@@ -14,20 +14,16 @@ using System.Collections.Generic;
 
 namespace Ankh.WorkingCopyExplorer
 {
-    class WorkingCopyExplorer : Ankh.IWorkingCopyExplorer
+    class WorkingCopyExplorer : AnkhService, Ankh.IWorkingCopyExplorer
     {
-
+        readonly List<FileSystemRootItem> _roots;
+        WorkingCopyExplorerControl _control;
+        
         public WorkingCopyExplorer(IContext context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            this.context = context;
-            this.statusCache = context.GetService<IFileStatusCache>();
-
-            this.roots = new ArrayList();
-
-            this.LoadRoots();
+            _roots = new List<FileSystemRootItem>();
+            LoadRoots();
 
             if (context.UIShell.WorkingCopyExplorer != null)
             {
@@ -35,25 +31,31 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
+        private void LoadRoots()
+        {
+            DoLoadRoots();
+        }
+
+        IFileStatusCache _statusCache;
+        protected IFileStatusCache StatusCache
+        {
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+        }
+
         public void SetControl(WorkingCopyExplorerControl wcControl)
         {
-            if (this.control != null)
+            if (this._control != null)
             {
-                if (wcControl != this.control)
+                if (wcControl != this._control)
                     throw new InvalidOperationException();
             }
 
-            IStatusImageMapper mapper = context.GetService<IStatusImageMapper>();
+            IStatusImageMapper mapper = GetService<IStatusImageMapper>();
 
-            control = wcControl;
-            control.StateImages = mapper.StatusImageList;
-            control.WantNewRoot += new EventHandler(control_WantNewRoot);
-            control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler(control_ValidatingNewRoot);
-        }
-
-        public IContext Context
-        {
-            get { return this.context; }
+            _control = wcControl;
+            _control.StateImages = mapper.StatusImageList;
+            _control.WantNewRoot += new EventHandler(control_WantNewRoot);
+            _control.ValidatingNewRoot += new System.ComponentModel.CancelEventHandler(control_ValidatingNewRoot);
         }
 
         #region IWorkingCopyExplorer Members
@@ -78,8 +80,8 @@ namespace Ankh.WorkingCopyExplorer
             FileSystemRootItem root = GetSelectedRoot();
             if (root != null)
             {
-                this.roots.Remove(root);
-                this.control.RemoveRoot(root);
+                this._roots.Remove(root);
+                this._control.RemoveRoot(root);
 
                 root.Dispose();
             }
@@ -87,9 +89,9 @@ namespace Ankh.WorkingCopyExplorer
 
         private FileSystemRootItem GetSelectedRoot()
         {
-            if (control == null)
+            if (_control == null)
                 return null;
-            IFileSystemItem[] items = this.control.GetSelectedItems();
+            IFileSystemItem[] items = this._control.GetSelectedItems();
 
             if (items.Length != 1)
             {
@@ -105,7 +107,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void RefreshSelectionParents()
         {
-            foreach (IFileSystemItem selectedItem in this.control.GetSelectedItems())
+            foreach (IFileSystemItem selectedItem in this._control.GetSelectedItems())
             {
                 FileSystemItem item = selectedItem as FileSystemItem;
                 if (item != null && item.Parent != null)
@@ -117,7 +119,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void RefreshSelection()
         {
-            foreach (IFileSystemItem selectedItem in this.control.GetSelectedItems())
+            foreach (IFileSystemItem selectedItem in this._control.GetSelectedItems())
             {
                 FileSystemItem item = selectedItem as FileSystemItem;
                 if (item != null)
@@ -129,7 +131,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void SyncAll()
         {
-            foreach (FileSystemItem item in this.roots)
+            foreach (FileSystemItem item in this._roots)
             {
                 item.Refresh();
             }
@@ -149,7 +151,7 @@ namespace Ankh.WorkingCopyExplorer
         public IList GetAllResources(Predicate<SvnItem> filter)
         {
             ArrayList resources = new ArrayList();
-            foreach (FileSystemItem item in this.roots)
+            foreach (FileSystemItem item in this._roots)
             {
                 item.GetResources(resources, true, filter);
             }
@@ -162,7 +164,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             SortedList<string, IFileSystemItem> items = new SortedList<string, IFileSystemItem>(StringComparer.OrdinalIgnoreCase);
 
-            SvnDirectory dir = statusCache.GetDirectory(directoryItem.FullPath);
+            SvnDirectory dir = StatusCache.GetDirectory(directoryItem.FullPath);
 
             if (dir != null)
             {
@@ -171,7 +173,7 @@ namespace Ankh.WorkingCopyExplorer
                 foreach (SvnItem item in dir)
                 {
                     if (items.ContainsKey(item.Name))
-                        items.Add(item.Name, FileSystemFileItem.Create(context, this, item));
+                        items.Add(item.Name, FileSystemFileItem.Create(Context, this, item));
                 }
             }
 
@@ -181,9 +183,9 @@ namespace Ankh.WorkingCopyExplorer
                 if (!string.Equals(name, SvnClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase) &&
                     !items.ContainsKey(name))
                 {
-                    SvnItem item = this.statusCache[path];
+                    SvnItem item = StatusCache[path];
 
-                    items.Add(name, FileSystemItem.Create(context, this, item));
+                    items.Add(name, FileSystemItem.Create(Context, this, item));
                 }
             }
 
@@ -192,10 +194,10 @@ namespace Ankh.WorkingCopyExplorer
 
         internal void OpenItem(string path)
         {
-            EnvDTE._DTE dte = context.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
+            EnvDTE._DTE dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
             if (File.Exists(path))
             {
-                if (path.ToLower().EndsWith(".sln"))
+                if (string.Equals(Path.GetExtension(path), ".sln", StringComparison.OrdinalIgnoreCase))
                 {
                     dte.Solution.Open(path);
                 }
@@ -217,47 +219,46 @@ namespace Ankh.WorkingCopyExplorer
 
         void control_ValidatingNewRoot(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = !IsRootValid(this.control.NewRootPath);
+            e.Cancel = !IsRootValid(this._control.NewRootPath);
         }
 
         private bool IsRootValid(string path)
         {
-            return Directory.Exists(path) && context.GetService<IWorkingCopyOperations>().IsWorkingCopyPath(path);
+            return Directory.Exists(path) && SvnTools.IsManagedPath(path);
         }
 
         void control_WantNewRoot(object sender, EventArgs e)
         {
-            if (this.IsRootValid(this.control.NewRootPath))
+            if (this.IsRootValid(this._control.NewRootPath))
             {
-                this.AddRoot(this.control.NewRootPath);
+                this.AddRoot(this._control.NewRootPath);
             }
         }
 
         private void SaveRoots()
         {
-            string[] rootPaths = new string[this.roots.Count];
+            string[] rootPaths = new string[this._roots.Count];
             for (int i = 0; i < rootPaths.Length; i++)
             {
-                rootPaths[i] = ((FileSystemItem)this.roots[i]).SvnItem.FullPath;
+                rootPaths[i] = ((FileSystemItem)this._roots[i]).SvnItem.FullPath;
             }
-            this.Context.Configuration.SaveWorkingCopyExplorerRoots(rootPaths);
-        }
-
-        private void LoadRoots()
-        {
-            System.Threading.Thread t = new System.Threading.Thread(new ThreadStart(this.DoLoadRoots));
-            t.Start();
-        }
+            GetService<IContext>().Configuration.SaveWorkingCopyExplorerRoots(rootPaths);
+        }        
 
         private delegate void DoAddRootDelegate(FileSystemRootItem rootItem);
 
         private void DoLoadRoots()
         {
-            string[] rootPaths;
+            string[] rootPaths = null;
             try
             {
-                rootPaths = this.Context.Configuration.LoadWorkingCopyExplorerRoots();
-                if (rootPaths == null)
+                IContext ctx = GetService<IContext>();
+
+                if (ctx == null)
+                    return;
+
+                rootPaths = ctx.Configuration.LoadWorkingCopyExplorerRoots();
+                if (rootPaths == null || rootPaths.Length == 0)
                 {
                     return;
                 }
@@ -267,15 +268,15 @@ namespace Ankh.WorkingCopyExplorer
                     if (Directory.Exists(root))
                     {
                         FileSystemRootItem rootItem = CreateRoot(root);
-                        this.Context.UIShell.SynchronizingObject.Invoke(
-                            new DoAddRootDelegate(this.DoAddRoot), new object[] { rootItem });
+
+                        DoAddRoot(rootItem);
                     }
                 }
 
             }
             catch (TargetInvocationException ex)
             {
-                IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
                     handler.OnError(ex.InnerException);
@@ -284,7 +285,7 @@ namespace Ankh.WorkingCopyExplorer
             }
             catch (Exception ex)
             {
-                IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
                     handler.OnError(ex);
@@ -295,22 +296,16 @@ namespace Ankh.WorkingCopyExplorer
 
         private void DoAddRoot(FileSystemRootItem root)
         {
-            this.control.AddRoot(root);
-            this.roots.Add(root);
+            this._control.AddRoot(root);
+            this._roots.Add(root);
         }
 
         private FileSystemRootItem CreateRoot(string directory)
         {
-            this.statusCache.UpdateStatus(directory, SvnDepth.Infinity);
-            SvnItem item = this.statusCache[directory];
-            FileSystemRootItem root = new FileSystemRootItem(context, this, item);
+            StatusCache.UpdateStatus(directory, SvnDepth.Infinity);
+            SvnItem item = StatusCache[directory];
+            FileSystemRootItem root = new FileSystemRootItem(Context, this, item);
             return root;
-        }
-
-
-        private WorkingCopyExplorerControl control;
-        private IContext context;
-        private IFileStatusCache statusCache;
-        private ArrayList roots;
+        }        
     }
 }
