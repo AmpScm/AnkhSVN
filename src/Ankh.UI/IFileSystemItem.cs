@@ -40,6 +40,8 @@ namespace Ankh.UI
 
         void Open();
 
+        SvnItem SvnItem { get; }
+
         IFileSystemItem[] GetChildren();
     }
 }

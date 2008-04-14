@@ -5,13 +5,15 @@ using System.Collections;
 using System.Drawing;
 using Utils.Win32;
 using System.Runtime.InteropServices;
+using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 
 namespace Ankh.UI
 {
-    public class FileSystemDetailsView : ListView, IWorkingCopyExplorerSubControl
+    public class FileSystemDetailsView : ListViewWithSelection<ListViewItem>, IWorkingCopyExplorerSubControl
     {
         public event EventHandler CurrentDirectoryChanged;
-        
+
         public FileSystemDetailsView()
         {
             this.View = View.Details;
@@ -21,22 +23,50 @@ namespace Ankh.UI
             this.ListViewItemSorter = ListViewItemComparer.Instance;
         }
 
-        public void SetDirectory( IFileSystemItem directory )
+        IAnkhServiceProvider _context;
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set 
+            {
+                if(_context != value)
+                {
+                    _context = value;
+
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        IFileIconMapper _mapper;
+        
+        IFileIconMapper Mapper
+        {
+            get { return _mapper ?? (_mapper = Context.GetService<IFileIconMapper>()); }
+        }
+
+        protected virtual void OnContextChanged(EventArgs e)
+        {
+            if(SmallImageList == null)
+                SmallImageList = Mapper.ImageList;            
+        }
+
+
+
+        public void SetDirectory(IFileSystemItem directory)
         {
             // Initialize these the first time they are needed.
-            if ( this.textPropertyDescriptors == null )
+            if (this.textPropertyDescriptors == null)
             {
-                this.GetSystemImageList();
-
-                this.InitializePropertyDescriptors( directory );
+                this.InitializePropertyDescriptors(directory);
                 this.InitializeCharacterWidth();
                 this.InitializeColumns();
             }
 
-            AddChildren( directory );
+            AddChildren(directory);
         }
 
-        
+
 
         public IFileSystemItem CurrentDirectory
         {
@@ -45,12 +75,12 @@ namespace Ankh.UI
 
         public System.Drawing.Point GetSelectionPoint()
         {
-            if ( this.SelectedItems.Count > 0 )
+            if (this.SelectedItems.Count > 0)
             {
-                ListViewItem item = this.SelectedItems[ 0 ];
+                ListViewItem item = this.SelectedItems[0];
                 int offset = item.Bounds.Height / 3;
-                return this.PointToScreen(new Point( item.Bounds.X + offset + this.StateImageList.ImageSize.Width, 
-                    item.Bounds.Y + offset ));
+                return this.PointToScreen(new Point(item.Bounds.X + offset + this.StateImageList.ImageSize.Width,
+                    item.Bounds.Y + offset));
             }
             else
             {
@@ -61,68 +91,68 @@ namespace Ankh.UI
 
         public IFileSystemItem[] GetSelectedItems()
         {
-            if ( this.SelectedItems.Count == 1 )
+            if (this.SelectedItems.Count == 1)
             {
-                return new IFileSystemItem[] { (IFileSystemItem)this.SelectedItems[ 0 ].Tag };
+                return new IFileSystemItem[] { (IFileSystemItem)this.SelectedItems[0].Tag };
             }
             else
             {
                 ArrayList list = new ArrayList();
-                foreach ( ListViewItem item in this.SelectedItems )
+                foreach (ListViewItem item in this.SelectedItems)
                 {
-                    list.Add( item.Tag );
+                    list.Add(item.Tag);
                 }
-                return (IFileSystemItem[])list.ToArray( typeof( IFileSystemItem ) );
+                return (IFileSystemItem[])list.ToArray(typeof(IFileSystemItem));
             }
         }
 
-        
 
-        protected override void OnMouseDown( MouseEventArgs e )
+
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            ListViewItem lvi = this.GetItemAt( e.X, e.Y );
-            if ( lvi == null )
+            ListViewItem lvi = this.GetItemAt(e.X, e.Y);
+            if (lvi == null)
             {
                 return;
             }
 
             // ensure right mouse clicks cause a selection
-            if ( e.Button == MouseButtons.Right )
+            if (e.Button == MouseButtons.Right)
             {
-                lvi.Selected = true; 
+                lvi.Selected = true;
             }
             // Double clicks either opens a folder or the item
-            else if ( e.Clicks == 2 && e.Button == MouseButtons.Left )
+            else if (e.Clicks == 2 && e.Button == MouseButtons.Left)
             {
                 IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
-                if ( fileSystemItem != null )
+                if (fileSystemItem != null)
                 {
-                    OpenItem( fileSystemItem );
+                    OpenItem(fileSystemItem);
                 }
             }
-            base.OnMouseDown( e );
+            base.OnMouseDown(e);
         }
 
-        protected override void OnKeyDown( KeyEventArgs e )
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            base.OnKeyDown( e );
+            base.OnKeyDown(e);
 
             // Enter means open if there's only one selected item
-            if ( e.KeyCode == Keys.Enter && this.SelectedItems.Count == 1)
+            if (e.KeyCode == Keys.Enter && this.SelectedItems.Count == 1)
             {
-                IFileSystemItem item = this.SelectedItems[ 0 ].Tag as IFileSystemItem;
-                if ( item != null )
+                IFileSystemItem item = this.SelectedItems[0].Tag as IFileSystemItem;
+                if (item != null)
                 {
-                    this.OpenItem( item );
+                    this.OpenItem(item);
                 }
             }
         }
 
-        private void OpenItem( IFileSystemItem item )
+        private void OpenItem(IFileSystemItem item)
         {
-            if ( item.IsContainer )
+            if (item.IsContainer)
             {
-                this.SetDirectory( item );
+                this.SetDirectory(item);
                 this.OnCurrentDirectoryChanged();
             }
             else
@@ -133,36 +163,36 @@ namespace Ankh.UI
 
         protected virtual void OnCurrentDirectoryChanged()
         {
-            if ( this.CurrentDirectoryChanged != null )
+            if (this.CurrentDirectoryChanged != null)
             {
-                this.CurrentDirectoryChanged( this, EventArgs.Empty );
+                this.CurrentDirectoryChanged(this, EventArgs.Empty);
             }
         }
 
 
-        private void AddChildren( IFileSystemItem directory )
+        private void AddChildren(IFileSystemItem directory)
         {
             this.UnhookEvents();
 
             this.currentDirectory = directory;
 
-            this.currentDirectory.ItemChanged += new EventHandler<ItemChangedEventArgs>( this.item_Changed );
+            this.currentDirectory.ItemChanged += new EventHandler<ItemChangedEventArgs>(this.item_Changed);
 
             this.BeginUpdate();
             try
             {
                 this.Items.Clear();
 
-                foreach ( IFileSystemItem item in directory.GetChildren() )
+                foreach (IFileSystemItem item in directory.GetChildren())
                 {
-                    ListViewItem lvi = this.Items.Add( item.Text );
+                    ListViewItem lvi = this.Items.Add(item.Text);
 
-                    FormatListViewItem( item, lvi );
+                    FormatListViewItem(item, lvi);
 
                     lvi.Tag = item;
 
                     // we need to know when this item changes
-                    item.ItemChanged += new EventHandler<ItemChangedEventArgs>( item_Changed );
+                    item.ItemChanged += new EventHandler<ItemChangedEventArgs>(item_Changed);
                 }
 
                 this.Sort();
@@ -173,104 +203,104 @@ namespace Ankh.UI
             }
         }
 
-        private void InitializePropertyDescriptors( IFileSystemItem directory )
+        private void InitializePropertyDescriptors(IFileSystemItem directory)
         {
-            PropertyDescriptorCollection unfilteredProperties = TypeDescriptor.GetProperties( directory );
-            this.textPropertyDescriptors = new PropertyDescriptorCollection( new PropertyDescriptor[] { } );
-            foreach ( PropertyDescriptor pd in unfilteredProperties )
+            PropertyDescriptorCollection unfilteredProperties = TypeDescriptor.GetProperties(directory);
+            this.textPropertyDescriptors = new PropertyDescriptorCollection(new PropertyDescriptor[] { });
+            foreach (PropertyDescriptor pd in unfilteredProperties)
             {
-                if ( pd.Attributes[ typeof( TextPropertyAttribute ) ] != null )
+                if (pd.Attributes[typeof(TextPropertyAttribute)] != null)
                 {
-                    this.textPropertyDescriptors.Add( pd );
+                    this.textPropertyDescriptors.Add(pd);
                 }
-                if ( pd.Attributes[ typeof( StateImagePropertyAttribute ) ] != null )
+                if (pd.Attributes[typeof(StateImagePropertyAttribute)] != null)
                 {
                     this.stateImagePropertyDescriptor = pd;
                 }
             }
 
-            this.textPropertyDescriptors = this.textPropertyDescriptors.Sort( PropertyOrderComparer.Instance );
-            
+            this.textPropertyDescriptors = this.textPropertyDescriptors.Sort(PropertyOrderComparer.Instance);
+
         }
 
         private void InitializeColumns()
         {
-            this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters, HorizontalAlignment.Left );
+            this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters, HorizontalAlignment.Left);
 
-            foreach ( PropertyDescriptor pd in this.textPropertyDescriptors )
+            foreach (PropertyDescriptor pd in this.textPropertyDescriptors)
             {
-                TextPropertyAttribute attr = pd.Attributes[ typeof( TextPropertyAttribute ) ] as TextPropertyAttribute;
-                if ( attr == null )
+                TextPropertyAttribute attr = pd.Attributes[typeof(TextPropertyAttribute)] as TextPropertyAttribute;
+                if (attr == null)
                 {
                     continue;
                 }
 
-                this.Columns.Add( attr.Text, attr.TextWidth * this.characterWidth, HorizontalAlignment.Right );
+                this.Columns.Add(attr.Text, attr.TextWidth * this.characterWidth, HorizontalAlignment.Right);
             }
         }
 
         private void InitializeCharacterWidth()
         {
-            using ( Graphics g = this.CreateGraphics() )
+            using (Graphics g = this.CreateGraphics())
             {
                 string measureString = "Name of Something To Measure";
-                this.characterWidth = (int)(g.MeasureString( measureString, this.Font ).Width / measureString.Length);
+                this.characterWidth = (int)(g.MeasureString(measureString, this.Font).Width / measureString.Length);
             }
         }
 
         private void UnhookEvents()
         {
-            foreach ( ListViewItem lvi in this.Items )
+            foreach (ListViewItem lvi in this.Items)
             {
                 IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
-                if ( fileSystemItem != null )
+                if (fileSystemItem != null)
                 {
-                    fileSystemItem.ItemChanged -= new EventHandler<ItemChangedEventArgs>( this.item_Changed );
+                    fileSystemItem.ItemChanged -= new EventHandler<ItemChangedEventArgs>(this.item_Changed);
                 }
             }
 
-            if ( this.currentDirectory != null )
+            if (this.currentDirectory != null)
             {
-                this.currentDirectory.ItemChanged -= new EventHandler<ItemChangedEventArgs>( this.item_Changed );
+                this.currentDirectory.ItemChanged -= new EventHandler<ItemChangedEventArgs>(this.item_Changed);
             }
         }
 
-        void item_Changed( object sender, ItemChangedEventArgs e )
+        void item_Changed(object sender, ItemChangedEventArgs e)
         {
             IFileSystemItem fileSystemItem = sender as IFileSystemItem;
-            if ( fileSystemItem != null )
+            if (fileSystemItem != null)
             {
-                HandleItemChange( fileSystemItem, e.ItemChangedType );
+                HandleItemChange(fileSystemItem, e.ItemChangedType);
             }
         }
 
-        private void HandleItemChange( IFileSystemItem fileSystemItem, ItemChangedType changeType )
+        private void HandleItemChange(IFileSystemItem fileSystemItem, ItemChangedType changeType)
         {
-            if ( fileSystemItem == this.currentDirectory && changeType == ItemChangedType.ChildrenInvalidated )
+            if (fileSystemItem == this.currentDirectory && changeType == ItemChangedType.ChildrenInvalidated)
             {
                 this.InvalidateChildren();
             }
             else
             {
-                ListViewItem lvi = this.FindListViewItemWithTag( fileSystemItem );
-                if ( lvi != null )
+                ListViewItem lvi = this.FindListViewItemWithTag(fileSystemItem);
+                if (lvi != null)
                 {
                     // Reformat this listview item.
                     lvi.SubItems.Clear();
                     lvi.Text = fileSystemItem.Text;
-                    this.FormatListViewItem( fileSystemItem, lvi );
+                    this.FormatListViewItem(fileSystemItem, lvi);
                 }
             }
         }
 
         private void InvalidateChildren()
         {
-            this.AddChildren( this.currentDirectory );
+            this.AddChildren(this.currentDirectory);
         }
 
-        private ListViewItem FindListViewItemWithTag( IFileSystemItem fileSystemItem )
+        private ListViewItem FindListViewItemWithTag(IFileSystemItem fileSystemItem)
         {
-            foreach ( ListViewItem lvi in this.Items )
+            foreach (ListViewItem lvi in this.Items)
             {
                 if (Object.ReferenceEquals(lvi.Tag, fileSystemItem))
                 {
@@ -280,26 +310,26 @@ namespace Ankh.UI
             return null;
         }
 
-        private void FormatListViewItem( IFileSystemItem item, ListViewItem lvi )
+        private void FormatListViewItem(IFileSystemItem item, ListViewItem lvi)
         {
-            foreach ( PropertyDescriptor pd in this.textPropertyDescriptors )
+            foreach (PropertyDescriptor pd in this.textPropertyDescriptors)
             {
-                string value = pd.GetValue( item ).ToString();
-                lvi.SubItems.Add( value );
+                string value = pd.GetValue(item).ToString();
+                lvi.SubItems.Add(value);
             }
 
-            if ( item.IsContainer )
+            if (item.IsContainer)
             {
-                lvi.ImageIndex = this.closedFolderIconIndex;
+                lvi.ImageIndex = Mapper.DirectoryIcon;
             }
             else
             {
-                lvi.ImageIndex = this.fileIconIndex;
+                lvi.ImageIndex = Mapper.GetIcon(item.SvnItem.FullPath);
             }
 
-            if ( this.StateImageList != null && this.stateImagePropertyDescriptor != null )
+            if (this.StateImageList != null && this.stateImagePropertyDescriptor != null)
             {
-                int index = (int)this.stateImagePropertyDescriptor.GetValue( item );
+                int index = (int)this.stateImagePropertyDescriptor.GetValue(item);
                 lvi.StateImageIndex = index;
             }
         }
@@ -307,22 +337,22 @@ namespace Ankh.UI
 
         private class PropertyOrderComparer : IComparer
         {
-            public int Compare( object x, object y )
+            public int Compare(object x, object y)
             {
                 PropertyDescriptor pd1 = (PropertyDescriptor)x;
                 PropertyDescriptor pd2 = (PropertyDescriptor)y;
 
-                TextPropertyAttribute attr1 = (TextPropertyAttribute)pd1.Attributes[ typeof( TextPropertyAttribute ) ];
-                TextPropertyAttribute attr2 = (TextPropertyAttribute)pd2.Attributes[ typeof( TextPropertyAttribute ) ];
+                TextPropertyAttribute attr1 = (TextPropertyAttribute)pd1.Attributes[typeof(TextPropertyAttribute)];
+                TextPropertyAttribute attr2 = (TextPropertyAttribute)pd2.Attributes[typeof(TextPropertyAttribute)];
 
-                return Comparer.Default.Compare( attr1.Order, attr2.Order );
+                return Comparer.Default.Compare(attr1.Order, attr2.Order);
             }
             public static readonly PropertyOrderComparer Instance = new PropertyOrderComparer();
         }
 
         private class ListViewItemComparer : IComparer
         {
-            public int Compare( object x, object y )
+            public int Compare(object x, object y)
             {
                 ListViewItem lvi1 = (ListViewItem)x;
                 ListViewItem lvi2 = (ListViewItem)y;
@@ -332,66 +362,44 @@ namespace Ankh.UI
 
                 // If one of them is null (happens when a new item is added), just use the default comparer
                 // which handles one of the items being null
-                if ( ( item1 == null ) ^ ( item2 == null ) )
+                if ((item1 == null) ^ (item2 == null))
                 {
-                    return Comparer.Default.Compare( item1, item2 );
+                    return Comparer.Default.Compare(item1, item2);
                 }
 
                 // folders always first
-                if ( item1.IsContainer ^ item2.IsContainer )
+                if (item1.IsContainer ^ item2.IsContainer)
                 {
                     // one is a container, the other is not
                     // The minus is necessary to get folders first
-                    return -Comparer.Default.Compare( item1.IsContainer, item2.IsContainer );
+                    return -Comparer.Default.Compare(item1.IsContainer, item2.IsContainer);
                 }
 
-                return Comparer.Default.Compare( item1.Text, item2.Text );
+                return Comparer.Default.Compare(item1.Text, item2.Text);
             }
             public static readonly ListViewItemComparer Instance = new ListViewItemComparer();
         }
-
-        /// <summary>
-        /// Retrieve the system image list and assign it to this listview.
-        /// </summary>
-        private void GetSystemImageList()
-        {
-            // get the system image list
-            SHFILEINFO fileinfo = new SHFILEINFO(); ;
-            IntPtr sysImageList = Win32.SHGetFileInfo( "", 0, ref fileinfo,
-                (uint)Marshal.SizeOf( fileinfo ), Constants.SHGFI_SHELLICONSIZE |
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON );
-
-            // assign it to this listview
-            Win32.SendMessage( this.Handle, Msg.LVM_SETIMAGELIST, Constants.LVSIL_SMALL,
-                sysImageList );
-
-            // get the closed folder icon
-            Win32.SHGetFileInfo( "", Constants.FILE_ATTRIBUTE_DIRECTORY, ref fileinfo,
-                (uint)Marshal.SizeOf( fileinfo ), Constants.SHGFI_SHELLICONSIZE |
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                Constants.SHGFI_USEFILEATTRIBUTES );
-            this.closedFolderIconIndex = fileinfo.iIcon.ToInt32();
-
-            // get the icon for a file
-            Win32.SHGetFileInfo( "file.txt", 0, ref fileinfo,
-                (uint)Marshal.SizeOf( fileinfo ), Constants.SHGFI_SHELLICONSIZE |
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON |
-                Constants.SHGFI_USEFILEATTRIBUTES );
-            this.fileIconIndex = fileinfo.iIcon.ToInt32();
-        }    
-
         
+
+        internal override ListViewWithSelection<ListViewItem>.ListViewHierarchy CreateHierarchy()
+        {
+            return new FileSystemHierarchy(this);
+        }
+
+        sealed class FileSystemHierarchy : ListViewHierarchy
+        {
+            public FileSystemHierarchy(FileSystemDetailsView dv)
+                : base(dv)
+            {
+            }
+        }
 
         private PropertyDescriptorCollection textPropertyDescriptors = null;
         private PropertyDescriptor stateImagePropertyDescriptor = null;
         private int characterWidth;
 
-        private int closedFolderIconIndex;
-        private int fileIconIndex;
         private IFileSystemItem currentDirectory;
 
         private const int NameColumnNumberOfCharacters = 50;
-
-       
     }
 }

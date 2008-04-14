@@ -113,11 +113,15 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                return codeEditorNativeWindow.Text;
+                if (codeEditorNativeWindow != null)
+                    return codeEditorNativeWindow.Text;
+                else
+                    return null;
             }
             set
             {
-                codeEditorNativeWindow.Text = value;
+                if(codeEditorNativeWindow != null)
+                    codeEditorNativeWindow.Text = value;
             }
         }
 
