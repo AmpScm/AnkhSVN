@@ -16,6 +16,7 @@ using AnkhSvn.Ids;
 using Ankh.Commands;
 using Ankh.UI;
 using Ankh.Selection;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.VSPackage
 {   
@@ -25,6 +26,7 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style=VsDockStyle.Tabbed, Orientation=ToolWindowOrientation.Bottom, Transient=false, Window=ToolWindowGuids80.Outputwindow)]
+    [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false)]
 	public partial class AnkhSvnPackage
 	{
         public void ShowToolWindow(AnkhToolWindow window)
@@ -42,6 +44,8 @@ namespace Ankh.VSPackage
                     return typeof(WorkingCopyExplorerToolWindow);
                 case AnkhToolWindow.PendingChanges:
                     return typeof(PendingChangesToolWindow);
+                case AnkhToolWindow.Log:
+                    return typeof(LogToolWindow);
                 default:
                     throw new ArgumentOutOfRangeException("toolWindow");
             }
@@ -376,6 +380,15 @@ namespace Ankh.VSPackage
         public override void OnToolBarAdded()
         {
             base.OnToolBarAdded();
+        }
+    }
+
+    [Guid(AnkhId.LogToolWindowId)]
+    public class LogToolWindow : AnkhToolWindowPane
+    {
+        public LogToolWindow()
+        {
+            Control = new LogToolControl();
         }
     }
 }

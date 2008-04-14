@@ -44,6 +44,14 @@ namespace Ankh.UI.Presenters
 			invokeUpdateRowCount = new SendOrPostCallback(InvokeUpdateRowCount);
 		}
 
+        public void Start(ICollection<string> paths)
+        {
+            this.logService.LocalTargets = paths;
+            this.logService.RequiredItemCount = initialBatch;
+            logService.Start();
+        }
+
+        [Obsolete]
 		public void Start()
 		{
 			this.logService.RequiredItemCount = initialBatch;

@@ -50,6 +50,7 @@ namespace AnkhSvn.Ids
         public const string RepositoryExplorerToolWindowId = "748becbe-04a1-4ffa-8e1e-46840f91a083";
         public const string PendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
         public const string WorkingCopyExplorerToolWindowId = "a1929d7e-610a-48b0-8152-8e4aa202427f";
+        public const string LogToolWindowId = "2FAC1EBF-6B37-4be3-9A44-F9ED32D561CD";
 
 
 

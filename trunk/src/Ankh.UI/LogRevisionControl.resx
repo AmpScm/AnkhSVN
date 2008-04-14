@@ -155,6 +155,57 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="createBranchTagToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="createBranchTagToolStripMenuItem.Text" xml:space="preserve">
+    <value>Create branch/tag from</value>
+  </data>
+  <data name="toolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="toolStripMenuItem4.Text" xml:space="preserve">
+    <value>Set &amp;commit properties</value>
+  </data>
+  <data name="revertSingleToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="revertSingleToolStripMenuItem.Text" xml:space="preserve">
+    <value>Revert changes from</value>
+  </data>
+  <data name="switchToRevisionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="switchToRevisionToolStripMenuItem.Text" xml:space="preserve">
+    <value>Switch to revision</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 6</value>
+  </data>
+  <data name="miNoIssues.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="miNoIssues.Size" type="System.Drawing.Size, System.Drawing">
+    <value>124, 22</value>
+  </data>
+  <data name="miNoIssues.Text" xml:space="preserve">
+    <value>No issues</value>
+  </data>
+  <data name="miIssueContainer.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="miIssueContainer.Text" xml:space="preserve">
+    <value>Go to &amp;issue</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 6</value>
+  </data>
+  <data name="singleRefreshToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 22</value>
+  </data>
+  <data name="singleRefreshToolStripMenuItem.Text" xml:space="preserve">
+    <value>R&amp;efresh</value>
+  </data>
   <data name="singleItemContextMenu.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 148</value>
   </data>
@@ -189,69 +240,9 @@
   <data name="&gt;&gt;dataGridView1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="createBranchTagToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="createBranchTagToolStripMenuItem.Text" xml:space="preserve">
-    <value>Create branch/tag from</value>
-  </data>
-  <data name="toolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="toolStripMenuItem4.Text" xml:space="preserve">
-    <value>Set &amp;commit properties</value>
-  </data>
-  <data name="revertSingleToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="revertSingleToolStripMenuItem.Text" xml:space="preserve">
-    <value>Revert changes from</value>
-  </data>
-  <data name="switchToRevisionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="switchToRevisionToolStripMenuItem.Text" xml:space="preserve">
-    <value>Switch to revision</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 6</value>
-  </data>
-  <data name="miIssueContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="miIssueContainer.Text" xml:space="preserve">
-    <value>Go to &amp;issue</value>
-  </data>
-  <data name="miNoIssues.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="miNoIssues.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 22</value>
-  </data>
-  <data name="miNoIssues.Text" xml:space="preserve">
-    <value>No issues</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 6</value>
-  </data>
-  <data name="singleRefreshToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 22</value>
-  </data>
-  <data name="singleRefreshToolStripMenuItem.Text" xml:space="preserve">
-    <value>R&amp;efresh</value>
-  </data>
   <metadata name="multipleItemContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>186, 17</value>
   </metadata>
-  <data name="multipleItemContextMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 82</value>
-  </data>
-  <data name="&gt;&gt;multipleItemContextMenu.Name" xml:space="preserve">
-    <value>multipleItemContextMenu</value>
-  </data>
-  <data name="&gt;&gt;multipleItemContextMenu.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="revertChangesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>154, 22</value>
   </data>
@@ -275,6 +266,15 @@
   </data>
   <data name="refreshToolStripMenuItem.Text" xml:space="preserve">
     <value>R&amp;efresh</value>
+  </data>
+  <data name="multipleItemContextMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 82</value>
+  </data>
+  <data name="&gt;&gt;multipleItemContextMenu.Name" xml:space="preserve">
+    <value>multipleItemContextMenu</value>
+  </data>
+  <data name="&gt;&gt;multipleItemContextMenu.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

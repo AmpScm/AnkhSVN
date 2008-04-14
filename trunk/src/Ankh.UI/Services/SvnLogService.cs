@@ -14,7 +14,7 @@ namespace Ankh.UI.Services
 		//ISynchronizeInvoke syncContext;
 
 		Uri remoteTarget;
-		string localTarget;
+		ICollection<string> localTargets;
 		Queue<SvnLogEventArgs> logItemQueue = new Queue<SvnLogEventArgs>();
 		SvnRevision start = SvnRevision.None;
 		SvnRevision end = SvnRevision.None;
@@ -47,10 +47,10 @@ namespace Ankh.UI.Services
 			set { remoteTarget = value; }
 		}
 
-		public string LocalTarget
+		public ICollection<string> LocalTargets
 		{
-			get { return localTarget; }
-			set { localTarget = value; }
+			get { return localTargets; }
+			set { localTargets = value; }
 		}
 
 		public bool StrictNodeHistory
@@ -106,9 +106,9 @@ namespace Ankh.UI.Services
 		{
             using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
             {
-                if (LocalTarget != null)
-                    client.Log(LocalTarget, args, logItemReceiver);
-                if (RemoteTarget != null)
+                if (LocalTargets != null)
+                    client.Log(LocalTargets, args, logItemReceiver);
+                else if (RemoteTarget != null)
                     client.Log(RemoteTarget, args, logItemReceiver);
             }
 		}
