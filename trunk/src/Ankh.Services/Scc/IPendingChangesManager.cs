@@ -125,5 +125,10 @@ namespace Ankh.Scc
         /// Occurs when completing a refresh of more than a few items (This event allows you to batch a series of updates)
         /// </summary>
         event EventHandler<PendingChangeEventArgs> RefreshCompleted;
+
+        /// <summary>
+        /// Clears all state; called on solution close
+        /// </summary>
+        void Clear();
     }
 }

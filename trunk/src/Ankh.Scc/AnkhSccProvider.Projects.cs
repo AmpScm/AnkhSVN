@@ -157,8 +157,8 @@ namespace Ankh.Scc
             }
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
-            if (mgr != null)
-                mgr.Refresh((string)null);
+            if (mgr != null && mgr.IsActive)
+                mgr.FullRefresh(false);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Ankh.Scc
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
             if (mgr != null)
-                mgr.Refresh((string)null);
+                mgr.Clear();
         }
 
         /// <summary>
