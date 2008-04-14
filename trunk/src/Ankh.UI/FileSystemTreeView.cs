@@ -147,8 +147,7 @@ namespace Ankh.UI
             TreeNode node = nodes.Add( child.Text );
             node.Tag = child;
 
-            node.SelectedImageIndex = this.ClosedFolderIndex;
-            node.ImageIndex = this.ClosedFolderIndex;
+            node.ImageIndex = this.FolderIndex;
 
             TreeNode dummy = node.Nodes.Add( "DUMMY" );
             dummy.Tag = DummyTag;

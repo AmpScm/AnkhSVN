@@ -86,6 +86,7 @@ namespace Ankh.Commands
                 // equivalent to accepting the default in the dialog.
                 using (UpdateDialog d = new UpdateDialog())
                 {
+                    d.Context = Context;
                     d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                     d.Items = this.resources;
                     d.CheckedFilter = delegate{return true;};

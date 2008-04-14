@@ -82,7 +82,7 @@ namespace Ankh.UI
      
         public void AddRoot( IRepositoryTreeNode node, string label )
         {
-            TreeNode root = new TreeNode( label, this.OpenFolderIndex, this.OpenFolderIndex );
+            TreeNode root = new TreeNode( label, this.FolderIndex, this.FolderIndex );
 
             root.Tag = node;
             node.Tag = root;          
@@ -143,8 +143,7 @@ namespace Ankh.UI
                             new TreeNode[]{ dummy } );
 
                         // start with the closed folder icon
-                        newNode.ImageIndex = this.ClosedFolderIndex;
-                        newNode.SelectedImageIndex = this.ClosedFolderIndex;
+                        newNode.SelectedImageIndex = newNode.ImageIndex = this.FolderIndex;
                     }
                     else
                     {
@@ -165,7 +164,7 @@ namespace Ankh.UI
             {
                 this.Nodes.Clear();
                 this.Nodes.Add( new TreeNode( "An error occurred",  
-                    this.OpenFolderIndex, this.OpenFolderIndex ) );
+                    this.FolderIndex, this.FolderIndex ) );
             }
             finally
             {           

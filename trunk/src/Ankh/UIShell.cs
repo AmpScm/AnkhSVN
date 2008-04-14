@@ -254,6 +254,7 @@ namespace Ankh
         {
             using (PathSelector selector = new PathSelector())
             {
+                selector.Context = Context;
                 // to provide information about the paths
                 selector.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 

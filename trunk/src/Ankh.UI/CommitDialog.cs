@@ -25,6 +25,7 @@ namespace Ankh.UI
     public partial class CommitDialog : Form
     {
         public event EventHandler Proceed;
+        IAnkhServiceProvider _context;
 
         public CommitDialog()
         {
@@ -42,6 +43,32 @@ namespace Ankh.UI
             
             // HACK: since there is no KeyPreview on a UserControl
             this.HookUpKeyEvent(this);
+        }
+
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                if (_context != value)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Raises the ContextChanged event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnContextChanged(EventArgs e)
+        {
+            commitItemsTree.Context = Context;
         }
 
         /// <summary>

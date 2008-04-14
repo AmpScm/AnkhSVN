@@ -13,16 +13,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class UpdateDialog : System.Windows.Forms.Form
     {
-
-        /// <summary>
-        /// Used to retrieve information about a path.
-        /// </summary>
-        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
-        {
-            add{ this.pathSelectionTreeView.ResolvingPathInfo += value; }
-            remove{ this.pathSelectionTreeView.ResolvingPathInfo -= value; }
-        }
-
+        IAnkhServiceProvider _context;
 
         public UpdateDialog()
         {
@@ -36,6 +27,33 @@ namespace Ankh.UI
             this.revisionPicker.Changed += new EventHandler(RevisionPickerChanged);
             this.RevisionPickerChanged(this, EventArgs.Empty);
         }
+
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                if (value != _context)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs eventArgs)
+        {
+            pathSelectionTreeView.Context = Context;
+        }
+
+        /// <summary>
+        /// Used to retrieve information about a path.
+        /// </summary>
+        public event EventHandler<ResolvingPathEventArgs> GetPathInfo
+        {
+            add{ this.pathSelectionTreeView.ResolvingPathInfo += value; }
+            remove{ this.pathSelectionTreeView.ResolvingPathInfo -= value; }
+        }        
 
         /// <summary>
         /// The chosen revision

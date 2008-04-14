@@ -34,12 +34,6 @@ namespace Ankh
             set;
         }
 
-        Ankh.UI.CommitDialog CommitDialog
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Set the selection for the repository explorer.
         /// </summary>

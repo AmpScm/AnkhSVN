@@ -149,8 +149,7 @@ namespace Ankh.UI
                 this.ResolvingPathInfo( this, args );
                 if ( args.IsDirectory )
                 {
-                    node.SelectedImageIndex = this.ClosedFolderIndex;
-                    node.ImageIndex = this.ClosedFolderIndex;
+                    node.SelectedImageIndex = node.ImageIndex = this.FolderIndex;
                 }
                 else
                     this.SetIcon( node, args.Path );
@@ -271,19 +270,36 @@ namespace Ankh.UI
         {
             TreeNodeCollection nodes = this.Nodes;
 
-            string nodeName = item.ToString();
-
-            // get rid of any trailing path separators
-            if ( nodeName != String.Empty && nodeName[nodeName.Length-1] == this.PathSeparator[0] )
-                    nodeName = nodeName.Substring(0, nodeName.Length-1);
-
+            string fullPath = item.FullPath;
             string[] components;
             
             // special treatment for URLs - we want the hostname in one go.
-            if ( this.UrlPaths )
-                components = UriUtils.Split( nodeName );
+            if (this.UrlPaths)
+                components = UriUtils.Split(fullPath);
             else
-                components = nodeName.Split( this.PathSeparator[0]);
+            {
+                int nStart = 0;
+                if (Context != null)
+                {
+                    Ankh.VS.IAnkhSolutionSettings ss = Context.GetService<Ankh.VS.IAnkhSolutionSettings>();
+
+                    if (ss != null)
+                    {
+                        string root = ss.ProjectRootWithSeparator ?? "";
+
+                        if (fullPath.StartsWith(root))
+                            nStart = root.Length-1;
+                    }
+                }
+
+                if (nStart == 0)
+                    components = fullPath.Split(this.PathSeparator[0]);
+                else
+                {
+                    components = fullPath.Substring(nStart).Split(this.PathSeparator[0]);
+                    components[0] = fullPath.Substring(0, nStart) + components[0];
+                }
+            }
 
             TreeNode node = null;
             foreach( string component in components )
@@ -313,6 +329,7 @@ namespace Ankh.UI
 
             // non-leaf nodes default to gray and are disabled
             newNode.ForeColor = DisabledColor;
+            newNode.SelectedImageIndex = newNode.ImageIndex = FolderIndex;
             return newNode;
         }        
 
