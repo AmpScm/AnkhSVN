@@ -17,24 +17,21 @@ namespace Ankh.UI
     /// </summary>
     public partial class PathSelectionTreeView : PathTreeView
     {
-		Predicate<SvnItem> _checkedFilter;
-        /// <summary>
-        /// Fired when the treeview needs information about a path.
-        /// </summary>
-        public event EventHandler<ResolvingPathEventArgs> ResolvingPathInfo;
+        Predicate<SvnItem> _checkedFilter;
+
 
         public PathSelectionTreeView()
         {
             this.CheckBoxes = true;
             this.SingleCheck = false;
             this.Recursive = false;
-            this.items = new SvnItem[]{};
+            this.items = new SvnItem[] { };
         }
 
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICollection<SvnItem> Items
         {
-            get{ return this.items; }
+            get { return this.items; }
             set
             {
                 this.items = value;
@@ -48,9 +45,10 @@ namespace Ankh.UI
         public bool UrlPaths
         {
             get
-            { 
-                return this.PathSeparator == "/"; }
-            set{ this.PathSeparator = value ? "/" : "\\"; }
+            {
+                return this.PathSeparator == "/";
+            }
+            set { this.PathSeparator = value ? "/" : "\\"; }
         }
 
         /// <summary>
@@ -58,8 +56,8 @@ namespace Ankh.UI
         /// </summary>
         public bool SingleCheck
         {
-            get{ return this.singleCheck; }
-            set{ this.singleCheck = value; }
+            get { return this.singleCheck; }
+            set { this.singleCheck = value; }
         }
 
         /// <summary>
@@ -67,34 +65,34 @@ namespace Ankh.UI
         /// </summary>
         public bool Recursive
         {
-            get{ return this.recursive; }
+            get { return this.recursive; }
             set
-            { 
+            {
                 this.recursive = value;
                 BeginUpdate();
-                this.UncheckChildren( this.Nodes, value );
+                this.UncheckChildren(this.Nodes, value);
                 EndUpdate();
             }
         }
 
         public IEnumerable<SvnItem> CheckedItems
         {
-			get
-			{
-				return GetCheckedItems(this.Nodes);
-			}
+            get
+            {
+                return GetCheckedItems(this.Nodes);
+            }
         }
 
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public Predicate<SvnItem> CheckedFilter
-		{
-			get { return _checkedFilter; }
-			set 
-            { 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Predicate<SvnItem> CheckedFilter
+        {
+            get { return _checkedFilter; }
+            set
+            {
                 _checkedFilter = value;
                 SetCheckedItems(Nodes);
             }
-		}
+        }
 
         /// <summary>
         /// Keep track of the last checked node and make sure only
@@ -103,20 +101,20 @@ namespace Ankh.UI
         /// <param name="e"></param>
         protected override void OnAfterCheck(TreeViewEventArgs e)
         {
-            base.OnAfterCheck (e);
-            
+            base.OnAfterCheck(e);
+
             // unchecking?
-            if ( !e.Node.Checked )
+            if (!e.Node.Checked)
             {
                 this.checkedNode = null;
                 // reenable children?
-                if ( this.Recursive )
-                    this.ToggleChildren( e.Node, true );
+                if (this.Recursive)
+                    this.ToggleChildren(e.Node, true);
                 return;
             }
 
             // make sure only one node is checked if SingleCheck is true
-            if ( this.SingleCheck && this.checkedNode != null )
+            if (this.SingleCheck && this.checkedNode != null)
             {
                 this.checkedNode.Checked = false;
             }
@@ -125,8 +123,8 @@ namespace Ankh.UI
             this.checkedNode = e.Node;
 
             // disable children?
-            if ( this.Recursive )
-                this.ToggleChildren( e.Node, false );
+            if (this.Recursive)
+                this.ToggleChildren(e.Node, false);
 
 
         }
@@ -137,26 +135,23 @@ namespace Ankh.UI
         /// <param name="e"></param>
         protected override void OnBeforeCheck(TreeViewCancelEventArgs e)
         {
-            base.OnBeforeCheck (e);
+            base.OnBeforeCheck(e);
             e.Cancel = e.Node.ForeColor == DisabledColor;
         }
 
-        protected void OnResolvingPathInfo( TreeNode node )
+        protected void ResolveIcon(TreeNode node)
         {
-            if ( this.ResolvingPathInfo != null )
+
+            SvnItem item = (SvnItem)node.Tag;
+            if (item.IsDirectory)
             {
-                ResolvingPathEventArgs args = new ResolvingPathEventArgs( node.Tag );
-                this.ResolvingPathInfo( this, args );
-                if ( args.IsDirectory )
-                {
-                    node.SelectedImageIndex = node.ImageIndex = this.FolderIndex;
-                }
-                else
-                    this.SetIcon( node, args.Path );
+                node.SelectedImageIndex = node.ImageIndex = this.FolderIndex;
             }
+            else
+                this.SetIcon(node, item.FullPath);
         }
 
-       
+
 
         /// <summary>
         /// Retrieves a list of the checked items.
@@ -164,17 +159,17 @@ namespace Ankh.UI
         /// <param name="nodes"></param>
         /// <param name="list"></param>
         /// <returns></returns>
-		private IEnumerable<SvnItem> GetCheckedItems(TreeNodeCollection nodes)
-		{
-			foreach (TreeNode node in nodes)
-			{
-				if (node.Checked)
-					yield return (SvnItem)node.Tag;
+        private IEnumerable<SvnItem> GetCheckedItems(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Checked)
+                    yield return (SvnItem)node.Tag;
 
-				foreach (SvnItem i in GetCheckedItems(node.Nodes))
-					yield return i;
-			}
-		}
+                foreach (SvnItem i in GetCheckedItems(node.Nodes))
+                    yield return i;
+            }
+        }
 
         /// <summary>
         /// Sets the checked items.
@@ -196,14 +191,14 @@ namespace Ankh.UI
         /// Recursively uncheck and disable the children of checked nodes
         /// </summary>
         /// <param name="nodes"></param>
-        private void UncheckChildren( TreeNodeCollection nodes, bool recursive )
+        private void UncheckChildren(TreeNodeCollection nodes, bool recursive)
         {
-            foreach( TreeNode node in nodes )
+            foreach (TreeNode node in nodes)
             {
-                if ( node.Checked )
-                    this.ToggleChildren( node, !recursive );
+                if (node.Checked)
+                    this.ToggleChildren(node, !recursive);
                 else
-                    this.UncheckChildren( node.Nodes, recursive );
+                    this.UncheckChildren(node.Nodes, recursive);
             }
         }
 
@@ -212,11 +207,11 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="enabled"></param>
-        private void ToggleChildren( TreeNode parent, bool enabled )
+        private void ToggleChildren(TreeNode parent, bool enabled)
         {
             this.BeginUpdate();
-            this.DoToggleChildren( parent, enabled );
-            this.EndUpdate();            
+            this.DoToggleChildren(parent, enabled);
+            this.EndUpdate();
         }
 
         /// <summary>
@@ -224,14 +219,14 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="enabled"></param>
-        private void DoToggleChildren( TreeNode parent, bool enabled )
+        private void DoToggleChildren(TreeNode parent, bool enabled)
         {
-            foreach( TreeNode node in parent.Nodes )
+            foreach (TreeNode node in parent.Nodes)
             {
                 node.Checked = enabled ? node.Checked : false;
                 node.ForeColor = enabled ? EnabledColor : DisabledColor;
 
-                this.ToggleChildren( node, enabled );
+                this.ToggleChildren(node, enabled);
             }
         }
 
@@ -246,11 +241,11 @@ namespace Ankh.UI
                 this.BeginUpdate();
                 this.Nodes.Clear();
 
-                if ( this.items.Count == 0 )
-                    return;            
+                if (this.items.Count == 0)
+                    return;
 
-                foreach( SvnItem item in this.items )
-                    this.AddNode( item );
+                foreach (SvnItem item in this.items)
+                    this.AddNode(item);
 
                 this.TrimTree();
 
@@ -266,13 +261,13 @@ namespace Ankh.UI
         /// Adds a node to the right place in the tree.
         /// </summary>
         /// <param name="nodeName"></param>
-        private void AddNode( SvnItem item )
+        private void AddNode(SvnItem item)
         {
             TreeNodeCollection nodes = this.Nodes;
 
             string fullPath = item.FullPath;
             string[] components;
-            
+
             // special treatment for URLs - we want the hostname in one go.
             if (this.UrlPaths)
                 components = UriUtils.Split(fullPath);
@@ -288,7 +283,7 @@ namespace Ankh.UI
                         string root = ss.ProjectRootWithSeparator ?? "";
 
                         if (fullPath.StartsWith(root))
-                            nStart = root.Length-1;
+                            nStart = root.Length - 1;
                     }
                 }
 
@@ -302,36 +297,36 @@ namespace Ankh.UI
             }
 
             TreeNode node = null;
-            foreach( string component in components )
+            foreach (string component in components)
             {
-                node = this.GetNode( nodes, component );
+                node = this.GetNode(nodes, component);
                 nodes = node.Nodes;
             }
 
             // leaf nodes should be black and enabled
-            if ( node != null )
+            if (node != null)
             {
                 node.ForeColor = EnabledColor;
                 node.Tag = item;
-                this.OnResolvingPathInfo( node );
+                this.ResolveIcon(node);
             }
         }
 
-        private TreeNode GetNode( TreeNodeCollection nodes, string pathComponent )
+        private TreeNode GetNode(TreeNodeCollection nodes, string pathComponent)
         {
-            foreach( TreeNode node in nodes )
+            foreach (TreeNode node in nodes)
             {
-                if ( String.Compare( node.Text, pathComponent, true ) == 0 )
+                if (String.Compare(node.Text, pathComponent, true) == 0)
                     return node;
             }
 
-            TreeNode newNode = nodes.Add( pathComponent );
+            TreeNode newNode = nodes.Add(pathComponent);
 
             // non-leaf nodes default to gray and are disabled
             newNode.ForeColor = DisabledColor;
             newNode.SelectedImageIndex = newNode.ImageIndex = FolderIndex;
             return newNode;
-        }        
+        }
 
         /// <summary>
         /// Simplify the tree so top level node hierarchies with only 1 child
@@ -339,21 +334,21 @@ namespace Ankh.UI
         /// </summary>
         private void TrimTree()
         {
-            foreach ( TreeNode topLevelNode in this.Nodes )
+            foreach (TreeNode topLevelNode in this.Nodes)
             {
-                if ( topLevelNode.Nodes.Count == 1 )
+                if (topLevelNode.Nodes.Count == 1)
                 {
                     StringBuilder nodeName = new StringBuilder(topLevelNode.Text);
 
                     // Recurse down the tree, adding nodes while relevant
                     // We don't want to add the last child element
                     TreeNode activeNode = topLevelNode;
-                    while ( activeNode.Nodes.Count == 1 && activeNode.Nodes[0].Nodes.Count != 0 )
+                    while (activeNode.Nodes.Count == 1 && activeNode.Nodes[0].Nodes.Count != 0)
                     {
-                      activeNode = activeNode.Nodes[0];
+                        activeNode = activeNode.Nodes[0];
 
-                      nodeName.Append(System.IO.Path.DirectorySeparatorChar);
-                      nodeName.Append(activeNode.Text);
+                        nodeName.Append(System.IO.Path.DirectorySeparatorChar);
+                        nodeName.Append(activeNode.Text);
                     }
 
                     // Rename the last node to include the full path
@@ -366,41 +361,13 @@ namespace Ankh.UI
             }
         }
 
-		private ICollection<SvnItem> items;
+        private ICollection<SvnItem> items;
         private TreeNode checkedNode;
         private bool singleCheck;
         private bool recursive;
 
         private static readonly Color EnabledColor = Color.Black;
         private static readonly Color DisabledColor = Color.Gray;
-        
-    }
 
-    public class ResolvingPathEventArgs : EventArgs
-    {
-        public ResolvingPathEventArgs( object item )
-        {
-            this.item = item;
-        }
-
-        public object Item
-        {
-            get{ return this.item; }
-        }
-
-        public bool IsDirectory
-        {
-            get{ return this.isDirectory; }
-            set{ this.isDirectory = value; }
-        }
-
-        public string Path
-        {
-            get{ return this.path; }
-            set{ this.path = value; }
-        }
-        private bool isDirectory = false;
-        private string path = "";
-        private object item;
     }
 }

@@ -87,7 +87,6 @@ namespace Ankh.Commands
                 using (UpdateDialog d = new UpdateDialog())
                 {
                     d.Context = Context;
-                    d.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
                     d.Items = this.resources;
                     d.CheckedFilter = delegate{return true;};
                     d.Recursive = true;
@@ -108,14 +107,6 @@ namespace Ankh.Commands
                 // the user hasn't cancelled the update
                 return true;
             }
-
-            public static void GetPathInfo(object sender, ResolvingPathEventArgs args)
-            {
-                SvnItem item = (SvnItem)args.Item;
-                args.IsDirectory = item.IsDirectory;
-                args.Path = item.FullPath;
-            }
-
 
             /// <summary>
             /// The actual updating happens here.

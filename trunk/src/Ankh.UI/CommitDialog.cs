@@ -34,7 +34,6 @@ namespace Ankh.UI
             //
             InitializeComponent();
 
-            this.commitItemsTree.ResolvingPathInfo += new EventHandler<ResolvingPathEventArgs>(commitItemsTree_GetPathInfo);
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
             // Support Ctrl-A to select everything.
@@ -236,11 +235,6 @@ namespace Ankh.UI
                 this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
                     this.logMessageBox.Text, e.Node.Tag.ToString() );                
             }        
-        }
-
-        private void commitItemsTree_GetPathInfo(object sender, ResolvingPathEventArgs args)
-        {
-            args.Path = args.Item.ToString();
         }
 
         private void RaiseProceed(object sender, System.EventArgs e)
