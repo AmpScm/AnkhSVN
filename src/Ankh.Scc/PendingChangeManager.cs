@@ -93,8 +93,15 @@ namespace Ankh.Scc
 
         public void FullRefresh(bool clearStateCache)
         {
-            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
-            _pendingChanges.Clear();
+            if (clearStateCache && Cache != null)
+                Cache.ClearCache();
+
+            lock (_toRefresh)
+            {
+                _pendingChanges.Clear();
+            }
+
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);            
             OnListFlushed(ee);
 
             lock (_toRefresh)
@@ -103,6 +110,20 @@ namespace Ankh.Scc
                 _toRefresh.Clear();
 
                 ScheduleRefresh();
+            }
+        }
+
+        public void Clear()
+        {
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);            
+            OnListFlushed(ee);
+
+            lock (_toRefresh)
+            {
+                _toRefresh.Clear();
+                _fullRefresh = false;
+                _pendingChanges.Clear();
+                _extraFiles.Clear();
             }
         }
 
