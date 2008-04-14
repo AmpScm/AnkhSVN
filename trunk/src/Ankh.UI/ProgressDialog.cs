@@ -123,6 +123,11 @@ namespace Ankh.UI
                 case SvnNotifyAction.UpdateExternal:
                     actionText = actionText.Substring(6);
                     break;
+                case SvnNotifyAction.CommitAdded:
+                case SvnNotifyAction.CommitDeleted:
+                case SvnNotifyAction.CommitModified:
+                case SvnNotifyAction.CommitReplaced:
+                    actionText = actionText.Substring(6);
                 case SvnNotifyAction.CommitSendData:
                     actionText = "Sending";
                     break;
