@@ -14,5 +14,8 @@ namespace Ankh.VS
         int FileIcon { get; }
 
         int GetIconForExtension(string ext);
+
+        int HeaderUpIcon { get; }
+        int HeaderDownIcon { get; }
     }
 }

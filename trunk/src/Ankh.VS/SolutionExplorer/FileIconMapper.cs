@@ -88,9 +88,6 @@ namespace Ankh.VS.SolutionExplorer
             get { return _imageList; }
         }
 
-        #region IFileIconMapper Members
-
-
         int _dirIcon;
         public int DirectoryIcon
         {
@@ -140,11 +137,6 @@ namespace Ankh.VS.SolutionExplorer
             return ResolveReference(handle);
         }
 
-        #endregion
-
-        #region IFileIconMapper Members
-
-
         public int GetIconForExtension(string ext)
         {
             if (string.IsNullOrEmpty(ext))
@@ -153,6 +145,41 @@ namespace Ankh.VS.SolutionExplorer
             return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttribute.Normal);
         }
 
-        #endregion
+        int _lvDown, _lvUp;
+        public int HeaderUpIcon
+        {
+            get
+            {
+                if ((_lvDown == 0) && (_lvUp == 0))
+                    LoadUpDown();
+
+                return _lvUp;
+            }
+        }
+
+        public int HeaderDownIcon
+        {
+            get
+            {
+                if ((_lvDown == 0) && (_lvUp == 0))
+                    LoadUpDown();
+
+                return _lvDown;
+            }
+        }
+
+        void LoadUpDown()
+        {
+            if ((_lvDown != 0) && (_lvUp != 0))
+                return;
+
+            Image img = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
+                typeof(FileIconMapper).Namespace + ".UpDnListView.png"));
+
+            _imageList.Images.AddStrip(img);
+
+            _lvDown = _imageList.Images.Count - 1;
+            _lvUp = _lvDown - 1;
+        }
     }
 }

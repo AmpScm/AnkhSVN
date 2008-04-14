@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.VS.wxs" />
+    <EmbeddedResource Include="SolutionExplorer\UpDnListView.png" />
     <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
