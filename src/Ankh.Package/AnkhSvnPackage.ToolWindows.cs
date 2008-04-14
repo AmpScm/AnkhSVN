@@ -218,7 +218,7 @@ namespace Ankh.VSPackage
             if (t != null)
                 return t.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-                return VSConstants.E_NOTIMPL;
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         CommandMapper _mapper;
@@ -237,7 +237,7 @@ namespace Ankh.VSPackage
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             IOleCommandTarget t = _target ?? _baseTarget ?? (_baseTarget = (IOleCommandTarget)_pane.BaseGetService(typeof(IOleCommandTarget)));
-            int r = VSConstants.E_NOTIMPL;
+            int r = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             if (t != null)
                 r = t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
