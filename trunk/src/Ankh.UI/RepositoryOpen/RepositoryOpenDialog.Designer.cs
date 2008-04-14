@@ -237,7 +237,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Open From Subversion";
+            this.Text = "Open from Subversion";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
