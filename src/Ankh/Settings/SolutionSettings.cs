@@ -273,5 +273,29 @@ namespace Ankh.Settings
                 }
             }
         }
+
+        public string NewProjectLocation
+        {
+            get
+            {
+                ILocalRegistry2 r = Context.GetService<ILocalRegistry2>(typeof(SLocalRegistry));
+
+                string root;
+
+                if (!ErrorHandler.Succeeded(r.GetLocalRegistryRoot(out root)))
+                    return null;
+
+                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(root, RegistryKeyPermissionCheck.ReadSubTree))
+                {
+                    string value = rk.GetValue("VisualStudioProjectsLocation", "C:\\") as string;
+
+                    if (!string.IsNullOrEmpty(value))
+                        return SvnTools.GetNormalizedFullPath(value);
+                    else
+                        return "C:\\";
+                }
+            }
+        }
+
     }
 }

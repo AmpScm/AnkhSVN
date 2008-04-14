@@ -23,6 +23,7 @@ namespace Ankh.VS
         /// <value>The solution filename.</value>
         string SolutionFilename { get; }
 
+        string NewProjectLocation { get; }
 
         /// <summary>
         /// Gets the project root URI.
