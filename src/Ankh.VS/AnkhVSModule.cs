@@ -44,6 +44,7 @@ namespace Ankh.VS
             Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
             Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
             Container.AddService(typeof(IFileIconMapper), new FileIconMapper(Context));
+            Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
         }
 
         /// <summary>
