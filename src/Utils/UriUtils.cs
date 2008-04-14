@@ -6,13 +6,8 @@ namespace Utils
     /// <summary>
     /// A collection of utility methods for working on URIs
     /// </summary>
-    public class UriUtils
+    public static class UriUtils
     {
-        private UriUtils()
-        {
-            // nothing here
-        }        
-        
         /// <summary>
         /// Concatenates two URI segments, placing a / in between as appropriate.
         /// </summary>

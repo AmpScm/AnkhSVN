@@ -7,8 +7,7 @@ using System;
 
 namespace Utils
 {
-
-    public class ProcessReader
+    public sealed class ProcessReader
     {
         public ProcessReader( StreamReader reader )
         {
@@ -17,8 +16,6 @@ namespace Utils
             this.output = new StringBuilder();
             this.queue = new Queue();
         }
-
-
             
         public void Start()
         {

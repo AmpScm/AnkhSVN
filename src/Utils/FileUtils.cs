@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Utils
 {
-    public class FileUtils
+    public static class FileUtils
     {
         /// <summary>
         /// Copies a directory recursively.
