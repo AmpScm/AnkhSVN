@@ -64,8 +64,8 @@ namespace Ankh.Scc
             get { return _projects; }
         }
 
-        [DisplayName("Status")]
-        public string StatusText
+        [DisplayName("Change")]
+        public string ChangeText
         {
             get { return _status.Text; }
         }
@@ -124,11 +124,18 @@ namespace Ankh.Scc
         string _projects;
         string _relativePath;
         PendingChangeStatus _status;
+        PendingChangeKind _kind;
 
         [Browsable(false)]
         public int IconIndex
         {
             get { return _iconIndex; }
+        }
+
+        [Browsable(false)]
+        public PendingChangeKind Kind
+        {
+            get { return _kind; }
         }
 
         [Browsable(false)]
@@ -200,26 +207,31 @@ namespace Ankh.Scc
 
             switch (status.LocalContentStatus)
             {
-                case SharpSvn.SvnStatus.Normal:
-                    break; // Look further
-                case SharpSvn.SvnStatus.NotVersioned:
-                    return new PendingChangeStatus(PendingChangeState.New);
-                case SharpSvn.SvnStatus.Modified:
-                    return new PendingChangeStatus(PendingChangeState.Modified);
-                case SharpSvn.SvnStatus.Replaced:
-                    return new PendingChangeStatus(PendingChangeState.Replaced);
-                case SharpSvn.SvnStatus.Added:
+                case SvnStatus.NotVersioned:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.New);
+                case SvnStatus.Modified:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Modified);
+                case SvnStatus.Replaced:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Replaced);
+                case SvnStatus.Added:
                     if (item.Status.IsCopied)
-                        return new PendingChangeStatus(PendingChangeState.Copied);
+                        return new PendingChangeStatus(_kind = PendingChangeKind.Copied);
                     else
-                        return new PendingChangeStatus(PendingChangeState.Added);
-                case SharpSvn.SvnStatus.Deleted:
-                    return new PendingChangeStatus(PendingChangeState.Deleted);
-                case SharpSvn.SvnStatus.Missing:
-                    return new PendingChangeStatus(PendingChangeState.Missing);
-                // Default text is ok
+                        return new PendingChangeStatus(_kind = PendingChangeKind.Added);
+                case SvnStatus.Deleted:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Deleted);
+                case SvnStatus.Missing:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Missing);
+                case SvnStatus.Conflicted:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Conflicted);
+                case SvnStatus.Obstructed:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Obstructed);
+
+                //case SvnStatus.Zero:
+                //case SvnStatus.Normal:
+                //case SvnStatus.None:
                 default:
-                    return new PendingChangeStatus(status.LocalContentStatus.ToString());
+                    break; // Look further
             }
 
             switch (status.LocalPropertyStatus)
@@ -228,13 +240,16 @@ namespace Ankh.Scc
                 case SharpSvn.SvnStatus.None:
                     break; // Look further
                 default:
-                    return new PendingChangeStatus("Property " + status.LocalPropertyStatus.ToString());
+                    return new PendingChangeStatus(_kind = PendingChangeKind.PropertyModified);
             }
 
             if (isDirty)
-                return new PendingChangeStatus("Editted");
+                return new PendingChangeStatus(_kind = PendingChangeKind.EditorDirty);
             else
+            {
+                _kind = PendingChangeKind.None;
                 return null;
+            }
         }
 
         static void RefreshValue<T>(ref bool changed, ref T field, T newValue)
