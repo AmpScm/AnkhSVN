@@ -190,8 +190,30 @@ namespace Ankh.UI.PendingChanges
             }
             set
             {
-                // NOOP for now
-                //throw new InvalidOperationException();
+                if (textBuffer == null)
+                    return;
+
+                if (string.IsNullOrEmpty(value))
+                    value = "";
+
+                IVsTextLines lines = textBuffer as IVsTextLines;
+
+                if (lines == null)
+                    return;
+
+                int endLine, endIndex;
+
+                ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out endLine, out endIndex));
+
+                IntPtr pText = Marshal.StringToCoTaskMemUni(value);
+                try
+                {                    
+                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
+                }
+                finally
+                {
+                    Marshal.FreeCoTaskMem(pText);
+                }                
             }
         }
 
