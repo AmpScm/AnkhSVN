@@ -7,6 +7,7 @@ using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Scc;
 using Ankh.VS;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -34,42 +35,37 @@ namespace Ankh.Commands
             IAnkhOpenDocumentTracker docTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
             SaveAllDirtyDocuments(e.Selection, e.Context);
 
-            // get the modified resources
-            Dictionary<string, SvnItem> resources = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (!resources.ContainsKey(item.FullPath))
-                    resources.Add(item.FullPath, item);
-            }
-
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
+
+            PathSelectorResult result = null;
+            PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
+                e.Selection.GetSelectedSvnItems(true));
+
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified; };
+            info.VisibleFilter += delegate(SvnItem item) { return true; };
 
             if (!CommandBase.Shift &&
                 e.Command == AnkhCommand.RevertItem)
             {
-                PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
-                    resources.Values, delegate(SvnItem item) { return item.IsModified; });
-
                 //if(e.Command == AnkhCommand.ItemRevertSpecific)
                 //    info.RevisionStart = SvnRevision.Base;
 
-                info = context.UIShell.ShowPathSelector(info);
+                result = context.UIShell.ShowPathSelector(info);
                 if (info == null)
                     return;
                 confirmed = true;
                 depth = info.Depth;
-
-                resources.Clear();
-                foreach (SvnItem item in info.CheckedItems)
-                {
-                    if (!resources.ContainsKey(item.FullPath))
-                        resources.Add(item.FullPath, item);
-                }
             }
+            else
+            {
+                result = info.DefaultResult;
+            }
+            
+            string[] paths = new string[result.Selection.Count];
+            for (int i = 0; i < paths.Length; i++)
+                paths[i] = result.Selection[i].FullPath;
 
-            string[] paths = new string[resources.Count];
-            resources.Keys.CopyTo(paths, 0);
             // ask for confirmation if the Shift dialog hasn't been used
             if (!confirmed)
             {

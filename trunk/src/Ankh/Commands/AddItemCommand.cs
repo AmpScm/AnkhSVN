@@ -41,34 +41,26 @@ namespace Ankh.Commands
             Collection<SvnItem> resources = new Collection<SvnItem>();
 			ICollection<SvnItem> addItems=resources;
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsVersioned)
-                    continue;
-                else if (item.IsVersionable)
-                {
-                    if (paths.ContainsKey(item.FullPath))
-                        continue;
+			PathSelectorInfo info = new PathSelectorInfo("Select items to add",
+                e.Selection.GetSelectedSvnItems(true));
+            info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned; };
+            info.VisibleFilter += delegate(SvnItem item) { return true; };
 
-                    paths.Add(item.FullPath, item);
-                    resources.Add(item);
-                }
-            }
-
+            PathSelectorResult result = null;
             // are we shifted?
             if (!CommandBase.Shift)
             {
-				PathSelectorInfo info = new PathSelectorInfo("Select items to add",
-					resources, delegate { return true; });
                 info.EnableRecursive = false;
 
-                info = context.UIShell.ShowPathSelector(info);
+                result = context.UIShell.ShowPathSelector(info);
 
                 if (info == null)
                     return;
 
                 addItems = info.CheckedItems;
             }
+            else
+                result = info.DefaultResult;
 
             using(context.StartOperation("Adding"))
             using(SvnClient client = context.ClientPool.GetClient())

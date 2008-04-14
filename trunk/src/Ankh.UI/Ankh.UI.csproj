@@ -273,9 +273,11 @@
     <Compile Include="PathSelectionTreeView.Designer.cs">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathSelector.Designer.cs">
+    <Compile Include="PathSelector\PathSelector.Designer.cs">
       <DependentUpon>PathSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathSelector\PathSelectorInfo.cs" />
+    <Compile Include="PathSelector\PathSelectorResult.cs" />
     <Compile Include="PendingChanges\Commands\CommitPendingChanges.cs" />
     <Compile Include="PendingChanges\Commands\PasteToEditorList.cs" />
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
@@ -423,6 +425,12 @@
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\SvnLogService.cs" />
+    <Compile Include="SvnLog\LogToolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SvnLog\LogToolControl.Designer.cs">
+      <DependentUpon>LogToolControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
@@ -487,7 +495,7 @@
     <Compile Include="PathSelectionTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PathSelector.cs">
+    <Compile Include="PathSelector\PathSelector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathTreeView.cs">
@@ -598,7 +606,7 @@
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathSelector.resx">
+    <EmbeddedResource Include="PathSelector\PathSelector.resx">
       <DependentUpon>PathSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -762,6 +770,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\ChangeSourceControl.resx">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SvnLog\LogToolControl.resx">
+      <DependentUpon>LogToolControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorerControl.resx">

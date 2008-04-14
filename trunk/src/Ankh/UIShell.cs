@@ -250,54 +250,22 @@ namespace Ankh
             browser.Navigate(url, args);
         }
 
-        public PathSelectorInfo ShowPathSelector(PathSelectorInfo info)
+        public PathSelectorResult ShowPathSelector(PathSelectorInfo info)
         {
-            using (PathSelector selector = new PathSelector())
+            IAnkhDialogOwner dlgOwner = GetService<IAnkhDialogOwner>();
+
+            using (PathSelector selector = new PathSelector(info))
             {
                 selector.Context = Context;
-                // to provide information about the paths
-                selector.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
-
-                selector.EnableRecursive = info.EnableRecursive;
-                selector.Items = info.Items;
-                selector.CheckedFilter = info.CheckedFilter;
-                selector.Recursive = info.Depth == SvnDepth.Infinity;
-                selector.SingleSelection = info.SingleSelection;
-                selector.Caption = info.Caption;
-
-                // do we need go get a revision range?
-                if (info.RevisionStart == null && info.RevisionEnd == null)
-                {
-                    selector.Options = PathSelectorOptions.NoRevision;
-                }
-                else if (info.RevisionEnd == null)
-                {
-                    selector.RevisionStart = info.RevisionStart;
-                    selector.Options = PathSelectorOptions.DisplaySingleRevision;
-                }
-                else
-                {
-                    selector.RevisionStart = info.RevisionStart;
-                    selector.RevisionEnd = info.RevisionEnd;
-                    selector.Options = PathSelectorOptions.DisplayRevisionRange;
-                }
 
 
 
-                // show it
-                if (selector.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) == DialogResult.OK)
-                {
-                    info.CheckedItems = new List<SvnItem>(selector.CheckedItems);
-                    info.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    info.RevisionStart = selector.RevisionStart;
-                    info.RevisionEnd = selector.RevisionEnd;
-
-                    return info;
-                }
-                else
-                {
-                    return null;
-                }
+                bool succeeded = selector.ShowDialog(dlgOwner.DialogOwner) == DialogResult.OK;
+                PathSelectorResult result = new PathSelectorResult(succeeded, selector.CheckedItems);
+                result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                result.RevisionStart = selector.RevisionStart;
+                result.RevisionEnd = selector.RevisionEnd;
+                return result;
             }
         }
 
@@ -308,22 +276,23 @@ namespace Ankh
         /// <returns></returns>
         public LockDialogInfo ShowLockDialog(LockDialogInfo info)
         {
-            using (LockDialog dlg = new LockDialog())
-            {
-                dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
+            return null;
+            //using (LockDialog dlg = new LockDialog())
+            //{
+            //    dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
 
-                dlg.Items = info.Items;
-                dlg.CheckedFilter = info.CheckedFilter;
-                dlg.Message = info.Message;
-                dlg.StealLocks = info.StealLocks;
-                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                    return null;
+            //    dlg.Items = info.VisibleItems;
+            //    dlg.CheckedFilter = info.CheckedFilter;
+            //    dlg.Message = info.Message;
+            //    dlg.StealLocks = info.StealLocks;
+            //    if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
+            //        return null;
 
-                info.CheckedItems = new List<SvnItem>( dlg.CheckedItems);
-                info.Message = dlg.Message;
-                info.StealLocks = dlg.StealLocks;
-                return info;
-            }
+            //    info.CheckedItems = new List<SvnItem>( dlg.CheckedItems);
+            //    info.Message = dlg.Message;
+            //    info.StealLocks = dlg.StealLocks;
+            //    return info;
+            //}
         }
 
         /// <summary>
@@ -333,27 +302,28 @@ namespace Ankh
         /// <returns></returns>
         public LogDialogInfo ShowLogDialog(LogDialogInfo info)
         {
-            using (LogDialog dlg = new LogDialog())
-            {
-                dlg.EnableRecursive = false;
-                dlg.Items = info.Items;
-                dlg.CheckedFilter = info.CheckedFilter;
-                dlg.Options = PathSelectorOptions.DisplayRevisionRange;
-                dlg.RevisionStart = info.RevisionStart;
-                dlg.RevisionEnd = info.RevisionEnd;
-                dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
-                dlg.StopOnCopy = info.StopOnCopy;
+            return null;
+            //using (LogDialog dlg = new LogDialog())
+            //{
+            //    dlg.EnableRecursive = false;
+            //    dlg.Items = info.VisibleItems;
+            //    dlg.CheckedFilter = info.CheckedFilter;
+            //    dlg.Options = PathSelectorOptions.DisplayRevisionRange;
+            //    dlg.RevisionStart = info.RevisionStart;
+            //    dlg.RevisionEnd = info.RevisionEnd;
+            //    dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
+            //    dlg.StopOnCopy = info.StopOnCopy;
 
-                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                    return null;
+            //    if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
+            //        return null;
 
-                info.CheckedItems = new List<SvnItem>(dlg.CheckedItems);
-                info.StopOnCopy = dlg.StopOnCopy;
-                info.RevisionStart = dlg.RevisionStart;
-                info.RevisionEnd = dlg.RevisionEnd;
+            //    info.CheckedItems = new List<SvnItem>(dlg.CheckedItems);
+            //    info.StopOnCopy = dlg.StopOnCopy;
+            //    info.RevisionStart = dlg.RevisionStart;
+            //    info.RevisionEnd = dlg.RevisionEnd;
 
-                return info;
-            }
+            //    return info;
+            //}
         }
 
         public SwitchDialogInfo ShowSwitchDialog(SwitchDialogInfo info)
@@ -361,7 +331,7 @@ namespace Ankh
             using (SwitchDialog dialog = new SwitchDialog())
             {
                 dialog.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetUrlPathinfo);
-                dialog.Items = info.Items;
+                dialog.Items = info.VisibleItems;
                 dialog.SingleSelection = true;
 				dialog.CheckedFilter = delegate { return true; };
                 dialog.Options = PathSelectorOptions.DisplaySingleRevision;

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using SharpSvn;
 using AnkhSvn.Ids;
 using System.Collections.Generic;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -35,26 +36,31 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            List<SvnItem> resources = new List<SvnItem>();
-			/* context.Selection.GetSelectionResources(true,
-                 new ResourceFilterCallback(SvnItem.VersionedFilter));*/
-
-            if ( resources.Count == 0 )
-            {
-                return;
-            }
 
             SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = SvnRevision.Head;
 
+
+            bool first = true;
+            PathSelectorResult result = null;
+            PathSelectorInfo info = new PathSelectorInfo("Blame",
+                e.Selection.GetSelectedSvnItems(true));
+
+            info.CheckedFilter += delegate(SvnItem item) 
+            {
+                if (first)
+                {
+                    first = false;
+                    return true;
+                }
+                return false;
+            };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
+
             // is shift depressed?
             if ( !CommandBase.Shift )
             {
-				SvnItem first = resources[0];
-				PathSelectorInfo info = new PathSelectorInfo("Blame",
-					resources,
-					delegate(SvnItem item) { return item == first; }
-					);
+				
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
@@ -62,37 +68,39 @@ namespace Ankh.Commands
                 info.SingleSelection = true;
 
                 // show the selector dialog
-                info = context.UIShell.ShowPathSelector( info );
+                result = context.UIShell.ShowPathSelector( info );
                 if ( info == null )
                     return;
 
                 revisionStart = info.RevisionStart;
                 revisionEnd = info.RevisionEnd;
-                resources = new List<SvnItem>(info.CheckedItems);
             }
             else
             {
-                resources = new List<SvnItem>(new SvnItem[]{resources[0]});
+                result = info.DefaultResult;
             }
+
+            if (!result.Succeeded)
+                return;
 
             XslCompiledTransform transform = CommandBase.GetTransform( 
                 context, BlameTransform );
 
-            foreach( SvnItem item in resources )
+            foreach( SvnItem item in result.Selection )
             {
                 // do the blame thing
-                BlameResult result = new BlameResult();
+                BlameResult blameResult = new BlameResult();
 
-                result.Start();
-                BlameRunner runner = new BlameRunner( item.FullPath, 
-                    revisionStart, revisionEnd, result );
+                blameResult.Start();
+                BlameRunner runner = new BlameRunner( item.FullPath,
+                    revisionStart, revisionEnd, blameResult);
 
                 e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-                result.End();
+                blameResult.End();
                
                 // transform it to HTML
                 StringWriter writer = new StringWriter();
-                result.Transform( transform, writer );
+                blameResult.Transform(transform, writer);
 
                 // display the HTML with the filename as caption
                 string filename = Path.GetFileName( item.FullPath );

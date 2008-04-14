@@ -506,7 +506,7 @@ namespace Ankh.Tests
                 throw new NotImplementedException();
             }
 
-            PathSelectorInfo IUIShell.ShowPathSelector(PathSelectorInfo info)
+            PathSelectorResult IUIShell.ShowPathSelector(PathSelectorInfo info)
             {
                 throw new NotImplementedException();
             }

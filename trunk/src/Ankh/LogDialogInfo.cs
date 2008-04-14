@@ -10,6 +10,12 @@ namespace Ankh
     /// </summary>
     public class LogDialogInfo : PathSelectorInfo
     {
+        public LogDialogInfo(Collection<SvnItem> items)
+            : base("", items)
+        {
+        }
+
+        [Obsolete]
 		public LogDialogInfo(Collection<SvnItem> items, Predicate<SvnItem> checkedFilter) : 
             base( "", items, checkedFilter)
         {			

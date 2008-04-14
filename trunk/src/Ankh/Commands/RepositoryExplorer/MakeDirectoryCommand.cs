@@ -69,11 +69,10 @@ namespace Ankh.Commands
 
         private void DoCreateDir( ProgressWorkerArgs e )
         {
-            // create the dir.
-            e.Client.CreateDirectory( this.url );
+            e.Client.RemoteCreateDirectory( this.url );
         }
 
-        private string url;        
+        Uri url;        
     }
 }
 
