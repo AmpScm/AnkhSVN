@@ -13,13 +13,8 @@ namespace Utils
     /// <summary>
     /// Performs error handling and reporting.
     /// </summary>
-    public sealed class ErrorMessage
+    public static class ErrorMessage
     {
-        private ErrorMessage()
-        {
-            // empty
-        }
-
         /// <summary>
         /// Concatenates the error messages and exception types from (potentially)
         /// nested exceptions.
