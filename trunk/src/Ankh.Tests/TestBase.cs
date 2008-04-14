@@ -333,30 +333,6 @@ namespace NSvn.Core.Tests
         }
 
         protected const int PortNumber = 7777;
-        
-       
-
-        //        private static void Main()
-        //        {
-        //            TestBase test = new TestBase();
-        //            test.ExtractRepos();
-        //
-        //            Console.WriteLine( "repos url: {0}", test.ReposUrl );
-        //
-        //            Process p = Process.Start( "svn", string.Format( "ls {0}", test.ReposUrl ) );
-        //            p.WaitForExit();
-        //            Debug.Assert( p.ExitCode == 0, "svn ls exit code not 0" );
-        //            
-        //
-        //            test.ExtractWorkingCopy();
-        //
-        //            Console.WriteLine( "working copy path: {0}", test.WcPath );
-        //            p = Process.Start( "svn", string.Format( "status {0}", test.WcPath ) );
-        //            p.WaitForExit();
-        //            Debug.Assert( p.ExitCode == 0, "svn status exit code not 0");
-        //            
-        //            
-        //        }
         protected readonly string REPOS_FILE;
         private const string REPOS_NAME = "repos";
         protected const string BASEPATH = @"\tmp";

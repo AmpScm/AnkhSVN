@@ -69,12 +69,6 @@ namespace Ankh.UI
             base.Dispose( disposing );
         }
 
-        public static void Main()
-        {
-            PropertyEditorDialog pop = new PropertyEditorDialog();
-            pop.ShowDialog();
-        }
-
         /// <summary>
         /// List the property items defined.
         /// </summary>
