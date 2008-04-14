@@ -188,7 +188,7 @@
     <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
     <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
-    <Content Include="Gui\PendingChanges\ChangeSourceControl.ico" />
+    <Content Include="Gui\PendingChanges\ChangeSourceControl.png" />
     <Content Include="Gui\PendingChanges\CheckOut.png" />
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />

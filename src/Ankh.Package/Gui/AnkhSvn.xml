@@ -84,7 +84,7 @@
           <Group id="Grp_FileSccManagement" priority="0x0200">
             <Button id="Cmd_FileSccChangeSourceControl" name="ChangeSourceControl"  priority="0x100"
                     text="Change Source C&amp;ontrol..."
-                    toolTip="Change the Source Control bindings of the projects in this solution" iconFile="PendingChanges/ChangeSourceControl.ico">
+                    toolTip="Change the Source Control bindings of the projects in this solution" iconFile="PendingChanges/ChangeSourceControl.png">
               <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging"/>
             </Button>
             <ButtonRef id="Cmd_ShowPendingChanges" priority="0x301" />
