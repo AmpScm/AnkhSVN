@@ -15,7 +15,7 @@ namespace Ankh.UI
 		/// <summary>
 		/// The local target
 		/// </summary>
-		string LocalTarget { get; set; }
+		ICollection<string> LocalTargets { get; set; }
 
 		/// <summary>
 		/// Aka stop-on-copy

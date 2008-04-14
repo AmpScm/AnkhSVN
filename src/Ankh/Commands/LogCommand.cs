@@ -10,6 +10,8 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using AnkhSvn.Ids;
 using System.Collections.Generic;
+using Ankh.UI;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.Commands
 {
@@ -23,7 +25,7 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned)
                     return;
@@ -34,7 +36,19 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
+            IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
+            package.ShowToolWindow(AnkhToolWindow.Log);
 
+            List<string> selected = new List<string>();
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (i.IsVersioned)
+                    selected.Add(i.FullPath);
+            }
+
+            
+            LogToolControl logToolControl = e.Context.GetService<LogToolControl>();
+            logToolControl.Target = selected;
             /*IList resources = context.Selection.GetSelectionResources(
                 false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
 

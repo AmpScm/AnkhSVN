@@ -9,5 +9,6 @@ namespace AnkhSvn.Ids
         RepositoryExplorer,
         WorkingCopyExplorer,
         PendingChanges,
+        Log
     }
 }
