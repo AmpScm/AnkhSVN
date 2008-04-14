@@ -38,7 +38,7 @@ namespace Ankh.Selection
         CachedEnumerable<SvnItem> _svnItemsRecursive;
         CachedEnumerable<SvnProject> _selectedProjects;
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
-        IVsProject3 _miscFiles;
+        IVsHierarchy _miscFiles;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
         string _solutionFilename;
@@ -119,9 +119,9 @@ namespace Ankh.Selection
             _miscFiles = null;
         }
 
-        public IVsProject3 MiscellaneousProject
+        public IVsHierarchy MiscellaneousProject
         {
-            get { return _miscFiles ?? (_miscFiles = VsShellUtilities.GetMiscellaneousProject(Context)); }
+            get { return _miscFiles ?? (_miscFiles = (VsShellUtilities.GetMiscellaneousProject(Context) as IVsHierarchy)); }
         }
 
         public IVsSolution Solution
@@ -385,9 +385,7 @@ namespace Ankh.Selection
                 Marshal.Release(hierPtr);
                 isNested = true;
 
-                IVsProject3 p3 = nestedHierarchy as IVsProject3;
-
-                if(p3 != null && (p3 == MiscellaneousProject))
+                if (nestedHierarchy == null || (nestedHierarchy == MiscellaneousProject))
                     yield break;
             }
 
