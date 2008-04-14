@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Ankh.VS;
+using System.IO;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -48,7 +50,32 @@ namespace Ankh.UI.RepositoryOpen
             {
                 _projectUri = value;
                 projectUrl.Text = (value != null) ? value.ToString() : "";
+
+                if (Context != null)
+                {
+                    IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
+
+                    string txt = Path.GetExtension(value.PathAndQuery.Split('?')[0].Trim('/'));
+
+                    int ico = mapper.GetIconForExtension(txt);
+
+                    projectIcon.Image = CreateIcon(mapper.ImageList, ico);
+                    dirIco.Image = CreateIcon(mapper.ImageList, mapper.DirectoryIcon);
+                }
             }
+        }
+
+        Image CreateIcon(ImageList imgList, int index)
+        {
+            Bitmap bmp = new Bitmap(16, 16, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+            using (Graphics g = Graphics.FromImage(bmp))
+            using( SolidBrush sb = new SolidBrush(BackColor))
+            {
+                g.FillRectangle(sb, 0, 0, 16, 16);
+                imgList.Draw(g, 0, 0, 16, 16, index);
+            }
+
+            return bmp;
         }
 
         Uri _rootUri;
