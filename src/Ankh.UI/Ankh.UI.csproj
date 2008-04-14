@@ -459,12 +459,6 @@
     <Compile Include="LogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LogDialogTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LogDialogTest.Designer.cs">
-      <DependentUpon>LogDialogTest.cs</DependentUpon>
-    </Compile>
     <Compile Include="LogMessageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -676,10 +670,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LogChangedPaths.resx">
       <DependentUpon>LogChangedPaths.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogDialogTest.resx">
-      <DependentUpon>LogDialogTest.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="LogDialogView.resx">
