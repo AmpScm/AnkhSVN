@@ -163,7 +163,7 @@ namespace Ankh.Selection
                     if (ErrorHandler.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
-                        flags = GetFlagsFromOleBuffer(dw, true);
+                        GC.KeepAlive(GetFlagsFromOleBuffer(dw, true)); // Don't parse the flags as none are defined on special files
 
                         if (files != null && files.Length > 0)
                             allFiles.AddRange(files);
