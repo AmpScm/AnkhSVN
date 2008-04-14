@@ -660,7 +660,6 @@
     </EmbeddedResource>
     <None Include="Ankh.UI.snk" />
     <None Include="Ankh.UI.wxs" />
-    <None Include="WCExplorer.cd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddWorkingCopyExplorerRootDialog.resx">
