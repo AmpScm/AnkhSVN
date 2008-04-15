@@ -349,17 +349,6 @@ namespace Ankh
             return null;
         }
 
-        public string ShowNewDirectoryDialog()
-        {
-            using (NewDirectoryDialog dlg = new NewDirectoryDialog())
-            {
-                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                    return null;
-
-                return dlg.DirectoryName;
-            }
-        }
-
         public RepositoryRootInfo ShowAddRepositoryRootDialog()
         {
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())

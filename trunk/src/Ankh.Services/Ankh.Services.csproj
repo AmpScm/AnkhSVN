@@ -76,6 +76,7 @@
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="Scc\PendingChange.cs" />
+    <Compile Include="UI\ICurrentItemSource.cs" />
     <Compile Include="UI\IProgressRunner.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />

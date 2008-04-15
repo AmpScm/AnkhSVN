@@ -121,10 +121,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
-    <Reference Include="SharpSvn.UI, Version=1.4999.0.34878, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\autolib\SharpSvn\SharpSvn.UI.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -155,10 +151,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddRepositoryRootDialog.cs">
+    <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddRepositoryRootDialog.Designer.cs">
+    <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.Designer.cs">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AddSolutionDialog.cs">
@@ -167,17 +163,11 @@
     <Compile Include="AddSolutionDialog.Designer.cs">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddWorkingCopyExplorerRootDialog.cs">
+    <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddWorkingCopyExplorerRootDialog.Designer.cs">
+    <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.Designer.cs">
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="AdminDirDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdminDirDialog.Designer.cs">
-      <DependentUpon>AdminDirDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -213,15 +203,6 @@
     <Compile Include="DiffHtmlModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DiffTab.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="DiffView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DiffView.Designer.cs">
-      <DependentUpon>DiffView.cs</DependentUpon>
-    </Compile>
     <Compile Include="ErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,16 +215,15 @@
     <Compile Include="ExportDialog.Designer.cs">
       <DependentUpon>ExportDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileSystemDetailsView.cs">
+    <Compile Include="WorkingCopyExplorer\FileSystemDetailsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FileSystemItemAttributes.cs" />
-    <Compile Include="FileSystemTreeView.cs">
+    <Compile Include="WorkingCopyExplorer\FileSystemItemAttributes.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ICurrentItemSource.cs" />
-    <Compile Include="IFileSystemItem.cs" />
-    <Compile Include="IRepositoryTreeView.cs">
+    <Compile Include="WorkingCopyExplorer\IFileSystemItem.cs" />
+    <Compile Include="RepositoryExplorer\IRepositoryTreeView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LockDialog.Designer.cs">
@@ -266,9 +246,6 @@
     </Compile>
     <Compile Include="MultiLineStringTypeEditorDialog.Designer.cs">
       <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="NewDirectoryDialog.Designer.cs">
-      <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PathSelectionTreeView.Designer.cs">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
@@ -351,7 +328,7 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyEditorDialog.Designer.cs">
+    <Compile Include="PropertyEditors\PropertyEditorDialog.Designer.cs">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PropertyEditors\EolStylePropertyEditor.cs">
@@ -437,21 +414,12 @@
     <Compile Include="SvnLog\LogToolControl.Designer.cs">
       <DependentUpon>LogToolControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SwitchDialog.Designer.cs">
-      <DependentUpon>SwitchDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TestRepositoryExplorer.Designer.cs">
-      <DependentUpon>TestRepositoryExplorer.cs</DependentUpon>
-    </Compile>
     <Compile Include="UITypeEditors\AdminDirectoryNameTypeConverter.cs" />
     <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
     <Compile Include="UITypeEditors\LogMessageTypeEditor.cs" />
     <Compile Include="UITypeEditors\MergeExeTypeEditor.cs" />
     <Compile Include="UpdateDialog.Designer.cs">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewLogDialog.Designer.cs">
-      <DependentUpon>ViewLogDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
@@ -489,9 +457,6 @@
     <Compile Include="MultiLineStringTypeEditorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="NewDirectoryDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="PathSelectionTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -507,7 +472,7 @@
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertyEditorDialog.cs">
+    <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="RelocateDialog.cs">
@@ -531,17 +496,8 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TypeConverters.cs" />
-    <Compile Include="SwitchDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TestRepositoryExplorer.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="TypeEditors.cs" />
     <Compile Include="UpdateDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ViewLogDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="VSSelectionControls\SelectionItemMap.cs" />
@@ -549,22 +505,18 @@
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WorkingCopyExplorerControl.cs">
+    <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WorkingCopyExplorerControl.Designer.cs">
+    <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.Designer.cs">
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AddRepositoryRootDialog.resx">
+    <EmbeddedResource Include="RepositoryExplorer\AddRepositoryRootDialog.resx">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AddSolutionDialog.resx">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AdminDirDialog.resx">
-      <DependentUpon>AdminDirDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CheckoutDialog.resx">
@@ -577,10 +529,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConflictDialog.resx">
       <DependentUpon>ConflictDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DiffView.resx">
-      <DependentUpon>DiffView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorDialog.resx">
@@ -603,10 +551,6 @@
       <DependentUpon>LogMessageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="NewDirectoryDialog.resx">
-      <DependentUpon>NewDirectoryDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="PathSelectionTreeView.resx">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -623,7 +567,7 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditorDialog.resx">
+    <EmbeddedResource Include="PropertyEditors\PropertyEditorDialog.resx">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -647,27 +591,15 @@
       <DependentUpon>RevisionPicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SwitchDialog.resx">
-      <DependentUpon>SwitchDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TestRepositoryExplorer.resx">
-      <DependentUpon>TestRepositoryExplorer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ViewLogDialog.resx">
-      <DependentUpon>ViewLogDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Ankh.UI.snk" />
     <None Include="Ankh.UI.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddWorkingCopyExplorerRootDialog.resx">
+    <EmbeddedResource Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -780,7 +712,7 @@
       <DependentUpon>LogToolControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="WorkingCopyExplorerControl.resx">
+    <EmbeddedResource Include="WorkingCopyExplorer\WorkingCopyExplorerControl.resx">
       <SubType>Designer</SubType>
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
     </EmbeddedResource>
