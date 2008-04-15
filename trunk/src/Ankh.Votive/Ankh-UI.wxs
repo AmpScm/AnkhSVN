@@ -392,7 +392,7 @@ Click Install to start the installation.</Text>
                     <Text>MsiPathEdit</Text>
                 </Control>
                 <Control Id="BrowseButton" Type="PushButton" X="276" Y="106" Width="60" Height="18" Text="[ButtonText_Browse]">
-                    <Publish Property="_BrowseProperty" Value="TARGETDIR">1</Publish>
+                    <Publish Property="_BrowseProperty" Value="INSTALLLOCATION">1</Publish>
                     <Publish Event="SpawnDialog" Value="SelectFolderDialog">1</Publish>
                 </Control>
                 <!--Control Id="DiskCostButton" Type="PushButton" X="276" Y="130" Width="60" Height="18">
@@ -422,7 +422,7 @@ Click Install to start the installation.</Text>
                 </Control>
                 <Control Id="NextButton" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes"
                     Text="[ButtonText_Next]">
-                    <Publish Event="SetTargetPath" Value="TARGETDIR">1</Publish>
+                    <Publish Event="SetTargetPath" Value="INSTALLLOCATION">1</Publish>
                     <Publish Event="SpawnDialog" Value="DiskCost">OutOfDiskSpace=1</Publish>
                     <Publish Event="EndDialog" Value="Return">FolderForm_NextArgs="" AND OutOfDiskSpace&lt;&gt;1</Publish>
                     <Publish Event="NewDialog" Value="[FolderForm_NextArgs]">FolderForm_NextArgs&lt;&gt;"" AND OutOfDiskSpace&lt;&gt;1</Publish>
@@ -535,7 +535,7 @@ Click Install to start the installation.</Text>
                     <Subscribe Event="SelectionPathOn" Attribute="Visible" />
                     <Condition Action="hide">Installed</Condition>
                 </Control>
-                <Control Id="Location" Type="Text" X="30" Y="201" Width="260" Height="13" Property="TARGETDIR">
+                <Control Id="Location" Type="Text" X="30" Y="201" Width="260" Height="13" Property="INSTALLLOCATION">
                     <Text>&lt;The selection's path&gt;</Text>
                     <Subscribe Event="SelectionPath" Attribute="Text" />
                     <Subscribe Event="SelectionPathOn" Attribute="Visible" />
