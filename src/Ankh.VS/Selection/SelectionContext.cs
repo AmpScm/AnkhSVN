@@ -496,6 +496,9 @@ namespace Ankh.Selection
         {
             foreach (string file in GetSelectedFiles(recursive))
             {
+                if (file.LastIndexOf(':') > 1) // This skips URLs
+                    continue;
+                    
                 yield return _cache[file];
             }
         }
@@ -537,6 +540,8 @@ namespace Ankh.Selection
                     yield return new SvnProject(null, si.SccProject);
                     continue;
                 }
+                else if (si.Hierarchy is IVsSccVirtualFolders)
+                    continue; // Skip URL WebApplications fast
 
                 string[] files;
 
@@ -553,6 +558,9 @@ namespace Ankh.Selection
                 if (projectMapper != null)
                     foreach (string file in files)
                     {
+                        if (file.LastIndexOf(':') > 1)
+                            continue; // Skip URLs
+
                         foreach (SvnProject project in projectMapper.GetAllProjectsContaining(file))
                         {
                             if (project.RawHandle != null)
