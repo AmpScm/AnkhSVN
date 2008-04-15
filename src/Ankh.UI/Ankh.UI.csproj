@@ -229,17 +229,11 @@
     <Compile Include="LockDialog.Designer.cs">
       <DependentUpon>LockDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="LogDialog.Designer.cs">
-      <DependentUpon>LogDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="LogDialogView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="LogDialogView.Designer.cs">
       <DependentUpon>LogDialogView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LogMessageControl.Designer.cs">
-      <DependentUpon>LogMessageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MultiLineStringEditorWithTemplates.Designer.cs">
       <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
@@ -430,12 +424,6 @@
     <Compile Include="LogChangedPaths.Designer.cs">
       <DependentUpon>LogChangedPaths.cs</DependentUpon>
     </Compile>
-    <Compile Include="LogDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LogMessageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="LogMessageTemplate.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -541,14 +529,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LockDialog.resx">
       <DependentUpon>LockDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogDialog.resx">
-      <DependentUpon>LogDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LogMessageControl.resx">
-      <DependentUpon>LogMessageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelectionTreeView.resx">
