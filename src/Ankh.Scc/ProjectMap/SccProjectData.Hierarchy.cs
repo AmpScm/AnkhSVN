@@ -35,7 +35,8 @@ namespace Ankh.Scc.ProjectMap
 
         public int OnInvalidateItems(uint itemidParent)
         {
-            SetDirty();
+            // Should be set the project dirty.. 
+            // But is called in some cases when it really shouldn't
             return VSConstants.S_OK;
         }
 
