@@ -143,7 +143,9 @@ namespace Ankh.Settings
 
                         Uri combined = new Uri(solution, relative);
 
-                        return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(combined.AbsolutePath.Replace('/', Path.DirectorySeparatorChar));
+                        string vv = combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+
+                        return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv.Replace('/', Path.DirectorySeparatorChar));
                     }
 
                     return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
