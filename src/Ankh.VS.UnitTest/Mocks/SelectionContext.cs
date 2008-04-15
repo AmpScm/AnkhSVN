@@ -59,6 +59,11 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 get { return false; }
             }
+
+            public IEnumerable<T> GetSelection<T>() where T : class
+            {
+                yield break;
+            }
         }
     }
 }

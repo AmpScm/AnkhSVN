@@ -42,6 +42,15 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<SvnProject> GetSelectedProjects(bool recursive);
 
+
+        /// <summary>
+        /// Gets the item selection if it is available in the specified type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IEnumerable<T> GetSelection<T>()
+            where T : class;
+
         /// <summary>
         /// Gets a boolean indicating whether the solution node is currently selected
         /// </summary>
