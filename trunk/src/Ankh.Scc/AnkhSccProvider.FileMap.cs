@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Collections;
 using Ankh.Selection;
 using SharpSvn;
+using Ankh.VS;
 
 namespace Ankh.Scc
 {
@@ -520,6 +521,35 @@ namespace Ankh.Scc
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets a boolean indicating whether the specified path is of a project or the solution
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool IsProjectFileOrSolution(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SccProjectFile file;
+            if (!_fileMap.TryGetValue(path, out file))
+            {
+                // TODO: Cache this value somewhere after opening the solution
+                IAnkhSolutionSettings solSet = GetService<IAnkhSolutionSettings>();
+
+                if(solSet != null)
+                    return string.Equals(solSet.SolutionFilename, path, StringComparison.OrdinalIgnoreCase);
+            }
+
+            foreach (SccProjectData pd in file.GetOwnerProjects())
+            {
+                if (string.Equals(pd.ProjectFile, path, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+
+            return false;
         }
 
         #endregion

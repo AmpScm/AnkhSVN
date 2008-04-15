@@ -54,6 +54,14 @@ namespace Ankh.Scc
         /// <returns></returns>
         bool ContainsPath(string path);
 
+
+        /// <summary>
+        /// Gets a boolean indicating whether the specified path is of a project or the solution
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        bool IsProjectFileOrSolution(string path);
+
         /// <summary>
         /// Gets the project info.
         /// </summary>
