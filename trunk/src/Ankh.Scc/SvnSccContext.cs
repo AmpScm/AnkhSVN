@@ -548,8 +548,11 @@ namespace Ankh.Scc
             string file = Path.GetFileName(path);
 
             if (item.IsVersioned && item.Name == file)
-                return true;
+                return true; // Item already exists.. Fast
+            else if (!item.Exists && SvnTools.IsBelowManagedPath(path))
+                return true; // Item does not exist.. Fast
 
+            // Item does exist; check casing
             string parentDir = Path.GetDirectoryName(path);
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;

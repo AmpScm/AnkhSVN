@@ -17,14 +17,6 @@ namespace Ankh.Scc
             IVsSccProject2 sccProject = pProject as IVsSccProject2;
             bool track = _sccProvider.TrackProjectChanges(sccProject);
 
-            if(track)
-                for (int i = 0; i < cFiles; i++)
-                {
-                    string s = rgszMkNewNames[i];
-                    if (!string.IsNullOrEmpty(s))
-                        StatusCache.MarkDirty(s);
-                }
-
             bool allOk = true;
             for (int i = 0; i < cFiles; i++)
             {
