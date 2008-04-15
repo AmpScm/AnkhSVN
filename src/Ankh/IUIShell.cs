@@ -41,12 +41,6 @@ namespace Ankh
         void SetRepositoryExplorerSelection( object[] selection );
 
         /// <summary>
-        /// Shows the "New directory" dialog.
-        /// </summary>
-        /// <returns>The name of the new dialog, or null.</returns>
-        string ShowNewDirectoryDialog();
-
-        /// <summary>
         /// Whether the Repository Explorer window has focus
         /// </summary>
         /// <returns></returns>

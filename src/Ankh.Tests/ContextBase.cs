@@ -466,11 +466,6 @@ namespace Ankh.Tests
                 throw new NotImplementedException();
             }
 
-            string IUIShell.ShowNewDirectoryDialog()
-            {
-                throw new NotImplementedException();
-            }
-
             bool IUIShell.RepositoryExplorerHasFocus()
             {
                 throw new NotImplementedException();
