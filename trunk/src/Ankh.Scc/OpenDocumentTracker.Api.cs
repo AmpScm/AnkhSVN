@@ -4,10 +4,12 @@ using System.Text;
 using Ankh.Scc.ProjectMap;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
+using System.IO;
 
 namespace Ankh.Scc
 {
-    partial class OpenDocumentTracker 
+    partial class OpenDocumentTracker
     {
         public bool IsDocumentOpen(string path)
         {
@@ -15,8 +17,8 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
-            
-            if(!_docMap.TryGetValue(path, out data))
+
+            if (!_docMap.TryGetValue(path, out data))
                 return false;
             else
                 return true;
@@ -28,10 +30,10 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("path");
 
             SccDocumentData data;
-            
-            if(!_docMap.TryGetValue(path, out data))
+
+            if (!_docMap.TryGetValue(path, out data))
                 return false;
-            
+
             return data.IsDirty;
         }
 
@@ -51,7 +53,7 @@ namespace Ankh.Scc
                 return true; // Not/never modified, no need to save
 
             // Save the document if it is dirty
-            return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave, 
+            return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments((uint)__VSRDTSAVEOPTIONS.RDTSAVEOPT_PromptSave,
                 data.Hierarchy, data.ItemId, data.Cookie));
         }
 
@@ -98,12 +100,6 @@ namespace Ankh.Scc
             return true;
         }
 
-        public DocumentLock LockDocuments(IEnumerable<string> paths)
-        {
-            return new SccDocumentLock(Context);
-        }
-
-
         /// <summary>
         /// Marks the specified path dirty
         /// </summary>
@@ -125,32 +121,170 @@ namespace Ankh.Scc
             }
         }
 
-        class SccDocumentLock : DocumentLock
+        public ICollection<string> GetDocumentsBelow(string path)
         {
-            readonly IAnkhServiceProvider _context;
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
 
-            public SccDocumentLock(IAnkhServiceProvider context)
+            path = SvnTools.GetNormalizedFullPath(path);
+
+            List<string> files = new List<string>();
+            SccDocumentData dd;
+            if (_docMap.TryGetValue(path, out dd))
             {
-                if (context == null)
-                    throw new ArgumentNullException("context");
-
-                _context = context;
+                files.Add(path);
             }
+
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString()))
+                path += Path.DirectorySeparatorChar;
+
+            foreach (SccDocumentData d in _docMap.Values)
+            {
+                if (d.Name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.Name.Length > path.Length)
+                    files.Add(SvnTools.GetNormalizedFullPath(path));
+            }
+
+            return files.ToArray();
+        }
+
+        public DocumentLock LockDocuments(IEnumerable<string> paths, DocumentLockType lockType)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            HybridCollection<string> ignoring = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            HybridCollection<string> readOnly = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string path in paths)
+            {
+                SccDocumentData dd;
+                if (_docMap.TryGetValue(path, out dd))
+                {
+                    if (!ignoring.Contains(dd.Name) && dd.IgnoreFileChanges(true))
+                        ignoring.Add(dd.Name);
+
+                    if (lockType >= DocumentLockType.ReadOnly && !readOnly.Contains(dd.Name) && !dd.IsReadOnly())
+                    {
+                        // Don't set read-only twice!!!
+                        if (dd.SetReadOnly(true))
+                            readOnly.Add(dd.Name);
+                    }
+                }
+            }
+            return new SccDocumentLock(this, ignoring, readOnly);
+        }
+
+        class SccDocumentLock : DocumentLock, IVsFileChangeEvents
+        {
+            readonly OpenDocumentTracker _tracker;
+            readonly HybridCollection<string> _ignoring, _readonly;
+            readonly Dictionary<uint, string> _monitor;
+            readonly HybridCollection<string> _changedPaths;
+            IVsFileChangeEx _change;
+
+            public SccDocumentLock(OpenDocumentTracker tracker, HybridCollection<string> ignoring, HybridCollection<string> readOnly)
+            {
+                if (tracker == null)
+                    throw new ArgumentNullException("tracker");
+                else if (ignoring == null)
+                    throw new ArgumentNullException("ignoring");
+                else if (readOnly == null)
+                    throw new ArgumentNullException("readOnly");
+
+                _tracker = tracker;
+                _ignoring = ignoring;
+                _readonly = readOnly;
+                _changedPaths = new HybridCollection<string>();
+                _monitor = new Dictionary<uint, string>();
+            }
+
+            public override void MonitorChanges()
+            {
+                if (_monitor.Count > 0)
+                    return;
+                _change = _tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+                if (_change == null)
+                    return;
+
+                foreach (string path in _ignoring)
+                {
+                    uint cky;
+
+                    // BH: We don't monitor the attributes as some SVN actions put files temporary on read only!
+                    if (ErrorHandler.Succeeded(_change.AdviseFileChange(path, (uint)(/*_VSFILECHANGEFLAGS.VSFILECHG_Attr |*/
+                        _VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out cky)))
+                    {
+                        _monitor.Add(cky, path);
+                    }
+                }
+            }
+
+            public override void ReloadModified()
+            {
+                if (_monitor == null || _change == null)
+                    return;
+
+                foreach (string file in _monitor.Values)
+                {
+                    _change.SyncFile(file);
+                }
+
+                List<string> changed = new List<string>(_changedPaths);
+                _changedPaths.Clear();
+
+                foreach (string path in changed)
+                {
+                    SccDocumentData dd;
+                    if (_tracker._docMap.TryGetValue(path, out dd))
+                    {
+                        if (!dd.GetIsDirty())
+                            dd.Reload(true);
+                    }
+                }
+            }
+
+            #region IVsFileChangeEvents
+            // Called by the file monitor when a monitored directory has changed
+            int IVsFileChangeEvents.DirectoryChanged(string pszDirectory)
+            {
+                if (string.IsNullOrEmpty(pszDirectory))
+                    return VSConstants.S_OK;
+
+                if (!_changedPaths.Contains(pszDirectory))
+                    _changedPaths.Add(pszDirectory);
+
+                return VSConstants.S_OK;
+            }
+
+            // Called by the file monitor when a monitored file has changed
+            int IVsFileChangeEvents.FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
+            {
+                if (cChanges == 0 || rgpszFile == null)
+                    return VSConstants.S_OK;
+
+                for (int i = 0; i < cChanges && i < rgpszFile.Length; i++)
+                {
+                    string file = rgpszFile[i];
+                    if (string.IsNullOrEmpty(file))
+                        continue;
+
+                    if (!_changedPaths.Contains(file))
+                        _changedPaths.Add(file);
+                }
+
+                return VSConstants.S_OK;
+            }
+#endregion
 
             public override void Reload(IEnumerable<string> paths)
             {
                 if (paths == null)
                     throw new ArgumentNullException("paths");
 
-                OpenDocumentTracker dt = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
-
-                if (dt == null)
-                    throw new InvalidOperationException();
-
                 foreach (string path in paths)
                 {
                     SccDocumentData dd;
-                    if (dt._docMap.TryGetValue(path, out dd))
+                    if (_tracker._docMap.TryGetValue(path, out dd))
                     {
                         if (!dd.GetIsDirty())
                             dd.Reload(true);
@@ -160,8 +294,42 @@ namespace Ankh.Scc
 
             public override void Dispose()
             {
-                //
+                if (_change == null)
+                    _change = _tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+                if (_change != null)
+                {
+                    // Sync all files for the last time
+                    // to make sure they are not reloaded for old changes after disposing
+
+                    foreach (string path in _ignoring)
+                        _change.SyncFile(path);
+
+                    foreach (uint v in _monitor.Keys)
+                        _change.UnadviseFileChange(v);
+
+                    _monitor.Clear();
+                }
+
+                foreach (string path in _readonly)
+                {
+                    SccDocumentData dd;
+                    if (_tracker._docMap.TryGetValue(path, out dd))
+                    {
+                        dd.SetReadOnly(false);
+                    }
+                }
+
+                foreach (string path in _ignoring)
+                {
+                    SccDocumentData dd;
+                    if (_tracker._docMap.TryGetValue(path, out dd))
+                    {
+                        dd.IgnoreFileChanges(false);
+                    }
+                }                
             }
         }
     }
 }
+
