@@ -32,10 +32,10 @@
             this.checkOutFrom = new System.Windows.Forms.ComboBox();
             this.projectRootLabel = new System.Windows.Forms.Label();
             this.projectLabel = new System.Windows.Forms.Label();
-            this.projectUrl = new System.Windows.Forms.Label();
+            this.projectUrl = new System.Windows.Forms.TextBox();
             this.projectIcon = new System.Windows.Forms.PictureBox();
             this.locationIcon = new System.Windows.Forms.GroupBox();
-            this.directory = new System.Windows.Forms.Label();
+            this.directory = new System.Windows.Forms.TextBox();
             this.browseDirectoryButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.dirIco = new System.Windows.Forms.PictureBox();
@@ -74,9 +74,9 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.checkOutFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.checkOutFrom.FormattingEnabled = true;
-            this.checkOutFrom.Location = new System.Drawing.Point(96, 36);
+            this.checkOutFrom.Location = new System.Drawing.Point(93, 36);
             this.checkOutFrom.Name = "checkOutFrom";
-            this.checkOutFrom.Size = new System.Drawing.Size(351, 21);
+            this.checkOutFrom.Size = new System.Drawing.Size(354, 21);
             this.checkOutFrom.TabIndex = 2;
             // 
             // projectRootLabel
@@ -99,10 +99,13 @@
             // 
             // projectUrl
             // 
-            this.projectUrl.AutoSize = true;
+            this.projectUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.projectUrl.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.projectUrl.Location = new System.Drawing.Point(93, 16);
             this.projectUrl.Name = "projectUrl";
-            this.projectUrl.Size = new System.Drawing.Size(344, 13);
+            this.projectUrl.ReadOnly = true;
+            this.projectUrl.Size = new System.Drawing.Size(354, 13);
             this.projectUrl.TabIndex = 0;
             this.projectUrl.Text = "http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/AnkhSvn.2008.sln";
             // 
@@ -131,10 +134,13 @@
             // 
             // directory
             // 
-            this.directory.AutoSize = true;
-            this.directory.Location = new System.Drawing.Point(96, 19);
+            this.directory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.directory.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.directory.Location = new System.Drawing.Point(93, 19);
             this.directory.Name = "directory";
-            this.directory.Size = new System.Drawing.Size(274, 13);
+            this.directory.ReadOnly = true;
+            this.directory.Size = new System.Drawing.Size(325, 13);
             this.directory.TabIndex = 1;
             this.directory.Text = "C:\\Users\\SomeOne\\My Visual Studio Projects\\AnkhSvn";
             // 
@@ -183,7 +189,7 @@
             // version
             // 
             this.version.AutoSize = true;
-            this.version.Location = new System.Drawing.Point(96, 19);
+            this.version.Location = new System.Drawing.Point(90, 19);
             this.version.Name = "version";
             this.version.Size = new System.Drawing.Size(36, 13);
             this.version.TabIndex = 1;
@@ -265,13 +271,13 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label projectUrl;
+        private System.Windows.Forms.TextBox projectUrl;
         private System.Windows.Forms.PictureBox projectIcon;
         private System.Windows.Forms.GroupBox locationIcon;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.PictureBox dirIco;
         private System.Windows.Forms.Label projectRootLabel;
-        private System.Windows.Forms.Label directory;
+        private System.Windows.Forms.TextBox directory;
         private System.Windows.Forms.Button browseDirectoryButton;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button browseVersionButton;
