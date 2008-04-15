@@ -2,7 +2,7 @@
 using System;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to remove a URL from the Repository Explorer.

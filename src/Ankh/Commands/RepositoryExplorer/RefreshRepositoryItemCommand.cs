@@ -3,7 +3,7 @@ using System;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to refresh the current item in the Repository Explorer.

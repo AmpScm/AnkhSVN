@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.

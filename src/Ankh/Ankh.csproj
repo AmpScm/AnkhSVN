@@ -182,7 +182,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\SolutionUpdateCommand.cs" />
-    <Compile Include="Commands\ViewRepositoryFileCommand.cs" />
+    <Compile Include="Commands\RepositoryExplorer\ViewRepositoryFileCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\AddWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\BlameCommand.cs">
       <SubType>Code</SubType>
@@ -190,7 +190,7 @@
     <Compile Include="Commands\CheckoutCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CheckoutFolderCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\CheckoutFolderCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CheckoutRunner.cs">
@@ -206,7 +206,7 @@
     <Compile Include="Commands\CommitItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CopyReposExplorerUrl.cs">
+    <Compile Include="Commands\RepositoryExplorer\CopyReposExplorerUrl.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CreatePatchCommand.cs">
@@ -224,13 +224,10 @@
     <Compile Include="Commands\ExportCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ExportFolderCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\ExportFolderCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Runners\ExportRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ImportSolutionCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\LocalDiffCommandBase.cs">
@@ -270,7 +267,7 @@
     <Compile Include="Commands\RunSvnCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\SaveToFileCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\SendErrorReportCommand.cs">
@@ -280,9 +277,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\SwitchItemCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ToggleAnkhCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\UnlockCommand.cs" />

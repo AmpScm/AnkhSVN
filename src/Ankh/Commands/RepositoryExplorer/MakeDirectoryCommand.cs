@@ -8,7 +8,7 @@ using Utils;
 using AnkhSvn.Ids;
 using SharpSvn;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to creates a new directory here in the Repository Explorer.
