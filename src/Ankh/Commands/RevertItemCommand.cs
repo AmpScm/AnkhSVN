@@ -87,22 +87,18 @@ namespace Ankh.Commands
             using (e.Context.BeginOperation("Reverting"))
             using (DocumentLock dl = docTracker.LockDocuments(paths, DocumentLockType.NoReload))
             {
-                SvnRevertArgs args = new SvnRevertArgs();
                 dl.MonitorChanges();
+
+                SvnRevertArgs args = new SvnRevertArgs();
+                
                 //args.Depth = depth;
                 args.ThrowOnError = false;
-                Dictionary<string, string> revertedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                args.Notify += delegate(object sender, SvnNotifyEventArgs eNotify)
-                {
-                    if (eNotify.Action == SvnNotifyAction.Revert && !revertedItems.ContainsKey(eNotify.FullPath))
-                        revertedItems.Add(eNotify.FullPath, eNotify.FullPath);
-                };
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {
                     client.Revert(paths, args);
                 }
+
                 dl.ReloadModified();
-                dl.Reload(revertedItems.Keys);
             }
         }
     }
