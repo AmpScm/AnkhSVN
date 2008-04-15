@@ -26,7 +26,6 @@ namespace Ankh.Commands
 
                 if (diff == null)
                 {
-                    MessageBox.Show(e.Context.DialogOwner, "Nothing to diff here. Move along.");
                     return;
                 }
 
