@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Collections;
 using Microsoft.VisualStudio.OLE.Interop;
 using IServiceProvider = System.IServiceProvider;
+using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
 using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
 using Ankh.VS.SolutionExplorer;
@@ -38,6 +39,7 @@ namespace Ankh.Selection
         CachedEnumerable<SvnItem> _svnItemsRecursive;
         CachedEnumerable<SvnProject> _selectedProjects;
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
+        Dictionary<Type, IEnumerable> _selectedItemsMap;
         IVsHierarchy _miscFiles;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
@@ -65,7 +67,7 @@ namespace Ankh.Selection
                 _disposed = true;
                 IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
 
-                if(_cookie != 0)
+                if (_cookie != 0)
                     Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
                 ClearCache();
             }
@@ -117,6 +119,7 @@ namespace Ankh.Selection
             _isSolutionExplorer = false;
             _solutionFilename = null;
             _miscFiles = null;
+            _selectedItemsMap = null;
         }
 
         public IVsHierarchy MiscellaneousProject
@@ -165,7 +168,7 @@ namespace Ankh.Selection
             public SelectionItem(IVsHierarchy hierarchy, uint id)
             {
                 // Hierarchy can be null in the solution case
-                
+
                 _hierarchy = hierarchy;
                 _id = id;
             }
@@ -365,7 +368,7 @@ namespace Ankh.Selection
         /// <returns></returns>
         private IEnumerable<SelectionItem> GetDescendants(SelectionItem si, Dictionary<SelectionItem, SelectionItem> previous, ProjectWalkDepth depth)
         {
-            if(si == null)
+            if (si == null)
                 throw new ArgumentNullException("si");
 
             // A hierarchy node can have 2 identities. We only need the inner one
@@ -379,7 +382,7 @@ namespace Ankh.Selection
             IntPtr hierPtr;
             int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out subId);
 
-            if(ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
+            if (ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
                 nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
@@ -389,11 +392,11 @@ namespace Ankh.Selection
                     yield break;
             }
 
-            if(isNested && depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
+            if (isNested && depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
             {
                 yield break; // Don't walk into sub-hierarchies
             }
-            else if(isNested)
+            else if (isNested)
                 si = new SelectionItem(nestedHierarchy, subId);
 
             if (!previous.ContainsKey(si))
@@ -637,7 +640,7 @@ namespace Ankh.Selection
 
         public bool IsSolutionSelected
         {
-            get 
+            get
             {
                 foreach (SelectionItem item in GetSelectedItems(false))
                 {
@@ -648,6 +651,42 @@ namespace Ankh.Selection
                 return false;
             }
         }
+
+        public IEnumerable<T> GetSelection<T>()
+            where T : class
+        {
+            IEnumerable enumerable;
+            if (_selectedItemsMap != null && _selectedItemsMap.TryGetValue(typeof(T), out enumerable))
+                return (IEnumerable<T>)enumerable;
+
+            IEnumerable<T> v = new CachedEnumerable<T>(InternalGetSelection<T>());
+
+            _selectedItemsMap.Add(typeof(T), v);
+            return v;
+        }
+
+        IEnumerable<T> InternalGetSelection<T>()
+            where T : class
+        {
+            ISelectionContainer sc = _currentContainer;
+
+            uint nItems;
+            if (!ErrorHandler.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
+                yield break;
+
+            object[] objs = new object[(int)nItems];
+            if (ErrorHandler.Succeeded(sc.GetObjects((uint)ShellConstants.GETOBJS_SELECTED, nItems, objs)))
+            {
+                foreach (object o in objs)
+                {
+                    T i = o as T;
+
+                    if (i != null)
+                        yield return i;
+                }
+            }
+        }
+
 
         #endregion
     }
