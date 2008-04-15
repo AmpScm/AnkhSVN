@@ -23,7 +23,7 @@ namespace Ankh
         public UIShell(IAnkhServiceProvider context)
             : base(context)
         {
-            
+
         }
 
         #region IUIShell Members
@@ -76,7 +76,7 @@ namespace Ankh
             get
             {
                 // TODO: Fix someway; probably just removing
-				return this.RepositoryExplorer ?? null;
+                return this.RepositoryExplorer ?? null;
             }
         }
 
@@ -119,58 +119,58 @@ namespace Ankh
         /// <returns></returns>
         //public DialogResult ShowCommitDialogModal(CommitContext ctx)
         //{
-            /*
-            //if ( this.commitDialogWindow == null ) 
-                this.CreateCommitDialog();
-            Debug.Assert( this.commitDialog != null );
+        /*
+        //if ( this.commitDialogWindow == null ) 
+            this.CreateCommitDialog();
+        Debug.Assert( this.commitDialog != null );
 
-            this.commitDialog.UrlPaths = ctx.UrlPaths;
-            this.commitDialog.CommitItems = ctx.CommitItems;
-            this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
-            this.commitDialog.KeepLocks = ctx.KeepLocks;
+        this.commitDialog.UrlPaths = ctx.UrlPaths;
+        this.commitDialog.CommitItems = ctx.CommitItems;
+        this.commitDialog.LogMessageTemplate = ctx.LogMessageTemplate;
+        this.commitDialog.KeepLocks = ctx.KeepLocks;
 
-            this.commitDialog.LogMessage = ctx.LogMessage;
+        this.commitDialog.LogMessage = ctx.LogMessage;
 
-            // we want to preserve the original state.
-            bool originalVisibility = this.commitDialogWindow.Visible;
+        // we want to preserve the original state.
+        bool originalVisibility = this.commitDialogWindow.Visible;
 
-            this.commitDialogWindow.Visible = true;
-            this.commitDialogModal = true;
+        this.commitDialogWindow.Visible = true;
+        this.commitDialogModal = true;
 
-            this.EnsureWindowSize( this.commitDialogWindow );
+        this.EnsureWindowSize( this.commitDialogWindow );
 
-            // Fired when user clicks Commit or Cancel.
-            this.commitDialog.Proceed += new EventHandler( this.ProceedCommit );
+        // Fired when user clicks Commit or Cancel.
+        this.commitDialog.Proceed += new EventHandler( this.ProceedCommit );
 
-            // we need the buttons enabled now, since it's pseudo-modal.
-            this.commitDialog.ButtonsEnabled = true;
-            this.commitDialog.Initialize();
+        // we need the buttons enabled now, since it's pseudo-modal.
+        this.commitDialog.ButtonsEnabled = true;
+        this.commitDialog.Initialize();
 
-            // run a message pump while the commit dialog's open
-            Utils.Win32.Message msg;
-            while ( this.commitDialogModal && this.commitDialogWindow.Visible ) 
+        // run a message pump while the commit dialog's open
+        Utils.Win32.Message msg;
+        while ( this.commitDialogModal && this.commitDialogWindow.Visible ) 
+        {
+            if ( Win32.GetMessage( out msg, IntPtr.Zero, 0, 0 ))
             {
-                if ( Win32.GetMessage( out msg, IntPtr.Zero, 0, 0 ))
-                {
-                    Win32.TranslateMessage( out msg );
-                    Win32.DispatchMessage( out msg );                    
-                }
+                Win32.TranslateMessage( out msg );
+                Win32.DispatchMessage( out msg );                    
             }
+        }
 
-            ctx.LogMessage = this.commitDialog.LogMessage;
-            ctx.RawLogMessage = this.commitDialog.RawLogMessage;
-            ctx.CommitItems = this.commitDialog.CommitItems;
-            ctx.KeepLocks = this.commitDialog.KeepLocks;
+        ctx.LogMessage = this.commitDialog.LogMessage;
+        ctx.RawLogMessage = this.commitDialog.RawLogMessage;
+        ctx.CommitItems = this.commitDialog.CommitItems;
+        ctx.KeepLocks = this.commitDialog.KeepLocks;
 
-            ctx.Cancelled = this.commitDialog.CommitDialogResult == CommitDialogResult.Cancel;
+        ctx.Cancelled = this.commitDialog.CommitDialogResult == CommitDialogResult.Cancel;
 
-            // restore the pre-modal state.
-            this.commitDialog.ButtonsEnabled = false;
-            this.commitDialogWindow.Visible = originalVisibility;
-            this.commitDialog.CommitItems = new object[]{};
+        // restore the pre-modal state.
+        this.commitDialog.ButtonsEnabled = false;
+        this.commitDialogWindow.Visible = originalVisibility;
+        this.commitDialog.CommitItems = new object[]{};
 
-            return ctx;
-             */
+        return ctx;
+         */
         //    return DialogResult.OK;
         //}
 
@@ -234,11 +234,11 @@ namespace Ankh
         public void DisplayHtml(string caption, string html, bool reuse)
         {
             IAnkhWebBrowser browser = Context.GetService<IAnkhWebBrowser>();
-            
+
             string htmlFile = Path.GetTempFileName();
             using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.UTF8))
                 w.Write(html);
-            
+
             // have it show the html
             Uri url = new Uri("file://" + htmlFile);
             BrowserArgs args = new BrowserArgs();
@@ -328,24 +328,25 @@ namespace Ankh
 
         public SwitchDialogInfo ShowSwitchDialog(SwitchDialogInfo info)
         {
-            using (SwitchDialog dialog = new SwitchDialog())
-            {
-                dialog.Items = info.VisibleItems;
-                dialog.SingleSelection = true;
-				dialog.CheckedFilter = delegate { return true; };
-                dialog.Options = PathSelectorOptions.DisplaySingleRevision;
-                dialog.Recursive = true;
+            //using (SwitchDialog dialog = new SwitchDialog())
+            //{
+            //    dialog.Items = info.VisibleItems;
+            //    dialog.SingleSelection = true;
+            //    dialog.CheckedFilter = delegate { return true; };
+            //    dialog.Options = PathSelectorOptions.DisplaySingleRevision;
+            //    dialog.Recursive = true;
 
-                if (dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                    return null;
+            //    if (dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
+            //        return null;
 
-                info.SwitchToUrl = dialog.ToUrl;
-                info.Depth = dialog.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                info.Path = dialog.SelectedPath;
-                info.RevisionStart = dialog.RevisionStart;
+            //    info.SwitchToUrl = dialog.ToUrl;
+            //    info.Depth = dialog.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
+            //    info.Path = dialog.SelectedPath;
+            //    info.RevisionStart = dialog.RevisionStart;
 
-                return info;
-            }
+            //    return info;
+            //}
+            return null;
         }
 
         public string ShowNewDirectoryDialog()

@@ -89,12 +89,16 @@ namespace Ankh.UI
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Predicate<SvnItem> CheckedFilter
+        public event Predicate<SvnItem> CheckedFilter
         {
-            get { return _checkedFilter; }
-            set
+            add
             {
-                _checkedFilter = value;
+                _checkedFilter += value;
+                SetCheckedItems(Nodes);
+            }
+            remove
+            {
+                _checkedFilter -= value;
                 SetCheckedItems(Nodes);
             }
         }
@@ -378,7 +382,7 @@ namespace Ankh.UI
         Color _enabledColor;
         Color EnabledColor
         {
-            get 
+            get
             {
                 if (_enabledColor == Color.Empty)
                 {
@@ -388,7 +392,7 @@ namespace Ankh.UI
                         _enabledColor = color;
                     else
                         _enabledColor = Color.Black;
-                } 
+                }
                 return _enabledColor;
             }
         }

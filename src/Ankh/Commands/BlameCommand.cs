@@ -46,7 +46,7 @@ namespace Ankh.Commands
             PathSelectorInfo info = new PathSelectorInfo("Blame",
                 e.Selection.GetSelectedSvnItems(true));
 
-            info.CheckedFilter += delegate(SvnItem item) 
+            info.CheckedFilter += delegate(SvnItem item)
             {
                 if (first)
                 {
@@ -58,9 +58,9 @@ namespace Ankh.Commands
             info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
 
             // is shift depressed?
-            if ( !CommandBase.Shift )
+            if (!CommandBase.Shift)
             {
-				
+
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
@@ -68,8 +68,8 @@ namespace Ankh.Commands
                 info.SingleSelection = true;
 
                 // show the selector dialog
-                result = context.UIShell.ShowPathSelector( info );
-                if ( info == null )
+                result = context.UIShell.ShowPathSelector(info);
+                if (info == null)
                     return;
 
                 revisionStart = info.RevisionStart;
@@ -83,28 +83,28 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
-            XslCompiledTransform transform = CommandBase.GetTransform( 
-                context, BlameTransform );
+            XslCompiledTransform transform = CommandBase.GetTransform(
+                context, BlameTransform);
 
-            foreach( SvnItem item in result.Selection )
+            foreach (SvnItem item in result.Selection)
             {
                 // do the blame thing
                 BlameResult blameResult = new BlameResult();
 
                 blameResult.Start();
-                BlameRunner runner = new BlameRunner( item.FullPath,
+                BlameRunner runner = new BlameRunner(item.FullPath,
                     revisionStart, revisionEnd, blameResult);
 
                 e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
                 blameResult.End();
-               
+
                 // transform it to HTML
                 StringWriter writer = new StringWriter();
                 blameResult.Transform(transform, writer);
 
                 // display the HTML with the filename as caption
-                string filename = Path.GetFileName( item.FullPath );
-                context.UIShell.DisplayHtml( filename, writer.ToString(), false );
+                string filename = Path.GetFileName(item.FullPath);
+                context.UIShell.DisplayHtml(filename, writer.ToString(), false);
             }
         }
 
@@ -112,10 +112,10 @@ namespace Ankh.Commands
 
         private class BlameRunner : IProgressWorker
         {
-            public BlameRunner( string path, SvnRevision start, SvnRevision end, 
-                BlameResult result )
+            public BlameRunner(string path, SvnRevision start, SvnRevision end,
+                BlameResult result)
             {
-                this.path = path; 
+                this.path = path;
                 this.start = start;
                 this.end = end;
                 this.result = result;
@@ -130,7 +130,7 @@ namespace Ankh.Commands
                 //args.IgnoreMimeType
                 //args.IgnoreSpacing
                 //args.IncludeMergedRevisions
-                
+
                 e.Client.Blame(this.path, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
             }
 
@@ -145,7 +145,7 @@ namespace Ankh.Commands
             }
         }
 
-        
+
 
         private const string BlameTransform = "blame.xsl";
 

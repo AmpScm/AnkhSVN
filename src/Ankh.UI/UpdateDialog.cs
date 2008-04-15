@@ -52,7 +52,7 @@ namespace Ankh.UI
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SvnRevision Revision
         {
-            get{ return this.revisionPicker.Revision; }
+            get { return this.revisionPicker.Revision; }
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace Ankh.UI
         /// </summary>
         public ICollection<SvnItem> Items
         {
-            get{ return this.pathSelectionTreeView.Items; }
-            set{ this.pathSelectionTreeView.Items = value; }
+            get { return this.pathSelectionTreeView.Items; }
+            set { this.pathSelectionTreeView.Items = value; }
         }
 
         /// <summary>
@@ -69,21 +69,21 @@ namespace Ankh.UI
         /// </summary>
         public IEnumerable<SvnItem> CheckedItems
         {
-            get{ return this.pathSelectionTreeView.CheckedItems; }
+            get { return this.pathSelectionTreeView.CheckedItems; }
         }
 
-		public Predicate<SvnItem> CheckedFilter
-		{
-			get { return this.pathSelectionTreeView.CheckedFilter; }
-			set { this.pathSelectionTreeView.CheckedFilter = value; }
-		}
+        public event Predicate<SvnItem> CheckedFilter
+        {
+            add { pathSelectionTreeView.CheckedFilter += value; }
+            remove { pathSelectionTreeView.CheckedFilter -= value; }
+        }
         /// <summary>
         /// Whether the "Recursive" checkbox should be enabled
         /// </summary>
         public bool EnableRecursive
         {
-            get{ return this.recursiveCheckBox.Enabled; }
-            set{ this.recursiveCheckBox.Enabled = value; }
+            get { return this.recursiveCheckBox.Enabled; }
+            set { this.recursiveCheckBox.Enabled = value; }
         }
 
         /// <summary>
@@ -91,10 +91,10 @@ namespace Ankh.UI
         /// </summary>
         public bool Recursive
         {
-            get{ return this.recursiveCheckBox.Checked; }
+            get { return this.recursiveCheckBox.Checked; }
             set
             {
-                this.recursiveCheckBox.Checked = value; 
+                this.recursiveCheckBox.Checked = value;
                 this.pathSelectionTreeView.Recursive = value;
             }
         }
@@ -114,7 +114,7 @@ namespace Ankh.UI
             base.Dispose(disposing);
         }
 
-        private void RevisionPickerChanged( object sender, EventArgs e )
+        private void RevisionPickerChanged(object sender, EventArgs e)
         {
             this.okButton.Enabled = this.revisionPicker.Valid;
         }

@@ -39,7 +39,7 @@ namespace Ankh.Commands
 
             using (e.Context.BeginOperation("Updating"))
             {
-				Collection<SvnItem> files = new Collection<SvnItem>();
+                Collection<SvnItem> files = new Collection<SvnItem>();
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
                 {
                     if (item.IsVersioned)
@@ -60,7 +60,7 @@ namespace Ankh.Commands
         #region UpdateVisitor
         private class UpdateRunner : IProgressWorker
         {
-			public UpdateRunner(IContext context, Collection<SvnItem> resources)
+            public UpdateRunner(IContext context, Collection<SvnItem> resources)
             {
                 this.context = context;
                 this.resources = resources;
@@ -88,7 +88,7 @@ namespace Ankh.Commands
                 {
                     d.Context = Context;
                     d.Items = this.resources;
-                    d.CheckedFilter = delegate{return true;};
+                    d.CheckedFilter += delegate { return true; };
                     d.Recursive = true;
 
                     if (!CommandBase.Shift)
@@ -147,7 +147,7 @@ namespace Ankh.Commands
                 }
             }
 
-			private ICollection<SvnItem> resources;
+            private ICollection<SvnItem> resources;
             private SvnRevision revision;
             private SvnDepth depth;
             private bool conflictsOccurred = false;

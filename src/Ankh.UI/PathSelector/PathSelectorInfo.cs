@@ -7,6 +7,7 @@ using SharpSvn;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Ankh.UI;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -15,7 +16,7 @@ namespace Ankh
     /// </summary>
     public class PathSelectorInfo
     {
-        
+
         readonly string _caption;
         bool _singleSelection;
         bool _enableRecursive;
@@ -31,7 +32,7 @@ namespace Ankh
 
         [Obsolete]
         public PathSelectorInfo(string caption, ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter)
-            :this(caption, items)
+            : this(caption, items)
         {
             if (checkedFilter == null)
                 throw new ArgumentNullException("checkedFilter");
@@ -50,18 +51,21 @@ namespace Ankh
             _items = new List<SvnItem>(items);
         }
 
-
+        public bool EvaluateChecked(SvnItem item)
+        {
+            return SvnItemFilters.Evaluate(item, _checkedFilter);
+        }
 
         public event Predicate<SvnItem> CheckedFilter
         {
-            add 
+            add
             {
                 _evaluated = false;
-                _checkedFilter += value; 
+                _checkedFilter += value;
             }
-            remove 
+            remove
             {
-                _evaluated = false; 
+                _evaluated = false;
                 _checkedFilter -= value;
             }
         }
@@ -70,12 +74,12 @@ namespace Ankh
         {
             add
             {
-                _evaluated = false; 
+                _evaluated = false;
                 _visibleFilter += value;
             }
             remove
             {
-                _evaluated = false; 
+                _evaluated = false;
                 _visibleFilter -= value;
             }
         }
@@ -91,12 +95,12 @@ namespace Ankh
                 {
                     if (Ankh.Scc.SvnItemFilters.Evaluate(i, _visibleFilter))
                     {
-                        if(!_visibleItems.ContainsKey(i.FullPath))
+                        if (!_visibleItems.ContainsKey(i.FullPath))
                             _visibleItems.Add(i.FullPath, i);
 
                         if (Ankh.Scc.SvnItemFilters.Evaluate(i, _checkedFilter))
                         {
-                            if(!_checkedItems.ContainsKey(i.FullPath))
+                            if (!_checkedItems.ContainsKey(i.FullPath))
                                 _checkedItems.Add(i.FullPath, i);
                         }
                     }
@@ -107,7 +111,7 @@ namespace Ankh
 
         public ICollection<SvnItem> VisibleItems
         {
-            get 
+            get
             {
                 EnsureFiltered();
                 return _visibleItems.Values;
@@ -116,10 +120,10 @@ namespace Ankh
 
         public ICollection<SvnItem> CheckedItems
         {
-            get 
+            get
             {
                 EnsureFiltered();
-                return _checkedItems.Values; 
+                return _checkedItems.Values;
             }
             //internal set { _checkedItems = value; }
         }
@@ -172,6 +176,6 @@ namespace Ankh
             }
         }
 
-        
+
     }
 }
