@@ -64,7 +64,7 @@ namespace Ankh.Commands
         /// <summary>
         /// A progressrunner for reverse merges.
         /// </summary>
-        private class ReverseMergeRunner : IProgressWorker
+        private class ReverseMergeRunner
         {
             public ReverseMergeRunner(IList items, SvnRevision revision,
                 SvnDepth depth, bool dryRun)

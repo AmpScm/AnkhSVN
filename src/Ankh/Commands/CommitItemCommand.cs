@@ -94,11 +94,7 @@ namespace Ankh.Commands
 
             _args = new SvnCommitArgs();
 
-            CommitOperation operation = new CommitOperation(
-                _args,
-                new SimpleProgressWorker(new EventHandler<ProgressWorkerArgs>(this.DoCommit)),
-                resources,
-                e.Context);
+            CommitOperation operation = new CommitOperation(e.Context, resources, _args, this.DoCommit);
 
             operation.LogMessage = this.storedLogMessage;
 

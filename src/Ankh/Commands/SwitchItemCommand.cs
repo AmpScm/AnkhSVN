@@ -61,7 +61,7 @@ namespace Ankh.Commands
         /// <summary>
         /// A progress runner that runs the switch operation.
         /// </summary>
-        private class SwitchRunner : IProgressWorker
+        private class SwitchRunner
         {
             public SwitchRunner(string path, Uri url, SvnRevision revision,
                 SvnDepth depth)

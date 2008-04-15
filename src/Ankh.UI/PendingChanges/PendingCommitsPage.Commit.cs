@@ -155,8 +155,13 @@ namespace Ankh.UI.PendingChanges
                 // if(!PreCommit_....())
                 //  return;
 
-                Commit_CommitToRepository(state);
-            }
+                if (Commit_CommitToRepository(state))
+                {
+                    // TODO: Store the logmessage!
+
+                    logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded
+                }
+            }            
         }
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
@@ -302,6 +307,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         private bool Commit_CommitToRepository(PendingCommitState state)
         {
+            bool ok = false;
             ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing...",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
@@ -310,13 +316,12 @@ namespace Ankh.UI.PendingChanges
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeList = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
-                    e.Client.Commit(
+                    ok = e.Client.Commit(
                         state.CommitPaths,
                         ca);
                 });
-
             
-            return true;
+            return ok;
         }
 
         internal bool CanCommit(bool keepingLocks)

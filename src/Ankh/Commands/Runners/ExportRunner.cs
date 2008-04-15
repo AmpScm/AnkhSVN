@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// <summary>
     /// A progress runner for checkouts.
     /// </summary>
-    public class ExportRunner : IProgressWorker
+    public class ExportRunner
     {
         public ExportRunner(string path, SvnRevision revision, 
             string url, SvnDepth depth )

@@ -8,7 +8,7 @@ namespace Ankh.Commands
     /// <summary>
     /// For running cats on a separate thread.
     /// </summary>
-    public class CatRunner : IProgressWorker
+    public class CatRunner
     {
         public CatRunner(string name, SvnRevision revision, Uri url) 
         { 

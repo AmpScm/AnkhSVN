@@ -132,11 +132,7 @@ namespace Ankh.Commands
                     }
 
                 // now commit the added files
-                CommitOperation operation = new CommitOperation(
-                    _args,
-                    new SimpleProgressWorker(new EventHandler<ProgressWorkerArgs>(this.DoCommit)),
-                    this.paths,
-                    e.Context);
+                CommitOperation operation = new CommitOperation(e.Context, this.paths, _args, DoCommit);
 
                 if (!operation.ShowLogMessageDialog())
                 {
@@ -241,7 +237,7 @@ namespace Ankh.Commands
         /// <summary>
         /// A progress runner for creating repository directories.
         /// </summary>
-        private class MakeDirWorker : IProgressWorker
+        private class MakeDirWorker
         {
             public MakeDirWorker( string url, string logMessage, IContext context ) 
             {

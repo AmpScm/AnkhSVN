@@ -7,39 +7,38 @@ using Ankh.Configuration;
 using Ankh.ContextServices;
 using Ankh.VS;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Contexts;
 
 namespace Ankh
 {
     /// <summary>
     /// Encapsulates the details of an operation requiring a log message
     /// </summary>
-    class CommitOperation
-    {
-        readonly IProgressWorker worker;
+    sealed class CommitOperation
+    {        
         readonly IAnkhServiceProvider _context;
         readonly ICollection<SvnItem> _items;
         readonly SvnCommitArgs _args;
+        readonly EventHandler<ProgressWorkerArgs> _worker;
+        
         bool urlPaths;
         string logMessage;
 
-        public CommitOperation(
-            SvnCommitArgs args,
-            IProgressWorker worker,
-            ICollection<SvnItem> items,
-            IAnkhServiceProvider context)
+        public CommitOperation(IAnkhServiceProvider context, ICollection<SvnItem> items, SvnCommitArgs args, EventHandler<ProgressWorkerArgs> worker)
         {
-            if (args == null)
-                throw new ArgumentNullException("args");
-            if (items == null)
-                throw new ArgumentNullException("items");
             if (context == null)
                 throw new ArgumentNullException("context");
+            else if (items == null)
+                throw new ArgumentNullException("items");
+            else if (args == null)
+                throw new ArgumentNullException("args");
+            else if (worker == null)
+                throw new ArgumentNullException("worker");
 
-            _args = args;
             _context = context;
-            this.worker = worker;
-
             _items = items;
+            _args = args;
+            _worker = worker;
         }
 
         public bool UrlPaths
@@ -114,10 +113,7 @@ namespace Ankh
         /// </summary>
         public bool Run(string caption)
         {
-            ProgressRunner runner = new ProgressRunner(_context, worker);
-            runner.Start(caption);
-
-            return !runner.Cancelled;
+            return _context.GetService<IProgressRunner>().Run(caption, _worker).Succeeded;
         }
 
 
