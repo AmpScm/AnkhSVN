@@ -5,7 +5,7 @@ using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to copy the URL of this item to the clipboard in Repository Explorer.

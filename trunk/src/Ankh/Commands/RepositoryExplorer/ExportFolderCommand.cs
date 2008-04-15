@@ -5,7 +5,7 @@ using Utils;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command for exporting a folder

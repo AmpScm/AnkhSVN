@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to save currnet file to disk from Repository Explorer.

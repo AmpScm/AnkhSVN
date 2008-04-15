@@ -3,7 +3,7 @@ using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 using Utils.Win32;
 
-namespace Ankh.Commands
+namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// A command that opens a file from the server in VS.NET
