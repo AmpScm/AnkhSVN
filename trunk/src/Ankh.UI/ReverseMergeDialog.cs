@@ -41,7 +41,7 @@ namespace Ankh.UI
         /// <summary>
         /// The items to choose from.
         /// </summary>
-		public ICollection<SvnItem> Items
+        public ICollection<SvnItem> Items
         {
             get { return this.treeView.Items; }
             set { this.treeView.Items = value; }
@@ -64,10 +64,7 @@ namespace Ankh.UI
             get { return this.treeView.CheckedItems; }
         }
 
-		public Predicate<SvnItem> CheckedFilter
-		{
-			get { return this.treeView.CheckedFilter; }
-		}
+
 
         /// <summary>
         /// Whether the operation should be recursive.

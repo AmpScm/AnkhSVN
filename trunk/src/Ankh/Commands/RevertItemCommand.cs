@@ -61,7 +61,10 @@ namespace Ankh.Commands
             {
                 result = info.DefaultResult;
             }
-            
+
+            if (!result.Succeeded)
+                return;
+
             string[] paths = new string[result.Selection.Count];
             for (int i = 0; i < paths.Length; i++)
                 paths[i] = result.Selection[i].FullPath;

@@ -39,9 +39,9 @@ namespace Ankh.Commands
 
             SortedList<string, SvnItem> paths = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             Collection<SvnItem> resources = new Collection<SvnItem>();
-			ICollection<SvnItem> addItems=resources;
+            ICollection<SvnItem> addItems = resources;
 
-			PathSelectorInfo info = new PathSelectorInfo("Select items to add",
+            PathSelectorInfo info = new PathSelectorInfo("Select items to add",
                 e.Selection.GetSelectedSvnItems(true));
             info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned; };
             info.VisibleFilter += delegate(SvnItem item) { return true; };
@@ -61,9 +61,11 @@ namespace Ankh.Commands
             }
             else
                 result = info.DefaultResult;
+            if (!result.Succeeded)
+                return;
 
-            using(context.StartOperation("Adding"))
-            using(SvnClient client = context.ClientPool.GetClient())
+            using (context.StartOperation("Adding"))
+            using (SvnClient client = context.ClientPool.GetClient())
             {
                 SvnAddArgs args = new SvnAddArgs();
                 args.ThrowOnError = false;

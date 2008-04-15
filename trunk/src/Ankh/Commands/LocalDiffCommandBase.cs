@@ -59,11 +59,11 @@ namespace Ankh.Commands
                 }
             }
 
-			List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
+            List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
 
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
             info.VisibleFilter += delegate(SvnItem item) { return true; };
-            if(foundModified)
+            if (foundModified)
                 info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && item.IsModified; };
 
             info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
@@ -87,6 +87,9 @@ namespace Ankh.Commands
             else
                 result = info.DefaultResult;
 
+            if (!result.Succeeded)
+                return null;
+
             if (useExternalDiff)
             {
                 return DoExternalDiff(result, selection, context);
@@ -109,9 +112,9 @@ namespace Ankh.Commands
             if (slndir != null)
                 args.RelativeToPath = slndir;
             SvnRevisionRange range = new SvnRevisionRange(info.RevisionStart, info.RevisionEnd);
-            
-            using(MemoryStream stream = new MemoryStream())
-            using(StreamReader reader = new StreamReader(stream))
+
+            using (MemoryStream stream = new MemoryStream())
+            using (StreamReader reader = new StreamReader(stream))
             using (SvnClient client = context.ClientPool.GetClient())
             {
                 foreach (SvnItem item in info.Selection)
@@ -141,7 +144,7 @@ namespace Ankh.Commands
 
                 // We must split the line in program and arguments before running
                 diffString = diffString.TrimStart();
-                string program ;
+                string program;
                 string args;
 
                 if (diffString.Length > 0 && diffString[0] == '\"')
@@ -169,11 +172,11 @@ namespace Ankh.Commands
 
                     // We use the algorithm as documented by CreateProcess() in MSDN
                     // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
-                    while(n >= 0)
+                    while (n >= 0)
                     {
                         program = diffString.Substring(0, n);
 
-                        if(File.Exists(program))
+                        if (File.Exists(program))
                         {
                             args = diffString.Substring(n + 1).TrimStart();
                             break;
@@ -182,7 +185,7 @@ namespace Ankh.Commands
                             n = diffString.IndexOfAny(spacers, n + 1);
                     }
 
-                    if(n < 0)
+                    if (n < 0)
                     {
                         program = diffString.Trim();
                     }
@@ -215,7 +218,7 @@ namespace Ankh.Commands
                         return result.WorkingCopyBasePath;
                     }
                 }
-                
+
             }
             else if (revision == SvnRevision.Working)
             {

@@ -18,7 +18,7 @@ namespace Ankh.UI
         Cancel,
         Commit
     }
-    
+
     /// <summary>
     /// Dialog that lets a user enter a log message for a commit.
     /// </summary>
@@ -37,9 +37,9 @@ namespace Ankh.UI
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
             // Support Ctrl-A to select everything.
-            this.logMessageBox.KeyDown += new KeyEventHandler( logMessageBox_KeyDown );
-            this.logMessageBox.KeyPress += new KeyPressEventHandler( logMessageBox_KeyPress );
-            
+            this.logMessageBox.KeyDown += new KeyEventHandler(logMessageBox_KeyDown);
+            this.logMessageBox.KeyPress += new KeyPressEventHandler(logMessageBox_KeyPress);
+
             // HACK: since there is no KeyPreview on a UserControl
             this.HookUpKeyEvent(this);
         }
@@ -76,8 +76,8 @@ namespace Ankh.UI
         public string LogMessage
         {
             get
-            { 
-                return this.LogMessageTemplate.PostProcess( this.logMessageBox.Text );
+            {
+                return this.LogMessageTemplate.PostProcess(this.logMessageBox.Text);
             }
             set
             {
@@ -106,10 +106,10 @@ namespace Ankh.UI
         public LogMessageTemplate LogMessageTemplate
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get{ return this.logMessageTemplate; }
+            get { return this.logMessageTemplate; }
 
             [System.Diagnostics.DebuggerStepThrough]
-            set{ this.logMessageTemplate = value; }
+            set { this.logMessageTemplate = value; }
         }
 
         public ICollection<SvnItem> Items
@@ -120,19 +120,19 @@ namespace Ankh.UI
 
         public IEnumerable<SvnItem> CommitItems
         {
-            get{ return this.commitItemsTree.CheckedItems; }
-			//set
-			//{ 
-			//    this.commitItemsTree.Items = value;
-			//    this.commitItemsTree.CheckedItems = value;
-               
-			//}
+            get { return this.commitItemsTree.CheckedItems; }
+            //set
+            //{ 
+            //    this.commitItemsTree.Items = value;
+            //    this.commitItemsTree.CheckedItems = value;
+
+            //}
         }
 
-        public Predicate<SvnItem> CommitFilter
+        public event Predicate<SvnItem> CommitFilter
         {
-            get { return commitItemsTree.CheckedFilter; }
-            set { commitItemsTree.CheckedFilter = value; }
+            add { commitItemsTree.CheckedFilter += value; }
+            remove { commitItemsTree.CheckedFilter -= value; }
         }
 
         public bool UrlPaths
@@ -140,14 +140,14 @@ namespace Ankh.UI
             get
             { return this.commitItemsTree.UrlPaths; }
             set
-            { 
+            {
                 this.commitItemsTree.UrlPaths = value;
             }
         }
 
         public CommitDialogResult CommitDialogResult
         {
-            get{ return this.dialogResult; }
+            get { return this.dialogResult; }
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Ankh.UI
         /// </summary>
         public bool ButtonsEnabled
         {
-            get{ return this.commitButton.Enabled || this.cancelButton.Enabled; }
+            get { return this.commitButton.Enabled || this.cancelButton.Enabled; }
             set
             {
                 this.commitButton.Enabled = this.cancelButton.Enabled = value;
@@ -164,39 +164,39 @@ namespace Ankh.UI
 
         public bool KeepLocks
         {
-            get{ return this.keepLocksCheckBox.Checked; }
-            set{ this.keepLocksCheckBox.Checked = value; }
+            get { return this.keepLocksCheckBox.Checked; }
+            set { this.keepLocksCheckBox.Checked = value; }
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         /// <summary>
         /// Initialize the log message in the text box.
         /// </summary>
         public void Initialize()
-        {   
-            if ( this.logMessageBox.Text.Trim() == String.Empty )
+        {
+            if (this.logMessageBox.Text.Trim() == String.Empty)
             {
                 ArrayList arr = new ArrayList();
-                foreach( object item in this.commitItemsTree.CheckedItems )
-                    arr.Add( item.ToString() );
-                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths; 
-                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess( arr );
-        
-                
+                foreach (object item in this.commitItemsTree.CheckedItems)
+                    arr.Add(item.ToString());
+                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;
+                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess(arr);
+
+
             }
 
             this.logMessageBox.Focus();
@@ -219,49 +219,49 @@ namespace Ankh.UI
             this.dialogResult = CommitDialogResult.Cancel;
         }
 
-        private void ItemChecked(object sender, TreeViewEventArgs e )
+        private void ItemChecked(object sender, TreeViewEventArgs e)
         {
             // don't bother if we haven't been loaded
-            if ( ! this.loaded )
+            if (!this.loaded)
                 return;
-            
-            if ( e.Node.Checked )
-            {    
+
+            if (e.Node.Checked)
+            {
                 this.logMessageBox.Text = this.LogMessageTemplate.AddItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString() );
+                    this.logMessageBox.Text, e.Node.Tag.ToString());
             }
-            else 
+            else
             {
                 this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString() );                
-            }        
+                    this.logMessageBox.Text, e.Node.Tag.ToString());
+            }
         }
 
         private void RaiseProceed(object sender, System.EventArgs e)
         {
-            if ( sender == this.cancelButton )
+            if (sender == this.cancelButton)
                 this.dialogResult = CommitDialogResult.Cancel;
-            else if ( sender == this.commitButton )
+            else if (sender == this.commitButton)
                 this.dialogResult = CommitDialogResult.Commit;
 
-            if ( this.Proceed != null )
-                this.Proceed( this, EventArgs.Empty );
+            if (this.Proceed != null)
+                this.Proceed(this, EventArgs.Empty);
 
             this.loaded = false;
         }
 
-        void logMessageBox_KeyPress( object sender, KeyPressEventArgs e )
+        void logMessageBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             // suppress Ctrl-A, which is ASCII 1 for some reason...
-            if ( e.KeyChar == (char)1 )
+            if (e.KeyChar == (char)1)
             {
                 e.Handled = true;
             }
         }
 
-        void logMessageBox_KeyDown( object sender, KeyEventArgs e )
+        void logMessageBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if ( e.Control && e.KeyCode == Keys.A )
+            if (e.Control && e.KeyCode == Keys.A)
             {
                 this.logMessageBox.SelectAll();
                 e.Handled = true;
@@ -273,16 +273,16 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void CommitDialog_KeyDown( object sender, KeyEventArgs e )
+        void CommitDialog_KeyDown(object sender, KeyEventArgs e)
         {
-            if ( this.commitButton.Enabled && e.Control && e.KeyCode == Keys.Enter )
+            if (this.commitButton.Enabled && e.Control && e.KeyCode == Keys.Enter)
             {
-                this.RaiseProceed( this.commitButton, EventArgs.Empty );
+                this.RaiseProceed(this.commitButton, EventArgs.Empty);
                 e.Handled = true;
             }
-            else if ( this.cancelButton.Enabled && e.KeyCode == Keys.Escape )
+            else if (this.cancelButton.Enabled && e.KeyCode == Keys.Escape)
             {
-                this.RaiseProceed( this.cancelButton, EventArgs.Empty );
+                this.RaiseProceed(this.cancelButton, EventArgs.Empty);
                 e.Handled = true;
             }
         }
@@ -292,19 +292,19 @@ namespace Ankh.UI
         /// is no KeyPreview on a user control.
         /// </summary>
         /// <param name="control"></param>
-        private void HookUpKeyEvent( Control control )
+        private void HookUpKeyEvent(Control control)
         {
-            control.KeyDown += new KeyEventHandler( CommitDialog_KeyDown );
-            foreach ( Control child in control.Controls )
+            control.KeyDown += new KeyEventHandler(CommitDialog_KeyDown);
+            foreach (Control child in control.Controls)
             {
-                this.HookUpKeyEvent( child );
+                this.HookUpKeyEvent(child);
             }
         }
         private LogMessageTemplate logMessageTemplate;
-       
+
         private bool loaded = false;
 
-        private void label1_Click( object sender, EventArgs e )
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

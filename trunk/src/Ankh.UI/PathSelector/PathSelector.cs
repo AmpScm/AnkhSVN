@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
@@ -35,7 +36,7 @@ namespace Ankh.UI
         }
 
         public PathSelector(PathSelectorInfo info)
-            :this()
+            : this()
         {
             _info = info;
         }
@@ -44,7 +45,7 @@ namespace Ankh.UI
         {
             base.OnLoad(e);
 
-            if(!DesignMode)
+            if (!DesignMode)
                 EnsureSelection();
         }
 
@@ -73,8 +74,8 @@ namespace Ankh.UI
                 RevisionEnd = _info.RevisionEnd;
                 Options = PathSelectorOptions.DisplayRevisionRange;
             }
+            pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
         }
-
 
         public IAnkhServiceProvider Context
         {
@@ -115,26 +116,26 @@ namespace Ankh.UI
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ICollection<SvnItem> Items
         {
-            get{ return this.pathSelectionTreeView.Items; }
-            set{ this.pathSelectionTreeView.Items = value; }
+            get { return this.pathSelectionTreeView.Items; }
+            set { this.pathSelectionTreeView.Items = value; }
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public Predicate<SvnItem> CheckedFilter
-		{
-			get { return pathSelectionTreeView.CheckedFilter; }
-			set { pathSelectionTreeView.CheckedFilter = value; }
-		}
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //public event Predicate<SvnItem> CheckedFilter
+        //{
+        //    add { pathSelectionTreeView.CheckedFilter += value; }
+        //    remove { pathSelectionTreeView.CheckedFilter -= value; }
+        //}
 
         /// <summary>
         /// The items checked in the treeview.
         /// </summary>
-        [DesignerSerializationVisibility( DesignerSerializationVisibility.Hidden )]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IEnumerable<SvnItem> CheckedItems
         {
-            get{ return this.pathSelectionTreeView.CheckedItems; }
+            get { return this.pathSelectionTreeView.CheckedItems; }
         }
 
         /// <summary>
@@ -142,8 +143,8 @@ namespace Ankh.UI
         /// </summary>
         public bool EnableRecursive
         {
-            get{ return this.recursiveCheckBox.Enabled; }
-            set{ this.recursiveCheckBox.Enabled = value; }
+            get { return this.recursiveCheckBox.Enabled; }
+            set { this.recursiveCheckBox.Enabled = value; }
         }
 
         /// <summary>
@@ -151,8 +152,8 @@ namespace Ankh.UI
         /// </summary>
         public bool SingleSelection
         {
-            get{ return this.pathSelectionTreeView.SingleCheck; }
-            set{ this.pathSelectionTreeView.SingleCheck = value; }
+            get { return this.pathSelectionTreeView.SingleCheck; }
+            set { this.pathSelectionTreeView.SingleCheck = value; }
         }
 
         /// <summary>
@@ -160,10 +161,10 @@ namespace Ankh.UI
         /// </summary>
         public bool Recursive
         {
-            get{ return this.recursiveCheckBox.Checked; }
+            get { return this.recursiveCheckBox.Checked; }
             set
             {
-                this.recursiveCheckBox.Checked = value; 
+                this.recursiveCheckBox.Checked = value;
                 this.pathSelectionTreeView.Recursive = value;
             }
         }
@@ -171,24 +172,24 @@ namespace Ankh.UI
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SvnRevision RevisionStart
         {
-            get{ return this.revisionPickerStart.Revision; }
-            set{ this.revisionPickerStart.Revision = value; }
+            get { return this.revisionPickerStart.Revision; }
+            set { this.revisionPickerStart.Revision = value; }
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SvnRevision RevisionEnd
         {
-            get{ return this.revisionPickerEnd.Revision; }
-            set{ this.revisionPickerEnd.Revision = value; }
+            get { return this.revisionPickerEnd.Revision; }
+            set { this.revisionPickerEnd.Revision = value; }
         }
 
         public PathSelectorOptions Options
         {
-            get{ return this.options; }
+            get { return this.options; }
             set
             {
                 this.options = value;
-                switch( this.options )
+                switch (this.options)
                 {
                     case PathSelectorOptions.NoRevision:
                         this.revisionEndGroupBox.Enabled = false;
@@ -205,57 +206,57 @@ namespace Ankh.UI
                         this.revisionEndGroupBox.Enabled = true;
                         break;
                     default:
-                        throw new ArgumentException( "Invalid value for Options" );
+                        throw new ArgumentException("Invalid value for Options");
                 }
             }
         }
 
         protected PathSelectionTreeView TreeView
         {
-            get{ return this.pathSelectionTreeView; }
+            get { return this.pathSelectionTreeView; }
         }
 
         protected Button OkButton
         {
-            get{ return this.okButton; }
+            get { return this.okButton; }
         }
 
         protected Button DoCancelButton
         {
-            get{ return this.cancelButton; }
+            get { return this.cancelButton; }
         }
 
         protected RevisionPicker RevisionPickerStart
         {
-            get{ return this.revisionPickerStart; }
+            get { return this.revisionPickerStart; }
         }
 
         protected RevisionPicker RevisionPickerEnd
         {
-            get{ return this.revisionPickerEnd; }
+            get { return this.revisionPickerEnd; }
         }
 
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         private void RecursiveCheckedChanged(object sender, System.EventArgs e)
         {
-            this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;        
+            this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;
         }
 
-        private PathSelectorOptions options;        
+        private PathSelectorOptions options;
     }
 }

@@ -23,9 +23,9 @@ namespace Ankh
         string logMessage;
 
         public CommitOperation(
-            SvnCommitArgs args, 
-            IProgressWorker worker, 
-            ICollection<SvnItem> items, 
+            SvnCommitArgs args,
+            IProgressWorker worker,
+            ICollection<SvnItem> items,
             IAnkhServiceProvider context)
         {
             if (args == null)
@@ -93,7 +93,7 @@ namespace Ankh
                     dialog.LogMessage = savedLogMessage;
                     dialog.LogMessageTemplate = template;
                     dialog.Items = _items;
-                    dialog.CommitFilter = delegate { return true; };
+                    dialog.CommitFilter += delegate { return true; };
                     if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
                     {
                         logMessage = dialog.RawLogMessage;
