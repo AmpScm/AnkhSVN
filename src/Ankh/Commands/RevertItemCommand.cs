@@ -85,9 +85,10 @@ namespace Ankh.Commands
 
             // perform the actual revert 
             using (e.Context.BeginOperation("Reverting"))
-            using (DocumentLock dl = docTracker.LockDocuments(paths))
+            using (DocumentLock dl = docTracker.LockDocuments(paths, DocumentLockType.NoReload))
             {
                 SvnRevertArgs args = new SvnRevertArgs();
+                dl.MonitorChanges();
                 //args.Depth = depth;
                 args.ThrowOnError = false;
                 Dictionary<string, string> revertedItems = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -100,6 +101,7 @@ namespace Ankh.Commands
                 {
                     client.Revert(paths, args);
                 }
+                dl.ReloadModified();
                 dl.Reload(revertedItems.Keys);
             }
         }

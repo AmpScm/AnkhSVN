@@ -16,6 +16,22 @@ namespace Ankh.Scc
         /// Releases the locks placed on the paths
         /// </summary>
         public abstract void Dispose();
+
+        /// <summary>
+        /// Registers a file listener on all locked paths; allowing selective reload
+        /// </summary>
+        public abstract void MonitorChanges();
+
+        /// <summary>
+        /// Reloads all files modified since MonitorChanges()
+        /// </summary>
+        public abstract void ReloadModified();
+    }
+
+    public enum DocumentLockType
+    {
+        NoReload,
+        ReadOnly,
     }
 
     public interface IAnkhOpenDocumentTracker
@@ -27,6 +43,8 @@ namespace Ankh.Scc
         bool PromptSaveDocument(string path);
         bool SaveDocuments(IEnumerable<string> paths);
 
+        ICollection<string> GetDocumentsBelow(string path);
+
         void CheckDirty(string path);
 
         /// <summary>
@@ -34,7 +52,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="paths">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
         /// <returns></returns>
-        DocumentLock LockDocuments(IEnumerable<string> paths);
+        DocumentLock LockDocuments(IEnumerable<string> paths, DocumentLockType lockType);
 
 
         /// <summary>
