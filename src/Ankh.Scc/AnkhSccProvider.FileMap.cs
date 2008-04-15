@@ -292,14 +292,10 @@ namespace Ankh.Scc
                 monitor.ScheduleSvnStatus(paths);
             else
                 monitor.ScheduleGlyphUpdate(paths);
+
+            monitor.ScheduleMonitor(paths);
         }        
 
-        private void MarkGlyphsDirty(SccProjectData project, string filename)
-        {
-            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
-
-            monitor.ScheduleGlyphUpdate(filename);
-        }      
 
         #region ProjectFile
         internal SccProjectFile GetFile(string path)
