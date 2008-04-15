@@ -58,7 +58,7 @@ namespace Ankh.Commands
         #endregion
 
         #region UpdateVisitor
-        private class UpdateRunner : IProgressWorker
+        private class UpdateRunner
         {
             public UpdateRunner(IContext context, Collection<SvnItem> resources)
             {

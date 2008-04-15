@@ -321,7 +321,7 @@ namespace Ankh.RepositoryExplorer
         /// <summary>
         /// Used for running the list action in a separate thread.
         /// </summary>
-        private class ListRunner : IProgressWorker
+        private class ListRunner
         {
             public ListRunner( INode node ) 
             {

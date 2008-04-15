@@ -110,7 +110,7 @@ namespace Ankh.Commands
 
         #endregion
 
-        private class BlameRunner : IProgressWorker
+        private class BlameRunner
         {
             public BlameRunner(string path, SvnRevision start, SvnRevision end,
                 BlameResult result)

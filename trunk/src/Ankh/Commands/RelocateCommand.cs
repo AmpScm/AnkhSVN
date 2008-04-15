@@ -60,7 +60,7 @@ namespace Ankh.Commands
         /// <summary>
         /// Progress runner for the relocate operation.
         /// </summary>
-        private class RelocateRunner : IProgressWorker
+        private class RelocateRunner
         {
             public RelocateRunner(string path, Uri from, Uri to,
                 bool recursive)

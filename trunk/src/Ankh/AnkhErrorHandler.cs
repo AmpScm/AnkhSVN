@@ -69,7 +69,7 @@ namespace Ankh
             writer.WriteLine(exceptionMessage);
         }
 
-        private void DoHandle(ProgressRunner.ProgressRunnerException ex)
+        private void DoHandle(ProgressRunnerException ex)
         {
             // we're only interested in the inner exception - we know where the 
             // outer one comes from

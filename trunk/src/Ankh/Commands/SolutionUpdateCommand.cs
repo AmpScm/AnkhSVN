@@ -135,7 +135,7 @@ namespace Ankh.Commands
                 new UpdateRunner(paths, rev).Work);
         }
 
-        class UpdateRunner : IProgressWorker
+        class UpdateRunner
         {
             SvnRevision _rev;
             List<string> _paths;

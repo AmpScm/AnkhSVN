@@ -174,18 +174,6 @@ namespace Ankh
         //    return DialogResult.OK;
         //}
 
-        /// <summary>
-        /// Executes the worker.Work method while displaying a progress dialog.
-        /// </summary>
-        /// <param name="worker"></param>
-        internal bool RunWithProgressDialog(IProgressWorker worker, string caption)
-        {
-            ProgressRunner runner = new ProgressRunner(this.Context, worker);
-            runner.Start(caption);
-
-            return !runner.Cancelled;
-        }
-
         AnkhMessageBox _box;
         AnkhMessageBox MessageBox
         {
