@@ -18,8 +18,6 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments(e.Selection, context);
-
             using (context.StartOperation("Creating patch"))
             {
                 string diff = this.GetDiff(e.Selection, context);
