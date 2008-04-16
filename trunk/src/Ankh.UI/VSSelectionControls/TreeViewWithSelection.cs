@@ -50,7 +50,7 @@ namespace Ankh.UI.VSSelectionControls
 
             if (SelectionPublishServiceProvider != null)
             {
-                Hierarchy.NotifySelectionUpdated(SelectionPublishServiceProvider);
+                SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
             }
         }
 
@@ -103,23 +103,10 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        internal virtual TreeViewHierarchy CreateHierarchy()
+        SelectionItemMap _selectionMap;
+        internal SelectionItemMap SelectionMap
         {
-            return new TreeViewHierarchy(this);
-        }
-
-        TreeViewHierarchy _hier;
-        internal TreeViewHierarchy Hierarchy
-        {
-            get { return _hier ?? (_hier = CreateHierarchy()); }
-        }
-
-        internal class TreeViewHierarchy : SelectionItemMap<TNode>
-        {
-            public TreeViewHierarchy(TreeViewWithSelection<TNode> lv)
-                : base(lv)
-            {
-            }
+            get { return _selectionMap ?? (_selectionMap = SelectionItemMap.Create(this));; }
         }
 
         public sealed class RetrieveSelectionEventArgs : EventArgs

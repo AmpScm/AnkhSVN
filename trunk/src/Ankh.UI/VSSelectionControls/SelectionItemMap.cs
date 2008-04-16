@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.UI.VSSelectionControls
 {
-    interface ISelectionMapOwner<T>
+    public interface ISelectionMapOwner<T>
     {
         event EventHandler SelectionChanged;
         IList Selection { get; }
@@ -22,89 +22,211 @@ namespace Ankh.UI.VSSelectionControls
         object GetSelectionObject(T item);
     }
 
-    internal class SelectionItemMap<T> : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
-        where T : class
-    {
-        readonly Dictionary<uint, IVsHierarchyEvents> _eventHandlers = new Dictionary<uint, IVsHierarchyEvents>();
-        readonly Dictionary<T, uint> _items = new Dictionary<T, uint>();
-        readonly Dictionary<uint, T> _ids = new Dictionary<uint, T>();
-        readonly ISelectionMapOwner<T> _lv;
-        uint lvId;
-
-        public SelectionItemMap(ISelectionMapOwner<T> lv)
+    public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
+    {        
+        protected abstract class MapData
         {
-            _lv = lv;
-            lv.SelectionChanged += new EventHandler(OnSelectedIndexChanged);
+            internal MapData()
+            {
+            }
+
+            internal abstract object GetSelectionObject(object item);
+
+            internal abstract int AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie);
+            internal abstract int UnadviseHierarchyEvents(uint dwCookie);
+            internal abstract int GetProperty(uint itemid, int propid, out object pvar);
+            internal abstract uint GetId(object item);
+            internal abstract object GetItemObject(uint id);
+
+            public abstract IList Selection { get; }
+            public abstract IList AllItems { get; }
         }
 
-        void OnSelectedIndexChanged(object sender, EventArgs e)
+        sealed class MapData<T> : MapData
+            where T : class
         {
-            if (_items.Count == 0)
-                return;
+            readonly ISelectionMapOwner<T> _owner;
+            readonly Dictionary<uint, IVsHierarchyEvents> _eventHandlers = new Dictionary<uint, IVsHierarchyEvents>();
+            readonly Dictionary<T, uint> _items = new Dictionary<T, uint>();
+            readonly Dictionary<uint, T> _ids = new Dictionary<uint, T>();
+            uint lvId;
 
-            foreach (T i in new List<T>(_items.Keys))
+            public MapData(ISelectionMapOwner<T> owner)
             {
-                if (_lv.Selection.Contains(i))
-                {
-                    uint id = (uint)_items[i];
-                    _ids.Remove(id);
-                    _items.Remove(i);
+                _owner = owner;
+                _owner.SelectionChanged += new EventHandler(OwnerSelectionChanged);
+            }
 
+            public uint GetId(T item)
+            {
+                uint id;
+                if (_items.TryGetValue(item, out id))
+                    return id;
+
+                id = ++lvId;
+                _ids.Add(id, item);
+                _items.Add(item, id);
+
+                if (_eventHandlers != null)
                     foreach (IVsHierarchyEvents h in _eventHandlers.Values)
                     {
-                        h.OnItemDeleted(id);
+                        h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                    }
+
+                return id;
+            }
+
+            internal override uint GetId(object item)
+            {
+                return GetId((T)item);
+            }
+
+            public T GetItem(uint id)
+            {
+                T value;
+                if (_ids.TryGetValue(id, out value))
+                    return value;
+                else
+                    return null;
+            }
+
+            internal override object GetItemObject(uint id)
+            {
+                return GetItem(id);
+            }
+
+            void OwnerSelectionChanged(object sender, EventArgs e)
+            {
+                if (_items.Count == 0)
+                    return;
+
+                foreach (T i in new List<T>(_items.Keys))
+                {
+                    if (_owner.Selection.Contains(i))
+                    {
+                        uint id = (uint)_items[i];
+                        _ids.Remove(id);
+                        _items.Remove(i);
+
+                        foreach (IVsHierarchyEvents h in _eventHandlers.Values)
+                        {
+                            h.OnItemDeleted(id);
+                        }
                     }
                 }
             }
-        }
 
-        public uint GetId(T item)
-        {
-            uint id;
-            if (_items.TryGetValue(item, out id))
-                return id;
+            internal override object GetSelectionObject(object item)
+            {
+                return _owner.GetSelectionObject((T)item);
+            }
 
-            id = ++lvId;
-            _ids.Add(id, item);
-            _items.Add(item, id);
-
-            if (_eventHandlers != null)
-                foreach (IVsHierarchyEvents h in _eventHandlers.Values)
+            internal override int AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
+            {
+                if (pEventSink == null)
                 {
-                    h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                    pdwCookie = 0;
+                    return VSConstants.E_POINTER;
                 }
 
-            return id;
+                _eventHandlers.Add(pdwCookie = ++lvId, pEventSink);
+
+                return VSConstants.S_OK;
+            }
+
+            internal override int UnadviseHierarchyEvents(uint dwCookie)
+            {
+                if (_eventHandlers != null)
+                    _eventHandlers.Remove(dwCookie);
+
+                return VSConstants.S_OK;
+            }
+
+            internal override int GetProperty(uint itemid, int propid, out object pvar)
+            {
+                T lv;
+                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
+                {
+                    pvar = null;
+                    return VSConstants.E_FAIL;
+                }
+
+                switch ((__VSHPROPID)propid)
+                {
+                    case __VSHPROPID.VSHPROPID_Parent:
+                    case __VSHPROPID.VSHPROPID_FirstChild:
+                    case __VSHPROPID.VSHPROPID_NextSibling:
+                    case __VSHPROPID.VSHPROPID_NextVisibleSibling:
+
+                        pvar = unchecked((int)VSConstants.VSITEMID_NIL);
+                        break;
+                    case __VSHPROPID.VSHPROPID_Caption:
+                    case __VSHPROPID.VSHPROPID_Name:
+                    case __VSHPROPID.VSHPROPID_TypeName:
+                        pvar = _owner.GetText(lv);
+                        break;
+                    case __VSHPROPID.VSHPROPID_IconImgList:
+                        pvar = (int)_owner.GetImageList();
+                        break;
+                    case __VSHPROPID.VSHPROPID_IconIndex:
+                        pvar = _owner.GetImageListIndex(lv);
+                        break;
+                    case __VSHPROPID.VSHPROPID_Expandable:
+                    case __VSHPROPID.VSHPROPID_ExpandByDefault:
+                        pvar = false;
+                        break;
+                    case __VSHPROPID.VSHPROPID_StateIconIndex:
+                        pvar = 0;
+                        break;
+                    default:
+                        pvar = null;
+                        return VSConstants.E_FAIL;
+                }
+
+                return VSConstants.S_OK;
+            }
+
+            public override IList Selection
+            {
+                get { return _owner.Selection; }
+            }
+
+            public override IList AllItems
+            {
+                get { return _owner.AllItems; }
+            }
         }
 
-        public T GetItem(uint id)
+        readonly MapData _data;
+
+        protected SelectionItemMap(MapData mapData)
         {
-            T value;
-            if (_ids.TryGetValue(id, out value))
-                return value;
-            else
-                return null;
+            _data = mapData;
         }
+
+        public static SelectionItemMap Create<T>(ISelectionMapOwner<T> owner)
+            where T : class
+        {
+            if (owner == null)
+                throw new ArgumentNullException("owner");
+
+            return new SelectionItemMap(CreateData<T>(owner));
+        }
+
+        protected static MapData CreateData<T>(ISelectionMapOwner<T> owner)
+            where T : class
+        {
+            return new MapData<T>(owner);
+        }        
 
         int IVsHierarchy.AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
         {
-            if (pEventSink == null)
-            {
-                pdwCookie = 0;
-                return VSConstants.E_POINTER;
-            }
-
-            _eventHandlers.Add(pdwCookie = ++lvId, pEventSink);
-
-            return VSConstants.S_OK;
+            return _data.AdviseHierarchyEvents(pEventSink, out pdwCookie);
         }
 
         int IVsHierarchy.UnadviseHierarchyEvents(uint dwCookie)
         {
-            if (_eventHandlers != null)
-                _eventHandlers.Remove(dwCookie);
-
-            return VSConstants.S_OK;
+            return _data.UnadviseHierarchyEvents(dwCookie);
         }
 
         int IVsHierarchy.Close()
@@ -133,46 +255,7 @@ namespace Ankh.UI.VSSelectionControls
 
         int IVsHierarchy.GetProperty(uint itemid, int propid, out object pvar)
         {
-            T lv;
-            if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
-            {
-                pvar = null;
-                return VSConstants.E_FAIL;
-            }
-
-            switch ((__VSHPROPID)propid)
-            {
-                case __VSHPROPID.VSHPROPID_Parent:
-                case __VSHPROPID.VSHPROPID_FirstChild:
-                case __VSHPROPID.VSHPROPID_NextSibling:
-                case __VSHPROPID.VSHPROPID_NextVisibleSibling:
-
-                    pvar = unchecked((int)VSConstants.VSITEMID_NIL);
-                    break;
-                case __VSHPROPID.VSHPROPID_Caption:
-                case __VSHPROPID.VSHPROPID_Name:
-                case __VSHPROPID.VSHPROPID_TypeName:
-                    pvar = _lv.GetText(lv);
-                    break;
-                case __VSHPROPID.VSHPROPID_IconImgList:
-                    pvar = (int)_lv.GetImageList();
-                    break;
-                case __VSHPROPID.VSHPROPID_IconIndex:
-                    pvar = _lv.GetImageListIndex(lv);
-                    break;
-                case __VSHPROPID.VSHPROPID_Expandable:
-                case __VSHPROPID.VSHPROPID_ExpandByDefault:
-                    pvar = false;
-                    break;
-                case __VSHPROPID.VSHPROPID_StateIconIndex:
-                    pvar = 0;
-                    break;
-                default:
-                    pvar = null;
-                    return VSConstants.E_FAIL;
-            }
-
-            return VSConstants.S_OK;
+            return _data.GetProperty(itemid, propid, out pvar);
         }
 
         Microsoft.VisualStudio.OLE.Interop.IServiceProvider _serviceProvider;
@@ -236,9 +319,9 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         [DebuggerHidden]
-        public int GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
+        int IVsMultiItemSelect.GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
         {
-            pcItems = (uint)_lv.Selection.Count;
+            pcItems = (uint)_data.Selection.Count;
 
             pfSingleHierarchy = 1;  // If this line throws a nullreference exception, the bug is in the interop layer or the caller. 
             // Nothing we can do to fix it
@@ -246,19 +329,19 @@ namespace Ankh.UI.VSSelectionControls
             return VSConstants.S_OK;
         }
 
-        public int GetSelectedItems(uint grfGSI, uint cItems, VSITEMSELECTION[] rgItemSel)
+        int IVsMultiItemSelect.GetSelectedItems(uint grfGSI, uint cItems, VSITEMSELECTION[] rgItemSel)
         {
             bool omitHiers = (grfGSI == (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs);
 
-            if (cItems != _lv.Selection.Count)
+            if (cItems > _data.Selection.Count)
                 return VSConstants.E_FAIL;
 
             for (int i = 0; i < cItems; i++)
             {
                 rgItemSel[i].pHier = omitHiers ? null : this;
 
-                if (i < _lv.Selection.Count)
-                    rgItemSel[i].itemid = GetId((T)_lv.Selection[i]);
+                if (i < _data.Selection.Count)
+                    rgItemSel[i].itemid = _data.GetId(_data.Selection[i]);
             }
 
             return VSConstants.S_OK;
@@ -266,13 +349,13 @@ namespace Ankh.UI.VSSelectionControls
 
         #region ISelectionContainer Members
 
-        public int CountObjects(uint dwFlags, out uint pc)
+        int ISelectionContainer.CountObjects(uint dwFlags, out uint pc)
         {
             IList src;
             if (dwFlags == (uint)Constants.GETOBJS_ALL)
-                src = _lv.AllItems;
+                src = _data.AllItems;
             else if (dwFlags == (uint)Constants.GETOBJS_SELECTED)
-                src = _lv.Selection;
+                src = _data.Selection;
             else
             {
                 pc = 0;
@@ -284,16 +367,16 @@ namespace Ankh.UI.VSSelectionControls
             return VSConstants.S_OK;
         }
 
-        public int GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
+        int ISelectionContainer.GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
         {
             if (apUnkObjects == null)
                 return VSConstants.E_POINTER;
 
             IList src;
             if (dwFlags == (uint)Constants.GETOBJS_ALL)
-                src = _lv.AllItems;
+                src = _data.AllItems;
             else if (dwFlags == (uint)Constants.GETOBJS_SELECTED)
-                src = _lv.Selection;
+                src = _data.Selection;
             else
                 return VSConstants.E_FAIL;
 
@@ -302,13 +385,13 @@ namespace Ankh.UI.VSSelectionControls
 
             for (int i = 0; i < cObjects; i++)
             {
-                apUnkObjects[i] = _lv.GetSelectionObject((T)src[i]);
+                apUnkObjects[i] = _data.GetSelectionObject(src[i]);
             }
 
             return VSConstants.S_OK;
         }
 
-        public int SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
+        int ISelectionContainer.SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
         {
             return VSConstants.E_NOTIMPL;
         }
@@ -322,7 +405,7 @@ namespace Ankh.UI.VSSelectionControls
 
             IVsTrackSelectionEx sel = (IVsTrackSelectionEx)serviceProvider.GetService(typeof(SVsTrackSelectionEx));
 
-            int selectedCount = _lv.Selection.Count;
+            int selectedCount = _data.Selection.Count;
 
             if (sel != null && selectedCount > 0)
             {
@@ -336,7 +419,7 @@ namespace Ankh.UI.VSSelectionControls
                     IVsMultiItemSelect ms = null;
 
                     if (selectedCount == 1)
-                        id = GetId((T)_lv.Selection[0]);
+                        id = _data.GetId(_data.Selection[0]);
                     else
                     {
                         id = VSConstants.VSITEMID_SELECTION; // Look at selection instead of this item
@@ -354,6 +437,12 @@ namespace Ankh.UI.VSSelectionControls
             else if (sel != null)
                 sel.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
 
+        }
+
+        [CLSCompliant(false)]
+        protected object GetItem(uint id)
+        {
+            return _data.GetItemObject(id);
         }
     }
 }

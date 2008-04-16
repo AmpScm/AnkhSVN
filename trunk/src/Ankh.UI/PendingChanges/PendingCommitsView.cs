@@ -22,15 +22,16 @@ namespace Ankh.UI.PendingChanges
             StrictCheckboxesClick = true;
         }
 
-        internal override ListViewHierarchy CreateHierarchy()
+        PendingCommitsSelectionMap _map;
+        internal override SelectionItemMap SelectionMap
         {
-            return new PendingCommitsHierarchy(this);
+            get { return _map ?? (_map = new PendingCommitsSelectionMap(this)); }
         }
-
-        sealed class PendingCommitsHierarchy : ListViewHierarchy, IAnkhGetMkDocument
+   
+        sealed class PendingCommitsSelectionMap : SelectionItemMap, IAnkhGetMkDocument
         {
-            public PendingCommitsHierarchy(PendingCommitsView view)
-                : base(view)
+            public PendingCommitsSelectionMap(PendingCommitsView view)
+                : base(CreateData(view))
             {
 
             }
@@ -39,7 +40,7 @@ namespace Ankh.UI.PendingChanges
 
             public int GetMkDocument(uint itemid, out string pbstrMkDocument)
             {
-                PendingCommitItem pci = GetItem(itemid);
+                PendingCommitItem pci = (PendingCommitItem)GetItem(itemid);
 
                 if (pci != null)
                 {

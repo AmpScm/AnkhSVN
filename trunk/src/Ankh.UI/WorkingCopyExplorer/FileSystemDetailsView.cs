@@ -380,20 +380,6 @@ namespace Ankh.UI
             public static readonly ListViewItemComparer Instance = new ListViewItemComparer();
         }
         
-
-        internal override ListViewWithSelection<ListViewItem>.ListViewHierarchy CreateHierarchy()
-        {
-            return new FileSystemHierarchy(this);
-        }
-
-        sealed class FileSystemHierarchy : ListViewHierarchy
-        {
-            public FileSystemHierarchy(FileSystemDetailsView dv)
-                : base(dv)
-            {
-            }
-        }
-
         private PropertyDescriptorCollection textPropertyDescriptors = null;
         private PropertyDescriptor stateImagePropertyDescriptor = null;
         private int characterWidth;
