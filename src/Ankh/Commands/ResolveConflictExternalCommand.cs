@@ -6,7 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Configuration;
 
 namespace Ankh.Commands

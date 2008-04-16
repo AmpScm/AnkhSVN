@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Selection;
 using Microsoft.VisualStudio.Shell.Interop;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.VS;
 using Ankh.Commands;

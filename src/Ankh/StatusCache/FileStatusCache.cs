@@ -10,7 +10,7 @@ using Ankh.Scc;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Ankh.Commands;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.StatusCache
 {

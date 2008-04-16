@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.OLE.Interop;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;

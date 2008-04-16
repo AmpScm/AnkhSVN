@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.OLE.Interop;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VSPackage.Attributes;
 

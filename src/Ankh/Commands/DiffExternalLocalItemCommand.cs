@@ -1,7 +1,7 @@
 // $Id: DiffLocalItemCommand.cs 1503 2004-07-07 04:33:39Z Arild $
 using System.IO;
 using Ankh.UI;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Selection;
 using Ankh.Configuration;
 

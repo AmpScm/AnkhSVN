@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Scc;

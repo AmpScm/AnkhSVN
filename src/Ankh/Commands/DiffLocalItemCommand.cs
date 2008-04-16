@@ -2,7 +2,7 @@
 using System.IO;
 using Ankh.UI;
 using EnvDTE;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.VS;
 using System;
 using Microsoft.VisualStudio.Shell.Interop;

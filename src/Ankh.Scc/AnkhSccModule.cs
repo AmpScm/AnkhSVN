@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 

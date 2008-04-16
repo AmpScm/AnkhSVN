@@ -7,7 +7,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text;
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.Scc;
 

@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop; 
 
 using Ankh.UI;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.Commands
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnkhSvn.Ids
+namespace Ankh.Ids
 {
     public enum AnkhToolWindow
     {

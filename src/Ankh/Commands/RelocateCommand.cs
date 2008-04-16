@@ -3,7 +3,7 @@ using Ankh.UI;
 using System.Windows.Forms;
 
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.Commands
 {

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.Scc
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using System.Collections;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands

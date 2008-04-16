@@ -7,7 +7,7 @@ using System.Threading;
 using System.IO;
 using Utils;
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Ankh.Scc;

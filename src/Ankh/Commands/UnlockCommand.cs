@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.VS;
 using System.Collections.Generic;
 

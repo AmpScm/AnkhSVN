@@ -1,5 +1,5 @@
 ﻿using System;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {

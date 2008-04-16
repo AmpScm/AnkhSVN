@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.Commands
 {

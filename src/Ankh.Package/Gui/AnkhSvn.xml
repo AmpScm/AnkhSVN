@@ -6,11 +6,11 @@
     <Import include="stdidcmd.h" />
     <Import include="vsshlids.h" />
     <Import include="msobtnid.h" />
-    <Import type="AnkhSvn.Ids.AnkhId" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Ankh_" />
-    <Import type="AnkhSvn.Ids.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
-    <Import type="AnkhSvn.Ids.AnkhCommandGroup" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Grp_" />
-    <Import type="AnkhSvn.Ids.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
-    <Import type="AnkhSvn.Ids.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
+    <Import type="Ankh.Ids.AnkhId" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Ankh_" />
+    <Import type="Ankh.Ids.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
+    <Import type="Ankh.Ids.AnkhCommandGroup" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Grp_" />
+    <Import type="Ankh.Ids.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
+    <Import type="Ankh.Ids.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
   </Imports>
   <Defines>
   </Defines>

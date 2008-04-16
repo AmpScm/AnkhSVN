@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using System.Collections;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using System.Collections.Generic;
 using System.IO;
 using SharpSvn;

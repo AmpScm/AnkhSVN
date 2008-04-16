@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using System.Globalization;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.VSPackage.Attributes
 {

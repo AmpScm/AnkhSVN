@@ -4,7 +4,7 @@ using System.Text;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.UI.Services

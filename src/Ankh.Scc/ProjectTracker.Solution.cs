@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Selection;
 
 namespace Ankh.Scc

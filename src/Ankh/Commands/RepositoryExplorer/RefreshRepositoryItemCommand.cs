@@ -1,7 +1,7 @@
 // $Id$
 using System;
 using Ankh.RepositoryExplorer;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer

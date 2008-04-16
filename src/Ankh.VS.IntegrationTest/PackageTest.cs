@@ -7,7 +7,7 @@ using Microsoft.VSSDK.Tools.VsIdeTesting;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace IntegrationTestProject
 {

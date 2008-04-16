@@ -2,7 +2,7 @@ using System;
 using Ankh.Configuration;
 using Ankh.UI;
 using System.Windows.Forms;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.Commands
 {
