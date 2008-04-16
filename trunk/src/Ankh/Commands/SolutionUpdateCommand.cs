@@ -128,11 +128,32 @@ namespace Ankh.Commands
             if (rev == null)
                 rev = SvnRevision.Head;
 
-            IContext context = e.GetService<IContext>();
+            // Get a list of all documents below the specified paths that are open in editors inside VS
+            HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+            foreach (string path in paths)
+            {
+                foreach (string file in documentTracker.GetDocumentsBelow(path))
+                {
+                    if (!lockPaths.Contains(file))
+                        lockPaths.Add(file);
+                }
+            }
 
-            e.GetService<IProgressRunner>().Run(
-                string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
-                new UpdateRunner(paths, rev).Work);
+            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
+
+            using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
+            {
+                lck.MonitorChanges();
+
+                // TODO: Monitor conflicts!!
+
+                e.GetService<IProgressRunner>().Run(
+                    string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
+                    new UpdateRunner(paths, rev).Work);
+
+                lck.ReloadModified();
+            }
         }
 
         class UpdateRunner
