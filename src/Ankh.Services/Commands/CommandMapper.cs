@@ -14,11 +14,18 @@ namespace Ankh.Commands
     public sealed class CommandMapper : AnkhService
     {
         readonly Dictionary<AnkhCommand, CommandMapItem> _map;
+        readonly AnkhCommandContext _commandContext;
+        
 
         public CommandMapper(IAnkhServiceProvider context)
             : base(context)
         {
             _map = new Dictionary<AnkhCommand, CommandMapItem>();
+        }
+        public CommandMapper(IAnkhServiceProvider context, AnkhCommandContext commandContext)
+            : this(context)
+        {
+            _commandContext = commandContext;
         }
 
         public bool PerformUpdate(AnkhCommand command, CommandUpdateEventArgs e)
@@ -147,6 +154,9 @@ namespace Ankh.Commands
 
                     foreach (CommandAttribute cmdAttr in type.GetCustomAttributes(typeof(CommandAttribute), false))
                     {
+                        if (cmdAttr.Context != _commandContext)
+                            continue;
+
                         CommandMapItem item = this[cmdAttr.Command];
 
                         if (item != null)

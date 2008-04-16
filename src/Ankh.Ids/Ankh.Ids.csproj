@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhCommand.cs" />
+    <Compile Include="AnkhCommandContext.cs" />
     <Compile Include="AnkhCommandGroup.cs" />
     <Compile Include="AnkhCommandMenu.cs" />
     <Compile Include="AnkhId.cs">
