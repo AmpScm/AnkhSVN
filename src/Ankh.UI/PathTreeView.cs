@@ -82,18 +82,5 @@ namespace Ankh.UI
             else
                 node.SelectedImageIndex = node.ImageIndex = -1;
         }
-
-        internal override TreeViewWithSelection<TreeNode>.TreeViewHierarchy CreateHierarchy()
-        {
-            return new PathHierarchy(this);
-        }
-
-        sealed class PathHierarchy : TreeViewHierarchy
-        {
-            public PathHierarchy(PathTreeView ptv)
-                : base(ptv)
-            {
-            }
-        }
     }
 }

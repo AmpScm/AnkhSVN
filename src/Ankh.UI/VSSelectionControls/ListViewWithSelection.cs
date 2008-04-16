@@ -128,16 +128,12 @@ namespace Ankh.UI.VSSelectionControls
                 ShowContextMenu(this, e);
         }
 
-        internal virtual ListViewHierarchy CreateHierarchy()
+        SelectionItemMap _selectionItemMap;
+        internal virtual SelectionItemMap SelectionMap
         {
-            return new ListViewHierarchy(this);
+            get { return _selectionItemMap ?? (_selectionItemMap = SelectionItemMap.Create(this)); }
         }
-
-        ListViewHierarchy _hier;
-        internal ListViewHierarchy Hierarchy
-        {
-            get { return _hier ?? (_hier = CreateHierarchy()); }
-        }
+   
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
@@ -147,7 +143,7 @@ namespace Ankh.UI.VSSelectionControls
 
             if (SelectionPublishServiceProvider != null)
             {
-                Hierarchy.NotifySelectionUpdated(SelectionPublishServiceProvider);               
+                SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);               
             }
         }
 
@@ -232,18 +228,6 @@ namespace Ankh.UI.VSSelectionControls
                 get { return _item; }
             }
         }
-
-
-        #region IVsHierarchy implementation over the ListViewItems
-
-        internal class ListViewHierarchy : SelectionItemMap<TListViewItem>
-        {
-            public ListViewHierarchy(ListViewWithSelection<TListViewItem> lv)
-                : base(lv)
-            {
-            }            
-        }
-        #endregion
 
         #region ISelectionMapOwner<TListViewItem> Members
 
