@@ -209,8 +209,10 @@ namespace Ankh.Scc
 
                 foreach(string file in locked)
                 {
-                    // This files updates could not be suspended by calling Ignore on the document
-                    // We must therefore stop posting messages to it by stopping it in the monitor
+                    // This files auto reload could not be suspended by calling Ignore on the document
+                    // We must therefore stop posting messages to it by stopping it in the change monitor
+
+                    // But to be able to tell if there are changes.. We keep some stats ourselves
 
                     if(!ignoring.Contains(file) &&
                         ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
@@ -220,6 +222,7 @@ namespace Ankh.Scc
                         if (info.Exists)
                         {
                             GC.KeepAlive(info.LastWriteTime);
+                            GC.KeepAlive(info.CreationTime);
                             GC.KeepAlive(info.Length);
                         }
                         _altMonitor.Add(file, info);
@@ -262,7 +265,8 @@ namespace Ankh.Scc
                     FileInfo to = new FileInfo(file);
 
                     if (from.Exists && to.Exists &&
-                        ((from.LastWriteTime != to.LastWriteTime) || (from.Length != to.Length)))
+                        ((from.LastWriteTime != to.LastWriteTime) || (from.Length != to.Length) ||
+                        (from.CreationTime != to.CreationTime)))
                     {
                         if (!_changedPaths.Contains(file))
                         {
