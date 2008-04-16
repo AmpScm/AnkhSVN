@@ -11,6 +11,7 @@ using Ankh.Selection;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -48,14 +49,17 @@ namespace Ankh.Commands
             if (context == null)
                 throw new ArgumentNullException("context");
 
+             
+            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
             bool useExternalDiff = GetExe(selection, context) != null;
 
             bool foundModified = false;
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified)
+                if (item.IsModified || documentTracker.IsDocumentDirty(item.FullPath))
                 {
                     foundModified = true;
+                    break; // no need (yet) to keep searching
                 }
             }
 
@@ -64,7 +68,7 @@ namespace Ankh.Commands
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
             info.VisibleFilter += delegate(SvnItem item) { return true; };
             if (foundModified)
-                info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && item.IsModified; };
+                info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || documentTracker.IsDocumentDirty(item.FullPath)); };
 
             info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
             info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
@@ -89,6 +93,8 @@ namespace Ankh.Commands
 
             if (!result.Succeeded)
                 return null;
+
+            SaveAllDirtyDocuments(selection, context);
 
             if (useExternalDiff)
             {

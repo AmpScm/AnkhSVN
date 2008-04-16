@@ -49,9 +49,9 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments( e.Selection, context );
+            /*SaveAllDirtyDocuments( e.Selection, context );
 
-            /*using(context.StartOperation( "Resolving" ))
+            using(context.StartOperation( "Resolving" ))
             {
                 IList items = context.Selection.GetSelectionResources(false, 
                      new ResourceFilterCallback(SvnItem.ConflictedFilter) );

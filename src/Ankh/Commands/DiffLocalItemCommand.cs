@@ -34,8 +34,6 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
 
-            SaveAllDirtyDocuments(e.Selection, context);
-
             using (context.StartOperation("Diffing"))
             {
                 SvnRevisionRange revRange = null;
