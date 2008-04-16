@@ -2,6 +2,7 @@
 using System;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -15,10 +16,11 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
+            
             // we only want directories
-            if (context.RepositoryExplorer.SelectedNode == null ||
-                !context.RepositoryExplorer.SelectedNode.IsDirectory)
+            if (shell.RepositoryExplorerService.SelectedNode == null ||
+                !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
             {
                 e.Enabled = false;
             }
@@ -26,9 +28,9 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            context.RepositoryExplorer.Refresh( context.RepositoryExplorer.SelectedNode );
+            shell.RepositoryExplorerService.Refresh( shell.RepositoryExplorerService.SelectedNode );
         }
 
         #endregion

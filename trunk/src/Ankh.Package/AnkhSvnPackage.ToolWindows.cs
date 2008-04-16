@@ -17,6 +17,7 @@ using Ankh.Commands;
 using Ankh.UI;
 using Ankh.Selection;
 using Ankh.UI.SvnLog;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.VSPackage
 {   
@@ -290,6 +291,13 @@ namespace Ankh.VSPackage
             get { return _control; }
         }
 
+        [DebuggerStepThrough]
+        protected T GetService<T>()
+            where T : class
+        {
+            return GetService(typeof(T)) as T;
+        }
+
         protected override object GetService(Type serviceType)
         {
             if (serviceType == typeof(IOleCommandTarget))
@@ -327,7 +335,13 @@ namespace Ankh.VSPackage
         public override void OnToolBarAdded()
         {
             base.OnToolBarAdded();
-            ((AnkhSvnPackage)Package).AnkhContext.UIShell.WorkingCopyExplorer = Control as WorkingCopyExplorerControl;
+
+            IExplorersShell shell = GetService<Ankh.WorkingCopyExplorer.IExplorersShell>();
+
+            if(shell != null)
+            {
+                shell.WorkingCopyExplorer = Control as WorkingCopyExplorerControl;
+            }
         }
     }
 
@@ -353,7 +367,13 @@ namespace Ankh.VSPackage
         public override void OnToolBarAdded()
         {
             base.OnToolBarAdded();
-            ((AnkhSvnPackage)Package).AnkhContext.UIShell.RepositoryExplorer = Control as RepositoryExplorerControl;
+
+            IExplorersShell shell = GetService<Ankh.WorkingCopyExplorer.IExplorersShell>();
+
+            if (shell != null)
+            {
+                shell.RepositoryExplorer = Control as RepositoryExplorerControl;
+            }
         }
     }
 

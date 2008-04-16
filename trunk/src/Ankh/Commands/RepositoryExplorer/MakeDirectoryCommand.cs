@@ -7,6 +7,7 @@ using Ankh.UI;
 using Utils;
 using AnkhSvn.Ids;
 using SharpSvn;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -16,16 +17,17 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.NewDirectory)]
     public class MakeDirectoryCommand : CommandBase
     {
-        SvnCommitArgs _args;
+        SvnCommitArgs _args = null;
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
             // we only want directories
-            if ( context.RepositoryExplorer.SelectedNode == null ||
-                !context.RepositoryExplorer.SelectedNode.IsDirectory )
+            if (shell.RepositoryExplorerService.SelectedNode == null ||
+                !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
             {
                 e.Enabled = false;
             }
@@ -67,12 +69,12 @@ namespace Ankh.Commands.RepositoryExplorer
 
         #endregion
 
-        private void DoCreateDir( ProgressWorkerArgs e )
+        private void DoCreateDir(ProgressWorkerArgs e)
         {
-            e.Client.RemoteCreateDirectory( this.url );
+            e.Client.RemoteCreateDirectory(this.url);
         }
 
-        Uri url;        
+        Uri url = null;
     }
 }
 

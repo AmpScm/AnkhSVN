@@ -28,12 +28,6 @@ namespace Ankh
         ISvnClientPool ClientPool { get; }
 
         /// <summary>
-        /// The repository explorer controller.
-        /// </summary>
-		//[Obsolete("Use .SelectionContext wherever possible")]
-        RepositoryExplorer.Controller RepositoryExplorer { get; }
-
-        /// <summary>
         /// The configloader.
         /// </summary>
         IAnkhConfigurationService Configuration { get; }
@@ -41,12 +35,6 @@ namespace Ankh
         /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
-        IDisposable StartOperation( string description );
-
-        //[Obsolete("Use .SelectionContext wherever possible")]
-        IWorkingCopyExplorer WorkingCopyExplorer
-        {
-            get;
-        }
+        IDisposable StartOperation( string description );        
     }
 }

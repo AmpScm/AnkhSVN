@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Collections;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands
 {
@@ -15,17 +16,17 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.Context.GetService<IExplorersShell>();
 
-            if(!context.WorkingCopyExplorer.IsRootSelected)
+            if(!shell.WorkingCopyExplorerService.IsRootSelected)
                 e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.Context.GetService<IExplorersShell>();
 
-            context.WorkingCopyExplorer.RemoveSelectedRoot();
+            shell.WorkingCopyExplorerService.RemoveSelectedRoot();
         }
 
         #endregion

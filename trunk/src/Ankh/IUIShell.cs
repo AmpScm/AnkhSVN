@@ -10,56 +10,6 @@ namespace Ankh
 	/// </summary>
 	public interface IUIShell
 	{
-       
-        /// <summary>
-        /// The repository explorer UI.
-        /// </summary>
-        RepositoryExplorerControl RepositoryExplorer
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// This object is used to synchronize notification callbacks, among other things.
-        /// </summary>
-        System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-        {
-            get;
-        }
-
-        Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Set the selection for the repository explorer.
-        /// </summary>
-        /// <param name="selection"></param>
-        void SetRepositoryExplorerSelection( object[] selection );
-
-        /// <summary>
-        /// Whether the Repository Explorer window has focus
-        /// </summary>
-        /// <returns></returns>
-        bool RepositoryExplorerHasFocus();
-
-        /// <summary>
-        /// Whether the Repository Explorer window has focus
-        /// </summary>
-        /// <returns></returns>
-        bool WorkingCopyExplorerHasFocus();
-
-        /// <summary>
-        /// Whether the Repository Explorer window has focus
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        bool SolutionExplorerHasFocus();
-
-
         /// <summary>
         /// Display a message box.
         /// </summary>
@@ -124,14 +74,6 @@ namespace Ankh
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info );
-
-        /// <summary>
-        /// Shows the dialog for adding a new root to the repository.
-        /// </summary>
-        /// <returns></returns>
-        RepositoryRootInfo ShowAddRepositoryRootDialog();
-
-        string ShowAddWorkingCopyExplorerRootDialog();
+        SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info );        
     }
 }

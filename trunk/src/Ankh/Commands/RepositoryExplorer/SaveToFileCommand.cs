@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -17,11 +18,12 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
             using (context.StartOperation("Saving"))
             {
-                INode node = context.RepositoryExplorer.SelectedNode;
+                INode node = shell.RepositoryExplorerService.SelectedNode;
                 string filename = null;
                 using (SaveFileDialog sfd = new SaveFileDialog())
                 {

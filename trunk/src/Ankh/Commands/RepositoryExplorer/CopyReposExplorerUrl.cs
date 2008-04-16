@@ -4,6 +4,7 @@ using Ankh.UI;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -17,17 +18,17 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             // all we need is a selection in the repos explorer
-            if (context.RepositoryExplorer.SelectedNode == null)
+            if (shell.RepositoryExplorerService.SelectedNode == null)
                 e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            INode node = context.RepositoryExplorer.SelectedNode;
+            INode node = shell.RepositoryExplorerService.SelectedNode;
             Clipboard.SetDataObject( node.Url );
         }
 

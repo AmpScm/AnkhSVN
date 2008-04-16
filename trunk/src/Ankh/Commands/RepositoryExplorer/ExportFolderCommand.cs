@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Utils;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -17,10 +18,10 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            if (context.RepositoryExplorer.SelectedNode == null ||
-                !context.RepositoryExplorer.SelectedNode.IsDirectory)
+            if (shell.RepositoryExplorerService.SelectedNode == null ||
+                !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
             {
                 // BH: Why don't we allow exporting single files?
                 e.Enabled = false;
@@ -29,6 +30,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
@@ -41,7 +43,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
                 using (context.StartOperation("Exporting"))
                 {
-                    INode node = context.RepositoryExplorer.SelectedNode;
+                    INode node = shell.RepositoryExplorerService.SelectedNode;
 
                     ExportRunner runner = new ExportRunner(browser.SelectedPath, node.Revision, node.Url);
                     e.GetService<IProgressRunner>().Run(

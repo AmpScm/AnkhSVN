@@ -1,6 +1,7 @@
 // $Id$
 using System;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -14,9 +15,10 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
-            if (!context.RepositoryExplorer.IsRootNode(context.RepositoryExplorer.SelectedNode))
+            if (!shell.RepositoryExplorerService.IsRootNode(shell.RepositoryExplorerService.SelectedNode))
             {
                 e.Enabled = false;
             }
@@ -24,9 +26,9 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            context.RepositoryExplorer.RemoveRoot( context.RepositoryExplorer.SelectedNode );
+            shell.RepositoryExplorerService.RemoveRoot(shell.RepositoryExplorerService.SelectedNode);
         }
 
         #endregion

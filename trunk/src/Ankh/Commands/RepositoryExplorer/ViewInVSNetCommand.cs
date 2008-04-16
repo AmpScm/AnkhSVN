@@ -2,6 +2,7 @@ using System;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
 using Utils.Win32;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -16,11 +17,12 @@ namespace Ankh.Commands.RepositoryExplorer
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
             using (e.Context.BeginOperation("Opening"))
             {
-                INode node = context.RepositoryExplorer.SelectedNode;
+                INode node = shell.RepositoryExplorerService.SelectedNode;
 
                 CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
                 e.GetService<IProgressRunner>().Run("Retrieving file", runner.Work);
