@@ -355,7 +355,7 @@ namespace Ankh.RepositoryExplorer
                 ReposListArgs args = new ReposListArgs();
                 args.Depth = SvnDepth.Children;
                 args.Revision = this.node.Revision;
-                args.EntryItems = SvnDirEntryItems.AllFieldsV15;
+                args.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
                 e.Client.GetList(this.node.Url, args, out entries);
             }
 
