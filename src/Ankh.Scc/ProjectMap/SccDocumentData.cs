@@ -237,55 +237,52 @@ namespace Ankh.Scc.ProjectMap
         /// <returns></returns>
         public bool Reload(bool clearUndo)
         {
-            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
+            IVsPersistDocData vsPersistDocData = RawDocument as IVsPersistDocData;
+            if (vsPersistDocData != null)
+            {
+                // This method is valid on all text editors and probably many other editors
 
-            if (pdd != null)
-            {
-                // This method should be called on all documents (and is on at least the text editors)
-                return ErrorHandler.Succeeded(pdd.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0));
-            }
-            
-            IVsPersistHierarchyItem2 phi2 = RawDocument as IVsPersistHierarchyItem2;
-            if(phi2 != null)
-            {
-                // This route works for some project types and the solution
-                return ErrorHandler.Succeeded(phi2.ReloadItem(VSConstants.VSITEMID_ROOT, 0));
+                if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0)))
+                    return true;
             }
 
-            
-
-            IVsProject project = RawDocument as IVsProject;
-            IVsHierarchy hier = project as IVsHierarchy;
-
-            if(project != null && hier != null)
+            IVsPersistHierarchyItem2 vsPersistHierarchyItem2 = RawDocument as IVsPersistHierarchyItem2;
+            if (vsPersistHierarchyItem2 != null)
             {
-                // Not all projects can reload themselves; but the solution can!
+                // This route works for some project types and at least the solution
+                if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
+                    return true;
+            }
 
-                // Unload the project
-                IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
-                if (!ErrorHandler.Succeeded(sol.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject, hier, Cookie)))
+            IVsHierarchy hier = Hierarchy;
+            uint id = ItemId;
+
+            while (hier != null)
+            {
+                vsPersistHierarchyItem2 = hier as IVsPersistHierarchyItem2;
+
+                if (vsPersistHierarchyItem2 != null &&
+                    ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(id, 0)))
                 {
+                    // Our parent reloaded us
+                    return true;
+                }
+
+                // Ok.. We have one more option.. reload the parent itself
+
+                object v;
+                if (!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchyItemid, out v)))
                     return false;
-                }
 
-                IVsSolution2 sol2 = sol as IVsSolution2;
+                id = Convert.ToUInt32(v);
 
-                Guid empty = Guid.Empty;
-                IntPtr projectVal;
-                int hr;
-                if(ErrorHandler.Succeeded(hr = sol2.CreateProject(ref empty, Name, null, null,
-                    (uint)(__VSCREATEPROJFLAGS.CPF_OPENFILE),
-                    ref empty, out projectVal)))
-                {
-                    Marshal.Release(projectVal);
-                }
+                if (!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchy, out v)))
+                    return false;
 
-                Exception ee = Marshal.GetExceptionForHR(hr);
-
-                return true;
+                hier = v as IVsHierarchy;
             }
 
-
+        
             return false;
         }
 
