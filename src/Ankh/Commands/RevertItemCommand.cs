@@ -20,20 +20,22 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified)
+                if (item.IsModified || documentTracker.IsDocumentDirty(item.FullPath))
                     return;
             }
             e.Enabled = false;
         }
+        
 
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
             IAnkhDialogOwner dialogOwner = e.Context.GetService<IAnkhDialogOwner>();
-            IAnkhOpenDocumentTracker docTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
-            SaveAllDirtyDocuments(e.Selection, e.Context);
+            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
 
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
@@ -42,7 +44,7 @@ namespace Ankh.Commands
             PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
                 e.Selection.GetSelectedSvnItems(true));
 
-            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified; };
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || documentTracker.IsDocumentDirty(item.FullPath); };
             info.VisibleFilter += delegate(SvnItem item) { return true; };
 
             if (!CommandBase.Shift &&
@@ -65,6 +67,8 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
+            SaveAllDirtyDocuments(e.Selection, e.Context);
+
             string[] paths = new string[result.Selection.Count];
             for (int i = 0; i < paths.Length; i++)
                 paths[i] = result.Selection[i].FullPath;
@@ -85,7 +89,7 @@ namespace Ankh.Commands
 
             // perform the actual revert 
             using (e.Context.BeginOperation("Reverting"))
-            using (DocumentLock dl = docTracker.LockDocuments(paths, DocumentLockType.NoReload))
+            using (DocumentLock dl = documentTracker.LockDocuments(paths, DocumentLockType.NoReload))
             {
                 dl.MonitorChanges();
 
