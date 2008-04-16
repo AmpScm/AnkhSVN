@@ -211,6 +211,8 @@
     <Content Include="Gui\PendingChanges\ShowAll.png" />
     <Content Include="Gui\PendingChanges\ShowComment.png" />
     <Content Include="Gui\PendingChanges\SolutionExplorer.png" />
+    <Content Include="Gui\PendingChanges\SortAscending.png" />
+    <Content Include="Gui\PendingChanges\SortDescending.png" />
     <Content Include="Gui\PendingChanges\Switch.png" />
     <Content Include="Gui\PendingChanges\Update.png" />
     <Content Include="Gui\PendingChanges\UpdateSpecific.png" />

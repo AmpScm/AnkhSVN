@@ -34,11 +34,17 @@ namespace Ankh.Ids
         SolutionExplorerSccForItem,
         
         PendingChangesContextMenu,
+        PendingCommitsSortContextMenu,
         PendingChangesLogMessageMenu,
 
         PendingChangesCommit,
         PendingChangesUpdate,
         PendingChangesView,
+
+        PendingCommitsView,
+        PendingCommitsSort,
+        
+        PendingCommitsGroup,
 
         ItemConflict,
         ItemCompare,

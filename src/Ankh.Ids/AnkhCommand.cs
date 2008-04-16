@@ -144,5 +144,42 @@ namespace Ankh.Ids
 
         PcLogEditorPasteFileList,
         PcLogEditorPasteRecentLog,
+
+        #region Pending Changes ListView
+        PcSortPath,
+        PcSortProject,
+        PcSortChange,
+        PcSortChangeList,
+        PcSortFullPath,
+        PcSortLocked,
+        PcSortModified,
+        PcSortName,
+        PcSortType,
+        PcSortAscending,
+        PcSortDescending,
+
+        PcGroupPath,
+        PcGroupProject,
+        PcGroupChange,
+        PcGroupChangeList,
+        PcGroupFullPath,
+        PcGroupLocked,
+        PcGroupModified,
+        PcGroupName,
+        PcGroupType,
+        PcGroupAscending,
+        PcGroupDescending,
+
+        PcColViewPath,
+        PcColViewProject,
+        PcColViewChange,
+        PcColViewChangeList,
+        PcColViewDate,
+        PcColViewFullPath,
+        PcColViewLocked,
+        PcColViewModified,
+        PcColViewName,
+        PcColViewType,
+        #endregion
     }
 }
