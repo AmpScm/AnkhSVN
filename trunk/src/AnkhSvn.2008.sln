@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions"
 		BUILD.txt = BUILD.txt
 		CHANGES.txt = CHANGES.txt
 		CONTRIBUTERS.txt = CONTRIBUTERS.txt
+		LICENSE.rtf = LICENSE.rtf
 		..\README.txt = ..\README.txt
 	EndProjectSection
 EndProject
