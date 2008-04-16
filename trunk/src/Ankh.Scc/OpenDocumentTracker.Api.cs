@@ -141,7 +141,7 @@ namespace Ankh.Scc
             foreach (SccDocumentData d in _docMap.Values)
             {
                 if (d.Name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && d.Name.Length > path.Length)
-                    files.Add(SvnTools.GetNormalizedFullPath(path));
+                    files.Add(SvnTools.GetNormalizedFullPath(d.Name));
             }
 
             return files.ToArray();
@@ -152,6 +152,7 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
+            HybridCollection<string> locked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             HybridCollection<string> ignoring = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             HybridCollection<string> readOnly = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             foreach (string path in paths)
@@ -159,51 +160,76 @@ namespace Ankh.Scc
                 SccDocumentData dd;
                 if (_docMap.TryGetValue(path, out dd))
                 {
-                    if (!ignoring.Contains(dd.Name) && dd.IgnoreFileChanges(true))
-                        ignoring.Add(dd.Name);
+                    if (!locked.Contains(path))
+                        locked.Add(path);
 
-                    if (lockType >= DocumentLockType.ReadOnly && !readOnly.Contains(dd.Name) && !dd.IsReadOnly())
+                    if (!ignoring.Contains(path) && dd.IgnoreFileChanges(true))
+                        ignoring.Add(path);
+
+                    if (lockType >= DocumentLockType.ReadOnly && !readOnly.Contains(path) && !dd.IsReadOnly())
                     {
                         // Don't set read-only twice!!!
                         if (dd.SetReadOnly(true))
-                            readOnly.Add(dd.Name);
+                            readOnly.Add(path);
                     }
                 }
             }
-            return new SccDocumentLock(this, ignoring, readOnly);
+            return new SccDocumentLock(this, locked, ignoring, readOnly);
         }
 
         class SccDocumentLock : DocumentLock, IVsFileChangeEvents
         {
             readonly OpenDocumentTracker _tracker;
-            readonly HybridCollection<string> _ignoring, _readonly;
+            readonly HybridCollection<string> _locked, _ignoring, _readonly;
             readonly Dictionary<uint, string> _monitor;
+            readonly Dictionary<string, FileInfo> _altMonitor;
             readonly HybridCollection<string> _changedPaths;
-            IVsFileChangeEx _change;
+            readonly IVsFileChangeEx _change;
 
-            public SccDocumentLock(OpenDocumentTracker tracker, HybridCollection<string> ignoring, HybridCollection<string> readOnly)
+            public SccDocumentLock(OpenDocumentTracker tracker, HybridCollection<string> locked, HybridCollection<string> ignoring, HybridCollection<string> readOnly)
             {
                 if (tracker == null)
                     throw new ArgumentNullException("tracker");
+                else if (locked == null)
+                    throw new ArgumentNullException("locked");
                 else if (ignoring == null)
                     throw new ArgumentNullException("ignoring");
                 else if (readOnly == null)
                     throw new ArgumentNullException("readOnly");
 
                 _tracker = tracker;
+                _locked = locked;
                 _ignoring = ignoring;
                 _readonly = readOnly;
                 _changedPaths = new HybridCollection<string>();
                 _monitor = new Dictionary<uint, string>();
+                _altMonitor = new Dictionary<string,FileInfo>();
+
+                _change = tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+                foreach(string file in locked)
+                {
+                    // This files updates could not be suspended by calling Ignore on the document
+                    // We must therefore stop posting messages to it by stopping it in the monitor
+
+                    if(!ignoring.Contains(file) &&
+                        ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
+                    {
+                        FileInfo info = new FileInfo(file);
+                        info.Refresh();
+                        if (info.Exists)
+                        {
+                            GC.KeepAlive(info.LastWriteTime);
+                            GC.KeepAlive(info.Length);
+                        }
+                        _altMonitor.Add(file, info);
+                    }
+                }
             }
 
             public override void MonitorChanges()
             {
                 if (_monitor.Count > 0)
-                    return;
-                _change = _tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
-
-                if (_change == null)
                     return;
 
                 foreach (string path in _ignoring)
@@ -229,6 +255,23 @@ namespace Ankh.Scc
                     _change.SyncFile(file);
                 }
 
+                foreach (KeyValuePair<string, FileInfo> item in new List<KeyValuePair<string, FileInfo>>(_altMonitor))
+                {
+                    string file = item.Key;
+                    FileInfo from = item.Value;
+                    FileInfo to = new FileInfo(file);
+
+                    if (from.Exists && to.Exists &&
+                        ((from.LastWriteTime != to.LastWriteTime) || (from.Length != to.Length)))
+                    {
+                        if (!_changedPaths.Contains(file))
+                        {
+                            _changedPaths.Add(file);
+                            _altMonitor[file] = to;
+                        }
+                    }
+                }
+
                 List<string> changed = new List<string>(_changedPaths);
                 _changedPaths.Clear();
 
@@ -237,8 +280,7 @@ namespace Ankh.Scc
                     SccDocumentData dd;
                     if (_tracker._docMap.TryGetValue(path, out dd))
                     {
-                        if (!dd.GetIsDirty())
-                            dd.Reload(true);
+                        dd.Reload(true);
                     }
                 }
             }
@@ -274,7 +316,7 @@ namespace Ankh.Scc
 
                 return VSConstants.S_OK;
             }
-#endregion
+            #endregion
 
             public override void Reload(IEnumerable<string> paths)
             {
@@ -294,22 +336,23 @@ namespace Ankh.Scc
 
             public override void Dispose()
             {
-                if (_change == null)
-                    _change = _tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+                // Stop monitoring
+                foreach (uint v in _monitor.Keys)
+                    _change.UnadviseFileChange(v);
 
-                if (_change != null)
+                _monitor.Clear();
+
+                foreach (string path in _locked)
                 {
-                    // Sync all files for the last time
-                    // to make sure they are not reloaded for old changes after disposing
-
-                    foreach (string path in _ignoring)
-                        _change.SyncFile(path);
-
-                    foreach (uint v in _monitor.Keys)
-                        _change.UnadviseFileChange(v);
-
-                    _monitor.Clear();
+                    _change.SyncFile(path);
+                    _change.IgnoreFile(0, path, 0);
                 }
+
+                // Sync all files for the last time
+                // to make sure they are not reloaded for old changes after disposing
+
+                foreach (string path in _locked)
+                    _change.SyncFile(path);
 
                 foreach (string path in _readonly)
                 {
@@ -327,7 +370,7 @@ namespace Ankh.Scc
                     {
                         dd.IgnoreFileChanges(false);
                     }
-                }                
+                }
             }
         }
     }
