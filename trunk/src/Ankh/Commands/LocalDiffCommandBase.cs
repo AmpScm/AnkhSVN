@@ -50,7 +50,7 @@ namespace Ankh.Commands
                 throw new ArgumentNullException("context");
 
              
-            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+            IAnkhOpenDocumentTracker documentTracker = context.GetService<IAnkhOpenDocumentTracker>();
             bool useExternalDiff = GetExe(selection, context) != null;
 
             bool foundModified = false;
