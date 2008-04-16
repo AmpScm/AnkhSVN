@@ -322,7 +322,7 @@ namespace Ankh.UI.PendingChanges
                     SvnCommitArgs ca = new SvnCommitArgs();
                     ca.Depth = SvnDepth.Empty;
                     ca.KeepLocks = state.KeepLocks;
-                    ca.KeepChangeList = state.KeepChangeLists;
+                    ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
                     ok = e.Client.Commit(
                         state.CommitPaths,

@@ -507,7 +507,7 @@ namespace Ankh.UI.RepositoryOpen
                     SvnListArgs la = new SvnListArgs();
                     la.ThrowOnError = false;
                     la.Depth = SvnDepth.Children;
-                    la.EntryItems = SvnDirEntryItems.Kind;
+                    la.RetrieveEntries = SvnDirEntryItems.Kind;
 
                     Uri repositoryRoot = null;
                     List<ListViewItem> items = new List<ListViewItem>();
