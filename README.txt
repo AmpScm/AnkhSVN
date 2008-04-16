@@ -22,16 +22,20 @@ Contents:
 
   # svn co http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/ AnkhSVN
   
-  /* If you have AnkhSVN 2.0 (you can also automatically open the project */
-  /* directly in Visual Studio with AnkhSVN itself */
-  /* */
-  /*   File -> Subversion -> Open from Subversion */
-  /* */
-  /*   And then choose one of the Solution (.sln) files below: */
-  /*     http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/src/ */
+  If you have AnkhSVN 2.0 installed you can also automatically open the project
+  directly in Visual Studio with AnkhSVN itself
+  
+    Click: File -> Open -> Subversion Project
+  
+  And then choose the right Solution (.sln) file below:
+     http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/src/
+     
+  In the next dialog choose a location where you wish to store your local
+  working copy and click Ok.
+  
   
   Please read src/BUILD.txt for more information on how to test development
-  versions of AnkhSVN after checkout
+  versions of AnkhSVN after the checkout completes.
 
 
 2. Documentation
