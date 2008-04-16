@@ -11,6 +11,7 @@ using Ankh.StatusCache;
 using Ankh.Selection;
 using Ankh.VS;
 using Ankh.Settings;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh
 {
@@ -34,6 +35,8 @@ namespace Ankh
             Container.AddService(typeof(IUIShell), new UIShell(Context));
             Container.AddService(typeof(IAnkhSolutionSettings), new SolutionSettings(Context));
             Container.AddService(typeof(IProgressRunner), new ProgressRunnerService(Context));
+
+            Container.AddService(typeof(IExplorersShell), new ExplorersShell(Context), true);
 
             // Ensure old context behaviour
             _context = GetService<IContext>();

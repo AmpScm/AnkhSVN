@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -16,10 +17,10 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            if (context.RepositoryExplorer.SelectedNode == null ||
-                !context.RepositoryExplorer.SelectedNode.IsDirectory )
+            if (shell.RepositoryExplorerService.SelectedNode == null ||
+                !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
             {
                 e.Enabled = false;
             } 
@@ -27,6 +28,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
@@ -38,7 +40,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
 				using(context.StartOperation("Checking out"))
                 {
-					INode node = context.RepositoryExplorer.SelectedNode;
+					INode node = shell.RepositoryExplorerService.SelectedNode;
 
 					CheckoutRunner runner = new CheckoutRunner(
 						browser.SelectedPath, node.Revision, new Uri(node.Url));

@@ -62,7 +62,7 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorer
+        public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorerService
         {
             get
             {
@@ -421,66 +421,6 @@ namespace Ankh.Tests
 
             #region IUIShell Members
 
-
-            Ankh.UI.WorkingCopyExplorerControl IUIShell.WorkingCopyExplorer
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            public Ankh.UI.CommitDialog CommitDialog
-            {
-                get
-                {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
-                }
-            }
-
-            #endregion
-
-            #region IUIShell Members
-
-            Ankh.UI.RepositoryExplorerControl IUIShell.RepositoryExplorer
-            {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
-            }
-
-            System.ComponentModel.ISynchronizeInvoke IUIShell.SynchronizingObject
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            void IUIShell.SetRepositoryExplorerSelection(object[] selection)
-            {
-                throw new NotImplementedException();
-            }
-
-            bool IUIShell.RepositoryExplorerHasFocus()
-            {
-                throw new NotImplementedException();
-            }
-
-            bool IUIShell.WorkingCopyExplorerHasFocus()
-            {
-                throw new NotImplementedException();
-            }
-
-            bool IUIShell.SolutionExplorerHasFocus()
-            {
-                throw new NotImplementedException();
-            }
-
             DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons)
             {
                 throw new NotImplementedException();
@@ -517,16 +457,6 @@ namespace Ankh.Tests
             }
 
             SwitchDialogInfo IUIShell.ShowSwitchDialog(SwitchDialogInfo info)
-            {
-                throw new NotImplementedException();
-            }
-
-            RepositoryRootInfo IUIShell.ShowAddRepositoryRootDialog()
-            {
-                throw new NotImplementedException();
-            }
-
-            string IUIShell.ShowAddWorkingCopyExplorerRootDialog()
             {
                 throw new NotImplementedException();
             }

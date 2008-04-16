@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -16,13 +17,13 @@ namespace Ankh.Commands.RepositoryExplorer
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            RepositoryRootInfo info = context.UIShell.ShowAddRepositoryRootDialog();
+            RepositoryRootInfo info = shell.ShowAddRepositoryRootDialog();
             if ( info == null )
                 return;
 
-            context.RepositoryExplorer.AddRoot( info );
+            shell.RepositoryExplorerService.AddRoot( info );
         }
     }
 }

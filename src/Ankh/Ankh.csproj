@@ -196,7 +196,7 @@
     <Compile Include="Commands\CheckoutRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CheckoutSolutionCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\CheckoutSolutionCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CleanupCommand.cs">
@@ -302,7 +302,9 @@
     <Compile Include="EventSinks\TrackProjectEventsSink.cs" />
     <Compile Include="Settings\SolutionSettings.cs" />
     <Compile Include="StatusCache\FileStatusCleanup.cs" />
+    <Compile Include="WorkingCopyExplorer\ExplorersShell.cs" />
     <Compile Include="WorkingCopyExplorer\IAnkhSelectionContainer.cs" />
+    <Compile Include="WorkingCopyExplorer\IExplorersShell.cs" />
     <Compile Include="WorkingCopyExplorer\IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -347,7 +349,7 @@
     <Compile Include="RepositoryExplorer\Node.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RepositoryRootInfo.cs" />
+    <Compile Include="RepositoryExplorer\RepositoryRootInfo.cs" />
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>

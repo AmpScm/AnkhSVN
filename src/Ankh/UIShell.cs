@@ -12,6 +12,7 @@ using Ankh.ContextServices;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh
 {
@@ -24,93 +25,7 @@ namespace Ankh
             : base(context)
         {
 
-        }
-
-        #region IUIShell Members
-        public RepositoryExplorerControl RepositoryExplorer
-        {
-            get
-            {
-                if (this.repositoryExplorerControl == null)
-                    this.CreateRepositoryExplorer();
-                return this.repositoryExplorerControl;
-            }
-            set
-            {
-                Debug.Assert(this.repositoryExplorerControl == null);
-                this.repositoryExplorerControl = value;
-
-                if (value != null)
-                    GetService<IContext>().RepositoryExplorer.SetControl(value);
-            }
-        }
-
-        public WorkingCopyExplorerControl WorkingCopyExplorer
-        {
-            get
-            {
-                return this.workingCopyExplorerControl;
-            }
-            set
-            {
-                Debug.Assert(this.workingCopyExplorerControl == null);
-                this.workingCopyExplorerControl = value;
-
-                if (value != null)
-                    GetService<IContext>().WorkingCopyExplorer.SetControl(value);
-            }
-        }
-
-        public CommitDialog CommitDialog
-        {
-            get { return this.commitDialog; }
-            set
-            {
-                Debug.Assert(this.commitDialog == null);
-                this.commitDialog = value;
-            }
-        }
-
-        public System.ComponentModel.ISynchronizeInvoke SynchronizingObject
-        {
-            get
-            {
-                // TODO: Fix someway; probably just removing
-                return this.RepositoryExplorer ?? null;
-            }
-        }
-
-        public void SetRepositoryExplorerSelection(object[] selection)
-        {
-            //this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
-        }
-
-        public bool RepositoryExplorerHasFocus()
-        {
-            // The new command routing should make this method obsolete
-            if (this.repositoryExplorerControl != null)
-                return this.repositoryExplorerControl.ContainsFocus;
-            else
-                return false;
-        }
-
-        public bool WorkingCopyExplorerHasFocus()
-        {
-            // The new command routing should make this method obsolete
-            if (this.workingCopyExplorerControl != null)
-                return this.workingCopyExplorerControl.ContainsFocus;
-            else
-                return false;
-        }
-
-        [Obsolete]
-        public bool SolutionExplorerHasFocus()
-        {
-            // The new command routing should make this method obsolete
-            return false;// this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
-        }
-
-
+        }        
 
         /// <summary>
         /// Shows the commit dialog, blocking until the user hits cancel or commit.
@@ -336,56 +251,5 @@ namespace Ankh
             //}
             return null;
         }
-
-        public RepositoryRootInfo ShowAddRepositoryRootDialog()
-        {
-            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
-            {
-                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                    return null;
-
-                return new RepositoryRootInfo(dlg.Url, dlg.Revision);
-            }
-        }
-
-        public string ShowAddWorkingCopyExplorerRootDialog()
-        {
-            using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
-            {
-                if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                {
-                    return null;
-                }
-                return dlg.NewRoot;
-            }
-        }
-
-        #endregion
-
-        private void CreateRepositoryExplorer()
-        {
-            // BH: Moved creating to the package to allow VS to manage all state associated with the window
-            Debug.WriteLine("Previously precreated Repository Explorer here");
-        }
-
-        private void CreateCommitDialog()
-        {
-            Debug.WriteLine("Previously precreated Commit Window here");
-        }
-
-        private void CreateWorkingCopyExplorer()
-        {
-            // BH: Moved creating to the package to allow VS to manage all state associated with the window
-            Debug.WriteLine("Previously precreated Working Copy Explorer here");
-        }
-
-        private void ProceedCommit(object sender, EventArgs e)
-        {
-            this.commitDialog.Proceed -= new EventHandler(this.ProceedCommit);
-        }
-
-        private RepositoryExplorerControl repositoryExplorerControl;
-        private WorkingCopyExplorerControl workingCopyExplorerControl;
-        private CommitDialog commitDialog;
     }
 }

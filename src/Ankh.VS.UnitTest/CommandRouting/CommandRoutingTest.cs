@@ -81,7 +81,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             using (mocks.Record())
             {
-                Expect.Call(uiShell.ShowAddRepositoryRootDialog()).Return(reposInfo).Repeat.Any();
+                //Expect.Call(uiShell.ShowAddRepositoryRootDialog()).Return(reposInfo).Repeat.Any();
             }
 
             IContext context = AnkhContextMock.GetInstance(mocks, uiShell);
@@ -120,7 +120,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             using (mocks.Record())
             {
-                Expect.Call(uiShell.ShowAddWorkingCopyExplorerRootDialog()).Return("C:\\something").Repeat.Any();
+                //Expect.Call(uiShell.ShowAddWorkingCopyExplorerRootDialog()).Return("C:\\something").Repeat.Any();
             }
 
             IContext context = AnkhContextMock.GetInstance(mocks, uiShell);

@@ -1,5 +1,6 @@
 using System;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands
 {
@@ -11,12 +12,12 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IExplorersShell shell = e.Context.GetService<IExplorersShell>();
 
-            string newRoot = context.UIShell.ShowAddWorkingCopyExplorerRootDialog();
+            string newRoot = shell.ShowAddWorkingCopyExplorerRootDialog();
             if ( newRoot != null )
             {
-                context.WorkingCopyExplorer.AddRoot( newRoot );
+                shell.WorkingCopyExplorerService.AddRoot(newRoot);
             }
         }
     }

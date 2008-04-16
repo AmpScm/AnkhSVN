@@ -25,8 +25,6 @@ namespace Ankh
     /// </summary>
     public class OldAnkhContext : AnkhService, IContext, IAnkhServiceProvider
     {
-        WorkingCopyExplorer.WorkingCopyExplorer _workingCopyExplorer;
-        RepositoryExplorer.Controller _repositoryController;
         OutputPaneWriter _outputPane;
         IAnkhConfigurationService _config;
 
@@ -50,12 +48,7 @@ namespace Ankh
 
             this.LoadConfig();
 
-            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
-
-            this._repositoryController =
-                new RepositoryExplorer.Controller(this);
-            this._workingCopyExplorer =
-                new Ankh.WorkingCopyExplorer.WorkingCopyExplorer(this);
+            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");            
         }
 
         EnvDTE._DTE _dte;
@@ -96,16 +89,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return this._clientPool ?? (this._clientPool = GetService<ISvnClientPool>()); }
         }
-
-        /// <summary>
-        /// The repository explorer control.
-        /// </summary>
-        public RepositoryExplorer.Controller RepositoryExplorer
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this._repositoryController; }
-        }   
-
+  
         /// <summary>
         /// The configloader.
         /// </summary>
@@ -115,12 +99,6 @@ namespace Ankh
             get { return this._config; }
         }
        
-        public IWorkingCopyExplorer WorkingCopyExplorer
-        {
-            [DebuggerStepThrough]
-            get { return this._workingCopyExplorer; }
-        }
-
         bool _operationRunning;
         /// <summary>
         /// Should be called before starting any lengthy operation

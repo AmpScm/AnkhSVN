@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
 using AnkhSvn.Ids;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -15,13 +16,14 @@ namespace Ankh.Commands.RepositoryExplorer
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IContext context = e.GetService<IContext>();
+            IExplorersShell shell = e.GetService<IExplorersShell>();
 
             using (context.StartOperation("Opening"))
             {
 
                 // make the catrunner get it on a separate thread.
-                INode node = context.RepositoryExplorer.SelectedNode;
+                INode node = shell.RepositoryExplorerService.SelectedNode;
                 CatRunner runner = new CatRunner(node.Name,
                     node.Revision, new Uri(node.Url));
 

@@ -19,21 +19,27 @@ namespace Ankh.WorkingCopyExplorer
         readonly List<FileSystemRootItem> _roots;
         WorkingCopyExplorerControl _control;
         
-        public WorkingCopyExplorer(IContext context)
+        public WorkingCopyExplorer(IAnkhServiceProvider context)
             : base(context)
         {
             _roots = new List<FileSystemRootItem>();
             LoadRoots();
 
-            if (context.UIShell.WorkingCopyExplorer != null)
+            if (Shell != null && Shell.WorkingCopyExplorer != null)
             {
-                SetControl(context.UIShell.WorkingCopyExplorer);
+                SetControl(Shell.WorkingCopyExplorer);
             }
         }
 
         private void LoadRoots()
         {
             DoLoadRoots();
+        }
+
+        IExplorersShell _shell;
+        IExplorersShell Shell
+        {
+            get { return _shell ?? (_shell = GetService<IExplorersShell>()); }
         }
 
         IFileStatusCache _statusCache;
