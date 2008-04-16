@@ -8,6 +8,7 @@ using Ankh.Ids;
 using Ankh.Selection;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -238,10 +239,52 @@ namespace Ankh.Scc.ProjectMap
         {
             IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
 
-            if(pdd != null)
+            if (pdd != null)
             {
+                // This method should be called on all documents (and is on at least the text editors)
                 return ErrorHandler.Succeeded(pdd.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0));
             }
+            
+            IVsPersistHierarchyItem2 phi2 = RawDocument as IVsPersistHierarchyItem2;
+            if(phi2 != null)
+            {
+                // This route works for some project types and the solution
+                return ErrorHandler.Succeeded(phi2.ReloadItem(VSConstants.VSITEMID_ROOT, 0));
+            }
+
+            
+
+            IVsProject project = RawDocument as IVsProject;
+            IVsHierarchy hier = project as IVsHierarchy;
+
+            if(project != null && hier != null)
+            {
+                // Not all projects can reload themselves; but the solution can!
+
+                // Unload the project
+                IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
+                if (!ErrorHandler.Succeeded(sol.CloseSolutionElement((uint)__VSSLNCLOSEOPTIONS.SLNCLOSEOPT_UnloadProject, hier, Cookie)))
+                {
+                    return false;
+                }
+
+                IVsSolution2 sol2 = sol as IVsSolution2;
+
+                Guid empty = Guid.Empty;
+                IntPtr projectVal;
+                int hr;
+                if(ErrorHandler.Succeeded(hr = sol2.CreateProject(ref empty, Name, null, null,
+                    (uint)(__VSCREATEPROJFLAGS.CPF_OPENFILE),
+                    ref empty, out projectVal)))
+                {
+                    Marshal.Release(projectVal);
+                }
+
+                Exception ee = Marshal.GetExceptionForHR(hr);
+
+                return true;
+            }
+
 
             return false;
         }
