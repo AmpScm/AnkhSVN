@@ -29,8 +29,6 @@ namespace Ankh.Commands
 
         SvnCommitArgs _args;
 
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
@@ -109,17 +107,24 @@ namespace Ankh.Commands
 
             this.commitInfo = null;
 
-			foreach (List<SvnItem> items in repositories)
+            using (DocumentLock dl = tracker.LockDocuments(SvnItem.GetPaths(operation.Items), DocumentLockType.NoReload))
             {
-                string startText = "Committing ";
-                if (repositories.Count > 1 && items.Count > 0)
-                    startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
-                using (e.Context.BeginOperation(startText))
-                {
-                    this.paths = SvnItem.GetPaths(items);
+                dl.MonitorChanges();
 
-                    bool completed = operation.Run("Committing");
+                foreach (List<SvnItem> items in repositories)
+                {
+                    string startText = "Committing ";
+                    if (repositories.Count > 1 && items.Count > 0)
+                        startText += "to repository " + ((SvnItem)items[0]).Status.Uri;
+                    using (e.Context.BeginOperation(startText))
+                    {
+                        this.paths = SvnItem.GetPaths(items);
+
+                        bool completed = operation.Run("Committing");
+                    }
                 }
+
+                dl.ReloadModified();
             }
 
             // not in the finally, because we want to preserve the message for a 
@@ -127,7 +132,7 @@ namespace Ankh.Commands
             this.storedLogMessage = null;
         }
 
-        #endregion
+
 
         private void DoCommit(object sender, ProgressWorkerArgs e)
         {
