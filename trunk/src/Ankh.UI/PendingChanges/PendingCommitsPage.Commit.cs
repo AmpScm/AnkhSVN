@@ -6,6 +6,7 @@ using Ankh.Scc;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Ankh.VS;
+using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -155,11 +156,18 @@ namespace Ankh.UI.PendingChanges
                 // if(!PreCommit_....())
                 //  return;
 
-                if (Commit_CommitToRepository(state))
+                using (DocumentLock dl = UISite.GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
                 {
-                    // TODO: Store the logmessage!
+                    dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
 
-                    logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded
+                    if (Commit_CommitToRepository(state))
+                    {
+                        // TODO: Store the logmessage!
+
+                        logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded
+                    }
+
+                    dl.ReloadModified();
                 }
             }            
         }
