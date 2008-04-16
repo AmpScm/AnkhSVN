@@ -54,6 +54,10 @@ namespace Ankh.Ids
         PendingChangesSwitch,
 
         PendingChangesOpenEx,
+        PendingCommitsMenu,
+        PendingCommitsSortActions,
+        PendingCommitsGroupActions,
+        PendingCommitsActions,
 
         LogMessageCommands,
 

@@ -260,7 +260,23 @@ namespace Ankh.UI.PendingChanges
         private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y);
+
+            Point clP = pendingCommits.PointToClient(p);
+            ListViewHitTestInfo hti = pendingCommits.HitTest(clP);
+
+            bool showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
+            if (!showSort && hti.Item != null)
+            {
+                Rectangle r= hti.Item.GetBounds(ItemBoundsPortion.Entire);
+
+                if(!r.Contains(clP))
+                    showSort = true;
+            }
+
+            if(showSort)
+                UISite.ShowContextMenu(AnkhCommandMenu.PendingCommitsSortContextMenu, p.X, p.Y);
+            else
+                UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y);
         }        
 
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
