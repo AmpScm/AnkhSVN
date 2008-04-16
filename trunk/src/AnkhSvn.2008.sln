@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions"
 		BUILD.txt = BUILD.txt
 		CHANGES.txt = CHANGES.txt
 		CONTRIBUTERS.txt = CONTRIBUTERS.txt
+		..\README.txt = ..\README.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Services", "Ankh.Services\Ankh.Services.csproj", "{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}"
@@ -144,7 +145,7 @@ Global
 		{2FFF126C-D567-4491-8128-0D98CF74BDFD} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
