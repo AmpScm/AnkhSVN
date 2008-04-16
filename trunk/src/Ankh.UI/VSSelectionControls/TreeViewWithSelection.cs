@@ -10,9 +10,7 @@ namespace Ankh.UI.VSSelectionControls
     public class TreeViewWithSelection<TNode> : TreeView, ISelectionMapOwner<TNode>
         where TNode : TreeNode
     {
-        bool _maybeUnselect;
         EventHandler _selectionChanged;
-
 
         IServiceProvider _serviceProvider;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -46,8 +44,6 @@ namespace Ankh.UI.VSSelectionControls
         /// </summary>
         public void NotifySelectionUpdated()
         {
-            _maybeUnselect = true;
-
             if (SelectionPublishServiceProvider != null)
             {
                 SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
