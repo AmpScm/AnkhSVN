@@ -146,7 +146,7 @@ namespace Ankh.VS.Dialogs
                     _pane = null;
                     return;
                 }
-                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(AnkhSvn.Ids.AnkhId.CommandSetGuid, (int)AnkhSvn.Ids.AnkhToolBar.PendingChanges);
+                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(Ankh.Ids.AnkhId.CommandSetGuid, (int)Ankh.Ids.AnkhToolBar.PendingChanges);
 
 
                 if (tbId != null)

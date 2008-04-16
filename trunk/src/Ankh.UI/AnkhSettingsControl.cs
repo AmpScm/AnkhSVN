@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.Commands;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.UI
 {

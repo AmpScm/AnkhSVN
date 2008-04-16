@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Scc;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.StatusCache
 {

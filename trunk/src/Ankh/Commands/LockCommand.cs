@@ -3,7 +3,7 @@ using System.Collections;
 
 using System.Text;
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using System.Collections.Generic;
 
 namespace Ankh.Commands

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.UI
 {

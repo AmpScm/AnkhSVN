@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Selection;
 
 

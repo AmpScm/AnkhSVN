@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.UI;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Selection;
 using System.Collections.ObjectModel;

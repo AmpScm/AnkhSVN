@@ -5,7 +5,7 @@ using System.Collections;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Utils;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using SharpSvn;
 using Ankh.WorkingCopyExplorer;
 

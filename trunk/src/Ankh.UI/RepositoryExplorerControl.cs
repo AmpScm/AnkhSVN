@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 using SharpSvn;
 using Ankh.UI.Services;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 
 namespace Ankh.UI
 {

@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Ankh.UI.Services;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
 

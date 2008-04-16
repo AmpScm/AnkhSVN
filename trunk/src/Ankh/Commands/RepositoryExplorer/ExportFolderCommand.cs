@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using Utils;
 using Ankh.RepositoryExplorer;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer

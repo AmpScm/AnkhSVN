@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.VS;
 using System.ComponentModel;
 using System.ComponentModel.Design;

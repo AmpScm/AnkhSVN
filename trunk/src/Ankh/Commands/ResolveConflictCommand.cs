@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Collections;
 
 using SharpSvn;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.ContextServices;
 
 namespace Ankh.Commands

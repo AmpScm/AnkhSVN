@@ -1,6 +1,6 @@
 using System;
 using Ankh.RepositoryExplorer;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Utils.Win32;
 using Ankh.WorkingCopyExplorer;
 

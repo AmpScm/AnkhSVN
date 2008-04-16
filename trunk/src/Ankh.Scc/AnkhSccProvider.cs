@@ -7,7 +7,7 @@ using System.Diagnostics;
 using SharpSvn;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.VS;

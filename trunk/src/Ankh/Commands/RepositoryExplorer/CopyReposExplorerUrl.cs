@@ -3,7 +3,7 @@ using System;
 using Ankh.UI;
 using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer

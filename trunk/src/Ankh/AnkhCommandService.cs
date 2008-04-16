@@ -4,7 +4,7 @@ using System.Text;
 using Ankh.Commands;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel.Design;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
@@ -43,7 +43,7 @@ namespace Ankh
 
         #region IAnkhCommandService Members
 
-        public bool ExecCommand(AnkhSvn.Ids.AnkhCommand command)
+        public bool ExecCommand(Ankh.Ids.AnkhCommand command)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
             return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), false);
@@ -89,12 +89,12 @@ namespace Ankh
                 unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
 
-        public bool PostExecCommand(AnkhSvn.Ids.AnkhCommand command)
+        public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
         {
             return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), null);
         }
 
-        public bool PostExecCommand(AnkhSvn.Ids.AnkhCommand command, object args)
+        public bool PostExecCommand(Ankh.Ids.AnkhCommand command, object args)
         {
             return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), args);
         }

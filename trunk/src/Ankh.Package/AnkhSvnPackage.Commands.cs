@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Microsoft.VisualStudio;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell.Interop;

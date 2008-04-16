@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Commands;
 using Ankh.UI;
 using Ankh.Selection;

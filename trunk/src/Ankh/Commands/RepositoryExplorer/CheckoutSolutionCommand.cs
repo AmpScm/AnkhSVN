@@ -5,7 +5,7 @@ using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.Commands

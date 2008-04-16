@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using EnvDTE;
 using Utils;
 

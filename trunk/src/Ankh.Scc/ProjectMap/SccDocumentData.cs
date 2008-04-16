@@ -4,7 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Selection;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;

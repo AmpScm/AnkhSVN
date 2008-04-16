@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using System.ComponentModel.Design;
 using Ankh.Scc;
-using AnkhSvn.Ids;
+using Ankh.Ids;
 using Ankh.Commands;
 using Ankh.VS;
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnkhSvn.Ids
+namespace Ankh.Ids
 {
 	/// <summary>
 	/// Container of guids used by the package and command framework
