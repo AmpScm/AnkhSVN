@@ -34,10 +34,15 @@ namespace Ankh.Scc
     partial class AnkhSccProvider : IVsSccManager2, IVsSccManagerTooltip, IVsSccGlyphs
     {
         IStatusImageMapper _statusImages;
-
         IStatusImageMapper StatusImages
         {
-            get { return _statusImages ?? (_statusImages = Context.GetService<IStatusImageMapper>()); }
+            get { return _statusImages ?? (_statusImages = GetService<IStatusImageMapper>()); }
+        }
+
+        IPendingChangesManager _pendingChanges;
+        IPendingChangesManager PendingChanges
+        {
+            get { return _pendingChanges ?? (_pendingChanges = GetService<IPendingChangesManager>()); }
         }
 
         public AnkhGlyph GetPathGlyph(string path)
@@ -157,10 +162,22 @@ namespace Ankh.Scc
 
             for (int i = 0; i < cFiles; i++)
             {
-                AnkhGlyph glyph = GetPathGlyph(rgpszFullPaths[i]);
+                string fileName = rgpszFullPaths[i];
+                AnkhGlyph glyph = GetPathGlyph(fileName);
 
                 if (rgsiGlyphs != null)
                     rgsiGlyphs[i] = (VsStateIcon)glyph;
+
+                SccProjectFile file;
+
+                if (_fileMap.TryGetValue(fileName, out file))
+                {
+                    if (file.LastGlyph != glyph)
+                    {
+                        file.LastGlyph = glyph;
+                        PendingChanges.Refresh(fileName);                        
+                    }
+                }
 
                 if (rgdwSccStatus != null)
                 {
