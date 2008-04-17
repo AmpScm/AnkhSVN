@@ -105,7 +105,7 @@ namespace Ankh
                 _isFile = XBool.False; // An external is a directory in Subversion -1.5
                 _readOnly = XBool.False; // A directory can't be read only on windows
                 _isVersionable = XBool.True; // External WC, or my WC.. 
-
+                
                 if (_statusDirty == XBool.False)
                     return; // Just skip the rest.. Fill it when iterating the directory itself
 
@@ -146,18 +146,26 @@ namespace Ankh
 
             switch (status.LocalContentStatus)
             {
-                case SvnStatus.NotVersioned: // Node exists
+                case SvnStatus.NotVersioned: 
+                case SvnStatus.Ignored:
+                case SvnStatus.External:
+                    // Node exists but is not managed by us in this directory
+                    // (Might be from an other location as in the nested case)
+                    _exists = XBool.True;
+                    break;
                 case SvnStatus.Normal:
                 case SvnStatus.Added:
                 case SvnStatus.Replaced:
-                case SvnStatus.Modified:
-                case SvnStatus.Ignored:
-                case SvnStatus.Conflicted:
-
-                case SvnStatus.Obstructed: // node exists but is of the wrong type
-
+                case SvnStatus.Modified:                
+                case SvnStatus.Conflicted:                
                     _exists = XBool.True; // SVN checked this for us
                     break;
+
+                case SvnStatus.Obstructed: // node exists but is of the wrong type
+                    _exists = XBool.True;
+                    _readOnly = _isFile = _mustLock = XBool.None;
+                    return;
+
                 case SvnStatus.None:
                 case SvnStatus.Missing:
                     _exists = XBool.False;
@@ -168,7 +176,6 @@ namespace Ankh
 
             }
 
-            // In the obstructed case the NodeKind is incorrect!
             switch (status.NodeKind)
             {
                 case SvnNodeKind.Directory:
