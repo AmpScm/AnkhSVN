@@ -6,6 +6,7 @@ using Microsoft.VisualStudio;
 using SharpSvn;
 using System.Windows.Forms;
 using Ankh.Scc.ProjectMap;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -36,12 +37,14 @@ namespace Ankh.Scc
         IStatusImageMapper _statusImages;
         IStatusImageMapper StatusImages
         {
+            [DebuggerStepThrough]
             get { return _statusImages ?? (_statusImages = GetService<IStatusImageMapper>()); }
         }
 
         IPendingChangesManager _pendingChanges;
         IPendingChangesManager PendingChanges
         {
+            [DebuggerStepThrough]
             get { return _pendingChanges ?? (_pendingChanges = GetService<IPendingChangesManager>()); }
         }
 

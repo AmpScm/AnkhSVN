@@ -81,13 +81,18 @@ namespace Ankh.Scc
         {
             lock (_toRefresh)
             {
-                if (!_refreshScheduled)
-                {
-                    IAnkhCommandService cmd = GetService<IAnkhCommandService>();
+                ScheduleRefreshPreLocked();                
+            }
+        }
 
-                    if (cmd != null && cmd.PostExecCommand(AnkhCommand.TickRefreshPendingTasks))
-                        _refreshScheduled = true;
-                }
+        void ScheduleRefreshPreLocked()
+        {
+            if (!_refreshScheduled)
+            {
+                IAnkhCommandService cmd = GetService<IAnkhCommandService>();
+
+                if (cmd != null && cmd.PostExecCommand(AnkhCommand.TickRefreshPendingTasks))
+                    _refreshScheduled = true;
             }
         }
 
@@ -109,7 +114,7 @@ namespace Ankh.Scc
                 _fullRefresh = true;
                 _toRefresh.Clear();
 
-                ScheduleRefresh();
+                ScheduleRefreshPreLocked();
             }
         }
 
@@ -142,7 +147,7 @@ namespace Ankh.Scc
                 else if (!_fullRefresh && !_toRefresh.Contains(path))
                     _toRefresh.Add(path);
 
-                ScheduleRefresh();
+                ScheduleRefreshPreLocked();
             }
         }
 
@@ -165,7 +170,7 @@ namespace Ankh.Scc
                     }
                 }
 
-                ScheduleRefresh();
+                ScheduleRefreshPreLocked();
             }
         }
 
@@ -276,7 +281,7 @@ namespace Ankh.Scc
             {
                 _toMonitor.Add(path);
 
-                ScheduleRefresh();
+                ScheduleRefreshPreLocked();
             }            
         }
 
@@ -286,7 +291,7 @@ namespace Ankh.Scc
             {
                 _toMonitor.AddRange(paths);
 
-                ScheduleRefresh();
+                ScheduleRefreshPreLocked();
             }            
         }
     }
