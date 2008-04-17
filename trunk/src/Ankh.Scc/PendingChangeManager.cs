@@ -132,6 +132,9 @@ namespace Ankh.Scc
             if (path != null && string.IsNullOrEmpty(path)) // path == ""
                 throw new ArgumentNullException("path");
 
+            if (!_isActive)
+                return;
+
             lock (_toRefresh)
             {
                 if (path == null)
@@ -147,6 +150,9 @@ namespace Ankh.Scc
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
+
+            if (!_isActive)
+                return;
 
             lock (_toRefresh)
             {
