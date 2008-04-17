@@ -6,6 +6,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -70,7 +71,7 @@ namespace Ankh.Scc
             data.CheckDirty();
 
             // Save the document if it is dirty
-            return ErrorHandler.Succeeded(RunningDocumentTable.SaveDocuments(0, data.Hierarchy, data.ItemId, data.Cookie));
+            return data.SaveDocument(RunningDocumentTable);
         }
 
         public void CheckDirty(string path)
@@ -91,13 +92,45 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
+            bool ok = true;
+
             foreach (string path in paths)
             {
                 if (!SaveDocument(path))
-                    return false;
+                    ok = false;
             }
 
-            return true;
+            return ok;
+        }
+
+        public bool SaveAllDocumentsExcept(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            HybridCollection<string> pathsCol = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+            pathsCol.UniqueAddRange(paths);
+
+            bool ok = true;
+            foreach (SccDocumentData data in _docMap.Values)
+            {
+                if (!pathsCol.Contains(data.Name))
+                {
+                    if (!data.SaveDocument(RunningDocumentTable))
+                        ok = false;
+                }
+            }
+
+            return ok;
+        }
+
+        void SaveAllDocuments()
+        {
+            foreach (SccDocumentData dd in _docMap.Values)
+            {
+                dd.SaveDocument(RunningDocumentTable);
+            }
         }
 
         /// <summary>
@@ -203,18 +236,18 @@ namespace Ankh.Scc
                 _readonly = readOnly;
                 _changedPaths = new HybridCollection<string>();
                 _monitor = new Dictionary<uint, string>();
-                _altMonitor = new Dictionary<string,FileInfo>();
+                _altMonitor = new Dictionary<string, FileInfo>();
 
                 _change = tracker.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-                foreach(string file in locked)
+                foreach (string file in locked)
                 {
                     // This files auto reload could not be suspended by calling Ignore on the document
                     // We must therefore stop posting messages to it by stopping it in the change monitor
 
                     // But to be able to tell if there are changes.. We keep some stats ourselves
 
-                    if(!ignoring.Contains(file) &&
+                    if (!ignoring.Contains(file) &&
                         ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
                     {
                         FileInfo info = new FileInfo(file);
@@ -279,14 +312,7 @@ namespace Ankh.Scc
                 List<string> changed = new List<string>(_changedPaths);
                 _changedPaths.Clear();
 
-                foreach (string path in changed)
-                {
-                    SccDocumentData dd;
-                    if (_tracker._docMap.TryGetValue(path, out dd))
-                    {
-                        dd.Reload(true);
-                    }
-                }
+                Reload(changed);
             }
 
             #region IVsFileChangeEvents
@@ -327,13 +353,50 @@ namespace Ankh.Scc
                 if (paths == null)
                     throw new ArgumentNullException("paths");
 
-                foreach (string path in paths)
+                HybridCollection<string> changed = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                changed.AddRange(paths);
+
+                IProjectFileMapper mapper = _tracker.GetService<IProjectFileMapper>();
+
+                if (!string.IsNullOrEmpty(mapper.SolutionFilePath) && changed.Contains(mapper.SolutionFilePath))
                 {
-                    SccDocumentData dd;
-                    if (_tracker._docMap.TryGetValue(path, out dd))
+                    // Ok; we are going to reload the solution itself
+                    _tracker.SaveAllDocumentsExcept(changed); // Make sure everything that is dirty is saved
+
+                    // let's remove all documents that are in the solution from the changed list
+                    foreach (string file in mapper.GetAllFilesOfAllProjects())
                     {
-                        if (!dd.GetIsDirty())
-                            dd.Reload(true);
+                        changed.Remove(file);
+                    }
+
+                    // The solution was just removed; add it back
+                    changed.Add(mapper.SolutionFilePath);
+                }
+
+                for (int i = 0; i < changed.Count; i++)
+                {
+                    string ch = changed[i];
+                    SccDocumentData dd;
+                    if (_tracker._docMap.TryGetValue(ch, out dd))
+                    {
+                        if (!dd.Reload(true))
+                        {
+                            string parentDocument = _tracker.GetParentDocument(dd);
+
+                            if (string.IsNullOrEmpty(parentDocument))
+                                parentDocument = mapper.SolutionFilePath;
+
+                            if (!string.IsNullOrEmpty(parentDocument) && !changed.Contains(parentDocument))
+                            {                                
+                                if (!_locked.Contains(parentDocument))
+                                {
+                                    // The parent is not on our changed or locked list.. so make sure it is saved
+                                    _tracker.SaveDocument(parentDocument);
+                                }
+
+                                changed.Add(parentDocument);
+                            }
+                        }
                     }
                 }
             }
@@ -376,6 +439,28 @@ namespace Ankh.Scc
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the parent document of a document (normally a project or the solution)
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <returns></returns>
+        internal string GetParentDocument(SccDocumentData document)
+        {
+            IVsHierarchy hier = document.Hierarchy;
+
+            foreach (SccDocumentData dd in _docMap.Values)
+            {
+                IVsHierarchy hh = dd.RawDocument as IVsHierarchy;
+
+                if (hh != null && dd.Hierarchy == hier)
+                {
+                    return dd.Name;
+                }
+            }
+
+            return null;
         }
     }
 }
