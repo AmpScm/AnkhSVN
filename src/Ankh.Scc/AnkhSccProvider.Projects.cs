@@ -200,8 +200,16 @@ namespace Ankh.Scc
                 return;
             }
 
-            _solutionDirectory = SvnTools.GetTruePath(dir);
-            _solutionFile = SvnTools.GetTruePath(path);
+            if (string.IsNullOrEmpty(dir) || string.IsNullOrEmpty(path))
+            {
+                // Cache negative result; will be returned as null
+                _solutionDirectory = _solutionFile = "";
+            }
+            else
+            {
+                _solutionDirectory = SvnTools.GetTruePath(dir);
+                _solutionFile = SvnTools.GetTruePath(path);
+            }
         }
 
         /// <summary>
