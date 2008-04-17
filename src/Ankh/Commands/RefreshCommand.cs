@@ -21,6 +21,10 @@ namespace Ankh.Commands
                 IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 
                 monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
+
+                IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
+
+                pm.Refresh((string)null); // Perform a full incremental refresh on the PC window
             }
         }
     }
