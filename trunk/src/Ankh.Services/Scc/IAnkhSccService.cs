@@ -49,15 +49,7 @@ namespace Ankh.Scc
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <returns><c>true</c> if the solution is managed by the scc provider, otherwise <c>false</c></returns>
         bool IsProjectManaged(SvnProject project);
-
-        /// <summary>
-        /// Gets a boolean indicating whether the specified project (or the solution) is 
-        /// managed by the Subversion Scc provider
-        /// </summary>
-        /// <param name="project">A reference to the project or null for the solution</param>
-        /// <returns><c>true</c> if the solution is managed by the scc provider, otherwise <c>false</c></returns>
-        bool IsProjectManagedRaw(object project);
-
+   
         /// <summary>
         /// Register the scc provider as primary scc provider in Visual Studio
         /// </summary>
