@@ -254,38 +254,19 @@ namespace Ankh.Scc.ProjectMap
                     return true;
             }
 
-            IVsHierarchy hier = Hierarchy;
-            uint id = ItemId;
+            
+            vsPersistHierarchyItem2 = Hierarchy as IVsPersistHierarchyItem2;
 
-            while (hier != null)
+            if (vsPersistHierarchyItem2 != null &&
+                ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(ItemId, 0)))
             {
-                vsPersistHierarchyItem2 = hier as IVsPersistHierarchyItem2;
-
-                if (vsPersistHierarchyItem2 != null &&
-                    ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(id, 0)))
-                {
-                    // Our parent reloaded us
-                    return true;
-                }
-
-                // Ok.. We have one more option.. reload the parent itself
-
-                object v;
-                if (!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchyItemid, out v)))
-                    return false;
-
-                id = Convert.ToUInt32(v);
-
-                if (!ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ParentHierarchy, out v)))
-                    return false;
-
-                hier = v as IVsHierarchy;
+                // Our parent reloaded us
+                return true;
             }
 
-        
-            return false;
+            return false; // We can't be reloaded by ourselves.. Let our caller reload our parent instead
         }
-
+  
         /// <summary>
         /// Gets a value indicating whether this document is reloadable.
         /// </summary>
@@ -353,6 +334,7 @@ namespace Ankh.Scc.ProjectMap
             return ErrorHandler.Succeeded(pdd2.IsDocDataReadOnly(out readOnly)) && (readOnly != 0);
         }
 
+        int _ignored;
         /// <summary>
         /// Determines whether changes to DocData in files should be ignored.
         /// </summary>
@@ -364,8 +346,37 @@ namespace Ankh.Scc.ProjectMap
 
             if (ddfcc == null)
                 return false;
+           
+            if (ignore)
+            {
+                if (_ignored > 0)
+                {
+                    _ignored++;
+                    return true;
+                }
+            }
+            else
+            {
+                if (_ignored > 1)
+                {
+                    _ignored--;
+                    return true;
+                }
+                else if(_ignored == 0)
+                    return false; // We were not ignoring (Are we 100% reloaded?)
+            }
 
-            return ErrorHandler.Succeeded(ddfcc.IgnoreFileChanges(ignore ? 1 : 0));
+            if (ErrorHandler.Succeeded(ddfcc.IgnoreFileChanges(ignore ? 1 : 0)))
+            {
+                if (ignore)
+                    _ignored++;
+                else
+                    _ignored--;
+
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -403,6 +414,11 @@ namespace Ankh.Scc.ProjectMap
                 return false;
 
             return ErrorHandler.Succeeded(pdd3.HandsOnDocDataStorage());
-        }        
+        }
+
+        internal bool SaveDocument(IVsRunningDocumentTable rdt)
+        {
+            return ErrorHandler.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie));
+        }
     }
 }
