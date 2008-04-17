@@ -21,6 +21,17 @@ namespace Ankh
         {
         }
 
+        public void AddRange(IEnumerable<T> items)
+        {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
+            foreach (T item in items)
+            {
+                Add(item);
+            }
+        }
+
         protected override T GetKeyForItem(T item)
         {
             return item;
