@@ -448,24 +448,10 @@ namespace Ankh.StatusCache
         {
             // Note: There is a lock(_lock) around this in our caller
 
-            if (e.LocalContentStatus == SvnStatus.External)
-            {
-                // We must ignore those on the parent; this status is not usable
-                // and receive them again when we are walking the externals themselves
-
-                // TODO: Perhaps cache we found a directory, or...
-                // TODO: Build tests on this.
-          
-                // TODO: Maybe tick the item so it is not automatically deleted?
-                return;
-            }
-
-            string path = e.FullPath; // SharpSvn normalized it for us
-
-            // is there already an item for this path?
-            SvnItem item;
             AnkhStatus status = new AnkhStatus(e);
+            string path = e.FullPath; // Fully normalized
 
+            SvnItem item;
             if (!_map.TryGetValue(path, out item) || !item.NewFullPathOk(path, status))
             {
                 // We only create an item if we don't have an existing

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Ankh
 {
-    [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Path={FullPath}")]
+    [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
     public sealed class AnkhStatus
     {
         readonly SvnNodeKind _nodeKind;        

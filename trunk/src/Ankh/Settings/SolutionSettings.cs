@@ -205,7 +205,7 @@ namespace Ankh.Settings
                 if (_cache.ProjectRootUri != null)
                     return _cache.ProjectRootUri;
 
-                string projectroot = ProjectRootWithSeparator;
+                string projectroot = ProjectRoot;
 
                 if (string.IsNullOrEmpty(projectroot))
                     return null;
