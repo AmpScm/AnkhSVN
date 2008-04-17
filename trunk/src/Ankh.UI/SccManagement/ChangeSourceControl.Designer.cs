@@ -70,6 +70,7 @@
             this.bindingGrid.Location = new System.Drawing.Point(15, 37);
             this.bindingGrid.Name = "bindingGrid";
             this.bindingGrid.RowHeadersVisible = false;
+            this.bindingGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.bindingGrid.ShowEditingIcon = false;
             this.bindingGrid.Size = new System.Drawing.Size(756, 193);
             this.bindingGrid.TabIndex = 1;
