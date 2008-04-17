@@ -384,10 +384,7 @@ namespace Ankh.Scc
             if (_fileMap.ContainsKey(path))
                 return true;
 
-            // TODO: Keep some local copy of the solution filename
-            ISelectionContext sc = GetService<ISelectionContext>();
-
-            if (string.Equals(path, sc.SolutionFilename, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(path, SolutionFilePath, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;
@@ -455,10 +452,8 @@ namespace Ankh.Scc
         {
             List<string> files = new List<string>(_fileMap.Count+1);
 
-            ISelectionContext selection = Context.GetService<ISelectionContext>();
-
-            if (selection != null && !string.IsNullOrEmpty(selection.SolutionFilename))
-                files.Add(selection.SolutionFilename);
+            if (SolutionFilePath != null)
+                files.Add(SolutionFilePath);
 
             foreach(string file in _fileMap.Keys)
             {

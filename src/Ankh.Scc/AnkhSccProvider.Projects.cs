@@ -12,6 +12,7 @@ using Ankh.Selection;
 using Ankh.Ids;
 using Ankh.VS;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -135,6 +136,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
+            _solutionFile = _solutionDirectory = null;
             IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
 
             if (window != null)
@@ -159,6 +161,47 @@ namespace Ankh.Scc
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
             if (mgr != null && mgr.IsActive)
                 mgr.FullRefresh(false);
+        }
+
+        string _solutionFile;
+        string _solutionDirectory;
+        public string SolutionFilePath
+        {
+            get
+            {
+                if (_solutionFile == null)
+                    LoadSolutionInfo();
+                    
+                return _solutionFile.Length > 0 ? _solutionFile : null;
+            }
+        }
+
+        public string SolutionDirectory
+        {
+            get
+            {
+                if(_solutionDirectory == null)
+                    LoadSolutionInfo();
+
+                return _solutionDirectory;
+            }
+        }
+
+        void LoadSolutionInfo()
+        {
+            string dir, path, user;
+
+            IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
+
+            if(sol == null || 
+                !ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
+            {
+                _solutionDirectory = _solutionFile = "";
+                return;
+            }
+
+            _solutionDirectory = SvnTools.GetTruePath(dir);
+            _solutionFile = SvnTools.GetTruePath(path);
         }
 
         /// <summary>
@@ -196,6 +239,7 @@ namespace Ankh.Scc
             Debug.Assert(_projectMap.Count == 0);
             Debug.Assert(_fileMap.Count == 0);
 
+            _solutionFile = _solutionDirectory = null;
             _projectMap.Clear();
             _fileMap.Clear();
             _unreloadable.Clear();
