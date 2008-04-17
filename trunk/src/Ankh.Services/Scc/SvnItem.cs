@@ -113,9 +113,9 @@ namespace Ankh
 
                 return;
             }
-            else if (!ReferenceEquals(status, AnkhStatus.NotVersioned) &&
-                (status.LocalContentStatus == SvnStatus.NotVersioned) &&
-                 IsDirectory)
+            else if (
+                (((status.LocalContentStatus == SvnStatus.NotVersioned) && status != AnkhStatus.NotVersioned)
+                || (status.LocalContentStatus == SvnStatus.Ignored)) && IsDirectory)
             {
                 // A not versioned directory might be a working copy by itself!
 
