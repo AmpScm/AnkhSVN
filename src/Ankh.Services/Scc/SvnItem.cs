@@ -94,10 +94,50 @@ namespace Ankh
         void RefreshTo(AnkhStatus status)
         {
             if (status == null)
-                throw new ArgumentNullException("status");
+                throw new ArgumentNullException("status");            
 
-            _cookie = NextCookie();
-            _ticked = false;
+            if (status.LocalContentStatus == SvnStatus.External)
+            {
+                // When iterating the status of an external in it's parent directory
+                // We get an external status and no really usefull information
+
+                _exists = XBool.True;
+                _isFile = XBool.False; // An external is a directory in Subversion -1.5
+                _readOnly = XBool.False; // A directory can't be read only on windows
+                _isVersionable = XBool.True; // External WC, or my WC.. 
+
+                if (_statusDirty == XBool.False)
+                    return; // Just skip the rest.. Fill it when iterating the directory itself
+
+                _statusDirty = XBool.True; // Walk the path itself to get the data
+
+                return;
+            }
+            else if (!ReferenceEquals(status, AnkhStatus.NotVersioned) &&
+                (status.LocalContentStatus == SvnStatus.NotVersioned) &&
+                 IsDirectory)
+            {
+                // A not versioned directory might be a working copy by itself!
+
+                if (_statusDirty == XBool.False)
+                    return; // No need to remove valid cache entries
+
+                if(SvnTools.IsManagedPath(FullPath))
+                {
+                    _statusDirty = XBool.True; // Walk the path itself to get the data
+
+                    // Extract usefull information we got anyay
+                    _exists = XBool.True;
+                    _isVersionable = XBool.True;
+                    _isFile = XBool.False;
+                    _readOnly = XBool.False;
+
+                    return;
+                }
+                // Fall through
+            }
+
+            _cookie = NextCookie();            
             _statusDirty = XBool.False;
             _status = status;
 
@@ -144,6 +184,7 @@ namespace Ankh
 
         void ISvnItemUpdate.RefreshTo(AnkhStatus status)
         {
+            _ticked = false;
             RefreshTo(status);
         }
 
