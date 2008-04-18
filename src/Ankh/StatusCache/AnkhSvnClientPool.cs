@@ -155,7 +155,11 @@ namespace Ankh
 
                         while (!string.IsNullOrEmpty(dir))
                         {
-                            AddTouchedPath(Path.GetFullPath(Path.Combine(dir, e.Path))); // Not e.FullPath, as that is absolute (and invalid)
+                            string totalDir = Path.GetFullPath(Path.Combine(dir, e.Path));
+
+                            if(Directory.Exists(Path.GetDirectoryName(totalDir)))
+                                AddTouchedPath(totalDir); // Not e.FullPath, as that is absolute (and invalid)
+
                             dir = Path.GetDirectoryName(dir);
                         }
                     }

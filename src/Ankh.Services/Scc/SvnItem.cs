@@ -175,7 +175,7 @@ namespace Ankh
             switch (status.LocalContentStatus)
             {
                 case SvnStatus.None:
-                    SetState(SvnItemState.None, SvnItemState.Exists);
+                    SetState(SvnItemState.None, SvnItemState.Exists | managed | unset);
                     break;
                 case SvnStatus.NotVersioned:
                     // Node exists but is not managed by us in this directory
