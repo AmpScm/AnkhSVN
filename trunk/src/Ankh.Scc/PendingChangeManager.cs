@@ -28,9 +28,19 @@ namespace Ankh.Scc
                 if (value != _isActive)
                 {
                     _isActive = value;
+
+                    if(Change != null)
+                        Change.SvnItemsChanged += new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
+
                     OnIsActiveChanged(new PendingChangeEventArgs(this, null));
                 }
             }
+        }        
+
+        ISvnItemChange _change;
+        ISvnItemChange Change
+        {
+            get { return _change ?? (_change = GetService<ISvnItemChange>()); }
         }
 
         readonly HybridCollection<string> _toRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -74,7 +84,24 @@ namespace Ankh.Scc
                     ItemRefresh(path);
                 }
             }
-        }        
+        }
+
+        void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
+        {
+            lock (_toRefresh)
+            {
+                if (_fullRefresh)
+                    return;
+
+                foreach (SvnItem item in e.ChangedItems)
+                {
+                    if (!_toRefresh.Contains(item.FullPath))
+                        _toRefresh.Add(item.FullPath);
+                }
+
+                ScheduleRefresh();
+            }
+        }
 
         bool _refreshScheduled;
         void ScheduleRefresh()
