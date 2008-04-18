@@ -529,10 +529,11 @@
     <MenuRef id="Grp_NoUI">
       <Group id="Grp_NoUI" priority="0">
         <!-- This group contains our non-ui commands which are only used for triggering postcommands -->
-        <Button id="Cmd_MarkProjectDirty" name="." text="." priority="0" commandWellOnly="true" />
-        <Button id="Cmd_FileCacheFinishTasks" name="." text="." priority="0" commandWellOnly="true"  />
-        <Button id="Cmd_SccFinishTasks" name="." text="." priority="0" commandWellOnly="true"  />
-        <Button id="Cmd_TickRefreshPendingTasks" name="." text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_MarkProjectDirty" text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_FileCacheFinishTasks" text="." priority="0" commandWellOnly="true"  />
+        <Button id="Cmd_SccFinishTasks" text="." priority="0" commandWellOnly="true"  />
+        <Button id="Cmd_TickRefreshPendingTasks" text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_TickRefreshSvnItems" text="." priority="0" commandWellOnly="true" />
       </Group>
     </MenuRef>
   </UI>

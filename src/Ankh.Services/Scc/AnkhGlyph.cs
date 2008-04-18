@@ -62,7 +62,7 @@ namespace Ankh.Scc
         LockedNormal,        
 
         /// <summary>
-        /// File is versioned, locally locked and not modified (STATEICON_CHECKEDOUTEXCLUSIVEOTHER /0xA)
+        /// File is versioned, locally locked and modified (STATEICON_CHECKEDOUTEXCLUSIVEOTHER /0xA)
         /// </summary>
         LockedModified,        
 

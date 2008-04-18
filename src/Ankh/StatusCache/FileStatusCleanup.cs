@@ -8,6 +8,7 @@ using Ankh.Ids;
 namespace Ankh.StatusCache
 {
     [Command(AnkhCommand.FileCacheFinishTasks)]
+    [Command(AnkhCommand.TickRefreshSvnItems)]
     public class FileStatusCleanup : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -18,8 +19,13 @@ namespace Ankh.StatusCache
         {
             FileStatusCache cache = e.Context.GetService<FileStatusCache>(typeof(IFileStatusCache));
 
-            if(cache != null)
-                cache.OnCleanup();
+            if (cache != null)
+            {
+                if (e.Command == AnkhCommand.FileCacheFinishTasks)
+                    cache.OnCleanup();
+                else
+                    cache.BroadcastChanges();
+            }
         }
     }
 }
