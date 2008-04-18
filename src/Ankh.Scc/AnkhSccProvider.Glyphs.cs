@@ -41,13 +41,6 @@ namespace Ankh.Scc
             get { return _statusImages ?? (_statusImages = GetService<IStatusImageMapper>()); }
         }
 
-        IPendingChangesManager _pendingChanges;
-        IPendingChangesManager PendingChanges
-        {
-            [DebuggerStepThrough]
-            get { return _pendingChanges ?? (_pendingChanges = GetService<IPendingChangesManager>()); }
-        }
-
         public AnkhGlyph GetPathGlyph(string path)
         {
             return GetPathGlyph(path, true);
@@ -62,7 +55,7 @@ namespace Ankh.Scc
 
             AnkhGlyph glyph = StatusImages.GetStatusImageForSvnItem(item);
 
-            switch(glyph)
+            switch (glyph)
             {
                 case AnkhGlyph.Normal:
                     break; // See below
@@ -73,19 +66,19 @@ namespace Ankh.Scc
                 default:
                     return glyph;
             }
-                                
+
             if (DocumentTracker.IsDocumentDirty(item.FullPath))
-                return AnkhGlyph.FileDirty;            
+                return AnkhGlyph.FileDirty;
 
             // Let's try to do some simple inheritance trick on scc-special files
 
             SccProjectFile file;
-            if(!lookForChildren || !_fileMap.TryGetValue(item.FullPath, out file))
+            if (!lookForChildren || !_fileMap.TryGetValue(item.FullPath, out file))
                 return glyph;
 
             SccProjectFileReference rf = file.FirstReference;
 
-            if(rf != null)
+            if (rf != null)
                 foreach (string fn in rf.GetSubFiles())
                 {
                     AnkhGlyph gl = GetPathGlyph(fn, false);
@@ -165,22 +158,10 @@ namespace Ankh.Scc
 
             for (int i = 0; i < cFiles; i++)
             {
-                string fileName = rgpszFullPaths[i];
-                AnkhGlyph glyph = GetPathGlyph(fileName);
+                AnkhGlyph glyph = GetPathGlyph(rgpszFullPaths[i]);
 
                 if (rgsiGlyphs != null)
                     rgsiGlyphs[i] = (VsStateIcon)glyph;
-
-                SccProjectFile file;
-
-                if (_fileMap.TryGetValue(fileName, out file))
-                {
-                    if (file.LastGlyph != glyph)
-                    {
-                        file.LastGlyph = glyph;
-                        PendingChanges.Refresh(fileName);                        
-                    }
-                }
 
                 if (rgdwSccStatus != null)
                 {
@@ -264,10 +245,10 @@ namespace Ankh.Scc
             {
                 _baseIndex = BaseIndex;
                 _glyphList = StatusImages.CreateStatusImageList();
-                for(int i = (int)BaseIndex-1; i >= 0; i--)
+                for (int i = (int)BaseIndex - 1; i >= 0; i--)
                 {
                     _glyphList.Images.RemoveAt(i);
-                }                
+                }
             }
             pdwImageListHandle = unchecked((uint)_glyphList.Handle);
 
