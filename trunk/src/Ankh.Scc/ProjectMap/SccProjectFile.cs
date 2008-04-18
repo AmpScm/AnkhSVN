@@ -127,15 +127,6 @@ namespace Ankh.Scc.ProjectMap
             get { return _firstReference; }
         }
 
-        AnkhGlyph _lastGlyph;
-        internal AnkhGlyph LastGlyph
-        {
-            [DebuggerStepThrough]
-            get { return _lastGlyph; }
-            [DebuggerStepThrough]
-            set { _lastGlyph = value; }
-        }
-
         #region Linked list management
         internal void AddReference(SccProjectFileReference reference)
         {
