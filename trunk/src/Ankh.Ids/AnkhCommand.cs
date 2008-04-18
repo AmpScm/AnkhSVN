@@ -22,6 +22,7 @@ namespace Ankh.Ids
         FileCacheFinishTasks,
         SccFinishTasks,
         TickRefreshPendingTasks,
+        TickRefreshSvnItems,
 
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we
@@ -154,6 +155,7 @@ namespace Ankh.Ids
         PcSortLocked,
         PcSortModified,
         PcSortName,
+        PcSortRepository,
         PcSortType,
         PcSortAscending,
         PcSortDescending,
@@ -166,6 +168,7 @@ namespace Ankh.Ids
         PcGroupLocked,
         PcGroupModified,
         PcGroupName,
+        PcGroupRepository,
         PcGroupType,
         PcGroupAscending,
         PcGroupDescending,
@@ -179,6 +182,7 @@ namespace Ankh.Ids
         PcColViewLocked,
         PcColViewModified,
         PcColViewName,
+        PcColViewRepository,
         PcColViewType,
         #endregion
     }

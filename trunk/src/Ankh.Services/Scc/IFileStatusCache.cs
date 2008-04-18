@@ -63,14 +63,6 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        SvnDirectory GetDirectory(string path);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="directory"></param>
-        /// <returns></returns>
-        [Obsolete("Please use GetDirectory")]
-        IEnumerable<SvnItem> GetDeletions(string directory);
+        SvnDirectory GetDirectory(string path); 
     }
 }

@@ -51,7 +51,7 @@ namespace Ankh.Scc
 
             SvnItem originItem = StatusCache[fileOrigin];
 
-            if (!originItem.HasHistory)
+            if (!originItem.HasCopyableHistory)
                 return; // The origin was new itself
 
             using (SvnSccContext svn = new SvnSccContext(Context))

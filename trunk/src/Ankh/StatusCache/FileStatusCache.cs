@@ -17,7 +17,7 @@ namespace Ankh.StatusCache
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    public sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache
+    public sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
         readonly IAnkhServiceProvider _context;
@@ -89,6 +89,11 @@ namespace Ankh.StatusCache
         SvnItem CreateItem(string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
         {
             return new SvnItem(_context, fullPath, status, nodeKind);
+        }
+
+        SvnItem CreateItem(string fullPath, SvnNodeKind nodeKind)
+        {
+            return new SvnItem(_context, fullPath, nodeKind);
         }
 
         /// <summary>
@@ -536,10 +541,9 @@ namespace Ankh.StatusCache
                         string truePath = SvnTools.GetTruePath(path);
 
                         // Just create an item based on his name. Delay the svn calls as long as we can
-                        StoreItem(item = new SvnItem(_context, truePath ?? path,
-                            (truePath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting, SvnNodeKind.Unknown));
+                        StoreItem(item = new SvnItem(_context, truePath ?? path, SvnNodeKind.Unknown));
 
-                        item.MarkDirty(); // Load status on first access
+                        //item.MarkDirty(); // Load status on first access
                     }
 
                     return item;
@@ -557,54 +561,7 @@ namespace Ankh.StatusCache
                 this._dirMap.Clear();
                 this._map.Clear();
             }
-        }
-
-        /// <summary>
-        /// Returns a list of deleted items in the specified directory.
-        /// </summary>
-        /// <param name="dir"></param>
-        /// <returns></returns>
-        IEnumerable<SvnItem> GetDeletions(string path)
-        {
-            if (path == null)
-                throw new ArgumentNullException("path");
-
-            SvnDirectory dir = GetDirectory(path);
-
-            if (dir == null)
-                yield break;
-
-            foreach (SvnItem item in dir)
-            {
-                if (item.IsDeleteScheduled && item != dir.Directory)
-                    yield return item;
-            }
-        }
-
-        IEnumerable<SvnItem> Ankh.Scc.IFileStatusCache.GetDeletions(string dir)
-        {
-            return GetDeletions(dir);
-        }
-
-        static DeletedSvnItemList RefreshDeletionsList(DeletedSvnItemList deletions)
-        {
-            DeletedSvnItemList newList = new DeletedSvnItemList();
-
-            // First mark all items dirty to get an optimized refresh
-            foreach (SvnItem item in deletions)
-            {
-                item.MarkDirty();
-            }
-
-            // Now get the deleted items
-            foreach (SvnItem item in deletions)
-            {
-                if (item.Status.LocalContentStatus == SvnStatus.Deleted)
-                    newList.Add(item);
-            }
-
-            return newList;
-        }
+        }   
 
         #region IFileStatusCache Members
 
@@ -660,5 +617,39 @@ namespace Ankh.StatusCache
         }
 
         #endregion
+
+        internal void BroadcastChanges()
+        {
+            ISvnItemUpdate update;
+            if(_map.Count > 0)
+                update = GetFirst(_map.Values);
+            else
+                update = this["c:\\windows"]; // Just give me a SvnItem instance to access the interface
+
+            List<SvnItem> updates = update.GetUpdateQueueAndClearScheduled();
+
+            if(updates != null)
+                OnSvnItemsChanged(new SvnItemsEventArgs(updates));            
+        }
+
+        static T GetFirst<T>(IEnumerable<T> valueCollection)
+            where T : class
+        {
+            foreach (T a in valueCollection)
+                return a;
+
+            return null;
+        }
+
+        public event EventHandler<SvnItemsEventArgs> SvnItemsChanged;
+
+        public void OnSvnItemsChanged(SvnItemsEventArgs e)
+        {
+            if (e == null)
+                throw new ArgumentNullException("e");
+
+            if (SvnItemsChanged != null)
+                SvnItemsChanged(this, e);
+        }
     }
 }
