@@ -22,7 +22,7 @@ namespace Ankh.Commands
     public class AddSolutionToRepositoryCommand : CommandBase
     {
         SvnCommitArgs _args = null;
-        List<SvnItem> paths;
+        List<SvnItem> paths = new List<SvnItem>();
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
