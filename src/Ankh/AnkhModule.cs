@@ -47,8 +47,12 @@ namespace Ankh
             }
 
             // TODO: Register services
-            if(null == Container.GetService(typeof(IFileStatusCache)))
-                Container.AddService(typeof(IFileStatusCache), new FileStatusCache(Context));
+            if (null == Container.GetService(typeof(IFileStatusCache)))
+            {
+                FileStatusCache fsc = new FileStatusCache(Context);
+                Container.AddService(typeof(IFileStatusCache), fsc);
+                Container.AddService(typeof(ISvnItemChange), fsc);
+            }
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
 
 #if !DEBUG

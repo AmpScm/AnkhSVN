@@ -482,12 +482,12 @@ namespace Ankh
                 unavailable = flagsToGet & ~_validState;
             }
 
-            if (0 != (unavailable & (SvnItemState.OpenDocument | SvnItemState.DirtyDocument)))
+/*            if (0 != (unavailable & (SvnItemState.OpenDocument | SvnItemState.DirtyDocument)))
             {
                 UpdateDocumentInfo();
 
                 unavailable = flagsToGet & ~_validState;
-            }
+            }*/
 
             if (0 != (unavailable & SvnItemState.Versionable))
             {
@@ -532,7 +532,7 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.Versionable);
         }
 
-        void UpdateDocumentInfo()
+        /*void UpdateDocumentInfo()
         {
             IAnkhOpenDocumentTracker dt = _context.GetService<IAnkhOpenDocumentTracker>();
 
@@ -549,7 +549,7 @@ namespace Ankh
                 SetState(SvnItemState.OpenDocument, SvnItemState.DirtyDocument);
             else
                 SetState(SvnItemState.None, SvnItemState.DirtyDocument | SvnItemState.OpenDocument);
-        }
+        }*/
 
         bool TryGetState(SvnItemState mask, out SvnItemState result)
         {
