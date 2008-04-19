@@ -165,15 +165,18 @@ namespace Ankh
             // Let's assume status is more recent than our internal property cache
             // Set all caching properties we can
 
+            bool svnDirty = true;
             switch (status.LocalContentStatus)
             {
                 case SvnStatus.None:
                     SetState(SvnItemState.None, SvnItemState.Exists | managed | unset);
+                    svnDirty = false;
                     break;
                 case SvnStatus.NotVersioned:
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
                     SetState(SvnItemState.Exists, unset | managed);
+                    svnDirty = false;
                     break;
                 case SvnStatus.Ignored:
                     // Node exists but is not managed by us in this directory
@@ -219,6 +222,7 @@ namespace Ankh
                     goto case SvnStatus.Normal;
                 case SvnStatus.Normal:
                     SetState(managed | SvnItemState.Exists, unset);
+                    svnDirty = false;
                     break;
             }
 
@@ -232,10 +236,12 @@ namespace Ankh
                 case SvnStatus.Modified:
                     SetState(SvnItemState.PropertyModified | SvnItemState.HasProperties,
                              SvnItemState.PropertiesConflicted);
+                    svnDirty = true;
                     break;
                 case SvnStatus.Conflicted:
                     SetState(SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted | SvnItemState.HasProperties,
                              SvnItemState.None);
+                    svnDirty = true;
                     break;                
                 case SvnStatus.Normal:
                 default:
@@ -243,6 +249,11 @@ namespace Ankh
                              SvnItemState.PropertiesConflicted | SvnItemState.PropertyModified);
                     break;                    
             }
+
+            if (svnDirty)
+                SetState(SvnItemState.SvnDirty, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.SvnDirty);
 
             if (!hasProperties)
                 SetState(SvnItemState.None, SvnItemState.MustLock);
@@ -510,11 +521,16 @@ namespace Ankh
         {
             get
             {
+                bool newModified = GetState(SvnItemState.SvnDirty) != 0;
+#if DEBUG
                 EnsureClean();
 
                 AnkhStatus status = _status;
+                bool oldModified = GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
 
-                return GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
+                Debug.Assert(newModified == oldModified, string.Format("oldModified != newModified for combined status {0}", status.CombinedStatus));
+#endif
+                return newModified;
             }
         }
 

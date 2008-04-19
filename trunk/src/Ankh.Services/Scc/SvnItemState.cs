@@ -69,11 +69,16 @@ namespace Ankh.Scc
         /// The file is marked as dirty by the editor that has the file open
         /// </summary>
         DocumentDirty           = 0x000200,
-        
+
+        /// <summary>
+        /// Somehow modified in subversion
+        /// </summary>
+        SvnDirty                = 0x000800,
 
         #endregion
 
         #region SvnStates (When Versioned is set)
+
         /// <summary>
         /// The file is modified on disk
         /// </summary>
@@ -132,6 +137,6 @@ namespace Ankh.Scc
         /// <summary>
         /// Combination masks that 100% need an SvnStatus call to get the requested data
         /// </summary>
-        MaskSvnState = 0xFFF000 | Versioned | HasLockToken | Obstructed | Versionable,
+        MaskSvnState = 0xFFF000 | Versioned | HasLockToken | Obstructed | Versionable | SvnDirty,
     }
 }
