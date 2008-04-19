@@ -311,9 +311,9 @@ namespace Ankh.Scc
 
         internal void RemoveFile(SccProjectFile file)
         {
-            Debug.Assert(_fileMap[file.Filename] == file);
+            Debug.Assert(_fileMap[file.FullPath] == file);
 
-            _fileMap.Remove(file.Filename);
+            _fileMap.Remove(file.FullPath);
         }
         #endregion
 

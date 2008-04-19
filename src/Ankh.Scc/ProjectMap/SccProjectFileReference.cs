@@ -46,7 +46,7 @@ namespace Ankh.Scc.ProjectMap
         /// <value>The filename.</value>
         public string Filename
         {
-            get { return ProjectFile.Filename; }
+            get { return ProjectFile.FullPath; }
         }
 
         public SccProjectData Project

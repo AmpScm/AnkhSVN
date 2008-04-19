@@ -29,16 +29,14 @@ namespace Ankh
 
         void MarkStatusDirty();
 
-        bool ShouldClean();
-
-        List<SvnItem> GetUpdateQueueAndClearScheduled();
+        bool ShouldClean();        
     }
 
     /// <summary>
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed class SvnItem : LocalSvnItem, ISvnItemUpdate
+    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate
     {
         readonly IAnkhServiceProvider _context;
         readonly string _fullPath;
@@ -50,11 +48,7 @@ namespace Ankh
             False = 1
         }
 
-        AnkhStatus _status;
-
-        SvnItemState _currentState;
-        SvnItemState _validState;
-        SvnItemState _onceValid;
+        AnkhStatus _status;        
         bool _enqueued;
 
         static readonly Queue<SvnItem> _stateChanged = new Queue<SvnItem>();
@@ -163,9 +157,10 @@ namespace Ankh
             _statusDirty = XBool.False;
             _status = status;
 
+            SetDirty(SvnItemState.MustLock);
 
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
-                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict | SvnItemState.Ignored | SvnItemState.Obstructed;
+                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
 
             const SvnItemState managed = SvnItemState.Versionable | SvnItemState.Versioned;
 
@@ -186,10 +181,7 @@ namespace Ankh
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
                     SetState(SvnItemState.Exists | SvnItemState.Ignored, (unset & ~SvnItemState.Ignored) | managed);
-                    break;
-                case SvnStatus.Normal:
-                    SetState(managed | SvnItemState.Exists, unset);
-                    break;
+                    break;                
                 case SvnStatus.Modified:
                     SetState(managed | SvnItemState.Exists | SvnItemState.Modified, unset);
                     break;
@@ -209,10 +201,8 @@ namespace Ankh
                     SetState(managed | SvnItemState.Exists | SvnItemState.ContentConflicted, unset);
                     break;
                 case SvnStatus.Obstructed: // node exists but is of the wrong type
-                    SetState(SvnItemState.Exists, SvnItemState.None);
-                    SetDirty(SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.MustLock);
-                    return;
-
+                    SetState(SvnItemState.Exists, managed | unset);
+                    break;
                 case SvnStatus.Missing:
                     SetState(managed, unset | SvnItemState.Exists);
                     break;
@@ -224,31 +214,42 @@ namespace Ankh
                     // Should be handled above
                     throw new InvalidOperationException();
                 case SvnStatus.Incomplete:
+                    SetState(SvnItemState.Exists, managed | unset);
                     break;
                 default:
                     Trace.WriteLine(string.Format("Ignoring undefined status {0} in SvnItem.Refresh()", status.LocalContentStatus));
+                    goto case SvnStatus.Normal;
+                case SvnStatus.Normal:
+                    SetState(managed | SvnItemState.Exists, unset);
                     break;
             }
 
+            bool hasProperties = true;
             switch (status.LocalPropertyStatus)
             {
                 case SvnStatus.None:
-                    SetState(SvnItemState.None,
-                             SvnItemState.MustLock | SvnItemState.PropertiesConflicted | SvnItemState.PropertyModified);
-                    break;
-                case SvnStatus.Normal:
-                    SetState(SvnItemState.None,
-                             SvnItemState.PropertiesConflicted | SvnItemState.PropertyModified);
-                    break;
+                    hasProperties = false;
+                    SetState(SvnItemState.None, SvnItemState.PropertiesConflicted | SvnItemState.PropertyModified | SvnItemState.HasProperties);                    
+                    break;                
                 case SvnStatus.Modified:
-                    SetState(SvnItemState.PropertyModified,
+                    SetState(SvnItemState.PropertyModified | SvnItemState.HasProperties,
                              SvnItemState.PropertiesConflicted);
                     break;
                 case SvnStatus.Conflicted:
-                    SetState(SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted,
+                    SetState(SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted | SvnItemState.HasProperties,
                              SvnItemState.None);
-                    break;
+                    break;                
+                case SvnStatus.Normal:
+                default:
+                    SetState(SvnItemState.HasProperties,
+                             SvnItemState.PropertiesConflicted | SvnItemState.PropertyModified);
+                    break;                    
             }
+
+            if (!hasProperties)
+                SetState(SvnItemState.None, SvnItemState.MustLock);
+            else
+                SetDirty(SvnItemState.MustLock);
 
             switch (status.NodeKind)
             {
@@ -265,42 +266,7 @@ namespace Ankh
                 SetState(SvnItemState.HasLockToken, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.HasLockToken);
-        }
-
-        private void SetDirty(SvnItemState p)
-        {
-            _validState &= ~p;
-        }
-
-        void SetState(SvnItemState set, SvnItemState unset)
-        {
-            SvnItemState st = (_currentState & ~unset) | set;
-            _validState |= (set | unset);
-
-            if (st != _currentState)
-            {
-                // Calculate whether we have a change or just new information
-                bool changed = (st & _onceValid) != _currentState;
-                _currentState = st;
-
-                if (changed)
-                {
-                    if (!_enqueued)
-                    {
-                        _enqueued = true;
-
-                        // Schedule a stat changed broadcast
-                        lock (_stateChanged)
-                        {
-                            _stateChanged.Enqueue(this);
-
-                            ScheduleUpdateNotify();
-                        }
-                    }
-                }
-            }
-            _onceValid |= _validState;
-        }
+        }        
 
         void ScheduleUpdateNotify()
         {
@@ -413,17 +379,17 @@ namespace Ankh
             SvnItemState unset = SvnItemState.None;
 
             if ((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
-                set = SvnItemState.ReadOnly;
+                set |= SvnItemState.ReadOnly;
             else
                 unset = SvnItemState.ReadOnly;
 
             if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
             {
-                unset = SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
+                unset |= SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
                 set &= ~SvnItemState.ReadOnly;
             }
             else
-                set = SvnItemState.IsDiskFile;
+                set |= SvnItemState.IsDiskFile;
 
             SetState(set, unset);
         }
@@ -458,98 +424,7 @@ namespace Ankh
 
                 return _status;
             }
-        }
-
-        public SvnItemState GetState(SvnItemState flagsToGet)
-        {
-            SvnItemState unavailable = flagsToGet & ~_validState;
-
-            if (unavailable == 0)
-                return _currentState & flagsToGet; // We have everything we need
-
-            if (0 != (unavailable & SvnItemState.MaskSvnStatusOnly))
-            {
-                Debug.Assert(_statusDirty != XBool.False);
-                RefreshMe();
-
-                unavailable = flagsToGet & ~_validState;
-            }
-
-            if (0 != (unavailable & SvnItemState.MaskGetAttributes))
-            {
-                UpdateAttributeInfo();
-
-                unavailable = flagsToGet & ~_validState;
-            }
-
-/*            if (0 != (unavailable & (SvnItemState.OpenDocument | SvnItemState.DirtyDocument)))
-            {
-                UpdateDocumentInfo();
-
-                unavailable = flagsToGet & ~_validState;
-            }*/
-
-            if (0 != (unavailable & SvnItemState.Versionable))
-            {
-                CheckVersionable();
-
-                unavailable = flagsToGet & ~_validState;
-            }
-
-            if (0 != (unavailable & SvnItemState.MustLock))
-            {
-                CheckMustLock();
-
-                unavailable = flagsToGet & ~_validState;
-            }
-
-            if (unavailable != 0)
-            {
-                Trace.WriteLine(string.Format("Don't know how to retrieve {0:X} state; clearing dirty flag", (int)unavailable));
-
-                _validState |= unavailable;
-            }
-
-            return _currentState & flagsToGet;
-        }
-
-        private void CheckVersionable()
-        {
-            bool versionable;
-
-            SvnItemState state;
-
-            if (TryGetState(SvnItemState.Versioned, out state) && state != 0)
-                versionable = true;
-            else if (Exists && SvnTools.IsBelowManagedPath(FullPath)) // Will call GetState again!
-                versionable = true;
-            else
-                versionable = false;
-
-            if (versionable)
-                SetState(SvnItemState.Versionable, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.Versionable);
-        }
-
-        /*void UpdateDocumentInfo()
-        {
-            IAnkhOpenDocumentTracker dt = _context.GetService<IAnkhOpenDocumentTracker>();
-
-            if (dt == null)
-            {
-                // We /must/ make the state not dirty
-                SetState(SvnItemState.None, SvnItemState.DirtyDocument | SvnItemState.OpenDocument);
-                return;
-            }
-
-            if (dt.IsDocumentDirty(FullPath))
-                SetState(SvnItemState.OpenDocument | SvnItemState.DirtyDocument, SvnItemState.None);
-            else if (dt.IsDocumentOpen(FullPath))
-                SetState(SvnItemState.OpenDocument, SvnItemState.DirtyDocument);
-            else
-                SetState(SvnItemState.None, SvnItemState.DirtyDocument | SvnItemState.OpenDocument);
-        }*/
+        }                      
 
         bool TryGetState(SvnItemState mask, out SvnItemState result)
         {
@@ -561,38 +436,7 @@ namespace Ankh
 
             result = _currentState & mask;
             return true;
-        }
-
-        void CheckMustLock()
-        {
-            SvnItemState value = SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.Versioned;
-
-            bool mustLock;
-
-            if (GetState(value) != value)
-                mustLock = false;
-            else if (TryGetState(SvnItemState.HasProperties, out value) && value == 0)
-                mustLock = false; // File has no properties
-            else
-            {
-                using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
-                {
-                    string propVal;
-
-                    if (client.TryGetProperty(new SvnPathTarget(_fullPath), SvnPropertyNames.SvnNeedsLock, out propVal))
-                    {
-                        mustLock = (propVal == SvnPropertyNames.SvnBooleanValue);
-                    }
-                    else
-                        mustLock = false;
-                }
-            }
-
-            if (mustLock)
-                SetState(SvnItemState.MustLock, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.MustLock);
-        }
+        }        
 
         /// <summary>
         /// Gets a boolean indicating whether the item (on disk) is a file
@@ -624,18 +468,9 @@ namespace Ankh
                 else
                     return true;
             }
-        }
+        }   
 
-        /// <summary>
-        /// Gets the <see cref="SvnNodeKind"/> of the item (on disk)
-        /// </summary>
-        /// <value><see cref="SvnNodeKind.Directory"/> if <see cref="IsDirectory"/> otherwise <see cref="SvnNodeKind.File"/></value>
-        public SvnNodeKind NodeKind
-        {
-            get { return (GetState(SvnItemState.IsDiskFile) == 0) ? SvnNodeKind.Directory : SvnNodeKind.File; }
-        }
-
-        void RefreshMe()
+        void RefreshStatus()
         {
             _statusDirty = XBool.None;
             IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
@@ -694,14 +529,10 @@ namespace Ankh
         /// <summary>
         /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editting
         /// </summary>
-        /// <remarks>Assumes a mustlock file is readonly</remarks>
+        /// <remarks>Assumes a mustlock file is readonly to speed up testing</remarks>
         public bool ReadOnlyMustLock
         {
-            get
-            {
-                // Pass all required values to calculate to optimize the query
-                return (GetState(SvnItemState.MustLock | SvnItemState.ReadOnly | SvnItemState.Versioned) & SvnItemState.MustLock) != 0;
-            }
+            get { return GetState(SvnItemState.MustLock) != 0; }
         }
 
         /// <summary>
@@ -735,6 +566,15 @@ namespace Ankh
         public bool IsDeleteScheduled
         {
             get { return 0 != GetState(SvnItemState.Deleted); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref="SvnItem"/> is in one of the projects in the solution
+        /// </summary>
+        /// <value><c>true</c> if the file is in one of the projects of the solution; otherwise, <c>false</c>.</value>
+        public bool InSolution
+        {
+            get { return GetState(SvnItemState.InSolution) != 0; }
         }
 
         /// <summary>
@@ -794,7 +634,7 @@ namespace Ankh
             Debug.Assert(_statusDirty != XBool.None, "Recursive refresh call");
 
             if (_statusDirty == XBool.True)
-                this.RefreshMe();
+                this.RefreshStatus();
         }
 
         public void Dispose()
@@ -905,27 +745,6 @@ namespace Ankh
                 return n;
             else
                 return NextCookie(); // 1 in 4 billion times
-        }
-
-        List<SvnItem> ISvnItemUpdate.GetUpdateQueueAndClearScheduled()
-        {
-            lock (_stateChanged)
-            {
-                _scheduled = false;
-
-                if(_stateChanged.Count == 0)
-                    return null;
-
-                List<SvnItem> modified = new List<SvnItem>(_stateChanged.Count);
-                modified.AddRange(_stateChanged);
-                _stateChanged.Clear();
-
-                foreach (SvnItem i in modified)
-                    i._enqueued = false;
-
-                
-                return modified;
-            }
-        }                
+        }        
     }
 }
