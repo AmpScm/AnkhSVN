@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.VS;
 using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -66,12 +67,10 @@ namespace Ankh.Scc
                 if (item == null)
                     continue;
 
-                bool isDirty = !item.IsVersioned || item.IsDocumentDirty;
-
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
                 {
-                    if (pc.Refresh(RefreshContext, item, isDirty) && !wasClean)
+                    if (pc.Refresh(RefreshContext, item) && !wasClean)
                     {
                         if (pc.IsClean)
                         {
@@ -85,7 +84,7 @@ namespace Ankh.Scc
                             OnChanged(new PendingChangeEventArgs(this, pc));
                     }
                 }
-                else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
+                else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
                 {
                     _pendingChanges.Add(pc);
                     if (!wasClean)
@@ -107,13 +106,13 @@ namespace Ankh.Scc
                     continue;
                 }
 
-                bool isDirty = !item.IsVersioned || !item.IsDocumentDirty;
-
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
                 {
-                    if (pc.Refresh(RefreshContext, item, isDirty) && !wasClean)
+                    if (pc.Refresh(RefreshContext, item) && !wasClean)
                     {
+                        Debug.Assert(pc.IsClean == !PendingChange.IsPending(item));
+
                         if (pc.IsClean)
                         {
                             _pendingChanges.Remove(file);
@@ -128,7 +127,7 @@ namespace Ankh.Scc
                             OnChanged(new PendingChangeEventArgs(this, pc));
                     }
                 }
-                else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
+                else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
                 {
                     _pendingChanges.Add(pc);
                     if (!wasClean)
@@ -185,11 +184,9 @@ namespace Ankh.Scc
             if (item == null)
                 return;
 
-            bool isDirty = !item.IsVersioned || item.IsDocumentDirty;
-
             if (_pendingChanges.TryGetValue(file, out pc))
             {
-                if (pc.Refresh(RefreshContext, item, isDirty))
+                if (pc.Refresh(RefreshContext, item))
                 {
                     if (pc.IsClean)
                     {
@@ -203,7 +200,7 @@ namespace Ankh.Scc
                         OnChanged(new PendingChangeEventArgs(this, pc));
                 }
             }
-            else if (PendingChange.CreateIfPending(RefreshContext, item, isDirty, out pc))
+            else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
                 _pendingChanges.Add(pc);
 
