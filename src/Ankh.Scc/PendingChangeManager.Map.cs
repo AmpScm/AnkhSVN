@@ -66,7 +66,7 @@ namespace Ankh.Scc
                 if (item == null)
                     continue;
 
-                bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
+                bool isDirty = !item.IsVersioned || item.IsDocumentDirty;
 
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
@@ -107,7 +107,7 @@ namespace Ankh.Scc
                     continue;
                 }
 
-                bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
+                bool isDirty = !item.IsVersioned || !item.IsDocumentDirty;
 
                 PendingChange pc;
                 if (_pendingChanges.TryGetValue(file, out pc))
@@ -163,7 +163,9 @@ namespace Ankh.Scc
 
         private void ItemRefresh(string file)
         {
-            bool inProject = Mapper.ContainsPath(file);
+            SvnItem item = Cache[file];
+
+            bool inProject = item.InSolution;
             bool inExtra = _extraFiles.Contains(file);
             PendingChange pc;
 
@@ -180,12 +182,10 @@ namespace Ankh.Scc
             else if (inProject && inExtra)
                 _extraFiles.Remove(file);
 
-            SvnItem item = Cache[file];
-
             if (item == null)
                 return;
 
-            bool isDirty = !item.IsVersioned || Tracker.IsDocumentDirty(file);
+            bool isDirty = !item.IsVersioned || item.IsDocumentDirty;
 
             if (_pendingChanges.TryGetValue(file, out pc))
             {

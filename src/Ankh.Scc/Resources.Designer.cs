@@ -133,6 +133,15 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This file is modified.
+        /// </summary>
+        internal static string ToolTipModified {
+            get {
+                return ResourceManager.GetString("ToolTipModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This file must be locked before it can be editted..
         /// </summary>
         internal static string ToolTipMustLock {

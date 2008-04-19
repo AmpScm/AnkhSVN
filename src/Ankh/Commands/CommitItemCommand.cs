@@ -31,19 +31,16 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
-            IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
-
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
                 if (i.IsVersioned)
                 {
-                    if (i.IsModified || documentTracker.IsDocumentDirty(i.FullPath))
+                    if (i.IsModified || i.IsDocumentDirty)
                         return; // There might be a new version of this file
                 }
                 else if (i.IsIgnored)
                     continue;
-                else if (projectMapper.ContainsPath(i.FullPath))
+                else if (i.InSolution)
                     return; // The file is 'to be added'
             }
 
@@ -67,7 +64,7 @@ namespace Ankh.Commands
                     continue; // Check for dirty files is not necessary here, because we just saved the dirty documents
                 else if (item.IsIgnored)
                     continue;
-                else if (!projectMapper.ContainsPath(item.FullPath))
+                else if (!item.InSolution) // Hmm?
                     continue;
 
                 if (!resources.Contains(item))

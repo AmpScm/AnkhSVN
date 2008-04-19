@@ -141,6 +141,9 @@
   <data name="ToolTipLocked" xml:space="preserve">
     <value>You have exclusively locked this file.</value>
   </data>
+  <data name="ToolTipModified" xml:space="preserve">
+    <value>This file is modified</value>
+  </data>
   <data name="ToolTipMustLock" xml:space="preserve">
     <value>This file must be locked before it can be editted.</value>
   </data>

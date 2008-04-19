@@ -164,13 +164,16 @@ namespace Ankh.Scc.ProjectMap
                 UpdateGlyph();
             }
 
-            IFileStatusCache fcc = GetService<IFileStatusCache>();
-            if (fcc != null)
+            if (_isFileDocument)
             {
-                ISvnItemStateUpdate sisu = fcc[Name];
+                IFileStatusCache fcc = GetService<IFileStatusCache>();
+                if (fcc != null)
+                {
+                    ISvnItemStateUpdate sisu = fcc[Name];
 
-                if (sisu != null)
-                    sisu.SetDocumentOpen(false);
+                    if (sisu != null)
+                        sisu.SetDocumentOpen(false);
+                }
             }
 
             Dispose();
