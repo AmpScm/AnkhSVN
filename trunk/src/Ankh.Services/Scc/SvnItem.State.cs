@@ -284,7 +284,7 @@ namespace Ankh
             if (value)
                 SetState(SvnItemState.DocumentDirty | SvnItemState.DocumentOpen, SvnItemState.None);
             else
-                SetState(SvnItemState.DocumentOpen, SvnItemState.None);
+                SetState(SvnItemState.DocumentOpen, SvnItemState.DocumentDirty);
         }
 
         #endregion

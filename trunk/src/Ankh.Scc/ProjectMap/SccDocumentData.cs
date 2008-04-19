@@ -219,7 +219,21 @@ namespace Ankh.Scc.ProjectMap
                 return;
 
             _isDirty = dirty;
+
+            if (!_isFileDocument)
+                return;
+
             UpdateGlyph();
+
+            IFileStatusCache fcc = GetService<IFileStatusCache>();
+
+            if (fcc != null)
+            {
+                ISvnItemStateUpdate sisu = fcc[Name];
+
+                if (sisu != null)
+                    sisu.SetDocumentDirty(dirty);
+            }            
         }
 
         internal void CheckDirty()
@@ -232,22 +246,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (dirty != wasDirty)
             {
-                _isDirty = wasDirty;
-
-                if (!_isFileDocument)
-                    return;
-
-                IFileStatusCache fcc = GetService<IFileStatusCache>();
-
-                if (fcc != null)
-                {
-                    ISvnItemStateUpdate sisu = fcc[Name];
-
-                    if (sisu != null)
-                        sisu.SetDocumentDirty(dirty);
-                }
-
-                UpdateGlyph();
+                SetDirty(dirty);
             }
         }
 
