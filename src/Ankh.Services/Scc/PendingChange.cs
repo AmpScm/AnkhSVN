@@ -22,7 +22,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="item">The item.</param>
-        public PendingChange(RefreshContext context, SvnItem item, bool isDirty)
+        public PendingChange(RefreshContext context, SvnItem item)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -31,7 +31,7 @@ namespace Ankh.Scc
 
             _context = context;
             _item = item;
-            Refresh(context, item, isDirty);
+            Refresh(context, item);
         }
 
         [Browsable(false)]
@@ -161,13 +161,13 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool Refresh(RefreshContext context, SvnItem item, bool isDirty)
+        public bool Refresh(RefreshContext context, SvnItem item)
         {
             bool m = false;
 
             RefreshValue(ref m, ref _iconIndex, context.IconMapper.GetIcon(FullPath));
             RefreshValue(ref m, ref _projects, GetProjects(context));
-            RefreshValue(ref m, ref _status, GetStatus(context, item, isDirty));
+            RefreshValue(ref m, ref _status, GetStatus(context, item));
             RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
 
             return m || (_status == null);
@@ -207,7 +207,7 @@ namespace Ankh.Scc
                 return "<none>";
         }
 
-        PendingChangeStatus GetStatus(RefreshContext context, SvnItem item, bool isDirty)
+        PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
             AnkhStatus status = item.Status;
 
@@ -249,7 +249,7 @@ namespace Ankh.Scc
                     return new PendingChangeStatus(_kind = PendingChangeKind.PropertyModified);
             }
 
-            if (isDirty)
+            if (item.IsDocumentDirty)
                 return new PendingChangeStatus(_kind = PendingChangeKind.EditorDirty);
             else
             {
@@ -277,6 +277,22 @@ namespace Ankh.Scc
             }
         }
 
+        public static bool IsPending(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            bool create = false;
+            if (item.IsModified)
+                create = true; // Must commit
+            else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable)
+                create = true; // To be added
+            else if (item.IsVersioned && item.IsDocumentDirty)
+                create = true;
+
+            return create;
+        }
+
         /// <summary>
         /// Creates if pending.
         /// </summary>
@@ -284,27 +300,19 @@ namespace Ankh.Scc
         /// <param name="isDirty">if set to <c>true</c> [is dirty].</param>
         /// <param name="pc">The pc.</param>
         /// <returns></returns>
-        public static bool CreateIfPending(RefreshContext context, SvnItem item, bool isDirty, out PendingChange pc)
+        public static bool CreateIfPending(RefreshContext context, SvnItem item, out PendingChange pc)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
             else if (item == null)
                 throw new ArgumentNullException("item");
 
-            bool create = false;
-            if (isDirty)
+            if (IsPending(item))
             {
-                create = !item.IsIgnored;
-            }
-            else if (item.IsModified)
-                create = true;
-
-            if (create && item.Status.LocalContentStatus != SvnStatus.None)
-            {
-                pc = new PendingChange(context, item, isDirty);
+                pc = new PendingChange(context, item);
                 return true;
             }
-
+            
             pc = null;
             return false;
         }
