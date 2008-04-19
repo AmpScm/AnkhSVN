@@ -30,13 +30,15 @@ namespace Ankh.Scc.ProjectMap
 
             _context = context;
             _filename = filename;
+
+            ((ISvnItemStateUpdate)_context.GetService<IFileStatusCache>()[this.FullPath]).SetSolutionContained(true);
         }
 
         /// <summary>
         /// Gets the filename.
         /// </summary>
         /// <value>The filename.</value>
-        public string Filename
+        public string FullPath
         {
             get { return _filename; }
         }
@@ -156,6 +158,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (_firstReference == null)
                 {
+                    ((ISvnItemStateUpdate)_context.GetService<IFileStatusCache>()[this.FullPath]).SetSolutionContained(false);
                     _context.GetService<AnkhSccProvider>().RemoveFile(this);
                 }
                 return;

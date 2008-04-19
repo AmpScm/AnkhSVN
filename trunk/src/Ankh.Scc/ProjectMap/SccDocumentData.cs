@@ -20,6 +20,7 @@ namespace Ankh.Scc.ProjectMap
     {
         readonly IAnkhServiceProvider _context;
         readonly string _name;
+        readonly bool _isFileDocument;
         uint _cookie;
         bool _isDirty;
         bool _initialUpdateCompleted;
@@ -34,6 +35,23 @@ namespace Ankh.Scc.ProjectMap
 
             _context = context;
             _name = name;
+
+            IFileStatusCache fcc = GetService<IFileStatusCache>();
+
+            if (fcc != null && fcc.IsValidPath(name))
+            {
+                _isFileDocument = true;
+                ISvnItemStateUpdate sisu = fcc[name];
+
+                if (sisu != null)
+                    sisu.SetDocumentOpen(true);
+            }
+        }
+
+        T GetService<T>()
+            where T : class
+        {
+            return _context.GetService<T>();
         }
 
         /// <summary>
@@ -130,18 +148,31 @@ namespace Ankh.Scc.ProjectMap
         internal void OnSaved()
         {
             SetDirty(false);
-            IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
-            if (statusCache.IsValidPath(Name))
-            {
-                statusCache.MarkDirty(Name);
-                UpdateGlyph();
-            }
+
+            if(_isFileDocument)
+                return;
+            
+            IFileStatusMonitor statusMonitor = GetService<IFileStatusMonitor>();
+            statusMonitor.ScheduleSvnStatus(Name);
         }
 
         internal void OnClosed(bool closedWithoutSaving)
         {
             if (closedWithoutSaving && _isDirty)
+            {
+                _isDirty = false;
                 UpdateGlyph();
+            }
+
+            IFileStatusCache fcc = GetService<IFileStatusCache>();
+            if (fcc != null)
+            {
+                ISvnItemStateUpdate sisu = fcc[Name];
+
+                if (sisu != null)
+                    sisu.SetDocumentOpen(false);
+            }
+
             Dispose();
         }
 
@@ -199,12 +230,28 @@ namespace Ankh.Scc.ProjectMap
             if (dirty != wasDirty)
             {
                 _isDirty = wasDirty;
+
+                if (!_isFileDocument)
+                    return;
+
+                IFileStatusCache fcc = GetService<IFileStatusCache>();
+
+                if (fcc != null)
+                {
+                    ISvnItemStateUpdate sisu = fcc[Name];
+
+                    if (sisu != null)
+                        sisu.SetDocumentDirty(dirty);
+                }
+
                 UpdateGlyph();
             }
         }
 
         void UpdateGlyph()
         {
+            if (!_isFileDocument)
+                return;
             IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
 
             if (monitor != null)

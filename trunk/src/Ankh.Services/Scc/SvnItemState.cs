@@ -60,15 +60,15 @@ namespace Ankh.Scc
         /// </summary>
         ReadOnly                = 0x000080,
 
-/*        /// <summary>
+        /// <summary>
         /// The file is currently open in VS
         /// </summary>
-        OpenDocument            = 0x000100,
+        DocumentOpen            = 0x000100,
 
         /// <summary>
         /// The file is marked as dirty by the editor that has the file open
         /// </summary>
-        DirtyDocument           = 0x000200,*/
+        DocumentDirty           = 0x000200,
         
 
         #endregion
