@@ -12,8 +12,8 @@ namespace Ankh.UI.PendingChanges
 {
     partial class PendingCommitsPage
     {
-        bool _sortAscending;
-        bool _groupAscending;
+        bool _sortDescending;
+        bool _groupDescending;
         readonly List<PcComparer> _sorters = new List<PcComparer>();
         internal void SetSort(AnkhCommand command)
         {
@@ -21,10 +21,10 @@ namespace Ankh.UI.PendingChanges
             switch (command)
             {
                 case AnkhCommand.PcSortAscending:
-                    _sortAscending = true;
+                    _sortDescending = false;
                     break;
                 case AnkhCommand.PcSortDescending:
-                    _sortAscending = false;
+                    _sortDescending = true;
                     break;
                 case AnkhCommand.PcSortPath:
                     comparer = new PcComparer(PcComparer.CompareByPath, command);
@@ -77,7 +77,7 @@ namespace Ankh.UI.PendingChanges
             {
                 case AnkhCommand.PcSortAscending:
                 case AnkhCommand.PcSortDescending:
-                    e.Latched = (e.Command == AnkhCommand.PcSortAscending) == _sortAscending;
+                    e.Latched = (e.Command == AnkhCommand.PcSortDescending) == _sortDescending;
                     return;
             }
 
@@ -123,7 +123,7 @@ namespace Ankh.UI.PendingChanges
                     break;
             }
 
-            if (!_sortAscending)
+            if (_sortDescending)
                 return -n;
             else
                 return n;
