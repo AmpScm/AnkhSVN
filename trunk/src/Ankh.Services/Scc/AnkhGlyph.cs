@@ -82,15 +82,14 @@ namespace Ankh.Scc
         /// <remarks>Currently generated internally by the Scc provider</remarks>
         ShouldBeAdded,
         
-
         /// <summary>
         /// File is in conflict; must be resolved before continuing (Last+3 /0xE)
         /// </summary>
         InConflict,
 
         /// <summary>
-        /// Free 1 (Last+4 /0xF)
+        /// One of the Scc special/hidden files below this file is modified (Last+4 /0xF)
         /// </summary>
-        Free1
+        ChildChanged
     }
 }

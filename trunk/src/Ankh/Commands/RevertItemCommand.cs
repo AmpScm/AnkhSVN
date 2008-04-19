@@ -20,11 +20,9 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
-
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified || documentTracker.IsDocumentDirty(item.FullPath))
+                if (item.IsModified || item.IsDocumentDirty)
                     return;
             }
             e.Enabled = false;
@@ -44,7 +42,7 @@ namespace Ankh.Commands
             PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
                 e.Selection.GetSelectedSvnItems(true));
 
-            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || documentTracker.IsDocumentDirty(item.FullPath); };
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || item.IsDocumentDirty; };
             info.VisibleFilter += delegate(SvnItem item) { return true; };
 
             if (!CommandBase.Shift &&

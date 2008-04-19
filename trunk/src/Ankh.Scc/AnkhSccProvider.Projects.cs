@@ -338,6 +338,9 @@ namespace Ankh.Scc
 
             if(_projectMap.TryGetValue(project, out data))
             {
+                if (!removed && !string.IsNullOrEmpty(data.ProjectFile))
+                    StatusCache.MarkDirty(data.ProjectFile); // In this case we are probably reloading or something
+
                 data.OnClose();
                 _projectMap.Remove(project);
             }

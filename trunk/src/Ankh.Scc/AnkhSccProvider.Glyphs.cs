@@ -59,19 +59,12 @@ namespace Ankh.Scc
             {
                 case AnkhGlyph.Normal:
                     break; // See below
-                case AnkhGlyph.Blank:
-                    if (ContainsPath(path) && item.IsVersionable)
-                        return AnkhGlyph.ShouldBeAdded;
-                    goto default;
                 default:
                     return glyph;
             }
 
-            if (DocumentTracker.IsDocumentDirty(item.FullPath))
-                return AnkhGlyph.FileDirty;
-
-            // Let's try to do some simple inheritance trick on scc-special files
-
+            // Let's try to do some simple inheritance trick on scc-special files with a normal icon 
+            // as those are collapsed by default
             SccProjectFile file;
             if (!lookForChildren || !_fileMap.TryGetValue(item.FullPath, out file))
                 return glyph;
@@ -84,7 +77,7 @@ namespace Ankh.Scc
                     AnkhGlyph gl = GetPathGlyph(fn, false);
 
                     if (gl != AnkhGlyph.Normal)
-                        return AnkhGlyph.Free1;
+                        return AnkhGlyph.ChildChanged;
                 }
 
             return AnkhGlyph.Normal;
@@ -188,44 +181,85 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        /// <summary>
+        /// Provides ToolTip text based on the source control data for a specific node in the project's hierarchy Solution Explorer.
+        /// </summary>
+        /// <param name="phierHierarchy">[in] Owner hierarchy of node (null if it is a solution).</param>
+        /// <param name="itemidNode">[in] The ID of the node for which the ToolTip is requested.</param>
+        /// <param name="pbstrTooltipText">[out] ToolTip text.</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"></see>. If it fails, it returns an error code.
+        /// </returns>
         public int GetGlyphTipText(IVsHierarchy phierHierarchy, uint itemidNode, out string pbstrTooltipText)
         {
-            IFileStatusCache cache = StatusCache;
             ISccProjectWalker walker = Context.GetService<ISccProjectWalker>();
             pbstrTooltipText = null;
 
-            if ((walker == null) || (cache == null))
+            if (walker == null || StatusCache == null)
                 return VSConstants.S_OK;
 
-            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.SpecialFiles))
-            {
-                SvnItem item = cache[file];
+            if(phierHierarchy == null)
+                phierHierarchy = GetService<IVsHierarchy>(typeof(SVsSolution));
 
-                if (item.IsConflicted)
+            if(phierHierarchy == null)
+                return VSConstants.S_OK;
+
+            StringBuilder sb = new StringBuilder();
+
+            List<SccProjectFile> files = new List<SccProjectFile>();
+
+            int n = 0;
+            // pHierarchy = null if it is t
+            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty))
+            {
+                SccProjectFile spf;
+                if(_fileMap.TryGetValue(file, out spf))
                 {
-                    pbstrTooltipText = Resources.ToolTipConflict;
-                    return VSConstants.S_OK;
-                }
-                else if (item.IsObstructed)
-                {
-                    pbstrTooltipText = item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed;
-                }
-                else if (item.ReadOnlyMustLock)
-                {
-                    pbstrTooltipText = Resources.ToolTipMustLock;
-                    return VSConstants.S_OK;
-                }
-                else if (!item.Exists)
-                {
-                    pbstrTooltipText = Resources.ToolTipDoesNotExist;
-                    return VSConstants.S_OK;
-                }
-                else if (item.IsLocked)
-                {
-                    pbstrTooltipText = Resources.ToolTipLocked;
-                    return VSConstants.S_OK;
+                    if (files.Contains(spf))
+                        files.Remove(spf); // Must have been added as a subfile and normal file :(
+
+                    files.Insert(n++, spf);
+
+                    foreach(string subfile in spf.FirstReference.GetSubFiles())
+                    {
+                        if(_fileMap.TryGetValue(subfile, out spf))
+                        {
+                            if(!files.Contains(spf))
+                                files.Add(spf);
+                        }
+                    }
                 }
             }
+
+            string format = (files.Count > 0) ? "{0}: {1}" : "{1}";
+            for(int i = 0; i < files.Count; i++)
+            {
+                SvnItem item = StatusCache[files[i].FullPath];
+
+                if (i >= n) // This is a subitem!
+                {
+                    if (item.IsModified)
+                        sb.AppendFormat(format, item.Name, Resources.ToolTipModified).AppendLine();
+                }
+
+                if (item.IsConflicted)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipConflict).AppendLine();
+
+                if (item.IsObstructed)
+                    sb.AppendFormat(format, item.Name, item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed).AppendLine();
+
+                if (item.ReadOnlyMustLock && !item.IsLocked)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipMustLock).AppendLine();
+
+                if (!item.Exists)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipDoesNotExist).AppendLine();
+
+                if(item.IsLocked)
+                    sb.AppendFormat(format, item.Name, Resources.ToolTipLocked).AppendLine();
+            }
+
+            if (sb.Length > 0)
+                pbstrTooltipText = sb.ToString().Trim(); // We added newlines
 
             return VSConstants.S_OK;
         }

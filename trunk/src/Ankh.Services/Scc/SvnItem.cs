@@ -578,6 +578,14 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a value indicating whether this file is dirty in an open editor
+        /// </summary>
+        public bool IsDocumentDirty
+        {
+            get { return GetState(SvnItemState.DocumentDirty) != 0; }
+        }
+
+        /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> is explicitly ignored
         /// </summary>
         public bool IsIgnored

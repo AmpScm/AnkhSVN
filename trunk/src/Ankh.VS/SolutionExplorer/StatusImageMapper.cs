@@ -62,7 +62,7 @@ namespace Ankh.VS.SolutionExplorer
                 else if (item.IsIgnored)
                     return AnkhGlyph.Ignored;
                 else if (item.IsVersionable)
-                    return AnkhGlyph.Blank; // Scc provider will apply ShouldBeAdded if in a project
+                    return item.InSolution ? AnkhGlyph.ShouldBeAdded : AnkhGlyph.Blank;
                 else
                     return AnkhGlyph.None;
             }
@@ -70,10 +70,14 @@ namespace Ankh.VS.SolutionExplorer
 			switch (item.Status.CombinedStatus)
             {
                 case SvnStatus.Normal:
-                    return item.IsLocked ? AnkhGlyph.LockedNormal : AnkhGlyph.Normal;
+                    if (item.IsDocumentDirty)
+                        return AnkhGlyph.FileDirty;
+                    else if (item.IsLocked)
+                        return AnkhGlyph.LockedNormal;
+                    else
+                        return AnkhGlyph.Normal;
                 case SvnStatus.Modified:
                     return item.IsLocked ? AnkhGlyph.LockedModified : AnkhGlyph.Modified;
-
                 case SvnStatus.Replaced:
                     return AnkhGlyph.CopiedOrMoved;
                 case SvnStatus.Added:
