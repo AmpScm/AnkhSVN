@@ -132,11 +132,6 @@ namespace Ankh.Scc
         /// <summary>
         /// Combination masks that 100% need an SvnStatus call to get the requested data
         /// </summary>
-        MaskSvnStatusOnly = Versioned | HasLockToken | Obstructed | Modified | PropertyModified | Added | HasCopyOrigin 
-            | Deleted | Replaced | HasProperties | ContentConflicted | PropertyModified | InTreeConflict,
-
-        MaskGetAttributes = Exists | ReadOnly | IsDiskFile,
-
         MaskSvnState = 0xFFF000 | Versioned | HasLockToken | Obstructed | Versionable,
     }
 }

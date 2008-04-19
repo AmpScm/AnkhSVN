@@ -27,8 +27,6 @@ namespace Ankh
         bool ShouldRefresh();
         bool IsStatusClean();
 
-        void MarkStatusDirty();
-
         bool ShouldClean();        
     }
 
@@ -310,13 +308,6 @@ namespace Ankh
             _cookie = NextCookie();
         }
 
-        void ISvnItemUpdate.MarkStatusDirty()
-        {
-            _statusDirty = XBool.True;
-            _validState &= ~SvnItemState.MaskSvnState;
-            _cookie = NextCookie();
-        }
-
         bool ISvnItemUpdate.IsStatusClean()
         {
             return _statusDirty == XBool.False;
@@ -494,12 +485,37 @@ namespace Ankh
             get { return 0 != GetState(SvnItemState.Versioned); }
         }
 
+        static bool GetIsVersioned(AnkhStatus status)
+        {
+            switch (status.LocalContentStatus)
+            {
+                case SvnStatus.Added:
+                case SvnStatus.Conflicted:
+                case SvnStatus.Merged:
+                case SvnStatus.Modified:
+                case SvnStatus.Normal:
+                case SvnStatus.Replaced:
+                case SvnStatus.Deleted:
+                case SvnStatus.Incomplete:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         /// <summary>
         /// Is this resource modified; implies the item is versioned
         /// </summary>
         public bool IsModified
         {
-            get { return 0 != GetState(SvnItemState.Modified); }
+            get
+            {
+                EnsureClean();
+
+                AnkhStatus status = _status;
+
+                return GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
+            }
         }
 
         /// <summary>
