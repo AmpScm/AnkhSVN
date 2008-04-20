@@ -47,6 +47,9 @@ namespace Ankh.Scc
             if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
+            // TODO: C++ projects do not send directory renames; but do send OnAfterRenameFile() events
+            //       for all files (one at a time). We should detect that case here and fix up this dirt!
+
             int iFile = 0;
 
             for (int i = 0; i < cFiles; i++)
