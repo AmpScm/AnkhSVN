@@ -192,6 +192,27 @@ namespace Ankh.Scc
             }          
         }
 
+        internal void OnBeforeSolutionRenameFile(string oldName, string newName, VSQUERYRENAMEFILEFLAGS flags, out bool ok)
+        {
+            ok = true;
+            if (!IsActive)
+                return;
+
+            using (SvnSccContext svn = new SvnSccContext(Context))
+            {
+                if (!svn.CouldAdd(newName, SvnNodeKind.File))
+                {
+                    ok = false;
+                    return;
+                }
+
+                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
+
+                if (svn.IsUnversioned(status))
+                    return;
+            }        
+        }
+
         /// <summary>
         /// Called when a file in a project is renamed
         /// </summary>
@@ -207,7 +228,8 @@ namespace Ankh.Scc
             else
                 data.CheckProjectRename(project, oldName, newName);
 
-            data.RemovePath(oldName);
+            if(!data.ContainsFile(oldName))
+                data.RemovePath(oldName);
             data.AddPath(newName);
 
             if (!IsActive)
@@ -224,6 +246,26 @@ namespace Ankh.Scc
 
                 MarkDirty(new string[] { oldName, newName }, true);
             }            
+        }
+
+        internal void OnSolutionRenamedFile(string oldName, string newName, VSRENAMEFILEFLAGS flags)
+        {
+            if (!IsActive)
+                return;
+
+            _solutionDirectory = _solutionFile = null; // Get new data after this rename
+
+            using (SvnSccContext svn = new SvnSccContext(Context))
+            {
+                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
+
+                if (!svn.IsUnversioned(status))
+                {
+                    svn.SafeWcMoveFixup(oldName, newName);
+                }
+
+                MarkDirty(new string[] { oldName, newName }, true);
+            }
         }
 
         /// <summary>
@@ -266,6 +308,11 @@ namespace Ankh.Scc
 
             if(!IsActive)
                 return;
+
+            Debug.Assert(!Directory.Exists(oldName));
+            Debug.Assert(Directory.Exists(newName));
+            GC.KeepAlive(newName);
+            GC.KeepAlive(oldName);
         }
 
 

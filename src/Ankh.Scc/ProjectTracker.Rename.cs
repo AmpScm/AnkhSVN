@@ -11,26 +11,47 @@ namespace Ankh.Scc
     {
         public int OnQueryRenameFiles(IVsProject pProject, int cFiles, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEFILEFLAGS[] rgFlags, VSQUERYRENAMEFILERESULTS[] pSummaryResult, VSQUERYRENAMEFILERESULTS[] rgResults)
         {
-            if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
+            if (rgszMkNewNames == null || rgszMkOldNames == null)
                 return VSConstants.E_POINTER;
 
-            IVsSccProject2 sccProject = pProject as IVsSccProject2;
-            bool track = _sccProvider.TrackProjectChanges(sccProject);
-
             bool allOk = true;
-            for (int i = 0; i < cFiles; i++)
+            if (pProject == null)
             {
-                bool ok = true;
+                // We are renaming the solution file (or something in the solution itself)
 
-                if(track)
-                    _sccProvider.OnBeforeProjectRenameFile(sccProject, SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
-                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
+                for (int i = 0; i < cFiles; i++)
+                {
+                    bool ok = true;
 
-                if (rgResults != null)
-                    rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+                    _sccProvider.OnBeforeSolutionRenameFile(SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                            SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
-                if (!ok)
-                    allOk = false;
+                    if (rgResults != null)
+                        rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+
+                    if (!ok)
+                        allOk = false;
+                }
+            }
+            else
+            {
+                IVsSccProject2 sccProject = pProject as IVsSccProject2;
+                bool track = _sccProvider.TrackProjectChanges(sccProject);
+
+                for (int i = 0; i < cFiles; i++)
+                {
+                    bool ok = true;
+
+                    if (track)
+                        _sccProvider.OnBeforeProjectRenameFile(sccProject, SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                            SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
+
+                    if (rgResults != null)
+                        rgResults[i] = ok ? VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameOK : VSQUERYRENAMEFILERESULTS.VSQUERYRENAMEFILERESULTS_RenameNotOK;
+
+                    if (!ok)
+                        allOk = false;
+                }
             }
 
             if (pSummaryResult != null)
@@ -67,18 +88,32 @@ namespace Ankh.Scc
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
-                IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
-
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
-
-                for (; iFile < iLastFileThisProject; iFile++)
+                if (rgpProjects[iProject] != null)
                 {
-                    if (sccProject == null || !track)
-                        continue; // Not handled by our provider
+                    IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                    _sccProvider.OnProjectRenamedFile(sccProject, 
-                        SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
-                        SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
+                    bool track = _sccProvider.TrackProjectChanges(sccProject);
+
+                    for (; iFile < iLastFileThisProject; iFile++)
+                    {
+                        if (sccProject == null || !track)
+                            continue; // Not handled by our provider
+
+                        _sccProvider.OnProjectRenamedFile(sccProject,
+                            SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
+                            SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
+                    }
+                }
+                else
+                {
+                    // Renaming something in the solution (= solution file itself)
+
+                    for (; iFile < iLastFileThisProject; iFile++)
+                    {
+                        _sccProvider.OnSolutionRenamedFile(
+                            SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
+                            SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
+                    }
                 }
             }
 
