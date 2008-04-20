@@ -17,6 +17,7 @@ namespace Ankh.Scc
     {
         readonly SvnClient _client;
         readonly IFileStatusCache _statusCache;
+        bool _disposed;
 
         public SvnSccContext(IAnkhServiceProvider context)
             : base(context)
@@ -25,9 +26,14 @@ namespace Ankh.Scc
             _statusCache = GetService<IFileStatusCache>();
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            ((IDisposable)_client).Dispose();
+            if (!_disposed)
+            {
+                _disposed = true;
+                ((IDisposable)_client).Dispose();
+            }
+            base.Dispose(disposing);            
         }
 
         /// <summary>
@@ -63,6 +69,39 @@ namespace Ankh.Scc
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets the status as noted in the parent directory
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public SvnStatusEventArgs SafeGetStatusViaParent(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            string dir = Path.GetDirectoryName(path);
+
+            if (dir == null)
+                return null;
+
+            SvnStatusEventArgs saa = null;
+            SvnStatusArgs sa = new SvnStatusArgs();
+            sa.Depth = SvnDepth.Children;
+            sa.ThrowOnError = false;
+            sa.IgnoreExternals = true;
+
+            _client.Status(dir, sa, delegate(object sender, SvnStatusEventArgs e)
+                    {
+                        if (string.Equals(e.FullPath, path, StringComparison.OrdinalIgnoreCase))
+                        {
+                            e.Detach();
+                            saa = e;
+                        }
+                    });
+
+            return saa;
         }
 
         /// <summary>
@@ -160,7 +199,7 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         void MaybeRevertReplaced(string path)
         {
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SvnItem item = GetService<IFileStatusCache>()[path];
@@ -184,14 +223,14 @@ namespace Ankh.Scc
                 return;
             }
 
-            if(info == null)
+            if (info == null)
                 return;
 
-            if((info.CopyFromUri != null) && (info.Uri != info.CopyFromUri))
+            if ((info.CopyFromUri != null) && (info.Uri != info.CopyFromUri))
                 return;
-            else if(info.CopyFromRev >= 0 && info.CopyFromRev != info.Revision)
+            else if (info.CopyFromRev >= 0 && info.CopyFromRev != info.Revision)
                 return;
-            
+
             // Ok, the file was copied back to its original location!
 
             SvnRevertArgs ra = new SvnRevertArgs();
@@ -256,6 +295,15 @@ namespace Ankh.Scc
             return ok;
         }
 
+        public bool WcDelete(string path)
+        {
+            SvnDeleteArgs da = new SvnDeleteArgs();
+            da.ThrowOnError = false;
+            da.Force = true;
+
+            return _client.Delete(path, da);
+        }
+
         internal bool SafeWcMoveFixup(string fromPath, string toPath)
         {
             if (string.IsNullOrEmpty(fromPath))
@@ -313,6 +361,100 @@ namespace Ankh.Scc
             return ok;
         }
 
+        internal void SafeWcDirectoryCopyFixUp(string oldDir, string newDir)
+        {
+            using (HandsOffRecursive(newDir))
+            using (MarkIgnoreRecursive(newDir))
+            {
+                RetriedRename(newDir, oldDir);
+
+                RecursiveCopyNotVersioned(oldDir, newDir);
+            }
+        }
+
+        private IDisposable MarkIgnoreRecursive(string newDir)
+        {
+            IAnkhOpenDocumentTracker dt = GetService<IAnkhOpenDocumentTracker>();
+            IVsFileChangeEx change = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+            if (dt == null || change == null)
+                return null;
+
+            ICollection<string> files = dt.GetDocumentsBelow(newDir);
+
+            if (files == null || files.Count == 0)
+                return null;
+
+            foreach (string file in files)
+            {
+                Marshal.ThrowExceptionForHR(change.IgnoreFile(0, file, 1));
+            }
+
+            return new DelegateRunner(
+                delegate()
+                {
+                    foreach (string file in files)
+                    {
+                        change.SyncFile(file);
+                        change.IgnoreFile(0, file, 0);
+                    }
+                });
+        }
+
+        private IDisposable HandsOffRecursive(string newDir)
+        {
+            IAnkhOpenDocumentTracker dt = GetService<IAnkhOpenDocumentTracker>();
+            IVsTrackProjectDocuments3 tracker = GetService<IVsTrackProjectDocuments3>(typeof(SVsTrackProjectDocuments));
+
+            if (dt == null || tracker == null)
+                return null;
+
+            ICollection<string> files = dt.GetDocumentsBelow(newDir);
+
+            if (files == null || files.Count == 0)
+                return null;
+
+            string[] fileArray = new List<string>(files).ToArray();
+
+            Marshal.ThrowExceptionForHR(tracker.HandsOffFiles(
+                (uint)__HANDSOFFMODE.HANDSOFFMODE_DeleteAccess,
+                fileArray.Length, fileArray));
+
+            return new DelegateRunner(
+                delegate()
+                {
+                    tracker.HandsOnFiles(fileArray.Length, fileArray);
+                });
+        }
+
+        /// <summary>
+        /// Creates an unversioned copy of <paramref name="from"/> in <paramref name="to"/>. (Recursive copy skipping administrative directories)
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        private void RecursiveCopyNotVersioned(string from, string to)
+        {
+            DirectoryInfo fromDir = new DirectoryInfo(from);
+            DirectoryInfo toDir = new DirectoryInfo(to);
+
+            if (!fromDir.Exists)
+                return;
+
+            if (!toDir.Exists)
+                toDir.Create();
+
+            foreach (FileInfo file in fromDir.GetFiles())
+            {
+                File.Copy(file.FullName, Path.Combine(to, file.Name));
+            }
+
+            foreach (DirectoryInfo dir in fromDir.GetDirectories())
+            {
+                if (!string.Equals(dir.Name, SvnClient.AdministrativeDirectoryName))
+                    RecursiveCopyNotVersioned(dir.FullName, Path.Combine(to, dir.Name));
+            }
+        }
+
         public bool SafeDeleteFile(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -346,8 +488,8 @@ namespace Ankh.Scc
                     return true;
 
                 case SvnStatus.Deleted:
-                    // What to do with this?
-                    // * If there is a file it is unmanaged; but probably was once managed?
+                // What to do with this?
+                // * If there is a file it is unmanaged; but probably was once managed?
                 default:
                     return false;
             }
@@ -383,7 +525,7 @@ namespace Ankh.Scc
             {
                 string[] paths = new string[] { path, null };
 
-                int hr =tracker.HandsOffFiles(
+                int hr = tracker.HandsOffFiles(
                     (uint)__HANDSOFFMODE.HANDSOFFMODE_DeleteAccess,
                     1,
                     paths);
@@ -406,7 +548,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            IVsFileChangeEx change = GetService <IVsFileChangeEx>(typeof(SVsFileChangeEx));
+            IVsFileChangeEx change = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
             if (change != null)
             {
@@ -416,12 +558,12 @@ namespace Ankh.Scc
                     delegate()
                     {
                         change.SyncFile(path);
-                        change.IgnoreFile(0, path, 0);                        
+                        change.IgnoreFile(0, path, 0);
                     });
             }
             else
                 return null;
-        }  
+        }
 
         public IDisposable MoveAway(string path, bool touch)
         {
@@ -454,9 +596,9 @@ namespace Ankh.Scc
             }
             while (File.Exists(tmp) || Directory.Exists(tmp));
 
-            RetriedRename(path, tmp);    
-  
-            if(isFile)
+            RetriedRename(path, tmp);
+
+            if (isFile)
                 File.SetAttributes(tmp, FileAttributes.ReadOnly);
 
             return new DelegateRunner(
@@ -472,7 +614,7 @@ namespace Ankh.Scc
                         Directory.Delete(path, true);
                     }
 
-                    if(isFile)
+                    if (isFile)
                         File.SetAttributes(tmp, FileAttributes.Normal);
 
                     RetriedRename(tmp, path);
@@ -499,7 +641,13 @@ namespace Ankh.Scc
                 {
                     if (i == retryCount - 1)
                     {
-                        File.Move(path, tmp); // Throw an exception after 4 attempts
+                        // Throw an exception after 4 attempts
+
+                        if (Directory.Exists(path))
+                            Directory.Move(path, tmp);
+                        else
+                            File.Move(path, tmp);
+
                     }
                     else
                         System.Threading.Thread.Sleep(20 * (i + 1));
@@ -543,8 +691,8 @@ namespace Ankh.Scc
         {
             if (path == null)
                 throw new ArgumentNullException("path");
-            
-            SvnItem item = _statusCache[path];            
+
+            SvnItem item = _statusCache[path];
             string file = Path.GetFileName(path);
 
             if (item.IsVersioned && item.Name == file)
@@ -557,7 +705,7 @@ namespace Ankh.Scc
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;
             sa.RetrieveAllEntries = true;
-            
+
             sa.Depth = nodeKind == SvnNodeKind.File ? SvnDepth.Files : SvnDepth.Children;
             bool ok = true;
 
@@ -582,7 +730,7 @@ namespace Ankh.Scc
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
             internal static extern bool MoveFile(string src, string dst);
- 
+
 
 
         }

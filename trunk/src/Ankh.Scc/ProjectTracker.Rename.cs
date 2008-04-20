@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
+using System.IO;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -65,7 +67,7 @@ namespace Ankh.Scc
 
         public int OnAfterRenameFiles(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgszMkOldNames, string[] rgszMkNewNames, VSRENAMEFILEFLAGS[] rgFlags)
         {
-            if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null)
+            if (rgszMkNewNames == null || rgpProjects == null || rgszMkOldNames == null || rgszMkOldNames.Length != rgszMkNewNames.Length)
                 return VSConstants.E_POINTER;
 
             // TODO: C++ projects do not send directory renames; but do send OnAfterRenameFile() events
@@ -83,6 +85,9 @@ namespace Ankh.Scc
                 if (!string.IsNullOrEmpty(s))
                     StatusCache.MarkDirty(s);
             }
+
+            if(_sccProvider.IsActive)
+                FixWorkingCopyAfterRenames(rgszMkOldNames, rgszMkNewNames);
 
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
@@ -120,6 +125,77 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        /// <summary>
+        /// Fixes working copies which are invalidated by a rename operation
+        /// </summary>
+        /// <param name="rgszMkOldNames"></param>
+        /// <param name="rgszMkNewNames"></param>
+        private void FixWorkingCopyAfterRenames(string[] rgszMkOldNames, string[] rgszMkNewNames)
+        {
+            if (rgszMkNewNames == null || rgszMkOldNames == null || rgszMkOldNames.Length != rgszMkNewNames.Length)
+                return;
+
+            for (int i = 0; i < rgszMkOldNames.Length; i++)
+            {
+                string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]);
+                string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]);
+
+                string oldDir = Path.GetDirectoryName(oldName);
+                string newDir = Path.GetDirectoryName(newName);
+
+                if (Directory.Exists(newName))
+                {
+                    // The item itself is the directory
+                    oldDir = oldName;
+                    newDir = newName;
+                }
+
+                if (Directory.Exists(oldDir))
+                    continue; // Nothing to fix up
+
+                string parent = Path.GetDirectoryName(oldDir);
+                if (!Directory.Exists(parent))
+                {
+                    continue; // We can't fix up more than one level at this time
+                    // We probably fix it with one of the following renames; as paths are included too
+                }
+
+                SvnItem item = StatusCache[oldDir];
+
+                if (!item.IsVersioned && item.Status.LocalContentStatus != SvnStatus.Missing)
+                    continue; // Item was not cached as versioned or now-missing (Missing implicits Versioned)
+
+                StatusCache.MarkDirty(oldDir);
+                StatusCache.MarkDirty(newDir);
+
+                item = StatusCache[oldDir];
+
+                if (item.Status.LocalContentStatus != SvnStatus.Missing)
+                    continue;
+
+                SvnItem newItem = StatusCache[newDir];
+
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {    
+                    SvnStatusEventArgs sa = svn.SafeGetStatusViaParent(newDir);
+                    string newParent = Path.GetDirectoryName(newDir);
+
+                    if (sa != null && sa.LocalContentStatus != SvnStatus.NotVersioned && sa.LocalContentStatus != SvnStatus.Ignored)
+                        continue; // Not an unexpected WC root
+                    else if (!SvnTools.IsManagedPath(newDir))
+                        continue; // Not a wc root at all
+
+                    svn.SafeWcDirectoryCopyFixUp(oldDir, newDir); // Recreate the old WC directory
+                    svn.WcDelete(oldDir); // Delete everything in the old wc directory
+
+                    // We have all files of the old wc directory unversioned in the new location now
+
+                    StatusCache.MarkDirtyRecursive(oldDir);
+                    StatusCache.MarkDirtyRecursive(newDir);
+                }
+            }
+        }
+
         public int OnQueryRenameDirectories(IVsProject pProject, int cDirs, string[] rgszMkOldNames, string[] rgszMkNewNames, VSQUERYRENAMEDIRECTORYFLAGS[] rgFlags, VSQUERYRENAMEDIRECTORYRESULTS[] pSummaryResult, VSQUERYRENAMEDIRECTORYRESULTS[] rgResults)
         {
             if (rgszMkNewNames == null || pProject == null || rgszMkOldNames == null)
@@ -128,7 +204,7 @@ namespace Ankh.Scc
             IVsSccProject2 sccProject = pProject as IVsSccProject2;
             bool track = _sccProvider.TrackProjectChanges(sccProject);
 
-            if(track)
+            if (track)
                 for (int i = 0; i < cDirs; i++)
                 {
                     string s = rgszMkNewNames[i];
@@ -141,8 +217,8 @@ namespace Ankh.Scc
             {
                 bool ok = true;
 
-                if(track)
-                    _sccProvider.OnBeforeProjectDirectoryRename(sccProject, 
+                if (track)
+                    _sccProvider.OnBeforeProjectDirectoryRename(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
@@ -183,7 +259,7 @@ namespace Ankh.Scc
             for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirs); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirs;
-                
+
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
                 bool track = _sccProvider.TrackProjectChanges(sccProject);
@@ -193,7 +269,7 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectDirectoryRenamed(sccProject, 
+                    _sccProvider.OnProjectDirectoryRenamed(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[iDirectory]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[iDirectory]), rgFlags[iDirectory]);
                 }

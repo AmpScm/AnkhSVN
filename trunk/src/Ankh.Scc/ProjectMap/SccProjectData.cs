@@ -320,8 +320,11 @@ namespace Ankh.Scc.ProjectMap
 
         internal void RemovePath(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
             if (!_files.Contains(path))
-                throw new ArgumentOutOfRangeException("path");
+                return;
 
             _files[path].ReleaseReference();
 

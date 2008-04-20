@@ -151,7 +151,8 @@ namespace Ankh.Scc
                 return; // Not managed by us
 
             // Add a directory like a folder but with an ending '\'
-            data.RemovePath(Path.GetFullPath(directoryname).TrimEnd('\\') + '\\');
+            string dir = SvnTools.GetNormalizedFullPath(directoryname);
+            data.RemovePath(dir);
 
             if (!IsActive)
                 return;
@@ -228,8 +229,7 @@ namespace Ankh.Scc
             else
                 data.CheckProjectRename(project, oldName, newName);
 
-            if(!data.ContainsFile(oldName))
-                data.RemovePath(oldName);
+            data.RemovePath(oldName);
             data.AddPath(newName);
 
             if (!IsActive)
@@ -241,7 +241,8 @@ namespace Ankh.Scc
 
                 if (!svn.IsUnversioned(status))
                 {
-                    svn.SafeWcMoveFixup(oldName, newName);
+                    if(!Directory.Exists(newName)) // Fails if the new name is a directory!
+                        svn.SafeWcMoveFixup(oldName, newName);                    
                 }
 
                 MarkDirty(new string[] { oldName, newName }, true);
