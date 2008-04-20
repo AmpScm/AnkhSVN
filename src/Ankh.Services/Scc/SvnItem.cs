@@ -182,6 +182,7 @@ namespace Ankh
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
                     SetState(SvnItemState.Exists | SvnItemState.Ignored, (unset & ~SvnItemState.Ignored) | managed);
+                    svnDirty = false;
                     break;                
                 case SvnStatus.Modified:
                     SetState(managed | SvnItemState.Exists | SvnItemState.Modified, unset);
