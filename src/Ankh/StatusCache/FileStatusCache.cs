@@ -498,6 +498,26 @@ namespace Ankh.StatusCache
             }
         }
 
+        void Ankh.Scc.IFileStatusCache.MarkDirtyRecursive(string path)
+        {
+            if (path == null)
+                throw new ArgumentNullException("path");
+            
+            lock (_lock)
+            {
+                List<string> names = new List<string>();
+
+                foreach (SvnItem v in _map.Values)
+                {
+                    string name = v.FullPath;
+                    if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
+                    {
+                        v.MarkDirty();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Marks the specified file dirty
         /// </summary>

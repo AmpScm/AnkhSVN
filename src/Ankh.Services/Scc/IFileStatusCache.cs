@@ -63,6 +63,8 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        SvnDirectory GetDirectory(string path); 
+        SvnDirectory GetDirectory(string path);
+
+        void MarkDirtyRecursive(string path);
     }
 }
