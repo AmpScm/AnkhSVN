@@ -321,7 +321,7 @@
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Extenders\ResourceExtender.cs">
+    <Compile Include="Extenders\SvnItemExtender.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IContext.cs">
