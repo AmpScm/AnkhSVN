@@ -24,7 +24,7 @@ namespace Ankh
         SvnItemState _onceValid;
 
         const SvnItemState MaskRefreshTo = SvnItemState.Versioned | SvnItemState.HasLockToken | SvnItemState.Obstructed | SvnItemState.Modified | SvnItemState.PropertyModified | SvnItemState.Added | SvnItemState.HasCopyOrigin
-            | SvnItemState.Deleted | SvnItemState.Replaced | SvnItemState.HasProperties | SvnItemState.ContentConflicted | SvnItemState.PropertyModified | SvnItemState.InTreeConflict | SvnItemState.SvnDirty;
+            | SvnItemState.Deleted | SvnItemState.Replaced | SvnItemState.HasProperties | SvnItemState.ContentConflicted | SvnItemState.PropertyModified | SvnItemState.SvnDirty;
 
         public SvnItemState GetState(SvnItemState flagsToGet)
         {
@@ -127,13 +127,11 @@ namespace Ankh
         void SetState(SvnItemState set, SvnItemState unset)
         {
             SvnItemState st = (_currentState & ~unset) | set;
-            _validState |= (set | unset);
 
             if (st != _currentState)
             {
                 // Calculate whether we have a change or just new information
-                bool changed = (st & _onceValid) != _currentState;
-                _currentState = st;
+                bool changed = (st & _onceValid) != (_currentState & _onceValid);
 
                 if (changed)
                 {
@@ -150,7 +148,10 @@ namespace Ankh
                         }
                     }
                 }
+                _currentState = st;
+
             }
+            _validState |= (set | unset);
             _onceValid |= _validState;
         }
 
