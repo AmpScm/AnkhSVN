@@ -117,7 +117,7 @@ namespace Ankh.Scc
         [Browsable(false)]
         public bool IsClean
         {
-            get { return _status == null; }
+            get { return !PendingChange.IsPending(Item); }
         }
 
         int _iconIndex;

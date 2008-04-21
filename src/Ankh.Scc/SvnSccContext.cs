@@ -33,7 +33,7 @@ namespace Ankh.Scc
                 _disposed = true;
                 ((IDisposable)_client).Dispose();
             }
-            base.Dispose(disposing);            
+            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -664,8 +664,10 @@ namespace Ankh.Scc
             else if (string.IsNullOrEmpty(contentFrom))
                 throw new ArgumentNullException("path");
 
+            IDisposable moveAway = null;
+
             if (File.Exists(path))
-                throw new InvalidOperationException("Destination exists");
+                moveAway = MoveAway(path, false);
             else if (!File.Exists(contentFrom))
                 throw new InvalidOperationException("Source does not exist");
 
@@ -679,6 +681,9 @@ namespace Ankh.Scc
                         File.SetAttributes(path, FileAttributes.Normal);
                         File.Delete(path);
                     }
+
+                    if (moveAway != null)
+                        moveAway.Dispose();
                 });
         }
 
@@ -726,6 +731,49 @@ namespace Ankh.Scc
             return ok;
         }
 
+        /// <summary>
+        /// Removes all administrative directories from the specified path recursively
+        /// </summary>
+        /// <param name="directory"></param>
+        public void UnversionRecursive(string directory)
+        {
+            if (string.IsNullOrEmpty(directory))
+                throw new ArgumentNullException("directory");
+
+            DirectoryInfo dir = new DirectoryInfo(directory);
+
+            if (!dir.Exists)
+                return;
+
+            foreach (DirectoryInfo subDir in dir.GetDirectories(SvnClient.AdministrativeDirectoryName, SearchOption.AllDirectories))
+            {
+                RecursiveDelete(subDir);
+            }
+        }
+
+        private void RecursiveDelete(DirectoryInfo dir)
+        {
+            if(dir == null)
+                throw new ArgumentNullException("dir");
+
+            if (!dir.Exists)
+                return;
+
+            foreach (DirectoryInfo sd in dir.GetDirectories())
+            {
+                RecursiveDelete(sd);
+            }
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                file.Attributes = FileAttributes.Normal;
+                file.Delete();
+            }
+            dir.Delete();
+        }        
+
+
+
         static class NativeMethods
         {
             [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -733,6 +781,6 @@ namespace Ankh.Scc
 
 
 
-        }
+        }        
     }
 }

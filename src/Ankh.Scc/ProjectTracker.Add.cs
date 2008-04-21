@@ -421,10 +421,35 @@ namespace Ankh.Scc
 
             for (int i = 0; i < cDirectories; i++)
             {
-                string s = rgpszMkDocuments[i];
-                if (!string.IsNullOrEmpty(s))
+                string directory = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]);
+
+                StatusCache.MarkDirty(directory);
+
+                SvnItem item = StatusCache[directory];
+
+                if(!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(directory))
+                    continue;
+
+                DirectoryInfo dirInfo = new DirectoryInfo(directory);
+
+                if (!dirInfo.Exists || (DateTime.Now - dirInfo.CreationTime) > new TimeSpan(0, 1, 0))
+                    continue; // Directory is older than one minute.. Not just copied
+
+                using(SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    StatusCache.MarkDirty(s);
+                    // Ok; we have a 'new' directory here.. Lets check if VS broke the subversion working copy
+                    SvnStatusEventArgs status = svn.SafeGetStatusViaParent(directory);
+
+                    if (status == null)
+                    {
+                        string pd = Path.GetDirectoryName(directory);
+                        if (pd == null || SvnTools.IsManagedPath(pd))
+                            continue;
+                    }
+                    else if (status.LocalContentStatus != SvnStatus.NotVersioned && status.LocalContentStatus != SvnStatus.Ignored)
+                        continue;
+
+                    svn.UnversionRecursive(directory);
                 }
             }
 

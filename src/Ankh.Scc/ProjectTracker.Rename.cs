@@ -186,7 +186,9 @@ namespace Ankh.Scc
                         continue; // Not a wc root at all
 
                     svn.SafeWcDirectoryCopyFixUp(oldDir, newDir); // Recreate the old WC directory
-                    svn.WcDelete(oldDir); // Delete everything in the old wc directory
+
+                    _delayedDeletes.Add(oldDir); // Delete everything in the old wc when done
+                    RegisterForSccCleanup();
 
                     // We have all files of the old wc directory unversioned in the new location now
 
