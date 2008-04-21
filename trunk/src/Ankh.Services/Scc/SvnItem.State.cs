@@ -26,8 +26,6 @@ namespace Ankh
         const SvnItemState MaskRefreshTo = SvnItemState.Versioned | SvnItemState.HasLockToken | SvnItemState.Obstructed | SvnItemState.Modified | SvnItemState.PropertyModified | SvnItemState.Added | SvnItemState.HasCopyOrigin
             | SvnItemState.Deleted | SvnItemState.Replaced | SvnItemState.HasProperties | SvnItemState.ContentConflicted | SvnItemState.PropertyModified | SvnItemState.InTreeConflict | SvnItemState.SvnDirty;
 
-        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;        
-
         public SvnItemState GetState(SvnItemState flagsToGet)
         {
             SvnItemState unavailable = flagsToGet & ~_validState;
@@ -266,6 +264,45 @@ namespace Ankh
                 SetState(SvnItemState.MustLock, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.MustLock);
+        }
+        #endregion
+
+        #region Attribute Info
+        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;        
+        
+        void UpdateAttributeInfo()
+        {
+            // One call of the kernel's GetFileAttributesW() gives us most info we need
+
+            uint value = NativeMethods.GetFileAttributes(FullPath);
+
+            if (value == NativeMethods.INVALID_FILE_ATTRIBUTES)
+            {
+                // File does not exist / no rights, etc.
+
+                SetState(SvnItemState.IsDiskFile, // File allows more optimizations in the svn case
+                    SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.Versionable);
+
+                return;
+            }
+
+            SvnItemState set = SvnItemState.Exists;
+            SvnItemState unset = SvnItemState.None;
+
+            if ((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
+                set |= SvnItemState.ReadOnly;
+            else
+                unset = SvnItemState.ReadOnly;
+
+            if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
+            {
+                unset |= SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
+                set &= ~SvnItemState.ReadOnly;
+            }
+            else
+                set |= SvnItemState.IsDiskFile;
+
+            SetState(set, unset);
         }
         #endregion
 
