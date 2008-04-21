@@ -155,8 +155,6 @@ namespace Ankh
             _statusDirty = XBool.False;
             _status = status;
 
-            SetDirty(SvnItemState.MustLock);
-
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
                 SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
 
@@ -267,14 +265,16 @@ namespace Ankh
 
             if (!hasProperties)
                 SetState(SvnItemState.None, SvnItemState.MustLock);
-            else
-                SetDirty(SvnItemState.MustLock);
 
             switch (status.NodeKind)
             {
                 case SvnNodeKind.Directory:
-                    SetState(SvnItemState.None,
-                                SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
+                    SetState(SvnItemState.None, SvnItemState.ReadOnly | SvnItemState.MustLock);
+
+                    if (exists) // Behaviour must match updating from UpdateAttributeInfo()
+                        SetState(SvnItemState.None, SvnItemState.IsDiskFile);
+                    else
+                        SetState(SvnItemState.IsDiskFile, SvnItemState.None);
                     break;
                 case SvnNodeKind.File:
                     SetState(SvnItemState.IsDiskFile, SvnItemState.None);
@@ -370,42 +370,7 @@ namespace Ankh
         {
             get { return _cookie; }
         }
-
-        void UpdateAttributeInfo()
-        {
-            // One call of the kernel's GetFileAttributesW() gives us most info we need
-
-            uint value = NativeMethods.GetFileAttributes(FullPath);
-
-            if (value == NativeMethods.INVALID_FILE_ATTRIBUTES)
-            {
-                // File does not exist / no rights, etc.
-
-                SetState(SvnItemState.IsDiskFile, // File allows more optimizations in the svn case
-                    SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.Versionable);
-
-                return;
-            }
-
-            SvnItemState set = SvnItemState.Exists;
-            SvnItemState unset = SvnItemState.None;
-
-            if ((value & NativeMethods.FILE_ATTRIBUTE_READONLY) != 0)
-                set |= SvnItemState.ReadOnly;
-            else
-                unset = SvnItemState.ReadOnly;
-
-            if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
-            {
-                unset |= SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
-                set &= ~SvnItemState.ReadOnly;
-            }
-            else
-                set |= SvnItemState.IsDiskFile;
-
-            SetState(set, unset);
-        }
-
+        
         /// <summary>
         /// Gets the full normalized path of the item
         /// </summary>
@@ -531,16 +496,7 @@ namespace Ankh
         {
             get
             {
-                bool newModified = GetState(SvnItemState.SvnDirty) != 0;
-#if DEBUG
-                EnsureClean();
-
-                AnkhStatus status = _status;
-                bool oldModified = GetIsVersioned(status) && (status.CombinedStatus != SvnStatus.Normal);
-
-                Debug.Assert(newModified == oldModified, string.Format("oldModified != newModified for combined status {0}", status.CombinedStatus));
-#endif
-                return newModified;
+                return GetState(SvnItemState.SvnDirty) != 0;
             }
         }
 
