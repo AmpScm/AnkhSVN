@@ -141,7 +141,7 @@ namespace Ankh
                 {
                     _statusDirty = XBool.True; // Walk the path itself to get the data
 
-                    // Extract usefull information we got anyay
+                    // Extract useful information we got anyay
 
                     SetState(SvnItemState.Exists | SvnItemState.Versionable,
                                 SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
@@ -156,7 +156,7 @@ namespace Ankh
             _status = status;
 
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
-                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
+                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted  | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
 
             const SvnItemState managed = SvnItemState.Versioned;
 
@@ -171,6 +171,7 @@ namespace Ankh
                 case SvnStatus.None:
                     SetState(SvnItemState.None, managed | unset);
                     svnDirty = false;
+                    exists = false;
                     break;
                 case SvnStatus.NotVersioned:
                     // Node exists but is not managed by us in this directory
@@ -181,26 +182,26 @@ namespace Ankh
                 case SvnStatus.Ignored:
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
-                    SetState(SvnItemState.Ignored, (unset & ~SvnItemState.Ignored) | managed);
+                    SetState(SvnItemState.Ignored, unset | managed);
                     svnDirty = false;
                     break;                
                 case SvnStatus.Modified:
-                    SetState(managed | SvnItemState.Exists | SvnItemState.Modified, unset);
+                    SetState(managed | SvnItemState.Modified, unset);
                     break;
                 case SvnStatus.Added:
                     if (status.IsCopied)
-                        SetState(managed | SvnItemState.Exists | SvnItemState.Added | SvnItemState.HasCopyOrigin, unset);
+                        SetState(managed | SvnItemState.Added | SvnItemState.HasCopyOrigin, unset);
                     else
-                        SetState(managed | SvnItemState.Exists | SvnItemState.Added, unset);
+                        SetState(managed | SvnItemState.Added, unset);
                     break;
                 case SvnStatus.Replaced:
                     if (status.IsCopied)
-                        SetState(managed | SvnItemState.Exists | SvnItemState.Replaced | SvnItemState.HasCopyOrigin, unset);
+                        SetState(managed | SvnItemState.Replaced | SvnItemState.HasCopyOrigin, unset);
                     else
-                        SetState(managed | SvnItemState.Exists | SvnItemState.Replaced, unset);
+                        SetState(managed | SvnItemState.Replaced, unset);
                     break;
                 case SvnStatus.Conflicted:
-                    SetState(managed | SvnItemState.Exists | SvnItemState.ContentConflicted, unset);
+                    SetState(managed | SvnItemState.ContentConflicted, unset);
                     break;
                 case SvnStatus.Obstructed: // node exists but is of the wrong type
                     SetState(SvnItemState.None, managed | unset);
@@ -555,7 +556,7 @@ namespace Ankh
         /// </summary>
         public bool IsConflicted
         {
-            get { return 0 != GetState(SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict); }
+            get { return 0 != GetState(SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted); }
         }
 
         /// <summary>

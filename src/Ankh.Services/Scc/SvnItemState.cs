@@ -122,10 +122,10 @@ namespace Ankh.Scc
         /// </summary>
         PropertiesConflicted    = 0x200000,
 
-        /// <summary>
+        /*/// <summary>
         /// The SvnItem is part of a tree conflict
         /// </summary>
-        InTreeConflict          = 0x400000,
+        InTreeConflict          = 0x400000,*/
 
 
         /// <summary>
