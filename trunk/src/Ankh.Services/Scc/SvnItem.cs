@@ -160,28 +160,30 @@ namespace Ankh
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
                 SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.InTreeConflict | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
 
-            const SvnItemState managed = SvnItemState.Versionable | SvnItemState.Versioned;
+            const SvnItemState managed = SvnItemState.Versioned;
+
 
             // Let's assume status is more recent than our internal property cache
             // Set all caching properties we can
-
+            
             bool svnDirty = true;
+            bool exists = true;
             switch (status.LocalContentStatus)
             {
                 case SvnStatus.None:
-                    SetState(SvnItemState.None, SvnItemState.Exists | managed | unset);
+                    SetState(SvnItemState.None, managed | unset);
                     svnDirty = false;
                     break;
                 case SvnStatus.NotVersioned:
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
-                    SetState(SvnItemState.Exists, unset | managed);
+                    SetState(SvnItemState.None, unset | managed);
                     svnDirty = false;
                     break;
                 case SvnStatus.Ignored:
                     // Node exists but is not managed by us in this directory
                     // (Might be from an other location as in the nested case)
-                    SetState(SvnItemState.Exists | SvnItemState.Ignored, (unset & ~SvnItemState.Ignored) | managed);
+                    SetState(SvnItemState.Ignored, (unset & ~SvnItemState.Ignored) | managed);
                     svnDirty = false;
                     break;                
                 case SvnStatus.Modified:
@@ -203,20 +205,22 @@ namespace Ankh
                     SetState(managed | SvnItemState.Exists | SvnItemState.ContentConflicted, unset);
                     break;
                 case SvnStatus.Obstructed: // node exists but is of the wrong type
-                    SetState(SvnItemState.Exists, managed | unset);
+                    SetState(SvnItemState.None, managed | unset);
                     break;
                 case SvnStatus.Missing:
-                    SetState(managed, unset | SvnItemState.Exists);
+                    exists = false;
+                    SetState(managed, unset);
                     break;
                 case SvnStatus.Deleted:
                     // We don't unsed exists here; as the file may still exist
                     SetState(managed | SvnItemState.Deleted, unset);
+                    exists = false;
                     break;
                 case SvnStatus.External:
                     // Should be handled above
                     throw new InvalidOperationException();
                 case SvnStatus.Incomplete:
-                    SetState(SvnItemState.Exists, managed | unset);
+                    SetState(SvnItemState.None, managed | unset);
                     break;
                 default:
                     Trace.WriteLine(string.Format("Ignoring undefined status {0} in SvnItem.Refresh()", status.LocalContentStatus));
@@ -227,6 +231,11 @@ namespace Ankh
                     break;
             }
 
+            if(exists)
+                SetState(SvnItemState.Versionable | SvnItemState.Exists, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.Versionable | SvnItemState.Exists);          
+            
             bool hasProperties = true;
             switch (status.LocalPropertyStatus)
             {
@@ -264,7 +273,7 @@ namespace Ankh
             switch (status.NodeKind)
             {
                 case SvnNodeKind.Directory:
-                    SetState(SvnItemState.None | SvnItemState.Versioned | SvnItemState.Versionable,
+                    SetState(SvnItemState.None,
                                 SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
                     break;
                 case SvnNodeKind.File:
