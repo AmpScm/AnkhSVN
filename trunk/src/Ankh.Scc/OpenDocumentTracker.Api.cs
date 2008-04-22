@@ -214,6 +214,7 @@ namespace Ankh.Scc
         {
             readonly OpenDocumentTracker _tracker;
             readonly HybridCollection<string> _locked, _ignoring, _readonly;
+            readonly HybridCollection<string> _fsIgnored;
             readonly Dictionary<uint, string> _monitor;
             readonly Dictionary<string, FileInfo> _altMonitor;
             readonly HybridCollection<string> _changedPaths;
@@ -234,7 +235,8 @@ namespace Ankh.Scc
                 _locked = locked;
                 _ignoring = ignoring;
                 _readonly = readOnly;
-                _changedPaths = new HybridCollection<string>();
+                _fsIgnored = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                _changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
                 _monitor = new Dictionary<uint, string>();
                 _altMonitor = new Dictionary<string, FileInfo>();
 
@@ -250,6 +252,7 @@ namespace Ankh.Scc
                     if (!ignoring.Contains(file) &&
                         ErrorHandler.Succeeded(_change.IgnoreFile(0, file, 1)))
                     {
+                        _fsIgnored.Add(file);
                         FileInfo info = new FileInfo(file);
                         info.Refresh();
                         if (info.Exists)
@@ -409,7 +412,7 @@ namespace Ankh.Scc
 
                 _monitor.Clear();
 
-                foreach (string path in _locked)
+                foreach (string path in _fsIgnored)
                 {
                     _change.SyncFile(path);
                     _change.IgnoreFile(0, path, 0);
@@ -417,9 +420,8 @@ namespace Ankh.Scc
 
                 // Sync all files for the last time
                 // to make sure they are not reloaded for old changes after disposing
-
                 foreach (string path in _locked)
-                    _change.SyncFile(path);
+                    _change.SyncFile(path);                
 
                 foreach (string path in _readonly)
                 {
