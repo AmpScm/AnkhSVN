@@ -12,6 +12,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Ankh.Scc;
+using System.CodeDom.Compiler;
 
 namespace Ankh.Commands
 {
@@ -20,6 +21,17 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class LocalDiffCommandBase : CommandBase
     {
+        readonly TempFileCollection _tempFileCollection = new TempFileCollection();
+
+        /// <summary>
+        /// Gets the temp file collection.
+        /// </summary>
+        /// <value>The temp file collection.</value>
+        protected TempFileCollection TempFileCollection
+        {
+            get { return _tempFileCollection; }
+        }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
@@ -208,7 +220,7 @@ namespace Ankh.Commands
             {
                 if (item.Status.LocalContentStatus == SvnStatus.Added)
                 {
-                    string empty = Path.GetTempFileName();
+                    string empty = TempFileCollection.AddExtension("html");
                     File.Create(empty).Close();
                     return empty;
                 }
