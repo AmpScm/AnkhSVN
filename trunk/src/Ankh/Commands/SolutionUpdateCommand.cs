@@ -46,7 +46,7 @@ namespace Ankh.Commands
             {
                 IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
-                if (settings == null || string.IsNullOrEmpty(settings.SolutionFilename) || string.IsNullOrEmpty(settings.ProjectRootWithSeparator))
+                if (settings == null || string.IsNullOrEmpty(settings.SolutionFilename) || string.IsNullOrEmpty(settings.ProjectRoot))
                 {
                     e.Enabled = false;
                 }
@@ -84,10 +84,10 @@ namespace Ankh.Commands
 
                 if (settings == null)
                     return;
-                else if (string.IsNullOrEmpty(settings.ProjectRootWithSeparator))
+                else if (string.IsNullOrEmpty(settings.ProjectRoot))
                     return;
 
-                paths.Add(settings.ProjectRootWithSeparator);                
+                paths.Add(settings.ProjectRoot);                
             }
             else
             {

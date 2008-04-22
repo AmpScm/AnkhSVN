@@ -107,7 +107,7 @@ namespace Ankh.Commands
         private string DoInternalDiff(PathSelectorResult info, ISelectionContext selection, IContext context)
         {
             Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
-            string slndir = ss.ProjectRootWithSeparator;
+            string slndir = ss.ProjectRoot;
 
             SvnDiffArgs args = new SvnDiffArgs();
             args.IgnoreAncestry = true;
