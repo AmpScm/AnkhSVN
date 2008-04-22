@@ -7,6 +7,7 @@ using Ankh.VS;
 using System;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
+using System.CodeDom.Compiler;
 
 namespace Ankh.Commands
 {
@@ -21,6 +22,8 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemCompareSpecific)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
+        readonly TempFileCollection _tempFileCollection = new TempFileCollection();
+
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
@@ -59,14 +62,14 @@ namespace Ankh.Commands
                     // convert it to HTML and store in a temp file
                     DiffHtmlModel model = new DiffHtmlModel(diff);
                     string html = model.GetHtml();
-                    string htmlFile = Path.GetTempFileName();
+                    string htmlFile = _tempFileCollection.AddExtension("html");
                     using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.Default))
                         w.Write(html);
 
                     IAnkhWebBrowser browser = e.Context.GetService<IAnkhWebBrowser>();
                     BrowserArgs args = new BrowserArgs();
-                    args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow | 
-                        __VSCREATEWEBBROWSER.VSCWB_NoHistory | 
+                    args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
+                        __VSCREATEWEBBROWSER.VSCWB_NoHistory |
                         __VSCREATEWEBBROWSER.VSCWB_StartCustom |
                         __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
                     args.BaseCaption = "Subversion";
