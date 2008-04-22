@@ -220,7 +220,8 @@ namespace Ankh.Commands
             {
                 if (item.Status.LocalContentStatus == SvnStatus.Added)
                 {
-                    string empty = TempFileCollection.AddExtension("html");
+                    string empty = Path.GetTempFileName();
+                    TempFileCollection.AddFile(empty, false);
                     File.Create(empty).Close();
                     return empty;
                 }

@@ -7,6 +7,7 @@ using Ankh.VS;
 using System;
 using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -35,6 +36,12 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
+            List<string> selectedFiles = new List<string>();
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (i.IsModified)
+                    selectedFiles.Add(i.FullPath);
+            }
 
             using (context.StartOperation("Diffing"))
             {
@@ -61,7 +68,8 @@ namespace Ankh.Commands
                     // convert it to HTML and store in a temp file
                     DiffHtmlModel model = new DiffHtmlModel(diff);
                     string html = model.GetHtml();
-                    string htmlFile = TempFileCollection.AddExtension("html");
+                    string htmlFile = Path.GetTempFileName();
+                    TempFileCollection.AddFile(htmlFile, false);
                     using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.Default))
                         w.Write(html);
 
@@ -71,7 +79,7 @@ namespace Ankh.Commands
                         __VSCREATEWEBBROWSER.VSCWB_NoHistory |
                         __VSCREATEWEBBROWSER.VSCWB_StartCustom |
                         __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
-                    args.BaseCaption = "Subversion";
+                    args.BaseCaption = selectedFiles.Count == 1 ? Path.GetFileName(selectedFiles[0]) : "Subversion";
                     browser.Navigate(new Uri("file:///" + htmlFile), args);
                 }
             }
