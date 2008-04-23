@@ -6,7 +6,7 @@
       <filename>HtmlSnippet1.html</filename>
     </component>
     <component visibility="1" type="Html" order="2">
-      <title localize="false" />
+      <title localize="false">Resources on openCollabNet</title>
       <filename>HtmlSnippet2.html</filename>
     </component>
   </component_list>
