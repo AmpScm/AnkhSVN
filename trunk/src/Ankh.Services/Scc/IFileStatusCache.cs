@@ -66,5 +66,7 @@ namespace Ankh.Scc
         SvnDirectory GetDirectory(string path);
 
         void MarkDirtyRecursive(string path);
+
+        void SetSolutionContained(string path, bool contained);
     }
 }

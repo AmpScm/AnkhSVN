@@ -581,7 +581,17 @@ namespace Ankh.StatusCache
                 this._dirMap.Clear();
                 this._map.Clear();
             }
-        }   
+        }
+
+        void IFileStatusCache.SetSolutionContained(string path, bool contained)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SvnItem item;
+            if (_map.TryGetValue(path, out item))
+                ((ISvnItemStateUpdate)item).SetSolutionContained(contained);
+        }
 
         #region IFileStatusCache Members
 
