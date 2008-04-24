@@ -46,7 +46,9 @@ namespace Ankh.Scc
         /// </summary>
         Obstructed              = 0x000010,
 
-
+        /// <summary>
+        /// Item is versioned or below a versioned directory
+        /// </summary>
         Versionable             = 0x000020,
 
         /// <summary>
@@ -61,14 +63,9 @@ namespace Ankh.Scc
         ReadOnly                = 0x000080,
 
         /// <summary>
-        /// The file is currently open in VS
-        /// </summary>
-        DocumentOpen            = 0x000100,
-
-        /// <summary>
         /// The file is marked as dirty by the editor that has the file open
         /// </summary>
-        DocumentDirty           = 0x000200,
+        DocumentDirty           = 0x000100,
 
         /// <summary>
         /// Somehow modified in subversion

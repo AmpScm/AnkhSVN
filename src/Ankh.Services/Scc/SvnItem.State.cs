@@ -12,13 +12,12 @@ namespace Ankh
     {
         List<SvnItem> GetUpdateQueueAndClearScheduled();
 
-        void SetSolutionContained(bool inSolution);
-        void SetDocumentOpen(bool value);
         void SetDocumentDirty(bool value);
+        void SetSolutionContained(bool value);
     }
 
-	partial class SvnItem : ISvnItemStateUpdate
-	{
+    partial class SvnItem : ISvnItemStateUpdate
+    {
         SvnItemState _currentState;
         SvnItemState _validState;
         SvnItemState _onceValid;
@@ -95,7 +94,7 @@ namespace Ankh
                 _validState |= unavailable;
             }
 
-            return _currentState & flagsToGet;       
+            return _currentState & flagsToGet;
         }
 
         List<SvnItem> ISvnItemStateUpdate.GetUpdateQueueAndClearScheduled()
@@ -117,7 +116,7 @@ namespace Ankh
 
                 return modified;
             }
-        }        
+        }
 
         private void SetDirty(SvnItemState p)
         {
@@ -182,7 +181,7 @@ namespace Ankh
 
         #region DocumentInfo
 
-        const SvnItemState MaskDocumentInfo = SvnItemState.DocumentOpen | SvnItemState.DocumentDirty;        
+        const SvnItemState MaskDocumentInfo = SvnItemState.DocumentDirty;
 
         void UpdateDocumentInfo()
         {
@@ -191,25 +190,16 @@ namespace Ankh
             if (dt == null)
             {
                 // We /must/ make the state not dirty
-                SetState(SvnItemState.None, SvnItemState.DocumentDirty | SvnItemState.DocumentOpen);
+                SetState(SvnItemState.None, SvnItemState.DocumentDirty);
                 return;
             }
 
             if (dt.IsDocumentDirty(FullPath))
-                SetState(SvnItemState.DocumentOpen | SvnItemState.DocumentDirty, SvnItemState.None);
-            else if (dt.IsDocumentOpen(FullPath))
-                SetState(SvnItemState.DocumentOpen, SvnItemState.DocumentDirty);
+                SetState(SvnItemState.DocumentDirty, SvnItemState.None);
             else
-                SetState(SvnItemState.None, SvnItemState.DocumentDirty | SvnItemState.DocumentOpen);
+                SetState(SvnItemState.None, SvnItemState.DocumentDirty);
         }
 
-        void ISvnItemStateUpdate.SetSolutionContained(bool inSolution)
-        {
-            if (inSolution)
-                SetState(SvnItemState.InSolution, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.InSolution);
-        }
         #endregion
 
         #region Solution Info
@@ -227,6 +217,15 @@ namespace Ankh
             else
                 SetState(SvnItemState.None, SvnItemState.InSolution);
         }
+
+        void ISvnItemStateUpdate.SetSolutionContained(bool inSolution)
+        {
+            if (inSolution)
+                SetState(SvnItemState.InSolution, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.InSolution);
+        }
+
         #endregion
 
         #region Must Lock
@@ -269,8 +268,8 @@ namespace Ankh
         #endregion
 
         #region Attribute Info
-        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;        
-        
+        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;
+
         void UpdateAttributeInfo()
         {
             // One call of the kernel's GetFileAttributesW() gives us most info we need
@@ -309,20 +308,12 @@ namespace Ankh
 
         #region ISvnItemStateUpdate Members
 
-        void ISvnItemStateUpdate.SetDocumentOpen(bool value)
-        {
-            if (value)
-                SetState(SvnItemState.DocumentOpen, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.DocumentDirty | SvnItemState.DocumentOpen);
-        }
-
         void ISvnItemStateUpdate.SetDocumentDirty(bool value)
         {
             if (value)
-                SetState(SvnItemState.DocumentDirty | SvnItemState.DocumentOpen, SvnItemState.None);
+                SetState(SvnItemState.DocumentDirty, SvnItemState.None);
             else
-                SetState(SvnItemState.DocumentOpen, SvnItemState.DocumentDirty);
+                SetState(SvnItemState.None, SvnItemState.DocumentDirty);
         }
 
         #endregion

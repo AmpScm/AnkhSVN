@@ -41,10 +41,6 @@ namespace Ankh.Scc.ProjectMap
             if (fcc != null && fcc.IsValidPath(name))
             {
                 _isFileDocument = true;
-                ISvnItemStateUpdate sisu = fcc[name];
-
-                if (sisu != null)
-                    sisu.SetDocumentOpen(true);
             }
         }
 
@@ -158,24 +154,7 @@ namespace Ankh.Scc.ProjectMap
 
         internal void OnClosed(bool closedWithoutSaving)
         {
-            if (closedWithoutSaving && _isDirty)
-            {
-                _isDirty = false;
-                UpdateGlyph();
-            }
-
-            if (_isFileDocument)
-            {
-                IFileStatusCache fcc = GetService<IFileStatusCache>();
-                if (fcc != null)
-                {
-                    ISvnItemStateUpdate sisu = fcc[Name];
-
-                    if (sisu != null)
-                        sisu.SetDocumentOpen(false);
-                }
-            }
-
+            SetDirty(false); // Mark as undirty
             Dispose();
         }
 
