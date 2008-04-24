@@ -157,6 +157,8 @@ namespace Ankh.VS.Dialogs
                         _panel = new Panel();
                         _panel.Size = _form.ClientRectangle.Size;
                         _form.Controls.Add(_panel);
+                        IButtonControl cancelButton = _form.CancelButton;
+                        IButtonControl acceptButton = _form.AcceptButton;
 
                         for(int i = 0; i < _form.Controls.Count; i++)
                         {
@@ -166,6 +168,12 @@ namespace Ankh.VS.Dialogs
                             {
                                 _panel.Controls.Add(cc);
                                 i--;
+                                if (cc == cancelButton)
+                                    _form.CancelButton = cancelButton;
+
+                                if (cc == acceptButton)
+                                    _form.AcceptButton = acceptButton;
+
                             }                        
                         }
                         _form.SizeChanged += new EventHandler(VSForm_SizeChanged);
@@ -253,5 +261,12 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            internal static extern bool EnableWindow(IntPtr hWnd, bool enable);
+        }
     }
 }
