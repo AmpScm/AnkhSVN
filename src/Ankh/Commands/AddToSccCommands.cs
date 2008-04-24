@@ -93,7 +93,9 @@ namespace Ankh.Commands
                 { /* File is in subversion; just enable */ }
                 else if (item.IsVersionable)
                 {
-                    if (DialogResult.Yes != mb.Show(string.Format(CommandResources.AddSolutionXToSubversion,
+                    if (e.IsInAutomation)
+                        confirmed = true;
+                    else if (DialogResult.Yes != mb.Show(string.Format(CommandResources.AddSolutionXToSubversion,
                         Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
                     {
                         return;
@@ -117,7 +119,8 @@ namespace Ankh.Commands
                     return;
                 }
 
-                if (!confirmed && DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
+                if (!confirmed && !e.IsInAutomation &&
+                    DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
                     Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
                 {
                     return;
@@ -134,30 +137,33 @@ namespace Ankh.Commands
 
             if (mapper != null)
             {
-                StringBuilder sb = new StringBuilder();
-                bool foundOne = false;
-                foreach (SvnProject project in GetSelection(e.Selection))
+                if (!e.IsInAutomation)
                 {
-                    ISvnProjectInfo info;
-                    if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
+                    StringBuilder sb = new StringBuilder();
+                    bool foundOne = false;
+                    foreach (SvnProject project in GetSelection(e.Selection))
                     {
-                        if (sb.Length > 0)
-                            sb.Append("', '");
+                        ISvnProjectInfo info;
+                        if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
+                        {
+                            if (sb.Length > 0)
+                                sb.Append("', '");
 
-                        sb.Append(info.ProjectName);
+                            sb.Append(info.ProjectName);
+                        }
+
+                        foundOne = true;
                     }
+                    string txt = sb.ToString();
+                    int li = txt.LastIndexOf("', '");
+                    if (li > 0)
+                        txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
 
-                    foundOne = true;
-                }
-                string txt = sb.ToString();
-                int li = txt.LastIndexOf("', '");
-                if (li > 0)
-                    txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
-
-                if (foundOne && DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
-                    txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
-                {
-                    return;
+                    if (foundOne && DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
+                        txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
+                    {
+                        return;
+                    }
                 }
 
                 foreach (SvnProject project in GetSelection(e.Selection))
