@@ -18,6 +18,7 @@ using Ankh.UI;
 using Ankh.Selection;
 using Ankh.UI.SvnLog;
 using Ankh.WorkingCopyExplorer;
+using System.Windows.Forms.Design;
 
 namespace Ankh.VSPackage
 {   
@@ -147,9 +148,20 @@ namespace Ankh.VSPackage
         #endregion
 
         #region IServiceProvider Members
-
+        AmbientProperties _ambientProperties;
         public object GetService(Type serviceType)
         {
+            if (serviceType == typeof(AmbientProperties))
+            {
+                if (_ambientProperties == null)
+                {
+                    IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
+                    _ambientProperties = new AmbientProperties();
+                    _ambientProperties.Font = (System.Drawing.Font)uis.Styles["DialogFont"];
+                }
+                return _ambientProperties;
+            }
+
             System.IServiceProvider paneSp = _pane;
 
             object ob = paneSp.GetService(serviceType);
