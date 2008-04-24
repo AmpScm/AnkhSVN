@@ -12,6 +12,14 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CreatePatch)]
     public class CreatePatchCommand : LocalDiffCommandBase
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+        }
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)

@@ -17,7 +17,7 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.NewDirectory)]
     public class MakeDirectoryCommand : CommandBase
     {
-        SvnCommitArgs _args = null;
+        //SvnCommitArgs _args = null;
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)

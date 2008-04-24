@@ -19,10 +19,14 @@ namespace Ankh.Commands
     [Command(AnkhCommand.UpdateItem)]
     public class UpdateItem : CommandBase
     {
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned)
@@ -54,8 +58,6 @@ namespace Ankh.Commands
                 e.GetService<IProgressRunner>().Run("Updating", runner.Work);
             }
         }
-
-        #endregion
 
         #region UpdateVisitor
         private class UpdateRunner
