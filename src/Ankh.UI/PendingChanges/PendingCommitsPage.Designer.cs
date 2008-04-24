@@ -32,10 +32,12 @@
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.lastRevLabel = new System.Windows.Forms.Label();
+            this.lastRevBox = new System.Windows.Forms.TextBox();
             this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
@@ -82,14 +84,18 @@
             // 
             // topLayoutPanel
             // 
-            this.topLayoutPanel.ColumnCount = 3;
+            this.topLayoutPanel.ColumnCount = 5;
             this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 144F));
-            this.topLayoutPanel.Controls.Add(this.textBox1, 2, 0);
-            this.topLayoutPanel.Controls.Add(this.label2, 1, 0);
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.topLayoutPanel.Controls.Add(this.label2, 3, 0);
             this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
             this.topLayoutPanel.Controls.Add(this.logMessageEditor, 0, 1);
+            this.topLayoutPanel.Controls.Add(this.textBox1, 4, 0);
+            this.topLayoutPanel.Controls.Add(this.lastRevLabel, 1, 0);
+            this.topLayoutPanel.Controls.Add(this.lastRevBox, 2, 0);
             this.topLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.topLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.topLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
@@ -100,23 +106,12 @@
             this.topLayoutPanel.Size = new System.Drawing.Size(766, 81);
             this.topLayoutPanel.TabIndex = 0;
             // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(622, 0);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(144, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Visible = false;
-            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(584, 3);
+            this.label2.Location = new System.Drawing.Point(583, 3);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
@@ -136,7 +131,7 @@
             // 
             // logMessageEditor
             // 
-            this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 3);
+            this.topLayoutPanel.SetColumnSpan(this.logMessageEditor, 5);
             this.logMessageEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
             this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
@@ -144,6 +139,40 @@
             this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
             this.logMessageEditor.Text = null;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(621, 0);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(0);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(144, 20);
+            this.textBox1.TabIndex = 0;
+            this.textBox1.Visible = false;
+            // 
+            // lastRevLabel
+            // 
+            this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lastRevLabel.AutoSize = true;
+            this.lastRevLabel.Location = new System.Drawing.Point(237, 3);
+            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lastRevLabel.Name = "lastRevLabel";
+            this.lastRevLabel.Size = new System.Drawing.Size(69, 13);
+            this.lastRevLabel.TabIndex = 5;
+            this.lastRevLabel.Text = "Last revision:";
+            this.lastRevLabel.Visible = false;
+            // 
+            // lastRevBox
+            // 
+            this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lastRevBox.Enabled = false;
+            this.lastRevBox.Location = new System.Drawing.Point(312, 3);
+            this.lastRevBox.Name = "lastRevBox";
+            this.lastRevBox.ReadOnly = true;
+            this.lastRevBox.Size = new System.Drawing.Size(74, 13);
+            this.lastRevBox.TabIndex = 6;
+            this.lastRevBox.Visible = false;
             // 
             // pendingCommits
             // 
@@ -224,5 +253,7 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panel1;
         private PendingCommitsView pendingCommits;
+        private System.Windows.Forms.Label lastRevLabel;
+        private System.Windows.Forms.TextBox lastRevBox;
     }
 }

@@ -75,6 +75,11 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            ILastChangeInfo ci = e.GetService<ILastChangeInfo>();
+
+            if (ci != null)
+                ci.SetLastChange(null, null);
+
             SvnRevision rev;
 
             if (IsHeadCommand(e.Command))
@@ -154,9 +159,17 @@ namespace Ankh.Commands
 
                 // TODO: Monitor conflicts!!
 
+                UpdateRunner ur = new UpdateRunner(paths, rev);
+
                 e.GetService<IProgressRunner>().Run(
                     string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
-                    new UpdateRunner(paths, rev).Work);
+                    ur.Work);
+
+                if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))
+                {
+                    ci.SetLastChange("Updated to:", ur.LastResult.Revision.ToString());
+                }
+
 
                 lck.ReloadModified();
             }
@@ -166,6 +179,7 @@ namespace Ankh.Commands
         {
             SvnRevision _rev;
             List<string> _paths;
+            SvnUpdateResult _result;
 
             public UpdateRunner(List<string> paths, SvnRevision rev)
             {
@@ -176,6 +190,11 @@ namespace Ankh.Commands
 
                 _paths = paths;
                 _rev = rev;
+            }
+
+            public SvnUpdateResult LastResult
+            {
+                get { return _result; }
             }
 
             #region IProgressWorker Members
@@ -232,7 +251,7 @@ namespace Ankh.Commands
                         }
                     }
 
-                    if (!e.Client.Update(now, ua) && ua.LastException != null)
+                    if (!e.Client.Update(now, ua, out _result) && ua.LastException != null)
                     {
                         e.Exception = ua.LastException;
                         return;
