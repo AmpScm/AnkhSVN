@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VS.Dialogs
 {
@@ -19,9 +21,7 @@ namespace Ankh.VS.Dialogs
         readonly static Dictionary<VSContainerForm, VSCommandRouting> _map = new Dictionary<VSContainerForm, VSCommandRouting>();
         VSFormContainerPane _pane;
         IVsToolWindowToolbarHost _tbHost;
-        IVsFilterKeys2 _filterKeys;
         Panel _panel;
-        //IntPtr _paneHwnd;
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
@@ -82,116 +82,100 @@ namespace Ankh.VS.Dialogs
                 int lResult;
                 int hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
                 // Check for errors.
-                if (ErrorHandler.Failed(hr))
-                    return false;
-
-                // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
-                // function have to return true in this case.
-                if (hr == VSConstants.S_FALSE)
-                    return true;
-            }
-
-            if(_filterKeys == null)
-                _filterKeys = (IVsFilterKeys2)GetService(typeof(SVsFilterKeys));
-
-            if (_filterKeys != null)
-            {
-                MSG[] messages = tmpMsg;
-                messages[0].hwnd = m.HWnd;
-                messages[0].lParam = m.LParam;
-                messages[0].wParam = m.WParam;
-                messages[0].message = (uint)m.Msg;
-
-                Guid cmdGuid;
-                uint cmdCode;
-                int cmdTranslated;
-                int keyComboStarts;
-
-                int hr = _filterKeys.TranslateAcceleratorEx(messages,
-                    (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope //Translates keys using TextEditor key bindings. Equivalent to passing CMDUIGUID_TextEditor, CMDSETID_StandardCommandSet97, and guidKeyDupe for scopes and the VSTAEXF_IgnoreActiveKBScopes flag. 
-                    | (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
-                    0,
-                    null,
-                    out cmdGuid,
-                    out cmdCode,
-                    out cmdTranslated,
-                    out keyComboStarts);
-
-                if (hr != VSConstants.S_OK)
+                if (ErrorHandler.Succeeded(hr))
                 {
-                    return false;
+                    // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
+                    // function have to return true in this case.
+                    if (hr == VSConstants.S_FALSE)
+                    {
+                        m.Result = (IntPtr)lResult;
+                        return true;
+                    }
                 }
-
-                return cmdTranslated != 0;
             }
-
             return false;
         }
 
         #endregion
 
+        bool _loadRegistered;
         internal void OnHandleCreated()
         {
             if (_pane == null)
             {
-                _pane = new VSFormContainerPane(_form.Context, this, _form);
+                if (_panel == null)
+                {
+                    _panel = new Panel();
+                    _panel.Location = new Point(0, 0);
+                    _panel.Size = _form.ClientRectangle.Size;
+                    _form.Controls.Add(_panel);
+                }
+
+                _pane = new VSFormContainerPane(_form.Context, this, _panel);
+                //                _form.EnabledChanged += new EventHandler(Form_EnabledChanged);
+                //                _form.VisibleChanged += new EventHandler(Form_EnabledChanged);
 
                 IVsWindowPane p = _pane;
 
                 IntPtr hwnd;
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
+
                 if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, r.X, r.Y, r.Width, r.Height, out hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;
                     return;
                 }
-                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(Ankh.Ids.AnkhId.CommandSetGuid, (int)Ankh.Ids.AnkhToolBar.PendingChanges);
+                _form.Size = r.Size;
+                _panel.Size = _form.ClientSize;
 
+                IButtonControl cancelButton = _form.CancelButton;
+                IButtonControl acceptButton = _form.AcceptButton;
 
-                if (tbId != null)
+                for (int i = 0; i < _form.Controls.Count; i++)
                 {
-                    if (_panel == null)
+                    Control cc = _form.Controls[i];
+
+                    if (cc != _panel)
                     {
-                        _panel = new Panel();
-                        _panel.Size = _form.ClientRectangle.Size;
-                        _form.Controls.Add(_panel);
-                        IButtonControl cancelButton = _form.CancelButton;
-                        IButtonControl acceptButton = _form.AcceptButton;
+                        _panel.Controls.Add(cc);
+                        i--;
+                        if (cc == cancelButton)
+                            _form.CancelButton = cancelButton;
 
-                        for(int i = 0; i < _form.Controls.Count; i++)
-                        {
-                            Control cc = _form.Controls[i];
+                        if (cc == acceptButton)
+                            _form.AcceptButton = acceptButton;
 
-                            if(cc != _panel)
-                            {
-                                _panel.Controls.Add(cc);
-                                i--;
-                                if (cc == cancelButton)
-                                    _form.CancelButton = cancelButton;
-
-                                if (cc == acceptButton)
-                                    _form.AcceptButton = acceptButton;
-
-                            }                        
-                        }
-                        _form.SizeChanged += new EventHandler(VSForm_SizeChanged);
                     }
-
-                    if (_tbHost == null)
-                    {
-                        IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
-
-                        Marshal.ThrowExceptionForHR(uiShell.SetupToolbar(_form.Handle, (IVsToolWindowToolbar)this, out _tbHost));
-                    }
-
-                    Guid toolbarCommandSet = tbId.Guid;
-                    Marshal.ThrowExceptionForHR(
-                        _tbHost.AddToolbar(VSTWT_LOCATION.VSTWT_TOP, ref toolbarCommandSet, (uint)tbId.ID));
-                    Marshal.ThrowExceptionForHR(_tbHost.Show(0));
-                    Marshal.ThrowExceptionForHR(_tbHost.ForceUpdateUI());
                 }
+                _form.SizeChanged += new EventHandler(VSForm_SizeChanged);
+            }
+            if (!_loadRegistered)
+            {
+                _loadRegistered = true;
+                _form.Load += new EventHandler(OnLoad);
+            }
+        }
+
+        void OnLoad(object sender, EventArgs e)
+        {
+            if (_form.ToolBar != 0)
+            {
+                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(Ankh.Ids.AnkhId.CommandSetGuid, (int)_form.ToolBar);
+
+                if (_tbHost == null)
+                {
+                    IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
+
+                    Marshal.ThrowExceptionForHR(uiShell.SetupToolbar(_form.Handle, (IVsToolWindowToolbar)this, out _tbHost));
+                }
+
+                Guid toolbarCommandSet = tbId.Guid;
+                Marshal.ThrowExceptionForHR(
+                    _tbHost.AddToolbar(VSTWT_LOCATION.VSTWT_TOP, ref toolbarCommandSet, (uint)tbId.ID));
+                Marshal.ThrowExceptionForHR(_tbHost.Show(0));
+                Marshal.ThrowExceptionForHR(_tbHost.ForceUpdateUI());
             }
         }
 
@@ -205,7 +189,13 @@ namespace Ankh.VS.Dialogs
 
             _panel.Size = sz;
 
-            Marshal.ThrowExceptionForHR(_tbHost.BorderChanged());
+            if (_tbHost != null)
+                Marshal.ThrowExceptionForHR(_tbHost.BorderChanged());
+            else
+            {
+                _panel.Location = new Point(0, 0);
+                _panel.Size = _form.ClientSize;
+            }
         }
 
         #region IVsToolWindowToolbar Members
@@ -248,7 +238,7 @@ namespace Ankh.VS.Dialogs
             if (!_initialSet)
             {
                 _initialSet = true;
-                _form.Size = new Size(
+                _form.ClientSize = new Size(
                     sz.Width + reserved.left + reserved.right,
                     sz.Height + reserved.top + reserved.bottom);
             }
@@ -261,12 +251,5 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
-
-        static class NativeMethods
-        {
-            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            internal static extern bool EnableWindow(IntPtr hWnd, bool enable);
-        }
     }
 }

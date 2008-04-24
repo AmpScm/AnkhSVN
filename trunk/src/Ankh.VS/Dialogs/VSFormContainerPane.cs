@@ -3,48 +3,32 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
+using System.Windows.Forms;
 
 namespace Ankh.VS.Dialogs
 {
     class VSFormContainerPane : WindowPane
     {
         readonly VSCommandRouting _routing;
-        readonly VSContainerForm _form;
+        readonly Panel _panel;
 
-        public VSFormContainerPane(IAnkhServiceProvider context, VSCommandRouting routing, VSContainerForm form)
+        public VSFormContainerPane(IAnkhServiceProvider context, VSCommandRouting routing, Panel panel)
             : base(context)
         {
-            if (routing == null)
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (routing == null)
                 throw new ArgumentNullException("routing");
-            else if (form == null)
-                throw new ArgumentNullException("form");
+            else if (panel == null)
+                throw new ArgumentNullException("panel");
+
             _routing = routing;
-            _form = form;
+            _panel = panel;
         }
 
         public override System.Windows.Forms.IWin32Window Window
         {
-            get { return _form; }
-        }
-
-        protected override bool PreProcessMessage(ref System.Windows.Forms.Message m)
-        {
-            return base.PreProcessMessage(ref m);
-        }
-
-        protected override object GetService(Type serviceType)
-        {
-            return base.GetService(serviceType);
-        }
-
-        protected override void OnClose()
-        {
-            base.OnClose();
-        }
-
-        protected override void OnCreate()
-        {
-            base.OnCreate();
+            get { return _panel; }
         }
     }
 }

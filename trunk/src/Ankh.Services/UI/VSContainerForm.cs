@@ -8,6 +8,7 @@ using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel.Design;
 using System.ComponentModel;
+using Ankh.Ids;
 
 namespace Ankh.UI
 {
@@ -25,7 +26,7 @@ namespace Ankh.UI
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
-        CommandID _toolbarId;
+        AnkhToolBar _toolbarId;
         
         [Browsable(false)]
         public IAnkhServiceProvider Context
@@ -158,7 +159,7 @@ namespace Ankh.UI
 
         }
 
-        public CommandID ToolBarId
+        public AnkhToolBar ToolBar
         {
             get { return _toolbarId; }
             set { _toolbarId = value; }
