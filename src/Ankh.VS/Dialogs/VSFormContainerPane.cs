@@ -26,5 +26,25 @@ namespace Ankh.VS.Dialogs
         {
             get { return _form; }
         }
+
+        protected override bool PreProcessMessage(ref System.Windows.Forms.Message m)
+        {
+            return base.PreProcessMessage(ref m);
+        }
+
+        protected override object GetService(Type serviceType)
+        {
+            return base.GetService(serviceType);
+        }
+
+        protected override void OnClose()
+        {
+            base.OnClose();
+        }
+
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+        }
     }
 }
