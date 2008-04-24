@@ -14,7 +14,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
-    partial class PendingCommitsPage : PendingChangesPage
+    partial class PendingCommitsPage : PendingChangesPage, ILastChangeInfo
     {
         public PendingCommitsPage()
         {
@@ -41,6 +41,8 @@ namespace Ankh.UI.PendingChanges
 
             if (pendingCommits != null)
                 pendingCommits.SelectionPublishServiceProvider = UISite;
+
+            UISite.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
             HookList();
         }
@@ -317,5 +319,22 @@ namespace Ankh.UI.PendingChanges
             if(sb.Length > 0)
                 logMessageEditor.PasteText(sb.ToString());
         }
+
+        #region ILastChangeInfo Members
+
+        void ILastChangeInfo.SetLastChange(string caption, string value)
+        {
+            if (string.IsNullOrEmpty(caption))
+                lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = false;
+            else
+            {
+                lastRevLabel.Text = caption ?? "";
+                lastRevBox.Text = value ?? "";
+
+                lastRevBox.Enabled = lastRevBox.Visible = lastRevLabel.Enabled = lastRevLabel.Visible = true;
+            }
+        }
+
+        #endregion
     }
 }

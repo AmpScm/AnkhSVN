@@ -115,6 +115,11 @@ namespace Ankh.UI.PendingChanges
         internal void DoCommit(bool keepingLocks)
         {
             // Ok, to make a commit happen we have to take 'a few' steps
+            ILastChangeInfo ci = UISite.GetService<ILastChangeInfo>();
+
+            if (ci != null)
+                ci.SetLastChange(null, null);
+
 
             List<PendingChange> changes = new List<PendingChange>();
 
@@ -164,13 +169,15 @@ namespace Ankh.UI.PendingChanges
                     {
                         // TODO: Store the logmessage!
 
-                        logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded
+                        logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded                        
                     }
 
                     dl.ReloadModified();
                 }
             }            
         }
+
+        long _lastRev;
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
         {
@@ -316,6 +323,7 @@ namespace Ankh.UI.PendingChanges
         private bool Commit_CommitToRepository(PendingCommitState state)
         {
             bool ok = false;
+            SvnCommitResult rslt = null;
             ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing...",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
@@ -326,8 +334,16 @@ namespace Ankh.UI.PendingChanges
                     ca.LogMessage = state.LogMessage;
                     ok = e.Client.Commit(
                         state.CommitPaths,
-                        ca);
+                        ca, out rslt);
                 });
+
+            if (rslt != null && UISite != null)
+            {
+                ILastChangeInfo ci = UISite.GetService<ILastChangeInfo>();
+
+                if (ci != null)
+                    ci.SetLastChange("Committed:", rslt.Revision.ToString());
+            }
             
             return ok;
         }

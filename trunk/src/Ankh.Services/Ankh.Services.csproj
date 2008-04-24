@@ -60,6 +60,7 @@
     <Compile Include="Commands\IAnkhCommandService.cs" />
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="Scc\ILastChangeInfo.cs" />
     <Compile Include="Scc\PendingChangeKind.cs" />
     <Compile Include="Scc\PendingChangeText.Designer.cs">
       <DependentUpon>PendingChangeText.resx</DependentUpon>
