@@ -60,13 +60,22 @@ namespace Ankh.UI
         /// <summary>
         /// Obsolete: Use ShowDialog(Context)
         /// </summary>
-        [Obsolete("Always use ShowDialog(Context) even when the context is already set", true)]
+        [Obsolete("Always use ShowDialog(Context) even when the context is already set")]
         public new DialogResult ShowDialog()
         {
             if (Context != null)
                 return ShowDialog(Context);
             else
                 return ShowDialog(new AnkhServiceContainer());
+        }
+
+        [Obsolete("Always use ShowDialog(Context) even when the context is already set")]
+        public new DialogResult ShowDialog(IWin32Window owner)
+        {
+            if (Context != null)
+                return ShowDialog(Context, owner);
+            else
+                return ShowDialog(new AnkhServiceContainer(), owner);
         }
 
         /// <summary>

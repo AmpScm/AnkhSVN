@@ -66,7 +66,7 @@ namespace Ankh.VS.Dialogs
 
         #region IMessageFilter Members
 
-        readonly MSG[] tmpMsg = new MSG[0];
+        readonly MSG[] tmpMsg = new MSG[1];
         /// <summary>
         /// Filters out a message before it is dispatched.
         /// </summary>
@@ -87,7 +87,8 @@ namespace Ankh.VS.Dialogs
 
                 // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
                 // function have to return true in this case.
-                return (hr == VSConstants.S_FALSE);
+                if (hr == VSConstants.S_FALSE)
+                    return true;
             }
 
             if(_filterKeys == null)
@@ -140,7 +141,7 @@ namespace Ankh.VS.Dialogs
                 IntPtr hwnd;
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
-                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(IntPtr.Zero, r.X, r.Y, r.Width, r.Height, out hwnd)))
+                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, r.X, r.Y, r.Width, r.Height, out hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;
@@ -157,10 +158,15 @@ namespace Ankh.VS.Dialogs
                         _panel.Size = _form.ClientRectangle.Size;
                         _form.Controls.Add(_panel);
 
-                        foreach (Control c in _form.Controls)
+                        for(int i = 0; i < _form.Controls.Count; i++)
                         {
-                            if (c != _panel)
-                                _panel.Controls.Add(c);
+                            Control cc = _form.Controls[i];
+
+                            if(cc != _panel)
+                            {
+                                _panel.Controls.Add(cc);
+                                i--;
+                            }                        
                         }
                         _form.SizeChanged += new EventHandler(VSForm_SizeChanged);
                     }
