@@ -33,14 +33,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <param name="managed"></param>
-        void SetProjectManaged(SvnProject project, bool managed);
-
-        /// <summary>
-        /// Marks the specified project as managed by the Scc provider
-        /// </summary>
-        /// <param name="project">A reference to the project or null for the solution</param>
-        /// <param name="managed"></param>
-        void SetProjectManagedRaw(object project, bool managed);
+        void SetProjectManaged(SvnProject project, bool managed);    
 
         /// <summary>
         /// Gets a boolean indicating whether the specified project (or the solution) is 

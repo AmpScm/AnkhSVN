@@ -171,6 +171,11 @@
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommandResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommandResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Commands\AddItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -361,6 +366,11 @@
     <Compile Include="XmlResultBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="CommandResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Commands\blame.xsl" />
     <EmbeddedResource Include="Commands\log.xsl" />
   </ItemGroup>
