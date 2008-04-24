@@ -12,11 +12,20 @@ namespace Ankh.Commands
     [Command(AnkhCommand.Refresh)]
     public class RefreshCommand : CommandBase
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
 
-            using(context.StartOperation( "Refreshing" ))
+            using (context.StartOperation("Refreshing"))
             {
                 IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 

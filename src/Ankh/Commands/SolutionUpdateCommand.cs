@@ -11,21 +11,21 @@ namespace Ankh.Commands
 {
     [Command(AnkhCommand.SolutionUpdateHead)]
     //[Command(AnkhCommand.SolutionUpdateSpecific)]
-    [Command(AnkhCommand.ProjectUpdateHead)]    
+    [Command(AnkhCommand.ProjectUpdateHead)]
     //[Command(AnkhCommand.ProjectUpdateSpecific)]
     class SolutionUpdateCommand : CommandBase
     {
 
         bool IsSolutionCommand(AnkhCommand command)
         {
-            switch(command)
+            switch (command)
             {
                 case AnkhCommand.SolutionUpdateHead:
                 case AnkhCommand.SolutionUpdateSpecific:
                     return true;
                 default:
                     return false;
-            }            
+            }
         }
 
         bool IsHeadCommand(AnkhCommand command)
@@ -42,6 +42,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+
             if (IsSolutionCommand(e.Command))
             {
                 IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
@@ -87,7 +93,7 @@ namespace Ankh.Commands
                 else if (string.IsNullOrEmpty(settings.ProjectRoot))
                     return;
 
-                paths.Add(settings.ProjectRoot);                
+                paths.Add(settings.ProjectRoot);
             }
             else
             {
@@ -100,14 +106,14 @@ namespace Ankh.Commands
 
                 foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                 {
-                    if(!projects.Contains(project))
+                    if (!projects.Contains(project))
                         projects.Add(project);
                 }
 
-                if(projects.Count == 0)
-                    foreach(SvnProject project in e.Selection.GetOwnerProjects(false))
+                if (projects.Count == 0)
+                    foreach (SvnProject project in e.Selection.GetOwnerProjects(false))
                     {
-                        if(!projects.Contains(project))
+                        if (!projects.Contains(project))
                             projects.Add(project);
                     }
 
@@ -232,7 +238,7 @@ namespace Ankh.Commands
                         return;
                     }
 
-                    if(ua.IsLastInvocationCanceled)
+                    if (ua.IsLastInvocationCanceled)
                         return;
                 }
             }

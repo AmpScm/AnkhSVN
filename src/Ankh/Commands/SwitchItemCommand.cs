@@ -16,10 +16,14 @@ namespace Ankh.Commands
     [Command(AnkhCommand.SwitchItem)]
     public class SwitchItemCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.IsVersioned)
@@ -55,8 +59,6 @@ namespace Ankh.Commands
                 context.UIShell.RunWithProgressDialog(runner, "Switching");
             }*/
         }
-
-        #endregion
 
         /// <summary>
         /// A progress runner that runs the switch operation.

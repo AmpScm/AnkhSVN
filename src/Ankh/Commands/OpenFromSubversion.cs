@@ -54,17 +54,12 @@ namespace Ankh.Commands
             using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
             {
                 dlg.Context = e.Context;
-                string filters = settings.AllProjectExtensionsFilter;
 
-                if (e.Command == AnkhCommand.FileFileOpenFromSubversion || e.Command == AnkhCommand.FileSccOpenFromSubversion)
-                {
-                    filters = "*.sln;*.dsw;" + filters;
+                dlg.Filter = settings.OpenProjectFilterName + "|" + settings.OpenProjectFilterName + "|All Files (*.*)|*";
 
-                    dlg.Filter = "All Projects and Solutions (" + filters + ")|" + filters + "|All Files (*.*)|*";
-                }
-                else
+                if (e.Command != AnkhCommand.FileFileOpenFromSubversion && e.Command != AnkhCommand.FileSccOpenFromSubversion)
                 {
-                    dlg.Filter = "All Projects  (" + filters + ")|" + filters + "|All Files (*.*)|*";
+                    dlg.Filter = dlg.Filter.Replace("*.sln;", "").Replace("*.dsw;", "");
                 }
 
                 if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
