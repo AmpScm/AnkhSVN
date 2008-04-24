@@ -46,19 +46,17 @@ namespace Ankh.Commands
             SvnRevision revisionEnd = SvnRevision.Head;
 
 
-            bool first = true;
+            SvnItem firstItem = null;
             PathSelectorResult result = null;
             PathSelectorInfo info = new PathSelectorInfo("Blame",
                 e.Selection.GetSelectedSvnItems(true));
 
             info.CheckedFilter += delegate(SvnItem item)
             {
-                if (first)
-                {
-                    first = false;
-                    return true;
-                }
-                return false;
+                if (firstItem == null && item.IsFile)
+                    firstItem = item;
+
+                return (item == firstItem);
             };
             info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
 

@@ -14,7 +14,10 @@ namespace Ankh.VS
 
     public class BrowserArgs
     {
-        __VSCREATEWEBBROWSER _createFlags;
+        __VSCREATEWEBBROWSER _createFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
+                        __VSCREATEWEBBROWSER.VSCWB_NoHistory |
+                        __VSCREATEWEBBROWSER.VSCWB_StartCustom |
+                        __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
         string _baseCaption;
 
         public string BaseCaption
