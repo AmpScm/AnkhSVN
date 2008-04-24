@@ -38,7 +38,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(168, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Placeholder for recent pages view";
+            this.label1.Text = "Placeholder for recent changes view";
             // 
             // RecentChangesPage
             // 
