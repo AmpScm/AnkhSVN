@@ -86,6 +86,7 @@ namespace Ankh.VS.Selection
             _solutionHasMultipleProjects = null;
             _solutionHasSingleProject = null;
             _ankhActiveScc = null;
+            _otherSccProviderActive = null;
         }
 
         uint _codeWindowId;
@@ -196,7 +197,40 @@ namespace Ankh.VS.Selection
             if(contextId == 0)
                 value = getGuid();
 
-            return GetState(ref contextId, getGuid);
+            return GetState(ref contextId, value);
         }
+
+        #region IAnkhCommandStates Members
+
+        bool? _otherSccProviderActive;
+        public bool OtherSccProviderActive
+        {
+            get { return (bool)(_otherSccProviderActive ?? GetOtherSccProviderActive()); }
+        }
+
+        private bool GetOtherSccProviderActive()
+        {
+            if (SccProviderActive)
+                return false; // We are active
+
+            IVsSccManager2 manager = GetService<IVsSccManager2>(typeof(SVsSccManager));
+
+            if (manager == null)
+                return false;
+
+            // If the active manager is not installed, it is not active            
+            int installed = 0;
+            if (!ErrorHandler.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
+                return false;
+
+            // TODO: Find a way to check if the other scc provider is really enabled
+            // (IVsSccProvider2.AnyItemsUnderSourceControl() should give the right information)
+
+            // For now it only invalidates the no-scc provider case; as the no-provider is not installed
+
+            return true;
+        }
+
+        #endregion
     }
 }

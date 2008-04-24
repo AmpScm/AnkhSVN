@@ -11,8 +11,11 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
-                e.Enabled = e.Visible = false;
+            if (!e.State.SccProviderActive || !e.State.SolutionExists)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
         }
 
         public override void OnExecute(CommandEventArgs e)

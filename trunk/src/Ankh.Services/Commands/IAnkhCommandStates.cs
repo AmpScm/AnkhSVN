@@ -29,5 +29,7 @@ namespace Ankh.Commands
         bool SolutionHasSingleProject { get; }
 
         bool SccProviderActive { get; }
+
+        bool OtherSccProviderActive { get; }
     }
 }
