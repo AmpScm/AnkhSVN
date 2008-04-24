@@ -13,12 +13,22 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ShowRepositoryExplorer)]
     public class ShowToolWindows : CommandBase
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            switch (e.Command)
+            {
+                case AnkhCommand.ShowPendingChanges:
+                    if (!e.State.SccProviderActive)
+                        e.Visible = e.Enabled = false;
+                    break;
+            }
+        }
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
 
             AnkhToolWindow toolWindow;
-            switch(e.Command)
+            switch (e.Command)
             {
                 case AnkhCommand.ShowPendingChanges:
                     toolWindow = AnkhToolWindow.PendingChanges;
