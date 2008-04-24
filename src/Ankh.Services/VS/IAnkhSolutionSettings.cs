@@ -33,5 +33,7 @@ namespace Ankh.VS
 
 
         string AllProjectExtensionsFilter { get; }
+
+        string OpenProjectFilterName { get; }
     }
 }

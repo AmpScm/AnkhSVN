@@ -8,6 +8,8 @@ using Ankh.VS.Dialogs;
 using Ankh.VS.SolutionExplorer;
 using Ankh.VS.WebBrowser;
 using Ankh.ContextServices;
+using Ankh.Commands;
+using Ankh.VS.Selection;
 
 namespace Ankh.VS
 {
@@ -45,6 +47,7 @@ namespace Ankh.VS
             Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
             Container.AddService(typeof(IFileIconMapper), new FileIconMapper(Context));
             Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
+            Container.AddService(typeof(IAnkhCommandStates), new CommandState(Context));
         }
 
         /// <summary>

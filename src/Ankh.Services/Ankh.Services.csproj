@@ -58,6 +58,7 @@
     <Compile Include="Commands\CommandUpdateEventArgs.cs" />
     <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Commands\IAnkhCommandService.cs" />
+    <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="Scc\PendingChangeKind.cs" />
     <Compile Include="Scc\PendingChangeText.Designer.cs">
@@ -101,7 +102,7 @@
     <Compile Include="Scc\IStatusImageMapper.cs" />
     <Compile Include="Scc\SvnItem.cs" />
     <Compile Include="Scc\SvnItem.State.cs">
-        <DependentUpon>SvnItem.cs</DependentUpon>
+      <DependentUpon>SvnItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Scc\SvnItemFilters.cs" />
     <Compile Include="Selection\ISelectionContext.cs" />

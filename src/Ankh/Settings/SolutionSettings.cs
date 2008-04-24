@@ -226,53 +226,37 @@ namespace Ankh.Settings
                 if (_allProjectTypesFilter != null)
                     return _allProjectTypesFilter;
 
-                // VS2008+ Use ILocalRegistry4.GetLocalRegistryRootEx to get RANU support
+                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
-                ILocalRegistry2 r = Context.GetService<ILocalRegistry2>(typeof(SLocalRegistry));
-
-                string root;
-
-                if (!ErrorHandler.Succeeded(r.GetLocalRegistryRoot(out root)))
+                if(solution == null)
                     return null;
-                
-                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(root + "\\Projects", RegistryKeyPermissionCheck.ReadSubTree))
-                {
-                    if (rk == null)
-                        return null;
 
-                    List<string> extensions = new List<string>();
-                    StringBuilder sb = new StringBuilder();
+                object value;
+                if (ErrorHandler.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_RegisteredProjExtns, out value)))
+                    _allProjectTypesFilter = value as string;
 
-                    foreach(string sk in rk.GetSubKeyNames())
-                    {
-                        using (RegistryKey k = rk.OpenSubKey(sk, RegistryKeyPermissionCheck.ReadSubTree))
-                        {
-                            string v = k.GetValue("PossibleProjectExtensions", null) as string;
-                            
-                            if (string.IsNullOrEmpty(v))
-                                continue;
+                return _allProjectTypesFilter;
+            }
+        }
 
-                            foreach(string ext in v.Split(';'))
-                            {
-                                v = ext.Trim();
+        string _projectFilterName;
+        public string OpenProjectFilterName
+        {
+            get
+            {
+                if (_projectFilterName != null)
+                    return _projectFilterName;
 
-                                if (string.IsNullOrEmpty(v) || extensions.Contains(v))
-                                    continue;
+                IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
-                                extensions.Add(v);
-                                
-                                if(sb.Length > 0)
-                                    sb.Append(";*.");
-                                else
-                                    sb.Append("*.");
+                if (solution == null)
+                    return null;
 
-                                sb.Append(v);
-                            }
-                        }
-                    }
+                object value;
+                if (ErrorHandler.Succeeded(solution.GetProperty((int)__VSPROPID.VSPROPID_OpenProjectFilter, out value)))
+                    _projectFilterName = value as string;
 
-                    return _allProjectTypesFilter = sb.ToString();
-                }
+                return _projectFilterName;
             }
         }
 

@@ -30,14 +30,26 @@ namespace Ankh.Commands
             get { return _context; }
         }
 
+        ISelectionContext _selection;
+        IAnkhCommandStates _state;
         /// <summary>
         /// Gets the Visual Studio selection
         /// </summary>
-        /// <value>The selection.</value>
+        /// <value>The selection.</value>        
         public ISelectionContext Selection
         {
             [DebuggerStepThrough]
-            get { return _context.GetService<ISelectionContext>(); }
+            get { return _selection ?? (_selection = GetService<ISelectionContext>()); }
+        }
+
+        /// <summary>
+        /// Gets the command states.
+        /// </summary>
+        /// <value>The state.</value>
+        public IAnkhCommandStates State
+        {
+            [DebuggerStepThrough]
+            get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
         }
 
         /// <summary>
