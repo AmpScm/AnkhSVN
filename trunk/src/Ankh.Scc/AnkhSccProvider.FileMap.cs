@@ -500,7 +500,7 @@ namespace Ankh.Scc
         {
             List<string> files = new List<string>(_fileMap.Count+1);
 
-            if (SolutionFilePath != null)
+            if (SolutionFilePath != null && ! _fileMap.ContainsKey(SolutionFilePath))
                 files.Add(SolutionFilePath);
 
             foreach(string file in _fileMap.Keys)
