@@ -147,7 +147,7 @@ namespace Ankh.Selection
                     if (Solution != null)
                     {
                         string solutionDir, solutionFile, solutionUserFile;
-                        if (Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile) == VSConstants.S_OK)
+                        if (ErrorHandler.Succeeded(Solution.GetSolutionInfo(out solutionDir, out solutionFile, out solutionUserFile)))
                         {
                             _solutionFilename = solutionFile;
                         }
@@ -234,7 +234,7 @@ namespace Ankh.Selection
                     IVsMultiItemSelect ms;
                     uint itemId;
 
-                    if (hw.GetCurrentSelection(out hierarchy, out itemId, out ms) != VSConstants.S_OK)
+                    if (!ErrorHandler.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
                         return _isSolutionExplorer = false;
 
                     IVsHierarchy hier = null;
