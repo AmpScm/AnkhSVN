@@ -185,7 +185,7 @@ namespace Ankh.Selection
 
             IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
-            if (sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions) == VSConstants.S_OK)
+            if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions)))
             {
                 return solutionFile;
             }

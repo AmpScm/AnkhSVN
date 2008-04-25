@@ -378,7 +378,7 @@ namespace Ankh.UI.PendingChanges
                 (int)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES,
                 initView);
 
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
@@ -389,13 +389,13 @@ namespace Ankh.UI.PendingChanges
             Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
 
             hr = textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
 
             hr = codeWindow.SetBuffer((IVsTextLines)textBuffer);
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
@@ -404,13 +404,13 @@ namespace Ankh.UI.PendingChanges
             IVsWindowPane windowPane = (IVsWindowPane)codeWindow;
 
             hr = windowPane.SetSite(serviceProvider);
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
 
             hr = windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd);
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
@@ -430,7 +430,7 @@ namespace Ankh.UI.PendingChanges
 
             int hr = localRegistry.CreateInstance(clsid, null, ref iid, (uint)CLSCTX.CLSCTX_INPROC_SERVER, out unknown);
 
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
@@ -480,7 +480,7 @@ namespace Ankh.UI.PendingChanges
             IVsTextView textView;
             int hr = codeWindow.GetPrimaryView(out textView);
 
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
@@ -511,7 +511,7 @@ namespace Ankh.UI.PendingChanges
 
             int hr = serviceProvider.QueryService(ref serviceGuid, ref interfaceGuid, out unknown);
 
-            if (hr != VSConstants.S_OK)
+            if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }

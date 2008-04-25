@@ -85,8 +85,8 @@ namespace Ankh
                     return false; // Not enabled
             }
 
-            return VSConstants.S_OK == dispatcher.Exec(ref g, 
-                unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+            return ErrorHandler.Succeeded(dispatcher.Exec(ref g, 
+                unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero));
         }
 
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
