@@ -16,8 +16,8 @@ namespace Ankh.Ids
 		public const string PackageId  = "604ad610-5cf9-4bd5-8acc-f49810e2efd4";
 
         public const string PlkVersion = "2.0";
-        public const string PlkProduct = "AnkhSvn";
-        public const string PlkCompany = "AnkhSvn";
+        public const string PlkProduct = "AnkhSVN";
+        public const string PlkCompany = "AnkhSVN Core Team";
 //**********************************************************************************
 
 
