@@ -43,7 +43,7 @@ namespace NSvn.Core.Tests
                 if ( this.ReposPath != null )
                     Directory.Delete( this.ReposPath, true );
                 if ( this.WcPath != null )
-                    PathUtils.RecursiveDelete( this.wcPath );
+                    RecursiveDelete( this.wcPath );
             }
             catch( Exception )
             {
@@ -69,7 +69,7 @@ namespace NSvn.Core.Tests
         {
             //already exists?
             if (Directory.Exists(path))
-                PathUtils.RecursiveDelete(path);
+                RecursiveDelete(path);
 
             Zip.ExtractZipResource(path, type, resourceName );
             string reposUrl = "file://" + 
@@ -330,6 +330,24 @@ namespace NSvn.Core.Tests
             string authConf = Path.Combine( this.reposPath,
                 Path.Combine( "conf", "svnserve.auth.conf" ) );
             File.Copy( authConf, conf, true );
+        }
+
+        /// <summary>
+        /// Recursively deletes a directory.
+        /// </summary>
+        /// <param name="path"></param>
+        public static void RecursiveDelete(string path)
+        {
+            foreach (string dir in Directory.GetDirectories(path))
+            {
+                RecursiveDelete(dir);
+            }
+
+            foreach (string file in Directory.GetFiles(path))
+                File.SetAttributes(file, FileAttributes.Normal);
+
+            File.SetAttributes(path, FileAttributes.Normal);
+            Directory.Delete(path, true);
         }
 
         protected const int PortNumber = 7777;

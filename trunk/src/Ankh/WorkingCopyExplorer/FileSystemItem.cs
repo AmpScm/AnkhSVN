@@ -130,7 +130,7 @@ namespace Ankh.WorkingCopyExplorer
             if (other == null)
                 return false;
 
-            return PathUtils.AreEqual(this.SvnItem.FullPath, other.SvnItem.FullPath);
+            return String.Equals(this.SvnItem.FullPath, other.SvnItem.FullPath, StringComparison.OrdinalIgnoreCase);
         }
 
         public override int GetHashCode()
