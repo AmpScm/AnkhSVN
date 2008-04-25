@@ -99,9 +99,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileUtils.cs" />
-    <Compile Include="PathUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ProcessReader.cs">
       <SubType>Code</SubType>
     </Compile>

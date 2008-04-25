@@ -35,7 +35,13 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
+            // TODO: Implement new strategy
+            // * Allow user to select a new path in a repository
+            // * Select the local machine path that maps to this path
+            // * Check out the new path at the specified local directory keeping local obstructions
+            // Mark everything below the specified path dirty in the status cache and a full status refresh
+
+            /*IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IContext context = e.Context.GetService<IContext>();
 
             SaveAllDirtyDocuments(e.Selection, context);
@@ -157,7 +163,7 @@ namespace Ankh.Commands
                             return;
                     }
                 }
-            }
+            }*/
         }
 
         #endregion
