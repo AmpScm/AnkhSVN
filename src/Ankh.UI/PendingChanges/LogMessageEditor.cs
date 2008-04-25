@@ -18,6 +18,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IServiceProvider = System.IServiceProvider;
 using System.ComponentModel;
 
 namespace Ankh.UI.PendingChanges
@@ -35,14 +36,38 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Creation and initialization of <see cref="CodeEditorNativeWindow"/> class.
         /// </summary>
-        /// <param name="serviceProvider">The IOleServiceProvider interface is a generic access mechanism to locate a globally unique identifier (GUID) identified service.</param>
-        [CLSCompliant(false)]
-        public void Init(IOleServiceProvider serviceProvider)
+        /// <param name="context">The context.</param>
+        public void Init(IAnkhServiceProvider context)
         {
+            IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow();
             codeEditorNativeWindow.Init(serviceProvider, this);
             codeEditorNativeWindow.Area = this.ClientRectangle;
+
+            InitializeFont(context);
         }
+
+        public void InitializeFont(IServiceProvider sp)
+        {
+            IVsFontAndColorStorage pStorage = sp.GetService(typeof(SVsFontAndColorStorage)) as IVsFontAndColorStorage;
+
+            Guid textCategory = new Guid("{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
+            if (ErrorHandler.Succeeded(pStorage.OpenCategory(ref textCategory, (int)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS))))
+            {
+                FontInfo[] fi = new FontInfo[1];
+                fi[0] = new FontInfo();
+                if (ErrorHandler.Succeeded(pStorage.GetFont(null, fi)))
+                {
+                    Font font = new Font(fi[0].bstrFaceName, (float)fi[0].wPointSize);
+
+                    codeEditorNativeWindow.SetFont(font);
+                    // TODO: Assign the font to the editor
+                }
+
+                pStorage.CloseCategory();
+            }
+        }
+
 
         [CLSCompliant(false)]
         public IOleCommandTarget CommandTarget
@@ -219,6 +244,23 @@ namespace Ankh.UI.PendingChanges
                     Marshal.FreeCoTaskMem(pText);
                 }                
             }
+        }
+
+        internal void SetFont(Font font)
+        {
+            /*IVsTextEditorPropertyCategoryContainer cat = _textView as IVsTextEditorPropertyCategoryContainer;
+
+            Guid GUID_EditPropCategory_View_MasterSettings = new Guid("d1756e7cb7fd49a8b48e87b14a55655a");
+
+            IVsTextEditorPropertyContainer container;
+            if(ErrorHandler.Succeeded(cat.GetPropertyCategory(ref GUID_EditPropCategory_View_MasterSettings, out container)))
+            {
+                int hr = container.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_FontCategory, "{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
+                hr = container.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_ColorCategory, "{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
+
+                GC.KeepAlive(hr);
+            }
+            */
         }
 
         public bool PasteText(string text)
@@ -560,6 +602,9 @@ namespace Ankh.UI.PendingChanges
             [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
             [return: MarshalAs(UnmanagedType.U1)]
             internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        }
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        }        
     }
 }

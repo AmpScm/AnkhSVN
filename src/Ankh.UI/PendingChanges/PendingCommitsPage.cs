@@ -28,15 +28,9 @@ namespace Ankh.UI.PendingChanges
 
             if (!_createdEditor)
             {
-                //UISite.
-                IOleServiceProvider sp = UISite.GetService<IOleServiceProvider>();
-
-                if (sp != null)
-                {
-                    logMessageEditor.Init(sp);
-                    UISite.CommandTarget = logMessageEditor.CommandTarget;
-                    _createdEditor = true;
-                }
+                logMessageEditor.Init(UISite);
+                UISite.CommandTarget = logMessageEditor.CommandTarget;
+                _createdEditor = true;
             }
 
             if (pendingCommits != null)
