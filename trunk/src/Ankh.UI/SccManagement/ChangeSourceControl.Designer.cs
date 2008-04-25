@@ -30,11 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChangeSourceControl));
             this.bindingGrid = new System.Windows.Forms.DataGridView();
-            this.ProjectColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UrlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RegisteredColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.StatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.connectButton = new System.Windows.Forms.ToolStripButton();
             this.disconnectButton = new System.Windows.Forms.ToolStripButton();
@@ -46,6 +41,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.helpButton = new System.Windows.Forms.Button();
             this.solutionRootBox = new System.Windows.Forms.ComboBox();
+            this.ProjectColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.UrlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RegisteredColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.StatusColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.PathColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bindingGrid)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -75,39 +75,6 @@
             this.bindingGrid.Size = new System.Drawing.Size(756, 193);
             this.bindingGrid.TabIndex = 1;
             this.bindingGrid.SelectionChanged += new System.EventHandler(this.bindingGrid_SelectionChanged);
-            // 
-            // ProjectColumn
-            // 
-            this.ProjectColumn.HeaderText = "Solution/Project";
-            this.ProjectColumn.Name = "ProjectColumn";
-            this.ProjectColumn.Width = 108;
-            // 
-            // UrlColumn
-            // 
-            this.UrlColumn.HeaderText = "Url";
-            this.UrlColumn.Name = "UrlColumn";
-            this.UrlColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.UrlColumn.Width = 45;
-            // 
-            // RegisteredColumn
-            // 
-            this.RegisteredColumn.HeaderText = "Connected";
-            this.RegisteredColumn.Name = "RegisteredColumn";
-            this.RegisteredColumn.Width = 65;
-            // 
-            // StatusColumn
-            // 
-            this.StatusColumn.HeaderText = "Status";
-            this.StatusColumn.Name = "StatusColumn";
-            this.StatusColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.StatusColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.StatusColumn.Width = 43;
-            // 
-            // PathColumn
-            // 
-            this.PathColumn.HeaderText = "Path";
-            this.PathColumn.Name = "PathColumn";
-            this.PathColumn.Width = 54;
             // 
             // toolStrip1
             // 
@@ -232,6 +199,42 @@
             this.solutionRootBox.Size = new System.Drawing.Size(492, 21);
             this.solutionRootBox.TabIndex = 3;
             // 
+            // ProjectColumn
+            // 
+            this.ProjectColumn.HeaderText = "Solution/Project";
+            this.ProjectColumn.Name = "ProjectColumn";
+            this.ProjectColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.ProjectColumn.Width = 89;
+            // 
+            // UrlColumn
+            // 
+            this.UrlColumn.HeaderText = "Url";
+            this.UrlColumn.Name = "UrlColumn";
+            this.UrlColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.UrlColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.UrlColumn.Width = 26;
+            // 
+            // RegisteredColumn
+            // 
+            this.RegisteredColumn.HeaderText = "Connected";
+            this.RegisteredColumn.Name = "RegisteredColumn";
+            this.RegisteredColumn.Width = 65;
+            // 
+            // StatusColumn
+            // 
+            this.StatusColumn.HeaderText = "Status";
+            this.StatusColumn.Name = "StatusColumn";
+            this.StatusColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.StatusColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.StatusColumn.Width = 43;
+            // 
+            // PathColumn
+            // 
+            this.PathColumn.HeaderText = "Path";
+            this.PathColumn.Name = "PathColumn";
+            this.PathColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.PathColumn.Width = 35;
+            // 
             // ChangeSourceControl
             // 
             this.AcceptButton = this.okButton;
@@ -253,6 +256,7 @@
             this.Name = "ChangeSourceControl";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Change Source Control";
             ((System.ComponentModel.ISupportInitialize)(this.bindingGrid)).EndInit();
             this.toolStrip1.ResumeLayout(false);
