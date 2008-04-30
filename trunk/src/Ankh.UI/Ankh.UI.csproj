@@ -726,6 +726,7 @@
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="MergeWizard\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
