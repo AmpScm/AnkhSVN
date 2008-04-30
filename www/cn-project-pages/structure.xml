@@ -30,11 +30,5 @@
     <directory>Tools &amp; admin</directory>
     <ordinal>5</ordinal>
   </page>
-  <page>
-    <id>iyvKZS</id>
-    <name>Debug</name>
-    <directory>Debug</directory>
-    <ordinal>6</ordinal>
-  </page>
 </structure>
 
