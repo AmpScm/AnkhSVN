@@ -135,6 +135,16 @@ namespace Ankh.Ids
         ItemIgnoreFileType,
         ItemIgnoreFilesInFolder,
 
+        ItemResolveMerge,
+
+        ItemResolveMineFull,
+        ItemResolveTheirsFull,
+        ItemResolveMineConflict,
+        ItemResolveTheirsConflict,
+        ItemResolveBase,
+        ItemResolveWorking,
+        ItemResolveMergeTool,
+
         RefreshPendingChanges,
 
         SolutionSwitchCombo,

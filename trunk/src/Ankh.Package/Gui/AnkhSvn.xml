@@ -168,6 +168,23 @@
       <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
       <ButtonRef id="Cmd_CommitItem" priority="0x20" />
       <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
+      <Menu id="Menu_ItemResolve" priority="0x40" name="Resolve" text="Resol&amp;ve" defaultInvisible="true">
+        <Group id="Grp_ItemResolveCommand" priority="0x100">
+          <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />          
+        </Group>
+        <Group id="Grp_ItemResolveFile" priority="0x200">
+          <Button id="Cmd_ItemResolveWorking" priority="0x10" text="Using &amp;Working copy file" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveBase" priority="0x20" text="Using &amp;Original file" defaultInvisible="true" />
+        </Group>
+        <Group id="Grp_ItemResolveAutoConflict" priority="0x400">
+          <Button id="Cmd_ItemResolveMineConflict" priority="0x10" text="Using &amp;Mine on conflicts" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveTheirsConflict" priority="0x20" text="Using &amp;Their on conflicts" defaultInvisible="true" />
+        </Group>
+        <Group id="Grp_ItemResolveAutoFull" priority="0x300">
+          <Button id="Cmd_ItemResolveMineFull" priority="0x10" text="Using M&amp;y File" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveTheirsFull" priority="0x20" text="Using T&amp;heir file" defaultInvisible="true" />
+        </Group>        
+      </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x40" />
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x50" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">

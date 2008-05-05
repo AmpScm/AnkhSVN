@@ -131,9 +131,6 @@ namespace Ankh.Scc
         Ignored                 = 0x800000,
         #endregion
 
-        /// <summary>
-        /// Combination masks that 100% need an SvnStatus call to get the requested data
-        /// </summary>
-        MaskSvnState = 0xFFF000 | Versioned | HasLockToken | Obstructed | Versionable | SvnDirty,
+        IsTextFile                = 0x1000000,
     }
 }
