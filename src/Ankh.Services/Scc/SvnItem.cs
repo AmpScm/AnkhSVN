@@ -105,7 +105,7 @@ namespace Ankh
                     SetState(SvnItemState.IsDiskFile | SvnItemState.Exists, SvnItemState.None);
                     break;
                 case SvnNodeKind.Directory:
-                    SetState(SvnItemState.Exists, SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
+                    SetState(SvnItemState.Exists, SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
                     break;
             }
         }
@@ -121,7 +121,7 @@ namespace Ankh
                 // We get an external status and no really usefull information
 
                 SetState(SvnItemState.Exists | SvnItemState.Versionable,
-                            SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
+                            SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
 
                 if (_statusDirty != XBool.False)
                     _statusDirty = XBool.True; // Walk the path itself to get the data you want
@@ -144,7 +144,7 @@ namespace Ankh
                     // Extract useful information we got anyay
 
                     SetState(SvnItemState.Exists | SvnItemState.Versionable,
-                                SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock);
+                                SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
 
                     return;
                 }
@@ -265,12 +265,12 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.SvnDirty);
 
             if (!hasProperties)
-                SetState(SvnItemState.None, SvnItemState.MustLock);
+                SetState(SvnItemState.None, SvnItemState.MustLock | SvnItemState.IsTextFile);
 
             switch (status.NodeKind)
             {
                 case SvnNodeKind.Directory:
-                    SetState(SvnItemState.None, SvnItemState.ReadOnly | SvnItemState.MustLock);
+                    SetState(SvnItemState.None, SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
 
                     if (exists) // Behaviour must match updating from UpdateAttributeInfo()
                         SetState(SvnItemState.None, SvnItemState.IsDiskFile);
@@ -549,6 +549,14 @@ namespace Ankh
         public bool IsObstructed
         {
             get { return GetState(SvnItemState.Obstructed) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is a managed binary file.
+        /// </summary>
+        public bool IsTextFile
+        {
+            get { return GetState(SvnItemState.IsTextFile) != 0; }
         }
 
         /// <summary>

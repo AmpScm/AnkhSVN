@@ -87,6 +87,15 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskMustLock) == 0, "UpdateMustLock() set all attributes it should");
             }
 
+            if(0 != (unavailable & MaskTextFile))
+            {
+                UpdateTextFile();
+
+                unavailable = flagsToGet & ~_validState;
+
+                Debug.Assert((~_validState & MaskTextFile) == 0, "UpdateTextFile() set all attributes it should");
+            }
+
             if (unavailable != 0)
             {
                 Trace.WriteLine(string.Format("Don't know how to retrieve {0:X} state; clearing dirty flag", (int)unavailable));
@@ -267,6 +276,46 @@ namespace Ankh
         }
         #endregion
 
+        #region TextFile File
+        const SvnItemState MaskTextFile = SvnItemState.IsTextFile;
+        void UpdateTextFile()
+        {
+            SvnItemState value = SvnItemState.IsDiskFile | SvnItemState.Versioned;
+            SvnItemState v;
+
+            bool isTextFile;
+
+            if (TryGetState(SvnItemState.Versioned, out v) && (v == 0))
+                isTextFile = false;
+            else if (TryGetState(SvnItemState.HasProperties, out v) && (v == 0))
+                isTextFile = false;
+            else if (GetState(value) != value)
+                isTextFile = false;
+            else
+            {
+                using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                {
+                    SvnGetWorkingCopyStateArgs a = new SvnGetWorkingCopyStateArgs();
+                    a.ThrowOnError = false;
+                    a.RetrieveBaseFile = false;
+                    a.RetrieveFileData = true;
+                    SvnWorkingCopyState state;
+                    if (client.GetWorkingCopyState(FullPath, out state))
+                    {
+                        isTextFile = state.IsTextFile;
+                    }
+                    else
+                        isTextFile = false;
+                }
+            }
+
+            if(isTextFile)
+                SetState(SvnItemState.IsTextFile, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.IsTextFile);
+        }
+        #endregion
+
         #region Attribute Info
         const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;
 
@@ -304,7 +353,7 @@ namespace Ankh
 
             SetState(set, unset);
         }
-        #endregion
+        #endregion        
 
         #region ISvnItemStateUpdate Members
 

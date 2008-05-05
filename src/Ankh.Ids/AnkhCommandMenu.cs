@@ -50,6 +50,7 @@ namespace Ankh.Ids
         ItemCompare,
         ItemOpen,
         ItemRevert,
+        ItemResolve,
 
         ItemIgnore,
 	}
