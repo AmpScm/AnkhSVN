@@ -2,20 +2,12 @@
 using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Windows.Forms;
 using Ankh.UI;
-using Ankh.UI.Services;
-using SharpSvn;
-using Utils;
-using Ankh.Scc;
-using IServiceProvider = System.IServiceProvider;
-using Ankh.Selection;
-using Ankh.EventSinks;
-using System.Collections.Generic;
 using Ankh.VS;
-using Ankh.ContextServices;
+
+using SharpSvn;
+using IServiceProvider = System.IServiceProvider;
 
 namespace Ankh
 {
