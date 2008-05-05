@@ -316,9 +316,9 @@
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
-    <Compile Include="Trees\TreeNode.cs" />
-    <Compile Include="Trees\NodeStatus.cs" />
-    <Compile Include="Trees\NodeStatusKind.cs" />
+    <Compile Include="WorkingCopyExplorer\Trees\TreeNode.cs" />
+    <Compile Include="WorkingCopyExplorer\Trees\NodeStatus.cs" />
+    <Compile Include="WorkingCopyExplorer\Trees\NodeStatusKind.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
@@ -389,9 +389,6 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventSinks\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateSerializationAssemblies" Condition="'$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')" DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource" Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)" Outputs="$(IntermediateOutputPath)$(_SGenDllName)">
