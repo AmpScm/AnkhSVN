@@ -110,6 +110,33 @@ namespace Ankh.UI.PendingChanges
             }
 
             #endregion
+
+            public SvnDepth CalculateCommitDepth()
+            {
+                SvnDepth depth = SvnDepth.Empty;
+
+                foreach (string path in CommitPaths)
+                {
+                    SvnItem item = Cache[path];
+
+                    if (item.IsDirectory)
+                    {
+                        if (item.IsReplaced || !item.IsDeleteScheduled)
+                        {
+                            depth = SvnDepth.Empty;
+                            break;
+                        }
+                        else if (item.IsDeleteScheduled)
+                            depth = SvnDepth.Infinity;
+                    }
+                }
+
+                // Returns SvnDepth.Infinity if there are directories scheduled for commit 
+                // and all directories scheduled for commit are to be deleted
+                //
+                // Returns SvnDepth.Empty in all other cases
+                return depth;
+            }
         }
 
         internal void DoCommit(bool keepingLocks)
@@ -174,7 +201,7 @@ namespace Ankh.UI.PendingChanges
 
                     dl.ReloadModified();
                 }
-            }            
+            }
         }
 
         long _lastRev;
@@ -283,7 +310,7 @@ namespace Ankh.UI.PendingChanges
                 }
             }
             return true;
-        }        
+        }
 
         /// <summary>
         /// Fixes up missing files by deleting them
@@ -306,7 +333,7 @@ namespace Ankh.UI.PendingChanges
                     {
                         state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                         return false;
-                    }                    
+                    }
                 }
             }
 
@@ -324,11 +351,12 @@ namespace Ankh.UI.PendingChanges
         {
             bool ok = false;
             SvnCommitResult rslt = null;
+
             ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing...",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnCommitArgs ca = new SvnCommitArgs();
-                    ca.Depth = SvnDepth.Empty;
+                    ca.Depth = state.CalculateCommitDepth();
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
@@ -344,7 +372,7 @@ namespace Ankh.UI.PendingChanges
                 if (ci != null)
                     ci.SetLastChange("Committed:", rslt.Revision.ToString());
             }
-            
+
             return ok;
         }
 
