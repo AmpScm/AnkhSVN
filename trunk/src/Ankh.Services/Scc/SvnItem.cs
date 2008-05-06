@@ -576,6 +576,14 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a boolean indicating whether the <see cref="SvnItem"/> is scheduled for replacement
+        /// </summary>
+        public bool IsReplaced
+        {
+            get { return 0 != GetState(SvnItemState.Replaced); }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether the <see cref="SvnItem"/> is in one of the projects in the solution
         /// </summary>
         /// <value><c>true</c> if the file is in one of the projects of the solution; otherwise, <c>false</c>.</value>
