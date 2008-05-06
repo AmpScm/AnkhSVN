@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -29,7 +30,10 @@ namespace Ankh.UI.PendingChanges
     /// <seealso cref="UserControl"/>
     public partial class LogMessageEditor : UserControl
     {
+        IAnkhServiceProvider _context;
         private CodeEditorNativeWindow codeEditorNativeWindow;
+        IntPtr _hwndTop;
+        bool _fixUI;
 
         #region Methods
 
@@ -39,35 +43,17 @@ namespace Ankh.UI.PendingChanges
         /// <param name="context">The context.</param>
         public void Init(IAnkhServiceProvider context)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow();
             codeEditorNativeWindow.Init(serviceProvider, this);
             codeEditorNativeWindow.Area = this.ClientRectangle;
 
-            InitializeFont(context);
+            _fixUI = true; // Fix the font issues in the next size changed            
         }
-
-        public void InitializeFont(IServiceProvider sp)
-        {
-            IVsFontAndColorStorage pStorage = sp.GetService(typeof(SVsFontAndColorStorage)) as IVsFontAndColorStorage;
-
-            Guid textCategory = new Guid("{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
-            if (ErrorHandler.Succeeded(pStorage.OpenCategory(ref textCategory, (int)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS))))
-            {
-                FontInfo[] fi = new FontInfo[1];
-                fi[0] = new FontInfo();
-                if (ErrorHandler.Succeeded(pStorage.GetFont(null, fi)))
-                {
-                    Font font = new Font(fi[0].bstrFaceName, (float)fi[0].wPointSize);
-
-                    codeEditorNativeWindow.SetFont(font);
-                    // TODO: Assign the font to the editor
-                }
-
-                pStorage.CloseCategory();
-            }
-        }
-
 
         [CLSCompliant(false)]
         public IOleCommandTarget CommandTarget
@@ -125,6 +111,34 @@ namespace Ankh.UI.PendingChanges
             if (codeEditorNativeWindow != null)
             {
                 codeEditorNativeWindow.Area = this.ClientRectangle;
+
+                if (_fixUI)
+                {
+                    if (_hwndTop == IntPtr.Zero)
+                    {
+                        IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                        if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out _hwndTop)))
+                        {
+                            if (!CodeEditorNativeWindow.NativeMethods.IsWindow(_hwndTop) ||
+                                (_hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
+                            {
+                                // For some reason VS gives an invalid window (the desktop) while loading
+                                _hwndTop = IntPtr.Zero;
+                            }
+                        }
+                        else
+                            _hwndTop = IntPtr.Zero;
+
+                    }
+
+                    if (_hwndTop != IntPtr.Zero)
+                    {
+                        // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
+                        CodeEditorNativeWindow.NativeMethods.PostMessage(_hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
+                        _fixUI = false;
+                    }
+                }
             }
         }
 
@@ -145,7 +159,7 @@ namespace Ankh.UI.PendingChanges
             }
             set
             {
-                if(codeEditorNativeWindow != null)
+                if (codeEditorNativeWindow != null)
                     codeEditorNativeWindow.Text = value;
             }
         }
@@ -236,31 +250,14 @@ namespace Ankh.UI.PendingChanges
 
                 IntPtr pText = Marshal.StringToCoTaskMemUni(value);
                 try
-                {                    
+                {
                     ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
                 }
                 finally
                 {
                     Marshal.FreeCoTaskMem(pText);
-                }                
+                }
             }
-        }
-
-        internal void SetFont(Font font)
-        {
-            /*IVsTextEditorPropertyCategoryContainer cat = _textView as IVsTextEditorPropertyCategoryContainer;
-
-            Guid GUID_EditPropCategory_View_MasterSettings = new Guid("d1756e7cb7fd49a8b48e87b14a55655a");
-
-            IVsTextEditorPropertyContainer container;
-            if(ErrorHandler.Succeeded(cat.GetPropertyCategory(ref GUID_EditPropCategory_View_MasterSettings, out container)))
-            {
-                int hr = container.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_FontCategory, "{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
-                hr = container.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewGeneral_ColorCategory, "{A27B4E24-A735-4d1d-B8E7-9716E1E3D8E0}");
-
-                GC.KeepAlive(hr);
-            }
-            */
         }
 
         public bool PasteText(string text)
@@ -590,7 +587,7 @@ namespace Ankh.UI.PendingChanges
         #endregion
 
 
-        static class NativeMethods
+        internal static class NativeMethods
         {
             [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
             internal static extern IntPtr SetFocus(IntPtr hWnd);
@@ -605,6 +602,15 @@ namespace Ankh.UI.PendingChanges
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-        }        
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool IsWindow(IntPtr hWnd);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern IntPtr GetDesktopWindow();
+        }
     }
 }
