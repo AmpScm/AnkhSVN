@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Globalization;
 using System.Collections.ObjectModel;
+using Ankh.UI.SvnLog;
+
 
 namespace Ankh.UI
 {
@@ -109,17 +111,17 @@ namespace Ankh.UI
 
                 revertSingleToolStripMenuItem.Text = string.Format(
                     CultureInfo.CurrentCulture,
-                    Resources.RevertChangesFromRevisionX,
+                    Strings.RevertChangesFromRevisionX,
                     currentRev);
 
                 createBranchTagToolStripMenuItem.Text = string.Format(
                     CultureInfo.CurrentCulture,
-                    Resources.CreateBranchTagFromRevisionX,
+                    Strings.CreateBranchTagFromRevisionX,
                     currentRev);
 
                 switchToRevisionToolStripMenuItem.Text = string.Format(
                     CultureInfo.CurrentCulture,
-                    Resources.SwitchToRevisionX,
+                    Strings.SwitchToRevisionX,
                     currentRev);
             }
             else
@@ -130,7 +132,7 @@ namespace Ankh.UI
 
                 revertChangesToolStripMenuItem.Text = string.Format(
                     CultureInfo.CurrentCulture,
-                    Resources.RevertChangesFromRevisionXToY,
+                    Strings.RevertChangesFromRevisionXToY,
                     firstRev,
                     lastRev);
 
@@ -140,7 +142,7 @@ namespace Ankh.UI
                 {
                     compareToolStripMenuItem.Text = string.Format(
                         CultureInfo.CurrentCulture,
-                        Resources.CompareRevisionXToY,
+                        Strings.CompareRevisionXToY,
                         firstRev,
                         lastRev);
                     compareToolStripMenuItem.Visible = true;
