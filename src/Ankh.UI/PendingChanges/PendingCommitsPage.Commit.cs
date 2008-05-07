@@ -276,7 +276,7 @@ namespace Ankh.UI.PendingChanges
                     a.Depth = SvnDepth.Empty;
                     a.ThrowOnError = false;
 
-                    if (!state.Client.Add(pc.FullPath))
+                    if (!state.Client.Add(pc.FullPath, a))
                     {
                         state.MessageBox.Show(a.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     }
