@@ -1,4 +1,4 @@
-// $Id$
+﻿// $Id$
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -15,7 +15,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN Team")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright � AnkhSVN Team 2003-2008")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
