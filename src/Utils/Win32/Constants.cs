@@ -6,6 +6,7 @@ namespace Utils.Win32
     /// <summary>
     /// Contains Win32 constants.
     /// </summary>
+    [CLSCompliant(false)]
     public class Constants
     {
         /// <summary>
