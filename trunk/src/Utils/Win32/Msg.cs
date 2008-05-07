@@ -6,6 +6,7 @@ namespace Utils.Win32
     /// <summary>
     /// Contains Win32 messages.
     /// </summary>
+    [CLSCompliant(false)]
     public static class Msg
     {
         /// <summary>

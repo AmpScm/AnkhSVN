@@ -11,7 +11,7 @@ using System.Resources;
 [assembly: AssemblyTitle("Ankh.VS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("AnkhSVN Team")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]

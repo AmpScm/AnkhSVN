@@ -7,7 +7,7 @@ namespace Utils.Win32
     /// <summary>
     /// Represents the SHFILEINFO struct
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential), CLSCompliant(false)]
     public struct SHFILEINFO
     {
         public IntPtr hIcon;

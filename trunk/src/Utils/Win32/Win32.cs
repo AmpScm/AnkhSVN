@@ -8,6 +8,7 @@ namespace Utils.Win32
     /// <summary>
     /// Contains P/Invoke declarations for Win32 API calls.
     /// </summary>
+    [CLSCompliant(false)]
     public static class Win32
     {
         /// <summary>
