@@ -10,7 +10,8 @@
 		<QQnTurtleTasksFolder>..\tools\TurtleTasks\</QQnTurtleTasksFolder>
 		
 		<MSBuildAllProjects>$(MSBuildAllProjects);$(QQnTurtleTasksFolder)QQn.TurtleTasks.targets</MSBuildAllProjects>
-		<CoreCompileDependsOn>ApplyXslTemplates;DownloadDependencies;$(CoreCompileDependsOn);</CoreCompileDependsOn>
+		<CoreCompileDependsOn>ApplyXslTemplates;DownloadDependencies;$(CoreCompileDependsOn)</CoreCompileDependsOn>
+		<MergeCtoResourceDependsOn>ApplyXslTemplates;$(MergeCtoResourceDependsOn)</MergeCtoResourceDependsOn>
 		<ApplyXslTemplatesDependsOn>$(ApplyXslTemplatesDependsOn);</ApplyXslTemplatesDependsOn>
 	</PropertyGroup>
 
