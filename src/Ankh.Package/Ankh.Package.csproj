@@ -218,6 +218,7 @@
     <Content Include="Gui\PendingChanges\Update.png" />
     <Content Include="Gui\PendingChanges\UpdateSpecific.png" />
     <Content Include="Gui\PendingChanges\UrlRefresh.ico" />
+    <Content Include="Gui\PendingChanges\ViewHistory.png" />
     <Content Include="Gui\PendingChanges\ViewItems.png" />
     <Content Include="Gui\PendingChanges\Views.png" />
     <Content Include="Resources\Package.ico" />
