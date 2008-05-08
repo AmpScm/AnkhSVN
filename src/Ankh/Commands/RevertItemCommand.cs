@@ -30,7 +30,7 @@ namespace Ankh.Commands
                 if (item.IsModified || item.IsDocumentDirty)
                     return;
             }
-            e.Enabled = false;
+            e.Enabled = e.Visible = false;
         }
         
 
