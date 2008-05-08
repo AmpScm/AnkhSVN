@@ -446,21 +446,6 @@ namespace Ankh.Tests
                 throw new NotImplementedException();
             }
 
-            LockDialogInfo IUIShell.ShowLockDialog(LockDialogInfo info)
-            {
-                throw new NotImplementedException();
-            }
-
-            LogDialogInfo IUIShell.ShowLogDialog(LogDialogInfo info)
-            {
-                throw new NotImplementedException();
-            }
-
-            SwitchDialogInfo IUIShell.ShowSwitchDialog(SwitchDialogInfo info)
-            {
-                throw new NotImplementedException();
-            }
-
             #endregion
         }
 
