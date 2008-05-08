@@ -15,13 +15,6 @@ namespace Ankh
             this.message = "";
         }
 
-        [Obsolete]
-		public LockDialogInfo(ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter) :
-			base("", items, checkedFilter)
-		{
-			this.message = "";
-		}
-
 		public string Message
 		{
 			get { return this.message; }

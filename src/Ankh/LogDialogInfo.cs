@@ -15,12 +15,6 @@ namespace Ankh
         {
         }
 
-        [Obsolete]
-		public LogDialogInfo(Collection<SvnItem> items, Predicate<SvnItem> checkedFilter) : 
-            base( "", items, checkedFilter)
-        {			
-        }
-
         public bool StopOnCopy
         {
             get{ return this.stopOnCopy; }
