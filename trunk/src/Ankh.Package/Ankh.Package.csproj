@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VisualStudioVersion>
     <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
   </PropertyGroup>
   <PropertyGroup>
