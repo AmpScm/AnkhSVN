@@ -92,6 +92,46 @@ namespace Ankh.UI.PendingChanges
             return true;
         }
 
+        /*IVsFilterKeys2 _filterKeys2;
+        public override bool PreProcessMessage(ref Message msg)
+        {
+            if(_filterKeys2 == null)
+                _filterKeys2 = _context.GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
+
+            if (_filterKeys2 != null)
+            {
+
+                //IVsFilterKeys2 performs advanced keyboard message translation
+
+                MSG[] messages = new MSG[1];
+                messages[0].hwnd = msg.HWnd;
+                messages[0].lParam = msg.LParam;
+                messages[0].wParam = msg.WParam;
+                messages[0].message = (uint)msg.Msg;
+
+                Guid cmdGuid;
+                uint cmdCode;
+                int cmdTranslated;
+                int keyComboStarts;
+
+                int hr = _filterKeys2.TranslateAcceleratorEx(messages,
+                    (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope, //Translates keys using TextEditor key bindings. Equivalent to passing CMDUIGUID_TextEditor, CMDSETID_StandardCommandSet97, and guidKeyDupe for scopes and the VSTAEXF_IgnoreActiveKBScopes flag. 
+                    0,
+                    null,
+                    out cmdGuid,
+                    out cmdCode,
+                    out cmdTranslated,
+                    out keyComboStarts);
+
+                if (hr == VSConstants.S_OK)
+                {
+                    return true;
+                }
+            }
+
+            return base.PreProcessMessage(ref msg);
+        }*/
+
         /// <summary>
         /// Overrides OnGotFocus method to handle OnGotFocus event
         /// </summary>
