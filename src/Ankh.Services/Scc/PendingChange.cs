@@ -177,7 +177,7 @@ namespace Ankh.Scc
         {
             string projectRoot = context.SolutionSettings.ProjectRootWithSeparator;
 
-            if (FullPath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(projectRoot) && FullPath.StartsWith(projectRoot, StringComparison.OrdinalIgnoreCase))
                 return FullPath.Substring(projectRoot.Length).Replace('\\', '/');
             else
                 return FullPath;
