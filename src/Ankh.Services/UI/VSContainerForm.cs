@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using Ankh.Ids;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI
 {
@@ -112,6 +113,12 @@ namespace Ankh.UI
             
             if(setContext)
                 Context = context;
+
+            IUIService uiService = null;
+
+            if(Context != null)
+                uiService = Context.GetService<IUIService>();
+
             try
             {
                 if(owner == null && DialogOwner != null)
@@ -125,11 +132,19 @@ namespace Ankh.UI
                 {
                     using (DialogOwner.InstallFormRouting(this, EventArgs.Empty))
                     {
-                        rslt = base.ShowDialog(owner);
+                        if (uiService != null)
+                            rslt = uiService.ShowDialog(this);
+                        else
+                            rslt = base.ShowDialog(owner);
                     }
                 }
                 else
-                    rslt = base.ShowDialog(owner);
+                {
+                    if (uiService != null)
+                        rslt = uiService.ShowDialog(this);
+                    else
+                        rslt = base.ShowDialog(owner);
+                }
 
                 OnAfterShowDialog(EventArgs.Empty);
 

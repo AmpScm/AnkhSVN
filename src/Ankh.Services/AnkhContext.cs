@@ -5,6 +5,7 @@ using Ankh.ContextServices;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Ankh.VS;
+using System.Windows.Forms.Design;
 
 namespace Ankh
 {
@@ -83,9 +84,10 @@ namespace Ankh
         {
             get
             {
-                IAnkhDialogOwner owner = GetService<IAnkhDialogOwner>();
-                if (owner != null)
-                    return owner.DialogOwner;
+                IUIService service = GetService<IUIService>();
+
+                if (service != null)
+                    return service.GetDialogOwnerWindow();
                 else
                     return null;
             }

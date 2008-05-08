@@ -13,6 +13,7 @@ using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
 using Ankh.WorkingCopyExplorer;
+using System.Windows.Forms.Design;
 
 namespace Ankh
 {
@@ -155,101 +156,19 @@ namespace Ankh
 
         public PathSelectorResult ShowPathSelector(PathSelectorInfo info)
         {
-            IAnkhDialogOwner dlgOwner = GetService<IAnkhDialogOwner>();
+            IUIService uiService = GetService<IUIService>();
 
             using (PathSelector selector = new PathSelector(info))
             {
                 selector.Context = Context;
 
-
-
-                bool succeeded = selector.ShowDialog(dlgOwner.DialogOwner) == DialogResult.OK;
+                bool succeeded = uiService.ShowDialog(selector) == DialogResult.OK;
                 PathSelectorResult result = new PathSelectorResult(succeeded, selector.CheckedItems);
                 result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                 result.RevisionStart = selector.RevisionStart;
                 result.RevisionEnd = selector.RevisionEnd;
                 return result;
             }
-        }
-
-        /// <summary>
-        /// Shows the lock dialog.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        public LockDialogInfo ShowLockDialog(LockDialogInfo info)
-        {
-            return null;
-            //using (LockDialog dlg = new LockDialog())
-            //{
-            //    dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
-
-            //    dlg.Items = info.VisibleItems;
-            //    dlg.CheckedFilter = info.CheckedFilter;
-            //    dlg.Message = info.Message;
-            //    dlg.StealLocks = info.StealLocks;
-            //    if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-            //        return null;
-
-            //    info.CheckedItems = new List<SvnItem>( dlg.CheckedItems);
-            //    info.Message = dlg.Message;
-            //    info.StealLocks = dlg.StealLocks;
-            //    return info;
-            //}
-        }
-
-        /// <summary>
-        /// Shows the log dialog.
-        /// </summary>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        public LogDialogInfo ShowLogDialog(LogDialogInfo info)
-        {
-            return null;
-            //using (LogDialog dlg = new LogDialog())
-            //{
-            //    dlg.EnableRecursive = false;
-            //    dlg.Items = info.VisibleItems;
-            //    dlg.CheckedFilter = info.CheckedFilter;
-            //    dlg.Options = PathSelectorOptions.DisplayRevisionRange;
-            //    dlg.RevisionStart = info.RevisionStart;
-            //    dlg.RevisionEnd = info.RevisionEnd;
-            //    dlg.GetPathInfo += new EventHandler<ResolvingPathEventArgs>(GetPathInfo);
-            //    dlg.StopOnCopy = info.StopOnCopy;
-
-            //    if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-            //        return null;
-
-            //    info.CheckedItems = new List<SvnItem>(dlg.CheckedItems);
-            //    info.StopOnCopy = dlg.StopOnCopy;
-            //    info.RevisionStart = dlg.RevisionStart;
-            //    info.RevisionEnd = dlg.RevisionEnd;
-
-            //    return info;
-            //}
-        }
-
-        public SwitchDialogInfo ShowSwitchDialog(SwitchDialogInfo info)
-        {
-            //using (SwitchDialog dialog = new SwitchDialog())
-            //{
-            //    dialog.Items = info.VisibleItems;
-            //    dialog.SingleSelection = true;
-            //    dialog.CheckedFilter = delegate { return true; };
-            //    dialog.Options = PathSelectorOptions.DisplaySingleRevision;
-            //    dialog.Recursive = true;
-
-            //    if (dialog.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-            //        return null;
-
-            //    info.SwitchToUrl = dialog.ToUrl;
-            //    info.Depth = dialog.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-            //    info.Path = dialog.SelectedPath;
-            //    info.RevisionStart = dialog.RevisionStart;
-
-            //    return info;
-            //}
-            return null;
-        }
+        }       
     }
 }
