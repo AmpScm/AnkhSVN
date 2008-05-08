@@ -3,13 +3,13 @@
     <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
     <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
     <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion >
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
     <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -52,7 +52,7 @@
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
-    <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService.8.0</VSLangAssembly>
+    <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService</VSLangAssembly>
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
   </PropertyGroup>
   <ItemGroup>
@@ -119,8 +119,7 @@
     <None Include="Ankh.Package.snk" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
-      <SubType>
-      </SubType>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
@@ -263,21 +262,9 @@
   </Target>
   -->
   <Target Name="AfterBuild" DependsOnTargets="FindSDKInstallation">
-    <Exec 
-	Condition="'$(UseVS2005MPF)' == ''"
-	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" 
-	/>
-    <Exec 
-	Condition="'$(UseVS2005MPF)' == ''"
-	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" 
-	/>
-    <Exec 
-	Condition="'$(UseVS2005MPF)' != ''"
-	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" 
-	/>
-    <Exec 
-	Condition="'$(UseVS2005MPF)' != ''"
-	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" 
-	/>
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' == ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
+    <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
   </Target>
 </Project>
