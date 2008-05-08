@@ -28,11 +28,6 @@ namespace Ankh.UI.MergeWizard
             ToggleMergeTypeInformation(this, (RadioButton)sender);
         }
 
-        private void changesetBasedRadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            ToggleMergeTypeInformation(this, (RadioButton)sender);
-        }
-
         private void twoDifferentTreesRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
@@ -60,11 +55,6 @@ namespace Ankh.UI.MergeWizard
             {
                 page.mergeTypeDescriptionLabel.Text = resman.GetString("ReintegrateABranchDescription");
                 page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("ReintegrateABranchImage");
-            }
-            else if (radioButton.Name == "changesetBasedRadioButton")
-            {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("ChangesetBasedDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("ChangesetBasedImage");
             }
             else if (radioButton.Name == "twoDifferentTreesRadioButton")
             {

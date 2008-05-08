@@ -117,16 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChangesetBasedDescription" xml:space="preserve">
-    <value>Use this method to merge the revisions associated with one or more CollabNet artifacts.  Typically this option would be used to backport fixes to a release branch or similar scenarios where all of the changes associated with an artifact need to be merged from one location to another.</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ChangesetBasedImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>images\ChangesetBased.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ManuallyRecordDescription" xml:space="preserve">
     <value>Use this method to block a revision or range of revisions from being merged into this location.  For example, you might want to do this if the changes in the branch have already been manually applied to this location or you do not intend to ever merge the changes from the branch into this location.</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ManuallyRecordImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\ManuallyRecord.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
