@@ -17,7 +17,7 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool foundOne = true;
+            bool foundOne = false;
             bool canDiff = true;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
