@@ -12,6 +12,9 @@ using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
 using Ankh.UI.SvnLog;
+using Ankh.Selection;
+using Ankh.VS;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -19,10 +22,10 @@ namespace Ankh.Commands
     /// Command to show the change log for the selected item.
     /// </summary>
     [Command(AnkhCommand.Log)]
+    [Command(AnkhCommand.ProjectHistory)]
+    [Command(AnkhCommand.SolutionHistory)]
 	public class LogCommand : CommandBase
     {
-        #region Implementation of ICommand
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             if (!e.State.SccProviderActive)
@@ -46,66 +49,40 @@ namespace Ankh.Commands
             package.ShowToolWindow(AnkhToolWindow.Log);
 
             List<string> selected = new List<string>();
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+
+            switch (e.Command)
             {
-                if (i.IsVersioned)
-                    selected.Add(i.FullPath);
+                case AnkhCommand.Log:
+                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+                    {
+                        if (i.IsVersioned)
+                            selected.Add(i.FullPath);
+                    }
+                    break;
+                case AnkhCommand.ProjectHistory:
+                case AnkhCommand.SolutionHistory:
+                    if (e.Selection.IsSolutionSelected)
+                    {
+                        IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+
+                        selected.Add(settings.ProjectRoot);
+                    }
+                    else
+                    {
+                        IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                        foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                        {
+                            ISvnProjectInfo info = mapper.GetProjectInfo(p);
+
+                            if (info != null)
+                                selected.Add(info.ProjectDirectory);
+                        }
+                    }
+                    break;
             }
 
-            
             LogToolControl logToolControl = e.Context.GetService<LogToolControl>();
             logToolControl.Target = selected;
-            /*IList resources = context.Selection.GetSelectionResources(
-                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
-
-            this.info = new LogDialogInfo( resources, resources );
-            this.info.RevisionStart = SvnRevision.Zero;
-            this.info.RevisionEnd = SvnRevision.Head;
-
-            // is Shift down?
-            if ( !CommandBase.Shift )
-            {
-                this.info = context.UIShell.ShowLogDialog( info );
-                if ( this.info == null )
-                    return;
-            }
-
-            this.result = null;
-
-            context.UIShell.RunWithProgressDialog( new SimpleProgressWorker( 
-                new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Retrieving log" );
-
-            Debug.Assert( this.result != null );
-
-            // transform it to HTML and display it
-            XslCompiledTransform transform = CommandBase.GetTransform( context, "log.xsl" );
-            StringWriter writer = new StringWriter();
-            this.result.Transform( transform, writer );
-
-            // display the HTML with the filename as caption
-            context.UIShell.DisplayHtml( "Log", writer.ToString(), false );*/
         }
-
-        #endregion
-
-        private void ProgressCallback(ProgressWorkerArgs e)
-        {
-            this.result = new LogResult();
-            this.result.Start();
-
-            List<string> paths = new List<string>(SvnItem.GetPaths(info.CheckedItems));
-
-            SvnLogArgs args = new SvnLogArgs();
-            args.StrictNodeHistory = info.StopOnCopy;
-            args.Log += new EventHandler<SvnLogEventArgs>(result.Receive);
-
-            Collection<SvnLogEventArgs> logItems;
-            e.Client.GetLog(paths[0], args, out logItems);
-
-            this.result.End();
-        }
-
-        private LogDialogInfo info = null;
-        private LogResult result = null;
     }
 }
