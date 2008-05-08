@@ -750,7 +750,6 @@
     <None Include="Resources\connectButton.Image.png" />
     <None Include="Resources\refreshButton.Image.png" />
     <Content Include="MergeWizard\images\ManuallyRecord.png" />
-    <Content Include="MergeWizard\images\ChangesetBased.png" />
     <None Include="MergeWizard\images\MergeWizardHeader.png" />
     <None Include="MergeWizard\images\MergeWizard.ico" />
     <Content Include="MergeWizard\images\RangeOfRevisions.png" />

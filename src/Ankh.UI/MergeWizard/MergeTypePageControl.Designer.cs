@@ -33,7 +33,6 @@
             this.manuallyRemoveRadioButton = new System.Windows.Forms.RadioButton();
             this.manuallyRecordRadioButton = new System.Windows.Forms.RadioButton();
             this.twoDifferentTreesRadioButton = new System.Windows.Forms.RadioButton();
-            this.changesetBasedRadioButton = new System.Windows.Forms.RadioButton();
             this.reintegrateABranchRadioButton = new System.Windows.Forms.RadioButton();
             this.rangeOfRevisionsRadioButton = new System.Windows.Forms.RadioButton();
             this.mergeTypeDescriptionGroupBox = new System.Windows.Forms.GroupBox();
@@ -51,7 +50,6 @@
             this.mergeTypeGroupBox.Controls.Add(this.manuallyRemoveRadioButton);
             this.mergeTypeGroupBox.Controls.Add(this.manuallyRecordRadioButton);
             this.mergeTypeGroupBox.Controls.Add(this.twoDifferentTreesRadioButton);
-            this.mergeTypeGroupBox.Controls.Add(this.changesetBasedRadioButton);
             this.mergeTypeGroupBox.Controls.Add(this.reintegrateABranchRadioButton);
             this.mergeTypeGroupBox.Controls.Add(this.rangeOfRevisionsRadioButton);
             this.mergeTypeGroupBox.Name = "mergeTypeGroupBox";
@@ -77,13 +75,6 @@
             this.twoDifferentTreesRadioButton.Name = "twoDifferentTreesRadioButton";
             this.twoDifferentTreesRadioButton.UseVisualStyleBackColor = true;
             this.twoDifferentTreesRadioButton.CheckedChanged += new System.EventHandler(this.twoDifferentTreesRadioButton_CheckedChanged);
-            // 
-            // changesetBasedRadioButton
-            // 
-            resources.ApplyResources(this.changesetBasedRadioButton, "changesetBasedRadioButton");
-            this.changesetBasedRadioButton.Name = "changesetBasedRadioButton";
-            this.changesetBasedRadioButton.UseVisualStyleBackColor = true;
-            this.changesetBasedRadioButton.CheckedChanged += new System.EventHandler(this.changesetBasedRadioButton_CheckedChanged);
             // 
             // reintegrateABranchRadioButton
             // 
@@ -150,7 +141,6 @@
         private System.Windows.Forms.GroupBox mergeTypeGroupBox;
         private System.Windows.Forms.RadioButton rangeOfRevisionsRadioButton;
         private System.Windows.Forms.RadioButton reintegrateABranchRadioButton;
-        private System.Windows.Forms.RadioButton changesetBasedRadioButton;
         private System.Windows.Forms.RadioButton twoDifferentTreesRadioButton;
         private System.Windows.Forms.RadioButton manuallyRecordRadioButton;
         private System.Windows.Forms.RadioButton manuallyRemoveRadioButton;

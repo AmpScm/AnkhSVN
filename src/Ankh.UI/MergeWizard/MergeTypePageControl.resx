@@ -130,7 +130,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="manuallyRemoveRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 130</value>
+    <value>10, 100</value>
   </data>
   <data name="manuallyRemoveRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -163,7 +163,7 @@
     <value>NoControl</value>
   </data>
   <data name="manuallyRecordRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 108</value>
+    <value>10, 80</value>
   </data>
   <data name="manuallyRecordRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -196,7 +196,7 @@
     <value>NoControl</value>
   </data>
   <data name="twoDifferentTreesRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 86</value>
+    <value>10, 60</value>
   </data>
   <data name="twoDifferentTreesRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -222,39 +222,6 @@
   <data name="&gt;&gt;twoDifferentTreesRadioButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="changesetBasedRadioButton.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="changesetBasedRadioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="changesetBasedRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 64</value>
-  </data>
-  <data name="changesetBasedRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="changesetBasedRadioButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 17</value>
-  </data>
-  <data name="changesetBasedRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="changesetBasedRadioButton.Text" xml:space="preserve">
-    <value>&amp;Changeset based merge</value>
-  </data>
-  <data name="&gt;&gt;changesetBasedRadioButton.Name" xml:space="preserve">
-    <value>changesetBasedRadioButton</value>
-  </data>
-  <data name="&gt;&gt;changesetBasedRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;changesetBasedRadioButton.Parent" xml:space="preserve">
-    <value>mergeTypeGroupBox</value>
-  </data>
-  <data name="&gt;&gt;changesetBasedRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="reintegrateABranchRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -262,7 +229,7 @@
     <value>NoControl</value>
   </data>
   <data name="reintegrateABranchRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 42</value>
+    <value>10, 40</value>
   </data>
   <data name="reintegrateABranchRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -286,7 +253,7 @@
     <value>mergeTypeGroupBox</value>
   </data>
   <data name="&gt;&gt;reintegrateABranchRadioButton.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="rangeOfRevisionsRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -316,7 +283,7 @@
     <value>mergeTypeGroupBox</value>
   </data>
   <data name="&gt;&gt;rangeOfRevisionsRadioButton.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="mergeTypeGroupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 5</value>
@@ -325,7 +292,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="mergeTypeGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 157</value>
+    <value>490, 125</value>
   </data>
   <data name="mergeTypeGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -373,7 +340,7 @@
     <value>1</value>
   </data>
   <data name="mergeTypeDescriptionGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 171</value>
+    <value>5, 135</value>
   </data>
   <data name="mergeTypeDescriptionGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -652,7 +619,7 @@
     <value>True</value>
   </data>
   <data name="checkBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 421</value>
+    <value>5, 385</value>
   </data>
   <data name="checkBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -688,7 +655,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>500, 440</value>
+    <value>500, 405</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MergeTypePageControl</value>
