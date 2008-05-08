@@ -1,9 +1,9 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
-    <VisualStudioVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VisualStudioVersion>
-    <VisualStudioVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VisualStudioVersion>
-    <RealVisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</RealVisualStudioVersion>
-    <RealVisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</RealVisualStudioVersion >
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion >
     <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
   </PropertyGroup>
   <PropertyGroup>
@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- Only required for the VS2005 SDK; VS2008 defaults to 9.0Exp -->
-    <TargetRegistryRoot Condition="$(VisualStudioVersion) == '8.0'">Software\Microsoft\VisualStudio\8.0Exp</TargetRegistryRoot>
+    <TargetRegistryRoot Condition="$(VsSdkVersion) == '8.0'">Software\Microsoft\VisualStudio\8.0Exp</TargetRegistryRoot>
     <!--
     To specify a different registry root to register your package, uncomment the TargetRegistryRoot
     tag and specify a registry root in it.
@@ -50,10 +50,10 @@
     <RegisterWithCodebase>true</RegisterWithCodebase>
     <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
-    <ShellAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
-    <ShellAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
-    <VSLangAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService.8.0</VSLangAssembly>
-    <VSLangAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+    <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService.8.0</VSLangAssembly>
+    <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
@@ -63,7 +63,7 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
     <Reference Include="$(ShellAssembly)" />
     <Reference Include="$(VSLangAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(VisualStudioVersion)' == '9.0'">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(VsSdkVersion)' == '9.0'">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="SharpSvn, Version=1.4999.373.29609, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
@@ -252,8 +252,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(RealVisualStudioVersion) == '9.0'" />
-  <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(RealVisualStudioVersion) == '8.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
   <Import Project="..\tools\turtletasks\QQn.TurtleTasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -263,7 +263,21 @@
   </Target>
   -->
   <Target Name="AfterBuild" DependsOnTargets="FindSDKInstallation">
-    <Exec Command="&quot;$(VsSDKInstall)\VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
-    <Exec Command="&quot;$(VsSDKInstall)\VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
+    <Exec 
+	Condition="'$(UseVS2005MPF)' == ''"
+	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" 
+	/>
+    <Exec 
+	Condition="'$(UseVS2005MPF)' == ''"
+	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" 
+	/>
+    <Exec 
+	Condition="'$(UseVS2005MPF)' != ''"
+	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" 
+	/>
+    <Exec 
+	Condition="'$(UseVS2005MPF)' != ''"
+	Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(TargetDir)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" 
+	/>
   </Target>
 </Project>
