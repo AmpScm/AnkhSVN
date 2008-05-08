@@ -43,7 +43,7 @@
 								toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
 								text="&amp;Commit..."
-								toolTip="Commit selected items to the Subversion repository." iconFile="menu/Commit.png" defaultInvisible="true"/>
+								toolTip="Commit selected items to the Subversion repository." iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
             <Button id="Cmd_RevertItem" name="RevertItem" priority="0x300"
 								text="&amp;Revert"
 								toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
@@ -52,10 +52,8 @@
 								toolTip="Identify which user wrote which lines." iconFile="menu/Blame.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
 								text="Di&amp;ff..."
-								toolTip="Show differences compared to local text base." iconFile="menu/Diff.png" defaultInvisible="true"/>
-            <Button id="Cmd_Log" name="Log" priority="0x600"
-								text="&amp;Log"
-								toolTip="Show the change log for the selected item." iconFile="menu/Log.png" defaultInvisible="true"/>
+								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+            <ButtonRef id="Cmd_Log" priority="0x600" />            
           </Group>
           <Group id="Grp_FileSccItem" priority="0x0190">
             <ButtonRef id="Cmd_AddItem" priority="0x10" />
@@ -114,22 +112,22 @@
 
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
       <!-- VS Predefined group for SCC commands on the solution -->
-      <ButtonRef id="Cmd_SolutionUpdateHead" priority="0x10" />
-      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x50" name="Subversion" text="&amp;Subversion">
+      <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1100" />
+      <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />
+      <ButtonRef id="Cmd_SolutionUpdateHead" priority="0x1500" />
+      <Button id="Cmd_SolutionCommit" priority="0x1600" name="SolutionCommit"
+              text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
+      <Button id="Cmd_SolutionHistory" priority="0x1700" name="SolutionHistory"
+              text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+      <ButtonRef id="Cmd_RevertItem" priority="0x1800" />
+      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
-          <ButtonRef id="Cmd_Log" priority="0x30" />
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
-          <ButtonRef id="Cmd_ResolveConflict" priority="0xA0" />
-          <ButtonRef id="Cmd_ResolveConflictExternal" priority="0xB0" />
-          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <ButtonRef id="Cmd_Refresh" priority="0xE0" />
         </Group>
@@ -137,27 +135,30 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
       <!-- VS Predefined group for SCC commands on projects -->
-      <Button id="Cmd_ProjectUpdateHead" priority="0x10" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
+      <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1100" />
+      <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />     
+      <Button id="Cmd_ProjectUpdateHead" priority="0x1500" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
               iconFile="PendingChanges/Update.png" />
-      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x50" name="Subversion" text="&amp;Subversion">
+      <Button id="Cmd_ProjectCommit" priority="0x1600" name="ProjectCommit" 
+              text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" />
+      <Button id="Cmd_ProjectHistory" priority="0x1700" name="ProjectHistory"
+              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1800" />
+      
+      <MenuRef id="Menu_ItemResolve" priority="0x1900" />
+      <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
+      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
 								text="&amp;Add..."
 								toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
-          <ButtonRef id="Cmd_Log" priority="0x30" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />          
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
-          <ButtonRef id="Cmd_ResolveConflict" priority="0xA0" />
-          <ButtonRef id="Cmd_ResolveConflictExternal" priority="0xB0" />
-          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <ButtonRef id="Cmd_Refresh" priority="0xE0" />
         </Group>
@@ -165,10 +166,13 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
       <!-- VS Predefined group for SCC commands on project items -->
-      <ButtonRef id="Cmd_UpdateItem" priority="0x10" />
-      <ButtonRef id="Cmd_CommitItem" priority="0x20" />
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x30" />
-      <Menu id="Menu_ItemResolve" priority="0x40" name="Resolve" text="Resol&amp;ve">
+      <ButtonRef id="Cmd_UpdateItem" priority="0x1500" />
+      <ButtonRef id="Cmd_CommitItem" priority="0x1600" />
+      <Button id="Cmd_Log" name="Log" priority="0x1700"
+								text="View &amp;History"
+								toolTip="Show the change log for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1900" />      
+      <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
           <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" />
@@ -186,14 +190,13 @@
           <Button id="Cmd_ItemResolveTheirsFull" priority="0x20" text="Using T&amp;heir file" defaultInvisible="true" />
         </Group>        
       </Menu>
-      <ButtonRef id="Cmd_RevertItem" priority="0x40" />
-      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x50" name="Subversion" text="&amp;Subversion">
+      <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
+      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x20" defaultInvisible="true"
 								text="&amp;Switch..."
 								toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
-          <ButtonRef id="Cmd_Log" priority="0x30" />
           <Button id="Cmd_Lock" name="Lock" priority="0x40" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
@@ -209,14 +212,7 @@
               toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
           <Button id="Cmd_DiffExternalLocalItem" name="DiffExternalLocalItem" priority="0x90"
               text="Diff E&amp;xternal"
-              toolTip="Diff against local text base using external tool." iconFile="menu/Diff.png" defaultInvisible="true"/>
-          <Button id="Cmd_ResolveConflict" name="ResolveConflict" priority="0xA0" defaultInvisible="true"
-              text="Res&amp;olve Conflict..."
-              toolTip="Resolve conflict between changes." iconFile="menu/ResolveConflict.png"/>
-          <Button id="Cmd_ResolveConflictExternal" name="ResolveConflictExternal" priority="0xB0"
-              text="Resolve Conflict E&amp;xternal..." defaultInvisible="true"
-              toolTip="Resolve conflict between changes using external tool." iconFile="menu/ResolveConflict.png"/>
-          <ButtonRef id="Cmd_RevertItem" priority="0xC0" />
+              toolTip="Diff against local text base using external tool." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
