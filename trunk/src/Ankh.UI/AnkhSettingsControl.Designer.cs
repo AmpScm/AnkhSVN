@@ -47,7 +47,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.openButton);
             this.Name = "AnkhSettingsControl";
-            this.Size = new System.Drawing.Size(318, 197);
+            this.Size = new System.Drawing.Size(400, 271);
             this.ResumeLayout(false);
 
         }
