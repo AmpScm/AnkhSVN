@@ -22,17 +22,32 @@ namespace Ankh.UI
     {
         PathSelectorInfo _info;
         IAnkhServiceProvider _context;
-
-
-
-        public PathSelector()
+        PathSelectorOptions _options;
+        
+        protected PathSelector()
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
 
+            SaveSizes();
             this.Options = PathSelectorOptions.NoRevision;
+        }
+
+        int _revStartOffset;
+        int _revEndOffset;
+        int _suppressOffset;
+        int _buttonOffset;
+        int _bottomSpacing;
+
+        private void SaveSizes()
+        {
+            _revStartOffset = revisionStartGroupBox.Top - pathSelectionTreeView.Bottom;
+            _revEndOffset = revisionEndGroupBox.Top - revisionStartGroupBox.Bottom;
+            _suppressOffset = suppressGroupBox.Top - revisionEndGroupBox.Bottom;
+            _buttonOffset = bottomPanel.Top - suppressGroupBox.Bottom;
+            _bottomSpacing = ClientSize.Height - bottomPanel.Bottom;
         }
 
         public PathSelector(PathSelectorInfo info)
@@ -46,7 +61,10 @@ namespace Ankh.UI
             base.OnLoad(e);
 
             if (!DesignMode)
+            {
+                UpdateLayout();
                 EnsureSelection();
+            }
         }
 
         void EnsureSelection()
@@ -144,7 +162,7 @@ namespace Ankh.UI
         public bool EnableRecursive
         {
             get { return this.recursiveCheckBox.Enabled; }
-            set { this.recursiveCheckBox.Enabled = value; }
+            set { this.recursiveCheckBox.Visible = this.recursiveCheckBox.Enabled = value; }
         }
 
         /// <summary>
@@ -183,31 +201,97 @@ namespace Ankh.UI
             set { this.revisionPickerEnd.Revision = value; }
         }
 
+
         public PathSelectorOptions Options
         {
-            get { return this.options; }
+            get { return this._options; }
             set
             {
-                this.options = value;
-                switch (this.options)
+                _options = value;
+                switch (value)
                 {
                     case PathSelectorOptions.NoRevision:
-                        this.revisionEndGroupBox.Enabled = false;
-                        this.revisionStartGroupBox.Enabled = false;
+                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = false;
+                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = false;
                         break;
                     case PathSelectorOptions.DisplaySingleRevision:
-                        this.revisionStartGroupBox.Text = "Revision";
-                        this.revisionStartGroupBox.Enabled = true;
-                        this.revisionEndGroupBox.Enabled = false;
+                        revisionStartGroupBox.Text = "Revision";
+                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = true;
+                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = false;
                         break;
                     case PathSelectorOptions.DisplayRevisionRange:
-                        this.revisionStartGroupBox.Enabled = true;
-                        this.revisionStartGroupBox.Text = "Revision start";
-                        this.revisionEndGroupBox.Enabled = true;
+                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = true;
+                        revisionStartGroupBox.Text = "Revision start";
+                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = true;
                         break;
                     default:
                         throw new ArgumentException("Invalid value for Options");
                 }
+
+                if (IsHandleCreated)
+                    UpdateLayout();
+            }
+        }
+
+        void UpdateLayout()
+        {
+            int y = ClientSize.Height - _bottomSpacing;
+
+            if (bottomPanel.Visible)
+            {
+                if (y != bottomPanel.Bottom)
+                    bottomPanel.Top = y - bottomPanel.Height;
+
+                y = bottomPanel.Top - _bottomSpacing;
+            }
+
+            if (suppressGroupBox.Visible)
+            {
+                if (y != suppressGroupBox.Bottom)
+                    suppressGroupBox.Top = y - suppressGroupBox.Height;
+
+                y = suppressGroupBox.Top - _suppressOffset;
+            }
+
+            if (revisionEndGroupBox.Visible)
+            {
+                if (y != revisionEndGroupBox.Bottom)
+                    revisionEndGroupBox.Top = y - revisionEndGroupBox.Height;
+
+                y = revisionEndGroupBox.Top - _revEndOffset;
+            }
+
+            if (revisionStartGroupBox.Visible)
+            {
+                if (y != revisionStartGroupBox.Bottom)
+                    revisionStartGroupBox.Top = y - revisionStartGroupBox.Height;
+
+                y = revisionStartGroupBox.Top - _revStartOffset;
+            }
+
+            y -= _revStartOffset;
+
+            if (y != pathSelectionTreeView.Bottom)
+            {
+                int n = pathSelectionTreeView.Bottom - y;
+                pathSelectionTreeView.Height -= n;                
+
+                if (n < 0)
+                {
+                    Height += n;
+                }
+            }
+
+            int nv = pathSelectionTreeView.VisibleCount;
+
+            if(nv > 5 && nv > _info.VisibleItems.Count * 2)
+            {
+                int height = (pathSelectionTreeView.Height * 3) / 2  / nv;
+
+                height = Math.Max(5, _info.VisibleItems.Count+3) * height;
+
+                if(height < pathSelectionTreeView.Height)
+                    Height -= pathSelectionTreeView.Height - height;
             }
         }
 
@@ -255,8 +339,6 @@ namespace Ankh.UI
         private void RecursiveCheckedChanged(object sender, System.EventArgs e)
         {
             this.pathSelectionTreeView.Recursive = this.recursiveCheckBox.Checked;
-        }
-
-        private PathSelectorOptions options;
+        }        
     }
 }

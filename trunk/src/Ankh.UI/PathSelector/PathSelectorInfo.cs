@@ -16,7 +16,6 @@ namespace Ankh
     /// </summary>
     public class PathSelectorInfo
     {
-
         readonly string _caption;
         bool _singleSelection;
         bool _enableRecursive;
@@ -29,16 +28,6 @@ namespace Ankh
         Predicate<SvnItem> _checkedFilter;
         Predicate<SvnItem> _visibleFilter;
         bool _evaluated;
-
-        [Obsolete]
-        public PathSelectorInfo(string caption, ICollection<SvnItem> items, Predicate<SvnItem> checkedFilter)
-            : this(caption, items)
-        {
-            if (checkedFilter == null)
-                throw new ArgumentNullException("checkedFilter");
-
-            CheckedFilter += checkedFilter;
-        }
 
         public PathSelectorInfo(string caption, IEnumerable<SvnItem> items)
         {
@@ -125,19 +114,18 @@ namespace Ankh
                 EnsureFiltered();
                 return _checkedItems.Values;
             }
-            //internal set { _checkedItems = value; }
         }
 
         public bool EnableRecursive
         {
-            get { return this._enableRecursive; }
-            set { this._enableRecursive = value; }
+            get { return _enableRecursive; }
+            set { _enableRecursive = value; }
         }
 
         public SvnDepth Depth
         {
-            get { return this._depth; }
-            set { this._depth = value; }
+            get { return _depth; }
+            set { _depth = value; }
         }
 
         public SvnRevision RevisionStart
@@ -154,8 +142,8 @@ namespace Ankh
 
         public bool SingleSelection
         {
-            get { return this._singleSelection; }
-            set { this._singleSelection = value; }
+            get { return _singleSelection; }
+            set { _singleSelection = value; }
         }
 
         public string Caption
@@ -175,7 +163,5 @@ namespace Ankh
                 return result;
             }
         }
-
-
     }
 }
