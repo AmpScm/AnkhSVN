@@ -19,6 +19,8 @@ namespace Ankh.Commands
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
     [Command(AnkhCommand.CommitItem)]
+    [Command(AnkhCommand.ProjectCommit)]
+    [Command(AnkhCommand.SolutionCommit)]
     public class CommitItemCommand : CommandBase
     {
         ICollection<string> paths;
@@ -63,7 +65,58 @@ namespace Ankh.Commands
 
             Collection<SvnItem> resources = new Collection<SvnItem>();
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            List<SvnItem> selectedItems = new List<SvnItem>();
+            HybridCollection<string> ticked;
+            switch (e.Command)
+            {
+                case AnkhCommand.SolutionCommit:
+                    foreach(string file in mapper.GetAllFilesOfAllProjects())
+                    {
+                        SvnItem item = cache[file];
+
+                        if (item != null)
+                            selectedItems.Add(item);
+                    }
+                    break;
+                case AnkhCommand.ProjectCommit:
+                    // TODO: Fetch all selecteded objects and feed them into a selection dialog with refresh option
+                    ticked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach(string file in mapper.GetAllFilesOf(new List<SvnProject>(e.Selection.GetSelectedProjects(false))))
+                    {
+                        if (ticked.Contains(file))
+                            continue;
+
+                        ticked.Add(file);
+
+                        SvnItem item = cache[file];
+
+                        if (item != null)
+                            selectedItems.Add(item);
+                    }
+                    break;
+                case AnkhCommand.CommitItem:
+                    ticked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (string file in e.Selection.GetSelectedFiles(true))
+                    {
+                        if (ticked.Contains(file))
+                            continue;
+
+                        ticked.Add(file);
+
+                        SvnItem item = cache[file];
+
+                        if (item != null)
+                            selectedItems.Add(item);
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            // TODO: Give the whole list to a refreshable dialog!
+            foreach (SvnItem item in selectedItems)
             {
                 if (item.IsVersioned && !item.IsModified)
                     continue; // Check for dirty files is not necessary here, because we just saved the dirty documents
@@ -86,9 +139,7 @@ namespace Ankh.Commands
                         parent = parent.Parent;
                     }
                 }
-
             }
-
             if (resources.Count == 0)
                 return;
 
