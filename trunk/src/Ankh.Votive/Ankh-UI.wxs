@@ -241,14 +241,14 @@ Click Next to continue.</Text>
                     Text="[ButtonText_Cancel]">
                     <Publish Event="SpawnDialog" Value="Cancel" />
                 </Control>
-                <Control Id="AgreeRadioGroup" Type="RadioButtonGroup" X="18" Y="200" Width="348" Height="15" Property="EulaForm_Property">
+                <Control Id="AgreeRadioGroup" Type="RadioButtonGroup" X="60" Y="216" Width="348" Height="15" Property="EulaForm_Property">
                     <Text>MsiRadioButtonGroup</Text>
                     <RadioButtonGroup Property="EulaForm_Property">
-                        <RadioButton Value="No" X="0" Y="0" Width="138" Height="15" Text="I &amp;Do Not Agree" />
-                        <RadioButton Value="Yes" X="138" Y="0" Width="138" Height="15" Text="I &amp;Agree" />
+                        <RadioButton Value="No" X="0" Y="0" Width="100" Height="15" Text="I &amp;Do Not Agree" />
+                        <RadioButton Value="Yes" X="100" Y="0" Width="138" Height="15" Text="I &amp;Agree" />
                     </RadioButtonGroup>
                 </Control>
-                <Control Id="LicenseText" Type="ScrollableText" X="18" Y="55" Width="348" Height="120" 
+                <Control Id="LicenseText" Type="ScrollableText" X="18" Y="55" Width="348" Height="160" 
                     Sunken="yes" TabSkip="no">
                     <Text SourceFile="$(sys.SOURCEFILEDIR)..\LICENSE.rtf" />
                 </Control>
