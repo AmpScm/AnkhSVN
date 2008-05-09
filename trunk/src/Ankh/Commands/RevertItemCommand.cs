@@ -30,7 +30,10 @@ namespace Ankh.Commands
                 if (item.IsModified || item.IsDocumentDirty)
                     return;
             }
-            e.Enabled = e.Visible = false;
+            e.Enabled = false;
+
+            if (e.Command != AnkhCommand.ItemRevertBase)
+                e.Visible = false; // Don't hide nested toolbar buttons
         }
         
 
