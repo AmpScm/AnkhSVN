@@ -19,6 +19,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.ComponentModel;
 using System.Collections.Generic;
 
@@ -48,8 +49,8 @@ namespace Ankh.UI.PendingChanges
 
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
-            codeEditorNativeWindow = new CodeEditorNativeWindow();
-            codeEditorNativeWindow.Init(serviceProvider, this);
+            codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
+            codeEditorNativeWindow.Init();
             codeEditorNativeWindow.Area = this.ClientRectangle;
 
             _fixUI = true; // Fix the font issues in the next size changed            
@@ -88,6 +89,9 @@ namespace Ankh.UI.PendingChanges
         /// <returns>Always returns true</returns>
         protected override bool IsInputKey(Keys keyData)
         {
+            if (_fixUI)
+                FixUI();
+
             // Since we process each pressed keystroke, the return value is always true.
             return true;
         }
@@ -137,10 +141,16 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
+            base.OnGotFocus(e);
             if (codeEditorNativeWindow != null)
             {
                 codeEditorNativeWindow.Focus();
             }
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
         }
 
         /// <summary>
@@ -152,34 +162,48 @@ namespace Ankh.UI.PendingChanges
             {
                 codeEditorNativeWindow.Area = this.ClientRectangle;
 
-                if (_fixUI)
+                
+                    FixUI();
+            }
+        }
+
+        void FixUI()
+        {
+            if (!_fixUI)
+                return;
+
+            if (_hwndTop == IntPtr.Zero)
+            {
+                IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out _hwndTop)))
                 {
-                    if (_hwndTop == IntPtr.Zero)
+                    if (!CodeEditorNativeWindow.NativeMethods.IsWindow(_hwndTop) ||
+                        (_hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
                     {
-                        IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
-
-                        if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out _hwndTop)))
-                        {
-                            if (!CodeEditorNativeWindow.NativeMethods.IsWindow(_hwndTop) ||
-                                (_hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
-                            {
-                                // For some reason VS gives an invalid window (the desktop) while loading
-                                _hwndTop = IntPtr.Zero;
-                            }
-                        }
-                        else
-                            _hwndTop = IntPtr.Zero;
-
-                    }
-
-                    if (_hwndTop != IntPtr.Zero)
-                    {
-                        // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
-                        CodeEditorNativeWindow.NativeMethods.PostMessage(_hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
-                        _fixUI = false;
+                        // For some reason VS gives an invalid window (the desktop) while loading
+                        _hwndTop = IntPtr.Zero;
                     }
                 }
+                else
+                    _hwndTop = IntPtr.Zero;
+
             }
+
+            if (_hwndTop != IntPtr.Zero)
+            {
+                // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
+                CodeEditorNativeWindow.NativeMethods.PostMessage(_hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
+                _fixUI = false;
+            }
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (_fixUI && codeEditorNativeWindow != null && Visible)
+                FixUI();
         }
 
         #endregion
@@ -222,6 +246,10 @@ namespace Ankh.UI.PendingChanges
     {
         #region Fields
 
+        readonly Control _container;
+        readonly IAnkhServiceProvider _context;
+        readonly IOleServiceProvider _serviceProvider;
+
         /// <summary>
         /// Editor window handle
         /// </summary>
@@ -239,11 +267,6 @@ namespace Ankh.UI.PendingChanges
         private IOleCommandTarget commandTarget;
 
         /// <summary>
-        /// Service provider
-        /// </summary>
-        private IOleServiceProvider serviceProvider;
-
-        /// <summary>
         /// Reference to VsCodeWindow object
         /// </summary>
         private IVsCodeWindow codeWindow;
@@ -252,6 +275,18 @@ namespace Ankh.UI.PendingChanges
         IVsTextView _textView;
 
         #endregion
+
+        public CodeEditorNativeWindow(IAnkhServiceProvider context, Control container)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (container == null)
+                throw new ArgumentNullException("container");
+
+            _context = context;
+            _container = container;
+            _serviceProvider = context.GetService<IOleServiceProvider>();
+        }
 
         public string Text
         {
@@ -367,12 +402,12 @@ namespace Ankh.UI.PendingChanges
                 if (editorHwnd != IntPtr.Zero)
                 {
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y,
-                        value.Width, value.Height, 0x04);
+                        value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
                 if (commandHwnd != IntPtr.Zero)
                 {
                     NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, value.X, value.Y,
-                        value.Width, value.Height, 0x04);
+                        value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
             }
         }
@@ -440,7 +475,7 @@ namespace Ankh.UI.PendingChanges
             // create pane window
             IVsWindowPane windowPane = (IVsWindowPane)codeWindow;
 
-            hr = windowPane.SetSite(serviceProvider);
+            hr = windowPane.SetSite(_serviceProvider);
             if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
@@ -487,7 +522,7 @@ namespace Ankh.UI.PendingChanges
             // Try to site object instance
             IObjectWithSite objectWithSite = objectInstance as IObjectWithSite;
             if (objectWithSite != null)
-                objectWithSite.SetSite(serviceProvider);
+                objectWithSite.SetSite(_serviceProvider);
 
             return objectInstance;
         }
@@ -505,13 +540,10 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="serviceProvider">IOleServiceProvider</param>
         /// <param name="parent">Control, that can be used to create other controls</param>
-        public void Init(IOleServiceProvider serviceProvider, UserControl parent)
+        public void Init()
         {
-            // Store service provider
-            this.serviceProvider = serviceProvider;
-
             //Create window            
-            CreateCodeWindow(parent.Handle, parent.ClientRectangle, out codeWindow);
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, out codeWindow);
             commandTarget = codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
@@ -527,7 +559,7 @@ namespace Ankh.UI.PendingChanges
 
             //Assign a handle to this window
             AssignHandle(commandHwnd);
-            NativeMethods.ShowWindow(editorHwnd, 1);
+            NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
         }
 
         /// <summary>
@@ -546,7 +578,7 @@ namespace Ankh.UI.PendingChanges
 
             InterfaceType service = null;
 
-            int hr = serviceProvider.QueryService(ref serviceGuid, ref interfaceGuid, out unknown);
+            int hr = _serviceProvider.QueryService(ref serviceGuid, ref interfaceGuid, out unknown);
 
             if (!ErrorHandler.Succeeded(hr))
             {
@@ -607,7 +639,12 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+            if (_container.ContainsFocus)
+                return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+            else
+            {
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
         }
 
 
@@ -621,7 +658,12 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            if (_container.ContainsFocus)
+                return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+            else
+            {
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
         }
 
         #endregion

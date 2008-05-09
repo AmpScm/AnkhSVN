@@ -125,6 +125,7 @@ namespace Ankh.UI.PendingChanges
             issuesButton.Checked = (page == _issuesPage);
             recentChangesButton.Checked = (page == _changesPage);
             conflictsButton.Checked = (page == _conflictsPage);
+            page.Select();
 
             if (UISite != null)
             {
