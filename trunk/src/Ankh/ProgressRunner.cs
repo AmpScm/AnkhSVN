@@ -7,6 +7,7 @@ using Ankh.UI;
 using Ankh.VS;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace Ankh
 {
@@ -88,7 +89,13 @@ namespace Ankh
                         thread.Start(client);
                     };
                     _invoker = dialog;
-                    dialog.ShowDialog(dialogOwner.DialogOwner);
+
+                    IUIService service = _context.GetService<IUIService>();
+
+                    if (service == null)
+                        dialog.ShowDialog(dialogOwner.DialogOwner);
+                    else
+                        service.ShowDialog(dialog);
 
                     thread.Join();
                 }
