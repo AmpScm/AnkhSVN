@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio;
+using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
