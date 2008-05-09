@@ -12,29 +12,5 @@
       </Component>
     </DirectoryRef>
   </Fragment>
-	<!-- Visual Studio Ole Interop -->
-	<Fragment>
-		<ComponentGroup Id="Microsoft.VisualStudio.OLE.Interop">
-			<ComponentRef Id="C_Microsoft.VisualStudio.OLE.Interop.dll"/>
-		</ComponentGroup>
-		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
-			<Component Id="C_Microsoft.VisualStudio.OLE.Interop.dll" Guid="1D5697B8-CFAB-47FB-BEA7-6A81248EA1DF">
-				<File Id="CF_Microsoft.VisualStudio.OLE.Interop.dll" Name="Microsoft.VisualStudio.OLE.Interop.dll"
-                    KeyPath="yes" Vital="yes" Checksum="yes" />
-			</Component>
-		</DirectoryRef>
-	</Fragment>
-	<!-- Visual Studio Shell Interop -->
-	<Fragment>
-		<ComponentGroup Id="Microsoft.VisualStudio.Shell.Interop">
-			<ComponentRef Id="C_Microsoft.VisualStudio.Shell.Interop.dll"/>
-		</ComponentGroup>
-		<DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
-			<Component Id="C_Microsoft.VisualStudio.Shell.Interop.dll" Guid="A009D242-B41E-4F9B-86A3-9EA9DD4E85DF">
-				<File Id="CF_Microsoft.VisualStudio.Shell.Interop.dll" Name="Microsoft.VisualStudio.Shell.Interop.dll"
-					  KeyPath="yes" Vital="yes" Checksum="yes" />
-			</Component>
-		</DirectoryRef>
-	</Fragment>
 </Wix>
 
