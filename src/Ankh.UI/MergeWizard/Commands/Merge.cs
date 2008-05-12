@@ -6,6 +6,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 
 using WizardFramework;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.MergeWizard.Commands
 {
@@ -35,8 +36,15 @@ namespace Ankh.UI.MergeWizard.Commands
         public void OnExecute(CommandEventArgs e)
         {
             WizardDialog dialog = new WizardDialog(new MergeWizard());
+            dialog.TopMost = false; // Currently set in the wizard framework
+            dialog.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
-            dialog.ShowDialog();
+            IUIService uiService = e.GetService<IUIService>();
+
+            if (uiService != null)
+                uiService.ShowDialog(dialog);
+            else
+                dialog.ShowDialog();
         }
 
         #endregion
