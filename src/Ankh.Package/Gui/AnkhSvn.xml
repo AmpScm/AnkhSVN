@@ -130,7 +130,7 @@
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
-              text="&amp;Merge" iconFile="menu/Merge.gif" />
+              text="&amp;Merge" iconFile="menu/Merge.png" />
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
