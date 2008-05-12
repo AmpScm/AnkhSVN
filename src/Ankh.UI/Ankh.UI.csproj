@@ -325,7 +325,6 @@
     <Compile Include="PendingChanges\LogMessageLanguageService.cs" />
     <Compile Include="$(LogMessageFile)">
       <DependentUpon>LogMessageLanguageService.cs</DependentUpon>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesPage.cs">
       <SubType>UserControl</SubType>
