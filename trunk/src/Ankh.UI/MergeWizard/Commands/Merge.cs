@@ -15,7 +15,21 @@ namespace Ankh.UI.MergeWizard.Commands
         #region ICommandHandler Members
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnUpdate" />
-        public void OnUpdate(CommandUpdateEventArgs e) { }
+        public void OnUpdate(CommandUpdateEventArgs e)
+        {
+            if (!e.State.SccProviderActive)
+            {
+                e.Visible = e.Enabled = false;
+                return;
+            }
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsVersioned)
+                    return;
+            }
+            e.Enabled = false;
+        }
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
         public void OnExecute(CommandEventArgs e)
