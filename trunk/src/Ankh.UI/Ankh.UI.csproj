@@ -157,6 +157,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeWizard\Commands\Merge.cs" />
     <Compile Include="MergeWizard\MergeBestPracticesPage.cs" />
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.cs">
       <SubType>UserControl</SubType>
