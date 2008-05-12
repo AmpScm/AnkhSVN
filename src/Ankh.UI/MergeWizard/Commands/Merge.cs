@@ -39,7 +39,6 @@ namespace Ankh.UI.MergeWizard.Commands
             WizardDialog dialog = new WizardDialog(new MergeWizard());
             DialogResult result;
 
-            dialog.TopMost = false; // Currently set in the wizard framework
             dialog.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
             IUIService uiService = e.GetService<IUIService>();
