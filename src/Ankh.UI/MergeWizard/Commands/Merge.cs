@@ -6,6 +6,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 
 using WizardFramework;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
 namespace Ankh.UI.MergeWizard.Commands
@@ -36,15 +37,24 @@ namespace Ankh.UI.MergeWizard.Commands
         public void OnExecute(CommandEventArgs e)
         {
             WizardDialog dialog = new WizardDialog(new MergeWizard());
+            DialogResult result;
+
             dialog.TopMost = false; // Currently set in the wizard framework
             dialog.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 
             IUIService uiService = e.GetService<IUIService>();
 
-            if (uiService != null)
-                uiService.ShowDialog(dialog);
+            if (uiService == null)
+                result = uiService.ShowDialog(dialog);
             else
-                dialog.ShowDialog();
+                result = dialog.ShowDialog();
+            
+            if (result == DialogResult.OK)
+                MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
+                    "Until Ankh 2.0 releases at the end of May, this feature may not work.  " +
+                    "Please check the website for a newer build or if you have the latest, contact " +
+                    "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
         }
 
         #endregion
