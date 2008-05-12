@@ -22,9 +22,4 @@ namespace Ankh.UI.PendingChanges
             base.ShowContextMenu(menuId, groupGuid, target, x, y);
 		}
 	}
-
-    partial class LogMessageEditor
-    {
-        // The VS2008 SDK handles editor commands by itself????
-    }
 }
