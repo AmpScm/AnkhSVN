@@ -149,6 +149,8 @@ namespace Ankh.Ids
         ItemResolveWorking,
         ItemResolveMergeTool,
 
+        ItemMerge,
+
         RefreshPendingChanges,
 
         SolutionSwitchCombo,

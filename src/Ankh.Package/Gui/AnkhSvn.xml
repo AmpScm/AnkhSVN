@@ -129,7 +129,9 @@
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
-          <ButtonRef id="Cmd_Refresh" priority="0xE0" />
+          <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
+              text="&amp;Merge" iconFile="menu/Merge.gif" />
+          <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
     </GroupRef>
@@ -144,7 +146,6 @@
       <Button id="Cmd_ProjectHistory" priority="0x1700" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_DiffLocalItem" priority="0x1800" />
-      
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
@@ -160,7 +161,8 @@
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
-          <ButtonRef id="Cmd_Refresh" priority="0xE0" />
+          <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
+          <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
     </GroupRef>
@@ -216,7 +218,8 @@
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
-          <Button id="Cmd_Refresh" name="Refresh" priority="0xE0" defaultInvisible="true"
+          <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
+          <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
 								text="Refres&amp;h"
 								toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
         </Group>
