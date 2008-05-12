@@ -21,7 +21,9 @@ namespace Ankh.UI.MergeWizard
         public override void AddPages()
         {
             WizardPage mergeType = new MergeTypePage();
+            WizardPage bestPractices = new MergeBestPracticesPage();
             AddPage(mergeType);
+            AddPage(bestPractices);
         }
 
         /// <see cref="WizardFramework.Wizard.PerformFinish" />
@@ -29,6 +31,15 @@ namespace Ankh.UI.MergeWizard
         {
             // TODO: Implement
             return true;
+        }
+
+        /// <see cref="WizardFramework.IWizard.DefaultPageImage" />
+        public override System.Drawing.Image DefaultPageImage
+        {
+            get
+            {
+                return (System.Drawing.Image)resman.GetObject("MergeWizardHeaderImage");
+            }
         }
 
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());

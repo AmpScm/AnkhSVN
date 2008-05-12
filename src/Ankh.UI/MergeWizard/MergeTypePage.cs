@@ -19,7 +19,6 @@ namespace Ankh.UI.MergeWizard
 
             Title = resman.GetString("MergeTypePageHeaderTitle");
             this.Message = new WizardMessage(resman.GetString("MergeTypePageHeaderMessage"));
-            this.Image = (System.Drawing.Image)resman.GetObject("MergeWizardHeaderImage");
         }
 
         /// <see cref="WizardFramework.WizardPage.Control" />
