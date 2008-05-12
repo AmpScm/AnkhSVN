@@ -157,6 +157,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeWizard\MergeBestPracticesPage.cs" />
+    <Compile Include="MergeWizard\MergeBestPracticesPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeBestPracticesPageControl.Designer.cs">
+      <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\MergeTypePage.cs" />
     <Compile Include="MergeWizard\MergeTypePageControl.cs">
       <SubType>UserControl</SubType>
@@ -173,6 +180,11 @@
     <Compile Include="PendingChanges\Commands\PendingCommitSortCommands.cs" />
     <Compile Include="PendingChanges\Commands\PendingCommitGroupCommands.cs" />
     <Compile Include="PendingChanges\Commands\PendingCommitViewCommands.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -312,6 +324,7 @@
     <Compile Include="PendingChanges\LogMessageLanguageService.cs" />
     <Compile Include="$(LogMessageFile)">
       <DependentUpon>LogMessageLanguageService.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesPage.cs">
       <SubType>UserControl</SubType>
@@ -605,6 +618,10 @@
     <None Include="Ankh.UI.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MergeWizard\MergeBestPracticesPageControl.resx">
+      <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeTypePageControl.resx">
       <DependentUpon>MergeTypePageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -614,6 +631,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\RecentChangesPage.resx">
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.resx">
@@ -749,11 +771,13 @@
     <None Include="Resources\disconnectButton.Image.png" />
     <None Include="Resources\connectButton.Image.png" />
     <None Include="Resources\refreshButton.Image.png" />
+    <Content Include="MergeWizard\images\Error.png" />
     <Content Include="MergeWizard\images\ManuallyRecord.png" />
     <None Include="MergeWizard\images\MergeWizardHeader.png" />
     <None Include="MergeWizard\images\MergeWizard.ico" />
     <Content Include="MergeWizard\images\RangeOfRevisions.png" />
     <Content Include="MergeWizard\images\ReintegrateABranch.png" />
+    <Content Include="MergeWizard\images\Success.png" />
     <Content Include="MergeWizard\images\TwoDifferentTrees.png" />
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
     <Content Include="Resources\TabConflicts.png" />
