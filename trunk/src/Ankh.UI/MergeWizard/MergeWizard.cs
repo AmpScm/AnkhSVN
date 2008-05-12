@@ -4,6 +4,7 @@ using System.Text;
 using WizardFramework;
 using System.Resources;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -30,6 +31,8 @@ namespace Ankh.UI.MergeWizard
         public override bool PerformFinish()
         {
             // TODO: Implement
+            this.Form.DialogResult = DialogResult.OK;
+
             return true;
         }
 
