@@ -53,7 +53,7 @@ namespace Ankh.Extenders
         [Category("Subversion"), DisplayName("Change List"), Description("Change List")]
         public string ChangeList
         {
-            get { return SvnItem.Status.RepositoryId; }
+            get { return SvnItem.Status.ChangeList; }
         }
 
 
