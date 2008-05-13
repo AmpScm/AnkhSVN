@@ -38,7 +38,7 @@
             this.mergeTypeDescriptionGroupBox = new System.Windows.Forms.GroupBox();
             this.mergeTypeDescriptionLabel = new System.Windows.Forms.Label();
             this.mergeTypePictureBox = new System.Windows.Forms.PictureBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.showBestPracticesPageCheckbox = new System.Windows.Forms.CheckBox();
             this.mergeTypeGroupBox.SuspendLayout();
             this.mergeTypeDescriptionGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mergeTypePictureBox)).BeginInit();
@@ -111,19 +111,19 @@
             this.mergeTypePictureBox.Name = "mergeTypePictureBox";
             this.mergeTypePictureBox.TabStop = false;
             // 
-            // checkBox1
+            // showBestPracticesPageCheckbox
             // 
-            resources.ApplyResources(this.checkBox1, "checkBox1");
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.showBestPracticesPageCheckbox, "showBestPracticesPageCheckbox");
+            this.showBestPracticesPageCheckbox.Checked = true;
+            this.showBestPracticesPageCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showBestPracticesPageCheckbox.Name = "showBestPracticesPageCheckbox";
+            this.showBestPracticesPageCheckbox.UseVisualStyleBackColor = true;
             // 
             // MergeTypePageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.showBestPracticesPageCheckbox);
             this.Controls.Add(this.mergeTypeDescriptionGroupBox);
             this.Controls.Add(this.mergeTypeGroupBox);
             this.Name = "MergeTypePageControl";
@@ -147,6 +147,6 @@
         private System.Windows.Forms.GroupBox mergeTypeDescriptionGroupBox;
         private System.Windows.Forms.PictureBox mergeTypePictureBox;
         private System.Windows.Forms.Label mergeTypeDescriptionLabel;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox showBestPracticesPageCheckbox;
     }
 }

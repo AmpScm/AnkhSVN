@@ -21,13 +21,47 @@ namespace Ankh.UI.MergeWizard
 
         public override void AddPages()
         {
-            WizardPage mergeType = new MergeTypePage();
-            WizardPage bestPractices = new MergeBestPracticesPage();
-            AddPage(mergeType);
-            AddPage(bestPractices);
+            AddPage(mergeTypePage);
+            AddPage(bestPracticesPage);
         }
 
-        /// <see cref="WizardFramework.Wizard.PerformFinish" />
+        /// <see cref="WizardFramework.IWizard.GetNextPage" />
+        public override IWizardPage GetNextPage(IWizardPage page)
+        {
+            // Handle the main page
+            if (page is MergeTypePage)
+            {
+                if (((MergeTypePage)page).ShowBestPracticesPage)
+                    return bestPracticesPage;
+                else
+                    // TODO: Change this as more wizard pages are completed
+                    return null;
+            }
+
+            // Handle the best practices page
+            if (page is MergeBestPracticesPage)
+                return null; // For now, if you see the best practices page,
+                             // you have to fix the issue and then reattemp to merge.
+
+            return base.GetNextPage(page);
+        }
+
+        /// <see cref="WizardFramework.IWizard.CanFinish" />
+        public override bool CanFinish
+        {
+            get
+            {
+                if (Container.CurrentPage is MergeTypePage)
+                    return false;
+
+                if (Container.CurrentPage is MergeBestPracticesPage)
+                    return false;
+
+                return base.CanFinish;
+            }
+        }
+
+        /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
             // TODO: Implement
@@ -45,6 +79,8 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        private WizardPage mergeTypePage = new MergeTypePage();
+        private WizardPage bestPracticesPage = new MergeBestPracticesPage();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

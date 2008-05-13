@@ -36,7 +36,7 @@ namespace Ankh.UI.MergeWizard.Commands
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
         public void OnExecute(CommandEventArgs e)
         {
-            WizardDialog dialog = new WizardDialog(new MergeWizard());
+            WizardDialog dialog = new MergeWizardDialog();
             DialogResult result;
 
             dialog.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

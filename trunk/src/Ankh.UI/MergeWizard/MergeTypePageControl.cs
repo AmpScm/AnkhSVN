@@ -44,6 +44,15 @@ namespace Ankh.UI.MergeWizard
         }
         #endregion
 
+        /// <summary>
+        /// Gets whether or not the checkbox for performing pre-merge
+        /// best practices checks is checked.
+        /// </summary>
+        public bool IsPerformBestPracticesChecked
+        {
+            get { return showBestPracticesPageCheckbox.Checked; }
+        }
+
         private void ToggleMergeTypeInformation(MergeTypePageControl page, RadioButton radioButton)
         {
             if (radioButton.Name == "rangeOfRevisionsRadioButton")
