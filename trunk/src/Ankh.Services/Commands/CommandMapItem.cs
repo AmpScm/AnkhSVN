@@ -50,6 +50,20 @@ namespace Ankh.Commands
                 Update(this, e);
         }
 
+        bool _alwaysAvailable;
+        public bool AlwaysAvailable
+        {
+            get { return _alwaysAvailable; }
+            internal set { _alwaysAvailable = value; }
+        }
+
+        bool _showWhenDisabled;
+        public bool HideWhenDisabled
+        {
+            get { return !_showWhenDisabled; }
+            internal set { _showWhenDisabled = !value; }
+        }
+
         public bool IsHandled
         {
             get { return (Execute != null) || (ICommand != null); }

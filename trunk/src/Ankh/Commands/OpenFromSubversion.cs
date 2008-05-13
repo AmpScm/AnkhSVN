@@ -12,8 +12,8 @@ using System.IO;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileFileOpenFromSubversion)]
-    [Command(AnkhCommand.FileFileAddFromSubversion)]
+    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable=true)]
+    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable=true)]
     [Command(AnkhCommand.FileSccOpenFromSubversion)]
     [Command(AnkhCommand.FileSccAddFromSubversion)]
     class OpenFromSubversion : CommandBase
