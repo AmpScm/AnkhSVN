@@ -21,6 +21,14 @@ namespace Ankh.UI.MergeWizard
             this.Message = new WizardMessage(resman.GetString("MergeTypePageHeaderMessage"));
         }
 
+        /// <summary>
+        /// Returns whether or not to show the best practices page.
+        /// </summary>
+        public bool ShowBestPracticesPage
+        {
+            get { return ((MergeTypePageControl)control_prop).IsPerformBestPracticesChecked; }
+        }
+
         /// <see cref="WizardFramework.WizardPage.Control" />
         public override System.Windows.Forms.UserControl Control
         {
