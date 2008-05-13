@@ -64,9 +64,6 @@ namespace Ankh.Scc
         {
             EnsureService<IStatusImageMapper>();
             EnsureService<IFileStatusCache>();
-
-            // TODO: BH: I'm working on removing the next line!
-            _sccProvider.RegisterAsPrimarySccProvider();
         }
     }
 }
