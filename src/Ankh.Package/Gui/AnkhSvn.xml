@@ -115,9 +115,9 @@
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1100" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_SolutionUpdateHead" priority="0x1500" />
-      <Button id="Cmd_SolutionCommit" priority="0x1600" name="SolutionCommit"
+      <Button id="Cmd_SolutionCommit" priority="0x1600" name="SolutionCommit" defaultInvisible="true"
               text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
-      <Button id="Cmd_SolutionHistory" priority="0x1700" name="SolutionHistory"
+      <Button id="Cmd_SolutionHistory" priority="0x1700" name="SolutionHistory" defaultInvisible="true"
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1800" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
@@ -130,7 +130,7 @@
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
-              text="&amp;Merge" iconFile="menu/Merge.png" />
+              text="&amp;Merge" iconFile="menu/Merge.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
@@ -140,11 +140,11 @@
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1100" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />     
       <Button id="Cmd_ProjectUpdateHead" priority="0x1500" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
-              iconFile="PendingChanges/Update.png" />
+              iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectCommit" priority="0x1600" name="ProjectCommit" 
-              text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" />
+              text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectHistory" priority="0x1700" name="ProjectHistory"
-              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
       <ButtonRef id="Cmd_DiffLocalItem" priority="0x1800" />
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
