@@ -40,5 +40,24 @@ namespace Ankh.Commands
         {
             get { return _context; }
         }
+
+        bool _hideWhenDisabled;
+        public bool HideWhenDisabled
+        {
+            get { return _hideWhenDisabled; }
+            set { _hideWhenDisabled = value; }
+        }
+
+        bool _alwaysAvailable;
+
+        /// <summary>
+        /// Gets or sets a boolean indicating whether this command might be enabled if AnkhSVN is not the current SCC provider
+        /// </summary>
+        /// <remarks>If set to false the command is disabled (and when <see cref="HideWhenDisabled"/> also hidden)</remarks>
+        public bool AlwaysAvailable
+        {
+            get { return _alwaysAvailable; }
+            set { _alwaysAvailable = value; }
+        }
     }
 }

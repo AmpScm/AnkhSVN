@@ -35,22 +35,28 @@ namespace Ankh.Commands
 
             if (_map.TryGetValue(command, out item))
             {
-                try
-                {
-                    item.OnUpdate(e);
-                }
-                catch (Exception ex)
-                {
-                    IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
-
-                    if (handler != null)
+                if (!item.AlwaysAvailable && !e.State.SccProviderActive)
+                    e.Enabled = false; 
+                else
+                    try
                     {
-                        handler.OnError(ex);
-                        return false;
+                        item.OnUpdate(e);
+                    }
+                    catch (Exception ex)
+                    {
+                        IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
+
+                        if (handler != null)
+                        {
+                            handler.OnError(ex);
+                            return false;
+                        }
+
+                        throw;
                     }
 
-                    throw;
-                }
+                if (item.HideWhenDisabled && !e.Enabled)
+                    e.Visible = false;
 
                 return item.IsHandled;
             }
@@ -174,6 +180,8 @@ namespace Ankh.Commands
                             Debug.Assert(item.ICommand == null || item.ICommand == instance, string.Format("No previous ICommand registered on the CommandMapItem for {0}", cmdAttr.Command));
 
                             item.ICommand = instance; // hooks all events in compatibility mode
+                            item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
+                            item.HideWhenDisabled = cmdAttr.HideWhenDisabled;
                         }
                     }
                 }
