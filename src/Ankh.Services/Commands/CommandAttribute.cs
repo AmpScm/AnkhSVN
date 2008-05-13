@@ -41,11 +41,11 @@ namespace Ankh.Commands
             get { return _context; }
         }
 
-        bool _hideWhenDisabled;
+        bool _showWhenDisabled;
         public bool HideWhenDisabled
         {
-            get { return _hideWhenDisabled; }
-            set { _hideWhenDisabled = value; }
+            get { return !_showWhenDisabled; }
+            set { _showWhenDisabled = !value; }
         }
 
         bool _alwaysAvailable;
