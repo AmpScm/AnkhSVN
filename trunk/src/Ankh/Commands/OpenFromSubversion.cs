@@ -36,7 +36,7 @@ namespace Ankh.Commands
             {
                 dlg.Context = e.Context;
 
-                dlg.Filter = settings.OpenProjectFilterName + "|" + settings.OpenProjectFilterName + "|All Files (*.*)|*";
+                dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
 
                 if (e.Command != AnkhCommand.FileFileOpenFromSubversion && e.Command != AnkhCommand.FileSccOpenFromSubversion)
                 {
