@@ -57,12 +57,12 @@ namespace Ankh.Commands
             internal set { _alwaysAvailable = value; }
         }
 
-        bool _showWhenDisabled;
+        bool _hideWhenDisabled;
         public bool HideWhenDisabled
         {
-            get { return !_showWhenDisabled; }
-            internal set { _showWhenDisabled = !value; }
-        }
+            get { return _hideWhenDisabled; }
+            internal set { _hideWhenDisabled = value; }
+        }        
 
         public bool IsHandled
         {
