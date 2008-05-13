@@ -43,7 +43,7 @@ namespace Ankh.UI.MergeWizard.Commands
 
             IUIService uiService = e.GetService<IUIService>();
 
-            if (uiService == null)
+            if (uiService != null)
                 result = uiService.ShowDialog(dialog);
             else
                 result = dialog.ShowDialog();
