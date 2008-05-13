@@ -23,6 +23,7 @@ namespace Ankh.UI.MergeWizard
         {
             AddPage(mergeTypePage);
             AddPage(bestPracticesPage);
+            AddPage(mergeSourceRangeOfRevisions);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -31,11 +32,13 @@ namespace Ankh.UI.MergeWizard
             // Handle the main page
             if (page is MergeTypePage)
             {
-                if (((MergeTypePage)page).ShowBestPracticesPage)
+                // Handle displaying the best practices page
+                if (((MergeTypePage)page).ShowBestPracticesPage 
+                    && ((MergeBestPracticesPage)bestPracticesPage).DisplayBestPracticesPage)
                     return bestPracticesPage;
                 else
-                    // TODO: Change this as more wizard pages are completed
-                    return null;
+                    // TODO: Add accessor to merge type to get the desired merge source page.
+                    return mergeSourceRangeOfRevisions;
             }
 
             // Handle the best practices page
@@ -81,6 +84,7 @@ namespace Ankh.UI.MergeWizard
 
         private WizardPage mergeTypePage = new MergeTypePage();
         private WizardPage bestPracticesPage = new MergeBestPracticesPage();
+        private WizardPage mergeSourceRangeOfRevisions = new MergeSourceRangeOfRevisionsPage();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }
