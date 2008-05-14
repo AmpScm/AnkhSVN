@@ -295,7 +295,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (Uri.TryCreate(urlBox.Text, UriKind.Absolute, out dirUri) && Uri.TryCreate(fileText, UriKind.Relative, out fileUri))
             {
-                Uri combined = new Uri(dirUri, fileUri);
+                Uri combined = SvnTools.AppendPathSuffix(dirUri, fileText);
 
                 DoSomething fill = delegate()
                 {
@@ -385,7 +385,7 @@ namespace Ankh.UI.RepositoryOpen
             if (!string.IsNullOrEmpty(name) && Uri.TryCreate(name, UriKind.RelativeOrAbsolute, out nameUri))
             {
                 if (dirUri != null && !nameUri.IsAbsoluteUri && nameUri.ToString().Contains("/") || (nameUri.ToString() == ".."))
-                    nameUri = new Uri(dirUri, nameUri);
+                    nameUri = SvnTools.AppendPathSuffix(dirUri, name);
 
                 if (nameUri.IsAbsoluteUri)
                 {
@@ -445,7 +445,7 @@ namespace Ankh.UI.RepositoryOpen
                 if (!string.IsNullOrEmpty(fileText) &&
                     Uri.TryCreate(fileText.Trim(), UriKind.Relative, out fileUri))
                 {
-                    fileUri = parentUri.MakeRelativeUri(new Uri(uri, fileUri));
+                    fileUri = parentUri.MakeRelativeUri(SvnTools.AppendPathSuffix(uri, fileText.Trim()));
 
                     fileNameBox.Text = fileUri.ToString();
                 }
