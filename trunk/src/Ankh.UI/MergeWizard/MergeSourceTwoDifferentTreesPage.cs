@@ -9,18 +9,18 @@ namespace Ankh.UI.MergeWizard
 {
     /// <summary>
     /// Implementation of a wizard page for retrieving the merge source
-    /// information for your typical merge scenario.
+    /// information for merging two different trees together.
     /// </summary>
-    class MergeSourceRangeOfRevisionsPage : WizardPage
+    class MergeSourceTwoDifferentTreesPage : WizardPage
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MergeSourceRangeOfRevisionsPage() : base("Merge Source Range Of Revisions")
+        public MergeSourceTwoDifferentTreesPage() : base("Merge Source Two Different Trees")
         {
             IsPageComplete = false;
             Title = resman.GetString("MergeSourceHeaderTitle");
-            this.Message = new WizardMessage(resman.GetString("MergeSourceRangeOfRevisionsPageHeaderMessage"));
+            Message = new WizardMessage(resman.GetString("MergeSourceTwoDifferentTreesPageHeaderMessage"));
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
@@ -29,7 +29,7 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private System.Windows.Forms.UserControl control_prop = new MergeSourceRangeOfRevisionsPageControl();
+        private System.Windows.Forms.UserControl control_prop = new MergeSourceTwoDifferentTreesPageControl();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }
