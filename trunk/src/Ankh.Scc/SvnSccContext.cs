@@ -751,6 +751,38 @@ namespace Ankh.Scc
             }
         }
 
+        public void DeleteDirectory(string path)
+        {
+            DirectoryInfo dir = new DirectoryInfo(path);
+
+            if (dir.Exists)
+                RecursiveDelete(dir);
+        }
+
+        internal string MakeBackup(string fullPath)
+        {
+            if (string.IsNullOrEmpty(fullPath))
+                throw new ArgumentNullException("fullPath");
+
+            if (Directory.Exists(fullPath))
+            {
+                string tmp;
+                int n = 0;
+
+                do
+                {
+                    tmp = string.Format("{0}.tmp{1}", fullPath, n++);
+                }
+                while (!Directory.Exists(tmp));
+
+                Directory.CreateDirectory(tmp);
+
+                return tmp;
+            }
+            else
+                return null;
+        }
+
         private void RecursiveDelete(DirectoryInfo dir)
         {
             if(dir == null)
@@ -771,8 +803,6 @@ namespace Ankh.Scc
             }
             dir.Delete();
         }        
-
-
 
         static class NativeMethods
         {

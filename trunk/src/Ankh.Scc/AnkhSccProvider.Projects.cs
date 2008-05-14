@@ -19,8 +19,9 @@ namespace Ankh.Scc
     partial class AnkhSccProvider
     {
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
+        readonly Dictionary<string, string> _backupMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         bool _managedSolution;
-        List<string> _delayedDelete;
+        List<string> _delayedDelete;        
         bool _isDirty;
 
         public void LoadingManagedSolution(bool asPrimarySccProvider)
@@ -374,6 +375,18 @@ namespace Ankh.Scc
                             MarkDirty(file, true);
                         }
                     }
+                }
+            }
+
+            if (_backupMap.Count > 0)
+            {
+                List<string> dirs = new List<string>(_backupMap.Values);
+                _backupMap.Clear();
+
+                using(SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    foreach(string dir in dirs)
+                        svn.DeleteDirectory(dir);
                 }
             }
         }
