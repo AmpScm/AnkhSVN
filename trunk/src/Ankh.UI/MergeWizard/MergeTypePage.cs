@@ -19,6 +19,8 @@ namespace Ankh.UI.MergeWizard
 
             Title = resman.GetString("MergeTypePageHeaderTitle");
             this.Message = new WizardMessage(resman.GetString("MergeTypePageHeaderMessage"));
+
+            ((MergeTypePageControl)control_prop).WizardPage = this;
         }
 
         /// <summary>
@@ -35,6 +37,29 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
+        public MergeType SelectedMergeType
+        {
+            get
+            {
+                return mergeType_prop;
+            }
+
+            set
+            {
+                mergeType_prop = value;
+            }
+        }
+
+        public enum MergeType
+        {
+            RangeOfRevisions,
+            Reintegrate,
+            TwoDifferentTrees,
+            ManuallyRecord,
+            ManuallyRemove
+        }
+
+        private MergeType mergeType_prop = MergeType.RangeOfRevisions;
         private System.Windows.Forms.UserControl control_prop = new MergeTypePageControl();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }

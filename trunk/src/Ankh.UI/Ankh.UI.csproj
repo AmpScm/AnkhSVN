@@ -172,6 +172,13 @@
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.Designer.cs">
       <DependentUpon>MergeSourceRangeOfRevisionsPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeWizard\MergeSourceReintegratePage.cs" />
+    <Compile Include="MergeWizard\MergeSourceReintegratePageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeSourceReintegratePageControl.Designer.cs">
+      <DependentUpon>MergeSourceReintegratePageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\MergeTypePage.cs" />
     <Compile Include="MergeWizard\MergeTypePageControl.cs">
       <SubType>UserControl</SubType>
@@ -631,6 +638,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.resx">
       <DependentUpon>MergeSourceRangeOfRevisionsPageControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\MergeSourceReintegratePageControl.resx">
+      <DependentUpon>MergeSourceReintegratePageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeTypePageControl.resx">
