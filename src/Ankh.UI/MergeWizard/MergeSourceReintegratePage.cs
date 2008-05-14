@@ -7,8 +7,15 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
+    /// <summary>
+    /// Implementation of a wizard page for retrieving the merge source
+    /// information for a branch reintegration merge scenario.
+    /// </summary>
     class MergeSourceReintegratePage : WizardPage
     {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MergeSourceReintegratePage() : base("Merge Source Reintegrate")
         {
             IsPageComplete = false;

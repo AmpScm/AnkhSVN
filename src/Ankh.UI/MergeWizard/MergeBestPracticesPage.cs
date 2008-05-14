@@ -10,7 +10,7 @@ namespace Ankh.UI.MergeWizard
 {
     /// <summary>
     /// Implementation of a wizard page for handling the merge best
-    /// practices checking of AnkhSVN's merge capabilities
+    /// practices checking of AnkhSVN's merge capabilities.
     /// </summary>
     class MergeBestPracticesPage : WizardPage
     {

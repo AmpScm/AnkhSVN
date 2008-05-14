@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Resources;
 using System.Reflection;
+using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -63,7 +64,10 @@ namespace Ankh.UI.MergeWizard
             get { return showBestPracticesPageCheckbox.Checked; }
         }
 
-        public WizardFramework.WizardPage WizardPage
+        /// <summary>
+        /// Gets/Sets the wizard page associated with this UserControl.
+        /// </summary>
+        public WizardPage WizardPage
         {
             get
             {
@@ -76,6 +80,10 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        /// <summary>
+        /// Handles toggling the image and label contents based on the
+        /// currently selected merge type radio button.
+        /// </summary>
         private void ToggleMergeTypeInformation(MergeTypePageControl page, RadioButton radioButton)
         {
             if (radioButton.Name == "rangeOfRevisionsRadioButton")
