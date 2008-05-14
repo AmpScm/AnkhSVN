@@ -225,9 +225,6 @@
     <Compile Include="Commands\DiffLocalItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\EditConfigCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\ExportCommand.cs">
       <SubType>Code</SubType>
     </Compile>

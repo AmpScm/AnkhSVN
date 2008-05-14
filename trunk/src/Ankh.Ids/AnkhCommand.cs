@@ -61,7 +61,6 @@ namespace Ankh.Ids
         CreatePatch,
         DiffExternalLocalItem,
         DiffLocalItem,
-        EditConfigFile,
         Export,
         ExportFolder,
         Lock,

@@ -7,6 +7,10 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Commands;
 using Ankh.Ids;
+using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows.Forms.Design;
+using Ankh.UI.UITypeEditors;
+using Ankh.Configuration;
 
 namespace Ankh.UI
 {
@@ -28,11 +32,46 @@ namespace Ankh.UI
             set { _context = value; }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+		AnkhConfig _config;
+		AnkhConfig Config
+		{
+			get
+			{
+				if (_config == null)
+				{
+					IAnkhConfigurationService configurationSvc = Context.GetService<IAnkhConfigurationService>();
+					_config = configurationSvc.Instance;
+				}
+				return _config;
+			}
+		}
 
-            cs.DirectlyExecCommand(AnkhCommand.EditConfigFile, null);
-        }
+		public void LoadSettings()
+		{
+			txtDiffExePath.Text = Config.DiffExePath;
+			txtMergeExePath.Text = Config.MergeExePath;
+			cbDiffMergeManual.Checked = Config.ChooseDiffMergeManual;
+		}
+
+
+		public void SaveSettings()
+		{
+			Config.DiffExePath = txtDiffExePath.Text;
+			Config.MergeExePath = txtMergeExePath.Text;
+			Config.ChooseDiffMergeManual = cbDiffMergeManual.Checked;
+		}
+
+		private void btnDiffExePath_Click(object sender, EventArgs e)
+		{
+			DiffExeTypeEditor typeEditor = new DiffExeTypeEditor();
+			txtDiffExePath.Text = (string)typeEditor.EditValue(Context, Config.DiffExePath);
+		}
+
+		private void btnMergePath_Click(object sender, EventArgs e)
+		{
+			MergeExeTypeEditor typeEditor = new MergeExeTypeEditor();
+			txtMergeExePath.Text = (string)typeEditor.EditValue(Context, Config.MergeExePath);
+
+		}
     }
 }
