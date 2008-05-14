@@ -117,6 +117,34 @@ namespace Ankh.Scc
             }
         }
 
+        internal void OnBeforeRemoveDirectory(IVsSccProject2 project, string fullPath, out bool ok)
+        {
+            ok = true;
+            SccProjectData data;
+            if (!_projectMap.TryGetValue(project, out data))
+                return; // Not managed by us
+            else if (!IsActive)
+                return;
+
+            if (!_backupMap.ContainsKey(fullPath))
+            {
+                // Don't backup twice
+                string oldBackup = _backupMap[fullPath];
+                _backupMap.Remove(fullPath);
+                using (SvnSccContext svn = new SvnSccContext(this))
+                {
+                    svn.DeleteDirectory(oldBackup);
+                }
+            }
+
+            using (SvnSccContext svn = new SvnSccContext(this))
+            {
+                _backupMap.Add(fullPath, svn.MakeBackup(fullPath));
+            }
+
+            RegisterForSccCleanup();
+        }
+
         /// <summary>
         /// Called when a directory is added to a project
         /// </summary>
