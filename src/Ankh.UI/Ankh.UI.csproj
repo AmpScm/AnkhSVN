@@ -143,6 +143,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\WizardFramework.dll</HintPath>
     </Reference>
+    <ProjectReference Include="..\Ankh.Configuration\Ankh.Configuration.csproj">
+      <Project>{2FFF126C-D567-4491-8128-0D98CF74BDFD}</Project>
+      <Name>Ankh.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
@@ -243,12 +247,6 @@
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConfigurationDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConfigurationDialog.Designer.cs">
-      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ConflictDialog.cs">
       <SubType>Form</SubType>
@@ -678,10 +676,6 @@
     <EmbeddedResource Include="AnkhSettingsControl.resx">
       <DependentUpon>AnkhSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConfigurationDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ConfigurationDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogChangedPaths.resx">
       <DependentUpon>LogChangedPaths.cs</DependentUpon>

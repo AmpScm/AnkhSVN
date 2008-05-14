@@ -33,7 +33,7 @@ namespace Ankh.UI
 
         public override object EditValue( ITypeDescriptorContext context, IServiceProvider provider, object value )
         {
-            IWindowsFormsEditorService svc = (IWindowsFormsEditorService)provider.GetService( typeof( IWindowsFormsEditorService ) );
+            IUIService svc = (IUIService)provider.GetService( typeof( IUIService ) );
             using ( IStringEditorDialog dlg = this.GetStringEditorDialog() )
             {
                 dlg.Value = (string)value;
