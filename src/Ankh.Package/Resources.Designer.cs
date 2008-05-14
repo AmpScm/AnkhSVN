@@ -62,7 +62,7 @@ namespace Ankh.VSPackage {
         
         /// <summary>
         ///   Looks up a localized string similar to AnkhSVN - Subversion Support for Visual Studio {0}
-        /// * Build on Subversion {1} via SharpSvn {2}.
+        /// * Built on Subversion {1} via SharpSvn {2}.
         /// </summary>
         internal static string AboutDetails {
             get {

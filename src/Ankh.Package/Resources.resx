@@ -119,7 +119,7 @@
   </resheader>
   <data name="AboutDetails" xml:space="preserve">
     <value>AnkhSVN - Subversion Support for Visual Studio {0}
- * Build on Subversion {1} via SharpSvn {2}</value>
+ * Built on Subversion {1} via SharpSvn {2}</value>
   </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
