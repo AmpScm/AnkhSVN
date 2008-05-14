@@ -148,6 +148,9 @@
   <data name="MergeSourceReintegratePageHeaderMessage" xml:space="preserve">
     <value>Specify the location of the branch to reintegrate.</value>
   </data>
+  <data name="MergeSourceTwoDifferentTreesPageHeaderMessage" xml:space="preserve">
+    <value>Specify the URL and revisions containing the items to merge.</value>
+  </data>
   <data name="MergeTypePageHeaderMessage" xml:space="preserve">
     <value>Select the type of merge to perform</value>
   </data>
