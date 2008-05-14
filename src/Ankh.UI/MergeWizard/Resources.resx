@@ -145,6 +145,9 @@
   <data name="MergeSourceRangeOfRevisionsPageHeaderMessage" xml:space="preserve">
     <value>Specify the location containing the items to merge.</value>
   </data>
+  <data name="MergeSourceReintegratePageHeaderMessage" xml:space="preserve">
+    <value>Specify the location of the branch to reintegrate.</value>
+  </data>
   <data name="MergeTypePageHeaderMessage" xml:space="preserve">
     <value>Select the type of merge to perform</value>
   </data>

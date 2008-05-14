@@ -21,26 +21,36 @@ namespace Ankh.UI.MergeWizard
         private void rangeofRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
+
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.RangeOfRevisions;
         }
 
         private void reintegrateABranchRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
+
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.Reintegrate;
         }
 
         private void twoDifferentTreesRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
+
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.TwoDifferentTrees;
         }
 
         private void manuallyRecordMergeRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
+
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.ManuallyRecord;
         }
 
         private void manuallyRemoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
+
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.ManuallyRemove;
         }
         #endregion
 
@@ -51,6 +61,19 @@ namespace Ankh.UI.MergeWizard
         public bool IsPerformBestPracticesChecked
         {
             get { return showBestPracticesPageCheckbox.Checked; }
+        }
+
+        public WizardFramework.WizardPage WizardPage
+        {
+            get
+            {
+                return wizardPage_prop;
+            }
+
+            set
+            {
+                wizardPage_prop = value;
+            }
         }
 
         private void ToggleMergeTypeInformation(MergeTypePageControl page, RadioButton radioButton)
@@ -82,6 +105,7 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        private WizardFramework.WizardPage wizardPage_prop = null;
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

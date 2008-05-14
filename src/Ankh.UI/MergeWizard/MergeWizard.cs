@@ -23,7 +23,8 @@ namespace Ankh.UI.MergeWizard
         {
             AddPage(mergeTypePage);
             AddPage(bestPracticesPage);
-            AddPage(mergeSourceRangeOfRevisions);
+            AddPage(mergeSourceRangeOfRevisionsPage);
+            AddPage(mergeSourceReintegratePage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -37,8 +38,21 @@ namespace Ankh.UI.MergeWizard
                     && ((MergeBestPracticesPage)bestPracticesPage).DisplayBestPracticesPage)
                     return bestPracticesPage;
                 else
-                    // TODO: Add accessor to merge type to get the desired merge source page.
-                    return mergeSourceRangeOfRevisions;
+                    switch (((MergeTypePage)page).SelectedMergeType)
+                    {
+                        case MergeTypePage.MergeType.RangeOfRevisions:
+                            return mergeSourceRangeOfRevisionsPage;
+                        case MergeTypePage.MergeType.Reintegrate:
+                            return mergeSourceReintegratePage;
+                        case MergeTypePage.MergeType.TwoDifferentTrees:
+                            return null;
+                        case MergeTypePage.MergeType.ManuallyRecord:
+                            return null;
+                        case MergeTypePage.MergeType.ManuallyRemove:
+                            return null;
+                        default:
+                            return null;
+                    }
             }
 
             // Handle the best practices page
@@ -84,7 +98,8 @@ namespace Ankh.UI.MergeWizard
 
         private WizardPage mergeTypePage = new MergeTypePage();
         private WizardPage bestPracticesPage = new MergeBestPracticesPage();
-        private WizardPage mergeSourceRangeOfRevisions = new MergeSourceRangeOfRevisionsPage();
+        private WizardPage mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage();
+        private WizardPage mergeSourceReintegratePage = new MergeSourceReintegratePage();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }
