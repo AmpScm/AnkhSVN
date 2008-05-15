@@ -165,6 +165,13 @@
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.Designer.cs">
       <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeWizard\MergeSourceManuallyRecordPage.cs" />
+    <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.Designer.cs">
+      <DependentUpon>MergeSourceManuallyRecordPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPage.cs" />
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.cs">
       <SubType>UserControl</SubType>
@@ -635,6 +642,10 @@
   <ItemGroup>
     <EmbeddedResource Include="MergeWizard\MergeBestPracticesPageControl.resx">
       <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\MergeSourceManuallyRecordPageControl.resx">
+      <DependentUpon>MergeSourceManuallyRecordPageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.resx">
