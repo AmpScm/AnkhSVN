@@ -44,29 +44,27 @@ namespace Ankh.Commands
                 throw new ArgumentNullException("context");
 
             IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
-            if(selection != null && tracker != null)
+            if (selection != null && tracker != null)
                 tracker.SaveDocuments(selection.GetSelectedFiles(true));
         }
 
         internal static XslCompiledTransform GetTransform(IContext context, string name)
         {
-            // is the file already there?
-            string configDir = Path.GetDirectoryName(context.Configuration.UserConfigurationPath);
-            string path = Path.Combine(configDir, name);
 
-            if (!File.Exists(path))
-                CreateTransformFile(path, name);
+            // get the embedded resource and copy it to path
+            string resourceName = "Ankh.Commands." + name;
+            using (Stream s =
+                typeof(CommandBase).Assembly.GetManifestResourceStream(resourceName))
+            {
+                XPathDocument doc = new XPathDocument(s);
 
-            Debug.Assert(File.Exists(path));
+                // TODO: Transforms should be cached as a dynamic assembly is created
+                // which stays in memory until the appdomain closes
+                XslCompiledTransform transform = new XslCompiledTransform();
+                transform.Load(doc);
 
-            XPathDocument doc = new XPathDocument(new StreamReader(path));
-
-            // TODO: Transforms should be cached as a dynamic assembly is created
-            // which stays in memory until the appdomain closes
-			XslCompiledTransform transform = new XslCompiledTransform();
-            transform.Load(doc);
-
-            return transform;
+                return transform;
+            }
         }
 
         protected static void CreateTransformFile(string path, string name)

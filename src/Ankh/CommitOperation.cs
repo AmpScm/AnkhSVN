@@ -15,12 +15,12 @@ namespace Ankh
     /// Encapsulates the details of an operation requiring a log message
     /// </summary>
     sealed class CommitOperation
-    {        
+    {
         readonly IAnkhServiceProvider _context;
         readonly ICollection<SvnItem> _items;
         readonly SvnCommitArgs _args;
         readonly EventHandler<ProgressWorkerArgs> _worker;
-        
+
         bool urlPaths;
         string logMessage;
 
@@ -73,8 +73,7 @@ namespace Ankh
             // is there a previous log message?
             if (!string.IsNullOrEmpty(this.LogMessage))
             {
-                if (config.AutoReuseComment ||
-                    MessageBox.Show(ownerSvc.DialogOwner,
+                if (MessageBox.Show(ownerSvc.DialogOwner,
                     "The previous commit did not complete." + Environment.NewLine +
                     "Do you want to reuse the log message?",
                     "Previous log message", MessageBoxButtons.YesNo) ==

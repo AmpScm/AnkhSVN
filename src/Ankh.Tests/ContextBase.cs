@@ -21,7 +21,6 @@ namespace Ankh.Tests
     {        
         public ContextBase()
         {
-            this.config = this.CreateConfig();
             this.control = new Control();
         }
         #region IContext Members
@@ -450,15 +449,7 @@ namespace Ankh.Tests
         }
 
 
-        protected virtual Configuration.AnkhConfig CreateConfig()
-        {
-            Configuration.AnkhConfig config = new Configuration.AnkhConfig();
-            config.AutoAddNewFiles = true;
-            config.AutoAddNewFiles = true;
-            config.LogMessageTemplate = "";
-            config.DisableSolutionReload = true;
-            return config;
-        }
+       
 
         protected virtual void OnUnloading()
         {

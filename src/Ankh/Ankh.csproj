@@ -268,9 +268,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\Runners\CatRunner.cs" />
-    <Compile Include="Commands\RunSvnCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
       <SubType>Code</SubType>
     </Compile>
