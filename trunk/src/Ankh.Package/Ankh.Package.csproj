@@ -227,10 +227,6 @@
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ankh.Configuration\Ankh.Configuration.csproj">
-      <Project>{2FFF126C-D567-4491-8128-0D98CF74BDFD}</Project>
-      <Name>Ankh.Configuration</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
