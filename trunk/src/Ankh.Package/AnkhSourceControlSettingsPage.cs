@@ -13,65 +13,55 @@ namespace Ankh.VSPackage
         {
             get
             {
-				return Control;
+                return Control;
             }
         }
 
-		AnkhSettingsControl Control
-		{
-			get
-			{
-				return _control ?? (_control = CreateControl());
-			}
-		}
+        AnkhSettingsControl Control
+        {
+            get
+            {
+                return _control ?? (_control = CreateControl());
+            }
+        }
 
         AnkhSettingsControl CreateControl()
         {
             AnkhSettingsControl control = new AnkhSettingsControl();
             IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
-            
+
             if (sp != null)
                 control.Context = sp;
 
             return control;
         }
 
-		public override void LoadSettingsFromStorage()
-		{
-			base.LoadSettingsFromStorage();
+        public override void LoadSettingsFromStorage()
+        {
+            base.LoadSettingsFromStorage();
 
-			IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
-			if (sp != null)
-			{
-				IAnkhConfigurationService cfgSvc = sp.GetService<IAnkhConfigurationService>();
-				cfgSvc.LoadConfig();
-			}
-			Control.LoadSettings();
-		}
 
-		public override void SaveSettingsToStorage()
-		{
-			base.SaveSettingsToStorage();
+            Control.LoadSettings();
+        }
 
-			Control.SaveSettings();
-			IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
-			if (sp != null)
-			{
-				IAnkhConfigurationService cfgSvc = sp.GetService<IAnkhConfigurationService>();
-				cfgSvc.SaveConfig(cfgSvc.Instance);
-			}
-		}
+        public override void SaveSettingsToStorage()
+        {
+            base.SaveSettingsToStorage();
 
-		public override void ResetSettings()
-		{
-			base.ResetSettings();
+            Control.SaveSettings();
 
-			IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
-			if (sp != null)
-			{
-				IAnkhConfigurationService cfgSvc = sp.GetService<IAnkhConfigurationService>();
-				cfgSvc.LoadDefaultConfig();
-			}
-		}
+        }
+
+        public override void ResetSettings()
+        {
+            base.ResetSettings();
+
+            IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
+            if (sp != null)
+            {
+                IAnkhConfigurationService cfgSvc = sp.GetService<IAnkhConfigurationService>();
+                cfgSvc.LoadDefaultConfig();
+            }
+        }
     }
 }

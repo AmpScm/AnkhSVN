@@ -33,14 +33,14 @@ namespace Ankh
         public OldAnkhContext(IAnkhPackage package, IUIShell uiShell)
             : base(package)
         {
-            if(uiShell != null)
+            if (uiShell != null)
                 _uiShell = uiShell;
 
             this._config = package.GetService<IAnkhConfigurationService>();
 
             this.LoadConfig();
 
-            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");            
+            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
         }
 
         EnvDTE._DTE _dte;
@@ -52,7 +52,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return _dte ?? (_dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE))); }
         }
-        
+
         IUIShell _uiShell;
         /// <summary>
         /// The UI shell service
@@ -81,7 +81,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return this._clientPool ?? (this._clientPool = GetService<ISvnClientPool>()); }
         }
-  
+
         /// <summary>
         /// The configloader.
         /// </summary>
@@ -90,7 +90,7 @@ namespace Ankh
             [System.Diagnostics.DebuggerStepThrough]
             get { return this._config; }
         }
-       
+
         bool _operationRunning;
         /// <summary>
         /// Should be called before starting any lengthy operation
@@ -116,7 +116,7 @@ namespace Ankh
         {
             OldAnkhContext _context;
             IDisposable _disp2;
-            
+
             public OperationCompleter(OldAnkhContext context, IDisposable disp2)
             {
                 _context = context;
@@ -166,24 +166,8 @@ namespace Ankh
         /// </summary>
         private void LoadConfig()
         {
-            try
-            {
-                this._config.LoadConfig();
-            }
-            catch (Ankh.Configuration.ConfigException ex)
-            {
-                MessageBox.Show(GetService<IAnkhDialogOwner>().DialogOwner,
-                    "There is an error in your configuration file:" +
-                    Environment.NewLine + Environment.NewLine +
-                    ex.Message + Environment.NewLine + Environment.NewLine +
-                    "Please edit the " + this._config.UserConfigurationPath +
-                    " file and correct the error." + Environment.NewLine +
-                    "Ankh will now load a default configuration.", "Configuration error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            this._config.LoadConfig();
 
-                // fall back on the default configuration
-                this._config.LoadDefaultConfig();
-            }
 
             this.Configuration.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
         }
@@ -211,7 +195,7 @@ namespace Ankh
                 if (handler != null)
                     handler.OnError(ex);
                 else
-                    throw;                
+                    throw;
             }
         }
 
@@ -236,6 +220,6 @@ namespace Ankh
             private IntPtr handle;
 
         }
-        #endregion        
+        #endregion
     }
 }

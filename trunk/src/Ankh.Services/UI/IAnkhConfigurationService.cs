@@ -13,20 +13,11 @@ namespace Ankh.UI
         }
 
         /// <summary>
-        /// Gets the user configuration path.
-        /// </summary>
-        /// <value>The user configuration path.</value>
-        string UserConfigurationPath
-        {
-            get;
-        }
-
-        /// <summary>
         /// Occurs when the configuration file changed
         /// </summary>
         event EventHandler ConfigFileChanged;
 
-        bool LoadConfig();
+        void LoadConfig();
 
         AnkhConfig GetNewConfigInstance();
 
@@ -36,7 +27,7 @@ namespace Ankh.UI
 
         string[] LoadReposExplorerRoots();
 
-        bool LoadDefaultConfig();
+        void LoadDefaultConfig();
 
         void SaveWorkingCopyExplorerRoots(string[] rootPaths);
 

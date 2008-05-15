@@ -86,7 +86,6 @@
               <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging"/>
             </Button>
             <ButtonRef id="Cmd_ShowPendingChanges" priority="0x301" />
-            <Button id="Cmd_RunSvnCommand" name="RunSvn" text="RunSvn" priority="0xffff" commandWellOnly="true" allowParams="true" />
           </Group>
         </Menu>
       </Group>

@@ -156,8 +156,6 @@ namespace Ankh.Ids
         SolutionSwitchComboFill,
         SolutionSwitchDialog,
 
-        RunSvnCommand,
-
         PcLogEditorPasteFileList,
         PcLogEditorPasteRecentLog,
 
