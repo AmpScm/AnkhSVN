@@ -27,6 +27,7 @@ namespace Ankh.UI.MergeWizard
             AddPage(mergeSourceReintegratePage);
             AddPage(mergeSourceTwoDifferentTreesPage);
             AddPage(mergeSourceManuallyRecordPage);
+            AddPage(mergeSourceManuallyRemovePage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -51,7 +52,7 @@ namespace Ankh.UI.MergeWizard
                         case MergeTypePage.MergeType.ManuallyRecord:
                             return mergeSourceManuallyRecordPage;
                         case MergeTypePage.MergeType.ManuallyRemove:
-                            return null;
+                            return mergeSourceManuallyRemovePage;
                         default:
                             return null;
                     }
@@ -104,6 +105,7 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceReintegratePage = new MergeSourceReintegratePage();
         private WizardPage mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
         private WizardPage mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
+        private WizardPage mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
         private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

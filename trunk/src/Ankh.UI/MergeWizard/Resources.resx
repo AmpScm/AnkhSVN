@@ -145,6 +145,9 @@
   <data name="MergeSourceManuallyRecordPageHeaderMessage" xml:space="preserve">
     <value>Specify the location containing the items to be blocked from being merged.</value>
   </data>
+  <data name="MergeSourceManuallyRemovePageHeaderMessage" xml:space="preserve">
+    <value>Specify the location containing the items to unblock and allow for being merged.</value>
+  </data>
   <data name="MergeSourceRangeOfRevisionsPageHeaderMessage" xml:space="preserve">
     <value>Specify the location containing the items to merge.</value>
   </data>
