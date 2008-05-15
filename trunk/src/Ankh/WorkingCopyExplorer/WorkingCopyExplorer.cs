@@ -23,17 +23,11 @@ namespace Ankh.WorkingCopyExplorer
             : base(context)
         {
             _roots = new List<FileSystemRootItem>();
-            LoadRoots();
 
             if (Shell != null && Shell.WorkingCopyExplorer != null)
             {
                 SetControl(Shell.WorkingCopyExplorer);
             }
-        }
-
-        private void LoadRoots()
-        {
-            DoLoadRoots();
         }
 
         IExplorersShell _shell;
@@ -218,11 +212,6 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        void Context_Unloading(object sender, EventArgs e)
-        {
-            this.SaveRoots();
-        }
-
         void control_ValidatingNewRoot(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !IsRootValid(this._control.NewRootPath);
@@ -238,65 +227,6 @@ namespace Ankh.WorkingCopyExplorer
             if (this.IsRootValid(this._control.NewRootPath))
             {
                 this.AddRoot(this._control.NewRootPath);
-            }
-        }
-
-        private void SaveRoots()
-        {
-            string[] rootPaths = new string[this._roots.Count];
-            for (int i = 0; i < rootPaths.Length; i++)
-            {
-                rootPaths[i] = ((FileSystemItem)this._roots[i]).SvnItem.FullPath;
-            }
-            GetService<IContext>().Configuration.SaveWorkingCopyExplorerRoots(rootPaths);
-        }        
-
-        private delegate void DoAddRootDelegate(FileSystemRootItem rootItem);
-
-        private void DoLoadRoots()
-        {
-            string[] rootPaths = null;
-            try
-            {
-                IContext ctx = GetService<IContext>();
-
-                if (ctx == null)
-                    return;
-
-                rootPaths = ctx.Configuration.LoadWorkingCopyExplorerRoots();
-                if (rootPaths == null || rootPaths.Length == 0)
-                {
-                    return;
-                }
-
-                foreach (string root in rootPaths)
-                {
-                    if (Directory.Exists(root))
-                    {
-                        FileSystemRootItem rootItem = CreateRoot(root);
-
-                        DoAddRoot(rootItem);
-                    }
-                }
-
-            }
-            catch (TargetInvocationException ex)
-            {
-                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
-
-                if (handler != null)
-                    handler.OnError(ex.InnerException);
-                else
-                    throw;
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
-
-                if (handler != null)
-                    handler.OnError(ex);
-                else
-                    throw;
             }
         }
 

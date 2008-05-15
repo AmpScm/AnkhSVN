@@ -23,14 +23,6 @@ namespace Ankh.UI
 
         void SaveConfig(AnkhConfig config);
 
-        void SaveReposExplorerRoots(string[] p);
-
-        string[] LoadReposExplorerRoots();
-
         void LoadDefaultConfig();
-
-        void SaveWorkingCopyExplorerRoots(string[] rootPaths);
-
-        string[] LoadWorkingCopyExplorerRoots();
     }
 }
