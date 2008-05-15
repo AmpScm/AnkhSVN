@@ -23,7 +23,7 @@ namespace Ankh.UI.MergeWizard
             IsPageComplete = true;
 
             Title = resman.GetString("MergeBestPracticesPageHeaderTitle");
-            this.Message = new WizardMessage(resman.GetString("MergeBestPracticesPageHeaderMessage"));
+            Description = resman.GetString("MergeBestPracticesPageHeaderMessage");
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = false;
             Title = resman.GetString("MergeSourceHeaderTitle");
-            Message = new WizardMessage(resman.GetString("MergeSourceTwoDifferentTreesPageHeaderMessage"));
+            Description = resman.GetString("MergeSourceTwoDifferentTreesPageHeaderMessage");
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
