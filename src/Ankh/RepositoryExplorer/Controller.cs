@@ -37,7 +37,6 @@ namespace Ankh.RepositoryExplorer
 
 
             this._directories = new Dictionary<string, INode[]>();
-            this.LoadReposRoots();
         }
 
         IExplorersShell _shell;
@@ -205,59 +204,59 @@ namespace Ankh.RepositoryExplorer
 
 
 
-        /// <summary>
-        /// Load the stored roots in the config dir.
-        /// </summary>
-        private void LoadReposRoots()
-        {
-            IContext context = GetService<IContext>();
+//        /// <summary>
+//        /// Load the stored roots in the config dir.
+//        /// </summary>
+//        private void LoadReposRoots()
+//        {
+//            IContext context = GetService<IContext>();
 
-            if (context == null)
-                return;
-            string[] roots;
-            try
-            {
-                roots = context.Configuration.LoadReposExplorerRoots();
-            }
-            catch (Ankh.Configuration.ConfigException ex)
-            {
-                string msg = ex.Message;
-                if (ex.InnerException != null)
-                    msg += Environment.NewLine + ex.InnerException.Message;
+//            if (context == null)
+//                return;
+//            string[] roots;
+//            try
+//            {
+//                roots = context.Configuration.LoadReposExplorerRoots();
+//            }
+//            catch (Ankh.Configuration.ConfigException ex)
+//            {
+//                string msg = ex.Message;
+//                if (ex.InnerException != null)
+//                    msg += Environment.NewLine + ex.InnerException.Message;
 
-                MessageBox.Show(context.GetService<IAnkhDialogOwner>().DialogOwner,
-                    @"Unable to load the %APPDATA%\AnkhSVN\reposroots.xml file."
-                    + Environment.NewLine +
-                    "The file may be corrupt. Edit it or delete it to have it recreated." +
-                    Environment.NewLine + Environment.NewLine +
-                    msg,
-                    "Unable to load repository roots");
-                return;
-            }
+//                MessageBox.Show(context.GetService<IAnkhDialogOwner>().DialogOwner,
+//                    @"Unable to load the %APPDATA%\AnkhSVN\reposroots.xml file."
+//                    + Environment.NewLine +
+//                    "The file may be corrupt. Edit it or delete it to have it recreated." +
+//                    Environment.NewLine + Environment.NewLine +
+//                    msg,
+//                    "Unable to load repository roots");
+//                return;
+//            }
 
-            if (roots == null)
-                return;
+//            if (roots == null)
+//                return;
 
-            foreach (string root in roots)
-            {
-                if (root == null)
-                    continue;
-                string[] components = root.Split('|');
+//            foreach (string root in roots)
+//            {
+//                if (root == null)
+//                    continue;
+//                string[] components = root.Split('|');
 
-                // silently ignore invalid entries
-                INode node;
-                if (components.Length == 2)
-                    node = new RootNode(components[0], Parse(components[1]));
-                else if (components.Length == 1)
-                    node = new RootNode(components[0], SvnRevision.Head);
-                else
-                    continue;
+//                // silently ignore invalid entries
+//                INode node;
+//                if (components.Length == 2)
+//                    node = new RootNode(components[0], Parse(components[1]));
+//                else if (components.Length == 1)
+//                    node = new RootNode(components[0], SvnRevision.Head);
+//                else
+//                    continue;
 
-                string label = String.Format("{0} [{1}]", node.Url, node.Revision);
-#warning Needs fix!
-                //this.repositoryExplorer.AddRoot( label, node );
-            }
-        }
+//                string label = String.Format("{0} [{1}]", node.Url, node.Revision);
+//#warning Needs fix!
+//                //this.repositoryExplorer.AddRoot( label, node );
+//            }
+//        }
 
         static SvnRevision Parse(string s)
         {
@@ -285,26 +284,6 @@ namespace Ankh.RepositoryExplorer
 
             throw new FormatException("Cannot parse string to valid revision object");
         }
-
-        /// <summary>
-        /// The addin is unloading. Make sure to store the repos explorer
-        /// root nodes in the config dir.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ContextUnloading(object sender, EventArgs e)
-        {
-            IContext context = GetService<IContext>();
-            List<string> list = new List<string>();
-            IRepositoryTreeNode[] rootNodes = this.repositoryExplorer.Roots;
-            foreach (INode node in rootNodes)
-                list.Add(node.Url + "|" + node.Revision);
-
-            context.Configuration.SaveReposExplorerRoots(
-                list.ToArray());
-        }
-
-
 
         /// <summary>
         /// The background listing checkbox' state has changed.
