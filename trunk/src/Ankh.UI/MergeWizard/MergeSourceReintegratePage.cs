@@ -19,8 +19,8 @@ namespace Ankh.UI.MergeWizard
         public MergeSourceReintegratePage() : base("Merge Source Reintegrate")
         {
             IsPageComplete = false;
-            Title = resman.GetString("MergeSourceHeaderTitle");
-            Description = resman.GetString("MergeSourceReintegratePageHeaderMessage");
+            Title = Resources.MergeSourceHeaderTitle;
+            Description = Resources.MergeSourceReintegratePageHeaderMessage;
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
@@ -29,7 +29,6 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private System.Windows.Forms.UserControl control_prop = new MergeSourceReintegratePageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeSourceReintegratePageControl control_prop = new MergeSourceReintegratePageControl();
     }
 }

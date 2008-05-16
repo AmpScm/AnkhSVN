@@ -19,8 +19,8 @@ namespace Ankh.UI.MergeWizard
         public MergeSourceTwoDifferentTreesPage() : base("Merge Source Two Different Trees")
         {
             IsPageComplete = false;
-            Title = resman.GetString("MergeSourceHeaderTitle");
-            Description = resman.GetString("MergeSourceTwoDifferentTreesPageHeaderMessage");
+            Title = Resources.MergeSourceHeaderTitle;
+            Description = Resources.MergeSourceTwoDifferentTreesPageHeaderMessage;
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
@@ -29,7 +29,6 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private System.Windows.Forms.UserControl control_prop = new MergeSourceTwoDifferentTreesPageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeSourceTwoDifferentTreesPageControl control_prop = new MergeSourceTwoDifferentTreesPageControl();
     }
 }

@@ -19,8 +19,8 @@ namespace Ankh.UI.MergeWizard
         public MergeSourceRangeOfRevisionsPage() : base("Merge Source Range Of Revisions")
         {
             IsPageComplete = false;
-            Title = resman.GetString("MergeSourceHeaderTitle");
-            Description = resman.GetString("MergeSourceRangeOfRevisionsPageHeaderMessage");
+            Title = Resources.MergeSourceHeaderTitle;
+            Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
@@ -29,7 +29,6 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private System.Windows.Forms.UserControl control_prop = new MergeSourceRangeOfRevisionsPageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeSourceRangeOfRevisionsPageControl control_prop = new MergeSourceRangeOfRevisionsPageControl();
     }
 }

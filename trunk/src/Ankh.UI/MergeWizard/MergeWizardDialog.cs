@@ -15,11 +15,10 @@ namespace Ankh.UI.MergeWizard
         public MergeWizardDialog() : base()
         {
             this.Text = "Merge Wizard";
-            this.Icon = (System.Drawing.Icon)resman.GetObject("MergeWizardIcon");
+            this.Icon = Resources.MergeWizardIcon;
             this.Wizard = wizard;
         }
 
         private Wizard wizard = new MergeWizard();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

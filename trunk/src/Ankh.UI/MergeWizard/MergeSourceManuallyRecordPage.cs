@@ -20,8 +20,8 @@ namespace Ankh.UI.MergeWizard
             : base("Merge Source Manually Record")
         {
             IsPageComplete = false;
-            Title = resman.GetString("MergeSourceHeaderTitle");
-            Description = resman.GetString("MergeSourceManuallyRecordPageHeaderMessage");
+            Title = Resources.MergeSourceHeaderTitle;
+            Description = Resources.MergeSourceManuallyRecordPageHeaderMessage;
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
@@ -30,7 +30,6 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private System.Windows.Forms.UserControl control_prop = new MergeSourceManuallyRecordPageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeSourceManuallyRecordPageControl control_prop = new MergeSourceManuallyRecordPageControl();
     }
 }
