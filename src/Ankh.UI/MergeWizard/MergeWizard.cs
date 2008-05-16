@@ -16,7 +16,7 @@ namespace Ankh.UI.MergeWizard
         public MergeWizard()
             : base()
         {
-            this.WindowTitle = resman.GetString("MergeWizardTitle");
+            this.WindowTitle = Resources.MergeWizardTitle;
         }
 
         public override void AddPages()
@@ -95,7 +95,7 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                return (System.Drawing.Image)resman.GetObject("MergeWizardHeaderImage");
+                return Resources.MergeWizardHeaderImage;
             }
         }
 
@@ -106,6 +106,5 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
         private WizardPage mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
         private WizardPage mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

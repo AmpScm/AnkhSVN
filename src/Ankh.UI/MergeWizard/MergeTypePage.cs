@@ -17,10 +17,10 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = true;
 
-            Title = resman.GetString("MergeTypePageHeaderTitle");
-            this.Message = new WizardMessage(resman.GetString("MergeTypePageHeaderMessage"));
+            Title = Resources.MergeTypePageHeaderTitle;
+            this.Message = new WizardMessage(Resources.MergeTypePageHeaderMessage);
 
-            ((MergeTypePageControl)control_prop).WizardPage = this;
+            control_prop.WizardPage = this;
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         public bool ShowBestPracticesPage
         {
-            get { return ((MergeTypePageControl)control_prop).IsPerformBestPracticesChecked; }
+            get { return control_prop.IsPerformBestPracticesChecked; }
         }
 
         /// <see cref="WizardFramework.WizardPage.Control" />
@@ -60,7 +60,6 @@ namespace Ankh.UI.MergeWizard
         }
 
         private MergeType mergeType_prop = MergeType.RangeOfRevisions;
-        private System.Windows.Forms.UserControl control_prop = new MergeTypePageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeTypePageControl control_prop = new MergeTypePageControl();
     }
 }

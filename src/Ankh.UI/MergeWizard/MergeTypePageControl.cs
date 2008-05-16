@@ -88,32 +88,31 @@ namespace Ankh.UI.MergeWizard
         {
             if (radioButton.Name == "rangeOfRevisionsRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("RangeOfRevisionsDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("RangeOfRevisionsImage");
+                page.mergeTypeDescriptionLabel.Text = Resources.RangeOfRevisionsDescription;
+                page.mergeTypePictureBox.Image = Resources.RangeOfRevisionsImage;
             }
             else if (radioButton.Name == "reintegrateABranchRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("ReintegrateABranchDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("ReintegrateABranchImage");
+                page.mergeTypeDescriptionLabel.Text = Resources.ReintegrateABranchDescription;
+                page.mergeTypePictureBox.Image = Resources.ReintegrateABranchImage;
             }
             else if (radioButton.Name == "twoDifferentTreesRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("TwoDifferentTreesDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("TwoDifferentTreesImage");
+                page.mergeTypeDescriptionLabel.Text = Resources.TwoDifferentTreesDescription;
+                page.mergeTypePictureBox.Image = Resources.TwoDifferentTreesImage;
             }
             else if (radioButton.Name == "manuallyRecordRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("ManuallyRecordDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("ManuallyRecordImage");
+                page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRecordDescription;
+                page.mergeTypePictureBox.Image = Resources.ManuallyRecordImage;
             }
             else if (radioButton.Name == "manuallyRemoveRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = resman.GetString("ManuallyRemoveDescription");
-                page.mergeTypePictureBox.Image = (System.Drawing.Image)resman.GetObject("ManuallyRemoveImage");
+                page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRemoveDescription;
+                page.mergeTypePictureBox.Image = Resources.ManuallyRemoveImage;
             }
         }
 
         private WizardFramework.WizardPage wizardPage_prop = null;
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
     }
 }

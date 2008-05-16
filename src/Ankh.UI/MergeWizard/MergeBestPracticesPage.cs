@@ -22,8 +22,8 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = true;
 
-            Title = resman.GetString("MergeBestPracticesPageHeaderTitle");
-            Description = resman.GetString("MergeBestPracticesPageHeaderMessage");
+            Title = Resources.MergeBestPracticesPageHeaderTitle;
+            Description = Resources.MergeBestPracticesPageHeaderMessage;
         }
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        private UserControl control_prop = new MergeBestPracticesPageControl();
-        private ResourceManager resman = new ResourceManager("Ankh.UI.MergeWizard.Resources", Assembly.GetExecutingAssembly());
+        private MergeBestPracticesPageControl control_prop = new MergeBestPracticesPageControl();
     }
 }
