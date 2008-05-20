@@ -102,7 +102,7 @@ namespace Ankh.UI
 
         private void RecalculateSize()
         {
-            using (Graphics g = this.messageLabel.CreateGraphics())
+            /*using (Graphics g = this.messageLabel.CreateGraphics())
             {
                 SizeF size = g.MeasureString(this.messageLabel.Text,
                     this.messageLabel.Font, this.messageLabel.Width,
@@ -112,8 +112,8 @@ namespace Ankh.UI
 
                 this.Height -= diff;
                 this.messageLabel.Height = (int)size.Height;
-                this.stackTraceTextBox.Top = this.messageLabel.Bottom + STACKTRACEOFFSET;
-            }
+                //this.stackTraceTextBox.Top = this.messageLabel.Bottom + STACKTRACEOFFSET;
+            }*/
         }
 
         private bool internalError;
