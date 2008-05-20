@@ -16,7 +16,6 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommitDialog));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.itemsLabel = new System.Windows.Forms.Label();
             this.commitItemsTree = new Ankh.UI.PathSelectionTreeView();
@@ -71,6 +70,7 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.commitItemsTree.CheckBoxes = true;
+            this.commitItemsTree.Context = null;
             this.commitItemsTree.Location = new System.Drawing.Point(3, 25);
             this.commitItemsTree.Name = "commitItemsTree";
             this.commitItemsTree.Recursive = false;
@@ -186,6 +186,8 @@ namespace Ankh.UI
             // CommitDialog
             // 
             this.AcceptButton = this.commitButton;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(546, 313);
             this.Controls.Add(this.mainPanel);
