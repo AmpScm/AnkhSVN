@@ -63,7 +63,7 @@
             this.groupBox1.Controls.Add(this.projectIcon);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(453, 69);
+            this.groupBox1.Size = new System.Drawing.Size(525, 69);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "&Project:";
@@ -76,7 +76,7 @@
             this.checkOutFrom.FormattingEnabled = true;
             this.checkOutFrom.Location = new System.Drawing.Point(93, 36);
             this.checkOutFrom.Name = "checkOutFrom";
-            this.checkOutFrom.Size = new System.Drawing.Size(354, 21);
+            this.checkOutFrom.Size = new System.Drawing.Size(426, 21);
             this.checkOutFrom.TabIndex = 2;
             // 
             // projectRootLabel
@@ -105,7 +105,7 @@
             this.projectUrl.Location = new System.Drawing.Point(93, 16);
             this.projectUrl.Name = "projectUrl";
             this.projectUrl.ReadOnly = true;
-            this.projectUrl.Size = new System.Drawing.Size(354, 13);
+            this.projectUrl.Size = new System.Drawing.Size(426, 13);
             this.projectUrl.TabIndex = 0;
             this.projectUrl.Text = "http://ankhsvn.open.collab.net/svn/ankhsvn/trunk/AnkhSvn.2008.sln";
             // 
@@ -127,7 +127,7 @@
             this.locationIcon.Controls.Add(this.dirIco);
             this.locationIcon.Location = new System.Drawing.Point(12, 87);
             this.locationIcon.Name = "locationIcon";
-            this.locationIcon.Size = new System.Drawing.Size(453, 43);
+            this.locationIcon.Size = new System.Drawing.Size(525, 43);
             this.locationIcon.TabIndex = 1;
             this.locationIcon.TabStop = false;
             this.locationIcon.Text = "&Local Directory:";
@@ -140,14 +140,14 @@
             this.directory.Location = new System.Drawing.Point(93, 19);
             this.directory.Name = "directory";
             this.directory.ReadOnly = true;
-            this.directory.Size = new System.Drawing.Size(325, 13);
+            this.directory.Size = new System.Drawing.Size(397, 13);
             this.directory.TabIndex = 1;
             this.directory.Text = "C:\\Users\\SomeOne\\My Visual Studio Projects\\AnkhSvn";
             // 
             // browseDirectoryButton
             // 
             this.browseDirectoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseDirectoryButton.Location = new System.Drawing.Point(423, 12);
+            this.browseDirectoryButton.Location = new System.Drawing.Point(495, 12);
             this.browseDirectoryButton.Name = "browseDirectoryButton";
             this.browseDirectoryButton.Size = new System.Drawing.Size(24, 25);
             this.browseDirectoryButton.TabIndex = 2;
@@ -181,7 +181,7 @@
             this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Location = new System.Drawing.Point(12, 136);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(453, 43);
+            this.groupBox3.Size = new System.Drawing.Size(525, 43);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Version:";
@@ -199,7 +199,7 @@
             // 
             this.browseVersionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.browseVersionButton.Enabled = false;
-            this.browseVersionButton.Location = new System.Drawing.Point(423, 13);
+            this.browseVersionButton.Location = new System.Drawing.Point(495, 13);
             this.browseVersionButton.Name = "browseVersionButton";
             this.browseVersionButton.Size = new System.Drawing.Size(24, 25);
             this.browseVersionButton.TabIndex = 2;
@@ -219,7 +219,7 @@
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(390, 204);
+            this.cancelButton.Location = new System.Drawing.Point(462, 204);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 4;
@@ -230,7 +230,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(309, 204);
+            this.okButton.Location = new System.Drawing.Point(381, 204);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 3;
@@ -243,7 +243,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(477, 239);
+            this.ClientSize = new System.Drawing.Size(549, 239);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.groupBox3);
