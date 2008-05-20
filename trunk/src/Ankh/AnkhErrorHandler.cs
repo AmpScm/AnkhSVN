@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using SharpSvn;
 using Ankh.ContextServices;
 using Ankh.Xml;
+using System.Windows.Forms.Design;
 
 
 namespace Ankh
@@ -223,7 +224,16 @@ namespace Ankh
                 dlg.ShowStackTrace = showStackTrace;
                 dlg.StackTrace = stackTrace;
                 dlg.InternalError = internalError;
-                if (dlg.ShowDialog() == DialogResult.Retry)
+
+                IUIService ui = GetService<IUIService>();
+
+                DialogResult dr;
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog();
+
+                if (dr == DialogResult.Retry)
                 {
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
                         ErrrorReportSubject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
