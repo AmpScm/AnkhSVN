@@ -34,13 +34,16 @@ namespace Ankh.UI
             // 
             // treeView
             // 
+            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView.CheckBoxes = true;
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Top;
-            this.treeView.Location = new System.Drawing.Point(0, 19);
+            this.treeView.Context = null;
+            this.treeView.Location = new System.Drawing.Point(15, 25);
             this.treeView.Name = "treeView";
             this.treeView.Recursive = false;
             this.treeView.SingleCheck = false;
-            this.treeView.Size = new System.Drawing.Size(338, 220);
+            this.treeView.Size = new System.Drawing.Size(392, 178);
             this.treeView.TabIndex = 1;
             this.treeView.UrlPaths = false;
             // 
@@ -48,26 +51,26 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(168, 346);
+            this.okButton.Location = new System.Drawing.Point(251, 298);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 5;
-            this.okButton.Text = "&Merge";
+            this.okButton.Text = "Merge";
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(256, 346);
+            this.cancelButton.Location = new System.Drawing.Point(332, 298);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
-            this.cancelButton.Text = "&Cancel";
+            this.cancelButton.Text = "Cancel";
             // 
             // recursiveCheckbox
             // 
             this.recursiveCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.recursiveCheckbox.Location = new System.Drawing.Point(8, 322);
+            this.recursiveCheckbox.Location = new System.Drawing.Point(24, 270);
             this.recursiveCheckbox.Name = "recursiveCheckbox";
             this.recursiveCheckbox.Size = new System.Drawing.Size(104, 24);
             this.recursiveCheckbox.TabIndex = 3;
@@ -77,7 +80,7 @@ namespace Ankh.UI
             // dryRunCheckBox
             // 
             this.dryRunCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.dryRunCheckBox.Location = new System.Drawing.Point(8, 346);
+            this.dryRunCheckBox.Location = new System.Drawing.Point(24, 294);
             this.dryRunCheckBox.Name = "dryRunCheckBox";
             this.dryRunCheckBox.Size = new System.Drawing.Size(104, 24);
             this.dryRunCheckBox.TabIndex = 4;
@@ -88,9 +91,9 @@ namespace Ankh.UI
             this.revisionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionGroupBox.Controls.Add(this.revisionPicker);
-            this.revisionGroupBox.Location = new System.Drawing.Point(8, 252);
+            this.revisionGroupBox.Location = new System.Drawing.Point(15, 209);
             this.revisionGroupBox.Name = "revisionGroupBox";
-            this.revisionGroupBox.Size = new System.Drawing.Size(319, 55);
+            this.revisionGroupBox.Size = new System.Drawing.Size(392, 55);
             this.revisionGroupBox.TabIndex = 2;
             this.revisionGroupBox.TabStop = false;
             this.revisionGroupBox.Text = "&Revision";
@@ -98,20 +101,20 @@ namespace Ankh.UI
             // pathsLabel
             // 
             this.pathsLabel.AutoSize = true;
-            this.pathsLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pathsLabel.Location = new System.Drawing.Point(0, 0);
+            this.pathsLabel.Location = new System.Drawing.Point(12, 9);
             this.pathsLabel.Name = "pathsLabel";
-            this.pathsLabel.Size = new System.Drawing.Size(34, 19);
+            this.pathsLabel.Size = new System.Drawing.Size(34, 13);
             this.pathsLabel.TabIndex = 0;
             this.pathsLabel.Text = "&Paths";
+            this.pathsLabel.Click += new System.EventHandler(this.pathsLabel_Click);
             // 
             // ReverseMergeDialog
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(338, 383);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(419, 333);
             this.Controls.Add(this.treeView);
             this.Controls.Add(this.pathsLabel);
             this.Controls.Add(this.revisionGroupBox);
@@ -119,8 +122,10 @@ namespace Ankh.UI
             this.Controls.Add(this.recursiveCheckbox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ReverseMergeDialog";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Reverse merge";
