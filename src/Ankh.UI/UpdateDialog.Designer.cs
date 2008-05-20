@@ -117,7 +117,6 @@ namespace Ankh.UI
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(443, 338);
-            this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.recursiveCheckBox);
@@ -125,8 +124,11 @@ namespace Ankh.UI
             this.Controls.Add(this.pathSelectionTreeView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(266, 280);
             this.Name = "UpdateDialog";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Update";

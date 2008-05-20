@@ -178,7 +178,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
-            // Add a directory like a folder but with an ending '\'
+            // a directory can be added like a folder but with an ending '\'
             string dir = SvnTools.GetNormalizedFullPath(directoryname);
             data.RemovePath(dir);
 

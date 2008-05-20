@@ -103,5 +103,10 @@ namespace Ankh.UI
         {
             this.treeView.Recursive = this.recursiveCheckbox.Checked;
         }
+
+        private void pathsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
