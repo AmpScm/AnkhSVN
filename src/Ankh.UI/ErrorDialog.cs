@@ -40,23 +40,17 @@ namespace Ankh.UI
             {
                 if (value && !this.stackTraceTextBox.Visible)
                 {
-                    this.Height += STACKTRACEHEIGHT;
-                    this.stackTraceTextBox.Height += STACKTRACEHEIGHT - STACKTRACEOFFSET;
                     this.stackTraceTextBox.Visible = true;
+                    this.Height += STACKTRACEHEIGHT;                    
                     this.errorReportButton.Visible = this.errorReportButton.Enabled =
                         true;
                 }
                 else if (!value && this.stackTraceTextBox.Visible)
                 {
                     this.Height -= STACKTRACEHEIGHT;
-                    this.stackTraceTextBox.Height -= STACKTRACEHEIGHT - STACKTRACEOFFSET;
                     this.stackTraceTextBox.Visible = false;
-
-                    this.errorReportButton.Visible = this.errorReportButton.Enabled =
-                        false;
                 }
                 this.RecalculateSize();
-
             }
         }
 
@@ -106,8 +100,6 @@ namespace Ankh.UI
             base.Dispose(disposing);
         }
 
-
-
         private void RecalculateSize()
         {
             using (Graphics g = this.messageLabel.CreateGraphics())
@@ -126,8 +118,7 @@ namespace Ankh.UI
 
         private bool internalError;
 
-        private const int STACKTRACEHEIGHT = 120;
-        private const int STACKTRACEOFFSET = 15;
+        private const int STACKTRACEHEIGHT = 250;
 
         private void button2_Click(object sender, System.EventArgs e)
         {
