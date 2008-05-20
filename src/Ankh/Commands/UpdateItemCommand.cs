@@ -10,6 +10,7 @@ using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Selection;
 using System.Collections.ObjectModel;
+using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
@@ -95,9 +96,20 @@ namespace Ankh.Commands
 
                     if (!CommandBase.Shift)
                     {
-                        IAnkhDialogOwner owner = Context.GetService<IAnkhDialogOwner>();
+                        IUIService uiService = Context.GetService<IUIService>();
 
-                        if (d.ShowDialog(owner.DialogOwner) != DialogResult.OK)
+                        DialogResult dr;
+
+                        if (uiService != null)
+                            dr = uiService.ShowDialog(d);
+                        else
+                        {
+                            IAnkhDialogOwner owner = Context.GetService<IAnkhDialogOwner>();
+
+                            dr = d.ShowDialog(owner.DialogOwner);
+                        }
+
+                        if (dr != DialogResult.OK)
                             return false;
                     }
 

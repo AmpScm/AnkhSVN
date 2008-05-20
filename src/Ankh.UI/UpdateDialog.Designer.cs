@@ -30,21 +30,21 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(208, 386);
+            this.okButton.Location = new System.Drawing.Point(270, 303);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 4;
+            this.okButton.TabIndex = 5;
             this.okButton.Text = "&Update";
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(294, 386);
+            this.cancelButton.Location = new System.Drawing.Point(356, 303);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 5;
-            this.cancelButton.Text = "&Cancel";
+            this.cancelButton.TabIndex = 6;
+            this.cancelButton.Text = "Cancel";
             // 
             // pathSelectionTreeView
             // 
@@ -52,11 +52,12 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pathSelectionTreeView.CheckBoxes = true;
-            this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 28);
+            this.pathSelectionTreeView.Context = null;
+            this.pathSelectionTreeView.Location = new System.Drawing.Point(16, 28);
             this.pathSelectionTreeView.Name = "pathSelectionTreeView";
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SingleCheck = false;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(376, 214);
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(415, 137);
             this.pathSelectionTreeView.TabIndex = 1;
             this.pathSelectionTreeView.UrlPaths = false;
             // 
@@ -65,9 +66,9 @@ namespace Ankh.UI
             this.revisionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionGroupBox.Controls.Add(this.revisionPicker);
-            this.revisionGroupBox.Location = new System.Drawing.Point(8, 250);
+            this.revisionGroupBox.Location = new System.Drawing.Point(16, 171);
             this.revisionGroupBox.Name = "revisionGroupBox";
-            this.revisionGroupBox.Size = new System.Drawing.Size(360, 72);
+            this.revisionGroupBox.Size = new System.Drawing.Size(415, 72);
             this.revisionGroupBox.TabIndex = 2;
             this.revisionGroupBox.TabStop = false;
             this.revisionGroupBox.Text = "&Revision";
@@ -78,32 +79,32 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionPicker.Location = new System.Drawing.Point(8, 32);
             this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(344, 24);
+            this.revisionPicker.Size = new System.Drawing.Size(399, 24);
             this.revisionPicker.TabIndex = 0;
             // 
             // recursiveCheckBox
             // 
             this.recursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.recursiveCheckBox.Location = new System.Drawing.Point(10, 386);
+            this.recursiveCheckBox.Location = new System.Drawing.Point(33, 292);
             this.recursiveCheckBox.Name = "recursiveCheckBox";
             this.recursiveCheckBox.Size = new System.Drawing.Size(78, 24);
-            this.recursiveCheckBox.TabIndex = 3;
-            this.recursiveCheckBox.Text = "Recursi&ve";
+            this.recursiveCheckBox.TabIndex = 4;
+            this.recursiveCheckBox.Text = "`";
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(8, 338);
+            this.label1.Location = new System.Drawing.Point(16, 246);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(360, 40);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "You can suppress this dialog by holding down the Shift key while clicking Update";
+            this.label1.Size = new System.Drawing.Size(415, 43);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "`";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 9);
+            this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 13);
             this.label2.TabIndex = 0;
@@ -112,9 +113,10 @@ namespace Ankh.UI
             // UpdateDialog
             // 
             this.AcceptButton = this.okButton;
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(376, 415);
+            this.ClientSize = new System.Drawing.Size(443, 338);
             this.ControlBox = false;
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
