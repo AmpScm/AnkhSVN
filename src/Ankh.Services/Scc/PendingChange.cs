@@ -245,6 +245,8 @@ namespace Ankh.Scc
                 case SharpSvn.SvnStatus.Normal:
                 case SharpSvn.SvnStatus.None:
                     break; // Look further
+                case SharpSvn.SvnStatus.Conflicted:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.PropertyConflicted);
                 default:
                     return new PendingChangeStatus(_kind = PendingChangeKind.PropertyModified);
             }

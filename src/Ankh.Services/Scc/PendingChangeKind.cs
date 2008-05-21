@@ -47,6 +47,10 @@ namespace Ankh.Scc
         /// </summary>
         Conflicted,
         /// <summary>
+        /// The properties of the node are in conflict
+        /// </summary>
+        PropertyConflicted,
+        /// <summary>
         /// The item is obstructed by an item of the wrong kind
         /// </summary>
         Obstructed,
