@@ -24,11 +24,16 @@ namespace Ankh.UI.MergeWizard.Commands
                 return;
             }
 
+            List<SvnItem> items = new List<SvnItem>();
+
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsVersioned)
-                    return;
+                items.Add(item);
             }
+
+            if (items.Count == 1)
+                return;
+
             e.Enabled = false;
         }
 
