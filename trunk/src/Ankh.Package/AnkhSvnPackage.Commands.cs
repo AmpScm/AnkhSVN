@@ -71,9 +71,7 @@ namespace Ankh.VSPackage
 				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER,
 				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
 
-			// TODO: enable something like
-			// AnkhCommands.PerformCommand(args.Command, args);
-            if (!CommandMapper.Execute(args.Command, args))
+           if (!CommandMapper.Execute(args.Command, args))
                 return (int)OLEConstants.OLECMDERR_E_DISABLED;
 
 			if (pvaOut != IntPtr.Zero)
