@@ -7,7 +7,6 @@ using Ankh.Ids;
 
 using WizardFramework;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 
 namespace Ankh.UI.MergeWizard.Commands
 {
@@ -39,14 +38,7 @@ namespace Ankh.UI.MergeWizard.Commands
             WizardDialog dialog = new MergeWizardDialog();
             DialogResult result;
 
-            dialog.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-
-            IUIService uiService = e.GetService<IUIService>();
-
-            if (uiService != null)
-                result = uiService.ShowDialog(dialog);
-            else
-                result = dialog.ShowDialog();
+            result = dialog.ShowDialog();
             
             if (result == DialogResult.OK)
                 MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
