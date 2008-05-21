@@ -30,8 +30,7 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            SaveSizes();
+            
             this.Options = PathSelectorOptions.NoRevision;
         }
 
@@ -62,6 +61,8 @@ namespace Ankh.UI
 
             if (!DesignMode)
             {
+                SaveSizes();
+
                 UpdateLayout();
                 EnsureSelection();
             }
