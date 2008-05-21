@@ -113,6 +113,16 @@ namespace Ankh.UI.RepositoryOpen
                 catch (SecurityException)
                 { /* Ignore no read only access; stupid sysadmins */ }
 
+
+                IAnkhSolutionSettings ss = null;
+                if (Context != null)
+                    ss = Context.GetService<IAnkhSolutionSettings>();
+
+                if (ss != null && ss.ProjectRootUri != null)
+                {
+                    if(!urlBox.Items.Contains(ss.ProjectRootUri))
+                        urlBox.Items.Add(ss.ProjectRootUri);
+                }
             }
             if (urlBox.Items.Count > 0 && string.IsNullOrEmpty(urlBox.Text.Trim()))
             {
