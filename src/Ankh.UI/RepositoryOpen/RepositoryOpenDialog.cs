@@ -56,8 +56,20 @@ namespace Ankh.UI.RepositoryOpen
 
             if (urlBox.Items.Count == 0)
             {
+                // Add current project root (if available) first
+                IAnkhSolutionSettings ss = null;
+                if (Context != null)
+                    ss = Context.GetService<IAnkhSolutionSettings>();
+
+                if (ss != null && ss.ProjectRootUri != null)
+                {
+                    if (!urlBox.Items.Contains(ss.ProjectRootUri))
+                        urlBox.Items.Add(ss.ProjectRootUri);
+                }
+
                 try
                 {
+                    // Add last used url
                     using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
                         "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Dialogs", RegistryKeyPermissionCheck.ReadSubTree))
                     {
@@ -112,17 +124,30 @@ namespace Ankh.UI.RepositoryOpen
                 }
                 catch (SecurityException)
                 { /* Ignore no read only access; stupid sysadmins */ }
-
-
-                IAnkhSolutionSettings ss = null;
-                if (Context != null)
-                    ss = Context.GetService<IAnkhSolutionSettings>();
-
-                if (ss != null && ss.ProjectRootUri != null)
+                
+                // Finally add the last used list from TortoiseSVN
+                try
                 {
-                    if(!urlBox.Items.Contains(ss.ProjectRootUri))
-                        urlBox.Items.Add(ss.ProjectRootUri);
+                   using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
+                        "SOFTWARE\\TortoiseSVN\\History\\repoURLS", RegistryKeyPermissionCheck.ReadSubTree))
+                    {
+                        if (rk != null)
+                            foreach (string name in rk.GetValueNames())
+                            {
+                                string value = rk.GetValue(name) as string;
+
+                                Uri uri;
+                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                                {
+                                    if (!urlBox.Items.Contains(uri))
+                                        urlBox.Items.Add(uri);
+                                }
+                            }
+                    }
+
                 }
+                catch (SecurityException)
+                { /* Ignore no read only access; stupid sysadmins */ }
             }
             if (urlBox.Items.Count > 0 && string.IsNullOrEmpty(urlBox.Text.Trim()))
             {
