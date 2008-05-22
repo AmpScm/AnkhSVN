@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using Ankh.VS;
 using SharpSvn;
 using System.IO;
+using System.Windows.Forms.Design;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -29,6 +31,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IUIService ui = e.GetService<IUIService>();
             Uri selectedUri;
             Uri rootUri;
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
@@ -43,7 +46,14 @@ namespace Ankh.Commands
                     dlg.Filter = dlg.Filter.Replace("*.sln;", "").Replace("*.dsw;", "");
                 }
 
-                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
+                DialogResult dr;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog(e.Context.DialogOwner);
+
+                if(dr != DialogResult.OK)
                     return;
 
                 selectedUri = dlg.SelectedUri;
@@ -76,10 +86,45 @@ namespace Ankh.Commands
                     FindRoot(e.Context, selectedUri, dlg);
                 };
 
-                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
+                DialogResult dr;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog(e.Context.DialogOwner);
+
+                if (dr != DialogResult.OK)
                     return;
 
+                IVsSolution2 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
+
+                if (sol != null)
+                {
+                    sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
+
+                    sol = null;
+                }
+
+                IAnkhSccService scc = e.GetService<IAnkhSccService>();
+
+                if (scc != null)
+                    scc.RegisterAsPrimarySccProvider(); // Make us the current SCC provider!
+
                 CheckOutAndOpenSolution(e, dlg.ProjectTop, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+
+                sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
+
+                if (sol != null)
+                {
+                    string file, user, dir;
+
+                    if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out file, out user))
+                        && !string.IsNullOrEmpty(file))
+                    {
+                        scc.SetProjectManaged(null, true);
+                        sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
+                    }
+                }
             }
         }
 
