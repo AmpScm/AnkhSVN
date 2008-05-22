@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Ids;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Scc
 {
@@ -37,9 +38,34 @@ namespace Ankh.Scc
             ProjectNotifier notifier = new ProjectNotifier(this);
             Container.AddService(typeof(IProjectNotifier), notifier);
             Container.AddService(typeof(IFileStatusMonitor), notifier);
-            
+
             // We declare the Scc provider as a delayed create service to allow delayed registration as primary scc
-            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);            
+            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);
+
+            IVsMonitorSelection ms = GetService<IVsMonitorSelection>();
+
+            if (ms != null)
+            {
+                Guid sccGuid = AnkhId.SccProviderGuid;
+                uint cookie;
+                int active;
+
+                if (ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref sccGuid, out cookie)) &&
+                    ErrorHandler.Succeeded(ms.IsCmdUIContextActive(cookie, out active)))
+                {
+                    if (active != 0)
+                    {
+                        // Ok, Visual decided to activate the user context with our GUID
+                        // This tells us VS wants us to be the active SCC
+                        //
+                        // This is not documented directly. But it is documented that we should
+                        // enable our commands on that context
+
+                        // Set us active; this makes VS initialize the provider
+                        _sccProvider.RegisterAsPrimarySccProvider();
+                    }
+                }
+            }
         }
 
         /// <summary>
