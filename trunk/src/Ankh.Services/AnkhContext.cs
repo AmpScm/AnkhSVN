@@ -93,6 +93,13 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Gets the service object of the specified type.
+        /// </summary>
+        /// <typeparam name="T">The type of service to get</typeparam>
+        /// <returns>
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// </returns>
         [DebuggerStepThrough]
         public new T GetService<T>()
             where T : class
@@ -100,6 +107,12 @@ namespace Ankh
             return base.GetService<T>();
         }
 
+        /// <summary>
+        /// Gets the service of the specified type safely casted to T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns></returns>
         [DebuggerStepThrough]
         public new T GetService<T>(Type serviceType)
             where T : class
@@ -107,6 +120,13 @@ namespace Ankh
             return base.GetService<T>(serviceType);
         }
 
+        /// <summary>
+        /// Gets the service object of the specified type.
+        /// </summary>
+        /// <param name="serviceType">An object that specifies the type of service object to get.</param>
+        /// <returns>
+        /// A service object of type <paramref name="serviceType"/>.-or- null if there is no service object of type <paramref name="serviceType"/>.
+        /// </returns>
         [DebuggerStepThrough]
         public new object GetService(Type serviceType)
         {
