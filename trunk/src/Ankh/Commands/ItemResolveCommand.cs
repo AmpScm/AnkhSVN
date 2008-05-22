@@ -50,6 +50,10 @@ namespace Ankh.Commands
             SvnAccept accept = SvnAccept.Postpone;
             switch (e.Command)
             {
+                case AnkhCommand.ItemResolveMerge:
+                case AnkhCommand.ItemResolveMergeTool:
+                    // TODO: Fix or hide before 2.0
+                    throw new NotImplementedException();
                 case AnkhCommand.ItemResolveMineFull:
                     accept = SvnAccept.MineFull;
                     break;
@@ -65,7 +69,7 @@ namespace Ankh.Commands
                 case AnkhCommand.ItemResolveMineConflict:
                 case AnkhCommand.ItemResolveTheirsConflict:
                 default:
-                    throw new NotImplementedException();                
+                    throw new NotImplementedException();
             }
             if(accept == SvnAccept.Postpone)
                 throw new NotImplementedException();
