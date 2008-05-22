@@ -6,6 +6,8 @@ using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.Commands;
 using Ankh.Ids;
+using Microsoft.Win32;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.VS.Selection
 {
@@ -14,7 +16,7 @@ namespace Ankh.VS.Selection
         readonly IVsMonitorSelection _monitor;
         uint _cookie;
         bool _disposed;
-        
+
         #region Initialization
         public CommandState(IAnkhServiceProvider context)
             : base(context)
@@ -75,7 +77,7 @@ namespace Ankh.VS.Selection
         {
             // Clear all caching properties
             _codeWindow = null;
-            _debugging= null;
+            _debugging = null;
             _designMode = null;
             _dragging = null;
             _emptySolution = null;
@@ -194,7 +196,7 @@ namespace Ankh.VS.Selection
         private bool GetState(ref uint contextId, GetGuid getGuid)
         {
             string value = null;
-            if(contextId == 0)
+            if (contextId == 0)
                 value = getGuid();
 
             return GetState(ref contextId, value);
@@ -205,7 +207,97 @@ namespace Ankh.VS.Selection
         bool? _otherSccProviderActive;
         public bool OtherSccProviderActive
         {
-            get { return (bool)(_otherSccProviderActive ?? GetOtherSccProviderActive()); }
+            get { return (bool)(_otherSccProviderActive ?? (_otherSccProviderActive = GetOtherSccProviderActive())); }
+        }
+
+        class SccData
+        {
+            public readonly uint _id;
+            public readonly string _service;
+
+            public SccData(uint id, string service)
+            {
+                _id = id;
+                _service = new Guid(service).ToString();
+            }
+        }
+
+        SccData[] _otherSccProviderContexts;
+
+        bool GetOtherSccActive()
+        {
+            if (_otherSccProviderContexts == null)
+            {
+                List<SccData> sccs = new List<SccData>();
+
+                ILocalRegistry2 lr = GetService<ILocalRegistry2>(typeof(SLocalRegistry));
+
+                string root;
+                List<string> names = new List<string>();
+                if (ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
+                {
+                    // TODO: Find some way to use the VS2008 RANU api
+                    if (root.EndsWith("\\UserSettings"))
+                        root = root.Substring(0, root.Length - 13);
+
+                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(root + "\\SourceControlProviders", RegistryKeyPermissionCheck.ReadSubTree))
+                    {
+                        if (rk != null)
+                        {
+                            string myId = AnkhId.SccProviderGuid.ToString("B");
+                            foreach (string name in rk.GetSubKeyNames())
+                            {
+                                if (name.Length == 38 && !myId.Equals(name, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    try
+                                    {
+                                        using (RegistryKey rks = rk.OpenSubKey(name, RegistryKeyPermissionCheck.ReadSubTree))
+                                        {
+                                            Guid sccGuid = new Guid(name);
+                                            uint id;
+
+                                            if (ErrorHandler.Succeeded(Monitor.GetCmdUIContextCookie(ref sccGuid, out id)))
+                                                sccs.Add(new SccData(id, (string)rks.GetValue("Service")));
+                                        }
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _otherSccProviderContexts = sccs.ToArray();
+            }
+
+            foreach(SccData scc in _otherSccProviderContexts)
+            {
+                int active;
+                if(ErrorHandler.Succeeded(Monitor.IsCmdUIContextActive(scc._id, out active)) && active != 0)
+                {
+                    // Ok, let's ask the service if it has any files under source control?
+
+                    IOleServiceProvider sp = GetService<IOleServiceProvider>();
+                    Guid gService = new Guid(scc._service);
+                    Guid gInterface = typeof(IVsSccProvider).GUID;
+                    IntPtr handle;
+                    
+                    if(ErrorHandler.Succeeded(sp.QueryService(ref gService, ref gInterface, out handle)) && handle != IntPtr.Zero)
+                    {
+                        IVsSccProvider pv = (IVsSccProvider)Marshal.GetObjectForIUnknown(handle);
+                        Marshal.Release(handle);
+
+                        int iManaging;
+                        if (ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
+                        {
+                            if (iManaging != 0)
+                                return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private bool GetOtherSccProviderActive()
@@ -223,12 +315,10 @@ namespace Ankh.VS.Selection
             if (!ErrorHandler.Succeeded(manager.IsInstalled(out installed)) || (installed == 0))
                 return false;
 
-            // TODO: Find a way to check if the other scc provider is really enabled
-            // (IVsSccProvider2.AnyItemsUnderSourceControl() should give the right information)
+            if (GetOtherSccActive())
+                return true;
 
-            // For now it only invalidates the no-scc provider case; as the no-provider is not installed
-
-            return true;
+            return false;
         }
 
         #endregion
