@@ -76,9 +76,14 @@ namespace Ankh.UI.SccManagement
 
                 info = cache[projectInfo.ProjectDirectory];
 
+                string uri = "";
+
+                if (info.Status.Uri != null)
+                    uri = info.Status.Uri.ToString();
+
                 n = bindingGrid.Rows.Add(
                     projectInfo.UniqueProjectName,
-                    info.Status.Uri.ToString(),
+                    uri,
                     scc.IsProjectManaged(project),                    
                     (scc.IsProjectManaged(null) || solutionControlled) ? "Ok" : "Not Controlled",
                     projectInfo.ProjectDirectory);
