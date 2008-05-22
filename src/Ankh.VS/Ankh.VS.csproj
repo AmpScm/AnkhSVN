@@ -52,7 +52,6 @@
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
