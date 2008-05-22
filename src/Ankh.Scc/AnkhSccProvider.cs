@@ -32,10 +32,10 @@ namespace Ankh.Scc
 
         public void RegisterAsSccProvider()
         {
-            IVsRegisterScciProvider rscp = (IVsRegisterScciProvider)Context.GetService<IVsRegisterScciProvider>();
+            IVsRegisterScciProvider rscp = Context.GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {
-                rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid);
+                ErrorHandler.ThrowOnFailure(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
             }
         }
 
@@ -96,7 +96,6 @@ namespace Ankh.Scc
             if (!_active)
             {
                 _active = true;
-
 
                 // Disable our custom glyphs before an other SCC provider is initialized!
                 IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
