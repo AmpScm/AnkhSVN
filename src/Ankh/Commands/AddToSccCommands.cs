@@ -14,7 +14,7 @@ using SharpSvn;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.FileSccAddProjectToSubversion)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion)]
+    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable=true)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -82,6 +82,15 @@ namespace Ankh.Commands
             if (scc == null || cache == null || e.Selection.SolutionFilename == null)
                 return;
 
+            bool shouldActivate = false;
+            if (!scc.IsActive)
+            {
+                if (e.State.OtherSccProviderActive)
+                    return; // Can't switch in this case.. Nothing to do
+
+                shouldActivate = true;
+            }
+
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
             if (!scc.IsProjectManaged(null))
@@ -125,6 +134,9 @@ namespace Ankh.Commands
                 {
                     return;
                 }
+
+                if (shouldActivate)
+                    scc.RegisterAsPrimarySccProvider();
 
                 scc.SetProjectManaged(null, true);
                 item.MarkDirty(); // This clears the solution settings cache to retrieve its properties
