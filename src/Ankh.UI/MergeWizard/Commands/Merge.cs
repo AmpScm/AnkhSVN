@@ -7,6 +7,7 @@ using Ankh.Ids;
 
 using WizardFramework;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.MergeWizard.Commands
 {
@@ -40,17 +41,25 @@ namespace Ankh.UI.MergeWizard.Commands
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
         public void OnExecute(CommandEventArgs e)
         {
-            WizardDialog dialog = new MergeWizardDialog();
-            DialogResult result;
+            using (MergeWizardDialog dialog = new MergeWizardDialog())
+            {
+                dialog.Context = e.Context;
+                DialogResult result;
 
-            result = dialog.ShowDialog();
-            
-            if (result == DialogResult.OK)
-                MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
-                    "Until Ankh 2.0 releases at the end of May, this feature may not work.  " +
-                    "Please check the website for a newer build or if you have the latest, contact " +
-                    "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                IUIService uiService = e.GetService<IUIService>();
+
+                // TODO: Use
+                //result = uiService.ShowDialog(dialog);
+
+                result = dialog.ShowDialog(uiService.GetDialogOwnerWindow());
+
+                if (result == DialogResult.OK)
+                    MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
+                        "Until Ankh 2.0 releases at the end of May, this feature may not work as expected.  " +
+                        "Please check the website for a newer build or if you have the latest, contact " +
+                        "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+            }
         }
 
         #endregion
