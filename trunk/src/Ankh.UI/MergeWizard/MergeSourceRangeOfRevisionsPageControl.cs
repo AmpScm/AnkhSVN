@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
 using System.Threading;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -44,9 +45,10 @@ namespace Ankh.UI.MergeWizard
             {
                 mergeFromComboBox.Text = "";
                 mergeFromComboBox.DataSource = mergeSources;
-                mergeFromComboBox.SelectedIndex = 0;
-                mergeFromComboBox.Enabled = true;
-                selectButton.Enabled = true;
+
+                mergeFromComboBox.SelectedItem = ((MergeWizard)WizardPage.Wizard).MergeTarget.Status.Uri.ToString();
+
+                ((WizardDialog)WizardPage.Form).PageContainer.Enabled = true;
 
                 UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
 
@@ -65,7 +67,12 @@ namespace Ankh.UI.MergeWizard
                 List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget);
 
                 if (mergeSources.Count == 0)
-                    mergeSources.Add(wizard.MergeTarget.Status.Uri.ToString());
+                {
+                    using (SvnClient client = wizard.MergeUtils.GetClient())
+                    {
+                        mergeSources.Add(wizard.MergeTarget.Status.Uri.ToString());
+                    }
+                }
 
                 SetMergeSources(mergeSources);
             }
@@ -75,8 +82,7 @@ namespace Ankh.UI.MergeWizard
         private void MergeSourceRangeOfRevisionsPageControl_Load(object sender, EventArgs e)
         {
             mergeFromComboBox.Text = Resources.LoadingMergeSources;
-            mergeFromComboBox.Enabled = false;
-            selectButton.Enabled = false;
+            ((WizardDialog)WizardPage.Form).PageContainer.Enabled = false;
             Cursor.Current = Cursors.WaitCursor;
          
             Thread t = new Thread(new ThreadStart(RetrieveAndSetMergeSources));
