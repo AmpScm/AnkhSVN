@@ -40,7 +40,31 @@ namespace Ankh.Scc
             Container.AddService(typeof(IFileStatusMonitor), notifier);
 
             // We declare the Scc provider as a delayed create service to allow delayed registration as primary scc
-            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);
+            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);            
+        }
+
+        /// <summary>
+        /// Registers our scc provider when first ask for it by VS
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="serviceType"></param>
+        /// <returns></returns>
+        object CreateSccProvider(IServiceContainer container, Type serviceType)
+        {
+            Debug.Assert(serviceType == typeof(ITheAnkhSvnSccProvider));
+
+            _sccProvider.RegisterAsPrimarySccProvider();
+
+            return _sccProvider;            
+        }
+
+        /// <summary>
+        /// Called when <see cref="AnkhRuntime.Start"/> is called
+        /// </summary>
+        public override void OnInitialize()
+        {
+            EnsureService<IStatusImageMapper>();
+            EnsureService<IFileStatusCache>();
 
             IVsMonitorSelection ms = GetService<IVsMonitorSelection>();
 
@@ -66,30 +90,6 @@ namespace Ankh.Scc
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Registers our scc provider when first ask for it by VS
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="serviceType"></param>
-        /// <returns></returns>
-        object CreateSccProvider(IServiceContainer container, Type serviceType)
-        {
-            Debug.Assert(serviceType == typeof(ITheAnkhSvnSccProvider));
-
-            _sccProvider.RegisterAsPrimarySccProvider();
-
-            return _sccProvider;            
-        }
-
-        /// <summary>
-        /// Called when <see cref="AnkhRuntime.Start"/> is called
-        /// </summary>
-        public override void OnInitialize()
-        {
-            EnsureService<IStatusImageMapper>();
-            EnsureService<IFileStatusCache>();
         }
     }
 }
