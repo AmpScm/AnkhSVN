@@ -48,11 +48,13 @@ namespace Ankh.UI.MergeWizard
 
                 mergeFromComboBox.SelectedItem = ((MergeWizard)WizardPage.Wizard).MergeTarget.Status.Uri.ToString();
 
-                ((WizardDialog)WizardPage.Form).PageContainer.Enabled = true;
+                ((WizardDialog)WizardPage.Form).EnablePageAndButtons(true);
 
                 UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
 
                 Cursor.Current = Cursors.Default;
+
+                WizardPage.IsPageComplete = true;
             }
         }
 
@@ -82,12 +84,28 @@ namespace Ankh.UI.MergeWizard
         private void MergeSourceRangeOfRevisionsPageControl_Load(object sender, EventArgs e)
         {
             mergeFromComboBox.Text = Resources.LoadingMergeSources;
-            ((WizardDialog)WizardPage.Form).PageContainer.Enabled = false;
+            ((WizardDialog)WizardPage.Form).EnablePageAndButtons(false);
             Cursor.Current = Cursors.WaitCursor;
          
             Thread t = new Thread(new ThreadStart(RetrieveAndSetMergeSources));
 
             t.Start();
+        }
+
+        private void selectRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                ((MergeSourceRangeOfRevisionsPage)WizardPage).NextPageRequired = true;
+            }
+        }
+
+        private void allRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                ((MergeSourceRangeOfRevisionsPage)WizardPage).NextPageRequired = false;
+            }
         }
         #endregion
     }
