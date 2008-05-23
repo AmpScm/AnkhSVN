@@ -64,7 +64,7 @@ namespace Ankh.UI.VSSelectionControls
 
             if (!_updatingSelection)
             {
-                if (SelectedItems.Count > 0)
+                if (SelectedIndices.Count > 0)
                     NotifySelectionUpdated();
                 else
                     _maybeUnselect = true;
@@ -75,7 +75,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             base.OnMouseUp(e);
 
-            if (!DesignMode && _maybeUnselect && SelectedItems.Count == 0)
+            if (!DesignMode && _maybeUnselect && SelectedIndices.Count == 0)
             {
                 NotifySelectionUpdated();
             }
@@ -239,12 +239,23 @@ namespace Ankh.UI.VSSelectionControls
 
         IList ISelectionMapOwner<TListViewItem>.Selection
         {
-            get { return SelectedItems; }
+            get 
+			{
+				if (!VirtualMode)
+					return SelectedItems;
+				else
+				{
+					List<TListViewItem> lvi = new List<TListViewItem>();
+					foreach (int i in SelectedIndices)
+						lvi.Add((TListViewItem)Items[i]);
+					return lvi;
+				}
+			}
         }
 
         IList ISelectionMapOwner<TListViewItem>.AllItems
         {
-            get { return _provideFullList ? (IList)Items : (IList)SelectedItems; }
+            get { return _provideFullList ? (IList)Items : (IList)((ISelectionMapOwner<TListViewItem>)this).Selection; }
         }
 
 
