@@ -141,7 +141,7 @@ namespace Ankh
 
                 AddTouchedPath(e.FullPath);
 
-                // *************** See subversion issue #3168 ************************
+/*                // *************** See subversion issue #3168 ************************
                 if (e.CommandType == SvnCommandType.Commit && e.Action.ToString().StartsWith("Commit"))
                 {
                     if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath) && !Directory.Exists(Path.GetDirectoryName(e.FullPath)))
@@ -163,7 +163,7 @@ namespace Ankh
                             dir = Path.GetDirectoryName(dir);
                         }
                     }
-                }
+                }*/
             }
 
             void AddTouchedPath(string path)
