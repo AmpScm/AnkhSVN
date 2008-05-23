@@ -32,6 +32,7 @@ namespace Ankh.Ids
 
 
         public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
+        public const string SccServiceId = "d8c473d2-9634-4513-91d5-e1a671fe2df4";
 
         public const string LogMessageLanguageServiceId = "1dfe69ce-7f9b-4cc5-b09b-e5bde95e9439";
         public const string LogMessageServiceName = "Log Messages (AnkhSVN)";
@@ -72,5 +73,6 @@ namespace Ankh.Ids
 		public static readonly Guid AnkhOutputPaneGuid = new Guid(AnkhOutputPaneId);
 
         public static readonly Guid SccProviderGuid = new Guid(SccProviderId);
+        public static readonly Guid SccServiceGuid = new Guid(SccServiceId);
 	}
 }

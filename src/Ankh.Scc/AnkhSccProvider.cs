@@ -14,7 +14,7 @@ using Ankh.VS;
 
 namespace Ankh.Scc
 {
-    [GuidAttribute(AnkhId.SccProviderId), CLSCompliant(false)]
+    [GuidAttribute(AnkhId.SccServiceId), CLSCompliant(false)]
     public interface ITheAnkhSvnSccProvider : IVsSccProvider
     {
     }
