@@ -25,17 +25,20 @@ namespace Ankh.UI.MergeWizard.Commands
                 return;
             }
 
-            List<SvnItem> items = new List<SvnItem>();
-
+            int n = 0;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                items.Add(item);
+                n++;
+
+                if (n > 1)
+                {
+                    e.Enabled = false;
+                    return;
+                }
             }
 
-            if (items.Count == 1)
-                return;
-
-            e.Enabled = false;
+            if (n == 0)
+                e.Enabled = false;
         }
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
@@ -68,7 +71,7 @@ namespace Ankh.UI.MergeWizard.Commands
 
                 if (result == DialogResult.OK)
                     MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
-                        "Until Ankh 2.0 releases at the end of May, this feature may not work as expected.  " +
+                        "This feature may not work as expected.  " +
                         "Please check the website for a newer build or if you have the latest, contact " +
                         "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
