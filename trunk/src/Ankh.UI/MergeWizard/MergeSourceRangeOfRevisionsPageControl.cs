@@ -22,6 +22,18 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
+        /// Returns whether or not the "Merge From" <code>ComboBox</code>
+        /// has content in it.  (Validation will occur during the merge step.)
+        /// </summary>
+        public bool HasMergeSource
+        {
+            get
+            {
+                return mergeFromComboBox.Text != "";
+            }
+        }
+
+        /// <summary>
         /// Gets/Sets the wizard page associated with this UserControl.
         /// </summary>
         public WizardPage WizardPage
@@ -106,6 +118,11 @@ namespace Ankh.UI.MergeWizard
             {
                 ((MergeSourceRangeOfRevisionsPage)WizardPage).NextPageRequired = false;
             }
+        }
+
+        private void mergeFromComboBox_TextChanged(object sender, EventArgs e)
+        {
+            ((WizardDialog)WizardPage.Form).UpdateButtons();
         }
         #endregion
     }

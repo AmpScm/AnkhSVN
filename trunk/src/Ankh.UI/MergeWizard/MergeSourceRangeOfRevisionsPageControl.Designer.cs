@@ -78,6 +78,7 @@
             resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
             this.mergeFromComboBox.FormattingEnabled = true;
             this.mergeFromComboBox.Name = "mergeFromComboBox";
+            this.mergeFromComboBox.TextChanged += new System.EventHandler(this.mergeFromComboBox_TextChanged);
             // 
             // MergeSourceRangeOfRevisionsPageControl
             // 
