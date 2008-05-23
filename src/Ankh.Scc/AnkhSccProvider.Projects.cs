@@ -174,6 +174,9 @@ namespace Ankh.Scc
 
                         // Ask the user whether we should be registered in the solution?
                     }
+
+                    // BH: Many users seem to have .load and .noload files checked in
+                    // so we can't just remove them without issues.
                 }
             }
 
