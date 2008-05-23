@@ -21,6 +21,7 @@ namespace Ankh.UI.MergeWizard
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
+            control_prop.WizardPage = this;
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />

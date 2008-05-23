@@ -31,10 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceRangeOfRevisionsPageControl));
             this.mergeFromLabel = new System.Windows.Forms.Label();
             this.selectButton = new System.Windows.Forms.Button();
-            this.mergeFromTextBox = new System.Windows.Forms.TextBox();
             this.revisionsGroupBox = new System.Windows.Forms.GroupBox();
-            this.allRevisionsRadioButton = new System.Windows.Forms.RadioButton();
             this.selectRevisionsRadioButton = new System.Windows.Forms.RadioButton();
+            this.allRevisionsRadioButton = new System.Windows.Forms.RadioButton();
+            this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
             this.revisionsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,11 +49,6 @@
             this.selectButton.Name = "selectButton";
             this.selectButton.UseVisualStyleBackColor = true;
             // 
-            // mergeFromTextBox
-            // 
-            resources.ApplyResources(this.mergeFromTextBox, "mergeFromTextBox");
-            this.mergeFromTextBox.Name = "mergeFromTextBox";
-            // 
             // revisionsGroupBox
             // 
             resources.ApplyResources(this.revisionsGroupBox, "revisionsGroupBox");
@@ -61,6 +56,12 @@
             this.revisionsGroupBox.Controls.Add(this.allRevisionsRadioButton);
             this.revisionsGroupBox.Name = "revisionsGroupBox";
             this.revisionsGroupBox.TabStop = false;
+            // 
+            // selectRevisionsRadioButton
+            // 
+            resources.ApplyResources(this.selectRevisionsRadioButton, "selectRevisionsRadioButton");
+            this.selectRevisionsRadioButton.Name = "selectRevisionsRadioButton";
+            this.selectRevisionsRadioButton.UseVisualStyleBackColor = true;
             // 
             // allRevisionsRadioButton
             // 
@@ -70,21 +71,22 @@
             this.allRevisionsRadioButton.TabStop = true;
             this.allRevisionsRadioButton.UseVisualStyleBackColor = true;
             // 
-            // selectRevisionsRadioButton
+            // mergeFromComboBox
             // 
-            resources.ApplyResources(this.selectRevisionsRadioButton, "selectRevisionsRadioButton");
-            this.selectRevisionsRadioButton.Name = "selectRevisionsRadioButton";
-            this.selectRevisionsRadioButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
+            this.mergeFromComboBox.FormattingEnabled = true;
+            this.mergeFromComboBox.Name = "mergeFromComboBox";
             // 
             // MergeSourceRangeOfRevisionsPageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.mergeFromComboBox);
             this.Controls.Add(this.revisionsGroupBox);
-            this.Controls.Add(this.mergeFromTextBox);
             this.Controls.Add(this.selectButton);
             this.Controls.Add(this.mergeFromLabel);
             this.Name = "MergeSourceRangeOfRevisionsPageControl";
+            this.Load += new System.EventHandler(this.MergeSourceRangeOfRevisionsPageControl_Load);
             this.revisionsGroupBox.ResumeLayout(false);
             this.revisionsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -96,9 +98,9 @@
 
         private System.Windows.Forms.Label mergeFromLabel;
         private System.Windows.Forms.Button selectButton;
-        private System.Windows.Forms.TextBox mergeFromTextBox;
         private System.Windows.Forms.GroupBox revisionsGroupBox;
         private System.Windows.Forms.RadioButton allRevisionsRadioButton;
         private System.Windows.Forms.RadioButton selectRevisionsRadioButton;
+        private System.Windows.Forms.ComboBox mergeFromComboBox;
     }
 }

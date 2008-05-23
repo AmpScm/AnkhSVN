@@ -126,6 +126,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
@@ -204,6 +205,7 @@
     <Compile Include="MergeWizard\MergeTypePageControl.Designer.cs">
       <DependentUpon>MergeTypePageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeWizard\MergeUtils.cs" />
     <Compile Include="MergeWizard\MergeWizard.cs" />
     <Compile Include="MergeWizard\MergeWizardDialog.cs">
       <SubType>Form</SubType>
@@ -240,6 +242,7 @@
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIUtils.cs" />
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>

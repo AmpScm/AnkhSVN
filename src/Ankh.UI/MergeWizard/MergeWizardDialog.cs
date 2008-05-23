@@ -18,19 +18,17 @@ namespace Ankh.UI.MergeWizard
         {
             this.Text = "Merge Wizard";
             this.Icon = Resources.MergeWizardIcon;
-            this.Wizard = wizard;
+            this.Wizard = _wizard;
         }
 
         /// <summary>
-        /// Gets or sets the context.
+        /// Returns an instance of the wizard.
         /// </summary>
-        /// <value>The context.</value>
-        public IAnkhServiceProvider Context
+        public MergeWizard GetWizard()
         {
-            get { return _context; }
-            set { _context = value; }
+            return (MergeWizard)Wizard;
         }
 
-        private Wizard wizard = new MergeWizard();
+        Wizard _wizard = new MergeWizard();
     }
 }
