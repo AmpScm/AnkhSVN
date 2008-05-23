@@ -49,18 +49,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual EnvDTE._DTE DTE
-        {
-            get
-            {
-                if ( this.dte == null )
-                {
-                    this.dte = DteFactory.Create2003().Create();
-                }
-                return this.dte;
-            }
-        }
-
         public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorerService
         {
             get
@@ -84,14 +72,6 @@ namespace Ankh.Tests
         {
             // TODO:  Add ContextBase.ReloadSolutionIfNecessary implementation
             return false;
-        }
-
-        public virtual Ankh.Configuration.AnkhConfig Config
-        {
-            get
-            {
-                return this.config;
-            }
         }
 
         public virtual IUIShell UIShell
@@ -160,15 +140,6 @@ namespace Ankh.Tests
             {
                 // TODO:  Add ContextBase.SolutionIsOpen getter implementation
                 return false;
-            }
-        }
-
-        public virtual EnvDTE.AddIn AddIn
-        {
-            get
-            {
-                // TODO:  Add ContextBase.AddIn getter implementation
-                return null;
             }
         }
 
@@ -460,13 +431,11 @@ namespace Ankh.Tests
 
         }
 
-        public Configuration.AnkhConfig config;
-        public _DTE dte;
-        public SvnClient client;
-        public IAnkhErrorHandler errorHandler;
-        public OutputPaneWriter outputPane;
-        public IUIShell uiShell;
-        private Control control;
+        SvnClient client;
+        IAnkhErrorHandler errorHandler;
+        OutputPaneWriter outputPane;
+        IUIShell uiShell;
+        Control control;
 
         #region IContext Members
     

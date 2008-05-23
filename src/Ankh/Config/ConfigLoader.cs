@@ -69,8 +69,6 @@ namespace Ankh.Configuration
             }
         }
 
-        public event EventHandler ConfigFileChanged;
-
         public AnkhConfig Instance
         {
             get { return _instance ?? (_instance = GetSafeConfigInstance()); }
