@@ -21,7 +21,7 @@ namespace Ankh.Scc
         readonly Dictionary<IVsSccProject2, SccProjectData> _projectMap = new Dictionary<IVsSccProject2, SccProjectData>();
         readonly Dictionary<string, string> _backupMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         bool _managedSolution;
-        List<string> _delayedDelete;        
+        List<string> _delayedDelete;
         bool _isDirty;
 
         public void LoadingManagedSolution(bool asPrimarySccProvider)
@@ -134,10 +134,52 @@ namespace Ankh.Scc
         /// </summary>
         internal void OnSolutionOpened()
         {
+            _solutionFile = _solutionDirectory = null;
+
+            if (!IsActive)
+            {
+                IAnkhCommandStates states = GetService<IAnkhCommandStates>();
+
+                if (states == null || states.OtherSccProviderActive)
+                    return;
+            }
+
+            if (!_managedSolution)
+            {
+                string dir = SolutionDirectory;
+
+                if (!string.IsNullOrEmpty(dir) && Directory.Exists(dir))
+                {
+                    if (!SvnTools.IsManagedPath(dir))
+                        return; // Not for us
+
+                    // AnkhSVN 0.x and 1.x place Ankh.Load files to trigger loading
+                    if (File.Exists(Path.Combine(dir, "Ankh.Load")))
+                    {
+                        // Ok there is no (other) Scc provider active and there is an Ankh.load
+
+                        if(!IsActive)
+                            RegisterAsPrimarySccProvider(); // Make us active (Yes!)
+
+                        SetProjectManaged(null, true);
+
+                        Debug.Assert(IsActive, "We should be active now!");
+                    }
+                    else if (File.Exists(Path.Combine(dir, "Ankh.NoLoad")))
+                        return; // Explicit don't load Ankh, can be overridden from the .sln
+                    else
+                    {
+                        if(!IsActive)
+                            RegisterAsPrimarySccProvider(); // Set us active; we know there is a .svn
+
+                        // Ask the user whether we should be registered in the solution?
+                    }
+                }
+            }
+
             if (!IsActive)
                 return;
-
-            _solutionFile = _solutionDirectory = null;
+            
             IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
 
             if (window != null)
@@ -172,7 +214,7 @@ namespace Ankh.Scc
             {
                 if (_solutionFile == null)
                     LoadSolutionInfo();
-                    
+
                 return _solutionFile.Length > 0 ? _solutionFile : null;
             }
         }
@@ -181,7 +223,7 @@ namespace Ankh.Scc
         {
             get
             {
-                if(_solutionDirectory == null)
+                if (_solutionDirectory == null)
                     LoadSolutionInfo();
 
                 return _solutionDirectory;
@@ -194,7 +236,7 @@ namespace Ankh.Scc
 
             IVsSolution sol = GetService<IVsSolution>(typeof(SVsSolution));
 
-            if(sol == null || 
+            if (sol == null ||
                 !ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out path, out user)))
             {
                 _solutionDirectory = _solutionFile = "";
@@ -284,7 +326,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 _projectMap.Add(project, data = new SccProjectData(Context, project));
 
-            if(data.IsSolutionFolder || data.IsWebSite)
+            if (data.IsSolutionFolder || data.IsWebSite)
             {
                 // Solution folders are projects without Scc state
                 // Web sites are Solution-only projects with scc state
@@ -310,7 +352,7 @@ namespace Ankh.Scc
         internal void RefreshProject(IVsSccProject2 project)
         {
             SccProjectData data;
-            if(_projectMap.TryGetValue(project, out data))
+            if (_projectMap.TryGetValue(project, out data))
             {
                 data.Reload();
             }
@@ -337,7 +379,7 @@ namespace Ankh.Scc
         {
             SccProjectData data;
 
-            if(_projectMap.TryGetValue(project, out data))
+            if (_projectMap.TryGetValue(project, out data))
             {
                 if (!removed && !string.IsNullOrEmpty(data.ProjectFile))
                     StatusCache.MarkDirty(data.ProjectFile); // In this case we are probably reloading or something
@@ -383,9 +425,9 @@ namespace Ankh.Scc
                 List<string> dirs = new List<string>(_backupMap.Values);
                 _backupMap.Clear();
 
-                using(SvnSccContext svn = new SvnSccContext(Context))
+                using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    foreach(string dir in dirs)
+                    foreach (string dir in dirs)
                         svn.DeleteDirectory(dir);
                 }
             }
