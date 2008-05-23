@@ -44,8 +44,11 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!NextPageRequired)
-                    return true;
+                if (NextPageRequired)
+                    return false;
+
+                if (!((MergeSourceRangeOfRevisionsPageControl)Control).HasMergeSource)
+                    return false;
 
                 return base.IsPageComplete;
             }
