@@ -10,7 +10,7 @@ namespace Ankh.VSPackage.Attributes
     /// <summary>
     /// This attribute registers the package as source control provider.
     /// </summary>
-    [AttributeUsage( AttributeTargets.Class, AllowMultiple = true, Inherited = true )]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     internal sealed class ProvideSourceControlProvider : RegistrationAttribute
     {
         private string _regName = null;
@@ -18,7 +18,7 @@ namespace Ankh.VSPackage.Attributes
 
         /// <summary>
         /// </summary>
-        public ProvideSourceControlProvider( string regName, string uiName )
+        public ProvideSourceControlProvider(string regName, string uiName)
         {
             _regName = regName;
             _uiName = uiName;
@@ -61,7 +61,7 @@ namespace Ankh.VSPackage.Attributes
         /// </summary>
         public Guid SccProviderService
         {
-            get { return AnkhId.SccProviderGuid; }
+            get { return typeof(Ankh.Scc.ITheAnkhSvnSccProvider).GUID; }
         }
 
         /// <summary>
@@ -69,25 +69,28 @@ namespace Ankh.VSPackage.Attributes
         ///     contains the location where the registration inforomation should be placed.
         ///     It also contains other information such as the type being registered and path information.
         /// </summary>
-        public override void Register( RegistrationContext context )
+        public override void Register(RegistrationContext context)
         {
             // Write to the context's log what we are about to do
-            context.Log.WriteLine( String.Format( CultureInfo.CurrentCulture, 
-                "Ankh Source Control Provider:\t\t{0}\n", RegName ) );
+            context.Log.WriteLine(String.Format(CultureInfo.CurrentCulture,
+                "Ankh Source Control Provider:\t\t{0}\n", RegName));
 
             // Declare the source control provider, its name, the provider's service 
             // and aditionally the packages implementing this provider
-            using ( Key sccProviders = context.CreateKey( "SourceControlProviders" ) )
+            using (Key sccProviders = context.CreateKey("SourceControlProviders"))
             {
-                using ( Key sccProviderKey = sccProviders.CreateSubkey( RegGuid.ToString( "B" ) ) )
-                {
-                    sccProviderKey.SetValue( "", RegName );
-                    sccProviderKey.SetValue( "Service", SccProviderService.ToString( "B" ) );
+                // BH: Set ourselves as current default SCC Provider
+                sccProviders.SetValue("", RegGuid.ToString("B"));
 
-                    using ( Key sccProviderNameKey = sccProviderKey.CreateSubkey( "Name" ) )
+                using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B").ToUpperInvariant()))
+                {
+                    sccProviderKey.SetValue("", RegName);
+                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B"));
+
+                    using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Name"))
                     {
-                        sccProviderNameKey.SetValue( "", UIName );
-                        sccProviderNameKey.SetValue( "Package", UINamePkg.ToString( "B" ) );
+                        sccProviderNameKey.SetValue("", UIName);
+                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B"));
 
                         sccProviderNameKey.Close();
                     }
@@ -106,9 +109,9 @@ namespace Ankh.VSPackage.Attributes
         /// Unregister the source control provider
         /// </summary>
         /// <param name="context"></param>
-        public override void Unregister( RegistrationContext context )
+        public override void Unregister(RegistrationContext context)
         {
-            context.RemoveKey( "SourceControlProviders\\" + AnkhId.SccProviderGuid.ToString( "B" ) );
+            context.RemoveKey("SourceControlProviders\\" + AnkhId.SccProviderGuid.ToString("B"));
         }
     }
 }
