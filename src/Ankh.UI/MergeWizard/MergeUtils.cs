@@ -30,7 +30,7 @@ namespace Ankh.UI.MergeWizard
                 SvnMergeSourcesCollection mergeSources;
                 SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
                 SvnItem parent = target.Parent;
-
+                
                 args.ThrowOnError = false;
 
                 if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
@@ -42,13 +42,15 @@ namespace Ankh.UI.MergeWizard
                 }
             }
 
+            sources.Sort();
+
             return sources;
         }
 
         /// <summary>
         /// Returns an instance of <code>SharpSvn.SvnClient</code> from the pool.
         /// </summary>
-        protected SvnClient GetClient()
+        public SvnClient GetClient()
         {
             ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
 

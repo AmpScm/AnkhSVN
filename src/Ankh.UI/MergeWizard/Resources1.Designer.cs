@@ -68,7 +68,7 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please wait while we retrieve the suggested merge sources....
+        ///   Looks up a localized string similar to Please wait while the suggested merge sources are retrieved....
         /// </summary>
         internal static string LoadingMergeSources {
             get {
