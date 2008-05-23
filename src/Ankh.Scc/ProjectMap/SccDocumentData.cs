@@ -108,7 +108,7 @@ namespace Ankh.Scc.ProjectMap
                 if ((id != 0) && id != VSConstants.VSITEMID_NIL)
                     ItemId = id;
 
-                if (data != null)
+                if (data != IntPtr.Zero)
                 {
                     _rawDocument = Marshal.GetObjectForIUnknown(data);
                     Marshal.Release(data);
