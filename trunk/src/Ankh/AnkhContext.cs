@@ -166,10 +166,7 @@ namespace Ankh
         /// </summary>
         private void LoadConfig()
         {
-            this._config.LoadConfig();
-
-
-            this.Configuration.ConfigFileChanged += new EventHandler(ConfigLoader_ConfigFileChanged);
+            _config.LoadConfig();
         }
 
         /// <summary>

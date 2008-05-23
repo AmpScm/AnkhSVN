@@ -178,9 +178,6 @@
     <Compile Include="ContextBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DteFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Content Include="LogResultTest.cs">
       <SubType>Code</SubType>
     </Content>
@@ -200,9 +197,6 @@
       <SubType>Code</SubType>
     </Content>
     <Compile Include="TestBase.cs" />
-    <Compile Include="TestUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <EmbeddedResource Include="repos.zip" />
     <EmbeddedResource Include="repos2.zip" />
     <EmbeddedResource Include="unversioned.zip" />

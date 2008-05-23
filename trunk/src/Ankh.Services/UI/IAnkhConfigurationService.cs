@@ -12,11 +12,6 @@ namespace Ankh.UI
             get;
         }
 
-        /// <summary>
-        /// Occurs when the configuration file changed
-        /// </summary>
-        event EventHandler ConfigFileChanged;
-
         void LoadConfig();
 
         AnkhConfig GetNewConfigInstance();

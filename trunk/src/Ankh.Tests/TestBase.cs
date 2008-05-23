@@ -29,7 +29,7 @@ namespace NSvn.Core.Tests
         [SetUp]
         public virtual void SetUp()
         {
-            this.notifications = new ArrayList();
+            this._notifications = new ArrayList();
             this.client = new SvnClient();
             this.client.Committing += new EventHandler<SvnCommittingEventArgs>(LogMessage);
         }
@@ -209,7 +209,7 @@ namespace NSvn.Core.Tests
         {
             get
             {
-				return (SvnNotifyEventArgs[])this.notifications.ToArray(
+				return (SvnNotifyEventArgs[])this._notifications.ToArray(
 					typeof(SvnNotifyEventArgs));
 			}
         }
@@ -229,7 +229,7 @@ namespace NSvn.Core.Tests
         /// <param name="notification">An object containing information about the notification</param>
         public virtual void NotifyCallback( object sender, SvnNotifyEventArgs notification )
         {
-            this.notifications.Add( notification );
+            this._notifications.Add( notification );
         }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace NSvn.Core.Tests
         private SvnClient client;
     
         
-        protected ArrayList notifications;
+        ArrayList _notifications;
 
         
     }
