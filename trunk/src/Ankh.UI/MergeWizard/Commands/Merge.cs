@@ -41,9 +41,22 @@ namespace Ankh.UI.MergeWizard.Commands
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
         public void OnExecute(CommandEventArgs e)
         {
+            List<SvnItem> svnItems = new List<SvnItem>();
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                svnItems.Add(item);
+            }
+
             using (MergeWizardDialog dialog = new MergeWizardDialog())
             {
-                dialog.Context = e.Context;
+                if (dialog is MergeWizardDialog)
+                {
+                    ((MergeWizardDialog)dialog).GetWizard().MergeUtils = new MergeUtils(e.Context);
+                    ((MergeWizardDialog)dialog).GetWizard().MergeTarget = svnItems[0];
+                }
+
+
                 DialogResult result;
 
                 IUIService uiService = e.GetService<IUIService>();

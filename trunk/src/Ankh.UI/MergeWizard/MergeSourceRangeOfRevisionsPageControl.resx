@@ -183,35 +183,62 @@
   <data name="&gt;&gt;selectButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="mergeFromTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="mergeFromTextBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 6</value>
-  </data>
-  <data name="mergeFromTextBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="mergeFromTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 20</value>
-  </data>
-  <data name="mergeFromTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;mergeFromTextBox.Name" xml:space="preserve">
-    <value>mergeFromTextBox</value>
-  </data>
-  <data name="&gt;&gt;mergeFromTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergeFromTextBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;mergeFromTextBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="revisionsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;selectRevisionsRadioButton.Name" xml:space="preserve">
+    <value>selectRevisionsRadioButton</value>
+  </data>
+  <data name="&gt;&gt;selectRevisionsRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;selectRevisionsRadioButton.Parent" xml:space="preserve">
+    <value>revisionsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;selectRevisionsRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;allRevisionsRadioButton.Name" xml:space="preserve">
+    <value>allRevisionsRadioButton</value>
+  </data>
+  <data name="&gt;&gt;allRevisionsRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;allRevisionsRadioButton.Parent" xml:space="preserve">
+    <value>revisionsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;allRevisionsRadioButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="revisionsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 30</value>
+  </data>
+  <data name="revisionsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="revisionsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="revisionsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>490, 65</value>
+  </data>
+  <data name="revisionsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="revisionsGroupBox.Text" xml:space="preserve">
+    <value>Revisions</value>
+  </data>
+  <data name="&gt;&gt;revisionsGroupBox.Name" xml:space="preserve">
+    <value>revisionsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;revisionsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;revisionsGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;revisionsGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="selectRevisionsRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -276,34 +303,34 @@
   <data name="&gt;&gt;allRevisionsRadioButton.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="revisionsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 30</value>
+  <data name="mergeFromComboBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
   </data>
-  <data name="revisionsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="mergeFromComboBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 6</value>
+  </data>
+  <data name="mergeFromComboBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="revisionsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="mergeFromComboBox.MaxDropDownItems" type="System.Int32, mscorlib">
+    <value>10</value>
   </data>
-  <data name="revisionsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 65</value>
+  <data name="mergeFromComboBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>330, 21</value>
   </data>
-  <data name="revisionsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="mergeFromComboBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="revisionsGroupBox.Text" xml:space="preserve">
-    <value>Revisions</value>
+  <data name="&gt;&gt;mergeFromComboBox.Name" xml:space="preserve">
+    <value>mergeFromComboBox</value>
   </data>
-  <data name="&gt;&gt;revisionsGroupBox.Name" xml:space="preserve">
-    <value>revisionsGroupBox</value>
+  <data name="&gt;&gt;mergeFromComboBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;revisionsGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;revisionsGroupBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;mergeFromComboBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;revisionsGroupBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;mergeFromComboBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

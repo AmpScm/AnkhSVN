@@ -99,6 +99,21 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        public MergeUtils MergeUtils
+        {
+            get { return _mergeUtils; }
+            set { _mergeUtils = value; }
+        }
+
+        /// <summary>
+        /// Gets/Sets the target for the merge.
+        /// </summary>
+        public SvnItem MergeTarget
+        {
+            get { return _mergeTarget; }
+            set { _mergeTarget = value; }
+        }
+
         private WizardPage mergeTypePage = new MergeTypePage();
         private WizardPage bestPracticesPage = new MergeBestPracticesPage();
         private WizardPage mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage();
@@ -106,5 +121,8 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
         private WizardPage mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
         private WizardPage mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
+
+        MergeUtils _mergeUtils = null;
+        SvnItem _mergeTarget = null;
     }
 }
