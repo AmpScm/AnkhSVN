@@ -63,7 +63,7 @@ namespace Ankh.UI.MergeWizard
                 return null; // For now, if you see the best practices page,
                              // you have to fix the issue and then reattemp to merge.
 
-            return base.GetNextPage(page);
+            return null;
         }
 
         /// <see cref="WizardFramework.IWizard.CanFinish" />
@@ -77,7 +77,14 @@ namespace Ankh.UI.MergeWizard
                 if (Container.CurrentPage is MergeBestPracticesPage)
                     return false;
 
-                return base.CanFinish;
+                if (Container.CurrentPage is MergeSourceRangeOfRevisionsPage)
+                {
+                    return Container.CurrentPage.IsPageComplete &&
+                        !((MergeSourceRangeOfRevisionsPage)Container.CurrentPage).NextPageRequired;
+                }
+                    
+
+                return Container.CurrentPage.IsPageComplete;
             }
         }
 

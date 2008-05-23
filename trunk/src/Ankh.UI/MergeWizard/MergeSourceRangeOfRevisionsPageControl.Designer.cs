@@ -62,6 +62,7 @@
             resources.ApplyResources(this.selectRevisionsRadioButton, "selectRevisionsRadioButton");
             this.selectRevisionsRadioButton.Name = "selectRevisionsRadioButton";
             this.selectRevisionsRadioButton.UseVisualStyleBackColor = true;
+            this.selectRevisionsRadioButton.CheckedChanged += new System.EventHandler(this.selectRevisionsRadioButton_CheckedChanged);
             // 
             // allRevisionsRadioButton
             // 
@@ -70,6 +71,7 @@
             this.allRevisionsRadioButton.Name = "allRevisionsRadioButton";
             this.allRevisionsRadioButton.TabStop = true;
             this.allRevisionsRadioButton.UseVisualStyleBackColor = true;
+            this.allRevisionsRadioButton.CheckedChanged += new System.EventHandler(this.allRevisionsRadioButton_CheckedChanged);
             // 
             // mergeFromComboBox
             // 

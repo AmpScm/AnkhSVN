@@ -18,18 +18,46 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         public MergeSourceRangeOfRevisionsPage() : base("Merge Source Range Of Revisions")
         {
-            IsPageComplete = false;
+            NextPageRequired = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
-            control_prop.WizardPage = this;
+            _control.WizardPage = this;
+        }
+
+        /// <summary>
+        /// Gets/Sets whether or not the next page is required.
+        /// </summary>
+        public bool NextPageRequired
+        {
+            get { return _needsNextPage; }
+            set
+            {
+                _needsNextPage = value;
+
+                if (Form != null)
+                    ((WizardDialog)Form).UpdateButtons();
+            }
+        }
+
+        /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
+        public override bool IsPageComplete
+        {
+            get
+            {
+                if (!NextPageRequired)
+                    return true;
+
+                return base.IsPageComplete;
+            }
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
         public override System.Windows.Forms.UserControl Control
         {
-            get { return control_prop; }
+            get { return _control; }
         }
 
-        private MergeSourceRangeOfRevisionsPageControl control_prop = new MergeSourceRangeOfRevisionsPageControl();
+        private MergeSourceRangeOfRevisionsPageControl _control = new MergeSourceRangeOfRevisionsPageControl();
+        private bool _needsNextPage = false;
     }
 }
