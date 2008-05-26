@@ -22,7 +22,28 @@ namespace Ankh.UI
             // 
             // pathSelectionTreeView
             // 
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(370, 240);
+            this.pathSelectionTreeView.LineColor = System.Drawing.Color.Black;
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(383, 202);
+            // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(227, 4);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(308, 4);
+            // 
+            // revisionStartGroupBox
+            // 
+            this.revisionStartGroupBox.Size = new System.Drawing.Size(386, 48);
+            // 
+            // revisionEndGroupBox
+            // 
+            this.revisionEndGroupBox.Size = new System.Drawing.Size(386, 48);
+            // 
+            // suppressGroupBox
+            // 
+            this.suppressGroupBox.Size = new System.Drawing.Size(386, 32);
             // 
             // messageTextBox
             // 
@@ -32,7 +53,7 @@ namespace Ankh.UI
             this.messageTextBox.Location = new System.Drawing.Point(8, 16);
             this.messageTextBox.Multiline = true;
             this.messageTextBox.Name = "messageTextBox";
-            this.messageTextBox.Size = new System.Drawing.Size(342, 60);
+            this.messageTextBox.Size = new System.Drawing.Size(392, 60);
             this.messageTextBox.TabIndex = 7;
             // 
             // stealLocksCheckBox
@@ -51,31 +72,27 @@ namespace Ankh.UI
             this.groupBox1.Controls.Add(this.messageTextBox);
             this.groupBox1.Location = new System.Drawing.Point(8, 248);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(360, 85);
+            this.groupBox1.Size = new System.Drawing.Size(410, 85);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lock message";
             // 
             // LockDialog
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.Caption = "Lock";
-
-            this.ClientSize = new System.Drawing.Size(370, 416);
+            this.ClientSize = new System.Drawing.Size(420, 416);
             this.Controls.Add(this.stealLocksCheckBox);
             this.Controls.Add(this.groupBox1);
             this.MinimumSize = new System.Drawing.Size(376, 300);
             this.Name = "LockDialog";
             this.Text = "Lock";
             this.Controls.SetChildIndex(this.groupBox1, 0);
+            this.Controls.SetChildIndex(this.stealLocksCheckBox, 0);
             this.Controls.SetChildIndex(this.revisionEndGroupBox, 0);
             this.Controls.SetChildIndex(this.pathSelectionTreeView, 0);
-            this.Controls.SetChildIndex(this.recursiveCheckBox, 0);
-            this.Controls.SetChildIndex(this.okButton, 0);
-            this.Controls.SetChildIndex(this.cancelButton, 0);
             this.Controls.SetChildIndex(this.revisionStartGroupBox, 0);
             this.Controls.SetChildIndex(this.suppressGroupBox, 0);
-            this.Controls.SetChildIndex(this.stealLocksCheckBox, 0);
             this.suppressGroupBox.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
