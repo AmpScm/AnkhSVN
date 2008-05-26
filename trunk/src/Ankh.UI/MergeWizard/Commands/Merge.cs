@@ -26,7 +26,7 @@ namespace Ankh.UI.MergeWizard.Commands
             }
 
             int n = 0;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 n++;
 
@@ -46,7 +46,8 @@ namespace Ankh.UI.MergeWizard.Commands
         {
             List<SvnItem> svnItems = new List<SvnItem>();
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            // TODO: Check for solution and/or project selection to use the folder instead of the file
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 svnItems.Add(item);
             }
