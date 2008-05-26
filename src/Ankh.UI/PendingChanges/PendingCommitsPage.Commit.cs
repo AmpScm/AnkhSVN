@@ -25,15 +25,12 @@ namespace Ankh.UI.PendingChanges
             HybridCollection<string> _commitPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             string _logMessage;
 
-            public PendingCommitState(IAnkhServiceProvider context, SvnClient client, IEnumerable<PendingChange> changes)
+            public PendingCommitState(IAnkhServiceProvider context, IEnumerable<PendingChange> changes)
                 : base(context)
             {
-                if (client == null)
-                    throw new ArgumentNullException("client");
-                else if (changes == null)
+                if (changes == null)
                     throw new ArgumentNullException("changes");
 
-                _client = client;
                 _changes.UniqueAddRange(changes);
 
                 foreach (PendingChange pc in _changes)
@@ -45,7 +42,13 @@ namespace Ankh.UI.PendingChanges
 
             public SvnClient Client
             {
-                get { return _client; }
+                get 
+                {
+                    if (_client == null)
+                        _client = GetService<ISvnClientPool>().GetClient();
+                    
+                    return _client; 
+                }
             }
 
             public HybridCollection<PendingChange> Changes
@@ -106,7 +109,7 @@ namespace Ankh.UI.PendingChanges
 
             public void Dispose()
             {
-                //throw new NotImplementedException();
+                FlushState();                
             }
 
             #endregion
@@ -137,6 +140,17 @@ namespace Ankh.UI.PendingChanges
                 // Returns SvnDepth.Empty in all other cases
                 return depth;
             }
+
+            internal void FlushState()
+            {
+                // This method assumes giving back the SvnClient instance flushes the state to the FileState cache
+                if (_client != null)
+                {
+                    IDisposable cl = _client;
+                    _client = null;
+                    cl.Dispose();
+                }
+            }
         }
 
         internal void DoCommit(bool keepingLocks)
@@ -157,13 +171,11 @@ namespace Ankh.UI.PendingChanges
                     changes.Add(pci.PendingChange);
                 }
             }
-
-            using (SvnClient client = UISite.GetService<ISvnClientPool>().GetClient())
-            using (PendingCommitState state = new PendingCommitState(UISite, client, changes))
+            
+            using (PendingCommitState state = new PendingCommitState(UISite, changes))
             {
                 state.KeepLocks = keepingLocks;
                 state.LogMessage = logMessageEditor.Text;
-
 
                 if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
                     return;
@@ -179,6 +191,8 @@ namespace Ankh.UI.PendingChanges
 
                 if (!PreCommit_DeleteMissingFiles(state))
                     return;
+
+                state.FlushState();
 
                 if (!PreCommit_AddNeededParents(state))
                     return;
@@ -203,8 +217,6 @@ namespace Ankh.UI.PendingChanges
                 }
             }
         }
-
-        long _lastRev;
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
         {
