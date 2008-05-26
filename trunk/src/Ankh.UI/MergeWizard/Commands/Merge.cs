@@ -54,12 +54,8 @@ namespace Ankh.UI.MergeWizard.Commands
 
             using (MergeWizardDialog dialog = new MergeWizardDialog())
             {
-                if (dialog is MergeWizardDialog)
-                {
-                    ((MergeWizardDialog)dialog).GetWizard().MergeUtils = new MergeUtils(e.Context);
-                    ((MergeWizardDialog)dialog).GetWizard().MergeTarget = svnItems[0];
-                }
-
+                dialog.GetWizard().MergeUtils = new MergeUtils(e.Context);
+                dialog.GetWizard().MergeTarget = svnItems[0];                
 
                 DialogResult result;
 
