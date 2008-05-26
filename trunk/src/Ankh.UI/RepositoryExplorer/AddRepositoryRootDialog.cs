@@ -76,20 +76,6 @@ namespace Ankh.UI
             this.ValidateAdd();
         }
 
-        private void browseButton_Click(object sender, System.EventArgs e)
-        {
-            // Browse to a local repository
-			using (FolderBrowserDialog browser = new FolderBrowserDialog())
-			{
-				browser.ShowNewFolderButton = false;
-
-				//convert the returned directory path to a URL - for a local path URL no need for encoding
-				if (browser.ShowDialog() == DialogResult.OK)
-					urlTextBox.Text = "file:///" + browser.SelectedPath.Replace('\\', '/');
-			}
-
-        }
-
         private void ValidateAdd()
         {
             this.okButton.Enabled = this.revisionPicker.Valid &&
