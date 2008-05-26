@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.Generic;
+using Ankh.VS;
 
 namespace Ankh.UI
 {
@@ -137,6 +138,30 @@ namespace Ankh.UI
             return actionText;
         }
 
+        string _splitRoot;
+
+        string SplitRoot
+        {
+            get
+            {
+                if (_splitRoot == null && Context != null)
+                {
+                    IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
+
+                    if (ss != null)
+                        _splitRoot = ss.ProjectRootWithSeparator;
+
+                    if (string.IsNullOrEmpty(_splitRoot))
+                        _splitRoot = "";
+                }
+
+                if (string.IsNullOrEmpty(_splitRoot))
+                    return null;
+                else
+                    return _splitRoot;
+            }
+        }
+
         public void OnClientNotify(object sender, SvnNotifyEventArgs e)
         {            
             //e.Detach();
@@ -150,6 +175,14 @@ namespace Ankh.UI
                 if(!string.IsNullOrEmpty(path))
                 {
                     item = new ListViewItem(GetActionText(action));
+
+                    string sr = SplitRoot;
+                    if (!string.IsNullOrEmpty(sr))
+                    {
+                        if (path.StartsWith(sr, StringComparison.OrdinalIgnoreCase))
+                            path = path.Substring(sr.Length);
+                    }
+
                     item.SubItems.Add(path);
                 }
 

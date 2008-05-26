@@ -82,6 +82,7 @@ namespace Ankh
                 using (dialog.Bind(client))
                 {
                     dialog.Caption = caption;
+                    dialog.Context = _context;
                     thread.Name = "AnkhSVN Worker";
 
                     dialog.HandleCreated += delegate
