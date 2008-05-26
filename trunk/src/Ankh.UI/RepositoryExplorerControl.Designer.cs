@@ -17,8 +17,8 @@ namespace Ankh.UI
             this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
             this.toolBar = new System.Windows.Forms.ToolBar();
             this.enableBackgroundListingButton = new System.Windows.Forms.ToolBarButton();
-            this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.addRepoURLButton = new System.Windows.Forms.ToolBarButton();
+            this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.treeView = new Ankh.UI.RepositoryTreeView();
             this.SuspendLayout();
             // 
@@ -50,8 +50,14 @@ namespace Ankh.UI
             // enableBackgroundListingButton
             // 
             this.enableBackgroundListingButton.ImageIndex = 0;
+            this.enableBackgroundListingButton.Name = "enableBackgroundListingButton";
             this.enableBackgroundListingButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
             this.enableBackgroundListingButton.ToolTipText = "Enable background listing";
+            // 
+            // addRepoURLButton
+            // 
+            this.addRepoURLButton.ImageIndex = 1;
+            this.addRepoURLButton.Name = "addRepoURLButton";
             // 
             // toolbarImageList
             // 
@@ -59,15 +65,12 @@ namespace Ankh.UI
             this.toolbarImageList.ImageSize = new System.Drawing.Size(16, 16);
             this.toolbarImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // addRepoURLButton
-            // 
-            this.addRepoURLButton.ImageIndex = 1;
-            // 
             // treeView
             // 
             this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView.Context = null;
             this.treeView.Location = new System.Drawing.Point(0, 28);
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(296, 268);
@@ -84,6 +87,7 @@ namespace Ankh.UI
             this.Name = "RepositoryExplorerControl";
             this.Size = new System.Drawing.Size(296, 296);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         #endregion

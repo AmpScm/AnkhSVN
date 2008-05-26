@@ -21,13 +21,13 @@ namespace Ankh.UI
             // revisionTypeBox
             // 
             this.revisionTypeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                | System.Windows.Forms.AnchorStyles.Right)));
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionTypeBox.Location = new System.Drawing.Point(0, 0);
             this.revisionTypeBox.Name = "revisionTypeBox";
             this.revisionTypeBox.Size = new System.Drawing.Size(200, 21);
             this.revisionTypeBox.TabIndex = 0;
-            this.revisionTypeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.revisionTypeBox_KeyUp);
             this.revisionTypeBox.SelectionChangeCommitted += new System.EventHandler(this.revisionTypeBox_SelectionChangeCommitted);
+            this.revisionTypeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.revisionTypeBox_KeyUp);
             // 
             // datePicker
             // 

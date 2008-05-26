@@ -400,52 +400,52 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyEditors\PropertyEditorDialog.Designer.cs">
+    <None Include="PropertyEditors\PropertyEditorDialog.Designer.cs">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\EolStylePropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\EolStylePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\EolStylePropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\EolStylePropertyEditor.Designer.cs">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\ExecutablePropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\ExecutablePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\ExecutablePropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\ExecutablePropertyEditor.Designer.cs">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\ExternalsPropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\ExternalsPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\ExternalsPropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\ExternalsPropertyEditor.Designer.cs">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\IgnorePropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\IgnorePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\IPropertyEditor.cs" />
-    <Compile Include="PropertyEditors\KeywordsPropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\IPropertyEditor.cs" />
+    <None Include="PropertyEditors\KeywordsPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\KeywordsPropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\KeywordsPropertyEditor.Designer.cs">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\MimeTypePropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\MimeTypePropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\MimeTypePropertyEditor.Designer.cs">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PropertyEditors\PlainPropertyEditor.cs">
+    </None>
+    <None Include="PropertyEditors\PlainPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
+    </None>
+    <None Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="RelocateDialog.Designer.cs">
       <DependentUpon>RelocateDialog.cs</DependentUpon>
     </Compile>
@@ -535,9 +535,9 @@
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
+    <None Include="PropertyEditors\PropertyEditorDialog.cs">
       <SubType>Form</SubType>
-    </Compile>
+    </None>
     <Compile Include="RelocateDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -619,10 +619,10 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\PropertyEditorDialog.resx">
+    <None Include="PropertyEditors\PropertyEditorDialog.resx">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
     <EmbeddedResource Include="RelocateDialog.resx">
       <DependentUpon>RelocateDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -749,34 +749,34 @@
       <SubType>Designer</SubType>
       <DependentUpon>PopUpListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\EolStylePropertyEditor.resx">
+    <None Include="PropertyEditors\EolStylePropertyEditor.resx">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\ExecutablePropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\ExecutablePropertyEditor.resx">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\ExternalsPropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\ExternalsPropertyEditor.resx">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\IgnorePropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\IgnorePropertyEditor.resx">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\KeywordsPropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\KeywordsPropertyEditor.resx">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\MimeTypePropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\MimeTypePropertyEditor.resx">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PropertyEditors\PlainPropertyEditor.resx">
+    </None>
+    <None Include="PropertyEditors\PlainPropertyEditor.resx">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
+    </None>
     <EmbeddedResource Include="RepositoryExplorerControl.resx">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
       <SubType>Designer</SubType>
