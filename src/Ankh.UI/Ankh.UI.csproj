@@ -449,10 +449,10 @@
     <Compile Include="RelocateDialog.Designer.cs">
       <DependentUpon>RelocateDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="RepositoryExplorerControl.cs">
+    <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="RepositoryExplorerControl.Designer.cs">
+    <Compile Include="RepositoryExplorer\RepositoryExplorerControl.Designer.cs">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.cs">
@@ -461,7 +461,7 @@
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.Designer.cs">
       <DependentUpon>RepositoryOpenDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="RepositoryTreeView.Designer.cs">
+    <Compile Include="RepositoryExplorer\RepositoryTreeView.Designer.cs">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="ReverseMergeDialog.Designer.cs">
@@ -541,7 +541,7 @@
     <Compile Include="RelocateDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RepositoryTreeView.cs">
+    <Compile Include="RepositoryExplorer\RepositoryTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnLog\Strings.Designer.cs">
@@ -627,7 +627,7 @@
       <DependentUpon>RelocateDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RepositoryTreeView.resx">
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -777,7 +777,7 @@
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </None>
-    <EmbeddedResource Include="RepositoryExplorerControl.resx">
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryExplorerControl.resx">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
