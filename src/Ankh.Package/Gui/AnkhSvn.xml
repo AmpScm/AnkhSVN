@@ -234,7 +234,7 @@
 								toolTip="Checkout a Subversion repository." iconFile="menu/CheckoutDirectory.png"/>
           <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x301"
 							  text="A&amp;dd Repository Url"
-							  toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" />
+							  toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
           <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x301"
                 text="&amp;Remove Repository URL"
                 toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>

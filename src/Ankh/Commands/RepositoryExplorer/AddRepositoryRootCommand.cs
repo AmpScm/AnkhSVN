@@ -6,6 +6,8 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
+using SharpSvn;
+using Ankh.UI;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -18,12 +20,20 @@ namespace Ankh.Commands.RepositoryExplorer
         public override void OnExecute(CommandEventArgs e)
         {
             IExplorersShell shell = e.GetService<IExplorersShell>();
+            RepositoryRootInfo info;
 
-            RepositoryRootInfo info = shell.ShowAddRepositoryRootDialog();
-            if ( info == null )
-                return;
+            if (e.Argument is string)
+            {
+                // Allow opening from
+                info = new RepositoryRootInfo((string)e.Argument, SvnRevision.Head);
+            }
+            else
+                info = shell.ShowAddRepositoryRootDialog();
 
-            shell.RepositoryExplorerService.AddRoot( info );
+            if (info != null)
+            {
+                shell.RepositoryExplorerService.AddRoot(info);
+            }
         }
     }
 }
