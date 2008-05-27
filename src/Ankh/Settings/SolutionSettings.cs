@@ -160,6 +160,9 @@ namespace Ankh.Settings
                 string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\';
                 string v = SvnTools.GetNormalizedFullPath(value);
 
+                if (!v.EndsWith("\\"))
+                    v += "\\";
+
                 if (!sd.StartsWith(v, StringComparison.OrdinalIgnoreCase))
                     return;
 
