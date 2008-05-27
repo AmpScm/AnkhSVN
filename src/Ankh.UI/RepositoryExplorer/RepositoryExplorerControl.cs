@@ -16,6 +16,8 @@ namespace Ankh.UI
     /// </summary>
     public partial class RepositoryExplorerControl : System.Windows.Forms.UserControl
     {
+        IAnkhUISite _uiSite;
+
         public RepositoryExplorerControl()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -38,9 +40,18 @@ namespace Ankh.UI
             set
             {
                 base.Site = value;
-                if(value is IAnkhUISite)
+                if (value is IAnkhUISite)
+                {
                     _uiSite = value as IAnkhUISite;
+
+                    OnUISiteChanged(EventArgs.Empty);
+                }
             }
+        }
+
+        private void OnUISiteChanged(EventArgs eventArgs)
+        {
+            treeView.Context = _uiSite;
         }     
         
         /// <summary>
@@ -288,23 +299,8 @@ namespace Ankh.UI
                     this.AddRepoButtonClicked(this, EventArgs.Empty);
             }
         }
-
-
-
         
-
-        IAnkhUISite _uiSite;
-        private System.Windows.Forms.CheckBox backgroundListingCheck;
-        private Ankh.UI.RepositoryTreeView treeView;
-        private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ToolBar toolBar;
-        private System.Windows.Forms.ToolBarButton enableBackgroundListingButton;
-        private System.Windows.Forms.ImageList toolbarImageList;
-        private ToolBarButton addRepoURLButton;
-
         private INewDirectoryHandler newDirHandler;
-
-        
     }
 
     /// <summary>
