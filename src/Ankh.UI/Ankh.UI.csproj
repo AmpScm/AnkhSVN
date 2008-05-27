@@ -105,9 +105,6 @@
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
     <Reference Include="$(VSLangAssembly)" />
-    <Reference Include="Ankh.UI, Version=2.0.3062.21160, Culture=neutral, PublicKeyToken=d0beed809dd9333a, processorArchitecture=MSIL">
-      <HintPath>bin\Debug\Ankh.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -239,6 +236,12 @@
     <Compile Include="AddSolutionDialog.Designer.cs">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RepositoryStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryTreeNode.cs" />
     <Compile Include="SwitchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -681,10 +684,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RepositoryStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogRevisionControlNew.resx">
       <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+
     <EmbeddedResource Include="SwitchDialog.resx">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -827,6 +836,7 @@
     <Content Include="MergeWizard\images\Success.png" />
     <Content Include="MergeWizard\images\TwoDifferentTrees.png" />
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
+    <None Include="Resources\folderCloseButton.Image.png" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <ItemGroup>

@@ -145,7 +145,7 @@ namespace Ankh.VS.SolutionExplorer
             return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttribute.Normal);
         }
 
-        int _lvDown, _lvUp;
+        int _lvDown, _lvUp, _lvServers, _lvDb, _lvServer;
         public int HeaderUpIcon
         {
             get
@@ -168,6 +168,14 @@ namespace Ankh.VS.SolutionExplorer
             }
         }
 
+        public int GetSpecialIcon(SpecialIcon icon)
+        {
+            if ((_lvDown == 0) && (_lvUp == 0))
+                LoadUpDown();
+
+            return _lvDown + (int)icon;
+        }
+
         void LoadUpDown()
         {
             if ((_lvDown != 0) && (_lvUp != 0))
@@ -176,10 +184,21 @@ namespace Ankh.VS.SolutionExplorer
             Image img = Bitmap.FromStream(typeof(FileIconMapper).Assembly.GetManifestResourceStream(
                 typeof(FileIconMapper).Namespace + ".UpDnListView.png"));
 
+            int count = img.Width / 16;
             _imageList.Images.AddStrip(img);
 
-            _lvDown = _imageList.Images.Count - 1;
-            _lvUp = _lvDown - 1;
+            _lvDown = _imageList.Images.Count - count;
+            _lvUp = _lvDown+1;
+            _lvServers = _lvDown + 2;
+            _lvDb = _lvDown + 3;
+            _lvServer = _lvDown + 4;
         }
+
+        #region IFileIconMapper Members
+
+
+        
+
+        #endregion
     }
 }

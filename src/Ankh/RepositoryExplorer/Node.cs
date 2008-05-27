@@ -12,7 +12,7 @@ namespace Ankh.RepositoryExplorer
     /// <summary>
     /// Define some extra properties we need to track.
     /// </summary>
-    public interface INode : IRepositoryTreeNode
+    public interface INode : Ankh.UI.RepositoryExplorer.IRepositoryTreeNode
     {
         INode Parent
         {

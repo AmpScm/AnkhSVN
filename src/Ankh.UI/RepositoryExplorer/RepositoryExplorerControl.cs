@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.Services;
 using Ankh.Ids;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI
 {
@@ -52,29 +53,13 @@ namespace Ankh.UI
         private void OnUISiteChanged(EventArgs eventArgs)
         {
             treeView.Context = _uiSite;
+            treeView.SelectionPublishServiceProvider = _uiSite;
         }     
         
-        /// <summary>
-        /// Fired if the background listing checkbox' state is changed.
-        /// </summary>
-        public event EventHandler EnableBackgroundListingChanged;
-
         /// <summary>
         /// Fired when the selection changes.
         /// </summary>
         public event EventHandler SelectionChanged;
-
-        /// <summary>
-        /// Fired whenever a directory node is expanded.
-        /// </summary>
-        public event NodeExpandingDelegate NodeExpanding;
-
-        /// <summary>
-        /// Fired whenever the Add Rep button is clicked
-        /// </summary>
-        public event EventHandler AddRepoButtonClicked;
-
-        
 
         /// <summary>
         /// The selected node. Will be null if there is no selection.
@@ -103,14 +88,6 @@ namespace Ankh.UI
                 return (IRepositoryTreeNode[])
                     list.ToArray(typeof(IRepositoryTreeNode));
             }
-        }
-
-        /// <summary>
-        /// Whether the "Enable background listing" checkbox is checked.
-        /// </summary>
-        public bool EnableBackgroundListing
-        {
-            get{ return this.enableBackgroundListingButton.Pushed; }
         }
 
         /// <summary>
@@ -162,7 +139,7 @@ namespace Ankh.UI
 
             // create a new node.
             TreeNode node = new TreeNode( "Newdir" );
-            node.SelectedImageIndex = node.ImageIndex = this.treeView.FolderIndex;
+            //node.SelectedImageIndex = node.ImageIndex = this.treeView.FolderIndex;
             this.treeView.SelectedNode.Nodes.Add( node );
 
             // start editing it
@@ -216,38 +193,6 @@ namespace Ankh.UI
                 e.CancelEdit = cancel;
             }
         }
-
-
-
-        /// <summary>
-        /// The user wants to expand a node. Let him, but we have to list whats under it
-        /// first.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-        {
-            // don't bother going to the server unless it's the dummy child
-            if ( e.Node.Nodes.Count > 0 &&
-                e.Node.Nodes[0].Tag != RepositoryTreeView.DUMMY_NODE )
-                return;
-
-            // now see if any event handlers want to provide the children
-            IRepositoryTreeNode node = (IRepositoryTreeNode)e.Node.Tag;
-            NodeExpandingEventArgs args = new NodeExpandingEventArgs( node );
-
-            try
-            {
-                if ( this.NodeExpanding != null )
-                    this.NodeExpanding( this, args );
-                this.treeView.AddChildren( node, args.Children );
-            }
-            catch( SvnException )
-            {
-                // don't open it - the user can click on the plus to try again
-                e.Cancel = true;
-            }
-        }
         
         /// <summary> 
         /// Clean up any resources being used.
@@ -283,24 +228,13 @@ namespace Ankh.UI
             if ( this.SelectionChanged != null )
                 this.SelectionChanged( this, EventArgs.Empty );
         }
-
-        private void ToolBarButtonClicked(object sender, 
-            System.Windows.Forms.ToolBarButtonClickEventArgs e)
-        {
-            if (e.Button == this.enableBackgroundListingButton)
-            {
-                if (this.EnableBackgroundListingChanged != null)
-                    this.EnableBackgroundListingChanged(this, EventArgs.Empty);
-                e.Button.ToolTipText = e.Button.Pushed ? "Disable background listing" : "Enable background listing";
-            }
-            else if (e.Button == this.addRepoURLButton)
-            {
-                if (this.AddRepoButtonClicked != null)
-                    this.AddRepoButtonClicked(this, EventArgs.Empty);
-            }
-        }
         
         private INewDirectoryHandler newDirHandler;
+
+        private void treeView_RetrievingChanged(object sender, EventArgs e)
+        {
+            busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;
+        }
     }
 
     /// <summary>

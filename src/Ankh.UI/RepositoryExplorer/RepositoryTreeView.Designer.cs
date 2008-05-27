@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.RepositoryExplorer
 {
     partial class RepositoryTreeView
     {
+        void InitializeComponent()
+        {
+        }
     }
 }

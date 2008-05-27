@@ -15,6 +15,7 @@ using Ankh.UI;
 using Ankh.VS;
 using Thread = System.Threading.Thread;
 using Ankh.WorkingCopyExplorer;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.RepositoryExplorer
 {
@@ -51,11 +52,8 @@ namespace Ankh.RepositoryExplorer
 
             if (repositoryExplorer != null)
             {
-                this.repositoryExplorer.EnableBackgroundListingChanged +=
-                    new EventHandler(this.BackgroundListingChanged);
-                this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
+                //this.repositoryExplorer.NodeExpanding += new NodeExpandingDelegate(NodeExpanding);
                 this.repositoryExplorer.SelectionChanged += new EventHandler(SelectionChanged);
-                this.repositoryExplorer.AddRepoButtonClicked += new EventHandler(AddRepoButtonClicked);
             }
         }
 
@@ -140,68 +138,6 @@ namespace Ankh.RepositoryExplorer
             // now remove the item
             this._directories.Remove(url);
         }
-
-        /// <summary>
-        /// Handles the event fired when a directory node is expanded and 
-        /// the treeview does not have a listing for that directory.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void NodeExpanding(object sender, NodeExpandingEventArgs args)
-        {
-            try
-            {
-                INode parent = (INode)args.Node;
-                INode[] children;
-
-                // first see if it has been found by the background thread
-                lock (this._directories)
-                {
-                    _directories.TryGetValue(parent.Url, out children);
-                }
-
-                if (children != null)
-                {
-                    Debug.WriteLine("Repository directory listing found in cache");
-                }
-                else
-                {
-                    // nope - we have to do the work ourselves
-                    Debug.WriteLine("Repository directory listing *NOT* found in cache");
-
-                    // we want to run this in a separate thread
-                    ListRunner runner = new ListRunner(parent);
-                    bool completed = GetService<IProgressRunner>().Run(
-                        "Retrieving directory info.",
-                        runner.Work).Succeeded;
-                    if (completed)
-                    {
-                        ICollection<SvnListEventArgs> entries = runner.Entries;
-                        children = new INode[entries.Count];
-                        int i = 0;
-                        foreach (SvnListEventArgs entry in entries)
-                            children[i++] = new Node(parent, entry);
-                    }
-
-                    if (EnableBackgroundListing)
-                        new BackgroundLister(children, this).Start();
-                }
-
-                // sort them nicely
-                Array.Sort(children, Controller.NODECOMPARER);
-                args.Children = children;
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
-
-                if (handler != null)
-                    handler.OnError(ex);
-                else
-                    throw;
-            }
-        }
-
 
 
 //        /// <summary>
@@ -418,7 +354,7 @@ namespace Ankh.RepositoryExplorer
                 {
                     // run as long as there are items in the queue or until the user
                     // cancels background listing
-                    while (queue.Count > 0 && this._parent.EnableBackgroundListing)
+                    /*while (queue.Count > 0 && this._parent.EnableBackgroundListing)
                     {
                         INode node = (INode)queue.Dequeue();
                         Debug.WriteLine(Thread.CurrentThread.Name + " listing " + node.Url,
@@ -449,7 +385,7 @@ namespace Ankh.RepositoryExplorer
                         {
                             this._parent._directories[node.Url] = items.ToArray();
                         }
-                    }
+                    }*/
                 }
             }            
         }
@@ -477,16 +413,6 @@ namespace Ankh.RepositoryExplorer
                     return 1;
             }
             #endregion
-        }
-
-        protected bool EnableBackgroundListing
-        {
-            get
-            {
-                if (repositoryExplorer != null)
-                    return repositoryExplorer.EnableBackgroundListing;
-                return false;
-            }
         }
     }
 }

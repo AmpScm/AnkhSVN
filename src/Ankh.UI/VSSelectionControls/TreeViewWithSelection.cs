@@ -12,6 +12,10 @@ namespace Ankh.UI.VSSelectionControls
     {
         EventHandler _selectionChanged;
 
+        public TreeViewWithSelection()
+        {
+        }
+
         IServiceProvider _serviceProvider;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IServiceProvider SelectionPublishServiceProvider
