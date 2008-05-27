@@ -24,7 +24,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.Log)]
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
-	public class LogCommand : CommandBase
+    public class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -46,7 +46,7 @@ namespace Ankh.Commands
         {
             IContext context = e.Context.GetService<IContext>();
             IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
-            package.ShowToolWindow(AnkhToolWindow.Log);
+
 
             List<string> selected = new List<string>();
 
@@ -81,8 +81,9 @@ namespace Ankh.Commands
                     break;
             }
 
+            package.ShowToolWindow(AnkhToolWindow.Log);
             LogToolControl logToolControl = e.Context.GetService<LogToolControl>();
-            logToolControl.Target = selected;
+            logToolControl.Start(selected);
         }
     }
 }
