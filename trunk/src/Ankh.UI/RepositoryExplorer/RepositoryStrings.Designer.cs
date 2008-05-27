@@ -61,6 +61,15 @@ namespace Ankh.UI.RepositoryExplorer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Local Repositories.
+        /// </summary>
+        internal static string LocalRepositories {
+            get {
+                return ResourceManager.GetString("LocalRepositories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subversion Repositories.
         /// </summary>
         internal static string RootName {

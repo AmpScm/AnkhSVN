@@ -1,11 +1,11 @@
 using System;
-using Ankh.UI;
-
-using System.IO;
-using System.ComponentModel;
-using Utils;
 using System.Collections;
+using System.ComponentModel;
+using System.IO;
 using SharpSvn;
+
+using Ankh.UI;
+using Utils;
 
 namespace Ankh.RepositoryExplorer
 {

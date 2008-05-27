@@ -65,7 +65,7 @@ namespace Ankh.UI.RepositoryExplorer
                 if (IconMapper != null)
                     _rootNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Servers);
 
-                Nodes.Add(_rootNode);
+                SortedAddNode(Nodes, _rootNode);
             }
 
             Uri serverUri;
@@ -79,7 +79,11 @@ namespace Ankh.UI.RepositoryExplorer
                 if (IconMapper != null)
                     serverNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Server);
 
-                _rootNode.Nodes.Add(serverNode);
+
+                if (serverNode.Text.ToString() == "file:///")
+                    serverNode.Text = RepositoryStrings.LocalRepositories;
+
+                SortedAddNode(_rootNode.Nodes, serverNode);
             }
 
             if(!_rootNode.IsExpanded)
@@ -89,6 +93,21 @@ namespace Ankh.UI.RepositoryExplorer
                 serverNode.Expand();
 
             BrowseRoot(serverNode, uri);
+        }
+
+        private void SortedAddNode(TreeNodeCollection nodeCollection, RepositoryTreeNode newNode)
+        {
+            int n = 0;
+            foreach (RepositoryTreeNode tn in nodeCollection)
+            {
+                if (StringComparer.OrdinalIgnoreCase.Compare(tn.Text, newNode.Text) >= 0)
+                {
+                    nodeCollection.Insert(n, newNode);
+                    return;
+                }
+                n++;
+            }
+            nodeCollection.Add(newNode);
         }
 
         private RepositoryTreeNode FindServer(Uri uri, out Uri serverUri)
@@ -171,10 +190,12 @@ namespace Ankh.UI.RepositoryExplorer
                             {
                                 if (first)
                                 {
-                                    first = false;
                                     if (a.RepositoryRoot != null)
                                         EnsureRoot(a.RepositoryRoot);
                                 }
+
+                                AddItem(a, first);
+                                first = false;
                             }
                         });
                 }
@@ -192,7 +213,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             d.BeginInvoke(null, null);
         }
-
+        
         private RepositoryTreeNode EnsureRoot(Uri uri)
         {
             Uri serverUri;
@@ -214,11 +235,67 @@ namespace Ankh.UI.RepositoryExplorer
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
 
             serverNode.Nodes.Add(rtn);
+            _nodeMap.Add(rtn.RawUri, rtn);
 
             if (!serverNode.IsExpanded)
                 serverNode.Expand();
 
             return rtn;
+        }
+
+        private void AddItem(SvnListEventArgs item, bool first)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            Uri uri = item.EntryUri;
+
+            Uri folderUri;
+
+            if (item.Entry.NodeKind == SvnNodeKind.File)
+                folderUri = new Uri(uri, "./");
+            else
+                folderUri = uri;
+
+            if (first)
+            {
+                EnsureFolderUri(folderUri);
+            }
+        }
+
+        private RepositoryTreeNode EnsureFolderUri(Uri uri)
+        {
+            RepositoryTreeNode tn;
+
+            if (!_nodeMap.TryGetValue(uri, out tn))
+            {
+                Uri parentUri = new Uri(uri, "../");
+
+                if (parentUri == uri)
+                    return null;
+
+                RepositoryTreeNode parent = EnsureFolderUri(parentUri);
+
+                if (parent != null)
+                {
+                    tn = new RepositoryTreeNode(uri);
+                    string name = uri.ToString();
+                    int nS = name.LastIndexOf('/', name.Length - 1);
+
+                    if (nS >= 0)
+                        tn.Text = name.Substring(nS, name.Length - nS - 1);
+                    else
+                        tn.Text = name;
+
+                    if (IconMapper != null)
+                        tn.IconIndex = IconMapper.DirectoryIcon;
+
+                    _nodeMap.Add(tn.RawUri, tn);
+                    SortedAddNode(parent.Nodes, tn);
+                }
+            }
+
+            return tn;
         }
 
         public bool Retrieving
