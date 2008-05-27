@@ -53,7 +53,7 @@
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
 								text="Di&amp;ff..."
 								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
-            <ButtonRef id="Cmd_Log" priority="0x600" />            
+            <ButtonRef id="Cmd_Log" priority="0x600" />
           </Group>
           <Group id="Grp_FileSccItem" priority="0x0190">
             <ButtonRef id="Cmd_AddItem" priority="0x10" />
@@ -137,10 +137,10 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
       <!-- VS Predefined group for SCC commands on projects -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1100" />
-      <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />     
+      <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1200" />
       <Button id="Cmd_ProjectUpdateHead" priority="0x1500" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
               iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
-      <Button id="Cmd_ProjectCommit" priority="0x1600" name="ProjectCommit" 
+      <Button id="Cmd_ProjectCommit" priority="0x1600" name="ProjectCommit"
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectHistory" priority="0x1700" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
@@ -172,7 +172,7 @@
       <Button id="Cmd_Log" name="Log" priority="0x1700"
 								text="View &amp;History"
 								toolTip="Show the change log for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1900" />      
+      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1900" />
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
@@ -189,7 +189,7 @@
         <Group id="Grp_ItemResolveAutoFull" priority="0x300">
           <Button id="Cmd_ItemResolveMineFull" priority="0x10" text="Using M&amp;y File" defaultInvisible="true" />
           <Button id="Cmd_ItemResolveTheirsFull" priority="0x20" text="Using T&amp;heir file" defaultInvisible="true" />
-        </Group>        
+        </Group>
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
@@ -397,6 +397,8 @@
 									text="Open Containing &amp;Folder" iconFile="PendingChanges/OpenFolder.png"/>
               <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
 									text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
+              <Button id="Cmd_ItemOpenInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
+                  text="Open in &amp;Repository Explorer" />
             </Group>
           </Menu>
           <Menu id="Menu_ItemRevert" priority="0x300" name="Revert" type="MenuControllerLatched">
@@ -447,6 +449,24 @@
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
       </Menu>
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_EXPLORE">
+      <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
+                  text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
+        <Visibility context="Ankh_SccProviderGuid"/>
+      </Button>
+      <Button id="Cmd_ItemOpenFolderInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
+                  text="Open Folder in &amp;Repository Explorer" defaultInvisible="true">
+        <Visibility context="Ankh_SccProviderGuid"/>
+      </Button>
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EXPLORE">
+      <ButtonRef id="Cmd_ItemOpenFolderInWorkingCopyExplorer" priority="0x200" />
+      <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x300" />
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_FOLDER_EXPLORE">
+      <ButtonRef id="Cmd_ItemOpenFolderInWorkingCopyExplorer" priority="0x200" />
+      <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x300" />
     </GroupRef>
     <GroupRef id="Menu_PendingCommitsSortContextMenu">
       <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
@@ -512,7 +532,7 @@
                   text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
           <!--Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
                   text="Paste &amp;Recent Message" /-->
-        </Group>               
+        </Group>
         <Group id="Grp_PendingChangesLogEditor" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
           <ButtonRef id="guidVSStd97:cmdidCopy"  priority="0x101" />

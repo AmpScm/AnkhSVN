@@ -62,31 +62,31 @@ namespace Ankh.Extenders
             get { return SvnItem.Status.LastChangeAuthor; }
         }
 
-        [Category("Subversion"), Description("Revision")]
+        [Category("Subversion"), Description("Current Revision")]
         public long Revision
         {
             get { return SvnItem.Status.Revision; }
         }
 
-        [Category("Subversion"), Description("Last committed date")]
+        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
         public DateTime LastCommittedDate
         {
             get { return SvnItem.Status.LastChangeTime.ToLocalTime(); }
         }
 
-        [Category("Subversion"), Description("Last committed revision")]
+        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
         public long LastCommittedRevision
         {
             get { return SvnItem.Status.LastChangeRevision; }
         }
 
-        [Category("Subversion"), Description("Text Status"), DisplayName("Text Status")]
+        [Category("Subversion"), Description("Text Status"), DisplayName("Status Content")]
         public string TextStatus
         {
             get { return SvnItem.Status.LocalContentStatus.ToString(); }
         }
 
-        [Category("Subversion"), Description("Property status"), DisplayName("Property Status")]
+        [Category("Subversion"), Description("Property status"), DisplayName("Status Properties")]
         public string PropertyStatus
         {
             get { return SvnItem.Status.LocalPropertyStatus.ToString(); }

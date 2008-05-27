@@ -90,6 +90,9 @@ namespace Ankh.Ids
         ViewInWindows,
         CheckForOrphanedTreeNodes,
 
+        ItemOpenFolderInRepositoryExplorer,
+        ItemOpenFolderInWorkingCopyExplorer,
+
         PendingChangesSpacer, // Whitespace command to move all buttons a bit
 
         CommitPendingChanges,
@@ -130,6 +133,7 @@ namespace Ankh.Ids
         ItemOpenTextEditor,
         ItemOpenFolder,
         ItemOpenSolutionExplorer,
+        ItemOpenInRepositoryExplorer,
 
         ItemRevertBase,
         ItemRevertSpecific,
