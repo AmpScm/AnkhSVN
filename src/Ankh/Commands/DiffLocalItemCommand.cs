@@ -22,23 +22,24 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemCompareSpecific)]
     public class DiffLocalItem : LocalDiffCommandBase
     {
-        
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
-
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
+                {
+                    if (e.Command == AnkhCommand.DiffLocalItem || e.Command == AnkhCommand.ItemCompareBase)
+                    {
+                        if (!(item.IsModified || item.IsDocumentDirty))
+                            continue;
+                    }
+
                     return;
+                }
             }
-            e.Enabled = false;
+            e.Enabled = e.Visible = false;
         }
+
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
