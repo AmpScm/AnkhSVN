@@ -63,8 +63,8 @@ namespace Ankh.UI
             {
                 SaveSizes();
 
-                UpdateLayout();
                 EnsureSelection();
+                UpdateLayout();                
             }
         }
 
