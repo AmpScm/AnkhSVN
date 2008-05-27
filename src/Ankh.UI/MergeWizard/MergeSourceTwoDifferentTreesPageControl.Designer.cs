@@ -30,20 +30,20 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceTwoDifferentTreesPageControl));
             this.fromGroupBox = new System.Windows.Forms.GroupBox();
-            this.fromURLSelectButton = new System.Windows.Forms.Button();
-            this.fromURLTextBox = new System.Windows.Forms.TextBox();
-            this.fromHeadRevisionRadioButton = new System.Windows.Forms.RadioButton();
-            this.fromRevisionRadioButton = new System.Windows.Forms.RadioButton();
-            this.fromRevisionTextBox = new System.Windows.Forms.TextBox();
             this.fromRevisionButton = new System.Windows.Forms.Button();
+            this.fromRevisionTextBox = new System.Windows.Forms.TextBox();
+            this.fromRevisionRadioButton = new System.Windows.Forms.RadioButton();
+            this.fromHeadRevisionRadioButton = new System.Windows.Forms.RadioButton();
+            this.fromURLTextBox = new System.Windows.Forms.TextBox();
+            this.fromURLSelectButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.useFromURLCheckBox = new System.Windows.Forms.CheckBox();
             this.toRevisionSelectButton = new System.Windows.Forms.Button();
             this.toRevisionTextBox = new System.Windows.Forms.TextBox();
             this.toRevisionRadioButton = new System.Windows.Forms.RadioButton();
             this.toHEADRevisionRadioButton = new System.Windows.Forms.RadioButton();
             this.toURLTextBox = new System.Windows.Forms.TextBox();
             this.toURLSelectButton = new System.Windows.Forms.Button();
-            this.useFromURLCheckBox = new System.Windows.Forms.CheckBox();
             this.fromGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -60,22 +60,16 @@
             this.fromGroupBox.Name = "fromGroupBox";
             this.fromGroupBox.TabStop = false;
             // 
-            // fromURLSelectButton
+            // fromRevisionButton
             // 
-            resources.ApplyResources(this.fromURLSelectButton, "fromURLSelectButton");
-            this.fromURLSelectButton.Name = "fromURLSelectButton";
-            this.fromURLSelectButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.fromRevisionButton, "fromRevisionButton");
+            this.fromRevisionButton.Name = "fromRevisionButton";
+            this.fromRevisionButton.UseVisualStyleBackColor = true;
             // 
-            // fromURLTextBox
+            // fromRevisionTextBox
             // 
-            resources.ApplyResources(this.fromURLTextBox, "fromURLTextBox");
-            this.fromURLTextBox.Name = "fromURLTextBox";
-            // 
-            // fromHeadRevisionRadioButton
-            // 
-            resources.ApplyResources(this.fromHeadRevisionRadioButton, "fromHeadRevisionRadioButton");
-            this.fromHeadRevisionRadioButton.Name = "fromHeadRevisionRadioButton";
-            this.fromHeadRevisionRadioButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.fromRevisionTextBox, "fromRevisionTextBox");
+            this.fromRevisionTextBox.Name = "fromRevisionTextBox";
             // 
             // fromRevisionRadioButton
             // 
@@ -85,16 +79,22 @@
             this.fromRevisionRadioButton.TabStop = true;
             this.fromRevisionRadioButton.UseVisualStyleBackColor = true;
             // 
-            // fromRevisionTextBox
+            // fromHeadRevisionRadioButton
             // 
-            resources.ApplyResources(this.fromRevisionTextBox, "fromRevisionTextBox");
-            this.fromRevisionTextBox.Name = "fromRevisionTextBox";
+            resources.ApplyResources(this.fromHeadRevisionRadioButton, "fromHeadRevisionRadioButton");
+            this.fromHeadRevisionRadioButton.Name = "fromHeadRevisionRadioButton";
+            this.fromHeadRevisionRadioButton.UseVisualStyleBackColor = true;
             // 
-            // fromRevisionButton
+            // fromURLTextBox
             // 
-            resources.ApplyResources(this.fromRevisionButton, "fromRevisionButton");
-            this.fromRevisionButton.Name = "fromRevisionButton";
-            this.fromRevisionButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.fromURLTextBox, "fromURLTextBox");
+            this.fromURLTextBox.Name = "fromURLTextBox";
+            // 
+            // fromURLSelectButton
+            // 
+            resources.ApplyResources(this.fromURLSelectButton, "fromURLSelectButton");
+            this.fromURLSelectButton.Name = "fromURLSelectButton";
+            this.fromURLSelectButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -108,6 +108,15 @@
             this.groupBox1.Controls.Add(this.toURLSelectButton);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            // 
+            // useFromURLCheckBox
+            // 
+            resources.ApplyResources(this.useFromURLCheckBox, "useFromURLCheckBox");
+            this.useFromURLCheckBox.Checked = true;
+            this.useFromURLCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.useFromURLCheckBox.Name = "useFromURLCheckBox";
+            this.useFromURLCheckBox.UseVisualStyleBackColor = true;
+            this.useFromURLCheckBox.CheckedChanged += new System.EventHandler(this.useFromURLCheckBox_CheckedChanged);
             // 
             // toRevisionSelectButton
             // 
@@ -145,12 +154,6 @@
             this.toURLSelectButton.Name = "toURLSelectButton";
             this.toURLSelectButton.UseVisualStyleBackColor = true;
             // 
-            // useFromURLCheckBox
-            // 
-            resources.ApplyResources(this.useFromURLCheckBox, "useFromURLCheckBox");
-            this.useFromURLCheckBox.Name = "useFromURLCheckBox";
-            this.useFromURLCheckBox.UseVisualStyleBackColor = true;
-            // 
             // MergeSourceTwoDifferentTreesPageControl
             // 
             resources.ApplyResources(this, "$this");
@@ -158,6 +161,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.fromGroupBox);
             this.Name = "MergeSourceTwoDifferentTreesPageControl";
+            this.Load += new System.EventHandler(this.MergeSourceTwoDifferentTreesPageControl_Load);
             this.fromGroupBox.ResumeLayout(false);
             this.fromGroupBox.PerformLayout();
             this.groupBox1.ResumeLayout(false);
