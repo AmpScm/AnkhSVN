@@ -304,6 +304,19 @@
         </Group>
       </Menu>
     </GroupRef>
+    <GroupRef id="ToolBar_LogViewer">
+      <Menu id="ToolBar_LogViewer" name="LogViewer" priority="0" type="ToolWindowToolbar">
+        
+        <Group id="Grp_LogViewerToolbar" priority="0x10">
+          <Button id="Cmd_LogStrictNodeHistory" name="StrictNodeHistory" text="Strict node history" iconAndText="true" priority="0x100"
+                  toolTip="Stop on copy" />
+          <Button id="Cmd_LogIncludeMergedRevisions" name="IncludeMergedRevisions" text="Include merged revisions" iconAndText="true" priority="0x200"
+                  toolTip="Include merged revisions" />
+          <Button id="Cmd_LogFetchAll" name="LogFetchAll" text="Fetch all" iconAndText="true" priority="0x300"
+                  toolTip="Retrieve all revisions"/>
+        </Group>
+      </Menu>
+    </GroupRef>
     <GroupRef id="ToolBar_PendingChanges">
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">

@@ -202,5 +202,9 @@ namespace Ankh.Ids
         PcColViewRepository,
         PcColViewType,
         #endregion
+
+        LogStrictNodeHistory,
+        LogIncludeMergedRevisions,
+        LogFetchAll,
     }
 }

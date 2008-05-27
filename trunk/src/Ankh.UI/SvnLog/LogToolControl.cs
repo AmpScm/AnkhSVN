@@ -63,5 +63,28 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("context");
 
         }
+
+        internal void FetchAll()
+        {
+            logRevisionControl1.FetchAll();
+        }
+
+        public void Restart()
+        {
+            logRevisionControl1.Reset();
+            logRevisionControl1.Start(_site.GetService<IAnkhServiceProvider>(), Mode);
+        }
+
+        public bool IncludeMerged
+        {
+            get { return logRevisionControl1.IncludeMergedRevisions; }
+            set { logRevisionControl1.IncludeMergedRevisions = value; }
+        }
+
+        public bool StrictNodeHistory
+        {
+            get { return logRevisionControl1.StrictNodeHistory; }
+            set { logRevisionControl1.StrictNodeHistory = value; }
+        }
     }
 }
