@@ -12,17 +12,17 @@ namespace Ankh.Ids
     /// <para>New items should be added at the end. Items should only be obsoleted between releases.</para>
     /// <para>The values of this enum are part of our interaction with other packages within Visual Studio</para>
     /// </remarks>
-	[Guid(AnkhId.CommandSet)]
-	public enum AnkhCommandMenu
-	{
-		None = 0,
+    [Guid(AnkhId.CommandSet)]
+    public enum AnkhCommandMenu
+    {
+        None = 0,
 
-		// These values live in the same numberspace as the other values within 
-		// the command set. So we start countin at this number to make sure we
-		// do not reuse values
-		MenuFirst = 0x5FFFFFF,
+        // These values live in the same numberspace as the other values within 
+        // the command set. So we start countin at this number to make sure we
+        // do not reuse values
+        MenuFirst = 0x5FFFFFF,
 
-		FileScc,
+        FileScc,
 
         RepositoryExplorerToolBar,
         RepositoryExplorerContextMenu,
@@ -32,7 +32,7 @@ namespace Ankh.Ids
         SolutionExplorerSccForSolution,
         SolutionExplorerSccForProject,
         SolutionExplorerSccForItem,
-        
+
         PendingChangesContextMenu,
         PendingCommitsSortContextMenu,
         PendingChangesLogMessageMenu,
@@ -43,7 +43,7 @@ namespace Ankh.Ids
 
         PendingCommitsView,
         PendingCommitsSort,
-        
+
         PendingCommitsGroup,
 
         ItemConflict,
@@ -53,5 +53,5 @@ namespace Ankh.Ids
         ItemResolve,
 
         ItemIgnore,
-	}
+    }
 }

@@ -40,7 +40,6 @@ namespace Ankh.Ids
         FileSccAddProjectToSubversion,
 
         FileSccChangeSourceControl,
-        // Two test commands
 
         FileSccMenuUpdateLatest,
         FileSccMenuUpdateSpecific,
