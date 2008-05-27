@@ -29,30 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControlNew(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControlNew(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // logRevisionControl1
-            // 
-            this.logRevisionControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.logRevisionControl1.EndRevision = null;
-            this.logRevisionControl1.IncludeMergedRevisions = false;
-            this.logRevisionControl1.LocalTargets = null;
-            this.logRevisionControl1.Location = new System.Drawing.Point(3, 3);
-            this.logRevisionControl1.Name = "logRevisionControl1";
-            this.logRevisionControl1.RemoteTarget = null;
-            this.logRevisionControl1.Size = new System.Drawing.Size(710, 285);
-            this.logRevisionControl1.StartRevision = null;
-            this.logRevisionControl1.StrictNodeHistory = false;
-            this.logRevisionControl1.TabIndex = 0;
             // 
             // splitContainer1
             // 
@@ -80,6 +64,20 @@
             this.splitContainer2.Size = new System.Drawing.Size(716, 126);
             this.splitContainer2.SplitterDistance = 339;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // logRevisionControl1
+            // 
+            this.logRevisionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logRevisionControl1.EndRevision = null;
+            this.logRevisionControl1.IncludeMergedRevisions = false;
+            this.logRevisionControl1.LocalTargets = null;
+            this.logRevisionControl1.Location = new System.Drawing.Point(0, 0);
+            this.logRevisionControl1.Name = "logRevisionControl1";
+            this.logRevisionControl1.RemoteTarget = null;
+            this.logRevisionControl1.Size = new System.Drawing.Size(716, 291);
+            this.logRevisionControl1.StartRevision = null;
+            this.logRevisionControl1.StrictNodeHistory = false;
+            this.logRevisionControl1.TabIndex = 0;
             // 
             // LogToolControl
             // 

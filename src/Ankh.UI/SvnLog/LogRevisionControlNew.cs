@@ -141,10 +141,14 @@ namespace Ankh.UI.SvnLog
         bool _running;
         void DoFetch(SvnLogArgs args)
         {
-            _running = true;
+            lock (_instanceLock)
+            {
+                _running = true;
+                fetchCount += args.Limit;
+            }
             using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
             {
-                fetchCount += args.Limit;
+                
                 args.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
                 switch (_mode)
                 {
@@ -193,7 +197,10 @@ namespace Ankh.UI.SvnLog
 
         void LogComplete(IAsyncResult result)
         {
-            _running = false;
+            lock (_instanceLock)
+            {
+                _running = false;
+            }
         }
 
         IFileStatusCache StatusCache
@@ -209,21 +216,43 @@ namespace Ankh.UI.SvnLog
                 e.Item = li;
                 if (e.ItemIndex == _logItemList.Count - 1) // 10 items remaining, start new request
                 {
-                    if (!_running && _logItemList.Count == fetchCount)
+                    lock (_instanceLock)
                     {
-                        SvnLogArgs args = new SvnLogArgs();
-                        args.Start = li.RawData.Revision - 1;
-                        args.End = EndRevision;
-                        args.Limit = 20;
-                        args.StrictNodeHistory = StrictNodeHistory;
-                        args.RetrieveMergedRevisions = IncludeMergedRevisions;
-                        args.RetrieveChangedPaths = false;
+                        if (!_running && _logItemList.Count == fetchCount)
+                        {
+                            SvnLogArgs args = new SvnLogArgs();
+                            args.Start = li.RawData.Revision - 1;
+                            args.End = EndRevision;
+                            args.Limit = 20;
+                            args.StrictNodeHistory = StrictNodeHistory;
+                            args.RetrieveMergedRevisions = IncludeMergedRevisions;
+                            args.RetrieveChangedPaths = false;
 
-                        _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
+                            _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
+                        }
                     }
                 }
             }
 
+        }
+
+        internal void FetchAll()
+        {
+            lock (_instanceLock)
+            {
+                if (_running)
+                {
+                    WaitHandle.WaitAll(new WaitHandle[]{_logRunner.AsyncWaitHandle});
+                }
+            }
+            SvnLogArgs args = new SvnLogArgs();
+            args.Start = _logItemList[_logItemList.Count - 1].RawData.Revision - 1;
+            args.End = EndRevision;
+            args.StrictNodeHistory = StrictNodeHistory;
+            args.RetrieveMergedRevisions = IncludeMergedRevisions;
+            args.RetrieveChangedPaths = false;
+
+            _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
         }
     }
 
