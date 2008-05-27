@@ -15,20 +15,11 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-            IContext context = e.Context.GetService<IContext>();
-
-            if (!shell.RepositoryExplorerService.IsRootNode(shell.RepositoryExplorerService.SelectedNode))
-            {
-                e.Enabled = false;
-            }
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-
-            shell.RepositoryExplorerService.RemoveRoot(shell.RepositoryExplorerService.SelectedNode);
         }
 
         #endregion

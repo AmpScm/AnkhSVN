@@ -14,9 +14,13 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.ViewInWindows)]
     public class ViewInWindowsCommand : ViewRepositoryFileCommand
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            e.Enabled = false;
+        }
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.GetService<IContext>();
+            /*IContext context = e.GetService<IContext>();
             IExplorersShell shell = e.GetService<IExplorersShell>();
 
             using (context.StartOperation("Opening"))
@@ -47,7 +51,7 @@ namespace Ankh.Commands.RepositoryExplorer
                     else
                         throw;
                 }
-            }
+            }*/
         }
 
         private const int NOASSOCIATEDAPP = 1155;

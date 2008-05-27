@@ -339,10 +339,6 @@
     <Compile Include="RepositoryExplorer\Controller.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RepositoryExplorer\Node.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RepositoryExplorer\RepositoryRootInfo.cs" />
     <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>

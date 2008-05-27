@@ -340,7 +340,7 @@ namespace Ankh.Tests
                 return null;
             }
 
-            public virtual RepositoryRootInfo ShowAddRepositoryRootDialog()
+            public virtual Uri ShowAddRepositoryRootDialog()
             {
                 return null;
             }

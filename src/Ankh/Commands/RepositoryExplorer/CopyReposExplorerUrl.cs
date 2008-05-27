@@ -20,7 +20,7 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             IExplorersShell shell = e.GetService<IExplorersShell>();
             // all we need is a selection in the repos explorer
-            if (shell.RepositoryExplorerService.SelectedNode == null)
+            if (shell.RepositoryExplorerService.SelectedUri == null)
                 e.Enabled = false;
         }
 
@@ -28,8 +28,7 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             IExplorersShell shell = e.GetService<IExplorersShell>();
 
-            INode node = shell.RepositoryExplorerService.SelectedNode;
-            Clipboard.SetDataObject( node.Url );
+            Clipboard.SetDataObject( shell.RepositoryExplorerService.SelectedUri.AbsoluteUri );
         }
 
         #endregion

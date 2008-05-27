@@ -318,9 +318,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\IFileSystemItem.cs" />
-    <Compile Include="RepositoryExplorer\IRepositoryTreeView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LockDialog.Designer.cs">
       <DependentUpon>LockDialog.cs</DependentUpon>
     </Compile>

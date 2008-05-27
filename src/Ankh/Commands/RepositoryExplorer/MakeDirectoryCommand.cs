@@ -22,15 +22,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-
-            // we only want directories
-            if (shell.RepositoryExplorerService.SelectedNode == null ||
-                !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
-            {
-                e.Enabled = false;
-            }
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)

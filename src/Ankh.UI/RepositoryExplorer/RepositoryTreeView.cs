@@ -257,10 +257,10 @@ namespace Ankh.UI.RepositoryExplorer
             else
                 folderUri = uri;
 
-            if (first)
-            {
-                EnsureFolderUri(folderUri);
-            }
+            RepositoryTreeNode s = EnsureFolderUri(folderUri);
+
+            if(s != null)
+                s.Expand();
         }
 
         private RepositoryTreeNode EnsureFolderUri(Uri uri)
@@ -280,12 +280,14 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     tn = new RepositoryTreeNode(uri);
                     string name = uri.ToString();
-                    int nS = name.LastIndexOf('/', name.Length - 1);
+                    int nS = name.LastIndexOf('/', name.Length - 2);
 
                     if (nS >= 0)
-                        tn.Text = name.Substring(nS, name.Length - nS - 1);
+                        tn.Text = name.Substring(nS+1, name.Length - nS - 2);
                     else
                         tn.Text = name;
+
+                    tn.Text = Uri.UnescapeDataString(tn.Text); // Unescape special characters like '#' and ' '
 
                     if (IconMapper != null)
                         tn.IconIndex = IconMapper.DirectoryIcon;

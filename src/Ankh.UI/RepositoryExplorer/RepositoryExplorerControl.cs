@@ -25,9 +25,6 @@ namespace Ankh.UI
             InitializeComponent();
  
             this.components = new Container();
-
-            this.AddToolBarImages();
-           
         }
         
         IAnkhUISite UISite
@@ -95,120 +92,15 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="text"></param>
         /// <param name="node"></param>
-        public void AddRoot( string text, IRepositoryTreeNode node)
+        public void AddRoot(Uri uri)
         {
-            if ( !node.IsDirectory )
-                throw new ArgumentException( "The root needs to be a directory.", "node" );
-
-            this.treeView.AddRoot( node, text );
+            this.treeView.AddRoot(uri);
         }
 
-        /// <summary>
-        /// Removes the root of a given node.
-        /// </summary>
-        /// <param name="node"></param>
-        public void RemoveRoot( IRepositoryTreeNode node )
+        public Uri SelectedUri
         {
-            TreeNode root = (TreeNode)node.Tag;
-            while( root.Parent != null )
-                root = root.Parent;
-            root.Remove();
+            get { return null; }
         }
-
-        /// <summary>
-        /// Refreshes the node.
-        /// </summary>
-        /// <param name="node"></param>
-        public void RefreshNode( IRepositoryTreeNode node )
-        {
-            this.treeView.RefreshNode( node );
-        }
-
-        /// <summary>
-        /// Start the "create a new dir" operation under the current node.
-        /// </summary>
-        /// <param name="handler"></param>
-        public void MakeDir( INewDirectoryHandler handler )
-        {
-            if ( this.treeView.SelectedNode == null )
-                return;
-
-            // store the handler so we have it in the callback
-            this.newDirHandler = handler;
-            this.treeView.AfterLabelEdit += new NodeLabelEditEventHandler(MakeDirAfterEdit);
-
-            // create a new node.
-            TreeNode node = new TreeNode( "Newdir" );
-            //node.SelectedImageIndex = node.ImageIndex = this.treeView.FolderIndex;
-            this.treeView.SelectedNode.Nodes.Add( node );
-
-            // start editing it
-            this.treeView.LabelEdit = true;
-            node.BeginEdit();
-        }
-
-        private void AddToolBarImages()
-        {
-            /*this.toolbarImageList.Images.Add(
-                new Icon( this.GetType().Assembly.GetManifestResourceStream(
-                "Ankh.UI.Graphics.EnableBackgroundListing.ico" ) ) );
-            this.toolbarImageList.Images.Add(
-                new Icon(this.GetType().Assembly.GetManifestResourceStream( 
-                "Ankh.UI.Graphics.AddRepoURL.ico") ) );*/
-        }
-
-        
-
-        /// <summary>
-        /// This will be called when the user finishes editing the new node.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MakeDirAfterEdit(object sender, NodeLabelEditEventArgs e)
-        {
-            // disconnect the event handler - we don't want it fired more than once.
-            this.treeView.AfterLabelEdit -= new NodeLabelEditEventHandler(
-                this.MakeDirAfterEdit );
-            this.treeView.LabelEdit = false;
-
-            bool cancel = true;
-            try
-            {
-                // did the user actually enter a name?
-                if ( this.newDirHandler != null && e.Label != null )
-                {  
-                    // create the new dir and refresh the parent dir.
-                    cancel = !this.newDirHandler.MakeDir(
-                        (IRepositoryTreeNode)e.Node.Parent.Tag, e.Label );
-                    if ( !cancel )
-                        this.RefreshNode( (IRepositoryTreeNode)e.Node.Parent.Tag );
-                }
-                // if the user cancelled, just get rid of the new node.
-                if ( cancel ) 
-                    e.Node.Remove();
-            }
-            finally
-            {
-                this.newDirHandler = null;
-                e.CancelEdit = cancel;
-            }
-        }
-        
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose( bool disposing )
-        {
-            if( disposing )
-            {
-                if(components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            base.Dispose( disposing );
-        }	
-        
 
         private void TreeViewMouseDown( object sender, MouseEventArgs args )
         {
@@ -229,8 +121,6 @@ namespace Ankh.UI
                 this.SelectionChanged( this, EventArgs.Empty );
         }
         
-        private INewDirectoryHandler newDirHandler;
-
         private void treeView_RetrievingChanged(object sender, EventArgs e)
         {
             busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;

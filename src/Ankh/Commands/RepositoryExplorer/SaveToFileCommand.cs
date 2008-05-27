@@ -18,7 +18,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+            /*IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
             using (context.StartOperation("Saving"))
@@ -41,7 +41,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 e.GetService<IProgressRunner>().Run(
                                     "Retrieving file",
                                     runner.Work);
-            }
+            }*/
         }
 
         #endregion

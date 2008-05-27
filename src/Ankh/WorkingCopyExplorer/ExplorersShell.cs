@@ -99,14 +99,14 @@ namespace Ankh.WorkingCopyExplorer
             return false;// this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
         }
 
-        public RepositoryRootInfo ShowAddRepositoryRootDialog()
+        public Uri ShowAddRepositoryRootDialog()
         {
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
             {
                 if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
-                return new RepositoryRootInfo(dlg.Url, dlg.Revision);
+                return new Uri(dlg.Url);
             }
         }
 
