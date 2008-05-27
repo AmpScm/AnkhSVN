@@ -8,7 +8,6 @@ namespace Ankh.Ids
     [Guid(AnkhId.CommandSet)]
     public enum AnkhToolBar
     {
-
         ToolBarFirst = 0x7FFFFFF,
         PendingChanges,
         SourceControl,
