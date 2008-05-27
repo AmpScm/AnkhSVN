@@ -8,6 +8,7 @@ using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.VS;
 using SharpSvn;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -165,7 +166,7 @@ namespace Ankh.Scc
         {
             bool m = false;
 
-            RefreshValue(ref m, ref _iconIndex, context.IconMapper.GetIcon(FullPath));
+            RefreshValue(ref m, ref _iconIndex, GetIcon(context));
             RefreshValue(ref m, ref _projects, GetProjects(context));
             RefreshValue(ref m, ref _status, GetStatus(context, item));
             RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
@@ -205,6 +206,14 @@ namespace Ankh.Scc
                 return "<Solution>";
             else
                 return "<none>";
+        }
+
+        int GetIcon(RefreshContext context)
+        {
+            if (Item.Exists)
+                return context.IconMapper.GetIcon(FullPath);
+            else
+                return context.IconMapper.GetIconForExtension(Path.GetExtension(Name));
         }
 
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
