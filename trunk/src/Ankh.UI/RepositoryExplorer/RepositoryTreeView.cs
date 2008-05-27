@@ -7,6 +7,7 @@ using System.Data;
 using System.Windows.Forms;
 
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Ankh.UI
 {
@@ -170,6 +171,14 @@ namespace Ankh.UI
             {           
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        public override void SetIcon(TreeNode node, string name)
+        {
+            if (IconMapper != null)
+                node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIconForExtension(Path.GetExtension(name));
+            else
+                base.SetIcon(node, name);
         }
 
         /// <summary> 

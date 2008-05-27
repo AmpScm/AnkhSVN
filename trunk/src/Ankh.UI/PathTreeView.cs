@@ -75,7 +75,7 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="node"></param>
         /// <param name="path"></param>
-        public void SetIcon(TreeNode node, string path)
+        public virtual void SetIcon(TreeNode node, string path)
         {
             if (IconMapper != null)
                 node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIcon(path);

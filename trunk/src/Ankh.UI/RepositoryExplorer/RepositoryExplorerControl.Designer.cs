@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Ankh.UI
 {
@@ -91,5 +92,13 @@ namespace Ankh.UI
 
         }
         #endregion
+
+        private System.Windows.Forms.CheckBox backgroundListingCheck;
+        private Ankh.UI.RepositoryTreeView treeView;
+        private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.ToolBar toolBar;
+        private System.Windows.Forms.ToolBarButton enableBackgroundListingButton;
+        private System.Windows.Forms.ImageList toolbarImageList;
+        private ToolBarButton addRepoURLButton;
     }
 }
