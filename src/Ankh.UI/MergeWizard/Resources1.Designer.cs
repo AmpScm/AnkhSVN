@@ -222,6 +222,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no revisions to unblock from the selected path..
+        /// </summary>
+        internal static string NoRevisionsToUnblock {
+            get {
+                return ResourceManager.GetString("NoRevisionsToUnblock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this method to catch-up a feature branch with the changes in trunk or another branch.  You can merge a specific set of revisions or all eligible revisions..
         /// </summary>
         internal static string RangeOfRevisionsDescription {

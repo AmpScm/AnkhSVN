@@ -29,26 +29,11 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceRangeOfRevisionsPageControl));
-            this.mergeFromLabel = new System.Windows.Forms.Label();
-            this.selectButton = new System.Windows.Forms.Button();
             this.revisionsGroupBox = new System.Windows.Forms.GroupBox();
             this.selectRevisionsRadioButton = new System.Windows.Forms.RadioButton();
             this.allRevisionsRadioButton = new System.Windows.Forms.RadioButton();
-            this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
             this.revisionsGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // mergeFromLabel
-            // 
-            resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
-            this.mergeFromLabel.Name = "mergeFromLabel";
-            // 
-            // selectButton
-            // 
-            resources.ApplyResources(this.selectButton, "selectButton");
-            this.selectButton.Name = "selectButton";
-            this.selectButton.UseVisualStyleBackColor = true;
-            this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
             // 
             // revisionsGroupBox
             // 
@@ -74,23 +59,13 @@
             this.allRevisionsRadioButton.UseVisualStyleBackColor = true;
             this.allRevisionsRadioButton.CheckedChanged += new System.EventHandler(this.allRevisionsRadioButton_CheckedChanged);
             // 
-            // mergeFromComboBox
-            // 
-            resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
-            this.mergeFromComboBox.FormattingEnabled = true;
-            this.mergeFromComboBox.Name = "mergeFromComboBox";
-            this.mergeFromComboBox.TextChanged += new System.EventHandler(this.mergeFromComboBox_TextChanged);
-            // 
             // MergeSourceRangeOfRevisionsPageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mergeFromComboBox);
             this.Controls.Add(this.revisionsGroupBox);
-            this.Controls.Add(this.selectButton);
-            this.Controls.Add(this.mergeFromLabel);
             this.Name = "MergeSourceRangeOfRevisionsPageControl";
-            this.Load += new System.EventHandler(this.MergeSourceRangeOfRevisionsPageControl_Load);
+            this.Controls.SetChildIndex(this.revisionsGroupBox, 0);
             this.revisionsGroupBox.ResumeLayout(false);
             this.revisionsGroupBox.PerformLayout();
             this.ResumeLayout(false);
@@ -100,11 +75,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Label mergeFromLabel;
-        private System.Windows.Forms.Button selectButton;
         private System.Windows.Forms.GroupBox revisionsGroupBox;
-        private System.Windows.Forms.RadioButton allRevisionsRadioButton;
         private System.Windows.Forms.RadioButton selectRevisionsRadioButton;
-        private System.Windows.Forms.ComboBox mergeFromComboBox;
+        private System.Windows.Forms.RadioButton allRevisionsRadioButton;
+
     }
 }

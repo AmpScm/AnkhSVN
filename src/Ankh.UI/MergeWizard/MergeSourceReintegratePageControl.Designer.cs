@@ -29,45 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceReintegratePageControl));
-            this.selectButton = new System.Windows.Forms.Button();
-            this.mergeFromLabel = new System.Windows.Forms.Label();
-            this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // selectButton
-            // 
-            resources.ApplyResources(this.selectButton, "selectButton");
-            this.selectButton.Name = "selectButton";
-            this.selectButton.UseVisualStyleBackColor = true;
-            // 
-            // mergeFromLabel
-            // 
-            resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
-            this.mergeFromLabel.Name = "mergeFromLabel";
-            // 
-            // mergeFromComboBox
-            // 
-            resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
-            this.mergeFromComboBox.FormattingEnabled = true;
-            this.mergeFromComboBox.Name = "mergeFromComboBox";
             // 
             // MergeSourceReintegratePageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mergeFromComboBox);
-            this.Controls.Add(this.selectButton);
-            this.Controls.Add(this.mergeFromLabel);
             this.Name = "MergeSourceReintegratePageControl";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button selectButton;
-        private System.Windows.Forms.Label mergeFromLabel;
-        private System.Windows.Forms.ComboBox mergeFromComboBox;
     }
 }

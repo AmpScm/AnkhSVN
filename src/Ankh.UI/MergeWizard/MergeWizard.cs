@@ -11,7 +11,7 @@ namespace Ankh.UI.MergeWizard
     /// <summary>
     /// This is the wizard implementation for AnkhSVN's merge capability.
     /// </summary>
-    class MergeWizard : Wizard
+    public class MergeWizard : Wizard
     {
         /// <summary>
         /// Enumeration of available merge types.
@@ -97,8 +97,10 @@ namespace Ankh.UI.MergeWizard
                     return Container.CurrentPage.IsPageComplete &&
                         !((MergeSourceRangeOfRevisionsPage)Container.CurrentPage).NextPageRequired;
                 }
-                    
 
+                if (Container.CurrentPage is MergeSourceManuallyRecordPage)
+                    return false;
+                
                 return Container.CurrentPage.IsPageComplete;
             }
         }

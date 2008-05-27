@@ -29,27 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceManuallyRemovePageControl));
-            this.mergeFromLabel = new System.Windows.Forms.Label();
-            this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
-            // 
-            // mergeFromLabel
-            // 
-            resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
-            this.mergeFromLabel.Name = "mergeFromLabel";
-            // 
-            // mergeFromComboBox
-            // 
-            resources.ApplyResources(this.mergeFromComboBox, "mergeFromComboBox");
-            this.mergeFromComboBox.FormattingEnabled = true;
-            this.mergeFromComboBox.Name = "mergeFromComboBox";
             // 
             // MergeSourceManuallyRemovePageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mergeFromComboBox);
-            this.Controls.Add(this.mergeFromLabel);
             this.Name = "MergeSourceManuallyRemovePageControl";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -58,7 +43,5 @@
 
         #endregion
 
-        private System.Windows.Forms.Label mergeFromLabel;
-        private System.Windows.Forms.ComboBox mergeFromComboBox;
     }
 }
