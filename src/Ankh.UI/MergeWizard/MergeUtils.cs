@@ -21,9 +21,11 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns a list of strings for the suggested merge sources.
         /// </summary>
-        public List<string> GetSuggestedMergeSources(SvnItem target)
+        public List<string> GetSuggestedMergeSources(SvnItem target, MergeWizard.MergeType mergeType)
         {
             List<string> sources = new List<string>();
+
+
 
             using (SvnClient client = GetClient())
             {
