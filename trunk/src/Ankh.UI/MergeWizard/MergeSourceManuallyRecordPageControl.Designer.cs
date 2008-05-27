@@ -29,44 +29,18 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceManuallyRecordPageControl));
-            this.mergeFromTextBox = new System.Windows.Forms.TextBox();
-            this.selectButton = new System.Windows.Forms.Button();
-            this.mergeFromLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // mergeFromTextBox
-            // 
-            resources.ApplyResources(this.mergeFromTextBox, "mergeFromTextBox");
-            this.mergeFromTextBox.Name = "mergeFromTextBox";
-            // 
-            // selectButton
-            // 
-            resources.ApplyResources(this.selectButton, "selectButton");
-            this.selectButton.Name = "selectButton";
-            this.selectButton.UseVisualStyleBackColor = true;
-            // 
-            // mergeFromLabel
-            // 
-            resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
-            this.mergeFromLabel.Name = "mergeFromLabel";
             // 
             // MergeSourceManuallyRecordPageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mergeFromTextBox);
-            this.Controls.Add(this.selectButton);
-            this.Controls.Add(this.mergeFromLabel);
             this.Name = "MergeSourceManuallyRecordPageControl";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox mergeFromTextBox;
-        private System.Windows.Forms.Button selectButton;
-        private System.Windows.Forms.Label mergeFromLabel;
     }
 }

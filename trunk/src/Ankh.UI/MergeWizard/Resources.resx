@@ -175,6 +175,9 @@
   <data name="MergeWizardTitle" xml:space="preserve">
     <value>Merge Wizard</value>
   </data>
+  <data name="NoRevisionsToUnblock" xml:space="preserve">
+    <value>There are no revisions to unblock from the selected path.</value>
+  </data>
   <data name="RangeOfRevisionsDescription" xml:space="preserve">
     <value>Use this method to catch-up a feature branch with the changes in trunk or another branch.  You can merge a specific set of revisions or all eligible revisions.</value>
   </data>

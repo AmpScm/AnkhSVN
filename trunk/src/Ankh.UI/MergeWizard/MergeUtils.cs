@@ -5,7 +5,7 @@ using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
-    class MergeUtils
+    public class MergeUtils
     {
         IAnkhServiceProvider _context;
 
@@ -25,26 +25,27 @@ namespace Ankh.UI.MergeWizard
         {
             List<string> sources = new List<string>();
 
-
-
-            using (SvnClient client = GetClient())
+            if (mergeType != MergeWizard.MergeType.Reintegrate)
             {
-                SvnMergeSourcesCollection mergeSources;
-                SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
-                SvnItem parent = target.Parent;
-                
-                args.ThrowOnError = false;
-
-                if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
+                using (SvnClient client = GetClient())
                 {
-                    foreach (SvnMergeSource source in mergeSources)
+                    SvnMergeSourcesCollection mergeSources;
+                    SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
+                    SvnItem parent = target.Parent;
+
+                    args.ThrowOnError = false;
+
+                    if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
                     {
-                        sources.Add(source.Uri.ToString());
+                        foreach (SvnMergeSource source in mergeSources)
+                        {
+                            sources.Add(source.Uri.ToString());
+                        }
                     }
                 }
-            }
 
-            sources.Sort();
+                sources.Sort();
+            }
 
             return sources;
         }

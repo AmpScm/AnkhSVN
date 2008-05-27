@@ -11,7 +11,7 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for your typical merge scenario.
     /// </summary>
-    class MergeSourceRangeOfRevisionsPage : WizardPage
+    class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor
@@ -21,7 +21,6 @@ namespace Ankh.UI.MergeWizard
             NextPageRequired = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
-            _control.WizardPage = this;
         }
 
         /// <summary>
@@ -47,9 +46,6 @@ namespace Ankh.UI.MergeWizard
                 if (NextPageRequired)
                     return false;
 
-                if (!((MergeSourceRangeOfRevisionsPageControl)Control).HasMergeSource)
-                    return false;
-
                 return base.IsPageComplete;
             }
         }
@@ -58,6 +54,12 @@ namespace Ankh.UI.MergeWizard
         public override System.Windows.Forms.UserControl Control
         {
             get { return _control; }
+        }
+
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        public override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.RangeOfRevisions; }
         }
 
         private MergeSourceRangeOfRevisionsPageControl _control = new MergeSourceRangeOfRevisionsPageControl();

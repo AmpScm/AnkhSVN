@@ -11,7 +11,7 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a merge where you manually record revision changes.
     /// </summary>
-    class MergeSourceManuallyRecordPage : WizardPage
+    class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor.
@@ -28,6 +28,12 @@ namespace Ankh.UI.MergeWizard
         public override System.Windows.Forms.UserControl Control
         {
             get { return control_prop; }
+        }
+
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        public override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.ManuallyRecord; }
         }
 
         private MergeSourceManuallyRecordPageControl control_prop = new MergeSourceManuallyRecordPageControl();

@@ -11,7 +11,7 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a branch reintegration merge scenario.
     /// </summary>
-    class MergeSourceReintegratePage : WizardPage
+    class MergeSourceReintegratePage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor.
@@ -27,6 +27,12 @@ namespace Ankh.UI.MergeWizard
         public override System.Windows.Forms.UserControl Control
         {
             get { return control_prop; }
+        }
+
+        /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+        public override MergeWizard.MergeType MergeType
+        {
+            get { return MergeWizard.MergeType.Reintegrate; }
         }
 
         private MergeSourceReintegratePageControl control_prop = new MergeSourceReintegratePageControl();
