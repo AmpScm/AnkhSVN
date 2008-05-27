@@ -56,14 +56,7 @@ namespace Ankh.Extenders
             get { return SvnItem.Status.ChangeList; }
         }
 
-
-        [Category("Subversion"), Description("Repository UUID"), DisplayName("Repository UUID")]
-        public string RepositoryUuid
-        {
-            get { return SvnItem.Status.RepositoryId; }
-        }
-
-        [Category("Subversion"), Description("Last committed author")]
+        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
         public string LastCommittedAuthor
         {
             get { return SvnItem.Status.LastChangeAuthor; }
@@ -87,13 +80,13 @@ namespace Ankh.Extenders
             get { return SvnItem.Status.LastChangeRevision; }
         }
 
-        [Category("Subversion"), Description("Text status")]
+        [Category("Subversion"), Description("Text Status"), DisplayName("Text Status")]
         public string TextStatus
         {
             get { return SvnItem.Status.LocalContentStatus.ToString(); }
         }
 
-        [Category("Subversion"), Description("Property status")]
+        [Category("Subversion"), Description("Property status"), DisplayName("Property Status")]
         public string PropertyStatus
         {
             get { return SvnItem.Status.LocalPropertyStatus.ToString(); }
