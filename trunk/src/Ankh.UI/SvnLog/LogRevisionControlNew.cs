@@ -13,7 +13,7 @@ using Ankh.UI.Services;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogRevisionControlNew : UserControl
+    public partial class LogRevisionControlNew : UserControl, ICurrentItemSource<SvnLogEventArgs>
     {
         ICollection<string> _localTargets;
         Uri _remoteTarget;
@@ -120,7 +120,7 @@ namespace Ankh.UI.SvnLog
             args.Limit = 10;
             args.StrictNodeHistory = StrictNodeHistory;
             args.RetrieveMergedRevisions = IncludeMergedRevisions;
-            args.RetrieveChangedPaths = false;
+            //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
         }
@@ -170,7 +170,7 @@ namespace Ankh.UI.SvnLog
 
         void ReceiveItem(object sender, SvnLogEventArgs e)
         {
-            lock (_instanceLock)
+            lock (_logItems)
             {
                 e.Detach();
                 _logItems.Enqueue(new LogItem(_context, e));
@@ -180,7 +180,7 @@ namespace Ankh.UI.SvnLog
 
         void SopCallback(object target)
         {
-            lock (_instanceLock)
+            lock (_logItems)
             {
                 while (_logItems.Count > 0)
                 {
@@ -190,9 +190,9 @@ namespace Ankh.UI.SvnLog
             }
             logRevisionControl1.VirtualListSize = _logItemList.Count;
             //columnHeader1.Width = -3;
-            columnHeader2.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            columnHeader3.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            columnHeader4.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //columnHeader2.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //columnHeader3.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            //columnHeader4.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         void LogComplete(IAsyncResult result)
@@ -226,7 +226,7 @@ namespace Ankh.UI.SvnLog
                             args.Limit = 20;
                             args.StrictNodeHistory = StrictNodeHistory;
                             args.RetrieveMergedRevisions = IncludeMergedRevisions;
-                            args.RetrieveChangedPaths = false;
+                            //args.RetrieveChangedPaths = false;
 
                             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
                         }
@@ -245,14 +245,64 @@ namespace Ankh.UI.SvnLog
                     WaitHandle.WaitAll(new WaitHandle[]{_logRunner.AsyncWaitHandle});
                 }
             }
+
             SvnLogArgs args = new SvnLogArgs();
-            args.Start = _logItemList[_logItemList.Count - 1].RawData.Revision - 1;
+            if (_logItemList.Count > 0)
+                args.Start = _logItemList[_logItemList.Count - 1].RawData.Revision - 1;
+            else
+            {
+                lock (_logItems)
+                {
+                    if (_logItems.Count > 0)
+                    {
+                        LogItem[] items = _logItems.ToArray();
+                        args.Start = items[items.Length - 1].RawData.Revision - 1;
+                    }
+                }
+            }
             args.End = EndRevision;
             args.StrictNodeHistory = StrictNodeHistory;
             args.RetrieveMergedRevisions = IncludeMergedRevisions;
-            args.RetrieveChangedPaths = false;
+            //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
+        }
+
+        #region ICurrentItemSource<SvnLogEventArgs> Members
+
+        public event SelectionChangedEventHandler<SvnLogEventArgs> SelectionChanged;
+
+        public event FocusChangedEventHandler<SvnLogEventArgs> FocusChanged;
+
+        public SvnLogEventArgs FocusedItem
+        {
+            get { return ((LogItem)logRevisionControl1.FocusedItem).RawData; }
+        }
+
+        public IList<SvnLogEventArgs> SelectedItems
+        {
+            get 
+            {
+                List<SvnLogEventArgs> rslt = new List<SvnLogEventArgs>();
+                foreach(int i in logRevisionControl1.SelectedIndices)
+                    rslt.Add(((LogItem)logRevisionControl1.Items[i]).RawData);
+                return rslt;
+            }
+        }
+
+        #endregion
+
+        private void logRevisionControl1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            if (FocusChanged != null)
+                FocusChanged(this, FocusedItem);
+        }
+
+        private void logRevisionControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SelectionChanged != null)
+                SelectionChanged(this, SelectedItems);
+
         }
     }
 

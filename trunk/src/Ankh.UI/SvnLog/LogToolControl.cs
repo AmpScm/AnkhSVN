@@ -86,5 +86,33 @@ namespace Ankh.UI.SvnLog
             get { return logRevisionControl1.StrictNodeHistory; }
             set { logRevisionControl1.StrictNodeHistory = value; }
         }
+
+        bool _logMessageVisible = true;
+        public bool LogMessageVisible
+        {
+            get { return _logMessageVisible; }
+            set 
+            {
+                _logMessageVisible = value;
+                UpdateSplitPanels();
+            }
+        }
+        bool _changedPathsVisible = true;
+        public bool ChangedPathsVisible
+        {
+            get { return _changedPathsVisible; }
+            set 
+            {
+                _changedPathsVisible = value;
+                UpdateSplitPanels();
+            }
+        }
+
+        void UpdateSplitPanels()
+        {
+            splitContainer1.Panel2Collapsed = !_changedPathsVisible && !_logMessageVisible;
+            splitContainer2.Panel1Collapsed = !_changedPathsVisible;
+            splitContainer2.Panel2Collapsed = !_logMessageVisible;
+        }
     }
 }

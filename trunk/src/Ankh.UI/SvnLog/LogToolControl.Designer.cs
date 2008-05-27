@@ -32,9 +32,13 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControlNew(this.components);
+            this.logChangedPaths1 = new Ankh.UI.LogChangedPaths(this.components);
+            this.logMessageView1 = new Ankh.UI.LogMessageView(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,6 +65,14 @@
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.logChangedPaths1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.logMessageView1);
             this.splitContainer2.Size = new System.Drawing.Size(716, 126);
             this.splitContainer2.SplitterDistance = 339;
             this.splitContainer2.TabIndex = 0;
@@ -79,6 +91,24 @@
             this.logRevisionControl1.StrictNodeHistory = false;
             this.logRevisionControl1.TabIndex = 0;
             // 
+            // logChangedPaths1
+            // 
+            this.logChangedPaths1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logChangedPaths1.ItemSource = this.logRevisionControl1;
+            this.logChangedPaths1.Location = new System.Drawing.Point(0, 0);
+            this.logChangedPaths1.Name = "logChangedPaths1";
+            this.logChangedPaths1.Size = new System.Drawing.Size(339, 126);
+            this.logChangedPaths1.TabIndex = 0;
+            // 
+            // logMessageView1
+            // 
+            this.logMessageView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logMessageView1.ItemSource = this.logRevisionControl1;
+            this.logMessageView1.Location = new System.Drawing.Point(0, 0);
+            this.logMessageView1.Name = "logMessageView1";
+            this.logMessageView1.Size = new System.Drawing.Size(373, 126);
+            this.logMessageView1.TabIndex = 0;
+            // 
             // LogToolControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,6 +119,8 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -99,6 +131,8 @@
         private Ankh.UI.SvnLog.LogRevisionControlNew logRevisionControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
+        private LogChangedPaths logChangedPaths1;
+        private LogMessageView logMessageView1;
 
     }
 }
