@@ -105,6 +105,9 @@
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
     <Reference Include="$(VSLangAssembly)" />
+    <Reference Include="Ankh.UI, Version=2.0.3062.21160, Culture=neutral, PublicKeyToken=d0beed809dd9333a, processorArchitecture=MSIL">
+      <HintPath>bin\Debug\Ankh.UI.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -243,6 +246,25 @@
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\UIUtils.cs" />
+
+
+
+
+
+
+
+
+
+    <Compile Include="SvnLog\LogRevisionControlNew.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SvnLog\LogRevisionControlNew.Designer.cs">
+      <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SvnLog\LogRevisionView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UIUtils.cs" />
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -657,6 +679,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SvnLog\LogRevisionControlNew.resx">
+      <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SwitchDialog.resx">

@@ -21,16 +21,16 @@ using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
 
 namespace Ankh.VSPackage
-{   
+{
     // We define the toolwindows here. We implement them as some kind of
     // .Net control hosted in this container. This container makes sure
     // user settings are persisted, etc.
-    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
-    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style=VsDockStyle.Float, Transient=false, Width=600, Height=300)]
-    [ProvideToolWindow(typeof(PendingChangesToolWindow), Style=VsDockStyle.Tabbed, Orientation=ToolWindowOrientation.Bottom, Transient=false, Window=ToolWindowGuids80.Outputwindow)]
+    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
+    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
+    [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false)]
-	public partial class AnkhSvnPackage
-	{
+    public partial class AnkhSvnPackage
+    {
         public void ShowToolWindow(AnkhToolWindow window)
         {
             ShowToolWindow(window, 0, true);
@@ -64,8 +64,8 @@ namespace Ankh.VSPackage
             }
             // Bring the tool window to the front and give it focus
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(frame.Show());
-        }  
-	}
+        }
+    }
 
     class AnkhToolWindowSite : IAnkhToolWindowSite, IOleCommandTarget
     {
@@ -142,7 +142,7 @@ namespace Ankh.VSPackage
         public string Name
         {
             get { return ToString(); }
-            set {}
+            set { }
         }
 
         #endregion
@@ -172,7 +172,7 @@ namespace Ankh.VSPackage
                 return Package.GetService(serviceType);
             else
                 return null;
-        }        
+        }
 
         #endregion
 
@@ -194,7 +194,7 @@ namespace Ankh.VSPackage
             }
             catch (COMException)
             {
-                return false;                
+                return false;
             }
 
             return true;
@@ -255,12 +255,12 @@ namespace Ankh.VSPackage
             if (t != null)
                 r = t.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
-            if (((r == (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) || (r == (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)) 
+            if (((r == (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) || (r == (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP))
                 && pguidCmdGroup == AnkhId.CommandSetGuid)
             {
                 r = Mapper.QueryStatus(AnkhContext, cCmds, prgCmds, pCmdText);
             }
-            
+
             return r;
         }
 
@@ -333,14 +333,14 @@ namespace Ankh.VSPackage
         public WorkingCopyExplorerToolWindow()
         {
             this.Caption = "Working Copy Explorer";
-            
-			this.BitmapResourceID = 401;
-			this.BitmapIndex = 0;
+
+            this.BitmapResourceID = 401;
+            this.BitmapIndex = 0;
 
             this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
-			// Creating the user control that will be displayed in the window
+            // Creating the user control that will be displayed in the window
             Control = new WorkingCopyExplorerControl();
         }
 
@@ -350,7 +350,7 @@ namespace Ankh.VSPackage
 
             IExplorersShell shell = GetService<Ankh.WorkingCopyExplorer.IExplorersShell>();
 
-            if(shell != null)
+            if (shell != null)
             {
                 shell.WorkingCopyExplorer = Control as WorkingCopyExplorerControl;
             }
@@ -406,7 +406,7 @@ namespace Ankh.VSPackage
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
             Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
-                //new CommitDialog();
+            //new CommitDialog();
         }
 
         public override void OnToolBarAdded()
@@ -421,6 +421,7 @@ namespace Ankh.VSPackage
         public LogToolWindow()
         {
             Control = new LogToolControl();
+            Caption = "History Viewer";
         }
     }
 }

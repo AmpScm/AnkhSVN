@@ -15,7 +15,6 @@ namespace Ankh.UI.SvnLog
     public partial class LogToolControl : UserControl
     {
         IAnkhUISite _site;
-        SvnLogPresenter _presenter;
 
         public LogToolControl()
         {
@@ -34,52 +33,35 @@ namespace Ankh.UI.SvnLog
                 if (site != null)
                 {
                     _site = site;
-                    
+
+                    logRevisionControl1.Site = site;
+
                     if (_site.GetService<LogToolControl>() == null)
                         _site.Package.AddService(typeof(LogToolControl), this);
-                    CreatePresenter(_site);
-                    //foreach (PendingChangesPage page in panel1.Controls)
-                    //{
-                    //    page.UISite = site;
-                    //}
-
-                    //UpdateColors();
-                    //UpdateCaption();
                 }
             }
         }
 
-        ISvnLogService LogService
+        LogMode _mode;
+        public LogMode Mode
         {
-            get { return _site.GetService<ISvnLogService>();}
+            get { return _mode; }
+            set { _mode = value; }
         }
 
-        public ICollection<string> Target
+        public void Start(ICollection<string> targets)
         {
-            get { return LogService.LocalTargets;}
-            set 
-            {
-                LogService.Cancel();
-                LogService.LocalTargets = value;
-                logDialogView1.Reset();
-
-                _presenter.Start(value);
-            }
+            logRevisionControl1.LocalTargets = targets;
+            logRevisionControl1.Reset();
+            logRevisionControl1.Start(_site.GetService<IAnkhServiceProvider>(), Mode);
         }
+
 
         void CreatePresenter(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            ISelectionContext selection = context.GetService<ISelectionContext>();
 
-            List<string> selected = new List<string>(selection.GetSelectedFiles(false));
-            if(selected.Count == 0)
-                return;
-
-            ISvnLogService svc = context.GetService<ISvnLogService>();
-            _presenter = new SvnLogPresenter(logDialogView1, svc);
-            _presenter.Start(selected);
         }
     }
 }
