@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace Ankh.UI
+namespace Ankh.UI.MergeWizard
 {
     /// <summary>
     /// This class contains utility methods for the UI.

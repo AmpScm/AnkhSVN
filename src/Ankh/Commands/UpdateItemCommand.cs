@@ -11,6 +11,7 @@ using Ankh.VS;
 using Ankh.Selection;
 using System.Collections.ObjectModel;
 using System.Windows.Forms.Design;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -22,12 +23,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
-
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned)
@@ -38,135 +33,51 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            // save all files
-            //SaveAllDirtyDocuments(e.Context);
+            IContext context = e.GetService<IContext>();
+            IAnkhDialogOwner dialogOwner = e.GetService<IAnkhDialogOwner>();
 
-            using (e.Context.BeginOperation("Updating"))
+            PathSelectorResult result = null;
+            PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
+                e.Selection.GetSelectedSvnItems(true));
+
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsVersioned; };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
+            info.EnableRecursive = true;
+            info.RevisionStart = SvnRevision.Head;
+
+            if (!CommandBase.Shift)
             {
-                Collection<SvnItem> files = new Collection<SvnItem>();
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                result = context.UIShell.ShowPathSelector(info);
+            }
+            else
+            {
+                result = info.DefaultResult;
+            }
+
+            if (!result.Succeeded)
+                return;
+
+            SaveAllDirtyDocuments(e.Selection, e.Context);
+
+            SvnUpdateResult ur = null;
+
+            e.GetService<IProgressRunner>().Run("Updating", 
+                delegate(object sender, ProgressWorkerArgs ee)
                 {
-                    if (item.IsVersioned)
-                        files.Add(item);
-                }
+                    List<string> files = new List<string>();
 
-                // we assume by now that all items are working copy resources.                
-                UpdateRunner runner = new UpdateRunner(context, files);
-                if (!runner.MaybeShowUpdateDialog())
-                    return;
-
-                e.GetService<IProgressRunner>().Run("Updating", runner.Work);
-            }
-        }
-
-        #region UpdateVisitor
-        private class UpdateRunner
-        {
-            public UpdateRunner(IContext context, Collection<SvnItem> resources)
-            {
-                this.context = context;
-                this.resources = resources;
-            }
-
-            public IContext Context
-            {
-                get { return this.context; }
-            }
-
-            /// <summary>
-            /// Show the update dialog if wanted.
-            /// </summary>
-            /// <returns></returns>
-            public bool MaybeShowUpdateDialog()
-            {
-                this.depth = SvnDepth.Empty;
-                this.revision = SvnRevision.Head;
-
-                // We're using the update dialog no matter what to
-                // take advantage of it's path processing capabilities.
-                // This is the best way to ensure holding down Shift is
-                // equivalent to accepting the default in the dialog.
-                using (UpdateDialog d = new UpdateDialog())
-                {
-                    d.Context = Context;
-                    d.Items = this.resources;
-                    d.CheckedFilter += delegate { return true; };
-                    d.Recursive = true;
-
-                    if (!CommandBase.Shift)
+                    
+                    foreach(SvnItem item in result.Selection)
                     {
-                        IUIService uiService = Context.GetService<IUIService>();
-
-                        DialogResult dr;
-
-                        if (uiService != null)
-                            dr = uiService.ShowDialog(d);
-                        else
-                        {
-                            IAnkhDialogOwner owner = Context.GetService<IAnkhDialogOwner>();
-
-                            dr = d.ShowDialog(owner.DialogOwner);
-                        }
-
-                        if (dr != DialogResult.OK)
-                            return false;
+                        if(item.IsVersioned)
+                            files.Add(item.FullPath);
                     }
+                    SvnUpdateArgs ua = new SvnUpdateArgs();
+                    ua.Depth = result.Depth;
+                    ua.Revision = result.RevisionStart;
 
-                    depth = d.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                    this.resources = new List<SvnItem>(d.CheckedItems);
-                    this.revision = d.Revision;
-                }
-
-                // the user hasn't cancelled the update
-                return true;
-            }
-
-            /// <summary>
-            /// The actual updating happens here.
-            /// </summary>
-            public void Work(object sender, ProgressWorkerArgs e)
-            {
-                ICollection<string> paths = SvnItem.GetPaths(this.resources);
-                SvnUpdateArgs args = new SvnUpdateArgs();
-                args.Notify += new EventHandler<SvnNotifyEventArgs>(OnNotificationEventHandler);
-                args.Revision = revision;
-                args.Depth = depth;
-                args.IgnoreExternals = false;
-
-                e.Client.Update(paths, args);
-
-                if (this.conflictsOccurred)
-                {
-                    IAnkhTaskManager manager = e.Context.GetService<IAnkhTaskManager>();
-
-                    manager.NavigateTaskList();
-                }
-            }
-
-            /// <summary>
-            ///  Handle event for onNotification that conflicts occurred from update
-            /// </summary>
-            /// <param name="taskItem"></param>
-            /// <param name="navigateHandled"></param>
-            private void OnNotificationEventHandler(Object sender, SvnNotifyEventArgs args)
-            {
-                if (args.ContentState == SvnNotifyState.Conflicted)
-                {
-                    IAnkhTaskManager manager = Context.GetService<IAnkhTaskManager>();
-
-                    if (manager != null)
-                        manager.AddConflictTask(args.Path);
-                    this.conflictsOccurred = true;
-                }
-            }
-
-            private ICollection<SvnItem> resources;
-            private SvnRevision revision;
-            private SvnDepth depth;
-            private bool conflictsOccurred = false;
-            private IContext context;
+                    ee.Client.Update(files, ua, out ur);
+                });
         }
-        #endregion
     }
 }

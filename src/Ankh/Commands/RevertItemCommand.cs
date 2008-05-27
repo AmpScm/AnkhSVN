@@ -20,14 +20,9 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                if (item.IsModified || item.IsDocumentDirty)
+                if (item.IsModified || (item.IsVersioned && item.IsDocumentDirty))
                     return;
             }
             e.Enabled = false;
@@ -39,9 +34,9 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            IAnkhDialogOwner dialogOwner = e.Context.GetService<IAnkhDialogOwner>();
-            IAnkhOpenDocumentTracker documentTracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
+            IContext context = e.GetService<IContext>();
+            IAnkhDialogOwner dialogOwner = e.GetService<IAnkhDialogOwner>();
+            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
 
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
@@ -50,8 +45,8 @@ namespace Ankh.Commands
             PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
                 e.Selection.GetSelectedSvnItems(true));
 
-            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || item.IsDocumentDirty; };
-            info.VisibleFilter += delegate(SvnItem item) { return true; };
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || (item.IsVersioned && item.IsDocumentDirty); };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsModified || (item.IsVersioned && item.IsDocumentDirty); };
 
             if (!CommandBase.Shift &&
                 e.Command == AnkhCommand.RevertItem)
@@ -60,8 +55,7 @@ namespace Ankh.Commands
                 //    info.RevisionStart = SvnRevision.Base;
 
                 result = context.UIShell.ShowPathSelector(info);
-                if (info == null)
-                    return;
+
                 confirmed = true;
                 depth = info.Depth;
             }
@@ -101,7 +95,7 @@ namespace Ankh.Commands
 
                 SvnRevertArgs args = new SvnRevertArgs();
                 
-                //args.Depth = depth;
+                args.Depth = depth;
                 args.ThrowOnError = false;
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {

@@ -242,7 +242,7 @@
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UIUtils.cs" />
+    <Compile Include="MergeWizard\UIUtils.cs" />
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -267,12 +267,6 @@
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ConflictDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConflictDialog.Designer.cs">
-      <DependentUpon>ConflictDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffHtmlModel.cs">
       <SubType>Code</SubType>
@@ -487,9 +481,6 @@
     <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
     <Compile Include="UITypeEditors\LogMessageTypeEditor.cs" />
     <Compile Include="UITypeEditors\MergeExeTypeEditor.cs" />
-    <Compile Include="UpdateDialog.Designer.cs">
-      <DependentUpon>UpdateDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -557,9 +548,6 @@
     </Compile>
     <Compile Include="UITypeEditors\TypeConverters.cs" />
     <Compile Include="UITypeEditors\TypeEditors.cs" />
-    <Compile Include="UpdateDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="VSSelectionControls\SelectionItemMap.cs" />
     <Compile Include="VSSelectionControls\SvnItemTreeView.cs" />
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
@@ -585,10 +573,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CommitDialog.resx">
       <DependentUpon>CommitDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConflictDialog.resx">
-      <DependentUpon>ConflictDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ErrorDialog.resx">
@@ -637,10 +621,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RevisionPicker.resx">
       <DependentUpon>RevisionPicker.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UpdateDialog.resx">
-      <DependentUpon>UpdateDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Ankh.UI.snk" />
