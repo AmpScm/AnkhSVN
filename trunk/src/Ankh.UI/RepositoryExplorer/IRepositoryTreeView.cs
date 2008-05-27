@@ -1,4 +1,5 @@
 using System;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI
 {

@@ -15,50 +15,23 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.backgroundListingCheck = new System.Windows.Forms.CheckBox();
-            this.toolBar = new System.Windows.Forms.ToolBar();
-            this.enableBackgroundListingButton = new System.Windows.Forms.ToolBarButton();
-            this.addRepoURLButton = new System.Windows.Forms.ToolBarButton();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RepositoryExplorerControl));
             this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
-            this.treeView = new Ankh.UI.RepositoryTreeView();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.toolFolders = new System.Windows.Forms.ToolStrip();
+            this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
+            this.folderCloseButton = new System.Windows.Forms.ToolStripButton();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.toolStripFiles = new System.Windows.Forms.ToolStrip();
+            this.filesLabel = new System.Windows.Forms.ToolStripLabel();
+            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.toolFolders.SuspendLayout();
+            this.toolStripFiles.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // backgroundListingCheck
-            // 
-            this.backgroundListingCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.backgroundListingCheck.Location = new System.Drawing.Point(80, 160);
-            this.backgroundListingCheck.Name = "backgroundListingCheck";
-            this.backgroundListingCheck.Size = new System.Drawing.Size(184, 16);
-            this.backgroundListingCheck.TabIndex = 6;
-            this.backgroundListingCheck.Text = "Enable background listing";
-            // 
-            // toolBar
-            // 
-            this.toolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
-            this.toolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-            this.enableBackgroundListingButton,
-            this.addRepoURLButton});
-            this.toolBar.ButtonSize = new System.Drawing.Size(16, 16);
-            this.toolBar.DropDownArrows = true;
-            this.toolBar.ImageList = this.toolbarImageList;
-            this.toolBar.Location = new System.Drawing.Point(0, 0);
-            this.toolBar.Name = "toolBar";
-            this.toolBar.ShowToolTips = true;
-            this.toolBar.Size = new System.Drawing.Size(296, 28);
-            this.toolBar.TabIndex = 10;
-            this.toolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.ToolBarButtonClicked);
-            // 
-            // enableBackgroundListingButton
-            // 
-            this.enableBackgroundListingButton.ImageIndex = 0;
-            this.enableBackgroundListingButton.Name = "enableBackgroundListingButton";
-            this.enableBackgroundListingButton.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton;
-            this.enableBackgroundListingButton.ToolTipText = "Enable background listing";
-            // 
-            // addRepoURLButton
-            // 
-            this.addRepoURLButton.ImageIndex = 1;
-            this.addRepoURLButton.Name = "addRepoURLButton";
             // 
             // toolbarImageList
             // 
@@ -66,39 +39,140 @@ namespace Ankh.UI
             this.toolbarImageList.ImageSize = new System.Drawing.Size(16, 16);
             this.toolbarImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // splitContainer
+            // 
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.treeView);
+            this.splitContainer.Panel1.Controls.Add(this.toolFolders);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.listView1);
+            this.splitContainer.Panel2.Controls.Add(this.toolStripFiles);
+            this.splitContainer.Size = new System.Drawing.Size(492, 425);
+            this.splitContainer.SplitterDistance = 199;
+            this.splitContainer.TabIndex = 0;
+            // 
+            // toolFolders
+            // 
+            this.toolFolders.CanOverflow = false;
+            this.toolFolders.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.foldersLabel,
+            this.folderCloseButton});
+            this.toolFolders.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolFolders.Location = new System.Drawing.Point(0, 0);
+            this.toolFolders.Name = "toolFolders";
+            this.toolFolders.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolFolders.Size = new System.Drawing.Size(199, 25);
+            this.toolFolders.Stretch = true;
+            this.toolFolders.TabIndex = 0;
+            this.toolFolders.Text = "toolStrip1";
+            // 
+            // foldersLabel
+            // 
+            this.foldersLabel.Name = "foldersLabel";
+            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
+            this.foldersLabel.Text = "Folders";
+            // 
+            // folderCloseButton
+            // 
+            this.folderCloseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.folderCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.folderCloseButton.Image = ((System.Drawing.Image)(resources.GetObject("folderCloseButton.Image")));
+            this.folderCloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.folderCloseButton.Name = "folderCloseButton";
+            this.folderCloseButton.Size = new System.Drawing.Size(23, 22);
+            this.folderCloseButton.Text = "Close";
+            // 
+            // listView1
+            // 
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.Location = new System.Drawing.Point(0, 25);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(289, 400);
+            this.listView1.TabIndex = 1;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // toolStripFiles
+            // 
+            this.toolStripFiles.CanOverflow = false;
+            this.toolStripFiles.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filesLabel,
+            this.busyProgress});
+            this.toolStripFiles.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolStripFiles.Location = new System.Drawing.Point(0, 0);
+            this.toolStripFiles.Name = "toolStripFiles";
+            this.toolStripFiles.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStripFiles.Size = new System.Drawing.Size(289, 25);
+            this.toolStripFiles.Stretch = true;
+            this.toolStripFiles.TabIndex = 0;
+            // 
+            // filesLabel
+            // 
+            this.filesLabel.Name = "filesLabel";
+            this.filesLabel.Size = new System.Drawing.Size(30, 22);
+            this.filesLabel.Text = "Files";
+            // 
+            // busyProgress
+            // 
+            this.busyProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.busyProgress.Enabled = false;
+            this.busyProgress.Name = "busyProgress";
+            this.busyProgress.Size = new System.Drawing.Size(100, 22);
+            this.busyProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.busyProgress.Visible = false;
+            // 
             // treeView
             // 
-            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView.Context = null;
-            this.treeView.Location = new System.Drawing.Point(0, 28);
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.Location = new System.Drawing.Point(0, 25);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(296, 268);
-            this.treeView.TabIndex = 9;
-            this.treeView.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeExpand);
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
+                        | SharpSvn.SvnDirEntryItems.Time)));
+            this.treeView.ShowRootLines = false;
+            this.treeView.Size = new System.Drawing.Size(199, 400);
+            this.treeView.TabIndex = 1;
+            this.treeView.RetrievingChanged += new System.EventHandler(this.treeView_RetrievingChanged);
             this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
             // RepositoryExplorerControl
             // 
-            this.Controls.Add(this.toolBar);
-            this.Controls.Add(this.treeView);
-            this.Controls.Add(this.backgroundListingCheck);
+            this.Controls.Add(this.splitContainer);
             this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(296, 296);
+            this.Size = new System.Drawing.Size(492, 425);
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel1.PerformLayout();
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.Panel2.PerformLayout();
+            this.splitContainer.ResumeLayout(false);
+            this.toolFolders.ResumeLayout(false);
+            this.toolFolders.PerformLayout();
+            this.toolStripFiles.ResumeLayout(false);
+            this.toolStripFiles.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
         #endregion
 
-        private System.Windows.Forms.CheckBox backgroundListingCheck;
-        private Ankh.UI.RepositoryTreeView treeView;
+        private Ankh.UI.RepositoryExplorer.RepositoryTreeView treeView;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.ToolBar toolBar;
-        private System.Windows.Forms.ToolBarButton enableBackgroundListingButton;
         private System.Windows.Forms.ImageList toolbarImageList;
-        private ToolBarButton addRepoURLButton;
+        private SplitContainer splitContainer;
+        private ToolStrip toolFolders;
+        private ToolStripLabel foldersLabel;
+        private ToolStripButton folderCloseButton;
+        private ToolStrip toolStripFiles;
+        private ToolStripLabel filesLabel;
+        private ListView listView1;
+        private ToolStripProgressBar busyProgress;
     }
 }
