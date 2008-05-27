@@ -78,7 +78,7 @@ namespace Ankh.UI.MergeWizard
             if (WizardPage.Wizard is MergeWizard)
             {
                 MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
-                List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget);
+                List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget, MergeWizard.MergeType.RangeOfRevisions);
 
                 if (mergeSources.Count == 0)
                 {
@@ -123,6 +123,11 @@ namespace Ankh.UI.MergeWizard
         private void mergeFromComboBox_TextChanged(object sender, EventArgs e)
         {
             ((WizardDialog)WizardPage.Form).UpdateButtons();
+        }
+
+        private void selectButton_Click(object sender, EventArgs e)
+        {
+
         }
         #endregion
     }

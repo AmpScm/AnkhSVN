@@ -37,7 +37,7 @@ namespace Ankh.UI.MergeWizard
             get { return control_prop; }
         }
 
-        public MergeType SelectedMergeType
+        public MergeWizard.MergeType SelectedMergeType
         {
             get
             {
@@ -50,16 +50,7 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        public enum MergeType
-        {
-            RangeOfRevisions,
-            Reintegrate,
-            TwoDifferentTrees,
-            ManuallyRecord,
-            ManuallyRemove
-        }
-
-        private MergeType mergeType_prop = MergeType.RangeOfRevisions;
+        private MergeWizard.MergeType mergeType_prop = MergeWizard.MergeType.RangeOfRevisions;
         private MergeTypePageControl control_prop = new MergeTypePageControl();
     }
 }

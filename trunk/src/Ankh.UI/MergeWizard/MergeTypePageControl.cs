@@ -23,35 +23,35 @@ namespace Ankh.UI.MergeWizard
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.RangeOfRevisions;
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
         }
 
         private void reintegrateABranchRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.Reintegrate;
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.Reintegrate;
         }
 
         private void twoDifferentTreesRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.TwoDifferentTrees;
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
         }
 
         private void manuallyRecordMergeRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.ManuallyRecord;
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
         }
 
         private void manuallyRemoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeTypePage.MergeType.ManuallyRemove;
+            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
         }
         #endregion
 

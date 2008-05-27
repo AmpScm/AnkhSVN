@@ -48,6 +48,7 @@
             resources.ApplyResources(this.selectButton, "selectButton");
             this.selectButton.Name = "selectButton";
             this.selectButton.UseVisualStyleBackColor = true;
+            this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
             // 
             // revisionsGroupBox
             // 

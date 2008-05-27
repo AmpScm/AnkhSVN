@@ -13,6 +13,21 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeWizard : Wizard
     {
+        /// <summary>
+        /// Enumeration of available merge types.
+        /// </summary>
+        public enum MergeType
+        {
+            RangeOfRevisions,
+            Reintegrate,
+            TwoDifferentTrees,
+            ManuallyRecord,
+            ManuallyRemove
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MergeWizard()
             : base()
         {
@@ -43,15 +58,15 @@ namespace Ankh.UI.MergeWizard
                 else
                     switch (((MergeTypePage)page).SelectedMergeType)
                     {
-                        case MergeTypePage.MergeType.RangeOfRevisions:
+                        case MergeType.RangeOfRevisions:
                             return mergeSourceRangeOfRevisionsPage;
-                        case MergeTypePage.MergeType.Reintegrate:
+                        case MergeType.Reintegrate:
                             return mergeSourceReintegratePage;
-                        case MergeTypePage.MergeType.TwoDifferentTrees:
+                        case MergeType.TwoDifferentTrees:
                             return mergeSourceTwoDifferentTreesPage;
-                        case MergeTypePage.MergeType.ManuallyRecord:
+                        case MergeType.ManuallyRecord:
                             return mergeSourceManuallyRecordPage;
-                        case MergeTypePage.MergeType.ManuallyRemove:
+                        case MergeType.ManuallyRemove:
                             return mergeSourceManuallyRemovePage;
                         default:
                             return null;
