@@ -54,5 +54,10 @@ namespace Ankh.UI.RepositoryExplorer
         {
             get { return _uri; }
         }
+
+        public new void Expand()
+        {
+            base.Expand();
+        }
     }
 }

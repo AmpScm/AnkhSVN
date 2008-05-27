@@ -17,18 +17,19 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+            e.Enabled = false;
+            /*IExplorersShell shell = e.GetService<IExplorersShell>();
 
             if (shell.RepositoryExplorerService.SelectedNode == null ||
                 !shell.RepositoryExplorerService.SelectedNode.IsDirectory)
             {
                 e.Enabled = false;
-            } 
+            } */
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+/*            IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.Context.GetService<IContext>();
 
             /// first get the parent folder
@@ -49,7 +50,7 @@ namespace Ankh.Commands.RepositoryExplorer
                         runner.Work);
 
 				}
-			}
+			}*/
         }
 
         #endregion

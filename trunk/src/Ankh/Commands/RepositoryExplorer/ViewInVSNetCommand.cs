@@ -12,11 +12,15 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.ViewInVsNet)]
     public class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            e.Enabled = false;
+        }
         #region Implementation of ICommand
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.GetService<IContext>();
+            /*IContext context = e.GetService<IContext>();
             IExplorersShell shell = e.GetService<IExplorersShell>();
             EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
@@ -29,7 +33,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
                 dte.ItemOperations.OpenFile(runner.Path,
                     EnvDTE.Constants.vsViewKindPrimary);
-            }
+            }*/
         }
 
         #endregion

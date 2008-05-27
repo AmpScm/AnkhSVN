@@ -70,7 +70,7 @@ namespace Ankh.WorkingCopyExplorer
         /// Shows the dialog for adding a new root to the repository.
         /// </summary>
         /// <returns></returns>
-        RepositoryRootInfo ShowAddRepositoryRootDialog();
+        Uri ShowAddRepositoryRootDialog();
 
         string ShowAddWorkingCopyExplorerRootDialog();
     }

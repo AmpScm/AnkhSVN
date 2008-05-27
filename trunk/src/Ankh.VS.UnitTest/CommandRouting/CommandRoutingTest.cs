@@ -77,7 +77,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             IUIShell uiShell = mocks.DynamicMock<IUIShell>();
 
-            RepositoryRootInfo reposInfo = new RepositoryRootInfo("http://fakeurl/path", 100);
+            //RepositoryRootInfo reposInfo = new RepositoryRootInfo("http://fakeurl/path", 100);
 
             using (mocks.Record())
             {

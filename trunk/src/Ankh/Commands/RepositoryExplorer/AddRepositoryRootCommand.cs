@@ -20,12 +20,12 @@ namespace Ankh.Commands.RepositoryExplorer
         public override void OnExecute(CommandEventArgs e)
         {
             IExplorersShell shell = e.GetService<IExplorersShell>();
-            RepositoryRootInfo info;
+            Uri info;
 
             if (e.Argument is string)
             {
                 // Allow opening from
-                info = new RepositoryRootInfo((string)e.Argument, SvnRevision.Head);
+                info = new Uri((string)e.Argument);
             }
             else
                 info = shell.ShowAddRepositoryRootDialog();

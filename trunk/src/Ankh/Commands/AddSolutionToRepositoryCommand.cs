@@ -21,16 +21,13 @@ namespace Ankh.Commands
     [Command(AnkhCommand.AddSolutionToRepository)]
     public class AddSolutionToRepositoryCommand : CommandBase
     {
-        SvnCommitArgs _args = null;
         List<SvnItem> paths = new List<SvnItem>();
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
-                e.Enabled = false;
-            else if (!File.Exists(e.Selection.SolutionFilename))
-                e.Enabled = false;
+                e.Enabled = false;            
         }
 
         public override void OnExecute(CommandEventArgs e)

@@ -21,22 +21,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-
-            IRepositoryTreeNode node = shell.RepositoryExplorerService.SelectedNode;
-            if (node != null && !node.IsDirectory &&
-                node.Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
-            {
-                // e.Enabled = true;
-            }
-            else
-                e.Enabled = false;
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+            /*IExplorersShell shell = e.GetService<IExplorersShell>();
             IContext context = e.GetService<IContext>();
             EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
 
@@ -59,7 +49,7 @@ namespace Ankh.Commands
 
 					dte.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
 				}
-			}
+			}*/
         }
 
         #endregion
