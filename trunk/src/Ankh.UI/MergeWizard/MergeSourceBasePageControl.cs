@@ -20,6 +20,8 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     public partial class MergeSourceBasePageControl : UserControl
     {
+        private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
+            WizardMessage.ERROR);
         MergeSourceBasePage _wizardPage;
         delegate void SetMergeSourcesCallBack(List<string> mergeSources);
 
@@ -50,14 +52,39 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
-        /// Returns whether or not the "Merge From" <code>ComboBox</code>
-        /// has content in it.  (Validation will occur during the merge step.)
+        /// Returns whether or not the "Merge From" <code>TextBox</code>'s
+        /// text is a valid Uri.
         /// </summary>
-        public bool HasMergeSource
+        public bool IsMergeURLValid
         {
             get
             {
-                return mergeFromComboBox.Text != "";
+                Uri tmpUri;
+
+                // Do not show an error while the resources are retrieved.
+                if (mergeFromComboBox.Text == Resources.LoadingMergeSources)
+                    return true;
+
+                if (mergeFromComboBox.Text == "" ||
+                    !Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out tmpUri))
+                {
+                    WizardPage.Message = MergeUtils.INVALID_FROM_URL;
+
+                    ((WizardDialog)WizardPage.Form).UpdateMessage();
+
+                    return false;
+                }
+                else
+                {
+                    if (WizardPage.Message == MergeUtils.INVALID_FROM_URL)
+                    {
+                        WizardPage.Message = null;
+
+                        ((WizardDialog)WizardPage.Form).UpdateMessage();
+                    }
+
+                    return true;
+                }
             }
         }
 

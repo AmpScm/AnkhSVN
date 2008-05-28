@@ -68,6 +68,42 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid from revision..
+        /// </summary>
+        internal static string InvalidFromRevision {
+            get {
+                return ResourceManager.GetString("InvalidFromRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid from url..
+        /// </summary>
+        internal static string InvalidFromUrl {
+            get {
+                return ResourceManager.GetString("InvalidFromUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid to revision..
+        /// </summary>
+        internal static string InvalidToRevision {
+            get {
+                return ResourceManager.GetString("InvalidToRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid to url..
+        /// </summary>
+        internal static string InvalidToUrl {
+            get {
+                return ResourceManager.GetString("InvalidToUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please wait while the suggested merge sources are retrieved....
         /// </summary>
         internal static string LoadingMergeSources {

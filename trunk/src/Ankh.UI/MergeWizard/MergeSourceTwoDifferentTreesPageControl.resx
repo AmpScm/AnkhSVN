@@ -121,39 +121,39 @@
   <data name="fromGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
-  <data name="fromRevisionButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="fromRevisionSelectButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
-  <data name="fromRevisionButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="fromRevisionSelectButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="fromRevisionButton.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="fromRevisionSelectButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>410, 39</value>
   </data>
-  <data name="fromRevisionButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="fromRevisionSelectButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="fromRevisionButton.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="fromRevisionSelectButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="fromRevisionButton.TabIndex" type="System.Int32, mscorlib">
+  <data name="fromRevisionSelectButton.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="fromRevisionButton.Text" xml:space="preserve">
+  <data name="fromRevisionSelectButton.Text" xml:space="preserve">
     <value>Select...</value>
   </data>
-  <data name="&gt;&gt;fromRevisionButton.Name" xml:space="preserve">
-    <value>fromRevisionButton</value>
+  <data name="&gt;&gt;fromRevisionSelectButton.Name" xml:space="preserve">
+    <value>fromRevisionSelectButton</value>
   </data>
-  <data name="&gt;&gt;fromRevisionButton.Type" xml:space="preserve">
+  <data name="&gt;&gt;fromRevisionSelectButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;fromRevisionButton.Parent" xml:space="preserve">
+  <data name="&gt;&gt;fromRevisionSelectButton.Parent" xml:space="preserve">
     <value>fromGroupBox</value>
   </data>
-  <data name="&gt;&gt;fromRevisionButton.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;fromRevisionSelectButton.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="fromRevisionTextBox.Location" type="System.Drawing.Point, System.Drawing">
@@ -213,34 +213,34 @@
   <data name="&gt;&gt;fromRevisionRadioButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.AutoSize" type="System.Boolean, mscorlib">
+  <data name="fromHEADRevisionRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="fromHEADRevisionRadioButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 41</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="fromHEADRevisionRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="fromHEADRevisionRadioButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>99, 17</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.TabIndex" type="System.Int32, mscorlib">
+  <data name="fromHEADRevisionRadioButton.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="fromHeadRevisionRadioButton.Text" xml:space="preserve">
+  <data name="fromHEADRevisionRadioButton.Text" xml:space="preserve">
     <value>HEAD Revision</value>
   </data>
-  <data name="&gt;&gt;fromHeadRevisionRadioButton.Name" xml:space="preserve">
-    <value>fromHeadRevisionRadioButton</value>
+  <data name="&gt;&gt;fromHEADRevisionRadioButton.Name" xml:space="preserve">
+    <value>fromHEADRevisionRadioButton</value>
   </data>
-  <data name="&gt;&gt;fromHeadRevisionRadioButton.Type" xml:space="preserve">
+  <data name="&gt;&gt;fromHEADRevisionRadioButton.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;fromHeadRevisionRadioButton.Parent" xml:space="preserve">
+  <data name="&gt;&gt;fromHEADRevisionRadioButton.Parent" xml:space="preserve">
     <value>fromGroupBox</value>
   </data>
-  <data name="&gt;&gt;fromHeadRevisionRadioButton.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;fromHEADRevisionRadioButton.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
   <data name="fromURLTextBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -335,120 +335,6 @@
   </data>
   <data name="groupBox1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
-  </data>
-  <data name="&gt;&gt;useFromURLCheckBox.Name" xml:space="preserve">
-    <value>useFromURLCheckBox</value>
-  </data>
-  <data name="&gt;&gt;useFromURLCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;useFromURLCheckBox.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;useFromURLCheckBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;toRevisionSelectButton.Name" xml:space="preserve">
-    <value>toRevisionSelectButton</value>
-  </data>
-  <data name="&gt;&gt;toRevisionSelectButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toRevisionSelectButton.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toRevisionSelectButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;toRevisionTextBox.Name" xml:space="preserve">
-    <value>toRevisionTextBox</value>
-  </data>
-  <data name="&gt;&gt;toRevisionTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toRevisionTextBox.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toRevisionTextBox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;toRevisionRadioButton.Name" xml:space="preserve">
-    <value>toRevisionRadioButton</value>
-  </data>
-  <data name="&gt;&gt;toRevisionRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toRevisionRadioButton.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toRevisionRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;toHEADRevisionRadioButton.Name" xml:space="preserve">
-    <value>toHEADRevisionRadioButton</value>
-  </data>
-  <data name="&gt;&gt;toHEADRevisionRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toHEADRevisionRadioButton.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toHEADRevisionRadioButton.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;toURLTextBox.Name" xml:space="preserve">
-    <value>toURLTextBox</value>
-  </data>
-  <data name="&gt;&gt;toURLTextBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toURLTextBox.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toURLTextBox.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;toURLSelectButton.Name" xml:space="preserve">
-    <value>toURLSelectButton</value>
-  </data>
-  <data name="&gt;&gt;toURLSelectButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toURLSelectButton.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;toURLSelectButton.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 77</value>
-  </data>
-  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 87</value>
-  </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>To: (end URL and revision of the range to merge)</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="useFromURLCheckBox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -674,6 +560,36 @@
   </data>
   <data name="&gt;&gt;toURLSelectButton.ZOrder" xml:space="preserve">
     <value>6</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 77</value>
+  </data>
+  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>490, 87</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>To: (end URL and revision of the range to merge)</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
