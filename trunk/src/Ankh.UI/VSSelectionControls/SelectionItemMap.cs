@@ -20,6 +20,9 @@ namespace Ankh.UI.VSSelectionControls
         string GetText(T item);
 
         object GetSelectionObject(T item);
+
+        T GetItemFromSelectionObject(object item);
+        void SetSelection(T[] items);        
     }
 
     public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
@@ -31,12 +34,17 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             internal abstract object GetSelectionObject(object item);
+            internal abstract object GetRealObject(object selectionObject);
+
+            internal abstract void SetSelection(object[] selection);
 
             internal abstract int AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie);
             internal abstract int UnadviseHierarchyEvents(uint dwCookie);
             internal abstract int GetProperty(uint itemid, int propid, out object pvar);
             internal abstract uint GetId(object item);
             internal abstract object GetItemObject(uint id);
+
+            internal abstract object[] CreateArray(int count);
 
             public abstract IList Selection { get; }
             public abstract IList AllItems { get; }
@@ -119,6 +127,21 @@ namespace Ankh.UI.VSSelectionControls
             internal override object GetSelectionObject(object item)
             {
                 return _owner.GetSelectionObject((T)item);
+            }
+
+            internal override object GetRealObject(object selectionObject)
+            {
+                return _owner.GetItemFromSelectionObject(selectionObject);
+            }
+
+            internal override object[] CreateArray(int count)
+            {
+                return new T[count];
+            }
+
+            internal override void SetSelection(object[] selection)
+            {
+                _owner.SetSelection((T[])selection);
             }
 
             internal override int AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
@@ -393,6 +416,16 @@ namespace Ankh.UI.VSSelectionControls
 
         int ISelectionContainer.SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
         {
+            object[] items = _data.CreateArray((int)cSelect);
+
+            if(cSelect > 0 && apUnkSelect == null)
+                return VSConstants.E_POINTER;
+
+            for(int i = 0; i < cSelect; i++)
+                items[i] = _data.GetSelectionObject(apUnkSelect[i]);
+
+            _data.SetSelection(items);
+                
             return VSConstants.S_OK; // E_NOTIMPL kills VS from the property explorer
         }
 
