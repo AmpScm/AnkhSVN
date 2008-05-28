@@ -78,11 +78,13 @@ namespace Ankh.UI.RepositoryExplorer
         }
         #endregion
 
+        [DisplayName("Url")]
         public Uri Uri
         {
             get { return _uri; }
         }
 
+        [DisplayName("File Name")]
         public string Name
         {
             get { return _name; }

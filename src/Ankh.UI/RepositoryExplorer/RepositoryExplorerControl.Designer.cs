@@ -16,13 +16,12 @@ namespace Ankh.UI.RepositoryExplorer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RepositoryExplorerControl));
             this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.toolFolders = new System.Windows.Forms.ToolStrip();
             this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
-            this.folderCloseButton = new System.Windows.Forms.ToolStripButton();
+            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.fileView = new Ankh.UI.RepositoryExplorer.RepositoryListView();
             this.fileColumn = new System.Windows.Forms.ColumnHeader();
             this.extensionColumn = new System.Windows.Forms.ColumnHeader();
@@ -30,14 +29,10 @@ namespace Ankh.UI.RepositoryExplorer
             this.authorColumn = new System.Windows.Forms.ColumnHeader();
             this.sizeColumn = new System.Windows.Forms.ColumnHeader();
             this.dateColumn = new System.Windows.Forms.ColumnHeader();
-            this.toolStripFiles = new System.Windows.Forms.ToolStrip();
-            this.filesLabel = new System.Windows.Forms.ToolStripLabel();
-            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.toolFolders.SuspendLayout();
-            this.toolStripFiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolbarImageList
@@ -60,10 +55,41 @@ namespace Ankh.UI.RepositoryExplorer
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.fileView);
-            this.splitContainer.Panel2.Controls.Add(this.toolStripFiles);
             this.splitContainer.Size = new System.Drawing.Size(771, 425);
             this.splitContainer.SplitterDistance = 233;
             this.splitContainer.TabIndex = 0;
+            // 
+            // toolFolders
+            // 
+            this.toolFolders.CanOverflow = false;
+            this.toolFolders.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.busyProgress,
+            this.foldersLabel});
+            this.toolFolders.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.toolFolders.Location = new System.Drawing.Point(0, 0);
+            this.toolFolders.Name = "toolFolders";
+            this.toolFolders.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolFolders.Size = new System.Drawing.Size(233, 25);
+            this.toolFolders.Stretch = true;
+            this.toolFolders.TabIndex = 0;
+            this.toolFolders.Text = "toolStrip1";
+            // 
+            // foldersLabel
+            // 
+            this.foldersLabel.Name = "foldersLabel";
+            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
+            this.foldersLabel.Text = "Folders";
+            // 
+            // busyProgress
+            // 
+            this.busyProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.busyProgress.Enabled = false;
+            this.busyProgress.Name = "busyProgress";
+            this.busyProgress.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.busyProgress.Size = new System.Drawing.Size(160, 22);
+            this.busyProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.busyProgress.Visible = false;
             // 
             // treeView
             // 
@@ -80,38 +106,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
-            // toolFolders
-            // 
-            this.toolFolders.CanOverflow = false;
-            this.toolFolders.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.foldersLabel,
-            this.folderCloseButton});
-            this.toolFolders.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolFolders.Location = new System.Drawing.Point(0, 0);
-            this.toolFolders.Name = "toolFolders";
-            this.toolFolders.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolFolders.Size = new System.Drawing.Size(233, 25);
-            this.toolFolders.Stretch = true;
-            this.toolFolders.TabIndex = 0;
-            this.toolFolders.Text = "toolStrip1";
-            // 
-            // foldersLabel
-            // 
-            this.foldersLabel.Name = "foldersLabel";
-            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
-            this.foldersLabel.Text = "Folders";
-            // 
-            // folderCloseButton
-            // 
-            this.folderCloseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.folderCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.folderCloseButton.Image = ((System.Drawing.Image)(resources.GetObject("folderCloseButton.Image")));
-            this.folderCloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.folderCloseButton.Name = "folderCloseButton";
-            this.folderCloseButton.Size = new System.Drawing.Size(23, 22);
-            this.folderCloseButton.Text = "Close";
-            // 
             // fileView
             // 
             this.fileView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -123,10 +117,10 @@ namespace Ankh.UI.RepositoryExplorer
             this.dateColumn});
             this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileView.Location = new System.Drawing.Point(0, 25);
+            this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
             this.fileView.ProvideWholeListForSelection = false;
-            this.fileView.Size = new System.Drawing.Size(534, 400);
+            this.fileView.Size = new System.Drawing.Size(534, 425);
             this.fileView.TabIndex = 1;
             this.fileView.UseCompatibleStateImageBehavior = false;
             this.fileView.View = System.Windows.Forms.View.Details;
@@ -160,36 +154,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.dateColumn.Text = "Date";
             this.dateColumn.Width = 100;
             // 
-            // toolStripFiles
-            // 
-            this.toolStripFiles.CanOverflow = false;
-            this.toolStripFiles.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStripFiles.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.filesLabel,
-            this.busyProgress});
-            this.toolStripFiles.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStripFiles.Location = new System.Drawing.Point(0, 0);
-            this.toolStripFiles.Name = "toolStripFiles";
-            this.toolStripFiles.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStripFiles.Size = new System.Drawing.Size(534, 25);
-            this.toolStripFiles.Stretch = true;
-            this.toolStripFiles.TabIndex = 0;
-            // 
-            // filesLabel
-            // 
-            this.filesLabel.Name = "filesLabel";
-            this.filesLabel.Size = new System.Drawing.Size(30, 22);
-            this.filesLabel.Text = "Files";
-            // 
-            // busyProgress
-            // 
-            this.busyProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.busyProgress.Enabled = false;
-            this.busyProgress.Name = "busyProgress";
-            this.busyProgress.Size = new System.Drawing.Size(160, 22);
-            this.busyProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.busyProgress.Visible = false;
-            // 
             // RepositoryExplorerControl
             // 
             this.Controls.Add(this.splitContainer);
@@ -198,12 +162,9 @@ namespace Ankh.UI.RepositoryExplorer
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
             this.splitContainer.Panel2.ResumeLayout(false);
-            this.splitContainer.Panel2.PerformLayout();
             this.splitContainer.ResumeLayout(false);
             this.toolFolders.ResumeLayout(false);
             this.toolFolders.PerformLayout();
-            this.toolStripFiles.ResumeLayout(false);
-            this.toolStripFiles.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -232,15 +193,12 @@ namespace Ankh.UI.RepositoryExplorer
         private SplitContainer splitContainer;
         private ToolStrip toolFolders;
         private ToolStripLabel foldersLabel;
-        private ToolStripButton folderCloseButton;
-        private ToolStrip toolStripFiles;
-        private ToolStripLabel filesLabel;        
-        private ToolStripProgressBar busyProgress;
         private ColumnHeader fileColumn;
         private ColumnHeader extensionColumn;
         private ColumnHeader revisionColumn;
         private ColumnHeader authorColumn;
         private ColumnHeader sizeColumn;
         private ColumnHeader dateColumn;
+        private ToolStripProgressBar busyProgress;
     }
 }

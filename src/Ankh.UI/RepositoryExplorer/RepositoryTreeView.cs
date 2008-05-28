@@ -284,10 +284,12 @@ namespace Ankh.UI.RepositoryExplorer
 
             RepositoryTreeNode s = EnsureFolderUri(folderUri);
 
-            s.AddItem(item);
-
             if (s != null)
+            {
+                s.AddItem(item);
+
                 s.Expand();
+            }
         }
 
         internal static string UriItemName(Uri uri)
