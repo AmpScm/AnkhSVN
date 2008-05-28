@@ -166,7 +166,7 @@ namespace Ankh.UI.VSSelectionControls
         public sealed class ResolveItemEventArgs : EventArgs
         {
             readonly object _selectionItem;
-            ListViewItem _item;
+            TListViewItem _item;
 
             public ResolveItemEventArgs(object selectionItem)
             {
@@ -189,7 +189,7 @@ namespace Ankh.UI.VSSelectionControls
             /// Gets or sets the item.
             /// </summary>
             /// <value>The item.</value>
-            public ListViewItem Item
+            public TListViewItem Item
             {
                 get { return _item; }
                 set { _item = value; }
@@ -281,6 +281,34 @@ namespace Ankh.UI.VSSelectionControls
             OnRetrieveSelection(sa);
 
             return sa.SelectionItem;
+        }
+
+        #endregion
+
+        #region ISelectionMapOwner<TListViewItem> Members
+
+
+        public TListViewItem GetItemFromSelectionObject(object item)
+        {
+            ResolveItemEventArgs ra = new ResolveItemEventArgs(item);
+
+            OnResolveItem(ra);
+
+            return ra.Item;
+        }
+
+        public void SetSelection(TListViewItem[] items)
+        {
+            foreach (TListViewItem l in SelectedItems)
+            {
+                if (0 > Array.IndexOf(items, l))
+                    l.Selected = false;
+            }
+
+            foreach (TListViewItem l in items)
+            {
+                l.Selected = true;
+            }
         }
 
         #endregion

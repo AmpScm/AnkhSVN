@@ -192,5 +192,19 @@ namespace Ankh.UI.VSSelectionControls
 
             return sa.SelectionItem;
         }
+
+        #region ISelectionMapOwner<TNode> Members
+
+
+        public TNode GetItemFromSelectionObject(object item)
+        {
+            return null;
+        }
+
+        public void SetSelection(TNode[] items)
+        {            
+        }
+
+        #endregion
     }
 }
