@@ -2,11 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
     public class MergeUtils
     {
+        public static readonly WizardMessage INVALID_FROM_REVISION = new WizardMessage(Resources.InvalidFromRevision,
+            WizardMessage.ERROR);
+        public static readonly WizardMessage INVALID_TO_REVISION = new WizardMessage(Resources.InvalidToRevision,
+            WizardMessage.ERROR);
+        public static readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
+            WizardMessage.ERROR);
+        public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(Resources.InvalidToUrl,
+            WizardMessage.ERROR);
+
         IAnkhServiceProvider _context;
 
         /// <summary>

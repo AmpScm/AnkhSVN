@@ -23,7 +23,7 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!((MergeSourceBasePageControl)Control).HasMergeSource)
+                if (!((MergeSourceBasePageControl)Control).IsMergeURLValid)
                     return false;
 
                 return base.IsPageComplete;

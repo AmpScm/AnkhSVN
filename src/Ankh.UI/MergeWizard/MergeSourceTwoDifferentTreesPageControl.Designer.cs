@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceTwoDifferentTreesPageControl));
             this.fromGroupBox = new System.Windows.Forms.GroupBox();
-            this.fromRevisionButton = new System.Windows.Forms.Button();
+            this.fromRevisionSelectButton = new System.Windows.Forms.Button();
             this.fromRevisionTextBox = new System.Windows.Forms.TextBox();
             this.fromRevisionRadioButton = new System.Windows.Forms.RadioButton();
-            this.fromHeadRevisionRadioButton = new System.Windows.Forms.RadioButton();
+            this.fromHEADRevisionRadioButton = new System.Windows.Forms.RadioButton();
             this.fromURLTextBox = new System.Windows.Forms.TextBox();
             this.fromURLSelectButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -51,25 +51,26 @@
             // fromGroupBox
             // 
             resources.ApplyResources(this.fromGroupBox, "fromGroupBox");
-            this.fromGroupBox.Controls.Add(this.fromRevisionButton);
+            this.fromGroupBox.Controls.Add(this.fromRevisionSelectButton);
             this.fromGroupBox.Controls.Add(this.fromRevisionTextBox);
             this.fromGroupBox.Controls.Add(this.fromRevisionRadioButton);
-            this.fromGroupBox.Controls.Add(this.fromHeadRevisionRadioButton);
+            this.fromGroupBox.Controls.Add(this.fromHEADRevisionRadioButton);
             this.fromGroupBox.Controls.Add(this.fromURLTextBox);
             this.fromGroupBox.Controls.Add(this.fromURLSelectButton);
             this.fromGroupBox.Name = "fromGroupBox";
             this.fromGroupBox.TabStop = false;
             // 
-            // fromRevisionButton
+            // fromRevisionSelectButton
             // 
-            resources.ApplyResources(this.fromRevisionButton, "fromRevisionButton");
-            this.fromRevisionButton.Name = "fromRevisionButton";
-            this.fromRevisionButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.fromRevisionSelectButton, "fromRevisionSelectButton");
+            this.fromRevisionSelectButton.Name = "fromRevisionSelectButton";
+            this.fromRevisionSelectButton.UseVisualStyleBackColor = true;
             // 
             // fromRevisionTextBox
             // 
             resources.ApplyResources(this.fromRevisionTextBox, "fromRevisionTextBox");
             this.fromRevisionTextBox.Name = "fromRevisionTextBox";
+            this.fromRevisionTextBox.TextChanged += new System.EventHandler(this.fromRevisionTextBox_TextChanged);
             // 
             // fromRevisionRadioButton
             // 
@@ -78,17 +79,20 @@
             this.fromRevisionRadioButton.Name = "fromRevisionRadioButton";
             this.fromRevisionRadioButton.TabStop = true;
             this.fromRevisionRadioButton.UseVisualStyleBackColor = true;
+            this.fromRevisionRadioButton.CheckedChanged += new System.EventHandler(this.fromRevisionRadioButton_CheckedChanged);
             // 
-            // fromHeadRevisionRadioButton
+            // fromHEADRevisionRadioButton
             // 
-            resources.ApplyResources(this.fromHeadRevisionRadioButton, "fromHeadRevisionRadioButton");
-            this.fromHeadRevisionRadioButton.Name = "fromHeadRevisionRadioButton";
-            this.fromHeadRevisionRadioButton.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.fromHEADRevisionRadioButton, "fromHEADRevisionRadioButton");
+            this.fromHEADRevisionRadioButton.Name = "fromHEADRevisionRadioButton";
+            this.fromHEADRevisionRadioButton.UseVisualStyleBackColor = true;
+            this.fromHEADRevisionRadioButton.CheckedChanged += new System.EventHandler(this.fromHeadRevisionRadioButton_CheckedChanged);
             // 
             // fromURLTextBox
             // 
             resources.ApplyResources(this.fromURLTextBox, "fromURLTextBox");
             this.fromURLTextBox.Name = "fromURLTextBox";
+            this.fromURLTextBox.TextChanged += new System.EventHandler(this.fromURLTextBox_TextChanged);
             // 
             // fromURLSelectButton
             // 
@@ -128,6 +132,7 @@
             // 
             resources.ApplyResources(this.toRevisionTextBox, "toRevisionTextBox");
             this.toRevisionTextBox.Name = "toRevisionTextBox";
+            this.toRevisionTextBox.TextChanged += new System.EventHandler(this.toRevisionTextBox_TextChanged);
             // 
             // toRevisionRadioButton
             // 
@@ -136,17 +141,20 @@
             this.toRevisionRadioButton.Name = "toRevisionRadioButton";
             this.toRevisionRadioButton.TabStop = true;
             this.toRevisionRadioButton.UseVisualStyleBackColor = true;
+            this.toRevisionRadioButton.CheckedChanged += new System.EventHandler(this.toRevisionRadioButton_CheckedChanged);
             // 
             // toHEADRevisionRadioButton
             // 
             resources.ApplyResources(this.toHEADRevisionRadioButton, "toHEADRevisionRadioButton");
             this.toHEADRevisionRadioButton.Name = "toHEADRevisionRadioButton";
             this.toHEADRevisionRadioButton.UseVisualStyleBackColor = true;
+            this.toHEADRevisionRadioButton.CheckedChanged += new System.EventHandler(this.toHEADRevisionRadioButton_CheckedChanged);
             // 
             // toURLTextBox
             // 
             resources.ApplyResources(this.toURLTextBox, "toURLTextBox");
             this.toURLTextBox.Name = "toURLTextBox";
+            this.toURLTextBox.TextChanged += new System.EventHandler(this.toURLTextBox_TextChanged);
             // 
             // toURLSelectButton
             // 
@@ -175,10 +183,10 @@
         private System.Windows.Forms.GroupBox fromGroupBox;
         private System.Windows.Forms.Button fromURLSelectButton;
         private System.Windows.Forms.TextBox fromURLTextBox;
-        private System.Windows.Forms.RadioButton fromHeadRevisionRadioButton;
+        private System.Windows.Forms.RadioButton fromHEADRevisionRadioButton;
         private System.Windows.Forms.RadioButton fromRevisionRadioButton;
         private System.Windows.Forms.TextBox fromRevisionTextBox;
-        private System.Windows.Forms.Button fromRevisionButton;
+        private System.Windows.Forms.Button fromRevisionSelectButton;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox useFromURLCheckBox;
         private System.Windows.Forms.Button toRevisionSelectButton;
