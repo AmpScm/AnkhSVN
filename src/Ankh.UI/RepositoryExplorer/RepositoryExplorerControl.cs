@@ -9,8 +9,9 @@ using SharpSvn;
 using Ankh.UI.Services;
 using Ankh.Ids;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.VS;
 
-namespace Ankh.UI
+namespace Ankh.UI.RepositoryExplorer
 {
     /// <summary>
     /// Gives a tree view of the repository based on revision.
@@ -23,15 +24,16 @@ namespace Ankh.UI
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
- 
+
             this.components = new Container();
+            treeView.RetrieveItems = SvnDirEntryItems.Kind | SvnDirEntryItems.LastAuthor | SvnDirEntryItems.Revision | SvnDirEntryItems.Size | SvnDirEntryItems.Time;
         }
-        
+
         IAnkhUISite UISite
         {
             get { return _uiSite; }
         }
-                
+
         public override ISite Site
         {
             get { return base.Site; }
@@ -50,9 +52,11 @@ namespace Ankh.UI
         private void OnUISiteChanged(EventArgs eventArgs)
         {
             treeView.Context = _uiSite;
+            fileView.Context = _uiSite;
             treeView.SelectionPublishServiceProvider = _uiSite;
-        }     
-        
+            fileView.SelectionPublishServiceProvider = _uiSite;
+        }
+
         /// <summary>
         /// Fired when the selection changes.
         /// </summary>
@@ -64,9 +68,9 @@ namespace Ankh.UI
         public IRepositoryTreeNode SelectedNode
         {
             get
-            { 
-                return 
-                    this.treeView.SelectedNode != null ? 
+            {
+                return
+                    this.treeView.SelectedNode != null ?
                     this.treeView.SelectedNode.Tag as IRepositoryTreeNode :
                     null;
             }
@@ -80,8 +84,8 @@ namespace Ankh.UI
             get
             {
                 ArrayList list = new ArrayList();
-                foreach( TreeNode node in this.treeView.Nodes )
-                    list.Add( node.Tag );
+                foreach (TreeNode node in this.treeView.Nodes)
+                    list.Add(node.Tag);
                 return (IRepositoryTreeNode[])
                     list.ToArray(typeof(IRepositoryTreeNode));
             }
@@ -102,25 +106,69 @@ namespace Ankh.UI
             get { return null; }
         }
 
-        private void TreeViewMouseDown( object sender, MouseEventArgs args )
+        private void TreeViewMouseDown(object sender, MouseEventArgs args)
         {
-            if(UISite == null || args.Button != MouseButtons.Right )
+            if (UISite == null || args.Button != MouseButtons.Right)
                 return;
 
             // make sure right click causes a selection
-            this.treeView.SelectedNode = this.treeView.GetNodeAt( args.X, args.Y );
+            this.treeView.SelectedNode = this.treeView.GetNodeAt(args.X, args.Y);
 
-            Point screen = this.treeView.PointToScreen( new Point(args.X, args.Y) );
+            Point screen = this.treeView.PointToScreen(new Point(args.X, args.Y));
 
             UISite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 
+        IFileIconMapper _iconMapper;
+
+        IFileIconMapper IconMapper
+        {
+            get
+            {
+                if (_iconMapper == null && UISite != null)
+                    _iconMapper = UISite.GetService<IFileIconMapper>();
+
+                return _iconMapper;
+            }
+        }
+
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if ( this.SelectionChanged != null )
-                this.SelectionChanged( this, EventArgs.Empty );
+            if (this.SelectionChanged != null)
+                this.SelectionChanged(this, EventArgs.Empty);
+
+            fileView.Items.Clear();
+
+            RepositoryTreeNode tn = e.Node as RepositoryTreeNode;
+
+            if (tn != null)
+            {
+                foreach (RepositoryTreeNode sn in tn.Nodes)
+                {
+                    if (sn.FolderItems.Contains(sn.RawUri))
+                    {
+                        RepositoryListItem item = new RepositoryListItem(sn.FolderItems[sn.RawUri], IconMapper);
+
+                        fileView.Items.Add(item);
+                    }
+                }
+                foreach (SvnListEventArgs ee in tn.FolderItems)
+                {
+                    if (ee.EntryUri != tn.RawUri)
+                    {
+                        RepositoryListItem item = new RepositoryListItem(ee, IconMapper);
+
+                        fileView.Items.Add(item);
+                    }
+                }
+
+                if (fileView.Items.Count > 0)
+                {
+                    fileColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+                }
+            }
         }
-        
+
         private void treeView_RetrievingChanged(object sender, EventArgs e)
         {
             busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;
@@ -132,6 +180,6 @@ namespace Ankh.UI
     /// </summary>
     public interface INewDirectoryHandler
     {
-        bool MakeDir( IRepositoryTreeNode parent, string dirname );
+        bool MakeDir(IRepositoryTreeNode parent, string dirname);
     }
 }

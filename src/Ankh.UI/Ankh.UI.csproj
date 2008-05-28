@@ -243,6 +243,10 @@
     <Compile Include="AddSolutionDialog.Designer.cs">
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryListItem.cs" />
+    <Compile Include="RepositoryExplorer\RepositoryListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

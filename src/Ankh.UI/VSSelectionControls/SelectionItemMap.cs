@@ -393,7 +393,7 @@ namespace Ankh.UI.VSSelectionControls
 
         int ISelectionContainer.SelectObjects(uint cSelect, object[] apUnkSelect, uint dwFlags)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSConstants.S_OK; // E_NOTIMPL kills VS from the property explorer
         }
 
         #endregion
@@ -426,7 +426,11 @@ namespace Ankh.UI.VSSelectionControls
                         ms = this; // We implement IVsMultiItemSelect
                     }
 
-                    sel.OnSelectChangeEx(hier, id, ms, handle);
+                    try
+                    {
+                        sel.OnSelectChangeEx(hier, id, ms, handle);
+                    }
+                    catch { } // Ignore listener exceptions :(
                 }
                 finally
                 {
