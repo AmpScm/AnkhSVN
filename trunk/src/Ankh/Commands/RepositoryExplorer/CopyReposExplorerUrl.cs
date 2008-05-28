@@ -5,6 +5,7 @@ using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
+using Ankh.Scc;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -18,17 +19,50 @@ namespace Ankh.Commands.RepositoryExplorer
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-            // all we need is a selection in the repos explorer
-            if (shell.RepositoryExplorerService.SelectedUri == null)
+            int n = 0;
+            foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
+            {
+                n++;
+                if (n > 1 || i.Uri == null)
+                {
+                    e.Enabled = false;
+                    return;
+                }
+            }
+            if (n == 1)
+                return;
+
+            foreach(SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                n++;
+                if(n > 1 || item.Status.Uri == null)
+                {
+                    e.Enabled = false;
+                    return;
+                }
+            }
+
+            if (n != 1)
                 e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+            foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
+            {
+                if (i.Uri != null)
+                    Clipboard.SetText(i.Uri.AbsoluteUri);
 
-            Clipboard.SetDataObject( shell.RepositoryExplorerService.SelectedUri.AbsoluteUri );
+                return;
+            }
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (item.Status.Uri != null)
+                    Clipboard.SetText(item.Status.Uri.AbsoluteUri);
+
+                return;
+            }
         }
 
         #endregion
