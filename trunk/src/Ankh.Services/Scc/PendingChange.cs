@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Ankh.Scc
 {
-    [DebuggerDisplay("File={FullPath}, Status={Status}")]
+    [DebuggerDisplay("File={FullPath}, Change={ChangeText}")]
     public sealed class PendingChange : CustomTypeDescriptor
     {
         readonly IAnkhServiceProvider _context;
