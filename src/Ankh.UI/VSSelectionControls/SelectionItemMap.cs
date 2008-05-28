@@ -422,7 +422,7 @@ namespace Ankh.UI.VSSelectionControls
                 return VSConstants.E_POINTER;
 
             for(int i = 0; i < cSelect; i++)
-                items[i] = _data.GetSelectionObject(apUnkSelect[i]);
+                items[i] = _data.GetRealObject(apUnkSelect[i]);
 
             _data.SetSelection(items);
                 

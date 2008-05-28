@@ -73,7 +73,7 @@ namespace Ankh.UI.VSSelectionControls
         public sealed class ResolveItemEventArgs : EventArgs
         {
             readonly object _selectionItem;
-            ListViewItem _item;
+            TNode _item;
 
             public ResolveItemEventArgs(object selectionItem)
             {
@@ -96,7 +96,7 @@ namespace Ankh.UI.VSSelectionControls
             /// Gets or sets the item.
             /// </summary>
             /// <value>The item.</value>
-            public ListViewItem Item
+            public TNode Item
             {
                 get { return _item; }
                 set { _item = value; }
