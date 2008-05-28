@@ -28,7 +28,7 @@ namespace Ankh.Commands
             {
                 if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
                 {
-                    if (e.Command == AnkhCommand.DiffLocalItem || e.Command == AnkhCommand.ItemCompareBase)
+                    if (e.Command == AnkhCommand.ItemCompareBase)
                     {
                         if (!(item.IsModified || item.IsDocumentDirty))
                             continue;
