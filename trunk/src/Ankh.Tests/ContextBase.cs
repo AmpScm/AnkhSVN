@@ -238,7 +238,7 @@ namespace Ankh.Tests
         {
             #region IUIShell Members
 
-            public virtual Ankh.UI.RepositoryExplorerControl RepositoryExplorer
+            public virtual Ankh.UI.RepositoryExplorer.RepositoryExplorerControl RepositoryExplorer
             {
                 get
                 {

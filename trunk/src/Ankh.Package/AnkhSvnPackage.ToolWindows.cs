@@ -19,6 +19,7 @@ using Ankh.Selection;
 using Ankh.UI.SvnLog;
 using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.VSPackage
 {

@@ -54,7 +54,7 @@ namespace Ankh.UI.RepositoryExplorer
             if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            if(ImageList == null && IconMapper != null)
+            if (ImageList == null && IconMapper != null)
                 ImageList = IconMapper.ImageList;
 
             if (Nodes.Count == 0)
@@ -86,7 +86,7 @@ namespace Ankh.UI.RepositoryExplorer
                 SortedAddNode(_rootNode.Nodes, serverNode);
             }
 
-            if(!_rootNode.IsExpanded)
+            if (!_rootNode.IsExpanded)
                 _rootNode.Expand();
 
             if (!serverNode.IsExpanded)
@@ -166,7 +166,7 @@ namespace Ankh.UI.RepositoryExplorer
             nRunning++;
             if (nRunning == 1)
                 OnRetrievingChanged(EventArgs.Empty);
-            
+
             DoSomething d = delegate()
             {
                 try
@@ -213,7 +213,32 @@ namespace Ankh.UI.RepositoryExplorer
 
             d.BeginInvoke(null, null);
         }
-        
+
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.TreeView.BeforeExpand"/> event.
+        /// </summary>
+        /// <param name="e">A <see cref="T:System.Windows.Forms.TreeViewCancelEventArgs"/> that contains the event data.</param>
+        protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeExpand(e);
+
+            if (!e.Cancel)
+            {
+                RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
+                rtn.EnsureLoaded(true);
+            }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.TreeView.AfterExpand"/> event.
+        /// </summary>
+        /// <param name="e">A <see cref="T:System.Windows.Forms.TreeViewEventArgs"/> that contains the event data.</param>
+        protected override void OnAfterExpand(TreeViewEventArgs e)
+        {
+            RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
+            rtn.EnsureLoaded(true);
+        }
+
         private RepositoryTreeNode EnsureRoot(Uri uri)
         {
             Uri serverUri;
@@ -259,8 +284,25 @@ namespace Ankh.UI.RepositoryExplorer
 
             RepositoryTreeNode s = EnsureFolderUri(folderUri);
 
-            if(s != null)
+            s.AddItem(item);
+
+            if (s != null)
                 s.Expand();
+        }
+
+        internal static string UriItemName(Uri uri)
+        {
+            string v = uri.AbsoluteUri;
+
+            if (v.EndsWith("/"))
+                v = v.TrimEnd('/');
+
+            int lS = v.LastIndexOf('/');
+
+            if (lS >= 0)
+                return Uri.UnescapeDataString(v.Substring(lS + 1));
+            else
+                return Uri.UnescapeDataString(v);
         }
 
         private RepositoryTreeNode EnsureFolderUri(Uri uri)
@@ -283,7 +325,7 @@ namespace Ankh.UI.RepositoryExplorer
                     int nS = name.LastIndexOf('/', name.Length - 2);
 
                     if (nS >= 0)
-                        tn.Text = name.Substring(nS+1, name.Length - nS - 2);
+                        tn.Text = name.Substring(nS + 1, name.Length - nS - 2);
                     else
                         tn.Text = name;
 
@@ -308,11 +350,11 @@ namespace Ankh.UI.RepositoryExplorer
         public event EventHandler RetrievingChanged;
         private void OnRetrievingChanged(EventArgs e)
         {
-            if(RetrievingChanged != null)
+            if (RetrievingChanged != null)
                 RetrievingChanged(this, e);
         }
-     
-        public void AddRoot( IRepositoryTreeNode node, string label )
+
+        public void AddRoot(IRepositoryTreeNode node, string label)
         {
             AddRoot(new Uri(node.Name));
             /*TreeNode root = new TreeNode( label, this.FolderIndex, this.FolderIndex );
@@ -326,83 +368,12 @@ namespace Ankh.UI.RepositoryExplorer
             dummy.Tag = DUMMY_NODE;
 
             root.Nodes.Add( dummy );*/
-        }
-        
-        /// <summary>
-        /// Refresh the contents of this node.
-        /// </summary>
-        /// <param name="n"></param>
-        public void RefreshNode( IRepositoryTreeNode n )
-        {
-            // get rid of the subnodes
-            TreeNode node = (TreeNode)n.Tag;
-            node.Nodes.Clear();
-
-            // now add the dummy child.
-            TreeNode dummy = new TreeNode();
-            dummy.Tag = DUMMY_NODE;
-            node.Nodes.Add( dummy );
-
-            // make sure it gets refilled.
-            node.Collapse();
-            node.Expand();
-        }
-
-/*        private void BuildSubTree( TreeNodeCollection nodes, IList nodeList )
-        {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-
-                // we have set a new root, so get rid of any existing nodes
-                nodes.Clear();
-
-                foreach( IRepositoryTreeNode child in nodeList )
-                {
-                    TreeNode newNode;
-
-                    if ( child.IsDirectory )
-                    {
-                        TreeNode dummy = new TreeNode( "" );
-                        dummy.Tag = DUMMY_NODE;
-
-                        newNode = new TreeNode( child.Name, 
-                            new TreeNode[]{ dummy } );
-
-                        // start with the closed folder icon
-                        newNode.SelectedImageIndex = newNode.ImageIndex = this.FolderIndex;
-                    }
-                    else
-                    {
-                        newNode = new TreeNode( child.Name);
-
-                        // set the icon
-                        this.SetIcon( newNode, child.Name );
-                    }
-
-                    newNode.Tag = child;
-                    child.Tag = newNode;
-                    nodes.Add( newNode );
-
-                } // foreach
-
-            }
-            catch( ApplicationException )
-            {
-                this.Nodes.Clear();
-                this.Nodes.Add( new TreeNode( "An error occurred",  
-                    this.FolderIndex, this.FolderIndex ) );
-            }
-            finally
-            {           
-                this.Cursor = Cursors.Default;
-            }
-        }*/
+        }        
 
         public void SetIcon(TreeNode node, string name)
         {
             if (IconMapper != null)
-                node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIconForExtension(Path.GetExtension(name));            
+                node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIconForExtension(Path.GetExtension(name));
         }
 
         /// <summary> 
@@ -411,5 +382,5 @@ namespace Ankh.UI.RepositoryExplorer
         public static readonly object DUMMY_NODE = new object();
     }
 
-    
+
 }

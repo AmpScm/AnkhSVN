@@ -5,6 +5,7 @@ using Ankh.UI;
 using System.Diagnostics;
 using Ankh.VS;
 using System.Windows.Forms;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.WorkingCopyExplorer
 {
