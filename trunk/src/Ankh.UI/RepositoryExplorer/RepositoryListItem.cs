@@ -21,14 +21,18 @@ namespace Ankh.UI.RepositoryExplorer
             string name = RepositoryTreeView.UriItemName(info.EntryUri);
             Text = name;
 
-            string extension = Path.GetExtension(name);
+            bool isFile = (info.Entry.NodeKind == SvnNodeKind.File);
+
+            string extension = isFile ? Path.GetExtension(name) : "";
 
             if (iconMapper != null)
             {
-                if (info.Entry.NodeKind == SvnNodeKind.File)
+                if (isFile)
                     ImageIndex = iconMapper.GetIconForExtension(extension);
                 else
+                {
                     ImageIndex = iconMapper.DirectoryIcon;
+                }
             }
 
             SubItems.Add(extension);
