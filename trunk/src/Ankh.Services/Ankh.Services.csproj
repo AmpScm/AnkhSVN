@@ -62,6 +62,7 @@
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="Scc\ILastChangeInfo.cs" />
+    <Compile Include="Scc\ISvnRepositoryItem.cs" />
     <Compile Include="Scc\PendingChangeKind.cs" />
     <Compile Include="Scc\PendingChangeText.Designer.cs">
       <DependentUpon>PendingChangeText.resx</DependentUpon>

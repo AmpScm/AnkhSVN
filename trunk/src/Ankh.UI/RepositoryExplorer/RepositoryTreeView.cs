@@ -354,6 +354,18 @@ namespace Ankh.UI.RepositoryExplorer
                 RetrievingChanged(this, e);
         }
 
+        protected override void OnResolveItem(ResolveItemEventArgs e)
+        {
+            e.Item = ((RepositoryExplorerItem)e.SelectionItem).TreeNode;
+            base.OnResolveItem(e);
+        }
+
+        protected override void OnRetrieveSelection(TreeViewWithSelection<RepositoryTreeNode>.RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = new RepositoryExplorerItem((RepositoryTreeNode)e.SelectionItem);
+            base.OnRetrieveSelection(e);
+        }
+
         public void AddRoot(IRepositoryTreeNode node, string label)
         {
             AddRoot(new Uri(node.Name));

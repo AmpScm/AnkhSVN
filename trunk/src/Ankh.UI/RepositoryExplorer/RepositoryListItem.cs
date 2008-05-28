@@ -43,5 +43,10 @@ namespace Ankh.UI.RepositoryExplorer
 
             SubItems.Add(time.ToShortDateString() + " " + time.ToShortTimeString());
         }
+
+        public Uri RawUri
+        {
+            get { return _uri; }
+        }
     }
 }

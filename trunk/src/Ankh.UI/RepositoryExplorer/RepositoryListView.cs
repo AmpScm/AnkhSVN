@@ -29,5 +29,15 @@ namespace Ankh.UI.RepositoryExplorer
                 SmallImageList = fim.ImageList;
         }
 
-    }
+        protected override void OnResolveItem(ResolveItemEventArgs e)
+        {
+            e.Item = ((RepositoryExplorerItem)e.SelectionItem).ListViewItem;
+            base.OnResolveItem(e);
+        }
+
+        protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = new RepositoryExplorerItem(e.Item);
+            base.OnRetrieveSelection(e);
+        }    }
 }
