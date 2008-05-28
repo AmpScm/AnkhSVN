@@ -669,6 +669,9 @@ namespace Ankh.Selection
 
             IEnumerable<T> v = new CachedEnumerable<T>(InternalGetSelection<T>());
 
+            if (_selectedItemsMap == null)
+                _selectedItemsMap = new Dictionary<Type, IEnumerable>();
+
             _selectedItemsMap.Add(typeof(T), v);
             return v;
         }
@@ -679,7 +682,7 @@ namespace Ankh.Selection
             ISelectionContainer sc = _currentContainer;
 
             uint nItems;
-            if (!ErrorHandler.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
+            if (sc == null || !ErrorHandler.Succeeded(sc.CountObjects((uint)ShellConstants.GETOBJS_SELECTED, out nItems)))
                 yield break;
 
             object[] objs = new object[(int)nItems];
