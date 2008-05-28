@@ -489,7 +489,7 @@ namespace Ankh.Selection
 
         public IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive)
         {
-            return recursive ? GetSelectedSvnItemsRecursive() : GetSelectedSvnItemsRecursive();
+            return recursive ? GetSelectedSvnItemsRecursive() : GetSelectedSvnItems();
         }
 
         IEnumerable<SvnItem> InternalGetSelectedSvnItems(bool recursive)
