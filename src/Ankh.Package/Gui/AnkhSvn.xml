@@ -121,7 +121,9 @@
       <ButtonRef id="Cmd_RevertItem" priority="0x1800" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
-          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
+          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x20" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x30" />
           <!--ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
@@ -144,7 +146,7 @@
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectHistory" priority="0x1700" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1800" />
+      <ButtonRef id="Cmd_ItemShowChanges" priority="0x1800" />
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
@@ -152,13 +154,15 @@
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
 								text="&amp;Add..."
 								toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_SwitchItem" priority="0x20" />
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
+          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x30" />
+          <ButtonRef id="Cmd_SwitchItem" priority="0x40" />          
           <!--ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
-          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
+          
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
@@ -172,7 +176,9 @@
       <Button id="Cmd_Log" name="Log" priority="0x1700"
 								text="View &amp;History"
 								toolTip="Show the change log for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
-      <ButtonRef id="Cmd_DiffLocalItem" priority="0x1900" />
+      <Button id="Cmd_ItemShowChanges" name="SccCompare" priority="0x1800"
+								text="Show C&amp;hanges"
+								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
@@ -195,7 +201,11 @@
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
-          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x20" defaultInvisible="true"
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
+          <Button id="Cmd_DiffExternalLocalItem" name="DiffExternalLocalItem" priority="0x30"
+              text="Diff E&amp;xternal"
+              toolTip="Diff against local text base using external tool." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x40" defaultInvisible="true"
 								text="&amp;Switch..."
 								toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
           <!--Button id="Cmd_Lock" name="Lock" priority="0x40" defaultInvisible="true"
@@ -210,10 +220,7 @@
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
-              toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
-          <Button id="Cmd_DiffExternalLocalItem" name="DiffExternalLocalItem" priority="0x90"
-              text="Diff E&amp;xternal"
-              toolTip="Diff against local text base using external tool." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+              toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>          
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />

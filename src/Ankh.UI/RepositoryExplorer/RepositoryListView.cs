@@ -39,5 +39,6 @@ namespace Ankh.UI.RepositoryExplorer
         {
             e.SelectionItem = new RepositoryExplorerItem(e.Item);
             base.OnRetrieveSelection(e);
-        }    }
+        }
+    }
 }

@@ -58,6 +58,7 @@ namespace Ankh.Ids
         CommitItem,
         CopyReposExplorerUrl,
         CreatePatch,
+        ItemShowChanges,
         DiffExternalLocalItem,
         DiffLocalItem,
         Export,
