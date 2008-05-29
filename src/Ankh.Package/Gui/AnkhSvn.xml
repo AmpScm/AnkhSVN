@@ -37,6 +37,8 @@
       <!-- Visual Studio file menu -->
       <Group id="Grp_FileMenuScc" priority="0x0800">
         <Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Subve&amp;rsion">
+          <Visibility context="Ankh_SccProviderGuid"/>
+
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x100"
 								text="&amp;Update..."
@@ -64,26 +66,26 @@
             <Button id="Cmd_FileSccAddFromSubversion" text="A&amp;dd Project from Subversion..." name="AddFromSubversion" priority="0x200"
                     toolTip="Add an existing Project or Solution from Subversion" dynamicVisibility="true">
               <!-- Only show Add when not debugging, etc -->
-              <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
+              <Visibility context="Ankh_SccProviderGuid" />
             </Button>
           </Group>
           <Group id="Grp_FileSccAdd" priority="0x01B0">
             <Button id="Cmd_FileSccAddSolutionToSubversion" name="AddSolutionToRepository" priority="0x100"
 							  text="Add &amp;Solution to Subversion..."
 							  toolTip="Add this solution to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
-              <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
+              <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddProjectToSubversion" name="AddProjectToRepository" priority="0x200"
 							  text="Add S&amp;elected Projects to Subversion..."
 							  toolTip="Add the selected projects to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
-              <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
+              <Visibility context="Ankh_SccProviderGuid" />
             </Button>
           </Group>
           <Group id="Grp_FileSccManagement" priority="0x0200">
             <Button id="Cmd_FileSccChangeSourceControl" name="ChangeSourceControl"  priority="0x100"
                     text="Change Source C&amp;ontrol..."
                     toolTip="Change the Source Control bindings of the projects in this solution" iconFile="PendingChanges/ChangeSourceControl.png">
-              <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging"/>
+              <Visibility context="Ankh_SccProviderGuid"/>
             </Button>
             <ButtonRef id="Cmd_ShowPendingChanges" priority="0x301" />
           </Group>
@@ -156,13 +158,13 @@
 								toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x30" />
-          <ButtonRef id="Cmd_SwitchItem" priority="0x40" />          
+          <ButtonRef id="Cmd_SwitchItem" priority="0x40" />
           <!--ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
-          
+
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
           <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
@@ -220,7 +222,7 @@
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
-              toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>          
+              toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
@@ -313,7 +315,7 @@
     </GroupRef>
     <GroupRef id="ToolBar_LogViewer">
       <Menu id="ToolBar_LogViewer" name="LogViewer" priority="0" type="ToolWindowToolbar">
-        
+
         <Group id="Grp_LogViewerToolbar" priority="0x10">
           <Button id="Cmd_LogStrictNodeHistory" name="StrictNodeHistory" text="Strict node history" textOnly="true" priority="0x100"
                   toolTip="Stop on copy." />
@@ -362,7 +364,7 @@
               <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
 									text="U&amp;pdate to Latest Version"
 									toolTip="Update your solution to the HEAD version"
-									fixMenuController="true" iconFile="PendingChanges/Update.png"/>
+									fixMenuController="true" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200"
 									text="Update to a specific &amp;Version"
 									toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
