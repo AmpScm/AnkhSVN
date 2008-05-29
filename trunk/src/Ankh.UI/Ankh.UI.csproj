@@ -263,6 +263,12 @@
     <Compile Include="SvnLog\Commands\ShowChangedPaths.cs" />
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
+    <Compile Include="SvnLog\EditLogMessageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
+      <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SwitchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -699,6 +705,10 @@
     <EmbeddedResource Include="RepositoryExplorer\RepositoryStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>RepositoryStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SvnLog\EditLogMessageDialog.resx">
+      <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogRevisionControlNew.resx">
