@@ -15,6 +15,7 @@ namespace Ankh.Commands
     /// Shows differences compared to local text base.
     /// </summary>
     [Command(AnkhCommand.DiffLocalItem)]
+    [Command(AnkhCommand.ItemShowChanges, HideWhenDisabled = true)]
     [Command(AnkhCommand.ItemCompareBase)]
     [Command(AnkhCommand.ItemCompareCommitted)]
     [Command(AnkhCommand.ItemCompareHead)]
@@ -28,7 +29,7 @@ namespace Ankh.Commands
             {
                 if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
                 {
-                    if (e.Command == AnkhCommand.ItemCompareBase)
+                    if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
                     {
                         if (!(item.IsModified || item.IsDocumentDirty))
                             continue;
@@ -57,6 +58,7 @@ namespace Ankh.Commands
                 {
                     case AnkhCommand.DiffLocalItem:
                     case AnkhCommand.ItemCompareBase:
+                    case AnkhCommand.ItemShowChanges:
                         revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
                         break;
                     case AnkhCommand.ItemCompareCommitted:
