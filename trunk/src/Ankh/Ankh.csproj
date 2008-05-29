@@ -1,5 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
     <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
     <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
     <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
@@ -96,8 +98,8 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
-    <ShellAssembly Condition="'$(VisualStudioVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
-    <ShellAssembly Condition="'$(VisualStudioVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
