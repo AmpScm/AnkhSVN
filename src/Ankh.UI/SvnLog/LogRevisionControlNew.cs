@@ -113,7 +113,7 @@ namespace Ankh.UI.SvnLog
         {
             _mode = mode;
             _context = context;
-
+            _cancel = false;
             SvnLogArgs args = new SvnLogArgs();
             args.Start = StartRevision;
             args.End = EndRevision;
@@ -131,6 +131,15 @@ namespace Ankh.UI.SvnLog
 
         public void Reset()
         {
+            lock (_instanceLock)
+            {
+                if (_running)
+                {
+                    _cancel = true;
+                    _logAction.EndInvoke(_logRunner);
+                }
+            }
+
             _logItems.Clear();
             _logItemList.Clear();
             fetchCount = 0;
@@ -139,6 +148,7 @@ namespace Ankh.UI.SvnLog
 
         int fetchCount = 0;
         bool _running;
+        bool _cancel;
         void DoFetch(SvnLogArgs args)
         {
             lock (_instanceLock)
@@ -170,6 +180,8 @@ namespace Ankh.UI.SvnLog
 
         void ReceiveItem(object sender, SvnLogEventArgs e)
         {
+            if (_cancel)
+                e.Cancel = true;
             lock (_logItems)
             {
                 e.Detach();
@@ -242,7 +254,7 @@ namespace Ankh.UI.SvnLog
             {
                 if (_running)
                 {
-                    WaitHandle.WaitAll(new WaitHandle[]{_logRunner.AsyncWaitHandle});
+                    _logAction.EndInvoke(_logRunner);
                 }
             }
 
