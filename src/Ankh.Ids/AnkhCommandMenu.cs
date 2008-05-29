@@ -53,5 +53,7 @@ namespace Ankh.Ids
         ItemResolve,
 
         ItemIgnore,
+
+        LogViewerContextMenu,
     }
 }

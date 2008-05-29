@@ -207,6 +207,9 @@ namespace Ankh.Ids
         LogIncludeMergedRevisions,
         LogFetchAll,
         LogShowChangedPaths,
-        LogShowLogMessage
+        LogShowLogMessage,
+
+        LogChangeLogMessage,
+        LogShowChanges,
     }
 }
