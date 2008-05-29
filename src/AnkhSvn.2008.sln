@@ -151,7 +151,6 @@ Global
 		{1AD899A2-9283-4AB6-9426-E251E5772196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AD899A2-9283-4AB6-9426-E251E5772196}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release (With MSI)|Any CPU.ActiveCfg = Release|Any CPU
-		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release (With MSI)|Any CPU.Build.0 = Release|Any CPU
 		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
@@ -175,7 +174,7 @@ Global
 		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB} = {01F3ED56-C896-409C-8464-DB82B3AF1364}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
