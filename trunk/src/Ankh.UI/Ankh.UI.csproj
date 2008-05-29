@@ -256,10 +256,12 @@
       <DependentUpon>RepositoryStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeNode.cs" />
+    <Compile Include="SvnLog\Commands\ChangeLogMessage.cs" />
     <Compile Include="SvnLog\Commands\FetchAll.cs" />
     <Compile Include="SvnLog\Commands\IncludeMergedRevisions.cs" />
     <Compile Include="SvnLog\Commands\LogStrictNodeHistory.cs" />
     <Compile Include="SvnLog\Commands\ShowChangedPaths.cs" />
+    <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SwitchDialog.cs">
       <SubType>Form</SubType>

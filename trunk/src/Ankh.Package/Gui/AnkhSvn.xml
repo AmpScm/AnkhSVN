@@ -330,6 +330,17 @@
         </Group>
       </Menu>
     </GroupRef>
+    <GroupRef id="Menu_LogViewerContextMenu">
+      <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" type="Context" priority="0x100">
+        <Group id="Grp_LogViewerContextMenu" priority="0x100">
+          <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0x100"
+                  text="Change log message" textChanges="true" />
+          <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0x200"
+                  text="Show changes" textChanges="true" />
+                  
+        </Group>
+      </Menu>
+    </GroupRef>
     <GroupRef id="ToolBar_PendingChanges">
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">

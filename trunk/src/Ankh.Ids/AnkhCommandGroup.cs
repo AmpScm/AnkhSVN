@@ -74,5 +74,6 @@ namespace Ankh.Ids
         SccTbExtra,
 
         LogViewerToolbar,
+        LogViewerContextMenu,
     }
 }

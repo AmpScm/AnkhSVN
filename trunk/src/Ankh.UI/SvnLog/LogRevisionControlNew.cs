@@ -10,6 +10,7 @@ using System.Runtime.Remoting.Messaging;
 using System;
 using Ankh.Scc;
 using Ankh.UI.Services;
+using Ankh.Ids;
 
 namespace Ankh.UI.SvnLog
 {
@@ -61,6 +62,11 @@ namespace Ankh.UI.SvnLog
                     OnUISiteChanged(EventArgs.Empty);
                 }
             }
+        }
+        [Browsable(false)]
+        public IAnkhUISite UISite
+        {
+            get { return _site; }
         }
 
         protected void OnUISiteChanged(EventArgs e)
@@ -288,7 +294,7 @@ namespace Ankh.UI.SvnLog
 
         public SvnLogEventArgs FocusedItem
         {
-            get { return ((LogItem)logRevisionControl1.FocusedItem).RawData; }
+            get { return logRevisionControl1.FocusedItem == null ? null : ((LogItem)logRevisionControl1.FocusedItem).RawData; }
         }
 
         public IList<SvnLogEventArgs> SelectedItems
@@ -315,6 +321,12 @@ namespace Ankh.UI.SvnLog
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
 
+        }
+
+        private void logRevisionControl1_ShowContextMenu(object sender, EventArgs e)
+        {
+            Point p = MousePosition;
+            UISite.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
         }
     }
 
