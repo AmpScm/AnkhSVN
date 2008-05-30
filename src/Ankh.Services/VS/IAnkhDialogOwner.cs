@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.UI;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+
+using Ankh.UI;
 
 namespace Ankh.VS
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    [CLSCompliant(false)]
     public interface IAnkhDialogOwner
     {
         /// <summary>
@@ -16,17 +22,17 @@ namespace Ankh.VS
         IWin32Window DialogOwner { get; }
 
         /// <summary>
-        /// 
+        /// Installs the form routing.
         /// </summary>
-        /// <param name="container"></param>
-        /// <param name="eventArgs"></param>
+        /// <param name="container">The container.</param>
+        /// <param name="eventArgs">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         /// <returns></returns>
         IDisposable InstallFormRouting(VSContainerForm container, EventArgs eventArgs);
 
         /// <summary>
-        /// 
+        /// Called when the container has created a handle
         /// </summary>
-        /// <param name="vSContainerForm"></param>
+        /// <param name="vSContainerForm">The v S container form.</param>
         void OnContainerCreated(VSContainerForm vSContainerForm);
 
 
@@ -35,5 +41,11 @@ namespace Ankh.VS
         /// </summary>
         /// <value>The message box.</value>
         AnkhMessageBox MessageBox { get; }
+
+        /// <summary>
+        /// Adds the command target.
+        /// </summary>
+        /// <param name="commandTarget">The command target.</param>
+        void AddCommandTarget(VSContainerForm container, IOleCommandTarget commandTarget);
     }    
 }

@@ -14,14 +14,18 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VS.Dialogs
 {
-    class VSCommandRouting : AnkhService, IMessageFilter, IDisposable, IVsToolWindowToolbar
+    class VSCommandRouting : AnkhService, IMessageFilter, IDisposable, IVsToolWindowToolbar, IOleCommandTarget
     {
         readonly VSContainerForm _form;
         readonly IAnkhVSContainerForm _vsForm;
         readonly static Dictionary<VSContainerForm, VSCommandRouting> _map = new Dictionary<VSContainerForm, VSCommandRouting>();
         VSFormContainerPane _pane;
         IVsToolWindowToolbarHost _tbHost;
+        IVsFilterKeys2 _fKeys;
+        IVsRegisterPriorityCommandTarget _rPct;
+        uint _csCookie;
         Panel _panel;
+        List<IOleCommandTarget> _ctList;
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
@@ -36,6 +40,13 @@ namespace Ankh.VS.Dialogs
             Application.AddMessageFilter(this);
             _installed = true;
             _map.Add(form, this);
+
+            _rPct = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
+
+            if(_rPct != null)
+            {
+                Marshal.ThrowExceptionForHR(_rPct.RegisterPriorityCommandTarget(0, this, out _csCookie));
+            }
         }
 
         public static VSCommandRouting FromForm(VSContainerForm form)
@@ -52,6 +63,12 @@ namespace Ankh.VS.Dialogs
 
         public void Dispose()
         {
+            if (_csCookie != 0 && _rPct != null)
+            {
+                _rPct.UnregisterPriorityCommandTarget(_csCookie);
+                _csCookie = 0;
+            }
+
             if (_pane != null)
             {
                 _pane.Dispose(); // Unhook
@@ -93,6 +110,38 @@ namespace Ankh.VS.Dialogs
                     }
                 }
             }
+
+            if (_fKeys != null)
+            {
+                MSG[] messages = new MSG[1];
+                messages[0].hwnd = m.HWnd;
+                messages[0].lParam = m.LParam;
+                messages[0].wParam = m.WParam;
+                messages[0].message = (uint)m.Msg;
+
+                Guid cmdGuid;
+                uint cmdCode;
+                int cmdTranslated;
+                int keyComboStarts;
+
+                int hrr = _fKeys.TranslateAcceleratorEx(messages,
+                    (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_Default 
+                    | (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
+                    0,
+                    null,
+                    out cmdGuid,
+                    out cmdCode,
+                    out cmdTranslated,
+                    out keyComboStarts);
+
+                if (hrr != VSConstants.S_OK)
+                {
+                    return false;
+                }
+
+                return cmdTranslated != 0;
+            }
+
             return false;
         }
 
@@ -166,10 +215,13 @@ namespace Ankh.VS.Dialogs
 
                 if (_tbHost == null)
                 {
-                    IVsUIShell uiShell = (IVsUIShell)GetService(typeof(SVsUIShell));
+                    IVsUIShell uiShell = GetService<IVsUIShell>(typeof(SVsUIShell));
 
                     Marshal.ThrowExceptionForHR(uiShell.SetupToolbar(_form.Handle, (IVsToolWindowToolbar)this, out _tbHost));
                 }
+
+                if (_fKeys == null)
+                    _fKeys = GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
 
                 Guid toolbarCommandSet = tbId.Guid;
                 Marshal.ThrowExceptionForHR(
@@ -251,5 +303,51 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
+
+        #region IOleCommandTarget Members
+
+        int IOleCommandTarget.Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            if (_ctList != null)
+            {
+                foreach (IOleCommandTarget ct in _ctList)
+                {
+                    hr = ct.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+
+                    if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
+                        break;
+                }
+            }
+            
+            return hr;
+        }
+
+        int IOleCommandTarget.QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
+        {
+            int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            if (_ctList != null)
+            {
+                foreach (IOleCommandTarget ct in _ctList)
+                {
+                    hr = ct.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+
+                    if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
+                        break;
+                }
+            }
+            
+            return hr;
+        }
+
+        #endregion
+
+        internal void AddCommandTarget(IOleCommandTarget commandTarget)
+        {
+            if (_ctList == null)
+                _ctList = new List<IOleCommandTarget>();
+
+            _ctList.Add(commandTarget);
+        }
     }
 }

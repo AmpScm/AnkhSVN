@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.ContextServices;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Runtime.InteropServices;
-using Ankh.UI;
 using System.Windows.Forms.Design;
+using System.Runtime.InteropServices;
+
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.ContextServices;
+using Ankh.UI;
 
 namespace Ankh.VS.Dialogs
 {
-    class AnkhDialogOwner : AnkhService, IAnkhDialogOwner
+    sealed class AnkhDialogOwner : AnkhService, IAnkhDialogOwner
     {
         IVsUIShell _shell;
         IUIService _uiService;
@@ -66,6 +69,19 @@ namespace Ankh.VS.Dialogs
         public AnkhMessageBox MessageBox
         {
             get { return new AnkhMessageBox(this); }
+        }
+
+        #endregion
+
+        #region IAnkhDialogOwner Members
+
+
+        public void AddCommandTarget(Ankh.UI.VSContainerForm form, IOleCommandTarget commandTarget)
+        {
+            VSCommandRouting routing = VSCommandRouting.FromForm(form);
+
+            if (routing != null)
+                routing.AddCommandTarget(commandTarget);
         }
 
         #endregion
