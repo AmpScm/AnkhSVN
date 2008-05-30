@@ -42,7 +42,7 @@ namespace Ankh.UI.SvnLog.Commands
                 dialog.Context = e.Context;
                 dialog.LogMessage = logItems[0].RawData.LogMessage;
 
-                if (uiService.ShowDialog(dialog) == DialogResult.OK)
+                if (dialog.ShowDialog(e.Context, uiService.GetDialogOwnerWindow()) == DialogResult.OK)
                 {
                     using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
                     {
