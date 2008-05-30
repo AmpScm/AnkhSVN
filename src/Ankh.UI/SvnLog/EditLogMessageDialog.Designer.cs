@@ -31,6 +31,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.logMessageEditor1 = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -66,6 +67,17 @@
             this.logMessageEditor1.TabIndex = 0;
             this.logMessageEditor1.Text = null;
             // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(12, 12);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(472, 225);
+            this.textBox1.TabIndex = 3;
+            // 
             // EditLogMessageDialog
             // 
             this.AcceptButton = this.btnOk;
@@ -73,6 +85,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(496, 293);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.logMessageEditor1);
@@ -81,6 +94,7 @@
             this.ShowInTaskbar = false;
             this.Text = "Edit log message";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -89,5 +103,6 @@
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

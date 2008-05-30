@@ -9,8 +9,9 @@ using Ankh.UI.Services;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class EditLogMessageDialog : Form
+    public partial class EditLogMessageDialog : VSContainerForm
     {
+        bool _initialized;
         public EditLogMessageDialog()
         {
             InitializeComponent();
@@ -18,18 +19,17 @@ namespace Ankh.UI.SvnLog
 
         public string LogMessage
         {
-            get { return logMessageEditor1.Text; }
-            set { logMessageEditor1.Text = value; }
+            get { return textBox1.Text; }
+            set { textBox1.Text = value; }
         }
 
-        IAnkhServiceProvider _context;
-        public IAnkhServiceProvider Context
+        protected override void OnContextChanged(EventArgs e)
         {
-            get { return _context; }
-            set
+            base.OnContextChanged(e);
+            if (!_initialized && Context != null)
             {
-                _context = value;
-                logMessageEditor1.Init(_context);
+                logMessageEditor1.Init(Context);
+                _initialized = true;
             }
         }
     }

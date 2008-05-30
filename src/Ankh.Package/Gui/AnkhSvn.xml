@@ -338,7 +338,7 @@
           <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0x100"
                   text="Change log message" textChanges="true" />
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0x200"
-                  text="Show changes" textChanges="true" />
+                  text="Show changes" textChanges="true" iconFile="PendingChanges/Compare.png"/>
                   
         </Group>
       </Menu>
