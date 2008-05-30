@@ -244,7 +244,7 @@ namespace Ankh.UI.PendingChanges
                     break;
             }
 
-            string text = line.Substring(iFrom, iTo - iFrom + 1);
+            string text = iTo < line.Length ? line.Substring(iFrom, iTo - iFrom + 1) : null;
 
             if (string.IsNullOrEmpty(text))
                 return VSConstants.E_FAIL;
