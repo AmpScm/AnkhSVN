@@ -362,7 +362,7 @@
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
     <Compile Include="PendingChanges\LogMessageEditor.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitItem.cs" />
     <Compile Include="PendingChanges\PendingCommitsPage.Commit.cs">
