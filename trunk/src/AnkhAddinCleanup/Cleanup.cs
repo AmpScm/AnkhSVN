@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using EnvDTE;
-using Microsoft.Office.Core;
+using Microsoft.VisualStudio.CommandBars;
 
 namespace AnkhAddinCleanup
 {
@@ -10,7 +10,7 @@ namespace AnkhAddinCleanup
     {
         public void Clean(DTE dte)
         {
-            foreach (CommandBar bar in ((CommandBars)dte.CommandBars))
+			foreach (CommandBar bar in (CommandBars)dte.CommandBars)
             {
                 DeleteControls(bar.Controls);
             }
