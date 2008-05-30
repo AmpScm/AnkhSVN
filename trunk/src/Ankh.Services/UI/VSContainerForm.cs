@@ -10,6 +10,7 @@ using System.ComponentModel.Design;
 using System.ComponentModel;
 using Ankh.Ids;
 using System.Windows.Forms.Design;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.UI
 {
@@ -52,7 +53,7 @@ namespace Ankh.UI
         /// Gets the dialog owner service
         /// </summary>
         /// <value>The dialog owner.</value>
-        [Browsable(false)]
+        [Browsable(false), CLSCompliant(false)]
         protected IAnkhDialogOwner DialogOwner
         {
             get 
@@ -183,6 +184,18 @@ namespace Ankh.UI
         {
             get { return _toolbarId; }
             set { _toolbarId = value; }
+        }
+
+        [CLSCompliant(false)]
+        protected void AddCommandTarget(IOleCommandTarget commandTarget)
+        {
+            if (commandTarget == null)
+                throw new ArgumentNullException("commandTarget");
+
+            if(DialogOwner == null)
+                throw new InvalidOperationException("DialogOwner not available");
+
+            DialogOwner.AddCommandTarget(this, commandTarget);
         }
     }
 }
