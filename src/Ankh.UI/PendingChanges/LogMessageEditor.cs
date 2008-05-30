@@ -10,19 +10,22 @@
 //***************************************************************************
 
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
+
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using System.ComponentModel;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.Shell;
+
+
 
 namespace Ankh.UI.PendingChanges
 {
@@ -30,11 +33,10 @@ namespace Ankh.UI.PendingChanges
     /// This class is used to implement CodeEditorUserControl
     /// </summary>
     /// <seealso cref="UserControl"/>
-    public partial class LogMessageEditor : UserControl
+    public partial class LogMessageEditor : Control
     {
         IAnkhServiceProvider _context;
         private CodeEditorNativeWindow codeEditorNativeWindow;
-        IntPtr _hwndTop;
         bool _fixUI;
 
         #region Methods
@@ -94,7 +96,7 @@ namespace Ankh.UI.PendingChanges
 
             // Since we process each pressed keystroke, the return value is always true.
             return true;
-        }        
+        }
 
         /// <summary>
         /// Overrides OnGotFocus method to handle OnGotFocus event
@@ -108,11 +110,6 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        protected override void OnLostFocus(EventArgs e)
-        {
-            base.OnLostFocus(e);
-        }
-
         /// <summary>
         /// Overrides OnSizeChanged method to handle OnSizeChanged event
         /// </summary>
@@ -122,8 +119,7 @@ namespace Ankh.UI.PendingChanges
             {
                 codeEditorNativeWindow.Area = this.ClientRectangle;
 
-                
-                    FixUI();
+                FixUI();
             }
         }
 
@@ -132,28 +128,21 @@ namespace Ankh.UI.PendingChanges
             if (!_fixUI)
                 return;
 
-            if (_hwndTop == IntPtr.Zero)
-            {
-                IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
+            IntPtr hwndTop;
 
-                if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out _hwndTop)))
+            IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+            if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out hwndTop)))
+            {
+                if (!CodeEditorNativeWindow.NativeMethods.IsWindow(hwndTop) ||
+                    (hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
                 {
-                    if (!CodeEditorNativeWindow.NativeMethods.IsWindow(_hwndTop) ||
-                        (_hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
-                    {
-                        // For some reason VS gives an invalid window (the desktop) while loading
-                        _hwndTop = IntPtr.Zero;
-                    }
+                    // For some reason VS gives an invalid window (the desktop) while loading
+                    return;
                 }
-                else
-                    _hwndTop = IntPtr.Zero;
 
-            }
-
-            if (_hwndTop != IntPtr.Zero)
-            {
                 // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
-                CodeEditorNativeWindow.NativeMethods.PostMessage(_hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
+                CodeEditorNativeWindow.NativeMethods.PostMessage(hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
                 _fixUI = false;
             }
         }
@@ -202,7 +191,7 @@ namespace Ankh.UI.PendingChanges
     /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
     /// </summary>
     /// <seealso cref="NativeWindow"/>
-    internal class CodeEditorNativeWindow : NativeWindow, IOleCommandTarget, IDisposable
+    internal class CodeEditorNativeWindow : IOleCommandTarget, IDisposable
     {
         #region Fields
 
@@ -532,8 +521,6 @@ namespace Ankh.UI.PendingChanges
             _textView = textView;
             commandHwnd = textView.GetWindowHandle();
 
-            //Assign a handle to this window
-            AssignHandle(commandHwnd);
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
         }
 
@@ -575,14 +562,6 @@ namespace Ankh.UI.PendingChanges
             return service;
         }
 
-        /// <summary>
-        /// Releases the handle, previously assigned in Init method
-        /// </summary>
-        public override void DestroyHandle()
-        {
-            ReleaseHandle();
-        }
-
         #endregion
 
         #region IDisposable Members
@@ -600,9 +579,7 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
-        #region IOleCommandTarget Members
         //This implementation is a simple delegation to the implementation inside the text view 
-
         /// <summary>
         /// Executes a specified command or displays help for a command.
         /// </summary>
@@ -614,7 +591,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            if (_container.ContainsFocus)
+            if (HasFocus)
                 return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
             {
@@ -633,7 +610,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
-            if (_container.ContainsFocus)
+            if (HasFocus)
                 return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             else
             {
@@ -641,8 +618,10 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        #endregion
-
+        public bool HasFocus
+        {
+            get { return _container.ContainsFocus; }
+        }
 
         internal static class NativeMethods
         {
@@ -657,8 +636,8 @@ namespace Ankh.UI.PendingChanges
             [return: MarshalAs(UnmanagedType.U1)]
             internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+            //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            //internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
