@@ -39,8 +39,13 @@ namespace Ankh.UI
                 {
                     _context = value;
                     _dlgOwner = null;
+                    OnContextChanged(EventArgs.Empty);
                 }
             }
+        }
+
+        protected virtual void OnContextChanged(EventArgs e)
+        {
         }
 
         /// <summary>
