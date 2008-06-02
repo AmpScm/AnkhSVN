@@ -63,7 +63,7 @@ namespace Ankh.UI.SvnLog
                 }
             }
         }
-        [Browsable(false)]
+        [Browsable(false), CLSCompliant(false)]
         public IAnkhUISite UISite
         {
             get { return _site; }

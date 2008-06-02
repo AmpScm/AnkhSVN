@@ -45,7 +45,8 @@ namespace Ankh.UI.PendingChanges
         /// Creation and initialization of <see cref="CodeEditorNativeWindow"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
-        public void Init(IAnkhServiceProvider context)
+        /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
+        public void Init(IAnkhServiceProvider context, bool allowModal)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -53,7 +54,7 @@ namespace Ankh.UI.PendingChanges
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
-            codeEditorNativeWindow.Init();
+            codeEditorNativeWindow.Init(allowModal);
             codeEditorNativeWindow.Area = this.ClientRectangle;
 
             _fixUI = true; // Fix the font issues in the next size changed            
@@ -63,6 +64,16 @@ namespace Ankh.UI.PendingChanges
         public IOleCommandTarget CommandTarget
         {
             get { return codeEditorNativeWindow; }
+        }
+
+        /// <summary>
+        /// Gets the window pane.
+        /// </summary>
+        /// <value>The window pane.</value>
+        [CLSCompliant(false)]
+        public IVsWindowPane WindowPane
+        {
+            get { return codeEditorNativeWindow.WindowPane; }
         }
 
         protected override void Dispose(bool disposing)
@@ -185,6 +196,13 @@ namespace Ankh.UI.PendingChanges
         {
             codeEditorNativeWindow.PasteText(text);
         }
+
+        public override bool PreProcessMessage(ref Message msg)
+        {
+            return base.PreProcessMessage(ref msg);
+        }
+
+
     }
 
     /// <summary>
@@ -198,6 +216,7 @@ namespace Ankh.UI.PendingChanges
         readonly Control _container;
         readonly IAnkhServiceProvider _context;
         readonly IOleServiceProvider _serviceProvider;
+        IVsWindowPane _windowPane;
 
         /// <summary>
         /// Editor window handle
@@ -282,6 +301,15 @@ namespace Ankh.UI.PendingChanges
                     Marshal.FreeCoTaskMem(pText);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the window pane.
+        /// </summary>
+        /// <value>The window pane.</value>
+        public IVsWindowPane WindowPane
+        {
+            get { return _windowPane; }
         }
 
         public bool PasteText(string text)
@@ -369,8 +397,10 @@ namespace Ankh.UI.PendingChanges
         /// Used to create Code Window
         /// </summary>
         /// <param name="parentHandle">Parent window handle</param>
+        /// <param name="place">The place.</param>
+        /// <param name="allowModel">if set to <c>true</c> [allow model].</param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModel, out IVsCodeWindow codeWindow)
         {
             ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
 
@@ -387,17 +417,21 @@ namespace Ankh.UI.PendingChanges
             initView[0].fDragDropMove = 1;
             initView[0].fVisibleWhitespace = 0;
 
+            uint initViewFlags = 
+                (uint)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
+                (uint)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
+                (uint)TextViewInitFlags.VIF_VSCROLL |
+                (uint)TextViewInitFlags2.VIF_SUPPRESSBORDER |
+                (uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
+                (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES;
+
+            if (allowModel)
+                initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
+
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
             int hr = codeWindowEx.Initialize((uint)_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR |
                 (uint)_codewindowbehaviorflags.CWB_DISABLESPLITTER,
-                0, null, null,
-                (int)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
-                (int)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
-                (int)TextViewInitFlags.VIF_VSCROLL |
-                (int)TextViewInitFlags2.VIF_SUPPRESSBORDER |
-                (int)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
-                (int)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES,
-                initView);
+                0, null, null, initViewFlags, initView);
 
             if (!ErrorHandler.Succeeded(hr))
             {
@@ -422,15 +456,15 @@ namespace Ankh.UI.PendingChanges
             }
 
             // create pane window
-            IVsWindowPane windowPane = (IVsWindowPane)codeWindow;
+            _windowPane = (IVsWindowPane)codeWindow;
 
-            hr = windowPane.SetSite(_serviceProvider);
+            hr = _windowPane.SetSite(_serviceProvider);
             if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
 
-            hr = windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd);
+            hr = _windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd);
             if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
@@ -504,10 +538,10 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="serviceProvider">IOleServiceProvider</param>
         /// <param name="parent">Control, that can be used to create other controls</param>
-        public void Init()
+        public void Init(bool allowModal)
         {
             //Create window            
-            CreateCodeWindow(_container.Handle, _container.ClientRectangle, out codeWindow);
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, out codeWindow);
             commandTarget = codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
