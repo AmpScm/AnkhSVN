@@ -47,5 +47,12 @@ namespace Ankh.VS
         /// </summary>
         /// <param name="commandTarget">The command target.</param>
         void AddCommandTarget(VSContainerForm container, IOleCommandTarget commandTarget);
+
+        /// <summary>
+        /// Adds the window pane.
+        /// </summary>
+        /// <param name="vSContainerForm">The v S container form.</param>
+        /// <param name="pane">The pane.</param>
+        void AddWindowPane(VSContainerForm vSContainerForm, IVsWindowPane pane);
     }    
 }

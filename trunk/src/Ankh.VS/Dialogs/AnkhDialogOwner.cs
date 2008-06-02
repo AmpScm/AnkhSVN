@@ -84,6 +84,14 @@ namespace Ankh.VS.Dialogs
                 routing.AddCommandTarget(commandTarget);
         }
 
+        public void AddWindowPane(Ankh.UI.VSContainerForm form, IVsWindowPane pane)
+        {
+            VSCommandRouting routing = VSCommandRouting.FromForm(form);
+
+            if (routing != null)
+                routing.AddWindowPane(pane);
+        }
+
         #endregion
     }
 }

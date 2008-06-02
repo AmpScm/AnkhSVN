@@ -197,5 +197,17 @@ namespace Ankh.UI
 
             DialogOwner.AddCommandTarget(this, commandTarget);
         }
+
+        [CLSCompliant(false)]
+        protected void AddWindowPane(IVsWindowPane pane)
+        {
+            if (pane == null)
+                throw new ArgumentNullException("pane");
+
+            if (DialogOwner == null)
+                throw new InvalidOperationException("DialogOwner not available");
+
+            DialogOwner.AddWindowPane(this, pane);
+        }
     }
 }

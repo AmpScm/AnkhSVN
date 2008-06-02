@@ -30,5 +30,10 @@ namespace Ankh.VS.Dialogs
         {
             get { return _panel; }
         }
+
+        protected override bool PreProcessMessage(ref Message m)
+        {
+            return base.PreProcessMessage(ref m);
+        }
     }
 }
