@@ -124,7 +124,26 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Overrides OnSizeChanged method to handle OnSizeChanged event
         /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
         protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            ForceUIUpdate();
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.Control.LocationChanged"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        protected override void OnLocationChanged(EventArgs e)
+        {
+            base.OnLocationChanged(e);
+
+            ForceUIUpdate();
+        }
+
+        public void ForceUIUpdate()
         {
             if (codeEditorNativeWindow != null)
             {
@@ -133,7 +152,7 @@ namespace Ankh.UI.PendingChanges
                 FixUI();
             }
         }
-
+  
         void FixUI()
         {
             if (!_fixUI)
@@ -378,12 +397,12 @@ namespace Ankh.UI.PendingChanges
             {
                 if (editorHwnd != IntPtr.Zero)
                 {
-                    NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, value.X, value.Y,
+                    NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, 0, 0,
                         value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
                 if (commandHwnd != IntPtr.Zero)
                 {
-                    NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, value.X, value.Y,
+                    NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, 0, 0,
                         value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
             }

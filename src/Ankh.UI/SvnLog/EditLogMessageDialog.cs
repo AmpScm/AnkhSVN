@@ -17,20 +17,30 @@ namespace Ankh.UI.SvnLog
             InitializeComponent();
         }
 
+        string _originalText;
         public string LogMessage
         {
-            get { return textBox1.Text; }
-            set { textBox1.Text = value; }
+            get { return logMessageEditor.Text; }
+            set { logMessageEditor.Text = _originalText = value; }
         }
 
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
             if (!_initialized && Context != null)
             {
-                logMessageEditor1.Init(Context);
+                logMessageEditor.Init(Context, true);
+                AddCommandTarget(logMessageEditor.CommandTarget);
+                AddWindowPane(logMessageEditor.WindowPane);
                 _initialized = true;
             }
+  
+            LogMessage = _originalText;
         }
     }
 }
