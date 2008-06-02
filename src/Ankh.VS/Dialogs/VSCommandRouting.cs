@@ -26,6 +26,7 @@ namespace Ankh.VS.Dialogs
         uint _csCookie;
         Panel _panel;
         List<IOleCommandTarget> _ctList;
+        List<IVsWindowPane> _paneList;
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
@@ -111,14 +112,14 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
-            if (_fKeys != null)
-            {
-                MSG[] messages = new MSG[1];
+            MSG[] messages = new MSG[1];
                 messages[0].hwnd = m.HWnd;
                 messages[0].lParam = m.LParam;
                 messages[0].wParam = m.WParam;
                 messages[0].message = (uint)m.Msg;
 
+            if (_fKeys != null)
+            {
                 Guid cmdGuid;
                 uint cmdCode;
                 int cmdTranslated;
@@ -134,12 +135,21 @@ namespace Ankh.VS.Dialogs
                     out cmdTranslated,
                     out keyComboStarts);
 
-                if (hrr != VSConstants.S_OK)
+                if (hrr == VSConstants.S_OK)
                 {
-                    return false;
+                    if (cmdTranslated != 0)
+                        return true;
                 }
 
-                return cmdTranslated != 0;
+            }
+
+            if (_paneList != null)
+            {
+                foreach (IVsWindowPane pane in _paneList)
+                {
+                    if (pane.TranslateAccelerator(messages) == 0)
+                        return true;
+                }
             }
 
             return false;
@@ -209,6 +219,9 @@ namespace Ankh.VS.Dialogs
 
         void OnLoad(object sender, EventArgs e)
         {
+            if (_fKeys == null)
+                _fKeys = GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
+
             if (_form.ToolBar != 0)
             {
                 System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(Ankh.Ids.AnkhId.CommandSetGuid, (int)_form.ToolBar);
@@ -218,10 +231,7 @@ namespace Ankh.VS.Dialogs
                     IVsUIShell uiShell = GetService<IVsUIShell>(typeof(SVsUIShell));
 
                     Marshal.ThrowExceptionForHR(uiShell.SetupToolbar(_form.Handle, (IVsToolWindowToolbar)this, out _tbHost));
-                }
-
-                if (_fKeys == null)
-                    _fKeys = GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
+                }                
 
                 Guid toolbarCommandSet = tbId.Guid;
                 Marshal.ThrowExceptionForHR(
@@ -348,6 +358,14 @@ namespace Ankh.VS.Dialogs
                 _ctList = new List<IOleCommandTarget>();
 
             _ctList.Add(commandTarget);
+        }
+
+        internal void AddWindowPane(IVsWindowPane pane)
+        {
+            if (_paneList == null)
+                _paneList = new List<IVsWindowPane>();
+
+            _paneList.Add(pane);
         }
     }
 }
