@@ -29,6 +29,9 @@ namespace Ankh.UI.MergeWizard.Commands
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 n++;
+
+                if (n > 1)
+                    break;
             }
 
             if (n == 0 || n > 1)
