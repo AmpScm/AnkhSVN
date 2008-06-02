@@ -28,11 +28,7 @@ namespace Ankh.UI.SvnLog
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
-        }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
             if (!_initialized && Context != null)
             {
                 logMessageEditor.Init(Context, true);
@@ -40,6 +36,12 @@ namespace Ankh.UI.SvnLog
                 AddWindowPane(logMessageEditor.WindowPane);
                 _initialized = true;
             }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            
   
             LogMessage = _originalText;
         }

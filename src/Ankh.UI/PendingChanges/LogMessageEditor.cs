@@ -171,16 +171,6 @@ namespace Ankh.UI.PendingChanges
                     return;
                 }
 
-                if (!CodeEditorNativeWindow.NativeMethods.IsChild(hwndTop, Handle))
-                {
-                    Control parent = Parent;
-
-                    while (parent.Parent != null)
-                        parent = parent.Parent;
-
-                    hwndTop = parent.Handle;
-                }
-
                 // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
                 CodeEditorNativeWindow.NativeMethods.PostMessage(hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
                 _fixUI = false;
