@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using WizardFramework;
+using Ankh.VS;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -71,6 +72,22 @@ namespace Ankh.UI.MergeWizard
                 return pool.GetClient();
             else
                 return new SvnClient();
+        }
+
+        /// <summary>
+        /// Returns the working copy root for the opened solution.
+        /// </summary>
+        public string WorkingCopyRootPath
+        {
+            get
+            {
+                IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
+
+                if (settings == null)
+                    return null;
+
+                return settings.ProjectRoot;
+            }
         }
 
         /// <summary>

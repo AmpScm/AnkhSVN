@@ -267,6 +267,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Working copy is not ready for merge..
+        /// </summary>
+        internal static string NotReadyForMerge {
+            get {
+                return ResourceManager.GetString("NotReadyForMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this method to catch-up a feature branch with the changes in trunk or another branch.  You can merge a specific set of revisions or all eligible revisions..
         /// </summary>
         internal static string RangeOfRevisionsDescription {
@@ -279,6 +288,15 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("RangeOfRevisionsImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working copy is ready for merge..
+        /// </summary>
+        internal static string ReadyForMerge {
+            get {
+                return ResourceManager.GetString("ReadyForMerge", resourceCulture);
             }
         }
         
