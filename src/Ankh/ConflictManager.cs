@@ -18,24 +18,6 @@ namespace Ankh
         public ConflictManager(IAnkhServiceProvider context)
             : base(context)
         {
-            // Get the task event list and add an event for this task list item to it.
-            // This needs to be kept around so that there is a reference to it and
-            // won't get garbage collected because it's in unmanaged code
-            this.taskListEvents = DTE.Events.get_TaskListEvents(
-                ConflictTaskItemCategory);
-
-            // add an event for this task list item to the taskEventList.
-            this.taskListEvents.TaskNavigated += new
-                _dispTaskListEvents_TaskNavigatedEventHandler(TaskNavigated);
-        }
-
-        _DTE _dte;
-        /// <summary>
-        /// Gets the one and only DTE instance
-        /// </summary>
-        _DTE DTE
-        {
-            get { return _dte ?? (_dte = GetService<_DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE))); }
         }
 
         /// <summary>
@@ -44,23 +26,7 @@ namespace Ankh
         /// <param name="path">Path to the file containing the conflict.</param>
         public void AddConflictTask(string path)
         {
-            // Get the line number for adding to the task so that when the user clicks on 
-            // the task it opens the file and goes to the line the conflict text starts on
-            ArrayList conflictLines = this.GetConflictLines(path);
-
-
-            Window win = DTE.Windows.Item(Constants.vsWindowKindTaskList);
-            TaskList taskList = (TaskList)win.Object;
-
-            // add a task item for every conflict in the file
-            foreach (int lineNumber in conflictLines)
-            {
-                if (!TaskExists(path, lineNumber, taskList))
-                    taskList.TaskItems.Add(ConflictTaskItemCategory, " ",
-                        "AnkhSVN: file has a conflict. ",
-                        vsTaskPriority.vsTaskPriorityHigh,
-                        vsTaskIcon.vsTaskIconUser, true, path, lineNumber, true, true);
-            }
+            // TODO: Handle
         }
 
 
@@ -69,13 +35,6 @@ namespace Ankh
         /// </summary>
         public void CreateTaskItems()
         {
-            /*IList conflictItems =  this.context.SolutionExplorer.GetAllResources(new ResourceFilterCallback(ConflictedFilter)); 
-            foreach(SvnItem item in conflictItems)
-            {
-                this.AddTask(item.Path);
-            }
-            if(conflictItems.Count > 0) 
-                this.NavigateTaskList(); */
         }
 
         /// <summary>
@@ -83,23 +42,6 @@ namespace Ankh
         ///          /// </summary>
         public void RemoveAllTaskItems()
         {
-            Window win;
-            try
-            {
-                win = DTE.Windows.Item(Constants.vsWindowKindTaskList);
-            }
-            catch (ArgumentException)
-            {
-                // Swallow (this occurs on VS2005 RTM shutdown)
-                return;
-            }
-
-            TaskList taskList = (TaskList)win.Object;
-            foreach (TaskItem item in taskList.TaskItems)
-            {
-                if (item != null && item.Category == ConflictTaskItemCategory)
-                    item.Delete();
-            }
         }
 
         /// <summary>   
@@ -109,17 +51,6 @@ namespace Ankh
         /// <returns>void</returns>   
         public void RemoveTaskItem(string path)
         {
-            Window win = DTE.Windows.Item(Constants.vsWindowKindTaskList);
-            TaskList taskList = (TaskList)win.Object;
-
-            foreach (TaskItem item in taskList.TaskItems)
-            {
-                if (item.Category == ConflictTaskItemCategory &&
-                    item.FileName == path)
-                {
-                    item.Delete();
-                }
-            }
         }
 
 
@@ -129,9 +60,6 @@ namespace Ankh
         ///       
         public void NavigateTaskList()
         {
-            //object o = null;
-            Window win = DTE.Windows.Item(Constants.vsWindowKindTaskList);
-            win.Activate();
         }
 
         /// <summary>
@@ -150,14 +78,6 @@ namespace Ankh
         ///       
         private void TaskNavigated(TaskItem taskItem, ref bool navigateHandled)
         {
-            if (taskItem.Category == ConflictTaskItemCategory)
-            {
-                Window win = DTE.ItemOperations.OpenFile(taskItem.FileName, Constants.vsViewKindTextView);
-                TextSelection sel = (TextSelection)DTE.ActiveDocument.Selection;
-                sel.GotoLine(taskItem.Line, true);
-
-                navigateHandled = true;
-            }
         }
 
         /// <summary>
@@ -167,34 +87,7 @@ namespace Ankh
         /// <returns>int: Line number conflict </returns>
         private ArrayList GetConflictLines(string path)
         {
-            ArrayList conflictLines = new ArrayList();
-            int lineNumber = 0;
-            int index = NotFound;
-            bool nothingFound = true;
-            string line;
-            // Create an instance of StreamReader to read from a file.
-            // The using statement also closes the StreamReader.
-            using (StreamReader sr = new StreamReader(path))
-            {
-
-
-                // Read and display lines from the file until the end of 
-                // the file is reached and not match
-                while ((line = sr.ReadLine()) != null)
-                {
-                    lineNumber++;
-                    index = line.IndexOf(SvnConflictString);
-                    if (index != NotFound)
-                    {
-                        nothingFound = false;
-                        conflictLines.Add(lineNumber);
-                    }
-                }
-            }
-            if (nothingFound)
-                conflictLines.Add(0);
-
-            return conflictLines;
+            return new ArrayList();
         }
         /// <summary>
         ///  Look through the task items and return true is a conflict task item already exists for a file
@@ -204,23 +97,12 @@ namespace Ankh
         private bool TaskExists(String path, int lineNumber, TaskList taskList)
         {
             bool exists = false;
-            foreach (TaskItem item in taskList.TaskItems)
-            {
-                if (item.Category == ConflictTaskItemCategory &&
-                    item.FileName == path &&
-                    item.Line == lineNumber)
-                {
-                    exists = true;
-                    break;
-                }
-            }
             return exists;
         }
 
         const string ConflictTaskItemCategory = "Conflict";
         const string SvnConflictString = "<<<<<<< .mine";
         const int NotFound = -1;
-        TaskListEvents taskListEvents;
 
         #region IAnkhConflictManager Members
 

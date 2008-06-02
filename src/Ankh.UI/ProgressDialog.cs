@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.Generic;
 using Ankh.VS;
+using System.IO;
 
 namespace Ankh.UI
 {
@@ -180,7 +181,7 @@ namespace Ankh.UI
                     if (!string.IsNullOrEmpty(sr))
                     {
                         if (path.StartsWith(sr, StringComparison.OrdinalIgnoreCase))
-                            path = path.Substring(sr.Length);
+                            path = path.Substring(sr.Length).Replace(Path.DirectorySeparatorChar, '/');
                     }
 
                     item.SubItems.Add(path);
