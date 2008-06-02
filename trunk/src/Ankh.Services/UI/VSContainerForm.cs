@@ -18,7 +18,17 @@ namespace Ankh.UI
     public interface IAnkhVSContainerForm
     {
         //IVsToolWindowToolbarHost ToolBarHost { get; }
+        VSContainerMode ContainerMode { get; }
     }
+
+    [Flags]
+    public enum VSContainerMode
+    {
+        Default = 0,
+
+        UseTextEditorScope = 1,
+    }
+
 
     /// <summary>
     /// .Net form which when shown modal let's the VS command routing continue
@@ -29,6 +39,7 @@ namespace Ankh.UI
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
         AnkhToolBar _toolbarId;
+        VSContainerMode _mode;
         
         [Browsable(false)]
         public IAnkhServiceProvider Context
@@ -43,6 +54,29 @@ namespace Ankh.UI
                     OnContextChanged(EventArgs.Empty);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets or sets the mode.
+        /// </summary>
+        /// <value>The mode.</value>
+        protected VSContainerMode ContainerMode
+        {
+            get { return _mode; }
+            set
+            {
+                if (_mode != value)
+                {
+                    _mode = value;
+
+                    // Hook changes?
+                }
+            }
+        }
+
+        VSContainerMode IAnkhVSContainerForm.ContainerMode
+        {
+            get { return _mode; }
         }
 
         protected virtual void OnContextChanged(EventArgs e)

@@ -55,7 +55,7 @@ namespace Ankh.UI.PendingChanges
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
             codeEditorNativeWindow.Init(allowModal);
-            codeEditorNativeWindow.Area = this.ClientRectangle;
+            codeEditorNativeWindow.Size = Size;
 
             _fixUI = true; // Fix the font issues in the next size changed            
         }
@@ -147,7 +147,7 @@ namespace Ankh.UI.PendingChanges
         {
             if (codeEditorNativeWindow != null)
             {
-                codeEditorNativeWindow.Area = this.ClientRectangle;
+                codeEditorNativeWindow.Size = ClientRectangle.Size;
 
                 FixUI();
             }
@@ -169,6 +169,16 @@ namespace Ankh.UI.PendingChanges
                 {
                     // For some reason VS gives an invalid window (the desktop) while loading
                     return;
+                }
+
+                if (!CodeEditorNativeWindow.NativeMethods.IsChild(hwndTop, Handle))
+                {
+                    Control parent = Parent;
+
+                    while (parent.Parent != null)
+                        parent = parent.Parent;
+
+                    hwndTop = parent.Handle;
                 }
 
                 // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
@@ -391,7 +401,7 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Determines editor's window placement
         /// </summary>
-        public Rectangle Area
+        public Size Size
         {
             set
             {
@@ -495,10 +505,9 @@ namespace Ankh.UI.PendingChanges
             if (sp != null)
             {
                 ServiceProvider site = new ServiceProvider(sp);
-                object window = site.GetService(typeof(IVsWindowFrame).GUID);
-                if (window is IVsWindowFrame)
+                IVsWindowFrame frame = site.GetService(typeof(IVsWindowFrame).GUID) as IVsWindowFrame;
+                if (frame != null)
                 {
-                    IVsWindowFrame frame = (IVsWindowFrame)window;
                     Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
                     Marshal.ThrowExceptionForHR(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
                 }
@@ -519,10 +528,7 @@ namespace Ankh.UI.PendingChanges
 
             int hr = localRegistry.CreateInstance(clsid, null, ref iid, (uint)CLSCTX.CLSCTX_INPROC_SERVER, out unknown);
 
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
+            Marshal.ThrowExceptionForHR(hr);
 
             try
             {
@@ -697,6 +703,9 @@ namespace Ankh.UI.PendingChanges
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern bool IsWindow(IntPtr hWnd);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool IsChild(IntPtr hWndParent, IntPtr hWnd);
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern IntPtr GetDesktopWindow();

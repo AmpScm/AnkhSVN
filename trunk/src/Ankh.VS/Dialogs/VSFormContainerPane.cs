@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Ankh.VS.Dialogs
 {
-    class VSFormContainerPane : WindowPane
+    sealed class VSFormContainerPane : WindowPane
     {
         readonly VSCommandRouting _routing;
         readonly Panel _panel;
