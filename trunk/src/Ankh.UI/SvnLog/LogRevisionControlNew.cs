@@ -14,14 +14,14 @@ using Ankh.Ids;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogRevisionControlNew : UserControl, ICurrentItemSource<SvnLogEventArgs>
+	public partial class LogRevisionControlNew : UserControl, ICurrentItemSource<SvnLogEventArgs>
     {
         ICollection<string> _localTargets;
         Uri _remoteTarget;
         readonly Action<SvnLogArgs> _logAction;
         readonly object _instanceLock = new object();
-        readonly Queue<LogItem> _logItems = new Queue<LogItem>();
-        readonly List<LogItem> _logItemList = new List<LogItem>();
+        readonly Queue<LogListViewItem> _logItems = new Queue<LogListViewItem>();
+        readonly List<LogListViewItem> _logItemList = new List<LogListViewItem>();
         IAnkhServiceProvider _context;
         LogMode _mode;
         readonly EventHandler<SvnLogEventArgs> _logReceiver;
@@ -191,7 +191,7 @@ namespace Ankh.UI.SvnLog
             lock (_logItems)
             {
                 e.Detach();
-                _logItems.Enqueue(new LogItem(_context, e));
+                _logItems.Enqueue(new LogListViewItem(_context, e));
             }
             _syncContext.Post(_sopCallback, null);
         }
@@ -230,7 +230,7 @@ namespace Ankh.UI.SvnLog
         {
             if (e.ItemIndex < _logItemList.Count)
             {
-                LogItem li = _logItemList[e.ItemIndex];
+                LogListViewItem li = _logItemList[e.ItemIndex];
                 e.Item = li;
                 if (e.ItemIndex == _logItemList.Count - 1) // 10 items remaining, start new request
                 {
@@ -239,7 +239,7 @@ namespace Ankh.UI.SvnLog
                         if (!_running && _logItemList.Count == fetchCount)
                         {
                             SvnLogArgs args = new SvnLogArgs();
-                            args.Start = li.RawData.Revision - 1;
+                            args.Start = li.Revision - 1;
                             args.End = EndRevision;
                             args.Limit = 20;
                             args.StrictNodeHistory = StrictNodeHistory;
@@ -266,15 +266,15 @@ namespace Ankh.UI.SvnLog
 
             SvnLogArgs args = new SvnLogArgs();
             if (_logItemList.Count > 0)
-                args.Start = _logItemList[_logItemList.Count - 1].RawData.Revision - 1;
+                args.Start = _logItemList[_logItemList.Count - 1].Revision - 1;
             else
             {
                 lock (_logItems)
                 {
                     if (_logItems.Count > 0)
                     {
-                        LogItem[] items = _logItems.ToArray();
-                        args.Start = items[items.Length - 1].RawData.Revision - 1;
+                        LogListViewItem[] items = _logItems.ToArray();
+                        args.Start = items[items.Length - 1].Revision - 1;
                     }
                 }
             }
@@ -284,26 +284,26 @@ namespace Ankh.UI.SvnLog
             //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
-        }
+		}
 
-        #region ICurrentItemSource<SvnLogEventArgs> Members
+		#region ICurrentItemSource<SvnLogEventArgs> Members
 
-        public event SelectionChangedEventHandler<SvnLogEventArgs> SelectionChanged;
+		public event SelectionChangedEventHandler<SvnLogEventArgs> SelectionChanged;
 
-        public event FocusChangedEventHandler<SvnLogEventArgs> FocusChanged;
+		public event FocusChangedEventHandler<SvnLogEventArgs> FocusChanged;
 
-        public SvnLogEventArgs FocusedItem
+		public SvnLogEventArgs FocusedItem
         {
-            get { return logRevisionControl1.FocusedItem == null ? null : ((LogItem)logRevisionControl1.FocusedItem).RawData; }
+            get { return logRevisionControl1.FocusedItem == null ? null : ((LogListViewItem)logRevisionControl1.FocusedItem).RawData; }
         }
 
-        public IList<SvnLogEventArgs> SelectedItems
+		public IList<SvnLogEventArgs> SelectedItems
         {
             get 
             {
-                List<SvnLogEventArgs> rslt = new List<SvnLogEventArgs>();
+				List<SvnLogEventArgs> rslt = new List<SvnLogEventArgs>();
                 foreach(int i in logRevisionControl1.SelectedIndices)
-                    rslt.Add(((LogItem)logRevisionControl1.Items[i]).RawData);
+					rslt.Add(((LogListViewItem)logRevisionControl1.Items[i]).RawData);
                 return rslt;
             }
         }

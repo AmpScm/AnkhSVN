@@ -24,10 +24,10 @@ namespace Ankh.UI.SvnLog.Commands
             long min = long.MaxValue;
             long max = long.MinValue;
 
-            foreach (LogItem item in e.Selection.GetSelection<LogItem>())
+			foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
-                min = Math.Min(min, item.RawData.Revision);
-                max = Math.Max(max, item.RawData.Revision);
+                min = Math.Min(min, item.Revision);
+                max = Math.Max(max, item.Revision);
             }
 
             SvnRevisionRange range = new SvnRevisionRange(min-1, max);
