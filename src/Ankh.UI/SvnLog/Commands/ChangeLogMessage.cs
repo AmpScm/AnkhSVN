@@ -9,6 +9,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using Ankh.VS;
 using System.ComponentModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -18,7 +19,7 @@ namespace Ankh.UI.SvnLog.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             int count = 0;
-            foreach (LogItem i in e.Selection.GetSelection<LogItem>())
+			foreach (ISvnLogItem i in e.Selection.GetSelection<ISvnLogItem>())
             {
                 count++;
 
@@ -33,20 +34,23 @@ namespace Ankh.UI.SvnLog.Commands
         {
             IUIService uiService = e.GetService<IUIService>();
             IAnkhSolutionSettings slnSettings = e.GetService<IAnkhSolutionSettings>();
-            List<LogItem> logItems = new List<LogItem>(e.Selection.GetSelection<LogItem>());
+			List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
             if (logItems.Count != 1)
                 return;
 
             using (EditLogMessageDialog dialog = new EditLogMessageDialog())
             {
                 dialog.Context = e.Context;
-                dialog.LogMessage = logItems[0].RawData.LogMessage;
+                dialog.LogMessage = logItems[0].LogMessage;
 
                 if (dialog.ShowDialog(e.Context, uiService.GetDialogOwnerWindow()) == DialogResult.OK)
                 {
+					if (dialog.LogMessage == logItems[0].LogMessage)
+						return; // No changes
+
                     using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
                     {
-                        client.SetRevisionProperty(new SvnUriTarget(slnSettings.ProjectRootUri, logItems[0].RawData.Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
+                        client.SetRevisionProperty(new SvnUriTarget(slnSettings.ProjectRootUri, logItems[0].Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
                     }
                 }
             }
