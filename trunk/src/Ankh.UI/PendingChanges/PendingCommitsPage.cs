@@ -28,7 +28,7 @@ namespace Ankh.UI.PendingChanges
 
             if (!_createdEditor)
             {
-                logMessageEditor.Init(UISite);
+                logMessageEditor.Init(UISite, false);
                 UISite.CommandTarget = logMessageEditor.CommandTarget;
                 _createdEditor = true;
             }
