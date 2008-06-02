@@ -551,7 +551,7 @@ Commit or revert any local changes before merging.</value>
     <value>4</value>
   </data>
   <data name="dividerLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 140</value>
+    <value>0, 194</value>
   </data>
   <data name="dividerLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -576,6 +576,47 @@ Commit or revert any local changes before merging.</value>
   </data>
   <data name="completeWorkingCopyPanel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAbZJREFUOE+lkmsv
+        QnEcx3kk5724lwhz21iuSxE5nMg1midUp9I9hrkcD839OltorsNsHirJeA3mTUhf/86mjTKas52H38vv
+        8/+mAkj51xc1+M+ftFi52cA1rdTYPkOTMmjZqOd0JxoMHjGQcuUsf/5f6zev13HDx92Yf3LCc2eCeleJ
+        UneB+U8GirVaTutTY/bRgZlHG7r2WlHmKYTEKhTEDLTXTGX/Bd37vZF8tZaLVp4O2TAVsvLJJU5xuHA8
+        TxA7QXvFFPed06/srQ6Mt3nk04TA4gYOOzH1MI7JBwuYnRYUO/LDBZZcXswbDF52VvWdtb9M+FnMhuxQ
+        7crCBNaIbFk6039AYyJogeeeRce2AkV2UVhszomJeYPeU1W6xtcG/c0QFp7d8PhN0B6roTvVwOU3wnlv
+        BL0lh8QmfM83fRXHTqD35RRJhu5Mw985GTTDEdDD4ddDtdkUhRURsdlfkuN2QGBRsiUperztcAYMsN6N
+        om1dBgIrIjJmJRTH7UC6WEFVz5WRygoo1xpBYEWEhswfxQmHRN6XKnGJQWC95ekz034bWsIhEVhU7ljG
+        r+KkpvxTkw+TOHxqGWjxLQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 5</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="completeWorkingCopyPictureBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;completeWorkingCopyPictureBox.Name" xml:space="preserve">
+    <value>completeWorkingCopyPictureBox</value>
+  </data>
+  <data name="&gt;&gt;completeWorkingCopyPictureBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;completeWorkingCopyPictureBox.Parent" xml:space="preserve">
+    <value>completeWorkingCopyPanel</value>
+  </data>
+  <data name="&gt;&gt;completeWorkingCopyPictureBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="completeWorkingCopyDescriptionLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -608,7 +649,7 @@ Commit or revert any local changes before merging.</value>
     <value>completeWorkingCopyPanel</value>
   </data>
   <data name="&gt;&gt;completeWorkingCopyDescriptionLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="completeWorkingCopyLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -650,10 +691,10 @@ Commit or revert any local changes before merging.</value>
     <value>completeWorkingCopyPanel</value>
   </data>
   <data name="&gt;&gt;completeWorkingCopyLabel.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="completeWorkingCopyPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 163</value>
+    <value>0, 139</value>
   </data>
   <data name="completeWorkingCopyPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -782,7 +823,7 @@ Commit or revert any local changes before merging.</value>
     <value>True</value>
   </data>
   <data name="notCheckedLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 145</value>
+    <value>5, 200</value>
   </data>
   <data name="notCheckedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>

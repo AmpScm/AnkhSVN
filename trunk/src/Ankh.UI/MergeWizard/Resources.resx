@@ -190,11 +190,17 @@
   <data name="NoRevisionsToUnblock" xml:space="preserve">
     <value>There are no revisions to unblock from the selected path.</value>
   </data>
+  <data name="NotReadyForMerge" xml:space="preserve">
+    <value>Working copy is not ready for merge.</value>
+  </data>
   <data name="RangeOfRevisionsDescription" xml:space="preserve">
     <value>Use this method to catch-up a feature branch with the changes in trunk or another branch.  You can merge a specific set of revisions or all eligible revisions.</value>
   </data>
   <data name="RangeOfRevisionsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>images\RangeOfRevisions.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ReadyForMerge" xml:space="preserve">
+    <value>Working copy is ready for merge.</value>
   </data>
   <data name="ReintegrateABranchDescription" xml:space="preserve">
     <value>Use this method to merge the changes in a feature branch back to trunk or the location the branch was created from.  To use this method the working copy must not have any local modifications.  It must be at a single revision.  It must be a complete working copy and not have any switched children.  Finally, the revision of the working copy must be greater than or equal to the last revision the branch was synchronized to.</value>

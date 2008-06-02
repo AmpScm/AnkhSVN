@@ -49,6 +49,7 @@
             this.validRevisionDescriptionLabel = new System.Windows.Forms.Label();
             this.validRevisionLabel = new System.Windows.Forms.Label();
             this.notCheckedLabel = new System.Windows.Forms.Label();
+            this.completeWorkingCopyPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.noUncommitedModificationsPictureBox)).BeginInit();
             this.noUncommitedModificationsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.singleRevisionPictureBox)).BeginInit();
@@ -57,6 +58,7 @@
             this.noSwitchedChildrenPanel.SuspendLayout();
             this.completeWorkingCopyPanel.SuspendLayout();
             this.validRevisionPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.completeWorkingCopyPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // noUncommitedModificationsLabel
@@ -140,6 +142,7 @@
             // completeWorkingCopyPanel
             // 
             resources.ApplyResources(this.completeWorkingCopyPanel, "completeWorkingCopyPanel");
+            this.completeWorkingCopyPanel.Controls.Add(this.completeWorkingCopyPictureBox);
             this.completeWorkingCopyPanel.Controls.Add(this.completeWorkingCopyDescriptionLabel);
             this.completeWorkingCopyPanel.Controls.Add(this.completeWorkingCopyLabel);
             this.completeWorkingCopyPanel.Name = "completeWorkingCopyPanel";
@@ -180,6 +183,12 @@
             resources.ApplyResources(this.notCheckedLabel, "notCheckedLabel");
             this.notCheckedLabel.Name = "notCheckedLabel";
             // 
+            // completeWorkingCopyPictureBox
+            // 
+            resources.ApplyResources(this.completeWorkingCopyPictureBox, "completeWorkingCopyPictureBox");
+            this.completeWorkingCopyPictureBox.Name = "completeWorkingCopyPictureBox";
+            this.completeWorkingCopyPictureBox.TabStop = false;
+            // 
             // MergeBestPracticesPageControl
             // 
             resources.ApplyResources(this, "$this");
@@ -205,6 +214,7 @@
             this.completeWorkingCopyPanel.PerformLayout();
             this.validRevisionPanel.ResumeLayout(false);
             this.validRevisionPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.completeWorkingCopyPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,6 +242,7 @@
         private System.Windows.Forms.Label validRevisionDescriptionLabel;
         private System.Windows.Forms.Label validRevisionLabel;
         private System.Windows.Forms.Label notCheckedLabel;
+        private System.Windows.Forms.PictureBox completeWorkingCopyPictureBox;
 
 
 

@@ -76,7 +76,7 @@ namespace Ankh.UI.MergeWizard
             // Handle the best practices page
             if (page is MergeBestPracticesPage)
                 return null; // For now, if you see the best practices page,
-                             // you have to fix the issue and then reattemp to merge.
+                             // you have to fix the issue and then reattempt to merge.
 
             return null;
         }

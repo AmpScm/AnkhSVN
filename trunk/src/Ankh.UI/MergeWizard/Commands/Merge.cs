@@ -29,16 +29,12 @@ namespace Ankh.UI.MergeWizard.Commands
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 n++;
-
-                if (n > 1)
-                {
-                    e.Enabled = false;
-                    return;
-                }
             }
 
-            if (n == 0)
+            if (n == 0 || n > 1)
                 e.Enabled = false;
+            else
+                e.Enabled = true;
         }
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
@@ -52,11 +48,8 @@ namespace Ankh.UI.MergeWizard.Commands
                 svnItems.Add(item);
             }
 
-            using (MergeWizardDialog dialog = new MergeWizardDialog())
+            using (MergeWizardDialog dialog = new MergeWizardDialog(new MergeUtils(e.Context), svnItems[0]))
             {
-                dialog.GetWizard().MergeUtils = new MergeUtils(e.Context);
-                dialog.GetWizard().MergeTarget = svnItems[0];                
-
                 DialogResult result;
 
                 IUIService uiService = e.GetService<IUIService>();
