@@ -171,8 +171,6 @@ namespace Ankh.VS.Dialogs
                 }
 
                 _pane = new VSFormContainerPane(_form.Context, this, _panel);
-                //                _form.EnabledChanged += new EventHandler(Form_EnabledChanged);
-                //                _form.VisibleChanged += new EventHandler(Form_EnabledChanged);
 
                 IVsWindowPane p = _pane;
 
@@ -180,7 +178,7 @@ namespace Ankh.VS.Dialogs
                 Rectangle r = new Rectangle(_form.Location, _form.Size);
                 _form.Location = new Point(0, 0);
 
-                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, r.X, r.Y, r.Width, r.Height, out hwnd)))
+                if (!ErrorHandler.Succeeded(p.CreatePaneWindow(_form.Handle, 0, 0, r.Width, r.Height, out hwnd)))
                 {
                     _pane.Dispose();
                     _pane = null;

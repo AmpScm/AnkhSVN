@@ -32,7 +32,6 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            IUIService uiService = e.GetService<IUIService>();
             IAnkhSolutionSettings slnSettings = e.GetService<IAnkhSolutionSettings>();
 			List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
             if (logItems.Count != 1)
@@ -43,7 +42,7 @@ namespace Ankh.UI.SvnLog.Commands
                 dialog.Context = e.Context;
                 dialog.LogMessage = logItems[0].LogMessage;
 
-                if (dialog.ShowDialog(e.Context, uiService.GetDialogOwnerWindow()) == DialogResult.OK)
+                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                 {
 					if (dialog.LogMessage == logItems[0].LogMessage)
 						return; // No changes
