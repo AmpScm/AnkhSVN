@@ -94,11 +94,12 @@ namespace Ankh.VS.Dialogs
         /// </returns>
         public bool PreFilterMessage(ref Message m)
         {
+            int hr;
             IVsToolWindowToolbarHost host = _tbHost;
             if (host != null)
             {
                 int lResult;
-                int hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
+                hr = host.ProcessMouseActivationModal(m.HWnd, (uint)m.Msg, (uint)m.WParam, (int)m.LParam, out lResult);
                 // Check for errors.
                 if (ErrorHandler.Succeeded(hr))
                 {
@@ -125,9 +126,14 @@ namespace Ankh.VS.Dialogs
                 int cmdTranslated;
                 int keyComboStarts;
 
-                int hrr = _fKeys.TranslateAcceleratorEx(messages,
-                    (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_Default 
-                    | (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState,  //By default this function cannot be called when the shell is in a modal state, since command routing is inherently dangerous. However if you must access this in a modal state, specify this flag, but keep in mind that many commands will cause unpredictable behavior if fired. 
+
+                uint dwFlags = (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState;
+
+                if ((_vsForm.ContainerMode & VSContainerMode.UseTextEditorScope) == VSContainerMode.UseTextEditorScope)
+                    dwFlags |= (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope;
+
+                hr = _fKeys.TranslateAcceleratorEx(messages,
+                    dwFlags,
                     0,
                     null,
                     out cmdGuid,
@@ -135,7 +141,7 @@ namespace Ankh.VS.Dialogs
                     out cmdTranslated,
                     out keyComboStarts);
 
-                if (hrr == VSConstants.S_OK)
+                if (hr == VSConstants.S_OK)
                 {
                     if (cmdTranslated != 0)
                         return true;
