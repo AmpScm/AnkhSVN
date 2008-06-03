@@ -13,19 +13,13 @@ using System.Collections.Generic;
 
 namespace Ankh.UI
 {
-    public enum CommitDialogResult
-    {
-        Cancel,
-        Commit
-    }
-
     /// <summary>
     /// Dialog that lets a user enter a log message for a commit.
     /// </summary>
-    public partial class CommitDialog : Form
+    public partial class CommitDialog : VSContainerForm
     {
-        public event EventHandler Proceed;
-        IAnkhServiceProvider _context;
+        LogMessageTemplate _logMessageTemplate;
+        bool _loaded = false;
 
         public CommitDialog()
         {
@@ -36,38 +30,25 @@ namespace Ankh.UI
 
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
-            // Support Ctrl-A to select everything.
-            this.logMessageBox.KeyDown += new KeyEventHandler(logMessageBox_KeyDown);
-            this.logMessageBox.KeyPress += new KeyPressEventHandler(logMessageBox_KeyPress);
-
-            // HACK: since there is no KeyPreview on a UserControl
-            this.HookUpKeyEvent(this);
+            ContainerMode = VSContainerMode.UseTextEditorScope;
         }
-
-        /// <summary>
-        /// Gets or sets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set
-            {
-                if (_context != value)
-                {
-                    _context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Raises the ContextChanged event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnContextChanged(EventArgs e)
+        protected override void OnContextChanged(EventArgs e)
         {
+            base.OnContextChanged(e);
             commitItemsTree.Context = Context;
+            logMessageBox.Init(Context, true);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            AddCommandTarget(logMessageBox.CommandTarget);
+            AddWindowPane(logMessageBox.WindowPane);
         }
 
         /// <summary>
@@ -106,10 +87,10 @@ namespace Ankh.UI
         public LogMessageTemplate LogMessageTemplate
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this.logMessageTemplate; }
+            get { return this._logMessageTemplate; }
 
             [System.Diagnostics.DebuggerStepThrough]
-            set { this.logMessageTemplate = value; }
+            set { this._logMessageTemplate = value; }
         }
 
         public ICollection<SvnItem> Items
@@ -143,11 +124,6 @@ namespace Ankh.UI
             {
                 this.commitItemsTree.UrlPaths = value;
             }
-        }
-
-        public CommitDialogResult CommitDialogResult
-        {
-            get { return this.dialogResult; }
         }
 
         /// <summary>
@@ -199,30 +175,15 @@ namespace Ankh.UI
 
             }
 
-            this.logMessageBox.Focus();
-            this.logMessageBox.SelectionStart = this.logMessageBox.SelectionStart + this.logMessageBox.SelectionLength;
-            this.logMessageBox.SelectionLength = 0;
+            this.logMessageBox.Select();
 
-            this.dialogResult = CommitDialogResult.Cancel;
-
-            this.loaded = true;
-        }
-
-        /// <summary>
-        /// Reset the log message
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void Reset()
-        {
-            this.logMessageBox.Text = "";
-            this.dialogResult = CommitDialogResult.Cancel;
+            _loaded = true;
         }
 
         private void ItemChecked(object sender, TreeViewEventArgs e)
         {
             // don't bother if we haven't been loaded
-            if (!this.loaded)
+            if (!this._loaded)
                 return;
 
             if (e.Node.Checked)
@@ -232,81 +193,9 @@ namespace Ankh.UI
             }
             else
             {
-                this.logMessageBox.Text = this.logMessageTemplate.RemoveItem(
+                this.logMessageBox.Text = this._logMessageTemplate.RemoveItem(
                     this.logMessageBox.Text, e.Node.Tag.ToString());
             }
-        }
-
-        private void RaiseProceed(object sender, System.EventArgs e)
-        {
-            if (sender == this.cancelButton)
-                this.dialogResult = CommitDialogResult.Cancel;
-            else if (sender == this.commitButton)
-                this.dialogResult = CommitDialogResult.Commit;
-
-            if (this.Proceed != null)
-                this.Proceed(this, EventArgs.Empty);
-
-            this.loaded = false;
-        }
-
-        void logMessageBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // suppress Ctrl-A, which is ASCII 1 for some reason...
-            if (e.KeyChar == (char)1)
-            {
-                e.Handled = true;
-            }
-        }
-
-        void logMessageBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.A)
-            {
-                this.logMessageBox.SelectAll();
-                e.Handled = true;
-            }
-        }
-
-        /// <summary>
-        /// Handle Ctrl-Enter to commit and Esc to cancel.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void CommitDialog_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (this.commitButton.Enabled && e.Control && e.KeyCode == Keys.Enter)
-            {
-                this.RaiseProceed(this.commitButton, EventArgs.Empty);
-                e.Handled = true;
-            }
-            else if (this.cancelButton.Enabled && e.KeyCode == Keys.Escape)
-            {
-                this.RaiseProceed(this.cancelButton, EventArgs.Empty);
-                e.Handled = true;
-            }
-        }
-
-        /// <summary>
-        /// This method is necessary to ensure we get this event from all controls, since there
-        /// is no KeyPreview on a user control.
-        /// </summary>
-        /// <param name="control"></param>
-        private void HookUpKeyEvent(Control control)
-        {
-            control.KeyDown += new KeyEventHandler(CommitDialog_KeyDown);
-            foreach (Control child in control.Controls)
-            {
-                this.HookUpKeyEvent(child);
-            }
-        }
-        private LogMessageTemplate logMessageTemplate;
-
-        private bool loaded = false;
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

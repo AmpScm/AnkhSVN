@@ -24,6 +24,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using System.Security.Permissions;
 
 
 
@@ -37,6 +38,7 @@ namespace Ankh.UI.PendingChanges
     {
         IAnkhServiceProvider _context;
         private CodeEditorNativeWindow codeEditorNativeWindow;
+        BorderStyle _borderStyle;
         bool _fixUI;
 
         #region Methods
@@ -64,6 +66,50 @@ namespace Ankh.UI.PendingChanges
         public IOleCommandTarget CommandTarget
         {
             get { return codeEditorNativeWindow; }
+        }
+
+        protected override CreateParams CreateParams
+        {
+            [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+            get
+            {
+                CreateParams createParams = base.CreateParams;
+                createParams.ExStyle |= 65536;
+                createParams.ExStyle &= -513;
+                createParams.Style &= -8388609;
+                switch (_borderStyle)
+                {
+                    case BorderStyle.FixedSingle:
+                        createParams.Style |= 8388608;
+                        return createParams;
+
+                    case BorderStyle.Fixed3D:
+                        createParams.ExStyle |= 512;
+                        return createParams;
+                }
+                return createParams;
+            }
+        }
+
+        [Category("Appearance"), DefaultValue(BorderStyle.None)]
+        public BorderStyle BorderStyle
+        {
+            get
+            {
+                return _borderStyle;
+            }
+            set
+            {
+                if (_borderStyle != value)
+                {
+                    if (!Enum.IsDefined(typeof(BorderStyle), _borderStyle))
+                    {
+                        throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
+                    }
+                    _borderStyle = value;
+                    base.UpdateStyles();
+                }
+            }
         }
 
         /// <summary>
@@ -106,6 +152,11 @@ namespace Ankh.UI.PendingChanges
                 FixUI();
 
             // Since we process each pressed keystroke, the return value is always true.
+            return true;
+        }
+
+        protected override bool IsInputChar(char charCode)
+        {
             return true;
         }
 
@@ -152,7 +203,7 @@ namespace Ankh.UI.PendingChanges
                 FixUI();
             }
         }
-  
+
         void FixUI()
         {
             if (!_fixUI)
@@ -215,13 +266,6 @@ namespace Ankh.UI.PendingChanges
         {
             codeEditorNativeWindow.PasteText(text);
         }
-
-        public override bool PreProcessMessage(ref Message msg)
-        {
-            return base.PreProcessMessage(ref msg);
-        }
-
-
     }
 
     /// <summary>
@@ -436,7 +480,7 @@ namespace Ankh.UI.PendingChanges
             initView[0].fDragDropMove = 1;
             initView[0].fVisibleWhitespace = 0;
 
-            uint initViewFlags = 
+            uint initViewFlags =
                 (uint)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
                 (uint)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
                 (uint)TextViewInitFlags.VIF_VSCROLL |

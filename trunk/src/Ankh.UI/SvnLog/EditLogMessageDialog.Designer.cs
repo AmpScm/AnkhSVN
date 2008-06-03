@@ -60,6 +60,7 @@
             this.logMessageEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessageEditor.Location = new System.Drawing.Point(12, 12);
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(472, 240);
