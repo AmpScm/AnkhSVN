@@ -40,7 +40,7 @@ namespace Ankh.WorkingCopyExplorer
         /// The repository explorer controller.
         /// </summary>
         //[Obsolete("Use .SelectionContext wherever possible")]
-        RepositoryExplorer.Controller RepositoryExplorerService { get; }
+        RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService { get; }
 
         /// <summary>
         /// Set the selection for the repository explorer.

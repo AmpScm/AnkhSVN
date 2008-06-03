@@ -158,7 +158,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         int nRunning;
 
-        private void BrowseItem(Uri uri)
+        internal void BrowseItem(Uri uri)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
@@ -169,6 +169,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             DoSomething d = delegate()
             {
+                bool ok = false;
                 try
                 {
                     SvnListArgs la = new SvnListArgs();
@@ -182,8 +183,9 @@ namespace Ankh.UI.RepositoryExplorer
                         client.GetList(uri, la, out items);
                     }
 
-                    if (items != null && items.Count > 0)
-                        Invoke((DoSomething)delegate()
+                    BeginInvoke((DoSomething)delegate()
+                    {
+                        if (items != null && items.Count > 0)
                         {
                             bool first = true;
                             foreach (SvnListEventArgs a in items)
@@ -197,21 +199,48 @@ namespace Ankh.UI.RepositoryExplorer
                                 AddItem(a, first);
                                 first = false;
                             }
-                        });
-                }
-                finally
-                {
-                    BeginInvoke((DoSomething)delegate()
-                    {
+
+                            MaybeExpand(uri);
+                        }
+
                         nRunning--;
 
                         if (nRunning == 0)
                             OnRetrievingChanged(EventArgs.Empty);
                     });
+
+                    ok = true;
+                }
+                finally
+                {
+                    if (!ok)
+                        BeginInvoke((DoSomething)delegate()
+                        {
+                            nRunning--;
+
+                            if (nRunning == 0)
+                                OnRetrievingChanged(EventArgs.Empty);
+                        });
                 }
             };
 
             d.BeginInvoke(null, null);
+        }
+
+        private void MaybeExpand(Uri uri)
+        {
+            RepositoryTreeNode tn;
+            if(_nodeMap.TryGetValue(uri, out tn))
+            {
+                if(tn.ExpandAfterLoad)
+                    tn.LoadExpand();
+
+                if (SelectedNode == tn)
+                {
+                    // TODO: Force folder update
+
+                }
+            }            
         }
 
         /// <summary>
@@ -237,6 +266,15 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
             rtn.EnsureLoaded(true);
+        }
+
+        protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeSelect(e);
+
+            RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
+
+            rtn.EnsureLoaded(false);
         }
 
         private RepositoryTreeNode EnsureRoot(Uri uri)
@@ -288,7 +326,8 @@ namespace Ankh.UI.RepositoryExplorer
             {
                 s.AddItem(item);
 
-                s.Expand();
+                if(s.ExpandAfterLoad)
+                    s.LoadExpand();
             }
         }
 
@@ -337,6 +376,9 @@ namespace Ankh.UI.RepositoryExplorer
                         tn.IconIndex = IconMapper.DirectoryIcon;
 
                     _nodeMap.Add(tn.RawUri, tn);
+
+                    tn.AddDummy();
+
                     SortedAddNode(parent.Nodes, tn);
                 }
             }

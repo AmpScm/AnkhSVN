@@ -49,7 +49,7 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorerService
+        public virtual Ankh.RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService
         {
             get
             {

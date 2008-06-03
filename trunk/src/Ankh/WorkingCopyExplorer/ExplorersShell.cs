@@ -12,7 +12,7 @@ namespace Ankh.WorkingCopyExplorer
     public class ExplorersShell : AnkhService, IExplorersShell
     {
         readonly WorkingCopyExplorer _workingCopyExplorer;
-        readonly RepositoryExplorer.Controller _repositoryController;
+        readonly RepositoryExplorer.RepositoryBrowserController _repositoryController;
 
         RepositoryExplorerControl _reposControl;
         WorkingCopyExplorerControl _wcControl;
@@ -21,7 +21,7 @@ namespace Ankh.WorkingCopyExplorer
             : base(context)
         {
             this._repositoryController =
-                new RepositoryExplorer.Controller(this);
+                new RepositoryExplorer.RepositoryBrowserController(this);
             this._workingCopyExplorer =
                 new WorkingCopyExplorer(this);
         }
@@ -138,7 +138,7 @@ namespace Ankh.WorkingCopyExplorer
         #region IExplorersShell Members
 
 
-        public Ankh.RepositoryExplorer.Controller RepositoryExplorerService
+        public Ankh.RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService
         {
             get { return _repositoryController; }
         }
