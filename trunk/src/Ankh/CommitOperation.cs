@@ -92,7 +92,7 @@ namespace Ankh
                     dialog.LogMessageTemplate = template;
                     dialog.Items = _items;
                     dialog.CommitFilter += delegate { return true; };
-                    if (dialog.ShowDialog(ownerSvc.DialogOwner) != DialogResult.OK)
+                    if (dialog.ShowDialog(_context) != DialogResult.OK)
                     {
                         logMessage = dialog.RawLogMessage;
                         return false;
