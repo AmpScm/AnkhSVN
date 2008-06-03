@@ -14,7 +14,7 @@ namespace Ankh.Extenders
     public class AnkhExtenderProvider : EnvDTE.IExtenderProvider, IDisposable
     {
         public const string ServiceName = AnkhId.ExtenderProviderName;
-        #region CATIDs        
+        #region CATIDs
         public const string CATID_CscFileBrowse = "8d58e6af-ed4e-48b0-8c7b-c74ef0735451";
         public const string CATID_CscFolderBrowse = "914fe278-054a-45db-bf9e-5f22484cc84c";
         public const string CATID_CscProjectBrowse = "4ef9f003-de95-4d60-96b0-212979f2a857";
@@ -42,14 +42,14 @@ namespace Ankh.Extenders
 
             EnvDTE._DTE dte = _context.GetService<EnvDTE._DTE>();
             EnvDTE.ObjectExtenders extenders;
-            if(dte != null && ((extenders = dte.ObjectExtenders) != null))
+            if (dte != null && ((extenders = dte.ObjectExtenders) != null))
             {
                 _cookies = new int[CATIDS.Length];
                 int n = 0;
-                foreach(string catid in CATIDS)
+                foreach (string catid in CATIDS)
                 {
                     string cid = new Guid(catid).ToString("B");
-                    
+
                     _cookies[n++] = extenders.RegisterExtenderProvider(cid, ServiceName, this, ServiceName);
                 }
             }
@@ -62,10 +62,10 @@ namespace Ankh.Extenders
             EnvDTE._DTE dte = _context.GetService<EnvDTE._DTE>();
             EnvDTE.ObjectExtenders extenders;
             if (dte != null && ((extenders = dte.ObjectExtenders) != null))
-            foreach (int cookie in _cookies)
-            {
-                extenders.UnregisterExtenderProvider(cookie);
-            }
+                foreach (int cookie in _cookies)
+                {
+                    extenders.UnregisterExtenderProvider(cookie);
+                }
 
             _cookies = null;
         }
@@ -111,15 +111,15 @@ namespace Ankh.Extenders
                     selected = item;
                     break;
                 }
-            
-                if(selected == null)
+
+                if (selected == null)
                     return null;
 
                 return new SvnItemExtender(selected, _context);
             }
-            
+
             return null;
-        }        
+        }
 
         private readonly static string[] CATIDS = new string[]{
         CATID_CscFileBrowse,
@@ -135,6 +135,6 @@ namespace Ankh.Extenders
         CATID_CcFileBrowse,
         CATID_CcProjectBrowse,
         CATID_GenericProject
-        };                                                      
+        };
     }
 }
