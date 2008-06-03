@@ -18,10 +18,10 @@ namespace Ankh.UI.RepositoryExplorer
             this.components = new System.ComponentModel.Container();
             this.toolbarImageList = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.toolFolders = new System.Windows.Forms.ToolStrip();
-            this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
-            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
+            this.toolFolders = new System.Windows.Forms.ToolStrip();
+            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
             this.fileView = new Ankh.UI.RepositoryExplorer.RepositoryListView();
             this.fileColumn = new System.Windows.Forms.ColumnHeader();
             this.extensionColumn = new System.Windows.Forms.ColumnHeader();
@@ -59,6 +59,21 @@ namespace Ankh.UI.RepositoryExplorer
             this.splitContainer.SplitterDistance = 233;
             this.splitContainer.TabIndex = 0;
             // 
+            // treeView
+            // 
+            this.treeView.Context = null;
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.Location = new System.Drawing.Point(0, 25);
+            this.treeView.Name = "treeView";
+            this.treeView.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
+                        | SharpSvn.SvnDirEntryItems.Time)));
+            this.treeView.ShowRootLines = false;
+            this.treeView.Size = new System.Drawing.Size(233, 400);
+            this.treeView.TabIndex = 1;
+            this.treeView.RetrievingChanged += new System.EventHandler(this.treeView_RetrievingChanged);
+            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            // 
             // toolFolders
             // 
             this.toolFolders.CanOverflow = false;
@@ -75,12 +90,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.toolFolders.TabIndex = 0;
             this.toolFolders.Text = "toolStrip1";
             // 
-            // foldersLabel
-            // 
-            this.foldersLabel.Name = "foldersLabel";
-            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
-            this.foldersLabel.Text = "Folders";
-            // 
             // busyProgress
             // 
             this.busyProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -91,20 +100,11 @@ namespace Ankh.UI.RepositoryExplorer
             this.busyProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.busyProgress.Visible = false;
             // 
-            // treeView
+            // foldersLabel
             // 
-            this.treeView.Context = null;
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView.Location = new System.Drawing.Point(0, 25);
-            this.treeView.Name = "treeView";
-            this.treeView.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
-                        | SharpSvn.SvnDirEntryItems.Time)));
-            this.treeView.ShowRootLines = false;
-            this.treeView.Size = new System.Drawing.Size(233, 400);
-            this.treeView.TabIndex = 1;
-            this.treeView.RetrievingChanged += new System.EventHandler(this.treeView_RetrievingChanged);
-            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.foldersLabel.Name = "foldersLabel";
+            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
+            this.foldersLabel.Text = "Folders";
             // 
             // fileView
             // 
@@ -117,6 +117,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.dateColumn});
             this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileView.FullRowSelect = true;
             this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
             this.fileView.ProvideWholeListForSelection = false;
