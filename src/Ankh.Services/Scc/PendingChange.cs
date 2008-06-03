@@ -57,6 +57,32 @@ namespace Ankh.Scc
         public string ChangeList
         {
             get { return _item.Status.ChangeList; }
+            set
+            {
+                string cl = string.IsNullOrEmpty(value) ? null : value.Trim();
+
+                if (_item.IsVersioned && _item.Status != null && _item.IsFile)
+                {
+                    if (value != _item.Status.ChangeList)
+                    {
+                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                        {
+                            if (cl != null)
+                            {
+                                SvnAddToChangeListArgs ca = new SvnAddToChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.AddToChangeList(_item.FullPath, cl);
+                            }
+                            else
+                            {
+                                SvnRemoveFromChangeListArgs ca = new SvnRemoveFromChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.RemoveFromChangeList(_item.FullPath, ca);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         [DisplayName("Project")]

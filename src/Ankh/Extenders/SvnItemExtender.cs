@@ -54,6 +54,40 @@ namespace Ankh.Extenders
         public string ChangeList
         {
             get { return SvnItem.Status.ChangeList; }
+            set
+            {
+                string cl = string.IsNullOrEmpty(value) ? null : value.Trim();
+
+                if (SvnItem.IsVersioned && SvnItem.Status != null && SvnItem.IsFile)
+                {
+                    if (value != SvnItem.Status.ChangeList)
+                    {
+                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                        {
+                            if (cl != null)
+                            {
+                                SvnAddToChangeListArgs ca = new SvnAddToChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.AddToChangeList(SvnItem.FullPath, cl);
+                            }
+                            else
+                            {
+                                SvnRemoveFromChangeListArgs ca = new SvnRemoveFromChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.RemoveFromChangeList(SvnItem.FullPath, ca);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool ShouldSerializeChangeList()
+        {
+            if (!SvnItem.IsVersioned || SvnItem.IsDirectory)
+                return false;
+
+            return true;
         }
 
         [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
