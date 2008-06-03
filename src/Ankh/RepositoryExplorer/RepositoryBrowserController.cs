@@ -22,11 +22,11 @@ namespace Ankh.RepositoryExplorer
     /// <summary>
     /// Responsible for controlling the repository explorer.
     /// </summary>
-    public class Controller : AnkhService
+    public class RepositoryBrowserController : AnkhService
     {
         RepositoryExplorerControl _repositoryExplorer;
 
-        public Controller(IAnkhServiceProvider context)
+        public RepositoryBrowserController(IAnkhServiceProvider context)
             : base(context)
         {
             if(Shell != null && Shell.RepositoryExplorer != null)

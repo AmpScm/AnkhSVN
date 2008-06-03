@@ -127,6 +127,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
@@ -338,7 +339,7 @@
     <Compile Include="ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RepositoryExplorer\Controller.cs">
+    <Compile Include="RepositoryExplorer\RepositoryBrowserController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SwitchDialogInfo.cs" />

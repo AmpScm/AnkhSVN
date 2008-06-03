@@ -7,33 +7,6 @@ using System.Collections.ObjectModel;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-
-
-    /// <summary>
-    /// Represents a node in the tree.
-    /// </summary>
-    public interface IRepositoryTreeNode
-    {
-        /// <summary>
-        /// The filename.
-        /// </summary>
-        string Name
-        {
-            get;
-        }
-
-        bool IsDirectory
-        {
-            get;
-        }
-
-        object Tag
-        {
-            get;
-            set;
-        }
-    }
-
     sealed class ListItemCollection : KeyedCollection<Uri, SvnListEventArgs>
     {
         protected override Uri GetKeyForItem(SvnListEventArgs item)
@@ -47,6 +20,8 @@ namespace Ankh.UI.RepositoryExplorer
         readonly Uri _uri;
         RepositoryTreeNode _dummy;
         ListItemCollection _items;
+        bool _loaded;
+        bool _expandAfterLoad;
 
         public RepositoryTreeNode(Uri uri)
         {
@@ -70,6 +45,20 @@ namespace Ankh.UI.RepositoryExplorer
             base.Expand();
         }
 
+        public void LoadExpand()
+        {
+            if (Nodes.Count > 0)
+            {
+                _expandAfterLoad = false;
+                Expand();
+            }
+        }
+
+        protected new RepositoryTreeView TreeView
+        {
+            get { return (RepositoryTreeView)base.TreeView; }
+        }
+
         internal void AddDummy()
         {
             if (Nodes.Count == 0 && _dummy == null)
@@ -78,6 +67,11 @@ namespace Ankh.UI.RepositoryExplorer
                 _dummy.Name = _dummy.Text = "<dummy>";
                 Nodes.Add(_dummy);
             }
+        }
+
+        internal bool ExpandAfterLoad
+        {
+            get { return _expandAfterLoad; }
         }
 
         internal void RemoveDummy()
@@ -92,6 +86,16 @@ namespace Ankh.UI.RepositoryExplorer
         internal void EnsureLoaded(bool expandAfterLoading)
         {
             RemoveDummy();
+
+            if (!_loaded)
+            {
+                if(RawUri != null)
+                    TreeView.BrowseItem(RawUri);
+                _loaded = true;
+            }
+
+            if (expandAfterLoading)
+                _expandAfterLoad = true;
         }
 
         public ListItemCollection FolderItems

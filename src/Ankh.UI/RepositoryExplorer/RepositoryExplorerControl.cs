@@ -58,40 +58,6 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         /// <summary>
-        /// Fired when the selection changes.
-        /// </summary>
-        public event EventHandler SelectionChanged;
-
-        /// <summary>
-        /// The selected node. Will be null if there is no selection.
-        /// </summary>
-        public IRepositoryTreeNode SelectedNode
-        {
-            get
-            {
-                return
-                    this.treeView.SelectedNode != null ?
-                    this.treeView.SelectedNode.Tag as IRepositoryTreeNode :
-                    null;
-            }
-        }
-
-        /// <summary>
-        /// The current roots in the treeview.
-        /// </summary>
-        public IRepositoryTreeNode[] Roots
-        {
-            get
-            {
-                ArrayList list = new ArrayList();
-                foreach (TreeNode node in this.treeView.Nodes)
-                    list.Add(node.Tag);
-                return (IRepositoryTreeNode[])
-                    list.ToArray(typeof(IRepositoryTreeNode));
-            }
-        }
-
-        /// <summary>
         /// Add a new URL root to the tree.
         /// </summary>
         /// <param name="text"></param>
@@ -134,9 +100,6 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (this.SelectionChanged != null)
-                this.SelectionChanged(this, EventArgs.Empty);
-
             fileView.Items.Clear();
 
             RepositoryTreeNode tn = e.Node as RepositoryTreeNode;
