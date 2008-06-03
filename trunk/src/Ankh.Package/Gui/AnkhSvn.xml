@@ -281,6 +281,7 @@
           <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
           <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
         </Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="Menu_WorkingCopyExplorerToolBar">
@@ -311,6 +312,7 @@
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_LogViewer">
@@ -341,6 +343,7 @@
                   text="Show changes" textChanges="true" iconFile="PendingChanges/Compare.png"/>
                   
         </Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_PendingChanges">
@@ -487,6 +490,7 @@
           <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_EXPLORE">
@@ -581,6 +585,7 @@
           <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x100"  />
           <ButtonRef id="guidVSStd97:cmdidSelectAll"  priority="0x200" />
         </Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_SourceControl">
