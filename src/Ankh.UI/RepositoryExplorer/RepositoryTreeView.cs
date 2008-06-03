@@ -410,22 +410,6 @@ namespace Ankh.UI.RepositoryExplorer
             base.OnRetrieveSelection(e);
         }
 
-        public void AddRoot(IRepositoryTreeNode node, string label)
-        {
-            AddRoot(new Uri(node.Name));
-            /*TreeNode root = new TreeNode( label, this.FolderIndex, this.FolderIndex );
-
-            root.Tag = node;
-            node.Tag = root;          
-
-            this.Nodes.Add( root );
-
-            TreeNode dummy = new TreeNode("");
-            dummy.Tag = DUMMY_NODE;
-
-            root.Nodes.Add( dummy );*/
-        }        
-
         public void SetIcon(TreeNode node, string name)
         {
             if (IconMapper != null)

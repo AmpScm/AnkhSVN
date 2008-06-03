@@ -137,12 +137,4 @@ namespace Ankh.UI.RepositoryExplorer
             busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;
         }
     }
-
-    /// <summary>
-    /// An object that handles the actual creation of a directory.
-    /// </summary>
-    public interface INewDirectoryHandler
-    {
-        bool MakeDir(IRepositoryTreeNode parent, string dirname);
-    }
 }
