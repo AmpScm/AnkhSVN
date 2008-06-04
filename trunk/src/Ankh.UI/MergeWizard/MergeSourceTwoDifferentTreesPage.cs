@@ -11,25 +11,24 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for merging two different trees together.
     /// </summary>
-    class MergeSourceTwoDifferentTreesPage : WizardPage
+    class MergeSourceTwoDifferentTreesPage 
+        : MergeSourceBasePage<MergeSourceTwoDifferentTreesPageControl>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public MergeSourceTwoDifferentTreesPage() : base("Merge Source Two Different Trees")
+        public MergeSourceTwoDifferentTreesPage(MergeWizard wizard) 
+            : base(wizard, "Merge Source Two Different Trees")
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceTwoDifferentTreesPageHeaderMessage;
-            control_prop.WizardPage = this;
+            PageControl.WizardPage = this;
         }
 
-        /// <see cref="WizardFramework.IWizardPage.Control" />
-        public override System.Windows.Forms.UserControl Control
+        public override MergeWizard.MergeType MergeType
         {
-            get { return control_prop; }
+            get { return MergeWizard.MergeType.TwoDifferentTrees; }
         }
-
-        private MergeSourceTwoDifferentTreesPageControl control_prop = new MergeSourceTwoDifferentTreesPageControl();
     }
 }

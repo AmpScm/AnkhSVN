@@ -11,24 +11,25 @@ namespace Ankh.UI.MergeWizard
     /// to be used by all merge source pages except for the "Two Different Trees"
     /// merge source page.
     /// </summary>
-    public abstract class MergeSourceBasePage : WizardPage
+    public abstract class MergeSourceBasePage<TControl> : BasePage<MergeWizard, TControl>
+        where TControl : MergeSourceBasePageControl<TControl>, new()
     {
         /// <summary>
         /// Constructor with name.
         /// </summary>
-        protected MergeSourceBasePage(String name)
-            : base(name)
+        protected MergeSourceBasePage(MergeWizard wizard, String name)
+            : base(wizard, name)
         {
-            ((MergeSourceBasePageControl)Control).WizardPage = this;
+            PageControl.WizardPage = this;
         }
 
         /// <summary>
         /// Constructor with name and image.
         /// </summary>
-        protected MergeSourceBasePage(String name, Image image)
-            : base(name, image)
+        protected MergeSourceBasePage(MergeWizard wizard, String name, Image image)
+            : base(wizard, name, image)
         {
-            ((MergeSourceBasePageControl)Control).WizardPage = this;
+            PageControl.WizardPage = this;
         }
 
         /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
@@ -36,11 +37,16 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!((MergeSourceBasePageControl)Control).IsMergeURLValid)
+                if (!PageControl.IsMergeURLValid)
                     return false;
 
                 return base.IsPageComplete;
             }
+        }
+
+        internal string MergeSource
+        {
+            get { return PageControl.MergeSource; }
         }
 
         /// <summary>

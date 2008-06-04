@@ -11,22 +11,17 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a branch reintegration merge scenario.
     /// </summary>
-    class MergeSourceReintegratePage : MergeSourceBasePage
+    class MergeSourceReintegratePage : MergeSourceBasePage<MergeSourceReintegratePageControl>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeSourceReintegratePage() : base("Merge Source Reintegrate")
+        public MergeSourceReintegratePage(MergeWizard wizard) 
+            : base(wizard, "Merge Source Reintegrate")
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceReintegratePageHeaderMessage;
-        }
-
-        /// <see cref="WizardFramework.IWizardPage.Control" />
-        public override System.Windows.Forms.UserControl Control
-        {
-            get { return control_prop; }
         }
 
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
@@ -34,7 +29,5 @@ namespace Ankh.UI.MergeWizard
         {
             get { return MergeWizard.MergeType.Reintegrate; }
         }
-
-        private MergeSourceReintegratePageControl control_prop = new MergeSourceReintegratePageControl();
     }
 }

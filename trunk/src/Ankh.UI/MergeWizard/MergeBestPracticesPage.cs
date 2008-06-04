@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for handling the merge best
     /// practices checking of AnkhSVN's merge capabilities.
     /// </summary>
-    public class MergeBestPracticesPage : WizardPage
+    public class MergeBestPracticesPage : BasePage<MergeWizard, MergeBestPracticesPageControl>
     {
         public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(Resources.ReadyForMerge,
             WizardMessage.NONE);
@@ -35,13 +35,14 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeBestPracticesPage()
-            : base("Merge Best Practices")
+        public MergeBestPracticesPage(MergeWizard wizard)
+            : base(wizard, "Merge Best Practices")
         {
             IsPageComplete = true;
 
             Title = Resources.MergeBestPracticesPageHeaderTitle;
             Description = Resources.MergeBestPracticesPageHeaderMessage;
+
         }
 
         /// <summary>
@@ -54,18 +55,17 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (((MergeWizard)Wizard).MergeUtils == null)
+                if (Wizard.MergeUtils == null)
                     return false; // Work around issue where the WizardFramework calls this
                                   // before the MergeUtils is set when instantiating the WizardDialog.
 
-                using (SvnClient client = ((MergeWizard)Wizard).MergeUtils.GetClient())
+                using (SvnClient client = Wizard.MergeUtils.GetClient())
                 {
-                    MergeWizard wizard = ((MergeWizard)Wizard);
-                    WizardDialog dialog = (WizardDialog)wizard.Form;
-                    SvnItem mergeTarget = wizard.MergeTarget;
+                    WizardDialog dialog = (WizardDialog)Wizard.Form;
+                    SvnItem mergeTarget = Wizard.MergeTarget;
                     SvnWorkingCopyVersion wcRevision;
 
-                    client.GetWorkingCopyVersion(((MergeWizard)Wizard).MergeUtils.WorkingCopyRootPath,
+                    client.GetWorkingCopyVersion(Wizard.MergeUtils.WorkingCopyRootPath,
                         out wcRevision);
                     
                     bool hasLocalModifications = wcRevision.Modified;
@@ -84,39 +84,31 @@ namespace Ankh.UI.MergeWizard
                     }
 
                     dialog.UpdateMessage();
-
+                    
                     // Update the images based on the return of the best practices checks
                     if (hasLocalModifications)
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
                     else
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, true);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, true);
 
                     if (hasMixedRevisions)
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, false);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, false);
                     else
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, true);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, true);
 
                     if (hasSwitchedChildren)
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, false);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, false);
                     else
-                        control_prop.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, true);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, true);
 
                     if (isIncomplete)
-                        control_prop.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, false);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, false);
                     else
-                        control_prop.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, true);
+                        PageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, true);
 
                     return status;
                 }
             }
         }
-
-        /// <see cref="WizardFramework.WizardPage.Control" />
-        public override System.Windows.Forms.UserControl Control
-        {
-            get { return control_prop; }
-        }
-
-        private MergeBestPracticesPageControl control_prop = new MergeBestPracticesPageControl();
     }
 }

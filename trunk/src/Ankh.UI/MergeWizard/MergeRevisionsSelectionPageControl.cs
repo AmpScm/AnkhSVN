@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -18,6 +19,21 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Gets or sets the merge source.
+        /// </summary>
+        /// <value>The merge source.</value>
+        public string MergeSource
+        {
+            get { return ((MergeWizard)WizardPage.Wizard).MergeSource; }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            logToolControl1.Site = Site;
+            //logToolControl1.Start(new string[]{MergeSource.ToString()});
+        }
         /// <summary>
         /// Gets/Sets the wizard page associated with this control.
         /// </summary>

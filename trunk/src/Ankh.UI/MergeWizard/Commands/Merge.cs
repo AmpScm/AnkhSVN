@@ -8,11 +8,12 @@ using Ankh.Ids;
 using WizardFramework;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using System.ComponentModel;
 
 namespace Ankh.UI.MergeWizard.Commands
 {
     [Command(AnkhCommand.ItemMerge)]
-    class Merge : ICommandHandler
+    class Merge : ICommandHandler, IComponent
     {
         #region ICommandHandler Members
 
@@ -51,15 +52,13 @@ namespace Ankh.UI.MergeWizard.Commands
                 svnItems.Add(item);
             }
 
-            using (MergeWizardDialog dialog = new MergeWizardDialog(new MergeUtils(e.Context), svnItems[0]))
+            using (MergeWizardDialog dialog = new MergeWizardDialog(Site, new MergeUtils(e.Context), svnItems[0]))
             {
                 DialogResult result;
 
                 IUIService uiService = e.GetService<IUIService>();
-
                 // TODO: Use
                 //result = uiService.ShowDialog(dialog);
-
                 result = dialog.ShowDialog(uiService.GetDialogOwnerWindow());
 
                 if (result == DialogResult.OK)
@@ -69,6 +68,34 @@ namespace Ankh.UI.MergeWizard.Commands
                         "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
             }
+        }
+
+        #endregion
+
+        #region IComponent Members
+
+        public event EventHandler Disposed;
+
+        ISite _site;
+        public ISite Site
+        {
+            get
+            {
+                return _site;
+            }
+            set
+            {
+                if(value != null)
+                    _site = value;
+            }
+        }
+
+        #endregion
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
         }
 
         #endregion
