@@ -38,18 +38,6 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
-        public override bool IsPageComplete
-        {
-            get
-            {
-                if (NextPageRequired)
-                    return false;
-
-                return base.IsPageComplete;
-            }
-        }
-
         /// <see cref="WizardFramework.IWizardPage.Control" />
         public override System.Windows.Forms.UserControl Control
         {

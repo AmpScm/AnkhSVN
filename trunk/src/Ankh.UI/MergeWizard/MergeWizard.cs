@@ -43,6 +43,7 @@ namespace Ankh.UI.MergeWizard
             AddPage(mergeSourceTwoDifferentTreesPage);
             AddPage(mergeSourceManuallyRecordPage);
             AddPage(mergeSourceManuallyRemovePage);
+            AddPage(mergeRevisionsSelectionPage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -77,6 +78,14 @@ namespace Ankh.UI.MergeWizard
             if (page is MergeBestPracticesPage)
                 return null; // For now, if you see the best practices page,
                              // you have to fix the issue and then reattempt to merge.
+
+            // Handle the manually record/remove pages
+            if (page is MergeSourceManuallyRecordPage || page is MergeSourceManuallyRemovePage)
+                return mergeRevisionsSelectionPage;
+
+            // Handle the range of revisions page
+            if (page is MergeSourceRangeOfRevisionsPage && ((MergeSourceRangeOfRevisionsPage)page).NextPageRequired)
+                return mergeRevisionsSelectionPage;
 
             return null;
         }
@@ -145,6 +154,7 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
         private WizardPage mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
         private WizardPage mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
+        private WizardPage mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage();
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;
