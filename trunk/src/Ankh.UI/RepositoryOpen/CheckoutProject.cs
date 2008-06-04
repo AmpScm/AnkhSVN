@@ -167,23 +167,42 @@ namespace Ankh.UI.RepositoryOpen
                     }
 
                 if (checkOutFrom.SelectedIndex < 0)
-                foreach (Uri uri in checkOutFrom.Items)
-                {
-                    string txt = uri.ToString();
-
-                    if (txt.EndsWith("/branches/", StringComparison.OrdinalIgnoreCase) ||
-                        txt.EndsWith("/tags/", StringComparison.OrdinalIgnoreCase) ||
-                        txt.EndsWith("/releases/", StringComparison.OrdinalIgnoreCase))
+                    foreach (Uri uri in checkOutFrom.Items)
                     {
-                        int nIndex = checkOutFrom.Items.IndexOf(uri);
+                        string txt = uri.ToString();
 
-                        if (nIndex > 1)
+                        if (txt.EndsWith("/branches/", StringComparison.OrdinalIgnoreCase) ||
+                            txt.EndsWith("/tags/", StringComparison.OrdinalIgnoreCase) ||
+                            txt.EndsWith("/releases/", StringComparison.OrdinalIgnoreCase))
                         {
-                            checkOutFrom.SelectedIndex = nIndex - 1;
-                            break;
+                            int nIndex = checkOutFrom.Items.IndexOf(uri);
+
+                            if (nIndex > 1)
+                            {
+                                checkOutFrom.SelectedIndex = nIndex - 1;
+                                break;
+                            }
                         }
                     }
-                }
+
+                if (checkOutFrom.SelectedIndex < 0)
+                    foreach (Uri uri in checkOutFrom.Items)
+                    {
+                        string txt = uri.ToString();
+
+                        if (txt.EndsWith("/src/", StringComparison.OrdinalIgnoreCase) ||
+                            txt.EndsWith("/source/", StringComparison.OrdinalIgnoreCase) ||
+                            txt.EndsWith("/sourcecode/", StringComparison.OrdinalIgnoreCase))
+                        {
+                            int nIndex = checkOutFrom.Items.IndexOf(uri);
+
+                            if (nIndex < checkOutFrom.Items.Count-1)
+                            {
+                                checkOutFrom.SelectedIndex = nIndex + 1;
+                                break;
+                            }
+                        }
+                    }
 
                 if (checkOutFrom.SelectedIndex < 0 && checkOutFrom.Items.Count > 0)
                     checkOutFrom.SelectedIndex = 0;
