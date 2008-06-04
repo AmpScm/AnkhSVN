@@ -29,7 +29,7 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
-    [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false)]
+    [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
     public partial class AnkhSvnPackage
     {
