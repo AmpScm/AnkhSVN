@@ -126,7 +126,7 @@ namespace Ankh.Scc
             else if (!IsActive)
                 return;
 
-            if (!_backupMap.ContainsKey(fullPath))
+            if (_backupMap.ContainsKey(fullPath))
             {
                 // Don't backup twice
                 string oldBackup = _backupMap[fullPath];
