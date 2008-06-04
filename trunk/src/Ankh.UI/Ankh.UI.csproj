@@ -254,6 +254,7 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -315,6 +316,7 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>

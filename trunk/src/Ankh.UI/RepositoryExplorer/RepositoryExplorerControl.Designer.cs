@@ -70,6 +70,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.ShowRootLines = false;
             this.treeView.Size = new System.Drawing.Size(233, 400);
             this.treeView.TabIndex = 1;
+            this.treeView.SelectedNodeRefresh += new System.EventHandler(this.treeView_SelectedNodeRefresh);
             this.treeView.RetrievingChanged += new System.EventHandler(this.treeView_RetrievingChanged);
             this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);

@@ -100,9 +100,14 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            RefreshFileList();
+        }
+
+        void RefreshFileList()
+        {
             fileView.Items.Clear();
 
-            RepositoryTreeNode tn = e.Node as RepositoryTreeNode;
+            RepositoryTreeNode tn = treeView.SelectedNode as RepositoryTreeNode;
 
             if (tn != null)
             {
@@ -135,6 +140,11 @@ namespace Ankh.UI.RepositoryExplorer
         private void treeView_RetrievingChanged(object sender, EventArgs e)
         {
             busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;
+        }
+
+        private void treeView_SelectedNodeRefresh(object sender, EventArgs e)
+        {
+            RefreshFileList();
         }
     }
 }
