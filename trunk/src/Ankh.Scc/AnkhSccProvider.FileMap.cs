@@ -185,13 +185,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-			// delete the placeholder directory with the same name as the original that was created in OnQuery*
-			ISvnClientPool pool = GetService<ISvnClientPool>();
-			using (SvnClient client = pool.GetNoUIClient())
-			{
-				SvnDeleteArgs args = new SvnDeleteArgs();
-				client.Delete(dir, args);
-			}
+            RegisterForSccCleanup();
         }
 
         /// <summary>

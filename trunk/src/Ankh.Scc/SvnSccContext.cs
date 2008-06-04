@@ -764,7 +764,8 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(fullPath))
                 throw new ArgumentNullException("fullPath");
 
-            if (Directory.Exists(fullPath))
+            DirectoryInfo source = new DirectoryInfo(fullPath);
+            if (source.Exists)
             {
                 string tmp;
                 int n = 0;
@@ -775,12 +776,30 @@ namespace Ankh.Scc
                 }
                 while (Directory.Exists(tmp));
 
-                Directory.CreateDirectory(tmp);
+                DirectoryInfo dest = Directory.CreateDirectory(tmp);
+
+                RecursiveCopy(source, dest);
 
                 return tmp;
             }
             else
                 return null;
+        }
+
+        private void RecursiveCopy(DirectoryInfo source, DirectoryInfo destination)
+        {
+            foreach (FileInfo sourceFile in source.GetFiles())
+            {
+                FileInfo destFile = sourceFile.CopyTo(Path.Combine(destination.FullName, sourceFile.Name));
+                destFile.Attributes = sourceFile.Attributes;
+            }
+
+            foreach (DirectoryInfo subDirSource in source.GetDirectories())
+            {
+                DirectoryInfo subDirDestination = destination.CreateSubdirectory(subDirSource.Name);
+                subDirDestination.Attributes = subDirSource.Attributes;
+                RecursiveCopy(subDirSource, subDirDestination);
+            }
         }
 
         private void RecursiveDelete(DirectoryInfo dir)

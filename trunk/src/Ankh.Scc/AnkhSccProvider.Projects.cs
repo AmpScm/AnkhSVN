@@ -425,14 +425,28 @@ namespace Ankh.Scc
 
             if (_backupMap.Count > 0)
             {
-                List<string> dirs = new List<string>(_backupMap.Values);
-                _backupMap.Clear();
+                
 
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
-                    foreach (string dir in dirs)
-                        svn.DeleteDirectory(dir);
+                    foreach (KeyValuePair<string, string> dir in _backupMap)
+                    {
+                        string originalDir = dir.Key;
+                        string backupDir = dir.Value;
+
+                        if (!Directory.Exists(backupDir))
+                            continue; // No backupdir, we can't delete or move it
+
+                        if (Directory.Exists(originalDir))
+                            svn.DeleteDirectory(backupDir); // The original has not been deleted by visual studio, must be an exclude.
+                        else
+                        {
+                            Directory.Move(backupDir, originalDir); // Original is gone, must be a delete, put back backup so we can svn-delete it
+                            svn.WcDelete(originalDir);
+                        }
+                    }
                 }
+                _backupMap.Clear();
             }
         }
 
