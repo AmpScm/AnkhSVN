@@ -154,6 +154,12 @@
   <data name="MergeBestPracticesPageHeaderTitle" xml:space="preserve">
     <value>Best Practices</value>
   </data>
+  <data name="MergeRevisionsSelectionPageMessage" xml:space="preserve">
+    <value>Specify the revision(s) containing the changes to merge.</value>
+  </data>
+  <data name="MergeRevisionsSelectionPageTitle" xml:space="preserve">
+    <value>Select the revisions</value>
+  </data>
   <data name="MergeSourceHeaderTitle" xml:space="preserve">
     <value>Select the merge source</value>
   </data>

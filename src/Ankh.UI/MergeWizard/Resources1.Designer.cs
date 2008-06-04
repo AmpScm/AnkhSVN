@@ -163,6 +163,24 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specify the revision(s) containing the changes to merge..
+        /// </summary>
+        internal static string MergeRevisionsSelectionPageMessage {
+            get {
+                return ResourceManager.GetString("MergeRevisionsSelectionPageMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the revisions.
+        /// </summary>
+        internal static string MergeRevisionsSelectionPageTitle {
+            get {
+                return ResourceManager.GetString("MergeRevisionsSelectionPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the merge source.
         /// </summary>
         internal static string MergeSourceHeaderTitle {
