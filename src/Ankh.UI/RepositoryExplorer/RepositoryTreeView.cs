@@ -227,6 +227,21 @@ namespace Ankh.UI.RepositoryExplorer
             d.BeginInvoke(null, null);
         }
 
+        /// <summary>
+        /// Occurs when the selected node was refreshed
+        /// </summary>
+        public event EventHandler SelectedNodeRefresh;
+
+        /// <summary>
+        /// Raises the <see cref="E:SelectedNodeRefresh"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnSelectedNodeRefresh(EventArgs e)
+        {
+            if (SelectedNodeRefresh != null)
+                SelectedNodeRefresh(this, e);
+        }
+
         private void MaybeExpand(Uri uri)
         {
             RepositoryTreeNode tn;
@@ -237,8 +252,7 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (SelectedNode == tn)
                 {
-                    // TODO: Force folder update
-
+                    OnSelectedNodeRefresh(EventArgs.Empty);
                 }
             }            
         }
