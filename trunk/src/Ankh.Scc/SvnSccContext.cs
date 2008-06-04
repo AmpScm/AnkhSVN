@@ -773,7 +773,7 @@ namespace Ankh.Scc
                 {
                     tmp = string.Format("{0}.tmp{1}", fullPath, n++);
                 }
-                while (!Directory.Exists(tmp));
+                while (Directory.Exists(tmp));
 
                 Directory.CreateDirectory(tmp);
 
