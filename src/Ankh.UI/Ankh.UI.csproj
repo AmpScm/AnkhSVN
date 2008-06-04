@@ -343,12 +343,6 @@
     <Compile Include="LockDialog.Designer.cs">
       <DependentUpon>LockDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SvnLog\LogDialogView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogDialogView.Designer.cs">
-      <DependentUpon>LogDialogView.cs</DependentUpon>
-    </Compile>
     <Compile Include="UITypeEditors\MultiLineStringEditorWithTemplates.Designer.cs">
       <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
     </Compile>
@@ -541,12 +535,6 @@
     </Compile>
     <Compile Include="SvnLog\LogMessageView.Designer.cs">
       <DependentUpon>LogMessageView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SvnLog\LogRevisionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SvnLog\LogRevisionControl.Designer.cs">
-      <DependentUpon>LogRevisionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UITypeEditors\MultiLineStringEditorWithTemplates.cs">
       <SubType>Form</SubType>
@@ -742,16 +730,8 @@
       <DependentUpon>LogChangedPaths.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogDialogView.resx">
-      <DependentUpon>LogDialogView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogMessageView.resx">
       <DependentUpon>LogMessageView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogRevisionControl.resx">
-      <DependentUpon>LogRevisionControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UITypeEditors\MultiLineStringEditorWithTemplates.resx">
