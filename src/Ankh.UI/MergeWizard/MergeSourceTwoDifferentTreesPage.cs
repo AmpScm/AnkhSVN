@@ -12,7 +12,7 @@ namespace Ankh.UI.MergeWizard
     /// information for merging two different trees together.
     /// </summary>
     class MergeSourceTwoDifferentTreesPage 
-        : MergeSourceBasePage<MergeSourceTwoDifferentTreesPageControl>
+        : BasePage<MergeWizard, MergeSourceTwoDifferentTreesPageControl>
     {
         /// <summary>
         /// Constructor
@@ -24,11 +24,6 @@ namespace Ankh.UI.MergeWizard
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceTwoDifferentTreesPageHeaderMessage;
             PageControl.WizardPage = this;
-        }
-
-        public override MergeWizard.MergeType MergeType
-        {
-            get { return MergeWizard.MergeType.TwoDifferentTrees; }
         }
     }
 }
