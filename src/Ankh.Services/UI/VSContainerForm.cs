@@ -40,6 +40,14 @@ namespace Ankh.UI
         IAnkhDialogOwner _dlgOwner;
         AnkhToolBar _toolbarId;
         VSContainerMode _mode;
+
+        public VSContainerForm()
+        {
+            ShowInTaskbar = false;
+            MinimizeBox = false;
+            MaximizeBox = false;
+            ShowIcon = false;
+        }
         
         [Browsable(false)]
         public IAnkhServiceProvider Context
@@ -55,6 +63,15 @@ namespace Ankh.UI
                 }
             }
         }
+
+        [DefaultValue(false)]
+        public new bool ShowInTaskbar
+        {
+            get { return base.ShowInTaskbar; }
+            set { base.ShowInTaskbar = value; }
+        }
+        
+    
 
         /// <summary>
         /// Gets or sets the mode.

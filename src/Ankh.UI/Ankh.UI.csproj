@@ -253,6 +253,11 @@
       <DependentUpon>AddSolutionDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
+    <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
+    </Compile>
+    <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
+      <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryListItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryListView.cs">
       <SubType>Component</SubType>
@@ -271,13 +276,11 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -312,7 +315,6 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -699,6 +701,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\RepositoryFolderBrowserDialog.resx">
+      <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\RepositoryStrings.resx">
