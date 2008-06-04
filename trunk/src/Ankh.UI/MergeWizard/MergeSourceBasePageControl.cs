@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
-using System.Windows.Forms;
-using System.Resources;
-
-using SharpSvn;
 using WizardFramework;
+using System.Windows.Forms;
 using System.Threading;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -18,43 +13,39 @@ namespace Ankh.UI.MergeWizard
     /// of the wizard page UI.  This base class handles the merge sources population
     /// and the enablement to go to the next page and/or finish the wizard.
     /// </summary>
-    public partial class MergeSourceBasePageControl<TControl> : UserControl
+    public class MergeSourceBasePageControl<TControl> : MergeSourceBasePageControlImpl
         where TControl : MergeSourceBasePageControl<TControl>, new()
     {
-        private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
-            WizardMessage.ERROR);
         MergeSourceBasePage<TControl> _wizardPage;
-        delegate void SetMergeSourcesCallBack(List<string> mergeSources);
 
         /// <summary>
-        /// Constructor.
+        /// Gets/Sets the wizard page associated with this UserControl.
         /// </summary>
-        public MergeSourceBasePageControl()
+        public MergeSourceBasePage<TControl> WizardPage
         {
-            InitializeComponent();
+            get { return _wizardPage; }
+            set { _wizardPage = value; }
         }
 
-        /// <summary>
-        /// Enables/Disables the Select button.
-        /// </summary>
-        public void EnableSelectButton(bool enabled)
+        protected override void OnLoad(EventArgs e)
         {
-            selectButton.Enabled = enabled;
-            selectButton.Visible = enabled;
-        }
+            base.OnLoad(e);
 
-        #region Base Functionality
-        /// <summary>
-        /// Returns the merge type for the associated wizard page.
-        /// </summary>
-        public MergeWizard.MergeType MergeType
-        {
-            get { return WizardPage.MergeType; }
-        }
 
-        internal string MergeSource
-        {
-            get { return mergeFromComboBox.Text; }
+
+            if (!DesignMode)
+            {
+                mergeFromComboBox.TextChanged += new EventHandler(mergeFromComboBox_TextChanged);
+                mergeFromComboBox.Text = Resources.LoadingMergeSources;
+
+                ((WizardDialog)WizardPage.Form).EnablePageAndButtons(false);
+
+                Cursor.Current = Cursors.WaitCursor;
+
+                Thread t = new Thread(new ThreadStart(RetrieveAndSetMergeSources));
+
+                t.Start();
+            }
         }
 
         /// <summary>
@@ -95,12 +86,11 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
-        /// Gets/Sets the wizard page associated with this UserControl.
+        /// Returns the merge type for the associated wizard page.
         /// </summary>
-        public MergeSourceBasePage<TControl> WizardPage
+        public MergeWizard.MergeType MergeType
         {
-            get { return _wizardPage; }
-            set { _wizardPage = value; }
+            get { return WizardPage.MergeType; }
         }
 
         /// <summary>
@@ -164,28 +154,8 @@ namespace Ankh.UI.MergeWizard
                 SetMergeSources(mergeSources);
             }
         }
-        #endregion
 
         #region UI Events
-        /// <summary>
-        /// Loads the necessary suggested merge sources as part of the OnLoad event.
-        /// </summary>
-        private void MergeSourceBasePageControl_Load(object sender, EventArgs e)
-        {
-            if (!DesignMode)
-            {
-                mergeFromComboBox.Text = Resources.LoadingMergeSources;
-
-                ((WizardDialog)WizardPage.Form).EnablePageAndButtons(false);
-
-                Cursor.Current = Cursors.WaitCursor;
-
-                Thread t = new Thread(new ThreadStart(RetrieveAndSetMergeSources));
-
-                t.Start();
-            }
-        }
-
         /// <summary>
         /// Checks for text in the ComboBox to make sure something is there.
         /// </summary>
@@ -195,5 +165,6 @@ namespace Ankh.UI.MergeWizard
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
         }
         #endregion
+        delegate void SetMergeSourcesCallBack(List<string> mergeSources);
     }
 }
