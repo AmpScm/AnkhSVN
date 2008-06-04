@@ -7,6 +7,7 @@ using Ankh.UI;
 
 using SharpSvn;
 using Ankh.Ids;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -14,26 +15,71 @@ namespace Ankh.Commands
     /// Command to switch current item to a different URL.
     /// </summary>
     [Command(AnkhCommand.SwitchItem)]
+    [Command(AnkhCommand.SolutionSwitchDialog)]
     public class SwitchItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
+            if (e.Command == AnkhCommand.SolutionSwitchDialog)
             {
-                e.Visible = e.Enabled = false;
+                if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
+                    e.Enabled = false;
                 return;
             }
 
+            bool foundOne = false, error = false;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.IsVersioned)
-                    return;
+                if (item.IsVersioned && !foundOne)
+                    foundOne = true;
+                else
+                {
+                    error = true;
+                    break;
+                }
             }
-            e.Enabled = false;
+
+            e.Enabled = foundOne && !error;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
+            SvnItem theItem = null;
+            string path;
+
+            if (e.Command == AnkhCommand.SolutionSwitchDialog)
+                path = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
+            else
+            {
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (item.IsVersioned)
+                    {
+                        theItem = item;
+                        break;
+                    }
+                    return;
+                }
+                path = theItem.FullPath;
+            }
+
+            Uri uri;
+
+            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                uri = cl.GetUriFromWorkingCopy(path);
+            }
+            
+            using (SwitchDialog dlg = new SwitchDialog())
+            {
+                dlg.Context = e.Context;
+
+                dlg.LocalPath = path;
+                dlg.SwitchToUri = uri;                
+
+                dlg.ShowDialog(e.Context);
+            }
+
             IContext context = e.Context.GetService<IContext>();
 
             /*SaveAllDirtyDocuments(e.Selection, context);

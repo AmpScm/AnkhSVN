@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.switchBox = new System.Windows.Forms.GroupBox();
-            this.pathBox = new System.Windows.Forms.TextBox();
             this.pathLabel = new System.Windows.Forms.Label();
+            this.pathBox = new System.Windows.Forms.TextBox();
             this.toBox = new System.Windows.Forms.GroupBox();
-            this.urlLabel = new System.Windows.Forms.Label();
+            this.browseUrl = new System.Windows.Forms.Button();
             this.toUrlBox = new System.Windows.Forms.ComboBox();
+            this.urlLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.browseUrl = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.browseVersion = new System.Windows.Forms.Button();
             this.versionBox = new System.Windows.Forms.ComboBox();
@@ -59,6 +59,15 @@
             this.switchBox.TabStop = false;
             this.switchBox.Text = "&Switch:";
             // 
+            // pathLabel
+            // 
+            this.pathLabel.AutoSize = true;
+            this.pathLabel.Location = new System.Drawing.Point(6, 22);
+            this.pathLabel.Name = "pathLabel";
+            this.pathLabel.Size = new System.Drawing.Size(32, 13);
+            this.pathLabel.TabIndex = 0;
+            this.pathLabel.Text = "&Path:";
+            // 
             // pathBox
             // 
             this.pathBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -70,15 +79,6 @@
             this.pathBox.ReadOnly = true;
             this.pathBox.Size = new System.Drawing.Size(452, 13);
             this.pathBox.TabIndex = 1;
-            // 
-            // pathLabel
-            // 
-            this.pathLabel.AutoSize = true;
-            this.pathLabel.Location = new System.Drawing.Point(6, 22);
-            this.pathLabel.Name = "pathLabel";
-            this.pathLabel.Size = new System.Drawing.Size(32, 13);
-            this.pathLabel.TabIndex = 0;
-            this.pathLabel.Text = "&Path:";
             // 
             // toBox
             // 
@@ -94,14 +94,16 @@
             this.toBox.TabStop = false;
             this.toBox.Text = "&To:";
             // 
-            // urlLabel
+            // browseUrl
             // 
-            this.urlLabel.AutoSize = true;
-            this.urlLabel.Location = new System.Drawing.Point(6, 22);
-            this.urlLabel.Name = "urlLabel";
-            this.urlLabel.Size = new System.Drawing.Size(23, 13);
-            this.urlLabel.TabIndex = 0;
-            this.urlLabel.Text = "&Url:";
+            this.browseUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.browseUrl.Location = new System.Drawing.Point(474, 19);
+            this.browseUrl.Name = "browseUrl";
+            this.browseUrl.Size = new System.Drawing.Size(40, 23);
+            this.browseUrl.TabIndex = 2;
+            this.browseUrl.Text = "...";
+            this.browseUrl.UseVisualStyleBackColor = true;
+            this.browseUrl.Click += new System.EventHandler(this.browseUrl_Click);
             // 
             // toUrlBox
             // 
@@ -114,6 +116,15 @@
             this.toUrlBox.Name = "toUrlBox";
             this.toUrlBox.Size = new System.Drawing.Size(406, 21);
             this.toUrlBox.TabIndex = 1;
+            // 
+            // urlLabel
+            // 
+            this.urlLabel.AutoSize = true;
+            this.urlLabel.Location = new System.Drawing.Point(6, 22);
+            this.urlLabel.Name = "urlLabel";
+            this.urlLabel.Size = new System.Drawing.Size(23, 13);
+            this.urlLabel.TabIndex = 0;
+            this.urlLabel.Text = "&Url:";
             // 
             // cancelButton
             // 
@@ -136,16 +147,6 @@
             this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            // 
-            // browseUrl
-            // 
-            this.browseUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseUrl.Location = new System.Drawing.Point(474, 19);
-            this.browseUrl.Name = "browseUrl";
-            this.browseUrl.Size = new System.Drawing.Size(40, 23);
-            this.browseUrl.TabIndex = 2;
-            this.browseUrl.Text = "...";
-            this.browseUrl.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -207,6 +208,7 @@
             this.Name = "SwitchDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Switch To";
             this.switchBox.ResumeLayout(false);
             this.switchBox.PerformLayout();

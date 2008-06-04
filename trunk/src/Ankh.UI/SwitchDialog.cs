@@ -5,14 +5,56 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI
 {
-    public partial class SwitchDialog : Form
+    public partial class SwitchDialog : VSContainerForm
     {
         public SwitchDialog()
         {
             InitializeComponent();
+        }
+
+        private void browseUrl_Click(object sender, EventArgs e)
+        {
+            using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+            {
+                dlg.ShowDialog(Context);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the local path.
+        /// </summary>
+        /// <value>The local path.</value>
+        public string LocalPath
+        {
+            get { return pathBox.Text; }
+            set { pathBox.Text = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the switch to URI.
+        /// </summary>
+        /// <value>The switch to URI.</value>
+        public Uri SwitchToUri
+        {
+            get
+            {
+                Uri uri;
+                if (!string.IsNullOrEmpty(toUrlBox.Text) && Uri.TryCreate(toUrlBox.Text, UriKind.Absolute, out uri))
+                    return uri;
+
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                    toUrlBox.Text = "";
+                else
+                    toUrlBox.Text = value.AbsoluteUri;
+            }
         }
     }
 }

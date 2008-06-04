@@ -92,13 +92,19 @@ namespace Ankh.UI.PendingChanges.Commands
         void OnExecuteFill(CommandEventArgs e)
         {
             if (ProjectRootUri != null)
-                e.Result = new string[] { ProjectRootUri.ToString() };
+                e.Result = new string[] { ProjectRootUri.ToString(), "Other..." };
         }
 
-        string _currentValue = "http://subversion.lan/project/trunk";
         void OnExecuteSet(CommandEventArgs e)
         {
-            _currentValue = (string)e.Argument ?? "";
+            string value = (string)e.Argument;
+
+            IAnkhCommandService cs = e.GetService<IAnkhCommandService>();
+
+            if (value != null && value == "Other...")
+                cs.PostExecCommand(AnkhCommand.SolutionSwitchDialog);
+            else
+                cs.PostExecCommand(AnkhCommand.SolutionSwitchDialog, value);
         }
 
         void OnExecuteGet(CommandEventArgs e)
