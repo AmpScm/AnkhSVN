@@ -11,7 +11,7 @@ using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceRangeOfRevisionsPageControl : MergeSourceBasePageControl
+    public partial class MergeSourceRangeOfRevisionsPageControl : MergeSourceBasePageControl<MergeSourceRangeOfRevisionsPageControl>
     {
         public MergeSourceRangeOfRevisionsPageControl()
         {

@@ -4,6 +4,7 @@ using System.Text;
 using WizardFramework;
 using System.Resources;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -16,23 +17,27 @@ namespace Ankh.UI.MergeWizard
         /// Constructor.
         /// </summary>
         /// <param name="utils"></param>
-        public MergeWizardDialog(MergeUtils utils, SvnItem mergeTarget)
-            : this()
+        public MergeWizardDialog(ISite site, MergeUtils utils, SvnItem mergeTarget)
+            : this(site)
         {
-            ((MergeWizard)Wizard).MergeUtils = utils;
-            ((MergeWizard)Wizard).MergeTarget = mergeTarget;
+            
+            Wizard.MergeUtils = utils;
+            Wizard.MergeTarget = mergeTarget;
         }
 
-        /// <summary>
+        public new MergeWizard Wizard
+        {
+            get { return (MergeWizard)base.Wizard; }
+            set { base.Wizard = value; }
+        }
         /// Constructor.
         /// </summary>
-        public MergeWizardDialog() : base()
+        public MergeWizardDialog(ISite site) : base()
         {
-            this.Text = "Merge Wizard";
-            this.Icon = Resources.MergeWizardIcon;
-            this.Wizard = _wizard;
+            Site = site;
+            Text = "Merge Wizard";
+            Icon = Resources.MergeWizardIcon;
+            Wizard = new MergeWizard(this);
         }
-
-        Wizard _wizard = new MergeWizard();
     }
 }

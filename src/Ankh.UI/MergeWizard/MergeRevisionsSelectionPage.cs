@@ -11,27 +11,26 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of <code>WizardPage</code> to enable the user to select
     /// the merge revision(s).
     /// </summary>
-    class MergeRevisionsSelectionPage : WizardPage
+    class MergeRevisionsSelectionPage : BasePage<MergeWizard, MergeRevisionsSelectionPageControl>
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeRevisionsSelectionPage() : base("Merge Revisions Selection Pages")
+        public MergeRevisionsSelectionPage(MergeWizard wizard)
+            : base(wizard, "Merge Revisions Selection Pages")
         {
             IsPageComplete = false;
 
             Title = Resources.MergeRevisionsSelectionPageTitle;
             this.Message = new WizardMessage(Resources.MergeRevisionsSelectionPageMessage);
 
-            _control.WizardPage = this;
+            PageControl.WizardPage = this;
+            PageControl.Site = wizard.WizardDialog.Site;
         }
 
-        /// <see cref="WizardFramework.IWizardPage.Control" />s
-        public override UserControl Control
+        protected override void OnPageChanged(WizardPageChangeEventArgs e)
         {
-            get { return _control; }
+            base.OnPageChanged(e);
         }
-
-        MergeRevisionsSelectionPageControl _control = new MergeRevisionsSelectionPageControl();
     }
 }

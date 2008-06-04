@@ -5,6 +5,7 @@ using WizardFramework;
 using System.Resources;
 using System.Reflection;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -28,10 +29,20 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeWizard()
+        public MergeWizard(IWizardContainer container)
             : base()
         {
+            Container = container;
             this.WindowTitle = Resources.MergeWizardTitle;
+
+            mergeTypePage = new MergeTypePage(this);
+            bestPracticesPage = new MergeBestPracticesPage(this);
+            mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage(this);
+            mergeSourceReintegratePage = new MergeSourceReintegratePage(this);
+            mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage(this);
+            mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage(this);
+            mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage(this);
+            mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage(this);
         }
 
         public override void AddPages()
@@ -138,23 +149,42 @@ namespace Ankh.UI.MergeWizard
             set { _mergeUtils = value; }
         }
 
+
         /// <summary>
-        /// Gets/Sets the target for the merge.
+        /// Gets or sets the merge target.
         /// </summary>
+        /// <value>The merge target.</value>
         public SvnItem MergeTarget
         {
             get { return _mergeTarget; }
             set { _mergeTarget = value; }
         }
 
-        private WizardPage mergeTypePage = new MergeTypePage();
-        private WizardPage bestPracticesPage = new MergeBestPracticesPage();
-        private WizardPage mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage();
-        private WizardPage mergeSourceReintegratePage = new MergeSourceReintegratePage();
-        private WizardPage mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
-        private WizardPage mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
-        private WizardPage mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
-        private WizardPage mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage();
+        string _mergeSource;
+        /// <summary>
+        /// Gets or sets the merge source.
+        /// </summary>
+        /// <value>The merge source.</value>
+        public string MergeSource
+        {
+            get { return _mergeSource; }
+            set { _mergeSource = value; }
+        }
+
+        internal MergeWizardDialog WizardDialog
+        {
+            get { return (MergeWizardDialog)Form; }
+            //set { Form = value; }
+        }
+
+        private WizardPage mergeTypePage;
+        private WizardPage bestPracticesPage;
+        private WizardPage mergeSourceRangeOfRevisionsPage;
+        private WizardPage mergeSourceReintegratePage;
+        private WizardPage mergeSourceTwoDifferentTreesPage;
+        private WizardPage mergeSourceManuallyRecordPage;
+        private WizardPage mergeSourceManuallyRemovePage;
+        private WizardPage mergeRevisionsSelectionPage;
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;

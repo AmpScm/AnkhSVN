@@ -16,10 +16,10 @@ namespace Ankh.UI.MergeWizard
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            WizardFramework.Wizard wizard = new MergeWizard();
-            WizardFramework.WizardDialog wd = new WizardFramework.WizardDialog(wizard);
+            //WizardFramework.Wizard wizard = new MergeWizard();
+           // WizardFramework.WizardDialog wd = new WizardFramework.WizardDialog(wizard);
 
-            Application.Run(wd);
+            //Application.Run(wd);
         }
     }
 }

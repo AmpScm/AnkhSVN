@@ -10,7 +10,7 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceTwoDifferentTreesPageControl : UserControl
+    public partial class MergeSourceTwoDifferentTreesPageControl : MergeSourceBasePageControl<MergeSourceTwoDifferentTreesPageControl>
     {
         private WizardPage _wizardPage;
 

@@ -18,11 +18,12 @@ namespace Ankh.UI.MergeWizard
     /// of the wizard page UI.  This base class handles the merge sources population
     /// and the enablement to go to the next page and/or finish the wizard.
     /// </summary>
-    public partial class MergeSourceBasePageControl : UserControl
+    public partial class MergeSourceBasePageControl<TControl> : UserControl
+        where TControl : MergeSourceBasePageControl<TControl>, new()
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
             WizardMessage.ERROR);
-        MergeSourceBasePage _wizardPage;
+        MergeSourceBasePage<TControl> _wizardPage;
         delegate void SetMergeSourcesCallBack(List<string> mergeSources);
 
         /// <summary>
@@ -49,6 +50,11 @@ namespace Ankh.UI.MergeWizard
         public MergeWizard.MergeType MergeType
         {
             get { return WizardPage.MergeType; }
+        }
+
+        internal string MergeSource
+        {
+            get { return mergeFromComboBox.Text; }
         }
 
         /// <summary>
@@ -91,7 +97,7 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Gets/Sets the wizard page associated with this UserControl.
         /// </summary>
-        public MergeSourceBasePage WizardPage
+        public MergeSourceBasePage<TControl> WizardPage
         {
             get { return _wizardPage; }
             set { _wizardPage = value; }
@@ -116,7 +122,7 @@ namespace Ankh.UI.MergeWizard
                 {
                     mergeFromComboBox.DataSource = mergeSources;
 
-                    mergeFromComboBox.SelectedItem = ((MergeWizard)WizardPage.Wizard).MergeTarget.Status.Uri.ToString();
+                    mergeFromComboBox.SelectedItem = WizardPage.Wizard.MergeTarget.Status.Uri.ToString();
 
                     UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
 
@@ -144,7 +150,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (WizardPage != null && WizardPage.Wizard is MergeWizard)
             {
-                MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
+                MergeWizard wizard = WizardPage.Wizard;
                 List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget, MergeType);
 
                 if (mergeSources.Count == 0 && MergeType != MergeWizard.MergeType.ManuallyRemove)

@@ -28,18 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeRevisionsSelectionPageControl));
-            this.SuspendLayout();
-            // 
-            // MergeRevisionsSelectionPageControl
-            // 
-            resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "MergeRevisionsSelectionPageControl";
-            this.ResumeLayout(false);
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeRevisionsSelectionPageControl));
+			this.logToolControl1 = new Ankh.UI.SvnLog.LogToolControl();
+			this.SuspendLayout();
+			// 
+			// logToolControl1
+			// 
+			this.logToolControl1.ChangedPathsVisible = true;
+			this.logToolControl1.IncludeMerged = false;
+			resources.ApplyResources(this.logToolControl1, "logToolControl1");
+			this.logToolControl1.LogMessageVisible = true;
+			this.logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Local;
+			this.logToolControl1.Name = "logToolControl1";
+			this.logToolControl1.StrictNodeHistory = false;
+			// 
+			// MergeRevisionsSelectionPageControl
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.logToolControl1);
+			this.Name = "MergeRevisionsSelectionPageControl";
+			this.ResumeLayout(false);
 
         }
 
         #endregion
+
+		private Ankh.UI.SvnLog.LogToolControl logToolControl1;
     }
 }

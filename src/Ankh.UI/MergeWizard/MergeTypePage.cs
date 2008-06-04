@@ -11,16 +11,17 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for handling the merge type
     /// selection of AnkhSVN's merge capabilities
     /// </summary>
-    class MergeTypePage : WizardPage
+    class MergeTypePage : BasePage<MergeWizard, MergeTypePageControl>
     {
-        public MergeTypePage() : base("Merge Type")
+        public MergeTypePage(MergeWizard wizard)
+            : base(wizard, "Merge Type")
         {
             IsPageComplete = true;
 
             Title = Resources.MergeTypePageHeaderTitle;
             this.Message = new WizardMessage(Resources.MergeTypePageHeaderMessage);
 
-            control_prop.WizardPage = this;
+            PageControl.WizardPage = this;
         }
 
         /// <summary>
@@ -28,13 +29,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         public bool ShowBestPracticesPage
         {
-            get { return control_prop.IsPerformBestPracticesChecked; }
-        }
-
-        /// <see cref="WizardFramework.WizardPage.Control" />
-        public override System.Windows.Forms.UserControl Control
-        {
-            get { return control_prop; }
+            get { return PageControl.IsPerformBestPracticesChecked; }
         }
 
         public MergeWizard.MergeType SelectedMergeType
@@ -51,6 +46,5 @@ namespace Ankh.UI.MergeWizard
         }
 
         private MergeWizard.MergeType mergeType_prop = MergeWizard.MergeType.RangeOfRevisions;
-        private MergeTypePageControl control_prop = new MergeTypePageControl();
     }
 }
