@@ -48,6 +48,7 @@ namespace Ankh.VS
             Container.AddService(typeof(IFileIconMapper), new FileIconMapper(Context));
             Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
             Container.AddService(typeof(IAnkhCommandStates), new CommandState(Context));
+            Container.AddService(typeof(IAnkhTempFileManager), new TempFileManager(Context));
         }
 
         /// <summary>

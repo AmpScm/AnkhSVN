@@ -54,12 +54,14 @@
       <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TempFileManager.cs" />
     <Compile Include="AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />
     <Compile Include="AnkhVSModule.cs" />

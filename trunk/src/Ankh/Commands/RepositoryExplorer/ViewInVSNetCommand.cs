@@ -3,6 +3,13 @@ using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Utils.Win32;
 using Ankh.WorkingCopyExplorer;
+using System.Windows.Forms.Design;
+using Ankh.VS;
+using System.IO;
+using Ankh.Scc;
+using Microsoft.VisualStudio.Shell;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -10,32 +17,54 @@ namespace Ankh.Commands.RepositoryExplorer
     /// A command that opens a file from the server in VS.NET
     /// </summary>
     [Command(AnkhCommand.ViewInVsNet)]
-    public class ViewInVSNetCommand : ViewRepositoryFileCommand
+    [Command(AnkhCommand.ViewInWindows)]
+    class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             e.Enabled = false;
         }
-        #region Implementation of ICommand
+
+        const int NOASSOCIATEDAPP = 1155;
 
         public override void OnExecute(CommandEventArgs e)
         {
-            /*IContext context = e.GetService<IContext>();
-            IExplorersShell shell = e.GetService<IExplorersShell>();
-            EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
+            ISvnRepositoryItem ri = null;
 
-            using (e.Context.BeginOperation("Opening"))
+            foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
-                INode node = shell.RepositoryExplorerService.SelectedNode;
+                ri = i;
+                break;
+            }
+            if (ri == null)
+                return;
 
-                CatRunner runner = new CatRunner(node.Name, node.Revision, new Uri(node.Url));
-                e.GetService<IProgressRunner>().Run("Retrieving file", runner.Work);
+            string toFile = e.GetService<IAnkhTempFileManager>().GetTempFile(Path.GetExtension(ri.Name));
 
-                dte.ItemOperations.OpenFile(runner.Path,
-                    EnvDTE.Constants.vsViewKindPrimary);
-            }*/
-        }
+            SaveFile(e, ri, toFile);
 
-        #endregion
+            if (e.Command == AnkhCommand.ViewInVsNet)
+                VsShellUtilities.OpenDocument(e.Context, toFile);
+            else
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = runner.Path;
+                process.StartInfo.UseShellExecute = true;
+
+                try
+                {
+                    process.Start();
+                }
+                catch (Win32Exception ex)
+                {
+                    // no application is associated with the file type
+                    if (ex.NativeErrorCode == NOASSOCIATEDAPP)
+                        MessageBox.Show("Windows could not find an application associated with the file type",
+                            "No associated application", MessageBoxButtons.OK);
+                    else
+                        throw;
+                }
+            }
+        }        
     }
 }

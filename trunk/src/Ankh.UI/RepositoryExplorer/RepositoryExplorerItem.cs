@@ -127,5 +127,15 @@ namespace Ankh.UI.RepositoryExplorer
             get { return null; }
         }
         #endregion
+
+        #region ISvnRepositoryItem Members
+
+
+        public void RefreshItem()
+        {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
