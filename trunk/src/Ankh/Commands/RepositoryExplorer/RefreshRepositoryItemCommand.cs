@@ -31,7 +31,7 @@ namespace Ankh.Commands.RepositoryExplorer
             foreach (ISvnRepositoryItem it in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
                 if (it.Uri != null)
-                    it.RefreshItem();
+                    it.RefreshItem(false);
             }
         }
 
