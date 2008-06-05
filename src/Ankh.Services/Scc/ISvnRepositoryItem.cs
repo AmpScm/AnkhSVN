@@ -19,5 +19,16 @@ namespace Ankh.Scc
         /// Gets the <see cref="SvnRevision"/> of the item (Optional)
         /// </summary>
         SvnRevision Revision { get; }
+
+        /// <summary>
+        /// Gets the name of the item (its filename)
+        /// </summary>
+        /// <value>The name.</value>
+        string Name { get; }
+
+        /// <summary>
+        /// Refreshes the item.
+        /// </summary>
+        void RefreshItem(bool refreshParent);
     }
 }

@@ -5,6 +5,10 @@ using System.Windows.Forms;
 using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
+using Ankh.Scc;
+using System.Windows.Forms.Design;
+using System.IO;
+using SharpSvn;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -14,36 +18,33 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.SaveToFile)]
     public class SaveToFileCommand : ViewRepositoryFileCommand
     {
-        #region Implementation of ICommand
-
         public override void OnExecute(CommandEventArgs e)
         {
-            /*IExplorersShell shell = e.GetService<IExplorersShell>();
-            IContext context = e.Context.GetService<IContext>();
+            ISvnRepositoryItem ri = null;
 
-            using (context.StartOperation("Saving"))
+            foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
-                INode node = shell.RepositoryExplorerService.SelectedNode;
-                string filename = null;
-                using (SaveFileDialog sfd = new SaveFileDialog())
-                {
-                    sfd.FileName = node.Name;
-                    if (sfd.ShowDialog() == DialogResult.OK)
-                        filename = sfd.FileName;
-                    else
-                        return;
-                }
+                ri = i;
+                break;
+            }
+            if (ri == null)
+                return;
 
+            IUIService ui = e.GetService<IUIService>();
 
-                CatRunner runner = new CatRunner(node.Revision, new Uri(node.Url),
-                    filename);
+            string toFile;
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "All Files (*.*)|*";
+                sfd.FileName = ri.Name;               
 
-                e.GetService<IProgressRunner>().Run(
-                                    "Retrieving file",
-                                    runner.Work);
-            }*/
+                if (sfd.ShowDialog(ui.GetDialogOwnerWindow()) != DialogResult.OK)
+                    return;
+
+                toFile = sfd.FileName;
+            }
+
+            SaveFile(e, ri, toFile);
         }
-
-        #endregion
     }
 }

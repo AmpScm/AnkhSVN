@@ -283,9 +283,6 @@
     <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RepositoryExplorer\ViewInWindowsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CommitOperation.cs" />
     <Compile Include="Config\ConfigService.cs">
       <SubType>Code</SubType>
