@@ -17,9 +17,9 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
 
-            AnkhConfig config = context.Configuration.Instance;
+            AnkhConfig config = cs.Instance;
             // Allow external diff if enabled in config file
             if (!config.ChooseDiffMergeManual || config.DiffExePath == null)
                 e.Enabled = e.Visible = false;
@@ -32,9 +32,11 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected override string GetExe(ISelectionContext selection, IContext context)
-        {            
-            return context.Configuration.Instance.DiffExePath;
+        protected override string GetExe(IAnkhServiceProvider context, ISelectionContext selection)
+        {
+            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
+
+            return cs.Instance.DiffExePath;
         }
     }
 }

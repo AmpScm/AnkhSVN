@@ -16,18 +16,20 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to resolve conflict between changes.
     /// </summary>
-    [Command(AnkhCommand.ResolveConflict)]
+    //[Command(AnkhCommand.ResolveConflict)]
     public class ResolveConflictCommand : CommandBase
-    {    
+    {
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetExe( Ankh.IContext context )
+        protected virtual string GetExe(IAnkhServiceProvider context)
         {
-            if ( !context.Configuration.Instance.ChooseDiffMergeManual )
-                return context.Configuration.Instance.MergeExePath;
+            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
+
+            if (!cs.Instance.ChooseDiffMergeManual)
+                return cs.Instance.MergeExePath;
             else
                 return null;
         }
@@ -36,18 +38,12 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
-
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
                 if (item.IsConflicted)
                     return;
             }
-            
+
             e.Enabled = e.Visible = false;
         }
 
@@ -155,17 +151,17 @@ namespace Ankh.Commands
                     }
                 }
             }*/
-        }        
-
-        private void Copy( string toPath, string fromFile )
-        {
-            string dir = Path.GetDirectoryName( toPath );
-            string fromPath = Path.Combine( dir, fromFile );
-            File.Copy( fromPath, toPath,  true );
         }
 
-      
-        private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
+        private void Copy(string toPath, string fromFile)
+        {
+            string dir = Path.GetDirectoryName(toPath);
+            string fromPath = Path.Combine(dir, fromFile);
+            File.Copy(fromPath, toPath, true);
+        }
+
+
+        private readonly Regex NUMBER = new Regex(@".*\.r(\d+)");
 
     }
 }

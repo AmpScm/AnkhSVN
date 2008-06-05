@@ -71,7 +71,7 @@ namespace Ankh.Commands
                         revRange = new SvnRevisionRange(SvnRevision.Previous, SvnRevision.Working);
                         break;
                 }
-                string diff = this.GetDiff(e.Selection, context, revRange);
+                string diff = this.GetDiff(context, e.Selection, revRange);
                 if (diff != null)
                 {
                     // convert it to HTML and store in a temp file

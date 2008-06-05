@@ -37,31 +37,35 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetExe(ISelectionContext selection, IContext context)
+        protected virtual string GetExe(IAnkhServiceProvider context, ISelectionContext selection)
         {
-            if (!context.Configuration.Instance.ChooseDiffMergeManual)
-                return context.Configuration.Instance.DiffExePath;
+            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
+            
+            if (!cs.Instance.ChooseDiffMergeManual)
+                return cs.Instance.DiffExePath;
             else
                 return null;
         }
 
-        protected virtual string GetDiff(ISelectionContext selection, IContext context)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
         {
-            return GetDiff(selection, context, null);
+            return GetDiff(context, selection, null);
         }
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(ISelectionContext selection, IContext context, SvnRevisionRange revisions)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions)
         {
             if (selection == null)
                 throw new ArgumentNullException("selection");
-            if (context == null)
+            else if (context == null)
                 throw new ArgumentNullException("context");
 
-            bool useExternalDiff = GetExe(selection, context) != null;
+            IUIShell uiShell = context.GetService<IUIShell>();
+
+            bool useExternalDiff = GetExe(context, selection) != null;
 
             bool foundModified = false;
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
@@ -91,7 +95,7 @@ namespace Ankh.Commands
             // should we show the path selector?
             if (!CommandBase.Shift && (revisions == null || !foundModified))
             {
-                result = context.UIShell.ShowPathSelector(info);
+                result = uiShell.ShowPathSelector(info);
                 if (!result.Succeeded)
                     return null;
 
@@ -108,15 +112,15 @@ namespace Ankh.Commands
 
             if (useExternalDiff)
             {
-                return DoExternalDiff(result, selection, context);
+                return DoExternalDiff(context, result, selection);
             }
             else
             {
-                return DoInternalDiff(result, selection, context);
+                return DoInternalDiff(context, result, selection);
             }
         }
 
-        private string DoInternalDiff(PathSelectorResult info, ISelectionContext selection, IContext context)
+        private string DoInternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
         {
             Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
             string slndir = ss.ProjectRoot;
@@ -131,7 +135,7 @@ namespace Ankh.Commands
 
             using (MemoryStream stream = new MemoryStream())
             using (StreamReader reader = new StreamReader(stream))
-            using (SvnClient client = context.ClientPool.GetClient())
+            using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
             {
                 foreach (SvnItem item in info.Selection)
                 {
@@ -143,7 +147,7 @@ namespace Ankh.Commands
             }
         }
 
-        private string DoExternalDiff(PathSelectorResult info, ISelectionContext selection, IContext context)
+        private string DoExternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
         {
             foreach (SvnItem item in info.Selection)
             {
@@ -152,9 +156,9 @@ namespace Ankh.Commands
                     info.RevisionEnd == SvnRevision.Working && !item.IsModified)
                     continue;
 
-                string quotedLeftPath = GetPath(info.RevisionStart, item, selection, context);
-                string quotedRightPath = GetPath(info.RevisionEnd, item, selection, context);
-                string diffString = this.GetExe(selection, context);
+                string quotedLeftPath = GetPath(context, info.RevisionStart, item, selection);
+                string quotedRightPath = GetPath(context, info.RevisionEnd, item, selection);
+                string diffString = this.GetExe(context, selection);
                 diffString = diffString.Replace("%base", quotedLeftPath);
                 diffString = diffString.Replace("%mine", quotedRightPath);
 
@@ -213,7 +217,7 @@ namespace Ankh.Commands
             return null;
         }
 
-        private string GetPath(SvnRevision revision, SvnItem item, ISelectionContext selection, IContext context)
+        private string GetPath(IAnkhServiceProvider context, SvnRevision revision, SvnItem item, ISelectionContext selection)
         {
             // is it local?
             if (revision == SvnRevision.Base)
@@ -228,7 +232,7 @@ namespace Ankh.Commands
                 else
                 {
                     // BH: We should use Export here instead.. This will give us keyword expansion for free
-                    using (SvnClient client = context.ClientPool.GetClient())
+                    using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
                     {
                         SvnWorkingCopyState result;
                         client.GetWorkingCopyState(item.FullPath, out result);

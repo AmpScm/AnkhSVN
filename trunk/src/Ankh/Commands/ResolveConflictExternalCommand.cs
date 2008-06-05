@@ -26,9 +26,9 @@ namespace Ankh.Commands
                 e.Visible = e.Enabled = false;
                 return;
             }
-            IContext context = e.Context.GetService<IContext>();
+            IAnkhConfigurationService cs = e.Context.GetService<IAnkhConfigurationService>();
 
-            AnkhConfig config = context.Configuration.Instance;
+            AnkhConfig config = cs.Instance;
 
             if (!config.ChooseDiffMergeManual || config.MergeExePath == null)
             {
@@ -41,9 +41,9 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected override string GetExe(Ankh.IContext context)
+        protected override string GetExe(IAnkhServiceProvider context)
         {
-            return context.Configuration.Instance.MergeExePath;
+            return context.GetService<IAnkhConfigurationService>().Instance.MergeExePath;
         }
 
         #endregion
