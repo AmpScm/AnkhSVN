@@ -14,82 +14,34 @@ using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Microsoft.Win32;
 using System.ComponentModel;
+using Ankh.VS;
 
 
 namespace Ankh.Configuration
 {
     /// <summary>
-    /// Represents an error in the configuration file.
-    /// </summary>
-    public class ConfigException : ApplicationException
-    {
-        public ConfigException(string msg)
-            : base(msg)
-        { }
-
-        public ConfigException(string msg, Exception innerException) :
-            base(msg, innerException)
-        { }
-    }
-
-    /// <summary>
     /// Contains functions used to load and save configuration data.
     /// </summary>
-    sealed class ConfigLoader : IAnkhConfigurationService, IDisposable
+    sealed class ConfigService : AnkhService, IAnkhConfigurationService, IDisposable
     {
-        readonly IAnkhServiceProvider _context;
         readonly object _lock = new object();
-        uint _cookie;
         AnkhConfig _instance;
 
-        public ConfigLoader(IAnkhServiceProvider context)
+        public ConfigService(IAnkhServiceProvider context)
+            : base(context)
         {
-
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-
-            _context = context;
-
-
-            EnsureConfig();
-        }
-
-        public void Dispose()
-        {
-            if (_cookie != 0)
-            {
-                IVsFileChangeEx changeMonitor = (IVsFileChangeEx)_context.GetService(typeof(SVsFileChangeEx));
-
-                if (changeMonitor != null)
-                {
-                    changeMonitor.UnadviseFileChange(_cookie);
-                    _cookie = 0;
-                }
-            }
         }
 
         public AnkhConfig Instance
         {
-            get { return _instance ?? (_instance = GetSafeConfigInstance()); }
+            get { return _instance ?? (_instance = GetNewConfigInstance()); }
         }
 
-        private AnkhConfig GetSafeConfigInstance()
+        IAnkhSolutionSettings _settings;
+        IAnkhSolutionSettings Settings
         {
-            try
-            {
-                return GetNewConfigInstance();
-            }
-            catch
-            {
-                LoadDefaultConfig();
-                return _instance;
-            }
+            get { return _settings ?? (_settings = GetService<IAnkhSolutionSettings>()); }
         }
-
-
-
-
 
         /// <summary>
         /// Loads the Ankh configuration file from the given path.
@@ -97,11 +49,11 @@ namespace Ankh.Configuration
         /// <returns>A Config object.</returns>
         public AnkhConfig GetNewConfigInstance()
         {
-            EnsureConfig();
-
             AnkhConfig instance = new AnkhConfig();
+
             SetDefaultsFromRegistry(instance);
             SetSettingsFromRegistry(instance);
+
             return instance;
         }
 
@@ -126,31 +78,42 @@ namespace Ankh.Configuration
 
         void SetDefaultsFromRegistry(AnkhConfig config)
         {
-            using (RegistryKey reg = OpenHKLMKey())
+            using (RegistryKey reg = OpenHKLMKey("Configuration"))
             {
                 if (reg == null)
                     return;
 
                 foreach (PropertyDescriptor pd in config.GetProperties(null))
                 {
-                    object value = reg.GetValue(pd.Name, pd.GetValue(config));
-                    pd.SetValue(config, value);
+                    string value = reg.GetValue(pd.Name, null) as string;
+
+                    if (value != null)
+                        try
+                        {
+                            pd.SetValue(config, pd.Converter.ConvertFromString(value));
+                        }
+                        catch { }
                 }
             }
         }
 
         void SetSettingsFromRegistry(AnkhConfig config)
         {
-            using (RegistryKey reg = OpenHKCUKey())
+            using (RegistryKey reg = OpenHKCUKey("Configuration"))
             {
-                List<string> names = new List<string>(reg.GetValueNames());
+                if (reg == null)
+                    return;
 
                 foreach (PropertyDescriptor pd in config.GetProperties(null))
                 {
-                    if (!names.Contains(pd.Name))
-                        continue;
-                    object value = reg.GetValue(pd.Name, pd.GetValue(config));
-                    pd.SetValue(config, value);
+                    string value = reg.GetValue(pd.Name, null) as string;
+
+                    if (value != null)
+                        try
+                        {
+                            pd.SetValue(config, pd.Converter.ConvertFromString(value));
+                        }
+                        catch { }
                 }
             }
         }
@@ -161,15 +124,13 @@ namespace Ankh.Configuration
         /// <param name="config"></param>
         public void SaveConfig(AnkhConfig config)
         {
-            EnsureConfig();
-
             lock (this._lock)
             {
                 AnkhConfig defaultConfig = new AnkhConfig();
                 SetDefaultsFromRegistry(defaultConfig);
                 PropertyDescriptorCollection defaultsProps = defaultConfig.GetProperties(null);
 
-                using (RegistryKey reg = OpenHKCUKey())
+                using (RegistryKey reg = OpenHKCUKey("Configuration"))
                 {
                     List<string> valueNames = new List<string>(reg.GetValueNames());
                     foreach (PropertyDescriptor pd in config.GetProperties(null))
@@ -188,45 +149,22 @@ namespace Ankh.Configuration
             }
         }
 
-        /// <summary>
-        /// Ensures the config.
-        /// </summary>
-        private void EnsureConfig()
+        RegistryKey OpenHKLMKey(string suffix)
         {
-            lock (this._lock)
-            {
-                using (RegistryKey k = Registry.CurrentUser.CreateSubKey(RegistryRoot + "\\AnkhSVN"))
-                {
-                    GC.KeepAlive(k);
-                }
-            }
+            if (string.IsNullOrEmpty("suffix"))
+                throw new ArgumentNullException("suffix");
+
+            // Opens the specified key or returns null
+            return Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + suffix, RegistryKeyPermissionCheck.ReadSubTree);
         }
 
-        
-
-        string _registryRoot;
-        string RegistryRoot
+        RegistryKey OpenHKCUKey(string suffix)
         {
-            get
-            {
-                if (_registryRoot == null)
-                {
-                    ILocalRegistry3 regSvc = _context.GetService<ILocalRegistry3>(typeof(SLocalRegistry));
-                    ErrorHandler.ThrowOnFailure(regSvc.GetLocalRegistryRoot(out _registryRoot));
-                }
-                return _registryRoot;
-            }
-        }
+            if (string.IsNullOrEmpty("suffix"))
+                throw new ArgumentNullException("suffix");
 
-
-        RegistryKey OpenHKLMKey()
-        {
-            return Registry.LocalMachine.OpenSubKey(RegistryRoot + "\\AnkhSVN");
-        }
-
-        RegistryKey OpenHKCUKey()
-        {
-            return Registry.CurrentUser.OpenSubKey(RegistryRoot + "\\AnkhSVN", true);
+            // Opens or creates the specified key
+            return Registry.CurrentUser.CreateSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + suffix);
         }
     }
 }
