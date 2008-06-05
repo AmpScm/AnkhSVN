@@ -123,14 +123,14 @@ namespace Ankh.VSPackage
             {
                 if (!_inCommandLineMode.HasValue)
                 {
-                    IVsShell uiShell = (IVsShell)GetService(typeof(SVsShell));
+                    IVsShell shell = (IVsShell)GetService(typeof(SVsShell));
 
-                    if (uiShell == null)
+                    if (shell == null)
                         _inCommandLineMode = false; // Probably running in a testcase; the shell loads us!
                     else
                     {
                         object value;
-                        if (ErrorHandler.Succeeded(uiShell.GetProperty((int)__VSSPROPID.VSSPROPID_IsInCommandLineMode, out value)))
+                        if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_IsInCommandLineMode, out value)))
                         {
                             _inCommandLineMode = Convert.ToBoolean(value);
                         }
