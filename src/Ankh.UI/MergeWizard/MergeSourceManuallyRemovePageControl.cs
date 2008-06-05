@@ -9,11 +9,14 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceManuallyRemovePageControl : MergeSourceBasePageControl<MergeSourceManuallyRemovePageControl>
+    public partial class MergeSourceManuallyRemovePageControl : MergeSourceManuallyRemovePageControlBase
     {
         public MergeSourceManuallyRemovePageControl()
         {
             InitializeComponent();
         }
     }
+
+    public class MergeSourceManuallyRemovePageControlBase : MergeSourceBasePageControl<MergeSourceManuallyRemovePageControl>
+    { }
 }
