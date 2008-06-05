@@ -15,9 +15,43 @@ namespace Ankh.Settings
     class SolutionSettings : AnkhService, IAnkhSolutionSettings
     {
         int _solutionCookie;
+        bool _inRanu = false;
+        string _vsUserRoot;
+        string _vsAppRoot;
+        string _hiveSuffix;
+
         public SolutionSettings(IAnkhServiceProvider context)
             : base(context)
         {
+            IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+            if (shell == null)
+                throw new InvalidOperationException("IVsShell not available");
+
+            object r;
+            if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)))
+                _vsUserRoot = (string)r;
+            else
+                _vsUserRoot = @"SOFTWARE\Microsoft\VisualStudio\8.0";
+
+            string baseName = _vsUserRoot;
+
+            if (_vsUserRoot.EndsWith(@"\UserSettings", StringComparison.OrdinalIgnoreCase))
+            {
+                _inRanu = true;
+                baseName = _vsUserRoot.Substring(0, _vsUserRoot.Length - 13);
+                _vsAppRoot = baseName + @"\Configuration";
+            }
+            else
+                _vsAppRoot = _vsUserRoot;
+
+            if (baseName.StartsWith(@"SOFTWARE\", StringComparison.OrdinalIgnoreCase))
+                baseName = baseName.Substring(9); // Should always trigger
+
+            if (baseName.StartsWith(@"Microsoft\", StringComparison.OrdinalIgnoreCase))
+                baseName = baseName.Substring(10); // Give non-ms hives a prefix
+
+            _hiveSuffix = baseName;
         }
 
         class SettingsCache
@@ -267,24 +301,74 @@ namespace Ankh.Settings
         {
             get
             {
-                ILocalRegistry2 r = Context.GetService<ILocalRegistry2>(typeof(SLocalRegistry));
+                IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
-                string root;
-
-                if (!ErrorHandler.Succeeded(r.GetLocalRegistryRoot(out root)))
-                    return null;
-
-                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(root, RegistryKeyPermissionCheck.ReadSubTree))
+                if (shell != null)
                 {
-                    string value = rk.GetValue("VisualStudioProjectsLocation", "C:\\") as string;
-
-                    if (!string.IsNullOrEmpty(value))
-                        return SvnTools.GetNormalizedFullPath(value);
-                    else
-                        return "C:\\";
+                    object r;
+                    if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_VisualStudioProjDir, out r)))
+                        return SvnTools.GetNormalizedFullPath((string)r);
                 }
+
+                return "C:\\";
             }
         }
 
+        #region IAnkhSolutionSettings Members
+
+        public string OpenFileFilter
+        {
+            get
+            {
+                IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+                if (shell != null)
+                {
+                    object r;
+                    if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_OpenFileFilter, out r)))
+                        return ((string)r).Replace('\0', '|').TrimEnd('|');
+                }
+
+                return "All Files (*.*)|*.*";
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether [in ranu mode].
+        /// </summary>
+        /// <value><c>true</c> if [in ranu mode]; otherwise, <c>false</c>.</value>
+        public bool InRanuMode
+        {
+            get { return _inRanu; }
+        }
+
+        /// <summary>
+        /// Gets the visual studio registry root.
+        /// </summary>
+        /// <value>The visual studio registry root.</value>
+        public string VisualStudioRegistryRoot
+        {
+            get { return _vsAppRoot; }
+        }
+
+        /// <summary>
+        /// Gets the visual studio user registry root.
+        /// </summary>
+        /// <value>The visual studio user registry root.</value>
+        public string VisualStudioUserRegistryRoot
+        {
+            get { return _vsUserRoot; }
+        }
+
+        /// <summary>
+        /// Gets the registry hive suffix.
+        /// </summary>
+        /// <value>The registry hive suffix.</value>
+        public string RegistryHiveSuffix
+        {
+            get { return _hiveSuffix; }
+        }
+
+        #endregion
     }
 }

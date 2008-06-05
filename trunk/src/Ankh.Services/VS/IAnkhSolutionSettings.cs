@@ -36,8 +36,44 @@ namespace Ankh.VS
         Uri ProjectRootUri { get; }
 
 
+        /// <summary>
+        /// Gets all project extensions filter.
+        /// </summary>
+        /// <value>All project extensions filter.</value>
         string AllProjectExtensionsFilter { get; }
 
+        /// <summary>
+        /// Gets the name of the open project filter.
+        /// </summary>
+        /// <value>The name of the open project filter.</value>
         string OpenProjectFilterName { get; }
+
+
+        /// <summary>
+        /// Gets the open file filter.
+        /// </summary>
+        /// <value>The open file filter.</value>
+        string OpenFileFilter { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether [in ranu mode].
+        /// </summary>
+        /// <value><c>true</c> if [in ranu mode]; otherwise, <c>false</c>.</value>
+        bool InRanuMode { get; }
+        /// <summary>
+        /// Gets the visual studio registry root.
+        /// </summary>
+        /// <value>The visual studio registry root.</value>
+        string VisualStudioRegistryRoot { get; }
+        /// <summary>
+        /// Gets the visual studio user registry root.
+        /// </summary>
+        /// <value>The visual studio user registry root.</value>
+        string VisualStudioUserRegistryRoot { get; }
+        /// <summary>
+        /// Gets the registry hive suffix.
+        /// </summary>
+        /// <value>The registry hive suffix.</value>
+        string RegistryHiveSuffix { get; }
     }
 }
