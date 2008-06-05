@@ -243,18 +243,15 @@ namespace Ankh
 
         private static string GetNestedStackTraces(Exception ex)
         {
-            if (ex == null)
-                return String.Empty;
-            else
-                return ex.StackTrace + NL + NL + GetNestedStackTraces(ex.InnerException);
+            return ex.ToString();
         }
 
         private static string GetNestedMessages(Exception ex)
         {
             if (ex == null)
-                return String.Empty;
+                return "";
             else
-                return ex.Message + NL + NL + GetNestedMessages(ex.InnerException);
+                return ex.Message.Trim() + NL + GetNestedMessages(ex.InnerException);
         }
 
         private static readonly string NL = Environment.NewLine;
