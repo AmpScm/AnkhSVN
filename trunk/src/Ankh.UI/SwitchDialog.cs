@@ -20,7 +20,12 @@ namespace Ankh.UI
         {
             using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
             {
-                dlg.ShowDialog(Context);
+                dlg.SelectedUri = SwitchToUri;
+                if (dlg.ShowDialog(Context) == DialogResult.OK)
+                {
+                    if (dlg.SelectedUri != null)
+                        SwitchToUri = dlg.SelectedUri;
+                }
             }
         }
 

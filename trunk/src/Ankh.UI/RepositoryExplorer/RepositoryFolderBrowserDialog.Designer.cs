@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.newFolderButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.reposBrowser = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.urlLabel = new System.Windows.Forms.Label();
             this.urlBox = new System.Windows.Forms.ComboBox();
+            this.reposBrowser = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // newFolderButton
@@ -42,15 +44,17 @@
             this.newFolderButton.Enabled = false;
             this.newFolderButton.Location = new System.Drawing.Point(11, 319);
             this.newFolderButton.Name = "newFolderButton";
-            this.newFolderButton.Size = new System.Drawing.Size(75, 23);
+            this.newFolderButton.Size = new System.Drawing.Size(104, 23);
             this.newFolderButton.TabIndex = 0;
-            this.newFolderButton.Text = "&New Folder";
+            this.newFolderButton.Text = "&Make New Folder";
             this.newFolderButton.UseVisualStyleBackColor = true;
             this.newFolderButton.Visible = false;
+            this.newFolderButton.Click += new System.EventHandler(this.newFolderButton_Click);
             // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Location = new System.Drawing.Point(242, 319);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -68,20 +72,6 @@
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // reposBrowser
-            // 
-            this.reposBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.reposBrowser.Context = null;
-            this.reposBrowser.Location = new System.Drawing.Point(12, 36);
-            this.reposBrowser.Name = "reposBrowser";
-            this.reposBrowser.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
-                        | SharpSvn.SvnDirEntryItems.Time)));
-            this.reposBrowser.ShowRootLines = false;
-            this.reposBrowser.Size = new System.Drawing.Size(386, 269);
-            this.reposBrowser.TabIndex = 2;
             // 
             // urlLabel
             // 
@@ -104,6 +94,21 @@
             this.urlBox.Name = "urlBox";
             this.urlBox.Size = new System.Drawing.Size(360, 21);
             this.urlBox.TabIndex = 3;
+            this.urlBox.Leave += new System.EventHandler(this.urlBox_Leave);
+            // 
+            // reposBrowser
+            // 
+            this.reposBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.reposBrowser.Context = null;
+            this.reposBrowser.Location = new System.Drawing.Point(12, 36);
+            this.reposBrowser.Name = "reposBrowser";
+            this.reposBrowser.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
+                        | SharpSvn.SvnDirEntryItems.Time)));
+            this.reposBrowser.ShowRootLines = false;
+            this.reposBrowser.Size = new System.Drawing.Size(386, 269);
+            this.reposBrowser.TabIndex = 2;
             // 
             // RepositoryFolderBrowserDialog
             // 
@@ -134,5 +139,6 @@
         private Ankh.UI.RepositoryExplorer.RepositoryTreeView reposBrowser;
         private System.Windows.Forms.Label urlLabel;
         private System.Windows.Forms.ComboBox urlBox;
+        private System.Windows.Forms.Timer timer1;
     }
 }
