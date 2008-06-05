@@ -131,10 +131,9 @@
           <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
-          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x90" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
-          <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
-              text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+          <Button id="Cmd_SolutionMerge" priority="0xE0" name="MergeSolution"
+              text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>          
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
@@ -167,7 +166,8 @@
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
 
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
-          <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
+          <Button id="Cmd_ProjectMerge" priority="0xE0" name="MergeProject"
+              text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
       </Menu>
@@ -227,7 +227,8 @@
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
-          <ButtonRef id="Cmd_ItemMerge" priority="0xE0" />
+          <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
+              text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
           <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
 								text="Refres&amp;h"
 								toolTip="Refresh this view." iconFile="menu/Refresh.png"/>

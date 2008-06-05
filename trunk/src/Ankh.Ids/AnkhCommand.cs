@@ -102,11 +102,13 @@ namespace Ankh.Ids
         SolutionUpdateSpecific,
         SolutionCommit,
         SolutionHistory,
+        SolutionMerge,
 
         ProjectUpdateHead,
         ProjectUpdateSpecific,
         ProjectCommit,
         ProjectHistory,
+        ProjectMerge,
 
         PendingChangesViewFlat,
         PendingChangesViewProject,
