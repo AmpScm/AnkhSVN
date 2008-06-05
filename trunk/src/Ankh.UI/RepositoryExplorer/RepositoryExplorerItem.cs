@@ -131,7 +131,7 @@ namespace Ankh.UI.RepositoryExplorer
         #region ISvnRepositoryItem Members
 
 
-        public void RefreshItem()
+        public void RefreshItem(bool refreshParent)
         {
             //throw new NotImplementedException();
         }
