@@ -33,8 +33,8 @@
             this.fileChangesButton = new System.Windows.Forms.ToolStripButton();
             this.issuesButton = new System.Windows.Forms.ToolStripButton();
             this.recentChangesButton = new System.Windows.Forms.ToolStripButton();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.conflictsButton = new System.Windows.Forms.ToolStripButton();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.pendingChangesTabs.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,6 +70,7 @@
             // issuesButton
             // 
             this.issuesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.issuesButton.Enabled = false;
             this.issuesButton.Image = ((System.Drawing.Image)(resources.GetObject("issuesButton.Image")));
             this.issuesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.issuesButton.Name = "issuesButton";
@@ -80,20 +81,13 @@
             // recentChangesButton
             // 
             this.recentChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.recentChangesButton.Enabled = false;
             this.recentChangesButton.Image = ((System.Drawing.Image)(resources.GetObject("recentChangesButton.Image")));
             this.recentChangesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.recentChangesButton.Name = "recentChangesButton";
             this.recentChangesButton.Size = new System.Drawing.Size(35, 36);
             this.recentChangesButton.Text = "Recent Changes";
             this.recentChangesButton.Click += new System.EventHandler(this.recentChangesButton_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(36, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(768, 300);
-            this.panel1.TabIndex = 1;
             // 
             // conflictsButton
             // 
@@ -104,6 +98,14 @@
             this.conflictsButton.Size = new System.Drawing.Size(35, 36);
             this.conflictsButton.Text = "Conflicts";
             this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(36, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(768, 300);
+            this.panel1.TabIndex = 1;
             // 
             // PendingChangesToolControl
             // 
