@@ -10,6 +10,7 @@ using Ankh.Scc;
 using Microsoft.VisualStudio.Shell;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -48,7 +49,7 @@ namespace Ankh.Commands.RepositoryExplorer
             else
             {
                 Process process = new Process();
-                process.StartInfo.FileName = runner.Path;
+                process.StartInfo.FileName = toFile;
                 process.StartInfo.UseShellExecute = true;
 
                 try
@@ -59,7 +60,8 @@ namespace Ankh.Commands.RepositoryExplorer
                 {
                     // no application is associated with the file type
                     if (ex.NativeErrorCode == NOASSOCIATEDAPP)
-                        MessageBox.Show("Windows could not find an application associated with the file type",
+                        e.GetService<IAnkhDialogOwner>()
+                            .MessageBox.Show("Windows could not find an application associated with the file type",
                             "No associated application", MessageBoxButtons.OK);
                     else
                         throw;
