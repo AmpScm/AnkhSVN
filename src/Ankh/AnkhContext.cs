@@ -18,7 +18,6 @@ namespace Ankh
     public class OldAnkhContext : AnkhService, IContext, IAnkhServiceProvider
     {
         OutputPaneWriter _outputPane;
-        IAnkhConfigurationService _config;
 
         /// <summary>
         /// Fired when the addin is unloading.
@@ -35,10 +34,6 @@ namespace Ankh
         {
             if (uiShell != null)
                 _uiShell = uiShell;
-
-            this._config = package.GetService<IAnkhConfigurationService>();
-
-            this.LoadConfig();
 
             this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
         }
@@ -80,15 +75,6 @@ namespace Ankh
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this._clientPool ?? (this._clientPool = GetService<ISvnClientPool>()); }
-        }
-
-        /// <summary>
-        /// The configloader.
-        /// </summary>
-        public IAnkhConfigurationService Configuration
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this._config; }
         }
 
         bool _operationRunning;
@@ -159,64 +145,6 @@ namespace Ankh
         {
             if (this.Unloading != null)
                 this.Unloading(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// try to load the configuration file
-        /// </summary>
-        private void LoadConfig()
-        {
-            _config.LoadConfig();
-        }
-
-        /// <summary>
-        /// Seems someone has updated the config file on disk.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void ConfigLoader_ConfigFileChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.Configuration.LoadConfig();
-                this.OutputPane.WriteLine("Configuration reloaded.");
-            }
-            catch (Ankh.Configuration.ConfigException ex)
-            {
-                this.OutputPane.WriteLine("Configuration file has errors: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
-
-                if (handler != null)
-                    handler.OnError(ex);
-                else
-                    throw;
-            }
-        }
-
-        #region Win32Window class
-        private class Win32Window : IWin32Window
-        {
-            public Win32Window(IntPtr handle)
-            {
-                this.handle = handle;
-            }
-            #region IWin32Window Members
-
-            public System.IntPtr Handle
-            {
-                get
-                {
-                    return this.handle;
-                }
-            }
-
-            #endregion
-            private IntPtr handle;
-
-        }
-        #endregion
+        }   
     }
 }

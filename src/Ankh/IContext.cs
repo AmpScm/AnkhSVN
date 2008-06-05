@@ -28,11 +28,6 @@ namespace Ankh
         ISvnClientPool ClientPool { get; }
 
         /// <summary>
-        /// The configloader.
-        /// </summary>
-        IAnkhConfigurationService Configuration { get; }
-
-        /// <summary>
         /// Should be called before starting any lengthy operation
         /// </summary>
         IDisposable StartOperation( string description );        

@@ -23,10 +23,10 @@ namespace AnkhSvn_UnitTestProject.Mocks
 
             using (mocks.Record())
             {
-                Expect.Call(context.Configuration.Instance).Return(config).Repeat.Any();
+                //Expect.Call(context.Configuration.Instance).Return(config).Repeat.Any();
 
-                if (uiShell != null)
-                    Expect.Call(context.UIShell).Return(uiShell).Repeat.Any();
+                //if (uiShell != null)
+                //    Expect.Call(context.UIShell).Return(uiShell).Repeat.Any();
             }
 
             return context;

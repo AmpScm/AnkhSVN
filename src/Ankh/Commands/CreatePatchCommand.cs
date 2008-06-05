@@ -28,7 +28,7 @@ namespace Ankh.Commands
 
             using (context.StartOperation("Creating patch"))
             {
-                string diff = this.GetDiff(e.Selection, context);
+                string diff = this.GetDiff(context, e.Selection);
 
                 if (diff == null)
                 {
