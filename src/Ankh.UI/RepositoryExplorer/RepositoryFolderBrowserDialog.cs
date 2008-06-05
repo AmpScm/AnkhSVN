@@ -31,6 +31,14 @@ namespace Ankh.UI.RepositoryExplorer
 
                 return null;
             }
+
+            set
+            {
+                if (value != null && value.IsAbsoluteUri)
+                    urlBox.Text = value.AbsoluteUri;
+                else
+                    urlBox.Text = "";
+            }
         }
 
         Uri _rootUri;
@@ -49,6 +57,16 @@ namespace Ankh.UI.RepositoryExplorer
         {
             get { return newFolderButton.Enabled; }
             set { newFolderButton.Visible = newFolderButton.Enabled = value; }
+        }
+
+        private void urlBox_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void newFolderButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
