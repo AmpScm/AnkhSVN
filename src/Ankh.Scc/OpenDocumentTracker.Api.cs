@@ -356,6 +356,8 @@ namespace Ankh.Scc
                 if (paths == null)
                     throw new ArgumentNullException("paths");
 
+                StopMonitor(); // Make sure we have no further locks while reloading!
+
                 HybridCollection<string> changed = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
                 changed.AddRange(paths);
 
@@ -390,7 +392,7 @@ namespace Ankh.Scc
                                 parentDocument = mapper.SolutionFilePath;
 
                             if (!string.IsNullOrEmpty(parentDocument) && !changed.Contains(parentDocument))
-                            {                                
+                            {
                                 if (!_locked.Contains(parentDocument))
                                 {
                                     // The parent is not on our changed or locked list.. so make sure it is saved
@@ -406,6 +408,11 @@ namespace Ankh.Scc
 
             public override void Dispose()
             {
+                StopMonitor();
+            }
+
+            void StopMonitor()
+            {
                 // Stop monitoring
                 foreach (uint v in _monitor.Keys)
                     _change.UnadviseFileChange(v);
@@ -418,10 +425,14 @@ namespace Ankh.Scc
                     _change.IgnoreFile(0, path, 0);
                 }
 
+                _fsIgnored.Clear();
+
                 // Sync all files for the last time
                 // to make sure they are not reloaded for old changes after disposing
                 foreach (string path in _locked)
-                    _change.SyncFile(path);                
+                    _change.SyncFile(path);
+
+                _locked.Clear();
 
                 foreach (string path in _readonly)
                 {
@@ -431,6 +442,7 @@ namespace Ankh.Scc
                         dd.SetReadOnly(false);
                     }
                 }
+                _readonly.Clear();
 
                 foreach (string path in _ignoring)
                 {
@@ -440,6 +452,8 @@ namespace Ankh.Scc
                         dd.IgnoreFileChanges(false);
                     }
                 }
+
+                _ignoring.Clear();
             }
         }
 
