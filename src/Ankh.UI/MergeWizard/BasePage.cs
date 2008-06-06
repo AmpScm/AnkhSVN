@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace Ankh.UI.MergeWizard
 {
     public abstract class BasePage<TWizard, TControl> : WizardPage
-        where TWizard : class, IWizard
+        where TWizard : AnkhWizard
         where TControl : UserControl, new()
     {
         protected BasePage(TWizard wizard, string name)
@@ -25,16 +25,23 @@ namespace Ankh.UI.MergeWizard
             _control = new TControl();
         }
 
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public IAnkhServiceProvider Context
+        {
+            get { return Wizard.Context; }
+        }
+
         TWizard _wizard;
+        /// <summary>
+        /// Gets or sets the wizard.
+        /// </summary>
+        /// <value>The wizard.</value>
         public new TWizard Wizard
         {
-            get
-            {
-                if(_wizard == null)
-                    _wizard = (TWizard)base.Wizard;
-                
-                return _wizard;
-            }
+            get { return _wizard ?? (_wizard = (TWizard)base.Wizard); }
             set
             {
                 _wizard = value;

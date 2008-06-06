@@ -18,7 +18,7 @@ namespace Ankh.UI.MergeWizard.Commands
     [Command(AnkhCommand.ItemMerge)]
     [Command(AnkhCommand.ProjectMerge)]
     [Command(AnkhCommand.SolutionMerge)]
-    class Merge : ICommandHandler, IComponent
+    class Merge : ICommandHandler
     {
         #region ICommandHandler Members
 
@@ -93,7 +93,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     throw new InvalidOperationException();
             }
 
-            using (MergeWizardDialog dialog = new MergeWizardDialog(Site, new MergeUtils(e.Context), svnItems[0]))
+            using (MergeWizardDialog dialog = new MergeWizardDialog(e.Context, new MergeUtils(e.Context), svnItems[0]))
             {
                 DialogResult result;
 
@@ -111,34 +111,6 @@ namespace Ankh.UI.MergeWizard.Commands
             }
         }
 
-        #endregion
-
-        #region IComponent Members
-
-        public event EventHandler Disposed;
-
-        ISite _site;
-        public ISite Site
-        {
-            get
-            {
-                return _site;
-            }
-            set
-            {
-                if(value != null)
-                    _site = value;
-            }
-        }
-
-        #endregion
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-        }
-
-        #endregion
+        #endregion  
     }
 }

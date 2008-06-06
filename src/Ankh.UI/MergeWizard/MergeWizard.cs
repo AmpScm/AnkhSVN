@@ -12,7 +12,7 @@ namespace Ankh.UI.MergeWizard
     /// <summary>
     /// This is the wizard implementation for AnkhSVN's merge capability.
     /// </summary>
-    public class MergeWizard : Wizard
+    public class MergeWizard : AnkhWizard
     {
         /// <summary>
         /// Enumeration of available merge types.
@@ -29,8 +29,8 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeWizard(IWizardContainer container)
-            : base()
+        public MergeWizard(IAnkhServiceProvider context, IWizardContainer container)
+            : base(context)
         {
             Container = container;
             this.WindowTitle = Resources.MergeWizardTitle;
