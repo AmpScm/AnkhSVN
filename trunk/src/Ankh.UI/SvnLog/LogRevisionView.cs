@@ -63,7 +63,7 @@ namespace Ankh.UI.SvnLog
 
 		internal DateTime Date
 		{
-			get { return _args.Time; }
+			get { return _args.Time.ToLocalTime(); }
 		}
 
 		internal string Author
