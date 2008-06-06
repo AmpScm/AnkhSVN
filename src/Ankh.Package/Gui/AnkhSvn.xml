@@ -127,8 +127,8 @@
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x20" />
           <ButtonRef id="Cmd_SwitchItem" priority="0x30" />
-          <!--ButtonRef id="Cmd_Lock" priority="0x40" />
-          <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
+          <!--ButtonRef id="Cmd_Lock" priority="0x40" /-->
+          <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <ButtonRef id="Cmd_RevertToRevision" priority="0xD0" />
@@ -159,8 +159,8 @@
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x30" />
           <ButtonRef id="Cmd_SwitchItem" priority="0x40" />
-          <!--ButtonRef id="Cmd_Lock" priority="0x40" />
-          <ButtonRef id="Cmd_Unlock" priority="0x50" /-->
+          <!--ButtonRef id="Cmd_Lock" priority="0x40" /-->
+          <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
@@ -213,10 +213,10 @@
 								toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
           <!--Button id="Cmd_Lock" name="Lock" priority="0x40" defaultInvisible="true"
               text="Loc&amp;k..."
-              toolTip="Lock the selected item." iconFile="menu/Lock.png" />
+              toolTip="Lock the selected item." iconFile="menu/Lock.png" /-->
           <Button id="Cmd_Unlock" name="Unlock" priority="0x50" defaultInvisible="true"
               text="U&amp;nlock..."
-              toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/-->
+              toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
           <Button id="Cmd_Cleanup" name="Cleanup" priority="0x60" defaultInvisible="true"
               text="Cl&amp;eanup"
               toolTip="Cleanup the working copy." iconFile="menu/Cleanup.png"/>
@@ -302,9 +302,6 @@
           <Button id="Cmd_ExportFolder" name="ExportFolder" priority="0x301"
               text="E&amp;xport this folder"
               toolTip="Export this folder." iconFile="menu/Export.png" defaultInvisible="true"/>
-          <Button id="Cmd_Relocate" name="Relocate" priority="0x301"
-              text="Relo&amp;cate..."
-              toolTip="Relocate this file." iconFile="menu/Relocate.png" />
         </Group>
       </Menu>
     </GroupRef>
