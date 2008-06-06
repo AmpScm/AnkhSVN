@@ -36,6 +36,7 @@ namespace Ankh.UI.SvnLog
 
                     logRevisionControl1.Site = site;
 
+                    // BH: This makes the control single-instance only
                     if (_site.GetService<LogToolControl>() == null)
                         _site.Package.AddService(typeof(LogToolControl), this);
                 }
