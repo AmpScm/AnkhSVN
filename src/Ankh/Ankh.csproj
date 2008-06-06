@@ -325,9 +325,6 @@
     <Compile Include="ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="RepositoryExplorer\RepositoryBrowserController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
