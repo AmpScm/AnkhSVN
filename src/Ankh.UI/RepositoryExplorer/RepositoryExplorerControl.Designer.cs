@@ -65,9 +65,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 25);
             this.treeView.Name = "treeView";
-            this.treeView.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
-                        | SharpSvn.SvnDirEntryItems.Time)));
-            this.treeView.ShowRootLines = false;
             this.treeView.Size = new System.Drawing.Size(233, 400);
             this.treeView.TabIndex = 1;
             this.treeView.SelectedNodeRefresh += new System.EventHandler(this.treeView_SelectedNodeRefresh);

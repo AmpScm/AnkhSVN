@@ -49,6 +49,40 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         RepositoryTreeNode _rootNode;
+
+        protected RepositoryTreeNode RootNode
+        {
+            get { return _rootNode ?? (_rootNode = CreateRootNode()); }
+        }
+
+        private RepositoryTreeNode CreateRootNode()
+        {
+            RepositoryTreeNode rootNode;
+
+            rootNode = new RepositoryTreeNode(null);
+            rootNode.Text = RepositoryStrings.RootName;
+
+            if (IconMapper != null)
+                rootNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Servers);
+
+            SortedAddNode(Nodes, rootNode);
+
+            return rootNode;
+        }
+
+        protected override void OnCreateControl()
+        {
+            base.OnCreateControl();
+
+            if (DesignMode)
+                return;
+
+            if (ImageList == null && IconMapper != null)
+                ImageList = IconMapper.ImageList;
+
+            GC.KeepAlive(RootNode);
+        }
+
         public void AddRoot(Uri uri)
         {
             if (uri == null)
@@ -57,17 +91,19 @@ namespace Ankh.UI.RepositoryExplorer
             if (ImageList == null && IconMapper != null)
                 ImageList = IconMapper.ImageList;
 
-            if (Nodes.Count == 0)
-            {
-                _rootNode = new RepositoryTreeNode(null);
-                _rootNode.Text = RepositoryStrings.RootName;
+            RepositoryTreeNode serverNode = EnsureServerOf(uri);
 
-                if (IconMapper != null)
-                    _rootNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Servers);
+            if (!_rootNode.IsExpanded)
+                _rootNode.Expand();
 
-                SortedAddNode(Nodes, _rootNode);
-            }
+            if (!serverNode.IsExpanded)
+                serverNode.Expand();
 
+            BrowseRoot(serverNode, uri);
+        }
+
+        private RepositoryTreeNode EnsureServerOf(Uri uri)
+        {
             Uri serverUri;
             RepositoryTreeNode serverNode = FindServer(uri, out serverUri);
 
@@ -83,16 +119,12 @@ namespace Ankh.UI.RepositoryExplorer
                 if (serverNode.Text.ToString() == "file:///")
                     serverNode.Text = RepositoryStrings.LocalRepositories;
 
-                SortedAddNode(_rootNode.Nodes, serverNode);
+                SortedAddNode(RootNode.Nodes, serverNode);
+
+                if (!RootNode.IsExpanded)
+                    RootNode.Expand();
             }
-
-            if (!_rootNode.IsExpanded)
-                _rootNode.Expand();
-
-            if (!serverNode.IsExpanded)
-                serverNode.Expand();
-
-            BrowseRoot(serverNode, uri);
+            return serverNode;
         }
 
         private void SortedAddNode(TreeNodeCollection nodeCollection, RepositoryTreeNode newNode)
@@ -114,7 +146,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             serverUri = new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped));
 
-            foreach (RepositoryTreeNode tn in _rootNode.Nodes)
+            foreach (RepositoryTreeNode tn in RootNode.Nodes)
             {
                 if (serverUri == tn.RawUri)
                 {
@@ -136,7 +168,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         public void BrowseRoot(RepositoryTreeNode parent, Uri uri)
         {
-            // uri = SvnTools.NormalizeUri(uri); // TODO: Implement in SharpSvn
+            uri = SvnTools.GetNormalizedUri(uri);
 
             RepositoryTreeNode itemNode;
             if (_nodeMap.TryGetValue(uri, out itemNode))
@@ -150,6 +182,7 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         SvnDirEntryItems _retrieveItems = SvnDirEntryItems.SvnListDefault | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SvnDirEntryItems RetrieveItems
         {
             get { return _retrieveItems; }
@@ -158,10 +191,32 @@ namespace Ankh.UI.RepositoryExplorer
 
         int nRunning;
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new RepositoryTreeNode SelectedNode
+        {
+            get { return base.SelectedNode as RepositoryTreeNode; }
+            set { base.SelectedNode = value; }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                base.SelectedNode = GetNodeAt(e.X, e.Y);
+            }
+
+            base.OnMouseDown(e);
+        }
+
+
         internal void BrowseItem(Uri uri)
         {
             if (uri == null)
                 throw new ArgumentNullException("uri");
+
+            if (DesignMode)
+                return;
 
             nRunning++;
             if (nRunning == 1)
@@ -227,6 +282,13 @@ namespace Ankh.UI.RepositoryExplorer
             d.BeginInvoke(null, null);
         }
 
+        [DefaultValue(false)]
+        public new bool ShowRootLines
+        {
+            get { return base.ShowRootLines; }
+            set { base.ShowRootLines = value; }
+        }
+
         /// <summary>
         /// Occurs when the selected node was refreshed
         /// </summary>
@@ -244,6 +306,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void MaybeExpand(Uri uri)
         {
+            uri = SvnTools.GetNormalizedUri(uri);
             RepositoryTreeNode tn;
             if(_nodeMap.TryGetValue(uri, out tn))
             {
@@ -279,7 +342,11 @@ namespace Ankh.UI.RepositoryExplorer
         protected override void OnAfterExpand(TreeViewEventArgs e)
         {
             RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
-            rtn.EnsureLoaded(true);
+
+            if (rtn != null)
+            {
+                rtn.EnsureLoaded(true);
+            }
         }
 
         protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
@@ -288,11 +355,16 @@ namespace Ankh.UI.RepositoryExplorer
 
             RepositoryTreeNode rtn = e.Node as RepositoryTreeNode;
 
-            rtn.EnsureLoaded(false);
+            if (rtn != null)
+            {
+                rtn.EnsureLoaded(false);
+            }
         }
 
         private RepositoryTreeNode EnsureRoot(Uri uri)
         {
+            EnsureServerOf(uri);
+
             Uri serverUri;
 
             RepositoryTreeNode serverNode = FindServer(uri, out serverUri);
@@ -312,7 +384,7 @@ namespace Ankh.UI.RepositoryExplorer
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
 
             serverNode.Nodes.Add(rtn);
-            _nodeMap.Add(rtn.RawUri, rtn);
+            _nodeMap.Add(SvnTools.GetNormalizedUri(rtn.RawUri), rtn);
 
             if (!serverNode.IsExpanded)
                 serverNode.Expand();
@@ -362,9 +434,10 @@ namespace Ankh.UI.RepositoryExplorer
 
         private RepositoryTreeNode EnsureFolderUri(Uri uri)
         {
+            Uri nUri = SvnTools.GetNormalizedUri(uri);
             RepositoryTreeNode tn;
 
-            if (!_nodeMap.TryGetValue(uri, out tn))
+            if (!_nodeMap.TryGetValue(nUri, out tn))
             {
                 Uri parentUri = new Uri(uri, "../");
 
@@ -389,7 +462,7 @@ namespace Ankh.UI.RepositoryExplorer
                     if (IconMapper != null)
                         tn.IconIndex = IconMapper.DirectoryIcon;
 
-                    _nodeMap.Add(tn.RawUri, tn);
+                    _nodeMap.Add(nUri, tn);
 
                     tn.AddDummy();
 
@@ -423,17 +496,6 @@ namespace Ankh.UI.RepositoryExplorer
             e.SelectionItem = new RepositoryExplorerItem((RepositoryTreeNode)e.SelectionItem);
             base.OnRetrieveSelection(e);
         }
-
-        public void SetIcon(TreeNode node, string name)
-        {
-            if (IconMapper != null)
-                node.SelectedImageIndex = node.ImageIndex = IconMapper.GetIconForExtension(Path.GetExtension(name));
-        }
-
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        public static readonly object DUMMY_NODE = new object();
     }
 
 
