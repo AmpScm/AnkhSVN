@@ -69,7 +69,6 @@ namespace Ankh.Ids
         NewDirectory,
         Refresh,
         RefreshRepositoryItem,
-        Relocate,
         RemoveRepositoryRoot,
         RemoveWorkingCopyExplorerRoot,
         ResolveConflict,

@@ -15,14 +15,9 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
-    public class OldAnkhContext : AnkhService, IContext, IAnkhServiceProvider
+    public class OldAnkhContext : AnkhService, IContext
     {
         OutputPaneWriter _outputPane;
-
-        /// <summary>
-        /// Fired when the addin is unloading.
-        /// </summary>
-        public event EventHandler Unloading;
 
         public OldAnkhContext(IAnkhPackage package)
             : this(package, null)
@@ -137,14 +132,5 @@ namespace Ankh
                 _operationRunning = false;
             }
         }
-
-        /// <summary>
-        /// Miscellaneous cleanup stuff goes here.
-        /// </summary>
-        public void Shutdown()
-        {
-            if (this.Unloading != null)
-                this.Unloading(this, EventArgs.Empty);
-        }   
     }
 }

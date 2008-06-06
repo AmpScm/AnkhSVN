@@ -319,22 +319,7 @@ namespace Ankh.Tests
             {
                 return null;
             }
-
-            public virtual LockDialogInfo ShowLockDialog( LockDialogInfo info )
-            {
-                return null;
-            }
-
-            public virtual LogDialogInfo ShowLogDialog( LogDialogInfo info )
-            {
-                return null;
-            }
             
-            public virtual SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info )
-            {
-                return null;
-            }
-
             public virtual string ShowNewDirectoryDialog()
             {
                 return null;

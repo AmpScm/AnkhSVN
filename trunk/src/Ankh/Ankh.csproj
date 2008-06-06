@@ -246,9 +246,6 @@
     <Compile Include="Commands\RepositoryExplorer\RefreshRepositoryItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RelocateCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\RepositoryExplorer\RemoveRepositoryRootCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\RemoveWorkingCopyExplorerRootCommand.cs" />
     <Compile Include="Commands\ResolveConflictCommand.cs">
@@ -310,7 +307,6 @@
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
-    <Compile Include="NoProjectAutomationObjectException.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -323,13 +319,6 @@
     <Compile Include="IUIShell.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LockDialogInfo.cs" />
-    <Compile Include="LogDialogInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LogResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OutputPaneWriter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -339,7 +328,6 @@
     <Compile Include="RepositoryExplorer\RepositoryBrowserController.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SwitchDialogInfo.cs" />
     <Compile Include="UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
