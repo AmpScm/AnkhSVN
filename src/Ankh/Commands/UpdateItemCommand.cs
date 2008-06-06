@@ -33,8 +33,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.GetService<IContext>();
-            IAnkhDialogOwner dialogOwner = e.GetService<IAnkhDialogOwner>();
+            IUIShell uiShell = e.GetService<IUIShell>();
 
             PathSelectorResult result = null;
             PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
@@ -47,7 +46,7 @@ namespace Ankh.Commands
 
             if (!CommandBase.Shift)
             {
-                result = context.UIShell.ShowPathSelector(info);
+                result = uiShell.ShowPathSelector(info);
             }
             else
             {

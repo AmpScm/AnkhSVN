@@ -34,7 +34,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.GetService<IContext>();
+            IUIShell uiShell = e.GetService<IUIShell>();
             IAnkhDialogOwner dialogOwner = e.GetService<IAnkhDialogOwner>();
             IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
 
@@ -54,7 +54,7 @@ namespace Ankh.Commands
                 //if(e.Command == AnkhCommand.ItemRevertSpecific)
                 //    info.RevisionStart = SvnRevision.Base;
 
-                result = context.UIShell.ShowPathSelector(info);
+                result = uiShell.ShowPathSelector(info);
 
                 confirmed = true;
                 depth = info.Depth;
