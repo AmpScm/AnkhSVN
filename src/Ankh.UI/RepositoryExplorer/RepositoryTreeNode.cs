@@ -50,6 +50,8 @@ namespace Ankh.UI.RepositoryExplorer
             if (Nodes.Count > 0)
             {
                 _expandAfterLoad = false;
+                if (_items != null && _items.Count > 0)
+                    _loaded = true;
                 Expand();
             }
         }

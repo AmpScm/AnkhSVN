@@ -23,6 +23,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             InitializeComponent();
             ShowRootLines = false;
+            HideSelection = false;
         }
 
         IAnkhServiceProvider _context;
@@ -30,7 +31,18 @@ namespace Ankh.UI.RepositoryExplorer
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set { _context = value; }
+            set 
+            { 
+                _context = value;
+
+                if (ImageList == null && IconMapper != null)
+                {
+                    ImageList = IconMapper.ImageList;
+
+                    if (_rootNode != null)
+                        _rootNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Servers);
+                }
+            }
         }
 
         IFileIconMapper _iconMapper;
@@ -178,7 +190,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
             }
 
-            BrowseItem(uri);
+            BrowseTo(uri);
         }
 
         SvnDirEntryItems _retrieveItems = SvnDirEntryItems.SvnListDefault | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision;
@@ -189,7 +201,7 @@ namespace Ankh.UI.RepositoryExplorer
             set { _retrieveItems = value | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision; }
         }
 
-        int nRunning;
+        List<Uri> _running = new List<Uri>();
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -209,6 +221,36 @@ namespace Ankh.UI.RepositoryExplorer
             base.OnMouseDown(e);
         }
 
+        string _expandTo;
+        public void BrowseTo(Uri uri)
+        {
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+
+            Uri nUri = SvnTools.GetNormalizedUri(uri);
+
+            RepositoryTreeNode tn;
+            if (_nodeMap.TryGetValue(nUri, out tn))
+            {
+                TreeNode parent = tn;
+                while (parent != null)
+                {
+                    if (!parent.IsExpanded)
+                        parent.Expand();
+                    parent = parent.Parent;
+                }
+                SelectedNode = tn;
+                tn.EnsureVisible();
+                return;
+            }
+
+            if (uri.IsAbsoluteUri)
+                _expandTo = SvnTools.GetNormalizedUri(uri).AbsoluteUri;
+            else
+                _expandTo = null;
+
+            BrowseItem(uri);
+        }
 
         internal void BrowseItem(Uri uri)
         {
@@ -218,8 +260,14 @@ namespace Ankh.UI.RepositoryExplorer
             if (DesignMode)
                 return;
 
-            nRunning++;
-            if (nRunning == 1)
+            Uri nUri = SvnTools.GetNormalizedUri(uri);
+
+            if (_running.Contains(nUri))
+                return;
+
+            _running.Add(nUri);
+            
+            if (_running.Count == 1)
                 OnRetrievingChanged(EventArgs.Empty);
 
             DoSomething d = delegate()
@@ -258,9 +306,9 @@ namespace Ankh.UI.RepositoryExplorer
                             MaybeExpand(uri);
                         }
 
-                        nRunning--;
+                        _running.Remove(nUri);
 
-                        if (nRunning == 0)
+                        if (_running.Count == 0)
                             OnRetrievingChanged(EventArgs.Empty);
                     });
 
@@ -271,9 +319,9 @@ namespace Ankh.UI.RepositoryExplorer
                     if (!ok)
                         BeginInvoke((DoSomething)delegate()
                         {
-                            nRunning--;
+                            _running.Remove(nUri);
 
-                            if (nRunning == 0)
+                            if (_running.Count == 0)
                                 OnRetrievingChanged(EventArgs.Empty);
                         });
                 }
@@ -287,6 +335,13 @@ namespace Ankh.UI.RepositoryExplorer
         {
             get { return base.ShowRootLines; }
             set { base.ShowRootLines = value; }
+        }
+
+        [DefaultValue(false)]
+        public new bool HideSelection
+        {
+            get { return base.HideSelection; }
+            set { base.HideSelection = value; }
         }
 
         /// <summary>
@@ -310,7 +365,7 @@ namespace Ankh.UI.RepositoryExplorer
             RepositoryTreeNode tn;
             if(_nodeMap.TryGetValue(uri, out tn))
             {
-                if(tn.ExpandAfterLoad)
+                if(tn.ExpandAfterLoad || IsLoading(uri))
                     tn.LoadExpand();
 
                 if (SelectedNode == tn)
@@ -318,6 +373,30 @@ namespace Ankh.UI.RepositoryExplorer
                     OnSelectedNodeRefresh(EventArgs.Empty);
                 }
             }            
+        }
+
+        private bool IsLoading(Uri uri)
+        {
+            if (!uri.IsAbsoluteUri || string.IsNullOrEmpty(_expandTo))
+                return false;
+
+            string t = uri.AbsoluteUri;
+
+            if (t.Length < _expandTo.Length)
+            {
+                if (!t.EndsWith("/"))
+                    t += '/';
+
+                if (_expandTo.StartsWith(t))
+                    return true;
+            }
+            else if (t == _expandTo)
+            {
+                //_expandTo = null;
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -372,6 +451,9 @@ namespace Ankh.UI.RepositoryExplorer
             if (serverNode == null)
                 return null;
 
+            if (!serverNode.IsExpanded && IsLoading(uri))
+                serverNode.LoadExpand();
+
             foreach (RepositoryTreeNode reposRoot in serverNode.Nodes)
             {
                 if (reposRoot.RawUri == uri)
@@ -386,8 +468,8 @@ namespace Ankh.UI.RepositoryExplorer
             serverNode.Nodes.Add(rtn);
             _nodeMap.Add(SvnTools.GetNormalizedUri(rtn.RawUri), rtn);
 
-            if (!serverNode.IsExpanded)
-                serverNode.Expand();
+            if (!serverNode.IsExpanded || IsLoading(uri))
+                serverNode.LoadExpand();
 
             return rtn;
         }
@@ -412,8 +494,25 @@ namespace Ankh.UI.RepositoryExplorer
             {
                 s.AddItem(item);
 
-                if(s.ExpandAfterLoad)
+                if (s.ExpandAfterLoad)
+                {
                     s.LoadExpand();
+
+                    Uri nUri = SvnTools.GetNormalizedUri(folderUri);
+
+                    if (IsLoading(nUri))
+                    {
+                        TreeNode tn = SelectedNode;
+                        while (tn != null && tn != s)
+                            tn = tn.Parent;
+
+                        if (tn != s)
+                        {
+                            SelectedNode = s;
+                            s.EnsureVisible();
+                        }
+                    }
+                }
             }
         }
 
@@ -467,6 +566,9 @@ namespace Ankh.UI.RepositoryExplorer
                     tn.AddDummy();
 
                     SortedAddNode(parent.Nodes, tn);
+
+                    if (!parent.IsExpanded && IsLoading(nUri))
+                        parent.LoadExpand();
                 }
             }
 
@@ -475,7 +577,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         public bool Retrieving
         {
-            get { return nRunning > 0; }
+            get { return _running.Count > 0; }
         }
 
         public event EventHandler RetrievingChanged;

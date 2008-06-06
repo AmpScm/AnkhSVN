@@ -18,7 +18,8 @@ namespace Ankh.UI.RepositoryExplorer
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
-            reposBrowser.Context = Context;
+            if(!IsDisposed && !reposBrowser.IsDisposed)
+                reposBrowser.Context = Context;
         }
 
         public Uri SelectedUri
@@ -110,7 +111,7 @@ namespace Ankh.UI.RepositoryExplorer
             Uri uri = SelectedUri;
 
             if(uri != null)
-                reposBrowser.BrowseItem(uri);
+                reposBrowser.BrowseTo(uri);
         }
 
         private void reposBrowser_AfterSelect(object sender, TreeViewEventArgs e)

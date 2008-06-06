@@ -66,7 +66,7 @@ namespace Ankh.UI
             this.urlTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.urlTextBox.Location = new System.Drawing.Point(16, 24);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(376, 20);
+            this.urlTextBox.Size = new System.Drawing.Size(351, 20);
             this.urlTextBox.TabIndex = 0;
             // 
             // localDirGroupBox
