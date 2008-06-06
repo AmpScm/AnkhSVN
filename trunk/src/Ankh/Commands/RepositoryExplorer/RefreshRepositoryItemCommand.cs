@@ -1,6 +1,5 @@
 // $Id$
 using System;
-using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 using Ankh.Scc;

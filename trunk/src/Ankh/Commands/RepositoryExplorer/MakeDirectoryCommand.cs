@@ -2,7 +2,6 @@
 using System;
 using System.Windows.Forms;
 using System.Collections;
-using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Utils;
 using Ankh.Ids;

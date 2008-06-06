@@ -49,15 +49,6 @@ namespace Ankh.Tests
             }
         }
 
-        public virtual Ankh.RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService
-        {
-            get
-            {
-                // TODO:  Add ContextBase.RepositoryExplorer getter implementation
-                return null;
-            }
-        }
-
         public virtual string SolutionDirectory
         {
             get{ return null; }

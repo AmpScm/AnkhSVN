@@ -1,5 +1,4 @@
 using System;
-using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Utils.Win32;
 using Ankh.WorkingCopyExplorer;

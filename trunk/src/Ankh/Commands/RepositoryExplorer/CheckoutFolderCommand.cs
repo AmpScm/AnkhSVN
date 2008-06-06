@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 

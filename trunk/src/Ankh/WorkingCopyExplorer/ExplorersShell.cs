@@ -12,7 +12,6 @@ namespace Ankh.WorkingCopyExplorer
     public class ExplorersShell : AnkhService, IExplorersShell
     {
         readonly WorkingCopyExplorer _workingCopyExplorer;
-        readonly RepositoryExplorer.RepositoryBrowserController _repositoryController;
 
         RepositoryExplorerControl _reposControl;
         WorkingCopyExplorerControl _wcControl;
@@ -20,26 +19,16 @@ namespace Ankh.WorkingCopyExplorer
         public ExplorersShell(IAnkhServiceProvider context)
             : base(context)
         {
-            this._repositoryController =
-                new RepositoryExplorer.RepositoryBrowserController(this);
-            this._workingCopyExplorer =
-                new WorkingCopyExplorer(this);
+            _workingCopyExplorer = new WorkingCopyExplorer(this);
         }
 
         public RepositoryExplorerControl RepositoryExplorer
         {
-            get
-            {
-                if (_reposControl == null)
-                    this.CreateRepositoryExplorer();
-                return _reposControl;
-            }
+            get { return _reposControl; }
             set
             {
                 Debug.Assert(_reposControl == null);
                 _reposControl = value;
-
-                RepositoryExplorerService.SetControl(value);
             }
         }
 
@@ -70,20 +59,6 @@ namespace Ankh.WorkingCopyExplorer
 
         #region IExplorersShell Members
 
-        public void SetRepositoryExplorerSelection(object[] selection)
-        {
-            //this.repositoryExplorerWindow.SetSelectionContainer( ref selection );
-        }
-
-        public bool RepositoryExplorerHasFocus()
-        {
-            // The new command routing should make this method obsolete
-            if (_reposControl != null)
-                return _reposControl.ContainsFocus;
-            else
-                return false;
-        }
-
         public bool WorkingCopyExplorerHasFocus()
         {
             // The new command routing should make this method obsolete
@@ -92,14 +67,7 @@ namespace Ankh.WorkingCopyExplorer
             else
                 return false;
         }
-
-        [Obsolete]
-        public bool SolutionExplorerHasFocus()
-        {
-            // The new command routing should make this method obsolete
-            return false;// this.Context.DTE.ActiveWindow.Type == vsWindowType.vsWindowTypeSolutionExplorer;
-        }
-
+        
         public Uri ShowAddRepositoryRootDialog()
         {
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
@@ -135,31 +103,20 @@ namespace Ankh.WorkingCopyExplorer
 
         #endregion
 
-        #region IExplorersShell Members
-
-
-        public Ankh.RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService
-        {
-            get { return _repositoryController; }
-        }
-
-        #endregion
-
-        private void CreateRepositoryExplorer()
-        {
-            // BH: Moved creating to the package to allow VS to manage all state associated with the window
-            Debug.WriteLine("Previously precreated Repository Explorer here");
-        }
-
-        private void CreateCommitDialog()
-        {
-            Debug.WriteLine("Previously precreated Commit Window here");
-        }
-
         private void CreateWorkingCopyExplorer()
         {
             // BH: Moved creating to the package to allow VS to manage all state associated with the window
             Debug.WriteLine("Previously precreated Working Copy Explorer here");
         }
+
+        #region IExplorersShell Members
+
+
+        public void AddRepositoryRoot(Uri info)
+        {
+            RepositoryExplorer.AddRoot(info);
+        }
+
+        #endregion
     }
 }

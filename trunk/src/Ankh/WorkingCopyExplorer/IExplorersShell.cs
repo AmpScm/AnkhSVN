@@ -37,35 +37,10 @@ namespace Ankh.WorkingCopyExplorer
         }
 
         /// <summary>
-        /// The repository explorer controller.
-        /// </summary>
-        //[Obsolete("Use .SelectionContext wherever possible")]
-        RepositoryExplorer.RepositoryBrowserController RepositoryExplorerService { get; }
-
-        /// <summary>
-        /// Set the selection for the repository explorer.
-        /// </summary>
-        /// <param name="selection"></param>
-        void SetRepositoryExplorerSelection(object[] selection);
-
-        /// <summary>
-        /// Whether the Repository Explorer window has focus
-        /// </summary>
-        /// <returns></returns>
-        bool RepositoryExplorerHasFocus();
-
-        /// <summary>
         /// Whether the Repository Explorer window has focus
         /// </summary>
         /// <returns></returns>
         bool WorkingCopyExplorerHasFocus();
-
-        /// <summary>
-        /// Whether the Repository Explorer window has focus
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete]
-        bool SolutionExplorerHasFocus();
 
         /// <summary>
         /// Shows the dialog for adding a new root to the repository.
@@ -74,5 +49,7 @@ namespace Ankh.WorkingCopyExplorer
         Uri ShowAddRepositoryRootDialog();
 
         string ShowAddWorkingCopyExplorerRootDialog();
+
+        void AddRepositoryRoot(Uri info);
     }
 }

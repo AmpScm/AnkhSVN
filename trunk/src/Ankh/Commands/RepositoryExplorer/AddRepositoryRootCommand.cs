@@ -32,7 +32,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (info != null)
             {
-                shell.RepositoryExplorerService.AddRoot(info);
+                shell.AddRepositoryRoot(info);
             }
         }
     }
