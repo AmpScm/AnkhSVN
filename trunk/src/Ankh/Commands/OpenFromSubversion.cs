@@ -122,7 +122,6 @@ namespace Ankh.Commands
                         && !string.IsNullOrEmpty(file))
                     {
                         scc.SetProjectManaged(null, true);
-                        sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
                     }
                 }
             }
