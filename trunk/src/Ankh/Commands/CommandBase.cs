@@ -48,7 +48,7 @@ namespace Ankh.Commands
                 tracker.SaveDocuments(selection.GetSelectedFiles(true));
         }
 
-        internal static XslCompiledTransform GetTransform(IContext context, string name)
+        internal static XslCompiledTransform GetTransform(IAnkhServiceProvider context, string name)
         {
 
             // get the embedded resource and copy it to path

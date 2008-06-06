@@ -13,11 +13,6 @@ namespace Ankh
     public interface IContext : IAnkhServiceProvider
     {
         /// <summary>
-        /// The UI shell.
-        /// </summary>
-        IUIShell UIShell { get; }
-
-        /// <summary>
         /// The output pane.
         /// </summary>
         OutputPaneWriter OutputPane { get; }

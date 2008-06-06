@@ -39,12 +39,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-
+            IUIShell uiShell = e.GetService<IUIShell>();
 
             SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = SvnRevision.Head;
-
 
             SvnItem firstItem = null;
             PathSelectorResult result = null;
@@ -71,7 +69,7 @@ namespace Ankh.Commands
                 info.SingleSelection = true;
 
                 // show the selector dialog
-                result = context.UIShell.ShowPathSelector(info);
+                result = uiShell.ShowPathSelector(info);
                 if (info == null)
                     return;
 
@@ -86,8 +84,7 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
-            XslCompiledTransform transform = CommandBase.GetTransform(
-                context, BlameTransform);
+            XslCompiledTransform transform = CommandBase.GetTransform(e.Context, BlameTransform);
 
             foreach (SvnItem item in result.Selection)
             {
@@ -107,7 +104,7 @@ namespace Ankh.Commands
 
                 // display the HTML with the filename as caption
                 string filename = Path.GetFileName(item.FullPath);
-                context.UIShell.DisplayHtml(filename, writer.ToString(), false);
+                uiShell.DisplayHtml(filename, writer.ToString(), false);
             }
         }
 
