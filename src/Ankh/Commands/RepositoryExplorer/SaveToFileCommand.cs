@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-using Ankh.RepositoryExplorer;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 using Ankh.Scc;

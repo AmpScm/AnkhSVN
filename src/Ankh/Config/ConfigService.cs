@@ -10,7 +10,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Configuration;
-using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Microsoft.Win32;
 using System.ComponentModel;

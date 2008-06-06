@@ -3,7 +3,6 @@ using System.IO;
 using System.Windows.Forms;
 using Utils;
 using EnvDTE;
-using Ankh.RepositoryExplorer;
 using Ankh.UI;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;

@@ -116,7 +116,7 @@ namespace Ankh.UI.PendingChanges
 
             public SvnDepth CalculateCommitDepth()
             {
-                SvnDepth depth = SvnDepth.Empty;
+                SvnDepth depth = SvnDepth.Infinity;
 
                 foreach (string path in CommitPaths)
                 {
@@ -124,13 +124,12 @@ namespace Ankh.UI.PendingChanges
 
                     if (item.IsDirectory)
                     {
-                        if (item.IsReplaced || !item.IsDeleteScheduled)
+                        if (item.IsDeleteScheduled)
                         {
-                            depth = SvnDepth.Empty;
-                            break;
+                            // Infinity = OK
                         }
-                        else if (item.IsDeleteScheduled)
-                            depth = SvnDepth.Infinity;
+                        else
+                            depth = SvnDepth.Empty;
                     }
                 }
 

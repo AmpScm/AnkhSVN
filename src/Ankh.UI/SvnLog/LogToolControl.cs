@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.UI.Presenters;
 using Ankh.UI.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Selection;

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections;
 
-using Ankh.RepositoryExplorer;
 using SharpSvn;
 
 namespace Ankh.Commands
