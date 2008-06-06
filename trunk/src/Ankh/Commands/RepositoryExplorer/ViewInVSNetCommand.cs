@@ -20,11 +20,6 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.ViewInWindows)]
     class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
-        {
-            e.Enabled = false;
-        }
-
         const int NOASSOCIATEDAPP = 1155;
 
         public override void OnExecute(CommandEventArgs e)

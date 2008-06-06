@@ -6,6 +6,7 @@ using Utils;
 
 using SharpSvn;
 using Ankh.Ids;
+using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
@@ -19,20 +20,18 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IUIService ui = e.GetService<IUIService>();
 
             using (CheckoutDialog dlg = new CheckoutDialog())
             {
-                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
+                if (ui.ShowDialog(dlg) != DialogResult.OK)
                     return;
 
-                using (context.StartOperation("Checking out"))
-                {
-                    CheckoutRunner runner = new CheckoutRunner(
+                CheckoutRunner runner = new CheckoutRunner(
                         dlg.LocalPath, dlg.Revision, new Uri(dlg.Url), dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Empty);
 
-                    e.GetService<IProgressRunner>().Run("Checking out", runner.Work);
-                }
+                e.GetService<IProgressRunner>().Run("Checking out", runner.Work);
+
             }
         }
 
