@@ -258,7 +258,6 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -281,13 +280,11 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -322,7 +319,6 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -439,7 +435,6 @@
     <Compile Include="PopUpListForm.Designer.cs">
       <DependentUpon>PopUpListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Presenters\SvnLogPresenter.cs" />
     <Compile Include="ProgressDialog.Designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
@@ -517,7 +512,6 @@
     <Compile Include="SccManagement\ChangeSourceControl.Designer.cs">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\SvnLogService.cs" />
     <Compile Include="SvnLog\LogToolControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -864,9 +858,6 @@
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
     <None Include="Resources\folderCloseButton.Image.png" />
     <Content Include="Resources\TabConflicts.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

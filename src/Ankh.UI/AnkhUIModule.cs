@@ -22,9 +22,6 @@ namespace Ankh.UI
             LogMessageLanguageService ls = new LogMessageLanguageService(Context);
             Container.AddService(typeof(LogMessageLanguageService), ls, true);
             ls.SetSite(Container);
-
-            if (GetService<ISvnLogService>() == null)
-                Container.AddService(typeof(ISvnLogService), new SvnLogService(this.Context));
         }
 
         public override void OnInitialize()
