@@ -187,9 +187,7 @@
     <Content Include="ProjectItemsEventSinkTest.cs">
       <SubType>Code</SubType>
     </Content>
-    <Compile Include="Presenters\SvnLogPresenterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\LogServicetest.cs" />
     <Content Include="StatusCacheTest.cs">
       <SubType>Code</SubType>
     </Content>
