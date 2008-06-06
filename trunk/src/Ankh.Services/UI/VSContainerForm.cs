@@ -11,6 +11,7 @@ using System.ComponentModel;
 using Ankh.Ids;
 using System.Windows.Forms.Design;
 using Microsoft.VisualStudio.OLE.Interop;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
@@ -34,7 +35,7 @@ namespace Ankh.UI
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
-    public class VSContainerForm : System.Windows.Forms.Form, IAnkhVSContainerForm
+    public class VSContainerForm : System.Windows.Forms.Form, IAnkhVSContainerForm, IAnkhServiceProvider
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
@@ -47,9 +48,10 @@ namespace Ankh.UI
             MinimizeBox = false;
             MaximizeBox = false;
             ShowIcon = false;
+            StartPosition = FormStartPosition.CenterParent;
         }
         
-        [Browsable(false)]
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
             get { return _context; }
@@ -260,5 +262,40 @@ namespace Ankh.UI
 
             DialogOwner.AddWindowPane(this, pane);
         }
+
+        #region IAnkhServiceProvider Members
+
+        [DebuggerStepThrough]
+        T IAnkhServiceProvider.GetService<T>()
+        {
+            if (Context != null)
+                return Context.GetService<T>();
+            
+            return null;
+        }
+
+        [DebuggerStepThrough]
+        T IAnkhServiceProvider.GetService<T>(Type serviceType)
+        {
+            if (Context != null)
+                return Context.GetService<T>(serviceType);
+
+            return null;
+        }
+
+        #endregion
+
+        #region IServiceProvider Members
+
+        [DebuggerStepThrough]
+        object System.IServiceProvider.GetService(Type serviceType)
+        {
+            if (Context != null)
+                return Context.GetService(serviceType);
+
+            return null;
+        }
+
+        #endregion
     }
 }

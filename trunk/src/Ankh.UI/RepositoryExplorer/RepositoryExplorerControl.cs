@@ -72,16 +72,12 @@ namespace Ankh.UI.RepositoryExplorer
             get { return null; }
         }
 
-        private void TreeViewMouseDown(object sender, MouseEventArgs args)
+        private void TreeViewMouseDown(object sender, MouseEventArgs e)
         {
-            if (UISite == null || args.Button != MouseButtons.Right)
+            if (UISite == null || e.Button != MouseButtons.Right)
                 return;
 
-            // make sure right click causes a selection
-            this.treeView.SelectedNode = this.treeView.GetNodeAt(args.X, args.Y);
-
-            Point screen = this.treeView.PointToScreen(new Point(args.X, args.Y));
-
+            Point screen = this.treeView.PointToScreen(new Point(e.X, e.Y));
             UISite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 

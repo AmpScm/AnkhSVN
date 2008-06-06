@@ -35,7 +35,7 @@
             this.urlLabel = new System.Windows.Forms.Label();
             this.urlBox = new System.Windows.Forms.ComboBox();
             this.reposBrowser = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // newFolderButton
@@ -95,6 +95,8 @@
             this.urlBox.Size = new System.Drawing.Size(360, 21);
             this.urlBox.TabIndex = 3;
             this.urlBox.Leave += new System.EventHandler(this.urlBox_Leave);
+            this.urlBox.TextUpdate += new System.EventHandler(this.urlBox_TextUpdate);
+            this.urlBox.TextChanged += new System.EventHandler(this.urlBox_TextChanged);
             // 
             // reposBrowser
             // 
@@ -104,11 +106,14 @@
             this.reposBrowser.Context = null;
             this.reposBrowser.Location = new System.Drawing.Point(12, 36);
             this.reposBrowser.Name = "reposBrowser";
-            this.reposBrowser.RetrieveItems = ((SharpSvn.SvnDirEntryItems)(((SharpSvn.SvnDirEntryItems.Kind | SharpSvn.SvnDirEntryItems.Revision)
-                        | SharpSvn.SvnDirEntryItems.Time)));
-            this.reposBrowser.ShowRootLines = false;
             this.reposBrowser.Size = new System.Drawing.Size(386, 269);
             this.reposBrowser.TabIndex = 2;
+            this.reposBrowser.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.reposBrowser_AfterSelect);
+            // 
+            // timer
+            // 
+            this.timer.Interval = 500;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // RepositoryFolderBrowserDialog
             // 
@@ -124,7 +129,6 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.urlLabel);
             this.Name = "RepositoryFolderBrowserDialog";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Select Url";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -139,6 +143,6 @@
         private Ankh.UI.RepositoryExplorer.RepositoryTreeView reposBrowser;
         private System.Windows.Forms.Label urlLabel;
         private System.Windows.Forms.ComboBox urlBox;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer;
     }
 }

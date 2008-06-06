@@ -41,6 +41,24 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        bool _initialized;
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (DesignMode)
+                return;
+            if (!_initialized && IsHandleCreated && Visible)
+            {
+                if (SelectedUri != null)
+                {
+                    _initialized = false;
+                    BrowseText();
+                }
+            }
+        }
+
         Uri _rootUri;
         /// <summary>
         /// Gets or sets the top level uri to browse below; Currently only used when initializing the dialog
@@ -53,7 +71,7 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         [DefaultValue(false)]
-        public bool EnableNewFolder
+        public bool EnableNewFolderButton
         {
             get { return newFolderButton.Enabled; }
             set { newFolderButton.Visible = newFolderButton.Enabled = value; }
@@ -61,12 +79,49 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void urlBox_Leave(object sender, EventArgs e)
         {
-
+            BrowseText();
         }
 
         private void newFolderButton_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void urlBox_TextChanged(object sender, EventArgs e)
+        {
+            timer.Stop();
+            timer.Start();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            BrowseText();
+        }
+
+        private void urlBox_TextUpdate(object sender, EventArgs e)
+        {
+            BrowseText();
+        }
+
+        void BrowseText()
+        {
+            timer.Stop();
+
+            Uri uri = SelectedUri;
+
+            if(uri != null)
+                reposBrowser.BrowseItem(uri);
+        }
+
+        private void reposBrowser_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            RepositoryTreeNode tn = reposBrowser.SelectedNode;
+
+            if(tn != null && tn.RawUri != null)
+            {
+                urlBox.Text = tn.RawUri.AbsoluteUri;
+                timer.Stop();
+            }
         }
     }
 }
