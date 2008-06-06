@@ -115,7 +115,6 @@
     <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="UI\IAnkhConfigurationService.cs" />
     <Compile Include="UI\IAnkhUISite.cs" />
-    <Compile Include="UI\ISvnLogView.cs" />
     <Compile Include="UI\VSContainerForm.cs">
       <SubType>Form</SubType>
     </Compile>
