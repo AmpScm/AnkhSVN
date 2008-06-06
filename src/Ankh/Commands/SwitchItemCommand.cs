@@ -8,6 +8,7 @@ using Ankh.UI;
 using SharpSvn;
 using Ankh.Ids;
 using Ankh.VS;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -69,69 +70,57 @@ namespace Ankh.Commands
             {
                 uri = cl.GetUriFromWorkingCopy(path);
             }
+
+            SvnUriTarget target;
+
+            if (e.Argument is string)
+                target = SvnUriTarget.FromString((string)e.Argument);
+            else
+            {
+                using (SwitchDialog dlg = new SwitchDialog())
+                {
+                    dlg.Context = e.Context;
+
+                    dlg.LocalPath = path;
+                    dlg.SwitchToUri = uri;
+
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
+
+                    target = dlg.SwitchToUri;
+                }
+            }
+
+            IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
+
+
+            // Get a list of all documents below the specified paths that are open in editors inside VS
+            HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
             
-            using (SwitchDialog dlg = new SwitchDialog())
+            foreach (string file in documentTracker.GetDocumentsBelow(path))
             {
-                dlg.Context = e.Context;
-
-                dlg.LocalPath = path;
-                dlg.SwitchToUri = uri;                
-
-                dlg.ShowDialog(e.Context);
+                if (!lockPaths.Contains(file))
+                    lockPaths.Add(file);
             }
 
-            IContext context = e.Context.GetService<IContext>();
+            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
 
-            /*SaveAllDirtyDocuments(e.Selection, context);
-
-            IList resources = context.Selection.GetSelectionResources(
-                false, new ResourceFilterCallback(SvnItem.VersionedFilter));
-
-            if (resources.Count == 0)
-                return;
-
-            SwitchDialogInfo info = new SwitchDialogInfo(resources,
-                new object[] { resources[0] });
-
-            info = context.UIShell.ShowSwitchDialog(info);
-
-            if (info == null)
-                return;
-
-            using (context.StartOperation("Switching"))
+            using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
             {
-                SwitchRunner runner = new SwitchRunner(info.Path, new Uri(info.SwitchToUrl),
-                    info.RevisionStart, info.Depth);
-                context.UIShell.RunWithProgressDialog(runner, "Switching");
-            }*/
-        }
+                lck.MonitorChanges();
 
-        /// <summary>
-        /// A progress runner that runs the switch operation.
-        /// </summary>
-        private class SwitchRunner
-        {
-            public SwitchRunner(string path, Uri url, SvnRevision revision,
-                SvnDepth depth)
-            {
-                this.path = path;
-                this.url = url;
-                this.revision = revision;
-                this.depth = depth;
+                // TODO: Monitor conflicts!!
+
+                e.GetService<IProgressRunner>().Run(
+                    "Switching",
+                    delegate(object sender, ProgressWorkerArgs a)
+                    {
+                        a.Client.Switch(path, target);
+                    });
+                    
+                lck.ReloadModified();
             }
-
-            public void Work(object sender, ProgressWorkerArgs e)
-            {
-                SvnSwitchArgs args = new SvnSwitchArgs();
-                args.Revision = revision;
-                args.Depth = depth;
-                e.Client.Switch(this.path, this.url, args);
-            }
-
-            private string path;
-            private Uri url;
-            private SvnRevision revision;
-            private SvnDepth depth;
-        }
+        } 
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.VisualStudio;
 
 namespace Ankh
 {
-    class AnkhCommandService : AnkhService
+    class AnkhCommandService : AnkhService, IAnkhCommandService
     {
         public AnkhCommandService(IAnkhServiceProvider context)
             : base(context)
