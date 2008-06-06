@@ -11,16 +11,19 @@ namespace Ankh.UI.MergeWizard
     /// <summary>
     /// Implementation of a wizard dialog for AnkhSVN's merge capabilities.
     /// </summary>
-    class MergeWizardDialog : WizardDialog
+    partial class MergeWizardDialog : WizardDialog
     {
+        IAnkhServiceProvider _context;
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="utils"></param>
-        public MergeWizardDialog(ISite site, MergeUtils utils, SvnItem mergeTarget)
-            : this(site)
+        public MergeWizardDialog(IAnkhServiceProvider context, MergeUtils utils, SvnItem mergeTarget)
         {
-            
+            Icon = Resources.MergeWizardIcon;
+            Wizard = new MergeWizard(context, this);
+
+            _context = context;
             Wizard.MergeUtils = utils;
             Wizard.MergeTarget = mergeTarget;
         }
@@ -29,15 +32,6 @@ namespace Ankh.UI.MergeWizard
         {
             get { return (MergeWizard)base.Wizard; }
             set { base.Wizard = value; }
-        }
-        /// Constructor.
-        /// </summary>
-        public MergeWizardDialog(ISite site) : base()
-        {
-            Site = site;
-            Text = "Merge Wizard";
-            Icon = Resources.MergeWizardIcon;
-            Wizard = new MergeWizard(this);
-        }
+        }        
     }
 }

@@ -11,34 +11,29 @@ using Microsoft.VisualStudio;
 
 namespace Ankh
 {
-    class AnkhCommandService : IAnkhCommandService
+    class AnkhCommandService : AnkhService
     {
-        readonly IAnkhServiceProvider _context;
-
         public AnkhCommandService(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            _context = context;
         }
 
         IVsUIShell _uiShell;
-
         protected IVsUIShell UIShell
         {
-            get { return _uiShell ?? (_uiShell = (IVsUIShell)_context.GetService(typeof(SVsUIShell))); }
+            get { return _uiShell ?? (_uiShell = GetService<IVsUIShell>(typeof(SVsUIShell))); }
         }
 
         IOleCommandTarget _commandDispatcher;
         protected IOleCommandTarget CommandDispatcher
         {
-            get { return _commandDispatcher ?? (_commandDispatcher = (IOleCommandTarget)_context.GetService(typeof(SUIHostCommandDispatcher))); }
+            get { return _commandDispatcher ?? (_commandDispatcher = GetService<IOleCommandTarget>(typeof(SUIHostCommandDispatcher))); }
         }
 
         AnkhContext _ankhContext;
         protected AnkhContext AnkhContext
         {
-            get { return _ankhContext ?? (_ankhContext = _context.GetService<AnkhContext>()); }
+            get { return _ankhContext ?? (_ankhContext = GetService<AnkhContext>()); }
         }
 
         #region IAnkhCommandService Members
@@ -136,7 +131,7 @@ namespace Ankh
         {
             // TODO: Assert that we are in the UI thread
 
-            CommandMapper mapper = _context.GetService<CommandMapper>();
+            CommandMapper mapper = GetService<CommandMapper>();
 
             if (mapper == null)
                 return false;

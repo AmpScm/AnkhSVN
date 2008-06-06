@@ -25,7 +25,6 @@ namespace Ankh.UI.MergeWizard
             this.Message = new WizardMessage(Resources.MergeRevisionsSelectionPageMessage);
 
             PageControl.WizardPage = this;
-            PageControl.Site = wizard.WizardDialog.Site;
         }
 
         protected override void OnPageChanged(WizardPageChangeEventArgs e)

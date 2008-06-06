@@ -157,6 +157,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeWizard\AnkhWizard.cs" />
     <Compile Include="MergeWizard\BasePage.cs" />
     <Compile Include="MergeWizard\Commands\Merge.cs" />
     <Compile Include="MergeWizard\MergeBestPracticesPage.cs" />
@@ -229,6 +230,9 @@
     <Compile Include="MergeWizard\MergeWizard.cs" />
     <Compile Include="MergeWizard\MergeWizardDialog.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeWizardDialog.Designer.cs">
+      <DependentUpon>MergeWizardDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -689,6 +693,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeTypePageControl.resx">
       <DependentUpon>MergeTypePageControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\MergeWizardDialog.resx">
+      <DependentUpon>MergeWizardDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\Resources.resx">
