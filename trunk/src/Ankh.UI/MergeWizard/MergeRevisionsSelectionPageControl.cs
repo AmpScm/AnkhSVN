@@ -32,7 +32,8 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
             logToolControl1.Site = Site;
-            //logToolControl1.Start(new string[]{MergeSource.ToString()});
+            if(MergeSource != null)
+                logToolControl1.Start(new string[]{MergeSource.ToString()});
         }
         /// <summary>
         /// Gets/Sets the wizard page associated with this control.
