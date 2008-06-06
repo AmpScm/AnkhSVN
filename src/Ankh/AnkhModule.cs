@@ -63,6 +63,7 @@ namespace Ankh
         public override void OnInitialize()
         {
             EnsureService<IAnkhErrorHandler>();
+            EnsureService<IAnkhCommandService>();
         }
     }
 }

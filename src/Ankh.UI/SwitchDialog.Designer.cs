@@ -55,7 +55,7 @@
             this.switchBox.Location = new System.Drawing.Point(12, 12);
             this.switchBox.Name = "switchBox";
             this.switchBox.Size = new System.Drawing.Size(520, 52);
-            this.switchBox.TabIndex = 0;
+            this.switchBox.TabIndex = 4;
             this.switchBox.TabStop = false;
             this.switchBox.Text = "&Switch:";
             // 
@@ -90,7 +90,7 @@
             this.toBox.Location = new System.Drawing.Point(12, 70);
             this.toBox.Name = "toBox";
             this.toBox.Size = new System.Drawing.Size(520, 52);
-            this.toBox.TabIndex = 1;
+            this.toBox.TabIndex = 0;
             this.toBox.TabStop = false;
             this.toBox.Text = "&To:";
             // 
@@ -133,7 +133,7 @@
             this.cancelButton.Location = new System.Drawing.Point(405, 190);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 2;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -144,7 +144,7 @@
             this.okButton.Location = new System.Drawing.Point(324, 190);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 3;
+            this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
@@ -155,10 +155,11 @@
             this.groupBox3.Controls.Add(this.browseVersion);
             this.groupBox3.Controls.Add(this.versionBox);
             this.groupBox3.Controls.Add(this.versionLabel);
+            this.groupBox3.Enabled = false;
             this.groupBox3.Location = new System.Drawing.Point(12, 128);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(520, 52);
-            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabIndex = 1;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Version:";
             // 
@@ -203,12 +204,7 @@
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.toBox);
             this.Controls.Add(this.switchBox);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "SwitchDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Switch To";
             this.switchBox.ResumeLayout(false);
             this.switchBox.PerformLayout();
