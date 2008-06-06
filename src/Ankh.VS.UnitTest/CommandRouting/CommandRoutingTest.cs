@@ -362,21 +362,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [TestMethod]
-        public void RelocateCommand()
-        {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IContext context = AnkhContextMock.GetInstance(mocks);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            using (ServiceProviderHelper.AddService(typeof(IContext), context))
-            {
-                CommandTester.TestExecution(AnkhCommand.Relocate);
-            }
-        }
-
-        [TestMethod]
         public void RemoveReposRoot()
         {
             mocks = new MockRepository();
