@@ -31,7 +31,7 @@ namespace Ankh.UI.MergeWizard
 
         protected override void OnPageChanged(WizardPageChangeEventArgs e)
         {
-            Wizard.MergeSource = _control.MergeSource;
+            Wizard.MergeSource = PageControl.MergeSource;
         }
 
         /// <summary>
@@ -55,7 +55,6 @@ namespace Ankh.UI.MergeWizard
             get { return MergeWizard.MergeType.RangeOfRevisions; }
         }
 
-        private MergeSourceRangeOfRevisionsPageControl _control = new MergeSourceRangeOfRevisionsPageControl();
         private bool _needsNextPage = false;
     }
 }
