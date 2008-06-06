@@ -209,7 +209,7 @@
               text="Diff E&amp;xternal"
               toolTip="Diff against local text base using external tool." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x40" defaultInvisible="true"
-								text="&amp;Switch..."
+								text="&amp;Switch..." allowParams="true"
 								toolTip="Switch this item to a different URL." iconFile="menu/Switch.png"/>
           <!--Button id="Cmd_Lock" name="Lock" priority="0x40" defaultInvisible="true"
               text="Loc&amp;k..."
@@ -474,7 +474,7 @@
 							  text="Wo&amp;rking on:"
 							  iconAndText="true"
 							  />
-          <Button id="Cmd_SolutionSwitchDialog" name="SwitchDialog" priority="0x200"
+          <Button id="Cmd_SolutionSwitchDialog" name="SwitchDialog" priority="0x200" allowParams="true"
 							text="Switch" iconFile="PendingChanges/Switch.png"/>
         </Group>
         <Group id="Grp_PendingChangesToolBar" priority="0x1000">
