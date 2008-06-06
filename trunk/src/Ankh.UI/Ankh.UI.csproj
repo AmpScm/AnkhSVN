@@ -254,15 +254,8 @@
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.Designer.cs">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AddSolutionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddSolutionDialog.Designer.cs">
-      <DependentUpon>AddSolutionDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -285,13 +278,11 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -326,7 +317,6 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -493,9 +483,6 @@
     <None Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
     </None>
-    <Compile Include="RelocateDialog.Designer.cs">
-      <DependentUpon>RelocateDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -572,9 +559,6 @@
     <None Include="PropertyEditors\PropertyEditorDialog.cs">
       <SubType>Form</SubType>
     </None>
-    <Compile Include="RelocateDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -601,10 +585,6 @@
     </Compile>
     <EmbeddedResource Include="RepositoryExplorer\AddRepositoryRootDialog.resx">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AddSolutionDialog.resx">
-      <DependentUpon>AddSolutionDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="CheckoutDialog.resx">
@@ -647,10 +627,6 @@
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </None>
-    <EmbeddedResource Include="RelocateDialog.resx">
-      <DependentUpon>RelocateDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
