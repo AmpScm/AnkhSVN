@@ -43,11 +43,15 @@ namespace Ankh.UI
         /// <summary>
         /// The URL entered in the text box.
         /// </summary>
-        public string Url
+        public Uri Uri
         {
             get
             {
-                return this.urlTextBox.Text;
+                Uri uri;
+                if (string.IsNullOrEmpty(urlTextBox.Text) || !Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out uri))
+                    return null;
+
+                return uri;
             }
         }
 
@@ -79,8 +83,7 @@ namespace Ankh.UI
         private void ValidateAdd()
         {
             this.okButton.Enabled = this.revisionPicker.Valid &&
-                !string.IsNullOrEmpty(this.urlTextBox.Text) && 
-                UriUtils.IsValidUrl(this.urlTextBox.Text);
+                Uri != null;
         }
     }
 }

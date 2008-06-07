@@ -185,7 +185,7 @@ namespace Ankh.UI.RepositoryExplorer
             RepositoryTreeNode itemNode;
             if (_nodeMap.TryGetValue(uri, out itemNode))
             {
-                //itemNode.Select();
+                SelectedNode = itemNode;
                 itemNode.EnsureVisible();
                 return;
             }
@@ -445,13 +445,14 @@ namespace Ankh.UI.RepositoryExplorer
             EnsureServerOf(uri);
 
             Uri serverUri;
+            Uri nUri = SvnTools.GetNormalizedUri(uri);
 
             RepositoryTreeNode serverNode = FindServer(uri, out serverUri);
 
             if (serverNode == null)
                 return null;
 
-            if (!serverNode.IsExpanded && IsLoading(uri))
+            if (!serverNode.IsExpanded && IsLoading(nUri))
                 serverNode.LoadExpand();
 
             foreach (RepositoryTreeNode reposRoot in serverNode.Nodes)
@@ -468,7 +469,7 @@ namespace Ankh.UI.RepositoryExplorer
             serverNode.Nodes.Add(rtn);
             _nodeMap.Add(SvnTools.GetNormalizedUri(rtn.RawUri), rtn);
 
-            if (!serverNode.IsExpanded || IsLoading(uri))
+            if (!serverNode.IsExpanded || IsLoading(nUri))
                 serverNode.LoadExpand();
 
             return rtn;

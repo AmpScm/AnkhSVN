@@ -75,7 +75,7 @@ namespace Ankh.WorkingCopyExplorer
                 if (dlg.ShowDialog(Context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
                     return null;
 
-                return new Uri(dlg.Url);
+                return dlg.Uri;
             }
         }
 

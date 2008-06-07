@@ -25,10 +25,23 @@ namespace Ankh.UI
         /// <summary>
         /// The URL of the repository.
         /// </summary>
-        public string Url
+        public Uri Uri
         {
-            get { return this.urlTextBox.Text; }
-            set { this.urlTextBox.Text = value; }
+            get
+            {
+                Uri uri;
+                if (string.IsNullOrEmpty(urlTextBox.Text) || !Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out uri))
+                    return null;
+
+                return uri;
+            }
+            set 
+            {
+                if (value == null)
+                    urlTextBox.Text = "";
+                else
+                    urlTextBox.Text = value.AbsoluteUri;
+            }
         }
 
         /// <summary>
@@ -80,9 +93,7 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void ControlsChanged(object sender, System.EventArgs e)
         {
-            this.okButton.Enabled = this.revisionPicker.Valid &&
-                UriUtils.IsValidUrl(this.urlTextBox.Text) &&
-                this.localDirTextBox.Text.Length > 0;
+            this.okButton.Enabled = this.revisionPicker.Valid && Uri != null && !string.IsNullOrEmpty(localDirTextBox.Text);
         }
 
         /// <summary>

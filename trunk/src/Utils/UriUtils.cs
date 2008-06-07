@@ -8,26 +8,7 @@ namespace Utils
     /// </summary>
     public static class UriUtils
     {
-        /// <summary>
-        /// Concatenates two URI segments, placing a / in between as appropriate.
-        /// </summary>
-        /// <param name="uri1"></param>
-        /// <param name="uri2"></param>
-        /// <returns></returns>
-        public static string Combine( string uri1, string uri2 )
-        {            
-            bool uri1HasSlash = uri1.EndsWith("/");
-            bool uri2HasSlash = uri2.StartsWith( "/" );
-
-            if ( uri1HasSlash && uri2HasSlash )
-                return uri1.Substring(0, uri1.Length-1) + uri2;
-            else if ( uri1HasSlash ^ uri2HasSlash )
-                return uri1 + uri2;
-            else
-                return uri1 + "/" + uri2;
-        }
-
-        /// <summary>
+         /// <summary>
         /// Splits an URL. The first component in the returned array will be the
         /// hostname, the remaining ones will be the path components split by '/'
         /// </summary>
@@ -51,8 +32,10 @@ namespace Utils
 
         public static bool IsValidUrl(string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value == null)
                 throw new ArgumentNullException("value");
+            else if (string.IsNullOrEmpty(value))
+                return false;
 
             Uri uri;
 
