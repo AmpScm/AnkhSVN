@@ -7,32 +7,54 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public abstract class BasePage<TWizard, TControl> : WizardPage
-        where TWizard : AnkhWizard
-        where TControl : UserControl, new()
+    public abstract class BasePage : WizardPage
     {
-        protected BasePage(TWizard wizard, string name)
-            : base(name)
+        readonly AnkhWizard _wizard;
+        protected BasePage(AnkhWizard wizard, string name)
+            :base(name)
         {
-            Wizard = wizard;
-            _control = new TControl();
+            if (wizard == null)
+                throw new ArgumentNullException("wizard");
+
+            _wizard = wizard;
         }
 
-        protected BasePage(TWizard wizard, string name, Image image)
+        protected BasePage(AnkhWizard wizard, string name, Image image)
             : base(name, image)
         {
-            Wizard = wizard;
-            _control = new TControl();
-        }
+            if (wizard == null)
+                throw new ArgumentNullException("wizard");
 
+            _wizard = wizard;
+        }
         /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
         public IAnkhServiceProvider Context
         {
-            get { return Wizard.Context; }
+            get { return _wizard.Context; }
         }
+    }
+    public abstract class BasePage<TWizard, TControl> : BasePage
+        where TWizard : AnkhWizard
+        where TControl : UserControl, new()
+    {
+        protected BasePage(TWizard wizard, string name)
+            : base(wizard, name)
+        {
+            Wizard = wizard;
+            _control = new TControl();
+        }
+
+        protected BasePage(TWizard wizard, string name, Image image)
+            : base(wizard, name, image)
+        {
+            Wizard = wizard;
+            _control = new TControl();
+        }
+
+        
 
         TWizard _wizard;
         /// <summary>
