@@ -30,18 +30,6 @@ namespace Utils
             return components;
         }
 
-        public static bool IsValidUrl(string value)
-        {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            else if (string.IsNullOrEmpty(value))
-                return false;
-
-            Uri uri;
-
-            return Uri.TryCreate(value, UriKind.Absolute, out uri);
-        }
-
         private static readonly Regex URLPARSE = 
             new Regex(@"(?'host'[^:]+://[^/]*)/(?'rest'.*)", 
             RegexOptions.IgnoreCase);
