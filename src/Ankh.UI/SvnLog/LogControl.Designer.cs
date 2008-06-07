@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControlNew(this.components);
+            this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControl(this.components);
             this.logChangedPaths1 = new Ankh.UI.LogChangedPaths(this.components);
             this.logMessageView1 = new Ankh.UI.LogMessageView(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
@@ -128,7 +128,7 @@
 
         #endregion
 
-        private Ankh.UI.SvnLog.LogRevisionControlNew logRevisionControl1;
+        private Ankh.UI.SvnLog.LogRevisionControl logRevisionControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private LogChangedPaths logChangedPaths1;
