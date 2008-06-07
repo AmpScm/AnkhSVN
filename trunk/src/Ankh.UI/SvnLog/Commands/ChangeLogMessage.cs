@@ -14,7 +14,7 @@ using Ankh.Scc;
 namespace Ankh.UI.SvnLog.Commands
 {
     [Command(AnkhCommand.LogChangeLogMessage, HideWhenDisabled = true)]
-    class ChangeLogMessage : ICommandHandler, IComponent
+    class ChangeLogMessage : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -53,26 +53,6 @@ namespace Ankh.UI.SvnLog.Commands
                     }
                 }
             }
-        }
-
-        public event EventHandler Disposed;
-
-        ISite _site;
-        public ISite Site
-        {
-            get
-            {
-                return _site;
-            }
-            set
-            {
-                _site = value;
-            }
-        }
-
-
-        public void Dispose()
-        {
-        }
+        }   
     }
 }
