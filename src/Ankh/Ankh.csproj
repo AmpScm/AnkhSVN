@@ -196,9 +196,6 @@
     <Compile Include="Commands\RepositoryExplorer\CheckoutFolderCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CheckoutRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\RepositoryExplorer\CheckoutSolutionCommand.cs">
       <SubType>Code</SubType>
     </Compile>
