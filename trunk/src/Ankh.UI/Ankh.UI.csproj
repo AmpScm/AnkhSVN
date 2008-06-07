@@ -297,11 +297,11 @@
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\UIUtils.cs" />
-    <Compile Include="SvnLog\LogRevisionControlNew.cs">
+    <Compile Include="SvnLog\LogRevisionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SvnLog\LogRevisionControlNew.Designer.cs">
-      <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
+    <Compile Include="SvnLog\LogRevisionControl.Designer.cs">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SvnLog\LogRevisionView.cs">
       <SubType>Component</SubType>
@@ -716,8 +716,8 @@
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogRevisionControlNew.resx">
-      <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
+    <EmbeddedResource Include="SvnLog\LogRevisionControl.resx">
+      <DependentUpon>LogRevisionControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SvnLog\LogToolWindowControl.resx">

@@ -1,6 +1,6 @@
 ﻿namespace Ankh.UI.SvnLog
 {
-    partial class LogRevisionControlNew
+    partial class LogRevisionControl
     {
         /// <summary> 
         /// Required designer variable.

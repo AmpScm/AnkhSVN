@@ -14,7 +14,7 @@ using Ankh.Ids;
 
 namespace Ankh.UI.SvnLog
 {
-	public partial class LogRevisionControlNew : UserControl, ICurrentItemSource<SvnLogEventArgs>
+	public partial class LogRevisionControl : UserControl, ICurrentItemSource<SvnLogEventArgs>
     {
         ICollection<string> _localTargets;
         Uri _remoteTarget;
@@ -29,7 +29,7 @@ namespace Ankh.UI.SvnLog
         readonly SynchronizationContext _syncContext;
         readonly SendOrPostCallback _sopCallback;
 
-        public LogRevisionControlNew()
+        public LogRevisionControl()
         {
             InitializeComponent();
             _syncContext = SynchronizationContext.Current;
@@ -39,7 +39,7 @@ namespace Ankh.UI.SvnLog
             _logComplete = new AsyncCallback(LogComplete);
 
         }
-        public LogRevisionControlNew(IContainer container)
+        public LogRevisionControl(IContainer container)
             : this()
         {
             container.Add(this);
