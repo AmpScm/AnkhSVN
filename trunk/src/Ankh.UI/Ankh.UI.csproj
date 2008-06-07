@@ -256,6 +256,7 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -278,11 +279,19 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SvnLog\LogToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SvnLog\LogToolWindowControl.Designer.cs">
+      <DependentUpon>LogToolWindowControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="SwitchDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -317,6 +326,7 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -507,11 +517,11 @@
     <Compile Include="SccManagement\ChangeSourceControl.Designer.cs">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SvnLog\LogToolControl.cs">
+    <Compile Include="SvnLog\LogControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SvnLog\LogToolControl.Designer.cs">
-      <DependentUpon>LogToolControl.cs</DependentUpon>
+    <Compile Include="SvnLog\LogControl.Designer.cs">
+      <DependentUpon>LogControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UITypeEditors\AdminDirectoryNameTypeConverter.cs" />
     <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
@@ -710,6 +720,10 @@
       <DependentUpon>LogRevisionControlNew.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SvnLog\LogToolWindowControl.resx">
+      <DependentUpon>LogToolWindowControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SwitchDialog.resx">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -811,8 +825,8 @@
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnLog\LogToolControl.resx">
-      <DependentUpon>LogToolControl.cs</DependentUpon>
+    <EmbeddedResource Include="SvnLog\LogControl.resx">
+      <DependentUpon>LogControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorer\WorkingCopyExplorerControl.resx">

@@ -422,8 +422,11 @@ namespace Ankh.VSPackage
     {
         public LogToolWindow()
         {
-            Control = new LogToolControl();
+            Control = new LogToolWindowControl();
             Caption = "History Viewer";
+            
+            BitmapResourceID = 401;
+            BitmapIndex = 5;
 
             ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;

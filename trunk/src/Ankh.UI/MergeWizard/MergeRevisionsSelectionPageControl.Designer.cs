@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeRevisionsSelectionPageControl));
-			this.logToolControl1 = new Ankh.UI.SvnLog.LogToolControl();
+			this.logToolControl1 = new Ankh.UI.SvnLog.LogControl();
 			this.SuspendLayout();
 			// 
 			// logToolControl1
@@ -54,6 +54,6 @@
 
         #endregion
 
-		private Ankh.UI.SvnLog.LogToolControl logToolControl1;
+		private Ankh.UI.SvnLog.LogControl logToolControl1;
     }
 }
