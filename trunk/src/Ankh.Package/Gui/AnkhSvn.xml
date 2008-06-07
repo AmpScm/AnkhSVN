@@ -241,8 +241,7 @@
 
         <Group id="Grp_RepositoryExplorerToolBar" priority="0x100">
           <Button id="Cmd_Checkout" name="Checkout" priority="0x100"
-								text="Chec&amp;kout a Repository..."
-								toolTip="Checkout a Subversion repository." iconFile="menu/CheckoutDirectory.png"/>
+								text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png"/>
           <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x200"
 							  text="A&amp;dd Repository Url"
 							  toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
