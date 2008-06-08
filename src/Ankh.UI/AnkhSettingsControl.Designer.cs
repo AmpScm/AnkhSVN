@@ -40,25 +40,24 @@
 			// cbDiffMergeManual
 			// 
 			this.cbDiffMergeManual.AutoSize = true;
-			this.cbDiffMergeManual.Location = new System.Drawing.Point(3, 162);
+			this.cbDiffMergeManual.Location = new System.Drawing.Point(3, 86);
 			this.cbDiffMergeManual.Name = "cbDiffMergeManual";
 			this.cbDiffMergeManual.Size = new System.Drawing.Size(256, 17);
-			this.cbDiffMergeManual.TabIndex = 1;
+			this.cbDiffMergeManual.TabIndex = 4;
 			this.cbDiffMergeManual.Text = "Manually choose between internal or external diff";
 			this.cbDiffMergeManual.UseVisualStyleBackColor = true;
 			// 
 			// txtDiffExePath
 			// 
-			this.txtDiffExePath.Location = new System.Drawing.Point(0, 16);
+			this.txtDiffExePath.Location = new System.Drawing.Point(0, 15);
 			this.txtDiffExePath.Name = "txtDiffExePath";
-			this.txtDiffExePath.ReadOnly = true;
-			this.txtDiffExePath.Size = new System.Drawing.Size(361, 20);
-			this.txtDiffExePath.TabIndex = 2;
+			this.txtDiffExePath.Size = new System.Drawing.Size(355, 20);
+			this.txtDiffExePath.TabIndex = 0;
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Location = new System.Drawing.Point(-3, 0);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(89, 13);
 			this.label1.TabIndex = 3;
@@ -67,10 +66,10 @@
 			// btnDiffExePath
 			// 
 			this.btnDiffExePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnDiffExePath.Location = new System.Drawing.Point(367, 14);
+			this.btnDiffExePath.Location = new System.Drawing.Point(366, 13);
 			this.btnDiffExePath.Name = "btnDiffExePath";
-			this.btnDiffExePath.Size = new System.Drawing.Size(30, 23);
-			this.btnDiffExePath.TabIndex = 4;
+			this.btnDiffExePath.Size = new System.Drawing.Size(26, 23);
+			this.btnDiffExePath.TabIndex = 1;
 			this.btnDiffExePath.Text = "...";
 			this.btnDiffExePath.UseVisualStyleBackColor = true;
 			this.btnDiffExePath.Click += new System.EventHandler(this.btnDiffExePath_Click);
@@ -78,7 +77,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(3, 39);
+			this.label2.Location = new System.Drawing.Point(-3, 43);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(104, 13);
 			this.label2.TabIndex = 5;
@@ -86,19 +85,18 @@
 			// 
 			// txtMergeExePath
 			// 
-			this.txtMergeExePath.Location = new System.Drawing.Point(0, 55);
+			this.txtMergeExePath.Location = new System.Drawing.Point(0, 58);
 			this.txtMergeExePath.Name = "txtMergeExePath";
-			this.txtMergeExePath.ReadOnly = true;
-			this.txtMergeExePath.Size = new System.Drawing.Size(361, 20);
-			this.txtMergeExePath.TabIndex = 6;
+			this.txtMergeExePath.Size = new System.Drawing.Size(355, 20);
+			this.txtMergeExePath.TabIndex = 2;
 			// 
 			// btnMergeExePath
 			// 
 			this.btnMergeExePath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnMergeExePath.Location = new System.Drawing.Point(367, 52);
+			this.btnMergeExePath.Location = new System.Drawing.Point(366, 55);
 			this.btnMergeExePath.Name = "btnMergeExePath";
-			this.btnMergeExePath.Size = new System.Drawing.Size(30, 23);
-			this.btnMergeExePath.TabIndex = 7;
+			this.btnMergeExePath.Size = new System.Drawing.Size(26, 23);
+			this.btnMergeExePath.TabIndex = 3;
 			this.btnMergeExePath.Text = "...";
 			this.btnMergeExePath.UseVisualStyleBackColor = true;
 			this.btnMergeExePath.Click += new System.EventHandler(this.btnMergePath_Click);
@@ -114,6 +112,7 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.txtDiffExePath);
 			this.Controls.Add(this.cbDiffMergeManual);
+			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "AnkhSettingsControl";
 			this.Size = new System.Drawing.Size(400, 271);
 			this.ResumeLayout(false);
