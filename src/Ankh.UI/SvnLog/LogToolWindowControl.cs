@@ -23,9 +23,9 @@ namespace Ankh.UI.SvnLog
             container.Add(this);
         }
 
-        public void Start(ICollection<string> targets)
+        public void Start(IAnkhServiceProvider context, ICollection<string> targets)
         {
-            logControl.Start(targets);
+            logControl.Start(context, targets);
         }
 
         IAnkhUISite _site;

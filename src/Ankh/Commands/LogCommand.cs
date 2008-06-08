@@ -83,7 +83,7 @@ namespace Ankh.Commands
 
             package.ShowToolWindow(AnkhToolWindow.Log);
             LogToolWindowControl logToolControl = e.Context.GetService<LogToolWindowControl>();
-            logToolControl.Start(selected);
+            logToolControl.Start(e.Context, selected);
         }
     }
 }
