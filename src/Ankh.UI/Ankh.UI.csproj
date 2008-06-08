@@ -284,6 +284,9 @@
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SvnLog\LogChangedPathsView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SvnLog\LogToolWindowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

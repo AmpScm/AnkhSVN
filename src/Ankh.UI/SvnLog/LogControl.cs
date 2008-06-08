@@ -41,6 +41,7 @@ namespace Ankh.UI.SvnLog
                     _site = site;
 
                     logRevisionControl1.Site = site;
+                    logChangedPaths1.Site = site;
                 }
             }
         }
