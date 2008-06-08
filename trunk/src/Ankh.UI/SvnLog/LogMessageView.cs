@@ -47,5 +47,10 @@ namespace Ankh.UI
             else
                 textBox1.Text = "";
         }
+
+        internal void Reset()
+        {
+            textBox1.Text = "";
+        }
     }
 }

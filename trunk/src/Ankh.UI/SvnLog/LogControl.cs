@@ -53,14 +53,6 @@ namespace Ankh.UI.SvnLog
             set { _mode = value; }
         }
 
-        [Obsolete]
-        public void Start(ICollection<string> targets)
-        {
-            logRevisionControl1.LocalTargets = targets;
-            logRevisionControl1.Reset();
-            logRevisionControl1.Start(_site.GetService<IAnkhServiceProvider>(), Mode);
-        }
-
         public void Start(IAnkhServiceProvider context, ICollection<string> targets)
         {
             if (context == null)
@@ -78,6 +70,8 @@ namespace Ankh.UI.SvnLog
                     break;
             }
             logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
             logRevisionControl1.Start(context, Mode);
         }
 
@@ -89,6 +83,8 @@ namespace Ankh.UI.SvnLog
         public void Restart()
         {
             logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
             logRevisionControl1.Start(_site.GetService<IAnkhServiceProvider>(), Mode);
         }
 
