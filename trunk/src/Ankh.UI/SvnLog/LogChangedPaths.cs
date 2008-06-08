@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
+using Ankh.UI.SvnLog;
+using Ankh.UI.Services;
 
 namespace Ankh.UI
 {
@@ -20,7 +22,33 @@ namespace Ankh.UI
             : this()
         {
             container.Add(this);
+
         }
+
+        IAnkhUISite _site;
+        public override ISite Site
+        {
+            get { return base.Site; }
+            set
+            {
+                base.Site = value;
+
+                IAnkhUISite site = value as IAnkhUISite;
+
+                if (site != null)
+                {
+                    _site = site;
+
+                    OnUISiteChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected void OnUISiteChanged(EventArgs e)
+        {
+            changedPaths.SelectionPublishServiceProvider = _site;
+        }
+
 
         #region ICurrentItemDestination<SvnLogEventArgs> Members
         ICurrentItemSource<SvnLogEventArgs> itemSource;
@@ -51,7 +79,9 @@ namespace Ankh.UI
 
         void FocusChanged(object sender, SvnLogEventArgs e)
         {
-            dataGridView1.DataSource = e == null ? null : e.ChangedPaths;
+            changedPaths.Items.Clear();
+            foreach (SvnChangeItem i in e.ChangedPaths)
+                changedPaths.Items.Add(new PathListViewItem(i));
         }
     }
 }
