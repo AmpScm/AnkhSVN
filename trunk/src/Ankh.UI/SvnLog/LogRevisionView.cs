@@ -48,11 +48,6 @@ namespace Ankh.UI.SvnLog
             RefreshText();
         }
 
-        IAnkhVSColor VSColor
-        {
-            get { return _context.GetService<IAnkhVSColor>(); }
-        }
-
         void RefreshText()
         {
             Text = _args.Revision.ToString(CultureInfo.CurrentCulture);
