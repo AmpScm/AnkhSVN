@@ -45,20 +45,21 @@
             resources.ApplyResources(this.selectButton, "selectButton");
             this.selectButton.Name = "selectButton";
             this.selectButton.UseVisualStyleBackColor = true;
+            this.selectButton.Click += new System.EventHandler(this.selectButton_Click);
             // 
             // mergeFromLabel
             // 
             resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
             this.mergeFromLabel.Name = "mergeFromLabel";
             // 
-            // MergeSourceBasePageControl
+            // MergeSourceBasePageControlImpl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mergeFromComboBox);
             this.Controls.Add(this.selectButton);
             this.Controls.Add(this.mergeFromLabel);
-            this.Name = "MergeSourceBasePageControl";
+            this.Name = "MergeSourceBasePageControlImpl";
             this.ResumeLayout(false);
             this.PerformLayout();
 

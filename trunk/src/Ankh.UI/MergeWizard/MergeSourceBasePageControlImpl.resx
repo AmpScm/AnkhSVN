@@ -235,6 +235,6 @@
     <value>MergeSourceBasePageControlImpl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3082.27136, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

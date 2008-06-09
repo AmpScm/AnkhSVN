@@ -10,6 +10,7 @@ using System.Resources;
 using SharpSvn;
 using WizardFramework;
 using System.Threading;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -20,8 +21,6 @@ namespace Ankh.UI.MergeWizard
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
             WizardMessage.ERROR);
         
-        
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -40,14 +39,10 @@ namespace Ankh.UI.MergeWizard
         }
 
         #region Base Functionality
-
-
         internal string MergeSource
         {
             get { return mergeFromComboBox.Text; }
         }
-
-
 
         MergeSourceBasePage _wizardPage;
 
@@ -67,8 +62,6 @@ namespace Ankh.UI.MergeWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-
 
             if (!DesignMode)
             {
@@ -104,8 +97,6 @@ namespace Ankh.UI.MergeWizard
                 {
                     WizardPage.Message = MergeUtils.INVALID_FROM_URL;
 
-                    ((WizardDialog)WizardPage.Form).UpdateMessage();
-
                     return false;
                 }
                 else
@@ -113,8 +104,6 @@ namespace Ankh.UI.MergeWizard
                     if (WizardPage.Message == MergeUtils.INVALID_FROM_URL)
                     {
                         WizardPage.Message = null;
-
-                        ((WizardDialog)WizardPage.Form).UpdateMessage();
                     }
 
                     return true;
@@ -160,8 +149,6 @@ namespace Ankh.UI.MergeWizard
                 {
                     WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.ERROR);
 
-                    ((WizardDialog)WizardPage.Form).UpdateMessage();
-
                     WizardPage.IsPageComplete = false;
                 }
 
@@ -193,6 +180,9 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        delegate void SetMergeSourcesCallBack(List<string> mergeSources);       
+        #endregion
+
         #region UI Events
         /// <summary>
         /// Checks for text in the ComboBox to make sure something is there.
@@ -202,14 +192,39 @@ namespace Ankh.UI.MergeWizard
             if (!DesignMode)
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
         }
+
+        /// <summary>
+        /// Displays the Repository Folder Dialog
+        /// </summary>
+        private void selectButton_Click(object sender, EventArgs e)
+        {
+            if (((MergeWizard)WizardPage.Wizard).MergeTarget.IsDirectory)
+            {
+                using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+                {
+                    Uri uri;
+
+                    if (!Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out uri))
+                    {
+                        WizardPage.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
+
+                        return;
+                    }
+
+                    dlg.SelectedUri = uri;
+
+                    if (dlg.ShowDialog(((MergeWizard)WizardPage.Wizard).Context) == DialogResult.OK)
+                    {
+                        if (dlg.SelectedUri != null)
+                            mergeFromComboBox.Text = dlg.SelectedUri.ToString();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("File-based merge isn't supported yet.  Check back in a day.", "Unsupported", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
         #endregion
-        delegate void SetMergeSourcesCallBack(List<string> mergeSources);
-
-        
-
-       
-        #endregion
-
-
     }
 }
