@@ -31,7 +31,7 @@ namespace Ankh.Commands
             }
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.IsVersioned)
+                if (item.IsVersioned && item.IsFile)
                     return;
             }
             e.Enabled = false;
@@ -56,7 +56,7 @@ namespace Ankh.Commands
 
                 return (item == firstItem);
             };
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
 
             // is shift depressed?
             if (!CommandBase.Shift)
