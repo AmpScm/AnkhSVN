@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for handling the merge best
     /// practices checking of AnkhSVN's merge capabilities.
     /// </summary>
-    public class MergeBestPracticesPage : BasePage<MergeWizard, MergeBestPracticesPageControl>
+    public class MergeBestPracticesPage : BasePage
     {
         public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(Resources.ReadyForMerge,
             WizardMessage.NONE);
@@ -36,7 +36,7 @@ namespace Ankh.UI.MergeWizard
         /// Constructor.
         /// </summary>
         public MergeBestPracticesPage(MergeWizard wizard)
-            : base(wizard, "Merge Best Practices")
+            : base(wizard, new MergeBestPracticesPageControl(), "Merge Best Practices")
         {
             IsPageComplete = true;
 
@@ -55,17 +55,20 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (Wizard.MergeUtils == null)
+                MergeWizard wizard = (MergeWizard)Wizard;
+                MergeBestPracticesPageControl pageControl = (MergeBestPracticesPageControl)PageControl;
+
+                if (wizard.MergeUtils == null)
                     return false; // Work around issue where the WizardFramework calls this
                                   // before the MergeUtils is set when instantiating the WizardDialog.
 
-                using (SvnClient client = Wizard.MergeUtils.GetClient())
+                using (SvnClient client = wizard.MergeUtils.GetClient())
                 {
-                    WizardDialog dialog = (WizardDialog)Wizard.Form;
-                    SvnItem mergeTarget = Wizard.MergeTarget;
+                    WizardDialog dialog = (WizardDialog)wizard.Form;
+                    SvnItem mergeTarget = wizard.MergeTarget;
                     SvnWorkingCopyVersion wcRevision;
 
-                    client.GetWorkingCopyVersion(Wizard.MergeUtils.WorkingCopyRootPath,
+                    client.GetWorkingCopyVersion(wizard.MergeUtils.WorkingCopyRootPath,
                         out wcRevision);
                     
                     bool hasLocalModifications = wcRevision.Modified;
@@ -87,24 +90,24 @@ namespace Ankh.UI.MergeWizard
                     
                     // Update the images based on the return of the best practices checks
                     if (hasLocalModifications)
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
                     else
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, true);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, true);
 
                     if (hasMixedRevisions)
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, false);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, false);
                     else
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, true);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, true);
 
                     if (hasSwitchedChildren)
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, false);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, false);
                     else
-                        PageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, true);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, true);
 
                     if (isIncomplete)
-                        PageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, false);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, false);
                     else
-                        PageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, true);
+                        pageControl.UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, true);
 
                     return status;
                 }

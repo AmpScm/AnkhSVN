@@ -10,22 +10,11 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceTwoDifferentTreesPageControl : UserControl
+    public partial class MergeSourceTwoDifferentTreesPageControl : BasePageControl
     {
-        private WizardPage _wizardPage;
-
         public MergeSourceTwoDifferentTreesPageControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Gets/Sets the wizard page associated with this control.
-        /// </summary>
-        public WizardPage WizardPage
-        {
-            set { _wizardPage = value; }
-            get { return _wizardPage; }
         }
 
         /// <summary>

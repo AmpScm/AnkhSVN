@@ -7,26 +7,33 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
+    
     public abstract class BasePage : WizardPage
     {
-        readonly AnkhWizard _wizard;
-        protected BasePage(AnkhWizard wizard, string name)
-            :base(name)
+        protected BasePage(AnkhWizard wizard, BasePageControl control, string name)
+            : base(name)
         {
             if (wizard == null)
                 throw new ArgumentNullException("wizard");
+            if (control == null)
+                throw new ArgumentNullException("control");
 
-            _wizard = wizard;
+            Wizard = wizard;
+            _control = control;
         }
 
-        protected BasePage(AnkhWizard wizard, string name, Image image)
+        protected BasePage(AnkhWizard wizard, BasePageControl control, string name, Image image)
             : base(name, image)
         {
             if (wizard == null)
                 throw new ArgumentNullException("wizard");
+            if (control == null)
+                throw new ArgumentNullException("control");
 
-            _wizard = wizard;
+            Wizard = wizard;
+            _control = control;
         }
+
         /// <summary>
         /// Gets the context.
         /// </summary>
@@ -35,35 +42,17 @@ namespace Ankh.UI.MergeWizard
         {
             get { return _wizard.Context; }
         }
-    }
-    public abstract class BasePage<TWizard, TControl> : BasePage
-        where TWizard : AnkhWizard
-        where TControl : UserControl, new()
-    {
-        protected BasePage(TWizard wizard, string name)
-            : base(wizard, name)
-        {
-            Wizard = wizard;
-            _control = new TControl();
-        }
-
-        protected BasePage(TWizard wizard, string name, Image image)
-            : base(wizard, name, image)
-        {
-            Wizard = wizard;
-            _control = new TControl();
-        }
 
         
 
-        TWizard _wizard;
+        AnkhWizard _wizard;
         /// <summary>
         /// Gets or sets the wizard.
         /// </summary>
         /// <value>The wizard.</value>
-        public new TWizard Wizard
+        public new AnkhWizard Wizard
         {
-            get { return _wizard ?? (_wizard = (TWizard)base.Wizard); }
+            get { return _wizard ?? (_wizard = (AnkhWizard)base.Wizard); }
             set
             {
                 _wizard = value;
@@ -90,7 +79,7 @@ namespace Ankh.UI.MergeWizard
                 OnPageChanged(e);
         }
 
-        readonly TControl _control;
+        readonly BasePageControl _control;
         public sealed override UserControl Control
         {
             get 
@@ -99,7 +88,8 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        public TControl PageControl
+        //[Obsolete("Use Control")]
+        public BasePageControl PageControl
         {
             get
             {

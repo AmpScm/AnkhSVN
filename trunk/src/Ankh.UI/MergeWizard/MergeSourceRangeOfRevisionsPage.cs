@@ -11,13 +11,13 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for your typical merge scenario.
     /// </summary>
-    class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage<MergeSourceRangeOfRevisionsPageControl>
+    class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor
         /// </summary>
         public MergeSourceRangeOfRevisionsPage(MergeWizard wizard) 
-            : base(wizard, "Merge Source Range Of Revisions")
+            : base(wizard, new MergeSourceRangeOfRevisionsPageControl(), "Merge Source Range Of Revisions")
         {
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
@@ -32,7 +32,7 @@ namespace Ankh.UI.MergeWizard
         protected override void OnPageChanging(WizardPageChangingEventArgs e)
         {
             // HACK: this should happen in OnPageChanged, but that fires too late
-            Wizard.MergeSource = PageControl.MergeSource;
+            ((MergeWizard)Wizard).MergeSource = ((MergeSourceBasePageControlImpl)PageControl).MergeSource;
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeTypePageControl : UserControl
+    public partial class MergeTypePageControl : BasePageControl
     {
         public MergeTypePageControl()
         {
@@ -23,35 +23,35 @@ namespace Ankh.UI.MergeWizard
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
+            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
         }
 
         private void reintegrateABranchRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.Reintegrate;
+            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.Reintegrate;
         }
 
         private void twoDifferentTreesRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
+            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
         }
 
         private void manuallyRecordMergeRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
+            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
         }
 
         private void manuallyRemoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
 
-            ((MergeTypePage)wizardPage_prop).SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
+            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
         }
         #endregion
 
@@ -64,22 +64,7 @@ namespace Ankh.UI.MergeWizard
             get { return showBestPracticesPageCheckbox.Checked; }
         }
 
-        /// <summary>
-        /// Gets/Sets the wizard page associated with this UserControl.
-        /// </summary>
-        public WizardPage WizardPage
-        {
-            get
-            {
-                return wizardPage_prop;
-            }
-
-            set
-            {
-                wizardPage_prop = value;
-            }
-        }
-
+ 
         /// <summary>
         /// Handles toggling the image and label contents based on the
         /// currently selected merge type radio button.
@@ -112,7 +97,5 @@ namespace Ankh.UI.MergeWizard
                 page.mergeTypePictureBox.Image = Resources.ManuallyRemoveImage;
             }
         }
-
-        private WizardFramework.WizardPage wizardPage_prop = null;
     }
 }

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeBestPracticesPageControl : UserControl
+    public partial class MergeBestPracticesPageControl : BasePageControl
     {
         public MergeBestPracticesPageControl()
         {
