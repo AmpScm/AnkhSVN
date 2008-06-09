@@ -232,8 +232,8 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnVisibleChanged(e);
 
-            if (_fixUI && codeEditorNativeWindow != null && Visible)
-                FixUI();
+            if (Visible)
+                ForceUIUpdate();
         }
 
         #endregion
