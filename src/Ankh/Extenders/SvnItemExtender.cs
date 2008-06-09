@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 using SharpSvn;
 using Ankh.Selection;
+using SharpSvn.Implementation;
+using Ankh.Scc;
 
 
 namespace Ankh.Extenders
@@ -131,5 +133,136 @@ namespace Ankh.Extenders
         {
             get { return SvnItem.Status.IsLockedLocal; }
         }
+
+        
+
+        [Category("Properties"), DisplayName("Line ending style"), Description("svn:eol-style")]
+        public LineEndingStyle LineEndingStyle
+        {
+            get 
+            {
+                if (SvnItem == null)
+                    return LineEndingStyle.None;
+
+                using (SvnClient c = GetNoUIClient())
+                {
+                    if (c == null)
+                        return LineEndingStyle.None;
+
+                    string value;
+                    if (SvnItem.Exists && c.TryGetProperty(new SvnPathTarget(SvnItem.FullPath), SvnPropertyNames.SvnEolStyle, out value))
+                    {
+                        try
+                        {
+                            return (LineEndingStyle)Enum.Parse(typeof(LineEndingStyle), value, true);
+                        }
+                        catch { }
+                    }
+                }
+                return  LineEndingStyle.None;
+            }
+            set 
+            {
+                string strValue = null;
+                switch (value)
+                {
+                    case LineEndingStyle.Native:
+                        strValue = "native";
+                        break;
+                    case LineEndingStyle.None:
+                        break;
+                    default:
+                        strValue = value.ToString();
+                        break;
+                }
+                using (SvnClient c = GetNoUIClient())
+                {
+                    if (c == null)
+                        return;
+
+                    if(string.IsNullOrEmpty(strValue))
+                        c.DeleteProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle);
+                    else
+                        c.SetProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle, strValue);
+
+                    ScheduleUpdate();
+                }
+            }
+        }
+        [Category("Properties"), DisplayName("Mime type"), Description("svn:mime-type")]
+        [DefaultValue(null)]
+        public string MimeType
+        {
+            get
+            {
+                if (SvnItem == null || SvnItem.IsDirectory || !SvnItem.IsVersioned)
+                    return null;
+
+                using (SvnClient c = GetNoUIClient())
+                {
+                    if (c == null)
+                        return null;
+
+                    string value;
+                    try
+                    {
+                        if (c.TryGetProperty(new SvnPathTarget(SvnItem.FullPath), SvnPropertyNames.SvnMimeType, out value))
+                            return value;
+                    }
+                    catch { }
+                }
+                return null;
+            }
+            set
+            {
+                using (SvnClient c = GetNoUIClient())
+                {
+                    if (c == null)
+                        return;
+
+                    if (string.IsNullOrEmpty(value))
+                        c.DeleteProperty(SvnItem.FullPath, SvnPropertyNames.SvnMimeType);
+                    else
+                        c.SetProperty(SvnItem.FullPath, SvnPropertyNames.SvnMimeType, value);
+
+                    ScheduleUpdate();
+                }
+            }
+        }
+
+        #region Helpers
+        SvnPoolClient GetNoUIClient()
+        {
+            if (_context == null)
+                return null;
+
+            ISvnClientPool pool = _context.GetService<ISvnClientPool>();
+            if (pool == null)
+                return null;
+
+            return pool.GetNoUIClient();
+        }
+
+        void ScheduleUpdate()
+        {
+            if (_context == null || SvnItem == null)
+                return;
+
+            IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+            if (monitor == null)
+                return;
+
+            monitor.ScheduleSvnStatus(SvnItem.FullPath);
+        }
+        #endregion
+    }
+
+    public enum LineEndingStyle
+    {
+        None,
+        Native,
+        CRLF,
+        LF,
+        CR
     }
 }
