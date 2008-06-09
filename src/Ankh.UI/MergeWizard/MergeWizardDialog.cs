@@ -20,6 +20,8 @@ namespace Ankh.UI.MergeWizard
         /// <param name="utils"></param>
         public MergeWizardDialog(IAnkhServiceProvider context, MergeUtils utils, SvnItem mergeTarget)
         {
+            InitializeComponent();
+
             Icon = Resources.MergeWizardIcon;
             Wizard = new MergeWizard(context, this);
 
