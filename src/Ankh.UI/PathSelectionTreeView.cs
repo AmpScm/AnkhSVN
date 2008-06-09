@@ -11,6 +11,9 @@ using System.ComponentModel;
 using Ankh.Scc;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.UI.VSSelectionControls;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
@@ -31,6 +34,30 @@ namespace Ankh.UI
             this.SingleCheck = false;
             this.Recursive = false;
             this._items = new SvnItem[] { };
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            if (!DesignMode)
+            {
+                if (m.Msg == 0x0203) // WM_LBUTTONDBLCLK
+                {
+                    if (CheckBoxes && SingleCheck)
+                    {
+                            Point mp = PointToClient(MousePosition);
+                            TreeViewHitTestInfo hi = HitTest(mp);
+
+                            if (hi != null && 
+                                hi.Location == TreeViewHitTestLocations.StateImage && 
+                                !((PathTreeNode)hi.Node).Enabled)
+                            {
+                                m.Result = new IntPtr(1);
+                                return;
+                            }
+                    }
+                }
+            }
+            base.WndProc(ref m);
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -115,10 +142,13 @@ namespace Ankh.UI
             // unchecking?
             if (!e.Node.Checked)
             {
-                this._checkedNode = null;
-                // reenable children?
-                if (this.Recursive)
-                    this.ToggleChildren(e.Node, true);
+                if (e.Action == TreeViewAction.ByKeyboard || e.Action == TreeViewAction.ByMouse)
+                {
+                    this._checkedNode = null;
+                    // reenable children?
+                    if (this.Recursive)
+                        this.ToggleChildren(e.Node, true);
+                }
                 return;
             }
 
@@ -129,7 +159,8 @@ namespace Ankh.UI
             }
 
             // keep track of the last checked node
-            this._checkedNode = e.Node;
+            
+                this._checkedNode = e.Node;
 
             // disable children?
             if (this.Recursive)
@@ -145,7 +176,8 @@ namespace Ankh.UI
         protected override void OnBeforeCheck(TreeViewCancelEventArgs e)
         {
             base.OnBeforeCheck(e);
-            e.Cancel = e.Node.ForeColor == DisabledColor;
+            if (!((PathTreeNode)e.Node).Enabled)
+                e.Cancel = true;
         }
 
         protected void ResolveIcon(TreeNode node)
@@ -230,10 +262,9 @@ namespace Ankh.UI
         /// <param name="enabled"></param>
         private void DoToggleChildren(TreeNode parent, bool enabled)
         {
-            foreach (TreeNode node in parent.Nodes)
+            foreach (PathTreeNode node in parent.Nodes)
             {
                 node.Checked = enabled ? node.Checked : false;
-                node.ForeColor = enabled ? EnabledColor : DisabledColor;
 
                 this.ToggleChildren(node, enabled);
             }
@@ -305,7 +336,7 @@ namespace Ankh.UI
                 }
             }
 
-            TreeNode node = null;
+            PathTreeNode node = null;
             foreach (string component in components)
             {
                 node = this.GetNode(nodes, component);
@@ -315,24 +346,25 @@ namespace Ankh.UI
             // leaf nodes should be black and enabled
             if (node != null)
             {
-                node.ForeColor = EnabledColor;
+                node.Enabled = true;
                 node.Tag = item;
                 this.ResolveIcon(node);
             }
         }
 
-        private TreeNode GetNode(TreeNodeCollection nodes, string pathComponent)
+        private PathTreeNode GetNode(TreeNodeCollection nodes, string pathComponent)
         {
-            foreach (TreeNode node in nodes)
+            foreach (PathTreeNode node in nodes)
             {
                 if (String.Compare(node.Text, pathComponent, true) == 0)
                     return node;
             }
 
-            TreeNode newNode = nodes.Add(pathComponent);
+            PathTreeNode newNode = new PathTreeNode(pathComponent);
+            nodes.Add(newNode);
 
             // non-leaf nodes default to gray and are disabled
-            newNode.ForeColor = DisabledColor;
+            newNode.Enabled = false;
             newNode.SelectedImageIndex = newNode.ImageIndex = FolderIndex;
             return newNode;
         }
@@ -412,6 +444,24 @@ namespace Ankh.UI
                         _disabledColor = Color.Gray;
                 }
                 return _disabledColor;
+            }
+        }
+
+        class PathTreeNode : TreeNode
+        {
+            public PathTreeNode(string text)
+                :base(text)
+            {
+            }
+            bool _enabled;
+            public bool Enabled
+            {
+                get { return _enabled; }
+                set 
+                {
+                    _enabled = value;
+                    ForeColor = value ? ((PathSelectionTreeView)TreeView).EnabledColor : ((PathSelectionTreeView)TreeView).DisabledColor;
+                }
             }
         }
     }
