@@ -11,10 +11,10 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for handling the merge type
     /// selection of AnkhSVN's merge capabilities
     /// </summary>
-    class MergeTypePage : BasePage<MergeWizard, MergeTypePageControl>
+    class MergeTypePage : BasePage
     {
         public MergeTypePage(MergeWizard wizard)
-            : base(wizard, "Merge Type")
+            : base(wizard, new MergeTypePageControl(), "Merge Type")
         {
             IsPageComplete = true;
 
@@ -29,7 +29,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         public bool ShowBestPracticesPage
         {
-            get { return PageControl.IsPerformBestPracticesChecked; }
+            get { return ((MergeTypePageControl)PageControl).IsPerformBestPracticesChecked; }
         }
 
         public MergeWizard.MergeType SelectedMergeType

@@ -8,15 +8,11 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceManuallyRecordPageControl : MergeSourceManuallyRecordPageControlBase
+    public partial class MergeSourceManuallyRecordPageControl : MergeSourceBasePageControlImpl
     {
         public MergeSourceManuallyRecordPageControl()
         {
             InitializeComponent();
         }
-    }
-
-    public class MergeSourceManuallyRecordPageControlBase : MergeSourceBasePageControl<MergeSourceManuallyRecordPageControl>
-    {
     }
 }

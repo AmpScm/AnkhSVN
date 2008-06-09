@@ -8,11 +8,18 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceReintegratePageControl : MergeSourceBasePageControlImpl
+    public partial class BasePageControl : UserControl
     {
-        public MergeSourceReintegratePageControl()
+        public BasePageControl()
         {
             InitializeComponent();
+        }
+
+        BasePage _page;
+        internal BasePage WizardPage
+        {
+            get { return _page; }
+            set { _page = value; }
         }
     }
 }

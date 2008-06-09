@@ -11,13 +11,13 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a merge where you manually record revision changes.
     /// </summary>
-    class MergeSourceManuallyRecordPage : MergeSourceBasePage<MergeSourceManuallyRecordPageControl>
+    class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceManuallyRecordPage(MergeWizard wizard)
-            : base(wizard, "Merge Source Manually Record")
+            : base(wizard, new MergeSourceManuallyRecordPageControl(), "Merge Source Manually Record")
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;

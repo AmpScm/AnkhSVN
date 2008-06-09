@@ -11,19 +11,19 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a merge where you manually record revision changes.
     /// </summary>
-    class MergeSourceManuallyRemovePage : MergeSourceBasePage<MergeSourceManuallyRemovePageControl>
+    class MergeSourceManuallyRemovePage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceManuallyRemovePage(MergeWizard wizard)
-            : base(wizard, "Merge Source Manually Remove")
+            : base(wizard, new MergeSourceManuallyRemovePageControl(), "Merge Source Manually Remove")
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceManuallyRemovePageHeaderMessage;
 
-            PageControl.EnableSelectButton(false);
+            ((MergeSourceManuallyRemovePageControl)PageControl).EnableSelectButton(false);
         }
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
         public override MergeWizard.MergeType MergeType

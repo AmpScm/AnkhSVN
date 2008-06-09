@@ -11,13 +11,13 @@ namespace Ankh.UI.MergeWizard
     /// Implementation of a wizard page for retrieving the merge source
     /// information for a branch reintegration merge scenario.
     /// </summary>
-    class MergeSourceReintegratePage : MergeSourceBasePage<MergeSourceReintegratePageControl>
+    class MergeSourceReintegratePage : MergeSourceBasePage
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceReintegratePage(MergeWizard wizard) 
-            : base(wizard, "Merge Source Reintegrate")
+            : base(wizard, new MergeSourceReintegratePageControl(), "Merge Source Reintegrate")
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;

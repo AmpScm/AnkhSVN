@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WizardFramework;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -11,14 +12,13 @@ namespace Ankh.UI.MergeWizard
     /// to be used by all merge source pages except for the "Two Different Trees"
     /// merge source page.
     /// </summary>
-    public abstract class MergeSourceBasePage<TControl> : BasePage<MergeWizard, TControl>
-        where TControl : MergeSourceBasePageControl<TControl>, new()
+    public abstract class MergeSourceBasePage : BasePage
     {
         /// <summary>
         /// Constructor with name.
         /// </summary>
-        protected MergeSourceBasePage(MergeWizard wizard, String name)
-            : base(wizard, name)
+        protected MergeSourceBasePage(MergeWizard wizard, BasePageControl control, string name)
+            : base(wizard, control, name)
         {
             PageControl.WizardPage = this;
         }
@@ -26,8 +26,8 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor with name and image.
         /// </summary>
-        protected MergeSourceBasePage(MergeWizard wizard, String name, Image image)
-            : base(wizard, name, image)
+        protected MergeSourceBasePage(MergeWizard wizard, BasePageControl control, string name, Image image)
+            : base(wizard, control, name, image)
         {
             PageControl.WizardPage = this;
         }
@@ -37,7 +37,7 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!PageControl.IsMergeURLValid)
+                if (!((MergeSourceBasePageControlImpl)PageControl).IsMergeURLValid)
                     return false;
 
                 return base.IsPageComplete;
@@ -46,7 +46,7 @@ namespace Ankh.UI.MergeWizard
 
         internal string MergeSource
         {
-            get { return PageControl.MergeSource; }
+            get { return ((MergeSourceBasePageControlImpl)PageControl).MergeSource; }
         }
 
         /// <summary>

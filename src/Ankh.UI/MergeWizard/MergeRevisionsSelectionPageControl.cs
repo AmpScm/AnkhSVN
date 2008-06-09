@@ -10,10 +10,8 @@ using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeRevisionsSelectionPageControl : UserControl
+    public partial class MergeRevisionsSelectionPageControl : BasePageControl
     {
-        private BasePage _wizardPage;
-
         public MergeRevisionsSelectionPageControl()
         {
             InitializeComponent();
@@ -35,14 +33,6 @@ namespace Ankh.UI.MergeWizard
             logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Remote;
             if(MergeSource != null)
                 logToolControl1.Start(WizardPage.Context, new string[]{MergeSource});
-        }
-        /// <summary>
-        /// Gets/Sets the wizard page associated with this control.
-        /// </summary>
-        public BasePage WizardPage
-        {
-            set { _wizardPage = value; }
-            get { return _wizardPage; }
         }
     }
 }

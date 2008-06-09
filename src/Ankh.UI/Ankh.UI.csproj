@@ -159,6 +159,12 @@
   <ItemGroup>
     <Compile Include="MergeWizard\AnkhWizard.cs" />
     <Compile Include="MergeWizard\BasePage.cs" />
+    <Compile Include="MergeWizard\BasePageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\BasePageControl.Designer.cs">
+      <DependentUpon>BasePageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\Commands\Merge.cs" />
     <Compile Include="MergeWizard\MergeBestPracticesPage.cs" />
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.cs">
@@ -175,9 +181,6 @@
       <DependentUpon>MergeRevisionsSelectionPageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceBasePage.cs" />
-    <Compile Include="MergeWizard\MergeSourceBasePageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="MergeWizard\MergeSourceBasePageControlImpl.cs">
       <SubType>UserControl</SubType>
     </Compile>
