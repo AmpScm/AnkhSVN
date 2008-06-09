@@ -39,8 +39,6 @@ namespace Ankh.UI.MergeWizard
                 WizardPage.Message = MergeUtils.INVALID_FROM_URL;
                 WizardPage.IsPageComplete = false;
 
-                ((WizardDialog)WizardPage.Form).UpdateMessage();
-
                 return;
             }
 
@@ -49,8 +47,6 @@ namespace Ankh.UI.MergeWizard
             {
                 WizardPage.Message = MergeUtils.INVALID_TO_URL;
                 WizardPage.IsPageComplete = false;
-
-                ((WizardDialog)WizardPage.Form).UpdateMessage();
 
                 return;
             }
@@ -61,8 +57,6 @@ namespace Ankh.UI.MergeWizard
                 WizardPage.Message = null;
                 WizardPage.IsPageComplete = true;
 
-                ((WizardDialog)WizardPage.Form).UpdateMessage();
-
                 return;
             }
 
@@ -71,8 +65,6 @@ namespace Ankh.UI.MergeWizard
             {
                 WizardPage.Message = MergeUtils.INVALID_FROM_REVISION;
                 WizardPage.IsPageComplete = false;
-
-                ((WizardDialog)WizardPage.Form).UpdateMessage();
 
                 return;
             }
@@ -83,15 +75,11 @@ namespace Ankh.UI.MergeWizard
                 WizardPage.Message = MergeUtils.INVALID_TO_REVISION;
                 WizardPage.IsPageComplete = false;
 
-                ((WizardDialog)WizardPage.Form).UpdateMessage();
-
                 return;
             }
 
             WizardPage.Message = null;
             WizardPage.IsPageComplete = true;
-
-            ((WizardDialog)WizardPage.Form).UpdateMessage();
 
             return;
         }
@@ -111,8 +99,6 @@ namespace Ankh.UI.MergeWizard
                 if (WizardPage.Message == MergeUtils.INVALID_TO_URL)
                 {
                     WizardPage.Message = null;
-
-                    ((WizardDialog)WizardPage.Form).UpdateMessage();
                 }
             }
             else

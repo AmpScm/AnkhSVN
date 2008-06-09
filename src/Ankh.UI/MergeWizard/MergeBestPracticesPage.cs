@@ -86,8 +86,6 @@ namespace Ankh.UI.MergeWizard
                         Message = MergeBestPracticesPage.READY_FOR_MERGE;
                     }
 
-                    dialog.UpdateMessage();
-                    
                     // Update the images based on the return of the best practices checks
                     if (hasLocalModifications)
                         pageControl.UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
