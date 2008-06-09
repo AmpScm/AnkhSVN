@@ -32,31 +32,31 @@ namespace Ankh.UI
             // revisionGroupBox
             // 
             this.revisionGroupBox.Controls.Add(this.revisionPicker);
-            this.revisionGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.revisionGroupBox.Location = new System.Drawing.Point(10, 122);
             this.revisionGroupBox.Name = "revisionGroupBox";
-            this.revisionGroupBox.Size = new System.Drawing.Size(408, 64);
-            this.revisionGroupBox.TabIndex = 0;
+            this.revisionGroupBox.Size = new System.Drawing.Size(408, 49);
+            this.revisionGroupBox.TabIndex = 2;
             this.revisionGroupBox.TabStop = false;
-            this.revisionGroupBox.Text = "&Revision";
+            this.revisionGroupBox.Text = "&Revision:";
             // 
             // revisionPicker
             // 
             this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionPicker.Location = new System.Drawing.Point(16, 28);
+            this.revisionPicker.Location = new System.Drawing.Point(7, 19);
             this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(384, 20);
+            this.revisionPicker.Size = new System.Drawing.Size(365, 20);
             this.revisionPicker.TabIndex = 0;
             this.revisionPicker.Changed += new System.EventHandler(this.ControlsChanged);
             // 
             // urlGroupBox
             // 
             this.urlGroupBox.Controls.Add(this.urlTextBox);
-            this.urlGroupBox.Location = new System.Drawing.Point(12, 88);
+            this.urlGroupBox.Location = new System.Drawing.Point(11, 12);
             this.urlGroupBox.Name = "urlGroupBox";
-            this.urlGroupBox.Size = new System.Drawing.Size(408, 64);
-            this.urlGroupBox.TabIndex = 1;
+            this.urlGroupBox.Size = new System.Drawing.Size(408, 49);
+            this.urlGroupBox.TabIndex = 0;
             this.urlGroupBox.TabStop = false;
-            this.urlGroupBox.Text = "&URL";
+            this.urlGroupBox.Text = "&Url:";
             this.urlGroupBox.TextChanged += new System.EventHandler(this.ControlsChanged);
             // 
             // urlTextBox
@@ -64,26 +64,26 @@ namespace Ankh.UI
             this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.urlTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.urlTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
-            this.urlTextBox.Location = new System.Drawing.Point(16, 24);
+            this.urlTextBox.Location = new System.Drawing.Point(6, 19);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(351, 20);
+            this.urlTextBox.Size = new System.Drawing.Size(365, 20);
             this.urlTextBox.TabIndex = 0;
             // 
             // localDirGroupBox
             // 
             this.localDirGroupBox.Controls.Add(this.button1);
             this.localDirGroupBox.Controls.Add(this.localDirTextBox);
-            this.localDirGroupBox.Location = new System.Drawing.Point(12, 160);
+            this.localDirGroupBox.Location = new System.Drawing.Point(11, 67);
             this.localDirGroupBox.Name = "localDirGroupBox";
-            this.localDirGroupBox.Size = new System.Drawing.Size(407, 80);
-            this.localDirGroupBox.TabIndex = 2;
+            this.localDirGroupBox.Size = new System.Drawing.Size(407, 49);
+            this.localDirGroupBox.TabIndex = 1;
             this.localDirGroupBox.TabStop = false;
-            this.localDirGroupBox.Text = "Local &Directory";
+            this.localDirGroupBox.Text = "&Folder:";
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Location = new System.Drawing.Point(375, 32);
+            this.button1.Location = new System.Drawing.Point(377, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(24, 23);
             this.button1.TabIndex = 1;
@@ -95,16 +95,16 @@ namespace Ankh.UI
             this.localDirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.localDirTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.localDirTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.localDirTextBox.Location = new System.Drawing.Point(16, 32);
+            this.localDirTextBox.Location = new System.Drawing.Point(6, 16);
             this.localDirTextBox.Name = "localDirTextBox";
-            this.localDirTextBox.Size = new System.Drawing.Size(351, 20);
+            this.localDirTextBox.Size = new System.Drawing.Size(365, 20);
             this.localDirTextBox.TabIndex = 0;
             this.localDirTextBox.TextChanged += new System.EventHandler(this.ControlsChanged);
             // 
             // nonRecursiveCheckBox
             // 
             this.nonRecursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nonRecursiveCheckBox.Location = new System.Drawing.Point(28, 258);
+            this.nonRecursiveCheckBox.Location = new System.Drawing.Point(13, 186);
             this.nonRecursiveCheckBox.Name = "nonRecursiveCheckBox";
             this.nonRecursiveCheckBox.Size = new System.Drawing.Size(104, 24);
             this.nonRecursiveCheckBox.TabIndex = 3;
@@ -114,21 +114,21 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(256, 259);
+            this.okButton.Location = new System.Drawing.Point(219, 186);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 4;
-            this.okButton.Text = "Chec&kout";
+            this.okButton.Text = "OK";
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(344, 259);
+            this.cancelButton.Location = new System.Drawing.Point(307, 186);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 5;
-            this.cancelButton.Text = "&Cancel";
+            this.cancelButton.Text = "Cancel";
             // 
             // CheckoutDialog
             // 
@@ -136,13 +136,13 @@ namespace Ankh.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(432, 296);
+            this.ClientSize = new System.Drawing.Size(432, 222);
             this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.revisionGroupBox);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.nonRecursiveCheckBox);
             this.Controls.Add(this.localDirGroupBox);
             this.Controls.Add(this.urlGroupBox);
-            this.Controls.Add(this.revisionGroupBox);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CheckoutDialog";
