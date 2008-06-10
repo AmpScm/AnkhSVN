@@ -76,7 +76,7 @@
             // urlLabel
             // 
             this.urlLabel.AutoSize = true;
-            this.urlLabel.Location = new System.Drawing.Point(9, 9);
+            this.urlLabel.Location = new System.Drawing.Point(12, 12);
             this.urlLabel.Name = "urlLabel";
             this.urlLabel.Size = new System.Drawing.Size(23, 13);
             this.urlLabel.TabIndex = 2;

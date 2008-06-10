@@ -89,7 +89,7 @@ namespace Ankh.Configuration
                     if (value != null)
                         try
                         {
-                            pd.SetValue(config, pd.Converter.ConvertFromString(value));
+                            pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
                         }
                         catch { }
                 }
@@ -110,7 +110,7 @@ namespace Ankh.Configuration
                     if (value != null)
                         try
                         {
-                            pd.SetValue(config, pd.Converter.ConvertFromString(value));
+                            pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
                         }
                         catch { }
                 }
@@ -131,18 +131,22 @@ namespace Ankh.Configuration
 
                 using (RegistryKey reg = OpenHKCUKey("Configuration"))
                 {
-                    List<string> valueNames = new List<string>(reg.GetValueNames());
+                    HybridCollection<string> names = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                    names.AddRange(reg.GetValueNames());
+
                     foreach (PropertyDescriptor pd in config.GetProperties(null))
                     {
                         object value = pd.GetValue(config);
                         object defaultVal = defaultsProps[pd.Name].GetValue(defaultConfig);
 
-                        if (value != null)
+                        // Set the value only if it is already set previously, or if it's different from the default
+                        if(value == null || value.Equals(defaultVal))
                         {
-                            // Set the value only if it is already set previously, or if it's different from the default
-                            if (valueNames.Contains(pd.Name) || !value.Equals(defaultVal))
-                                reg.SetValue(pd.Name, value);
+                            if(names.Contains(pd.Name))
+                                reg.DeleteValue(pd.Name);
                         }
+                        else
+                            reg.SetValue(pd.Name, pd.Converter.ConvertToInvariantString(value));
                     }
                 }
             }
@@ -157,6 +161,11 @@ namespace Ankh.Configuration
             return Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + suffix, RegistryKeyPermissionCheck.ReadSubTree);
         }
 
+        /// <summary>
+        /// Opens or creates the HKCU key with the specified name
+        /// </summary>
+        /// <param name="suffix"></param>
+        /// <returns></returns>
         RegistryKey OpenHKCUKey(string suffix)
         {
             if (string.IsNullOrEmpty("suffix"))
