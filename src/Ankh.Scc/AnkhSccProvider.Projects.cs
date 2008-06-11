@@ -401,6 +401,15 @@ namespace Ankh.Scc
             {
                 _syncMap = false;
 
+                if (IsActive)
+                {
+                    // Enable our custom glyphs when we are set active
+                    IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
+
+                    if (solutionExplorer != null)
+                        solutionExplorer.EnableAnkhIcons(true);
+                }
+
                 foreach (SccProjectData pd in _projectMap.Values)
                     pd.Load();
             }
