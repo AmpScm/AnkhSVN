@@ -56,7 +56,7 @@ namespace Ankh.UI.PendingChanges
                 get { return _changes; }
             }
 
-            public Collection<string> CommitPaths
+            public HybridCollection<string> CommitPaths
             {
                 get { return _commitPaths; }
             }
@@ -117,6 +117,7 @@ namespace Ankh.UI.PendingChanges
             public SvnDepth CalculateCommitDepth()
             {
                 SvnDepth depth = SvnDepth.Infinity;
+                bool requireInfinity = false;
 
                 foreach (string path in CommitPaths)
                 {
@@ -127,9 +128,62 @@ namespace Ankh.UI.PendingChanges
                         if (item.IsDeleteScheduled)
                         {
                             // Infinity = OK
+                            requireInfinity = true;
                         }
                         else
                             depth = SvnDepth.Empty;
+                    }
+                }
+
+                if (requireInfinity && depth != SvnDepth.Infinity)
+                {
+                    // Houston we have a problem.
+                    // - Directory deletes require depth infinity
+                    // - There is another directory commit
+
+                    // Let's see if committing with depth infinity would go wrong
+                    bool hasOther = false;
+                    using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
+                    {
+                        bool cancel = false;
+                        SvnStatusArgs sa = new SvnStatusArgs();
+                        sa.ThrowOnError = false;
+                        sa.ThrowOnCancel = false;
+                        sa.RetrieveIgnoredEntries = false;
+                        sa.Depth = SvnDepth.Infinity;
+                        sa.Cancel += delegate(object sender, SvnCancelEventArgs ee) { if(cancel) ee.Cancel = true; };
+                        
+                        foreach (string path in CommitPaths)
+                        {
+                            SvnItem item = Cache[path];
+
+                            if (!item.IsDirectory || item.IsDeleteScheduled)
+                                continue; // Only check not to be deleted directories
+
+                            if (!cl.Status(path, sa,
+                                delegate(object sender, SvnStatusEventArgs ee)
+                                {
+                                    if (!CommitPaths.Contains(ee.FullPath))
+                                    {
+                                        hasOther = true;
+                                        cancel = true; // Cancel via the cancel hook
+                                    }
+                                }))
+                            {
+                                hasOther = true;
+                            }
+
+                            if (hasOther)
+                                break;
+                        }
+                    }
+
+                    if (!hasOther)
+                    {
+                        // Ok; it is safe to commit with depth infinity; all items that would be committed
+                        // with infinity would have been committed anyway
+
+                        depth = SvnDepth.Infinity;
                     }
                 }
 
