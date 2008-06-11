@@ -274,9 +274,6 @@ namespace Ankh.Scc
         /// </returns>
         public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
-            int n = lpszProjectPath.IndexOf("q-");
-            if (n > 0)
-                lpszProjectPath = lpszProjectPath.Substring(n+2);
             pbstrEnlistmentPath = lpszProjectPath;
             pbstrEnlistmentPathUNC = lpszProjectPath;
             return VSConstants.S_OK;            
