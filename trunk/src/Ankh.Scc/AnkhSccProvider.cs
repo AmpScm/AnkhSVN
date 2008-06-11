@@ -19,7 +19,7 @@ namespace Ankh.Scc
     {
     }
 
-    partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService
+    partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
         IFileStatusCache _statusCache;
@@ -97,7 +97,7 @@ namespace Ankh.Scc
             {
                 _active = true;
 
-                // Disable our custom glyphs before an other SCC provider is initialized!
+                // Enable our custom glyphs when we are set active
                 IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
 
                 if (solutionExplorer != null)
@@ -246,5 +246,42 @@ namespace Ankh.Scc
             return VSConstants.E_NOTIMPL;
         }
         #endregion        
+    
+        #region IVsSccEnlistmentPathTranslation Members
+
+        /// <summary>
+        /// Translates a physical project path to a (possibly) virtual project path.
+        /// </summary>
+        /// <param name="lpszEnlistmentPath">[in] The physical path (either the local path or the enlistment UNC path) to be translated.</param>
+        /// <param name="pbstrProjectPath">[out] The (possibly) virtual project path.</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
+        public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
+        {
+            pbstrProjectPath = lpszEnlistmentPath;
+            return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Translates a possibly virtual project path to a local path and an enlistment physical path.
+        /// </summary>
+        /// <param name="lpszProjectPath">[in] The project's (possibly) virtual path as obtained from the solution file.</param>
+        /// <param name="pbstrEnlistmentPath">[out] The local path used by the solution for loading and saving the project.</param>
+        /// <param name="pbstrEnlistmentPathUNC">[out] The path used by the source control system for managing the enlistment ("\\drive\path", "[drive]:\path", "file://server/path").</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
+        public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
+        {
+            int n = lpszProjectPath.IndexOf("q-");
+            if (n > 0)
+                lpszProjectPath = lpszProjectPath.Substring(n+2);
+            pbstrEnlistmentPath = lpszProjectPath;
+            pbstrEnlistmentPathUNC = lpszProjectPath;
+            return VSConstants.S_OK;            
+        }
+
+        #endregion
     }
 }
