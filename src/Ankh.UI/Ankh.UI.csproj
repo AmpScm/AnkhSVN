@@ -257,6 +257,9 @@
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.Designer.cs">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\BusyOverlay.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
       <SubType>Form</SubType>
@@ -875,6 +878,7 @@
     <Content Include="MergeWizard\images\TwoDifferentTrees.png" />
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
     <None Include="Resources\folderCloseButton.Image.png" />
+    <None Include="Resources\Busy.gif" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
