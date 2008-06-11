@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -451,6 +452,8 @@ namespace Ankh.UI.RepositoryOpen
         delegate void DoSomething();
 
         Uri _currentUri;
+        BusyOverlay _busy;
+        bool _loading;
         readonly Dictionary<Uri, List<ListViewItem>> _walking = new Dictionary<Uri, List<ListViewItem>>();
         readonly Dictionary<Uri, Uri> _running = new Dictionary<Uri, Uri>();
         private void RefreshBox(Uri uri)
@@ -477,6 +480,15 @@ namespace Ankh.UI.RepositoryOpen
                     return;
 
                 _running[uri] = uri; // Mark as walking
+
+                if (!_loading)
+                {
+                    if (_busy == null)
+                        _busy = new BusyOverlay(dirView, AnchorStyles.Right | AnchorStyles.Top);
+
+                    _loading = true;
+                    _busy.Show();
+                }
             }
 
             DoSomething fill = delegate()
@@ -564,10 +576,22 @@ namespace Ankh.UI.RepositoryOpen
             }
             finally
             {
-                lock (_running)
+                Invoke((DoSomething)delegate()
                 {
-                    _running.Remove(uri);
-                }
+                    lock (_running)
+                    {
+                        _running.Remove(uri);
+
+                        if (_running.Count == 0)
+                        {
+                            if (_busy != null && _loading)
+                            {
+                                _loading = false;
+                                _busy.Hide();
+                            }
+                        }
+                    }
+                });
                 // Exception or something
             }
         }
