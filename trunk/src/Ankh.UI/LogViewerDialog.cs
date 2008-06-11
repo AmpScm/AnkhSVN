@@ -10,7 +10,7 @@ namespace Ankh.UI
 {
     public partial class LogViewerDialog : Form
     {
-        private SvnItem _logTarget;
+        private string _logTarget;
         private IAnkhServiceProvider _context;
 
         public LogViewerDialog()
@@ -18,7 +18,7 @@ namespace Ankh.UI
             InitializeComponent();
         }
 
-        public LogViewerDialog(SvnItem target, IAnkhServiceProvider context)
+        public LogViewerDialog(string target, IAnkhServiceProvider context)
             : this()
         {
             LogTarget = target;
@@ -37,7 +37,7 @@ namespace Ankh.UI
         /// <summary>
         /// The target of the log.
         /// </summary>
-        public SvnItem LogTarget
+        public string LogTarget
         {
             get { return _logTarget; }
             set { _logTarget = value; }
@@ -49,7 +49,7 @@ namespace Ankh.UI
             logViewerControl.Site = Site;
             
             if (LogTarget != null)
-                logViewerControl.Start(Context, new string[] { LogTarget.Status.Uri.ToString() });
+                logViewerControl.Start(Context, new string[] { LogTarget });
         }
         #endregion
     }

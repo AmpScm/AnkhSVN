@@ -39,8 +39,13 @@ namespace Ankh.UI.MergeWizard
             {
                 WizardPage.Message = MergeUtils.INVALID_FROM_URL;
                 WizardPage.IsPageComplete = false;
+                fromRevisionSelectButton.Enabled = false;
 
                 return;
+            }
+            else
+            {
+                fromRevisionSelectButton.Enabled = true;
             }
 
             // Conditionally validate the To Url
@@ -48,8 +53,13 @@ namespace Ankh.UI.MergeWizard
             {
                 WizardPage.Message = MergeUtils.INVALID_TO_URL;
                 WizardPage.IsPageComplete = false;
+                toRevisionSelectButton.Enabled = false;
 
                 return;
+            }
+            else
+            {
+                toRevisionSelectButton.Enabled = true;
             }
 
             // Do not validate the revisions if To and From are using HEAD.
@@ -88,11 +98,26 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Displays the Subversion Log Viewer dialog.
         /// </summary>
-        private void DisplayLogViewerAndRetrieveRevisions()
+        private void DisplayLogViewerAndRetrieveRevisions(object sender)
         {
             // TODO: Update to allow for retrieval of the revisions for others to render.
-            LogViewerDialog dialog = new LogViewerDialog(((MergeWizard)WizardPage.Wizard).MergeTarget,
-                ((MergeWizard)WizardPage.Wizard).Context);
+            LogViewerDialog dialog;
+
+            if (sender == fromRevisionSelectButton || (sender == toRevisionSelectButton && useFromURLCheckBox.Checked))
+            {
+                dialog = new LogViewerDialog(fromURLTextBox.Text,
+                    ((MergeWizard)WizardPage.Wizard).Context);
+            }
+            else if (sender == toRevisionSelectButton)
+            {
+                dialog = new LogViewerDialog(toURLTextBox.Text,
+                    ((MergeWizard)WizardPage.Wizard).Context);
+            }
+            else
+            {
+                return;
+            }
+
             DialogResult result;
 
             result = dialog.ShowDialog(WizardPage.Form);
@@ -194,12 +219,12 @@ namespace Ankh.UI.MergeWizard
 
         private void fromRevisionSelectButton_Click(object sender, EventArgs e)
         {
-            DisplayLogViewerAndRetrieveRevisions();
+            DisplayLogViewerAndRetrieveRevisions(sender);
         }
 
         private void toRevisionSelectButton_Click(object sender, EventArgs e)
         {
-            DisplayLogViewerAndRetrieveRevisions();
+            DisplayLogViewerAndRetrieveRevisions(sender);
         }
         #endregion
     }
