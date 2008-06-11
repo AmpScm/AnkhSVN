@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.VS;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -52,10 +53,21 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
             if (!_initialized && IsHandleCreated && Visible)
             {
+                _initialized = true;
                 if (SelectedUri != null)
                 {
-                    _initialized = false;
                     BrowseText();
+                }
+
+                if (Context != null)
+                {
+                    IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
+                    if(settings != null)
+                        foreach (Uri uri in settings.GetRepositoryUris(true))
+                        {
+                            if (!urlBox.Items.Contains(uri))
+                                urlBox.Items.Add(uri);
+                        }
                 }
             }
         }
@@ -122,6 +134,30 @@ namespace Ankh.UI.RepositoryExplorer
             {
                 urlBox.Text = tn.RawUri.AbsoluteUri;
                 timer.Stop();
+            }
+        }
+
+        BusyOverlay _overlay;
+        bool _busy;
+
+        private void reposBrowser_RetrievingChanged(object sender, EventArgs e)
+        {
+            if (reposBrowser.Retrieving != _busy)
+            {
+                if (!_busy)
+                {
+                    _busy = true;
+                    if (_overlay == null)
+                        _overlay = new BusyOverlay(reposBrowser, AnchorStyles.Right | AnchorStyles.Top);
+
+                    _overlay.Show();
+                }
+                else
+                {
+                    _busy = false;
+                    if (_overlay != null)
+                        _overlay.Hide();
+                }
             }
         }
     }

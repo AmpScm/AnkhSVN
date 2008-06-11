@@ -108,6 +108,7 @@
             this.reposBrowser.Name = "reposBrowser";
             this.reposBrowser.Size = new System.Drawing.Size(386, 269);
             this.reposBrowser.TabIndex = 2;
+            this.reposBrowser.RetrievingChanged += new System.EventHandler(this.reposBrowser_RetrievingChanged);
             this.reposBrowser.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.reposBrowser_AfterSelect);
             // 
             // timer
