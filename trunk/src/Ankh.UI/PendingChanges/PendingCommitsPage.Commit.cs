@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Ankh.VS;
 using Ankh.Commands;
+using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -343,7 +344,8 @@ namespace Ankh.UI.PendingChanges
 
                     if (!state.Client.Add(pc.FullPath, a))
                     {
-                        state.MessageBox.Show(a.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        if (state.MessageBox.Show(a.LastException.Message, "AnkhSvn", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
+                            return false;
                     }
                 }
             }
