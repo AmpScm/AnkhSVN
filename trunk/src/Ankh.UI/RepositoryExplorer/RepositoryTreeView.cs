@@ -399,6 +399,20 @@ namespace Ankh.UI.RepositoryExplorer
             return false;
         }
 
+        protected override void OnDoubleClick(EventArgs e)
+        {
+            base.OnDoubleClick(e);
+
+            TreeViewHitTestInfo hti = HitTest(PointToClient(MousePosition));
+
+            RepositoryTreeNode rtn = hti.Node as RepositoryTreeNode;
+            if (rtn != null && hti.Location != TreeViewHitTestLocations.None)
+            {
+                // Make sure the node is expanded after its loaded (Was set to false on first click)
+                rtn.EnsureLoaded(true);
+            }
+        }
+
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.TreeView.BeforeExpand"/> event.
         /// </summary>
