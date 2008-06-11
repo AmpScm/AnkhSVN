@@ -42,7 +42,7 @@ namespace Ankh.UI
             {
                 if (m.Msg == 0x0203) // WM_LBUTTONDBLCLK
                 {
-                    if (CheckBoxes && SingleCheck)
+                    if (CheckBoxes)
                     {
                             Point mp = PointToClient(MousePosition);
                             TreeViewHitTestInfo hi = HitTest(mp);
