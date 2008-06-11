@@ -49,7 +49,9 @@ namespace Ankh.UI
         public void LoadSettings()
         {
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
-            cfgSvc.LoadConfig();
+
+            cfgSvc.LoadConfig(); // Load most recent settings from registry
+            _config = null; 
 
             txtDiffExePath.Text = Config.DiffExePath;
             txtMergeExePath.Text = Config.MergeExePath;
