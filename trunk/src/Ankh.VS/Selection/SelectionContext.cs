@@ -457,9 +457,10 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<string> InternalGetSelectedFiles(bool recursive)
         {
+            Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
-                Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 string[] files;
 
                 if (SelectionUtils.GetSccFiles(i, out files, true, true))
