@@ -40,17 +40,42 @@ namespace Ankh.UI.MergeWizard
             {
                 using (SvnClient client = GetClient())
                 {
-                    SvnMergeSourcesCollection mergeSources;
-                    SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
                     SvnItem parent = target.Parent;
 
-                    args.ThrowOnError = false;
-
-                    if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
+                    if (mergeType == MergeWizard.MergeType.ManuallyRemove)
                     {
-                        foreach (SvnMergeSource source in mergeSources)
+                        SvnGetAppliedMergeInfoArgs args = new SvnGetAppliedMergeInfoArgs();
+                        SvnAppliedMergeInfo mergeInfo;
+
+                        args.ThrowOnError = false;
+
+                        if (client.GetAppliedMergeInfo(SvnTarget.FromUri(target.Status.Uri), args, out mergeInfo))
                         {
-                            sources.Add(source.Uri.ToString());
+                            foreach (SvnMergeItem item in mergeInfo.AppliedMerges)
+                            {
+                                string uri = item.Uri.ToString();
+
+                                if (!sources.Contains(uri))
+                                    sources.Add(uri);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        SvnMergeSourcesCollection mergeSources;
+                        SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
+
+                        args.ThrowOnError = false;
+
+                        if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
+                        {
+                            foreach (SvnMergeSource source in mergeSources)
+                            {
+                                string uri = source.Uri.ToString();
+
+                                if (!sources.Contains(uri))
+                                    sources.Add(uri);
+                            }
                         }
                     }
                 }
