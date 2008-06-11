@@ -61,6 +61,24 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incomplete.
+        /// </summary>
+        internal static string Incomplete {
+            get {
+                return ResourceManager.GetString("Incomplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties Modified.
+        /// </summary>
+        internal static string PropertyModified {
+            get {
+                return ResourceManager.GetString("PropertyModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Added.
         /// </summary>
         internal static string StateAdded {

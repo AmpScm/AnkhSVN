@@ -134,8 +134,6 @@ namespace Ankh.Extenders
             get { return SvnItem.Status.IsLockedLocal; }
         }
 
-        
-
         [Category("Properties"), DisplayName("Line ending style"), Description("svn:eol-style")]
         public LineEndingStyle LineEndingStyle
         {
