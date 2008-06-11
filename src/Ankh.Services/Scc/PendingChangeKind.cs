@@ -57,6 +57,11 @@ namespace Ankh.Scc
         /// <summary>
         /// The item is unmodified but open and dirty in an editor
         /// </summary>
-        EditorDirty
+        EditorDirty,
+
+        /// <summary>
+        /// The item is in incomplete state
+        /// </summary>
+        Incomplete,
     }
 }

@@ -274,6 +274,8 @@ namespace Ankh.Scc
                     return new PendingChangeStatus(_kind = PendingChangeKind.Conflicted);
                 case SvnStatus.Obstructed:
                     return new PendingChangeStatus(_kind = PendingChangeKind.Obstructed);
+                case SvnStatus.Incomplete:
+                    return new PendingChangeStatus(_kind = PendingChangeKind.Incomplete);
 
                 //case SvnStatus.Zero:
                 //case SvnStatus.Normal:

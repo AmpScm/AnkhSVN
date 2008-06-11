@@ -48,6 +48,10 @@ namespace Ankh.Scc
                     return PendingChangeText.StateModified;
                 case PendingChangeKind.EditorDirty:
                     return PendingChangeText.StateEdited;
+                case PendingChangeKind.PropertyModified:
+                    return PendingChangeText.PropertyModified;
+                case PendingChangeKind.Incomplete:
+                    return PendingChangeText.Incomplete;
                 default:
                     return State.ToString();
             }            

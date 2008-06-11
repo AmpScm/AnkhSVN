@@ -32,7 +32,6 @@ namespace Ankh
             _nodeKind = args.NodeKind;
             _localContentStatus = args.LocalContentStatus;
             _localCopied = args.LocalCopied;
-            _localLocked = args.LocalLocked;
             _localPropertyStatus = args.LocalPropertyStatus;
             _switched = args.Switched;
             _uri = args.Uri;
@@ -45,6 +44,7 @@ namespace Ankh
                 _revision = args.WorkingCopyInfo.Revision;
                 _repositoryId = args.WorkingCopyInfo.RepositoryId;
                 _changeList = args.WorkingCopyInfo.ChangeList;
+                _localLocked = args.WorkingCopyInfo.LockToken != null;
             }
         }        
 
