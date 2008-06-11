@@ -7,6 +7,7 @@ using System.Resources;
 using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -82,6 +83,19 @@ namespace Ankh.UI.MergeWizard
             WizardPage.IsPageComplete = true;
 
             return;
+        }
+
+        /// <summary>
+        /// Displays the Subversion Log Viewer dialog.
+        /// </summary>
+        private void DisplayLogViewerAndRetrieveRevisions()
+        {
+            // TODO: Update to allow for retrieval of the revisions for others to render.
+            LogViewerDialog dialog = new LogViewerDialog(((MergeWizard)WizardPage.Wizard).MergeTarget,
+                ((MergeWizard)WizardPage.Wizard).Context);
+            DialogResult result;
+
+            result = dialog.ShowDialog(WizardPage.Form);
         }
 
         #region UI Events
@@ -176,6 +190,16 @@ namespace Ankh.UI.MergeWizard
 
                 TogglePageComplete();
             }
+        }
+
+        private void fromRevisionSelectButton_Click(object sender, EventArgs e)
+        {
+            DisplayLogViewerAndRetrieveRevisions();
+        }
+
+        private void toRevisionSelectButton_Click(object sender, EventArgs e)
+        {
+            DisplayLogViewerAndRetrieveRevisions();
         }
         #endregion
     }

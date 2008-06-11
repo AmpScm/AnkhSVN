@@ -65,6 +65,7 @@
             resources.ApplyResources(this.fromRevisionSelectButton, "fromRevisionSelectButton");
             this.fromRevisionSelectButton.Name = "fromRevisionSelectButton";
             this.fromRevisionSelectButton.UseVisualStyleBackColor = true;
+            this.fromRevisionSelectButton.Click += new System.EventHandler(this.fromRevisionSelectButton_Click);
             // 
             // fromRevisionTextBox
             // 
@@ -127,6 +128,7 @@
             resources.ApplyResources(this.toRevisionSelectButton, "toRevisionSelectButton");
             this.toRevisionSelectButton.Name = "toRevisionSelectButton";
             this.toRevisionSelectButton.UseVisualStyleBackColor = true;
+            this.toRevisionSelectButton.Click += new System.EventHandler(this.toRevisionSelectButton_Click);
             // 
             // toRevisionTextBox
             // 
