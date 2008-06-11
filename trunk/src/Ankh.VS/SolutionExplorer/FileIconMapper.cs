@@ -140,7 +140,7 @@ namespace Ankh.VS.SolutionExplorer
         public int GetIconForExtension(string ext)
         {
             if (string.IsNullOrEmpty(ext))
-                return _fileIcon;
+                return FileIcon;
 
             return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttribute.Normal);
         }

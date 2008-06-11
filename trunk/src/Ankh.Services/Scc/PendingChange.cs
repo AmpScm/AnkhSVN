@@ -237,7 +237,14 @@ namespace Ankh.Scc
         int GetIcon(RefreshContext context)
         {
             if (Item.Exists)
-                return context.IconMapper.GetIcon(FullPath);
+            {
+                if (Item.IsDirectory)
+                    return context.IconMapper.DirectoryIcon;
+                else
+                    return context.IconMapper.GetIcon(FullPath);
+            }
+            else if (Item.Status != null && Item.Status.NodeKind == SvnNodeKind.Directory)
+                return context.IconMapper.DirectoryIcon;
             else
                 return context.IconMapper.GetIconForExtension(Path.GetExtension(Name));
         }
