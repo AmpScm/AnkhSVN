@@ -86,6 +86,11 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
+                // Do not validate since this field isn't editable and its contents are
+                // retrieved directly from mergeinfo.
+                if (MergeType == MergeWizard.MergeType.ManuallyRemove)
+                    return true;
+
                 Uri tmpUri;
 
                 // Do not show an error while the resources are retrieved.
@@ -150,6 +155,8 @@ namespace Ankh.UI.MergeWizard
                     WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.ERROR);
 
                     WizardPage.IsPageComplete = false;
+
+                    mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 }
 
                 ((WizardDialog)WizardPage.Form).EnablePageAndButtons(true);
