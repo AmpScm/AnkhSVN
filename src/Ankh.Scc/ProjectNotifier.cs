@@ -216,7 +216,7 @@ namespace Ankh.Scc
 
         public void ScheduleMonitor(string path)
         {
-            if(string.IsNullOrEmpty("path"))
+            if(string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             ((PendingChangeManager)ChangeManager).ScheduleMonitor(path);

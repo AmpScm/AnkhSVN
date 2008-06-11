@@ -9,6 +9,8 @@ using System.IO;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.Win32;
+using Ankh.UI;
+using System.Security;
 
 namespace Ankh.Settings
 {
@@ -104,7 +106,7 @@ namespace Ankh.Settings
 
             IFileStatusCache cache = GetService<IFileStatusCache>();
 
-            if(cache == null)
+            if (cache == null)
                 return directory;
 
             SvnItem item = cache[directory];
@@ -226,7 +228,7 @@ namespace Ankh.Settings
             {
                 string pr = ProjectRoot;
 
-                if(!string.IsNullOrEmpty(pr) && pr[pr.Length-1] != Path.DirectorySeparatorChar)
+                if (!string.IsNullOrEmpty(pr) && pr[pr.Length - 1] != Path.DirectorySeparatorChar)
                     return pr + Path.DirectorySeparatorChar;
                 else
                     return pr;
@@ -265,7 +267,7 @@ namespace Ankh.Settings
 
                 IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
-                if(solution == null)
+                if (solution == null)
                     return null;
 
                 object value;
@@ -370,5 +372,73 @@ namespace Ankh.Settings
         }
 
         #endregion
+
+        IAnkhConfigurationService _config;
+        IAnkhConfigurationService Config
+        {
+            get { return _config ?? (_config = GetService<IAnkhConfigurationService>()); }
+        }
+
+        public IEnumerable<Uri> GetRepositoryUris(bool forBrowse)
+        {
+            HybridCollection<Uri> uris = new HybridCollection<Uri>();
+
+            if (ProjectRootUri != null)
+                uris.Add(ProjectRootUri);
+
+            // Global keys (over all versions)
+            using (RegistryKey rk = Config.OpenGlobalKey("Repositories"))
+            {
+                if (rk != null)
+                    LoadUris(uris, rk);
+            }
+
+            // Per hive
+            using (RegistryKey rk = Config.OpenInstanceKey("Repositories"))
+            {
+                if (rk != null)
+                    LoadUris(uris, rk);
+            }
+
+            // Per user + Per hive
+            using (RegistryKey rk = Config.OpenUserInstanceKey("Repositories"))
+            {
+                if (rk != null)
+                    LoadUris(uris, rk);
+            }
+
+            // Finally add the last used list from TortoiseSVN
+            try
+            {
+                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
+                     "SOFTWARE\\TortoiseSVN\\History\\repoURLS", RegistryKeyPermissionCheck.ReadSubTree))
+                {
+                    if (rk != null)
+                        LoadUris(uris, rk);
+                }
+
+            }
+            catch (SecurityException)
+            { /* Ignore no read only access; stupid sysadmins */ }
+
+            return uris;
+        }
+
+        static void LoadUris(HybridCollection<Uri> uris, RegistryKey rk)
+        {
+            foreach (string name in rk.GetValueNames())
+            {
+                string value = rk.GetValue(name) as string;
+
+                Uri uri;
+                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                {
+                    if (!uris.Contains(uri))
+                        uris.Add(uri);
+                }
+            }
+        }
     }
 }
+
+

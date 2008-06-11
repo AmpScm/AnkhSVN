@@ -77,22 +77,38 @@ namespace Ankh.Configuration
 
         void SetDefaultsFromRegistry(AnkhConfig config)
         {
+            using (RegistryKey reg = OpenHKLMCommonKey("Configuration"))
+            {
+                if (reg != null)
+
+                    foreach (PropertyDescriptor pd in config.GetProperties(null))
+                    {
+                        string value = reg.GetValue(pd.Name, null) as string;
+
+                        if (value != null)
+                            try
+                            {
+                                pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
+                            }
+                            catch { }
+                    }
+            }
+
+
             using (RegistryKey reg = OpenHKLMKey("Configuration"))
             {
-                if (reg == null)
-                    return;
+                if (reg != null)
+                    foreach (PropertyDescriptor pd in config.GetProperties(null))
+                    {
+                        string value = reg.GetValue(pd.Name, null) as string;
 
-                foreach (PropertyDescriptor pd in config.GetProperties(null))
-                {
-                    string value = reg.GetValue(pd.Name, null) as string;
-
-                    if (value != null)
-                        try
-                        {
-                            pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
-                        }
-                        catch { }
-                }
+                        if (value != null)
+                            try
+                            {
+                                pd.SetValue(config, pd.Converter.ConvertFromInvariantString(value));
+                            }
+                            catch { }
+                    }
             }
         }
 
@@ -152,13 +168,22 @@ namespace Ankh.Configuration
             }
         }
 
-        RegistryKey OpenHKLMKey(string suffix)
+        RegistryKey OpenHKLMCommonKey(string subKey)
         {
-            if (string.IsNullOrEmpty("suffix"))
-                throw new ArgumentNullException("suffix");
+            if (string.IsNullOrEmpty(subKey))
+                throw new ArgumentNullException("subKey");
 
             // Opens the specified key or returns null
-            return Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + suffix, RegistryKeyPermissionCheck.ReadSubTree);
+            return Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\Global\\" + subKey, RegistryKeyPermissionCheck.ReadSubTree);
+        }
+
+        RegistryKey OpenHKLMKey(string subKey)
+        {
+            if (string.IsNullOrEmpty(subKey))
+                throw new ArgumentNullException("subKey");
+
+            // Opens the specified key or returns null
+            return Registry.LocalMachine.OpenSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + subKey, RegistryKeyPermissionCheck.ReadSubTree);
         }
 
         /// <summary>
@@ -166,13 +191,32 @@ namespace Ankh.Configuration
         /// </summary>
         /// <param name="suffix"></param>
         /// <returns></returns>
-        RegistryKey OpenHKCUKey(string suffix)
+        RegistryKey OpenHKCUKey(string subKey)
         {
-            if (string.IsNullOrEmpty("suffix"))
-                throw new ArgumentNullException("suffix");
+            if (string.IsNullOrEmpty(subKey))
+                throw new ArgumentNullException("subKey");
 
             // Opens or creates the specified key
-            return Registry.CurrentUser.CreateSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + suffix);
+            return Registry.CurrentUser.CreateSubKey("SOFTWARE\\AnkhSVN\\AnkhSVN\\" + Settings.RegistryHiveSuffix + "\\" + subKey);
         }
+
+        #region IAnkhConfigurationService Members
+   
+        RegistryKey IAnkhConfigurationService.OpenUserInstanceKey(string subKey)
+        {
+            return OpenHKCUKey(subKey);
+        }
+
+        RegistryKey IAnkhConfigurationService.OpenInstanceKey(string subKey)
+        {
+            return OpenHKLMKey(subKey);
+        }
+
+        RegistryKey IAnkhConfigurationService.OpenGlobalKey(string subKey)
+        {
+            return OpenHKLMCommonKey(subKey);
+        }
+
+        #endregion
     }
 }

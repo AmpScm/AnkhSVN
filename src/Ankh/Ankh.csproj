@@ -159,8 +159,8 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
-    <Compile Include="AnkhCommandService.cs" />
-    <Compile Include="AnkhContext.cs">
+    <Compile Include="Services\AnkhCommandService.cs" />
+    <Compile Include="Services\AnkhContext.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AnkhModule.cs" />
@@ -277,17 +277,17 @@
     <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CommitOperation.cs" />
-    <Compile Include="Config\ConfigService.cs">
+    <Compile Include="Commands\Runners\CommitOperation.cs" />
+    <Compile Include="Services\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConflictManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AnkhErrorHandler.cs">
+    <Compile Include="Services\AnkhErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Settings\SolutionSettings.cs" />
+    <Compile Include="Services\SolutionSettings.cs" />
     <Compile Include="StatusCache\FileStatusCleanup.cs" />
     <Compile Include="WorkingCopyExplorer\ExplorersShell.cs" />
     <Compile Include="WorkingCopyExplorer\IAnkhSelectionContainer.cs" />
@@ -310,19 +310,19 @@
     <Compile Include="Extenders\SvnItemExtender.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IContext.cs">
+    <Compile Include="Services\IContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IUIShell.cs">
+    <Compile Include="Services\IUIShell.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OutputPaneWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProgressRunner.cs">
+    <Compile Include="Services\ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UIShell.cs">
+    <Compile Include="Services\UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\FileSystemRootItem.cs" />
