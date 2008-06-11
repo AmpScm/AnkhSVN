@@ -75,5 +75,12 @@ namespace Ankh.VS
         /// </summary>
         /// <value>The registry hive suffix.</value>
         string RegistryHiveSuffix { get; }
+
+        /// <summary>
+        /// Gets a list of Uris for url dropdowns
+        /// </summary>
+        /// <param name="forBrowse">if set to <c>true</c> [for browse].</param>
+        /// <returns></returns>
+        IEnumerable<Uri> GetRepositoryUris(bool forBrowse);
     }
 }

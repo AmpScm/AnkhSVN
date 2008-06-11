@@ -12,6 +12,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Security;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -36,6 +37,16 @@ namespace Ankh.UI.RepositoryOpen
             }
         }
 
+        [DebuggerStepThrough]
+        protected T GetService<T>()
+            where T : class
+        {
+            if (Context != null)
+                return Context.GetService<T>();
+
+            return null;
+        }
+
         int _dirOffset;
         int _fileOffset;
         void InitializeFromContext()
@@ -46,7 +57,19 @@ namespace Ankh.UI.RepositoryOpen
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
         }
-        
+
+        IAnkhSolutionSettings _solutionSettings;
+        IAnkhSolutionSettings SolutionSettings
+        {
+            get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
+        }
+
+        IAnkhConfigurationService _config;
+        IAnkhConfigurationService Config
+        {
+            get { return _config ?? (_config = GetService<IAnkhConfigurationService>()); }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -54,101 +77,37 @@ namespace Ankh.UI.RepositoryOpen
             if (urlBox == null)
                 return;
 
-            if (urlBox.Items.Count == 0)
+            // Add current project root (if available) first
+            if (SolutionSettings != null && SolutionSettings.ProjectRootUri != null)
             {
-                // Add current project root (if available) first
-                IAnkhSolutionSettings ss = null;
-                if (Context != null)
-                    ss = Context.GetService<IAnkhSolutionSettings>();
+                if (!urlBox.Items.Contains(SolutionSettings.ProjectRootUri))
+                    urlBox.Items.Add(SolutionSettings.ProjectRootUri);
+            }
 
-                if (ss != null && ss.ProjectRootUri != null)
+            if (Config != null)
+                // Add last used url
+                using (RegistryKey rk = Config.OpenUserInstanceKey("Dialogs"))
                 {
-                    if (!urlBox.Items.Contains(ss.ProjectRootUri))
-                        urlBox.Items.Add(ss.ProjectRootUri);
-                }
-
-                try
-                {
-                    // Add last used url
-                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
-                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Dialogs", RegistryKeyPermissionCheck.ReadSubTree))
+                    if (rk != null)
                     {
-                        if (rk != null)
-                        {
-                            string value = rk.GetValue("Last Repository") as string;
+                        string value = rk.GetValue("Last Repository") as string;
 
-                            Uri uri;
-                            if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
-                            {
-                                if (!urlBox.Items.Contains(uri))
-                                    urlBox.Items.Add(uri);
-                            }
+                        Uri uri;
+                        if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                        {
+                            if (!urlBox.Items.Contains(uri))
+                                urlBox.Items.Add(uri);
                         }
                     }
-
-                    // Allow corporate rollout of a default repository list via group policy
-                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(
-                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Subversion Repositories", RegistryKeyPermissionCheck.ReadSubTree))
-                    {
-                        if (rk != null)
-                            foreach (string name in rk.GetValueNames())
-                            {
-                                string value = rk.GetValue(name) as string;
-
-                                Uri uri;
-                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
-                                {
-                                    if (!urlBox.Items.Contains(uri))
-                                        urlBox.Items.Add(uri);
-                                }
-                            }
-                    }
-
-                    using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
-                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Subversion Repositories", RegistryKeyPermissionCheck.ReadSubTree))
-                    {
-                        if (rk != null)
-                            foreach (string name in rk.GetValueNames())
-                            {
-                                string value = rk.GetValue(name) as string;
-
-                                Uri uri;
-                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
-                                {
-                                    if (!urlBox.Items.Contains(uri))
-                                        urlBox.Items.Add(uri);
-                                }
-                            }
-                    }
-
                 }
-                catch (SecurityException)
-                { /* Ignore no read only access; stupid sysadmins */ }
-                
-                // Finally add the last used list from TortoiseSVN
-                try
+
+            if (SolutionSettings != null)
+                foreach (Uri uri in SolutionSettings.GetRepositoryUris(true))
                 {
-                   using (RegistryKey rk = Registry.CurrentUser.OpenSubKey(
-                        "SOFTWARE\\TortoiseSVN\\History\\repoURLS", RegistryKeyPermissionCheck.ReadSubTree))
-                    {
-                        if (rk != null)
-                            foreach (string name in rk.GetValueNames())
-                            {
-                                string value = rk.GetValue(name) as string;
-
-                                Uri uri;
-                                if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
-                                {
-                                    if (!urlBox.Items.Contains(uri))
-                                        urlBox.Items.Add(uri);
-                                }
-                            }
-                    }
-
+                    if (!urlBox.Items.Contains(uri))
+                        urlBox.Items.Add(uri);
                 }
-                catch (SecurityException)
-                { /* Ignore no read only access; stupid sysadmins */ }
-            }
+
             if (urlBox.Items.Count > 0 && string.IsNullOrEmpty(urlBox.Text.Trim()))
             {
                 urlBox.SelectedIndex = 0;
@@ -163,11 +122,10 @@ namespace Ankh.UI.RepositoryOpen
         {
             base.OnClosed(e);
 
-            if(_currentUri != null)
+            if (_currentUri != null)
                 try
                 {
-                    using (RegistryKey rk = Registry.CurrentUser.CreateSubKey(
-                        "SOFTWARE\\AnkhSVN\\AnkhSVN\\CurrentVersion\\Dialogs"))
+                    using (RegistryKey rk = Config.OpenUserInstanceKey("Dialogs"))
                     {
                         rk.SetValue("Last Repository", _currentUri.ToString());
                     }
@@ -188,13 +146,13 @@ namespace Ankh.UI.RepositoryOpen
             {
                 if (string.IsNullOrEmpty(name))
                     throw new ArgumentNullException("name");
-                else if(filter == null)
+                else if (filter == null)
                     throw new ArgumentNullException("filter");
 
                 _name = name;
                 _filter = filter;
 
-                if(string.IsNullOrEmpty(filter) || filter == "*" || filter == "*.*")
+                if (string.IsNullOrEmpty(filter) || filter == "*" || filter == "*.*")
                 {
                     _itemRegEx = new Regex("^.*$", RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture); // Match all
                     return;
@@ -297,7 +255,7 @@ namespace Ankh.UI.RepositoryOpen
 
         private void urlBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(!_inSetDirectory)
+            if (!_inSetDirectory)
                 OnDirChanged();
         }
 
@@ -322,7 +280,7 @@ namespace Ankh.UI.RepositoryOpen
 
             string fileText = fileNameBox.Text;
 
-            if(string.IsNullOrEmpty(fileText))
+            if (string.IsNullOrEmpty(fileText))
                 return;
 
             Uri dirUri;
@@ -631,7 +589,7 @@ namespace Ankh.UI.RepositoryOpen
                 foreach (ListViewItem i in items)
                 {
                     // Show directories and matching items
-                    if((i.ImageIndex == _dirOffset) || filter == null || filter.Regex.Match(i.Text).Success)
+                    if ((i.ImageIndex == _dirOffset) || filter == null || filter.Regex.Match(i.Text).Success)
                     {
                         if (!string.IsNullOrEmpty(selText) &&
                             selText.StartsWith(i.Text, StringComparison.Ordinal) &&
@@ -656,7 +614,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (uri != null)
                 RefreshBox(uri);
-        }    
+        }
 
 
         private void dirView_SelectedIndexChanged(object sender, EventArgs e)
@@ -760,7 +718,7 @@ namespace Ankh.UI.RepositoryOpen
 
         private void fileTypeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(_currentItems != null)
+            if (_currentItems != null)
                 SetView(_currentItems); // Refilter current directory
         }
 
@@ -793,7 +751,7 @@ namespace Ankh.UI.RepositoryOpen
 
                 int dirOffset = _dlg._dirOffset;
 
-                if((x.ImageIndex == dirOffset) != (y.ImageIndex == dirOffset))
+                if ((x.ImageIndex == dirOffset) != (y.ImageIndex == dirOffset))
                     return (x.ImageIndex == dirOffset) ? -1 : 1;
 
                 return StringComparer.OrdinalIgnoreCase.Compare(x.Text, y.Text);
