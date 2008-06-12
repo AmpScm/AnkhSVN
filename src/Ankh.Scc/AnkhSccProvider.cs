@@ -256,6 +256,9 @@ namespace Ankh.Scc
         /// <param name="pPropBag">The p prop bag.</param>
         void IAnkhSccService.WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag pPropBag)
         {
+            if (!IsActive || !_managedSolution)
+                return;
+
             SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
 
             string projectDir = SolutionDirectory;
@@ -272,8 +275,8 @@ namespace Ankh.Scc
 
             foreach (SccProjectData project in _projectMap.Values)
             {
-                if (string.IsNullOrEmpty(project.ProjectDirectory))
-                    continue; // Solution folder?
+                if (string.IsNullOrEmpty(project.ProjectDirectory) || !project.IsManaged)
+                    continue; // Solution folder or unmanaged?
 
                 bool enlist = false;
                 bool enlistOptional = true;
