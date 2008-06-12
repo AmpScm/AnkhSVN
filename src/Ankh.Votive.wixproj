@@ -17,21 +17,14 @@
     <WixToolsPath>$(WixToolsPathProp)</WixToolsPath>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
-    <IntermediateOutputPath>Ankh.Votive\obj\Debug\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
-    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
-    <SuppressValidation>False</SuppressValidation>
-    <CompilerAdditionalOptions>
-    </CompilerAdditionalOptions>
-    <LinkerAdditionalOptions>
-    </LinkerAdditionalOptions>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <Cultures>
     </Cultures>
+    <DefineConstants>Debug;SharpSvn_Pdb=1</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
@@ -39,17 +32,21 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
+    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
+    <SuppressValidation>False</SuppressValidation>
+    <CompilerAdditionalOptions>
+    </CompilerAdditionalOptions>
+    <LinkerAdditionalOptions>
+    </LinkerAdditionalOptions>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
-    <IntermediateOutputPath>Ankh.Votive\obj\Release\</IntermediateOutputPath>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Cultures>
     </Cultures>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>SharpSvn_Pdb=1</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
-    <SuppressPdbOutput>True</SuppressPdbOutput>
+    <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
+    <SuppressPdbOutput>False</SuppressPdbOutput>
     <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <VerboseOutput>False</VerboseOutput>
