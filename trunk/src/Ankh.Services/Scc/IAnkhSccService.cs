@@ -43,7 +43,15 @@ namespace Ankh.Scc
         /// <param name="project">A reference to the project or null for the solution</param>
         /// <returns><c>true</c> if the solution is managed by the scc provider, otherwise <c>false</c></returns>
         bool IsProjectManaged(SvnProject project);
-   
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is solution managed.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is solution managed; otherwise, <c>false</c>.
+        /// </value>
+        bool IsSolutionManaged { get; }
+
         /// <summary>
         /// Register the scc provider as primary scc provider in Visual Studio
         /// </summary>

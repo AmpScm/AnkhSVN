@@ -24,6 +24,11 @@ namespace Ankh.Scc
         List<string> _delayedDelete;
         bool _isDirty;
 
+        public bool IsSolutionManaged
+        {
+            get { return _managedSolution; }
+        }
+
         public void LoadingManagedSolution(bool asPrimarySccProvider)
         {
             // Called by the package when a solution is loaded which is marked as managed by us
@@ -36,7 +41,7 @@ namespace Ankh.Scc
                 return false;
 
             if (project == null)
-                return _managedSolution;
+                return IsSolutionManaged;
 
             return IsProjectManagedRaw(project.RawHandle);
         }
@@ -47,7 +52,7 @@ namespace Ankh.Scc
                 return false;
 
             if (project == null)
-                return _managedSolution;
+                return IsSolutionManaged;
 
             IVsSccProject2 sccProject = project as IVsSccProject2;
 
@@ -82,7 +87,7 @@ namespace Ankh.Scc
             {
                 // We are talking about the solution
 
-                if (managed != _managedSolution)
+                if (managed != IsSolutionManaged)
                 {
                     _managedSolution = managed;
                     IsSolutionDirty = true;
@@ -144,7 +149,7 @@ namespace Ankh.Scc
                     return;
             }
 
-            if (!_managedSolution)
+            if (!IsSolutionManaged)
             {
                 string dir = SolutionDirectory;
 
@@ -195,7 +200,7 @@ namespace Ankh.Scc
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
 
-                    if(_managedSolution)
+                    if(IsSolutionManaged)
                         data.SetManaged(true);
 
                     // Flush the glyph cache of solution folders
@@ -335,7 +340,7 @@ namespace Ankh.Scc
                 // Web sites are Solution-only projects with scc state
                 data.SccProject.SccGlyphChanged(0, null, null, null);
 
-                if (_managedSolution)
+                if (IsSolutionManaged)
                 {
                     // We let them follow the solution settings (See OnSolutionOpen() for the not added case
                     if (added)

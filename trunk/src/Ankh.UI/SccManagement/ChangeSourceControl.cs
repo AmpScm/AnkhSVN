@@ -59,12 +59,12 @@ namespace Ankh.UI.SccManagement
             if(dirUri != null)
                 dirUri = new Uri(dirUri, "./");
 
-            bool solutionControlled = scc.IsProjectManaged(null);
+            bool solutionControlled = scc.IsSolutionManaged;
             int n = bindingGrid.Rows.Add(
                 "Solution: " + Path.GetFileNameWithoutExtension(settings.SolutionFilename),
                 (dirUri != null) ? dirUri.ToString() : "",
                 solutionControlled,
-                scc.IsProjectManaged(null) ? "Ok" : "Not Controlled",
+                scc.IsSolutionManaged ? "Ok" : "Not Controlled",
                 info.ParentDirectory.FullPath);
 
             foreach (SvnProject project in mapper.GetAllProjects())
@@ -85,7 +85,7 @@ namespace Ankh.UI.SccManagement
                     projectInfo.UniqueProjectName,
                     uri,
                     scc.IsProjectManaged(project),                    
-                    (scc.IsProjectManaged(null) || solutionControlled) ? "Ok" : "Not Controlled",
+                    (scc.IsSolutionManaged || solutionControlled) ? "Ok" : "Not Controlled",
                     projectInfo.ProjectDirectory);
 
                 bindingGrid.Rows[n].Tag = project;

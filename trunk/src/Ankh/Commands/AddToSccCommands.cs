@@ -39,7 +39,7 @@ namespace Ankh.Commands
             }
 
 
-            if (!scc.IsProjectManaged(null))
+            if (!scc.IsSolutionManaged)
                 return; // Nothing is added unless the solution is added
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
@@ -93,7 +93,7 @@ namespace Ankh.Commands
 
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
-            if (!scc.IsProjectManaged(null))
+            if (!scc.IsSolutionManaged)
             {
                 bool confirmed = false;
                 SvnItem item = cache[e.Selection.SolutionFilename];
