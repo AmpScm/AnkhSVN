@@ -98,6 +98,32 @@ namespace Ankh.Settings
             }
         }
 
+        bool SameRepository(SvnItem item1, SvnItem item2)
+        {
+            bool oneNull = (item1 == null || item1.Status == null);
+                bool twoNull = (item2 == null || item2.Status == null);
+
+            if(oneNull || twoNull)
+                return oneNull && twoNull;
+
+            AnkhStatus s1 = item1.Status;
+            AnkhStatus s2 = item2.Status;
+
+            if(s1.RepositoryId != null && s2.RepositoryId != null)
+                return s1.RepositoryId == s2.RepositoryId;
+
+            if (!item1.IsVersioned || !item2.IsVersioned)
+                return false;
+
+            using(SvnClient svn = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                Uri r1 = svn.GetRepositoryRoot(item1.FullPath);
+                Uri r2 = svn.GetRepositoryRoot(item2.FullPath);
+
+                return r1 == r2;
+            }
+        }
+
 
         string GetSvnWcRoot(string directory)
         {
@@ -117,7 +143,7 @@ namespace Ankh.Settings
                 if (parent == null || !parent.IsVersioned)
                     break;
 
-                if (parent.Status.RepositoryId != item.Status.RepositoryId)
+                if (!SameRepository(parent, item))
                     break;
 
                 Uri uri = new Uri(item.Status.Uri, "../");

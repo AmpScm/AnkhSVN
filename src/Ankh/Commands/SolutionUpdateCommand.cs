@@ -52,7 +52,7 @@ namespace Ankh.Commands
             {
                 IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
-                if (settings == null || string.IsNullOrEmpty(settings.SolutionFilename) || string.IsNullOrEmpty(settings.ProjectRoot))
+                if (settings == null || string.IsNullOrEmpty(settings.ProjectRoot))
                 {
                     e.Enabled = false;
                 }
