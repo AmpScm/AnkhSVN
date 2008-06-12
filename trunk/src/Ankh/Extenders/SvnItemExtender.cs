@@ -86,10 +86,7 @@ namespace Ankh.Extenders
 
         public bool ShouldSerializeChangeList()
         {
-            if (!SvnItem.IsVersioned || SvnItem.IsDirectory)
-                return false;
-
-            return true;
+            return false; // Keep changelist non-bold
         }
 
         [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
@@ -187,6 +184,12 @@ namespace Ankh.Extenders
                 }
             }
         }
+
+        public bool ShouldSerializeLineEndingStyle()
+        {
+            return false; // Keep LineEndingStyle field non-bold
+        }
+
         [Category("Properties"), DisplayName("Mime type"), Description("svn:mime-type")]
         [DefaultValue(null)]
         public string MimeType
