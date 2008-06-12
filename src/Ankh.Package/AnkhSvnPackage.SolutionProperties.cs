@@ -105,18 +105,17 @@ namespace Ankh.VSPackage
                 object obj;
 
                 IAnkhSccService scc = GetService<IAnkhSccService>();
-                if (scc != null)
-                {
-                    if (scc.IsProjectManaged(null))
-                    {
-                        obj = true.ToString();
-                        pPropBag.Write(ManagedPropertyName, ref obj);
-                    
-                        // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
-                        obj = "AnkhSVN - Subversion Support for Visual Studio";
-                        pPropBag.Write(ManagerPropertyName, ref obj);
-                    }
-                }
+                if (scc == null || !scc.IsProjectManaged(null))
+                    return VSConstants.S_OK;
+
+                obj = true.ToString();
+                pPropBag.Write(ManagedPropertyName, ref obj);
+
+                // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
+                obj = "AnkhSVN - Subversion Support for Visual Studio";
+                pPropBag.Write(ManagerPropertyName, ref obj);
+
+                scc.WriteEnlistments(pPropBag);
             }
 
             return VSConstants.S_OK;
