@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
-using SharpSvn;
+using System.Runtime.InteropServices;
+using System.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using SharpSvn;
+
 using Ankh.Ids;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.VS;
-using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
@@ -69,7 +71,7 @@ namespace Ankh.Scc
         public int AnyItemsUnderSourceControl(out int pfResult)
         {
             // Set pfResult to false when the solution can change to an other scc provider
-            bool oneManaged = _active && _managedSolution;
+            bool oneManaged = _active && IsSolutionManaged;
 
             if (_active && !oneManaged)
             {
@@ -254,9 +256,9 @@ namespace Ankh.Scc
         /// Writes the enlistment state to the solution
         /// </summary>
         /// <param name="pPropBag">The p prop bag.</param>
-        void IAnkhSccService.WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag pPropBag)
+        void IAnkhSccService.WriteEnlistments(IPropertyBag pPropBag)
         {
-            if (!IsActive || !_managedSolution)
+            if (!IsActive || !IsSolutionManaged)
                 return;
 
             SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);

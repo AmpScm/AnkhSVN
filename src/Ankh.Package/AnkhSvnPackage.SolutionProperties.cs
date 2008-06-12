@@ -53,7 +53,7 @@ namespace Ankh.VSPackage
                     // Something changed -> Save
                     pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
                 }
-                else if (!scc.IsProjectManaged(null))
+                else if (!scc.IsSolutionManaged)
                 {
                     // Nothing changed and unmanaged; not adding anything
                     pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
@@ -84,7 +84,7 @@ namespace Ankh.VSPackage
             {
                 IAnkhSccService scc = GetService<IAnkhSccService>();
 
-                if (scc != null && scc.IsProjectManaged(null))
+                if (scc != null && scc.IsSolutionManaged)
                 {
                     // Calls WriteSolutionProps for us
                     pPersistence.SavePackageSolutionProps(1, pHierarchy, this, SubversionPropertyCategory);
@@ -105,7 +105,7 @@ namespace Ankh.VSPackage
                 object obj;
 
                 IAnkhSccService scc = GetService<IAnkhSccService>();
-                if (scc == null || !scc.IsProjectManaged(null))
+                if (scc == null || !scc.IsSolutionManaged)
                     return VSConstants.S_OK;
 
                 obj = true.ToString();
