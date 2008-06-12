@@ -11,6 +11,7 @@ using Ankh.Ids;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.VS;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc
 {
@@ -248,6 +249,79 @@ namespace Ankh.Scc
         #endregion        
     
         #region IVsSccEnlistmentPathTranslation Members
+
+        /// <summary>
+        /// Writes the enlistment state to the solution
+        /// </summary>
+        /// <param name="pPropBag">The p prop bag.</param>
+        void IAnkhSccService.WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag pPropBag)
+        {
+            SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            string projectDir = SolutionDirectory;
+
+            IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
+            Uri solutionUri = null;
+
+            if (ss != null)
+                projectDir = ss.ProjectRootWithSeparator;
+            else
+                projectDir = projectDir.TrimEnd('\\') + '\\';
+
+            string normalizedProjectDir = SvnTools.GetNormalizedFullPath(projectDir);
+
+            foreach (SccProjectData project in _projectMap.Values)
+            {
+                if (string.IsNullOrEmpty(project.ProjectDirectory))
+                    continue; // Solution folder?
+
+                string dir = SvnTools.GetNormalizedFullPath(project.ProjectDirectory);
+
+                if (string.IsNullOrEmpty(dir) || dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
+                    || normalizedProjectDir.Equals(dir, StringComparison.OrdinalIgnoreCase))
+                {
+                    // The directory is below our project root, we can ignore it
+                    //  - Yes we can, unless the directory is switched or nested below the root
+
+                    // TODO: Check those conditions somewhere else and reuse here                    
+                    continue;
+                }
+
+                SvnItem item = StatusCache[dir];
+
+                if (solutionUri == null)
+                {
+                    SvnItem solDirItem = StatusCache[SolutionDirectory];
+
+                    if (solDirItem != null && solDirItem.IsVersioned && solDirItem.Status != null && solDirItem.Status.Uri != null)
+                        solutionUri = solDirItem.Status.Uri;
+                }
+
+                if (item == null || !item.IsVersioned || item.Status == null || item.Status.Uri == null)
+                    continue;
+
+                Uri itemUri = item.Status.Uri;
+
+                if (solutionUri != null)
+                    itemUri = solutionUri.MakeRelativeUri(itemUri);
+
+                // This should match the directory as specified in the solution!!!
+                // (It currently does, but only because we don't really support virtual folders yet)
+                dir = PackageUtilities.MakeRelative(dir, projectDir);
+
+                string name = "Project-" + project.ProjectGuid.ToString("B");
+
+                values[name + "-Path"] = dir;
+                values[name + "-Uri"] = Uri.EscapeUriString(itemUri.ToString());                
+            }
+
+            // We write all values in alphabetical order to make sure we don't change the solution unnecessary
+            foreach(KeyValuePair<string, string> kv in values)
+            {
+                object value = kv.Value;
+                pPropBag.Write(kv.Key, ref value);
+            }
+        }
 
         /// <summary>
         /// Translates a physical project path to a (possibly) virtual project path.

@@ -8,6 +8,7 @@ namespace Ankh.Scc
 	/// <summary>
 	/// 
 	/// </summary>
+    [CLSCompliant(false)]
 	public interface IAnkhSccService
 	{
 		/// <summary>
@@ -55,5 +56,11 @@ namespace Ankh.Scc
         /// <param name="path">The path.</param>
         /// <returns></returns>
         AnkhGlyph GetPathGlyph(string path);
+
+        /// <summary>
+        /// Writes the enlistment state to the solution
+        /// </summary>
+        /// <param name="pPropBag">The p prop bag.</param>
+        void WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag pPropBag);
     }
 }

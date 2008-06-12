@@ -39,6 +39,7 @@ namespace Ankh.Scc.ProjectMap
         SvnProject _svnProjectInstance;
         string _projectName;
         string _projectDirectory;
+        Guid? _projectGuid;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -85,13 +86,12 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (_projectName == null && _sccProject != null)
+                if (_projectName == null && _hierarchy != null)
                 {
                     _projectName = "";
-                    IVsHierarchy hier = _sccProject as IVsHierarchy;
                     object name;
 
-                    if(hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    if(ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
                     {
                         _projectName = name as string;
                     }
@@ -101,17 +101,40 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        /// <summary>
+        /// Gets the guid of the project within the solution
+        /// </summary>
+        public Guid ProjectGuid
+        {
+            get
+            {
+                if(!_projectGuid.HasValue)
+                {
+                    IVsSolution solution = _context.GetService<IVsSolution>(typeof(SVsSolution));
+
+                    Guid value;
+                    if (ErrorHandler.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
+                        _projectGuid = value;                    
+                }
+
+                return _projectGuid.HasValue ? _projectGuid.Value : Guid.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the project directory.
+        /// </summary>
+        /// <value>The project directory or null if the project does not have one</value>
         public string ProjectDirectory
         {
             get
             {
-                if (_projectDirectory == null && _sccProject != null)
+                if (_projectDirectory == null && _hierarchy != null)
                 {
                     _projectDirectory = "";
-                    IVsHierarchy hier = _sccProject as IVsHierarchy;
                     object name;
 
-                    if (hier != null && ErrorHandler.Succeeded(hier.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_ProjectDir, out name)))
                     {
                         string dir = name as string;
 
@@ -122,7 +145,7 @@ namespace Ankh.Scc.ProjectMap
                     }
                 }
 
-                return _projectDirectory;
+                return String.IsNullOrEmpty(_projectDirectory) ? null : _projectDirectory;
             }
         }
 
@@ -130,13 +153,12 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if (!_checkedProjectFile && _sccProject != null)
+                if (!_checkedProjectFile && _vsProject != null)
                 {
                     _checkedProjectFile = true;
-                    IVsProject project = _sccProject as IVsProject;
                     string name;
 
-                    if (project != null && ErrorHandler.Succeeded(project.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
+                    if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
                         _projectFile = name;                        
                     }
