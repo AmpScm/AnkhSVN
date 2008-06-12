@@ -307,7 +307,7 @@ namespace Ankh.Scc
 
                 // This should match the directory as specified in the solution!!!
                 // (It currently does, but only because we don't really support virtual folders yet)
-                dir = PackageUtilities.MakeRelative(dir, projectDir);
+                dir = PackageUtilities.MakeRelative(projectDir, dir);
 
                 string name = "Project-" + project.ProjectGuid.ToString("B");
 
