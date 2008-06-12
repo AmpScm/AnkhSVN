@@ -151,9 +151,9 @@ namespace Ankh.Scc
                 foreach (SccProjectData pd in _projectMap.Values)
                 {
                     pd.SccProject.SccGlyphChanged(0, null, null, null);
-                }                
+                }
             }
-            
+
             return VSConstants.S_OK;
         }
 
@@ -246,8 +246,8 @@ namespace Ankh.Scc
         {
             return VSConstants.E_NOTIMPL;
         }
-        #endregion        
-    
+        #endregion
+
         #region IVsSccEnlistmentPathTranslation Members
 
         /// <summary>
@@ -275,9 +275,35 @@ namespace Ankh.Scc
                 if (string.IsNullOrEmpty(project.ProjectDirectory))
                     continue; // Solution folder?
 
+                bool enlist = false;
+                bool enlistOptional = true;
+                IVsSccProjectEnlistmentChoice projectChoice = project.VsProject as IVsSccProjectEnlistmentChoice;
+
+                if (projectChoice != null)
+                {
+                    VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
+
+                    if (ErrorHandler.Succeeded(projectChoice.GetEnlistmentChoice(choice)))
+                    {
+                        switch (choice[0])
+                        {
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_NEVER:
+                                // Don't take any enlistment actions
+                                break;
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
+                                enlist = true;
+                                enlistOptional = false;
+                                break;
+                            case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
+                                enlistOptional = enlist = true;
+                                break;
+                        }
+                    }
+                }
+
                 string dir = SvnTools.GetNormalizedFullPath(project.ProjectDirectory);
 
-                if (string.IsNullOrEmpty(dir) || dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
+                if (!enlist && dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
                     || normalizedProjectDir.Equals(dir, StringComparison.OrdinalIgnoreCase))
                 {
                     // The directory is below our project root, we can ignore it
@@ -309,14 +335,16 @@ namespace Ankh.Scc
                 // (It currently does, but only because we don't really support virtual folders yet)
                 dir = PackageUtilities.MakeRelative(projectDir, dir);
 
-                string name = "Project-" + project.ProjectGuid.ToString("B");
+                string name = "Project." + project.ProjectGuid.ToString("B").ToUpperInvariant();
 
-                values[name + "-Path"] = dir;
-                values[name + "-Uri"] = Uri.EscapeUriString(itemUri.ToString());                
+                values[name + ".Path"] = '\"' + dir + '\"';
+                values[name + ".Uri"] = '\"' + Uri.EscapeUriString(itemUri.ToString()) + '\"';
+                if (enlist)
+                    values[name + ".Enlist"] = enlistOptional ? "Maybe" : true.ToString();
             }
 
             // We write all values in alphabetical order to make sure we don't change the solution unnecessary
-            foreach(KeyValuePair<string, string> kv in values)
+            foreach (KeyValuePair<string, string> kv in values)
             {
                 object value = kv.Value;
                 pPropBag.Write(kv.Key, ref value);
@@ -350,7 +378,7 @@ namespace Ankh.Scc
         {
             pbstrEnlistmentPath = lpszProjectPath;
             pbstrEnlistmentPathUNC = lpszProjectPath;
-            return VSConstants.S_OK;            
+            return VSConstants.S_OK;
         }
 
         #endregion
