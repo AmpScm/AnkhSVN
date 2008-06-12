@@ -32,6 +32,7 @@
             this.openButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.urlLabel = new System.Windows.Forms.ToolStripLabel();
             this.urlBox = new System.Windows.Forms.ToolStripComboBox();
             this.refreshButton = new System.Windows.Forms.ToolStripButton();
             this.dirUpButton = new System.Windows.Forms.ToolStripButton();
@@ -43,7 +44,6 @@
             this.fileNameBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.fileTypeBox = new System.Windows.Forms.ComboBox();
-            this.urlLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +90,13 @@
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "Url:";
             // 
+            // urlLabel
+            // 
+            this.urlLabel.AutoSize = false;
+            this.urlLabel.Name = "urlLabel";
+            this.urlLabel.Size = new System.Drawing.Size(64, 22);
+            this.urlLabel.Text = "&Url:";
+            // 
             // urlBox
             // 
             this.urlBox.AutoToolTip = true;
@@ -102,11 +109,12 @@
             // refreshButton
             // 
             this.refreshButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.refreshButton.Enabled = false;
             this.refreshButton.Image = ((System.Drawing.Image)(resources.GetObject("refreshButton.Image")));
             this.refreshButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(23, 22);
-            this.refreshButton.Text = "&Open";
+            this.refreshButton.Text = "&Refresh";
             this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
             // 
             // dirUpButton
@@ -116,7 +124,7 @@
             this.dirUpButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dirUpButton.Name = "dirUpButton";
             this.dirUpButton.Size = new System.Drawing.Size(23, 22);
-            this.dirUpButton.Text = "&Save";
+            this.dirUpButton.Text = "Up";
             this.dirUpButton.Click += new System.EventHandler(this.dirUpButton_Click);
             // 
             // toolStripSeparator
@@ -205,13 +213,6 @@
             this.fileTypeBox.Size = new System.Drawing.Size(332, 21);
             this.fileTypeBox.TabIndex = 11;
             this.fileTypeBox.SelectedIndexChanged += new System.EventHandler(this.fileTypeBox_SelectedIndexChanged);
-            // 
-            // urlLabel
-            // 
-            this.urlLabel.AutoSize = false;
-            this.urlLabel.Name = "urlLabel";
-            this.urlLabel.Size = new System.Drawing.Size(64, 22);
-            this.urlLabel.Text = "&Url:";
             // 
             // RepositoryOpenDialog
             // 
