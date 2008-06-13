@@ -34,12 +34,37 @@ namespace Ankh.Scc
     {
         bool _solutionLoaded;
         readonly List<EnlistData> _enlistState = new List<EnlistData>();
-        bool _enlistCompleted = false;
+        bool _enlistCompleted;// = false;
 
         void ClearEnlistState()
         {
             _enlistState.Clear();
             _enlistCompleted = false;
+        }
+
+        protected IEnumerable<IVsHierarchy> GetAllProjectsInSolutionRaw()
+        {
+            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
+
+            if (solution == null)
+                yield break;
+
+            Guid none = Guid.Empty;
+            IEnumHierarchies hierEnum;
+            if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_ALLPROJECTS, ref none, out hierEnum)))
+                yield break;
+
+            IVsHierarchy[] hiers = new IVsHierarchy[32];
+            uint nFetched;
+            while (ErrorHandler.Succeeded(hierEnum.Next((uint)hiers.Length, hiers, out nFetched)))
+            {
+                if (nFetched == 0)
+                    break;
+                for (int i = 0; i < nFetched; i++)
+                {
+                    yield return hiers[i];
+                }
+            }
         }
 
         /// <summary>
@@ -98,7 +123,7 @@ namespace Ankh.Scc
                 }
 
                 string dir = SvnTools.GetNormalizedFullPath(project.ProjectDirectory);
-                string file = SvnTools.GetNormalizedFullPath(project.ProjectFile);
+                string file = project.ProjectFile;
 
                 if (!enlist && dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
                     || normalizedProjectDir.Equals(dir, StringComparison.OrdinalIgnoreCase))
@@ -128,9 +153,7 @@ namespace Ankh.Scc
                 if (solutionUri != null)
                     itemUri = solutionUri.MakeRelativeUri(itemUri);
 
-                if (string.Equals(dir, file, StringComparison.OrdinalIgnoreCase))
-                    file = null;
-                else
+                if (StatusCache.IsValidPath(file))
                     file = PackageUtilities.MakeRelative(dir, file);
 
                 // This should match the directory as specified in the solution!!!
@@ -152,6 +175,48 @@ namespace Ankh.Scc
                 {
                     // To enlist a project we need its project type (to get to the project factory)
                     values[prefix + ".EnlistType"] = project.ProjectTypeGuid.ToString("B").ToUpperInvariant();
+                }
+            }
+
+            IVsSolution solution = null;
+            foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
+            {
+                IVsSccProject2 scc = hier as IVsSccProject2;
+
+                if (scc != null && _projectMap.ContainsKey(scc))
+                    continue;
+
+                // OK: 2 options
+                //  * Unloaded project
+                //    -> Keep state from previous version
+                //  * Not scc capable project
+                //    -> TODO: Look at our options
+
+                if(solution == null)
+                    solution = GetService<IVsSolution>(typeof(SVsSolution));
+
+                Guid projectGuid;
+                if(ErrorHandler.Succeeded(solution.GetGuidOfProject(hier, out projectGuid)))
+                {
+                    string id = projectGuid.ToString("B").ToUpperInvariant();
+                    foreach(EnlistData data in _enlistState)
+                    {
+                        if(data.ProjectId == id)
+                        {
+                            projects.Add(id, id);
+                            string prefix = "Project." + id;
+                            
+                            projects[prefix + ".Path"] = Quote(data.Directory);
+                            if(!string.IsNullOrEmpty(data.RawFile))
+                                projects[prefix + ".File"] =  Quote(data.RawFile);
+
+                            if(!string.IsNullOrEmpty(data.EnlistType))
+                                projects[prefix + ".EnlistType"] = Quote(data.EnlistType);
+
+                            projects[prefix + ".Uri"] = Quote(Uri.EscapeUriString(data.Uri.ToString()));
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -178,30 +243,42 @@ namespace Ankh.Scc
 
         sealed class EnlistData
         {
-            readonly string _project;
+            readonly string _projectId;
             readonly string _directory;
             readonly string _path;
+            readonly string _rawFile;
             readonly Uri _uri;
             readonly string _enlistType;
 
-            public EnlistData(string project, string directory, string file, Uri uri, string enlistType)
+            public EnlistData(string projectId, string directory, string file, Uri uri, string enlistType)
             {
-                if (string.IsNullOrEmpty(project))
-                    throw new ArgumentNullException("project");
+                if (string.IsNullOrEmpty(projectId))
+                    throw new ArgumentNullException("projectId");
                 else if (string.IsNullOrEmpty(directory))
                     throw new ArgumentNullException("directory");
                 else if (uri == null)
                     throw new ArgumentNullException("uri");
 
-                _project = project;
+                _projectId = projectId;
                 _directory = directory;
-                if (file != null)
+                _rawFile = file;
+                if (file == null)
                     _path = directory.TrimEnd('\\') + '\\';
                 else
                     _path = System.IO.Path.Combine(directory, file);
 
                 _uri = uri;
                 _enlistType = enlistType;
+            }
+
+            public string ProjectId
+            {
+                get { return _projectId; }
+            }
+
+            internal string RawFile
+            {
+                get { return _rawFile; }
             }
 
             public string Directory
@@ -232,9 +309,7 @@ namespace Ankh.Scc
 
         void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
         {
-#if !DEBUG
-            return; 
-#else
+#if DEBUG
             IMyPropertyBag mpb = (IMyPropertyBag)propertyBag; // Stop HResult exception handling
             object value;
             string projects;
@@ -267,10 +342,8 @@ namespace Ankh.Scc
 
                 path = Unquote((string)value);
 
-                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".File", out value, null, 0, null)))
+                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".Project", out value, null, 0, null)))
                     file = Unquote((string)value);
-
-                path = Unquote((string)value);
 
                 if (!ErrorHandler.Succeeded(mpb.Read(prefix + ".Uri", out value, null, 0, null)))
                     continue;
@@ -295,14 +368,12 @@ namespace Ankh.Scc
 #endif
         }
 
-        void PostSolutionLoad()
-        {            
-        }
-
         void PerformEnlist()
         {
             _enlistCompleted = true;
+            _solutionDirectory = _solutionFile = null; // Clear cache
 
+#if DEBUG
             if (_enlistState.Count == 0)
                 return; // Nothing to do here
 
@@ -334,15 +405,64 @@ namespace Ankh.Scc
                 string enlistLocal, enlistUnc;
                 uint options;
 
-                if(!ErrorHandler.Succeeded(enlistmentFactory.GetDefaultEnlistment(Path.Combine(SolutionDirectory, item.Path), out enlistLocal, out enlistUnc))
-                    || !ErrorHandler.Succeeded(enlistmentFactory.GetEnlistmentFactoryOptions(out options)))
+                //SolutionFilePath
+
+                string projectPath;
+
+                if(item.Path.Contains("://"))
+                    projectPath = item.Path;
+                else
+                    projectPath = Path.GetFullPath(Path.Combine(SolutionDirectory, item.Path));
+
+                if(!ErrorHandler.Succeeded(enlistmentFactory.GetDefaultEnlistment(projectPath, out enlistLocal, out enlistUnc)))
                 {
                     continue;
                 }
 
+                if (!ErrorHandler.Succeeded(enlistmentFactory.GetEnlistmentFactoryOptions(out options)))
+                    options = (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH | __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITENLISTMENTPATH);
+
+                EnlistmentState state = new EnlistmentState(
+                    0 != (options & (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH | __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITENLISTMENTPATH)),
+                    0 != (options & (int)(__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITDEBUGGINGPATH| __VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANEDITDEBUGGINGPATH)));
+
+                state.Location = state.DebugLocation = enlistUnc;
+
+                if(0 != (options & (int)__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEENLISTMENTPATH))
+                    state.BrowseLocation += delegate(object sender, EnlistmentState.EnlistmentEventArgs e)
+                    {
+                        string location, uncLocation;
+
+                        if(ErrorHandler.Succeeded(enlistmentFactory.BrowseEnlistment(projectPath, e.State.Location, out location, out uncLocation)))
+                        {
+                            e.State.LocalLocation = location;
+                            e.State.Location = uncLocation;
+                        }
+                    };
+
+                if(0 != (options & (int)__VSSCCENLISTMENTFACTORYOPTIONS.VSSCC_EFO_CANBROWSEDEBUGGINGPATH))
+                    state.BrowseDebugLocation += delegate(object sender, EnlistmentState.EnlistmentEventArgs e)
+                    {
+                        string location, uncLocation;
+
+                        if(ErrorHandler.Succeeded(enlistmentFactory.BrowseEnlistment(projectPath, e.State.DebugLocation, out location, out uncLocation)))
+                        {
+                            e.State.LocalDebugLocation = location;
+                            e.State.DebugLocation = uncLocation;
+                        }
+                    };
+
+                IUIShell uiShell = GetService<IUIShell>();
+
+                if(!uiShell.EditEnlistmentState(state))
+                {
+                    continue;
+                }                
+
 
                 GC.KeepAlive(enlistLocal);
             }
+#endif
         }
 
         string Quote(string value)
