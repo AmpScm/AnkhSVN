@@ -3,7 +3,7 @@
   <?ifndef ankhVersion ?>
   <?define ankhVersion=2.0.0.1 ?>
   <?endif?>
-  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033"
+  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033" 
 			   Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="40880177-2453-4EC7-8EEF-744EC101B688">
     <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"
 				 Platform="intel" Languages="1033" />
@@ -19,15 +19,17 @@
 
     <Property Id="ShortProductName" Value="AnkhSVN" />
     <Property Id="ARPCONTACT">AnkhSVN - users@ankhsvn.open.collab.net</Property>
-    <Property Id="ARPURLINFOABOUT">http://ankhsvn.open.collab.net/</Property>
-    <Property Id="ARPHELPLINK">http://ankhsvn.open.collab.net/</Property>
-    <Property Id="ARPURLUPDATEINFO">http://ankhsvn.open.collab.net/</Property>
+    <Property Id="ARPURLINFOABOUT">http://www.ankhsvn.net/</Property>
+    <Property Id="ARPHELPLINK">http://www.ankhsvn.net/help/</Property>
+    <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/updates/</Property>
 
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
 
     <!-- Secure these -->
-    <Property Id="NEWERPRODUCTFOUND" Secure="yes" />
+    <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
+    <Property Id="EXACTVERSIONINSTALLED" Secure="yes" />
+    <Property Id="NEWERVERSIONINSTALLED" Secure="yes" />
 
     <!-- Errormessages -->
     <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
