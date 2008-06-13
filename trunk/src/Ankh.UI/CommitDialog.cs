@@ -30,7 +30,7 @@ namespace Ankh.UI
 
             this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
-            ContainerMode = VSContainerMode.UseTextEditorScope;
+            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
         
         /// <summary>

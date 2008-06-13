@@ -27,7 +27,8 @@ namespace Ankh.UI
     {
         Default = 0,
 
-        UseTextEditorScope = 1,
+        TranslateKeys = 1,
+        UseTextEditorScope = 2,
     }
 
 
