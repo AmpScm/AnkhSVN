@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="cf45b8b8-5de0-4843-89bc-8398ca6f2646" Name="WixProject" Language="1033" Version="1.0.0.0" Manufacturer="WixProject" UpgradeCode="5e0080bc-ab61-4cc1-b270-99dcb9a52015">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="WixProject.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="WixProject">
+					<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+					<!-- <Component Id="ProductComponent" Guid="acc9709d-3fd0-4713-b39e-2db3685e58c3"> -->
+						<!-- TODO: Insert files, registry keys, and other resources here. -->
+					<!-- </Component> -->
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<Feature Id="ProductFeature" Title="WixProject" Level="1">
+			<!-- TODO: Remove the comments around this ComponentRef element and the Component above in order to add resources to this installer. -->
+			<!-- <ComponentRef Id="ProductComponent" /> -->
+		</Feature>
+	</Product>
+</Wix>

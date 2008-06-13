@@ -1,0 +1,18 @@
+// CppAtlProject.idl : IDL source for CppAtlProject
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CppAtlProject.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(6DA98D7B-7D7A-46E3-B331-0B2614F59D16),
+	version(1.0),
+	helpstring("CppAtlProject 1.0 Type Library")
+]
+library CppAtlProjectLib
+{
+	importlib("stdole2.tlb");
+};
