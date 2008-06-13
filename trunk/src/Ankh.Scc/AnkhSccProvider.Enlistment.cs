@@ -14,20 +14,44 @@ using Ankh.Ids;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.VS;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace Ankh.Scc
 {
-    partial class AnkhSccProvider
+    [InterfaceType(1), ComImport]
+    [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
+    interface IMyPropertyBag
     {
+        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
+        int Read(string pszPropName, out object pVar, IErrorLog pErrorLog, uint VARTYPE, object pUnkObj);
+        
+        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
+        int Write(string pszPropName, ref object pVar);
+    }
+
+    partial class AnkhSccProvider : IVsAsynchOpenFromScc
+    {
+        bool _solutionLoaded;
+        readonly List<EnlistData> _enlistState = new List<EnlistData>();
+        bool _enlistCompleted = false;
+
+        void ClearEnlistState()
+        {
+            _enlistState.Clear();
+            _enlistCompleted = false;
+        }
+
         /// <summary>
         /// Writes the enlistment state to the solution
         /// </summary>
         /// <param name="pPropBag">The p prop bag.</param>
-        void IAnkhSccService.WriteEnlistments(IPropertyBag pPropBag)
+        void IAnkhSccService.WriteEnlistments(IPropertyBag propertyBag)
         {
             if (!IsActive || !IsSolutionManaged)
                 return;
-
+#if DEBUG
+            SortedList<string, string> projects = new SortedList<string, string>(StringComparer.Ordinal);
             SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
 
             string projectDir = SolutionDirectory;
@@ -74,6 +98,7 @@ namespace Ankh.Scc
                 }
 
                 string dir = SvnTools.GetNormalizedFullPath(project.ProjectDirectory);
+                string file = SvnTools.GetNormalizedFullPath(project.ProjectFile);
 
                 if (!enlist && dir.StartsWith(projectDir, StringComparison.OrdinalIgnoreCase)
                     || normalizedProjectDir.Equals(dir, StringComparison.OrdinalIgnoreCase))
@@ -103,28 +128,260 @@ namespace Ankh.Scc
                 if (solutionUri != null)
                     itemUri = solutionUri.MakeRelativeUri(itemUri);
 
+                if (string.Equals(dir, file, StringComparison.OrdinalIgnoreCase))
+                    file = null;
+                else
+                    file = PackageUtilities.MakeRelative(dir, file);
+
                 // This should match the directory as specified in the solution!!!
                 // (It currently does, but only because we don't really support virtual folders yet)
                 dir = PackageUtilities.MakeRelative(projectDir, dir);
 
-                string name = "Project." + project.ProjectGuid.ToString("B").ToUpperInvariant();
+                string prefix = project.ProjectGuid.ToString("B").ToUpperInvariant();
+                projects.Add(prefix, prefix);
 
-                values[name + ".Path"] = '\"' + dir + '\"';                
-                values[name + ".Uri"] = '\"' + Uri.EscapeUriString(itemUri.ToString()) + '\"';
+                prefix = "Project." + prefix;
+
+                values[prefix + ".Path"] = Quote(dir);
+
+                if (!string.IsNullOrEmpty(file))
+                    values[prefix + ".Project"] = Quote(PackageUtilities.MakeRelative(dir, file));
+
+                values[prefix + ".Uri"] = Quote(Uri.EscapeUriString(itemUri.ToString()));
                 if (enlist)
                 {
                     // To enlist a project we need its project type (to get to the project factory)
-                    values[name + ".Type"] = project.ProjectTypeGuid.ToString("B").ToUpperInvariant();
-                    values[name + ".Enlist"] = enlistOptional ? "Maybe" : true.ToString();
+                    values[prefix + ".EnlistType"] = project.ProjectTypeGuid.ToString("B").ToUpperInvariant();
                 }
             }
 
             // We write all values in alphabetical order to make sure we don't change the solution unnecessary
+            StringBuilder projectString = new StringBuilder();
+            foreach (string s in projects.Values)
+            {
+                if (projectString.Length > 0)
+                    projectString.Append(", ");
+
+                projectString.Append(s);
+            }
+
+            object value = projectString.ToString();
+            propertyBag.Write("Projects", ref value);            
+
             foreach (KeyValuePair<string, string> kv in values)
             {
-                object value = kv.Value;
-                pPropBag.Write(kv.Key, ref value);
+                value = kv.Value;
+                propertyBag.Write(kv.Key, ref value);
             }
+#endif
+        }
+
+        sealed class EnlistData
+        {
+            readonly string _project;
+            readonly string _directory;
+            readonly string _path;
+            readonly Uri _uri;
+            readonly string _enlistType;
+
+            public EnlistData(string project, string directory, string file, Uri uri, string enlistType)
+            {
+                if (string.IsNullOrEmpty(project))
+                    throw new ArgumentNullException("project");
+                else if (string.IsNullOrEmpty(directory))
+                    throw new ArgumentNullException("directory");
+                else if (uri == null)
+                    throw new ArgumentNullException("uri");
+
+                _project = project;
+                _directory = directory;
+                if (file != null)
+                    _path = directory.TrimEnd('\\') + '\\';
+                else
+                    _path = System.IO.Path.Combine(directory, file);
+
+                _uri = uri;
+                _enlistType = enlistType;
+            }
+
+            public string Directory
+            {
+                get { return _directory; }
+            }
+
+            public string Path
+            {
+                get { return _directory; }
+            }
+
+            public string ProjectFile
+            {
+                get { return _path; }
+            }
+
+            public Uri Uri
+            {
+                get { return _uri; }
+            }
+
+            public string EnlistType
+            {
+                get { return _enlistType; }
+            }
+        }
+
+        void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
+        {
+#if !DEBUG
+            return; 
+#else
+            IMyPropertyBag mpb = (IMyPropertyBag)propertyBag; // Stop HResult exception handling
+            object value;
+            string projects;
+
+            if(!ErrorHandler.Succeeded(mpb.Read("Projects", out value, null, 0, null)))
+                return;
+            
+            projects = ((string)value).Trim();
+
+            if (string.IsNullOrEmpty(projects))
+                return;
+
+            foreach(string project in projects.Split(','))
+            {
+                Guid projectId;
+
+                if (string.IsNullOrEmpty(project))
+                    continue;
+
+                if (!TryParseGuid(project, out projectId))
+                    continue;
+
+                projectId = new Guid(project);
+                string prefix = "Project." + projectId.ToString("B").ToUpperInvariant();
+
+                string path, url, file= null, enlistType=null;
+
+                if (!ErrorHandler.Succeeded(mpb.Read(prefix + ".Path", out value, null, 0, null)))
+                    continue;
+
+                path = Unquote((string)value);
+
+                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".File", out value, null, 0, null)))
+                    file = Unquote((string)value);
+
+                path = Unquote((string)value);
+
+                if (!ErrorHandler.Succeeded(mpb.Read(prefix + ".Uri", out value, null, 0, null)))
+                    continue;
+
+                url = Unquote((string)value);
+                Uri uri;
+
+                if (string.IsNullOrEmpty(url) || !Uri.TryCreate(url, UriKind.Relative, out uri))
+                    continue;
+
+                if (ErrorHandler.Succeeded(mpb.Read(prefix + ".EnlistType", out value, null, 0, null)))
+                {
+                    Guid enlistG;
+                    enlistType = ((string)value).Trim();
+
+                    if (!TryParseGuid(enlistType, out enlistG))
+                        enlistType = null;
+                }
+
+                _enlistState.Add(new EnlistData(project, path, file, uri, enlistType));
+            }
+#endif
+        }
+
+        void PostSolutionLoad()
+        {            
+        }
+
+        void PerformEnlist()
+        {
+            _enlistCompleted = true;
+
+            if (_enlistState.Count == 0)
+                return; // Nothing to do here
+
+            IVsSolution2 sol = GetService<IVsSolution2>(typeof(SVsSolution));
+            // TODO: Load previous enlist state
+
+            foreach (EnlistData item in _enlistState)
+            {
+                if (string.IsNullOrEmpty(item.EnlistType))
+                    continue;
+
+                Guid value;
+
+                if(!TryParseGuid(item.EnlistType, out value))
+                    continue;
+
+                Guid[] factoryGuid = new Guid[] { value };
+
+                IVsProjectFactory factory;
+                if (!ErrorHandler.Succeeded(sol.GetProjectFactory(0, factoryGuid, null, out factory)) || factory == null)
+                    continue;
+
+                IVsSccProjectEnlistmentFactory enlistmentFactory = factory as IVsSccProjectEnlistmentFactory;
+
+                if (enlistmentFactory == null)
+                    continue;
+
+                GC.KeepAlive(enlistmentFactory);
+                string enlistLocal, enlistUnc;
+                uint options;
+
+                if(!ErrorHandler.Succeeded(enlistmentFactory.GetDefaultEnlistment(Path.Combine(SolutionDirectory, item.Path), out enlistLocal, out enlistUnc))
+                    || !ErrorHandler.Succeeded(enlistmentFactory.GetEnlistmentFactoryOptions(out options)))
+                {
+                    continue;
+                }
+
+
+                GC.KeepAlive(enlistLocal);
+            }
+        }
+
+        string Quote(string value)
+        {
+            return '\"' + value + '\"';
+        }
+
+        private string Unquote(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return null;
+
+            value = value.Trim();
+            
+            if (string.IsNullOrEmpty(value))
+                return "";
+
+            if(value.Length >= 2 && value[0] == '\"' && value[value.Length-1] == '\"')
+            {
+                value = value.Substring(1, value.Length-2).Replace("\"\"", "\"");
+            }
+
+            return value;
+        }
+
+        private bool TryParseGuid(string project, out Guid projectId)
+        {
+            projectId = Guid.Empty;
+
+            if (string.IsNullOrEmpty(project))
+                return false;
+
+            project = project.Trim();
+
+            if (project.Length != 38 || project[0] != '{' || project[37] != '}')
+                return false;
+
+            projectId = new Guid(project);
+            return true;
         }
 
         /// <summary>
@@ -137,6 +394,9 @@ namespace Ankh.Scc
         /// </returns>
         public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
+            if (!_enlistCompleted)
+                PerformEnlist();
+
             pbstrProjectPath = lpszEnlistmentPath;
             return VSConstants.S_OK;
         }
@@ -152,9 +412,41 @@ namespace Ankh.Scc
         /// </returns>
         public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
+            if (!_enlistCompleted)
+                PerformEnlist();
+            //((IAnkhSccService)this).LoadEnlistments(null);
             pbstrEnlistmentPath = lpszProjectPath;
             pbstrEnlistmentPathUNC = lpszProjectPath;
             return VSConstants.S_OK;
         }
+
+        #region IVsAsynchOpenFromScc Members
+
+        public int IsLoadingContent(IVsHierarchy pHierarchy, out int pfIsLoading)
+        {
+            pfIsLoading = 0; // The project is available
+            return VSConstants.S_OK;
+        }
+
+        public int LoadProject(string lpszProjectPath)
+        {
+            return VSConstants.S_OK; // The project is available
+        }
+
+        /// <summary>
+        /// This method determines whether a specified project must be loaded asynchronously.
+        /// </summary>
+        /// <param name="lpszProjectPath">[in] Physical path to the specified project.</param>
+        /// <param name="pReturnValue">[out] Returns nonzero (true) if the project must be loaded asynchronously. Otherwise, returns zero (false) if the project can be loaded synchronously.</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
+        public int LoadProjectAsynchronously(string lpszProjectPath, out int pReturnValue)
+        {
+            pReturnValue = 0; // Project shouldn't be loaded asynchronous
+            return VSConstants.S_OK;
+        }
+
+        #endregion
     }
 }

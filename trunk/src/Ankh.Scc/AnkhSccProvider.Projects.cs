@@ -137,8 +137,9 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>
-        internal void OnSolutionOpened()
+        internal void OnSolutionOpened(bool onLoad)
         {
+            _solutionLoaded = true;
             _solutionFile = _solutionDirectory = null;
 
             if (!IsActive)
@@ -307,6 +308,8 @@ namespace Ankh.Scc
             // Clear status for reopening solution
             _managedSolution = false;
             _isDirty = false;
+            _solutionLoaded = false;
+            ClearEnlistState();
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
             if (mgr != null)
