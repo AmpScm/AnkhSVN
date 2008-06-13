@@ -14,7 +14,7 @@ namespace Ankh.Scc
 
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
-            _sccProvider.OnSolutionOpened();
+            _sccProvider.OnSolutionOpened(true);
 
             return VSConstants.S_OK;
         }

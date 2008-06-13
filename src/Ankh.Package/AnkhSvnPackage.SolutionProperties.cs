@@ -125,10 +125,10 @@ namespace Ankh.VSPackage
         {
             // This function gets called by the shell when a solution with one of our property categories is opened in the IDE.
 
-            if (SubversionPropertyCategory == pszKey)
+            if (pHierarchy == null && pszKey == SubversionPropertyCategory)
             {
                 IAnkhSccService scc = GetService<IAnkhSccService>();
-                if (scc != null)
+                if (scc != null && fPreLoad != 0)
                 {
                     // We were called to read the key written by this source control provider
                     // Make sure we were marked as primary Scc provider on this solution
@@ -152,6 +152,8 @@ namespace Ankh.VSPackage
 
                         scc.LoadingManagedSolution(result);
                     }
+
+                    scc.LoadEnlistments(pPropBag);
                 }
             }
 

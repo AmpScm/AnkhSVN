@@ -68,7 +68,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Writes the enlistment state to the solution
         /// </summary>
-        /// <param name="pPropBag">The p prop bag.</param>
-        void WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag pPropBag);
+        /// <param name="propertyBag">The property bag.</param>
+        void WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag propertyBag);
+
+        /// <summary>
+        /// Loads the state of the enlistment.
+        /// </summary>
+        /// <param name="propertyBag">The property bag.</param>
+        void LoadEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag propertyBag);
     }
 }

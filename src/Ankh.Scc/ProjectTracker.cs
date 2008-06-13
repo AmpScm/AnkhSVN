@@ -62,7 +62,9 @@ namespace Ankh.Scc
                     if(p2 != null)
                         _sccProvider.OnProjectOpened(p2, false);
                 }                
-            }            
+            }
+
+            _sccProvider.OnSolutionOpened(true);
         }
 
         public void Hook(bool enable)
