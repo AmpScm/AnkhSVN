@@ -145,7 +145,7 @@ namespace Ankh.Scc.ProjectMap
         {
             SetDirty(false);
 
-            if(_isFileDocument)
+            if(!_isFileDocument)
                 return;
             
             IFileStatusMonitor statusMonitor = GetService<IFileStatusMonitor>();
