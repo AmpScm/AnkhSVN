@@ -313,7 +313,12 @@ namespace Ankh.Scc.ProjectMap
                     }
                 }
 
-                _sccProject.SccGlyphChanged(0, null, null, null);
+                IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+                if (monitor != null)
+                {
+                    // Make sure we see all files as possible pending changes
+                    monitor.ScheduleGlyphUpdate(GetAllFiles());
+                }
                 Hook(true); 
             }
             finally
