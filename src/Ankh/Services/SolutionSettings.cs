@@ -179,35 +179,40 @@ namespace Ankh.Settings
                 {
                     string value;
 
-                    if (client.TryGetProperty(new SvnPathTarget(_cache.SolutionFilename), "vs:project-root", out value)
-                            && !string.IsNullOrEmpty(value))
+                    if (client.TryGetProperty(new SvnPathTarget(_cache.SolutionFilename), "vs:project-root", out value))                            
                     {
-                        Uri solution, relative;
+                        if (string.IsNullOrEmpty(value) && value != null)
+                            value = "./";
 
-                        if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution)
-                            || !Uri.TryCreate(value, UriKind.Relative, out relative))
+                        if (!string.IsNullOrEmpty(value))
                         {
-                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
-                        }
+                            Uri solution, relative;
 
-                        if (value != "./")
-                        {
-                            string r = value;
-                            while (r.StartsWith("../"))
-                                r = r.Substring(3);
-
-                            if (!string.IsNullOrEmpty(r))
+                            if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution)
+                                || !Uri.TryCreate(value, UriKind.Relative, out relative))
+                            {
                                 return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
+                            }
+
+                            if (value != "./")
+                            {
+                                string r = value;
+                                while (r.StartsWith("../"))
+                                    r = r.Substring(3);
+
+                                if (!string.IsNullOrEmpty(r))
+                                    return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
+                            }
+
+                            if (!Uri.TryCreate(value, UriKind.Relative, out relative))
+                                return null;
+
+                            Uri combined = new Uri(solution, relative);
+
+                            string vv = combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+
+                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv.Replace('/', Path.DirectorySeparatorChar));
                         }
-
-                        if (!Uri.TryCreate(value, UriKind.Relative, out relative))
-                            return null;
-
-                        Uri combined = new Uri(solution, relative);
-
-                        string vv = combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
-
-                        return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv.Replace('/', Path.DirectorySeparatorChar));
                     }
 
                     return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
