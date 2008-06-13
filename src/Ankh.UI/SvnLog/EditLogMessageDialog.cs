@@ -15,7 +15,7 @@ namespace Ankh.UI.SvnLog
         public EditLogMessageDialog()
         {
             InitializeComponent();
-            ContainerMode = VSContainerMode.UseTextEditorScope;
+            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
 
         string _originalText;

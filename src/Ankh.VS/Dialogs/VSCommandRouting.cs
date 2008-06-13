@@ -119,17 +119,17 @@ namespace Ankh.VS.Dialogs
                 messages[0].wParam = m.WParam;
                 messages[0].message = (uint)m.Msg;
 
-            if (_fKeys != null)
+            VSContainerMode mode = _vsForm.ContainerMode;
+            if (_fKeys != null && 0 != (mode & (VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope)))
             {
                 Guid cmdGuid;
                 uint cmdCode;
                 int cmdTranslated;
                 int keyComboStarts;
 
-
                 uint dwFlags = (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState;
 
-                if ((_vsForm.ContainerMode & VSContainerMode.UseTextEditorScope) == VSContainerMode.UseTextEditorScope)
+                if ((mode & VSContainerMode.UseTextEditorScope) != 0)
                     dwFlags |= (uint)__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope;
 
                 hr = _fKeys.TranslateAcceleratorEx(messages,
