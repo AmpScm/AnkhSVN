@@ -34,6 +34,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ExternalSite", "..\ExternalSite\", "{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}"
 	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "Svn"
+		SccAuxPath = "Svn"
+		SccLocalPath = "Svn"
+		SccProvider = "SubversionScc"
 		TargetFramework = "3.5"
 		Debug.AspNetCompiler.VirtualPath = "/ExternalSite"
 		Debug.AspNetCompiler.PhysicalPath = "..\ExternalSite\"
@@ -55,6 +59,10 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ExternalSite", "..\External
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "InternalSite", "InternalSite\", "{DB65491A-E346-425B-A2B3-87FBF40D7826}"
 	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "Svn"
+		SccAuxPath = "Svn"
+		SccLocalPath = "Svn"
+		SccProvider = "SubversionScc"
 		TargetFramework = "3.5"
 		Debug.AspNetCompiler.VirtualPath = "/InternalSite"
 		Debug.AspNetCompiler.PhysicalPath = "InternalSite\"
@@ -74,7 +82,23 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "InternalSite", "InternalSit
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalWebServiceApp", "..\ExternalWebServiceApp\ExternalWebServiceApp.csproj", "{4606AC40-F516-489D-B775-D99E1358F5AB}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Enlist = True
+		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Path = "..\ExternalSite"
+		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Type = {E24C65DC-7377-472B-9ABA-BC803B73C61A}
+		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Uri = "../ExternalSite/"
+		Project.{4606AC40-F516-489D-B775-D99E1358F5AB}.Path = "..\ExternalWebServiceApp"
+		Project.{4606AC40-F516-489D-B775-D99E1358F5AB}.Uri = "../ExternalWebServiceApp/"
+		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Enlist = True
+		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Path = "InternalSite"
+		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Type = {E24C65DC-7377-472B-9ABA-BC803B73C61A}
+		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Uri = "InternalSite/"
+	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AllTypesSolution-2008.vsmdi
 	EndGlobalSection
@@ -257,6 +281,20 @@ Global
 		{DB65491A-E346-425B-A2B3-87FBF40D7826}.Release|Mixed Platforms.Build.0 = Debug|.NET
 		{DB65491A-E346-425B-A2B3-87FBF40D7826}.Release|Win32.ActiveCfg = Debug|.NET
 		{DB65491A-E346-425B-A2B3-87FBF40D7826}.Release|x86.ActiveCfg = Debug|.NET
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|.NET.ActiveCfg = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

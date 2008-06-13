@@ -12,6 +12,10 @@
     <AssemblyName>SqlServerProject</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <RootNamespace>SqlServerProject</RootNamespace>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

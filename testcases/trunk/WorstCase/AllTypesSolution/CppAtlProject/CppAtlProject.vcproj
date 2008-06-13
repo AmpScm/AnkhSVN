@@ -4,6 +4,10 @@
 	Version="9,00"
 	Name="CppAtlProject"
 	ProjectGUID="{BBC16FB6-4137-4833-8FED-D5EBD77A0F8D}"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
 	Keyword="AtlProj"
 	TargetFrameworkVersion="196613"
 	>
