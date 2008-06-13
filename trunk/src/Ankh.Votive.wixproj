@@ -20,7 +20,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <Cultures>
     </Cultures>
-    <DefineConstants>Debug;SharpSvn_Pdb=1</DefineConstants>
+    <DefineConstants>Debug;</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
@@ -42,7 +42,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Cultures>
     </Cultures>
-    <DefineConstants>SharpSvn_Pdb=1</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
@@ -60,39 +61,6 @@
     </CompilerAdditionalOptions>
     <LinkerAdditionalOptions>
     </LinkerAdditionalOptions>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <Cultures>
-    </Cultures>
-    <DefineConstants>Debug</DefineConstants>
-    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
-    <LibBindFiles>False</LibBindFiles>
-    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
-    <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <VerboseOutput>False</VerboseOutput>
-    <WixVariables>
-    </WixVariables>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>False</Pedantic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Cultures>
-    </Cultures>
-    <DefineConstants>
-    </DefineConstants>
-    <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
-    <LibBindFiles>False</LibBindFiles>
-    <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
-    <SuppressPdbOutput>False</SuppressPdbOutput>
-    <SuppressSpecificWarnings>1080</SuppressSpecificWarnings>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <VerboseOutput>False</VerboseOutput>
-    <WixVariables>
-    </WixVariables>
-    <SuppressAllWarnings>False</SuppressAllWarnings>
-    <Pedantic>False</Pedantic>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
