@@ -2,6 +2,7 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -53,5 +54,12 @@ namespace Ankh
         /// <param name="info"></param>
         /// <returns></returns>
         PathSelectorResult ShowPathSelector(PathSelectorInfo info);
+
+        /// <summary>
+        /// Edits the state of the enlistment.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        /// <returns></returns>
+        bool EditEnlistmentState(EnlistmentState state);
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="Scc\EnlistmentState.cs" />
     <Compile Include="Scc\ILastChangeInfo.cs" />
     <Compile Include="Scc\ISvnLogChangedPathItem.cs" />
     <Compile Include="Scc\ISvnLogItem.cs" />
@@ -86,6 +87,9 @@
     <Compile Include="Scc\PendingChange.cs" />
     <Compile Include="UI\ICurrentItemSource.cs" />
     <Compile Include="UI\IProgressRunner.cs" />
+    <Compile Include="UI\IUIShell.cs" />
+    <Compile Include="UI\PathSelectorInfo.cs" />
+    <Compile Include="UI\PathSelectorResult.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
     <Compile Include="ContextServices\IAnkhOperationLogger.cs" />

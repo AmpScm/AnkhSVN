@@ -392,6 +392,10 @@ namespace Ankh.Tests
                 throw new NotImplementedException();
             }
 
+            bool IUIShell.EditEnlistmentState(Ankh.Scc.EnlistmentState state)
+            {
+                throw new NotImplementedException();
+            }
             #endregion
         }
 

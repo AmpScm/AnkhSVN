@@ -313,9 +313,6 @@
     <Compile Include="Services\IContext.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\IUIShell.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OutputPaneWriter.cs">
       <SubType>Code</SubType>
     </Compile>
