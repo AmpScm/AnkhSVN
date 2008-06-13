@@ -32,6 +32,9 @@ namespace Ankh.UI.SccManagement
 
             projectLocationBox.ReadOnly = state.AllowEditLocation;
             debugLocationBox.ReadOnly = state.AllowEditDebugLocation;
+
+            projectLocationBox.Text = state.Location;
+            debugLocationBox.Text = state.DebugLocation;
         }
 
         public EnlistmentState EnlistState
