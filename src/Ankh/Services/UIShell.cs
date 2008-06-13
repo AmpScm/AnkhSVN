@@ -14,13 +14,14 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.Generic;
 using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
+using Ankh.UI.SccManagement;
 
 namespace Ankh
 {
     /// <summary>
     /// Summary description for UIShell.
     /// </summary>
-    public class UIShell : AnkhService, IUIShell
+    class UIShell : AnkhService, IUIShell
     {
         public UIShell(IAnkhServiceProvider context)
             : base(context)
@@ -169,6 +170,24 @@ namespace Ankh
                 result.RevisionEnd = selector.RevisionEnd;
                 return result;
             }
-        }       
+        }
+
+        #region IUIShell Members
+
+
+        public bool EditEnlistmentState(Ankh.Scc.EnlistmentState state)
+        {
+            if (state == null)
+                throw new ArgumentNullException("state");
+
+            IUIService uiService = GetService<IUIService>();
+
+            using (SccEditEnlistment editor = new SccEditEnlistment(state))
+            {
+                return editor.ShowDialog(Context) == DialogResult.OK;
+            }
+        }
+
+        #endregion
     }
 }
