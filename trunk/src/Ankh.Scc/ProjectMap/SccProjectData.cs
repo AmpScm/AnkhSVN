@@ -40,6 +40,7 @@ namespace Ankh.Scc.ProjectMap
         string _projectName;
         string _projectDirectory;
         Guid? _projectGuid;
+        Guid? _projectTypeGuid;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -118,6 +119,26 @@ namespace Ankh.Scc.ProjectMap
                 }
 
                 return _projectGuid.HasValue ? _projectGuid.Value : Guid.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the guid of the project within the solution
+        /// </summary>
+        public Guid ProjectTypeGuid
+        {
+            get
+            {
+                if (!_projectTypeGuid.HasValue)
+                {
+                    IVsSolution solution = _context.GetService<IVsSolution>(typeof(SVsSolution));
+
+                    Guid value;
+                    if (ErrorHandler.Succeeded(solution.GetProjectTypeGuid(0, ProjectFile, out value)))
+                        _projectTypeGuid = value;            
+                }
+
+                return _projectTypeGuid.HasValue ? _projectTypeGuid.Value : Guid.Empty;
             }
         }
 
