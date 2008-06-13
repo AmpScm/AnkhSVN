@@ -189,20 +189,23 @@ namespace Ankh.Scc
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-            SvnItem item = StatusCache[pszMkDocument];
-            if (item != null)
+            if (StatusCache.IsValidPath(pszMkDocument))
             {
-                if (item.ReadOnlyMustLock)
+                SvnItem item = StatusCache[pszMkDocument];
+                if (item != null)
                 {
-                    // TODO: Prompt user to lock the file
-                    pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
-                    return VSConstants.S_OK;
+                    if (item.ReadOnlyMustLock)
+                    {
+                        // TODO: Prompt user to lock the file
+                        pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+                        return VSConstants.S_OK;
+                    }
+
+                    item.MarkDirty();
                 }
 
-                item.MarkDirty();
+                MarkDirty(pszMkDocument, true);
             }
-
-            MarkDirty(pszMkDocument, true);
             
             return VSConstants.S_OK;
         }
