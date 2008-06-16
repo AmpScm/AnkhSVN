@@ -179,6 +179,13 @@
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.Designer.cs">
       <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeWizard\MergeOptionsPage.cs" />
+    <Compile Include="MergeWizard\MergeOptionsPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeOptionsPageControl.Designer.cs">
+      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\MergeRevisionsSelectionPage.cs" />
     <Compile Include="MergeWizard\MergeRevisionsSelectionPageControl.cs">
       <SubType>UserControl</SubType>
@@ -681,6 +688,9 @@
     <EmbeddedResource Include="MergeWizard\MergeBestPracticesPageControl.resx">
       <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\MergeOptionsPageControl.resx">
+      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeRevisionsSelectionPageControl.resx">
       <DependentUpon>MergeRevisionsSelectionPageControl.cs</DependentUpon>

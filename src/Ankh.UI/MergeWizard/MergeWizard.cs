@@ -43,6 +43,7 @@ namespace Ankh.UI.MergeWizard
             mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage(this);
             mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage(this);
             mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage(this);
+            mergeOptionsPage = new MergeOptionsPage(this);
         }
 
         public override void AddPages()
@@ -55,6 +56,7 @@ namespace Ankh.UI.MergeWizard
             AddPage(mergeSourceManuallyRecordPage);
             AddPage(mergeSourceManuallyRemovePage);
             AddPage(mergeRevisionsSelectionPage);
+            AddPage(mergeOptionsPage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -90,13 +92,30 @@ namespace Ankh.UI.MergeWizard
                 return null; // For now, if you see the best practices page,
                              // you have to fix the issue and then reattempt to merge.
 
+            // Handle the range of revisions page
+            if (page is MergeSourceRangeOfRevisionsPage)
+            {
+                if (((MergeSourceRangeOfRevisionsPage)page).NextPageRequired)
+                    return mergeRevisionsSelectionPage;
+                else
+                    return mergeOptionsPage;
+            }
+
+            // Handle the reintegrate page
+            // Handle the revision selection page
+            // Handle the two different trees page
+            if (page is MergeSourceReintegratePage ||
+                page is MergeRevisionsSelectionPage ||
+                page is MergeSourceTwoDifferentTreesPage)
+                return mergeOptionsPage;
+
             // Handle the manually record/remove pages
             if (page is MergeSourceManuallyRecordPage || page is MergeSourceManuallyRemovePage)
                 return mergeRevisionsSelectionPage;
 
-            // Handle the range of revisions page
-            if (page is MergeSourceRangeOfRevisionsPage && ((MergeSourceRangeOfRevisionsPage)page).NextPageRequired)
-                return mergeRevisionsSelectionPage;
+            // Handle the merge options page
+            if (page is MergeOptionsPage)
+                return null;
 
             return null;
         }
@@ -185,6 +204,7 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceManuallyRecordPage;
         private WizardPage mergeSourceManuallyRemovePage;
         private WizardPage mergeRevisionsSelectionPage;
+        private WizardPage mergeOptionsPage;
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -24,8 +25,21 @@ namespace Ankh.UI.MergeWizard
                 ? SystemInformation.VerticalScrollBarWidth : 0;
             int newWidth;
 
-            foreach (string s in comboBox.Items)
+            foreach (object o in comboBox.Items)
             {
+                string s = "";
+
+                if (o is string)
+                    s = (string)o;
+                else if (o is KeyValuePair<SvnDepth, string>)
+                {
+                    s = ((KeyValuePair<SvnDepth, string>)o).Value;
+                }
+                else
+                {
+                    return;
+                }
+
                 newWidth = (int)g.MeasureString(s, font).Width
                     + vertScrollBarWidth;
                 if (width < newWidth)

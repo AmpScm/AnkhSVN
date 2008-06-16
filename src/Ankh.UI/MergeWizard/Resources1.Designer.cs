@@ -163,6 +163,24 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Specify the options for the merge process.
+        /// </summary>
+        internal static string MergeOptionsHeaderMessage {
+            get {
+                return ResourceManager.GetString("MergeOptionsHeaderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the merge options.
+        /// </summary>
+        internal static string MergeOptionsHeaderTitle {
+            get {
+                return ResourceManager.GetString("MergeOptionsHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Specify the revision(s) containing the changes to merge..
         /// </summary>
         internal static string MergeRevisionsSelectionPageMessage {
@@ -338,6 +356,51 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("SuccessImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Immediate children, including folders.
+        /// </summary>
+        internal static string SvnDepthChildren {
+            get {
+                return ResourceManager.GetString("SvnDepthChildren", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only this item.
+        /// </summary>
+        internal static string SvnDepthEmpty {
+            get {
+                return ResourceManager.GetString("SvnDepthEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only file children.
+        /// </summary>
+        internal static string SvnDepthFiles {
+            get {
+                return ResourceManager.GetString("SvnDepthFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fully recursive.
+        /// </summary>
+        internal static string SvnDepthInfinity {
+            get {
+                return ResourceManager.GetString("SvnDepthInfinity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working copy.
+        /// </summary>
+        internal static string SvnDepthUnknown {
+            get {
+                return ResourceManager.GetString("SvnDepthUnknown", resourceCulture);
             }
         }
         
