@@ -137,10 +137,10 @@ namespace Ankh.Settings
 
             SvnItem item = cache[directory];
 
-            while (item != null)
+            while (item != null && item.Status != null && item.Status.Uri != null)
             {
                 SvnItem parent = item.Parent;
-                if (parent == null || !parent.IsVersioned)
+                if (parent == null || !parent.IsVersioned || parent.Status == null || parent.Status.Uri == null)
                     break;
 
                 if (!SameRepository(parent, item))
