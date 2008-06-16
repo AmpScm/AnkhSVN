@@ -18,7 +18,8 @@ namespace Ankh.UI.MergeWizard
         public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(Resources.InvalidToUrl,
             WizardMessage.ERROR);
 
-        IAnkhServiceProvider _context;
+        private IAnkhServiceProvider _context;
+        private Dictionary<SvnDepth, string> _mergeDepths;
 
         /// <summary>
         /// Constructor.
@@ -27,6 +28,29 @@ namespace Ankh.UI.MergeWizard
         public MergeUtils(IAnkhServiceProvider context)
         {
             Context = context;
+        }
+
+        /// <summary>
+        /// Returns a key/value pairing of <code>SharpSvn.SvnDepth</code> as the key
+        /// and a string description of the depth key.
+        /// </summary>
+        public Dictionary<SvnDepth, string> MergeDepths
+        {
+            get
+            {
+                if (_mergeDepths == null)
+                {
+                    _mergeDepths = new Dictionary<SvnDepth, string>();
+
+                    _mergeDepths.Add(SvnDepth.Unknown, Resources.SvnDepthUnknown);
+                    _mergeDepths.Add(SvnDepth.Infinity, Resources.SvnDepthInfinity);
+                    _mergeDepths.Add(SvnDepth.Children, Resources.SvnDepthChildren);
+                    _mergeDepths.Add(SvnDepth.Files, Resources.SvnDepthFiles);
+                    _mergeDepths.Add(SvnDepth.Empty, Resources.SvnDepthEmpty);
+                }
+
+                return _mergeDepths;
+            }
         }
 
         /// <summary>

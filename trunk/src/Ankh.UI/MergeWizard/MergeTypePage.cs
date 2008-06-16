@@ -19,7 +19,7 @@ namespace Ankh.UI.MergeWizard
             IsPageComplete = true;
 
             Title = Resources.MergeTypePageHeaderTitle;
-            this.Message = new WizardMessage(Resources.MergeTypePageHeaderMessage);
+            this.Description = Resources.MergeTypePageHeaderMessage;
 
             PageControl.WizardPage = this;
         }
