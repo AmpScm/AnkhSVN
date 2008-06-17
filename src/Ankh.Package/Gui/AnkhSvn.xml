@@ -136,6 +136,16 @@
               text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>          
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
+        <Group id="Grp_SccExplore" priority="0xF000">
+          <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
+                      text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
+            <Visibility context="Ankh_SccProviderGuid"/>
+          </Button>
+          <Button id="Cmd_ItemOpenFolderInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
+                      text="Open Folder in &amp;Repository Explorer" defaultInvisible="true">
+            <Visibility context="Ankh_SccProviderGuid"/>
+          </Button>
+        </Group>
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
@@ -170,6 +180,7 @@
               text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_Refresh" priority="0xF0" />
         </Group>
+        <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
@@ -233,6 +244,7 @@
 								text="Refres&amp;h"
 								toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
         </Group>
+        <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="Menu_RepositoryExplorerToolBar">
@@ -490,25 +502,7 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
-    </GroupRef>
-    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_EXPLORE">
-      <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
-                  text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
-        <Visibility context="Ankh_SccProviderGuid"/>
-      </Button>
-      <Button id="Cmd_ItemOpenFolderInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
-                  text="Open Folder in &amp;Repository Explorer" defaultInvisible="true">
-        <Visibility context="Ankh_SccProviderGuid"/>
-      </Button>
-    </GroupRef>
-    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EXPLORE">
-      <ButtonRef id="Cmd_ItemOpenFolderInWorkingCopyExplorer" priority="0x200" />
-      <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x300" />
-    </GroupRef>
-    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_FOLDER_EXPLORE">
-      <ButtonRef id="Cmd_ItemOpenFolderInWorkingCopyExplorer" priority="0x200" />
-      <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x300" />
-    </GroupRef>
+    </GroupRef>    
     <GroupRef id="Menu_PendingCommitsSortContextMenu">
       <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
         <Group id="Grp_PendingCommitsMenu" priority="0x100">
