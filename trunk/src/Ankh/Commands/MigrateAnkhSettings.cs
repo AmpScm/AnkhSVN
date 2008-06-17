@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using EnvDTE;
 
 namespace Ankh.Commands
 {
@@ -22,8 +23,8 @@ namespace Ankh.Commands
                 upgradeFrom = (int)e.Argument;
             }
 
-            // TODO: Handle migration here (And don't throw an exception ;)
-            throw new NotImplementedException("Migration not implemented yet");
+			DTE dte = e.GetService<DTE>();
+			Ankh.Migrate.Cleanup.RemoveOldUI(dte, !incremental);
         }
     }
 }

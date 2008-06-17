@@ -150,6 +150,10 @@
       <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
       <Name>Ankh.UI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AnkhAddinCleanup\Ankh.Migrate.csproj">
+      <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
+      <Name>Ankh.Migrate</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\Utils.csproj">
       <Name>Utils</Name>
       <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
