@@ -4,9 +4,9 @@
       <ComponentGroupRef Id="Ankh.Ids"/>
       <ComponentRef Id="C_Ankh.Trigger.dll"/>
     </ComponentGroup>
-    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Package.TargetDir)">
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Trigger.TargetDir)">
       <Component Id="C_Ankh.Trigger.dll" Guid="906523B9-39E5-4903-A179-A85BBB3492C5">
-		  <!-- File must be called File_$(Ankh.Package.TargetName).dll for the following includes-->
+		  <!-- File must be called File_$(Ankh.Trigger.TargetName).dll for the following includes-->
 		  <File Id="File_Ankh.Trigger.dll" Name="Ankh.Trigger.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
 		  <?ifdef Ankh_Pdb?>
 		  <File Id="CF_Ankh.Trigger.pdb" Name="Ankh.Trigger.pdb" Checksum="yes" Vital="yes" />

@@ -5,9 +5,9 @@
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.Utils.TargetDir)">
 			<Component Id="C_Utils.dll" DiskId="1" Guid="CB47CC24-915F-45ea-90F8-A2B1CEF64056">
-				<File Id="Utils_file0" Name="Utils.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+				<File Id="CF_Utils.dll" Name="Utils.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
 				<?ifdef Ankh_Pdb?>
-				<File Id="Utils_file1" Name="UTILS.PDB" Checksum="yes" Vital="yes" />
+				<File Id="CF_Utils.pdb" Name="Utils.pdb" Checksum="yes" Vital="yes" />
 				<?endif?>
 			</Component>
 		</DirectoryRef>
