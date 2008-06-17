@@ -3,38 +3,34 @@
   <?ifndef ankhVersion ?>
   <?define ankhVersion=2.0.0.1 ?>
   <?endif?>
-  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033" 
+  <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033"
 			   Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
     <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"
 				 Platform="x86" Languages="1033" />
 
-		<!-- Ankh 2.0 daily builds -->
+    <!-- AnkhSVN 2.0 daily builds before 2008-06-18 -->
     <Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
-      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="$(var.ankhVersion)"
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0.0" Maximum="2.9999.0.0"
+							IncludeMinimum="yes" IncludeMaximum="yes" MigrateFeatures="no" />
+    </Upgrade>
+
+    <!-- AnkhSVN 0.5-1.0.3 and Ankh 2.0 and higher -->
+    <Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0"
+							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)"
 							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
       <UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)"
 							IncludeMinimum="yes" IncludeMaximum="yes" />
       <UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
 							IncludeMinimum="no" IncludeMaximum="yes" />
     </Upgrade>
-		
-		<!-- Ankh 1.* and Ankh 2.0 and higher -->
-		<Upgrade Id="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
-			<UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.5.0" Maximum="2.0.0"
-							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="no" />
-			<UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="2.0.0" Maximum="$(var.ankhVersion)"
-							IncludeMinimum="yes" IncludeMaximum="no" MigrateFeatures="yes" />
-			<UpgradeVersion Property="EXACTVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="$(var.ankhVersion)"
-							IncludeMinimum="yes" IncludeMaximum="yes" />
-			<UpgradeVersion Property="NEWERVERSIONINSTALLED" Minimum="$(var.ankhVersion)" Maximum="99.0.0.0"
-							IncludeMinimum="no" IncludeMaximum="yes" />
-		</Upgrade>
 
     <Property Id="ShortProductName" Value="AnkhSVN" />
     <Property Id="ARPCONTACT">AnkhSVN - users@ankhsvn.open.collab.net</Property>
     <Property Id="ARPURLINFOABOUT">http://www.ankhsvn.net/</Property>
     <Property Id="ARPHELPLINK">http://www.ankhsvn.net/help/</Property>
-    <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/updates/</Property>
+    <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/updates/?currentVersion=$(var.ankhVersion)</Property>
 
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
