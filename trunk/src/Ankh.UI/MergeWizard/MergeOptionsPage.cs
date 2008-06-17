@@ -11,8 +11,10 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeOptionsPage : BasePage
     {
+        public static readonly string PAGE_NAME = "Merge Options Page";
+
         public MergeOptionsPage(MergeWizard wizard)
-            : base(wizard, new MergeOptionsPageControl(), "Merge Conflict Resolution")
+            : base(wizard, new MergeOptionsPageControl(), PAGE_NAME)
         {
             IsPageComplete = true;
 

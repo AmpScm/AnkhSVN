@@ -13,11 +13,13 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeRevisionsSelectionPage : BasePage
     {
+        public static readonly string PAGE_NAME = "Merge Revisions Selection Page";
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeRevisionsSelectionPage(MergeWizard wizard)
-            : base(wizard, new MergeRevisionsSelectionPageControl(), "Merge Revisions Selection Pages")
+            : base(wizard, new MergeRevisionsSelectionPageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
 
