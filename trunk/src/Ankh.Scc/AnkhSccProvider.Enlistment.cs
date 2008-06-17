@@ -75,7 +75,7 @@ namespace Ankh.Scc
         {
             if (!IsActive || !IsSolutionManaged)
                 return;
-#if DEBUG
+#if DEBUG_ENLISTMENT
             SortedList<string, string> projects = new SortedList<string, string>(StringComparer.Ordinal);
             SortedList<string, string> values = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -309,7 +309,7 @@ namespace Ankh.Scc
 
         void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
         {
-#if DEBUG
+#if DEBUG_ENLISTMENT
             IMyPropertyBag mpb = (IMyPropertyBag)propertyBag; // Stop HResult exception handling
             object value;
             string projects;
@@ -373,7 +373,7 @@ namespace Ankh.Scc
             _enlistCompleted = true;
             _solutionDirectory = _solutionFile = null; // Clear cache
 
-#if DEBUG
+#if DEBUG_ENLISTMENT
             if (_enlistState.Count == 0)
                 return; // Nothing to do here
 
