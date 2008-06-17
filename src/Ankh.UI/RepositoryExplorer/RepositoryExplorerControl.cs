@@ -142,5 +142,24 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RefreshFileList();
         }
+
+        private void fileView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo ht = fileView.HitTest(e.X, e.Y);
+
+            RepositoryListItem li = ht.Item as RepositoryListItem;
+
+            if(ht.Location == ListViewHitTestLocations.None || li == null)
+                return;
+
+            if (li.Info.Entry.NodeKind == SvnNodeKind.Directory)
+            {
+                treeView.BrowseTo(li.RawUri);
+            }
+            else
+            {
+                // TODO: Perform default(?) action
+            }
+        }        
     }
 }

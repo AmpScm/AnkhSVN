@@ -52,5 +52,10 @@ namespace Ankh.UI.RepositoryExplorer
         {
             get { return _uri; }
         }
+
+        public SvnListEventArgs Info
+        {
+            get { return _info; }
+        }
     }
 }

@@ -116,6 +116,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fileView.FullRowSelect = true;
+            this.fileView.HideSelection = false;
             this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
             this.fileView.ProvideWholeListForSelection = false;
@@ -123,6 +124,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.TabIndex = 1;
             this.fileView.UseCompatibleStateImageBehavior = false;
             this.fileView.View = System.Windows.Forms.View.Details;
+            this.fileView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileView_MouseDoubleClick);
             // 
             // fileColumn
             // 
