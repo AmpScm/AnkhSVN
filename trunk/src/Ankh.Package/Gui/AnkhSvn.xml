@@ -40,6 +40,7 @@
           <Visibility context="Ankh_SccProviderGuid"/>
 
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
+            <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from future versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x100"
 								text="&amp;Update..."
 								toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>

@@ -159,6 +159,7 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
+    <Compile Include="Commands\MigrateAnkhSettings.cs" />
     <Compile Include="Services\AnkhCommandService.cs" />
     <Compile Include="Services\AnkhContext.cs">
       <SubType>Code</SubType>

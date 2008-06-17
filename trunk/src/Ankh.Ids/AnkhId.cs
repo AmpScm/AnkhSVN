@@ -55,6 +55,10 @@ namespace Ankh.Ids
         public const string CtxFullSccLoaded = "1142ad52-4c53-499a-afac-3f3694261f5d";
         //**********************************************************************************
 
+        // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
+        public const int MigrateVersion = 1; 
+
+
         public const string LogMessageLanguageServiceId = "1dfe69ce-7f9b-4cc5-b09b-e5bde95e9439";
         public const string LogMessageServiceName = "Log Messages (AnkhSVN)";
 
