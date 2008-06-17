@@ -1,0 +1,19 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Ankh.Trigger">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentRef Id="C_Ankh.Trigger.dll"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Package.TargetDir)">
+      <Component Id="C_Ankh.Trigger.dll" Guid="906523B9-39E5-4903-A179-A85BBB3492C5">
+		  <!-- File must be called File_$(Ankh.Package.TargetName).dll for the following includes-->
+		  <File Id="File_Ankh.Trigger.dll" Name="Ankh.Trigger.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+		  <?ifdef Ankh_Pdb?>
+		  <File Id="CF_Ankh.Trigger.pdb" Name="Ankh.Trigger.pdb" Checksum="yes" Vital="yes" />
+		  <?endif?>
+		  <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2005.wxi ?>
+		  <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2008.wxi ?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
