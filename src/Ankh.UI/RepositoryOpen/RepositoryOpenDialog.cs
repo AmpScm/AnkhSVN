@@ -67,6 +67,9 @@ namespace Ankh.UI.RepositoryOpen
 
             if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out clr))
                 toolStrip1.ForeColor = clr;
+
+            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_TEXT_ACTIVE, out clr))
+                urlLabel.ForeColor = clr;
         }
 
         IAnkhSolutionSettings _solutionSettings;
