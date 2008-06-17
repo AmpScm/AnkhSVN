@@ -11,6 +11,8 @@ using System;
 using Ankh.Scc;
 using Ankh.UI.Services;
 using Ankh.Ids;
+using Ankh.UI.RepositoryExplorer;
+using System.Diagnostics;
 
 namespace Ankh.UI.SvnLog
 {
@@ -28,6 +30,7 @@ namespace Ankh.UI.SvnLog
         readonly AsyncCallback _logComplete;
         readonly SynchronizationContext _syncContext;
         readonly SendOrPostCallback _sopCallback;
+		BusyOverlay _busyOverlay;
 
         public LogRevisionControl()
         {
@@ -129,6 +132,7 @@ namespace Ankh.UI.SvnLog
             //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
+			ShowBusyIndicator();
         }
 
         public void Stop()
@@ -143,6 +147,9 @@ namespace Ankh.UI.SvnLog
                 {
                     _cancel = true;
                     _logAction.EndInvoke(_logRunner);
+
+					if(_busyOverlay != null)
+						_busyOverlay.Hide();
                 }
             }
 
@@ -213,13 +220,35 @@ namespace Ankh.UI.SvnLog
             //columnHeader4.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
+		delegate void DoIt();
         void LogComplete(IAsyncResult result)
         {
             lock (_instanceLock)
             {
-                _running = false;
+				_running = false;
+				
+				HideBusyIndicator();
             }
         }
+
+		void ShowBusyIndicator()
+		{
+			if (InvokeRequired)
+				Invoke(new DoIt(ShowBusyIndicator));
+			else
+			{
+				if (_busyOverlay == null)
+					_busyOverlay = new BusyOverlay(logRevisionControl1, AnchorStyles.Bottom | AnchorStyles.Right);
+				_busyOverlay.Show();
+			}
+		}
+		void HideBusyIndicator()
+		{
+			if (InvokeRequired)
+				Invoke(new DoIt(HideBusyIndicator));
+			else if (_busyOverlay != null)
+				_busyOverlay.Hide();
+		}
 
         IFileStatusCache StatusCache
         {
@@ -246,6 +275,7 @@ namespace Ankh.UI.SvnLog
                             args.RetrieveMergedRevisions = IncludeMergedRevisions;
                             //args.RetrieveChangedPaths = false;
 
+							ShowBusyIndicator();
                             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
                         }
                     }
@@ -284,6 +314,7 @@ namespace Ankh.UI.SvnLog
             //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
+			ShowBusyIndicator();
 		}
 
 		#region ICurrentItemSource<SvnLogEventArgs> Members
@@ -328,6 +359,11 @@ namespace Ankh.UI.SvnLog
             Point p = MousePosition;
             UISite.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
         }
+
+		private void logRevisionControl1_CacheVirtualItems(object sender, CacheVirtualItemsEventArgs e)
+		{
+			//Debug.WriteLine(string.Format("CacheVirtualItems start: {0}, end: {1}", e.StartIndex, e.EndIndex));
+		}
     }
 
     public enum LogMode
