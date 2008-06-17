@@ -226,15 +226,14 @@ namespace Ankh.UI.SvnLog
             lock (_instanceLock)
             {
 				_running = false;
-				
-				HideBusyIndicator();
             }
+			HideBusyIndicator();
         }
 
 		void ShowBusyIndicator()
 		{
 			if (InvokeRequired)
-				Invoke(new DoIt(ShowBusyIndicator));
+				BeginInvoke(new DoIt(ShowBusyIndicator));
 			else
 			{
 				if (_busyOverlay == null)
@@ -245,7 +244,7 @@ namespace Ankh.UI.SvnLog
 		void HideBusyIndicator()
 		{
 			if (InvokeRequired)
-				Invoke(new DoIt(HideBusyIndicator));
+				BeginInvoke(new DoIt(HideBusyIndicator));
 			else if (_busyOverlay != null)
 				_busyOverlay.Hide();
 		}
