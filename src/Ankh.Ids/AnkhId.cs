@@ -27,7 +27,7 @@ namespace Ankh.Ids
         public const string TriggerPackageId = "2340124C-5DAE-4D72-84AA-4DEF3EFDFA1D";
 
         public const string TriggerPlkVersion = PlkVersion;
-        public const string TriggerPlkProduct = PlkProduct;
+        public const string TriggerPlkProduct = "AnkhSVN Trigger";
         public const string TriggerPlkCompany = PlkCompany;
         //**********************************************************************************
 
