@@ -142,10 +142,10 @@
     <value>296, 17</value>
   </data>
   <data name="binaryConflictsRepositoryRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="binaryConflictsRepositoryRadioButton.Text" xml:space="preserve">
-    <value>Resolve the conflict using the reposi&amp;tory version of the file</value>
+    <value>Reso&amp;lve the conflict using the repository version of the file</value>
   </data>
   <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.Name" xml:space="preserve">
     <value>binaryConflictsRepositoryRadioButton</value>
@@ -175,10 +175,10 @@
     <value>246, 17</value>
   </data>
   <data name="binaryConflictsMyRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="binaryConflictsMyRadioButton.Text" xml:space="preserve">
-    <value>Resolve the conflict using &amp;my version of the file</value>
+    <value>Re&amp;solve the conflict using my version of the file</value>
   </data>
   <data name="&gt;&gt;binaryConflictsMyRadioButton.Name" xml:space="preserve">
     <value>binaryConflictsMyRadioButton</value>
@@ -208,7 +208,7 @@
     <value>225, 17</value>
   </data>
   <data name="binaryConflictsMarkRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="binaryConflictsMarkRadioButton.Text" xml:space="preserve">
     <value>M&amp;ark each conflict and let me resolve later</value>
@@ -241,10 +241,10 @@
     <value>241, 17</value>
   </data>
   <data name="binaryConflictsPromptRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="binaryConflictsPromptRadioButton.Text" xml:space="preserve">
-    <value>P&amp;rompt me for each conflict and let me decide</value>
+    <value>Pr&amp;ompt me for each conflict and let me decide</value>
   </data>
   <data name="&gt;&gt;binaryConflictsPromptRadioButton.Name" xml:space="preserve">
     <value>binaryConflictsPromptRadioButton</value>
@@ -259,7 +259,7 @@
     <value>3</value>
   </data>
   <data name="binaryConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 79</value>
+    <value>8, 119</value>
   </data>
   <data name="binaryConflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -290,6 +290,72 @@
   </data>
   <data name="textConflictsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 77</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>296, 17</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="textConflictsRepositoryRadioButton.Text" xml:space="preserve">
+    <value>R&amp;esolve the conflict using the repository version of the file</value>
+  </data>
+  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Name" xml:space="preserve">
+    <value>textConflictsRepositoryRadioButton</value>
+  </data>
+  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Parent" xml:space="preserve">
+    <value>textConflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;textConflictsRepositoryRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="textConflictsMyRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="textConflictsMyRadioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="textConflictsMyRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 57</value>
+  </data>
+  <data name="textConflictsMyRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="textConflictsMyRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 17</value>
+  </data>
+  <data name="textConflictsMyRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="textConflictsMyRadioButton.Text" xml:space="preserve">
+    <value>&amp;Resolve the conflict using my version of the file</value>
+  </data>
+  <data name="&gt;&gt;textConflictsMyRadioButton.Name" xml:space="preserve">
+    <value>textConflictsMyRadioButton</value>
+  </data>
+  <data name="&gt;&gt;textConflictsMyRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textConflictsMyRadioButton.Parent" xml:space="preserve">
+    <value>textConflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;textConflictsMyRadioButton.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="textConflictsMarkRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -322,7 +388,7 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsMarkRadioButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="textConflictsPromptRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -352,7 +418,7 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsPromptRadioButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="textConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 15</value>
@@ -364,7 +430,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="textConflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>474, 59</value>
+    <value>474, 99</value>
   </data>
   <data name="textConflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -391,7 +457,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="conflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 186</value>
+    <value>490, 226</value>
   </data>
   <data name="conflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -454,7 +520,7 @@
     <value>175, 21</value>
   </data>
   <data name="depthComboBox.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="&gt;&gt;depthComboBox.Name" xml:space="preserve">
     <value>depthComboBox</value>
@@ -484,10 +550,10 @@
     <value>172, 17</value>
   </data>
   <data name="unversionedCheckBox.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="unversionedCheckBox.Text" xml:space="preserve">
-    <value>&amp;Allow unversioned obstructions</value>
+    <value>Allo&amp;w unversioned obstructions</value>
   </data>
   <data name="&gt;&gt;unversionedCheckBox.Name" xml:space="preserve">
     <value>unversionedCheckBox</value>
@@ -514,7 +580,7 @@
     <value>99, 17</value>
   </data>
   <data name="ignoreAncestryCheckBox.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="ignoreAncestryCheckBox.Text" xml:space="preserve">
     <value>&amp;Ignore ancestry</value>
@@ -532,7 +598,7 @@
     <value>3</value>
   </data>
   <data name="mergeOptionsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 196</value>
+    <value>5, 236</value>
   </data>
   <data name="mergeOptionsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -577,6 +643,6 @@
     <value>MergeOptionsPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3089.22369, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3090.25147, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

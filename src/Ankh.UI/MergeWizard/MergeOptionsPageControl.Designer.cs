@@ -43,6 +43,8 @@
             this.depthComboBox = new System.Windows.Forms.ComboBox();
             this.unversionedCheckBox = new System.Windows.Forms.CheckBox();
             this.ignoreAncestryCheckBox = new System.Windows.Forms.CheckBox();
+            this.textConflictsRepositoryRadioButton = new System.Windows.Forms.RadioButton();
+            this.textConflictsMyRadioButton = new System.Windows.Forms.RadioButton();
             this.conflictsGroupBox.SuspendLayout();
             this.binaryConflictsGroupBox.SuspendLayout();
             this.textConflictsGroupBox.SuspendLayout();
@@ -96,6 +98,8 @@
             // textConflictsGroupBox
             // 
             resources.ApplyResources(this.textConflictsGroupBox, "textConflictsGroupBox");
+            this.textConflictsGroupBox.Controls.Add(this.textConflictsRepositoryRadioButton);
+            this.textConflictsGroupBox.Controls.Add(this.textConflictsMyRadioButton);
             this.textConflictsGroupBox.Controls.Add(this.textConflictsMarkRadioButton);
             this.textConflictsGroupBox.Controls.Add(this.textConflictsPromptRadioButton);
             this.textConflictsGroupBox.Name = "textConflictsGroupBox";
@@ -149,6 +153,18 @@
             this.ignoreAncestryCheckBox.Name = "ignoreAncestryCheckBox";
             this.ignoreAncestryCheckBox.UseVisualStyleBackColor = true;
             // 
+            // textConflictsRepositoryRadioButton
+            // 
+            resources.ApplyResources(this.textConflictsRepositoryRadioButton, "textConflictsRepositoryRadioButton");
+            this.textConflictsRepositoryRadioButton.Name = "textConflictsRepositoryRadioButton";
+            this.textConflictsRepositoryRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // textConflictsMyRadioButton
+            // 
+            resources.ApplyResources(this.textConflictsMyRadioButton, "textConflictsMyRadioButton");
+            this.textConflictsMyRadioButton.Name = "textConflictsMyRadioButton";
+            this.textConflictsMyRadioButton.UseVisualStyleBackColor = true;
+            // 
             // MergeOptionsPageControl
             // 
             resources.ApplyResources(this, "$this");
@@ -184,5 +200,7 @@
         private System.Windows.Forms.CheckBox ignoreAncestryCheckBox;
         private System.Windows.Forms.ComboBox depthComboBox;
         private System.Windows.Forms.Label depthLabel;
+        private System.Windows.Forms.RadioButton textConflictsRepositoryRadioButton;
+        private System.Windows.Forms.RadioButton textConflictsMyRadioButton;
     }
 }
