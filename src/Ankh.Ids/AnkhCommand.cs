@@ -212,5 +212,7 @@ namespace Ankh.Ids
 
         LogChangeLogMessage,
         LogShowChanges,
+
+        MigrateSettings,
     }
 }
