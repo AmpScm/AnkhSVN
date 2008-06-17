@@ -37,6 +37,7 @@ namespace Ankh.UI
 			// 
 			resources.ApplyResources(this.textBox1, "textBox1");
 			this.textBox1.BackColor = System.Drawing.SystemColors.Window;
+			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ReadOnly = true;
 			// 
