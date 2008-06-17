@@ -14,6 +14,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Ankh.UI.RepositoryExplorer;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -57,6 +58,15 @@ namespace Ankh.UI.RepositoryOpen
             dirView.SmallImageList = mapper.ImageList;
             _dirOffset = mapper.DirectoryIcon;
             _fileOffset = mapper.FileIcon;
+
+            IAnkhVSColor color = Context.GetService<IAnkhVSColor>();
+
+            Color clr;
+            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out clr))
+                toolStrip1.BackColor = clr;
+
+            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out clr))
+                toolStrip1.ForeColor = clr;
         }
 
         IAnkhSolutionSettings _solutionSettings;
