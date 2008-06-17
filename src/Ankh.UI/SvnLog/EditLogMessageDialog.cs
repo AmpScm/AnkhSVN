@@ -11,7 +11,6 @@ namespace Ankh.UI.SvnLog
 {
     public partial class EditLogMessageDialog : VSContainerForm
     {
-        bool _initialized;
         public EditLogMessageDialog()
         {
             InitializeComponent();
@@ -29,20 +28,31 @@ namespace Ankh.UI.SvnLog
         {
             base.OnContextChanged(e);
 
+            Initialize();
+        }
+
+        bool _initialized, _hooked;
+        void Initialize()
+        {
             if (!_initialized && Context != null)
             {
                 logMessageEditor.Init(Context, true);
+                _initialized = true;
+            }
+
+            if(!_hooked && _initialized && Context != null && IsHandleCreated)
+            {
                 AddCommandTarget(logMessageEditor.CommandTarget);
                 AddWindowPane(logMessageEditor.WindowPane);
-                _initialized = true;
+                _hooked = true;
             }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            
-  
+
+            Initialize();
             LogMessage = _originalText;
         }
     }

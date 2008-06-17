@@ -82,6 +82,8 @@ namespace Ankh.VS.Dialogs
 
             if (routing != null)
                 routing.AddCommandTarget(commandTarget);
+            else
+                throw new InvalidOperationException("Command routing not initialized yet");
         }
 
         public void AddWindowPane(Ankh.UI.VSContainerForm form, IVsWindowPane pane)
@@ -90,6 +92,8 @@ namespace Ankh.VS.Dialogs
 
             if (routing != null)
                 routing.AddWindowPane(pane);
+            else
+                throw new InvalidOperationException("Command routing not initialized yet");
         }
 
         #endregion
