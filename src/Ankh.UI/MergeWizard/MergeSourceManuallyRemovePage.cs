@@ -13,11 +13,13 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceManuallyRemovePage : MergeSourceBasePage
     {
+        public static readonly string PAGE_NAME = "Merge Source Manually Remove";
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceManuallyRemovePage(MergeWizard wizard)
-            : base(wizard, new MergeSourceManuallyRemovePageControl(), "Merge Source Manually Remove")
+            : base(wizard, new MergeSourceManuallyRemovePageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;

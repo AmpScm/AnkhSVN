@@ -13,11 +13,13 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceTwoDifferentTreesPage : BasePage
     {
+        public static readonly string PAGE_NAME = "Merge Source Two Different Trees";
+
         /// <summary>
         /// Constructor
         /// </summary>
         public MergeSourceTwoDifferentTreesPage(MergeWizard wizard) 
-            : base(wizard, new MergeSourceTwoDifferentTreesPageControl(), "Merge Source Two Different Trees")
+            : base(wizard, new MergeSourceTwoDifferentTreesPageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;

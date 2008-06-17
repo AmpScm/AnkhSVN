@@ -13,11 +13,13 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceReintegratePage : MergeSourceBasePage
     {
+        public static readonly string PAGE_NAME = "Merge Source Reintegrate";
+
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceReintegratePage(MergeWizard wizard) 
-            : base(wizard, new MergeSourceReintegratePageControl(), "Merge Source Reintegrate")
+            : base(wizard, new MergeSourceReintegratePageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
             Title = Resources.MergeSourceHeaderTitle;

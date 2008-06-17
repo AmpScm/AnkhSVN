@@ -13,11 +13,13 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
+        public static readonly string PAGE_NAME = "Merge Source Range of Revisions";
+
         /// <summary>
         /// Constructor
         /// </summary>
         public MergeSourceRangeOfRevisionsPage(MergeWizard wizard) 
-            : base(wizard, new MergeSourceRangeOfRevisionsPageControl(), "Merge Source Range Of Revisions")
+            : base(wizard, new MergeSourceRangeOfRevisionsPageControl(), PAGE_NAME)
         {
             Title = Resources.MergeSourceHeaderTitle;
             Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
