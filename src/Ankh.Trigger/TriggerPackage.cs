@@ -45,7 +45,7 @@ namespace Ankh.Trigger
     // package has a load key embedded in its resources.
     [ProvideLoadKey("Standard", AnkhId.TriggerPlkVersion, AnkhId.TriggerPlkProduct, AnkhId.TriggerPlkCompany, 1)]
     [Guid(AnkhId.TriggerPackageId)]    
-    sealed class Ankh_TriggerPackage : Package, IVsShellPropertyEvents, IOleCommandTarget
+    sealed class TriggerPackage : Package, IVsShellPropertyEvents, IOleCommandTarget
     {
         /// <summary>
         /// Default constructor of the package.
@@ -54,7 +54,7 @@ namespace Ankh.Trigger
         /// not sited yet inside Visual Studio environment. The place to do all the other 
         /// initialization is the Initialize method.
         /// </summary>
-        public Ankh_TriggerPackage()
+        public TriggerPackage()
         {
         }
 
@@ -122,10 +122,45 @@ namespace Ankh.Trigger
                 {
                     EnsureHooks();
 
+                    EnsureMigration();
+
                     ReleaseShellHook();                    
                 }
             }
             return VSConstants.S_OK;
+        }
+
+        const string MigrateId = "MigrateId";
+        private void EnsureMigration()
+        {
+            using(RegistryKey rkRoot = this.UserRegistryRoot)
+            using (RegistryKey ankhMigration = rkRoot.CreateSubKey("AnkhSVN-Trigger"))
+            {
+                int migrateFrom = 0;
+                object value = ankhMigration.GetValue(MigrateId, migrateFrom);
+
+                if (value is int)
+                    migrateFrom = (int)value;
+                else
+                    ankhMigration.DeleteValue(MigrateId, false);
+
+                if (migrateFrom < 0)
+                    migrateFrom = 0;
+
+                if(migrateFrom >= AnkhId.MigrateVersion)
+                    return; // Nothing to do
+
+                try
+                {
+                    OleMenuCommandService mcs = new OleMenuCommandService(this);
+                    if (mcs.GlobalInvoke(new CommandID(new Guid(AnkhId.CommandSet), unchecked((int)AnkhCommand.MigrateSettings)), migrateFrom))
+                    {
+                        ankhMigration.SetValue(MigrateId, AnkhId.MigrateVersion);
+                    }
+                }
+                catch
+                { /* NOP: Don't fail here... ever! */}
+            }
         }
 
         private void ReleaseShellHook()
@@ -156,7 +191,6 @@ namespace Ankh.Trigger
             if (monitorSelection != null)
             {
                 _filter = new SelectionFilter(monitorSelection);
-                ReleaseShellHook();
             }
         }
 
