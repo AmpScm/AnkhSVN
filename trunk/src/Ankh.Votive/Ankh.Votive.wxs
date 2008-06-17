@@ -6,7 +6,7 @@
   <Product Id="*" Name="AnkhSVN $(var.ankhVersion)" Language="1033" 
 			   Version="$(var.ankhVersion)" Manufacturer="AnkhSVN Team" UpgradeCode="FFE67D45-DC1F-45C6-BF0D-ABC579868168">
     <Package InstallerVersion="300" Compressed="yes" InstallPrivileges="elevated"
-				 Platform="intel" Languages="1033" />
+				 Platform="x86" Languages="1033" />
 
 		<!-- Ankh 2.0 daily builds -->
     <Upgrade Id="40880177-2453-4EC7-8EEF-744EC101B688">
