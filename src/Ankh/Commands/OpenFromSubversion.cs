@@ -16,8 +16,8 @@ namespace Ankh.Commands
 {
     [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable=true)]
     [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable=true)]
-    [Command(AnkhCommand.FileSccOpenFromSubversion)]
-    [Command(AnkhCommand.FileSccAddFromSubversion)]
+    [Command(AnkhCommand.FileSccOpenFromSubversion, AlwaysAvailable=true)]
+    [Command(AnkhCommand.FileSccAddFromSubversion, AlwaysAvailable=true)]
     class OpenFromSubversion : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

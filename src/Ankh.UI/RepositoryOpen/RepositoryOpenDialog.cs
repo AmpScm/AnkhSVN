@@ -130,7 +130,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (string.IsNullOrEmpty(fileTypeBox.Text) && fileTypeBox.Items.Count > 0)
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
-        }
+        }        
 
         protected override void OnClosed(EventArgs e)
         {
@@ -792,6 +792,17 @@ namespace Ankh.UI.RepositoryOpen
                     return (x.ImageIndex == dirOffset) ? -1 : 1;
 
                 return StringComparer.OrdinalIgnoreCase.Compare(x.Text, y.Text);
+            }
+        }
+
+        bool _forcedToolTip;
+        private void fileNameBox_Enter(object sender, EventArgs e)
+        {
+            if (IsHandleCreated && Visible && !_forcedToolTip && urlBox.Items.Count == 0)
+            {
+                _forcedToolTip = true;
+                string message = toolTip.GetToolTip(fileNameBox);
+                toolTip.Show(message, fileNameBox);
             }
         }
     }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RepositoryOpenDialog));
             this.openButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -44,6 +45,7 @@
             this.fileNameBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.fileTypeBox = new System.Windows.Forms.ComboBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +55,7 @@
             this.openButton.Location = new System.Drawing.Point(489, 255);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 23);
-            this.openButton.TabIndex = 1;
+            this.openButton.TabIndex = 4;
             this.openButton.Text = "&Open";
             this.openButton.UseVisualStyleBackColor = true;
             this.openButton.Click += new System.EventHandler(this.OnOkClicked);
@@ -65,7 +67,7 @@
             this.cancelButton.Location = new System.Drawing.Point(489, 284);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 2;
+            this.cancelButton.TabIndex = 5;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -87,7 +89,7 @@
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.toolStrip1.Size = new System.Drawing.Size(548, 25);
-            this.toolStrip1.TabIndex = 4;
+            this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "Url:";
             // 
             // urlLabel
@@ -149,7 +151,7 @@
             this.panel1.Location = new System.Drawing.Point(13, 41);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(57, 266);
-            this.panel1.TabIndex = 5;
+            this.panel1.TabIndex = 7;
             // 
             // dirView
             // 
@@ -161,7 +163,7 @@
             this.dirView.Name = "dirView";
             this.dirView.Size = new System.Drawing.Size(484, 208);
             this.dirView.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.dirView.TabIndex = 6;
+            this.dirView.TabIndex = 8;
             this.dirView.UseCompatibleStateImageBehavior = false;
             this.dirView.View = System.Windows.Forms.View.List;
             this.dirView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dirView_MouseDoubleClick);
@@ -175,7 +177,7 @@
             this.label2.Location = new System.Drawing.Point(76, 260);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 8;
+            this.label2.TabIndex = 0;
             this.label2.Text = "File &name:";
             // 
             // fileNameBox
@@ -187,8 +189,10 @@
             this.fileNameBox.Location = new System.Drawing.Point(151, 257);
             this.fileNameBox.Name = "fileNameBox";
             this.fileNameBox.Size = new System.Drawing.Size(332, 20);
-            this.fileNameBox.TabIndex = 9;
+            this.fileNameBox.TabIndex = 1;
+            this.toolTip.SetToolTip(this.fileNameBox, "Please type the url of a repository or file here");
             this.fileNameBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.fileNameBox_KeyDown);
+            this.fileNameBox.Enter += new System.EventHandler(this.fileNameBox_Enter);
             // 
             // label3
             // 
@@ -197,7 +201,7 @@
             this.label3.Location = new System.Drawing.Point(76, 284);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
-            this.label3.TabIndex = 10;
+            this.label3.TabIndex = 2;
             this.label3.Text = "Files of &type:";
             // 
             // fileTypeBox
@@ -211,8 +215,15 @@
             this.fileTypeBox.Location = new System.Drawing.Point(151, 284);
             this.fileTypeBox.Name = "fileTypeBox";
             this.fileTypeBox.Size = new System.Drawing.Size(332, 21);
-            this.fileTypeBox.TabIndex = 11;
+            this.fileTypeBox.TabIndex = 3;
             this.fileTypeBox.SelectedIndexChanged += new System.EventHandler(this.fileTypeBox_SelectedIndexChanged);
+            // 
+            // toolTip
+            // 
+            this.toolTip.IsBalloon = true;
+            this.toolTip.StripAmpersands = true;
+            this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip.ToolTipTitle = "Open from Subversion";
             // 
             // RepositoryOpenDialog
             // 
@@ -261,5 +272,6 @@
         private System.Windows.Forms.ComboBox fileTypeBox;
         private System.Windows.Forms.ToolStripButton versionButton;
         private System.Windows.Forms.ToolStripLabel urlLabel;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }
