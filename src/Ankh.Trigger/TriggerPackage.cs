@@ -86,6 +86,12 @@ namespace Ankh.Trigger
         {
             base.Initialize();
 
+            if (InCommandLineMode)
+            {
+                Trace.WriteLine("Ankh.Trigger: Skipping package initialization. (VS Running in commandline mode)");
+                return; 
+            }
+
             IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
             if (shell != null)
@@ -208,5 +214,33 @@ namespace Ankh.Trigger
         }
 
         #endregion
+
+        bool? _inCommandLineMode;
+        /// <summary>
+        /// Get a boolean indicating whether we are running in commandline mode
+        /// </summary>
+        public bool InCommandLineMode
+        {
+            get
+            {
+                if (!_inCommandLineMode.HasValue)
+                {
+                    IVsShell shell = (IVsShell)GetService(typeof(SVsShell));
+
+                    if (shell == null)
+                        _inCommandLineMode = false; // Probably running in a testcase; the shell loads us!
+                    else
+                    {
+                        object value;
+                        if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_IsInCommandLineMode, out value)))
+                        {
+                            _inCommandLineMode = Convert.ToBoolean(value);
+                        }
+                    }
+                }
+
+                return _inCommandLineMode.Value;
+            }
+        }
     }
 }

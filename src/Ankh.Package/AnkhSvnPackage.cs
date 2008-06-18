@@ -81,7 +81,7 @@ namespace Ankh.VSPackage
 
             if (InCommandLineMode)
             {
-                Trace.WriteLine("AnkhSVN: Skipping package initialization. (VS Running in commandline mode)");
+                Trace.WriteLine("Ankh.Package: Skipping package initialization. (VS Running in commandline mode)");
                 return; // Do nothing; speed up devenv /setup by not loading all our modules!
             }
 
