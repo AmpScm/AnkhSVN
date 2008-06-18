@@ -3,6 +3,10 @@
     <When Condition="Exists('$(ProgramFiles)\Windows Installer XML v3\bin')">
       <PropertyGroup>
         <WixToolPathProp>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPathProp>
+        <SccProjectName>Svn</SccProjectName>
+        <SccProvider>SubversionScc</SccProvider>
+        <SccAuxPath>Svn</SccAuxPath>
+        <SccLocalPath>Svn</SccLocalPath>
       </PropertyGroup>
     </When>
   </Choose>
