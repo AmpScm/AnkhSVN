@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Ankh.UI
 {
@@ -22,8 +23,8 @@ namespace Ankh.UI
             CreateMyToolTip();
 
             SetNewEditor(new PlainPropertyEditor());
-			
-            this.propItems = new ArrayList();
+
+			this.propItems = new List<PropertyItem>();
 
             this.nameCombo.Items.Add(new ExecutablePropertyEditor());
             this.nameCombo.Items.Add(new MimeTypePropertyEditor());
@@ -44,7 +45,7 @@ namespace Ankh.UI
             get
             {
                 return (PropertyItem[])
-                    this.propItems.ToArray(typeof(PropertyItem));
+                    this.propItems.ToArray();
             }
             set
             {
@@ -92,6 +93,7 @@ namespace Ankh.UI
 
             public void VisitTextPropertyItem(TextPropertyItem item)
             {
+				// HACK: find out if all this .Replace is really what we want/need
                 AddItem( new string[]{ item.Name, 
                                          item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
             }
@@ -132,7 +134,7 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void deleteButton_Click(object sender, System.EventArgs e)
         {
-            object item = this.propListView.SelectedItems[0].Tag;
+            PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
             this.propItems.Remove(item);
             this.PopulateListView();
 
@@ -154,7 +156,7 @@ namespace Ankh.UI
             if (this.propListView.SelectedItems.Count > 0)
             {
                 // yup - find the property item associated with the selection and replace it
-                object selectedItem = this.propListView.SelectedItems[0].Tag;
+				PropertyItem selectedItem = (PropertyItem)this.propListView.SelectedItems[0].Tag;
                 int index = this.propItems.IndexOf(selectedItem);
                 this.propItems[index] = item;
             }
@@ -310,7 +312,7 @@ namespace Ankh.UI
     
 
 
-        private ArrayList propItems;
+        private List<PropertyItem> propItems;
 
         
     
@@ -378,7 +380,7 @@ namespace Ankh.UI
     /// </summary>
     public class BinaryPropertyItem : PropertyItem
     {
-        public BinaryPropertyItem(byte[] data)
+        public BinaryPropertyItem(ICollection<byte> data)
         {
             this.data = data;
         }
@@ -395,12 +397,12 @@ namespace Ankh.UI
         /// <summary>
         /// Binary data belonging to this property.
         /// </summary>
-        public byte[] Data
+        public ICollection<byte> Data
         {
             get { return this.data;}
         }
  
-        private byte[] data;    
+        private ICollection<byte> data;    
     }
 
     /// <summary>

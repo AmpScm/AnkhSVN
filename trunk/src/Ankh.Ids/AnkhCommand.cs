@@ -214,5 +214,6 @@ namespace Ankh.Ids
         LogShowChanges,
 
         MigrateSettings,
+		ItemEditProperties
     }
 }

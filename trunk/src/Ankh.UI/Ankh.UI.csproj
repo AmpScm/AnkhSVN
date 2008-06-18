@@ -483,52 +483,52 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="PropertyEditors\PropertyEditorDialog.Designer.cs">
+    <Compile Include="PropertyEditors\PropertyEditorDialog.Designer.cs">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\EolStylePropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\EolStylePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\EolStylePropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\EolStylePropertyEditor.Designer.cs">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\ExecutablePropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\ExecutablePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\ExecutablePropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\ExecutablePropertyEditor.Designer.cs">
       <DependentUpon>ExecutablePropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\ExternalsPropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\ExternalsPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\ExternalsPropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\ExternalsPropertyEditor.Designer.cs">
       <DependentUpon>ExternalsPropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\IgnorePropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\IgnorePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\IPropertyEditor.cs" />
-    <None Include="PropertyEditors\KeywordsPropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\IPropertyEditor.cs" />
+    <Compile Include="PropertyEditors\KeywordsPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\KeywordsPropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\KeywordsPropertyEditor.Designer.cs">
       <DependentUpon>KeywordsPropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\MimeTypePropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\MimeTypePropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\MimeTypePropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\MimeTypePropertyEditor.Designer.cs">
       <DependentUpon>MimeTypePropertyEditor.cs</DependentUpon>
-    </None>
-    <None Include="PropertyEditors\PlainPropertyEditor.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\PlainPropertyEditor.cs">
       <SubType>UserControl</SubType>
-    </None>
-    <None Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
+    </Compile>
+    <Compile Include="PropertyEditors\PlainPropertyEditor.Designer.cs">
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
-    </None>
+    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -602,9 +602,9 @@
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <None Include="PropertyEditors\PropertyEditorDialog.cs">
+    <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
       <SubType>Form</SubType>
-    </None>
+    </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
