@@ -534,7 +534,7 @@ namespace Ankh.Scc
         {
             if (!_enlistCompleted)
                 PerformEnlist();
-            //((IAnkhSccService)this).LoadEnlistments(null);
+
             pbstrEnlistmentPath = lpszProjectPath;
             pbstrEnlistmentPathUNC = lpszProjectPath;
             return VSConstants.S_OK;
