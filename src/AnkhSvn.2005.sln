@@ -15,8 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh", "Ankh\Ankh.csproj", 
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
-		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
 		{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE} = {AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}
+		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A3248E1E-8272-4227-AF02-BB86040FBED9}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
@@ -103,6 +103,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Package", "Ankh.Packag
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{D81A44B8-57A9-4296-832C-7D29019D989B} = {D81A44B8-57A9-4296-832C-7D29019D989B}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16898D70-FA00-46A2-8141-27B38D97E0CF}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -111,6 +114,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{16898D70
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{A0B1E164-8624-42B6-9A13-D016C4EFE94A}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Migrate", "Ankh.Migrate\Ankh.Migrate.csproj", "{1AD899A2-9283-4AB6-9426-E251E5772196}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.Debug = "False"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Trigger", "Ankh.Trigger\Ankh.Trigger.csproj", "{D81A44B8-57A9-4296-832C-7D29019D989B}"
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -172,6 +187,14 @@ Global
 		{FA90174C-5763-46E8-9C95-328CA8451072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA90174C-5763-46E8-9C95-328CA8451072}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AD899A2-9283-4AB6-9426-E251E5772196}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AD899A2-9283-4AB6-9426-E251E5772196}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AD899A2-9283-4AB6-9426-E251E5772196}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81A44B8-57A9-4296-832C-7D29019D989B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81A44B8-57A9-4296-832C-7D29019D989B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81A44B8-57A9-4296-832C-7D29019D989B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81A44B8-57A9-4296-832C-7D29019D989B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,14 +206,16 @@ Global
 		{906E3F01-CD79-4F80-BCA7-1105224328C4} = {4A42502C-DBFF-40C9-81ED-EE95DDD82B94}
 		{874C0358-E7DD-42DA-BF07-58198B41FD25} = {A0B1E164-8624-42B6-9A13-D016C4EFE94A}
 		{A3248E1E-8272-4227-AF02-BB86040FBED9} = {A0B1E164-8624-42B6-9A13-D016C4EFE94A}
+		{1AD899A2-9283-4AB6-9426-E251E5772196} = {A0B1E164-8624-42B6-9A13-D016C4EFE94A}
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747} = {16898D70-FA00-46A2-8141-27B38D97E0CF}
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E} = {16898D70-FA00-46A2-8141-27B38D97E0CF}
 		{61D343CF-77BA-4EF2-96F5-E0D4EFD04844} = {2A99D7C3-4AA0-4B9A-846B-D27730F23474}
 		{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB} = {2A99D7C3-4AA0-4B9A-846B-D27730F23474}
 		{FA90174C-5763-46E8-9C95-328CA8451072} = {7207B9A7-E4B0-49D4-9F09-16CF29D38835}
+		{D81A44B8-57A9-4296-832C-7D29019D989B} = {7207B9A7-E4B0-49D4-9F09-16CF29D38835}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 EndGlobal
