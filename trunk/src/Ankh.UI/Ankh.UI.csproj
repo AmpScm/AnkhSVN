@@ -7,6 +7,10 @@
     <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
     <Win32Resource>
     </Win32Resource>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
