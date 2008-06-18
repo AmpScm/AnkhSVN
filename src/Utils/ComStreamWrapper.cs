@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Microsoft.VisualStudio.OLE.Interop;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Utils
 {
