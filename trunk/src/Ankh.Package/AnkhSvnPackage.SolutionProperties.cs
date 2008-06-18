@@ -8,12 +8,14 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VSPackage.Attributes;
+using Ankh.VS;
+using System.IO;
 
 namespace Ankh.VSPackage
 {
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
-    partial class AnkhSvnPackage : IVsPersistSolutionProps    
-	{
+    partial class AnkhSvnPackage : IVsPersistSolutionProps
+    {
         const string SubversionPropertyCategory = AnkhId.SubversionSccName;
         const string ManagedPropertyName = "Svn-Managed";
         const string ManagerPropertyName = "Manager";
@@ -24,7 +26,7 @@ namespace Ankh.VSPackage
 
             if (scc != null)
                 scc.IsSolutionDirty = true; // We should save our settings again
-            
+
             return VSConstants.S_OK;
         }
 
@@ -158,27 +160,137 @@ namespace Ankh.VSPackage
             }
 
             return VSConstants.S_OK;
-        }        
+        }
 
         #region IVsPersistSolutionOpts
+        const string PendingChangeStream = AnkhId.SubversionSccName + "Pending";
+
         public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
         {
-            return VSConstants.S_OK;
+            if ((grfLoadOpts & (uint)__VSLOADUSEROPTS.LUO_OPENEDDSW) != 0)
+            {
+                return VSConstants.S_OK; // We only know .suo; let's ignore old style projects
+            }
+
+            try
+            {
+                pPersistence.LoadPackageUserOpts(this, PendingChangeStream);
+
+
+                return VSConstants.S_OK;
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
+            }
         }
 
         public int ReadUserOptions([In] IStream pOptionsStream, [In] string pszKey)
         {
-            return VSConstants.S_OK; // Our data is in subversion properties
-        }        
+            try
+            {
+                using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream))
+                {
+                    switch (pszKey)
+                    {
+                        case PendingChangeStream:
+                            LoadPendingChanges(wrapper);
+                            break;
+
+                        default:
+                            // TODO: Add support for some service api for our services
+                            break;
+                    }
+                }
+                return VSConstants.S_OK; // Our data is in subversion properties
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
+            }
+        }
 
         public int SaveUserOptions([In] IVsSolutionPersistence pPersistence)
         {
-            return VSConstants.S_OK;
+            try
+            {
+                pPersistence.SavePackageUserOpts(this, PendingChangeStream);
+
+                return VSConstants.S_OK;
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(pPersistence); // See Package.cs from MPF for reason
+            }
         }
 
         public int WriteUserOptions([In] IStream pOptionsStream, [In] string pszKey)
         {
-            return VSConstants.E_NOTIMPL;
+            try
+            {
+                using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream))
+                {
+                    switch (pszKey)
+                    {
+                        case PendingChangeStream:
+                            WritePendingChanges(wrapper);
+                            break;
+
+                        default:
+                            // TODO: Add support for some service api for our services
+                            break;
+                    }
+                }
+
+                return VSConstants.S_OK;
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(pOptionsStream); // See Package.cs from MPF for reason
+            }
+        }
+
+        private void WritePendingChanges(Stream storageStream)
+        {
+            IPendingChangesManager pendingChanges = GetService<IPendingChangesManager>();
+
+            using (BinaryWriter bw = new BinaryWriter(storageStream))
+            {
+                List<PendingChange> changes = (pendingChanges != null) ? new List<PendingChange>(pendingChanges.GetAll()) : null;
+
+                if (changes == null)
+                    bw.Write((int)0);
+                else
+                {
+                    bw.Write((int)changes.Count);
+
+                    foreach (PendingChange pc in changes)
+                    {
+                        bw.Write(pc.FullPath);
+                    }
+                }
+            }
+        }
+
+        private void LoadPendingChanges(Stream storageStream)
+        {
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
+
+            if(monitor == null)
+                return;
+
+            using (BinaryReader br = new BinaryReader(storageStream))
+            {
+                int n = br.ReadInt32();
+                List<string> files = new List<string>();
+
+                for(int i = 0; i < n; i++)
+                {
+                    files.Add(br.ReadString());
+                }
+
+                monitor.ScheduleMonitor(files);                    
+            }
         }
         #endregion
     }
