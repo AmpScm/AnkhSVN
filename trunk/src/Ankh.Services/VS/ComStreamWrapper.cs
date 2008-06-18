@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
+using Microsoft.VisualStudio.OLE.Interop;
 
-namespace Utils
+namespace Ankh.VS
 {
     /// <summary>
     /// 
