@@ -99,6 +99,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComStreamWrapper.cs" />
     <Compile Include="ErrorMessage.cs">
       <SubType>Code</SubType>
     </Compile>
