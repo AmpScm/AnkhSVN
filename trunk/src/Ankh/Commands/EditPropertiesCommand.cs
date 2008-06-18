@@ -11,7 +11,9 @@ using Ankh.Ids;
 
 namespace Ankh.Commands
 {
+#if DEBUG
 	[Command(AnkhCommand.ItemEditProperties,HideWhenDisabled=true)]
+#endif
 	class EditPropertiesCommand: CommandBase
 	{
 		public override void OnUpdate(CommandUpdateEventArgs e)
