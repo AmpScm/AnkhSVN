@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using Ankh.UI.RepositoryExplorer;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -31,7 +32,7 @@ namespace Ankh.UI.RepositoryOpen
         {
             get { return _context; }
             set
-            {
+			{
                 _context = value;
 
                 if (value != null)
@@ -84,6 +85,13 @@ namespace Ankh.UI.RepositoryOpen
             get { return _config ?? (_config = GetService<IAnkhConfigurationService>()); }
         }
 
+		public string AddUrl
+		{
+			get { return "Add repository url..."; } // TODO: Make localizable
+		}
+
+		public event EventHandler<EventArgs> TestEvent;
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -127,6 +135,9 @@ namespace Ankh.UI.RepositoryOpen
                 urlBox.SelectedIndex = 0;
                 UpdateDirectories();
             }
+
+			if (!string.IsNullOrEmpty(AddUrl))
+				urlBox.Items.Add(AddUrl);
 
             if (string.IsNullOrEmpty(fileTypeBox.Text) && fileTypeBox.Items.Count > 0)
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
@@ -333,7 +344,7 @@ namespace Ankh.UI.RepositoryOpen
                             {
                                 Uri parentUri = new Uri(e.Uri, "../");
 
-                                if (parentUri.ToString() != urlBox.Text)
+                                if (urlBox.Text != AddUrl && parentUri.ToString() != urlBox.Text)
                                     return; // The user selected something else while we where busy
 
                                 // The user typed a directory Url without ending '/'
@@ -421,6 +432,12 @@ namespace Ankh.UI.RepositoryOpen
         {
             string txt = urlBox.Text;
 
+			if (txt == AddUrl && !string.IsNullOrEmpty(AddUrl))
+			{
+				ShowAddUriDialog();
+				return;
+			}
+
             if (!txt.EndsWith("/"))
                 txt += '/';
 
@@ -430,6 +447,28 @@ namespace Ankh.UI.RepositoryOpen
 
             RefreshBox(uri);
         }
+
+		void ShowAddUriDialog()
+		{
+			using (AddUriDialog dialog = new AddUriDialog())
+			{
+				IUIService uiService = _context.GetService<IUIService>();
+				if (DialogResult.OK == uiService.ShowDialog(dialog))
+				{
+					Uri dirUri;
+					if (Uri.TryCreate(dialog.UrlText, UriKind.Absolute, out dirUri))
+					{
+						//Uri combined = SvnTools.AppendPathSuffix(dirUri, fileText);
+
+						DoSomething fill = delegate()
+						{
+							CheckResult(dirUri);
+						};
+						fill.BeginInvoke(null, null);
+					}
+				}
+			}
+		}
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {
