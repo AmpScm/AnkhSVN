@@ -19,6 +19,7 @@ namespace Ankh.UI
             // 
             // executableCheckBox
             // 
+            this.executableCheckBox.Location = new System.Drawing.Point(3, 13);
             this.executableCheckBox.Name = "executableCheckBox";
             this.executableCheckBox.Size = new System.Drawing.Size(160, 24);
             this.executableCheckBox.TabIndex = 1;
@@ -27,9 +28,9 @@ namespace Ankh.UI
             // 
             // ExecutablePropertyEditor
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.executableCheckBox});
+            this.Controls.Add(this.executableCheckBox);
             this.Name = "ExecutablePropertyEditor";
+            this.Size = new System.Drawing.Size(250, 150);
             this.ResumeLayout(false);
 
         }

@@ -54,7 +54,7 @@ namespace Ankh.Commands
 
 			IUIService ui = e.GetService<IUIService>();
 			using(SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
-			using (PropertyEditorDialog dialog = new PropertyEditorDialog())
+			using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned.FullPath))
 			{
 				SvnPropertyListArgs args = new SvnPropertyListArgs();
 				Collection<SvnPropertyListEventArgs> properties;
@@ -76,6 +76,54 @@ namespace Ankh.Commands
 				}
 				if (ui.ShowDialog(dialog) == DialogResult.OK)
 				{
+                    if (properties.Count <= 1)
+                    {
+                        PropertyItem[] finalItems = dialog.PropertyItems;
+
+                        #region perform delete
+                        if (properties.Count > 0)
+                        {
+                            SvnPropertyListEventArgs propArgs = properties[0];
+                            SvnPropertyCollection propCollection = propArgs.Properties;
+                            Collection<SvnPropertyValue> deletedProps = new Collection<SvnPropertyValue>();
+                            foreach (SvnPropertyValue svnProp in propCollection)
+                            {
+                                bool deleted = true;
+                                foreach (PropertyItem item in finalItems)
+                                {
+                                    if (svnProp.Key.Equals(item.Name))
+                                    {
+                                        deleted = false;
+                                        break;
+                                    }
+                                }
+                                if (deleted)
+                                {
+                                    deletedProps.Add(svnProp);
+                                }
+                            }
+                            foreach (SvnPropertyValue deletedProp in deletedProps)
+                            {
+                                client.DeleteProperty(firstVersioned.FullPath, deletedProp.Key);
+                            }
+                        }
+                        #endregion
+
+                        foreach (PropertyItem item in finalItems)
+                        {
+                            string key = item.Name;
+                            if (item is BinaryPropertyItem)
+                            {
+                                ICollection<byte> data = ((BinaryPropertyItem)item).Data;
+                                client.SetProperty(firstVersioned.FullPath, key, data);
+                            }
+                            else if (item is TextPropertyItem) 
+                            {
+                                string data = ((TextPropertyItem)item).Text;
+                                client.SetProperty(firstVersioned.FullPath, key, data);
+                            }
+                        }
+                    }
 					// TODO: implement propset
 				}
 			}

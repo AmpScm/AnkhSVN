@@ -14,47 +14,49 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.valueTextBox = new System.Windows.Forms.TextBox();
-            this.plainLabel = new System.Windows.Forms.Label();
+            this.plainGroupBox = new System.Windows.Forms.GroupBox();
+            this.plainGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // valueTextBox
             // 
             this.valueTextBox.AcceptsReturn = true;
             this.valueTextBox.AcceptsTab = true;
-            this.valueTextBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.valueTextBox.Location = new System.Drawing.Point(0, 22);
+            this.valueTextBox.Location = new System.Drawing.Point(6, 19);
             this.valueTextBox.Multiline = true;
             this.valueTextBox.Name = "valueTextBox";
-            this.valueTextBox.Size = new System.Drawing.Size(240, 128);
+            this.valueTextBox.Size = new System.Drawing.Size(232, 119);
             this.valueTextBox.TabIndex = 0;
-            this.valueTextBox.Text = "";
             this.valueTextBox.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);
             // 
-            // plainLabel
+            // plainGroupBox
             // 
-            this.plainLabel.Name = "plainLabel";
-            this.plainLabel.Size = new System.Drawing.Size(264, 23);
-            this.plainLabel.TabIndex = 1;
-            this.plainLabel.Text = "Enter values:";
+            this.plainGroupBox.Controls.Add(this.valueTextBox);
+            this.plainGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.plainGroupBox.Name = "plainGroupBox";
+            this.plainGroupBox.Size = new System.Drawing.Size(244, 144);
+            this.plainGroupBox.TabIndex = 2;
+            this.plainGroupBox.TabStop = false;
+            this.plainGroupBox.Text = "Enter values";
             // 
             // PlainPropertyEditor
             // 
-            this.Controls.AddRange(new System.Windows.Forms.Control[] {
-                                                                          this.plainLabel,
-                                                                          this.valueTextBox});
+            this.Controls.Add(this.plainGroupBox);
             this.Name = "PlainPropertyEditor";
-            this.Size = new System.Drawing.Size(240, 150);
+            this.Size = new System.Drawing.Size(250, 150);
+            this.plainGroupBox.ResumeLayout(false);
+            this.plainGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
         #endregion
 
         private System.Windows.Forms.TextBox valueTextBox;
-        private System.Windows.Forms.Label plainLabel;
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+        private System.Windows.Forms.GroupBox plainGroupBox;
 
     }
 }

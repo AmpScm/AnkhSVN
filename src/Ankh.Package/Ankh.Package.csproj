@@ -175,6 +175,7 @@
     <Content Include="Gui\menu\MakeDirectory.png" />
     <Content Include="Gui\menu\Merge.png" />
     <Content Include="Gui\menu\PendingChanges.png" />
+    <Content Include="Gui\menu\Properties.png" />
     <Content Include="Gui\menu\Refresh.png" />
     <Content Include="Gui\menu\Relocate.png" />
     <Content Include="Gui\menu\RemoveFolder.png" />
