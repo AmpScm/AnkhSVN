@@ -14,6 +14,9 @@ namespace Ankh.Commands
 	[Command(AnkhCommand.ItemEditProperties,HideWhenDisabled=true)]
 	class EditPropertiesCommand: CommandBase
 	{
+		// TODO: We should probably add commands for projects and solutions specific too
+		// To handle the common directory != project file case
+
 		public override void OnUpdate(CommandUpdateEventArgs e)
 		{
 			int count = 0;
