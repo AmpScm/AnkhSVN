@@ -11,9 +11,7 @@ using Ankh.Ids;
 
 namespace Ankh.Commands
 {
-#if DEBUG
 	[Command(AnkhCommand.ItemEditProperties,HideWhenDisabled=true)]
-#endif
 	class EditPropertiesCommand: CommandBase
 	{
 		public override void OnUpdate(CommandUpdateEventArgs e)
@@ -22,9 +20,19 @@ namespace Ankh.Commands
 			foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
 			{
 				if (i.IsVersioned)
+				{
 					count++;
+
+					if (count > 1)
+					{
+						e.Enabled = false;
+						return;
+					}
+				}
 			}
-			e.Enabled = count == 1;
+
+			if (count != 1)
+				e.Enabled = false;
 		}
 		public override void OnExecute(CommandEventArgs e)
 		{
