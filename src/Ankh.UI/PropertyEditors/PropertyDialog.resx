@@ -132,7 +132,7 @@
     <value>0</value>
   </data>
   <data name="nameLabel.Text" xml:space="preserve">
-    <value>Property Name:</value>
+    <value>Property &amp;Name:</value>
   </data>
   <data name="&gt;&gt;nameLabel.Name" xml:space="preserve">
     <value>nameLabel</value>
@@ -192,7 +192,7 @@
     <value>False</value>
   </data>
   <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>106, 208</value>
+    <value>106, 211</value>
   </data>
   <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -216,7 +216,7 @@
     <value>1</value>
   </data>
   <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 208</value>
+    <value>187, 211</value>
   </data>
   <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
