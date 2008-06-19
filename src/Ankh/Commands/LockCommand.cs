@@ -11,7 +11,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [Command(AnkhCommand.Lock)]
+    [Command(AnkhCommand.Lock, HideWhenDisabled=true)]
     public class LockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
