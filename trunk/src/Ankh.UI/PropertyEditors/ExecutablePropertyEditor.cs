@@ -70,7 +70,7 @@ namespace Ankh.UI
 
         public override string ToString()
         {
-            return "executable";
+            return PropertyEditorConstants.SVN_PROP_EXECUTABLE;
         }
 
         /// <summary> 

@@ -81,7 +81,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return "mime-type";
+            return PropertyEditorConstants.SVN_PROP_MIMETYPE;
         }
 
         /// <summary> 

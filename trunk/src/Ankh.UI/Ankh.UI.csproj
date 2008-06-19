@@ -275,6 +275,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PropertyEditors\PropertyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\PropertyDialog.Designer.cs">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\PropertyEditorConstants.cs" />
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -676,10 +683,10 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="PropertyEditors\PropertyEditorDialog.resx">
+    <EmbeddedResource Include="PropertyEditors\PropertyEditorDialog.resx">
       <DependentUpon>PropertyEditorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\RepositoryTreeView.resx">
       <DependentUpon>RepositoryTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -756,6 +763,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\PropertyDialog.resx">
+      <DependentUpon>PropertyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RepositoryExplorer\RepositoryFolderBrowserDialog.resx">
@@ -923,6 +934,7 @@
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
     <None Include="Resources\folderCloseButton.Image.png" />
     <None Include="Resources\Busy.gif" />
+    <Content Include="PropertyEditors\Images\Properties.ico" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

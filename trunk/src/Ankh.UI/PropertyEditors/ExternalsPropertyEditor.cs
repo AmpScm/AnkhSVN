@@ -81,7 +81,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return "externals";
+            return PropertyEditorConstants.SVN_PROP_EXTERNALS;
         }
 
         /// <summary> 

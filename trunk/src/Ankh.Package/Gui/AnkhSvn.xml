@@ -237,8 +237,9 @@
               text="Create &amp;Patch..."
               toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
 					<Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
-									text="&amp;Edit propeties"
-									toolTip="Edit Subversion properties" />
+									text="Prop&amp;erties..."
+									toolTip="View/Edit Subversion Properties" 
+                  iconFile="menu/Properties.png"/>
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />

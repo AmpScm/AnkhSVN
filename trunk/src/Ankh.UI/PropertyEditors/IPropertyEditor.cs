@@ -8,6 +8,7 @@ namespace Ankh.UI
     /// </summary>
     internal interface IPropertyEditor
     {
+
         /// <summary>
         /// Whether the property editor is in a valid state
         /// </summary>
@@ -35,7 +36,6 @@ namespace Ankh.UI
         /// Fired whenever the editor's state changes
         /// </summary>
         event EventHandler Changed;
-
     }
 }
 

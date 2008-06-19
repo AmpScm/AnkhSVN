@@ -13,28 +13,16 @@ namespace Ankh.UI
     /// </summary>
     public partial class PropertyEditorDialog : System.Windows.Forms.Form
     {
-        public PropertyEditorDialog()
+        public PropertyEditorDialog(string svnItemPath)
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
             
-            CreateMyToolTip();
-
-            SetNewEditor(new PlainPropertyEditor());
-
 			this.propItems = new List<PropertyItem>();
 
-            this.nameCombo.Items.Add(new ExecutablePropertyEditor());
-            this.nameCombo.Items.Add(new MimeTypePropertyEditor());
-            this.nameCombo.Items.Add(new IgnorePropertyEditor());
-            this.nameCombo.Items.Add(new KeywordsPropertyEditor());
-            this.nameCombo.Items.Add(new EolStylePropertyEditor());
-            this.nameCombo.Items.Add(new ExternalsPropertyEditor()); 
-           
-            //Set default value in list to first item in nameCombo 
-            this.nameCombo.SelectedIndex = 0;        
+            this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
         }
 
         /// <summary>
@@ -80,7 +68,7 @@ namespace Ankh.UI
             foreach (PropertyItem item in this.propItems)
                 item.AcceptVisitor(visitor);
         }
-        #region class ListVitor
+        #region class ListVisitor
         /// <summary>
         /// Visitor that populates the list view.
         /// </summary>
@@ -116,15 +104,34 @@ namespace Ankh.UI
         #endregion
 
         /// <summary>
-        /// Clear/default the values in the selected editor if new-button is clicked.
+        /// Brings up the Property Dialog in edit mode.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void newButton_Click(object sender, System.EventArgs e)
+        private void editButton_Click(object sender, System.EventArgs e)
         {
-            this.currentEditor.Reset();
-            nameCombo.Text = "";
-            this.propListView.SelectedItems.Clear();
+            PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
+            int index = this.propItems.IndexOf(item);
+            PropertyDialog pDialog = new PropertyDialog(item);
+            if (pDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                PropertyItem editedItem = pDialog.GetPropertyItem();
+                if (editedItem != null)
+                {
+                    int otherIndex = -1; ;
+                    if (!item.Name.Equals(editedItem.Name)
+                        && ((otherIndex = TryFindItem(editedItem.Name)) > -1) 
+                        && otherIndex != index)
+                    {
+                        // there is already a property with the same name
+                        // TODO
+                        // Delete selected item AND replace the existing item ???
+                    }
+                    else {
+                        this.propItems[index] = editedItem;
+                        this.PopulateListView();
+                        this.UpdateButtons();
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -137,39 +144,52 @@ namespace Ankh.UI
             PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
             this.propItems.Remove(item);
             this.PopulateListView();
-
-            this.ValidateForm();
+            this.UpdateButtons();
         }
 
         /// <summary>
-        /// Save the valid item if save-button is clicked.
+        /// Bring up Property Dialog in Add mode.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveButton_Click(object sender, System.EventArgs e)
+        private void addButton_Click(object sender, System.EventArgs e)
         {
-            
-            PropertyItem item= this.currentEditor.PropertyItem;
-            item.Name = nameCombo.Text;
-            
-            // anything selected in the property list?
-            if (this.propListView.SelectedItems.Count > 0)
+            PropertyDialog propDialog = new PropertyDialog();
+            if (propDialog.ShowDialog(this) == DialogResult.OK)
             {
-                // yup - find the property item associated with the selection and replace it
-				PropertyItem selectedItem = (PropertyItem)this.propListView.SelectedItems[0].Tag;
-                int index = this.propItems.IndexOf(selectedItem);
-                this.propItems[index] = item;
+                PropertyItem item = propDialog.GetPropertyItem();
+                if (item != null)
+                {
+                    int index = this.TryFindItem(item.Name);
+                    if (index > -1)
+                    {
+                        // There is already a property with the same name.
+                        // TODO ask user
+                        this.propItems[index] = item;
+                    }
+                    else
+                    {
+                        this.propItems.Add(item);
+                    }
+                    this.PopulateListView();
+                    this.UpdateButtons();
+                }
             }
-            else
-            {
-                this.propItems.Add(item);
-            }
-
-            this.PopulateListView();
-            this.currentEditor.Reset();
-            nameCombo.Text = "";
         }
 
+        private int TryFindItem(string key)
+        {
+            int i = 0;
+            foreach (PropertyItem item in this.propItems)
+            {
+                if (key.Equals(item.Name))
+                {
+                    return i;
+                }
+                i++;
+            }
+            return -1;
+        }
         /// <summary>
         /// Checks whether a predefined property is selected.
         /// If selected sets the editor to the selected item.
@@ -179,24 +199,7 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void propListView_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if (this.propListView.SelectedItems.Count > 0)
-            {
-                TextPropertyItem item = (TextPropertyItem)this.propListView.SelectedItems[0].Tag;
-                this.nameCombo.Text = item.Name;
-
-                //Check whether a predefined property is selected.
-                //If selected sets the editor to the selected item.
-                //HACK: find better way
-                foreach( object o in this.nameCombo.Items )
-                { 
-                    if ( o.ToString() == item.Name )
-                        this.SetNewEditor( (IPropertyEditor)o );
-                }
- 
-                this.currentEditor.PropertyItem = item;
-            }
-
-            this.ValidateForm();
+            this.UpdateButtons();
         }   
         
         /// <summary>
@@ -206,21 +209,6 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void currentEditor_Changed(object sender, System.EventArgs e)
         {
-            this.ValidateForm();
-        }
-
-        /// <summary>
-        /// Sets plain editor if the text in the combo has beed modified.
-        /// Validate the form.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void nameCombo_TextChanged(object sender, System.EventArgs e)
-        { 
-            if ( this.nameCombo.SelectedItem != null)
-            {
-                SetNewEditor(new PlainPropertyEditor());   
-            }
             this.ValidateForm();
         }
 
@@ -236,10 +224,7 @@ namespace Ankh.UI
                 this.currentEditor.Changed -= new EventHandler( 
                     this.currentEditor_Changed);
             }
-            //Clear the editor panel and add the new editor.
-            this.editorPanel.Controls.Clear();
-            this.editorPanel.Controls.Add((Control)editor);
-           
+            
             //Sets the current editor to match the selected item.
             this.currentEditor = editor;
             this.currentEditor.Changed += new EventHandler( 
@@ -253,69 +238,20 @@ namespace Ankh.UI
         /// </summary>
         private void ValidateForm ()
         {
-            this.deleteButton.Enabled = this.propListView.SelectedItems.Count > 0;
-            this.saveButton.Enabled = this.nameCombo.Text.Trim() != "" && 
-                this.currentEditor.Valid;
-        }  
+        }
 
-        /// <summary>
-        /// Sets new editor if selected combo value has changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void nameCombo_SelectedValueChanged(object sender, System.EventArgs e)
+        private void UpdateButtons()
         {
-            IPropertyEditor selectedItem = (IPropertyEditor)this.nameCombo.SelectedItem; 
-
-            // is the selection a special svn: keyword?
-            if ( selectedItem != null)
+            PropertyItem selection = null;
+            if (this.propListView.SelectedItems.Count > 0)
             {
-                SetNewEditor(selectedItem);
-
-                //clear any existing selection in the list view
-                this.propListView.SelectedItems.Clear();
-
-                // is there already set a property of this type?
-                //HACK: find better way
-                foreach( ListViewItem item in this.propListView.Items )
-                {
-                    if ( item.Text == selectedItem.ToString() )
-                    {                        
-                        currentEditor.PropertyItem = (PropertyItem)item.Tag;
-                        item.Selected = true;
-                    }
-                }
-            }   
+                selection = (PropertyItem)this.propListView.SelectedItems[0].Tag;
+            }
+            this.deleteButton.Enabled = selection != null;
+            this.editButton.Enabled = selection != null;
         }
-
-        private void CreateMyToolTip()
-        {
-            // Create the ToolTip and associate with the Form container.
-            ToolTip ToolTip = new ToolTip(this.components);
-
-            // Set up the delays in milliseconds for the ToolTip.
-            ToolTip.AutoPopDelay = 5000;
-            ToolTip.InitialDelay = 1000;
-            ToolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            ToolTip.ShowAlways = true;
-         
-            // Set up the ToolTip text for the Button and Checkbox.
-            ToolTip.SetToolTip( this.nameCombo, "Select or compose your own property name");
-            ToolTip.SetToolTip( this.newButton, "Clear name and value fields");
-            ToolTip.SetToolTip( this.saveButton, "Save property name and value");
-            ToolTip.SetToolTip( this.deleteButton, "Delete selected property");
-            ToolTip.SetToolTip( this.propListView, "List of defined properties");
-        }
-
-  
-    
-
 
         private List<PropertyItem> propItems;
-
-        
-    
         private IPropertyEditor currentEditor;        
     }
 
