@@ -22,36 +22,26 @@ namespace Ankh.UI.MergeWizard
         private void rangeofRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
-
-            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
         }
 
         private void reintegrateABranchRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
-
-            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.Reintegrate;
         }
 
         private void twoDifferentTreesRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
-
-            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
         }
 
         private void manuallyRecordMergeRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
-
-            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
         }
 
         private void manuallyRemoveRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ToggleMergeTypeInformation(this, (RadioButton)sender);
-
-            ((MergeTypePage)WizardPage).SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
         }
         #endregion
 
@@ -71,30 +61,42 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void ToggleMergeTypeInformation(MergeTypePageControl page, RadioButton radioButton)
         {
+            MergeTypePage wizardPage = ((MergeTypePage)WizardPage);
+
             if (radioButton.Name == "rangeOfRevisionsRadioButton")
             {
                 page.mergeTypeDescriptionLabel.Text = Resources.RangeOfRevisionsDescription;
                 page.mergeTypePictureBox.Image = Resources.RangeOfRevisionsImage;
+
+                wizardPage.SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
             }
             else if (radioButton.Name == "reintegrateABranchRadioButton")
             {
                 page.mergeTypeDescriptionLabel.Text = Resources.ReintegrateABranchDescription;
                 page.mergeTypePictureBox.Image = Resources.ReintegrateABranchImage;
+
+                wizardPage.SelectedMergeType = MergeWizard.MergeType.Reintegrate;
             }
             else if (radioButton.Name == "twoDifferentTreesRadioButton")
             {
                 page.mergeTypeDescriptionLabel.Text = Resources.TwoDifferentTreesDescription;
                 page.mergeTypePictureBox.Image = Resources.TwoDifferentTreesImage;
+
+                wizardPage.SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
             }
             else if (radioButton.Name == "manuallyRecordRadioButton")
             {
                 page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRecordDescription;
                 page.mergeTypePictureBox.Image = Resources.ManuallyRecordImage;
+
+                wizardPage.SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
             }
             else if (radioButton.Name == "manuallyRemoveRadioButton")
             {
                 page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRemoveDescription;
                 page.mergeTypePictureBox.Image = Resources.ManuallyRemoveImage;
+
+                wizardPage.SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
             }
         }
     }

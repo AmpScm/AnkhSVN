@@ -88,7 +88,7 @@ namespace Ankh.UI.MergeWizard
             {
                 // Do not validate since this field isn't editable and its contents are
                 // retrieved directly from mergeinfo.
-                if (MergeType == MergeWizard.MergeType.ManuallyRemove)
+                if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
                     return true;
 
                 Uri tmpUri;
@@ -117,14 +117,6 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
-        /// Returns the merge type for the associated wizard page.
-        /// </summary>
-        public MergeWizard.MergeType MergeType
-        {
-            get { return WizardPage.MergeType; }
-        }
-
-        /// <summary>
         /// Sets the merge sources for the mergeFromComboBox.
         /// </summary>
         private void SetMergeSources(List<string> mergeSources)
@@ -138,6 +130,7 @@ namespace Ankh.UI.MergeWizard
             else
             {
                 MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
+
                 mergeFromComboBox.Text = "";
 
                 if (mergeSources.Count != 0)
@@ -150,7 +143,7 @@ namespace Ankh.UI.MergeWizard
 
                     WizardPage.IsPageComplete = true;
                 }
-                else if (MergeType == MergeWizard.MergeType.ManuallyRemove)
+                else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
                 {
                     WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.ERROR);
 
@@ -171,11 +164,12 @@ namespace Ankh.UI.MergeWizard
         private void RetrieveAndSetMergeSources()
         {
             MergeWizard wizard = WizardPage.Wizard as MergeWizard;
+
             if (WizardPage != null)
             {
-                List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget, MergeType);
+                List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget, WizardPage.MergeType);
 
-                if (mergeSources.Count == 0 && MergeType != MergeWizard.MergeType.ManuallyRemove)
+                if (mergeSources.Count == 0 && WizardPage.MergeType != MergeWizard.MergeType.ManuallyRemove)
                 {
                     using (SvnClient client = wizard.MergeUtils.GetClient())
                     {

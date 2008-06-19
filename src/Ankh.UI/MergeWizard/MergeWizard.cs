@@ -44,6 +44,7 @@ namespace Ankh.UI.MergeWizard
             mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage(this);
             mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage(this);
             mergeOptionsPage = new MergeOptionsPage(this);
+            mergeSummaryPage = new MergeSummaryPage(this);
         }
 
         public override void AddPages()
@@ -57,6 +58,7 @@ namespace Ankh.UI.MergeWizard
             AddPage(mergeSourceManuallyRemovePage);
             AddPage(mergeRevisionsSelectionPage);
             AddPage(mergeOptionsPage);
+            AddPage(mergeSummaryPage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
@@ -115,7 +117,7 @@ namespace Ankh.UI.MergeWizard
 
             // Handle the merge options page
             if (page is MergeOptionsPage)
-                return null;
+                return mergeSummaryPage;
 
             return null;
         }
@@ -205,6 +207,7 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceManuallyRemovePage;
         private WizardPage mergeRevisionsSelectionPage;
         private WizardPage mergeOptionsPage;
+        private WizardPage mergeSummaryPage;
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;
