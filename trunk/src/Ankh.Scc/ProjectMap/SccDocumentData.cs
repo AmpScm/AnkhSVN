@@ -145,9 +145,9 @@ namespace Ankh.Scc.ProjectMap
         {
             SetDirty(false);
 
-            if(!_isFileDocument)
+            if (!_isFileDocument)
                 return;
-            
+
             IFileStatusMonitor statusMonitor = GetService<IFileStatusMonitor>();
             statusMonitor.ScheduleSvnStatus(Name);
         }
@@ -212,7 +212,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (sisu != null)
                     sisu.SetDocumentDirty(dirty);
-            }            
+            }
         }
 
         internal void CheckDirty()
@@ -282,7 +282,7 @@ namespace Ankh.Scc.ProjectMap
                     return true;
             }
 
-            
+
             vsPersistHierarchyItem2 = Hierarchy as IVsPersistHierarchyItem2;
 
             if (vsPersistHierarchyItem2 != null &&
@@ -294,7 +294,7 @@ namespace Ankh.Scc.ProjectMap
 
             return false; // We can't be reloaded by ourselves.. Let our caller reload our parent instead
         }
-  
+
         /// <summary>
         /// Gets a value indicating whether this document is reloadable.
         /// </summary>
@@ -335,10 +335,10 @@ namespace Ankh.Scc.ProjectMap
         /// </returns>
         /// <remarks>Gets the live data; or if that fails the cached data</remarks>
         internal bool GetIsDirty(bool fallback)
-		{
-			IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
+        {
+            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
 
-            if(pdd == null)
+            if (pdd == null)
                 return fallback && _isDirty;
 
             int dirty;
@@ -374,7 +374,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (ddfcc == null)
                 return false;
-           
+
             if (ignore)
             {
                 if (_ignored > 0)
@@ -390,7 +390,7 @@ namespace Ankh.Scc.ProjectMap
                     _ignored--;
                     return true;
                 }
-                else if(_ignored == 0)
+                else if (_ignored == 0)
                     return false; // We were not ignoring (Are we 100% reloaded?)
             }
 
@@ -446,7 +446,13 @@ namespace Ankh.Scc.ProjectMap
 
         internal bool SaveDocument(IVsRunningDocumentTable rdt)
         {
-            return ErrorHandler.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie));
+            if (ErrorHandler.Succeeded(rdt.SaveDocuments(0, Hierarchy, ItemId, Cookie)))
+            {
+                SetDirty(false);
+                return true;
+            }
+
+            return false;
         }
     }
 }
