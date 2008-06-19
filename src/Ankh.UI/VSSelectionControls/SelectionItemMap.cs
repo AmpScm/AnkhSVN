@@ -67,6 +67,9 @@ namespace Ankh.UI.VSSelectionControls
 
             public uint GetId(T item)
             {
+				if (item == null)
+					throw new ArgumentNullException("item");
+
                 uint id;
                 if (_items.TryGetValue(item, out id))
                     return id;
