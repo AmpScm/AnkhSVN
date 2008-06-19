@@ -4,6 +4,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using SharpSvn;
+using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.RepositoryOpen;
+using WizardFramework;
+using System.IO;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -48,6 +52,61 @@ namespace Ankh.UI.MergeWizard
                 }
             }
             comboBox.DropDownWidth = width;
+        }
+
+        public static Uri DisplayBrowseDialogAndGetResult(WizardPage page, SvnItem target, string baseUri)
+        {
+            Uri result = null;
+
+            if (((MergeWizard)page.Wizard).MergeTarget.IsDirectory)
+            {
+                using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+                {
+                    Uri uri;
+
+                    if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
+                    {
+                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
+                    }
+                    else
+                    {
+                        dlg.SelectedUri = uri;
+
+                        if (dlg.ShowDialog(((MergeWizard)page.Wizard).Context) == DialogResult.OK)
+                        {
+                            result = dlg.SelectedUri;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
+                {
+                    MergeWizard wizard = ((MergeWizard)page.Wizard);
+                    Uri uri;
+                    string fileName = Path.GetFileName(target.FullPath);
+
+                    dlg.Context = wizard.Context;
+                    dlg.Filter = fileName + "|" + fileName + "|All Files (*.*)|*";
+
+                    if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
+                    {
+                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
+                    }
+                    else
+                    {
+                        dlg.SelectedUri = uri;
+
+                        if (dlg.ShowDialog() == DialogResult.OK)
+                        {
+                            result = dlg.SelectedUri;
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
