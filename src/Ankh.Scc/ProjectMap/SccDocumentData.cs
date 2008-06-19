@@ -138,7 +138,7 @@ namespace Ankh.Scc.ProjectMap
         internal void OnCookieLoad()
         {
             _initialUpdateCompleted = true;
-            _isDirty = GetIsDirty();
+            _isDirty = GetIsDirty(true);
         }
 
         internal void OnSaved()
@@ -221,7 +221,7 @@ namespace Ankh.Scc.ProjectMap
                 return;
 
             bool wasDirty = IsDirty;
-            bool dirty = GetIsDirty();
+            bool dirty = GetIsDirty(true);
 
             if (dirty != wasDirty)
             {
@@ -334,12 +334,12 @@ namespace Ankh.Scc.ProjectMap
         /// 	<c>true</c> if this instance is dirty; otherwise, <c>false</c>.
         /// </returns>
         /// <remarks>Gets the live data; or if that fails the cached data</remarks>
-        internal bool GetIsDirty()
-        {
-            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
+        internal bool GetIsDirty(bool fallback)
+		{
+			IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
 
             if(pdd == null)
-                return _isDirty;
+                return fallback && _isDirty;
 
             int dirty;
             return ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) ? (dirty != 0) : _isDirty;
