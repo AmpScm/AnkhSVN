@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Selection;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -76,5 +77,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="propertyBag">The property bag.</param>
         void LoadEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag propertyBag);
+
+        /// <summary>
+        /// Serializes the enlist data.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="writeData">if set to <c>true</c> [write data].</param>
+        void SerializeEnlistData(Stream store, bool writeData);
     }
 }

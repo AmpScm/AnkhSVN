@@ -13,6 +13,7 @@ namespace Ankh.VS
     {
         readonly IStream _comStream;
         bool _disposed;
+        bool _readOnly;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ComStreamWrapper"/> class.
@@ -20,12 +21,26 @@ namespace Ankh.VS
         /// <param name="comStream">The COM stream.</param>
         [CLSCompliant(false)]
         public ComStreamWrapper(IStream comStream)
+            : this(comStream, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ComStreamWrapper"/> class.
+        /// </summary>
+        /// <param name="comStream">The COM stream.</param>
+        /// <param name="readOnly">if set to <c>true</c> [read only].</param>
+        [CLSCompliant(false)]
+        public ComStreamWrapper(IStream comStream, bool readOnly)
         {
             if (comStream == null)
                 throw new ArgumentNullException("comStream");
 
             _comStream = comStream;
+            _readOnly = readOnly;
         }
+
+
         /// <summary>
         /// When overridden in a derived class, gets or sets the position within the current stream.
         /// </summary>
@@ -56,7 +71,7 @@ namespace Ankh.VS
         {
             get
             {
-                return true;
+                return !_readOnly;
             }
         }
 
@@ -98,10 +113,10 @@ namespace Ankh.VS
         {
             get
             {
-                long curPos = this.Position;
-                long endPos = Seek(0, SeekOrigin.End);
-                this.Position = curPos;
-                return endPos - curPos;
+                STATSTG[] sg = new STATSTG[1];
+                _comStream.Stat(sg, (uint)(STATFLAG.STATFLAG_DEFAULT));
+
+                return (long)sg[0].cbSize.QuadPart;                
             }
         }
 
@@ -164,6 +179,8 @@ namespace Ankh.VS
         {
             if (_disposed)
                 throw new ObjectDisposedException("ComStreamWrapper");
+            else if (!CanWrite)
+                throw new InvalidOperationException();
 
             ULARGE_INTEGER ul = new ULARGE_INTEGER();
             ul.QuadPart = (ulong)value;
@@ -207,6 +224,8 @@ namespace Ankh.VS
                 throw new ArgumentNullException("buffer");
             else if (_disposed)
                 throw new ObjectDisposedException("ComStreamWrapper");
+            else if (!CanWrite)
+                throw new InvalidOperationException();
 
             uint bytesWritten;
 

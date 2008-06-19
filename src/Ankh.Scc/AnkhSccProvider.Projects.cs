@@ -134,6 +134,11 @@ namespace Ankh.Scc
             set { _isDirty = value; }
         }
 
+        public bool IsSolutionLoaded
+        {
+            get { return _solutionLoaded; }
+        }
+
         /// <summary>
         /// Called by ProjectDocumentTracker when a solution is opened 
         /// </summary>

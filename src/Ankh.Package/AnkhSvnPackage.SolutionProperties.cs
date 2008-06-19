@@ -163,7 +163,8 @@ namespace Ankh.VSPackage
         }
 
         #region IVsPersistSolutionOpts
-        const string PendingChangeStream = AnkhId.SubversionSccName + "Pending";
+        const string SccPendingChangeStream = AnkhId.SubversionSccName + "Pending";
+        const string SccEnlistStream = AnkhId.SubversionSccName + "Enlist";
 
         public int LoadUserOptions(IVsSolutionPersistence pPersistence, uint grfLoadOpts)
         {
@@ -174,8 +175,8 @@ namespace Ankh.VSPackage
 
             try
             {
-                pPersistence.LoadPackageUserOpts(this, PendingChangeStream);
-
+                pPersistence.LoadPackageUserOpts(this, SccPendingChangeStream);
+                pPersistence.LoadPackageUserOpts(this, SccEnlistStream);
 
                 return VSConstants.S_OK;
             }
@@ -189,12 +190,17 @@ namespace Ankh.VSPackage
         {
             try
             {
-                using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream))
+                using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream, true))
                 {
                     switch (pszKey)
                     {
-                        case PendingChangeStream:
+                        case SccPendingChangeStream:
                             LoadPendingChanges(wrapper);
+                            break;
+                        case SccEnlistStream:
+                            IAnkhSccService scc = GetService<IAnkhSccService>();
+                            if (scc != null)
+                                scc.SerializeEnlistData(wrapper, false);
                             break;
 
                         default:
@@ -214,7 +220,15 @@ namespace Ankh.VSPackage
         {
             try
             {
-                pPersistence.SavePackageUserOpts(this, PendingChangeStream);
+                IAnkhSccService scc = GetService<IAnkhSccService>();
+                if (scc != null)
+                {
+                    if (scc.IsActive && scc.IsSolutionManaged)
+                    {
+                        pPersistence.SavePackageUserOpts(this, SccPendingChangeStream);
+                        pPersistence.SavePackageUserOpts(this, SccEnlistStream);
+                    }
+                }
 
                 return VSConstants.S_OK;
             }
@@ -230,12 +244,17 @@ namespace Ankh.VSPackage
             {
                 using (ComStreamWrapper wrapper = new ComStreamWrapper(pOptionsStream))
                 {
+                    IAnkhSccService scc;
                     switch (pszKey)
                     {
-                        case PendingChangeStream:
+                        case SccPendingChangeStream:
                             WritePendingChanges(wrapper);
                             break;
-
+                        case SccEnlistStream:
+                            scc = GetService<IAnkhSccService>();
+                            if (scc != null)
+                                scc.SerializeEnlistData(wrapper, true);
+                            break;
                         default:
                             // TODO: Add support for some service api for our services
                             break;
