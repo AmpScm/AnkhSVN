@@ -235,7 +235,7 @@ namespace Ankh.Scc
             // Copy the list to allow changes while we are busy
             foreach(SccDocumentData dd in new List<SccDocumentData>(_docMap.Values))
             {
-                if (dd.IsDirty && !dd.GetIsDirty())
+                if (dd.IsDirty && !dd.GetIsDirty(false))
                 {
                     // We marked this document as dirty and it still says its dirty; 
                     // so it probably was not dirty after all
