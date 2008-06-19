@@ -31,12 +31,6 @@ namespace Ankh.UI.MergeWizard
             NextPageRequired = false;
         }
 
-        protected override void OnPageChanging(WizardPageChangingEventArgs e)
-        {
-            // HACK: this should happen in OnPageChanged, but that fires too late
-            ((MergeWizard)Wizard).MergeSource = ((MergeSourceBasePageControlImpl)PageControl).MergeSource;
-        }
-
         /// <summary>
         /// Gets/Sets whether or not the next page is required.
         /// </summary>

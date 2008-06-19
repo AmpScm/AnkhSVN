@@ -26,5 +26,37 @@ namespace Ankh.UI.MergeWizard
             Description = Resources.MergeSourceTwoDifferentTreesPageHeaderMessage;
             PageControl.WizardPage = this;
         }
+
+        /// <summary>
+        /// Gets/Sets the first merge source.
+        /// </summary>
+        public string MergeSourceOne
+        {
+            get { return _mergeSourceOne; }
+            set { _mergeSourceOne = value; }
+        }
+
+        /// <summary>
+        /// Gets/Sets the second merge source.
+        /// </summary>
+        public string MergeSourceTwo
+        {
+            get { return _mergeSourceTwo; }
+            set { _mergeSourceTwo = value; }
+        }
+
+        /// <summary>
+        /// Gets/Sets whether or not merge source one and
+        /// merge source two have the same url.
+        /// </summary>
+        public bool HasSecondMergeSourceUrl
+        {
+            get { return _hasSecondMergeSourceUrl; }
+            set { _hasSecondMergeSourceUrl = value; }
+        }
+
+        private bool _hasSecondMergeSourceUrl = false;
+        private string _mergeSourceOne;
+        private string _mergeSourceTwo;
     }
 }

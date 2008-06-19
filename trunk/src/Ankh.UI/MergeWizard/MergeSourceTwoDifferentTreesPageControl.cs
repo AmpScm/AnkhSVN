@@ -139,6 +139,8 @@ namespace Ankh.UI.MergeWizard
                 {
                     WizardPage.Message = null;
                 }
+
+                ((MergeSourceTwoDifferentTreesPage)WizardPage).HasSecondMergeSourceUrl = false;
             }
             else
             {
@@ -149,6 +151,8 @@ namespace Ankh.UI.MergeWizard
                 toURLTextBox.Visible = true;
                 toURLTextBox.Text = fromURLTextBox.Text;
                 toURLTextBox.SelectAll();
+
+                ((MergeSourceTwoDifferentTreesPage)WizardPage).HasSecondMergeSourceUrl = true;
             }
         }
 
@@ -199,11 +203,15 @@ namespace Ankh.UI.MergeWizard
         private void fromURLTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
+
+            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceOne = fromURLTextBox.Text;
         }
 
         private void toURLTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
+
+            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceTwo = fromURLTextBox.Text;
         }
 
         private void MergeSourceTwoDifferentTreesPageControl_Load(object sender, EventArgs e)

@@ -60,6 +60,42 @@ namespace Ankh.UI.MergeWizard {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Mark each conflict and let me resolve later.
+        /// </summary>
+        internal static string ConflictHandlingMark {
+            get {
+                return ResourceManager.GetString("ConflictHandlingMark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolve the conflict using my version of the file.
+        /// </summary>
+        internal static string ConflictHandlingMine {
+            get {
+                return ResourceManager.GetString("ConflictHandlingMine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prompt me for each conflict and let me decide.
+        /// </summary>
+        internal static string ConflictHandlingPrompt {
+            get {
+                return ResourceManager.GetString("ConflictHandlingPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolve the conflict using the repository version of the file.
+        /// </summary>
+        internal static string ConflictHandlingTheirs {
+            get {
+                return ResourceManager.GetString("ConflictHandlingTheirs", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap ErrorImage {
             get {
                 object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
@@ -253,6 +289,24 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please review your merge configuration below and feel free to revisit previous pages to make any necessary changes..
+        /// </summary>
+        internal static string MergeSummaryPageHeaderMessage {
+            get {
+                return ResourceManager.GetString("MergeSummaryPageHeaderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merge Summary.
+        /// </summary>
+        internal static string MergeSummaryPageHeaderTitle {
+            get {
+                return ResourceManager.GetString("MergeSummaryPageHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select the type of merge to perform.
         /// </summary>
         internal static string MergeTypePageHeaderMessage {
@@ -294,11 +348,29 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no revisions to unblock from the selected path..
         /// </summary>
         internal static string NoRevisionsToUnblock {
             get {
                 return ResourceManager.GetString("NoRevisionsToUnblock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        internal static string NotApplicableShort {
+            get {
+                return ResourceManager.GetString("NotApplicableShort", resourceCulture);
             }
         }
         
@@ -417,6 +489,15 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("TwoDifferentTreesImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
