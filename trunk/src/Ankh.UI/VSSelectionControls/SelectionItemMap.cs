@@ -189,13 +189,19 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_Caption:
                     case __VSHPROPID.VSHPROPID_Name:
                     case __VSHPROPID.VSHPROPID_TypeName:
-                        pvar = _owner.GetText(lv);
+						if (lv != null)
+							pvar = _owner.GetText(lv);
+						else
+							pvar = null;
                         break;
                     case __VSHPROPID.VSHPROPID_IconImgList:
                         pvar = (int)_owner.GetImageList();
                         break;
                     case __VSHPROPID.VSHPROPID_IconIndex:
-                        pvar = _owner.GetImageListIndex(lv);
+						if(lv != null)
+							pvar = _owner.GetImageListIndex(lv);
+						else
+							pvar = -1;
                         break;
                     case __VSHPROPID.VSHPROPID_Expandable:
                     case __VSHPROPID.VSHPROPID_ExpandByDefault:
