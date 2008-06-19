@@ -33,11 +33,13 @@ namespace Ankh.Scc
     partial class AnkhSccProvider : IVsAsynchOpenFromScc
     {
         bool _solutionLoaded;
+        readonly Dictionary<string, EnlistBase> _enlistStore = new Dictionary<string, EnlistBase>();
         readonly List<EnlistData> _enlistState = new List<EnlistData>();
         bool _enlistCompleted;// = false;
 
         void ClearEnlistState()
         {
+            _enlistStore.Clear();
             _enlistState.Clear();
             _enlistCompleted = false;
         }
@@ -241,7 +243,42 @@ namespace Ankh.Scc
 #endif
         }
 
-        sealed class EnlistData
+        class EnlistBase
+        {
+            readonly string _projectId;
+
+            public EnlistBase(string projectId)
+            {
+                if (string.IsNullOrEmpty(projectId))
+                    throw new ArgumentNullException("projectId");
+
+                _projectId = projectId;
+            }
+
+            public string ProjectId
+            {
+                get { return _projectId; }
+            }
+
+            string[] _userData;
+
+            public virtual void LoadUserData(List<string> values)
+            {
+                _userData = values.ToArray();
+            }
+
+            internal string[] GetUserData()
+            {
+                return (string[])(_userData ?? new string[0]).Clone();
+            }
+
+            internal bool ShouldSerialize()
+            {
+                return true;
+            }
+        }
+
+        sealed class EnlistData : EnlistBase
         {
             readonly string _projectId;
             readonly string _directory;
@@ -251,10 +288,9 @@ namespace Ankh.Scc
             readonly string _enlistType;
 
             public EnlistData(string projectId, string directory, string file, Uri uri, string enlistType)
+                : base(projectId)
             {
-                if (string.IsNullOrEmpty(projectId))
-                    throw new ArgumentNullException("projectId");
-                else if (string.IsNullOrEmpty(directory))
+                if (string.IsNullOrEmpty(directory))
                     throw new ArgumentNullException("directory");
                 else if (uri == null)
                     throw new ArgumentNullException("uri");
@@ -269,11 +305,6 @@ namespace Ankh.Scc
 
                 _uri = uri;
                 _enlistType = enlistType;
-            }
-
-            public string ProjectId
-            {
-                get { return _projectId; }
             }
 
             internal string RawFile
@@ -305,6 +336,11 @@ namespace Ankh.Scc
             {
                 get { return _enlistType; }
             }
+
+            public override void LoadUserData(List<string> values)
+            {
+                base.LoadUserData(values);
+            }            
         }
 
         void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
@@ -373,9 +409,17 @@ namespace Ankh.Scc
             _enlistCompleted = true;
             _solutionDirectory = _solutionFile = null; // Clear cache
 
-#if DEBUG_ENLISTMENT
             if (_enlistState.Count == 0)
                 return; // Nothing to do here
+
+            IVsSolutionPersistence ps = GetService<IVsSolutionPersistence>(typeof(SVsSolutionPersistence));
+            if (ps != null)
+            {
+                int hr = ps.LoadPackageUserOpts((IVsPersistSolutionOpts)GetService<Ankh.UI.IAnkhPackage>(), AnkhId.SubversionSccName + "Enlist");
+                
+            }
+
+#if DEBUG_ENLISTMENT
 
             IVsSolution2 sol = GetService<IVsSolution2>(typeof(SVsSolution));
             // TODO: Load previous enlist state
@@ -463,6 +507,96 @@ namespace Ankh.Scc
                 GC.KeepAlive(enlistLocal);
             }
 #endif
+        }
+
+        /// <summary>
+        /// Serializes the enlist data.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="writeData">if set to <c>true</c> [write data].</param>
+        void IAnkhSccService.SerializeEnlistData(Stream store, bool writeData)
+        {
+            if (writeData)
+                WriteEnlistData(store);
+            else
+                ReadEnlistUserData(store);
+        }
+
+        const int EnlistSerializerVersion = 1;
+
+        private void ReadEnlistUserData(Stream store)
+        {
+            if (store.Length < 2*sizeof(int))
+                return;
+
+            using (BinaryReader br = new BinaryReader(store))
+            {
+                int version = br.ReadInt32(); // The enlist version used to write the data
+                int requiredVersion = br.ReadInt32(); // All enlist versions older then this should ignore all data
+
+                if ((requiredVersion > EnlistSerializerVersion) || version < requiredVersion)
+                    return; // Older versions (we) should ignore this data
+
+                int count = br.ReadInt32();
+
+                for (int i = 0; i < count; i++)
+                {
+                    Guid project = new Guid(br.ReadBytes(16));
+                    int stringCount = br.ReadInt32();
+
+                    List<string> values = new List<string>();
+
+                    for (int j = 0; i < stringCount; j++)
+                        values.Add(br.ReadString());
+
+                    string projectId = project.ToString("B").ToUpperInvariant();
+
+                    if (!_enlistStore.ContainsKey(projectId))
+                    {   // Don't overwrite; we load 1 or 2 times during solution opening
+
+                        EnlistBase enlist = new EnlistBase(projectId);
+
+                        enlist.LoadUserData(values);
+                        _enlistStore[projectId] = enlist;
+                    }                    
+                }
+            }
+        }
+
+        private void WriteEnlistData(Stream store)
+        {
+            using (BinaryWriter bw = new BinaryWriter(store))
+            {
+                bw.Write((int)1); // Minimum version required to read these settings; update if incompatible
+                bw.Write((int)EnlistSerializerVersion); // Writer version
+
+                List<EnlistBase> list = new List<EnlistBase>();
+                IVsSolution sol = GetService<IVsSolution2>(typeof(SVsSolution));
+
+                foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
+                {
+                    Guid g;
+                    if(!ErrorHandler.Succeeded(sol.GetGuidOfProject(hier, out g)))
+                        continue;
+
+                    string projectId = g.ToString("B").ToUpperInvariant();
+
+                    EnlistBase enlist;
+                    if(_enlistStore.TryGetValue(projectId, out enlist) && enlist.ShouldSerialize())
+                        list.Add(enlist);
+                }
+
+                bw.Write((int)list.Count);
+                foreach (EnlistBase b in list)
+                {
+                    string[] values = b.GetUserData();
+
+                    bw.Write((int)values.Length);
+
+                    foreach (string s in values)
+                        bw.Write(s);
+                }
+            }
         }
 
         string Quote(string value)
