@@ -11,6 +11,8 @@ using SharpSvn;
 using WizardFramework;
 using System.Threading;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.RepositoryOpen;
+using System.IO;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -223,7 +225,31 @@ namespace Ankh.UI.MergeWizard
             }
             else
             {
-                MessageBox.Show("File-based merge isn't supported yet.  Check back in a day.", "Unsupported", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
+                {
+                    MergeWizard wizard = ((MergeWizard)WizardPage.Wizard);
+                    Uri uri;
+                    string fileName = Path.GetFileName(wizard.MergeTarget.FullPath);
+
+                    dlg.Context = wizard.Context;
+                    dlg.Filter = fileName + "|" + fileName + "|All Files (*.*)|*";
+
+                    if (!Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out uri))
+                    {
+                        WizardPage.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
+
+                        return;
+                    }
+
+                    dlg.SelectedUri = uri;
+
+                    if (dlg.ShowDialog() == DialogResult.OK)
+                    {
+                        if (dlg.SelectedUri != null)
+                            mergeFromComboBox.Text = dlg.SelectedUri.ToString();
+                    }
+
+                }
             }
         }
         #endregion
