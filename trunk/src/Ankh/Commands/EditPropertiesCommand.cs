@@ -8,6 +8,7 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using SharpSvn.Implementation;
 using Ankh.Ids;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -124,9 +125,10 @@ namespace Ankh.Commands
                             }
                         }
                     }
-					// TODO: implement propset
-				}
-			}
-		}
+				} // if
+			} // using
+
+			e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
+		} // OnExecute
 	}
 }
