@@ -201,56 +201,12 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void selectButton_Click(object sender, EventArgs e)
         {
-            if (((MergeWizard)WizardPage.Wizard).MergeTarget.IsDirectory)
-            {
-                using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
-                {
-                    Uri uri;
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
+                ((MergeWizard)WizardPage.Wizard).MergeTarget,
+                mergeFromComboBox.Text);
 
-                    if (!Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out uri))
-                    {
-                        WizardPage.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
-
-                        return;
-                    }
-
-                    dlg.SelectedUri = uri;
-
-                    if (dlg.ShowDialog(((MergeWizard)WizardPage.Wizard).Context) == DialogResult.OK)
-                    {
-                        if (dlg.SelectedUri != null)
-                            mergeFromComboBox.Text = dlg.SelectedUri.ToString();
-                    }
-                }
-            }
-            else
-            {
-                using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
-                {
-                    MergeWizard wizard = ((MergeWizard)WizardPage.Wizard);
-                    Uri uri;
-                    string fileName = Path.GetFileName(wizard.MergeTarget.FullPath);
-
-                    dlg.Context = wizard.Context;
-                    dlg.Filter = fileName + "|" + fileName + "|All Files (*.*)|*";
-
-                    if (!Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out uri))
-                    {
-                        WizardPage.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.ERROR);
-
-                        return;
-                    }
-
-                    dlg.SelectedUri = uri;
-
-                    if (dlg.ShowDialog() == DialogResult.OK)
-                    {
-                        if (dlg.SelectedUri != null)
-                            mergeFromComboBox.Text = dlg.SelectedUri.ToString();
-                    }
-
-                }
-            }
+            if (uri != null)
+                mergeFromComboBox.Text = uri.ToString();
         }
         #endregion
     }

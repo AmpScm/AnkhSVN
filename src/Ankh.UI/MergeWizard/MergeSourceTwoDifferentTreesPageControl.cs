@@ -234,6 +234,26 @@ namespace Ankh.UI.MergeWizard
         {
             DisplayLogViewerAndRetrieveRevisions(sender);
         }
+
+        private void fromURLSelectButton_Click(object sender, EventArgs e)
+        {
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
+                ((MergeWizard)WizardPage.Wizard).MergeTarget,
+                fromURLTextBox.Text);
+
+            if (uri != null)
+                fromURLTextBox.Text = uri.ToString();
+        }
+
+        private void toURLSelectButton_Click(object sender, EventArgs e)
+        {
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
+                ((MergeWizard)WizardPage.Wizard).MergeTarget,
+                toURLTextBox.Text);
+
+            if (uri != null)
+                toURLTextBox.Text = uri.ToString();
+        }
         #endregion
     }
 }

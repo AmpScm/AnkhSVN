@@ -100,6 +100,7 @@
             resources.ApplyResources(this.fromURLSelectButton, "fromURLSelectButton");
             this.fromURLSelectButton.Name = "fromURLSelectButton";
             this.fromURLSelectButton.UseVisualStyleBackColor = true;
+            this.fromURLSelectButton.Click += new System.EventHandler(this.fromURLSelectButton_Click);
             // 
             // groupBox1
             // 
@@ -163,6 +164,7 @@
             resources.ApplyResources(this.toURLSelectButton, "toURLSelectButton");
             this.toURLSelectButton.Name = "toURLSelectButton";
             this.toURLSelectButton.UseVisualStyleBackColor = true;
+            this.toURLSelectButton.Click += new System.EventHandler(this.toURLSelectButton_Click);
             // 
             // MergeSourceTwoDifferentTreesPageControl
             // 

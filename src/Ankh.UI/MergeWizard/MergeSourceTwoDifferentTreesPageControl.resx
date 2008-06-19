@@ -607,6 +607,6 @@
     <value>MergeSourceTwoDifferentTreesPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3084.26797, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3092.26108, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
