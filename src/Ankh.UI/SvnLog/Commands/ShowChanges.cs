@@ -17,6 +17,12 @@ namespace Ankh.UI.SvnLog.Commands
         TempFileCollection _collection = new TempFileCollection();
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+			foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+			{
+				return;
+			}
+
+			e.Enabled = false; 
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -40,6 +46,7 @@ namespace Ankh.UI.SvnLog.Commands
                 using (MemoryStream ms = new MemoryStream())
                 using(StreamReader reader = new StreamReader(ms))
                 {
+					// BH: Why do we always diff over the project root instead of the selected location?
                     client.Diff(new SvnUriTarget(e.GetService<IAnkhSolutionSettings>().ProjectRootUri), range, ms);
                     ms.Flush();
                     ms.Position = 0;
