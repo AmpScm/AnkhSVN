@@ -6,6 +6,7 @@ using Microsoft.VisualStudio;
 using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.Selection;
+using Ankh.Commands;
 
 namespace Ankh.Scc
 {
@@ -153,6 +154,7 @@ namespace Ankh.Scc
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
 
+            List<SvnItem> mustLockFiles = new List<SvnItem>();
             if (rgpszMkDocuments != null)
             {
                 for (int i = 0; i < cFiles; i++)
@@ -164,10 +166,31 @@ namespace Ankh.Scc
 
                     if (item.ReadOnlyMustLock)
                     {
-                        // TODO: Prompt user to lock the file
+                        if (queryFlags == tagVSQueryEditFlags.QEF_ReportOnly)
+                        {
+                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                                | tagVSQueryEditResultFlags.QER_EditNotPossible
+                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                            break;
+                        }
 
+                        mustLockFiles.Add(item);
+                    }
+                }
+            }
+            if (mustLockFiles.Count > 0)
+            {
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockFiles);
+
+                foreach (SvnItem i in mustLockFiles)
+                {
+                    if (i.ReadOnlyMustLock)
+                    {
+                        // User has probably canceled the lock operation, or it failed.
                         pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout 
+                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
                             | tagVSQueryEditResultFlags.QER_EditNotPossible
                             | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
                         break;
@@ -196,8 +219,9 @@ namespace Ankh.Scc
                 {
                     if (item.ReadOnlyMustLock)
                     {
-                        // TODO: Prompt user to lock the file
-                        pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+                        IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                        cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[]{item});
+                        pdwQSResult = item.ReadOnlyMustLock ? (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel : (uint)tagVSQuerySaveResult.QSR_SaveOK;
                         return VSConstants.S_OK;
                     }
 
