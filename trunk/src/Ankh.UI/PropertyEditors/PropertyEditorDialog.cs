@@ -5,6 +5,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI
 {
@@ -13,16 +14,26 @@ namespace Ankh.UI
     /// </summary>
     public partial class PropertyEditorDialog : System.Windows.Forms.Form
     {
+        IAnkhServiceProvider _context;
+        List<PropertyItem> _propItems;
+        IPropertyEditor _currentEditor;
+
         public PropertyEditorDialog(string svnItemPath)
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-            
-			this.propItems = new List<PropertyItem>();
+
+            this._propItems = new List<PropertyItem>();
 
             this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
+        }
+
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; }
         }
 
         /// <summary>
@@ -33,12 +44,12 @@ namespace Ankh.UI
             get
             {
                 return (PropertyItem[])
-                    this.propItems.ToArray();
+                    _propItems.ToArray();
             }
             set
             {
-                this.propItems.Clear();
-                this.propItems.AddRange(value);
+                _propItems.Clear();
+                _propItems.AddRange(value);
                 this.PopulateListView();
             }
         }
@@ -46,16 +57,16 @@ namespace Ankh.UI
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -64,8 +75,8 @@ namespace Ankh.UI
         private void PopulateListView()
         {
             this.propListView.Items.Clear();
-            ListVisitor visitor= new ListVisitor(this.propListView);
-            foreach (PropertyItem item in this.propItems)
+            ListVisitor visitor = new ListVisitor(this.propListView);
+            foreach (PropertyItem item in this._propItems)
                 item.AcceptVisitor(visitor);
         }
         #region class ListVisitor
@@ -81,24 +92,24 @@ namespace Ankh.UI
 
             public void VisitTextPropertyItem(TextPropertyItem item)
             {
-				// HACK: find out if all this .Replace is really what we want/need
-                AddItem( new string[]{ item.Name, 
-                                         item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item );
+                // HACK: find out if all this .Replace is really what we want/need
+                AddItem(new string[]{ item.Name, 
+                                         item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item);
             }
 
             public void VisitBinaryPropertyItem(BinaryPropertyItem item)
             {
-                this.AddItem( new string[]{ item.Name, "<binary value>" }, item );
-                
+                this.AddItem(new string[] { item.Name, "<binary value>" }, item);
+
             }
 
             private void AddItem(string[] items, PropertyItem item)
             {
-                ListViewItem listItem = new ListViewItem( items );
+                ListViewItem listItem = new ListViewItem(items);
                 listItem.Tag = item;
                 this.list.Items.Add(listItem);
             }
-                                                                          
+
             private ListView list;
         }
         #endregion
@@ -109,27 +120,41 @@ namespace Ankh.UI
         private void editButton_Click(object sender, System.EventArgs e)
         {
             PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
-            int index = this.propItems.IndexOf(item);
+            int index = this._propItems.IndexOf(item);
+
+            IUIService ui = null;
+            if (Context != null)
+                ui = Context.GetService<IUIService>();
+
             PropertyDialog pDialog = new PropertyDialog(item);
-            if (pDialog.ShowDialog(this) == DialogResult.OK)
+
+            DialogResult dr;
+
+            if (ui != null)
+                dr = ui.ShowDialog(pDialog);
+            else
+                dr = pDialog.ShowDialog(this);
+
+            if (dr != DialogResult.OK)
+                return;
+
+            PropertyItem editedItem = pDialog.GetPropertyItem();
+            if (editedItem != null)
             {
-                PropertyItem editedItem = pDialog.GetPropertyItem();
-                if (editedItem != null)
+                int otherIndex = -1; ;
+                if (!item.Name.Equals(editedItem.Name)
+                    && ((otherIndex = TryFindItem(editedItem.Name)) > -1)
+                    && otherIndex != index)
                 {
-                    int otherIndex = -1; ;
-                    if (!item.Name.Equals(editedItem.Name)
-                        && ((otherIndex = TryFindItem(editedItem.Name)) > -1) 
-                        && otherIndex != index)
-                    {
-                        // there is already a property with the same name
-                        // TODO
-                        // Delete selected item AND replace the existing item ???
-                    }
-                    else {
-                        this.propItems[index] = editedItem;
-                        this.PopulateListView();
-                        this.UpdateButtons();
-                    }
+                    // there is already a property with the same name
+                    // TODO
+                    // Delete selected item AND replace the existing item ???
+                }
+                else
+                {
+                    this._propItems[index] = editedItem;
+                    this.PopulateListView();
+                    this.UpdateButtons();
                 }
             }
         }
@@ -142,7 +167,7 @@ namespace Ankh.UI
         private void deleteButton_Click(object sender, System.EventArgs e)
         {
             PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
-            this.propItems.Remove(item);
+            this._propItems.Remove(item);
             this.PopulateListView();
             this.UpdateButtons();
         }
@@ -165,11 +190,11 @@ namespace Ankh.UI
                     {
                         // There is already a property with the same name.
                         // TODO ask user
-                        this.propItems[index] = item;
+                        this._propItems[index] = item;
                     }
                     else
                     {
-                        this.propItems.Add(item);
+                        this._propItems.Add(item);
                     }
                     this.PopulateListView();
                     this.UpdateButtons();
@@ -180,7 +205,7 @@ namespace Ankh.UI
         private int TryFindItem(string key)
         {
             int i = 0;
-            foreach (PropertyItem item in this.propItems)
+            foreach (PropertyItem item in this._propItems)
             {
                 if (key.Equals(item.Name))
                 {
@@ -200,8 +225,8 @@ namespace Ankh.UI
         private void propListView_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             this.UpdateButtons();
-        }   
-        
+        }
+
         /// <summary>
         /// Validate the form if the type of editor is changed.
         /// </summary>
@@ -217,17 +242,17 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="editor"></param>
         private void SetNewEditor(IPropertyEditor editor)
-        { 
-            if (this.currentEditor != null)
+        {
+            if (this._currentEditor != null)
             {
                 //Unsubscribe the current editor from the Changed event.
-                this.currentEditor.Changed -= new EventHandler( 
+                this._currentEditor.Changed -= new EventHandler(
                     this.currentEditor_Changed);
             }
-            
+
             //Sets the current editor to match the selected item.
-            this.currentEditor = editor;
-            this.currentEditor.Changed += new EventHandler( 
+            this._currentEditor = editor;
+            this._currentEditor.Changed += new EventHandler(
                 this.currentEditor_Changed);
 
             this.ValidateForm();
@@ -236,7 +261,7 @@ namespace Ankh.UI
         /// <summary>
         /// Validate the form.
         /// </summary>
-        private void ValidateForm ()
+        private void ValidateForm()
         {
         }
 
@@ -250,9 +275,6 @@ namespace Ankh.UI
             this.deleteButton.Enabled = selection != null;
             this.editButton.Enabled = selection != null;
         }
-
-        private List<PropertyItem> propItems;
-        private IPropertyEditor currentEditor;        
     }
 
     /// <summary>
@@ -260,27 +282,27 @@ namespace Ankh.UI
     /// </summary>
     public abstract class PropertyItem
     {
-        protected PropertyItem( )
+        protected PropertyItem()
         {
-            this.name="";
+            this.name = "";
         }
-        
+
 
         /// <summary>
         /// Accepts a visitor.
         /// </summary>
         /// <param name="visitor">A visitor</param>
         public abstract void AcceptVisitor(IPropertyItemVisitor visitor);
-        
+
         /// <summary>
         /// The name of the property.
         /// </summary>
         public string Name
-        { 
-            get{ return this.name;}
-            set { this.name = value;}
+        {
+            get { return this.name; }
+            set { this.name = value; }
         }
-         
+
         private string name;
     }
     /// <summary>
@@ -305,12 +327,12 @@ namespace Ankh.UI
         /// </summary>
         public string Text
         {
-            get { return this.text;}
+            get { return this.text; }
         }
- 
-        private string text;    
+
+        private string text;
     }
-      
+
     /// <summary>
     /// Represents a binary property.
     /// </summary>
@@ -320,7 +342,7 @@ namespace Ankh.UI
         {
             this.data = data;
         }
-    
+
         /// <summary>
         /// Accepts a visitor.
         /// </summary>
@@ -335,10 +357,10 @@ namespace Ankh.UI
         /// </summary>
         public ICollection<byte> Data
         {
-            get { return this.data;}
+            get { return this.data; }
         }
- 
-        private ICollection<byte> data;    
+
+        private ICollection<byte> data;
     }
 
     /// <summary>
@@ -351,7 +373,7 @@ namespace Ankh.UI
         /// </summary>
         /// <param name="item"></param>
         void VisitTextPropertyItem(TextPropertyItem item);
-        
+
         /// <summary>
         /// Visit a binary property.
         /// </summary>
