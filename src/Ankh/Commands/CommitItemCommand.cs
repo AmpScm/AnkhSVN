@@ -232,7 +232,6 @@ namespace Ankh.Commands
 
         private void DoCommit(object sender, ProgressWorkerArgs e)
         {
-            _args.ThrowOnError = false;
             e.Client.Commit(this.paths, _args, out commitInfo);
         }
 
