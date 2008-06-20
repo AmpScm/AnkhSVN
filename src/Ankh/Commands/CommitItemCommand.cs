@@ -65,7 +65,7 @@ namespace Ankh.Commands
                     {
                         foreach(PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
                         {
-                            if(pc.CanCommit && !pfm.ContainsPath(pc.FullPath))
+                            if(!pfm.ContainsPath(pc.FullPath))
                                 return;
                         }
                     }
@@ -128,13 +128,12 @@ namespace Ankh.Commands
                         {
                             foreach (PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
                             {
-                                if (pc.CanCommit)
+                                if (!ticked.Contains(pc.FullPath))
                                 {
-                                    if (!ticked.Contains(pc.FullPath) && !projectMapper.ContainsPath(pc.FullPath))
-                                    {
-                                        ticked.Add(pc.FullPath);
+                                    ticked.Add(pc.FullPath);
+
+                                    if(!projectMapper.ContainsPath(pc.FullPath))
                                         selectedItems.Add(pc.Item);
-                                    }
                                 }
                             }
                         }
