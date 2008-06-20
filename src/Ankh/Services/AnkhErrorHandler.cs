@@ -38,7 +38,7 @@ namespace Ankh
                 // BH: Uses reflection to find the best match based on the exception??
 
                 Type t = typeof(AnkhErrorHandler);
-                MethodInfo method = t.GetMethod("DoHandle", new Type[] { ex.GetType() });
+                MethodInfo method = t.GetMethod("DoHandle", BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { ex.GetType() }, null);
 
                 if (method != null)
                     method.Invoke(this, new object[] { ex });
