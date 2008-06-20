@@ -110,7 +110,7 @@ namespace Ankh
         {
             MessageBox.Show(
                 "You failed to authenticate against the remote repository. ",
-                "Authorization failed", MessageBoxButtons.OK,
+                "Authentication failed", MessageBoxButtons.OK,
                 MessageBoxIcon.Warning);
         }
 
