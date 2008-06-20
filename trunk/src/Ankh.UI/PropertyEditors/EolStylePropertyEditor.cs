@@ -24,9 +24,6 @@ namespace Ankh.UI
             CreateMyToolTip();
 
             this.selectedValue = "native";
-
-            // TODO: Add any initialization after the InitForm call
-
         }
 
         public void Reset()
