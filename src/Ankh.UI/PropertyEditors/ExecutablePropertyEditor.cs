@@ -23,9 +23,6 @@ namespace Ankh.UI
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
-
-            // TODO: Add any initialization after the InitForm call
-
         }
 
         public void Reset()
