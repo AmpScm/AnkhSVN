@@ -14,9 +14,11 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
             this.ignoreGroupBox = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ignoreGroupBox.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -63,13 +65,11 @@ namespace Ankh.UI
         }
         #endregion
 
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.TextBox ignoreTextBox;
         private System.Windows.Forms.GroupBox ignoreGroupBox;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolTip conflictToolTip;
+        private System.ComponentModel.IContainer components;
         
     }
 }

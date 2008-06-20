@@ -13,11 +13,13 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.nativeRadioButton = new System.Windows.Forms.RadioButton();
             this.lfRadioButton = new System.Windows.Forms.RadioButton();
             this.crRadioButton = new System.Windows.Forms.RadioButton();
             this.crlfRdioButton = new System.Windows.Forms.RadioButton();
             this.eolStyleGroupBox = new System.Windows.Forms.GroupBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.eolStyleGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -89,5 +91,7 @@ namespace Ankh.UI
         private System.Windows.Forms.RadioButton crRadioButton;
         private System.Windows.Forms.RadioButton crlfRdioButton;
         private System.Windows.Forms.GroupBox eolStyleGroupBox;
+        private System.Windows.Forms.ToolTip conflictToolTip;
+        private System.ComponentModel.IContainer components;
     }
 }
