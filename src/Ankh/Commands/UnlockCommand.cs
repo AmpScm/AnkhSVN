@@ -20,11 +20,11 @@ namespace Ankh.Commands
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
-                //if (item.IsVersioned && item.IsLocked)
+                if (item.IsLocked)
                     return;
 
             }
-            e.Enabled = false;
+            e.Enabled = false; // No need to unlock anything if we are not versioned or not locked
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -33,12 +33,12 @@ namespace Ankh.Commands
 
             psi.VisibleFilter += delegate(SvnItem item)
             {
-				return true;// item.IsLocked;
+				return item.IsLocked;
             };
 
             psi.CheckedFilter += delegate(SvnItem item)
             {
-				return true;// item.IsLocked;
+				return item.IsLocked;
             };
             
             PathSelectorResult psr;
@@ -64,25 +64,20 @@ namespace Ankh.Commands
             if(files.Count == 0)
                 return;
 
-            e.GetService<IProgressRunner>().Run("Unlocking",
-                delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    SvnUnlockArgs ua = new SvnUnlockArgs();
-					ua.SvnError += delegate(object errorSender, SvnErrorEventArgs error)
-					{
-						if (error.Exception.SvnErrorCode == SvnErrorCode.SVN_ERR_CLIENT_MISSING_LOCK_TOKEN)
-						{
-							error.Cancel = true; // File is already unlocked, probably by another client, cancel this exception.
+            try
+            {
+                e.GetService<IProgressRunner>().Run("Unlocking",
+                    delegate(object sender, ProgressWorkerArgs ee)
+                    {
+                        SvnUnlockArgs ua = new SvnUnlockArgs();
 
-							// This schedule should not be removed, the error indicates our working copy state was wrong
-							e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
-						}
-					};
-                    ee.Client.Unlock(files, ua);
-                });
-
-			// TODO: this can be removed when switching to Subversion 1.6
-			e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
+                        ee.Client.Unlock(files, ua);
+                    });
+            }
+            finally
+            {
+                e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
+            }
         }
 	}
 }
