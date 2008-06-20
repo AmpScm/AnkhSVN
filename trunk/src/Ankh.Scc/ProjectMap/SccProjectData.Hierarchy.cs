@@ -19,7 +19,7 @@ namespace Ankh.Scc.ProjectMap
                     _hierarchyEventsCookie = cookie;
                 }
             }
-            else if(!hook)
+            else if(!hook && (_hierarchyEventsCookie != 0))
             {
                 cookie = _hierarchyEventsCookie;
                 _hierarchyEventsCookie = 0;

@@ -192,7 +192,7 @@ namespace Ankh.UI.VSSelectionControls
 						if (lv != null)
 							pvar = _owner.GetText(lv);
 						else
-							pvar = null;
+							pvar = "Pending Change";
                         break;
                     case __VSHPROPID.VSHPROPID_IconImgList:
                         pvar = (int)_owner.GetImageList();
@@ -209,6 +209,13 @@ namespace Ankh.UI.VSSelectionControls
                         break;
                     case __VSHPROPID.VSHPROPID_StateIconIndex:
                         pvar = 0;
+                        break;
+                    case __VSHPROPID.VSHPROPID_ParentHierarchy:
+                    case (__VSHPROPID)__VSHPROPID2.VSHPROPID_StatusBarClientText:
+                        pvar = null;
+                        break;
+                    case __VSHPROPID.VSHPROPID_ParentHierarchyItemid:
+                        pvar = VSConstants.VSITEMID_NIL;
                         break;
                     default:
                         pvar = null;
