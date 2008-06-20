@@ -121,6 +121,17 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="addButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAOpJREFUOE+VkbEN
+        wjAQRS9j0NAxAAUlPXQ0iJYd0mSEVClZgJIJ2IOSjkEOf/u+c5GMSSKdIkv33v2zG1nw9b0o27tOmgVo
+        aoVAdVAvmiUBwKKA59kCgKmQIlU9yfGtYjVNMKYpCww6tKq+IEt3UJscmggNjyTYXAJyTn+fpLx7EGxv
+        oq/POD0LWtHVKTzj7p6fcioxeP+UKPFgPFMQ0sj6WpCYAM2MDohwFiBBTYDJnI7d4/42Hf8I1wSECBLG
+        /nUBbiSsEZsw2Z4TIApr/Z7O66QAe1rxDjJcjO/fgzBS8MK491/YizxUAb9Lax/0OZQDLgAAAABJRU5E
+        rkJggg==
+</value>
+  </data>
   <data name="refreshButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

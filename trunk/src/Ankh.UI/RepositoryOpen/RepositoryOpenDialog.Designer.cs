@@ -46,6 +46,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.fileTypeBox = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.addButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,6 +82,7 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.urlLabel,
             this.urlBox,
+            this.addButton,
             this.refreshButton,
             this.dirUpButton,
             this.toolStripSeparator,
@@ -225,6 +227,17 @@
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Open from Subversion";
             // 
+            // addButton
+            // 
+            this.addButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addButton.Image = ((System.Drawing.Image)(resources.GetObject("addButton.Image")));
+            this.addButton.ImageTransparentColor = System.Drawing.Color.White;
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(23, 22);
+            this.addButton.Text = "Add url";
+            this.addButton.ToolTipText = "Add repository url";
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
             // RepositoryOpenDialog
             // 
             this.AcceptButton = this.openButton;
@@ -273,5 +286,6 @@
         private System.Windows.Forms.ToolStripButton versionButton;
         private System.Windows.Forms.ToolStripLabel urlLabel;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolStripButton addButton;
     }
 }
