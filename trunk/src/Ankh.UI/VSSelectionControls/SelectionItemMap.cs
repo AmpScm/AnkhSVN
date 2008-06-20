@@ -81,7 +81,11 @@ namespace Ankh.UI.VSSelectionControls
                 if (_eventHandlers != null)
                     foreach (IVsHierarchyEvents h in _eventHandlers.Values)
                     {
-                        h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                        try
+                        {
+                            h.OnItemAdded(VSConstants.VSITEMID_ROOT, VSConstants.VSITEMID_ROOT, id);
+                        }
+                        catch { }
                     }
 
                 return id;
@@ -121,7 +125,11 @@ namespace Ankh.UI.VSSelectionControls
 
                         foreach (IVsHierarchyEvents h in _eventHandlers.Values)
                         {
-                            h.OnItemDeleted(id);
+                            try
+                            {
+                                h.OnItemDeleted(id);
+                            }
+                            catch { }
                         }
                     }
                 }
@@ -183,8 +191,16 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_FirstChild:
                     case __VSHPROPID.VSHPROPID_NextSibling:
                     case __VSHPROPID.VSHPROPID_NextVisibleSibling:
-
-                        pvar = unchecked((int)VSConstants.VSITEMID_NIL);
+                        pvar = VSConstants.VSITEMID_NIL;
+                        break;
+                    case __VSHPROPID.VSHPROPID_Root:
+                        pvar = VSConstants.VSITEMID_ROOT;
+                        break;
+                    case __VSHPROPID.VSHPROPID_TypeGuid:                    
+                        pvar = typeof(SelectionItemMap).GUID;
+                        break;
+                    case __VSHPROPID.VSHPROPID_CmdUIGuid:
+                        pvar = Guid.Empty;
                         break;
                     case __VSHPROPID.VSHPROPID_Caption:
                     case __VSHPROPID.VSHPROPID_Name:
@@ -204,11 +220,12 @@ namespace Ankh.UI.VSSelectionControls
 							pvar = -1;
                         break;
                     case __VSHPROPID.VSHPROPID_Expandable:
+                    case __VSHPROPID.VSHPROPID_Expanded:
                     case __VSHPROPID.VSHPROPID_ExpandByDefault:
                         pvar = false;
                         break;
                     case __VSHPROPID.VSHPROPID_StateIconIndex:
-                        pvar = 0;
+                        pvar = (int)VsStateIcon.STATEICON_NOSTATEICON;
                         break;
                     case __VSHPROPID.VSHPROPID_ParentHierarchy:
                     case (__VSHPROPID)__VSHPROPID2.VSHPROPID_StatusBarClientText:
