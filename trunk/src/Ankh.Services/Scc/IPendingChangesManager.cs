@@ -62,6 +62,12 @@ namespace Ankh.Scc
         IEnumerable<PendingChange> GetAll();
 
         /// <summary>
+        /// Gets a list of all current pending changes below a specific path
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<PendingChange> GetAllBelow(string path);
+
+        /// <summary>
         /// Schedules a refresh of all pending change state
         /// </summary>
         /// <param name="clearStateCache"></param>
@@ -139,5 +145,14 @@ namespace Ankh.Scc
         /// <returns></returns>
         /// <remarks>Called from the log message editor in an attempt to provide a mouse over</remarks>
         bool TryMatchFile(string text, out PendingChange change);
+
+        /// <summary>
+        /// Determines whether the list of pending changes contains the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified path contains path; otherwise, <c>false</c>.
+        /// </returns>
+        bool ContainsPath(string path);
     }
 }
