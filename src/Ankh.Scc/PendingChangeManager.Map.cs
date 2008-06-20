@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.VS;
 using System.IO;
 using System.Diagnostics;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -275,6 +276,33 @@ namespace Ankh.Scc
 
                 return false;
             }
+        }
+
+        public IEnumerable<PendingChange> GetAllBelow(string path)
+        {
+            if(string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            path = SvnTools.GetNormalizedFullPath(path);
+
+            foreach (PendingChange pc in _pendingChanges)
+            {
+                if (pc.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase)
+                    && path.Length == pc.FullPath.Length || pc.FullPath[path.Length] == Path.DirectorySeparatorChar)
+                {
+                    yield return pc;
+                }
+            }
+        }
+
+        public bool ContainsPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            path = SvnTools.GetNormalizedFullPath(path);
+
+            return _pendingChanges.Contains(path);
         }
     }
 }

@@ -51,6 +51,27 @@ namespace Ankh.Commands
                     return; // The file is 'to be added'
             }
 
+            if (e.Command == AnkhCommand.ProjectCommit)
+            {
+                IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
+
+                if(pfm != null && pcm != null)
+                foreach(SvnProject p in e.Selection.GetSelectedProjects(true))
+                {
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+
+                    if(pi != null && !string.IsNullOrEmpty(pi.ProjectDirectory))
+                    {
+                        foreach(PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
+                        {
+                            if(pc.CanCommit && !pfm.ContainsPath(pc.FullPath))
+                                return;
+                        }
+                    }
+                }
+            }
+
             e.Enabled = false;
         }
 
@@ -60,6 +81,7 @@ namespace Ankh.Commands
             IAnkhOpenDocumentTracker tracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
             IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
+            IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
 
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
@@ -95,6 +117,28 @@ namespace Ankh.Commands
                         if (item != null)
                             selectedItems.Add(item);
                     }
+                    if (!pcm.IsActive)
+                        pcm.IsActive = true;
+
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(true))
+                    {
+                        ISvnProjectInfo pi = projectMapper.GetProjectInfo(p);
+
+                        if (pi != null && !string.IsNullOrEmpty(pi.ProjectDirectory))
+                        {
+                            foreach (PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
+                            {
+                                if (pc.CanCommit)
+                                {
+                                    if (!ticked.Contains(pc.FullPath) && !projectMapper.ContainsPath(pc.FullPath))
+                                    {
+                                        ticked.Add(pc.FullPath);
+                                        selectedItems.Add(pc.Item);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     break;
                 case AnkhCommand.CommitItem:
                     ticked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -109,7 +153,7 @@ namespace Ankh.Commands
 
                         if (item != null)
                             selectedItems.Add(item);
-                    }
+                    }                    
                     break;
                 default:
                     throw new InvalidOperationException();
@@ -122,7 +166,7 @@ namespace Ankh.Commands
                     continue; // Check for dirty files is not necessary here, because we just saved the dirty documents
                 else if (item.IsIgnored)
                     continue;
-                else if (!item.InSolution) // Hmm?
+                else if (!item.InSolution && !pcm.ContainsPath(item.FullPath)) // Hmm?
                     continue;
 
                 if (!resources.Contains(item))
