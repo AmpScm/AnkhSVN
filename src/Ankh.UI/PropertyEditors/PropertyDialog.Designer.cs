@@ -83,6 +83,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PropertyDialog";
+            this.ShowInTaskbar = false;
             this.ResumeLayout(false);
             this.PerformLayout();
 
