@@ -59,7 +59,7 @@ namespace Ankh
             System.Collections.Specialized.StringDictionary dict = new
                 System.Collections.Specialized.StringDictionary();
 
-            Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrrorReportSubject, null,
+            Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrorReportSubject, null,
                 typeof(AnkhErrorHandler).Assembly, dict);
         }
 
@@ -236,7 +236,7 @@ namespace Ankh
                 if (dr == DialogResult.Retry)
                 {
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
-                        ErrrorReportSubject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
+                        ErrorReportSubject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace Ankh
         private const int LockedFileErrorCode = 720032;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
         private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
-        private const string ErrrorReportSubject = "Exception";
+        private const string ErrorReportSubject = "Exception";
         private const string ErrorLogFile = "errors.xml";
     }
 
