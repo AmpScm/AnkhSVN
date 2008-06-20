@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.locationBox = new System.Windows.Forms.GroupBox();
+            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.createFolderButton = new System.Windows.Forms.Button();
+            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -39,8 +41,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.projectBox = new System.Windows.Forms.GroupBox();
             this.projectNameBox = new System.Windows.Forms.TextBox();
-            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
@@ -62,6 +62,16 @@
             this.locationBox.TabStop = false;
             this.locationBox.Text = "&Repository Url:";
             // 
+            // comboBox3
+            // 
+            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Location = new System.Drawing.Point(6, 19);
+            this.comboBox3.Name = "comboBox3";
+            this.comboBox3.Size = new System.Drawing.Size(424, 21);
+            this.comboBox3.TabIndex = 1;
+            // 
             // createFolderButton
             // 
             this.createFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -71,6 +81,17 @@
             this.createFolderButton.TabIndex = 3;
             this.createFolderButton.Text = "&Create Folder...";
             this.createFolderButton.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView1.Context = null;
+            this.treeView1.Location = new System.Drawing.Point(6, 46);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(325, 207);
+            this.treeView1.TabIndex = 2;
             // 
             // comboBox1
             // 
@@ -141,8 +162,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(427, 28);
             this.label1.TabIndex = 0;
-            this.label1.Text = "This will create a folder in your repository and create a working copy to place y" +
-                "our files in. Your files will be added on your first commit";
+            this.label1.Text = "This will create a folder in the repository to hold your project and initialze yo" +
+                "ur working copy.";
             // 
             // projectBox
             // 
@@ -164,27 +185,6 @@
             this.projectNameBox.Name = "projectNameBox";
             this.projectNameBox.Size = new System.Drawing.Size(424, 20);
             this.projectNameBox.TabIndex = 0;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Context = null;
-            this.treeView1.Location = new System.Drawing.Point(6, 46);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(325, 207);
-            this.treeView1.TabIndex = 2;
-            // 
-            // comboBox3
-            // 
-            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(6, 19);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(424, 21);
-            this.comboBox3.TabIndex = 1;
             // 
             // AddToSubversion
             // 
