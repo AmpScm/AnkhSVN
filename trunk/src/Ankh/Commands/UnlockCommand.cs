@@ -76,6 +76,7 @@ namespace Ankh.Commands
             }
             finally
             {
+                // Subversion 1.5.0 bug. Invalid path passed to notify handler :(
                 e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
             }
         }
