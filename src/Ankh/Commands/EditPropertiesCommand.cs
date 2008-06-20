@@ -12,71 +12,73 @@ using Ankh.Scc;
 
 namespace Ankh.Commands
 {
-	[Command(AnkhCommand.ItemEditProperties,HideWhenDisabled=true)]
-	class EditPropertiesCommand: CommandBase
-	{
-		// TODO: We should probably add commands for projects and solutions specific too
-		// To handle the common directory != project file case
+    [Command(AnkhCommand.ItemEditProperties, HideWhenDisabled = true)]
+    class EditPropertiesCommand : CommandBase
+    {
+        // TODO: We should probably add commands for projects and solutions specific too
+        // To handle the common directory != project file case
 
-		public override void OnUpdate(CommandUpdateEventArgs e)
-		{
-			int count = 0;
-			foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
-			{
-				if (i.IsVersioned)
-				{
-					count++;
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            int count = 0;
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (i.IsVersioned)
+                {
+                    count++;
 
-					if (count > 1)
-					{
-						e.Enabled = false;
-						return;
-					}
-				}
-			}
+                    if (count > 1)
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+                }
+            }
 
-			if (count != 1)
-				e.Enabled = false;
-		}
-		public override void OnExecute(CommandEventArgs e)
-		{
-			SvnItem firstVersioned = null;
+            if (count != 1)
+                e.Enabled = false;
+        }
+        public override void OnExecute(CommandEventArgs e)
+        {
+            SvnItem firstVersioned = null;
 
-			foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
-			{
-				if (i.IsVersioned)
-				{
-					firstVersioned = i;
-					break;
-				}
-			}
-			if (firstVersioned == null)
-				return; // exceptional case
+            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            {
+                if (i.IsVersioned)
+                {
+                    firstVersioned = i;
+                    break;
+                }
+            }
+            if (firstVersioned == null)
+                return; // exceptional case
 
-			IUIService ui = e.GetService<IUIService>();
-			using(SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
-			using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned.FullPath))
-			{
-				SvnPropertyListArgs args = new SvnPropertyListArgs();
-				Collection<SvnPropertyListEventArgs> properties;
-				if(client.GetPropertyList(firstVersioned.FullPath, args, out properties) && properties.Count == 1) // Handle single-file case for now
-				{
-					List<PropertyItem> propItems = new List<PropertyItem>();
-					foreach(SvnPropertyValue prop in properties[0].Properties)
-					{
-						PropertyItem pi;
-						if(prop.StringValue == null)
-							pi = new BinaryPropertyItem(prop.RawValue);
-						else
-							pi = new TextPropertyItem(prop.StringValue);
+            IUIService ui = e.GetService<IUIService>();
+            using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
+            using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned.FullPath))
+            {
+                dialog.Context = e.Context;
 
-						pi.Name = prop.Key;
-						propItems.Add(pi);
-					}
-					dialog.PropertyItems = propItems.ToArray();
-				}
-				if (ui.ShowDialog(dialog) == DialogResult.OK)
-				{
+                SvnPropertyListArgs args = new SvnPropertyListArgs();
+                Collection<SvnPropertyListEventArgs> properties;
+                if (client.GetPropertyList(firstVersioned.FullPath, args, out properties) && properties.Count == 1) // Handle single-file case for now
+                {
+                    List<PropertyItem> propItems = new List<PropertyItem>();
+                    foreach (SvnPropertyValue prop in properties[0].Properties)
+                    {
+                        PropertyItem pi;
+                        if (prop.StringValue == null)
+                            pi = new BinaryPropertyItem(prop.RawValue);
+                        else
+                            pi = new TextPropertyItem(prop.StringValue);
+
+                        pi.Name = prop.Key;
+                        propItems.Add(pi);
+                    }
+                    dialog.PropertyItems = propItems.ToArray();
+                }
+                if (ui.ShowDialog(dialog) == DialogResult.OK)
+                {
                     if (properties.Count <= 1)
                     {
                         PropertyItem[] finalItems = dialog.PropertyItems;
@@ -118,18 +120,18 @@ namespace Ankh.Commands
                                 ICollection<byte> data = ((BinaryPropertyItem)item).Data;
                                 client.SetProperty(firstVersioned.FullPath, key, data);
                             }
-                            else if (item is TextPropertyItem) 
+                            else if (item is TextPropertyItem)
                             {
                                 string data = ((TextPropertyItem)item).Text;
                                 client.SetProperty(firstVersioned.FullPath, key, data);
                             }
                         }
                     }
-				} // if
-			} // using
+                } // if
+            } // using
 
-			// TODO: this can be removed when switching to Subversion 1.6
-			e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
-		} // OnExecute
-	}
+            // TODO: this can be removed when switching to Subversion 1.6
+            e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
+        } // OnExecute
+    }
 }
