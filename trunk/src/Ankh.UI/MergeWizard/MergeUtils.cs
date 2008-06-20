@@ -103,8 +103,6 @@ namespace Ankh.UI.MergeWizard
                         }
                     }
                 }
-
-                sources.Sort();
             }
 
             return sources;
