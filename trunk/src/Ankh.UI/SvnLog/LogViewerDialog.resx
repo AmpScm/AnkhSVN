@@ -126,10 +126,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>418, 411</value>
-  </data>
-  <data name="cancelButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+    <value>413, 406</value>
   </data>
   <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -139,7 +136,7 @@
     <value>2</value>
   </data>
   <data name="cancelButton.Text" xml:space="preserve">
-    <value>&amp;Cancel</value>
+    <value>Cancel</value>
   </data>
   <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
     <value>cancelButton</value>
@@ -160,10 +157,7 @@
     <value>NoControl</value>
   </data>
   <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>338, 411</value>
-  </data>
-  <data name="okButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+    <value>332, 406</value>
   </data>
   <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -172,7 +166,7 @@
     <value>1</value>
   </data>
   <data name="okButton.Text" xml:space="preserve">
-    <value>&amp;OK</value>
+    <value>OK</value>
   </data>
   <data name="&gt;&gt;okButton.Name" xml:space="preserve">
     <value>okButton</value>
@@ -190,13 +184,10 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="logViewerControl.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="logViewerControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+    <value>12, 12</value>
   </data>
   <data name="logViewerControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>500, 405</value>
+    <value>476, 388</value>
   </data>
   <data name="logViewerControl.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -205,7 +196,7 @@
     <value>logViewerControl</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3084.29041, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3093.29213, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Parent" xml:space="preserve">
     <value>$this</value>
