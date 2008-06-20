@@ -6,104 +6,172 @@ namespace Ankh.UI
 {
     partial class LockDialog
     {
-        #region Designer generated code
+        #region Windows Form Designer generated code
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.messageTextBox = new System.Windows.Forms.TextBox();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.suppressGroupBox = new System.Windows.Forms.GroupBox();
+            this.suppressLabel = new System.Windows.Forms.Label();
+            this.bottomPanel = new System.Windows.Forms.Panel();
+            this.messageTextBox = new System.Windows.Forms.TextBox();
+            this.lockMessageGroupBox = new System.Windows.Forms.GroupBox();
+            this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.suppressGroupBox.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.bottomPanel.SuspendLayout();
+            this.lockMessageGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pathSelectionTreeView
-            // 
-            this.pathSelectionTreeView.LineColor = System.Drawing.Color.Black;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(383, 202);
-            // 
-            // okButton
-            // 
-            this.okButton.Location = new System.Drawing.Point(227, 4);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Location = new System.Drawing.Point(308, 4);
-            // 
-            // revisionStartGroupBox
-            // 
-            this.revisionStartGroupBox.Size = new System.Drawing.Size(386, 48);
-            // 
-            // revisionEndGroupBox
-            // 
-            this.revisionEndGroupBox.Size = new System.Drawing.Size(386, 48);
-            // 
-            // suppressGroupBox
-            // 
-            this.suppressGroupBox.Size = new System.Drawing.Size(386, 32);
-            // 
-            // messageTextBox
-            // 
-            this.messageTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.messageTextBox.Location = new System.Drawing.Point(8, 16);
-            this.messageTextBox.Multiline = true;
-            this.messageTextBox.Name = "messageTextBox";
-            this.messageTextBox.Size = new System.Drawing.Size(392, 60);
-            this.messageTextBox.TabIndex = 7;
             // 
             // stealLocksCheckBox
             // 
-            this.stealLocksCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.stealLocksCheckBox.Location = new System.Drawing.Point(16, 384);
+            this.stealLocksCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.stealLocksCheckBox.Location = new System.Drawing.Point(11, 7);
             this.stealLocksCheckBox.Name = "stealLocksCheckBox";
-            this.stealLocksCheckBox.Size = new System.Drawing.Size(104, 24);
+            this.stealLocksCheckBox.Size = new System.Drawing.Size(129, 20);
             this.stealLocksCheckBox.TabIndex = 8;
             this.stealLocksCheckBox.Text = "Steal Locks";
             // 
-            // groupBox1
+            // okButton
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Enabled = false;
+            this.okButton.Location = new System.Drawing.Point(177, 7);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 20);
+            this.okButton.TabIndex = 4;
+            this.okButton.Text = "OK";
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(258, 7);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 20);
+            this.cancelButton.TabIndex = 5;
+            this.cancelButton.Text = "Cancel";
+            // 
+            // suppressGroupBox
+            // 
+            this.suppressGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.messageTextBox);
-            this.groupBox1.Location = new System.Drawing.Point(8, 248);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(410, 85);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Lock message";
+            this.suppressGroupBox.Controls.Add(this.suppressLabel);
+            this.suppressGroupBox.Location = new System.Drawing.Point(12, 3);
+            this.suppressGroupBox.Name = "suppressGroupBox";
+            this.suppressGroupBox.Size = new System.Drawing.Size(349, 32);
+            this.suppressGroupBox.TabIndex = 2;
+            this.suppressGroupBox.TabStop = false;
+            // 
+            // suppressLabel
+            // 
+            this.suppressLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.suppressLabel.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.suppressLabel.Location = new System.Drawing.Point(8, 11);
+            this.suppressLabel.Name = "suppressLabel";
+            this.suppressLabel.Size = new System.Drawing.Size(298, 18);
+            this.suppressLabel.TabIndex = 0;
+            this.suppressLabel.Text = "You can suppress this dialog by holding down the Shift key";
+            // 
+            // bottomPanel
+            // 
+            this.bottomPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.bottomPanel.Controls.Add(this.stealLocksCheckBox);
+            this.bottomPanel.Controls.Add(this.okButton);
+            this.bottomPanel.Controls.Add(this.cancelButton);
+            this.bottomPanel.Location = new System.Drawing.Point(12, 359);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(349, 36);
+            this.bottomPanel.TabIndex = 6;
+            // 
+            // messageTextBox
+            // 
+            this.messageTextBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.messageTextBox.Location = new System.Drawing.Point(11, 18);
+            this.messageTextBox.Multiline = true;
+            this.messageTextBox.Name = "messageTextBox";
+            this.messageTextBox.Size = new System.Drawing.Size(327, 91);
+            this.messageTextBox.TabIndex = 7;
+            // 
+            // lockMessageGroupBox
+            // 
+            this.lockMessageGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lockMessageGroupBox.Controls.Add(this.messageTextBox);
+            this.lockMessageGroupBox.Location = new System.Drawing.Point(12, 240);
+            this.lockMessageGroupBox.Name = "lockMessageGroupBox";
+            this.lockMessageGroupBox.Size = new System.Drawing.Size(349, 113);
+            this.lockMessageGroupBox.TabIndex = 2;
+            this.lockMessageGroupBox.TabStop = false;
+            this.lockMessageGroupBox.Text = "Lock message";
+            // 
+            // pathSelectionTreeView
+            // 
+            this.pathSelectionTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pathSelectionTreeView.CheckBoxes = true;
+            this.pathSelectionTreeView.Context = null;
+            this.pathSelectionTreeView.Location = new System.Drawing.Point(12, 45);
+            this.pathSelectionTreeView.Name = "pathSelectionTreeView";
+            this.pathSelectionTreeView.Recursive = false;
+            this.pathSelectionTreeView.SingleCheck = false;
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(349, 183);
+            this.pathSelectionTreeView.TabIndex = 3;
+            this.pathSelectionTreeView.UrlPaths = false;
+            this.pathSelectionTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.pathSelectionTreeView_AfterCheck);
             // 
             // LockDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.Caption = "Lock";
-            this.ClientSize = new System.Drawing.Size(420, 416);
-            this.Controls.Add(this.stealLocksCheckBox);
-            this.Controls.Add(this.groupBox1);
-            this.MinimumSize = new System.Drawing.Size(376, 300);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(373, 407);
+            this.ControlBox = false;
+            this.Controls.Add(this.bottomPanel);
+            this.Controls.Add(this.lockMessageGroupBox);
+            this.Controls.Add(this.suppressGroupBox);
+            this.Controls.Add(this.pathSelectionTreeView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MinimumSize = new System.Drawing.Size(100, 36);
             this.Name = "LockDialog";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lock";
-            this.Controls.SetChildIndex(this.groupBox1, 0);
-            this.Controls.SetChildIndex(this.stealLocksCheckBox, 0);
-            this.Controls.SetChildIndex(this.revisionEndGroupBox, 0);
-            this.Controls.SetChildIndex(this.pathSelectionTreeView, 0);
-            this.Controls.SetChildIndex(this.revisionStartGroupBox, 0);
-            this.Controls.SetChildIndex(this.suppressGroupBox, 0);
             this.suppressGroupBox.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.bottomPanel.ResumeLayout(false);
+            this.lockMessageGroupBox.ResumeLayout(false);
+            this.lockMessageGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
         #endregion
 
-        private System.Windows.Forms.TextBox messageTextBox;
+        protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
         private System.Windows.Forms.CheckBox stealLocksCheckBox;
-        private System.Windows.Forms.GroupBox groupBox1;
+        [CLSCompliant(false)]
+        protected System.Windows.Forms.Button okButton;
+        [CLSCompliant(false)]
+        protected System.Windows.Forms.Button cancelButton;
+
+        protected System.Windows.Forms.Label suppressLabel;
+        protected System.Windows.Forms.GroupBox suppressGroupBox;
+        private System.Windows.Forms.Panel bottomPanel;
+
+        private System.Windows.Forms.TextBox messageTextBox;
+        private System.Windows.Forms.GroupBox lockMessageGroupBox;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
         private System.ComponentModel.IContainer components = null;
     }
 }
