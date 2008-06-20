@@ -31,31 +31,31 @@ namespace Ankh.UI
             // 
             this.stealLocksCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.stealLocksCheckBox.Location = new System.Drawing.Point(11, 7);
+            this.stealLocksCheckBox.Location = new System.Drawing.Point(11, 8);
             this.stealLocksCheckBox.Name = "stealLocksCheckBox";
-            this.stealLocksCheckBox.Size = new System.Drawing.Size(129, 20);
-            this.stealLocksCheckBox.TabIndex = 8;
-            this.stealLocksCheckBox.Text = "Steal Locks";
+            this.stealLocksCheckBox.Size = new System.Drawing.Size(129, 24);
+            this.stealLocksCheckBox.TabIndex = 5;
+            this.stealLocksCheckBox.Text = "&Steal Locks";
             // 
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Enabled = false;
-            this.okButton.Location = new System.Drawing.Point(177, 7);
+            this.okButton.Location = new System.Drawing.Point(182, 7);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 20);
-            this.okButton.TabIndex = 4;
+            this.okButton.Size = new System.Drawing.Size(75, 24);
+            this.okButton.TabIndex = 6;
             this.okButton.Text = "OK";
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(258, 7);
+            this.cancelButton.Location = new System.Drawing.Point(263, 7);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 20);
-            this.cancelButton.TabIndex = 5;
+            this.cancelButton.Size = new System.Drawing.Size(75, 24);
+            this.cancelButton.TabIndex = 7;
             this.cancelButton.Text = "Cancel";
             // 
             // suppressGroupBox
@@ -66,7 +66,7 @@ namespace Ankh.UI
             this.suppressGroupBox.Location = new System.Drawing.Point(12, 3);
             this.suppressGroupBox.Name = "suppressGroupBox";
             this.suppressGroupBox.Size = new System.Drawing.Size(349, 32);
-            this.suppressGroupBox.TabIndex = 2;
+            this.suppressGroupBox.TabIndex = 0;
             this.suppressGroupBox.TabStop = false;
             // 
             // suppressLabel
@@ -89,7 +89,7 @@ namespace Ankh.UI
             this.bottomPanel.Location = new System.Drawing.Point(12, 359);
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(349, 36);
-            this.bottomPanel.TabIndex = 6;
+            this.bottomPanel.TabIndex = 4;
             // 
             // messageTextBox
             // 
@@ -98,7 +98,7 @@ namespace Ankh.UI
             this.messageTextBox.Multiline = true;
             this.messageTextBox.Name = "messageTextBox";
             this.messageTextBox.Size = new System.Drawing.Size(327, 91);
-            this.messageTextBox.TabIndex = 7;
+            this.messageTextBox.TabIndex = 3;
             // 
             // lockMessageGroupBox
             // 
@@ -125,7 +125,7 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SingleCheck = false;
             this.pathSelectionTreeView.Size = new System.Drawing.Size(349, 183);
-            this.pathSelectionTreeView.TabIndex = 3;
+            this.pathSelectionTreeView.TabIndex = 1;
             this.pathSelectionTreeView.UrlPaths = false;
             this.pathSelectionTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.pathSelectionTreeView_AfterCheck);
             // 
