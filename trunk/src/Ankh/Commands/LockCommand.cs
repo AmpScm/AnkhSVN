@@ -35,7 +35,9 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", e.Selection.GetSelectedSvnItems(true));
+            IEnumerable<SvnItem> items = e.Argument as IEnumerable<SvnItem>;
+
+            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items != null ? items : e.Selection.GetSelectedSvnItems(true));
             psi.VisibleFilter += delegate(SvnItem item)
             {
                 return item.IsFile && !item.IsLocked;
