@@ -19,18 +19,36 @@ namespace Ankh.Migrate
 
 			foreach (CommandBar bar in ((CommandBars)dte.CommandBars))
 			{
-				string name = bar.Name;
+                string name = null;
+                try
+                {
+                    name = bar.Name;
+                }
+                catch
+                {
+                    // Swallow
+                }
 				if (name == "Context Menus")
 				{
 					foreach (CommandBarControl control in bar.Controls)
 					{
 						if (control.Type == MsoControlType.msoControlPopup)
 						{
-							string caption = control.Caption;
+                            string caption = null;
+                            try
+                            {
+                                caption = control.Caption;
+                            }
+                            catch
+                            {
+                                // Swallow
+                            }
+
+                            CommandBarPopup popup = control as CommandBarPopup;
 							if (caption == "Project and Solution Context Menus" || caption == "Other Context Menus")
-								RecurseCommands(((CommandBarPopup)control).Controls);
+								RecurseCommands(popup.Controls);
 							else if (fullSearch)
-								RecurseCommands(((CommandBarPopup)control).Controls);
+								RecurseCommands(popup.Controls);
 						}
 					}
 				}
@@ -50,10 +68,24 @@ namespace Ankh.Migrate
 			foreach (CommandBarControl control in controls)
 			{
 
-				if (control.accChildCount > 0 && control.Type == MsoControlType.msoControlPopup)
-					RecurseCommands(((CommandBarPopup)control).Controls);
+                if (control.accChildCount > 0 && control.Type == MsoControlType.msoControlPopup)
+                {
+                    CommandBarPopup popup = control as CommandBarPopup;
+                    if(popup != null)
+                        RecurseCommands(popup.Controls);
+                }
+                
+                
+                string caption = null;
+                try
+                {
+                    caption = control.Caption;
+                }
+                catch
+                {
+                    // Swallow
+                }
 
-				string caption = control.Caption;
 				if (caption == "An&kh" || caption == "An&khSVN" || caption == "WorkingCopyExplorer" || caption == "ReposExplorer")
 				{
 					control.Delete(false);
