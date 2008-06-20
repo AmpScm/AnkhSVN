@@ -13,12 +13,14 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.urlCheckBox = new System.Windows.Forms.CheckBox();
             this.revisionCheckBox = new System.Windows.Forms.CheckBox();
             this.authorCheckBox = new System.Windows.Forms.CheckBox();
             this.allCheckBox = new System.Windows.Forms.CheckBox();
             this.dateCheckBox = new System.Windows.Forms.CheckBox();
             this.keywordsGoupBox = new System.Windows.Forms.GroupBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.keywordsGoupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -96,15 +98,13 @@ namespace Ankh.UI
         }
         #endregion
 
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.CheckBox dateCheckBox;
         private System.Windows.Forms.CheckBox urlCheckBox;
         private System.Windows.Forms.CheckBox revisionCheckBox;
         private System.Windows.Forms.CheckBox allCheckBox;
         private System.Windows.Forms.CheckBox authorCheckBox;
         private System.Windows.Forms.GroupBox keywordsGoupBox;
+        private System.Windows.Forms.ToolTip conflictToolTip;
+        private System.ComponentModel.IContainer components;
     }
 }

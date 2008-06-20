@@ -13,8 +13,10 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.valueTextBox = new System.Windows.Forms.TextBox();
             this.plainGroupBox = new System.Windows.Forms.GroupBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.plainGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,11 +54,9 @@ namespace Ankh.UI
         #endregion
 
         private System.Windows.Forms.TextBox valueTextBox;
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.GroupBox plainGroupBox;
+        private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.ToolTip conflictToolTip;
 
     }
 }

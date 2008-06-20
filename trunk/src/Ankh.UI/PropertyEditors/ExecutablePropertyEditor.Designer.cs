@@ -14,7 +14,9 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.executableCheckBox = new System.Windows.Forms.CheckBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // executableCheckBox
@@ -37,9 +39,7 @@ namespace Ankh.UI
         #endregion
 
         private System.Windows.Forms.CheckBox executableCheckBox;
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
+        private System.Windows.Forms.ToolTip conflictToolTip;
+        private System.ComponentModel.IContainer components;
     }
 }

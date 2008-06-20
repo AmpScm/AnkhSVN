@@ -101,16 +101,6 @@ namespace Ankh.UI
 
         private void CreateMyToolTip()
         {
-            // Create the ToolTip and associate with the Form container.
-            ToolTip conflictToolTip = new ToolTip(this.components);
-
-            // Set up the delays in milliseconds for the ToolTip.
-            conflictToolTip.AutoPopDelay = 5000;
-            conflictToolTip.InitialDelay = 1000;
-            conflictToolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            conflictToolTip.ShowAlways = true;
-         
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.nativeRadioButton, "Default. Line endings dependant on operating system");
             conflictToolTip.SetToolTip( this.lfRadioButton, "End of line style is LF (Line Feed)");
@@ -123,11 +113,6 @@ namespace Ankh.UI
         /// Flag for enabling/disabling save button
         /// </summary>
         private bool dirty;
-		
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
 
       
 

@@ -14,8 +14,10 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mimeTextBox = new System.Windows.Forms.TextBox();
             this.mimeGroupBox = new System.Windows.Forms.GroupBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.mimeGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,11 +52,9 @@ namespace Ankh.UI
         #endregion
 
         private System.Windows.Forms.TextBox mimeTextBox;
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.GroupBox mimeGroupBox;
+        private System.Windows.Forms.ToolTip conflictToolTip;
+        private System.ComponentModel.IContainer components;
 
     }
 }

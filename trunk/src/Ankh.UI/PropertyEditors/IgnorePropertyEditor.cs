@@ -97,17 +97,7 @@ namespace Ankh.UI
         }
 
         private void CreateMyToolTip()
-        {
-            // Create the ToolTip and associate with the Form container.
-            ToolTip conflictToolTip = new ToolTip(this.components);
-
-            // Set up the delays in milliseconds for the ToolTip.
-            conflictToolTip.AutoPopDelay = 5000;
-            conflictToolTip.InitialDelay = 1000;
-            conflictToolTip.ReshowDelay = 500;
-            // Force the ToolTip text to be displayed whether or not the form is active.
-            conflictToolTip.ShowAlways = true;
-         
+        {         
             // Set up the ToolTip text for the Button and Checkbox.
             conflictToolTip.SetToolTip( this.ignoreTextBox, 
                 "Eks *.obj, subdir. Names of file-categories and directories to be ignored.");
