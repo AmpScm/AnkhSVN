@@ -85,13 +85,6 @@ namespace Ankh.UI.RepositoryOpen
             get { return _config ?? (_config = GetService<IAnkhConfigurationService>()); }
         }
 
-		public string AddUrl
-		{
-			get { return "Add repository url..."; } // TODO: Make localizable
-		}
-
-		public event EventHandler<EventArgs> TestEvent;
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -135,9 +128,6 @@ namespace Ankh.UI.RepositoryOpen
                 urlBox.SelectedIndex = 0;
                 UpdateDirectories();
             }
-
-			if (!string.IsNullOrEmpty(AddUrl))
-				urlBox.Items.Add(AddUrl);
 
             if (string.IsNullOrEmpty(fileTypeBox.Text) && fileTypeBox.Items.Count > 0)
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
@@ -344,7 +334,7 @@ namespace Ankh.UI.RepositoryOpen
                             {
                                 Uri parentUri = new Uri(e.Uri, "../");
 
-                                if (urlBox.Text != AddUrl && parentUri.ToString() != urlBox.Text)
+                                if (parentUri.ToString() != urlBox.Text)
                                     return; // The user selected something else while we where busy
 
                                 // The user typed a directory Url without ending '/'
@@ -431,12 +421,6 @@ namespace Ankh.UI.RepositoryOpen
         void OnDirChanged()
         {
             string txt = urlBox.Text;
-
-			if (txt == AddUrl && !string.IsNullOrEmpty(AddUrl))
-			{
-				ShowAddUriDialog();
-				return;
-			}
 
             if (!txt.EndsWith("/"))
                 txt += '/';
@@ -843,6 +827,11 @@ namespace Ankh.UI.RepositoryOpen
                 string message = toolTip.GetToolTip(fileNameBox);
                 toolTip.Show(message, fileNameBox);
             }
+        }
+
+        private void addButton_Click(object sender, EventArgs e)
+        {
+            ShowAddUriDialog();
         }
     }
 }
