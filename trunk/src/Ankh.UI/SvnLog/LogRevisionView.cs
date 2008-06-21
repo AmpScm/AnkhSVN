@@ -129,5 +129,11 @@ namespace Ankh.UI.SvnLog
 		{
 			get { return _lvi.Revision; }
 		}
+
+        [Browsable(false)]
+        public SvnChangeItemCollection ChangedPaths
+        {
+            get { return _lvi.RawData.ChangedPaths; }
+        }
 	}
 }

@@ -8,16 +8,20 @@ using System.Windows.Forms;
 using Ankh.UI.Services;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Selection;
+using SharpSvn;
+using System.Diagnostics;
+using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogControl : UserControl
+    public partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
         IAnkhUISite _site;
 
         public LogControl()
         {
             InitializeComponent();
+            ItemSource = logRevisionControl1;
         }
 
 
@@ -127,5 +131,48 @@ namespace Ankh.UI.SvnLog
             splitContainer2.Panel1Collapsed = !_changedPathsVisible;
             splitContainer2.Panel2Collapsed = !_logMessageVisible;
         }
+
+        public event SelectionChangedEventHandler<ISvnLogItem> SelectionChanged;
+
+        public event FocusChangedEventHandler<ISvnLogItem> FocusChanged;
+
+        public ISvnLogItem FocusedItem
+        {
+            get { return ItemSource == null ? null : ItemSource.FocusedItem; }
+        }
+
+        public IList<ISvnLogItem> SelectedItems
+        {
+            get { return ItemSource == null ? null : ItemSource.SelectedItems; }
+        }
+
+        #region ICurrentItemDestination<ISvnLogItem> Members
+
+        ICurrentItemSource<ISvnLogItem> _itemSource;
+        public ICurrentItemSource<ISvnLogItem> ItemSource
+        {
+            [DebuggerStepThrough]
+            get { return _itemSource; }
+            set 
+            {
+                _itemSource = value;
+                value.FocusChanged += OnFocusChanged;
+                value.SelectionChanged += OnSelectionChanged;
+            }
+        }
+
+        void OnFocusChanged(object sender, ISvnLogItem e)
+        {
+            if(FocusChanged != null)
+                FocusChanged(sender, e);
+        }
+
+        void OnSelectionChanged(object sender, IList<ISvnLogItem> e)
+        {
+            if (SelectionChanged != null)
+                SelectionChanged(sender, e);
+        }
+
+        #endregion
     }
 }

@@ -8,10 +8,11 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.SvnLog;
 using Ankh.UI.Services;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
-    public partial class LogChangedPaths : UserControl, ICurrentItemDestination<SvnLogEventArgs>
+    public partial class LogChangedPaths : UserControl, ICurrentItemDestination<ISvnLogItem>
     {
         public LogChangedPaths()
         {
@@ -50,34 +51,34 @@ namespace Ankh.UI
         }
 
 
-        #region ICurrentItemDestination<SvnLogEventArgs> Members
-        ICurrentItemSource<SvnLogEventArgs> itemSource;
-        public ICurrentItemSource<SvnLogEventArgs> ItemSource
+        #region ICurrentItemDestination<ISvnLogItem> Members
+        ICurrentItemSource<ISvnLogItem> itemSource;
+        public ICurrentItemSource<ISvnLogItem> ItemSource
         {
             get { return itemSource; }
             set
             {
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged -= new SelectionChangedEventHandler<SvnLogEventArgs>(SelectionChanged);
-                    itemSource.FocusChanged -= new FocusChangedEventHandler<SvnLogEventArgs>(FocusChanged);
+                    itemSource.SelectionChanged -= new SelectionChangedEventHandler<ISvnLogItem>(SelectionChanged);
+                    itemSource.FocusChanged -= new FocusChangedEventHandler<ISvnLogItem>(FocusChanged);
                 }
                 itemSource = value;
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged += new SelectionChangedEventHandler<SvnLogEventArgs>(SelectionChanged);
-                    itemSource.FocusChanged += new FocusChangedEventHandler<SvnLogEventArgs>(FocusChanged);
+                    itemSource.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(SelectionChanged);
+                    itemSource.FocusChanged += new FocusChangedEventHandler<ISvnLogItem>(FocusChanged);
                 }
             }
         }
 
         #endregion
 
-        void SelectionChanged(object sender, IList<SvnLogEventArgs> e)
+        void SelectionChanged(object sender, IList<ISvnLogItem> e)
         {
         }
 
-        void FocusChanged(object sender, SvnLogEventArgs e)
+        void FocusChanged(object sender, ISvnLogItem e)
         {
             changedPaths.Items.Clear();
             foreach (SvnChangeItem i in e.ChangedPaths)

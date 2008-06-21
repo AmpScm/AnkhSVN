@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SharpSvn;
+using SharpSvn.Implementation;
 
 namespace Ankh.Scc
 {
@@ -10,5 +12,6 @@ namespace Ankh.Scc
 		string Author { get; }
 		string LogMessage { get; }
 		long Revision { get; }
+        SvnChangeItemCollection ChangedPaths { get; }
 	}
 }
