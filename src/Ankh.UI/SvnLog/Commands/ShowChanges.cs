@@ -17,12 +17,12 @@ namespace Ankh.UI.SvnLog.Commands
         TempFileCollection _collection = new TempFileCollection();
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-			foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
-			{
-				return;
-			}
+            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+            {
+                return;
+            }
 
-			e.Enabled = false; 
+            e.Enabled = false;
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -30,36 +30,41 @@ namespace Ankh.UI.SvnLog.Commands
             long min = long.MaxValue;
             long max = long.MinValue;
 
-			foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);
                 max = Math.Max(max, item.Revision);
             }
 
-            SvnRevisionRange range = new SvnRevisionRange(min-1, max);
-
-            using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
-            {
-                string htmlFile = Path.GetTempFileName();
-                _collection.AddFile(htmlFile, false);
-
-                using (MemoryStream ms = new MemoryStream())
-                using(StreamReader reader = new StreamReader(ms))
+            SvnRevisionRange range = new SvnRevisionRange(min - 1, max);
+            string htmlFile = null;
+            e.GetService<IProgressRunner>().Run("Retrieving changes",
+                delegate(object sender, ProgressWorkerArgs ee)
                 {
-					// BH: Why do we always diff over the project root instead of the selected location?
-                    client.Diff(new SvnUriTarget(e.GetService<IAnkhSolutionSettings>().ProjectRootUri), range, ms);
-                    ms.Flush();
-                    ms.Position = 0;
+                    htmlFile = Path.GetTempFileName();
+                    _collection.AddFile(htmlFile, false);
 
-                    DiffHtmlModel model = new DiffHtmlModel(reader.ReadToEnd());
-                    
-                    using(FileStream fs = File.OpenWrite(htmlFile))
-                    using (StreamWriter writer = new StreamWriter(fs))
+                    using (MemoryStream ms = new MemoryStream())
+                    using (StreamReader reader = new StreamReader(ms))
                     {
-                        writer.Write(model.GetHtml());
-                    }
-                }
+                        // BH: Why do we always diff over the project root instead of the selected location?
+                        ee.Client.Diff(new SvnUriTarget(e.GetService<IAnkhSolutionSettings>().ProjectRootUri), range, ms);
+                        ms.Flush();
+                        ms.Position = 0;
 
+                        DiffHtmlModel model = new DiffHtmlModel(reader.ReadToEnd());
+
+                        using (FileStream fs = File.OpenWrite(htmlFile))
+                        using (StreamWriter writer = new StreamWriter(fs))
+                        {
+                            writer.Write(model.GetHtml());
+                        }
+                    }
+
+                });
+
+            if (htmlFile != null)
+            {
                 IAnkhWebBrowser browser = e.Context.GetService<IAnkhWebBrowser>();
                 BrowserArgs args = new BrowserArgs();
                 args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
