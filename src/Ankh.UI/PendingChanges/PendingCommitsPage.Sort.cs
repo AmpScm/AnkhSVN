@@ -13,7 +13,7 @@ namespace Ankh.UI.PendingChanges
     partial class PendingCommitsPage
     {
         bool _sortDescending;
-        bool _groupDescending;
+        //bool _groupDescending;
         readonly List<PcComparer> _sorters = new List<PcComparer>();
         internal void SetSort(AnkhCommand command)
         {
