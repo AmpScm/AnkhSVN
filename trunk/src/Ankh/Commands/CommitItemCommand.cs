@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
 using Ankh.Selection;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -56,20 +57,20 @@ namespace Ankh.Commands
                 IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                 IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
 
-                if(pfm != null && pcm != null)
-                foreach(SvnProject p in e.Selection.GetSelectedProjects(true))
-                {
-                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
-
-                    if(pi != null && !string.IsNullOrEmpty(pi.ProjectDirectory))
+                if (pfm != null && pcm != null)
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(true))
                     {
-                        foreach(PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
+                        ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+
+                        if (pi != null && !string.IsNullOrEmpty(pi.ProjectDirectory))
                         {
-                            if(!pfm.ContainsPath(pc.FullPath))
-                                return;
+                            foreach (PendingChange pc in pcm.GetAllBelow(pi.ProjectDirectory))
+                            {
+                                if (!pfm.ContainsPath(pc.FullPath))
+                                    return;
+                            }
                         }
                     }
-                }
             }
 
             e.Enabled = false;
@@ -82,6 +83,7 @@ namespace Ankh.Commands
             IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
             IProjectFileMapper projectMapper = e.Context.GetService<IProjectFileMapper>();
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
+            IAnkhSolutionSettings sc = e.GetService<IAnkhSolutionSettings>();
 
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
@@ -94,18 +96,36 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.SolutionCommit:
-                    foreach(string file in mapper.GetAllFilesOfAllProjects())
+                    foreach (string file in mapper.GetAllFilesOfAllProjects())
                     {
                         SvnItem item = cache[file];
 
                         if (item != null)
                             selectedItems.Add(item);
                     }
+
+                    if (!pcm.IsActive)
+                        pcm.IsActive = true;
+
+                    if (!string.IsNullOrEmpty(sc.ProjectRoot))
+                    {
+                        foreach (PendingChange pc in pcm.GetAllBelow(sc.ProjectRoot))
+                        {
+                            if (!ticked.Contains(pc.FullPath))
+                            {
+                                ticked.Add(pc.FullPath);
+
+                                if (!projectMapper.ContainsPath(pc.FullPath))
+                                    selectedItems.Add(pc.Item);
+                            }
+                        }
+                    }
+
                     break;
                 case AnkhCommand.ProjectCommit:
                     // TODO: Fetch all selecteded objects and feed them into a selection dialog with refresh option
                     ticked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                    foreach(string file in mapper.GetAllFilesOf(new List<SvnProject>(e.Selection.GetSelectedProjects(false))))
+                    foreach (string file in mapper.GetAllFilesOf(new List<SvnProject>(e.Selection.GetSelectedProjects(false))))
                     {
                         if (ticked.Contains(file))
                             continue;
@@ -132,7 +152,7 @@ namespace Ankh.Commands
                                 {
                                     ticked.Add(pc.FullPath);
 
-                                    if(!projectMapper.ContainsPath(pc.FullPath))
+                                    if (!projectMapper.ContainsPath(pc.FullPath))
                                         selectedItems.Add(pc.Item);
                                 }
                             }
@@ -152,7 +172,7 @@ namespace Ankh.Commands
 
                         if (item != null)
                             selectedItems.Add(item);
-                    }                    
+                    }
                     break;
                 default:
                     throw new InvalidOperationException();
