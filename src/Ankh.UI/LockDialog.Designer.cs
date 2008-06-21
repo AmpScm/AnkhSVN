@@ -16,7 +16,7 @@ namespace Ankh.UI
             this.suppressGroupBox = new System.Windows.Forms.GroupBox();
             this.suppressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -62,13 +62,13 @@ namespace Ankh.UI
             // 
             // cancelButton
             // 
-            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(289, 371);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 24);
-            this.cancelButton.TabIndex = 7;
-            this.cancelButton.Text = "Cancel";
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(289, 371);
+            this.btnCancel.Name = "cancelButton";
+            this.btnCancel.Size = new System.Drawing.Size(75, 24);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Text = "Cancel";
             // 
             // okButton
             // 
@@ -145,13 +145,13 @@ namespace Ankh.UI
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.cancelButton;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(373, 407);
             this.Controls.Add(this.suppressGroupBox);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.stealLocksCheckBox);
             this.Controls.Add(this.okButton);
-            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.btnCancel);
             this.MinimumSize = new System.Drawing.Size(100, 36);
             this.Name = "LockDialog";
             this.Text = "Lock";
@@ -177,7 +177,7 @@ namespace Ankh.UI
         /// </summary>
         private System.ComponentModel.IContainer components = null;
         private System.Windows.Forms.Label label1;
-        protected System.Windows.Forms.Button cancelButton;
+        protected System.Windows.Forms.Button btnCancel;
         protected System.Windows.Forms.Button okButton;
         private System.Windows.Forms.CheckBox stealLocksCheckBox;
         private System.Windows.Forms.SplitContainer splitContainer1;
