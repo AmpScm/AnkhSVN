@@ -13,7 +13,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.suppressGroupBox = new System.Windows.Forms.GroupBox();
             this.suppressLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -22,31 +21,18 @@ namespace Ankh.UI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
-            this.suppressGroupBox.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // suppressGroupBox
-            // 
-            this.suppressGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.suppressGroupBox.Controls.Add(this.suppressLabel);
-            this.suppressGroupBox.Location = new System.Drawing.Point(12, 12);
-            this.suppressGroupBox.Name = "suppressGroupBox";
-            this.suppressGroupBox.Size = new System.Drawing.Size(352, 39);
-            this.suppressGroupBox.TabIndex = 4;
-            this.suppressGroupBox.TabStop = false;
-            // 
             // suppressLabel
             // 
-            this.suppressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.suppressLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.suppressLabel.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.suppressLabel.Location = new System.Drawing.Point(6, 13);
+            this.suppressLabel.Location = new System.Drawing.Point(12, 329);
             this.suppressLabel.Name = "suppressLabel";
-            this.suppressLabel.Size = new System.Drawing.Size(340, 20);
+            this.suppressLabel.Size = new System.Drawing.Size(352, 20);
             this.suppressLabel.TabIndex = 0;
             this.suppressLabel.Text = "You can suppress this dialog by holding down the Shift key";
             this.suppressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -57,17 +43,17 @@ namespace Ankh.UI
             this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Lock message:";
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(289, 371);
+            this.btnCancel.Location = new System.Drawing.Point(289, 362);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 24);
-            this.btnCancel.TabIndex = 3;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "Cancel";
             // 
             // okButton
@@ -75,20 +61,20 @@ namespace Ankh.UI
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Enabled = false;
-            this.okButton.Location = new System.Drawing.Point(208, 371);
+            this.okButton.Location = new System.Drawing.Point(208, 362);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 24);
-            this.okButton.TabIndex = 2;
+            this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             // 
             // stealLocksCheckBox
             // 
             this.stealLocksCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stealLocksCheckBox.AutoSize = true;
-            this.stealLocksCheckBox.Location = new System.Drawing.Point(12, 378);
+            this.stealLocksCheckBox.Location = new System.Drawing.Point(12, 362);
             this.stealLocksCheckBox.Name = "stealLocksCheckBox";
             this.stealLocksCheckBox.Size = new System.Drawing.Size(82, 17);
-            this.stealLocksCheckBox.TabIndex = 1;
+            this.stealLocksCheckBox.TabIndex = 2;
             this.stealLocksCheckBox.Text = "&Steal Locks";
             // 
             // splitContainer1
@@ -96,7 +82,7 @@ namespace Ankh.UI
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(12, 54);
+            this.splitContainer1.Location = new System.Drawing.Point(12, 9);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -109,7 +95,7 @@ namespace Ankh.UI
             // 
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.logMessageEditor);
-            this.splitContainer1.Size = new System.Drawing.Size(352, 314);
+            this.splitContainer1.Size = new System.Drawing.Size(352, 315);
             this.splitContainer1.SplitterDistance = 157;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -137,8 +123,8 @@ namespace Ankh.UI
             this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessageEditor.Location = new System.Drawing.Point(0, 25);
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.Size = new System.Drawing.Size(352, 128);
-            this.logMessageEditor.TabIndex = 0;
+            this.logMessageEditor.Size = new System.Drawing.Size(352, 129);
+            this.logMessageEditor.TabIndex = 1;
             this.logMessageEditor.Text = null;
             // 
             // LockDialog
@@ -147,8 +133,8 @@ namespace Ankh.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(373, 407);
-            this.Controls.Add(this.suppressGroupBox);
+            this.ClientSize = new System.Drawing.Size(373, 398);
+            this.Controls.Add(this.suppressLabel);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.stealLocksCheckBox);
             this.Controls.Add(this.okButton);
@@ -156,7 +142,6 @@ namespace Ankh.UI
             this.MinimumSize = new System.Drawing.Size(100, 36);
             this.Name = "LockDialog";
             this.Text = "Lock";
-            this.suppressGroupBox.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
@@ -170,7 +155,6 @@ namespace Ankh.UI
         protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
 
         protected System.Windows.Forms.Label suppressLabel;
-        protected System.Windows.Forms.GroupBox suppressGroupBox;
 
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         /// <summary>

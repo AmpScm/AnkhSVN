@@ -58,8 +58,7 @@ namespace Ankh.Commands
                 IUIService uiService = e.GetService<IUIService>();
                 using (LockDialog dlg = new LockDialog(psi))
                 {
-                    dlg.Context = e.Context;
-                    bool succeeded = uiService.ShowDialog(dlg) == DialogResult.OK;
+                    bool succeeded = (dlg.ShowDialog(e.Context)== DialogResult.OK);
                     psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
                     stealLocks = dlg.StealLocks;
                     comment = dlg.Message;
