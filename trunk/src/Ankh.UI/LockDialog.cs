@@ -121,14 +121,9 @@ namespace Ankh.UI
             get { return this.pathSelectionTreeView; }
         }
 
-        protected Button OkButton
-        {
-            get { return this.okButton; }
-        }
-
         protected Button DoCancelButton
         {
-            get { return this.cancelButton; }
+            get { return this.btnCancel; }
         }
 
         /// <summary>
@@ -158,7 +153,7 @@ namespace Ankh.UI
                     break;
                 }
             }
-            this.OkButton.Enabled = result;
+            okButton.Enabled = result;
         }
     }
 }
