@@ -36,7 +36,7 @@ namespace Ankh.UI
             this.suppressGroupBox.Location = new System.Drawing.Point(12, 12);
             this.suppressGroupBox.Name = "suppressGroupBox";
             this.suppressGroupBox.Size = new System.Drawing.Size(352, 39);
-            this.suppressGroupBox.TabIndex = 0;
+            this.suppressGroupBox.TabIndex = 4;
             this.suppressGroupBox.TabStop = false;
             // 
             // suppressLabel
@@ -57,7 +57,7 @@ namespace Ankh.UI
             this.label1.Location = new System.Drawing.Point(3, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 5;
+            this.label1.TabIndex = 1;
             this.label1.Text = "Lock message:";
             // 
             // btnCancel
@@ -67,7 +67,7 @@ namespace Ankh.UI
             this.btnCancel.Location = new System.Drawing.Point(289, 371);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 24);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             // 
             // okButton
@@ -78,7 +78,7 @@ namespace Ankh.UI
             this.okButton.Location = new System.Drawing.Point(208, 371);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 24);
-            this.okButton.TabIndex = 6;
+            this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             // 
             // stealLocksCheckBox
@@ -88,7 +88,7 @@ namespace Ankh.UI
             this.stealLocksCheckBox.Location = new System.Drawing.Point(12, 378);
             this.stealLocksCheckBox.Name = "stealLocksCheckBox";
             this.stealLocksCheckBox.Size = new System.Drawing.Size(82, 17);
-            this.stealLocksCheckBox.TabIndex = 5;
+            this.stealLocksCheckBox.TabIndex = 1;
             this.stealLocksCheckBox.Text = "&Steal Locks";
             // 
             // splitContainer1
@@ -111,7 +111,7 @@ namespace Ankh.UI
             this.splitContainer1.Panel2.Controls.Add(this.logMessageEditor);
             this.splitContainer1.Size = new System.Drawing.Size(352, 314);
             this.splitContainer1.SplitterDistance = 157;
-            this.splitContainer1.TabIndex = 8;
+            this.splitContainer1.TabIndex = 0;
             // 
             // pathSelectionTreeView
             // 
@@ -125,7 +125,7 @@ namespace Ankh.UI
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SingleCheck = false;
             this.pathSelectionTreeView.Size = new System.Drawing.Size(352, 154);
-            this.pathSelectionTreeView.TabIndex = 1;
+            this.pathSelectionTreeView.TabIndex = 0;
             this.pathSelectionTreeView.UrlPaths = false;
             this.pathSelectionTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.pathSelectionTreeView_AfterCheck);
             // 
@@ -138,7 +138,7 @@ namespace Ankh.UI
             this.logMessageEditor.Location = new System.Drawing.Point(0, 25);
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(352, 128);
-            this.logMessageEditor.TabIndex = 3;
+            this.logMessageEditor.TabIndex = 0;
             this.logMessageEditor.Text = null;
             // 
             // LockDialog
