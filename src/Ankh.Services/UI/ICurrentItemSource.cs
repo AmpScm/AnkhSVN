@@ -42,7 +42,7 @@ namespace Ankh.UI
         /// <summary>
         /// Gets or sets the <see cref="ICurrentItemSource"/>
         /// </summary>
-        ICurrentItemSource<SvnLogEventArgs> ItemSource { get;set;}
+        ICurrentItemSource<TItem> ItemSource { get;set;}
     }
 
     /// <summary>
