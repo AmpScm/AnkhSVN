@@ -49,7 +49,6 @@ namespace Ankh.UI
             {
                 EnsureSelection();
             }
-            Initialize();
             Message = _originalText;
         }
 
@@ -66,6 +65,13 @@ namespace Ankh.UI
             base.OnContextChanged(e);
 
             pathSelectionTreeView.Context = Context;
+            Initialize();
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
             Initialize();
         }
 
