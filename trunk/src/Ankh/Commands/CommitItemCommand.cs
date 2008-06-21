@@ -96,8 +96,13 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.SolutionCommit:
+                    ticked = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
                     foreach (string file in mapper.GetAllFilesOfAllProjects())
                     {
+                        if (ticked.Contains(file))
+                            continue;
+
+                        ticked.Add(file);
                         SvnItem item = cache[file];
 
                         if (item != null)
