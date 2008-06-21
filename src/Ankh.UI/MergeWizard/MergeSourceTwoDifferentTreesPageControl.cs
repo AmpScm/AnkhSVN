@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
 using System.Windows.Forms.Design;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -100,27 +101,31 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void DisplayLogViewerAndRetrieveRevisions(object sender)
         {
-            // TODO: Update to allow for retrieval of the revisions for others to render.
-            LogViewerDialog dialog;
-
+            string target;
             if (sender == fromRevisionSelectButton || (sender == toRevisionSelectButton && useFromURLCheckBox.Checked))
             {
-                dialog = new LogViewerDialog(fromURLTextBox.Text,
-                    ((MergeWizard)WizardPage.Wizard).Context);
+                target = fromURLTextBox.Text;   
             }
             else if (sender == toRevisionSelectButton)
             {
-                dialog = new LogViewerDialog(toURLTextBox.Text,
-                    ((MergeWizard)WizardPage.Wizard).Context);
+                target = toURLTextBox.Text;
             }
             else
             {
                 return;
             }
 
-            DialogResult result;
-
-            result = dialog.ShowDialog(WizardPage.Form);
+            using (LogViewerDialog dialog = new LogViewerDialog(target,
+                    ((MergeWizard)WizardPage.Wizard).Context))
+            {
+                if (dialog.ShowDialog(WizardPage.Form) == DialogResult.OK)
+                {
+                    IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
+                    
+                    // TODO: use selection in correct field
+                    GC.KeepAlive(selected);
+                }
+            }
         }
 
         #region UI Events

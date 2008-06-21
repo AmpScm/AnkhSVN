@@ -5,10 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
-    public partial class LogViewerDialog : Form
+    public partial class LogViewerDialog : Form, ICurrentItemDestination<ISvnLogItem>
     {
         private string _logTarget;
         private IAnkhServiceProvider _context;
@@ -16,6 +18,7 @@ namespace Ankh.UI
         public LogViewerDialog()
         {
             InitializeComponent();
+            ItemSource = logViewerControl;
         }
 
         public LogViewerDialog(string target, IAnkhServiceProvider context)
@@ -43,6 +46,17 @@ namespace Ankh.UI
             set { _logTarget = value; }
         }
 
+        public IEnumerable<ISvnLogItem> SelectedItems
+        {
+            get
+            {
+                if (ItemSource == null)
+                    return new ISvnLogItem[0];
+
+                return ItemSource.SelectedItems;
+            }
+        }
+
         #region UI Events
         private void LogViewerDialog_Load(object sender, EventArgs e)
         {
@@ -52,5 +66,26 @@ namespace Ankh.UI
                 logViewerControl.Start(Context, new string[] { LogTarget });
         }
         #endregion
+
+        #region ICurrentItemDestination<ISvnLogItem> Members
+
+        ICurrentItemSource<ISvnLogItem> _itemSource;
+        public ICurrentItemSource<ISvnLogItem> ItemSource
+        {
+            get
+            {
+                return _itemSource;
+            }
+            set
+            {
+                _itemSource = value;
+                value.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(value_SelectionChanged);
+            }
+        }
+        #endregion
+
+        void value_SelectionChanged(object sender, IList<ISvnLogItem> e)
+        {
+        }
     }
 }

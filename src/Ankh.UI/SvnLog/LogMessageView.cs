@@ -6,12 +6,13 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI
 {
     public partial class LogMessageView : UserControl
     {
-        ICurrentItemSource<SvnLogEventArgs> logItemSource;
+        ICurrentItemSource<ISvnLogItem> logItemSource;
 
         public LogMessageView()
         {
@@ -24,23 +25,23 @@ namespace Ankh.UI
             container.Add(this);
         }
 
-        public ICurrentItemSource<SvnLogEventArgs> ItemSource
+        public ICurrentItemSource<ISvnLogItem> ItemSource
         {
             get { return logItemSource; }
             set 
             { 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged -= new FocusChangedEventHandler<SvnLogEventArgs>(LogFocusChanged);
+                    logItemSource.FocusChanged -= new FocusChangedEventHandler<ISvnLogItem>(LogFocusChanged);
 
                 logItemSource = value; 
                 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged += new FocusChangedEventHandler<SvnLogEventArgs>(LogFocusChanged);
+                    logItemSource.FocusChanged += new FocusChangedEventHandler<ISvnLogItem>(LogFocusChanged);
 
             }
         }
 
-        void LogFocusChanged(object sender, SvnLogEventArgs e)
+        void LogFocusChanged(object sender, ISvnLogItem e)
         {
             if (ItemSource != null && ItemSource.FocusedItem != null)
                 textBox1.Text = logItemSource.FocusedItem.LogMessage;

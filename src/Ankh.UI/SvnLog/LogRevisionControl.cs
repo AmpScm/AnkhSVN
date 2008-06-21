@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace Ankh.UI.SvnLog
 {
-	public partial class LogRevisionControl : UserControl, ICurrentItemSource<SvnLogEventArgs>
+    public partial class LogRevisionControl : UserControl, ICurrentItemSource<ISvnLogItem>
     {
         ICollection<string> _localTargets;
         Uri _remoteTarget;
@@ -314,27 +314,31 @@ namespace Ankh.UI.SvnLog
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
 			ShowBusyIndicator();
-		}
-
-		#region ICurrentItemSource<SvnLogEventArgs> Members
-
-		public event SelectionChangedEventHandler<SvnLogEventArgs> SelectionChanged;
-
-		public event FocusChangedEventHandler<SvnLogEventArgs> FocusChanged;
-
-		public SvnLogEventArgs FocusedItem
-        {
-            get { return logRevisionControl1.FocusedItem == null ? null : ((LogListViewItem)logRevisionControl1.FocusedItem).RawData; }
         }
 
-		public IList<SvnLogEventArgs> SelectedItems
+        #region ICurrentItemSource<ISvnLogItem> Members
+
+        public event SelectionChangedEventHandler<ISvnLogItem> SelectionChanged;
+
+        public event FocusChangedEventHandler<ISvnLogItem> FocusChanged;
+
+        public ISvnLogItem FocusedItem
+        {
+            get
+            {
+                if (logRevisionControl1.FocusedItem == null)
+                    return null;
+
+                return new LogItem((LogListViewItem)logRevisionControl1.FocusedItem);
+            }
+        }
+
+        readonly IList<ISvnLogItem> _selectedItems = new List<ISvnLogItem>();
+        public IList<ISvnLogItem> SelectedItems
         {
             get 
             {
-				List<SvnLogEventArgs> rslt = new List<SvnLogEventArgs>();
-                foreach(int i in logRevisionControl1.SelectedIndices)
-					rslt.Add(((LogListViewItem)logRevisionControl1.Items[i]).RawData);
-                return rslt;
+                return _selectedItems;
             }
         }
 
@@ -348,9 +352,12 @@ namespace Ankh.UI.SvnLog
 
         private void logRevisionControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            _selectedItems.Clear();
+            foreach (int i in logRevisionControl1.SelectedIndices)
+                _selectedItems.Add(new LogItem((LogListViewItem)logRevisionControl1.Items[i]));
+
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
-
         }
 
         private void logRevisionControl1_ShowContextMenu(object sender, EventArgs e)
