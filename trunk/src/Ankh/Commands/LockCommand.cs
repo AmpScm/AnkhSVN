@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Ankh.UI;
 using System.Windows.Forms;
 using Ankh.Scc;
+using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
@@ -54,10 +55,11 @@ namespace Ankh.Commands
 
             if (!CommandBase.Shift)
             {
+                IUIService uiService = e.GetService<IUIService>();
                 using (LockDialog dlg = new LockDialog(psi))
                 {
                     dlg.Context = e.Context;
-                    bool succeeded = dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK;
+                    bool succeeded = uiService.ShowDialog(dlg) == DialogResult.OK;
                     psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
                     stealLocks = dlg.StealLocks;
                     comment = dlg.Message;

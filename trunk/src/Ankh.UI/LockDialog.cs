@@ -8,20 +8,37 @@ namespace Ankh.UI
     /// <summary>
     /// The dialog to lock SVN items.
     /// </summary>
-    public partial class LockDialog : System.Windows.Forms.Form
+    public partial class LockDialog : VSContainerForm
 	{
         PathSelectorInfo _info;
-        IAnkhServiceProvider _context;
 
 		public LockDialog()
 		{
 			// This call is required by the Windows Form Designer.
 			InitializeComponent();
+            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
 		}
 
         public LockDialog(PathSelectorInfo info) : this()
         {
             this._info = info;
+        }
+
+        bool _initialized, _hooked;
+        void Initialize()
+        {
+            if (!_initialized && Context != null)
+            {
+                logMessageEditor.Init(Context, true);
+                _initialized = true;
+            }
+
+            if (!_hooked && _initialized && Context != null && IsHandleCreated)
+            {
+                AddCommandTarget(logMessageEditor.CommandTarget);
+                AddWindowPane(logMessageEditor.WindowPane);
+                _hooked = true;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -32,6 +49,8 @@ namespace Ankh.UI
             {
                 EnsureSelection();
             }
+            Initialize();
+            Message = _originalText;
         }
 
         void EnsureSelection()
@@ -42,22 +61,12 @@ namespace Ankh.UI
             pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
         }
 
-        public IAnkhServiceProvider Context
+        protected override  void OnContextChanged(EventArgs e)
         {
-            get { return _context; }
-            set
-            {
-                if (value != _context)
-                {
-                    _context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
+            base.OnContextChanged(e);
 
-        protected virtual void OnContextChanged(EventArgs eventArgs)
-        {
             pathSelectionTreeView.Context = Context;
+            Initialize();
         }
 
         /// <summary>
@@ -94,10 +103,11 @@ namespace Ankh.UI
             get { return this.pathSelectionTreeView.CheckedItems; }
         }
 
+        string _originalText;
         public string Message
         {
-            get { return this.messageTextBox.Text; }
-            set { this.messageTextBox.Text = value; }
+            get { return this.logMessageEditor.Text; }
+            set { this.logMessageEditor.Text = _originalText = value; }
         }
 
         public bool StealLocks
