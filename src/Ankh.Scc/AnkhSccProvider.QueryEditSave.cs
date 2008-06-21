@@ -154,7 +154,7 @@ namespace Ankh.Scc
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
 
-            List<SvnItem> mustLockFiles = new List<SvnItem>();
+            List<SvnItem> mustLockFiles = null;
             if (rgpszMkDocuments != null)
             {
                 for (int i = 0; i < cFiles; i++)
@@ -175,14 +175,17 @@ namespace Ankh.Scc
                             break;
                         }
 
+                        if(mustLockFiles == null)
+                            mustLockFiles = new List<SvnItem>();
                         mustLockFiles.Add(item);
                     }
                 }
             }
-            if (mustLockFiles.Count > 0)
+            if (mustLockFiles != null)
             {
                 IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockFiles);
+                
+                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockFiles, CommandPrompt.Always);
 
                 foreach (SvnItem i in mustLockFiles)
                 {

@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// Command to lock the selected item.
     /// </summary>
     [Command(AnkhCommand.Lock, HideWhenDisabled=true)]
-    public class LockCommand : CommandBase
+    class LockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -53,7 +53,7 @@ namespace Ankh.Commands
             bool stealLocks = false;
             string comment = "";
 
-            if (!CommandBase.Shift)
+            if (e.PromptUser || !(CommandBase.Shift || e.DontPrompt))
             {
                 IUIService uiService = e.GetService<IUIService>();
                 using (LockDialog dlg = new LockDialog(psi))
@@ -85,16 +85,22 @@ namespace Ankh.Commands
             if (files.Count == 0)
                 return;
 
-            e.GetService<IProgressRunner>().Run("Locking",
-                delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    SvnLockArgs la = new SvnLockArgs();
-                    la.StealLock = stealLocks;
-                    la.Comment = comment;
-                    ee.Client.Lock(files, la);
-                });
-            // TODO: this can be removed when switching to Subversion 1.6
-            e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
+            try
+            {
+                e.GetService<IProgressRunner>().Run("Locking",
+                    delegate(object sender, ProgressWorkerArgs ee)
+                    {
+                        SvnLockArgs la = new SvnLockArgs();
+                        la.StealLock = stealLocks;
+                        la.Comment = comment;
+                        ee.Client.Lock(files, la);
+                    });
+            }
+            finally
+            {
+                // TODO: this can be removed when switching to Subversion 1.6
+                e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
+            }
 
         } // OnExecute
 
