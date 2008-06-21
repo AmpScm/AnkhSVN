@@ -86,12 +86,17 @@ namespace Ankh
 
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
         {
-            return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), null);
+            return PostExecCommand(command, null, CommandPrompt.DoDefault);
         }
 
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command, object args)
         {
-            return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), args);
+            return PostExecCommand(command, args, CommandPrompt.DoDefault);
+        }
+
+        public bool PostExecCommand(Ankh.Ids.AnkhCommand command, object args, CommandPrompt prompt)
+        {
+            return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), args, prompt);
         }
 
         public bool PostExecCommand(System.ComponentModel.Design.CommandID command)
@@ -103,6 +108,11 @@ namespace Ankh
         }
 
         public bool PostExecCommand(System.ComponentModel.Design.CommandID command, object args)
+        {
+            return PostExecCommand(command, args, CommandPrompt.DoDefault);
+        }
+
+        public bool PostExecCommand(System.ComponentModel.Design.CommandID command, object args, CommandPrompt prompt)
         {
             if (command == null)
                 throw new ArgumentNullException("command");
@@ -116,8 +126,22 @@ namespace Ankh
                 Guid set = command.Guid;
                 object a = args;
 
+                uint flags;
+                switch (prompt)
+                {
+                    case CommandPrompt.Always:
+                        flags = (uint)OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER;
+                        break;
+                    case CommandPrompt.Never:
+                        flags = (uint)OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER;
+                        break;
+                    default:
+                        flags = (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT;
+                        break;
+                }
+
                 return VSConstants.S_OK == shell.PostExecCommand(ref set, 
-                    unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, ref a);
+                    unchecked((uint)command.ID), flags, ref a);
             }
 
             return false;
@@ -129,6 +153,11 @@ namespace Ankh
 
         public bool DirectlyExecCommand(AnkhCommand command, object args)
         {
+            return DirectlyExecCommand(command, args, CommandPrompt.DoDefault);
+        }
+
+        public bool DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt)
+        {
             // TODO: Assert that we are in the UI thread
 
             CommandMapper mapper = GetService<CommandMapper>();
@@ -136,7 +165,7 @@ namespace Ankh
             if (mapper == null)
                 return false;
 
-            return mapper.Execute(command, new CommandEventArgs(command, AnkhContext, args, false, false));
+            return mapper.Execute(command, new CommandEventArgs(command, AnkhContext, args, prompt == CommandPrompt.Always, prompt == CommandPrompt.Never));
         }        
 
         #endregion

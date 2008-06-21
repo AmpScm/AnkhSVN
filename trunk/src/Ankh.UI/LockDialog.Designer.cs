@@ -60,12 +60,12 @@ namespace Ankh.UI
             this.label1.TabIndex = 5;
             this.label1.Text = "Lock message:";
             // 
-            // cancelButton
+            // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(289, 371);
-            this.btnCancel.Name = "cancelButton";
+            this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 24);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
@@ -134,6 +134,7 @@ namespace Ankh.UI
             this.logMessageEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessageEditor.Location = new System.Drawing.Point(0, 25);
             this.logMessageEditor.Name = "logMessageEditor";
             this.logMessageEditor.Size = new System.Drawing.Size(352, 128);

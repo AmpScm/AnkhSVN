@@ -6,6 +6,13 @@ using System.ComponentModel.Design;
 
 namespace Ankh.Commands
 {
+    public enum CommandPrompt
+    {
+        DoDefault,
+        Always,
+        Never
+    }
+
     public interface IAnkhCommandService
     {
         // ExecCommand has no args object because it would require a lot 
@@ -43,6 +50,15 @@ namespace Ankh.Commands
         /// <returns></returns>
         bool DirectlyExecCommand(AnkhCommand command, object args);
 
+        /// <summary>
+        /// Directly calls the ankh command handler.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        bool DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
+        
+
         // These methods can be called from the UI or a background thread
         /// <summary>
         /// Posts the command to the command queue
@@ -55,6 +71,17 @@ namespace Ankh.Commands
         /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
         bool PostExecCommand(AnkhCommand command, object args);
+
+
+        /// <summary>
+        /// Posts the command to the command queue
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="args">The args.</param>
+        /// <param name="prompt">The prompt.</param>
+        /// <returns></returns>
+        bool PostExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
+
         /// <summary>
         /// Posts the command to the command queue
         /// </summary>
@@ -66,6 +93,15 @@ namespace Ankh.Commands
         /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
         bool PostExecCommand(CommandID command, object args);
+
+        /// <summary>
+        /// Posts the command to the command queue
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="args">The args.</param>
+        /// <param name="prompt">The prompt.</param>
+        /// <returns></returns>
+        bool PostExecCommand(CommandID command, object args, CommandPrompt prompt);
 
         /// <summary>
         /// Updates the command UI.
