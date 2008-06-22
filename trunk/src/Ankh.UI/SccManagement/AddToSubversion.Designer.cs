@@ -162,8 +162,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(427, 28);
             this.label1.TabIndex = 0;
-            this.label1.Text = "This will create a folder in the repository to hold your project and initialze yo" +
-                "ur working copy.";
+            this.label1.Text = "This will create a folder in the repository to hold your project and initialize y" +
+                "our working copy.";
             // 
             // projectBox
             // 
