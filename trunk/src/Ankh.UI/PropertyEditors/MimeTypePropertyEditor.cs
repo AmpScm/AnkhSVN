@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using SharpSvn.Implementation;
 
 namespace Ankh.UI
 {
@@ -81,7 +82,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return PropertyEditorConstants.SVN_PROP_MIMETYPE;
+            return SvnPropertyNames.SvnMimeType;
         }
 
         /// <summary> 

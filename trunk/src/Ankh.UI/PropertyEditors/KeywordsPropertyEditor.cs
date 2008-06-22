@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
+using SharpSvn.Implementation;
 
 namespace Ankh.UI
 {
@@ -118,7 +119,7 @@ namespace Ankh.UI
         /// <returns></returns>
         public override string ToString()
         {
-            return PropertyEditorConstants.SVN_PROP_KEYWORDS;
+            return SvnPropertyNames.SvnKeywords;
         }
 
 
