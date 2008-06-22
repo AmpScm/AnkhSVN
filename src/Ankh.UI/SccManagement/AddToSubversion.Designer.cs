@@ -44,6 +44,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.addTrunk = new System.Windows.Forms.CheckBox();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
@@ -61,7 +62,7 @@
             this.locationBox.Controls.Add(this.comboBox1);
             this.locationBox.Location = new System.Drawing.Point(12, 91);
             this.locationBox.Name = "locationBox";
-            this.locationBox.Size = new System.Drawing.Size(436, 251);
+            this.locationBox.Size = new System.Drawing.Size(436, 227);
             this.locationBox.TabIndex = 2;
             this.locationBox.TabStop = false;
             this.locationBox.Text = "&Repository Url:";
@@ -96,7 +97,7 @@
             this.treeView1.Context = null;
             this.treeView1.Location = new System.Drawing.Point(6, 46);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(325, 199);
+            this.treeView1.Size = new System.Drawing.Size(325, 175);
             this.treeView1.TabIndex = 2;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -113,7 +114,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.localFolder);
-            this.groupBox1.Location = new System.Drawing.Point(12, 348);
+            this.groupBox1.Location = new System.Drawing.Point(12, 324);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(436, 46);
             this.groupBox1.TabIndex = 3;
@@ -182,6 +183,7 @@
             this.projectNameBox.Name = "projectNameBox";
             this.projectNameBox.Size = new System.Drawing.Size(424, 20);
             this.projectNameBox.TabIndex = 0;
+            this.projectNameBox.TextChanged += new System.EventHandler(this.projectNameBox_TextChanged);
             // 
             // timer1
             // 
@@ -207,6 +209,18 @@
             this.textBox1.Size = new System.Drawing.Size(424, 20);
             this.textBox1.TabIndex = 0;
             // 
+            // addTrunk
+            // 
+            this.addTrunk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.addTrunk.AutoSize = true;
+            this.addTrunk.Location = new System.Drawing.Point(12, 376);
+            this.addTrunk.Name = "addTrunk";
+            this.addTrunk.Size = new System.Drawing.Size(155, 17);
+            this.addTrunk.TabIndex = 8;
+            this.addTrunk.Text = "A&dd trunk Folder for Project";
+            this.addTrunk.UseVisualStyleBackColor = true;
+            this.addTrunk.CheckedChanged += new System.EventHandler(this.addTrunk_CheckedChanged);
+            // 
             // AddToSubversion
             // 
             this.AcceptButton = this.okButton;
@@ -214,6 +228,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(460, 485);
+            this.Controls.Add(this.addTrunk);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.projectBox);
             this.Controls.Add(this.label1);
@@ -230,6 +245,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -250,5 +266,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox addTrunk;
     }
 }

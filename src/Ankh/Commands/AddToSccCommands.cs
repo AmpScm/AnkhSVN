@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
 using Ankh.VS;
+using Ankh.UI.SccManagement;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
@@ -113,21 +115,40 @@ namespace Ankh.Commands
                     else
                         confirmed = true;
 
-                    using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                    using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
                     using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
                     {
                         dialog.PathToAdd = e.Selection.SolutionFilename;
                         if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                         {
                             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-                            // Create uri (including optional /trunk if required)
-                            // Disabled because "create trunk" option is currently disabled
-                            //cl.RemoteCreateDirectory(dialog.RepositoryUrl);
+
+                            Collection<SvnInfoEventArgs> info;
+                            SvnInfoArgs ia = new SvnInfoArgs();
+                            ia.ThrowOnError = false;
+                            if (!cl.GetInfo(new SvnUriTarget(dialog.RepositoryAddUrl), ia, out info))
+                            {
+                                using (CreateDirectory createDialog = new CreateDirectory())
+                                {
+                                    createDialog.NewDirectoryName = dialog.RepositoryAddUrl.ToString();
+                                    createDialog.NewDirectoryReadonly = true;
+                                    if (createDialog.ShowDialog(e.Context) == DialogResult.OK)
+                                    {
+                                        // Create uri (including optional /trunk if required)
+                                        SvnCreateDirectoryArgs cdArg = new SvnCreateDirectoryArgs();
+                                        cdArg.MakeParents = true;
+                                        cdArg.LogMessage = createDialog.LogMessage;
+                                        cl.RemoteCreateDirectory(dialog.RepositoryAddUrl, cdArg);
+                                    }
+                                    else
+                                        return; // bail out, we cannot continue without directory in the repository
+                                }
+                            }
 
                             // Create working copy
                             SvnCheckOutArgs coArg = new SvnCheckOutArgs();
                             coArg.AllowObstructions = true;
-                            cl.CheckOut(dialog.RepositoryUrl, dialog.WorkingCopyDir, coArg);
+                            cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
 
                             // Add solutionfile so we can set properties (set managed)
                             SvnAddArgs aa = new SvnAddArgs();
