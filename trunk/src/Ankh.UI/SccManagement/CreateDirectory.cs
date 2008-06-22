@@ -45,6 +45,12 @@ namespace Ankh.UI.SccManagement
             set { textBox1.Text = value; }
         }
 
+        public bool NewDirectoryReadonly
+        {
+            get { return !textBox1.Enabled; }
+            set { textBox1.Enabled = !value; }
+        }
+
         public string LogMessage
         {
             get { return logMessage.Text; }

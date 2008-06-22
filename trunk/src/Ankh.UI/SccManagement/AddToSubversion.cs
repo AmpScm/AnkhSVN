@@ -24,16 +24,6 @@ namespace Ankh.UI.SccManagement
             set { _pathToAdd = value; }
         }
 
-        public Uri RepositoryUrl
-        {
-            get
-            {
-                if (treeView1.SelectedNode == null)
-                    return null;
-
-                return treeView1.SelectedNode.RawUri;
-            }
-        }
 
         public string WorkingCopyDir
         {
@@ -54,6 +44,8 @@ namespace Ankh.UI.SccManagement
 
             string directory = File.Exists(PathToAdd) ? Path.GetDirectoryName(PathToAdd) : PathToAdd;
             string root = Path.GetPathRoot(directory);
+
+            projectNameBox.Text = Path.GetFileNameWithoutExtension(PathToAdd);
 
             localFolder.Items.Add(directory);
             while (!root.Equals(directory, StringComparison.OrdinalIgnoreCase))
@@ -108,9 +100,43 @@ namespace Ankh.UI.SccManagement
             timer1.Enabled = true;
         }
 
+        public Uri RepositoryAddUrl
+        {
+            get
+            {
+                if (treeView1.SelectedNode == null)
+                    return null;
+
+                Uri u = treeView1.SelectedNode.RawUri;
+                if (!string.IsNullOrEmpty(projectNameBox.Text))
+                    u = new Uri(u, projectNameBox.Text + "/");
+                if (addTrunk.Checked)
+                    u = new Uri(u, "trunk/");
+                return u;
+            }
+        }
+
+        void UpdateUrlPreview()
+        {
+            if (RepositoryAddUrl == null)
+                textBox1.Text = "";
+            else
+                textBox1.Text = RepositoryAddUrl.ToString();
+        }
+
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            textBox1.Text = treeView1.SelectedNode == null ? "" : treeView1.SelectedNode.RawUri.ToString();
+            UpdateUrlPreview();
+        }
+
+        private void addTrunk_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateUrlPreview();
+        }
+
+        private void projectNameBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateUrlPreview();
         }
     }
 }
