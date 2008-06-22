@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
+using Ankh.VS;
 
 namespace Ankh.UI.SccManagement
 {
@@ -35,7 +36,27 @@ namespace Ankh.UI.SccManagement
             base.OnContextChanged(e);
 
             if (Context != null)
+            {
                 treeView1.Context = Context;
+                Initialize();
+            }
+        }
+
+        bool _initialized;
+        private void Initialize()
+        {
+            if (_initialized)
+                return;
+
+            if (Context != null)
+            {
+                IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
+                foreach (Uri u in ss.GetRepositoryUris(true))
+                {
+                    repositoryUrl.Items.Add(u);
+                }
+                _initialized = true;
+            }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -53,8 +74,13 @@ namespace Ankh.UI.SccManagement
                 directory = Path.GetDirectoryName(directory);
                 localFolder.Items.Add(directory);
             }
+        }
 
-            GC.KeepAlive(PathToAdd);
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            // TODO: Save repository location
         }
 
         SvnClient _client;
@@ -137,6 +163,12 @@ namespace Ankh.UI.SccManagement
         private void projectNameBox_TextChanged(object sender, EventArgs e)
         {
             UpdateUrlPreview();
+        }
+
+        private void repositoryUrl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Uri u = (Uri)repositoryUrl.SelectedItem;
+            treeView1.AddRoot(u);
         }
     }
 }
