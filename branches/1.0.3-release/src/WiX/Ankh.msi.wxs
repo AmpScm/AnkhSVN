@@ -13,7 +13,7 @@
     <Upgrade Id="F5BC3C04-5CC8-405B-94EB-63F0FD3C8AC1">
       <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" 
                       Minimum="1.0.4" IncludeMinimum="yes"
-                      Maximum="$(var.ankhversion)" IncludeMaximum="yes"
+                      Maximum="$(var.ankhversion)" IncludeMaximum="no"
                       MigrateFeatures="yes" />
       <UpgradeVersion Property="NEWERVERSIONFOUND" 
                       Minimum="$(var.ankhversion)" IncludeMinimum="no"
@@ -26,9 +26,6 @@
                       Minimum="0.5.0" IncludeMinimum="yes" 
 					            Maximum="1.0.3" IncludeMaximum="yes"
                       MigrateFeatures="yes" />
-			<UpgradeVersion Property="NEWERVERSIONFOUND" 
-                      Minimum="0.5.0" IncludeMinimum="no"
-                      Maximum="99.0.0" OnlyDetect="yes"/>
 		</Upgrade>
 
 		<Property Id="ShortProductName">AnkhSvn</Property>
@@ -36,6 +33,8 @@
 		<Property Id="ARPURLINFOABOUT">http://ankhsvn.tigris.org/</Property>
 		<Property Id="ARPHELPLINK">http://ankhsvn.tigris.org/</Property>
 		<Property Id="ARPURLUPDATEINFO">http://ankhsvn.tigris.org/</Property>
+
+    <Property Id="ALLUSERS">1</Property>
 
 		<!-- Error messages -->
 		<Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
