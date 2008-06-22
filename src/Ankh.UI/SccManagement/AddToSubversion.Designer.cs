@@ -32,6 +32,7 @@
             this.locationBox = new System.Windows.Forms.GroupBox();
             this.repositoryUrl = new System.Windows.Forms.ComboBox();
             this.createFolderButton = new System.Windows.Forms.Button();
+            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.localFolder = new System.Windows.Forms.ComboBox();
@@ -43,7 +44,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
@@ -59,9 +59,9 @@
             this.locationBox.Controls.Add(this.createFolderButton);
             this.locationBox.Controls.Add(this.treeView1);
             this.locationBox.Controls.Add(this.comboBox1);
-            this.locationBox.Location = new System.Drawing.Point(12, 89);
+            this.locationBox.Location = new System.Drawing.Point(12, 91);
             this.locationBox.Name = "locationBox";
-            this.locationBox.Size = new System.Drawing.Size(436, 257);
+            this.locationBox.Size = new System.Drawing.Size(436, 251);
             this.locationBox.TabIndex = 2;
             this.locationBox.TabStop = false;
             this.locationBox.Text = "&Repository Url:";
@@ -88,6 +88,18 @@
             this.createFolderButton.UseVisualStyleBackColor = true;
             this.createFolderButton.Click += new System.EventHandler(this.createFolderButton_Click);
             // 
+            // treeView1
+            // 
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView1.Context = null;
+            this.treeView1.Location = new System.Drawing.Point(6, 46);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(325, 199);
+            this.treeView1.TabIndex = 2;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
@@ -101,9 +113,9 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.localFolder);
-            this.groupBox1.Location = new System.Drawing.Point(12, 352);
+            this.groupBox1.Location = new System.Drawing.Point(12, 348);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(436, 43);
+            this.groupBox1.Size = new System.Drawing.Size(436, 46);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Local &Folder:";
@@ -114,7 +126,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.localFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.localFolder.FormattingEnabled = true;
-            this.localFolder.Location = new System.Drawing.Point(6, 16);
+            this.localFolder.Location = new System.Drawing.Point(6, 19);
             this.localFolder.Name = "localFolder";
             this.localFolder.Size = new System.Drawing.Size(424, 21);
             this.localFolder.TabIndex = 0;
@@ -157,7 +169,7 @@
             this.projectBox.Controls.Add(this.projectNameBox);
             this.projectBox.Location = new System.Drawing.Point(12, 40);
             this.projectBox.Name = "projectBox";
-            this.projectBox.Size = new System.Drawing.Size(436, 43);
+            this.projectBox.Size = new System.Drawing.Size(436, 45);
             this.projectBox.TabIndex = 1;
             this.projectBox.TabStop = false;
             this.projectBox.Text = "Project &Name:";
@@ -179,32 +191,21 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 401);
+            this.groupBox2.Location = new System.Drawing.Point(12, 399);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(436, 43);
+            this.groupBox2.Size = new System.Drawing.Size(436, 45);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project will be created in:";
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 17);
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(6, 19);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(424, 20);
             this.textBox1.TabIndex = 0;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Context = null;
-            this.treeView1.Location = new System.Drawing.Point(6, 46);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(325, 205);
-            this.treeView1.TabIndex = 2;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // AddToSubversion
             // 
