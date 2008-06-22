@@ -15,7 +15,7 @@ namespace Ankh.UI
     public partial class PropertyEditorDialog : System.Windows.Forms.Form
     {
         IAnkhServiceProvider _context;
-        List<PropertyItem> _propItems;
+        readonly List<PropertyItem> _propItems;
         IPropertyEditor _currentEditor;
 
         public PropertyEditorDialog(string svnItemPath)
@@ -25,7 +25,7 @@ namespace Ankh.UI
             //
             InitializeComponent();
 
-            this._propItems = new List<PropertyItem>();
+            _propItems = new List<PropertyItem>();
 
             this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
         }
