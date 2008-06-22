@@ -288,8 +288,9 @@ namespace Ankh.Scc
             foreach (PendingChange pc in _pendingChanges)
             {
                 if (pc.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase)
-                    && path.Length == pc.FullPath.Length || pc.FullPath[path.Length] == Path.DirectorySeparatorChar)
+                    && path.Length == pc.FullPath.Length || (pc.FullPath.Length > path.Length && pc.FullPath[path.Length] == Path.DirectorySeparatorChar))
                 {
+                    // SR: Added pc.FullPath.Length > path.Length to avoid index out of bounds exception
                     yield return pc;
                 }
             }
