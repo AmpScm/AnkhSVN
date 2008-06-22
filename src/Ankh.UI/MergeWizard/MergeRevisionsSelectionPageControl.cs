@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
 using SharpSvn;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -26,13 +27,27 @@ namespace Ankh.UI.MergeWizard
             get { return ((MergeWizard)WizardPage.Wizard).MergeSource; }
         }
 
+        public string MergeTarget
+        {
+            get { return ((MergeWizard)WizardPage.Wizard).MergeTarget.FullPath; }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             logToolControl1.Site = Site;
-            logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Remote;
-            if(MergeSource != null)
-                logToolControl1.Start(WizardPage.Context, new string[]{MergeSource});
+            switch(((MergeWizard)WizardPage.Wizard).LogMode)
+            {
+                case LogMode.MergesEligible:
+                    logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, new Uri(MergeSource));
+                    break;
+                case LogMode.MergesMerged:
+                    logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, new Uri(MergeSource));
+                    break;
+                case LogMode.Remote:
+                    logToolControl1.StartRemoteLog(WizardPage.Context, new Uri(MergeSource));
+                    break;
+            }
         }
     }
 }

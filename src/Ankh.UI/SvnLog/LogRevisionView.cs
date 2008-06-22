@@ -40,8 +40,8 @@ namespace Ankh.UI.SvnLog
     public class LogListViewItem : ListViewItem
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnLogEventArgs _args;
-        public LogListViewItem(IAnkhServiceProvider context, SvnLogEventArgs e)
+        readonly SvnLoggingEventArgs _args;
+        public LogListViewItem(IAnkhServiceProvider context, SvnLoggingEventArgs e)
         {
             _args = e;
             _context = context;
@@ -81,7 +81,7 @@ namespace Ankh.UI.SvnLog
 			get { return _args.ChangedPaths; }
 		}
 
-		internal SvnLogEventArgs RawData
+        internal SvnLoggingEventArgs RawData
 		{
 			get { return _args; }
 		}

@@ -6,6 +6,7 @@ using System.Resources;
 using System.Reflection;
 using System.Windows.Forms;
 using SharpSvn;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -190,6 +191,17 @@ namespace Ankh.UI.MergeWizard
         {
             get { return _mergeSource; }
             set { _mergeSource = value; }
+        }
+
+        LogMode _logMode = LogMode.Remote;
+        /// <summary>
+        /// Gets or sets the log mode.
+        /// </summary>
+        /// <value>The log mode.</value>
+        public LogMode LogMode
+        {
+            get { return _logMode; }
+            set { _logMode = value; }
         }
 
         internal MergeWizardDialog WizardDialog

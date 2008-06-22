@@ -31,5 +31,12 @@ namespace Ankh.UI.MergeWizard
         {
             get { return MergeWizard.MergeType.ManuallyRecord; }
         }
+
+        protected override void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            base.OnPageChanging(e);
+
+            ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+        }
     }
 }
