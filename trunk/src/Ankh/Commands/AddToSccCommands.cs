@@ -10,24 +10,25 @@ using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileSccAddProjectToSubversion)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable=true)]
+    [Command(AnkhCommand.FileSccAddProjectToSubversion, HideWhenDisabled = true)]
+    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable=true, HideWhenDisabled=true)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             if (!e.State.SolutionExists || (e.Command == AnkhCommand.FileSccAddProjectToSubversion && e.State.EmptySolution))
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return;
             }
 
             if (e.State.OtherSccProviderActive)
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return; // Only one scc provider can be active at a time
             }
 
@@ -44,7 +45,7 @@ namespace Ankh.Commands
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
             {
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
                 return;
             }
 
@@ -54,7 +55,7 @@ namespace Ankh.Commands
                     return; // Something to enable
             }
 
-            e.Visible = e.Enabled = false;
+            e.Enabled = false;
         }
 
         private IEnumerable<SvnProject> GetSelection(ISelectionContext iSelectionContext)
@@ -113,13 +114,29 @@ namespace Ankh.Commands
                         confirmed = true;
 
                     using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                    using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
                     {
-                        SvnAddArgs aa = new SvnAddArgs();
-                        aa.AddParents = true;
+                        dialog.PathToAdd = e.Selection.SolutionFilename;
+                        if (dialog.ShowDialog(e.Context) == DialogResult.OK)
+                        {
+                            IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                            // Create uri (including optional /trunk if required)
+                            // Disabled because "create trunk" option is currently disabled
+                            //cl.RemoteCreateDirectory(dialog.RepositoryUrl);
 
-                        // For now just throw the error
+                            // Create working copy
+                            SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                            coArg.AllowObstructions = true;
+                            cl.CheckOut(dialog.RepositoryUrl, dialog.WorkingCopyDir, coArg);
 
-                        cl.Add(e.Selection.SolutionFilename, aa);
+                            // Add solutionfile so we can set properties (set managed)
+                            SvnAddArgs aa = new SvnAddArgs();
+                            aa.AddParents = true;
+                            cl.Add(e.Selection.SolutionFilename, aa);
+
+                            settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+                        }
+
                     }
                 }
                 else
