@@ -123,6 +123,7 @@ namespace Ankh.UI.MergeWizard
                     IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
                     
                     // TODO: use selection in correct field
+                    // We should probably support something like revision: '123-456,457,500-512'
                     GC.KeepAlive(selected);
                 }
             }
