@@ -28,22 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.locationBox = new System.Windows.Forms.GroupBox();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.repositoryUrl = new System.Windows.Forms.ComboBox();
             this.createFolderButton = new System.Windows.Forms.Button();
-            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.localFolder = new System.Windows.Forms.ComboBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.projectBox = new System.Windows.Forms.GroupBox();
             this.projectNameBox = new System.Windows.Forms.TextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // locationBox
@@ -51,26 +55,27 @@
             this.locationBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.locationBox.Controls.Add(this.comboBox3);
+            this.locationBox.Controls.Add(this.repositoryUrl);
             this.locationBox.Controls.Add(this.createFolderButton);
             this.locationBox.Controls.Add(this.treeView1);
             this.locationBox.Controls.Add(this.comboBox1);
             this.locationBox.Location = new System.Drawing.Point(12, 89);
             this.locationBox.Name = "locationBox";
-            this.locationBox.Size = new System.Drawing.Size(436, 259);
+            this.locationBox.Size = new System.Drawing.Size(436, 257);
             this.locationBox.TabIndex = 2;
             this.locationBox.TabStop = false;
             this.locationBox.Text = "&Repository Url:";
             // 
-            // comboBox3
+            // repositoryUrl
             // 
-            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.repositoryUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(6, 19);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(424, 21);
-            this.comboBox3.TabIndex = 1;
+            this.repositoryUrl.FormattingEnabled = true;
+            this.repositoryUrl.Location = new System.Drawing.Point(6, 19);
+            this.repositoryUrl.Name = "repositoryUrl";
+            this.repositoryUrl.Size = new System.Drawing.Size(424, 21);
+            this.repositoryUrl.TabIndex = 1;
+            this.repositoryUrl.TextUpdate += new System.EventHandler(this.repositoryUrl_TextUpdate);
             // 
             // createFolderButton
             // 
@@ -81,17 +86,7 @@
             this.createFolderButton.TabIndex = 3;
             this.createFolderButton.Text = "&Create Folder...";
             this.createFolderButton.UseVisualStyleBackColor = true;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Context = null;
-            this.treeView1.Location = new System.Drawing.Point(6, 46);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(325, 207);
-            this.treeView1.TabIndex = 2;
+            this.createFolderButton.Click += new System.EventHandler(this.createFolderButton_Click);
             // 
             // comboBox1
             // 
@@ -105,40 +100,30 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.comboBox2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 354);
+            this.groupBox1.Controls.Add(this.localFolder);
+            this.groupBox1.Location = new System.Drawing.Point(12, 352);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(436, 43);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Local &Folder:";
             // 
-            // comboBox2
+            // localFolder
             // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.localFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(6, 16);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(424, 21);
-            this.comboBox2.TabIndex = 0;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(18, 403);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(155, 17);
-            this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "A&dd trunk Folder for Project";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.localFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.localFolder.FormattingEnabled = true;
+            this.localFolder.Location = new System.Drawing.Point(6, 16);
+            this.localFolder.Name = "localFolder";
+            this.localFolder.Size = new System.Drawing.Size(424, 21);
+            this.localFolder.TabIndex = 0;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(373, 423);
+            this.cancelButton.Location = new System.Drawing.Point(373, 450);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
@@ -149,7 +134,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(292, 423);
+            this.okButton.Location = new System.Drawing.Point(292, 450);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 5;
@@ -186,18 +171,53 @@
             this.projectNameBox.Size = new System.Drawing.Size(424, 20);
             this.projectNameBox.TabIndex = 0;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 350;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Location = new System.Drawing.Point(12, 401);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(436, 43);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Project will be created in:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 17);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(424, 20);
+            this.textBox1.TabIndex = 0;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView1.Context = null;
+            this.treeView1.Location = new System.Drawing.Point(6, 46);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(325, 205);
+            this.treeView1.TabIndex = 2;
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
             // AddToSubversion
             // 
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(460, 458);
+            this.ClientSize = new System.Drawing.Size(460, 485);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.projectBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.locationBox);
             this.Name = "AddToSubversion";
@@ -206,8 +226,9 @@
             this.groupBox1.ResumeLayout(false);
             this.projectBox.ResumeLayout(false);
             this.projectBox.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -216,15 +237,17 @@
         private System.Windows.Forms.GroupBox locationBox;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox localFolder;
         private System.Windows.Forms.Button createFolderButton;
         private Ankh.UI.RepositoryExplorer.RepositoryTreeView treeView1;
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox projectBox;
         private System.Windows.Forms.TextBox projectNameBox;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox repositoryUrl;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
