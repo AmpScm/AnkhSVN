@@ -27,6 +27,8 @@ namespace Ankh.UI.SvnLog
         IAnkhServiceProvider _context;
         LogMode _mode;
         readonly EventHandler<SvnLogEventArgs> _logReceiver;
+        readonly EventHandler<SvnMergesEligibleEventArgs> _mergesEligibleReceiver;
+        readonly EventHandler<SvnMergesMergedEventArgs> _mergesMergedReceiver;
         readonly AsyncCallback _logComplete;
         readonly SynchronizationContext _syncContext;
         readonly SendOrPostCallback _sopCallback;
@@ -39,6 +41,9 @@ namespace Ankh.UI.SvnLog
             _sopCallback = new SendOrPostCallback(SopCallback);
             _logAction = new Action<SvnLogArgs>(DoFetch);
             _logReceiver = new EventHandler<SvnLogEventArgs>(ReceiveItem);
+            _mergesEligibleReceiver = new EventHandler<SvnMergesEligibleEventArgs>(ReceiveItem);
+            _mergesMergedReceiver = new EventHandler<SvnMergesMergedEventArgs>(ReceiveItem);
+
             _logComplete = new AsyncCallback(LogComplete);
 
         }
@@ -181,6 +186,24 @@ namespace Ankh.UI.SvnLog
                     case LogMode.Remote:
                         client.Log(RemoteTarget, args, _logReceiver);
                         break;
+                    case LogMode.MergesEligible:
+                        string target = null;
+                        foreach(string t in LocalTargets)
+                        {
+                            target = t;
+                            break;
+                        }
+                        client.ListMergesEligible(target, RemoteTarget, _mergesEligibleReceiver);
+                        break;
+                    case LogMode.MergesMerged:
+                        string mergedTarget = null;
+                        foreach(string t in LocalTargets)
+                        {
+                            mergedTarget = t;
+                            break;
+                        }
+                        client.ListMergesMerged(mergedTarget, RemoteTarget, _mergesMergedReceiver);
+                        break;
                 }
             }
         }
@@ -195,11 +218,39 @@ namespace Ankh.UI.SvnLog
         {
             if (_cancel)
                 e.Cancel = true;
+
             lock (_logItems)
             {
                 e.Detach();
                 _logItems.Enqueue(new LogListViewItem(_context, e));
             }
+
+            _syncContext.Post(_sopCallback, null);
+        }
+
+        void ReceiveItem(object sender, SvnMergesMergedEventArgs e)
+        {
+            if (_cancel)
+                e.Cancel = true;
+
+            lock (_logItems)
+            {
+                e.Detach();
+                _logItems.Enqueue(new LogListViewItem(_context, e));
+            }
+        }
+
+        void ReceiveItem(object sender, SvnMergesEligibleEventArgs e)
+        {
+            if (_cancel)
+                e.Cancel = true;
+
+            lock(_logItems)
+            {
+                e.Detach();
+                _logItems.Enqueue(new LogListViewItem(_context, e));
+            }
+
             _syncContext.Post(_sopCallback, null);
         }
 
@@ -375,6 +426,8 @@ namespace Ankh.UI.SvnLog
     public enum LogMode
     {
         Local,
-        Remote
+        Remote,
+        MergesEligible,
+        MergesMerged
     }
 }

@@ -51,12 +51,80 @@ namespace Ankh.UI.SvnLog
         }
 
         LogMode _mode;
+        [Obsolete]
         public LogMode Mode
         {
             get { return _mode; }
             set { _mode = value; }
         }
 
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (targets == null)
+                throw new ArgumentNullException("targets");
+
+            logRevisionControl1.LocalTargets = targets;
+
+            logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
+            logRevisionControl1.Start(context, LogMode.Local);
+        }
+
+        public void StartRemoteLog(IAnkhServiceProvider context, Uri remoteTarget)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (remoteTarget == null)
+                throw new ArgumentNullException("remoteTarget");
+
+            logRevisionControl1.RemoteTarget = remoteTarget;
+
+            logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
+            logRevisionControl1.Start(context, LogMode.Remote);
+        }
+
+        public void StartMergesEligible(IAnkhServiceProvider context, string target, Uri source)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            logRevisionControl1.LocalTargets = new string[]{target};
+            logRevisionControl1.RemoteTarget = source;
+
+            logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
+            logRevisionControl1.Start(context, LogMode.MergesEligible);
+        }
+
+        public void StartMergesMerged(IAnkhServiceProvider context, string target, Uri source)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (source == null)
+                throw new ArgumentNullException("source");
+
+            logRevisionControl1.LocalTargets = new string[]{target};
+            logRevisionControl1.RemoteTarget = source;
+
+            logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
+            logRevisionControl1.Start(context, LogMode.MergesMerged);
+        }
+
+        [Obsolete]
         public void Start(IAnkhServiceProvider context, ICollection<string> targets)
         {
             if (context == null)
