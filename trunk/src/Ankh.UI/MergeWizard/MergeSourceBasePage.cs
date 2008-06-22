@@ -44,6 +44,14 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        protected override void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            base.OnPageChanging(e);
+
+            // Set the MergeSource before the page changes
+            ((MergeWizard)Wizard).MergeSource = MergeSource;
+        }
+
         internal string MergeSource
         {
             get { return ((MergeSourceBasePageControlImpl)PageControl).MergeSource; }

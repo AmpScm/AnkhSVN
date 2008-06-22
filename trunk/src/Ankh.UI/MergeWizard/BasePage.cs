@@ -99,11 +99,6 @@ namespace Ankh.UI.MergeWizard
 
         protected virtual void OnPageChanging(WizardPageChangingEventArgs e)
         {
-            if (this is MergeSourceBasePage)
-            {
-                // Set the MergeSource before the page changes
-                ((MergeWizard)Wizard).MergeSource = ((MergeSourceBasePageControlImpl)PageControl).MergeSource;
-            }
         }
 
         protected virtual void OnPageChanged(WizardPageChangeEventArgs e)
