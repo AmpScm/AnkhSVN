@@ -189,7 +189,7 @@ namespace Ankh.UI
                     if (index > -1)
                     {
                         // There is already a property with the same name.
-                        // TODO ask user
+                        // Replace the existing item with the new one
                         this._propItems[index] = item;
                     }
                     else
