@@ -23,9 +23,30 @@ namespace Ankh.UI.SvnLog
             container.Add(this);
         }
 
+        [Obsolete]
         public void Start(IAnkhServiceProvider context, ICollection<string> targets)
         {
             logControl.Start(context, targets);
+        }
+
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
+        {
+            logControl.StartLocalLog(context, targets);
+        }
+
+        public void StartMergesEligible(IAnkhServiceProvider context, string target, Uri source)
+        {
+            logControl.StartMergesEligible(context, target, source);
+        }
+
+        public void StartMergesMerged(IAnkhServiceProvider context, string target, Uri source)
+        {
+            logControl.StartMergesMerged(context, target, source);
+        }
+
+        public void StartRemoteLog(IAnkhServiceProvider context, Uri remoteTarget)
+        {
+            logControl.StartRemoteLog(context, remoteTarget);
         }
 
         IAnkhUISite _site;

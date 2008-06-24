@@ -299,6 +299,9 @@
         <Group id="Grp_RepositoryExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
           <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
+          <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x300"
+                  text="View &amp;History"
+                  toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

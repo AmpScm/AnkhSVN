@@ -24,6 +24,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.Log)]
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
+    [Command(AnkhCommand.ReposExplorerLog)]
     public class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -34,10 +35,28 @@ namespace Ankh.Commands
                 return;
             }
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            switch (e.Command)
             {
-                if (item.IsVersioned)
-                    return;
+                case AnkhCommand.Log:
+                case AnkhCommand.ProjectHistory:
+                case AnkhCommand.SolutionHistory:
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                    {
+                        if (item.IsVersioned)
+                            return;
+                    }
+                    break;
+                case AnkhCommand.ReposExplorerLog:
+                    int i = 0;
+                    foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
+                    {
+                        i++;
+                        if (i > 1)
+                            break;
+                    }
+                    if (i == 1)
+                        return;
+                    break;
             }
             e.Enabled = false;
         }
@@ -45,7 +64,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IContext context = e.Context.GetService<IContext>();
-            IAnkhPackage package = e.Context.GetService<IAnkhPackage>();
+            
 
 
             List<string> selected = new List<string>();
@@ -58,6 +77,7 @@ namespace Ankh.Commands
                         if (i.IsVersioned)
                             selected.Add(i.FullPath);
                     }
+                    LocalLog(e.Context, selected);
                     break;
                 case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
@@ -66,6 +86,8 @@ namespace Ankh.Commands
                         IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
                         selected.Add(settings.ProjectRoot);
+
+                        LocalLog(e.Context, selected);
                     }
                     else
                     {
@@ -77,13 +99,39 @@ namespace Ankh.Commands
                             if (info != null)
                                 selected.Add(info.ProjectDirectory);
                         }
+
+                        LocalLog(e.Context, selected);
                     }
                     break;
+                case AnkhCommand.ReposExplorerLog:
+                    ISvnRepositoryItem item = null;
+                    foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
+                    {
+                        item = i;
+                        break;
+                    }
+                    if (item != null)
+                        RemoteLog(e.Context, item.Uri);
+                    break;
             }
+        }
+
+        static void LocalLog(IAnkhServiceProvider context, ICollection<string> targets)
+        {
+            IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
-            LogToolWindowControl logToolControl = e.Context.GetService<LogToolWindowControl>();
-            logToolControl.Start(e.Context, selected);
+            LogToolWindowControl logToolControl = context.GetService<LogToolWindowControl>();
+            logToolControl.StartLocalLog(context, targets);
+        }
+
+        static void RemoteLog(IAnkhServiceProvider context, Uri target)
+        {
+            IAnkhPackage package = context.GetService<IAnkhPackage>();
+
+            package.ShowToolWindow(AnkhToolWindow.Log);
+            LogToolWindowControl logToolControl = context.GetService<LogToolWindowControl>();
+            logToolControl.StartRemoteLog(context, target); // TODO: revision support
         }
     }
 }
