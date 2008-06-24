@@ -7,10 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Scc;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
-    public partial class LogViewerDialog : Form, ICurrentItemDestination<ISvnLogItem>
+    public partial class LogViewerDialog : Form
     {
         private string _logTarget;
         private IAnkhServiceProvider _context;
@@ -18,7 +19,7 @@ namespace Ankh.UI
         public LogViewerDialog()
         {
             InitializeComponent();
-            ItemSource = logViewerControl;
+            logViewerControl.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(value_SelectionChanged); ;
         }
 
         public LogViewerDialog(string target, IAnkhServiceProvider context)
@@ -33,6 +34,7 @@ namespace Ankh.UI
         /// </summary>
         public IAnkhServiceProvider Context
         {
+            [DebuggerStepThrough]
             get { return _context; }
             set { _context = value; }
         }
@@ -42,19 +44,14 @@ namespace Ankh.UI
         /// </summary>
         public string LogTarget
         {
+            [DebuggerStepThrough]
             get { return _logTarget; }
             set { _logTarget = value; }
         }
 
         public IEnumerable<ISvnLogItem> SelectedItems
         {
-            get
-            {
-                if (ItemSource == null)
-                    return new ISvnLogItem[0];
-
-                return ItemSource.SelectedItems;
-            }
+            get { return logViewerControl.SelectedItems; }
         }
 
         #region UI Events
@@ -63,26 +60,10 @@ namespace Ankh.UI
             logViewerControl.Site = Site;
             
             if (LogTarget != null)
-                logViewerControl.Start(Context, new string[] { LogTarget });
+                logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
         }
         #endregion
 
-        #region ICurrentItemDestination<ISvnLogItem> Members
-
-        ICurrentItemSource<ISvnLogItem> _itemSource;
-        public ICurrentItemSource<ISvnLogItem> ItemSource
-        {
-            get
-            {
-                return _itemSource;
-            }
-            set
-            {
-                _itemSource = value;
-                value.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(value_SelectionChanged);
-            }
-        }
-        #endregion
 
         void value_SelectionChanged(object sender, IList<ISvnLogItem> e)
         {
