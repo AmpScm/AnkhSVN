@@ -401,7 +401,24 @@ namespace Ankh.UI.SvnLog
                 FocusChanged(this, FocusedItem);
         }
 
+        /* SR:  Weird stuff is going on with ListViews in virtual mode, modify with care
+         *      -   normal clicking -> SelectedIndexChange is 'right' about the number of selected indices
+         *      -   ctrl clicking ->  SelectedIndexChange is 'right' about the number of selected indices
+         *      -   shift clicking -> VirtualItemsSelectionRangeChanges is 'right' about the number of selected indices
+        */
         private void logRevisionControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Debug.WriteLine("NormalChanged: " + logRevisionControl1.SelectedIndices.Count);
+            OnSelectionChanged();
+        }
+
+        private void logRevisionControl1_VirtualItemsSelectionRangeChanged(object sender, ListViewVirtualItemsSelectionRangeChangedEventArgs e)
+        {
+            //Debug.WriteLine("RangeChanged:  " + logRevisionControl1.SelectedIndices.Count);
+            OnSelectionChanged();
+        }
+
+        void OnSelectionChanged()
         {
             _selectedItems.Clear();
             foreach (int i in logRevisionControl1.SelectedIndices)
@@ -410,6 +427,8 @@ namespace Ankh.UI.SvnLog
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
         }
+
+
 
         private void logRevisionControl1_ShowContextMenu(object sender, EventArgs e)
         {
@@ -424,6 +443,8 @@ namespace Ankh.UI.SvnLog
 		{
 			//Debug.WriteLine(string.Format("CacheVirtualItems start: {0}, end: {1}", e.StartIndex, e.EndIndex));
 		}
+
+        
     }
 
     public enum LogMode
