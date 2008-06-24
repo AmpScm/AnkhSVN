@@ -413,8 +413,11 @@ namespace Ankh.UI.SvnLog
 
         private void logRevisionControl1_ShowContextMenu(object sender, EventArgs e)
         {
-            Point p = MousePosition;
-            UISite.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
+            if (UISite != null)
+            {
+                Point p = MousePosition;
+                UISite.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
+            }
         }
 
 		private void logRevisionControl1_CacheVirtualItems(object sender, CacheVirtualItemsEventArgs e)
