@@ -81,8 +81,10 @@ namespace Ankh.UI
         void FocusChanged(object sender, ISvnLogItem e)
         {
             changedPaths.Items.Clear();
-            foreach (SvnChangeItem i in e.ChangedPaths)
-                changedPaths.Items.Add(new PathListViewItem(i));
+
+            if (e.ChangedPaths != null)
+                foreach (SvnChangeItem i in e.ChangedPaths)
+                    changedPaths.Items.Add(new PathListViewItem(i));
         }
 
         internal void Reset()
