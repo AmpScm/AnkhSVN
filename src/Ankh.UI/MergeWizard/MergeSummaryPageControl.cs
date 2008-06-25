@@ -59,6 +59,8 @@ namespace Ankh.UI.MergeWizard
                     binaryConflictsTextBox.Text = Resources.ConflictHandlingPrompt;
                 else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
                     binaryConflictsTextBox.Text = Resources.ConflictHandlingTheirs;
+                else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
+                    binaryConflictsTextBox.Text = Resources.ConflictHandlingBase;
 
                 // Populate Text Conflicts
                 if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
@@ -69,6 +71,8 @@ namespace Ankh.UI.MergeWizard
                     textConflictsTextBox.Text = Resources.ConflictHandlingPrompt;
                 else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
                     textConflictsTextBox.Text = Resources.ConflictHandlingTheirs;
+                else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
+                    textConflictsTextBox.Text = Resources.ConflictHandlingBase;
 
                 // Populate Depth
                 if (mergeOptions.Depth == SharpSvn.SvnDepth.Children)

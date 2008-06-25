@@ -17,7 +17,8 @@ namespace Ankh.UI.MergeWizard
             PROMPT,
             MARK,
             MINE,
-            THEIRS
+            THEIRS,
+            BASE
         }
 
         public MergeOptionsPage(MergeWizard wizard)

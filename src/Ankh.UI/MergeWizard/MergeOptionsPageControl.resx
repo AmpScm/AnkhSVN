@@ -124,193 +124,40 @@
   <data name="binaryConflictsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
-  <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.Name" xml:space="preserve">
-    <value>binaryConflictsRepositoryRadioButton</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="binaryConflictsBaseRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.Parent" xml:space="preserve">
-    <value>binaryConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMyRadioButton.Name" xml:space="preserve">
-    <value>binaryConflictsMyRadioButton</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMyRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMyRadioButton.Parent" xml:space="preserve">
-    <value>binaryConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMyRadioButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMarkRadioButton.Name" xml:space="preserve">
-    <value>binaryConflictsMarkRadioButton</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMarkRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMarkRadioButton.Parent" xml:space="preserve">
-    <value>binaryConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsMarkRadioButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsPromptRadioButton.Name" xml:space="preserve">
-    <value>binaryConflictsPromptRadioButton</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsPromptRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsPromptRadioButton.Parent" xml:space="preserve">
-    <value>binaryConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsPromptRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="binaryConflictsBaseRadioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="binaryConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 119</value>
+  <data name="binaryConflictsBaseRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 97</value>
   </data>
-  <data name="binaryConflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="binaryConflictsBaseRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="binaryConflictsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="binaryConflictsBaseRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>321, 17</value>
   </data>
-  <data name="binaryConflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>474, 99</value>
+  <data name="binaryConflictsBaseRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="binaryConflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="binaryConflictsBaseRadioButton.Text" xml:space="preserve">
+    <value>Resolve the conflict with the pre-merge base &amp;version of the file.</value>
   </data>
-  <data name="binaryConflictsGroupBox.Text" xml:space="preserve">
-    <value>Binary Files</value>
+  <data name="&gt;&gt;binaryConflictsBaseRadioButton.Name" xml:space="preserve">
+    <value>binaryConflictsBaseRadioButton</value>
   </data>
-  <data name="&gt;&gt;binaryConflictsGroupBox.Name" xml:space="preserve">
+  <data name="&gt;&gt;binaryConflictsBaseRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;binaryConflictsBaseRadioButton.Parent" xml:space="preserve">
     <value>binaryConflictsGroupBox</value>
   </data>
-  <data name="&gt;&gt;binaryConflictsGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsGroupBox.Parent" xml:space="preserve">
-    <value>conflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;binaryConflictsGroupBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;binaryConflictsBaseRadioButton.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="textConflictsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Name" xml:space="preserve">
-    <value>textConflictsRepositoryRadioButton</value>
-  </data>
-  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textConflictsRepositoryRadioButton.Parent" xml:space="preserve">
-    <value>textConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsRepositoryRadioButton.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMyRadioButton.Name" xml:space="preserve">
-    <value>textConflictsMyRadioButton</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMyRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMyRadioButton.Parent" xml:space="preserve">
-    <value>textConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMyRadioButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMarkRadioButton.Name" xml:space="preserve">
-    <value>textConflictsMarkRadioButton</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMarkRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMarkRadioButton.Parent" xml:space="preserve">
-    <value>textConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsMarkRadioButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;textConflictsPromptRadioButton.Name" xml:space="preserve">
-    <value>textConflictsPromptRadioButton</value>
-  </data>
-  <data name="&gt;&gt;textConflictsPromptRadioButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textConflictsPromptRadioButton.Parent" xml:space="preserve">
-    <value>textConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsPromptRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="textConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 15</value>
-  </data>
-  <data name="textConflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="textConflictsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="textConflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>474, 99</value>
-  </data>
-  <data name="textConflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="textConflictsGroupBox.Text" xml:space="preserve">
-    <value>Text Files</value>
-  </data>
-  <data name="&gt;&gt;textConflictsGroupBox.Name" xml:space="preserve">
-    <value>textConflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textConflictsGroupBox.Parent" xml:space="preserve">
-    <value>conflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;textConflictsGroupBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="conflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 5</value>
-  </data>
-  <data name="conflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="conflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 226</value>
-  </data>
-  <data name="conflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="conflictsGroupBox.Text" xml:space="preserve">
-    <value>Conflict Handling</value>
-  </data>
-  <data name="&gt;&gt;conflictsGroupBox.Name" xml:space="preserve">
-    <value>conflictsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;conflictsGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;conflictsGroupBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;conflictsGroupBox.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="binaryConflictsRepositoryRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -343,7 +190,7 @@
     <value>binaryConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsRepositoryRadioButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="binaryConflictsMyRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -376,7 +223,7 @@
     <value>binaryConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsMyRadioButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="binaryConflictsMarkRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -409,7 +256,7 @@
     <value>binaryConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsMarkRadioButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="binaryConflictsPromptRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -442,7 +289,73 @@
     <value>binaryConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsPromptRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
+  </data>
+  <data name="binaryConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 139</value>
+  </data>
+  <data name="binaryConflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="binaryConflictsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="binaryConflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>474, 119</value>
+  </data>
+  <data name="binaryConflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="binaryConflictsGroupBox.Text" xml:space="preserve">
+    <value>Binary Files</value>
+  </data>
+  <data name="&gt;&gt;binaryConflictsGroupBox.Name" xml:space="preserve">
+    <value>binaryConflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;binaryConflictsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;binaryConflictsGroupBox.Parent" xml:space="preserve">
+    <value>conflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;binaryConflictsGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="textConflictsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 97</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>321, 17</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="textConflictsBaseRadioButton.Text" xml:space="preserve">
+    <value>Resolve the conflict with the pre-merge &amp;base version of the file.</value>
+  </data>
+  <data name="&gt;&gt;textConflictsBaseRadioButton.Name" xml:space="preserve">
+    <value>textConflictsBaseRadioButton</value>
+  </data>
+  <data name="&gt;&gt;textConflictsBaseRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textConflictsBaseRadioButton.Parent" xml:space="preserve">
+    <value>textConflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;textConflictsBaseRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="textConflictsRepositoryRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -475,7 +388,7 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsRepositoryRadioButton.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="textConflictsMyRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -508,7 +421,7 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsMyRadioButton.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="textConflictsMarkRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -541,7 +454,7 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsMarkRadioButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="textConflictsPromptRadioButton.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -571,7 +484,64 @@
     <value>textConflictsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsPromptRadioButton.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
+  </data>
+  <data name="textConflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 15</value>
+  </data>
+  <data name="textConflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="textConflictsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="textConflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>474, 119</value>
+  </data>
+  <data name="textConflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="textConflictsGroupBox.Text" xml:space="preserve">
+    <value>Text Files</value>
+  </data>
+  <data name="&gt;&gt;textConflictsGroupBox.Name" xml:space="preserve">
+    <value>textConflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;textConflictsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textConflictsGroupBox.Parent" xml:space="preserve">
+    <value>conflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;textConflictsGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="conflictsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 5</value>
+  </data>
+  <data name="conflictsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="conflictsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>490, 268</value>
+  </data>
+  <data name="conflictsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="conflictsGroupBox.Text" xml:space="preserve">
+    <value>Conflict Handling</value>
+  </data>
+  <data name="&gt;&gt;conflictsGroupBox.Name" xml:space="preserve">
+    <value>conflictsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;conflictsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;conflictsGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;conflictsGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="mergeOptionsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -694,7 +664,7 @@
     <value>3</value>
   </data>
   <data name="mergeOptionsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 236</value>
+    <value>5, 278</value>
   </data>
   <data name="mergeOptionsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -739,6 +709,6 @@
     <value>MergeOptionsPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3091.40071, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3097.29700, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

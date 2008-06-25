@@ -61,6 +61,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolve the conflict with the pre-merge base version of the file..
+        /// </summary>
+        internal static string ConflictHandlingBase {
+            get {
+                return ResourceManager.GetString("ConflictHandlingBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mark each conflict and let me resolve later.
         /// </summary>
         internal static string ConflictHandlingMark {
@@ -421,6 +430,15 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("ReintegrateABranchImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
         
