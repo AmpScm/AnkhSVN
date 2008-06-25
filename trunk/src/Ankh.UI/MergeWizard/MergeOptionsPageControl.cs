@@ -63,6 +63,11 @@ namespace Ankh.UI.MergeWizard
             ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
         }
 
+        private void textConflictsBaseRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
+        }
+
         private void binaryConflictsPromptRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.PROMPT;
@@ -81,6 +86,11 @@ namespace Ankh.UI.MergeWizard
         private void binaryConflictsRepositoryRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
+        }
+
+        private void binaryConflictsBaseRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
         }
 
         private void ignoreAncestryCheckBox_CheckedChanged(object sender, EventArgs e)
