@@ -134,6 +134,9 @@ namespace Ankh.UI.SccManagement
                     return null;
 
                 Uri u = treeView1.SelectedNode.RawUri;
+                if (u == null)
+                    return null;
+
                 if (!string.IsNullOrEmpty(projectNameBox.Text))
                     u = new Uri(u, projectNameBox.Text + "/");
                 if (addTrunk.Checked)
@@ -153,6 +156,7 @@ namespace Ankh.UI.SccManagement
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             UpdateUrlPreview();
+            errorProvider1.SetError(treeView1, null);
         }
 
         private void addTrunk_CheckedChanged(object sender, EventArgs e)
@@ -169,6 +173,30 @@ namespace Ankh.UI.SccManagement
         {
             Uri u = (Uri)repositoryUrl.SelectedItem;
             treeView1.AddRoot(u);
+        }
+
+        private void AddToSubversion_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (DialogResult == DialogResult.Cancel)
+                return; // Always allow cancel
+
+            if (localFolder.SelectedItem == null)
+            {
+                e.Cancel = true;
+                
+                errorProvider1.SetError(localFolder, "Please select a working copy path");
+            }
+            if (RepositoryAddUrl == null)
+            {
+                e.Cancel = true;
+
+                errorProvider1.SetError(treeView1, "Please select a location in the repository to add to");
+            }
+        }
+
+        private void localFolder_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            errorProvider1.SetError(localFolder, null);
         }
     }
 }
