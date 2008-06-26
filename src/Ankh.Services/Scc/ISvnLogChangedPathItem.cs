@@ -11,5 +11,6 @@ namespace Ankh.Scc
 		string CopyFromPath { get; }
 		long CopyFromRevision { get; }
 		string Path { get; }
+        long Revision { get; }
 	}
 }

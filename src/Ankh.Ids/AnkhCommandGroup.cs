@@ -77,5 +77,7 @@ namespace Ankh.Ids
         LogViewerContextMenu,
 
         SccExplore,
+
+        LogChangedPathsContextMenu,
     }
 }
