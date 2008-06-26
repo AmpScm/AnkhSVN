@@ -354,7 +354,9 @@ namespace Ankh.UI.SvnLog
                     if (_logItems.Count > 0)
                     {
                         LogListViewItem[] items = _logItems.ToArray();
-                        args.Start = items[items.Length - 1].Revision - 1;
+                        long revision = items[items.Length - 1].Revision - 1;
+                        // revision should not be < 0
+                        args.Start = revision < 0 ? SvnRevision.Zero : revision;
                     }
                 }
             }
