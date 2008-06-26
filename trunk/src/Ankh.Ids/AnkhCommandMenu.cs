@@ -55,5 +55,6 @@ namespace Ankh.Ids
         ItemIgnore,
 
         LogViewerContextMenu,
+        LogChangedPathsContextMenu,
     }
 }

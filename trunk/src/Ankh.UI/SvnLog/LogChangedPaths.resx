@@ -181,7 +181,7 @@
     <value>changedPaths</value>
   </data>
   <data name="&gt;&gt;changedPaths.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.0.3081.26663, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.0.3098.954, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;changedPaths.Parent" xml:space="preserve">
     <value>$this</value>

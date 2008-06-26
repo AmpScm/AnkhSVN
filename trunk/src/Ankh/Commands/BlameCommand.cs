@@ -11,6 +11,7 @@ using SharpSvn;
 using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -18,8 +19,13 @@ namespace Ankh.Commands
     /// Command to identify which users to blame for which lines.
     /// </summary>
     [Command(AnkhCommand.Blame)]
+    [Command(AnkhCommand.LogBlameRevision)]
     public class BlameCommand : CommandBase
     {
+        XslCompiledTransform _transform;
+        private const string BlameTransform = "blame.xsl";
+
+
         #region Implementation of ICommand
 
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -29,15 +35,81 @@ namespace Ankh.Commands
                 e.Visible = e.Enabled = false;
                 return;
             }
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            switch (e.Command)
             {
-                if (item.IsVersioned && item.IsFile)
+                case AnkhCommand.Blame:
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                    {
+                        if (item.IsVersioned && item.IsFile)
+                            return;
+                    }
+                    break;
+                case AnkhCommand.LogBlameRevision:
+                    // Disabled for now, see TODO belows
+                    e.Visible = e.Enabled = false;
                     return;
+
+                    int count = 0;
+                    foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+                    {
+                        count++;
+                        if (count > 1)
+                            break;
+                    }
+                    if (count == 1)
+                        return;
+                    break;
             }
             e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
+        {
+            switch (e.Command)
+            {
+                case AnkhCommand.Blame:
+                    BlameItem(e);
+                    break;
+                case AnkhCommand.LogBlameRevision:
+                    BlameRevision(e);
+                    break;
+            }
+        }
+
+        void BlameRevision(CommandEventArgs e)
+        {
+            IUIShell uiShell = e.GetService<IUIShell>();
+            ISvnLogChangedPathItem item = null;
+            foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+            {
+                item = logItem;
+                break;
+            }
+            if (item == null)
+                return;
+
+            SvnRevision revisionStart = SvnRevision.Zero;
+            SvnRevision revisionEnd = item.Revision;
+
+            BlameResult blameResult = new BlameResult();
+
+            blameResult.Start();
+            // TODO: we need the real filesystem path and/or url here
+            BlameRunner runner = new BlameRunner(item.Path,
+                revisionStart, revisionEnd, blameResult);
+            
+            e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
+            blameResult.End();
+
+            // transform it to HTML
+            StringWriter writer = new StringWriter();
+            blameResult.Transform(GetTransform(e.Context), writer);
+
+            // display the HTML with the filename as caption
+            uiShell.DisplayHtml(string.Format("Revision {0}", item.Revision), writer.ToString(), false);
+        }
+
+        void BlameItem(CommandEventArgs e)
         {
             IUIShell uiShell = e.GetService<IUIShell>();
 
@@ -84,15 +156,13 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
-            XslCompiledTransform transform = CommandBase.GetTransform(e.Context, BlameTransform);
-
             foreach (SvnItem item in result.Selection)
             {
                 // do the blame thing
                 BlameResult blameResult = new BlameResult();
 
                 blameResult.Start();
-                BlameRunner runner = new BlameRunner(item.FullPath,
+                BlameRunner runner = new BlameRunner(new SvnPathTarget(item.FullPath),
                     revisionStart, revisionEnd, blameResult);
 
                 e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
@@ -100,7 +170,7 @@ namespace Ankh.Commands
 
                 // transform it to HTML
                 StringWriter writer = new StringWriter();
-                blameResult.Transform(transform, writer);
+                blameResult.Transform(GetTransform(e.Context), writer);
 
                 // display the HTML with the filename as caption
                 string filename = Path.GetFileName(item.FullPath);
@@ -112,10 +182,10 @@ namespace Ankh.Commands
 
         private class BlameRunner
         {
-            public BlameRunner(string path, SvnRevision start, SvnRevision end,
+            public BlameRunner(SvnTarget target, SvnRevision start, SvnRevision end,
                 BlameResult result)
             {
-                this.path = path;
+                this.target = target;
                 this.start = start;
                 this.end = end;
                 this.result = result;
@@ -131,10 +201,10 @@ namespace Ankh.Commands
                 //args.IgnoreSpacing
                 //args.IncludeMergedRevisions
 
-                e.Client.Blame(this.path, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
+                e.Client.Blame(this.target, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
             }
 
-            private string path;
+            private SvnTarget target;
             private SvnRevision start;
             private SvnRevision end;
             private BlameResult result;
@@ -145,10 +215,9 @@ namespace Ankh.Commands
             }
         }
 
-
-
-        private const string BlameTransform = "blame.xsl";
-
-
+        XslCompiledTransform GetTransform(IAnkhServiceProvider context)
+        {
+            return _transform ?? (_transform = CommandBase.GetTransform(context, BlameTransform));
+        }
     }
 }

@@ -360,9 +360,17 @@
                   text="Change log message" textChanges="true" />
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0x200"
                   text="Show changes" textChanges="true" iconFile="PendingChanges/Compare.png"/>
-                  
+          
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_LogChangedPathsContextMenu">
+      <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" type="Context" priority="0x100">
+        <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
+          <Button id="Cmd_LogBlameRevision" name="LogBlameRevision" priority="0x300"
+                  text="Blame revision" iconFile="menu/Blame.png"/>
+        </Group>
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_PendingChanges">

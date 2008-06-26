@@ -9,6 +9,7 @@ using SharpSvn;
 using Ankh.UI.SvnLog;
 using Ankh.UI.Services;
 using Ankh.Scc;
+using Ankh.Ids;
 
 namespace Ankh.UI
 {
@@ -83,13 +84,23 @@ namespace Ankh.UI
             changedPaths.Items.Clear();
 
             if (e.ChangedPaths != null)
+            {
                 foreach (SvnChangeItem i in e.ChangedPaths)
-                    changedPaths.Items.Add(new PathListViewItem(i));
+                    changedPaths.Items.Add(new PathListViewItem(e, i));
+            }
         }
 
         internal void Reset()
         {
             changedPaths.Items.Clear();
+        }
+
+        
+
+        private void changedPaths_ShowContextMenu(object sender, EventArgs e)
+        {
+            Point p = MousePosition;
+            _site.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
         }
     }
 }

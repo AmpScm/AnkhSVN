@@ -36,12 +36,16 @@ namespace Ankh.UI.SvnLog
 
     sealed class PathListViewItem : ListViewItem
     {
+        readonly ISvnLogItem _logItem;
         readonly SvnChangeItem _change;
-        public PathListViewItem(SvnChangeItem change)
+        
+        public PathListViewItem(ISvnLogItem logItem, SvnChangeItem change)
         {
+            if(logItem == null)
+                throw new ArgumentNullException("logItem");
             if (change == null)
                 throw new ArgumentNullException("change");
-
+            _logItem = logItem;
             _change = change;
             RefreshText();
         }
@@ -72,6 +76,11 @@ namespace Ankh.UI.SvnLog
         internal long CopyFromRevision
         {
             get { return _change.CopyFromRevision; }
+        }
+
+        internal ISvnLogItem LogItem
+        {
+            get { return _logItem;}
         }
     }
 
@@ -116,6 +125,12 @@ namespace Ankh.UI.SvnLog
         public string Path
         {
             get { return _lvi.Path; }
+        }
+     
+        [Browsable(false)]
+        public long Revision
+        {
+            get { return _lvi.LogItem.Revision; }
         }
     }
 }
