@@ -44,11 +44,13 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.addTrunk = new System.Windows.Forms.CheckBox();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // locationBox
@@ -118,12 +120,14 @@
             this.localFolder.FormattingEnabled = true;
             this.localFolder.Location = new System.Drawing.Point(6, 19);
             this.localFolder.Name = "localFolder";
-            this.localFolder.Size = new System.Drawing.Size(424, 21);
+            this.localFolder.Size = new System.Drawing.Size(410, 21);
             this.localFolder.TabIndex = 0;
+            this.localFolder.SelectedIndexChanged += new System.EventHandler(this.localFolder_SelectedIndexChanged);
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.CausesValidation = false;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(373, 450);
             this.cancelButton.Name = "cancelButton";
@@ -210,6 +214,10 @@
             this.addTrunk.UseVisualStyleBackColor = true;
             this.addTrunk.CheckedChanged += new System.EventHandler(this.addTrunk_CheckedChanged);
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // treeView1
             // 
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -239,12 +247,14 @@
             this.Controls.Add(this.locationBox);
             this.Name = "AddToSubversion";
             this.Text = "Add to Subversion";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddToSubversion_FormClosing);
             this.locationBox.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.projectBox.ResumeLayout(false);
             this.projectBox.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -268,5 +278,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox addTrunk;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
