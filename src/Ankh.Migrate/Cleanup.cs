@@ -67,13 +67,16 @@ namespace Ankh.Migrate
 		{
 			foreach (CommandBarControl control in controls)
 			{
-
-                if (control.accChildCount > 0 && control.Type == MsoControlType.msoControlPopup)
+                try
                 {
-                    CommandBarPopup popup = control as CommandBarPopup;
-                    if(popup != null)
-                        RecurseCommands(popup.Controls);
+                    if (control.accChildCount > 0 && control.Type == MsoControlType.msoControlPopup)
+                    {
+                        CommandBarPopup popup = control as CommandBarPopup;
+                        if (popup != null)
+                            RecurseCommands(popup.Controls);
+                    }
                 }
+                catch { }
                 
                 
                 string caption = null;
