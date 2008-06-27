@@ -57,10 +57,21 @@ namespace Ankh.UI
         #region UI Events
         private void LogViewerDialog_Load(object sender, EventArgs e)
         {
+            Uri uri;
+
             logViewerControl.Site = Site;
-            
+
+            if (!Uri.TryCreate(LogTarget, UriKind.Absolute, out uri))
+            {
+                MessageBox.Show("Invalid URL", "'" + LogTarget + "' is not a valid url.",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return;
+            }
+
             if (LogTarget != null)
-                logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
+                logViewerControl.StartRemoteLog(Context, uri);
+                //logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
         }
         #endregion
 
