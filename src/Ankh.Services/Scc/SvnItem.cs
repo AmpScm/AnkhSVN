@@ -265,7 +265,7 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.SvnDirty);
 
             if (!hasProperties)
-                SetState(SvnItemState.None, SvnItemState.MustLock | SvnItemState.IsTextFile);
+                SetState(SvnItemState.None, SvnItemState.MustLock);
 
             switch (status.NodeKind)
             {
