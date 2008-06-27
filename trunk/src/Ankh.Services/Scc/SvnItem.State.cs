@@ -287,8 +287,6 @@ namespace Ankh
 
             if (TryGetState(SvnItemState.Versioned, out v) && (v == 0))
                 isTextFile = false;
-            else if (TryGetState(SvnItemState.HasProperties, out v) && (v == 0))
-                isTextFile = false;
             else if (GetState(value) != value)
                 isTextFile = false;
             else
