@@ -4,6 +4,7 @@ using System.Resources;
 using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -30,9 +31,34 @@ namespace Ankh.UI.MergeWizard
             ((MergeRevisionsSelectionPageControl)PageControl).SelectionChanged += new EventHandler<EventArgs>(MergeRevisionsSelectionPage_SelectionChanged);
         }
 
+        /// <summary>
+        /// Returns an array of revisions, in numerical order, to be merged.
+        /// </summary>
+        public long[] MergeRevisions
+        {
+            get
+            {
+                List<long> revs = new List<long>();
+
+                foreach (ISvnLogItem item in ((MergeRevisionsSelectionPageControl)PageControl).SelectedRevisions)
+                {
+                    revs.Add(item.Revision);
+                }
+
+                revs.Sort();
+
+                return revs.ToArray();
+            }
+        }
+
         void MergeRevisionsSelectionPage_SelectionChanged(object sender, EventArgs e)
         {
             IsPageComplete = ((MergeRevisionsSelectionPageControl)PageControl).SelectedRevisions.Count > 0;
+
+            if (IsPageComplete)
+                ((MergeWizard)Wizard).MergeRevisions = MergeRevisions;
+            else
+                ((MergeWizard)Wizard).MergeRevisions = null;
         }
 
         protected override void OnPageChanged(WizardPageChangeEventArgs e)

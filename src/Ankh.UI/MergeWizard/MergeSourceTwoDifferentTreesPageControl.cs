@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using WizardFramework;
 using System.Windows.Forms.Design;
 using Ankh.Scc;
+using System.Diagnostics;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -121,9 +122,31 @@ namespace Ankh.UI.MergeWizard
                 if (dialog.ShowDialog(WizardPage.Form) == DialogResult.OK)
                 {
                     IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
-                    
-                    // TODO: use selection in correct field
-                    // We should probably support something like revision: '123-456,457,500-512'
+                    long low = -1;
+                    long high = -1;
+
+                    foreach (ISvnLogItem item in selected)
+                    {
+                        // Should happen on first iteration
+                        if (low == -1 && high == -1)
+                        {
+                            low = item.Revision;
+                            high = item.Revision;
+
+                            continue;
+                        }
+
+                        if (item.Revision < low)
+                            low = item.Revision;
+                        else if (item.Revision > high)
+                            high = item.Revision;
+                    }
+
+                    fromRevisionTextBox.Text = low.ToString();
+
+                    if (useFromURLCheckBox.Checked && high != -1 && high != low)
+                        toRevisionTextBox.Text = high.ToString();
+
                     GC.KeepAlive(selected);
                 }
             }
@@ -198,12 +221,22 @@ namespace Ankh.UI.MergeWizard
 
         private void fromRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
+            long rev = -1;
             TogglePageComplete();
+
+            if (long.TryParse(fromRevisionTextBox.Text, out rev))
+                ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = rev;
+            else((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = -1;
         }
 
         private void toRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
+            long rev = -1;
             TogglePageComplete();
+
+            if (long.TryParse(toRevisionTextBox.Text, out rev))
+                ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = rev;
+            else ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = -1;
         }
 
         private void fromURLTextBox_TextChanged(object sender, EventArgs e)
