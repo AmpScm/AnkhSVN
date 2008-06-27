@@ -193,6 +193,41 @@ namespace Ankh.UI.MergeWizard
             set { _mergeSource = value; }
         }
 
+        /// <summary>
+        /// Integer array for the revision(s) being merged.
+        /// </summary>
+        internal long[] MergeRevisions
+        {
+            get { return _mergeRevisions; }
+            set { _mergeRevisions = value; }
+        }
+
+        /// <summary>
+        /// Returns the revisions from <code>MergeRevisions</code> as a string.
+        /// </summary>
+        internal string MergeRevisionsAsString
+        {
+            get
+            {
+                long[] revs = MergeRevisions;
+                StringBuilder sb = new StringBuilder();
+
+
+                for (int i = 0; i < revs.Length; i++)
+                {
+                    if (i != revs.Length - 1)
+                        sb.Append(revs[i].ToString() + ", ");
+                    else
+                        sb.Append(revs[i].ToString());
+                }
+
+                // TODO: Make the string range-aware.  So instead of '1, 3, 4, 5, 8',
+                // return '1, 3-5, 8'.
+
+                return sb.ToString();
+            }
+        }
+
         LogMode _logMode = LogMode.Remote;
         /// <summary>
         /// Gets or sets the log mode.
@@ -223,5 +258,6 @@ namespace Ankh.UI.MergeWizard
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;
+        long[] _mergeRevisions = null;
     }
 }

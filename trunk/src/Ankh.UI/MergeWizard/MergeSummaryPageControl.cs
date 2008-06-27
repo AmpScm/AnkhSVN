@@ -49,6 +49,14 @@ namespace Ankh.UI.MergeWizard
                     mergeSource2TextBox.Text = Resources.NotApplicableShort;
 
                 // Populate Revisions
+                if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
+                    revisionsTextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeFromRevision.ToString() + "-" +
+                        ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeToRevision.ToString();
+                else
+                    if (mergeWizard.MergeRevisions == null)
+                        revisionsTextBox.Text = Resources.All;
+                    else
+                        revisionsTextBox.Text = mergeWizard.MergeRevisionsAsString;
 
                 // Populate Binary Conflicts
                 if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)

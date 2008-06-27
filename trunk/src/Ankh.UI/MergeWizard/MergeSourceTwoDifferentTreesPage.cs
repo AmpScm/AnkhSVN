@@ -55,6 +55,26 @@ namespace Ankh.UI.MergeWizard
             set { _hasSecondMergeSourceUrl = value; }
         }
 
+        /// <summary>
+        /// Gets/Sets the 'From' merge revision.
+        /// </summary>
+        public long MergeFromRevision
+        {
+            get { return _mergeFromRevision; }
+            set { _mergeFromRevision = value; }
+        }
+
+        /// <summary>
+        /// Gets/Sets the 'To' merge revision.
+        /// </summary>
+        public long MergeToRevision
+        {
+            get { return _mergeToRevision; }
+            set { _mergeToRevision = value; }
+        }
+
+        private long _mergeFromRevision;
+        private long _mergeToRevision;
         private bool _hasSecondMergeSourceUrl = false;
         private string _mergeSourceOne;
         private string _mergeSourceTwo;
