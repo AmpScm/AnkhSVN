@@ -50,6 +50,8 @@ namespace Ankh.Commands
                     int i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
+                        if (item == null || item.Uri == null)
+                            continue;
                         i++;
                         if (i > 1)
                             break;
@@ -107,9 +109,11 @@ namespace Ankh.Commands
                     ISvnRepositoryItem item = null;
                     foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
-                        item = i;
+                        if(i!= null && i.Uri != null)
+                            item = i;
                         break;
                     }
+
                     if (item != null)
                         RemoteLog(e.Context, item.Uri);
                     break;
