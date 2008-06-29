@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
 using Ankh.VS;
+using System.Collections.ObjectModel;
 
 namespace Ankh.UI.SccManagement
 {
@@ -91,6 +92,8 @@ namespace Ankh.UI.SccManagement
 
         private void createFolderButton_Click(object sender, EventArgs e)
         {
+            if (treeView1.SelectedNode == null)
+                return;
             Uri u = treeView1.SelectedNode.RawUri;
             using (CreateDirectory dialog = new CreateDirectory())
             {
@@ -153,10 +156,36 @@ namespace Ankh.UI.SccManagement
                 textBox1.Text = RepositoryAddUrl.ToString();
         }
 
+        [Obsolete("Remove when SharpSvn fixed")]
+        static Uri Canonicalize(Uri uri)
+        {
+            String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+            if (path.Length > 0 && (path[path.Length - 1] == '/' || path.IndexOf('\\') >= 0))
+            {
+                // Create a new uri with all / and \ characters at the end removed
+                return new Uri(uri, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            }
+
+            return uri;
+        }
+
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             UpdateUrlPreview();
             errorProvider1.SetError(treeView1, null);
+
+
+            if (treeView1.SelectedNode != null && treeView1.SelectedNode.RawUri != null)
+            {
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.ThrowOnError=false;
+                Collection<SvnInfoEventArgs> info;
+                if (Client.GetInfo(new SvnUriTarget(Canonicalize(treeView1.SelectedNode.RawUri)), ia, out info))
+                    createFolderButton.Enabled = true;
+                else createFolderButton.Enabled = false;
+            }
+            else
+                createFolderButton.Enabled = false;
         }
 
         private void addTrunk_CheckedChanged(object sender, EventArgs e)
