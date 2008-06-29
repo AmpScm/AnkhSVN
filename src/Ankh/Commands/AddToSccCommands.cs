@@ -85,6 +85,7 @@ namespace Ankh.Commands
             return item.IsVersionable;
         }
 
+        [Obsolete("Remove when SharpSvn fixed")]
         static Uri Canonicalize(Uri uri)
         {
             String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
