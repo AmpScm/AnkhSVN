@@ -141,6 +141,7 @@ namespace Ankh.Commands
                         dialog.PathToAdd = e.Selection.SolutionFilename;
                         if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                         {
+                            confirmed = true;
                             Collection<SvnInfoEventArgs> info;
                             SvnInfoArgs ia = new SvnInfoArgs();
                             ia.ThrowOnError = false;
