@@ -85,6 +85,18 @@ namespace Ankh.Commands
             return item.IsVersionable;
         }
 
+        static Uri Canonicalize(Uri uri)
+        {
+            String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+            if (path.Length > 0 && (path[path.Length - 1] == '/' || path.IndexOf('\\') >= 0))
+            {
+                // Create a new uri with all / and \ characters at the end removed
+                return new Uri(uri, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            }
+
+            return uri;
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
@@ -157,7 +169,8 @@ namespace Ankh.Commands
                                         SvnCreateDirectoryArgs cdArg = new SvnCreateDirectoryArgs();
                                         cdArg.MakeParents = true;
                                         cdArg.LogMessage = createDialog.LogMessage;
-                                        cl.RemoteCreateDirectory(dialog.RepositoryAddUrl, cdArg);
+
+                                        cl.RemoteCreateDirectory(Canonicalize(dialog.RepositoryAddUrl), cdArg);
                                     }
                                     else
                                         return; // bail out, we cannot continue without directory in the repository
@@ -167,7 +180,7 @@ namespace Ankh.Commands
                             // Create working copy
                             SvnCheckOutArgs coArg = new SvnCheckOutArgs();
                             coArg.AllowObstructions = true;
-                            cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+                            cl.CheckOut(Canonicalize(dialog.RepositoryAddUrl), dialog.WorkingCopyDir, coArg);
 
                             // Add solutionfile so we can set properties (set managed)
                             SvnAddArgs aa = new SvnAddArgs();
