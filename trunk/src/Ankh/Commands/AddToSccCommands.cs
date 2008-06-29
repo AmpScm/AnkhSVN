@@ -78,6 +78,13 @@ namespace Ankh.Commands
             }
         }
 
+        static bool IsVersionable(SvnItem item)
+        {
+            // HACK: remove when IsVersionable behavior is fixed
+            item.MarkDirty();
+            return item.IsVersionable;
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
@@ -101,9 +108,11 @@ namespace Ankh.Commands
                 bool confirmed = false;
                 SvnItem item = cache[e.Selection.SolutionFilename];
 
+                IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+
                 if (item.IsVersioned)
                 { /* File is in subversion; just enable */ }
-                else if (item.IsVersionable)
+                else if (IsVersionable(item))
                 {
                     if (e.IsInAutomation)
                         confirmed = true;
@@ -115,14 +124,23 @@ namespace Ankh.Commands
                     else
                         confirmed = true;
 
+                    using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                    {
+                        SvnAddArgs aa = new SvnAddArgs();
+                        aa.AddParents = true;
+                        cl.Add(e.Selection.SolutionFilename, aa);
+
+                        //settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+                    }
+                }
+                else
+                {
                     using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
                     using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
                     {
                         dialog.PathToAdd = e.Selection.SolutionFilename;
                         if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                         {
-                            IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-
                             Collection<SvnInfoEventArgs> info;
                             SvnInfoArgs ia = new SvnInfoArgs();
                             ia.ThrowOnError = false;
@@ -157,13 +175,11 @@ namespace Ankh.Commands
 
                             settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
                         }
-
+                        else
+                        {
+                            return; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh or anything else
+                        }
                     }
-                }
-                else
-                {
-                    new AddSolutionToRepositoryCommand().OnExecute(e);
-                    return;
                 }
 
                 if (!confirmed && !e.IsInAutomation &&
