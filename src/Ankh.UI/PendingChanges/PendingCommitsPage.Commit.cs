@@ -237,6 +237,9 @@ namespace Ankh.UI.PendingChanges
                 if (!PreCommit_VerifyLogMessage(state))
                     return;
 
+                if (!PreCommit_CheckSolutionAdded(state))
+                    return;
+
                 if (!PreCommit_SaveDirty(state))
                     return;
 
@@ -270,6 +273,50 @@ namespace Ankh.UI.PendingChanges
                     dl.ReloadModified();
                 }
             }
+        }
+
+        private bool PreCommit_CheckSolutionAdded(PendingCommitState state)
+        {
+            IAnkhCommandService cmdSvc = state.GetService<IAnkhCommandService>();
+            string slnFile = state.GetService<IAnkhSolutionSettings>().SolutionFilename;
+            SvnItem slnItem = state.Cache[slnFile];
+
+            if (slnItem.IsVersioned)
+                return true;
+
+            slnItem.MarkDirty();  
+            // HACK: there's a bug in IsVersionable, it's always true when File.Exists, and becomes false after UpdateVersionable()
+            // too much depends on IsVersionable = true intially to change this now.
+
+            if (slnItem.IsVersionable)
+            {
+                if (slnItem.Parent.IsVersioned)
+                {
+                    // Direct parent is versioned, cannot add to a 'fresh' working copy, lets add to this one
+                    return true;
+                }
+
+                // detect working copy
+                SvnItem i = slnItem.Parent;
+                while (i != null && !i.IsVersioned)
+                    i = i.Parent;
+
+                // Ask wether we should ask to detected working copy
+                if (DialogResult.Yes == state.MessageBox.Show(string.Format("Existing working copy detected\r\n" + 
+                    "Do you want to add the solution to:\r\n" + 
+                    "{0}", i.FullPath), 
+                    "AnkhSvn", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question))
+                    return true;
+            }
+
+            // sln file is either not in a working copy, or user wants to add it to a new working copy.
+            cmdSvc.DirectlyExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion, null);
+
+            state.GetService<IFileStatusMonitor>().ScheduleSvnStatus(slnFile);
+            //slnItem.MarkDirty();
+            return slnItem.IsVersioned;
         }
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
@@ -336,6 +383,10 @@ namespace Ankh.UI.PendingChanges
                 if (pc.Change != null && pc.Change.State == PendingChangeKind.New)
                 {
                     SvnItem item = pc.Item;
+
+                    // HACK: figure out why PendingChangeKind.New is still true
+                    if (item.IsVersioned)
+                        continue; // No need to add
 
                     SvnAddArgs a = new SvnAddArgs();
                     a.AddParents = true;
