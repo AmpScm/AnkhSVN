@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using Ankh.Commands;
 
 namespace Ankh.Scc
 {
@@ -16,12 +17,9 @@ namespace Ankh.Scc
         /// </returns>
         public int AddNewSolutionToSourceControl()
         {
-            SetProjectManagedRaw(null, true);
+            IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
 
-            foreach (IVsSccProject2 project in _projectMap.Keys)
-            {
-                SetProjectManagedRaw(project, true);
-            }
+            cmdSvc.PostExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion);
 
             return VSConstants.S_OK;
         }
