@@ -162,8 +162,9 @@ namespace Ankh.UI.SccManagement
             String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
             if (path.Length > 0 && (path[path.Length - 1] == '/' || path.IndexOf('\\') >= 0))
             {
+                Uri u = new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped));
                 // Create a new uri with all / and \ characters at the end removed
-                return new Uri(uri, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+                return new Uri(u, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
             }
 
             return uri;
