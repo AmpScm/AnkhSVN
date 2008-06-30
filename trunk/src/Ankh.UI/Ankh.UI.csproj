@@ -161,6 +161,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="SccManagement\CreateDirectory.cs">
       <SubType>Form</SubType>
     </Compile>
