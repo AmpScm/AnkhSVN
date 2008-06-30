@@ -150,11 +150,77 @@ namespace Ankh.UI.MergeWizard
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
-            //SvnClient client = MergeUtils.GetClient();
-            // Use SvnMergeArgs ???
-            //client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
-            //client.Merge(..)
-            // TODO: Implement
+            // TODO: Get merge working in scenario where "All revisions" should be merged
+            // TODO: Create a dialog with the merge results
+
+            MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
+
+            // Perform merge using IProgressRunner
+            Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
+                delegate(object sender, ProgressWorkerArgs ee)
+                {
+                    // Attach the conflict handler
+                    ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
+                    
+                    if (mergeType == MergeType.TwoDifferentTrees)
+                    {
+                        MergeSourceTwoDifferentTreesPage page = ((MergeSourceTwoDifferentTreesPage)mergeSourceTwoDifferentTreesPage);
+                        SvnRevisionRange revRange = new SvnRevisionRange(page.MergeFromRevision, page.MergeToRevision);
+                        SvnDiffMergeArgs dArgs = new SvnDiffMergeArgs();
+                        Uri fromUri;
+                        Uri toUri;
+
+                        // Set the proper depth
+                        dArgs.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
+
+                        // Set whether or not unversioned obstructions should be allowed
+                        dArgs.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
+
+                        // Set whether or not to ignore ancestry
+                        dArgs.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
+
+                        // Create 'From' uri
+                        Uri.TryCreate(page.MergeSourceOne, UriKind.Absolute, out fromUri);
+
+                        // Create 'To' uri if necessary
+                        if (page.HasSecondMergeSourceUrl)
+                            Uri.TryCreate(page.MergeSourceTwo, UriKind.Absolute, out toUri);
+                        else
+                            toUri = fromUri;
+
+                        ee.Client.DiffMerge(MergeTarget.FullPath,
+                            new SvnUriTarget(fromUri, page.MergeFromRevision),
+                            new SvnUriTarget(toUri, page.MergeToRevision),
+                            dArgs);
+                    }
+                    else
+                    {
+                        SvnMergeArgs args = new SvnMergeArgs();
+                        List<SvnRevisionRange> mergeRevisions = new List<SvnRevisionRange>();
+
+                        // Set the proper depth
+                        args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
+
+                        // Set whether or not unversioned obstructions should be allowed
+                        args.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
+
+                        // Set whether or not to ignore ancestry
+                        args.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
+
+                        // Set whether or not this merge should just record the merge information
+                        args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
+
+                        // TODO: Enhance to be range-aware
+                        foreach (long rev in MergeRevisions)
+                        {
+                            mergeRevisions.Add(new SvnRevisionRange(rev, rev));
+                        }
+
+                        ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                            mergeRevisions, args);
+                    }
+                });
+
             this.Form.DialogResult = DialogResult.OK;
 
             return true;

@@ -366,6 +366,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Merging....
+        /// </summary>
+        internal static string MergingTitle {
+            get {
+                return ResourceManager.GetString("MergingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {

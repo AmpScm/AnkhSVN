@@ -103,11 +103,9 @@ namespace Ankh.UI.MergeWizard.Commands
                 result = dialog.ShowDialog(uiService.GetDialogOwnerWindow());
 
                 if (result == DialogResult.OK)
-                    MessageBox.Show("AnkhSVN merge functionality is not complete and is a work in progress.  " +
-                        "This feature may not work as expected.  " +
-                        "Please check the website for a newer build or if you have the latest, contact " +
-                        "the developers for an estimated delivery date.", "AnkhSVN Merge", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                {
+                    // TODO: Show the merge summary dialog.
+                }
             }
         }
 
