@@ -223,6 +223,9 @@
   <data name="MergeWizardTitle" xml:space="preserve">
     <value>Merge Wizard</value>
   </data>
+  <data name="MergingTitle" xml:space="preserve">
+    <value>Merging...</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
