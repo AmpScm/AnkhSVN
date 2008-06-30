@@ -150,6 +150,10 @@ namespace Ankh.UI.MergeWizard
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
+            //SvnClient client = MergeUtils.GetClient();
+            // Use SvnMergeArgs ???
+            //client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
+            //client.Merge(..)
             // TODO: Implement
             this.Form.DialogResult = DialogResult.OK;
 
@@ -237,6 +241,68 @@ namespace Ankh.UI.MergeWizard
         {
             get { return _logMode; }
             set { _logMode = value; }
+        }
+
+        private void OnConflict(object sender, SvnConflictEventArgs args)
+        {
+            MergeConflictHandler.OnConflict(args);
+        }
+
+        private MergeConflictHandler mergeConflictHandler;
+        private MergeConflictHandler MergeConflictHandler
+        {
+            get
+            {
+                if (mergeConflictHandler == null)
+                {
+                    mergeConflictHandler = new MergeConflictHandler();
+                    if (mergeOptionsPage != null)
+                    {
+                        MergeOptionsPage optionsPage = (MergeOptionsPage)mergeOptionsPage;
+                        MergeOptionsPage.ConflictResolutionOption binaryOption = optionsPage.BinaryConflictResolution;
+                        if (binaryOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
+                        {
+                            mergeConflictHandler.PromptOnBinaryConflict = true;
+                        }
+                        else
+                        {
+                            mergeConflictHandler.BinaryConflictResolutionChoice = ToSvnAccept(binaryOption);
+                        }
+
+                        MergeOptionsPage.ConflictResolutionOption textOption = optionsPage.TextConflictResolution;
+                        if (textOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
+                        {
+                            mergeConflictHandler.PromptOnTextConflict = true;
+                        }
+                        else
+                        {
+                            mergeConflictHandler.TextConflictResolutionChoice = ToSvnAccept(textOption);
+                        }
+                    }
+                }
+                return mergeConflictHandler;
+            }
+        }
+
+        private SvnAccept ToSvnAccept(MergeOptionsPage.ConflictResolutionOption option)
+        {
+            SvnAccept choice = SvnAccept.Postpone;
+            switch (option)
+            {
+                case MergeOptionsPage.ConflictResolutionOption.BASE:
+                    choice = SvnAccept.Base;
+                    break;
+                case MergeOptionsPage.ConflictResolutionOption.MINE:
+                    choice = SvnAccept.MineFull;
+                    break;
+                case MergeOptionsPage.ConflictResolutionOption.THEIRS:
+                    choice = SvnAccept.TheirsFull;
+                    break;
+                default:
+                    choice = SvnAccept.Postpone;
+                    break;
+            }
+            return choice;
         }
 
         internal MergeWizardDialog WizardDialog
