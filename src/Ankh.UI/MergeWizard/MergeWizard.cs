@@ -160,6 +160,7 @@ namespace Ankh.UI.MergeWizard
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     // Attach the conflict handler
+                    ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(this.OnConflict);
                     ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
                     
                     if (mergeType == MergeType.TwoDifferentTrees)
@@ -210,10 +211,13 @@ namespace Ankh.UI.MergeWizard
                         // Set whether or not this merge should just record the merge information
                         args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
 
-                        // TODO: Enhance to be range-aware
-                        foreach (long rev in MergeRevisions)
+                        if (MergeRevisions != null)
                         {
-                            mergeRevisions.Add(new SvnRevisionRange(rev, rev));
+                            // TODO: Enhance to be range-aware
+                            foreach (long rev in MergeRevisions)
+                            {
+                                mergeRevisions.Add(new SvnRevisionRange(rev, rev));
+                            }
                         }
 
                         ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),

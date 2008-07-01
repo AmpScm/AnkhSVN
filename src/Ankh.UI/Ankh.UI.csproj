@@ -111,6 +111,14 @@
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
     <Reference Include="$(VSLangAssembly)" />
+    <Reference Include="Menees, Version=2.0.3104.20430, Culture=neutral, PublicKeyToken=195d53503ddcaef6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Menees.dll</HintPath>
+    </Reference>
+    <Reference Include="MeneesDiffUtils, Version=2.0.2.0, Culture=neutral, PublicKeyToken=b5c875595330e5f6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\MeneesDiffUtils.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -143,7 +151,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="WizardFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WizardFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4d734c443eb4978e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\WizardFramework.dll</HintPath>
     </Reference>
@@ -162,6 +170,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
+    <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\MergeConflictHandlerDialog.Designer.cs">
+      <DependentUpon>MergeConflictHandlerDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\CreateDirectory.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -711,6 +725,10 @@
     <None Include="Ankh.UI.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MergeWizard\MergeConflictHandlerDialog.resx">
+      <DependentUpon>MergeConflictHandlerDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateDirectory.resx">
       <DependentUpon>CreateDirectory.cs</DependentUpon>
       <SubType>Designer</SubType>
