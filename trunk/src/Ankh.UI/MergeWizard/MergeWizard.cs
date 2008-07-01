@@ -190,7 +190,7 @@ namespace Ankh.UI.MergeWizard
                             toUri = fromUri;
 
                         ee.Client.DiffMerge(MergeTarget.FullPath,
-                            new SvnUriTarget(fromUri, page.MergeFromRevision),
+                            new SvnUriTarget(fromUri, page.MergeFromRevision - 1),
                             new SvnUriTarget(toUri, page.MergeToRevision),
                             dArgs);
                     }
@@ -211,17 +211,17 @@ namespace Ankh.UI.MergeWizard
                         // Set whether or not this merge should just record the merge information
                         args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
 
+                        // TODO: Enhance to be range-aware
                         if (MergeRevisions != null)
                         {
-                            // TODO: Enhance to be range-aware
                             foreach (long rev in MergeRevisions)
                             {
-                                mergeRevisions.Add(new SvnRevisionRange(rev, rev));
+                                mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
                             }
                         }
 
                         ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
-                            mergeRevisions, args);
+                            mergeRevisions.Count == 0 ? null : mergeRevisions, args);
                     }
                 });
 

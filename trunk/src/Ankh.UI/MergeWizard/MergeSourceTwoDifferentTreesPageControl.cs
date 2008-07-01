@@ -193,6 +193,8 @@ namespace Ankh.UI.MergeWizard
             fromRevisionSelectButton.Enabled = false;
 
             TogglePageComplete();
+
+            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = -1;
         }
 
         private void fromRevisionRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -210,6 +212,8 @@ namespace Ankh.UI.MergeWizard
             toRevisionSelectButton.Enabled = false;
 
             TogglePageComplete();
+
+            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = -1;
         }
 
         private void toRevisionRadioButton_CheckedChanged(object sender, EventArgs e)

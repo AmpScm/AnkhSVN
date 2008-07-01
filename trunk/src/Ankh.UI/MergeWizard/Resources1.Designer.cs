@@ -122,6 +122,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HEAD.
+        /// </summary>
+        internal static string HEAD {
+            get {
+                return ResourceManager.GetString("HEAD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid from revision..
         /// </summary>
         internal static string InvalidFromRevision {
