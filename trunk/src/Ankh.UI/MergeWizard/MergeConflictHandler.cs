@@ -7,19 +7,27 @@ namespace Ankh.UI.MergeWizard
 {
     class MergeConflictHandler
     {
-        SharpSvn.SvnAccept _binaryChoice = SharpSvn.SvnAccept.Postpone;
-        SharpSvn.SvnAccept _textChoice = SharpSvn.SvnAccept.Postpone;
-        SharpSvn.SvnAccept _propertyChoice = SharpSvn.SvnAccept.Postpone;
+        /// Conflict resolution preference for binary files
+        SvnAccept _binaryChoice = SvnAccept.Postpone;
 
+        /// Conflict resolution preference for text files
+        SvnAccept _textChoice = SvnAccept.Postpone;
+
+        /// Conflict resolution preference for properties
+        SvnAccept _propertyChoice = SvnAccept.Postpone;
+
+        /// flag (not) to show conflict resolution option dialog for text files
         bool _txt_showDialog = false;
+
+        /// flag (not) to show conflict resolution option dialog for binary files
         bool _binary_showDialog = false;
 
-        public MergeConflictHandler(SharpSvn.SvnAccept binaryChoice, SharpSvn.SvnAccept textChoice, SharpSvn.SvnAccept propChoice)
+        public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
             : this(binaryChoice, textChoice)
         {
         }
         
-        public MergeConflictHandler(SharpSvn.SvnAccept binaryChoice, SharpSvn.SvnAccept textChoice)
+        public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice)
             : this()
         {
             this._binaryChoice = binaryChoice;
@@ -30,6 +38,9 @@ namespace Ankh.UI.MergeWizard
         {
         }
 
+        /// <summary>
+        /// Gets/sets the conflict resolution preference for text files
+        /// </summary>
         public SvnAccept TextConflictResolutionChoice
         {
             get
@@ -42,6 +53,9 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        /// <summary>
+        /// Gets/sets the conflict resolution preference for binary files
+        /// </summary>
         public SvnAccept BinaryConflictResolutionChoice
         {
             get
@@ -54,6 +68,9 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        /// <summary>
+        /// Gets/sets the flag to show conflict resolution dialog for text file conflicts.
+        /// </summary>
         public bool PromptOnTextConflict
         {
             get
@@ -66,6 +83,9 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        /// <summary>
+        /// Gets/sets the flag to show conflict resolution dialog for binary file conflicts.
+        /// </summary>
         public bool PromptOnBinaryConflict
         {
             get
@@ -78,32 +98,60 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        public void OnConflict(SharpSvn.SvnConflictEventArgs args)
+        /// <summary>
+        /// Handles the conflict based on the preferences.
+        /// </summary>
+        public void OnConflict(SvnConflictEventArgs args)
         {
-            SvnAccept choice = SvnAccept.Postpone;
-            if (args.IsBinary)
+            if (args.ConflictReason == SvnConflictReason.Edited)
             {
-                if (PromptOnBinaryConflict)
+                SvnAccept choice = SvnAccept.Postpone;
+                if (args.IsBinary)
                 {
-                    // TODO
+                    if (PromptOnBinaryConflict)
+                    {
+                        HandleConflictWithDialog(args);
+                        return;
+                    }
+                    else
+                    {
+                        choice = BinaryConflictResolutionChoice;
+                    }
                 }
                 else
                 {
-                    choice = BinaryConflictResolutionChoice;
+                    if (PromptOnTextConflict)
+                    {
+                        HandleConflictWithDialog(args);
+                        return;
+                    }
+                    else
+                    {
+                        choice = TextConflictResolutionChoice;
+                    }
                 }
+                args.Choice = choice;
             }
             else
             {
-                if (PromptOnTextConflict)
+                args.Choice = SvnAccept.Postpone;
+            }
+        }
+
+        private void HandleConflictWithDialog(SvnConflictEventArgs args)
+        {
+            using (MergeConflictHandlerDialog dlg = new MergeConflictHandlerDialog(args))
+            {
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    // TODO
+                    args.Choice = dlg.ConflictResolution;
+                    // TODO handle merged file option
                 }
                 else
                 {
-                    choice = TextConflictResolutionChoice;
+                    args.Choice = SvnAccept.Postpone;
                 }
             }
-            args.Choice = choice;
         }
     }
 }
