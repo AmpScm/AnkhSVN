@@ -50,8 +50,12 @@ namespace Ankh.UI.MergeWizard
 
                 // Populate Revisions
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
-                    revisionsTextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeFromRevision.ToString() + "-" +
-                        ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeToRevision.ToString();
+                {
+                    MergeSourceTwoDifferentTreesPage tdtPage = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME));
+
+                    revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : Resources.HEAD) + "-" +
+                        (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : Resources.HEAD);
+                }
                 else
                     if (mergeWizard.MergeRevisions == null)
                         revisionsTextBox.Text = Resources.All;
