@@ -119,6 +119,8 @@ namespace Ankh.UI.MergeWizard
             using (LogViewerDialog dialog = new LogViewerDialog(target,
                     ((MergeWizard)WizardPage.Wizard).Context))
             {
+                dialog.LogControl.StrictNodeHistory = true;
+
                 if (dialog.ShowDialog(WizardPage.Form) == DialogResult.OK)
                 {
                     IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
