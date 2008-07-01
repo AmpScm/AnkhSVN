@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Scc;
 using System.Diagnostics;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.UI
 {
@@ -27,6 +28,14 @@ namespace Ankh.UI
         {
             LogTarget = target;
             Context = context;
+        }
+
+        /// <summary>
+        /// Gets an instance of the <code>LogControl</code>.
+        /// </summary>
+        public LogControl LogControl
+        {
+            get { return logViewerControl; }
         }
 
         /// <summary>

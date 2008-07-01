@@ -17,7 +17,10 @@ namespace Ankh.UI.MergeWizard
         {
             InitializeComponent();
             logToolControl1.SelectionChanged += new SelectionChangedEventHandler<Ankh.Scc.ISvnLogItem>(logToolControl1_SelectionChanged);
+
+            logToolControl1.StrictNodeHistory = true;
         }
+
         public IList<Ankh.Scc.ISvnLogItem> SelectedRevisions
         {
             get
