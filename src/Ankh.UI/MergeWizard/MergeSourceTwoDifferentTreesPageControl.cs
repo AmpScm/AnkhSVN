@@ -74,7 +74,7 @@ namespace Ankh.UI.MergeWizard
             }
 
             // Conditionally validate the From Revision number
-            if (fromRevisionRadioButton.Checked && !Int32.TryParse(fromRevisionTextBox.Text, out tmpInt))
+            if (fromRevisionRadioButton.Checked && (!Int32.TryParse(fromRevisionTextBox.Text, out tmpInt) || tmpInt < 0))
             {
                 WizardPage.Message = MergeUtils.INVALID_FROM_REVISION;
                 WizardPage.IsPageComplete = false;
@@ -83,7 +83,7 @@ namespace Ankh.UI.MergeWizard
             }
 
             // Conditionally validate the To Revision number
-            if (toRevisionRadioButton.Checked && !Int32.TryParse(toRevisionTextBox.Text, out tmpInt))
+            if (toRevisionRadioButton.Checked && (!Int32.TryParse(toRevisionTextBox.Text, out tmpInt) || tmpInt < 0))
             {
                 WizardPage.Message = MergeUtils.INVALID_TO_REVISION;
                 WizardPage.IsPageComplete = false;
