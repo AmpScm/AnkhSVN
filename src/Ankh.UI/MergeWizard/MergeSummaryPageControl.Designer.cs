@@ -49,6 +49,8 @@
             this.depthTextBox = new System.Windows.Forms.TextBox();
             this.textConflictsTextBox = new System.Windows.Forms.TextBox();
             this.binaryConflictsTextBox = new System.Windows.Forms.TextBox();
+            this.performDryRunLabel = new System.Windows.Forms.Label();
+            this.performDryRunCheckBox = new System.Windows.Forms.CheckBox();
             this.mergeDetailsGroupBox.SuspendLayout();
             this.mergeOptionsGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -139,6 +141,8 @@
             // mergeOptionsGroupBox
             // 
             resources.ApplyResources(this.mergeOptionsGroupBox, "mergeOptionsGroupBox");
+            this.mergeOptionsGroupBox.Controls.Add(this.performDryRunCheckBox);
+            this.mergeOptionsGroupBox.Controls.Add(this.performDryRunLabel);
             this.mergeOptionsGroupBox.Controls.Add(this.unversionedObstructionsTextBox);
             this.mergeOptionsGroupBox.Controls.Add(this.ignoreAncestryTextBox);
             this.mergeOptionsGroupBox.Controls.Add(this.depthTextBox);
@@ -182,6 +186,18 @@
             this.binaryConflictsTextBox.Name = "binaryConflictsTextBox";
             this.binaryConflictsTextBox.ReadOnly = true;
             // 
+            // performDryRunLabel
+            // 
+            resources.ApplyResources(this.performDryRunLabel, "performDryRunLabel");
+            this.performDryRunLabel.Name = "performDryRunLabel";
+            // 
+            // performDryRunCheckBox
+            // 
+            resources.ApplyResources(this.performDryRunCheckBox, "performDryRunCheckBox");
+            this.performDryRunCheckBox.Name = "performDryRunCheckBox";
+            this.performDryRunCheckBox.UseVisualStyleBackColor = true;
+            this.performDryRunCheckBox.CheckedChanged += new System.EventHandler(this.performDryRunCheckBox_CheckedChanged);
+            // 
             // MergeSummaryPageControl
             // 
             resources.ApplyResources(this, "$this");
@@ -220,5 +236,7 @@
         private System.Windows.Forms.TextBox depthTextBox;
         private System.Windows.Forms.TextBox textConflictsTextBox;
         private System.Windows.Forms.TextBox binaryConflictsTextBox;
+        private System.Windows.Forms.Label performDryRunLabel;
+        private System.Windows.Forms.CheckBox performDryRunCheckBox;
     }
 }
