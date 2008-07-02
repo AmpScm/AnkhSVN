@@ -117,10 +117,344 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="horizontalDividerLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="horizontalDividerLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="horizontalDividerLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="horizontalDividerLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="horizontalDividerLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>540, 1</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="horizontalDividerLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;horizontalDividerLabel.Name" xml:space="preserve">
+    <value>horizontalDividerLabel</value>
+  </data>
+  <data name="&gt;&gt;horizontalDividerLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;horizontalDividerLabel.Parent" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;horizontalDividerLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="headerDescription.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="headerDescription.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="headerDescription.Location" type="System.Drawing.Point, System.Drawing">
+    <value>26, 24</value>
+  </data>
+  <data name="headerDescription.Size" type="System.Drawing.Size, System.Drawing">
+    <value>449, 38</value>
+  </data>
+  <data name="headerDescription.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="headerDescription.Text" xml:space="preserve">
+    <value>Below are the results of the merge you just performed.</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Name" xml:space="preserve">
+    <value>headerDescription</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="headerTitle.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="headerTitle.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="headerTitle.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="headerTitle.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 5</value>
+  </data>
+  <data name="headerTitle.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="headerTitle.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 13</value>
+  </data>
+  <data name="headerTitle.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="headerTitle.Text" xml:space="preserve">
+    <value>Merge Results</value>
+  </data>
+  <data name="headerTitle.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Name" xml:space="preserve">
+    <value>headerTitle</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="okButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>378, 16</value>
+  </data>
+  <data name="okButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="okButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="okButton.Text" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="&gt;&gt;okButton.Name" xml:space="preserve">
+    <value>okButton</value>
+  </data>
+  <data name="&gt;&gt;okButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okButton.Parent" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left, Right</value>
+  </data>
+  <data name="cancelButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>458, 16</value>
+  </data>
+  <data name="cancelButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cancelButton.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
+    <value>cancelButton</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="controlPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 416</value>
+  </data>
+  <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>542, 50</value>
+  </data>
+  <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Name" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="headerImage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="headerImage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        RK5CYII=
+</value>
+  </data>
+  <data name="headerImage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="headerImage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>478, 2</value>
+  </data>
+  <data name="headerImage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="headerImage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 64</value>
+  </data>
+  <data name="headerImage.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Name" xml:space="preserve">
+    <value>headerImage</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerImage.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="headerPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="headerPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="headerPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="headerPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>542, 66</value>
+  </data>
+  <data name="headerPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Name" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
@@ -155,7 +489,6 @@
         AAD8QwAA+GMAAPD/AADh/wAAw/8AAMf/AAA=
 </value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>
   </data>
