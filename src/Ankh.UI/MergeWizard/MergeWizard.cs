@@ -169,7 +169,6 @@ namespace Ankh.UI.MergeWizard
                     if (mergeType == MergeType.TwoDifferentTrees)
                     {
                         MergeSourceTwoDifferentTreesPage page = ((MergeSourceTwoDifferentTreesPage)mergeSourceTwoDifferentTreesPage);
-                        SvnRevisionRange revRange = new SvnRevisionRange(page.MergeFromRevision, page.MergeToRevision);
                         SvnDiffMergeArgs dArgs = new SvnDiffMergeArgs();
                         Uri fromUri;
                         Uri toUri;
@@ -196,8 +195,12 @@ namespace Ankh.UI.MergeWizard
                             toUri = fromUri;
 
                         ee.Client.DiffMerge(MergeTarget.FullPath,
-                            new SvnUriTarget(fromUri, page.MergeFromRevision - 1),
-                            new SvnUriTarget(toUri, page.MergeToRevision),
+                            new SvnUriTarget(fromUri, (page.MergeFromRevision > -1 ?
+                                new SvnRevision(page.MergeFromRevision - 1) :
+                                SvnRevision.Head)),
+                            new SvnUriTarget(toUri, (page.MergeToRevision > -1 ?
+                                new SvnRevision(page.MergeToRevision) :
+                                SvnRevision.Head)),
                             dArgs);
                     }
                     else if (mergeType == MergeType.Reintegrate)

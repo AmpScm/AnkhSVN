@@ -62,9 +62,11 @@ namespace Ankh.UI.MergeWizard
             switch (((MergeWizard)WizardPage.Wizard).LogMode)
             {
                 case LogMode.MergesEligible:
+                    logToolControl1.IncludeMerged = false;
                     logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, new Uri(MergeSource));
                     break;
                 case LogMode.MergesMerged:
+                    logToolControl1.IncludeMerged = true;
                     logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, new Uri(MergeSource));
                     break;
                 case LogMode.Remote:
