@@ -154,9 +154,9 @@
             this.Controls.Add(this.diffPanel);
             this.Controls.Add(this.preferencesGroupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MergeConflictHandlerDialog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Handle Conflict";
             this.preferencesGroupBox.ResumeLayout(false);
             this.preferencesGroupBox.PerformLayout();
