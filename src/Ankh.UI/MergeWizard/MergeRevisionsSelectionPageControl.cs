@@ -56,11 +56,10 @@ namespace Ankh.UI.MergeWizard
             get { return ((MergeWizard)WizardPage.Wizard).MergeTarget.FullPath; }
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected void PopulateUI()
         {
-            base.OnLoad(e);
             logToolControl1.Site = Site;
-            switch(((MergeWizard)WizardPage.Wizard).LogMode)
+            switch (((MergeWizard)WizardPage.Wizard).LogMode)
             {
                 case LogMode.MergesEligible:
                     logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, new Uri(MergeSource));
@@ -72,6 +71,23 @@ namespace Ankh.UI.MergeWizard
                     logToolControl1.StartRemoteLog(WizardPage.Context, new Uri(MergeSource));
                     break;
             }
+        }
+
+        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangeEventArgs e)
+        {
+            if (e.CurrentPage == WizardPage)
+            {
+                PopulateUI();
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            PopulateUI();
+
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
     }
 }
