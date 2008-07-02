@@ -183,6 +183,9 @@ namespace Ankh.UI.MergeWizard
                         // Set whether or not to ignore ancestry
                         dArgs.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
 
+                        // Set whether or not this is a dry run
+                        dArgs.DryRun = false;
+
                         // Create 'From' uri
                         Uri.TryCreate(page.MergeSourceOne, UriKind.Absolute, out fromUri);
 
@@ -196,6 +199,16 @@ namespace Ankh.UI.MergeWizard
                             new SvnUriTarget(fromUri, page.MergeFromRevision - 1),
                             new SvnUriTarget(toUri, page.MergeToRevision),
                             dArgs);
+                    }
+                    else if (mergeType == MergeType.Reintegrate)
+                    {
+                        SvnReintegrationMergeArgs args = new SvnReintegrationMergeArgs();
+
+                        // Set whether or not this is a dry run
+                        args.DryRun = false;
+
+                        ee.Client.ReintegrationMerge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                            args);
                     }
                     else
                     {
@@ -213,6 +226,9 @@ namespace Ankh.UI.MergeWizard
 
                         // Set whether or not this merge should just record the merge information
                         args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
+
+                        // Set whether or not this is a dry run
+                        args.DryRun = false;
 
                         // TODO: Enhance to be range-aware
                         if (MergeRevisions != null)
