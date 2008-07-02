@@ -119,6 +119,11 @@ namespace Ankh.UI.MergeWizard
 
             ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
+
+        private void performDryRunCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            ((MergeWizard)WizardPage.Wizard).PerformDryRun = performDryRunCheckBox.Checked;
+        }
         #endregion
     }
 }

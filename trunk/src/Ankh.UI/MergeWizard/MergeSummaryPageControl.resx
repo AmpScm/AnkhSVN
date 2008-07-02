@@ -394,7 +394,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsLabel.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="textConflictsLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -424,7 +424,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsLabel.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="depthLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -454,7 +454,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;depthLabel.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="ignoreAncestryLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -484,7 +484,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;ignoreAncestryLabel.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="unversionedObstructionsLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -514,10 +514,64 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;unversionedObstructionsLabel.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="mergeOptionsGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="performDryRunCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="performDryRunCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>139, 144</value>
+  </data>
+  <data name="performDryRunCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 14</value>
+  </data>
+  <data name="performDryRunCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;performDryRunCheckBox.Name" xml:space="preserve">
+    <value>performDryRunCheckBox</value>
+  </data>
+  <data name="&gt;&gt;performDryRunCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;performDryRunCheckBox.Parent" xml:space="preserve">
+    <value>mergeOptionsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;performDryRunCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="performDryRunLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="performDryRunLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="performDryRunLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>48, 143</value>
+  </data>
+  <data name="performDryRunLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 13</value>
+  </data>
+  <data name="performDryRunLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="performDryRunLabel.Text" xml:space="preserve">
+    <value>Perform Dry-Run:</value>
+  </data>
+  <data name="&gt;&gt;performDryRunLabel.Name" xml:space="preserve">
+    <value>performDryRunLabel</value>
+  </data>
+  <data name="&gt;&gt;performDryRunLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;performDryRunLabel.Parent" xml:space="preserve">
+    <value>mergeOptionsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;performDryRunLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="unversionedObstructionsTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>139, 115</value>
@@ -541,7 +595,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;unversionedObstructionsTextBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="ignoreAncestryTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>139, 90</value>
@@ -565,7 +619,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;ignoreAncestryTextBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="depthTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>139, 65</value>
@@ -589,7 +643,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;depthTextBox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="textConflictsTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>139, 40</value>
@@ -613,7 +667,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;textConflictsTextBox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="binaryConflictsTextBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>139, 15</value>
@@ -637,7 +691,7 @@
     <value>mergeOptionsGroupBox</value>
   </data>
   <data name="&gt;&gt;binaryConflictsTextBox.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="mergeOptionsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 127</value>
@@ -646,7 +700,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="mergeOptionsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 142</value>
+    <value>490, 165</value>
   </data>
   <data name="mergeOptionsGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -682,6 +736,6 @@
     <value>MergeSummaryPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3091.21048, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3105.27400, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

@@ -183,7 +183,7 @@ namespace Ankh.UI.MergeWizard
                         dArgs.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
 
                         // Set whether or not this is a dry run
-                        dArgs.DryRun = false;
+                        dArgs.DryRun = PerformDryRun;
 
                         // Create 'From' uri
                         Uri.TryCreate(page.MergeSourceOne, UriKind.Absolute, out fromUri);
@@ -208,7 +208,7 @@ namespace Ankh.UI.MergeWizard
                         SvnReintegrationMergeArgs args = new SvnReintegrationMergeArgs();
 
                         // Set whether or not this is a dry run
-                        args.DryRun = false;
+                        args.DryRun = PerformDryRun;
 
                         ee.Client.ReintegrationMerge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
                             args);
@@ -231,7 +231,7 @@ namespace Ankh.UI.MergeWizard
                         args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
 
                         // Set whether or not this is a dry run
-                        args.DryRun = false;
+                        args.DryRun = PerformDryRun;
 
                         // TODO: Enhance to be range-aware
                         if (MergeRevisions != null)
@@ -424,6 +424,15 @@ namespace Ankh.UI.MergeWizard
             //set { Form = value; }
         }
 
+        /// <summary>
+        /// Gets/Sets whether or not to perform a dry run.
+        /// </summary>
+        public bool PerformDryRun
+        {
+            get { return _performDryRun; }
+            set { _performDryRun = value; }
+        }
+
         private WizardPage mergeTypePage;
         private WizardPage bestPracticesPage;
         private WizardPage mergeSourceRangeOfRevisionsPage;
@@ -438,5 +447,6 @@ namespace Ankh.UI.MergeWizard
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;
         long[] _mergeRevisions = null;
+        bool _performDryRun = false;
     }
 }
