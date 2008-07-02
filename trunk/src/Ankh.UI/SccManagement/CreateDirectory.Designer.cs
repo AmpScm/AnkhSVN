@@ -99,10 +99,12 @@
             this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessage.Location = new System.Drawing.Point(7, 20);
             this.logMessage.Name = "logMessage";
             this.logMessage.Size = new System.Drawing.Size(247, 134);
             this.logMessage.TabIndex = 0;
+            this.logMessage.Text = null;
             // 
             // CreateDirectory
             // 
