@@ -307,7 +307,7 @@
     <value>1</value>
   </data>
   <data name="binaryConflictsGroupBox.Text" xml:space="preserve">
-    <value>Binary Files</value>
+    <value>Binary Conflicts</value>
   </data>
   <data name="&gt;&gt;binaryConflictsGroupBox.Name" xml:space="preserve">
     <value>binaryConflictsGroupBox</value>
@@ -502,7 +502,7 @@
     <value>0</value>
   </data>
   <data name="textConflictsGroupBox.Text" xml:space="preserve">
-    <value>Text Files</value>
+    <value>Text Conflicts</value>
   </data>
   <data name="&gt;&gt;textConflictsGroupBox.Name" xml:space="preserve">
     <value>textConflictsGroupBox</value>
@@ -709,6 +709,6 @@
     <value>MergeOptionsPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3097.29700, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3105.25892, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

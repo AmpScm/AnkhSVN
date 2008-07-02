@@ -31,11 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeOptionsPageControl));
             this.conflictsGroupBox = new System.Windows.Forms.GroupBox();
             this.binaryConflictsGroupBox = new System.Windows.Forms.GroupBox();
+            this.binaryConflictsBaseRadioButton = new System.Windows.Forms.RadioButton();
             this.binaryConflictsRepositoryRadioButton = new System.Windows.Forms.RadioButton();
             this.binaryConflictsMyRadioButton = new System.Windows.Forms.RadioButton();
             this.binaryConflictsMarkRadioButton = new System.Windows.Forms.RadioButton();
             this.binaryConflictsPromptRadioButton = new System.Windows.Forms.RadioButton();
             this.textConflictsGroupBox = new System.Windows.Forms.GroupBox();
+            this.textConflictsBaseRadioButton = new System.Windows.Forms.RadioButton();
             this.textConflictsRepositoryRadioButton = new System.Windows.Forms.RadioButton();
             this.textConflictsMyRadioButton = new System.Windows.Forms.RadioButton();
             this.textConflictsMarkRadioButton = new System.Windows.Forms.RadioButton();
@@ -45,8 +47,6 @@
             this.depthComboBox = new System.Windows.Forms.ComboBox();
             this.unversionedCheckBox = new System.Windows.Forms.CheckBox();
             this.ignoreAncestryCheckBox = new System.Windows.Forms.CheckBox();
-            this.textConflictsBaseRadioButton = new System.Windows.Forms.RadioButton();
-            this.binaryConflictsBaseRadioButton = new System.Windows.Forms.RadioButton();
             this.conflictsGroupBox.SuspendLayout();
             this.binaryConflictsGroupBox.SuspendLayout();
             this.textConflictsGroupBox.SuspendLayout();
@@ -71,6 +71,13 @@
             this.binaryConflictsGroupBox.Controls.Add(this.binaryConflictsPromptRadioButton);
             this.binaryConflictsGroupBox.Name = "binaryConflictsGroupBox";
             this.binaryConflictsGroupBox.TabStop = false;
+            // 
+            // binaryConflictsBaseRadioButton
+            // 
+            resources.ApplyResources(this.binaryConflictsBaseRadioButton, "binaryConflictsBaseRadioButton");
+            this.binaryConflictsBaseRadioButton.Name = "binaryConflictsBaseRadioButton";
+            this.binaryConflictsBaseRadioButton.UseVisualStyleBackColor = true;
+            this.binaryConflictsBaseRadioButton.CheckedChanged += new System.EventHandler(this.binaryConflictsBaseRadioButton_CheckedChanged);
             // 
             // binaryConflictsRepositoryRadioButton
             // 
@@ -112,6 +119,13 @@
             this.textConflictsGroupBox.Controls.Add(this.textConflictsPromptRadioButton);
             this.textConflictsGroupBox.Name = "textConflictsGroupBox";
             this.textConflictsGroupBox.TabStop = false;
+            // 
+            // textConflictsBaseRadioButton
+            // 
+            resources.ApplyResources(this.textConflictsBaseRadioButton, "textConflictsBaseRadioButton");
+            this.textConflictsBaseRadioButton.Name = "textConflictsBaseRadioButton";
+            this.textConflictsBaseRadioButton.UseVisualStyleBackColor = true;
+            this.textConflictsBaseRadioButton.CheckedChanged += new System.EventHandler(this.textConflictsBaseRadioButton_CheckedChanged);
             // 
             // textConflictsRepositoryRadioButton
             // 
@@ -179,20 +193,6 @@
             this.ignoreAncestryCheckBox.Name = "ignoreAncestryCheckBox";
             this.ignoreAncestryCheckBox.UseVisualStyleBackColor = true;
             this.ignoreAncestryCheckBox.CheckedChanged += new System.EventHandler(this.ignoreAncestryCheckBox_CheckedChanged);
-            // 
-            // textConflictsBaseRadioButton
-            // 
-            resources.ApplyResources(this.textConflictsBaseRadioButton, "textConflictsBaseRadioButton");
-            this.textConflictsBaseRadioButton.Name = "textConflictsBaseRadioButton";
-            this.textConflictsBaseRadioButton.UseVisualStyleBackColor = true;
-            this.textConflictsBaseRadioButton.CheckedChanged += new System.EventHandler(this.textConflictsBaseRadioButton_CheckedChanged);
-            // 
-            // binaryConflictsBaseRadioButton
-            // 
-            resources.ApplyResources(this.binaryConflictsBaseRadioButton, "binaryConflictsBaseRadioButton");
-            this.binaryConflictsBaseRadioButton.Name = "binaryConflictsBaseRadioButton";
-            this.binaryConflictsBaseRadioButton.UseVisualStyleBackColor = true;
-            this.binaryConflictsBaseRadioButton.CheckedChanged += new System.EventHandler(this.binaryConflictsBaseRadioButton_CheckedChanged);
             // 
             // MergeOptionsPageControl
             // 
