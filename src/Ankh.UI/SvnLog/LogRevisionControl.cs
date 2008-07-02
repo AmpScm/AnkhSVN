@@ -238,6 +238,8 @@ namespace Ankh.UI.SvnLog
                 e.Detach();
                 _logItems.Enqueue(new LogListViewItem(_context, e));
             }
+
+            _syncContext.Post(_sopCallback, null);
         }
 
         void ReceiveItem(object sender, SvnMergesEligibleEventArgs e)
