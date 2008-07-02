@@ -76,7 +76,7 @@ namespace Ankh.VS.SolutionExplorer
                         handle = SearchForSolutionExplorer((IntPtr)hostWindow.HWnd, expCaption);
                 }
 
-                if (handle == null)
+                if (handle == IntPtr.Zero)
                     handle = SearchFloatingPalettes(expCaption);
             }
 
