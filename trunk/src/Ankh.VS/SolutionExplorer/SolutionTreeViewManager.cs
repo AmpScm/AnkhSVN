@@ -68,7 +68,7 @@ namespace Ankh.VS.SolutionExplorer
                 if (hostWindow != null)
                     handle = SearchForSolutionExplorer((IntPtr)hostWindow.HWnd, expCaption);
 
-                if (handle == null)
+                if (handle == IntPtr.Zero)
                 {
                     hostWindow = window.DTE.MainWindow;
 
