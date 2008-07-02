@@ -13,11 +13,19 @@ namespace Ankh.UI.SccManagement
         public CreateDirectory()
         {
             InitializeComponent();
+            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
 
-        protected override void OnVisibleChanged(EventArgs e)
+        protected override void OnContextChanged(EventArgs e)
         {
-            base.OnVisibleChanged(e);
+            base.OnContextChanged(e);
+
+            Initialize();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
             Initialize();
         }
