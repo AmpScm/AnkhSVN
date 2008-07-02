@@ -193,7 +193,10 @@ namespace Ankh.UI.MergeWizard
         private void mergeFromComboBox_TextChanged(object sender, EventArgs e)
         {
             if (!DesignMode)
+            {
+                ((MergeWizard)WizardPage.Wizard).MergeSource = mergeFromComboBox.Text;
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
+            }
         }
 
         /// <summary>
