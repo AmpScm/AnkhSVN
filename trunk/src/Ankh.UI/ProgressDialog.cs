@@ -19,6 +19,7 @@ namespace Ankh.UI
         public event EventHandler Cancel;
         string _title;
         string _caption;
+        readonly object _instanceLock = new object();
         /// <summary>
         /// Loader Form
         /// </summary>
@@ -86,7 +87,7 @@ namespace Ankh.UI
         DateTime _start;
         long _bytesReceived;
         
-        SortedList<long, ProgressState> _progressCalc = new SortedList<long, ProgressState>();        
+        readonly SortedList<long, ProgressState> _progressCalc = new SortedList<long, ProgressState>();
 
         public void OnClientProcessing(object sender, SvnProcessingEventArgs e)
         {
@@ -99,8 +100,10 @@ namespace Ankh.UI
 
             Enqueue(delegate()
             {
-                _progressCalc.Clear();
-                
+                lock (_instanceLock)
+                {
+                    _progressCalc.Clear();
+                }
                 ListViewItem item = new ListViewItem("Action");
                 item.SubItems.Add(type.ToString());
                 item.ForeColor = Color.Gray;
@@ -199,25 +202,27 @@ namespace Ankh.UI
             ProgressState state;
 
             long received;
-            
-            if(_progressCalc.TryGetValue(e.TotalProgress, out state))
+            lock (_instanceLock)
             {
-                if(e.Progress < state.LastCount)
-                    state.LastCount = 0;
+                if (_progressCalc.TryGetValue(e.TotalProgress, out state))
+                {
+                    if (e.Progress < state.LastCount)
+                        state.LastCount = 0;
 
-                received = e.Progress - state.LastCount;
-                if (e.TotalProgress == e.Progress)
-                    _progressCalc.Remove(e.TotalProgress);
+                    received = e.Progress - state.LastCount;
+                    if (e.TotalProgress == e.Progress)
+                        _progressCalc.Remove(e.TotalProgress);
+                    else
+                        state.LastCount = e.Progress;
+                }
                 else
+                {
+                    state = new ProgressState();
                     state.LastCount = e.Progress;
+                    _progressCalc.Add(e.TotalProgress, state);
+                    received = e.Progress;
+                }
             }
-            else
-            {
-                state = new ProgressState();
-                state.LastCount = e.Progress;
-                _progressCalc.Add(e.TotalProgress, state);
-                received = e.Progress;
-            }                
             _bytesReceived += received;
 
             TimeSpan ts = DateTime.UtcNow - _start;
