@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.SvnLog;
+using System.Collections.ObjectModel;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -153,6 +154,8 @@ namespace Ankh.UI.MergeWizard
             // TODO: Get merge working in scenario where "All revisions" should be merged
             // TODO: Create a dialog with the merge results
 
+            ((WizardDialog)Form).EnablePageAndButtons(false);
+
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
 
             // Perform merge using IProgressRunner
@@ -217,6 +220,27 @@ namespace Ankh.UI.MergeWizard
                             foreach (long rev in MergeRevisions)
                             {
                                 mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
+                            }
+                        }
+                        else
+                        {
+                            // This should only occur when you choose 'All eligible revisions'
+                            if (mergeType == MergeType.RangeOfRevisions)
+                            {
+                                SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
+                                Collection<SvnMergesEligibleEventArgs> availableMerges;
+
+                                lArgs.ThrowOnError = false;
+
+                                ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
+                                    SvnUriTarget.FromString(MergeSource), lArgs, out availableMerges);
+
+                                foreach (SvnMergesEligibleEventArgs entries in availableMerges)
+                                {
+                                    long rev = entries.Revision;
+
+                                    mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
+                                }
                             }
                         }
 
