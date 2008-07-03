@@ -39,6 +39,7 @@
             this.mergeTypeDescriptionLabel = new System.Windows.Forms.Label();
             this.mergeTypePictureBox = new System.Windows.Forms.PictureBox();
             this.showBestPracticesPageCheckbox = new System.Windows.Forms.CheckBox();
+            this.disclaimerLabel = new System.Windows.Forms.Label();
             this.mergeTypeGroupBox.SuspendLayout();
             this.mergeTypeDescriptionGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mergeTypePictureBox)).BeginInit();
@@ -119,10 +120,16 @@
             this.showBestPracticesPageCheckbox.Name = "showBestPracticesPageCheckbox";
             this.showBestPracticesPageCheckbox.UseVisualStyleBackColor = true;
             // 
+            // disclaimerLabel
+            // 
+            resources.ApplyResources(this.disclaimerLabel, "disclaimerLabel");
+            this.disclaimerLabel.Name = "disclaimerLabel";
+            // 
             // MergeTypePageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.disclaimerLabel);
             this.Controls.Add(this.showBestPracticesPageCheckbox);
             this.Controls.Add(this.mergeTypeDescriptionGroupBox);
             this.Controls.Add(this.mergeTypeGroupBox);
@@ -148,5 +155,6 @@
         private System.Windows.Forms.PictureBox mergeTypePictureBox;
         private System.Windows.Forms.Label mergeTypeDescriptionLabel;
         private System.Windows.Forms.CheckBox showBestPracticesPageCheckbox;
+        private System.Windows.Forms.Label disclaimerLabel;
     }
 }
