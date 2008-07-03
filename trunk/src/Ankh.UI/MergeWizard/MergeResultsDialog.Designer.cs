@@ -38,25 +38,25 @@
             this.headerImage = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.fileStatisticsGroupBox = new System.Windows.Forms.GroupBox();
-            this.propertyStatisticsGroupBox = new System.Windows.Forms.GroupBox();
-            this.fileUpdatedLabel = new System.Windows.Forms.Label();
-            this.fileAddedLabel = new System.Windows.Forms.Label();
-            this.fileExistedLabel = new System.Windows.Forms.Label();
-            this.fileDeletedLabel = new System.Windows.Forms.Label();
-            this.fileMergedLabel = new System.Windows.Forms.Label();
-            this.fileConflictedLabel = new System.Windows.Forms.Label();
-            this.fileResolvedLabel = new System.Windows.Forms.Label();
-            this.filesSkipedDirectoriesLabel = new System.Windows.Forms.Label();
-            this.fileSkippedFilesLabel = new System.Windows.Forms.Label();
-            this.fileUpdatedValueLabel = new System.Windows.Forms.Label();
-            this.fileAddedValueLabel = new System.Windows.Forms.Label();
-            this.fileExistedValueLabel = new System.Windows.Forms.Label();
-            this.fileDeletedValueLabel = new System.Windows.Forms.Label();
-            this.fileMergedValueLabel = new System.Windows.Forms.Label();
-            this.fileConflictedValueLabel = new System.Windows.Forms.Label();
-            this.fileResolvedValueLabel = new System.Windows.Forms.Label();
-            this.fileSkippedDirectoriesValueLabel = new System.Windows.Forms.Label();
             this.fileSkippedFilesValueLabel = new System.Windows.Forms.Label();
+            this.fileSkippedDirectoriesValueLabel = new System.Windows.Forms.Label();
+            this.fileResolvedValueLabel = new System.Windows.Forms.Label();
+            this.fileConflictedValueLabel = new System.Windows.Forms.Label();
+            this.fileMergedValueLabel = new System.Windows.Forms.Label();
+            this.fileDeletedValueLabel = new System.Windows.Forms.Label();
+            this.fileExistedValueLabel = new System.Windows.Forms.Label();
+            this.fileAddedValueLabel = new System.Windows.Forms.Label();
+            this.fileUpdatedValueLabel = new System.Windows.Forms.Label();
+            this.fileSkippedFilesLabel = new System.Windows.Forms.Label();
+            this.filesSkipedDirectoriesLabel = new System.Windows.Forms.Label();
+            this.fileResolvedLabel = new System.Windows.Forms.Label();
+            this.fileConflictedLabel = new System.Windows.Forms.Label();
+            this.fileMergedLabel = new System.Windows.Forms.Label();
+            this.fileDeletedLabel = new System.Windows.Forms.Label();
+            this.fileExistedLabel = new System.Windows.Forms.Label();
+            this.fileAddedLabel = new System.Windows.Forms.Label();
+            this.fileUpdatedLabel = new System.Windows.Forms.Label();
+            this.propertyStatisticsGroupBox = new System.Windows.Forms.GroupBox();
             this.propertyResolvedValueLabel = new System.Windows.Forms.Label();
             this.propertyConflictedValueLabel = new System.Windows.Forms.Label();
             this.propertyMergedValueLabel = new System.Windows.Forms.Label();
@@ -153,6 +153,96 @@
             this.fileStatisticsGroupBox.Name = "fileStatisticsGroupBox";
             this.fileStatisticsGroupBox.TabStop = false;
             // 
+            // fileSkippedFilesValueLabel
+            // 
+            resources.ApplyResources(this.fileSkippedFilesValueLabel, "fileSkippedFilesValueLabel");
+            this.fileSkippedFilesValueLabel.Name = "fileSkippedFilesValueLabel";
+            // 
+            // fileSkippedDirectoriesValueLabel
+            // 
+            resources.ApplyResources(this.fileSkippedDirectoriesValueLabel, "fileSkippedDirectoriesValueLabel");
+            this.fileSkippedDirectoriesValueLabel.Name = "fileSkippedDirectoriesValueLabel";
+            // 
+            // fileResolvedValueLabel
+            // 
+            resources.ApplyResources(this.fileResolvedValueLabel, "fileResolvedValueLabel");
+            this.fileResolvedValueLabel.Name = "fileResolvedValueLabel";
+            // 
+            // fileConflictedValueLabel
+            // 
+            resources.ApplyResources(this.fileConflictedValueLabel, "fileConflictedValueLabel");
+            this.fileConflictedValueLabel.Name = "fileConflictedValueLabel";
+            // 
+            // fileMergedValueLabel
+            // 
+            resources.ApplyResources(this.fileMergedValueLabel, "fileMergedValueLabel");
+            this.fileMergedValueLabel.Name = "fileMergedValueLabel";
+            // 
+            // fileDeletedValueLabel
+            // 
+            resources.ApplyResources(this.fileDeletedValueLabel, "fileDeletedValueLabel");
+            this.fileDeletedValueLabel.Name = "fileDeletedValueLabel";
+            // 
+            // fileExistedValueLabel
+            // 
+            resources.ApplyResources(this.fileExistedValueLabel, "fileExistedValueLabel");
+            this.fileExistedValueLabel.Name = "fileExistedValueLabel";
+            // 
+            // fileAddedValueLabel
+            // 
+            resources.ApplyResources(this.fileAddedValueLabel, "fileAddedValueLabel");
+            this.fileAddedValueLabel.Name = "fileAddedValueLabel";
+            // 
+            // fileUpdatedValueLabel
+            // 
+            resources.ApplyResources(this.fileUpdatedValueLabel, "fileUpdatedValueLabel");
+            this.fileUpdatedValueLabel.Name = "fileUpdatedValueLabel";
+            // 
+            // fileSkippedFilesLabel
+            // 
+            resources.ApplyResources(this.fileSkippedFilesLabel, "fileSkippedFilesLabel");
+            this.fileSkippedFilesLabel.Name = "fileSkippedFilesLabel";
+            // 
+            // filesSkipedDirectoriesLabel
+            // 
+            resources.ApplyResources(this.filesSkipedDirectoriesLabel, "filesSkipedDirectoriesLabel");
+            this.filesSkipedDirectoriesLabel.Name = "filesSkipedDirectoriesLabel";
+            // 
+            // fileResolvedLabel
+            // 
+            resources.ApplyResources(this.fileResolvedLabel, "fileResolvedLabel");
+            this.fileResolvedLabel.Name = "fileResolvedLabel";
+            // 
+            // fileConflictedLabel
+            // 
+            resources.ApplyResources(this.fileConflictedLabel, "fileConflictedLabel");
+            this.fileConflictedLabel.Name = "fileConflictedLabel";
+            // 
+            // fileMergedLabel
+            // 
+            resources.ApplyResources(this.fileMergedLabel, "fileMergedLabel");
+            this.fileMergedLabel.Name = "fileMergedLabel";
+            // 
+            // fileDeletedLabel
+            // 
+            resources.ApplyResources(this.fileDeletedLabel, "fileDeletedLabel");
+            this.fileDeletedLabel.Name = "fileDeletedLabel";
+            // 
+            // fileExistedLabel
+            // 
+            resources.ApplyResources(this.fileExistedLabel, "fileExistedLabel");
+            this.fileExistedLabel.Name = "fileExistedLabel";
+            // 
+            // fileAddedLabel
+            // 
+            resources.ApplyResources(this.fileAddedLabel, "fileAddedLabel");
+            this.fileAddedLabel.Name = "fileAddedLabel";
+            // 
+            // fileUpdatedLabel
+            // 
+            resources.ApplyResources(this.fileUpdatedLabel, "fileUpdatedLabel");
+            this.fileUpdatedLabel.Name = "fileUpdatedLabel";
+            // 
             // propertyStatisticsGroupBox
             // 
             this.propertyStatisticsGroupBox.Controls.Add(this.propertyResolvedValueLabel);
@@ -166,96 +256,6 @@
             resources.ApplyResources(this.propertyStatisticsGroupBox, "propertyStatisticsGroupBox");
             this.propertyStatisticsGroupBox.Name = "propertyStatisticsGroupBox";
             this.propertyStatisticsGroupBox.TabStop = false;
-            // 
-            // fileUpdatedLabel
-            // 
-            resources.ApplyResources(this.fileUpdatedLabel, "fileUpdatedLabel");
-            this.fileUpdatedLabel.Name = "fileUpdatedLabel";
-            // 
-            // fileAddedLabel
-            // 
-            resources.ApplyResources(this.fileAddedLabel, "fileAddedLabel");
-            this.fileAddedLabel.Name = "fileAddedLabel";
-            // 
-            // fileExistedLabel
-            // 
-            resources.ApplyResources(this.fileExistedLabel, "fileExistedLabel");
-            this.fileExistedLabel.Name = "fileExistedLabel";
-            // 
-            // fileDeletedLabel
-            // 
-            resources.ApplyResources(this.fileDeletedLabel, "fileDeletedLabel");
-            this.fileDeletedLabel.Name = "fileDeletedLabel";
-            // 
-            // fileMergedLabel
-            // 
-            resources.ApplyResources(this.fileMergedLabel, "fileMergedLabel");
-            this.fileMergedLabel.Name = "fileMergedLabel";
-            // 
-            // fileConflictedLabel
-            // 
-            resources.ApplyResources(this.fileConflictedLabel, "fileConflictedLabel");
-            this.fileConflictedLabel.Name = "fileConflictedLabel";
-            // 
-            // fileResolvedLabel
-            // 
-            resources.ApplyResources(this.fileResolvedLabel, "fileResolvedLabel");
-            this.fileResolvedLabel.Name = "fileResolvedLabel";
-            // 
-            // filesSkipedDirectoriesLabel
-            // 
-            resources.ApplyResources(this.filesSkipedDirectoriesLabel, "filesSkipedDirectoriesLabel");
-            this.filesSkipedDirectoriesLabel.Name = "filesSkipedDirectoriesLabel";
-            // 
-            // fileSkippedFilesLabel
-            // 
-            resources.ApplyResources(this.fileSkippedFilesLabel, "fileSkippedFilesLabel");
-            this.fileSkippedFilesLabel.Name = "fileSkippedFilesLabel";
-            // 
-            // fileUpdatedValueLabel
-            // 
-            resources.ApplyResources(this.fileUpdatedValueLabel, "fileUpdatedValueLabel");
-            this.fileUpdatedValueLabel.Name = "fileUpdatedValueLabel";
-            // 
-            // fileAddedValueLabel
-            // 
-            resources.ApplyResources(this.fileAddedValueLabel, "fileAddedValueLabel");
-            this.fileAddedValueLabel.Name = "fileAddedValueLabel";
-            // 
-            // fileExistedValueLabel
-            // 
-            resources.ApplyResources(this.fileExistedValueLabel, "fileExistedValueLabel");
-            this.fileExistedValueLabel.Name = "fileExistedValueLabel";
-            // 
-            // fileDeletedValueLabel
-            // 
-            resources.ApplyResources(this.fileDeletedValueLabel, "fileDeletedValueLabel");
-            this.fileDeletedValueLabel.Name = "fileDeletedValueLabel";
-            // 
-            // fileMergedValueLabel
-            // 
-            resources.ApplyResources(this.fileMergedValueLabel, "fileMergedValueLabel");
-            this.fileMergedValueLabel.Name = "fileMergedValueLabel";
-            // 
-            // fileConflictedValueLabel
-            // 
-            resources.ApplyResources(this.fileConflictedValueLabel, "fileConflictedValueLabel");
-            this.fileConflictedValueLabel.Name = "fileConflictedValueLabel";
-            // 
-            // fileResolvedValueLabel
-            // 
-            resources.ApplyResources(this.fileResolvedValueLabel, "fileResolvedValueLabel");
-            this.fileResolvedValueLabel.Name = "fileResolvedValueLabel";
-            // 
-            // fileSkippedDirectoriesValueLabel
-            // 
-            resources.ApplyResources(this.fileSkippedDirectoriesValueLabel, "fileSkippedDirectoriesValueLabel");
-            this.fileSkippedDirectoriesValueLabel.Name = "fileSkippedDirectoriesValueLabel";
-            // 
-            // fileSkippedFilesValueLabel
-            // 
-            resources.ApplyResources(this.fileSkippedFilesValueLabel, "fileSkippedFilesValueLabel");
-            this.fileSkippedFilesValueLabel.Name = "fileSkippedFilesValueLabel";
             // 
             // propertyResolvedValueLabel
             // 
@@ -310,6 +310,7 @@
             this.MinimizeBox = false;
             this.Name = "MergeResultsDialog";
             this.ShowInTaskbar = false;
+            this.Load += new System.EventHandler(this.MergeResultsDialog_Load);
             this.controlPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.headerImage)).EndInit();
             this.headerPanel.ResumeLayout(false);
