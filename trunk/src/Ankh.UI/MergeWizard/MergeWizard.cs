@@ -148,6 +148,8 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        private MergeConflictHandler currentMergeConflictHandler;
+
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
@@ -157,7 +159,7 @@ namespace Ankh.UI.MergeWizard
             ((WizardDialog)Form).EnablePageAndButtons(false);
 
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
-            MergeConflictHandler.Reset();
+            this.currentMergeConflictHandler = CreateMergeConflictHandler();
             
             // Perform merge using IProgressRunner
             Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
@@ -273,7 +275,10 @@ namespace Ankh.UI.MergeWizard
                         }
                     }
                 });
-            Dictionary<string,List<SvnConflictType>> resolutions = this.MergeConflictHandler.ResolvedMergedConflicts;
+            if (this.currentMergeConflictHandler != null)
+            {
+                Dictionary<string, List<SvnConflictType>> resolutions = this.currentMergeConflictHandler.ResolvedMergedConflicts;
+            }
             this.Form.DialogResult = DialogResult.OK;
 
             return true;
@@ -364,43 +369,40 @@ namespace Ankh.UI.MergeWizard
 
         private void OnConflict(object sender, SvnConflictEventArgs args)
         {
-            MergeConflictHandler.OnConflict(args);
+            if (this.currentMergeConflictHandler == null)
+            {
+                this.currentMergeConflictHandler = CreateMergeConflictHandler();
+            }
+            this.currentMergeConflictHandler.OnConflict(args);
         }
 
-        private MergeConflictHandler mergeConflictHandler;
-        private MergeConflictHandler MergeConflictHandler
+        private MergeConflictHandler CreateMergeConflictHandler()
         {
-            get
+            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
+            if (mergeOptionsPage != null)
             {
-                if (mergeConflictHandler == null)
+                MergeOptionsPage optionsPage = (MergeOptionsPage)mergeOptionsPage;
+                MergeOptionsPage.ConflictResolutionOption binaryOption = optionsPage.BinaryConflictResolution;
+                if (binaryOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
                 {
-                    mergeConflictHandler = new MergeConflictHandler();
-                    if (mergeOptionsPage != null)
-                    {
-                        MergeOptionsPage optionsPage = (MergeOptionsPage)mergeOptionsPage;
-                        MergeOptionsPage.ConflictResolutionOption binaryOption = optionsPage.BinaryConflictResolution;
-                        if (binaryOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                        {
-                            mergeConflictHandler.PromptOnBinaryConflict = true;
-                        }
-                        else
-                        {
-                            mergeConflictHandler.BinaryConflictResolutionChoice = ToSvnAccept(binaryOption);
-                        }
-
-                        MergeOptionsPage.ConflictResolutionOption textOption = optionsPage.TextConflictResolution;
-                        if (textOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                        {
-                            mergeConflictHandler.PromptOnTextConflict = true;
-                        }
-                        else
-                        {
-                            mergeConflictHandler.TextConflictResolutionChoice = ToSvnAccept(textOption);
-                        }
-                    }
+                    mergeConflictHandler.PromptOnBinaryConflict = true;
                 }
-                return mergeConflictHandler;
+                else
+                {
+                    mergeConflictHandler.BinaryConflictResolutionChoice = ToSvnAccept(binaryOption);
+                }
+
+                MergeOptionsPage.ConflictResolutionOption textOption = optionsPage.TextConflictResolution;
+                if (textOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
+                {
+                    mergeConflictHandler.PromptOnTextConflict = true;
+                }
+                else
+                {
+                    mergeConflictHandler.TextConflictResolutionChoice = ToSvnAccept(textOption);
+                }
             }
+            return mergeConflictHandler;
         }
 
         private SvnAccept ToSvnAccept(MergeOptionsPage.ConflictResolutionOption option)
