@@ -25,6 +25,8 @@ namespace Ankh.UI.MergeWizard
         /// flag (not) to show conflict resolution option dialog for property files
         bool _property_showDialog = true; // prompt for properties initially
 
+        List<string> currentResolutions = new List<string>();
+
         public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
             : this(binaryChoice, textChoice)
         {
@@ -131,6 +133,14 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        public List<string> CurrentResolutions
+        {
+            get
+            {
+                return this.currentResolutions;
+            }
+        }
+
         /// <summary>
         /// Handles the conflict based on the preferences.
         /// </summary>
@@ -181,6 +191,18 @@ namespace Ankh.UI.MergeWizard
             {
                 args.Choice = SvnAccept.Postpone;
             }
+            if (args.Choice != SvnAccept.Postpone)
+            {
+                AddToCurrentResolutions(args.MyFile);
+            }
+        }
+
+        private void AddToCurrentResolutions(string fullPath)
+        {
+            if (!string.IsNullOrEmpty(fullPath))
+            {
+                currentResolutions.Add(fullPath);
+            }
         }
 
         private void HandleConflictWithDialog(SvnConflictEventArgs args)
@@ -191,6 +213,7 @@ namespace Ankh.UI.MergeWizard
                 {
                     args.Choice = dlg.ConflictResolution;
                     bool applyToAll = dlg.ApplyToAll;
+                    // modify the preferences based on the conflicted file type
                     if (applyToAll)
                     {
                         if (args.ConflictType == SvnConflictType.Property)
@@ -215,6 +238,11 @@ namespace Ankh.UI.MergeWizard
                 {
                     args.Choice = SvnAccept.Postpone;
                 }
+            }
+
+            if (args.Choice != SvnAccept.Postpone)
+            {
+                AddToCurrentResolutions(args.MyFile);
             }
         }
     }

@@ -272,7 +272,7 @@ namespace Ankh.UI.MergeWizard
                         }
                     }
                 });
-
+            List<string> resolutions = this.MergeConflictHandler.CurrentResolutions;
             this.Form.DialogResult = DialogResult.OK;
 
             return true;
