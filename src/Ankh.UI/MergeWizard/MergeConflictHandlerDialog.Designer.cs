@@ -37,6 +37,7 @@
             this.diffControl = new Menees.DiffUtils.Controls.DiffControl();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.applyToCheckBox = new System.Windows.Forms.CheckBox();
             this.preferencesGroupBox.SuspendLayout();
             this.diffPanel.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +48,7 @@
             this.preferencesGroupBox.Controls.Add(this.theirsRadioButton);
             this.preferencesGroupBox.Controls.Add(this.mineRadioButton);
             this.preferencesGroupBox.Controls.Add(this.postponeRadioButton);
-            this.preferencesGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.preferencesGroupBox.Location = new System.Drawing.Point(12, 9);
             this.preferencesGroupBox.Name = "preferencesGroupBox";
             this.preferencesGroupBox.Size = new System.Drawing.Size(467, 119);
             this.preferencesGroupBox.TabIndex = 0;
@@ -105,9 +106,9 @@
             // diffPanel
             // 
             this.diffPanel.Controls.Add(this.diffControl);
-            this.diffPanel.Location = new System.Drawing.Point(12, 137);
+            this.diffPanel.Location = new System.Drawing.Point(12, 156);
             this.diffPanel.Name = "diffPanel";
-            this.diffPanel.Size = new System.Drawing.Size(467, 332);
+            this.diffPanel.Size = new System.Drawing.Size(467, 313);
             this.diffPanel.TabIndex = 1;
             // 
             // diffControl
@@ -119,7 +120,7 @@
             this.diffControl.Name = "diffControl";
             this.diffControl.ShowToolbar = false;
             this.diffControl.ShowWhitespaceInLineDiff = true;
-            this.diffControl.Size = new System.Drawing.Size(467, 332);
+            this.diffControl.Size = new System.Drawing.Size(467, 313);
             this.diffControl.TabIndex = 0;
             this.diffControl.ViewFont = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             // 
@@ -143,12 +144,24 @@
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
+            // applyToCheckBox
+            // 
+            this.applyToCheckBox.AutoSize = true;
+            this.applyToCheckBox.Location = new System.Drawing.Point(12, 134);
+            this.applyToCheckBox.Name = "applyToCheckBox";
+            this.applyToCheckBox.Size = new System.Drawing.Size(119, 17);
+            this.applyToCheckBox.TabIndex = 4;
+            this.applyToCheckBox.Text = "&Apply to all conflicts";
+            this.applyToCheckBox.UseVisualStyleBackColor = true;
+            this.applyToCheckBox.CheckedChanged += new System.EventHandler(this.applyToCheckBox_CheckedChanged);
+            // 
             // MergeConflictHandlerDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(491, 510);
+            this.Controls.Add(this.applyToCheckBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.diffPanel);
@@ -162,6 +175,7 @@
             this.preferencesGroupBox.PerformLayout();
             this.diffPanel.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -176,5 +190,6 @@
         private Menees.DiffUtils.Controls.DiffControl diffControl;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox applyToCheckBox;
     }
 }

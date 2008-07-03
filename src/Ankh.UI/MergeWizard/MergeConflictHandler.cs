@@ -22,6 +22,9 @@ namespace Ankh.UI.MergeWizard
         /// flag (not) to show conflict resolution option dialog for binary files
         bool _binary_showDialog = false;
 
+        /// flag (not) to show conflict resolution option dialog for property files
+        bool _property_showDialog = true; // prompt for properties initially
+
         public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
             : this(binaryChoice, textChoice)
         {
@@ -69,6 +72,21 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
+        /// Gets/sets the conflict resolution preference for properties
+        /// </summary>
+        public SvnAccept PropertyConflictResolutionChoice
+        {
+            get
+            {
+                return this._propertyChoice;
+            }
+            set
+            {
+                this._propertyChoice = value;
+            }
+        }
+
+        /// <summary>
         /// Gets/sets the flag to show conflict resolution dialog for text file conflicts.
         /// </summary>
         public bool PromptOnTextConflict
@@ -99,6 +117,21 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
+        /// Gets/sets the flag to show conflict resolution dialog for property conflicts.
+        /// </summary>
+        public bool PromptOnPropertyConflict
+        {
+            get
+            {
+                return this._property_showDialog;
+            }
+            set
+            {
+                this._property_showDialog = value;
+            }
+        }
+
+        /// <summary>
         /// Handles the conflict based on the preferences.
         /// </summary>
         public void OnConflict(SvnConflictEventArgs args)
@@ -106,7 +139,19 @@ namespace Ankh.UI.MergeWizard
             if (args.ConflictReason == SvnConflictReason.Edited)
             {
                 SvnAccept choice = SvnAccept.Postpone;
-                if (args.IsBinary)
+                if (args.ConflictType == SvnConflictType.Property)
+                {
+                    if (PromptOnPropertyConflict)
+                    {
+                        HandleConflictWithDialog(args);
+                        return;
+                    }
+                    else
+                    {
+                        choice = PropertyConflictResolutionChoice;
+                    }
+                }
+                else if (args.IsBinary)
                 {
                     if (PromptOnBinaryConflict)
                     {
@@ -145,6 +190,25 @@ namespace Ankh.UI.MergeWizard
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     args.Choice = dlg.ConflictResolution;
+                    bool applyToAll = dlg.ApplyToAll;
+                    if (applyToAll)
+                    {
+                        if (args.ConflictType == SvnConflictType.Property)
+                        {
+                            PropertyConflictResolutionChoice = args.Choice;
+                            PromptOnPropertyConflict = false;
+                        }
+                        else if (args.IsBinary)
+                        {
+                            BinaryConflictResolutionChoice = args.Choice;
+                            PromptOnBinaryConflict = false;
+                        }
+                        else
+                        {
+                            TextConflictResolutionChoice = args.Choice;
+                            PromptOnTextConflict = false;
+                        }
+                    }
                     // TODO handle merged file option
                 }
                 else
