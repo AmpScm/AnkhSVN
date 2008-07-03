@@ -157,6 +157,7 @@ namespace Ankh.UI.MergeWizard
             ((WizardDialog)Form).EnablePageAndButtons(false);
 
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
+            MergeConflictHandler.Reset();
             
             // Perform merge using IProgressRunner
             Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
@@ -272,7 +273,7 @@ namespace Ankh.UI.MergeWizard
                         }
                     }
                 });
-            List<string> resolutions = this.MergeConflictHandler.CurrentResolutions;
+            Dictionary<string,List<SvnConflictType>> resolutions = this.MergeConflictHandler.ResolvedMergedConflicts;
             this.Form.DialogResult = DialogResult.OK;
 
             return true;
