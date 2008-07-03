@@ -93,6 +93,7 @@
       <ComponentGroupRef Id="Ankh.Trigger"/>
       <ComponentRef Id="C_CONTRIBUTERS"/>
       <ComponentRef Id="C_LICENSE"/>
+      <ComponentRef Id="C_NOTICE"/>
       <MergeRef Id="CRT"/>
     </Feature>
   </Product>
