@@ -315,12 +315,17 @@ namespace Ankh.UI.RepositoryOpen
 
         private void CheckResult(Uri combined)
         {
+            CheckResult(combined, false);
+        }
+
+        private void CheckResult(Uri combined, bool forceLoad)
+        {
             using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
             {
                 SvnInfoArgs args = new SvnInfoArgs();
                 args.ThrowOnError = false;
                 args.Depth = SvnDepth.Empty;
-
+                
                 client.Info(combined, args,
                     delegate(object sender, SvnInfoEventArgs e)
                     {
@@ -334,7 +339,7 @@ namespace Ankh.UI.RepositoryOpen
                             {
                                 Uri parentUri = new Uri(e.Uri, "../");
 
-                                if (parentUri.ToString() != urlBox.Text)
+                                if (!forceLoad && parentUri.ToString() != urlBox.Text)
                                     return; // The user selected something else while we where busy
 
                                 // The user typed a directory Url without ending '/'
@@ -446,7 +451,7 @@ namespace Ankh.UI.RepositoryOpen
 
 						DoSomething fill = delegate()
 						{
-							CheckResult(dirUri);
+							CheckResult(dirUri, true);
 						};
 						fill.BeginInvoke(null, null);
 					}
