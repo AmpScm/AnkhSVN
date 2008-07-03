@@ -4,6 +4,7 @@
       <ComponentGroupRef Id="Ankh.Ids"/>
       <ComponentGroupRef Id="Ankh.Services"/>
       <ComponentGroupRef Id="WizardFramework"/>
+      <ComponentGroupRef Id="DiffUtils"/>
 			<ComponentRef Id="C_Ankh.UI.dll"/>
 		</ComponentGroup>
 		<DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.UI.TargetDir)">
