@@ -26,6 +26,7 @@ namespace Ankh.UI.MergeWizard
         bool _property_showDialog = true; // prompt for properties initially
 
         List<string> currentResolutions = new List<string>();
+        Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
 
         public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
             : this(binaryChoice, textChoice)
@@ -133,12 +134,26 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        public List<string> CurrentResolutions
+        /// <summary>
+        /// Gets the dictionary of resolved conflicts.
+        /// key: file path
+        /// value: list of conflict types
+        /// </summary>
+        public Dictionary<string, List<SvnConflictType>> ResolvedMergedConflicts
         {
             get
             {
-                return this.currentResolutions;
+                return this._resolvedMergeConflicts;
             }
+        }
+
+        /// <summary>
+        /// Resets the handler's cache.
+        /// </summary>
+        public void Reset()
+        {
+            // reset current resolutions
+            this._resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
         }
 
         /// <summary>
@@ -194,14 +209,6 @@ namespace Ankh.UI.MergeWizard
             AddToCurrentResolutions(args);
         }
 
-        private void AddToCurrentResolutions(SvnConflictEventArgs args)
-        {
-            if (args != null && args.Choice != SvnAccept.Postpone)
-            {
-                currentResolutions.Add(args.Path);
-            }
-        }
-
         private void HandleConflictWithDialog(SvnConflictEventArgs args)
         {
             using (MergeConflictHandlerDialog dlg = new MergeConflictHandlerDialog(args))
@@ -239,5 +246,24 @@ namespace Ankh.UI.MergeWizard
 
             AddToCurrentResolutions(args);
         }
+
+        private void AddToCurrentResolutions(SvnConflictEventArgs args)
+        {
+            if (args != null && args.Choice != SvnAccept.Postpone)
+            {
+                List<SvnConflictType> conflictTypes = null;
+                if (_resolvedMergeConflicts.ContainsKey(args.Path))
+                {
+                    conflictTypes = _resolvedMergeConflicts[args.Path];
+                }
+                else
+                {
+                    conflictTypes = new List<SvnConflictType>();
+                    _resolvedMergeConflicts.Add(args.Path, conflictTypes);
+                }
+                conflictTypes.Add(args.ConflictType);
+            }
+        }
+
     }
 }
