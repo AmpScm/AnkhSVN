@@ -12,5 +12,21 @@
       </Component>
     </DirectoryRef>
   </Fragment>
+  <Fragment>
+    <ComponentGroup Id="DiffUtils">
+      <ComponentRef Id="C_Menees.dll"/>
+      <ComponentRef Id="C_MeneesDiffUtils.dll"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
+      <Component Id="C_Menees.dll" Guid="B9528D04-233C-44ff-B446-C1A28FF1C842">
+        <File Id="CF_Menees.dll" Name="Menees.dll"
+              KeyPath="yes" Vital="yes" Checksum="yes"/>
+      </Component>
+      <Component Id="C_MeneesDiffUtils.dll" Guid="33EE5590-FEAF-4602-9735-136A1CFE7846">
+        <File Id="CF_MeneesDiffUtils.dll" Name="MeneesDiffUtils.dll"
+              KeyPath="yes" Vital="yes" Checksum="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
 </Wix>
 
