@@ -191,17 +191,14 @@ namespace Ankh.UI.MergeWizard
             {
                 args.Choice = SvnAccept.Postpone;
             }
-            if (args.Choice != SvnAccept.Postpone)
-            {
-                AddToCurrentResolutions(args.MyFile);
-            }
+            AddToCurrentResolutions(args);
         }
 
-        private void AddToCurrentResolutions(string fullPath)
+        private void AddToCurrentResolutions(SvnConflictEventArgs args)
         {
-            if (!string.IsNullOrEmpty(fullPath))
+            if (args != null && args.Choice != SvnAccept.Postpone)
             {
-                currentResolutions.Add(fullPath);
+                currentResolutions.Add(args.Path);
             }
         }
 
@@ -240,10 +237,7 @@ namespace Ankh.UI.MergeWizard
                 }
             }
 
-            if (args.Choice != SvnAccept.Postpone)
-            {
-                AddToCurrentResolutions(args.MyFile);
-            }
+            AddToCurrentResolutions(args);
         }
     }
 }
