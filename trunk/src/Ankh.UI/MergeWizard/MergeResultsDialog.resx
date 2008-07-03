@@ -310,7 +310,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="headerImage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -450,7 +450,919 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;headerPanel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 159</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="fileSkippedFilesValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Name" xml:space="preserve">
+    <value>fileSkippedFilesValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 141</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="fileSkippedDirectoriesValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Name" xml:space="preserve">
+    <value>fileSkippedDirectoriesValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="fileResolvedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileResolvedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileResolvedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 123</value>
+  </data>
+  <data name="fileResolvedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileResolvedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileResolvedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="fileResolvedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Name" xml:space="preserve">
+    <value>fileResolvedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="fileConflictedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileConflictedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileConflictedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 105</value>
+  </data>
+  <data name="fileConflictedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileConflictedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileConflictedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="fileConflictedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Name" xml:space="preserve">
+    <value>fileConflictedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="fileMergedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileMergedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileMergedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 87</value>
+  </data>
+  <data name="fileMergedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileMergedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileMergedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="fileMergedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Name" xml:space="preserve">
+    <value>fileMergedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="fileDeletedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileDeletedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileDeletedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 69</value>
+  </data>
+  <data name="fileDeletedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileDeletedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileDeletedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="fileDeletedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Name" xml:space="preserve">
+    <value>fileDeletedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="fileExistedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileExistedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileExistedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 51</value>
+  </data>
+  <data name="fileExistedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileExistedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileExistedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="fileExistedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Name" xml:space="preserve">
+    <value>fileExistedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="fileAddedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileAddedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileAddedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 33</value>
+  </data>
+  <data name="fileAddedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileAddedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileAddedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="fileAddedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Name" xml:space="preserve">
+    <value>fileAddedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="fileUpdatedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileUpdatedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 15</value>
+  </data>
+  <data name="fileUpdatedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileUpdatedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="fileUpdatedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="fileUpdatedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Name" xml:space="preserve">
+    <value>fileUpdatedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="fileSkippedFilesLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileSkippedFilesLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileSkippedFilesLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 159</value>
+  </data>
+  <data name="fileSkippedFilesLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileSkippedFilesLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 13</value>
+  </data>
+  <data name="fileSkippedFilesLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="fileSkippedFilesLabel.Text" xml:space="preserve">
+    <value>Skipped Files:</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Name" xml:space="preserve">
+    <value>fileSkippedFilesLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 141</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>102, 13</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="filesSkipedDirectoriesLabel.Text" xml:space="preserve">
+    <value>Skipped Directories:</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Name" xml:space="preserve">
+    <value>filesSkipedDirectoriesLabel</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="fileResolvedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileResolvedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileResolvedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 123</value>
+  </data>
+  <data name="fileResolvedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileResolvedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 13</value>
+  </data>
+  <data name="fileResolvedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="fileResolvedLabel.Text" xml:space="preserve">
+    <value>Resolved:</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Name" xml:space="preserve">
+    <value>fileResolvedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="fileConflictedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileConflictedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileConflictedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 105</value>
+  </data>
+  <data name="fileConflictedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileConflictedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 13</value>
+  </data>
+  <data name="fileConflictedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="fileConflictedLabel.Text" xml:space="preserve">
+    <value>Conflicted:</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Name" xml:space="preserve">
+    <value>fileConflictedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="fileMergedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileMergedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileMergedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>61, 87</value>
+  </data>
+  <data name="fileMergedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileMergedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 13</value>
+  </data>
+  <data name="fileMergedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="fileMergedLabel.Text" xml:space="preserve">
+    <value>Merged:</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Name" xml:space="preserve">
+    <value>fileMergedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="fileDeletedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileDeletedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileDeletedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>60, 69</value>
+  </data>
+  <data name="fileDeletedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileDeletedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 13</value>
+  </data>
+  <data name="fileDeletedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="fileDeletedLabel.Text" xml:space="preserve">
+    <value>Deleted:</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Name" xml:space="preserve">
+    <value>fileDeletedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="fileExistedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileExistedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileExistedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>63, 51</value>
+  </data>
+  <data name="fileExistedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileExistedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 13</value>
+  </data>
+  <data name="fileExistedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="fileExistedLabel.Text" xml:space="preserve">
+    <value>Existed:</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Name" xml:space="preserve">
+    <value>fileExistedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="fileAddedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileAddedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="fileAddedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>66, 33</value>
+  </data>
+  <data name="fileAddedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileAddedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 13</value>
+  </data>
+  <data name="fileAddedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="fileAddedLabel.Text" xml:space="preserve">
+    <value>Added:</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Name" xml:space="preserve">
+    <value>fileAddedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="fileUpdatedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="fileUpdatedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 15</value>
+  </data>
+  <data name="fileUpdatedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileUpdatedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 13</value>
+  </data>
+  <data name="fileUpdatedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="fileUpdatedLabel.Text" xml:space="preserve">
+    <value>Updated:</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Name" xml:space="preserve">
+    <value>fileUpdatedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 70</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>262, 177</value>
+  </data>
+  <data name="fileStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Text" xml:space="preserve">
+    <value>File Statistics</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Name" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="propertyResolvedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyResolvedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyResolvedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 69</value>
+  </data>
+  <data name="propertyResolvedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyResolvedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="propertyResolvedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="propertyResolvedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Name" xml:space="preserve">
+    <value>propertyResolvedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedValueLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="propertyConflictedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyConflictedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyConflictedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 51</value>
+  </data>
+  <data name="propertyConflictedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyConflictedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="propertyConflictedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
+  </data>
+  <data name="propertyConflictedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.Name" xml:space="preserve">
+    <value>propertyConflictedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="propertyMergedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyMergedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyMergedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 33</value>
+  </data>
+  <data name="propertyMergedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyMergedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="propertyMergedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="propertyMergedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Name" xml:space="preserve">
+    <value>propertyMergedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 15</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 13</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="propertyUpdatedValueLabel.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Name" xml:space="preserve">
+    <value>propertyUpdatedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="propertyResolvedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyResolvedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyResolvedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>52, 69</value>
+  </data>
+  <data name="propertyResolvedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyResolvedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 13</value>
+  </data>
+  <data name="propertyResolvedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="propertyResolvedLabel.Text" xml:space="preserve">
+    <value>Resolved:</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Name" xml:space="preserve">
+    <value>propertyResolvedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="propertyConflictedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyConflictedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyConflictedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>50, 51</value>
+  </data>
+  <data name="propertyConflictedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyConflictedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 13</value>
+  </data>
+  <data name="propertyConflictedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="propertyConflictedLabel.Text" xml:space="preserve">
+    <value>Conflicted:</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Name" xml:space="preserve">
+    <value>propertyConflictedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="propertyMergedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyMergedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyMergedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>61, 33</value>
+  </data>
+  <data name="propertyMergedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyMergedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 13</value>
+  </data>
+  <data name="propertyMergedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="propertyMergedLabel.Text" xml:space="preserve">
+    <value>Merged:</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Name" xml:space="preserve">
+    <value>propertyMergedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="propertyUpdatedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="propertyUpdatedLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="propertyUpdatedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>56, 15</value>
+  </data>
+  <data name="propertyUpdatedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyUpdatedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 13</value>
+  </data>
+  <data name="propertyUpdatedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="propertyUpdatedLabel.Text" xml:space="preserve">
+    <value>Updated:</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedLabel.Name" xml:space="preserve">
+    <value>propertyUpdatedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 70</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>265, 177</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Text" xml:space="preserve">
+    <value>Property Statistics</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Name" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
