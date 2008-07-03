@@ -1077,7 +1077,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyResolvedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 69</value>
+    <value>60, 69</value>
   </data>
   <data name="propertyResolvedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1110,7 +1110,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyConflictedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 51</value>
+    <value>60, 51</value>
   </data>
   <data name="propertyConflictedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1143,7 +1143,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyMergedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 33</value>
+    <value>60, 33</value>
   </data>
   <data name="propertyMergedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1176,7 +1176,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyUpdatedValueLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 15</value>
+    <value>60, 15</value>
   </data>
   <data name="propertyUpdatedValueLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1209,7 +1209,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyResolvedLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>52, 69</value>
+    <value>7, 69</value>
   </data>
   <data name="propertyResolvedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1242,7 +1242,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyConflictedLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 51</value>
+    <value>5, 51</value>
   </data>
   <data name="propertyConflictedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1275,7 +1275,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyMergedLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>61, 33</value>
+    <value>16, 33</value>
   </data>
   <data name="propertyMergedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1308,7 +1308,7 @@
     <value>NoControl</value>
   </data>
   <data name="propertyUpdatedLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>56, 15</value>
+    <value>11, 15</value>
   </data>
   <data name="propertyUpdatedLabel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>

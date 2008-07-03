@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using WizardFramework;
-using System.Resources;
-using System.Reflection;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.SvnLog;
@@ -153,135 +151,182 @@ namespace Ankh.UI.MergeWizard
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
-            // TODO: Get merge working in scenario where "All revisions" should be merged
-            // TODO: Create a dialog with the merge results
-
             ((WizardDialog)Form).EnablePageAndButtons(false);
 
+            if (PerformDryRun)
+            {
+                PerformMerge();
+
+                MergeResultsDialog dialog = new MergeResultsDialog();
+
+                dialog.MergeActions = MergeActions;
+                dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
+
+                dialog.ShowDialog(this.Form);
+
+                ((WizardDialog)Form).EnablePageAndButtons(true);
+
+                return false;
+            }
+            else
+            {
+                PerformMerge();
+
+                this.Form.DialogResult = DialogResult.OK;
+
+                return true;
+            }
+        }
+
+        public void PerformMerge()
+        {
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
+
             this.currentMergeConflictHandler = CreateMergeConflictHandler();
-            
+
             // Perform merge using IProgressRunner
             Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
-                    // Attach the conflict handler
-                    ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
-                    
-                    if (mergeType == MergeType.TwoDifferentTrees)
+                    _mergeActions = new List<SvnNotifyEventArgs>();
+
+                    try
                     {
-                        MergeSourceTwoDifferentTreesPage page = ((MergeSourceTwoDifferentTreesPage)mergeSourceTwoDifferentTreesPage);
-                        SvnDiffMergeArgs dArgs = new SvnDiffMergeArgs();
-                        Uri fromUri;
-                        Uri toUri;
-
-                        // Set the proper depth
-                        dArgs.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
-
-                        // Set whether or not unversioned obstructions should be allowed
-                        dArgs.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
-
-                        // Set whether or not to ignore ancestry
-                        dArgs.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
-
-                        // Set whether or not this is a dry run
-                        dArgs.DryRun = PerformDryRun;
-
-                        // Create 'From' uri
-                        Uri.TryCreate(page.MergeSourceOne, UriKind.Absolute, out fromUri);
-
-                        // Create 'To' uri if necessary
-                        if (page.HasSecondMergeSourceUrl)
-                            Uri.TryCreate(page.MergeSourceTwo, UriKind.Absolute, out toUri);
-                        else
-                            toUri = fromUri;
-
-                        ee.Client.DiffMerge(MergeTarget.FullPath,
-                            new SvnUriTarget(fromUri, (page.MergeFromRevision > -1 ?
-                                new SvnRevision(page.MergeFromRevision - 1) :
-                                SvnRevision.Head)),
-                            new SvnUriTarget(toUri, (page.MergeToRevision > -1 ?
-                                new SvnRevision(page.MergeToRevision) :
-                                SvnRevision.Head)),
-                            dArgs);
-                    }
-                    else if (mergeType == MergeType.Reintegrate)
-                    {
-                        SvnReintegrationMergeArgs args = new SvnReintegrationMergeArgs();
-
-                        // Set whether or not this is a dry run
-                        args.DryRun = PerformDryRun;
-
-                        ee.Client.ReintegrationMerge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
-                            args);
-                    }
-                    else
-                    {
-                        SvnMergeArgs args = new SvnMergeArgs();
-                        List<SvnRevisionRange> mergeRevisions = new List<SvnRevisionRange>();
-
-                        // Set the proper depth
-                        args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
-
-                        // Set whether or not unversioned obstructions should be allowed
-                        args.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
-
-                        // Set whether or not to ignore ancestry
-                        args.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
-
-                        // Set whether or not this merge should just record the merge information
-                        args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
-
-                        // Set whether or not this is a dry run
-                        args.DryRun = PerformDryRun;
-
-                        // TODO: Enhance to be range-aware
-                        if (MergeRevisions != null)
+                        if (!PerformDryRun)
                         {
-                            foreach (long rev in MergeRevisions)
-                            {
-                                mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
-                            }
+                            // Attach the conflict handler
+                            ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
+                        }
+
+                        // Attach the notify handler
+                        ee.Client.Notify += new EventHandler<SvnNotifyEventArgs>(this.OnNotify);
+
+                        if (mergeType == MergeType.TwoDifferentTrees)
+                        {
+                            MergeSourceTwoDifferentTreesPage page = ((MergeSourceTwoDifferentTreesPage)mergeSourceTwoDifferentTreesPage);
+                            SvnDiffMergeArgs dArgs = new SvnDiffMergeArgs();
+                            Uri fromUri;
+                            Uri toUri;
+
+                            // Set the proper depth
+                            dArgs.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
+
+                            // Set whether or not unversioned obstructions should be allowed
+                            dArgs.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
+
+                            // Set whether or not to ignore ancestry
+                            dArgs.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
+
+                            // Set whether or not this is a dry run
+                            dArgs.DryRun = PerformDryRun;
+
+                            // Create 'From' uri
+                            Uri.TryCreate(page.MergeSourceOne, UriKind.Absolute, out fromUri);
+
+                            // Create 'To' uri if necessary
+                            if (page.HasSecondMergeSourceUrl)
+                                Uri.TryCreate(page.MergeSourceTwo, UriKind.Absolute, out toUri);
+                            else
+                                toUri = fromUri;
+
+                            ee.Client.DiffMerge(MergeTarget.FullPath,
+                                new SvnUriTarget(fromUri, (page.MergeFromRevision > -1 ?
+                                    new SvnRevision(page.MergeFromRevision - 1) :
+                                    SvnRevision.Head)),
+                                new SvnUriTarget(toUri, (page.MergeToRevision > -1 ?
+                                    new SvnRevision(page.MergeToRevision) :
+                                    SvnRevision.Head)),
+                                dArgs);
+                        }
+                        else if (mergeType == MergeType.Reintegrate)
+                        {
+                            SvnReintegrationMergeArgs args = new SvnReintegrationMergeArgs();
+
+                            // Set whether or not this is a dry run
+                            args.DryRun = PerformDryRun;
+
+                            ee.Client.ReintegrationMerge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                                args);
                         }
                         else
                         {
-                            // This should only occur when you choose 'All eligible revisions'
-                            if (mergeType == MergeType.RangeOfRevisions)
+                            SvnMergeArgs args = new SvnMergeArgs();
+                            List<SvnRevisionRange> mergeRevisions = new List<SvnRevisionRange>();
+
+                            // Set the proper depth
+                            args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
+
+                            // Set whether or not unversioned obstructions should be allowed
+                            args.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
+
+                            // Set whether or not to ignore ancestry
+                            args.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
+
+                            // Set whether or not this merge should just record the merge information
+                            args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
+
+                            // Set whether or not this is a dry run
+                            args.DryRun = PerformDryRun;
+
+                            // TODO: Enhance to be range-aware
+                            if (MergeRevisions != null)
                             {
-                                SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
-                                Collection<SvnMergesEligibleEventArgs> availableMerges;
-
-                                lArgs.ThrowOnError = false;
-
-                                ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
-                                    SvnUriTarget.FromString(MergeSource), lArgs, out availableMerges);
-
-                                foreach (SvnMergesEligibleEventArgs entries in availableMerges)
+                                foreach (long rev in MergeRevisions)
                                 {
-                                    long rev = entries.Revision;
-
                                     mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
                                 }
                             }
-                        }
-                        try
-                        {
+                            else
+                            {
+                                // This should only occur when you choose 'All eligible revisions'
+                                if (mergeType == MergeType.RangeOfRevisions)
+                                {
+                                    SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
+                                    Collection<SvnMergesEligibleEventArgs> availableMerges;
+
+                                    lArgs.ThrowOnError = false;
+
+                                    ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
+                                        SvnUriTarget.FromString(MergeSource), lArgs, out availableMerges);
+
+                                    foreach (SvnMergesEligibleEventArgs entries in availableMerges)
+                                    {
+                                        long rev = entries.Revision;
+
+                                        mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
+                                    }
+                                }
+                            }
+
                             ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
-                                mergeRevisions.Count == 0 ? null : mergeRevisions, args);
-                        }
-                        finally
-                        {
-                            ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+                                    mergeRevisions.Count == 0 ? null : mergeRevisions, args);
                         }
                     }
+                    finally
+                    {
+                        // Detach the conflict handler
+                        ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+
+                        // Detach the notify handler
+                        ee.Client.Notify -= new EventHandler<SvnNotifyEventArgs>(OnNotify);
+                    }
                 });
+
             if (this.currentMergeConflictHandler != null)
             {
-                Dictionary<string, List<SvnConflictType>> resolutions = this.currentMergeConflictHandler.ResolvedMergedConflicts;
+                _resolvedMergeConflicts = this.currentMergeConflictHandler.ResolvedMergedConflicts;
             }
-            this.Form.DialogResult = DialogResult.OK;
+        }
 
-            return true;
+        void OnNotify(object sender, SvnNotifyEventArgs e)
+        {
+            // Do not catalog MergeBegin
+            if (e.Action == SvnNotifyAction.MergeBegin)
+                return;
+
+            e.Detach();
+
+            _mergeActions.Add(e);
         }
 
         /// <see cref="WizardFramework.IWizard.DefaultPageImage" />
@@ -441,6 +486,22 @@ namespace Ankh.UI.MergeWizard
             set { _performDryRun = value; }
         }
 
+        /// <summary>
+        /// Gets the actions performed by the merge.
+        /// </summary>
+        public List<SvnNotifyEventArgs> MergeActions
+        {
+            get { return _mergeActions; }
+        }
+
+        /// <summary>
+        /// Gets the paths of the conflicts resolved during the merge.
+        /// </summary>
+        public Dictionary<string, List<SvnConflictType>> ResolvedMergeConflicts
+        {
+            get { return _resolvedMergeConflicts; }
+        }
+
         private WizardPage mergeTypePage;
         private WizardPage bestPracticesPage;
         private WizardPage mergeSourceRangeOfRevisionsPage;
@@ -456,5 +517,7 @@ namespace Ankh.UI.MergeWizard
         SvnItem _mergeTarget = null;
         long[] _mergeRevisions = null;
         bool _performDryRun = false;
+        List<SvnNotifyEventArgs> _mergeActions;
+        Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts;
     }
 }

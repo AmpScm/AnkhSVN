@@ -104,7 +104,12 @@ namespace Ankh.UI.MergeWizard.Commands
 
                 if (result == DialogResult.OK)
                 {
-                    // TODO: Show the merge summary dialog.
+                    MergeResultsDialog mrd = new MergeResultsDialog();
+
+                    mrd.MergeActions = ((MergeWizard)dialog.Wizard).MergeActions;
+                    mrd.ResolvedMergeConflicts = ((MergeWizard)dialog.Wizard).ResolvedMergeConflicts;
+
+                    mrd.ShowDialog(uiService.GetDialogOwnerWindow());
                 }
             }
         }
