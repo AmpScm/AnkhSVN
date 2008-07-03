@@ -157,13 +157,12 @@ namespace Ankh.UI.MergeWizard
             ((WizardDialog)Form).EnablePageAndButtons(false);
 
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
-
+            
             // Perform merge using IProgressRunner
             Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     // Attach the conflict handler
-                    ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(this.OnConflict);
                     ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
                     
                     if (mergeType == MergeType.TwoDifferentTrees)
@@ -262,9 +261,15 @@ namespace Ankh.UI.MergeWizard
                                 }
                             }
                         }
-
-                        ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
-                            mergeRevisions.Count == 0 ? null : mergeRevisions, args);
+                        try
+                        {
+                            ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                                mergeRevisions.Count == 0 ? null : mergeRevisions, args);
+                        }
+                        finally
+                        {
+                            ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+                        }
                     }
                 });
 

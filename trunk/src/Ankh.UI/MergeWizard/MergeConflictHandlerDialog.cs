@@ -11,6 +11,7 @@ namespace Ankh.UI.MergeWizard
     {
         SvnConflictEventArgs input;
         SvnAccept resolution = SvnAccept.Postpone;
+        bool applyToAll = false;
         bool isBinary;
 
         public MergeConflictHandlerDialog()
@@ -26,6 +27,18 @@ namespace Ankh.UI.MergeWizard
             if (this.input != null)
             {
                 isBinary = this.input.IsBinary;
+                if (this.input.ConflictType == SvnConflictType.Property)
+                {
+                    applyToCheckBox.Text = "&Apply to all property conflicts";
+                }
+                else if (isBinary)
+                {
+                    applyToCheckBox.Text = "&Apply to all binary conflicts";
+                }
+                else
+                {
+                    applyToCheckBox.Text = "&Apply to all text conflicts";
+                }
                 ShowDifferences(this.input.MyFile, this.input.TheirFile);
             }
         }
@@ -42,6 +55,17 @@ namespace Ankh.UI.MergeWizard
             internal set
             {
                 this.resolution = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets applyToAll option.
+        /// </summary>
+        public bool ApplyToAll
+        {
+            get
+            {
+                return applyToAll;
             }
         }
 
@@ -102,6 +126,11 @@ namespace Ankh.UI.MergeWizard
                 A = Functions.GetFileTextLines(strA);
                 B = Functions.GetFileTextLines(strB);
             }
+        }
+
+        private void applyToCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.applyToAll = this.applyToCheckBox.Checked;
         }
     }
 }
