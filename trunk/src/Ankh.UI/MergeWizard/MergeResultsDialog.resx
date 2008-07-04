@@ -219,14 +219,53 @@
   <data name="&gt;&gt;headerTitle.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+  <data name="controlPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;okButton.Name" xml:space="preserve">
+    <value>okButton</value>
+  </data>
+  <data name="&gt;&gt;okButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okButton.Parent" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 416</value>
+  </data>
+  <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>542, 50</value>
+  </data>
+  <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Name" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="okButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>378, 16</value>
+    <value>458, 16</value>
   </data>
   <data name="okButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -251,66 +290,6 @@
   </data>
   <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left, Right</value>
-  </data>
-  <data name="cancelButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>458, 16</value>
-  </data>
-  <data name="cancelButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="cancelButton.Text" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
-    <value>cancelButton</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="controlPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 416</value>
-  </data>
-  <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>542, 50</value>
-  </data>
-  <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Name" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="headerImage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -450,7 +429,253 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;headerPanel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Name" xml:space="preserve">
+    <value>fileSkippedFilesValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesValueLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Name" xml:space="preserve">
+    <value>fileSkippedDirectoriesValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedDirectoriesValueLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Name" xml:space="preserve">
+    <value>fileResolvedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedValueLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Name" xml:space="preserve">
+    <value>fileConflictedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedValueLabel.ZOrder" xml:space="preserve">
     <value>3</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Name" xml:space="preserve">
+    <value>fileMergedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileMergedValueLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Name" xml:space="preserve">
+    <value>fileDeletedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedValueLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Name" xml:space="preserve">
+    <value>fileExistedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileExistedValueLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Name" xml:space="preserve">
+    <value>fileAddedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileAddedValueLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Name" xml:space="preserve">
+    <value>fileUpdatedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedValueLabel.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Name" xml:space="preserve">
+    <value>fileSkippedFilesLabel</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileSkippedFilesLabel.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Name" xml:space="preserve">
+    <value>filesSkipedDirectoriesLabel</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;filesSkipedDirectoriesLabel.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Name" xml:space="preserve">
+    <value>fileResolvedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileResolvedLabel.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Name" xml:space="preserve">
+    <value>fileConflictedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileConflictedLabel.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Name" xml:space="preserve">
+    <value>fileMergedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileMergedLabel.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Name" xml:space="preserve">
+    <value>fileDeletedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileDeletedLabel.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Name" xml:space="preserve">
+    <value>fileExistedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileExistedLabel.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Name" xml:space="preserve">
+    <value>fileAddedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileAddedLabel.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Name" xml:space="preserve">
+    <value>fileUpdatedLabel</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.Parent" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileUpdatedLabel.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 70</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>262, 177</value>
+  </data>
+  <data name="fileStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="fileStatisticsGroupBox.Text" xml:space="preserve">
+    <value>File Statistics</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Name" xml:space="preserve">
+    <value>fileStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;fileStatisticsGroupBox.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="fileSkippedFilesValueLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1040,34 +1265,130 @@
   <data name="&gt;&gt;fileUpdatedLabel.ZOrder" xml:space="preserve">
     <value>17</value>
   </data>
-  <data name="fileStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 70</value>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Name" xml:space="preserve">
+    <value>propertyResolvedValueLabel</value>
   </data>
-  <data name="fileStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="fileStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="&gt;&gt;propertyResolvedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
   </data>
-  <data name="fileStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>262, 177</value>
+  <data name="&gt;&gt;propertyResolvedValueLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="fileStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;propertyConflictedValueLabel.Name" xml:space="preserve">
+    <value>propertyConflictedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedValueLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Name" xml:space="preserve">
+    <value>propertyMergedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedValueLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Name" xml:space="preserve">
+    <value>propertyUpdatedValueLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedValueLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Name" xml:space="preserve">
+    <value>propertyResolvedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyResolvedLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Name" xml:space="preserve">
+    <value>propertyConflictedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyConflictedLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Name" xml:space="preserve">
+    <value>propertyMergedLabel</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyMergedLabel.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="fileStatisticsGroupBox.Text" xml:space="preserve">
-    <value>File Statistics</value>
+  <data name="&gt;&gt;propertyUpdatedLabel.Name" xml:space="preserve">
+    <value>propertyUpdatedLabel</value>
   </data>
-  <data name="&gt;&gt;fileStatisticsGroupBox.Name" xml:space="preserve">
-    <value>fileStatisticsGroupBox</value>
+  <data name="&gt;&gt;propertyUpdatedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;fileStatisticsGroupBox.Type" xml:space="preserve">
+  <data name="&gt;&gt;propertyUpdatedLabel.Parent" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyUpdatedLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 70</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>265, 177</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="propertyStatisticsGroupBox.Text" xml:space="preserve">
+    <value>Property Statistics</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Name" xml:space="preserve">
+    <value>propertyStatisticsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;fileStatisticsGroupBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;propertyStatisticsGroupBox.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;fileStatisticsGroupBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;propertyStatisticsGroupBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="propertyResolvedValueLabel.AutoSize" type="System.Boolean, mscorlib">
@@ -1334,35 +1655,56 @@
   <data name="&gt;&gt;propertyUpdatedLabel.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="propertyStatisticsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 70</value>
+  <data name="modifiedPathsListView.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="propertyStatisticsGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="modifiedPathsListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 251</value>
+  </data>
+  <data name="modifiedPathsListView.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="propertyStatisticsGroupBox.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="modifiedPathsListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>532, 160</value>
   </data>
-  <data name="propertyStatisticsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>265, 177</value>
+  <data name="modifiedPathsListView.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="propertyStatisticsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="&gt;&gt;modifiedPathsListView.Name" xml:space="preserve">
+    <value>modifiedPathsListView</value>
   </data>
-  <data name="propertyStatisticsGroupBox.Text" xml:space="preserve">
-    <value>Property Statistics</value>
+  <data name="&gt;&gt;modifiedPathsListView.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListView, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;propertyStatisticsGroupBox.Name" xml:space="preserve">
-    <value>propertyStatisticsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;propertyStatisticsGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;propertyStatisticsGroupBox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;modifiedPathsListView.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;propertyStatisticsGroupBox.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;modifiedPathsListView.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="changedPathColumn.Text" xml:space="preserve">
+    <value>Changed Path</value>
+  </data>
+  <data name="changedPathColumn.Width" type="System.Int32, mscorlib">
+    <value>348</value>
+  </data>
+  <data name="contentColumn.Text" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="contentColumn.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="contentColumn.Width" type="System.Int32, mscorlib">
+    <value>90</value>
+  </data>
+  <data name="propertiesColumn.Text" xml:space="preserve">
+    <value>Properites</value>
+  </data>
+  <data name="propertiesColumn.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="propertiesColumn.Width" type="System.Int32, mscorlib">
+    <value>90</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -1406,6 +1748,24 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Merge Results</value>
+  </data>
+  <data name="&gt;&gt;changedPathColumn.Name" xml:space="preserve">
+    <value>changedPathColumn</value>
+  </data>
+  <data name="&gt;&gt;changedPathColumn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;contentColumn.Name" xml:space="preserve">
+    <value>contentColumn</value>
+  </data>
+  <data name="&gt;&gt;contentColumn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertiesColumn.Name" xml:space="preserve">
+    <value>propertiesColumn</value>
+  </data>
+  <data name="&gt;&gt;propertiesColumn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MergeResultsDialog</value>

@@ -61,11 +61,38 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Added.
+        /// </summary>
+        internal static string Added {
+            get {
+                return ResourceManager.GetString("Added", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         internal static string All {
             get {
                 return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changed Path.
+        /// </summary>
+        internal static string ChangedPath {
+            get {
+                return ResourceManager.GetString("ChangedPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conflicted.
+        /// </summary>
+        internal static string Conflicted {
+            get {
+                return ResourceManager.GetString("Conflicted", resourceCulture);
             }
         }
         
@@ -114,10 +141,37 @@ namespace Ankh.UI.MergeWizard {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        internal static string Content {
+            get {
+                return ResourceManager.GetString("Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        internal static string Deleted {
+            get {
+                return ResourceManager.GetString("Deleted", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap ErrorImage {
             get {
                 object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existed.
+        /// </summary>
+        internal static string Existed {
+            get {
+                return ResourceManager.GetString("Existed", resourceCulture);
             }
         }
         
@@ -222,6 +276,15 @@ namespace Ankh.UI.MergeWizard {
         internal static string MergeBestPracticesPageHeaderTitle {
             get {
                 return ResourceManager.GetString("MergeBestPracticesPageHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merged.
+        /// </summary>
+        internal static string Merged {
+            get {
+                return ResourceManager.GetString("Merged", resourceCulture);
             }
         }
         
@@ -384,6 +447,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modified.
+        /// </summary>
+        internal static string Modified {
+            get {
+                return ResourceManager.GetString("Modified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string No {
@@ -416,6 +488,15 @@ namespace Ankh.UI.MergeWizard {
         internal static string NotReadyForMerge {
             get {
                 return ResourceManager.GetString("NotReadyForMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Properties.
+        /// </summary>
+        internal static string Properties {
+            get {
+                return ResourceManager.GetString("Properties", resourceCulture);
             }
         }
         
@@ -457,6 +538,33 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("ReintegrateABranchImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced.
+        /// </summary>
+        internal static string Replaced {
+            get {
+                return ResourceManager.GetString("Replaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolved.
+        /// </summary>
+        internal static string Resolved {
+            get {
+                return ResourceManager.GetString("Resolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipped.
+        /// </summary>
+        internal static string Skipped {
+            get {
+                return ResourceManager.GetString("Skipped", resourceCulture);
             }
         }
         
@@ -525,6 +633,24 @@ namespace Ankh.UI.MergeWizard {
             get {
                 object obj = ResourceManager.GetObject("TwoDifferentTreesImage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unchanged.
+        /// </summary>
+        internal static string Unchanged {
+            get {
+                return ResourceManager.GetString("Unchanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        internal static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
             }
         }
         
