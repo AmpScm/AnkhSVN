@@ -17,10 +17,10 @@ namespace Ankh.UI.MergeWizard
         SvnAccept _propertyChoice = SvnAccept.Postpone;
 
         /// flag (not) to show conflict resolution option dialog for text files
-        bool _txt_showDialog = false;
+        bool _txt_showDialog/* = false*/;
 
         /// flag (not) to show conflict resolution option dialog for binary files
-        bool _binary_showDialog = false;
+        bool _binary_showDialog/* = false*/;
 
         /// flag (not) to show conflict resolution option dialog for property files
         bool _property_showDialog = true; // prompt for properties initially

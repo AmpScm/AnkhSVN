@@ -7,7 +7,7 @@ using Ankh.VS;
 
 namespace Ankh.UI.MergeWizard
 {
-    public class MergeUtils
+    internal class MergeUtils
     {
         public static readonly WizardMessage INVALID_FROM_REVISION = new WizardMessage(Resources.InvalidFromRevision,
             WizardMessage.ERROR);

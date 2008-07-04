@@ -360,7 +360,7 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        public MergeUtils MergeUtils
+        internal MergeUtils MergeUtils
         {
             get { return _mergeUtils; }
             set { _mergeUtils = value; }

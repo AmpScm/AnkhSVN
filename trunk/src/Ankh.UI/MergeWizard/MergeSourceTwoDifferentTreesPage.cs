@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceTwoDifferentTreesPage : BasePage
     {
-        public static readonly string PAGE_NAME = "Merge Source Two Different Trees";
+        public const string PAGE_NAME = "Merge Source Two Different Trees";
 
         /// <summary>
         /// Constructor

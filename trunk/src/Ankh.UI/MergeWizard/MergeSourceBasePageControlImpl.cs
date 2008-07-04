@@ -99,7 +99,7 @@ namespace Ankh.UI.MergeWizard
                 if (mergeFromComboBox.Text == Resources.LoadingMergeSources)
                     return true;
 
-                if (mergeFromComboBox.Text == "" ||
+                if (string.IsNullOrEmpty(mergeFromComboBox.Text) ||
                     !Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out tmpUri))
                 {
                     WizardPage.Message = MergeUtils.INVALID_FROM_URL;

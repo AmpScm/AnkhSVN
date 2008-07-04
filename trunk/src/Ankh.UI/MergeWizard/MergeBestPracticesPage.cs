@@ -15,7 +15,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     public class MergeBestPracticesPage : BasePage
     {
-        public static readonly string PAGE_NAME = "Merge Best Practices Page";
+        public const string PAGE_NAME = "Merge Best Practices Page";
 
         public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(Resources.ReadyForMerge,
             WizardMessage.NONE);

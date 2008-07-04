@@ -14,7 +14,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeRevisionsSelectionPage : BasePage
     {
-        public static readonly string PAGE_NAME = "Merge Revisions Selection Page";
+        public const string PAGE_NAME = "Merge Revisions Selection Page";
 
         /// <summary>
         /// Constructor.

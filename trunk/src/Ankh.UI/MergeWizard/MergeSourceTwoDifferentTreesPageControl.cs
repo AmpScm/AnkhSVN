@@ -148,8 +148,6 @@ namespace Ankh.UI.MergeWizard
 
                     if (useFromURLCheckBox.Checked && high != -1 && high != low)
                         toRevisionTextBox.Text = high.ToString();
-
-                    GC.KeepAlive(selected);
                 }
             }
         }
