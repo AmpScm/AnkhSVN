@@ -105,6 +105,9 @@
             // 
             // diffPanel
             // 
+            this.diffPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.diffPanel.Controls.Add(this.diffControl);
             this.diffPanel.Location = new System.Drawing.Point(12, 156);
             this.diffPanel.Name = "diffPanel";
