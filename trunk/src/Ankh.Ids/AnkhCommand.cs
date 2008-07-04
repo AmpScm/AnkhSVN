@@ -216,6 +216,8 @@ namespace Ankh.Ids
         MigrateSettings,
 		ItemEditProperties,
         ReposExplorerLog,
-        LogBlameRevision
+        LogBlameRevision,
+        RevertProjectToRevision,
+        RevertSolutionToRevision,
     }
 }

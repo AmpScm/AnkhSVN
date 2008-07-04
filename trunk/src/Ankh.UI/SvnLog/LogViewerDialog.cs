@@ -9,6 +9,7 @@ using SharpSvn;
 using Ankh.Scc;
 using System.Diagnostics;
 using Ankh.UI.SvnLog;
+using System.IO;
 
 namespace Ankh.UI
 {
@@ -70,16 +71,24 @@ namespace Ankh.UI
 
             logViewerControl.Site = Site;
 
-            if (!Uri.TryCreate(LogTarget, UriKind.Absolute, out uri))
+            if (LogTarget != null && File.Exists(LogTarget) || Directory.Exists(LogTarget))
             {
-                MessageBox.Show("Invalid URL", "'" + LogTarget + "' is not a valid url.",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return;
+                logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
             }
+            else
+            {
 
-            if (LogTarget != null)
-                logViewerControl.StartRemoteLog(Context, uri);
+                if (!Uri.TryCreate(LogTarget, UriKind.Absolute, out uri))
+                {
+                    MessageBox.Show("Invalid URL", "'" + LogTarget + "' is not a valid url.",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
+
+                if (LogTarget != null)
+                    logViewerControl.StartRemoteLog(Context, uri);
+            }
                 //logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
         }
         #endregion
