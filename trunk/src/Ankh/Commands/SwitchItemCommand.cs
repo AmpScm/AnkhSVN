@@ -91,13 +91,10 @@ namespace Ankh.Commands
                 }
             }
 
-            IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
-
-
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
-            
+
             foreach (string file in documentTracker.GetDocumentsBelow(path))
             {
                 if (!lockPaths.Contains(file))
