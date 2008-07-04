@@ -6,6 +6,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions"
 		CHANGES.txt = CHANGES.txt
 		CONTRIBUTERS.txt = CONTRIBUTERS.txt
 		LICENSE.rtf = LICENSE.rtf
+		NOTICE.txt = NOTICE.txt
 		..\README.txt = ..\README.txt
 	EndProjectSection
 EndProject
@@ -56,7 +57,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		AllTests.testrunconfig = AllTests.testrunconfig
 		AnkhSvn.2008.vsmdi = AnkhSvn.2008.vsmdi
-		NOTICE.txt = NOTICE.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Trigger", "Ankh.Trigger\Ankh.Trigger.csproj", "{D81A44B8-57A9-4296-832C-7D29019D989B}"
@@ -188,7 +188,7 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {BEAF04B7-B1BB-4ABA-BF6F-00495274C725}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
