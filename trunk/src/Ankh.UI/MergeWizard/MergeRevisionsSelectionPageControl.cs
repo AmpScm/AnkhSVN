@@ -91,5 +91,13 @@ namespace Ankh.UI.MergeWizard
 
             ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
+
+        private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)
+        {
+            if (e.TotalCount == 0)
+            {
+                WizardPage.Message = new WizardMessage(Resources.NoLogItems, WizardMessage.ERROR);
+            }
+        }
     }
 }
