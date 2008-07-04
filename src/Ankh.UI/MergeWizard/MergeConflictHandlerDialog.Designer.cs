@@ -44,6 +44,8 @@
             // 
             // preferencesGroupBox
             // 
+            this.preferencesGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.preferencesGroupBox.Controls.Add(this.baseRadioButton);
             this.preferencesGroupBox.Controls.Add(this.theirsRadioButton);
             this.preferencesGroupBox.Controls.Add(this.mineRadioButton);
@@ -116,8 +118,9 @@
             // 
             // diffControl
             // 
+            this.diffControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.diffControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.diffControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.diffControl.LineDiffHeight = 60;
             this.diffControl.Location = new System.Drawing.Point(0, 0);
             this.diffControl.Name = "diffControl";

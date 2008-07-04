@@ -157,14 +157,17 @@ namespace Ankh.UI.MergeWizard
             {
                 PerformMerge();
 
-                MergeResultsDialog dialog = new MergeResultsDialog();
+                if (_mergeActions != null && _resolvedMergeConflicts != null)
+                {
+                    MergeResultsDialog dialog = new MergeResultsDialog();
 
-                dialog.MergeActions = MergeActions;
-                dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
+                    dialog.MergeActions = MergeActions;
+                    dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
 
-                dialog.ShowDialog(this.Form);
+                    dialog.ShowDialog(this.Form);
 
-                ((WizardDialog)Form).EnablePageAndButtons(true);
+                    ((WizardDialog)Form).EnablePageAndButtons(true);
+                }
 
                 return false;
             }
@@ -189,6 +192,7 @@ namespace Ankh.UI.MergeWizard
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     _mergeActions = new List<SvnNotifyEventArgs>();
+                    _resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
 
                     try
                     {
@@ -197,6 +201,9 @@ namespace Ankh.UI.MergeWizard
                             // Attach the conflict handler
                             ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
                         }
+
+                        // Attach the cancel handler
+                        ee.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.OnCancel);
 
                         // Attach the notify handler
                         ee.Client.Notify += new EventHandler<SvnNotifyEventArgs>(this.OnNotify);
@@ -304,17 +311,32 @@ namespace Ankh.UI.MergeWizard
                     }
                     finally
                     {
-                        // Detach the conflict handler
-                        ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+                        if (!PerformDryRun)
+                        {
+                            // Detach the conflict handler
+                            ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+                        }
 
                         // Detach the notify handler
                         ee.Client.Notify -= new EventHandler<SvnNotifyEventArgs>(OnNotify);
+
+                        // Detach the cancel handler
+                        ee.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.OnCancel);
                     }
                 });
 
             if (this.currentMergeConflictHandler != null)
             {
                 _resolvedMergeConflicts = this.currentMergeConflictHandler.ResolvedMergedConflicts;
+            }
+        }
+
+        void OnCancel(object sender, SvnCancelEventArgs e)
+        {
+            if (e.Cancel)
+            {
+                _mergeActions = null;
+                _resolvedMergeConflicts = null;
             }
         }
 

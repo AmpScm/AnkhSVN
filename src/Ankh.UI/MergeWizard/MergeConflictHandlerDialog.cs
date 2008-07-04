@@ -24,6 +24,7 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
             this.input = args;
             this.postponeRadioButton.Checked = true;
+            this.Text = args.Path.Replace('/', '\\');
             if (this.input != null)
             {
                 isBinary = this.input.IsBinary;
@@ -101,7 +102,6 @@ namespace Ankh.UI.MergeWizard
             string strCaptionB = "Theirs";
             Menees.FileName fnA = new Menees.FileName(mine);
             Menees.FileName fnB = new Menees.FileName(theirs);
-            this.Text = string.Format("{0} : {1}", fnA.Name, fnB.Name);
             diffControl.SetData(A, B, Script, strCaptionA, strCaptionB);
         }
 
