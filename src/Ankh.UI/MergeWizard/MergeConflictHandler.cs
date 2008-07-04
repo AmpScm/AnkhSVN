@@ -259,7 +259,7 @@ namespace Ankh.UI.MergeWizard
                 else
                 {
                     conflictTypes = new List<SvnConflictType>();
-                    _resolvedMergeConflicts.Add(args.Path, conflictTypes);
+                    _resolvedMergeConflicts.Add(args.Path.Replace('/', '\\'), conflictTypes);
                 }
                 conflictTypes.Add(args.ConflictType);
             }
