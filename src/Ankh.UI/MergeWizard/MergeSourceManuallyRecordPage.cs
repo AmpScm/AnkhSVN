@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
-        public static readonly string PAGE_NAME = "Merge Source Manually Record";
+        public const string PAGE_NAME = "Merge Source Manually Record";
 
         /// <summary>
         /// Constructor.

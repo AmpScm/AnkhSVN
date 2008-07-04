@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceManuallyRemovePage : MergeSourceBasePage
     {
-        public static readonly string PAGE_NAME = "Merge Source Manually Remove";
+        public const string PAGE_NAME = "Merge Source Manually Remove";
 
         /// <summary>
         /// Constructor.

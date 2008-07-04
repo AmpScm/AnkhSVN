@@ -13,7 +13,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
-        public static readonly string PAGE_NAME = "Merge Source Range of Revisions";
+        public const string PAGE_NAME = "Merge Source Range of Revisions";
 
         /// <summary>
         /// Constructor

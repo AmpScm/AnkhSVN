@@ -11,7 +11,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeOptionsPage : BasePage
     {
-        public static readonly string PAGE_NAME = "Merge Options Page";
+        public const string PAGE_NAME = "Merge Options Page";
         public enum ConflictResolutionOption
         {
             PROMPT,

@@ -14,7 +14,7 @@ namespace Ankh.UI.MergeWizard
     /// <summary>
     /// This class contains utility methods for the UI.
     /// </summary>
-    class UIUtils
+    static class UIUtils
     {
         /// <summary>
         /// Resizes a <code>System.Windows.Forms.ComboBox</code>'s DropDownWidth

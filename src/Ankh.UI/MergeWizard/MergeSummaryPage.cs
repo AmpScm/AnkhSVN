@@ -9,7 +9,7 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     class MergeSummaryPage : BasePage
     {
-        public static readonly string PAGE_NAME = "Merge Summary Page";
+        public const string PAGE_NAME = "Merge Summary Page";
 
         public MergeSummaryPage(MergeWizard wizard)
             : base(wizard, new MergeSummaryPageControl(), PAGE_NAME)
