@@ -191,9 +191,6 @@
     <Compile Include="Commands\OpenFromSubversion.cs" />
     <Compile Include="Commands\OpenInVisualStudio.cs" />
     <Compile Include="Commands\RepositoryExplorer\AddRepositoryRootCommand.cs" />
-    <Compile Include="Commands\AddSolutionToRepositoryCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\SolutionUpdateCommand.cs" />
     <Compile Include="Commands\RepositoryExplorer\ViewRepositoryFileCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\AddWorkingCopyExplorerRootCommand.cs" />
