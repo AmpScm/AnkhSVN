@@ -465,6 +465,15 @@ namespace Ankh.UI.MergeWizard {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No log entries available..
+        /// </summary>
+        internal static string NoLogItems {
+            get {
+                return ResourceManager.GetString("NoLogItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no revisions to unblock from the selected path..
         /// </summary>
         internal static string NoRevisionsToUnblock {

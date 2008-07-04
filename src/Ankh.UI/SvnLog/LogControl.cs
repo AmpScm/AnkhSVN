@@ -22,6 +22,13 @@ namespace Ankh.UI.SvnLog
         {
             InitializeComponent();
             ItemSource = logRevisionControl1;
+            logRevisionControl1.BatchDone += new EventHandler<BatchFinishedEventArgs>(logRevisionControl1_BatchDone);
+        }
+
+        void logRevisionControl1_BatchDone(object sender, BatchFinishedEventArgs e)
+        {
+            if (BatchFinished != null)
+                BatchFinished(sender, e);
         }
 
 
@@ -199,6 +206,8 @@ namespace Ankh.UI.SvnLog
             splitContainer2.Panel1Collapsed = !_changedPathsVisible;
             splitContainer2.Panel2Collapsed = !_logMessageVisible;
         }
+
+        public event EventHandler<BatchFinishedEventArgs> BatchFinished;
 
         public event SelectionChangedEventHandler<ISvnLogItem> SelectionChanged;
 

@@ -281,7 +281,21 @@ namespace Ankh.UI.SvnLog
 				_running = false;
             }
 			HideBusyIndicator();
+            OnBatchDone();
         }
+
+        void OnBatchDone()
+        {
+            if (InvokeRequired)
+                BeginInvoke(new DoIt(OnBatchDone));
+            else
+            {
+                if (BatchDone != null)
+                    BatchDone(this, new BatchFinishedEventArgs(_logItemList.Count));
+            }
+        }
+
+        internal event EventHandler<BatchFinishedEventArgs> BatchDone;
 
 		void ShowBusyIndicator()
 		{
@@ -449,6 +463,20 @@ namespace Ankh.UI.SvnLog
 		}
 
         
+    }
+
+    public sealed class BatchFinishedEventArgs : EventArgs
+    {
+        readonly int _totalCount;
+        public BatchFinishedEventArgs(int totalCount)
+        {
+            _totalCount = totalCount;
+        }
+
+        public int TotalCount
+        {
+            get { return _totalCount; }
+        }
     }
 
     public enum LogMode
