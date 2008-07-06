@@ -52,6 +52,8 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.RevertSolutionToRevision:
+                    if (string.IsNullOrEmpty(solSettings.ProjectRoot))
+                        break;
                     SvnItem i = statusCache[solSettings.ProjectRoot];
                     if (i.IsVersioned)
                         count++;
@@ -59,7 +61,7 @@ namespace Ankh.Commands
                 case AnkhCommand.RevertProjectToRevision:
                     foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                     {
-                        if (p.IsSolution)
+                        if (p.IsSolution || string.IsNullOrEmpty(p.FullPath))
                             continue;
 
                         SvnItem ii = statusCache[p.FullPath];
@@ -103,7 +105,7 @@ namespace Ankh.Commands
                 case AnkhCommand.RevertProjectToRevision:
                     foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                     {
-                        if (p.IsSolution)
+                        if (p.IsSolution || string.IsNullOrEmpty(p.FullPath))
                             continue;
                         SvnItem iii = statusCache[p.FullPath];
                         if (iii.IsVersioned)
