@@ -35,21 +35,23 @@ namespace Ankh.Commands
                 return;
             }
 
-            Version v = CurrentVersion;
+            Version version = CurrentVersion;
+            Version vsVersion = new Version(e.GetService<_DTE>(typeof(SDTE)).Version);
+            Version osVersion = Environment.OSVersion.Version;
 
             StringBuilder sb = new StringBuilder();
             sb.Append("http://svc.ankhsvn.net/svc/update-info/");
-            sb.Append(v.ToString(2));
+            sb.Append(version.ToString(2));
             sb.Append(".xml");
             sb.Append("?av=");
-            sb.Append(v.ToString());
+            sb.Append(version);
             sb.Append("&vs=");
-            sb.Append(Uri.EscapeDataString(e.GetService<_DTE>(typeof(SDTE)).Version));
+            sb.Append(vsVersion);
             sb.Append("&os=");
-            sb.Append(Uri.EscapeDataString(Environment.OSVersion.Version.ToString()));
+            sb.Append(osVersion);
             int x = 0;
-            // Create some hashcode that is probably constant and unique but unidentifyable
-            // behind a NAT interface
+            // Create some hashcode that is probably constant and unique for all users
+            // using the same IP address, but not translatable to a single user
             try
             {
                 foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
@@ -73,6 +75,7 @@ namespace Ankh.Commands
             {
                 hwr.AllowAutoRedirect = true;
                 hwr.AllowWriteStreamBuffering = true;
+                hwr.UserAgent = string.Format("AnkhSVN/{0} VisualStudio/{1} Windows/{2}", version, vsVersion, osVersion);
             }
 
             wr.BeginGetResponse(new AsyncCallback(OnResponse), wr);
@@ -80,10 +83,31 @@ namespace Ankh.Commands
 
         private void ShowUpdate(CommandEventArgs e)
         {
-            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+            string[] args = (string[])e.Argument;
+            string title = args[0], header = args[1], description = args[2], url= args[3], urltext=args[4], version = args[5];
 
-            mb.Show("An update is available");
-            //throw new NotImplementedException();
+            using (Ankh.UI.SccManagement.UpdateAvailableDialog uad = new Ankh.UI.SccManagement.UpdateAvailableDialog())
+            {
+                uad.Text = string.Format(uad.Text, title);
+                uad.headLabel.Text = header;
+                //uad.desc
+                uad.linkLabel.Text = urltext;
+                uad.linkLabel.Links.Add(0, urltext.Length).LinkData = url;
+
+                if (!string.IsNullOrEmpty(version))
+                {
+                    uad.newVerLabel.Text = version;
+                    uad.curVerLabel.Text = CurrentVersion.ToString();
+                    uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
+                }
+
+                System.Windows.Forms.Design.IUIService ui = e.GetService<System.Windows.Forms.Design.IUIService>();
+
+                if (ui != null)
+                    ui.ShowDialog(uad);
+                else
+                    uad.ShowDialog();
+            }
         }
 
         public void OnResponse(IAsyncResult ar)
@@ -130,9 +154,10 @@ namespace Ankh.Commands
             doc.LoadXml(body);
 
             string title = NodeText(doc, "/u/i/t");
+            string header = NodeText(doc, "/u/i/h") ?? title;
             string description = NodeText(doc, "/u/i/d");
             string url = NodeText(doc, "/u/i/u");
-            string urltext = NodeText(doc, "/u/i/u");
+            string urltext = NodeText(doc, "/u/i/l");
 
             string version = NodeText(doc, "/u/i/v");            
 
@@ -149,7 +174,7 @@ namespace Ankh.Commands
                 IAnkhCommandService cs = (IAnkhCommandService)_site.GetService(typeof(IAnkhCommandService));
 
                 cs.PostExecCommand(AnkhCommand.CheckForUpdates,
-                    new string[] { title, description, url, urltext, version });
+                    new string[] { title, header, description, url, urltext, version });
             }
         }
 
@@ -158,7 +183,7 @@ namespace Ankh.Commands
             XmlNode node = doc.SelectSingleNode(xpath);
 
             if (node != null)
-                return node.Value;
+                return node.InnerText;
 
             return null;
         }
