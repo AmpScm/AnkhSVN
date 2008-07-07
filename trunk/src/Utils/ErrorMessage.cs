@@ -21,10 +21,10 @@ namespace Utils
         /// </summary>
         /// <param name="ex"></param>
         /// <returns></returns>
-        public static string GetMessage( Exception ex )
+        public static string GetMessage(Exception ex)
         {
             string msg = "";
-            while( ex != null )
+            while (ex != null)
             {
                 msg += ex.GetType().FullName + ": " + Environment.NewLine;
                 msg += ex.Message + Environment.NewLine;
@@ -44,12 +44,12 @@ namespace Utils
         /// <param name="ex"></param>
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
-        public static void SendByMail( string recipient, string subject, Exception ex, 
-            Assembly assembly, StringDictionary additionalInfo )
+        public static void SendByMail(string recipient, string subject, Exception ex,
+            Assembly assembly, StringDictionary additionalInfo)
         {
-            string attributes = GetAttributes( additionalInfo );
+            string attributes = GetAttributes(additionalInfo);
 
-            string msg = GetMessage( ex ) + Environment.NewLine + Environment.NewLine + 
+            string msg = GetMessage(ex) + Environment.NewLine + Environment.NewLine +
                 attributes;
 
             string versionString = assembly == null ? "" : assembly.GetName().Version.ToString();
@@ -57,11 +57,11 @@ namespace Utils
             msg += Environment.NewLine + Environment.NewLine + "Version: " +
                 versionString;
 
-            msg = HttpUtility.UrlEncode( msg ).Replace("+", "%20");
+            msg = HttpUtility.UrlEncode(msg).Replace("+", "%20");
 
-            string command = string.Format( "mailto:{0}?subject={1}&body={2}",
-                recipient, HttpUtility.UrlEncode(subject), 
-                msg );
+            string command = string.Format("mailto:{0}?subject={1}&body={2}",
+                recipient, HttpUtility.UrlEncode(subject),
+                msg);
 
             Debug.WriteLine(command);
             Process p = new Process();
@@ -78,16 +78,16 @@ namespace Utils
         /// <param name="ex"></param>
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
-        public static void SendByWeb( string url, Exception ex, Assembly assembly,
-            StringDictionary additionalInfo )
+        public static void SendByWeb(string url, Exception ex, Assembly assembly,
+            StringDictionary additionalInfo)
         {
             try
             {
-                string msg = GetMessage( ex );
-                string attributes = GetAttributes( additionalInfo );
-                string assemblyVersion = assembly == null ? "" : HttpUtility.UrlEncode( assembly.GetName().Version.ToString());
-                string command = string.Format( "{0}?message={1}&version={2}&{3}", 
-                    url, HttpUtility.UrlEncode( msg ), assemblyVersion, attributes );
+                string msg = GetMessage(ex);
+                string attributes = GetAttributes(additionalInfo);
+                string assemblyVersion = assembly == null ? "" : HttpUtility.UrlEncode(assembly.GetName().Version.ToString());
+                string command = string.Format("{0}?message={1}&version={2}&{3}",
+                    url, HttpUtility.UrlEncode(msg), assemblyVersion, attributes);
 
                 Process p = new Process();
                 p.StartInfo.FileName = command;
@@ -95,9 +95,9 @@ namespace Utils
 
                 p.Start();
             }
-            catch( Exception newex )
+            catch (Exception newex)
             {
-                MessageBox.Show( GetMessage( newex ) );
+                MessageBox.Show(GetMessage(newex));
             }
         }
 
@@ -109,13 +109,13 @@ namespace Utils
         /// <param name="ex"></param>
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
-        public static void QuerySendByMail( string recipient, string subject, Exception ex,
-            Assembly assembly, StringDictionary additionalInfo )
+        public static void QuerySendByMail(string recipient, string subject, Exception ex,
+            Assembly assembly, StringDictionary additionalInfo)
         {
-            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?",
-                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
+            if (MessageBox.Show("An error has occurred. Do you wish to send an error report?",
+                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
             {
-                SendByMail( recipient, subject, ex, assembly, additionalInfo );
+                SendByMail(recipient, subject, ex, assembly, additionalInfo);
             }
 
         }
@@ -127,30 +127,30 @@ namespace Utils
         /// <param name="ex"></param>
         /// <param name="assembly">The assembly where the error originated. This will 
         /// be used to extract version information.</param>
-        public static void QuerySendByWeb( string url, Exception ex, Assembly assembly )
+        public static void QuerySendByWeb(string url, Exception ex, Assembly assembly)
         {
-            string message = GetMessage( ex );
-            if ( MessageBox.Show( "An error has occurred. Do you wish to send an error report?" + 
-                Environment.NewLine + 
+            string message = GetMessage(ex);
+            if (MessageBox.Show("An error has occurred. Do you wish to send an error report?" +
+                Environment.NewLine +
                 "(This will open your default web browser)" + Environment.NewLine + Environment.NewLine +
                 message,
-                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error ) == DialogResult.Yes )
+                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
             {
-                SendByWeb( url, ex, assembly, new StringDictionary() );
+                SendByWeb(url, ex, assembly, new StringDictionary());
             }
 
         }
 
-        private static string GetAttributes( StringDictionary additionalInfo )
+        private static string GetAttributes(StringDictionary additionalInfo)
         {
             if (additionalInfo == null)
                 return "";
 
             StringBuilder builder = new StringBuilder();
-            foreach( DictionaryEntry de in additionalInfo )
+            foreach (DictionaryEntry de in additionalInfo)
             {
-                builder.AppendFormat( "{0}={1}&", HttpUtility.UrlEncode( (string)de.Key ), 
-                    HttpUtility.UrlEncode( (string)de.Value ) );
+                builder.AppendFormat("{0}={1}&", HttpUtility.UrlEncode((string)de.Key),
+                    HttpUtility.UrlEncode((string)de.Value));
             }
 
             return builder.ToString();
