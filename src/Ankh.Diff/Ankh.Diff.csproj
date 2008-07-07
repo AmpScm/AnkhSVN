@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30428</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{62F97060-6A9E-477D-B15B-E1A1F5320039}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ankh.Diff</RootNamespace>
+    <AssemblyName>Ankh.Diff</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ankh.Diff.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\Classes\ApplicationExceptionHandler.cs" />
+    <Compile Include="Common\Classes\Caret.cs" />
+    <Compile Include="Common\Classes\Enumerations.cs" />
+    <Compile Include="Common\Classes\FileName.cs" />
+    <Compile Include="Common\Classes\Finder.cs" />
+    <Compile Include="Common\Classes\ItemClickEventArgs.cs" />
+    <Compile Include="Common\Classes\SettingsEventArgs.cs" />
+    <Compile Include="Common\Classes\SettingsKey.cs" />
+    <Compile Include="Common\Classes\TextBoxFinder.cs" />
+    <Compile Include="Common\Classes\Utilities.cs" />
+    <Compile Include="Common\Classes\VisualStudioInvoker.cs" />
+    <Compile Include="Common\Classes\VisualStyles.cs" />
+    <Compile Include="Common\Classes\WaitCursor.cs" />
+    <Compile Include="Common\Classes\Windows.cs" />
+    <None Include="Common\Classes\XmlKey.cs" />
+    <Compile Include="Common\Components\FormSaver.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\FormSaver.Designer.cs">
+      <DependentUpon>FormSaver.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Components\ListViewEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\ListViewItemMover.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Components\NonSelectButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\RecentItemList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\RecentItemList.Designer.cs">
+      <DependentUpon>RecentItemList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Components\RichTextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Components\TextEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Forms\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\Forms\FindDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\Properties\Resources.Designer.cs" />
+    <Compile Include="DiffUtils\Classes\AddCopyList.cs" />
+    <Compile Include="DiffUtils\Classes\BinaryDiff.cs" />
+    <Compile Include="DiffUtils\Classes\BinaryDiffLines.cs" />
+    <Compile Include="DiffUtils\Classes\DiagonalVector.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiff.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiffFileFilter.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiffHelpers.cs" />
+    <Compile Include="DiffUtils\Classes\EditDataTypes.cs" />
+    <Compile Include="DiffUtils\Classes\Functions.cs" />
+    <Compile Include="DiffUtils\Classes\MyersDiff.cs" />
+    <Compile Include="DiffUtils\Classes\StringHasher.cs" />
+    <Compile Include="DiffUtils\Classes\SubArray.cs" />
+    <Compile Include="DiffUtils\Classes\TextDiff.cs" />
+    <Compile Include="DiffUtils\Controls\DiffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffOptions.cs" />
+    <Compile Include="DiffUtils\Controls\DiffOverview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffViewLines.cs" />
+    <Compile Include="DiffUtils\Controls\DiffViewPosition.cs" />
+    <Compile Include="DiffUtils\Controls\DirDiffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DirDiffTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\GoToDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Properties\Resources.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common\Components\ListViewEx.resx">
+      <DependentUpon>ListViewEx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Components\ListViewItemMover.resx">
+      <DependentUpon>ListViewItemMover.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Components\NonSelectButton.resx">
+      <DependentUpon>NonSelectButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Components\NumericTextBox.resx">
+      <DependentUpon>NumericTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Forms\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Forms\FindDlg.resx">
+      <DependentUpon>FindDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Properties\Resources.resx" />
+    <EmbeddedResource Include="DiffUtils\Controls\DiffControl.resx">
+      <DependentUpon>DiffControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DiffView.resx">
+      <DependentUpon>DiffView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DirDiffControl.resx">
+      <DependentUpon>DirDiffControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DirDiffTreeView.resx">
+      <DependentUpon>DirDiffTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\GoToDlg.resx">
+      <DependentUpon>GoToDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Properties\Resources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.Diff.wxs" />
+    <Content Include="Common\Images\FormSaver.bmp" />
+    <Content Include="Common\Images\Menees.bmp" />
+    <Content Include="Common\Images\NumericTextBox.bmp" />
+    <Content Include="Common\Images\RecentItemList.bmp" />
+    <Content Include="Common\Images\TextEditor.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\16x16.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Changed.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Copy.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Delete.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Deleted.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffControl.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffOverview.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffView.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DirDiffControl.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DirDiffTreeView.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\File.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FileError.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Find.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FindNext.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FindPrev.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FirstDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FolderClosed.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FolderOpen.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\GotoLine.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Inserted.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\LastDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\MissingFile.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\MissingFolder.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\NextDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\NonSelectButton.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\PrevDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Recompare.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\ShowDifferences.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\View.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.Diff.snk" />
+    <None Include="Common\Images\Menees.pspimage" />
+    <None Include="DiffUtils\Docs\BurnsBinaryDiff_Paper.pdf" />
+    <None Include="DiffUtils\Docs\BurnsBinaryDiff_Thesis.pdf" />
+    <None Include="DiffUtils\Docs\MyersDiff.pdf" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
