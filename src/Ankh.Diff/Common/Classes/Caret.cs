@@ -28,169 +28,170 @@ using System.Diagnostics;
 
 namespace Ankh.Diff
 {
-	/// <summary>
-	/// Encapsulates the Win32 API for Carets.
-	/// It inherits from MarshalByRefObject because it
-	/// wraps unmanaged resources and can't be marshaled
-	/// to remote contexts by value.
-	/// </summary>
-	public sealed class Caret : MarshalByRefObject, IDisposable
-	{
-		#region Public Members
+    /// <summary>
+    /// Encapsulates the Win32 API for Carets.
+    /// It inherits from MarshalByRefObject because it
+    /// wraps unmanaged resources and can't be marshaled
+    /// to remote contexts by value.
+    /// </summary>
+    public sealed class Caret : MarshalByRefObject, IDisposable
+    {
+        #region Public Members
 
-		public Caret(Control Ctrl, int iHeight) : this(Ctrl, 2, iHeight)
-		{
-		}
+        public Caret(Control Ctrl, int iHeight)
+            : this(Ctrl, 2, iHeight)
+        {
+        }
 
-		public Caret(Control Ctrl, int iWidth, int iHeight)
-		{
-			m_Ctrl = Ctrl;
-			m_Size = new Size(iWidth, iHeight);
-			m_Position = Point.Empty;
+        public Caret(Control Ctrl, int iWidth, int iHeight)
+        {
+            m_Ctrl = Ctrl;
+            m_Size = new Size(iWidth, iHeight);
+            m_Position = Point.Empty;
 
-			Control.GotFocus += new EventHandler(ControlGotFocus);
-			Control.LostFocus += new EventHandler(ControlLostFocus);
+            Control.GotFocus += new EventHandler(ControlGotFocus);
+            Control.LostFocus += new EventHandler(ControlLostFocus);
 
-			//If the control already has focus, then create the caret.
-			if (Ctrl.Focused)
-			{
-				ControlGotFocus(Ctrl, EventArgs.Empty);
-			}
-		}
+            //If the control already has focus, then create the caret.
+            if (Ctrl.Focused)
+            {
+                ControlGotFocus(Ctrl, EventArgs.Empty);
+            }
+        }
 
-		~Caret()
-		{
-			Dispose(false);
-		}
+        ~Caret()
+        {
+            Dispose(false);
+        }
 
-		public void Dispose()
-		{
-			Dispose(true);
-		}
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
-		public Control Control
-		{
-			get
-			{
-				return m_Ctrl;
-			}
-		}
+        public Control Control
+        {
+            get
+            {
+                return m_Ctrl;
+            }
+        }
 
-		public bool Visible
-		{
-			get
-			{
-				return m_bVisible;
-			}
-			set
-			{
-				if (m_bVisible != value)
-				{
-					m_bVisible = value;
+        public bool Visible
+        {
+            get
+            {
+                return m_bVisible;
+            }
+            set
+            {
+                if (m_bVisible != value)
+                {
+                    m_bVisible = value;
 
-					if (m_bCreatedCaret)
-					{
-						if (value)
-						{
-							Windows.ShowCaret(m_Ctrl);
-						}
-						else
-						{
-							Windows.HideCaret(m_Ctrl);
-						}
-					}
-				}
-			}
-		}
+                    if (m_bCreatedCaret)
+                    {
+                        if (value)
+                        {
+                            Windows.ShowCaret(m_Ctrl);
+                        }
+                        else
+                        {
+                            Windows.HideCaret(m_Ctrl);
+                        }
+                    }
+                }
+            }
+        }
 
-		public Point Position
-		{
-			get
-			{
-				if (m_bCreatedCaret)
-				{
-					Windows.GetCaretPos(ref m_Position);
-				}
-				return m_Position;
-			}
-			set
-			{
-				if (m_bCreatedCaret)
-				{
-					Windows.SetCaretPos(value.X, value.Y);
-				}
-				else
-				{
-					m_Position = value;
-				}
-			}
-		}
+        public Point Position
+        {
+            get
+            {
+                if (m_bCreatedCaret)
+                {
+                    Windows.GetCaretPos(ref m_Position);
+                }
+                return m_Position;
+            }
+            set
+            {
+                if (m_bCreatedCaret)
+                {
+                    Windows.SetCaretPos(value.X, value.Y);
+                }
+                else
+                {
+                    m_Position = value;
+                }
+            }
+        }
 
-		public Size Size
-		{
-			get
-			{
-				return m_Size;
-			}
-		}
+        public Size Size
+        {
+            get
+            {
+                return m_Size;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Members
+        #region Private Members
 
-		private void Dispose(bool bDisposing)
-		{
-			if (bDisposing)
-			{
-				if (m_Ctrl.Focused)
-				{
-					ControlLostFocus(m_Ctrl, EventArgs.Empty);
-				}
+        private void Dispose(bool bDisposing)
+        {
+            if (bDisposing)
+            {
+                if (m_Ctrl.Focused)
+                {
+                    ControlLostFocus(m_Ctrl, EventArgs.Empty);
+                }
 
-				m_Ctrl.GotFocus -= new EventHandler(ControlGotFocus);
-				m_Ctrl.LostFocus -= new EventHandler(ControlLostFocus);
+                m_Ctrl.GotFocus -= new EventHandler(ControlGotFocus);
+                m_Ctrl.LostFocus -= new EventHandler(ControlLostFocus);
 
-				GC.SuppressFinalize(this);
-			}
-			else if (m_bCreatedCaret)
-			{
-				//The GC called our Finalize method, so we only 
-				//need to release unmanaged resources.
-				Windows.DestroyCaret();
-			}
-		}
+                GC.SuppressFinalize(this);
+            }
+            else if (m_bCreatedCaret)
+            {
+                //The GC called our Finalize method, so we only 
+                //need to release unmanaged resources.
+                Windows.DestroyCaret();
+            }
+        }
 
-		private void ControlGotFocus(object sender, EventArgs e)
-		{
-			Debug.Assert(!m_bCreatedCaret, "When the control is getting focus we shouldn't already have a caret.");
+        private void ControlGotFocus(object sender, EventArgs e)
+        {
+            Debug.Assert(!m_bCreatedCaret, "When the control is getting focus we shouldn't already have a caret.");
 
-			m_bCreatedCaret = Windows.CreateCaret(m_Ctrl, m_Size.Width, m_Size.Height);
-			if (m_bCreatedCaret)
-			{
-				Windows.SetCaretPos(m_Position.X, m_Position.Y);
-				Visible = true;
-			}
-		}
+            m_bCreatedCaret = Windows.CreateCaret(m_Ctrl, m_Size.Width, m_Size.Height);
+            if (m_bCreatedCaret)
+            {
+                Windows.SetCaretPos(m_Position.X, m_Position.Y);
+                Visible = true;
+            }
+        }
 
-		private void ControlLostFocus(object sender, EventArgs e)
-		{
-			if (m_bCreatedCaret)
-			{
-				Visible = false;
-				Windows.DestroyCaret();
-			}
-		}
+        private void ControlLostFocus(object sender, EventArgs e)
+        {
+            if (m_bCreatedCaret)
+            {
+                Visible = false;
+                Windows.DestroyCaret();
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Data Members
+        #region Private Data Members
 
-		private Control m_Ctrl;
-		private Size m_Size;
-		private Point m_Position;
-		private bool m_bVisible;
-		private bool m_bCreatedCaret;
+        private Control m_Ctrl;
+        private Size m_Size;
+        private Point m_Position;
+        private bool m_bVisible;
+        private bool m_bCreatedCaret;
 
-		#endregion		
-	}
+        #endregion
+    }
 }
