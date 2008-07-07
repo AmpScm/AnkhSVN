@@ -20,12 +20,12 @@ using System.Drawing;
 
 namespace Ankh.Diff
 {
-	[ToolboxBitmap(typeof(Button))]
-	public sealed class NonSelectButton : Button
-	{
-		public NonSelectButton()
-		{
-			SetStyle(ControlStyles.Selectable, false);
-		}
-	}
+    [ToolboxBitmap(typeof(Button))]
+    public sealed class NonSelectButton : Button
+    {
+        public NonSelectButton()
+        {
+            SetStyle(ControlStyles.Selectable, false);
+        }
+    }
 }

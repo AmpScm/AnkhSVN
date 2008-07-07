@@ -20,91 +20,91 @@ using System.Text;
 
 namespace Ankh.Diff.DiffUtils
 {
-	public enum HashType { HashCode, CRC32, Unique };
+    public enum HashType { HashCode, CRC32, Unique };
 
-	/// <summary>
-	/// Used to get a hash code for a string.
-	/// </summary>
-	internal sealed class StringHasher
-	{
-		private HashType m_eType;
-		private Hashtable m_UniqueTable;
-		private bool m_bIgnoreCase = false;
-		private bool m_bIgnoreWhiteSpace = false;
-		private int m_iLeadingCharactersToIgnore = 0;
+    /// <summary>
+    /// Used to get a hash code for a string.
+    /// </summary>
+    internal sealed class StringHasher
+    {
+        private HashType m_eType;
+        private Hashtable m_UniqueTable;
+        private bool m_bIgnoreCase = false;
+        private bool m_bIgnoreWhiteSpace = false;
+        private int m_iLeadingCharactersToIgnore = 0;
 
-		public StringHasher(HashType eType, bool bIgnoreCase, bool bIgnoreWhiteSpace, int iLeadingCharactersToIgnore)
-		{
-			m_eType = eType;
-			m_bIgnoreCase = bIgnoreCase;
-			m_bIgnoreWhiteSpace = bIgnoreWhiteSpace;
-			m_iLeadingCharactersToIgnore = iLeadingCharactersToIgnore;
+        public StringHasher(HashType eType, bool bIgnoreCase, bool bIgnoreWhiteSpace, int iLeadingCharactersToIgnore)
+        {
+            m_eType = eType;
+            m_bIgnoreCase = bIgnoreCase;
+            m_bIgnoreWhiteSpace = bIgnoreWhiteSpace;
+            m_iLeadingCharactersToIgnore = iLeadingCharactersToIgnore;
 
-			if (m_eType == HashType.Unique)
-			{
-				m_UniqueTable = new Hashtable();
-			}
-		}
+            if (m_eType == HashType.Unique)
+            {
+                m_UniqueTable = new Hashtable();
+            }
+        }
 
-		public int GetHashCode(string strLine)
-		{
-			if (m_bIgnoreWhiteSpace) strLine = strLine.Trim();
+        public int GetHashCode(string strLine)
+        {
+            if (m_bIgnoreWhiteSpace) strLine = strLine.Trim();
 
-			if (m_iLeadingCharactersToIgnore > 0)
-			{
-				if (m_iLeadingCharactersToIgnore >= strLine.Length)
-				{
-					strLine = "";
-				}
-				else
-				{
-					strLine = strLine.Substring(m_iLeadingCharactersToIgnore);
-				}
-			}
+            if (m_iLeadingCharactersToIgnore > 0)
+            {
+                if (m_iLeadingCharactersToIgnore >= strLine.Length)
+                {
+                    strLine = "";
+                }
+                else
+                {
+                    strLine = strLine.Substring(m_iLeadingCharactersToIgnore);
+                }
+            }
 
-			if (m_bIgnoreCase) strLine = strLine.ToUpper();
+            if (m_bIgnoreCase) strLine = strLine.ToUpper();
 
-			switch(m_eType)
-			{
-				case HashType.HashCode:
-					return strLine.GetHashCode();
-				case HashType.CRC32:
-					return GetCRC32(strLine);
-				default:
-					return GetUnique(strLine);
-			}
-		}
+            switch (m_eType)
+            {
+                case HashType.HashCode:
+                    return strLine.GetHashCode();
+                case HashType.CRC32:
+                    return GetCRC32(strLine);
+                default:
+                    return GetUnique(strLine);
+            }
+        }
 
-		//This uses the CRC32 algorithm.  For more info see:
-		//http://www.efg2.com/Lab/Mathematics/CRC.htm.
-		private int GetCRC32(string strLine)
-		{
-			byte[] arBytes = Encoding.Unicode.GetBytes(strLine);
+        //This uses the CRC32 algorithm.  For more info see:
+        //http://www.efg2.com/Lab/Mathematics/CRC.htm.
+        private int GetCRC32(string strLine)
+        {
+            byte[] arBytes = Encoding.Unicode.GetBytes(strLine);
 
-			uint uiResult = 0xFFFFFFFF;
-			int iNumBytes = arBytes.Length;
-			for (int i = 0; i < iNumBytes; i++)
-			{
-				uiResult = (uiResult >> 8) ^ c_arCRC32[ arBytes[i] ^ (uiResult & 0xFF)];
-			}
+            uint uiResult = 0xFFFFFFFF;
+            int iNumBytes = arBytes.Length;
+            for (int i = 0; i < iNumBytes; i++)
+            {
+                uiResult = (uiResult >> 8) ^ c_arCRC32[arBytes[i] ^ (uiResult & 0xFF)];
+            }
 
-			return (int)(~uiResult);
-		}
+            return (int)(~uiResult);
+        }
 
-		private int GetUnique(string strLine)
-		{
-			object obj = m_UniqueTable[strLine];
-			if (obj == null)
-			{
-				int iCode = m_UniqueTable.Count + 1;
-				m_UniqueTable[strLine] = iCode;
-				return iCode;
-			}
-			else
-				return (int)obj;
-		}
+        private int GetUnique(string strLine)
+        {
+            object obj = m_UniqueTable[strLine];
+            if (obj == null)
+            {
+                int iCode = m_UniqueTable.Count + 1;
+                m_UniqueTable[strLine] = iCode;
+                return iCode;
+            }
+            else
+                return (int)obj;
+        }
 
-		private static uint[] c_arCRC32 = 
+        private static uint[] c_arCRC32 = 
 		{ 
 			0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
 			0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -142,5 +142,5 @@ namespace Ankh.Diff.DiffUtils
 			0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF,
 			0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D 
 		};
-	}
+    }
 }

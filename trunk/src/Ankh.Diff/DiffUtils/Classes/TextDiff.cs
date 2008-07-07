@@ -19,57 +19,57 @@ using System.Collections;
 
 namespace Ankh.Diff.DiffUtils
 {
-	/// <summary>
-	/// This class uses the MyersDiff helper class to difference two
-	/// string lists.  It hashes each string in both lists and then 
-	/// differences the resulting integer arrays. 
-	/// </summary>
-	public class TextDiff
-	{
-		#region Public Members
+    /// <summary>
+    /// This class uses the MyersDiff helper class to difference two
+    /// string lists.  It hashes each string in both lists and then 
+    /// differences the resulting integer arrays. 
+    /// </summary>
+    public class TextDiff
+    {
+        #region Public Members
 
-		public TextDiff(HashType eHashType, bool bIgnoreCase, bool bIgnoreWhiteSpace)
-			: this(eHashType, bIgnoreCase, bIgnoreWhiteSpace, 0)
-		{
-		}
+        public TextDiff(HashType eHashType, bool bIgnoreCase, bool bIgnoreWhiteSpace)
+            : this(eHashType, bIgnoreCase, bIgnoreWhiteSpace, 0)
+        {
+        }
 
-		public TextDiff(HashType eHashType, bool bIgnoreCase, bool bIgnoreWhiteSpace, int iLeadingCharactersToIgnore)
-		{
-			m_Hasher = new StringHasher(eHashType, bIgnoreCase, bIgnoreWhiteSpace, iLeadingCharactersToIgnore);
-		}
+        public TextDiff(HashType eHashType, bool bIgnoreCase, bool bIgnoreWhiteSpace, int iLeadingCharactersToIgnore)
+        {
+            m_Hasher = new StringHasher(eHashType, bIgnoreCase, bIgnoreWhiteSpace, iLeadingCharactersToIgnore);
+        }
 
-		public EditScript Execute(IList A, IList B)
-		{
-			int[] arHashA = HashStringList(A);
-			int[] arHashB = HashStringList(B);
+        public EditScript Execute(IList A, IList B)
+        {
+            int[] arHashA = HashStringList(A);
+            int[] arHashB = HashStringList(B);
 
-			MyersDiff Diff = new MyersDiff(arHashA, arHashB);
-			return Diff.Execute();
-		}
+            MyersDiff Diff = new MyersDiff(arHashA, arHashB);
+            return Diff.Execute();
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private int[] HashStringList(IList Lines)
-		{
-			int iNumLines = Lines.Count;
-			int[] arResult = new int[iNumLines];
+        private int[] HashStringList(IList Lines)
+        {
+            int iNumLines = Lines.Count;
+            int[] arResult = new int[iNumLines];
 
-			for (int i = 0; i < iNumLines; i++)
-			{
-				arResult[i] = m_Hasher.GetHashCode((string)Lines[i]);
-			}
+            for (int i = 0; i < iNumLines; i++)
+            {
+                arResult[i] = m_Hasher.GetHashCode((string)Lines[i]);
+            }
 
-			return arResult;
-		}
+            return arResult;
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Member Variables
+        #region Private Member Variables
 
-		private StringHasher m_Hasher;
+        private StringHasher m_Hasher;
 
-		#endregion
-	}
+        #endregion
+    }
 }

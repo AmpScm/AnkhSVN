@@ -25,41 +25,41 @@ using System.ComponentModel;
 
 namespace Ankh.Diff
 {
-	[Description("A delegate type for hooking up RecentItemList.ItemClick notifications.")]
-	public delegate void ItemClickEventHandler(object sender, ItemClickEventArgs e);
+    [Description("A delegate type for hooking up RecentItemList.ItemClick notifications.")]
+    public delegate void ItemClickEventHandler(object sender, ItemClickEventArgs e);
 
-	[Description("The arguments for the RecentItemList.ItemClick event.")]
-	public sealed class ItemClickEventArgs : EventArgs
-	{
-		#region Constructors
+    [Description("The arguments for the RecentItemList.ItemClick event.")]
+    public sealed class ItemClickEventArgs : EventArgs
+    {
+        #region Constructors
 
-		internal ItemClickEventArgs(string strItemName, string[] arStrings)
-		{
-			m_strItemName = strItemName;
-			m_arStrings = arStrings;
-		}
+        internal ItemClickEventArgs(string strItemName, string[] arStrings)
+        {
+            m_strItemName = strItemName;
+            m_arStrings = arStrings;
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Properties
+        #region Public Properties
 
-		public string ItemName
-		{
-			get { return m_strItemName; }
-		}
+        public string ItemName
+        {
+            get { return m_strItemName; }
+        }
 
-		public string[] Strings
-		{
-			get { return m_arStrings; }
-		}
+        public string[] Strings
+        {
+            get { return m_arStrings; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Data Members
+        #region Private Data Members
 
-		private string m_strItemName;
-		private string[] m_arStrings;
+        private string m_strItemName;
+        private string[] m_arStrings;
 
-		#endregion
-	}
+        #endregion
+    }
 }

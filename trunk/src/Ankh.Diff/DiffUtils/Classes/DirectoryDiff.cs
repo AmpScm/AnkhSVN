@@ -20,199 +20,199 @@ using System.Collections;
 
 namespace Ankh.Diff.DiffUtils
 {
-	public class DirectoryDiff
-	{
-		#region Public Members
+    public class DirectoryDiff
+    {
+        #region Public Members
 
-		public DirectoryDiff(bool bShowOnlyInA, bool bShowOnlyInB, bool bShowDifferent, bool bShowSame, bool bRecursive, bool bIgnoreDirectoryComparison, DirectoryDiffFileFilter Filter)
-		{
-			m_bShowOnlyInA = bShowOnlyInA;
-			m_bShowOnlyInB = bShowOnlyInB;
-			m_bShowDifferent = bShowDifferent;
-			m_bShowSame = bShowSame;
-			m_bRecursive = bRecursive;
-			m_bIgnoreDirectoryComparison = bIgnoreDirectoryComparison;
-			m_Filter = Filter;
-		}
+        public DirectoryDiff(bool bShowOnlyInA, bool bShowOnlyInB, bool bShowDifferent, bool bShowSame, bool bRecursive, bool bIgnoreDirectoryComparison, DirectoryDiffFileFilter Filter)
+        {
+            m_bShowOnlyInA = bShowOnlyInA;
+            m_bShowOnlyInB = bShowOnlyInB;
+            m_bShowDifferent = bShowDifferent;
+            m_bShowSame = bShowSame;
+            m_bRecursive = bRecursive;
+            m_bIgnoreDirectoryComparison = bIgnoreDirectoryComparison;
+            m_Filter = Filter;
+        }
 
-		public DirectoryDiffResults Execute(string strA, string strB)
-		{
-			return Execute(new DirectoryInfo(strA), new DirectoryInfo(strB));
-		}
+        public DirectoryDiffResults Execute(string strA, string strB)
+        {
+            return Execute(new DirectoryInfo(strA), new DirectoryInfo(strB));
+        }
 
-		public DirectoryDiffResults Execute(DirectoryInfo A, DirectoryInfo B)
-		{
-			//Create a faux base entry to pass to Execute
-			DirectoryDiffEntry Entry = new DirectoryDiffEntry("", false, true, true, false);
+        public DirectoryDiffResults Execute(DirectoryInfo A, DirectoryInfo B)
+        {
+            //Create a faux base entry to pass to Execute
+            DirectoryDiffEntry Entry = new DirectoryDiffEntry("", false, true, true, false);
 
-			//If the base paths are the same, we don't need to check for file differences.
-			bool bCheckIfFilesAreDifferent = String.Compare(A.FullName, B.FullName, true) != 0;
+            //If the base paths are the same, we don't need to check for file differences.
+            bool bCheckIfFilesAreDifferent = String.Compare(A.FullName, B.FullName, true) != 0;
 
-			Execute(A, B, Entry, bCheckIfFilesAreDifferent);
+            Execute(A, B, Entry, bCheckIfFilesAreDifferent);
 
-			DirectoryDiffResults Results = new DirectoryDiffResults(A, B, Entry.SubEntries, m_bRecursive, m_Filter);
-			return Results;
-		}
+            DirectoryDiffResults Results = new DirectoryDiffResults(A, B, Entry.SubEntries, m_bRecursive, m_Filter);
+            return Results;
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private void Execute(DirectoryInfo A, DirectoryInfo B, DirectoryDiffEntry Entry, bool bCheckIfFilesAreDifferent)
-		{
-			//Get the arrays of files
-			FileInfo[] arAFileInfos, arBFileInfos;
-			if (m_Filter == null)
-			{
-				arAFileInfos = A.GetFiles();
-				arBFileInfos = B.GetFiles();
-				//Sort them
-				Array.Sort(arAFileInfos, FileSystemInfoComparer.Comparer);
-				Array.Sort(arBFileInfos, FileSystemInfoComparer.Comparer);
-			}
-			else
-			{
-				arAFileInfos = m_Filter.Filter(A);
-				arBFileInfos = m_Filter.Filter(B);
-			}
+        private void Execute(DirectoryInfo A, DirectoryInfo B, DirectoryDiffEntry Entry, bool bCheckIfFilesAreDifferent)
+        {
+            //Get the arrays of files
+            FileInfo[] arAFileInfos, arBFileInfos;
+            if (m_Filter == null)
+            {
+                arAFileInfos = A.GetFiles();
+                arBFileInfos = B.GetFiles();
+                //Sort them
+                Array.Sort(arAFileInfos, FileSystemInfoComparer.Comparer);
+                Array.Sort(arBFileInfos, FileSystemInfoComparer.Comparer);
+            }
+            else
+            {
+                arAFileInfos = m_Filter.Filter(A);
+                arBFileInfos = m_Filter.Filter(B);
+            }
 
-			//Diff them
-			DiffFileSystemInfos(arAFileInfos, arBFileInfos, Entry, true, bCheckIfFilesAreDifferent);
+            //Diff them
+            DiffFileSystemInfos(arAFileInfos, arBFileInfos, Entry, true, bCheckIfFilesAreDifferent);
 
-			//Get the arrays of subdirectories
-			DirectoryInfo[] arADirInfos = A.GetDirectories();
-			DirectoryInfo[] arBDirInfos = B.GetDirectories();
-			//Sort them
-			Array.Sort(arADirInfos, FileSystemInfoComparer.Comparer);
-			Array.Sort(arBDirInfos, FileSystemInfoComparer.Comparer);
-			//Diff them
-			DiffFileSystemInfos(arADirInfos, arBDirInfos, Entry, false, bCheckIfFilesAreDifferent);
-		}
+            //Get the arrays of subdirectories
+            DirectoryInfo[] arADirInfos = A.GetDirectories();
+            DirectoryInfo[] arBDirInfos = B.GetDirectories();
+            //Sort them
+            Array.Sort(arADirInfos, FileSystemInfoComparer.Comparer);
+            Array.Sort(arBDirInfos, FileSystemInfoComparer.Comparer);
+            //Diff them
+            DiffFileSystemInfos(arADirInfos, arBDirInfos, Entry, false, bCheckIfFilesAreDifferent);
+        }
 
-		private void DiffFileSystemInfos(FileSystemInfo[] arA, FileSystemInfo[] arB, DirectoryDiffEntry Entry, bool bIsFile, bool bCheckIfFilesAreDifferent)
-		{
-			int iAIndex = 0;
-			int iBIndex = 0;
-			int iNumA = arA.Length;
-			int iNumB = arB.Length;
-			while (iAIndex < iNumA && iBIndex < iNumB)
-			{
-				FileSystemInfo A = arA[iAIndex];
-				FileSystemInfo B = arB[iBIndex];
+        private void DiffFileSystemInfos(FileSystemInfo[] arA, FileSystemInfo[] arB, DirectoryDiffEntry Entry, bool bIsFile, bool bCheckIfFilesAreDifferent)
+        {
+            int iAIndex = 0;
+            int iBIndex = 0;
+            int iNumA = arA.Length;
+            int iNumB = arB.Length;
+            while (iAIndex < iNumA && iBIndex < iNumB)
+            {
+                FileSystemInfo A = arA[iAIndex];
+                FileSystemInfo B = arB[iBIndex];
 
-				int iCompareResult = String.Compare(A.Name, B.Name, true);
+                int iCompareResult = String.Compare(A.Name, B.Name, true);
 
-				if (iCompareResult == 0)
-				{
-					//The item is in both directories
-					if (m_bShowDifferent || m_bShowSame)
-					{
-						bool bDifferent = false;
-						DirectoryDiffEntry NewEntry = new DirectoryDiffEntry(A.Name, bIsFile, true, true, false);
+                if (iCompareResult == 0)
+                {
+                    //The item is in both directories
+                    if (m_bShowDifferent || m_bShowSame)
+                    {
+                        bool bDifferent = false;
+                        DirectoryDiffEntry NewEntry = new DirectoryDiffEntry(A.Name, bIsFile, true, true, false);
 
-						if (bIsFile)
-						{
-							if (bCheckIfFilesAreDifferent)
-							{
-								try
-								{
-									bDifferent = Functions.AreFilesDifferent((FileInfo)A, (FileInfo)B);
-								}
-								catch(Exception ex)
-								{
-									NewEntry.Error = ex.Message;
-								}
-								NewEntry.Different = bDifferent;
-							}
+                        if (bIsFile)
+                        {
+                            if (bCheckIfFilesAreDifferent)
+                            {
+                                try
+                                {
+                                    bDifferent = Functions.AreFilesDifferent((FileInfo)A, (FileInfo)B);
+                                }
+                                catch (Exception ex)
+                                {
+                                    NewEntry.Error = ex.Message;
+                                }
+                                NewEntry.Different = bDifferent;
+                            }
 
-							if ((bDifferent && m_bShowDifferent) || (!bDifferent && m_bShowSame))
-							{
-								Entry.SubEntries.Add(NewEntry);
-							}
-						}
-						else
-						{
-							if (m_bRecursive)
-							{
-								Execute((DirectoryInfo)A, (DirectoryInfo)B, NewEntry, bCheckIfFilesAreDifferent);
-							}
+                            if ((bDifferent && m_bShowDifferent) || (!bDifferent && m_bShowSame))
+                            {
+                                Entry.SubEntries.Add(NewEntry);
+                            }
+                        }
+                        else
+                        {
+                            if (m_bRecursive)
+                            {
+                                Execute((DirectoryInfo)A, (DirectoryInfo)B, NewEntry, bCheckIfFilesAreDifferent);
+                            }
 
-							if (m_bIgnoreDirectoryComparison)
-							{
-								NewEntry.Different = false;
-							}
-							else
-							{
-								bDifferent = NewEntry.Different;
-							}
+                            if (m_bIgnoreDirectoryComparison)
+                            {
+                                NewEntry.Different = false;
+                            }
+                            else
+                            {
+                                bDifferent = NewEntry.Different;
+                            }
 
-							if (m_bIgnoreDirectoryComparison || (bDifferent && m_bShowDifferent) || (!bDifferent && m_bShowSame))
-							{
-								Entry.SubEntries.Add(NewEntry);
-							}
-						}
+                            if (m_bIgnoreDirectoryComparison || (bDifferent && m_bShowDifferent) || (!bDifferent && m_bShowSame))
+                            {
+                                Entry.SubEntries.Add(NewEntry);
+                            }
+                        }
 
-						if (bDifferent)
-						{
-							Entry.Different = true;
-						}
-					}
-					iAIndex++;
-					iBIndex++;
-				}
-				else if (iCompareResult < 0)
-				{
-					//The item is only in A
-					if (m_bShowOnlyInA)
-					{
-						Entry.SubEntries.Add(new DirectoryDiffEntry(A.Name, bIsFile, true, false, false));
-						Entry.Different = true;
-					}
-					iAIndex++;
-				}
-				else //iCompareResult > 0
-				{
-					//The item is only in B
-					if (m_bShowOnlyInB)
-					{
-						Entry.SubEntries.Add(new DirectoryDiffEntry(B.Name, bIsFile, false, true, false));
-						Entry.Different = true;
-					}
-					iBIndex++;
-				}
-			}
+                        if (bDifferent)
+                        {
+                            Entry.Different = true;
+                        }
+                    }
+                    iAIndex++;
+                    iBIndex++;
+                }
+                else if (iCompareResult < 0)
+                {
+                    //The item is only in A
+                    if (m_bShowOnlyInA)
+                    {
+                        Entry.SubEntries.Add(new DirectoryDiffEntry(A.Name, bIsFile, true, false, false));
+                        Entry.Different = true;
+                    }
+                    iAIndex++;
+                }
+                else //iCompareResult > 0
+                {
+                    //The item is only in B
+                    if (m_bShowOnlyInB)
+                    {
+                        Entry.SubEntries.Add(new DirectoryDiffEntry(B.Name, bIsFile, false, true, false));
+                        Entry.Different = true;
+                    }
+                    iBIndex++;
+                }
+            }
 
-			//Add any remaining entries
-			if (iAIndex < iNumA && m_bShowOnlyInA)
-			{
-				for (int i = iAIndex; i < iNumA; i++)
-				{
-					Entry.SubEntries.Add(new DirectoryDiffEntry(arA[i].Name, bIsFile, true, false, false));
-					Entry.Different = true;
-				}
-			}
-			else if (iBIndex < iNumB && m_bShowOnlyInB)
-			{
-				for (int i = iBIndex; i < iNumB; i++)
-				{
-					Entry.SubEntries.Add(new DirectoryDiffEntry(arB[i].Name, bIsFile, false, true, false));
-					Entry.Different = true;
-				}
-			}
-		}
+            //Add any remaining entries
+            if (iAIndex < iNumA && m_bShowOnlyInA)
+            {
+                for (int i = iAIndex; i < iNumA; i++)
+                {
+                    Entry.SubEntries.Add(new DirectoryDiffEntry(arA[i].Name, bIsFile, true, false, false));
+                    Entry.Different = true;
+                }
+            }
+            else if (iBIndex < iNumB && m_bShowOnlyInB)
+            {
+                for (int i = iBIndex; i < iNumB; i++)
+                {
+                    Entry.SubEntries.Add(new DirectoryDiffEntry(arB[i].Name, bIsFile, false, true, false));
+                    Entry.Different = true;
+                }
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Data Members
+        #region Private Data Members
 
-		private bool m_bShowOnlyInA;
-		private bool m_bShowOnlyInB;
-		private bool m_bShowDifferent;
-		private bool m_bShowSame;
-		private bool m_bRecursive;
-		private bool m_bIgnoreDirectoryComparison;
-		private DirectoryDiffFileFilter m_Filter;
+        private bool m_bShowOnlyInA;
+        private bool m_bShowOnlyInB;
+        private bool m_bShowDifferent;
+        private bool m_bShowSame;
+        private bool m_bRecursive;
+        private bool m_bIgnoreDirectoryComparison;
+        private DirectoryDiffFileFilter m_Filter;
 
-		#endregion
-	}
+        #endregion
+    }
 }

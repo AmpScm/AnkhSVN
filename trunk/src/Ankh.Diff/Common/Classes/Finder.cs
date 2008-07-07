@@ -29,112 +29,112 @@ using System.Windows.Forms;
 
 namespace Ankh.Diff
 {
-	//This class isn't sealed, so you can inherit from it
-	//and add your own data members.  Then you can use a
-	//custom IFindDlg implementation to edit your data.
-	public class FindData
-	{
-		#region Public Properties
+    //This class isn't sealed, so you can inherit from it
+    //and add your own data members.  Then you can use a
+    //custom IFindDlg implementation to edit your data.
+    public class FindData
+    {
+        #region Public Properties
 
-		public string Text { get { return m_strText; } set { m_strText = value; } }
-		public bool MatchCase { get { return m_bMatchCase; } set { m_bMatchCase = value; } }
-		public bool SearchUp { get { return m_bSearchUp; } set { m_bSearchUp = value; } }
+        public string Text { get { return m_strText; } set { m_strText = value; } }
+        public bool MatchCase { get { return m_bMatchCase; } set { m_bMatchCase = value; } }
+        public bool SearchUp { get { return m_bSearchUp; } set { m_bSearchUp = value; } }
 
-		#endregion
+        #endregion
 
-		#region Private Data Members
+        #region Private Data Members
 
-		private string m_strText = String.Empty;
-		private bool m_bMatchCase;
-		private bool m_bSearchUp;
+        private string m_strText = String.Empty;
+        private bool m_bMatchCase;
+        private bool m_bSearchUp;
 
-		#endregion
-	}
+        #endregion
+    }
 
-	public abstract class Finder
-	{
-		#region Public Properties
+    public abstract class Finder
+    {
+        #region Public Properties
 
-		public FindData Data
-		{
-			get
-			{
-				if (m_Data == null)
-				{
-					m_Data = new FindData();
-				}
+        public FindData Data
+        {
+            get
+            {
+                if (m_Data == null)
+                {
+                    m_Data = new FindData();
+                }
 
-				return m_Data;
-			}
-			set
-			{
-				m_Data = value;
-			}
-		}
+                return m_Data;
+            }
+            set
+            {
+                m_Data = value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
+        #region Public Methods
 
-		public bool Find(IWin32Window Owner, IFindDlg Dlg)
-		{
-			if (OnDialogExecute(Dlg, Owner, Data))
-			{
-				if (Data.SearchUp)
-					return FindPrevious(Owner, Dlg);
-				else
-					return FindNext(Owner, Dlg);
-			}
+        public bool Find(IWin32Window Owner, IFindDlg Dlg)
+        {
+            if (OnDialogExecute(Dlg, Owner, Data))
+            {
+                if (Data.SearchUp)
+                    return FindPrevious(Owner, Dlg);
+                else
+                    return FindNext(Owner, Dlg);
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool FindNext(IWin32Window Owner, IFindDlg Dlg)
-		{
-			if (Data.Text.Length == 0)
-			{
-				Data.SearchUp = false;
-				return Find(Owner, Dlg);
-			}
-			else
-			{
-				return OnFindNext();
-			}
-		}
+        public bool FindNext(IWin32Window Owner, IFindDlg Dlg)
+        {
+            if (Data.Text.Length == 0)
+            {
+                Data.SearchUp = false;
+                return Find(Owner, Dlg);
+            }
+            else
+            {
+                return OnFindNext();
+            }
+        }
 
-		public bool FindPrevious(IWin32Window Owner, IFindDlg Dlg)
-		{
-			if (Data.Text.Length == 0)
-			{
-				Data.SearchUp = true;
-				return Find(Owner, Dlg);
-			}
-			else
-			{
-				return OnFindPrevious();
-			}
-		}
+        public bool FindPrevious(IWin32Window Owner, IFindDlg Dlg)
+        {
+            if (Data.Text.Length == 0)
+            {
+                Data.SearchUp = true;
+                return Find(Owner, Dlg);
+            }
+            else
+            {
+                return OnFindPrevious();
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Protected Overridable Methods
+        #region Protected Overridable Methods
 
-		protected virtual bool OnDialogExecute(IFindDlg Dlg, IWin32Window Owner, FindData Data)
-		{
-			return Dlg.Execute(Owner, Data);
-		}
+        protected virtual bool OnDialogExecute(IFindDlg Dlg, IWin32Window Owner, FindData Data)
+        {
+            return Dlg.Execute(Owner, Data);
+        }
 
-		protected abstract bool OnFindNext();
-		protected abstract bool OnFindPrevious();
+        protected abstract bool OnFindNext();
+        protected abstract bool OnFindPrevious();
 
-		#endregion
+        #endregion
 
-		#region Private Data Members
+        #region Private Data Members
 
-		//Store a reference to FindData so an external FindData
-		//instance can be shared with multiple Finder instances.
-		private FindData m_Data;
+        //Store a reference to FindData so an external FindData
+        //instance can be shared with multiple Finder instances.
+        private FindData m_Data;
 
-		#endregion
-	}
+        #endregion
+    }
 }
