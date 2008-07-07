@@ -239,12 +239,12 @@ namespace Ankh.Diff
 
         public static bool PlaySound(string strWavFileName)
         {
-            return Windows.PlaySound(strWavFileName);
+            return NativeMethods.PlaySound(strWavFileName);
         }
 
         public static bool PlaySound(int iFrequency, int iDuration)
         {
-            return Windows.Beep(iFrequency, iDuration);
+            return NativeMethods.Beep(iFrequency, iDuration);
         }
 
         public static int Compare(float fX, float fY, float fTolerance)

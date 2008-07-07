@@ -26,38 +26,13 @@ using System.Text;
 
 namespace Ankh.Diff
 {
-    public sealed class Windows
+    internal sealed class NativeMethods
     {
         #region Public SendMessage Methods
 
-        public static int SendMessage(IWin32Window Ctrl, int iMsg, int wParam)
-        {
-            return SendMessage(Ctrl, iMsg, wParam, 0);
-        }
-
-        [CLSCompliant(false)]
         public static int SendMessage(IWin32Window Ctrl, int iMsg, int iWParam, int iLParam)
         {
             return (int)SendMessage(Ctrl.Handle, (IntPtr)iMsg, (IntPtr)iWParam, (IntPtr)iLParam);
-        }
-
-        [CLSCompliant(false)]
-        public static int SendMessage(IWin32Window Ctrl, int iMsg, int wParam, ref int lParam)
-        {
-            IntPtr lParamPtr = (IntPtr)lParam;
-            IntPtr Result = SendMessage(Ctrl.Handle, (IntPtr)iMsg, (IntPtr)wParam, ref lParamPtr);
-            lParam = (int)lParamPtr;
-            return (int)Result;
-        }
-
-        public static int SendMessage(IWin32Window Ctrl, int iMsg, ref int wParam, ref int lParam)
-        {
-            IntPtr wParamPtr = (IntPtr)wParam;
-            IntPtr lParamPtr = (IntPtr)lParam;
-            IntPtr Result = SendMessage(Ctrl.Handle, (IntPtr)iMsg, ref wParamPtr, ref lParamPtr);
-            wParam = (int)wParamPtr;
-            lParam = (int)lParamPtr;
-            return (int)Result;
         }
 
         #endregion
@@ -83,29 +58,9 @@ namespace Ankh.Diff
             }
         }
 
-        [DllImport("User32.dll"), CLSCompliant(false)]
-        public static extern ushort GetKeyState(int virtKey);
-
-        [DllImport("user32.dll")]
-        public static extern bool GetMenuItemRect(IntPtr hWnd, IntPtr hMenu, int Item, ref Rectangle rc);
-
-        [DllImport("User32.dll"), CLSCompliant(false)]
-        public static extern bool SystemParametersInfo(int iAction, int iParam1, ref int riParam2, int iWinIni);
-
-        [DllImport("User32.dll")]
-        public static extern bool SystemParametersInfo(int iAction, int iParam1, int iParam2, int iWinIni);
-
-        [DllImport("Gdi32.dll")]
-        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetDialogBaseUnits();
-
         #endregion
 
         #region Public Scrolling Methods
-
-        [CLSCompliant(false)]
         public static ScrollInfo GetScrollInfo(IWin32Window Ctrl, bool bHorz)
         {
             ScrollInfo Info = ScrollInfo.Create(SIF_ALL);
@@ -118,15 +73,6 @@ namespace Ankh.Diff
             ScrollInfo Info = ScrollInfo.Create(SIF_POS);
             if (GetScrollInfo(Ctrl.Handle, bHorz ? SB_HORZ : SB_VERT, ref Info) != 0)
                 return Info.nPos;
-            else
-                return 0;
-        }
-
-        public static int GetScrollTrackPos(IWin32Window Ctrl, bool bHorz)
-        {
-            ScrollInfo Info = ScrollInfo.Create(SIF_TRACKPOS);
-            if (GetScrollInfo(Ctrl.Handle, bHorz ? SB_HORZ : SB_VERT, ref Info) != 0)
-                return Info.nTrackPos;
             else
                 return 0;
         }
@@ -166,24 +112,6 @@ namespace Ankh.Diff
                 return 0;
         }
 
-        public static int GetScrollMin(IWin32Window Ctrl, bool bHorz)
-        {
-            ScrollInfo Info = ScrollInfo.Create(SIF_RANGE);
-            if (GetScrollInfo(Ctrl.Handle, bHorz ? SB_HORZ : SB_VERT, ref Info) != 0)
-                return (int)Info.nMin;
-            else
-                return 0;
-        }
-
-        public static int GetScrollMax(IWin32Window Ctrl, bool bHorz)
-        {
-            ScrollInfo Info = ScrollInfo.Create(SIF_RANGE);
-            if (GetScrollInfo(Ctrl.Handle, bHorz ? SB_HORZ : SB_VERT, ref Info) != 0)
-                return (int)Info.nMax;
-            else
-                return 0;
-        }
-
         #endregion
 
         #region Public Caret Methods
@@ -203,62 +131,14 @@ namespace Ankh.Diff
             return ShowCaret(Ctrl.Handle);
         }
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         public static extern bool DestroyCaret();
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         public static extern bool SetCaretPos(int X, int Y);
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         public static extern bool GetCaretPos(ref Point lpPoint);
-
-        #endregion
-
-        #region Public File Methods
-
-        public static string GetFullPathName(string strFileName)
-        {
-            StringBuilder strBuffer = new StringBuilder(4096);
-            IntPtr pFilePart = IntPtr.Zero;
-            GetFullPathName(strFileName, strBuffer.Capacity, strBuffer, ref pFilePart);
-            return strBuffer.ToString();
-        }
-
-        public static string GetLongPathName(string strShortPath)
-        {
-            StringBuilder SB = new StringBuilder(260);
-            uint uiResult = GetLongPathName(strShortPath, SB, SB.Capacity);
-            if (uiResult > SB.Capacity)
-            {
-                SB = new StringBuilder((int)uiResult + 1);
-                uiResult = GetLongPathName(strShortPath, SB, SB.Capacity);
-            }
-
-            if (uiResult == 0)
-            {
-                throw new ArgumentException("Unable to get the long path name for: " + strShortPath);
-            }
-
-            return SB.ToString();
-        }
-
-        public static string GetShortPathName(string strLongPath)
-        {
-            StringBuilder SB = new StringBuilder(260);
-            uint uiResult = GetShortPathName(strLongPath, SB, SB.Capacity);
-            if (uiResult > SB.Capacity)
-            {
-                SB = new StringBuilder((int)uiResult + 1);
-                uiResult = GetShortPathName(strLongPath, SB, SB.Capacity);
-            }
-
-            if (uiResult == 0)
-            {
-                throw new ArgumentException("Unable to get the short path name for: " + strLongPath);
-            }
-
-            return SB.ToString();
-        }
 
         #endregion
 
@@ -269,7 +149,7 @@ namespace Ankh.Diff
             return PlaySound(strSound, IntPtr.Zero, 0);
         }
 
-        [DllImport("Kernel32.dll")]
+        [DllImport("kernel32.dll")]
         public static extern bool Beep(int iFrequency, int iDuration);
 
         #endregion
@@ -306,7 +186,7 @@ namespace Ankh.Diff
 
         #region Private Methods
 
-        private Windows()
+        private NativeMethods()
         {
             //So no one can create an instance.
         }
@@ -317,13 +197,13 @@ namespace Ankh.Diff
 
         //We have to import this function multiple ways because sometimes the parameters
         //are pointers (i.e. references), and sometimes they're not.
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, IntPtr msg, ref IntPtr wParam, ref IntPtr lParam);
 
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, IntPtr msg, IntPtr wParam, ref IntPtr lParam);
 
-        [DllImport("User32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, IntPtr msg, IntPtr wParam, IntPtr lParam);
 
         #endregion
@@ -346,29 +226,14 @@ namespace Ankh.Diff
 
         #region Private Caret Methods
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         private static extern bool CreateCaret(IntPtr hWnd, IntPtr hBitmap, int nWidth, int nHeight);
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         private static extern bool HideCaret(IntPtr hWnd);
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         private static extern bool ShowCaret(IntPtr hWnd);
-
-        #endregion
-
-        #region Private File Methods
-
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
-        //I have no idea if the last parameter is correct.
-        //The other parameters work, and that's all I care about.
-        private static extern int GetFullPathName(string strFileName, int iBufSize, StringBuilder strBuffer, ref IntPtr pFilePart);
-
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern uint GetLongPathName(string strShortPath, StringBuilder bufLongPath, int uiBufferSize);
-
-        [DllImport("Kernel32.dll", CharSet = CharSet.Auto)]
-        private static extern uint GetShortPathName(string strLongPath, StringBuilder bufLongPath, int uiBufferSize);
 
         #endregion
 
@@ -381,7 +246,7 @@ namespace Ankh.Diff
 
         #region Private RichEdit Methods
 
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
         private static extern int SendMessage(IntPtr hWnd, IntPtr msg, ref GETTEXTLENGTHEX wParam, IntPtr lParam);
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -546,7 +411,6 @@ namespace Ankh.Diff
 
         #region WinUser.h Types
 
-        [CLSCompliant(false)]
         [StructLayout(LayoutKind.Sequential)]
         public struct ScrollInfo
         {

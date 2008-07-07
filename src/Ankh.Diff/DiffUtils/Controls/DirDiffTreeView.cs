@@ -64,7 +64,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 try
                 {
                     m_bSendingVScroll = true;
-                    Windows.SendMessage(this, Windows.WM_VSCROLL, (int)WParam, 0);
+                    NativeMethods.SendMessage(this, NativeMethods.WM_VSCROLL, (int)WParam, 0);
                 }
                 finally
                 {
@@ -80,7 +80,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 try
                 {
                     m_bSendingKeyDown = true;
-                    Windows.SendMessage(this, Windows.WM_KEYDOWN, (int)KeyCode, (int)KeyData);
+                    NativeMethods.SendMessage(this, NativeMethods.WM_KEYDOWN, (int)KeyCode, (int)KeyData);
                 }
                 finally
                 {
@@ -96,7 +96,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 try
                 {
                     m_bSendingMouseWheel = true;
-                    Windows.SendMessage(this, Windows.WM_MOUSEWHEEL, (int)WParam, (int)LParam);
+                    NativeMethods.SendMessage(this, NativeMethods.WM_MOUSEWHEEL, (int)WParam, (int)LParam);
                 }
                 finally
                 {
@@ -182,12 +182,12 @@ namespace Ankh.Diff.DiffUtils.Controls
         {
             base.WndProc(ref m);
 
-            if (m.Msg == Windows.WM_VSCROLL && !m_bSendingVScroll && VScroll != null)
+            if (m.Msg == NativeMethods.WM_VSCROLL && !m_bSendingVScroll && VScroll != null)
             {
                 Win32MessageEventArgs e = new Win32MessageEventArgs(m.WParam, m.LParam);
                 VScroll(this, e);
             }
-            else if (m.Msg == Windows.WM_MOUSEWHEEL && !m_bSendingMouseWheel && MouseWheelMsg != null)
+            else if (m.Msg == NativeMethods.WM_MOUSEWHEEL && !m_bSendingMouseWheel && MouseWheelMsg != null)
             {
                 Win32MessageEventArgs e = new Win32MessageEventArgs(m.WParam, m.LParam);
                 MouseWheelMsg(this, e);
