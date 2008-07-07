@@ -22,12 +22,20 @@ namespace Ankh.Commands
             // Always available
         }
 
+        static Version CurrentVersion
+        {
+            get { return typeof(CheckForUpdates).Assembly.GetName().Version; }
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             if (e.Argument != null)
+            {
                 ShowUpdate(e);
+                return;
+            }
 
-            Version v = typeof(CheckForUpdates).Assembly.GetName().Version;
+            Version v = CurrentVersion;
 
             StringBuilder sb = new StringBuilder();
             sb.Append("http://svc.ankhsvn.net/svc/update-info/");
@@ -37,7 +45,8 @@ namespace Ankh.Commands
             sb.Append(v.ToString());
             sb.Append("&vs=");
             sb.Append(Uri.EscapeDataString(e.GetService<_DTE>(typeof(SDTE)).Version));
-
+            sb.Append("&os=");
+            sb.Append(Uri.EscapeDataString(Environment.OSVersion.Version.ToString()));
             int x = 0;
             // Create some hashcode that is probably constant and unique but unidentifyable
             // behind a NAT interface
@@ -125,15 +134,22 @@ namespace Ankh.Commands
             string url = NodeText(doc, "/u/i/u");
             string urltext = NodeText(doc, "/u/i/u");
 
-            string version = NodeText(doc, "/u/i/v");
+            string version = NodeText(doc, "/u/i/v");            
 
             if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(description))
             {
+                if (!string.IsNullOrEmpty(version))
+                {
+                    Version v = new Version(version);
+
+                    if (v <= CurrentVersion)
+                        return;
+                }
+
                 IAnkhCommandService cs = (IAnkhCommandService)_site.GetService(typeof(IAnkhCommandService));
 
                 cs.PostExecCommand(AnkhCommand.CheckForUpdates,
                     new string[] { title, description, url, urltext, version });
-
             }
         }
 
