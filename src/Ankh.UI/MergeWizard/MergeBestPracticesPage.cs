@@ -18,9 +18,9 @@ namespace Ankh.UI.MergeWizard
         public const string PAGE_NAME = "Merge Best Practices Page";
 
         public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(Resources.ReadyForMerge,
-            WizardMessage.NONE);
+            WizardMessage.MessageType.NONE);
         public static readonly WizardMessage NOT_READY_FOR_MERGE = new WizardMessage(Resources.NotReadyForMerge,
-            WizardMessage.ERROR);
+            WizardMessage.MessageType.ERROR);
 
         /// <summary>
         /// Enumeration for the best practices checks performed by AnkhSVN.
