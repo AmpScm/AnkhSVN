@@ -93,11 +93,11 @@ namespace Ankh.Diff
                     {
                         if (value)
                         {
-                            Windows.ShowCaret(m_Ctrl);
+                            NativeMethods.ShowCaret(m_Ctrl);
                         }
                         else
                         {
-                            Windows.HideCaret(m_Ctrl);
+                            NativeMethods.HideCaret(m_Ctrl);
                         }
                     }
                 }
@@ -110,7 +110,7 @@ namespace Ankh.Diff
             {
                 if (m_bCreatedCaret)
                 {
-                    Windows.GetCaretPos(ref m_Position);
+                    NativeMethods.GetCaretPos(ref m_Position);
                 }
                 return m_Position;
             }
@@ -118,7 +118,7 @@ namespace Ankh.Diff
             {
                 if (m_bCreatedCaret)
                 {
-                    Windows.SetCaretPos(value.X, value.Y);
+                    NativeMethods.SetCaretPos(value.X, value.Y);
                 }
                 else
                 {
@@ -157,7 +157,7 @@ namespace Ankh.Diff
             {
                 //The GC called our Finalize method, so we only 
                 //need to release unmanaged resources.
-                Windows.DestroyCaret();
+                NativeMethods.DestroyCaret();
             }
         }
 
@@ -165,10 +165,10 @@ namespace Ankh.Diff
         {
             Debug.Assert(!m_bCreatedCaret, "When the control is getting focus we shouldn't already have a caret.");
 
-            m_bCreatedCaret = Windows.CreateCaret(m_Ctrl, m_Size.Width, m_Size.Height);
+            m_bCreatedCaret = NativeMethods.CreateCaret(m_Ctrl, m_Size.Width, m_Size.Height);
             if (m_bCreatedCaret)
             {
-                Windows.SetCaretPos(m_Position.X, m_Position.Y);
+                NativeMethods.SetCaretPos(m_Position.X, m_Position.Y);
                 Visible = true;
             }
         }
@@ -178,7 +178,7 @@ namespace Ankh.Diff
             if (m_bCreatedCaret)
             {
                 Visible = false;
-                Windows.DestroyCaret();
+                NativeMethods.DestroyCaret();
             }
         }
 

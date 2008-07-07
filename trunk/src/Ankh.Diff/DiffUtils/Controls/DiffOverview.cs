@@ -189,7 +189,7 @@ namespace Ankh.Diff.DiffUtils.Controls
             get
             {
                 CreateParams P = base.CreateParams;
-                Windows.SetBorderStyle(P, m_BorderStyle);
+                NativeMethods.SetBorderStyle(P, m_BorderStyle);
                 return P;
             }
         }

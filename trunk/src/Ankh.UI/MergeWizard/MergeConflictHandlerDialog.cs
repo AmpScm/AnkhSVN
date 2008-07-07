@@ -100,8 +100,8 @@ namespace Ankh.UI.MergeWizard
 
             string strCaptionA = "Mine";
             string strCaptionB = "Theirs";
-            Ankh.Diff.FileName fnA = new Ankh.Diff.FileName(mine);
-            Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
+            //Ankh.Diff.FileName fnA = new Ankh.Diff.FileName(mine);
+            //Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl.SetData(A, B, Script, strCaptionA, strCaptionB);
         }
 

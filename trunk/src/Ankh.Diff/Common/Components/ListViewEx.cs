@@ -67,7 +67,7 @@ namespace Ankh.Diff
         /// </summary>
         public int GetActualColumnWidth(ColumnHeader Header)
         {
-            return Windows.SendMessage(this, Windows.LVM_GETCOLUMNWIDTH, Header.Index, 0);
+            return NativeMethods.SendMessage(this, NativeMethods.LVM_GETCOLUMNWIDTH, Header.Index, 0);
         }
 
         public void AutoSizeColumn(ColumnHeader Column)
@@ -135,7 +135,7 @@ namespace Ankh.Diff
             //3.  We don't want the event to fire again after a double-click launches a modal, that
             //    gets closed, and then someone tries to check or uncheck the item.  Somehow in
             //    .NET 1.0 that reflects a WM_LBUTTONUP message and fires the OnDoubleClick override!
-            if (M.Msg == Windows.WM_LBUTTONDBLCLK)
+            if (M.Msg == NativeMethods.WM_LBUTTONDBLCLK)
             {
                 m_bDoubleClickEventFired = false;
                 m_bInDoubleClick = true;
@@ -223,7 +223,7 @@ namespace Ankh.Diff
             if (Columns.Count > 0)
             {
                 ListViewItem Item = Items[iIndex];
-                int iScrollPos = Windows.GetScrollPos(this, true);
+                int iScrollPos = NativeMethods.GetScrollPos(this, true);
                 int iPX = pt.X + iScrollPos;
 
                 int iImageWidth = StateImageList != null ? StateImageList.ImageSize.Width : 16;

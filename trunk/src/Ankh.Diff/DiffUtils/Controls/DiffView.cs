@@ -124,7 +124,7 @@ namespace Ankh.Diff.DiffUtils.Controls
         {
             get
             {
-                return Windows.GetScrollPos(this, false);
+                return NativeMethods.GetScrollPos(this, false);
             }
             set
             {
@@ -137,7 +137,7 @@ namespace Ankh.Diff.DiffUtils.Controls
         {
             get
             {
-                return Windows.GetScrollPos(this, true);
+                return NativeMethods.GetScrollPos(this, true);
             }
             set
             {
@@ -746,19 +746,19 @@ namespace Ankh.Diff.DiffUtils.Controls
             get
             {
                 CreateParams P = base.CreateParams;
-                P.Style = P.Style | Windows.WS_VSCROLL | Windows.WS_HSCROLL;
-                Windows.SetBorderStyle(P, m_BorderStyle);
+                P.Style = P.Style | NativeMethods.WS_VSCROLL | NativeMethods.WS_HSCROLL;
+                NativeMethods.SetBorderStyle(P, m_BorderStyle);
                 return P;
             }
         }
 
         protected override void WndProc(ref System.Windows.Forms.Message m)
         {
-            if (m.Msg == Windows.WM_VSCROLL || m.Msg == Windows.WM_HSCROLL)
+            if (m.Msg == NativeMethods.WM_VSCROLL || m.Msg == NativeMethods.WM_HSCROLL)
             {
-                bool bHorz = (m.Msg == Windows.WM_HSCROLL);
+                bool bHorz = (m.Msg == NativeMethods.WM_HSCROLL);
 
-                Windows.ScrollInfo Info = Windows.GetScrollInfo(this, bHorz);
+                NativeMethods.ScrollInfo Info = NativeMethods.GetScrollInfo(this, bHorz);
                 int iNewPos = Info.nPos;
                 int iOriginalPos = iNewPos;
 
@@ -766,25 +766,25 @@ namespace Ankh.Diff.DiffUtils.Controls
                 ushort usSBCode = (ushort)((int)m.WParam & 0xFFFF);
                 switch (usSBCode)
                 {
-                    case Windows.SB_TOP: //SB_LEFT
+                    case NativeMethods.SB_TOP: //SB_LEFT
                         iNewPos = Info.nMin;
                         break;
-                    case Windows.SB_BOTTOM: //SB_RIGHT
+                    case NativeMethods.SB_BOTTOM: //SB_RIGHT
                         iNewPos = Info.nMax;
                         break;
-                    case Windows.SB_LINEUP: //SB_LINELEFT;
+                    case NativeMethods.SB_LINEUP: //SB_LINELEFT;
                         iNewPos--;
                         break;
-                    case Windows.SB_LINEDOWN: //SB_LINERIGHT
+                    case NativeMethods.SB_LINEDOWN: //SB_LINERIGHT
                         iNewPos++;
                         break;
-                    case Windows.SB_PAGEUP: //SB_PAGELEFT
+                    case NativeMethods.SB_PAGEUP: //SB_PAGELEFT
                         iNewPos -= (int)Info.nPage;
                         break;
-                    case Windows.SB_PAGEDOWN: //SB_PAGERIGHT
+                    case NativeMethods.SB_PAGEDOWN: //SB_PAGERIGHT
                         iNewPos += (int)Info.nPage;
                         break;
-                    case Windows.SB_THUMBTRACK:
+                    case NativeMethods.SB_THUMBTRACK:
                         iNewPos = Info.nTrackPos;
                         break;
                 }
@@ -799,12 +799,12 @@ namespace Ankh.Diff.DiffUtils.Controls
                 base.WndProc(ref m);
             }
 
-            if (m.Msg == Windows.WM_GETDLGCODE)
+            if (m.Msg == NativeMethods.WM_GETDLGCODE)
             {
                 //I've since learned that the .NET way to do this is to
                 //override IsInputKey and return true for the arrow keys.
                 //But this works, and I don't feel like recoding and testing.
-                m.Result = (IntPtr)((int)m.Result + Windows.DLGC_WANTARROWS);
+                m.Result = (IntPtr)((int)m.Result + NativeMethods.DLGC_WANTARROWS);
             }
         }
 
@@ -879,7 +879,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                     break;
                 case Keys.PageUp:
                     {
-                        int iPage = Windows.GetScrollPage(this, false);
+                        int iPage = NativeMethods.GetScrollPage(this, false);
                         if (bShift)
                         {
                             ExtendSelection(-iPage, 0);
@@ -893,7 +893,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                     break;
                 case Keys.PageDown:
                     {
-                        int iPage = Windows.GetScrollPage(this, false);
+                        int iPage = NativeMethods.GetScrollPage(this, false);
                         if (bShift)
                         {
                             ExtendSelection(iPage, 0);
@@ -1343,22 +1343,22 @@ namespace Ankh.Diff.DiffUtils.Controls
             //Vertical
             int iPage = ClientSize.Height / LineHeight;
             int iMax = m_Lines != null ? m_Lines.Count - 1 : 0;
-            Windows.SetScrollPageAndRange(this, false, 0, iMax, iPage);
+            NativeMethods.SetScrollPageAndRange(this, false, 0, iMax, iPage);
 
             //Horizontal
             iPage = ClientSize.Width / CharWidth;
             //Don't subtract 1 here because it's necessary to see 
             //everything when the client size is small.
             iMax = m_Lines != null ? m_Lines.LongestStringLength : 0;
-            Windows.SetScrollPageAndRange(this, true, 0, iMax, iPage);
+            NativeMethods.SetScrollPageAndRange(this, true, 0, iMax, iPage);
         }
 
         private int UpdateScrollPos(int iNewPos, bool bHorz)
         {
             //Set the position and then retrieve it.  Due to adjustments by Windows 
             //(e.g. if Pos is > Max) it may not be the same as the value set.
-            Windows.SetScrollPos(this, bHorz, iNewPos);
-            return Windows.GetScrollPos(this, bHorz);
+            NativeMethods.SetScrollPos(this, bHorz, iNewPos);
+            return NativeMethods.GetScrollPos(this, bHorz);
         }
 
         private void ScrollVertically(int iNewPos, int iOriginalPos)
@@ -1369,7 +1369,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 int iNumPixels = LineHeight * (iOriginalPos - iPos);
                 if (iNumPixels < ClientSize.Height)
                 {
-                    Windows.ScrollWindow(this, 0, iNumPixels);
+                    NativeMethods.ScrollWindow(this, 0, iNumPixels);
                 }
                 else
                 {
@@ -1413,7 +1413,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                     //To make this smooth and correct, we also set the scroll bar
                     //Page size and calculate X in OnPaint using the integral
                     //CharWidth.
-                    Windows.ScrollWindow(this, iNumPixels, 0, ref R, ref R);
+                    NativeMethods.ScrollWindow(this, iNumPixels, 0, ref R, ref R);
                 }
                 else
                 {

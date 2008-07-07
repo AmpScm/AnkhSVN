@@ -42,21 +42,10 @@
   <ItemGroup>
     <Compile Include="Common\Classes\Caret.cs" />
     <Compile Include="Common\Classes\Enumerations.cs" />
-    <Compile Include="Common\Classes\FileName.cs" />
     <Compile Include="Common\Classes\Finder.cs" />
-    <Compile Include="Common\Classes\ItemClickEventArgs.cs" />
-    <Compile Include="Common\Classes\SettingsEventArgs.cs" />
     <Compile Include="Common\Classes\SettingsKey.cs" />
-    <Compile Include="Common\Classes\TextBoxFinder.cs" />
     <Compile Include="Common\Classes\Utilities.cs" />
     <Compile Include="Common\Classes\Windows.cs" />
-    <None Include="Common\Classes\XmlKey.cs" />
-    <Compile Include="Common\Components\FormSaver.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Components\FormSaver.Designer.cs">
-      <DependentUpon>FormSaver.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Components\ListViewEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -67,18 +56,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Components\NumericTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Components\RecentItemList.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Components\RecentItemList.Designer.cs">
-      <DependentUpon>RecentItemList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Components\RichTextBoxEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Components\TextEditor.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Common\Forms\FindDlg.cs">
@@ -174,7 +151,6 @@
     <Content Include="Common\Images\Menees.bmp" />
     <Content Include="Common\Images\NumericTextBox.bmp" />
     <Content Include="Common\Images\RecentItemList.bmp" />
-    <Content Include="Common\Images\TextEditor.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\16x16.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Changed.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Copy.bmp" />
@@ -207,7 +183,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Diff.snk" />
-    <None Include="Common\Images\Menees.pspimage" />
     <None Include="DiffUtils\Docs\BurnsBinaryDiff_Paper.pdf" />
     <None Include="DiffUtils\Docs\BurnsBinaryDiff_Thesis.pdf" />
     <None Include="DiffUtils\Docs\MyersDiff.pdf" />
