@@ -93,7 +93,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             }
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void AddSolutionToRepositoryCommand()
         {
             mocks = new MockRepository();
@@ -109,7 +109,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             {
                 CommandTester.TestExecution(AnkhCommand.AddSolutionToRepository);
             }
-        }
+        }*/
 
         [TestMethod]
         public void AddWorkingCopyExplorerRootCommand()
