@@ -165,9 +165,9 @@ namespace Ankh.UI.MergeWizard
                     dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
 
                     dialog.ShowDialog(this.Form);
-
-                    ((WizardDialog)Form).EnablePageAndButtons(true);
                 }
+
+                ((WizardDialog)Form).EnablePageAndButtons(true);
 
                 return false;
             }
@@ -337,6 +337,8 @@ namespace Ankh.UI.MergeWizard
             {
                 _mergeActions = null;
                 _resolvedMergeConflicts = null;
+
+
             }
         }
 
