@@ -151,34 +151,49 @@ namespace Ankh.UI.MergeWizard
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
-            ((WizardDialog)Form).EnablePageAndButtons(false);
+            bool status = false;
 
-            if (PerformDryRun)
+            try
             {
-                PerformMerge();
+                ((WizardDialog)Form).EnablePageAndButtons(false);
 
-                if (_mergeActions != null && _resolvedMergeConflicts != null)
+                if (PerformDryRun)
                 {
-                    MergeResultsDialog dialog = new MergeResultsDialog();
+                    PerformMerge();
 
-                    dialog.MergeActions = MergeActions;
-                    dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
+                    if (_mergeActions != null && _resolvedMergeConflicts != null)
+                    {
+                        MergeResultsDialog dialog = new MergeResultsDialog();
 
-                    dialog.ShowDialog(this.Form);
+                        dialog.MergeActions = MergeActions;
+                        dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
+
+                        dialog.ShowDialog(this.Form);
+                    }
+
+                    status = false;
                 }
+                else
+                {
+                    PerformMerge();
 
-                ((WizardDialog)Form).EnablePageAndButtons(true);
+                    this.Form.DialogResult = DialogResult.OK;
 
-                return false;
+                    status = true;
+                }
             }
-            else
+            catch (Exception e)
             {
-                PerformMerge();
+                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(e.InnerException.Message, WizardMessage.MessageType.ERROR);
 
-                this.Form.DialogResult = DialogResult.OK;
-
-                return true;
+                status = false;
             }
+            finally
+            {
+                ((WizardDialog)Form).EnablePageAndButtons(true);
+            }
+
+            return status;
         }
 
         public void PerformMerge()
@@ -291,8 +306,6 @@ namespace Ankh.UI.MergeWizard
                                     SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
                                     Collection<SvnMergesEligibleEventArgs> availableMerges;
 
-                                    lArgs.ThrowOnError = false;
-
                                     ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
                                         SvnUriTarget.FromString(MergeSource), lArgs, out availableMerges);
 
@@ -337,8 +350,6 @@ namespace Ankh.UI.MergeWizard
             {
                 _mergeActions = null;
                 _resolvedMergeConflicts = null;
-
-
             }
         }
 

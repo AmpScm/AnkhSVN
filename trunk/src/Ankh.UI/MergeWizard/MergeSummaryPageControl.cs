@@ -20,6 +20,8 @@ namespace Ankh.UI.MergeWizard
         {
             if (e.CurrentPage == WizardPage)
             {
+                WizardPage.Message = null;
+
                 PopulateUI();
             }
         }
