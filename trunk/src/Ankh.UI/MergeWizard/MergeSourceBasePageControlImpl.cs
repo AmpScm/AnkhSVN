@@ -21,7 +21,7 @@ namespace Ankh.UI.MergeWizard
         
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
-            WizardMessage.ERROR);
+            WizardMessage.MessageType.ERROR);
         
         /// <summary>
         /// Constructor.
@@ -147,7 +147,7 @@ namespace Ankh.UI.MergeWizard
                 }
                 else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
                 {
-                    WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.ERROR);
+                    WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.MessageType.ERROR);
 
                     WizardPage.IsPageComplete = false;
 
