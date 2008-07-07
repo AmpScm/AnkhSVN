@@ -13,6 +13,8 @@ using SharpSvn;
 using Ankh.ContextServices;
 using Ankh.Xml;
 using System.Windows.Forms.Design;
+using EnvDTE;
+using Microsoft.VisualStudio.Shell.Interop;
 
 
 namespace Ankh
@@ -217,6 +219,13 @@ namespace Ankh
             string message = GetNestedMessages(ex);
             System.Collections.Specialized.StringDictionary additionalInfo =
                 new System.Collections.Specialized.StringDictionary();
+
+
+            _DTE dte = GetService<_DTE>(typeof(SDTE));
+            if (dte != null)
+                additionalInfo.Add("VS-Version", dte.Version);
+
+            additionalInfo.Add("OS-Version", Environment.OSVersion.VersionString);
 
             using (ErrorDialog dlg = new ErrorDialog())
             {
