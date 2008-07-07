@@ -31,7 +31,6 @@ namespace Ankh.Diff
     /// <summary>
     /// A textbox for editing numeric values.
     /// </summary>
-    [ToolboxBitmap(typeof(NumericTextBox), "Images.NumericTextBox.bmp")]
     public sealed class NumericTextBox : TextBox
     {
         #region Constructors

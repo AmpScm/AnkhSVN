@@ -14,6 +14,10 @@
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Diff.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,15 +50,6 @@
     <Compile Include="Common\Classes\SettingsKey.cs" />
     <Compile Include="Common\Classes\Utilities.cs" />
     <Compile Include="Common\Classes\Windows.cs" />
-    <Compile Include="Common\Components\ListViewEx.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Components\ListViewItemMover.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Components\NonSelectButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Common\Components\NumericTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,15 +107,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\Components\ListViewEx.resx">
-      <DependentUpon>ListViewEx.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Components\ListViewItemMover.resx">
-      <DependentUpon>ListViewItemMover.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Components\NonSelectButton.resx">
-      <DependentUpon>NonSelectButton.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Common\Components\NumericTextBox.resx">
       <DependentUpon>NumericTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -147,10 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.Diff.wxs" />
-    <Content Include="Common\Images\FormSaver.bmp" />
-    <Content Include="Common\Images\Menees.bmp" />
-    <Content Include="Common\Images\NumericTextBox.bmp" />
-    <Content Include="Common\Images\RecentItemList.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\16x16.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Changed.bmp" />
     <Content Include="DiffUtils\Controls\Bitmaps\Copy.bmp" />
