@@ -9,6 +9,7 @@ namespace Ankh.Migrate
 {
     public static class Cleanup
     {
+        [CLSCompliant(false)]
         public static void RemoveOldUI(DTE dte, bool fullSearch)
         {
 			foreach (Command c in dte.Commands)
