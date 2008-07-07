@@ -34,7 +34,7 @@
             this.mineRadioButton = new System.Windows.Forms.RadioButton();
             this.postponeRadioButton = new System.Windows.Forms.RadioButton();
             this.diffPanel = new System.Windows.Forms.Panel();
-            this.diffControl = new Menees.DiffUtils.Controls.DiffControl();
+            this.diffControl = new Ankh.Diff.DiffUtils.Controls.DiffControl();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.applyToCheckBox = new System.Windows.Forms.CheckBox();
@@ -193,7 +193,7 @@
         private System.Windows.Forms.RadioButton theirsRadioButton;
         private System.Windows.Forms.RadioButton baseRadioButton;
         private System.Windows.Forms.Panel diffPanel;
-        private Menees.DiffUtils.Controls.DiffControl diffControl;
+        private Ankh.Diff.DiffUtils.Controls.DiffControl diffControl;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox applyToCheckBox;

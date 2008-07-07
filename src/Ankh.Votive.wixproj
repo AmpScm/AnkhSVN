@@ -67,6 +67,7 @@
     </LinkerAdditionalOptions>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Ankh.Diff\Ankh.Diff.wxs" />
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
@@ -84,6 +85,7 @@
     <Compile Include="Utils\Utils.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Ankh.Diff\" />
     <Folder Include="Ankh.Ids\" />
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Migrate\" />
