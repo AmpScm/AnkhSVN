@@ -193,7 +193,9 @@ namespace Ankh.UI.SvnLog
                             target = t;
                             break;
                         }
-                        client.ListMergesEligible(target, RemoteTarget, _mergesEligibleReceiver);
+                        SvnMergesEligibleArgs meArgs = new SvnMergesEligibleArgs();
+                        meArgs.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
+                        client.ListMergesEligible(target, RemoteTarget, meArgs, _mergesEligibleReceiver);
                         break;
                     case LogMode.MergesMerged:
                         string mergedTarget = null;
@@ -202,6 +204,8 @@ namespace Ankh.UI.SvnLog
                             mergedTarget = t;
                             break;
                         }
+                        SvnMergesMergedArgs mmArgs = new SvnMergesMergedArgs();
+                        mmArgs.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
                         client.ListMergesMerged(mergedTarget, RemoteTarget, _mergesMergedReceiver);
                         break;
                 }
@@ -210,8 +214,11 @@ namespace Ankh.UI.SvnLog
 
         void args_SvnError(object sender, SvnErrorEventArgs e)
         {
+            // TODO: replace with specific SvnExceptions when available
             if (e.Exception.SvnErrorCode == SharpSvn.Implementation.SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES)
                 e.Cancel = true; // File not there, prevent exception
+            else if (e.Exception.SvnErrorCode == SharpSvn.Implementation.SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE)
+                e.Cancel = true; // Probably requesting merge against 1.4 server
         }
 
         void ReceiveItem(object sender, SvnLogEventArgs e)
