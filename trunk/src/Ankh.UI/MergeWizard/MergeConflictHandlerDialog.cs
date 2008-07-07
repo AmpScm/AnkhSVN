@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Windows.Forms;
-using Menees.DiffUtils;
+using Ankh.Diff.DiffUtils;
 using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
@@ -100,8 +100,8 @@ namespace Ankh.UI.MergeWizard
 
             string strCaptionA = "Mine";
             string strCaptionB = "Theirs";
-            Menees.FileName fnA = new Menees.FileName(mine);
-            Menees.FileName fnB = new Menees.FileName(theirs);
+            Ankh.Diff.FileName fnA = new Ankh.Diff.FileName(mine);
+            Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl.SetData(A, B, Script, strCaptionA, strCaptionB);
         }
 
