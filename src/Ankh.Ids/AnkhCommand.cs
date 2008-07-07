@@ -47,8 +47,7 @@ namespace Ankh.Ids
         // Raw dump of old commands; to be sorted out
         AddItem,
         AddRepositoryRoot,
-        [Obsolete]
-        AddSolutionToRepository,
+        CheckForUpdates,
         AddWorkingCopyExplorerRoot,
         Blame,
         ChangeAdminDirName,

@@ -631,6 +631,7 @@
         <Button id="Cmd_SccFinishTasks" text="." priority="0" commandWellOnly="true"  />
         <Button id="Cmd_TickRefreshPendingTasks" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_TickRefreshSvnItems" text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
       </Group>
     </MenuRef>
   </UI>
