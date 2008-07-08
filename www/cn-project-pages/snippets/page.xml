@@ -24,7 +24,7 @@
     <component visibility="1" type="Subproject" order="6">
       <title localize="false" />
     </component>
-    <component visibility="3" type="Html" order="7">
+    <component visibility="2" type="Html" order="7">
       <title localize="false">What's new in 2.0</title>
       <filename>HtmlSnippet2.html</filename>
     </component>
