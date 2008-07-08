@@ -30,5 +30,11 @@
     <directory>Tools &amp; admin</directory>
     <ordinal>5</ordinal>
   </page>
+  <page>
+    <id>PpvZJl</id>
+    <name>Screenshots</name>
+    <directory>Screenshots</directory>
+    <ordinal>6</ordinal>
+  </page>
 </structure>
 
