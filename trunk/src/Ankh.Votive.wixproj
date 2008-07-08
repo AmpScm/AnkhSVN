@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <Cultures>
     </Cultures>
-    <DefineConstants>Debug;</DefineConstants>
+    <DefineConstants>Debug;SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\Debug\</OutputPath>
@@ -46,8 +46,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <Cultures>
     </Cultures>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
     <OutputPath>Ankh.Votive\bin\Release\</OutputPath>
