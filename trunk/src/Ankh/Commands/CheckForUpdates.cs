@@ -58,7 +58,10 @@ namespace Ankh.Commands
             Version osVersion = Environment.OSVersion.Version;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("http://svc.ankhsvn.net/svc/update-info/");
+            sb.Append("http://svc.ankhsvn.net/svc/");
+            if (IsDevVersion())
+                sb.Append("dev/");
+            sb.Append("update-info/");
             sb.Append(version.ToString(2));
             sb.Append(".xml");
             sb.Append("?av=");
@@ -67,6 +70,10 @@ namespace Ankh.Commands
             sb.Append(vsVersion);
             sb.Append("&os=");
             sb.Append(osVersion);
+
+            if (IsDevVersion())
+                sb.Append("&dev=1");
+
             sb.AppendFormat(CultureInfo.InvariantCulture, "&iv={0}", interval);
             int x = 0;
             // Create some hashcode that is probably constant and unique for all users
@@ -98,6 +105,22 @@ namespace Ankh.Commands
             }
 
             wr.BeginGetResponse(new AsyncCallback(OnResponse), wr);
+        }
+
+        bool? _isDevVersion;
+        private bool IsDevVersion()
+        {
+            if (_isDevVersion.HasValue)
+                return _isDevVersion.Value;
+
+            _isDevVersion = true;
+            foreach (AssemblyConfigurationAttribute a in typeof(CheckForUpdates).Assembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false))
+            {
+                if (!string.IsNullOrEmpty(a.Configuration))
+                    _isDevVersion = false;
+            }
+
+            return _isDevVersion.Value;
         }
 
         private void ShowUpdate(CommandEventArgs e)
