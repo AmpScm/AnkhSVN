@@ -38,8 +38,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.headLabel = new System.Windows.Forms.Label();
             this.okButton = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.updateInterval = new System.Windows.Forms.ComboBox();
+            this.sameCheck = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.versionPanel.SuspendLayout();
             this.SuspendLayout();
@@ -154,38 +153,20 @@
             this.okButton.Location = new System.Drawing.Point(324, 210);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 3;
+            this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // sameCheck
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.AutoSize = true;
-            this.label3.Enabled = false;
-            this.label3.Location = new System.Drawing.Point(12, 215);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "&Next check:";
-            this.label3.Visible = false;
-            // 
-            // updateInterval
-            // 
-            this.updateInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.updateInterval.Enabled = false;
-            this.updateInterval.FormattingEnabled = true;
-            this.updateInterval.Items.AddRange(new object[] {
-            "Tomorrow",
-            "In one week",
-            "In two weeks",
-            "In four weeks",
-            "Never"});
-            this.updateInterval.Location = new System.Drawing.Point(83, 212);
-            this.updateInterval.Name = "updateInterval";
-            this.updateInterval.Size = new System.Drawing.Size(140, 21);
-            this.updateInterval.TabIndex = 2;
-            this.updateInterval.Visible = false;
+            this.sameCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.sameCheck.AutoSize = true;
+            this.sameCheck.Location = new System.Drawing.Point(12, 214);
+            this.sameCheck.Name = "sameCheck";
+            this.sameCheck.Size = new System.Drawing.Size(163, 17);
+            this.sameCheck.TabIndex = 0;
+            this.sameCheck.Text = "&Don\'t show this update again";
+            this.sameCheck.UseVisualStyleBackColor = true;
             // 
             // UpdateAvailableDialog
             // 
@@ -194,8 +175,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.okButton;
             this.ClientSize = new System.Drawing.Size(411, 245);
-            this.Controls.Add(this.updateInterval);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.sameCheck);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
@@ -224,8 +204,7 @@
         public System.Windows.Forms.Panel versionPanel;
         public System.Windows.Forms.Label newVerLabel;
         public System.Windows.Forms.Label curVerLabel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox updateInterval;
         public System.Windows.Forms.Label bodyLabel;
+        public System.Windows.Forms.CheckBox sameCheck;
     }
 }

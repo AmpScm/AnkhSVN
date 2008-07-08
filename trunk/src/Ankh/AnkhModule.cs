@@ -64,6 +64,8 @@ namespace Ankh
         {
             EnsureService<IAnkhErrorHandler>();
             EnsureService<IAnkhCommandService>();
+
+            CheckForUpdates.MaybePerformUpdateCheck(Context);
         }
     }
 }
