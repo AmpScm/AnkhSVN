@@ -13,7 +13,7 @@
       <title localize="false">See It! (1.X)</title>
       <filename>HtmlSnippet4.html</filename>
     </component>
-    <component visibility="1" type="Html" order="4">
+    <component visibility="3" type="Html" order="4">
       <title localize="false">See It! (2.0)</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
