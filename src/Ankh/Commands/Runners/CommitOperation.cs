@@ -58,6 +58,12 @@ namespace Ankh
             get { return this._items; }
         }
 
+        IEnumerable<SvnItem> _selected;
+        public IEnumerable<SvnItem> SelectedItems
+        {
+            get { return _selected ?? _items; }
+        }
+
         public bool ShowLogMessageDialog()
         {
             IAnkhConfigurationService configSvc = _context.GetService<IAnkhConfigurationService>();
@@ -99,8 +105,12 @@ namespace Ankh
                     }
 
                     _args.LogMessage = dialog.LogMessage;
+                    _selected = dialog.CommitItems;
                 }
             }
+            else
+                _args.LogMessage = "";
+
 
             //this.items = commitContext.CommitItems;
             this.logMessage = _args.LogMessage;
