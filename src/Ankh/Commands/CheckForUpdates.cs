@@ -315,7 +315,7 @@ namespace Ankh.Commands
             IAnkhConfigurationService config = context.GetService<IAnkhConfigurationService>();
             using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
             {
-                int interval = 24 * 7 * 60; // 1 week
+                int interval = 24 * 7; // 1 week
                 object value = rk.GetValue("Interval");
 
                 if(value is int)
@@ -326,7 +326,7 @@ namespace Ankh.Commands
                         return;
                 }
 
-                TimeSpan ts = TimeSpan.FromMinutes(interval);
+                TimeSpan ts = TimeSpan.FromHours(interval);
 
                 
                 value = rk.GetValue("LastCheck");
