@@ -224,11 +224,11 @@ namespace Ankh.Commands
                 return;
 
             // we need to commit to each repository separately
-            ICollection<List<SvnItem>> repositories = SortByRepository(operation.Items);
+            ICollection<List<SvnItem>> repositories = SortByRepository(operation.SelectedItems);
 
             this.commitInfo = null;
 
-            using (DocumentLock dl = tracker.LockDocuments(SvnItem.GetPaths(operation.Items), DocumentLockType.NoReload))
+            using (DocumentLock dl = tracker.LockDocuments(SvnItem.GetPaths(operation.SelectedItems), DocumentLockType.NoReload))
             {
                 dl.MonitorChanges();
 
@@ -265,7 +265,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        static ICollection<List<SvnItem>> SortByRepository(ICollection<SvnItem> items)
+        static ICollection<List<SvnItem>> SortByRepository(IEnumerable<SvnItem> items)
         {
             Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
             foreach (SvnItem item in items)
