@@ -226,6 +226,47 @@ namespace Ankh.VS.Selection
 
         bool GetOtherSccActive()
         {
+            EnsureContexts();
+
+            try
+            {
+                foreach (SccData scc in _otherSccProviderContexts)
+                {
+                    int active;
+                    if (ErrorHandler.Succeeded(Monitor.IsCmdUIContextActive(scc._id, out active)) && active != 0)
+                    {
+                        // Ok, let's ask the service if it has any files under source control?
+
+                        IOleServiceProvider sp = GetService<IOleServiceProvider>();
+                        Guid gService = new Guid(scc._service);
+                        Guid gInterface = typeof(IVsSccProvider).GUID;
+                        IntPtr handle;
+
+                        if (sp == null)
+                            continue;
+
+                        if (ErrorHandler.Succeeded(sp.QueryService(ref gService, ref gInterface, out handle)) && handle != IntPtr.Zero)
+                        {
+                            IVsSccProvider pv = (IVsSccProvider)Marshal.GetObjectForIUnknown(handle);
+                            Marshal.Release(handle);
+
+                            int iManaging;
+                            if (ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
+                            {
+                                if (iManaging != 0)
+                                    return true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            return false;
+        }
+
+        private void EnsureContexts()
+        {
             if (_otherSccProviderContexts == null)
             {
                 List<SccData> sccs = new List<SccData>();
@@ -269,35 +310,6 @@ namespace Ankh.VS.Selection
 
                 _otherSccProviderContexts = sccs.ToArray();
             }
-
-            foreach(SccData scc in _otherSccProviderContexts)
-            {
-                int active;
-                if(ErrorHandler.Succeeded(Monitor.IsCmdUIContextActive(scc._id, out active)) && active != 0)
-                {
-                    // Ok, let's ask the service if it has any files under source control?
-
-                    IOleServiceProvider sp = GetService<IOleServiceProvider>();
-                    Guid gService = new Guid(scc._service);
-                    Guid gInterface = typeof(IVsSccProvider).GUID;
-                    IntPtr handle;
-                    
-                    if(ErrorHandler.Succeeded(sp.QueryService(ref gService, ref gInterface, out handle)) && handle != IntPtr.Zero)
-                    {
-                        IVsSccProvider pv = (IVsSccProvider)Marshal.GetObjectForIUnknown(handle);
-                        Marshal.Release(handle);
-
-                        int iManaging;
-                        if (ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
-                        {
-                            if (iManaging != 0)
-                                return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         private bool GetOtherSccProviderActive()
