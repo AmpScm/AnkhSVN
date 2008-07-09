@@ -22,10 +22,12 @@ namespace Ankh.UI.RepositoryExplorer
         ListItemCollection _items;
         bool _loaded;
         bool _expandAfterLoad;
+        bool _inRepository;
 
-        public RepositoryTreeNode(Uri uri)
+        public RepositoryTreeNode(Uri uri, bool inRepository)
         {
             _uri = uri;
+            _inRepository = inRepository;
         }
 
         public int IconIndex
@@ -37,6 +39,11 @@ namespace Ankh.UI.RepositoryExplorer
         public Uri RawUri
         {
             get { return _uri; }
+        }
+
+        public bool IsRepositoryPath
+        {
+            get { return _inRepository; }
         }
 
         public new void Expand()
@@ -65,7 +72,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             if (Nodes.Count == 0 && _dummy == null)
             {
-                _dummy = new RepositoryTreeNode(RawUri);
+                _dummy = new RepositoryTreeNode(RawUri, false);
                 _dummy.Name = _dummy.Text = "<dummy>";
                 Nodes.Add(_dummy);
             }
