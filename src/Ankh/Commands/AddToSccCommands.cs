@@ -103,6 +103,7 @@ namespace Ankh.Commands
         {
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
             if (scc == null || cache == null || e.Selection.SolutionFilename == null)
                 return;
 
@@ -194,7 +195,7 @@ namespace Ankh.Commands
                             settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
 
                             IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-                            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                            
 
                             if (monitor != null && mapper != null)
                             {
@@ -225,8 +226,6 @@ namespace Ankh.Commands
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
                 return;
-
-            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
 
             if (mapper != null)
             {
