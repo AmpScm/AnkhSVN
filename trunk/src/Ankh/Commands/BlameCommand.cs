@@ -49,7 +49,7 @@ namespace Ankh.Commands
                     e.Visible = e.Enabled = false;
                     return;
 
-                    int count = 0;
+                    /*int count = 0;
                     foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
                     {
                         count++;
@@ -58,7 +58,7 @@ namespace Ankh.Commands
                     }
                     if (count == 1)
                         return;
-                    break;
+                    break;*/
             }
             e.Enabled = false;
         }
