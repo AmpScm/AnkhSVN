@@ -163,6 +163,8 @@ namespace Ankh.Commands
                             {
                                 using (CreateDirectory createDialog = new CreateDirectory())
                                 {
+                                    createDialog.Text = dialog.Text; // Override dialog title with text from other dialog
+
                                     createDialog.NewDirectoryName = dialog.RepositoryAddUrl.ToString();
                                     createDialog.NewDirectoryReadonly = true;
                                     if (createDialog.ShowDialog(e.Context) == DialogResult.OK)
@@ -190,6 +192,15 @@ namespace Ankh.Commands
                             cl.Add(e.Selection.SolutionFilename, aa);
 
                             settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+
+                            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+                            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+
+                            if (monitor != null && mapper != null)
+                            {
+                                // Make sure all visible glyphs are updated to reflect a new working copy
+                                monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
+                            }
                         }
                         else
                         {
