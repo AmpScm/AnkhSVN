@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <!-- Wizard Framework -->
+  <Fragment>
+    <ComponentGroup Id="WizardFramework">
+      <ComponentRef Id="C_WizardFramework.dll"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.SolutionDir)lib\">
+      <Component Id="C_WizardFramework.dll" Guid="7FDBFF55-16BD-440B-8503-516DBD29C538">
+        <File Id="CF_WizardFramework.dll" Name="WizardFramework.dll"
+                    KeyPath="yes" Vital="yes" Checksum="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
+
