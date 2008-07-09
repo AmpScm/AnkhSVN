@@ -230,8 +230,17 @@ namespace Ankh
                     break;
             }
 
-            if(exists)
-                SetState(SvnItemState.Versionable | SvnItemState.Exists, SvnItemState.None);
+            if (exists)
+            {
+                SvnItemState existsState;
+
+                if (status != AnkhStatus.NotVersioned)
+                    existsState = SvnItemState.Exists | SvnItemState.Versionable; // Status retrieved from svn call
+                else
+                    existsState = SvnItemState.Exists; // Status retrieved via another route
+
+                SetState(existsState, SvnItemState.None);
+            }
             else
                 SetState(SvnItemState.None, SvnItemState.Versionable | SvnItemState.Exists);          
             
