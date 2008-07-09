@@ -117,8 +117,9 @@ namespace Ankh.UI.PendingChanges
 
             public SvnDepth CalculateCommitDepth()
             {
-                SvnDepth depth = SvnDepth.Infinity;
+                SvnDepth depth = SvnDepth.Empty;
                 bool requireInfinity = false;
+                bool noDepthInfinity = false;
 
                 foreach (string path in CommitPaths)
                 {
@@ -132,11 +133,14 @@ namespace Ankh.UI.PendingChanges
                             requireInfinity = true;
                         }
                         else
-                            depth = SvnDepth.Empty;
+                            noDepthInfinity = true;
                     }
                 }
 
-                if (requireInfinity && depth != SvnDepth.Infinity)
+                if (requireInfinity && !noDepthInfinity)
+                    depth = SvnDepth.Infinity;
+
+                if (requireInfinity && noDepthInfinity)
                 {
                     // Houston we have a problem.
                     // - Directory deletes require depth infinity
