@@ -71,7 +71,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RepositoryTreeNode rootNode;
 
-            rootNode = new RepositoryTreeNode(null);
+            rootNode = new RepositoryTreeNode(null, false);
             rootNode.Text = RepositoryStrings.RootName;
 
             if (IconMapper != null)
@@ -121,7 +121,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             if (serverNode == null)
             {
-                serverNode = new RepositoryTreeNode(serverUri);
+                serverNode = new RepositoryTreeNode(serverUri, false);
                 serverNode.Text = serverUri.ToString();
 
                 if (IconMapper != null)
@@ -227,7 +227,15 @@ namespace Ankh.UI.RepositoryExplorer
             if (uri == null)
                 throw new ArgumentNullException("uri");
 
-            Uri nUri = SvnTools.GetNormalizedUri(uri);
+            Uri nUri;
+            try
+            {
+                nUri = SvnTools.GetNormalizedUri(uri);
+            }
+            catch(UriFormatException)
+            {
+                return;
+            }
 
             RepositoryTreeNode tn;
             if (_nodeMap.TryGetValue(nUri, out tn))
@@ -475,7 +483,7 @@ namespace Ankh.UI.RepositoryExplorer
                     return reposRoot;
             }
 
-            RepositoryTreeNode rtn = new RepositoryTreeNode(uri);
+            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, true);
             rtn.Text = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
             if (IconMapper != null)
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
@@ -562,7 +570,7 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (parent != null)
                 {
-                    tn = new RepositoryTreeNode(uri);
+                    tn = new RepositoryTreeNode(uri, true);
                     string name = uri.ToString();
                     int nS = name.LastIndexOf('/', name.Length - 2);
 

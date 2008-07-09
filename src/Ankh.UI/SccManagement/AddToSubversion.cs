@@ -120,7 +120,7 @@ namespace Ankh.UI.SccManagement
             else if (!string.IsNullOrEmpty(previousUrl) && Uri.TryCreate(previousUrl, UriKind.Absolute, out u))
             {
                 timer1.Enabled = false;
-                treeView1.AddRoot(u);
+                treeView1.BrowseTo(u);
             }
         }
 
@@ -156,34 +156,22 @@ namespace Ankh.UI.SccManagement
                 textBox1.Text = RepositoryAddUrl.ToString();
         }
 
-        [Obsolete("Remove when SharpSvn fixed")]
-        static Uri Canonicalize(Uri uri)
-        {
-            String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
-            if (path.Length > 0 && (path[path.Length - 1] == '/' || path.IndexOf('\\') >= 0))
-            {
-                Uri u = new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped));
-                // Create a new uri with all / and \ characters at the end removed
-                return new Uri(u, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-            }
-
-            return uri;
-        }
-
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             UpdateUrlPreview();
             errorProvider1.SetError(treeView1, null);
-
 
             if (treeView1.SelectedNode != null && treeView1.SelectedNode.RawUri != null)
             {
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.ThrowOnError=false;
                 Collection<SvnInfoEventArgs> info;
-                if (Client.GetInfo(new SvnUriTarget(Canonicalize(treeView1.SelectedNode.RawUri)), ia, out info))
+                if (treeView1.SelectedNode.IsRepositoryPath || Client.GetInfo(new SvnUriTarget(treeView1.SelectedNode.RawUri), ia, out info))
                     createFolderButton.Enabled = true;
-                else createFolderButton.Enabled = false;
+                else 
+                    createFolderButton.Enabled = false;
+
+                repositoryUrl.Text = treeView1.SelectedNode.RawUri.AbsoluteUri;
             }
             else
                 createFolderButton.Enabled = false;
