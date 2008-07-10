@@ -518,6 +518,51 @@ namespace Ankh.StatusCache
             }
         }
 
+        public IList<SvnItem> GetCachedBelow(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+            
+            lock (_lock)
+            {
+                List<SvnItem> items = new List<SvnItem>();
+
+                foreach (SvnItem v in _map.Values)
+                {
+                    string name = v.FullPath;
+                    if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
+                        items.Add(v);
+                }
+
+                return items;
+            }
+        }
+
+        public IList<SvnItem> GetCachedBelow(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                SortedList<string, SvnItem> items = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+
+                foreach (string path in paths)
+                {
+                    foreach (SvnItem v in _map.Values)
+                    {
+                        string name = v.FullPath;
+                        if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
+                        {
+                            items[v.FullPath] = v;
+                        }
+                    }
+                }
+
+                return new List<SvnItem>(items.Values);
+            }
+        }
+
         /// <summary>
         /// Marks the specified file dirty
         /// </summary>
