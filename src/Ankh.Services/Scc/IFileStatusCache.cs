@@ -67,6 +67,9 @@ namespace Ankh.Scc
 
         void MarkDirtyRecursive(string path);
 
+        IList<SvnItem> GetCachedBelow(string path);
+        IList<SvnItem> GetCachedBelow(IEnumerable<string> paths);
+
         void SetSolutionContained(string path, bool contained);
     }
 }

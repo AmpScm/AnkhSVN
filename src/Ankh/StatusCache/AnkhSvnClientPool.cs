@@ -7,29 +7,27 @@ using SharpSvn;
 using Ankh.Scc;
 using Ankh.VS;
 using System.IO;
+using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace Ankh
 {
-    public class AnkhSvnClientPool : ISvnClientPool
+    public class AnkhSvnClientPool : AnkhService, ISvnClientPool
     {
-        readonly IAnkhServiceProvider _context;
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
         readonly NotificationHandler _notifyHandler;
         const int MaxPoolSize = 10;
 
         public AnkhSvnClientPool(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
             _notifyHandler = context.GetService<NotificationHandler>();
 
             if (_notifyHandler == null)
             {
                 _notifyHandler = new NotificationHandler(context);
-                context.GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
+                GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
             }
 
             SvnClient.AddClientName("AnkhSVN", new System.Reflection.AssemblyName(typeof(AnkhSvnClientPool).Assembly.FullName).Version);
@@ -59,36 +57,46 @@ namespace Ankh
 
         private SvnPoolClient CreateClient(bool hookUI)
         {
-            IAnkhDialogOwner owner = _context.GetService<IAnkhDialogOwner>();
+            IAnkhDialogOwner owner = GetService<IAnkhDialogOwner>();
 
             if (owner == null)
                 hookUI = false;
 
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI);
 
-            ////// should we use a custom configuration directory?
-            //if (this.config.Subversion.ConfigDir != null)
-            //    this.client.LoadConfiguration(
-            //        Environment.ExpandEnvironmentVariables(this.config.Subversion.ConfigDir));
-
             if (hookUI)
             {
-                    // Let SharpSvnUI handle login and SSL dialogs
-                    SharpSvn.UI.SharpSvnUI.Bind(client, owner.DialogOwner);
+                // Let SharpSvnUI handle login and SSL dialogs
+                SharpSvn.UI.SharpSvnUI.Bind(client, new OwnerWrapper(owner));
             }
 
             return client;
         }
 
-        internal bool ReturnClient(SvnPoolClient poolClient, IList<string> changedPaths)
+        internal bool ReturnClient(SvnPoolClient poolClient, HybridCollection<string> changedPaths, IList<string> deleted)
         {
             bool ok = ReturnClient(poolClient);
 
+            if (deleted != null && deleted.Count > 0)
+            {
+                if (changedPaths == null)
+                    changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+                IFileStatusCache cache = GetService<IFileStatusCache>();
+
+                if (cache != null)
+                {
+                    foreach (SvnItem item in cache.GetCachedBelow(deleted))
+                    {
+                        if(!changedPaths.Contains(item.FullPath))
+                            changedPaths.Add(item.FullPath);
+                    }
+                }
+            }
+
             if (changedPaths != null && changedPaths.Count > 0)
             {
-                // TODO: Marshal to UI thread if we are not there!!!
-
-                IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+                IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
                 if (monitor != null)
                 {
@@ -122,7 +130,8 @@ namespace Ankh
 
         class AnkhSvnPoolClient : SvnPoolClient
         {
-            readonly Dictionary<string, string> _touchedPaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            readonly HybridCollection<string> _touchedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            readonly HybridCollection<string> _deleted = new HybridCollection<string>();
             readonly bool _uiEnabled;
             public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled)
                 : base(pool)
@@ -139,47 +148,78 @@ namespace Ankh
             {
                 base.OnNotify(e);
 
-                AddTouchedPath(e.FullPath);
-
-/*                // *************** See subversion issue #3168 ************************
-                if (e.CommandType == SvnCommandType.Commit && e.Action.ToString().StartsWith("Commit"))
-                {
-                    if (!File.Exists(e.FullPath) && !Directory.Exists(e.FullPath) && !Directory.Exists(Path.GetDirectoryName(e.FullPath)))
-                    {
-                        // e.FullPath should have been ok, as all files to commit should exist (or its parent directory should)
-
-                        // As a workaround:
-                        //   We just add all possible variations of a path that might be committed to the list of files to refresh
-
-                        string dir = Environment.CurrentDirectory;
-
-                        while (!string.IsNullOrEmpty(dir))
-                        {
-                            string totalDir = Path.GetFullPath(Path.Combine(dir, e.Path));
-
-                            if(Directory.Exists(Path.GetDirectoryName(totalDir)))
-                                AddTouchedPath(totalDir); // Not e.FullPath, as that is absolute (and invalid)
-
-                            dir = Path.GetDirectoryName(dir);
-                        }
-                    }
-                }*/
+                AddTouchedPath(e.FullPath, e.Action == SvnNotifyAction.CommitDeleted);
             }
 
-            void AddTouchedPath(string path)
+            void AddTouchedPath(string path, bool deleted)
             {
-                if (!string.IsNullOrEmpty(path) && !_touchedPaths.ContainsKey(path))
-                    _touchedPaths[path] = path;
+                if (!string.IsNullOrEmpty(path) && !_touchedPaths.Contains(path))
+                {
+                    _touchedPaths.Add(path);
+                }
+
+                if (deleted && !_deleted.Contains(path))
+                    _deleted.Add(path);
             }
 
             protected override void ReturnClient()
             {
-                List<string> paths = new List<string>(_touchedPaths.Values);
+                HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);                
+                List<string> deleted = null;
+                
+                if(_deleted.Count > 0)
+                    deleted = new List<string>(_deleted);
+
+                paths.AddRange(_touchedPaths);
                 _touchedPaths.Clear();
-                if (!((AnkhSvnClientPool)SvnClientPool).ReturnClient(this, paths))
+                _deleted.Clear();
+                if (!((AnkhSvnClientPool)SvnClientPool).ReturnClient(this, paths, deleted))
                 {
                     InnerDispose();
                 }
+            }
+        }
+    }
+
+    sealed class OwnerWrapper : IWin32Window
+    {
+        IAnkhDialogOwner _owner;
+
+        public OwnerWrapper(IAnkhDialogOwner owner)
+        {
+            if (owner == null)
+                throw new ArgumentNullException("owner");
+
+            _owner = owner;
+        }
+
+        public IntPtr Handle
+        {
+            get
+            {
+                IWin32Window window = _owner.DialogOwner;
+
+                if (window != null)
+                {
+                    ISynchronizeInvoke invoker = window as ISynchronizeInvoke;
+
+                    if (invoker != null && invoker.InvokeRequired && Control.CheckForIllegalCrossThreadCalls)
+                    {
+                        Control.CheckForIllegalCrossThreadCalls = false;
+                        try
+                        {
+                            return window.Handle;
+                        }
+                        finally
+                        {
+                            Control.CheckForIllegalCrossThreadCalls = true;
+                        }
+                    }
+                    else
+                        return window.Handle;
+                }
+                else
+                    return IntPtr.Zero;
             }
         }
     }
