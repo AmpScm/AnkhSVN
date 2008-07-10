@@ -51,8 +51,7 @@ namespace Ankh.VSPackage
 
     [CLSCompliant(false)]
     [ProvideSourceControlProvider("AnkhSVN - Subversion Support for Visual Studio", "#100")]
-    [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]
-    [ProvideOptionPage(typeof(AnkhSourceControlSettingsPage), "Source Control", "Subversion", 106, 107, false)]
+    [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]    
     sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
         AnkhRuntime _runtime;
