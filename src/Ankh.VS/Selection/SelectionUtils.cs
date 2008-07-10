@@ -103,7 +103,7 @@ namespace Ankh.Selection
 
                 if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
                 {
-                    if (string.IsNullOrEmpty(mkDocument))
+                    if (string.IsNullOrEmpty(mkDocument) || !IsFilePath(mkDocument))
                         files = new string[0];
                     else
                         files = new string[] { mkDocument };
@@ -119,7 +119,7 @@ namespace Ankh.Selection
 
                 if (ErrorHandler.Succeeded(getDoc.GetMkDocument(id, out mkDocument)))
                 {
-                    if (string.IsNullOrEmpty(mkDocument))
+                    if (string.IsNullOrEmpty(mkDocument) || !IsFilePath(mkDocument))
                         files = new string[0];
                     else
                         files = new string[] { mkDocument };
@@ -129,6 +129,11 @@ namespace Ankh.Selection
             }
 
             return ok;
+        }
+
+        private static bool IsFilePath(string path)
+        {
+            return SvnItem.IsValidPath(path);
         }
 
         internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc)
