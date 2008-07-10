@@ -25,11 +25,11 @@ namespace Ankh.Selection
 
             for (int i = 0; i < nEls; i++)
             {
-                IntPtr pathIntPtr = Marshal.ReadIntPtr(pathStr[0].pElems, i*IntPtr.Size);
+                IntPtr pathIntPtr = Marshal.ReadIntPtr(pathStr[0].pElems, i * IntPtr.Size);
                 files[i] = Marshal.PtrToStringUni(pathIntPtr);
 
-                if(free)
-                Marshal.FreeCoTaskMem(pathIntPtr);
+                if (free)
+                    Marshal.FreeCoTaskMem(pathIntPtr);
             }
             if (free && pathStr[0].pElems != IntPtr.Zero)
                 Marshal.FreeCoTaskMem(pathStr[0].pElems);
@@ -40,7 +40,7 @@ namespace Ankh.Selection
         //[CLSCompliant(false)]
         internal static int[] GetFlagsFromOleBuffer(CADWORD[] dwords, bool free)
         {
-            if(dwords == null)
+            if (dwords == null)
                 throw new ArgumentNullException("dwords");
 
             int n = (int)dwords[0].cElems;
@@ -48,17 +48,17 @@ namespace Ankh.Selection
 
             bool foundFlag = false;
 
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 int v = items[i] = Marshal.ReadInt32(dwords[0].pElems, i * sizeof(int));
 
                 if (v != 0)
-                    foundFlag = true;                
+                    foundFlag = true;
             }
 
-            if(free && dwords[0].pElems != IntPtr.Zero)
+            if (free && dwords[0].pElems != IntPtr.Zero)
                 Marshal.FreeCoTaskMem(dwords[0].pElems);
-            
+
             return foundFlag ? items : null;
         }
 
@@ -85,9 +85,9 @@ namespace Ankh.Selection
                     flags = GetFlagsFromOleBuffer(dw, true);
 
                     if (!includeNoScc || files.Length > 0)
-                        return true; // Try the GetMkDocument route to find an alternative
+                        return true; // We have a result
                     else
-                        ok = true; // Let's try GetMkDocument()
+                        ok = true; // Try the GetMkDocument route to find an alternative
                 }
                 else if (hr != VSConstants.E_NOTIMPL)
                     return false; // 
@@ -147,13 +147,13 @@ namespace Ankh.Selection
 
             if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc))
                 return false;
-            else if(flags == null || sccProject == null)
+            else if (flags == null || sccProject == null)
                 return true;
 
             int n = Math.Min(files.Length, flags.Length);
 
             List<string> allFiles = new List<string>(files);
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 if (0 != (flags[i] & (int)tagVsSccFilesFlags.SFF_HasSpecialFiles))
                 {
@@ -295,7 +295,7 @@ namespace Ankh.Selection
                 return VSConstants.E_NOTIMPL;
             }
 
-            #endregion            
+            #endregion
         }
 
         internal static CALPOLESTR CreateCALPOLESTR(IList<string> strings)
