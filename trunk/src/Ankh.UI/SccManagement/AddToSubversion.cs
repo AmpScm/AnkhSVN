@@ -151,9 +151,9 @@ namespace Ankh.UI.SccManagement
         void UpdateUrlPreview()
         {
             if (RepositoryAddUrl == null)
-                textBox1.Text = "";
+                resultUriBox.Text = "";
             else
-                textBox1.Text = RepositoryAddUrl.ToString();
+                resultUriBox.Text = RepositoryAddUrl.ToString();
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
