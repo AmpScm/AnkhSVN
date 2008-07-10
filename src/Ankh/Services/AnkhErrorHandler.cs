@@ -258,7 +258,7 @@ namespace Ankh
                     if (sx != null)
                     {
                         SvnException rc = sx.RootCause as SvnException;
-                        if (rc.SvnErrorCode == sx.SvnErrorCode)
+                        if (rc == null || rc.SvnErrorCode == sx.SvnErrorCode)
                             subject += " (" + sx.SvnErrorCode.ToString() + ")";
                         else
                             subject += " (" + sx.SvnErrorCode.ToString() + "-" + rc.SvnErrorCode.ToString() + ")";
