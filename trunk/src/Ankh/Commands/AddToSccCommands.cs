@@ -78,27 +78,6 @@ namespace Ankh.Commands
             }
         }
 
-        static bool IsVersionable(SvnItem item)
-        {
-            // HACK: remove when IsVersionable behavior is fixed
-            item.MarkDirty();
-            return item.IsVersionable;
-        }
-
-        [Obsolete("Remove when SharpSvn fixed")]
-        static Uri Canonicalize(Uri uri)
-        {
-            String path = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
-            if (path.Length > 0 && (path[path.Length - 1] == '/' || path.IndexOf('\\') >= 0))
-            {
-                Uri u = new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped));
-                // Create a new uri with all / and \ characters at the end removed
-                return new Uri(u, path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
-            }
-
-            return uri;
-        }
-
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
@@ -127,7 +106,7 @@ namespace Ankh.Commands
 
                 if (item.IsVersioned)
                 { /* File is in subversion; just enable */ }
-                else if (IsVersionable(item))
+                else if (item.IsVersionable)
                 {
                     if (e.IsInAutomation)
                         confirmed = true;
@@ -175,7 +154,7 @@ namespace Ankh.Commands
                                         cdArg.MakeParents = true;
                                         cdArg.LogMessage = createDialog.LogMessage;
 
-                                        cl.RemoteCreateDirectory(Canonicalize(dialog.RepositoryAddUrl), cdArg);
+                                        cl.RemoteCreateDirectory(dialog.RepositoryAddUrl, cdArg);
                                     }
                                     else
                                         return; // bail out, we cannot continue without directory in the repository
@@ -185,7 +164,7 @@ namespace Ankh.Commands
                             // Create working copy
                             SvnCheckOutArgs coArg = new SvnCheckOutArgs();
                             coArg.AllowObstructions = true;
-                            cl.CheckOut(Canonicalize(dialog.RepositoryAddUrl), dialog.WorkingCopyDir, coArg);
+                            cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
 
                             // Add solutionfile so we can set properties (set managed)
                             SvnAddArgs aa = new SvnAddArgs();
