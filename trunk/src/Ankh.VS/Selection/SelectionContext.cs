@@ -457,7 +457,7 @@ namespace Ankh.Selection
         /// <returns></returns>
         IEnumerable<string> InternalGetSelectedFiles(bool recursive)
         {
-            Dictionary<string, string> foundFiles = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            HybridCollection<string> foundFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (SelectionItem i in GetSelectedItems(recursive))
             {
@@ -467,9 +467,9 @@ namespace Ankh.Selection
                 {
                     foreach (string file in files)
                     {
-                        if (!foundFiles.ContainsKey(file))
+                        if (!foundFiles.Contains(file))
                         {
-                            foundFiles.Add(file, file);
+                            foundFiles.Add(file);
 
                             yield return file;
                         }
@@ -497,9 +497,6 @@ namespace Ankh.Selection
         {
             foreach (string file in GetSelectedFiles(recursive))
             {
-                if (file.LastIndexOf(':') > 1) // This skips URLs
-                    continue;
-                    
                 yield return _cache[file];
             }
         }
