@@ -13,7 +13,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -145,6 +145,9 @@
     <Compile Include="AnkhSvnPackage.Languages.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhSvnPackage.OptionPages.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnkhSvnPackage.ToolWindows.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
@@ -153,6 +156,7 @@
     </Compile>
     <Compile Include="Attributes\ProvideSolutionProperties.cs" />
     <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
+    <Compile Include="Attributes\ProvideToolsOptionsPageVisibility.cs" />
     <Content Include="Ankh.Package.wxs" />
     <Content Include="Gui\menu\Add.png" />
     <Content Include="Gui\menu\AddFolder.png" />
