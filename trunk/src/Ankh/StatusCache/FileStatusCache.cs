@@ -653,17 +653,7 @@ namespace Ankh.StatusCache
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            int lc = path.LastIndexOf(':');
-            if (lc > 1)
-                return false;
-            else if (lc == 1 && path.IndexOf(Path.DirectorySeparatorChar) == 2)
-                return true;
-            else if (path.StartsWith(@"\\", StringComparison.Ordinal))
-                return true;
-
-            // TODO: Add more checks. This code is called from the OpenDocumentTracker
-
-            return false;
+            return SvnItem.IsValidPath(path);
         }
 
         #endregion
