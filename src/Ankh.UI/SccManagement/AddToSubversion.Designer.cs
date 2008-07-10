@@ -43,7 +43,7 @@
             this.projectNameBox = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.resultUriBox = new System.Windows.Forms.TextBox();
             this.addTrunk = new System.Windows.Forms.CheckBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.locationBox.SuspendLayout();
@@ -198,7 +198,10 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.resultUriBox);
             this.groupBox2.Location = new System.Drawing.Point(12, 399);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(436, 45);
@@ -206,14 +209,14 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project will be created in:";
             // 
-            // textBox1
+            // resultUriBox
             // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(6, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(424, 20);
-            this.textBox1.TabIndex = 0;
+            this.resultUriBox.Enabled = false;
+            this.resultUriBox.Location = new System.Drawing.Point(6, 19);
+            this.resultUriBox.Name = "resultUriBox";
+            this.resultUriBox.ReadOnly = true;
+            this.resultUriBox.Size = new System.Drawing.Size(424, 20);
+            this.resultUriBox.TabIndex = 0;
             // 
             // addTrunk
             // 
@@ -277,7 +280,7 @@
         private System.Windows.Forms.ComboBox repositoryUrl;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox resultUriBox;
         private System.Windows.Forms.CheckBox addTrunk;
         private System.Windows.Forms.ErrorProvider errorProvider1;
     }
