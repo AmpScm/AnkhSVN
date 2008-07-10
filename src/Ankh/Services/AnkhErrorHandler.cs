@@ -244,8 +244,28 @@ namespace Ankh
 
                 if (dr == DialogResult.Retry)
                 {
+                    string subject = ErrorReportSubject;
+
+                    SvnException sx = ex as SvnException;
+
+                    Exception e = ex;
+                    while (sx == null && e != null)
+                    {
+                        e = e.InnerException;
+                        sx = e as SvnException;
+                    }
+
+                    if (sx != null)
+                    {
+                        SvnException rc = sx.RootCause as SvnException;
+                        if (rc.SvnErrorCode == sx.SvnErrorCode)
+                            subject += " (" + sx.SvnErrorCode.ToString() + ")";
+                        else
+                            subject += " (" + sx.SvnErrorCode.ToString() + "-" + rc.SvnErrorCode.ToString() + ")";
+                    }
+
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
-                        ErrorReportSubject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
+                        subject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
                 }
             }
         }
