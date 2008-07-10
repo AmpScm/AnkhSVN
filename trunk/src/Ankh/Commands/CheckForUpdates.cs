@@ -15,6 +15,49 @@ using EnvDTE;
 using Ankh.Ids;
 using Ankh.UI;
 
+/*****************************************************************
+ * This command performs update checks by calling our webservice
+ *****************************************************************
+ * A sample request would be:
+ * http://svc.ankhsvn.net/svc/dev/update-info/2.0.xml?av=2.0.1234.5678&vs=9.0&os=6.0.6001.65536&iv=168&xx=2062238964
+ *     
+ * 2.0.xml is the major version; allowing updates per major version to be a static file
+ *  av: Ankh version
+ *  vs: Visual Studion version
+ *  os: OS version
+ *  iv: Update interval in hours (For usage statistics)
+ *  xx: Hashcode per machine (For usage statistics)
+ * 
+ * Some sample valid responses are:
+ *   * A 0 byte file or a file containing just whitespace. There is no update available
+ *   * The following response 
+ * <u>
+ * <g>1</g>
+ * <i>
+ *   <t>Update available</t>
+ *   <h>AnkhSVN Update Available</h>
+ *   <d>A new version of AnkhSVN 2.0 might be available.
+ * This is a test of the update service. The testmode will be deactivated after 2008-07-08.
+ *
+ * Thanks for your support.
+ *   </d>
+ *   <u>http://ankhsvn.net/daily/</u>
+ *   <l>Download a new daily version</l>
+ *   <v>2.0.9999.9999</v>
+ * </i>
+ *  </u>
+ * 
+ * g: 1             Informational version. Used for the tick 'never show this again'
+ * i:               Update item block
+ *  t:              Title of the dialog (appended to 'AnkhSVN -')
+ *  h:              The header text (centered above the description); defaults to the 't' value
+ *  d:              The description body
+ *  u:              The title of the link
+ *  l:              The link value
+ *  v:              The new version (optional). If set the message is only shown on 
+ *                  versions older than the specified version
+ */
+
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.CheckForUpdates, AlwaysAvailable = true)]
