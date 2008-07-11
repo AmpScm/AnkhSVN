@@ -84,20 +84,12 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "InternalSite", "InternalSit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalWebServiceApp", "..\ExternalWebServiceApp\ExternalWebServiceApp.csproj", "{4606AC40-F516-489D-B775-D99E1358F5AB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppIgnoreProject", "CppIgnoreProject\CppIgnoreProject.vcproj", "{5BEFA670-8404-4D75-A5F2-E99997916668}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
-		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Enlist = True
-		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Path = "..\ExternalSite"
-		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Type = {E24C65DC-7377-472B-9ABA-BC803B73C61A}
-		Project.{14E503D6-F341-4FA0-B6E5-8996A5C9FBDA}.Uri = "../ExternalSite/"
-		Project.{4606AC40-F516-489D-B775-D99E1358F5AB}.Path = "..\ExternalWebServiceApp"
-		Project.{4606AC40-F516-489D-B775-D99E1358F5AB}.Uri = "../ExternalWebServiceApp/"
-		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Enlist = True
-		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Path = "InternalSite"
-		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Type = {E24C65DC-7377-472B-9ABA-BC803B73C61A}
-		Project.{DB65491A-E346-425B-A2B3-87FBF40D7826}.Uri = "InternalSite/"
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = AllTypesSolution-2008.vsmdi
@@ -295,6 +287,20 @@ Global
 		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|Win32.ActiveCfg = Release|Any CPU
 		{4606AC40-F516-489D-B775-D99E1358F5AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|.NET.ActiveCfg = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|Win32.Build.0 = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Debug|x86.ActiveCfg = Debug|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|.NET.ActiveCfg = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Any CPU.ActiveCfg = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Win32.ActiveCfg = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Win32.Build.0 = Release|Win32
+		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
