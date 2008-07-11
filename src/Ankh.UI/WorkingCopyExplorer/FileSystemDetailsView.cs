@@ -106,31 +106,22 @@ namespace Ankh.UI
             }
         }
 
-
-
-        protected override void OnMouseDown(MouseEventArgs e)
+        protected override void OnDoubleClick(EventArgs e)
         {
-            ListViewItem lvi = this.GetItemAt(e.X, e.Y);
-            if (lvi == null)
+            base.OnDoubleClick(e);
+
+            ListViewHitTestInfo hti = this.HitTest(PointToClient(Control.MousePosition));
+            if (hti.Item == null || hti.Location == ListViewHitTestLocations.None)
             {
                 return;
             }
 
-            // ensure right mouse clicks cause a selection
-            if (e.Button == MouseButtons.Right)
-            {
-                lvi.Selected = true;
-            }
             // Double clicks either opens a folder or the item
-            else if (e.Clicks == 2 && e.Button == MouseButtons.Left)
+            IFileSystemItem fileSystemItem = hti.Item.Tag as IFileSystemItem;
+            if (fileSystemItem != null)
             {
-                IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
-                if (fileSystemItem != null)
-                {
-                    OpenItem(fileSystemItem);
-                }
+                OpenItem(fileSystemItem);
             }
-            base.OnMouseDown(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
