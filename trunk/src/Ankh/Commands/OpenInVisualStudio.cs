@@ -25,11 +25,11 @@ namespace Ankh.Commands
             bool first = true;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (!item.Exists)
-                    continue;
-                else if(e.Command == AnkhCommand.ItemOpenVisualStudio || e.Command == AnkhCommand.ItemOpenTextEditor)
+                // SR: Don't check item.Exists and item.IsFile here, rather check it below. 
+                // If you doubleclick a missing file, we don't want an generic error dialog showing
+                if (e.Command == AnkhCommand.ItemOpenVisualStudio || e.Command == AnkhCommand.ItemOpenTextEditor)
                     return;
-                else if(!first)
+                else if (!first)
                 {
                     e.Enabled = false;
                     return;
@@ -67,6 +67,10 @@ namespace Ankh.Commands
                                     }
                                 }
                             }
+
+                            if (!item.IsFile)
+                                continue;
+
                             VsShellUtilities.OpenDocument(e.Context, item.FullPath);
                             break;
                         case AnkhCommand.ItemOpenTextEditor:
@@ -74,6 +78,9 @@ namespace Ankh.Commands
                                 IVsUIHierarchy hier;
                                 IVsWindowFrame frame;
                                 uint id;
+
+                                if (!item.IsFile)
+                                    continue;
 
                                 VsShellUtilities.OpenDocument(e.Context, item.FullPath, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
                             }
