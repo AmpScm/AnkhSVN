@@ -335,9 +335,9 @@
     </GroupRef>
     <GroupRef id="Menu_WorkingCopyExplorerContextMenu">
       <!-- The Working Copy Explorer Toolbar -->
-      <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="ToolWindowToolbar">
+      <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="Context">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
-          <ButtonRef id="Cmd_Refresh" priority="0x100" />
+          <ButtonRef id="Cmd_Refresh" priority="0x500" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
