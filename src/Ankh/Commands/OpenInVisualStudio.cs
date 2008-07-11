@@ -25,17 +25,26 @@ namespace Ankh.Commands
             bool first = true;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                // SR: Don't check item.Exists and item.IsFile here, rather check it below. 
-                // If you doubleclick a missing file, we don't want an generic error dialog showing
-                if (e.Command == AnkhCommand.ItemOpenVisualStudio || e.Command == AnkhCommand.ItemOpenTextEditor)
-                    return;
-                else if (!first)
-                {
-                    e.Enabled = false;
-                    return;
-                }
+                if (!item.Exists)
+                    continue;
                 else
-                    first = false;
+                    switch (e.Command)
+                    {
+                        case AnkhCommand.ItemOpenTextEditor:
+                        case AnkhCommand.ItemOpenVisualStudio:
+                            if (item.IsFile)
+                                return;
+                            break;
+                        default:
+                            if (!first)
+                            {
+                                e.Enabled = false;
+                                return;
+                            }
+                            else
+                                first = false;
+                            break;
+                    }
             }
 
             e.Enabled = !first;
