@@ -41,7 +41,13 @@ namespace Ankh
         public bool ExecCommand(Ankh.Ids.AnkhCommand command)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
-            return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), false);
+            return ExecCommand(command, false);
+        }
+
+        public bool ExecCommand(Ankh.Ids.AnkhCommand command, bool verifyEnabled)
+        {
+            // The commandhandler in the package always checks enabled; no need to do it here
+            return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), verifyEnabled);
         }
 
         public bool ExecCommand(System.ComponentModel.Design.CommandID command)

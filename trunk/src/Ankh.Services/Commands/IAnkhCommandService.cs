@@ -20,12 +20,20 @@ namespace Ankh.Commands
         // efficient ways to call code than
 
         // The following methods should be called from the UI thread
+
         /// <summary>
         /// Executes the specified command synchronously
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
         bool ExecCommand(AnkhCommand command);
+
+        /// <summary>
+        /// Executes the specified command synchronously
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
+        bool ExecCommand(AnkhCommand command, bool verifyEnabled);
         /// <summary>
         /// Executes the specified command synchronously
         /// </summary>

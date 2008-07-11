@@ -245,7 +245,7 @@ namespace Ankh.UI.PendingChanges
             IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
 
             if (cmd != null)
-                cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio);
+                cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
         }
 
         private void pendingCommits_ColumnReordered(object sender, ColumnReorderedEventArgs e)
