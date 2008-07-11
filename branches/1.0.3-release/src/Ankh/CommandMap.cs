@@ -215,7 +215,13 @@ namespace Ankh
             object toolMenu = context.CommandBars.GetCommandBar( CommandBarPredicate.Create("Tools") );
 
             // check that the menu isn't already there (only necessary in 2005)
-            object ankhMenu = context.CommandBars.GetBarControl( toolMenu, "AnkhSVN" );
+            CommandBarControl oldAnkhMenu = context.CommandBars.GetBarControl( toolMenu, "AnkhSVN" ) as CommandBarControl;
+            if (oldAnkhMenu != null)
+            {
+                oldAnkhMenu.Delete(false);
+            }
+
+            object ankhMenu = context.CommandBars.GetBarControl(toolMenu, "An&khSVN");
             if ( ankhMenu == null )
             {
                 context.CommandBars.AddCommandBar( "An&khSVN", 
