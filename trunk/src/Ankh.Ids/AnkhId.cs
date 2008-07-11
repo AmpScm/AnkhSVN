@@ -56,7 +56,7 @@ namespace Ankh.Ids
         //**********************************************************************************
 
         // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
-        public const int MigrateVersion = 3; 
+        public const int MigrateVersion = 4; 
 
 
         public const string LogMessageLanguageServiceId = "1dfe69ce-7f9b-4cc5-b09b-e5bde95e9439";
