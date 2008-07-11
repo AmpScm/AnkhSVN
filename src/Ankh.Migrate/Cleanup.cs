@@ -90,7 +90,9 @@ namespace Ankh.Migrate
                     // Swallow
                 }
 
-				if (caption == "An&kh" || caption == "An&khSVN" || caption == "WorkingCopyExplorer" || caption == "ReposExplorer")
+                // Ankh and AnkhSVN (without accelerators) have been installed by all versions prior to 0.6.0 snapshot 33
+                // Later versions didn't replace this with an item with accelerator, so we still have to check for them when migrating
+				if (caption == "An&kh" || caption == "Ankh" || caption == "An&khSVN" || caption == "AnkhSVN" || caption == "WorkingCopyExplorer" || caption == "ReposExplorer")
 				{
 					control.Delete(false);
 					//Debug.WriteLine(GetPath(control));
