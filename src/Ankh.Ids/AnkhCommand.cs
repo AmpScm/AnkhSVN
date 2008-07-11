@@ -219,5 +219,7 @@ namespace Ankh.Ids
         LogBlameRevision,
         RevertProjectToRevision,
         RevertSolutionToRevision,
+
+        SwitchProject,
     }
 }

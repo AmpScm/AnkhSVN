@@ -9,6 +9,7 @@ using SharpSvn;
 using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Scc;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -17,6 +18,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.SwitchItem)]
     [Command(AnkhCommand.SolutionSwitchDialog)]
+    [Command(AnkhCommand.SwitchProject)]
     public class SwitchItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -50,6 +52,25 @@ namespace Ankh.Commands
 
             if (e.Command == AnkhCommand.SolutionSwitchDialog)
                 path = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
+            else if (e.Command == AnkhCommand.SwitchProject)
+            {
+                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                path = null;
+
+                foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
+                {
+                    ISvnProjectInfo pi = mapper.GetProjectInfo(item);
+
+                    if (pi == null)
+                        continue;
+
+                    path = pi.ProjectDirectory;
+                    break;
+                }
+
+                if (string.IsNullOrEmpty(path))
+                    return;
+            }
             else
             {
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
