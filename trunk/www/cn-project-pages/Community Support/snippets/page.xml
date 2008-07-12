@@ -5,7 +5,7 @@
       <title localize="false" />
       <filename>HtmlSnippet4.html</filename>
     </component>
-    <component visibility="3" type="Html" order="2">
+    <component visibility="1" type="Html" order="2">
       <title localize="false">Frequently Asked Questions</title>
       <filename>HtmlSnippet2.html</filename>
     </component>
