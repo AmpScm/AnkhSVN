@@ -410,8 +410,8 @@ namespace Ankh.UI.RepositoryOpen
 
                     if (dirEnd >= 0)
                     {
-                        Uri dir = new Uri(nameUri, path.Substring(0, dirEnd + 1));
-                        nameUri = dir.MakeRelativeUri(nameUri);
+                        Uri dir = new Uri(new Uri(nameUri, path.Substring(0, dirEnd + 1)).ToString()); // Normalize to UI Url
+                        nameUri = dir.MakeRelativeUri(nameUri); 
 
                         SetDirectory(dir);
                         fileNameBox.Text = nameUri.ToString();
@@ -564,7 +564,7 @@ namespace Ankh.UI.RepositoryOpen
                                 return;
 
                             ListViewItem lvi = new ListViewItem();
-                            lvi.Tag = new Uri(e.RepositoryRoot, e.BasePath.Substring(1) + '/' + e.Path);
+                            lvi.Tag = e.EntryUri;
                             lvi.Text = e.Path;
                             lvi.ImageIndex = (e.Entry.NodeKind == SvnNodeKind.Directory) ? _dirOffset : _fileOffset;
                             items.Add(lvi);

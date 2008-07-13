@@ -135,7 +135,7 @@ namespace Ankh.Commands
 
             Uri file = projectTop.MakeRelativeUri(projectUri);
 
-            string projectFile = Path.Combine(localDir, SvnTools.UriPartToPath(file.ToString()));
+            string projectFile = SvnTools.GetNormalizedFullPath(Path.Combine(localDir, SvnTools.UriPartToPath(file.ToString())));
 
             OpenProject(e, projectFile);
         }
