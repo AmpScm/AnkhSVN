@@ -62,13 +62,11 @@ namespace Ankh.VS.Selection
 
         int IVsSelectionEvents.OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
         {
-            ClearState();
             return VSConstants.S_OK;
         }
 
         int IVsSelectionEvents.OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld, IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
         {
-            ClearState();
             return VSConstants.S_OK;
         }
         #endregion
@@ -277,11 +275,16 @@ namespace Ankh.VS.Selection
                 List<string> names = new List<string>();
                 if (ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
                 {
+                    RegistryKey baseKey = Registry.LocalMachine;
+
                     // TODO: Find some way to use the VS2008 RANU api
                     if (root.EndsWith("\\UserSettings"))
-                        root = root.Substring(0, root.Length - 13);
+                    {
+                        root = root.Substring(0, root.Length - 13) + "\\Configuration";
+                        baseKey = Registry.CurrentUser;
+                    }
 
-                    using (RegistryKey rk = Registry.LocalMachine.OpenSubKey(root + "\\SourceControlProviders", RegistryKeyPermissionCheck.ReadSubTree))
+                    using (RegistryKey rk = baseKey.OpenSubKey(root + "\\SourceControlProviders", RegistryKeyPermissionCheck.ReadSubTree))
                     {
                         if (rk != null)
                         {
@@ -317,6 +320,11 @@ namespace Ankh.VS.Selection
             if (SccProviderActive)
                 return false; // We are active
 
+            return GetRawOtherSccProviderActive();
+        }
+
+        public bool GetRawOtherSccProviderActive()
+        {
             IVsSccManager2 manager = GetService<IVsSccManager2>(typeof(SVsSccManager));
 
             if (manager == null)
