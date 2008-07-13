@@ -37,8 +37,6 @@
       <!-- Visual Studio file menu -->
       <Group id="Grp_FileMenuScc" priority="0x0800">
         <Menu id="Menu_FileScc" priority="0x0100" name="SvnMenu" text="Subve&amp;rsion">
-          <Visibility context="Ankh_SccProviderGuid"/>
-
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
             <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from future versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x100"
@@ -63,7 +61,9 @@
           </Group>
           <Group id="Grp_FileSccOpen" priority="0x01A0">
             <Button id="Cmd_FileSccOpenFromSubversion" text="Open &amp;from Subve&amp;rsion..." name="OpenFromSubversion" priority="0x100"
-                    toolTip="Open a Project or Solution from Subversion" />
+                    toolTip="Open a Project or Solution from Subversion" dynamicVisibility="true">
+              <Visibility context="Ankh_SccProviderGuid" />
+            </Button>
             <Button id="Cmd_FileSccAddFromSubversion" text="A&amp;dd Project from Subversion..." name="AddFromSubversion" priority="0x200"
                     toolTip="Add an existing Project or Solution from Subversion" dynamicVisibility="true">
               <!-- Only show Add when not debugging, etc -->
@@ -249,7 +249,7 @@
 					<Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
 									text="Prop&amp;erties..."
 									toolTip="View/Edit Subversion Properties" 
-                  iconFile="menu/Properties.png"/>
+                  iconFile="menu/Properties.png" defaultInvisible="true"/>
           <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
 							text="Re&amp;vert to Revision..."
 							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
@@ -513,7 +513,7 @@
 							  iconAndText="true"
 							  />
           <Button id="Cmd_SolutionSwitchDialog" name="SwitchDialog" priority="0x200" allowParams="true"
-							text="&amp;Switch Solution..." iconFile="PendingChanges/Switch.png"/>
+							text="&amp;Switch Solution..." iconFile="PendingChanges/Switch.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_PendingChangesToolBar" priority="0x1000">
 
