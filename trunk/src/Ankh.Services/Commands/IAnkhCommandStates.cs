@@ -31,9 +31,7 @@ namespace Ankh.Commands
         bool SccProviderActive { get; }
 
         bool OtherSccProviderActive { get; }
-        bool OtherSccProviderMarkedActive { get; }
 
-        bool GetRawOtherSccProviderMarkedActive();
         bool GetRawOtherSccProviderActive();
     }
 }
