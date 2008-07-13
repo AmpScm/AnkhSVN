@@ -12,6 +12,7 @@ using Ankh.Selection;
 using Ankh.VS;
 using Ankh.Settings;
 using Ankh.WorkingCopyExplorer;
+using Ankh.Services;
 
 namespace Ankh
 {
@@ -32,6 +33,7 @@ namespace Ankh
             Container.AddService(typeof(IWorkingCopyOperations), new WorkingCopyOperations(Context));
             Container.AddService(typeof(ISvnClientPool), new AnkhSvnClientPool(Context));
             Container.AddService(typeof(IAnkhTaskManager), new ConflictManager(Context));
+            Container.AddService(typeof(IAnkhScheduler), new AnkhScheduler(Context));
             Container.AddService(typeof(IUIShell), new UIShell(Context));
             Container.AddService(typeof(IAnkhSolutionSettings), new SolutionSettings(Context));
             Container.AddService(typeof(IProgressRunner), new ProgressRunnerService(Context));
@@ -54,13 +56,7 @@ namespace Ankh
                 Container.AddService(typeof(ISvnItemChange), fsc);
             }
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
-
-            // The AnkhScheduler service is defined in the trigger module
-            // We add it to the package service provider to make the lookup cheaper
-            IAnkhScheduler scheduler = GetService<IAnkhScheduler>();
-
-            if (scheduler != null)
-                Container.AddService(typeof(IAnkhScheduler), scheduler);
+            
 
 #if !DEBUG
             Container.AddService(typeof(IAnkhErrorHandler), new AnkhErrorHandler(Context));

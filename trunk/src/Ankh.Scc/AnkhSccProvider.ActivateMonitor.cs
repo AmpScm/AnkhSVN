@@ -8,59 +8,53 @@ using Ankh.Commands;
 
 namespace Ankh.Scc
 {
-    partial class AnkhSccProvider : IVsSelectionEvents
+    partial class AnkhSccProvider
     {
-        uint _selCookie;
+        IVsMonitorSelection _selectionMonitor;
         uint _sccContextCookie;
-        void MonitorActive()
-        {
-            IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
-            monitor.AdviseSelectionEvents(this, out _selCookie);
-            Guid gCook = AnkhId.SccProviderGuid;
-            monitor.GetCmdUIContextCookie(ref gCook, out _sccContextCookie);
+        IVsMonitorSelection SelectionMonitor
+        {
+            get { return _selectionMonitor ?? (_selectionMonitor = GetService<IVsMonitorSelection>()); }
         }
 
-        int IVsSelectionEvents.OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
+        uint SccContextCookie
         {
-            if (dwCmdUICookie == _sccContextCookie && fActive != 0)
-                MaybeRegisterAsPrimarySccProvider();
-
-            return VSConstants.S_OK;
+            get
+            {
+                if(_sccContextCookie == 0)
+                {
+                    Guid gCook = AnkhId.SccProviderGuid;
+                    if(!ErrorHandler.Succeeded(SelectionMonitor.GetCmdUIContextCookie(ref gCook, out _sccContextCookie)))
+                        _sccContextCookie = 0;
+                }
+                return _sccContextCookie;
+            }
         }
 
-        bool _maybeRegisteredBefore;
-        internal void MaybeRegisterAsPrimarySccProvider()
+        bool _tryRegisteredBefore;
+        internal void TryRegisterSccProvider()
         {
-            if (_maybeRegisteredBefore)
+            if (_tryRegisteredBefore)
+            {
                 return;
-
-            IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
+            }
 
             int active;
-
-            if (ErrorHandler.Succeeded(monitor.IsCmdUIContextActive(_sccContextCookie, out active)))
+            if(!ErrorHandler.Succeeded(SelectionMonitor.IsCmdUIContextActive(SccContextCookie, out active))
+                || (active == 0))
             {
-                if (active == 0)
-                    return;
+                return; 
             }
 
-            _maybeRegisteredBefore = true;
-
-            if (_selCookie != 0)
-            {
-                monitor.UnadviseSelectionEvents(_selCookie);
-                _selCookie = 0;
-            }
-
+            _tryRegisteredBefore = true;            
 
             IAnkhCommandStates states = GetService<IAnkhCommandStates>();
 
-
             if (states.GetRawOtherSccProviderActive())
             {
-                // Ok: We triggered a bug here. We were active but not disabled, because we where not loaded
-                monitor.SetCmdUIContext(_sccContextCookie, 0);
+                // Ok: We triggered a bug here. We were active but not disabled, because we weren't loaded
+                SelectionMonitor.SetCmdUIContext(_sccContextCookie, 0);
             }
             else
             {
@@ -74,18 +68,5 @@ namespace Ankh.Scc
                 RegisterAsPrimarySccProvider();
             }
         }
-
-        #region IVsSelectionEvents Members
-        int IVsSelectionEvents.OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        int IVsSelectionEvents.OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld, IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        #endregion
     }
 }

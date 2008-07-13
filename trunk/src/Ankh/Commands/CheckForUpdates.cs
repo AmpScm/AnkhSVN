@@ -385,7 +385,7 @@ namespace Ankh.Commands
                 }
             }
 
-            context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.CheckForUpdates, null, CommandPrompt.Never);
+            context.GetService<IAnkhScheduler>().Schedule(new TimeSpan(0,1,0), AnkhCommand.CheckForUpdates);
         }
 
         private string NodeText(XmlDocument doc, string xpath)

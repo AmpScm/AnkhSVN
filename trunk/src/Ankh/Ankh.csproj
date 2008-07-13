@@ -296,6 +296,7 @@
     <Compile Include="Services\AnkhErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\Scheduler.cs" />
     <Compile Include="Services\SolutionSettings.cs" />
     <Compile Include="StatusCache\FileStatusCleanup.cs" />
     <Compile Include="WorkingCopyExplorer\ExplorersShell.cs" />

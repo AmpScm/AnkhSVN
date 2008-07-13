@@ -65,6 +65,7 @@
     <Compile Include="Commands\IAnkhCommandStates.cs" />
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="ContextServices\IAnkhPackage.cs" />
+    <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Scc\EnlistmentState.cs" />
     <Compile Include="Scc\ILastChangeInfo.cs" />
     <Compile Include="Scc\ISvnLogChangedPathItem.cs" />

@@ -79,8 +79,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hooks\Scheduler.cs">
-    </Compile>
     <Compile Include="Hooks\SelectionFilter.cs" />
     <Compile Include="TriggerPackage.cs" />
     <Compile Include="Resources.Designer.cs">

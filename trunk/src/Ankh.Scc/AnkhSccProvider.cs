@@ -31,11 +31,11 @@ namespace Ankh.Scc
         public AnkhSccProvider(AnkhContext context)
             : base(context)
         {
-            MonitorActive();
         }
 
         public void RegisterAsSccProvider()
         {
+            _tryRegisteredBefore = true;
             IVsRegisterScciProvider rscp = Context.GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {

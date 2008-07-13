@@ -119,6 +119,7 @@ namespace Ankh.Trigger
 
         #region IVsShellPropertyEvents Members
 
+        bool _loaded;
         int IVsShellPropertyEvents.OnShellPropertyChange(int propid, object var)
         {
             if (propid == (int)__VSSPROPID.VSSPROPID_Zombie)
@@ -127,14 +128,25 @@ namespace Ankh.Trigger
 
                 if (value == false)
                 {
-                    EnsureHooks();
-
-                    EnsureMigration();
-
-                    ReleaseShellHook();
+                    Load();
                 }
             }
             return VSConstants.S_OK;
+        }
+
+        void Load()
+        {
+            if (_loaded)
+                return;
+            _loaded = true;
+
+            EnsureHooks();
+
+            EnsureMigration();
+
+            ReleaseShellHook();
+
+            _filter.Load();
         }
 
         const string MigrateId = "MigrateId";
@@ -187,7 +199,6 @@ namespace Ankh.Trigger
         #endregion
 
         SelectionFilter _filter;
-        Scheduler _scheduler;
 
         private void EnsureHooks()
         {
@@ -201,12 +212,6 @@ namespace Ankh.Trigger
                 _filter = new SelectionFilter(this, monitorSelection);
             }
 
-            IVsUIShell shell = GetService<IVsUIShell>(typeof(SVsUIShell));
-
-            if (shell != null)
-            {
-                ((IServiceContainer)this).AddService(typeof(IAnkhScheduler), new Scheduler(shell), true);
-            }
         }
 
 
