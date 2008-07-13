@@ -14,6 +14,7 @@ using Microsoft.VisualStudio.Shell;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
 using Ankh.Ids;
+using Ankh.Trigger.Hooks;
 
 namespace Ankh.Trigger
 {
@@ -44,7 +45,7 @@ namespace Ankh.Trigger
     // http://msdn.microsoft.com/vstudio/extend/). This attributes tells the shell that this 
     // package has a load key embedded in its resources.
     [ProvideLoadKey("Standard", AnkhId.TriggerPlkVersion, AnkhId.TriggerPlkProduct, AnkhId.TriggerPlkCompany, 1)]
-    [Guid(AnkhId.TriggerPackageId)]    
+    [Guid(AnkhId.TriggerPackageId)]
     sealed class TriggerPackage : Package, IVsShellPropertyEvents, IOleCommandTarget
     {
         /// <summary>
@@ -89,7 +90,7 @@ namespace Ankh.Trigger
             if (InCommandLineMode)
             {
                 Trace.WriteLine("Ankh.Trigger: Skipping package initialization. (VS Running in commandline mode)");
-                return; 
+                return;
             }
 
             IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
@@ -130,7 +131,7 @@ namespace Ankh.Trigger
 
                     EnsureMigration();
 
-                    ReleaseShellHook();                    
+                    ReleaseShellHook();
                 }
             }
             return VSConstants.S_OK;
@@ -139,7 +140,7 @@ namespace Ankh.Trigger
         const string MigrateId = "MigrateId";
         private void EnsureMigration()
         {
-            using(RegistryKey rkRoot = this.UserRegistryRoot)
+            using (RegistryKey rkRoot = this.UserRegistryRoot)
             using (RegistryKey ankhMigration = rkRoot.CreateSubKey("AnkhSVN-Trigger"))
             {
                 int migrateFrom = 0;
@@ -153,7 +154,7 @@ namespace Ankh.Trigger
                 if (migrateFrom < 0)
                     migrateFrom = 0;
 
-                if(migrateFrom >= AnkhId.MigrateVersion)
+                if (migrateFrom >= AnkhId.MigrateVersion)
                     return; // Nothing to do
 
                 try
@@ -186,17 +187,25 @@ namespace Ankh.Trigger
         #endregion
 
         SelectionFilter _filter;
+        Scheduler _scheduler;
 
         private void EnsureHooks()
         {
-            if(_filter != null)
+            if (_filter != null)
                 return;
 
             IVsMonitorSelection monitorSelection = GetService<IVsMonitorSelection>();
 
             if (monitorSelection != null)
             {
-                _filter = new SelectionFilter(monitorSelection);
+                _filter = new SelectionFilter(this, monitorSelection);
+            }
+
+            IVsUIShell shell = GetService<IVsUIShell>(typeof(SVsUIShell));
+
+            if (shell != null)
+            {
+                ((IServiceContainer)this).AddService(typeof(IAnkhScheduler), new Scheduler(shell), true);
             }
         }
 
