@@ -4,6 +4,8 @@ using System.IO;
 using System.Windows.Forms;
 using Ankh.Diff.DiffUtils;
 using SharpSvn;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -93,7 +95,7 @@ namespace Ankh.UI.MergeWizard
         /// Sets the diff data
         private void ShowDifferences(string mine, string theirs)
         {
-            StringCollection A, B;
+            Collection<string> A, B;
             GetFileLines(mine, theirs, out A, out B);
             TextDiff Diff = new TextDiff(HashType.HashCode, false, false);
             EditScript Script = Diff.Execute(A, B);
@@ -105,7 +107,7 @@ namespace Ankh.UI.MergeWizard
             diffControl.SetData(A, B, Script, strCaptionA, strCaptionB);
         }
 
-        private void GetFileLines(string strA, string strB, out StringCollection A, out StringCollection B)
+        private void GetFileLines(string strA, string strB, out Collection<string> A, out Collection<string> B)
         {
             if (this.isBinary)
             {

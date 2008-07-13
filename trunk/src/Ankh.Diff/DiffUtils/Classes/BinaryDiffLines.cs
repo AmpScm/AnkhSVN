@@ -19,6 +19,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Diff.DiffUtils
 {
@@ -87,7 +88,7 @@ namespace Ankh.Diff.DiffUtils
 
         #region Public Properties
 
-        public StringCollection BaseLines
+        public Collection<string> BaseLines
         {
             get
             {
@@ -95,7 +96,7 @@ namespace Ankh.Diff.DiffUtils
             }
         }
 
-        public StringCollection VerLines
+        public Collection<string> VerLines
         {
             get
             {
@@ -196,8 +197,8 @@ namespace Ankh.Diff.DiffUtils
         #region Private Data Members
 
         private int m_iBytesPerLine;
-        private StringCollection m_BaseLines = new StringCollection();
-        private StringCollection m_VerLines = new StringCollection();
+        private Collection<string> m_BaseLines = new Collection<string>();
+        private Collection<string> m_VerLines = new Collection<string>();
         private int m_iBasePos;
         private int m_iVerPos;
 
