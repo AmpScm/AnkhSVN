@@ -19,6 +19,7 @@ using System.Drawing;
 using System.Collections;
 using Ankh.Diff.DiffUtils;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Ankh.Diff.DiffUtils.Controls
 {
@@ -26,7 +27,7 @@ namespace Ankh.Diff.DiffUtils.Controls
     {
         #region Public Members
 
-        public DiffViewLines(IList StringList, EditScript Script, bool bUseA)
+        public DiffViewLines(IList<string> StringList, EditScript Script, bool bUseA)
         {
             int iCurrentLine = 0;
 
@@ -145,7 +146,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         #region Private Members
 
-        private int AddUneditedLines(IList StringList, int iCurrent, int iEnd)
+        private int AddUneditedLines(IList<string> StringList, int iCurrent, int iEnd)
         {
             for (int i = iCurrent; i < iEnd; i++)
             {

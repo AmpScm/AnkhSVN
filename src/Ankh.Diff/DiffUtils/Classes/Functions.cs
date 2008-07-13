@@ -23,6 +23,7 @@ using System.Diagnostics;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using Ankh.Diff;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Diff.DiffUtils
 {
@@ -121,7 +122,7 @@ namespace Ankh.Diff.DiffUtils
             }
         }
 
-        public static StringCollection GetFileTextLines(string strFileName)
+        public static Collection<string> GetFileTextLines(string strFileName)
         {
             using (StreamReader Reader = new StreamReader(strFileName, Encoding.Default, true))
             {
@@ -129,7 +130,7 @@ namespace Ankh.Diff.DiffUtils
             }
         }
 
-        public static StringCollection GetStringTextLines(string strText)
+        public static Collection<string> GetStringTextLines(string strText)
         {
             using (StringReader Reader = new StringReader(strText))
             {
@@ -137,9 +138,9 @@ namespace Ankh.Diff.DiffUtils
             }
         }
 
-        public static StringCollection GetTextLines(TextReader Reader)
+        public static Collection<string> GetTextLines(TextReader Reader)
         {
-            StringCollection Lines = new StringCollection();
+            Collection<string> Lines = new Collection<string>();
 
             while (Reader.Peek() > -1)
             {

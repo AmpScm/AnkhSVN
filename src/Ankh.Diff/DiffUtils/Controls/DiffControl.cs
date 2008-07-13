@@ -26,6 +26,7 @@ using System.Data;
 using System.Windows.Forms;
 using Ankh.Diff.DiffUtils;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Ankh.Diff.DiffUtils.Controls
 {
@@ -55,12 +56,12 @@ namespace Ankh.Diff.DiffUtils.Controls
             ViewLineDiff.GotFocus += EH;
         }
 
-        public void SetData(IList StringListA, IList StringListB, EditScript Script)
+        public void SetData(IList<string> StringListA, IList<string> StringListB, EditScript Script)
         {
             SetData(StringListA, StringListB, Script, String.Empty, String.Empty);
         }
 
-        public void SetData(IList StringListA, IList StringListB, EditScript Script, string strNameA, string strNameB)
+        public void SetData(IList<string> StringListA, IList<string> StringListB, EditScript Script, string strNameA, string strNameB)
         {
             ViewA.SetData(StringListA, Script, true);
             ViewB.SetData(StringListB, Script, false);

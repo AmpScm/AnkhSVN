@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Ankh.Diff.DiffUtils;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 /*
  * Chad discovered that with lines over about 25000 characters long, that GDI+
@@ -71,7 +72,7 @@ namespace Ankh.Diff.DiffUtils.Controls
             Cursor = Cursors.IBeam;
         }
 
-        public void SetData(IList StringList, EditScript Script, bool bUseA)
+        public void SetData(IList<string> StringList, EditScript Script, bool bUseA)
         {
             m_StringList = StringList;
             m_Lines = new DiffViewLines(m_StringList, Script, bUseA);
@@ -1838,7 +1839,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         private BorderStyle m_BorderStyle = BorderStyle.Fixed3D;
         private DiffViewLines m_Lines;
-        private IList m_StringList;
+        private IList<string> m_StringList;
         private int m_iLineHeight = 1; //Make these non-zero because we divide by them.
         private int m_iCharWidth = 1;
         private float m_fCharWidth = 1;
