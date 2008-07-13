@@ -6,6 +6,7 @@ using Ankh.Ids;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using Microsoft.VisualStudio;
+using Ankh.Commands;
 
 namespace Ankh.Scc
 {
@@ -40,22 +41,7 @@ namespace Ankh.Scc
             Container.AddService(typeof(IFileStatusMonitor), notifier);
 
             // We declare the Scc provider as a delayed create service to allow delayed registration as primary scc
-            Container.AddService(typeof(ITheAnkhSvnSccProvider), new ServiceCreatorCallback(CreateSccProvider), true);            
-        }
-
-        /// <summary>
-        /// Registers our scc provider when first ask for it by VS
-        /// </summary>
-        /// <param name="container"></param>
-        /// <param name="serviceType"></param>
-        /// <returns></returns>
-        object CreateSccProvider(IServiceContainer container, Type serviceType)
-        {
-            Debug.Assert(serviceType == typeof(ITheAnkhSvnSccProvider));
-
-            _sccProvider.RegisterAsPrimarySccProvider();
-
-            return _sccProvider;            
+            Container.AddService(typeof(ITheAnkhSvnSccProvider), _sccProvider, true);            
         }
 
         /// <summary>
@@ -72,21 +58,31 @@ namespace Ankh.Scc
             {
                 Guid sccGuid = AnkhId.SccProviderGuid;
                 uint cookie;
-                int active;
+                int active;                
 
                 if (ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref sccGuid, out cookie)) &&
                     ErrorHandler.Succeeded(ms.IsCmdUIContextActive(cookie, out active)))
                 {
                     if (active != 0)
                     {
-                        // Ok, Visual decided to activate the user context with our GUID
-                        // This tells us VS wants us to be the active SCC
-                        //
-                        // This is not documented directly. But it is documented that we should
-                        // enable our commands on that context
+                        IAnkhCommandStates states = GetService<IAnkhCommandStates>();
 
-                        // Set us active; this makes VS initialize the provider
-                        _sccProvider.RegisterAsPrimarySccProvider();
+                        if (states.GetRawOtherSccProviderActive())
+                        {
+                            // Ok: We triggered a bug here. We were active but not disabled, because we where not loaded
+                            ms.SetCmdUIContext(cookie, 0);
+                        }
+                        else
+                        {
+                            // Ok, Visual decided to activate the user context with our GUID
+                            // This tells us VS wants us to be the active SCC
+                            //
+                            // This is not documented directly. But it is documented that we should
+                            // enable our commands on that context
+
+                            // Set us active; this makes VS initialize the provider
+                            _sccProvider.RegisterAsPrimarySccProvider();
+                        }
                     }
                 }
             }
