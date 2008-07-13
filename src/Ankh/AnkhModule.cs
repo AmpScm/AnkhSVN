@@ -55,6 +55,13 @@ namespace Ankh
             }
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
 
+            // The AnkhScheduler service is defined in the trigger module
+            // We add it to the package service provider to make the lookup cheaper
+            IAnkhScheduler scheduler = GetService<IAnkhScheduler>();
+
+            if (scheduler != null)
+                Container.AddService(typeof(IAnkhScheduler), scheduler);
+
 #if !DEBUG
             Container.AddService(typeof(IAnkhErrorHandler), new AnkhErrorHandler(Context));
 #endif
