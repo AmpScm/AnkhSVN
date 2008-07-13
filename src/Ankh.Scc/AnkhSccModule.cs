@@ -52,7 +52,7 @@ namespace Ankh.Scc
             EnsureService<IStatusImageMapper>();
             EnsureService<IFileStatusCache>();
 
-            _sccProvider.MaybeRegisterAsPrimarySccProvider();
+            _sccProvider.TryRegisterSccProvider();
         }
     }
 }

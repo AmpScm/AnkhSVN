@@ -10,6 +10,7 @@ namespace Ankh.Trigger.Hooks
 {
     sealed class SelectionFilter : IVsSelectionEvents, IDisposable
     {
+        readonly IVsUIShell _shell;
         readonly IVsMonitorSelection _monitor;
         readonly IServiceProvider _sp;
         uint _cookie;
@@ -33,6 +34,14 @@ namespace Ankh.Trigger.Hooks
                 _sccCookie = 0;
 
             _sp = sp;
+            _shell = (IVsUIShell)sp.GetService(typeof(IVsUIShell));
+        }
+
+        Guid _grp = AnkhId.CommandSetGuid;
+        internal void PostCommand(AnkhCommand command)
+        {
+            object n = null;
+            _shell.PostExecCommand(ref _grp, (uint)command, 0, ref n);
         }
 
         void IDisposable.Dispose()
@@ -44,20 +53,14 @@ namespace Ankh.Trigger.Hooks
             }
         }
 
-        bool _scheduled;
         int IVsSelectionEvents.OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
         {
             bool active = (fActive != 0);
             if (dwCmdUICookie == _sccCookie && _sccCookie != 0)
             {
-                if (!_scheduled)
+                if (_loaded && active)
                 {
-                    _scheduled = true;
-
-                    IAnkhScheduler scheduler = (IAnkhScheduler)_sp.GetService(typeof(IAnkhScheduler));
-
-                    if (scheduler != null)
-                        scheduler.Schedule(new TimeSpan(0, 0, 8), AnkhCommand.ActivateSccProvider);
+                    PostCommand(AnkhCommand.ActivateSccProvider);
                 }
             }
             return VSConstants.S_OK;
@@ -71,6 +74,21 @@ namespace Ankh.Trigger.Hooks
         int IVsSelectionEvents.OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld, IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
         {
             return VSConstants.S_OK;
+        }
+
+        bool _loaded;
+        internal void Load()
+        {
+            if (_loaded)
+                return;
+
+            _loaded = true;
+            int active;
+
+            if (ErrorHandler.Succeeded(_monitor.IsCmdUIContextActive(_sccCookie, out active)) && (active != 0))
+            {
+                PostCommand(AnkhCommand.ActivateSccProvider);
+            }
         }
     }
 }

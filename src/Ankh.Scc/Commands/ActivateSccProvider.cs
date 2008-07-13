@@ -15,6 +15,10 @@ namespace Ankh.Scc.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
+            AnkhSccProvider scc = e.GetService<AnkhSccProvider>(typeof(IAnkhSccService));
+
+            if (scc != null)
+                scc.TryRegisterSccProvider();
         }
     }
 }

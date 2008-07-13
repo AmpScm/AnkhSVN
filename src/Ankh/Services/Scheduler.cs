@@ -4,22 +4,22 @@ using System.Text;
 using System.Timers;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Ids;
+using Ankh.Commands;
 
-namespace Ankh.Trigger.Hooks
+namespace Ankh.Services
 {
-    sealed class Scheduler : IAnkhScheduler
+    sealed class AnkhScheduler : AnkhService, IAnkhScheduler
     {
         readonly Timer _timer;
-        readonly IVsUIShell _shell;
+        readonly IAnkhCommandService _commands;
         readonly SortedList<DateTime, KeyValuePair<Delegate, object[]>> _actions = new SortedList<DateTime, KeyValuePair<Delegate, object[]>>();
         Guid _grp = AnkhId.CommandSetGuid;
 
-        public Scheduler(IVsUIShell shell)
+        public AnkhScheduler(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (shell == null)
-                throw new ArgumentNullException("shell");
+            _commands = GetService<IAnkhCommandService>();
 
-            _shell = shell;
             _timer = new Timer();
             _timer.Enabled = false;
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
@@ -104,8 +104,7 @@ namespace Ankh.Trigger.Hooks
         {
             return delegate
             {
-                object n = null;
-                _shell.PostExecCommand(ref _grp, (uint)command, 0, ref n);
+                _commands.PostExecCommand(command);
             };
         }
 

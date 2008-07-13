@@ -53,7 +53,6 @@
     </Compile>
     <Compile Include="AnkhToolBar.cs" />
     <Compile Include="AnkhToolWindow.cs" />
-    <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
