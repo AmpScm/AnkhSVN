@@ -52,40 +52,7 @@ namespace Ankh.Scc
             EnsureService<IStatusImageMapper>();
             EnsureService<IFileStatusCache>();
 
-            IVsMonitorSelection ms = GetService<IVsMonitorSelection>();
-
-            if (ms != null)
-            {
-                Guid sccGuid = AnkhId.SccProviderGuid;
-                uint cookie;
-                int active;                
-
-                if (ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref sccGuid, out cookie)) &&
-                    ErrorHandler.Succeeded(ms.IsCmdUIContextActive(cookie, out active)))
-                {
-                    if (active != 0)
-                    {
-                        IAnkhCommandStates states = GetService<IAnkhCommandStates>();
-
-                        if (states.GetRawOtherSccProviderActive())
-                        {
-                            // Ok: We triggered a bug here. We were active but not disabled, because we where not loaded
-                            ms.SetCmdUIContext(cookie, 0);
-                        }
-                        else
-                        {
-                            // Ok, Visual decided to activate the user context with our GUID
-                            // This tells us VS wants us to be the active SCC
-                            //
-                            // This is not documented directly. But it is documented that we should
-                            // enable our commands on that context
-
-                            // Set us active; this makes VS initialize the provider
-                            _sccProvider.RegisterAsPrimarySccProvider();
-                        }
-                    }
-                }
-            }
+            _sccProvider.MaybeRegisterAsPrimarySccProvider();
         }
     }
 }
