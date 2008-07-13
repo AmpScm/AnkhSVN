@@ -188,7 +188,7 @@ namespace Ankh.Settings
                         {
                             Uri solution, relative;
 
-                            if (!Uri.TryCreate("file:///" + _cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/'), UriKind.Absolute, out solution)
+                            if (!Uri.TryCreate("file:///" + SvnTools.PathToRelativeUri(_cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/')).ToString(), UriKind.Absolute, out solution)
                                 || !Uri.TryCreate(value, UriKind.Relative, out relative))
                             {
                                 return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
@@ -209,9 +209,9 @@ namespace Ankh.Settings
 
                             Uri combined = new Uri(solution, relative);
 
-                            string vv = combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+                            string vv = SvnTools.UriPartToPath(combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
 
-                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv.Replace('/', Path.DirectorySeparatorChar));
+                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv);
                         }
                     }
 
@@ -224,11 +224,11 @@ namespace Ankh.Settings
                 if (SolutionFilename == null)
                     return;
 
-                string sd = Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\';
-                string v = SvnTools.GetNormalizedFullPath(value);
+                string sd = SvnTools.PathToRelativeUri(Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\').ToString();
+                string v = SvnTools.PathToRelativeUri(SvnTools.GetNormalizedFullPath(value)).ToString();
 
-                if (!v.EndsWith("\\"))
-                    v += "\\";
+                if (!v.EndsWith("/"))
+                    v += "/";
 
                 if (!sd.StartsWith(v, StringComparison.OrdinalIgnoreCase))
                     return;
