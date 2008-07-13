@@ -16,7 +16,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemResolveTheirsConflict)]
     [Command(AnkhCommand.ItemResolveBase)]
     [Command(AnkhCommand.ItemResolveWorking)]
-    [Command(AnkhCommand.ItemResolveMergeTool, HideWhenDisabled = false)]
+    [Command(AnkhCommand.ItemResolveMergeTool)]
     class ItemResolveCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
