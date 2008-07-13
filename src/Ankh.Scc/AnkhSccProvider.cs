@@ -31,6 +31,7 @@ namespace Ankh.Scc
         public AnkhSccProvider(AnkhContext context)
             : base(context)
         {
+            MonitorActive();
         }
 
         public void RegisterAsSccProvider()

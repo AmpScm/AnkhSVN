@@ -63,6 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhSccModule.cs" />
+    <Compile Include="AnkhSccProvider.ActivateMonitor.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnkhSccProvider.cs" />
     <Compile Include="AnkhSccProvider.Enlistment.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
