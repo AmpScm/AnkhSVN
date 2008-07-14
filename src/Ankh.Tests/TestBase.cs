@@ -104,7 +104,7 @@ namespace NSvn.Core.Tests
         {   
             string output = this.RunCommand( "svn", "st --non-recursive \"" + path + "\"" );
 
-            if ( output.Trim() == String.Empty )
+            if ( output.Trim() == "" )
                 return (char)0;
 
             string[] lines = output.Trim().Split( '\n' );

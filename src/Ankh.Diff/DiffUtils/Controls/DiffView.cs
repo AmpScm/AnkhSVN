@@ -654,7 +654,7 @@ namespace Ankh.Diff.DiffUtils.Controls
             {
                 if (!HasSelection || m_Lines == null)
                 {
-                    return String.Empty;
+                    return "";
                 }
                 else
                 {
@@ -1672,7 +1672,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         private string GetLineText(int iLine)
         {
-            string strResult = String.Empty;
+            string strResult = "";
 
             if (m_Lines != null && iLine >= 0 && iLine < m_Lines.Count)
             {

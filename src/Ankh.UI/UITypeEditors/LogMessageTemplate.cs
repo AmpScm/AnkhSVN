@@ -55,7 +55,7 @@ namespace Ankh.UI
 
         public virtual string PreProcess(IList paths)
         {
-            if (this.Template.Trim() == String.Empty)
+            if (this.Template.Trim() == "")
             {
                 return this.Template;
             }

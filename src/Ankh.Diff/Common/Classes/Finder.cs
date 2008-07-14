@@ -44,7 +44,7 @@ namespace Ankh.Diff
 
         #region Private Data Members
 
-        private string m_strText = String.Empty;
+        private string m_strText = "";
         private bool m_bMatchCase;
         private bool m_bSearchUp;
 

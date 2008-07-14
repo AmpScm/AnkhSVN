@@ -79,7 +79,7 @@ namespace Ankh.Tests
 
             this.cmd.OnExecute(new CommandEventArgs(AnkhCommand.Blame, this.ctx));
             Assert.IsTrue( this.uiShell.Called );
-            Assert.IsFalse( this.uiShell.Html == String.Empty );
+            Assert.IsFalse( this.uiShell.Html == "" );
             Assert.IsFalse( this.uiShell.Reuse );
             Assert.IsTrue( this.uiShell.ProgressDialogCalled );
             Assert.IsTrue( this.uiShell.ShowPathSelectorCalled );

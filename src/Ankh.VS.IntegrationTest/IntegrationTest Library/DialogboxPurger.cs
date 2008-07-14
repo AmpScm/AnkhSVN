@@ -57,7 +57,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 		/// <summary>
 		/// The expected text to see on the dialog box. If set the thread will continue finding the dialog box with this text.
 		/// </summary>
-		private string expectedDialogBoxText = String.Empty;
+		private string expectedDialogBoxText = "";
 
 		/// <summary>
 		/// The number of the same  dialog boxes to wait for.
@@ -236,7 +236,7 @@ namespace Microsoft.VsSDK.IntegrationTestLibrary
 						if (windowClassName.ToString().Contains("#32770"))
 						{
 							IntPtr unmanagedMemoryLocation = IntPtr.Zero;
-							string dialogBoxText = String.Empty;
+							string dialogBoxText = "";
 							try
 							{
 								unmanagedMemoryLocation = Marshal.AllocHGlobal(10 * 1024);

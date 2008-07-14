@@ -58,7 +58,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         public void SetData(IList<string> StringListA, IList<string> StringListB, EditScript Script)
         {
-            SetData(StringListA, StringListB, Script, String.Empty, String.Empty);
+            SetData(StringListA, StringListB, Script, "", "");
         }
 
         public void SetData(IList<string> StringListA, IList<string> StringListB, EditScript Script, string strNameA, string strNameB)

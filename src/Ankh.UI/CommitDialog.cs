@@ -164,7 +164,7 @@ namespace Ankh.UI
         /// </summary>
         public void Initialize()
         {
-            if (this.logMessageBox.Text.Trim() == String.Empty)
+            if (this.logMessageBox.Text.Trim() == "")
             {
                 ArrayList arr = new ArrayList();
                 foreach (object item in this.commitItemsTree.CheckedItems)
