@@ -363,7 +363,7 @@ namespace Ankh.Commands
             //
             if (pCmdText.cwActual == 0)
             {
-                return String.Empty;
+                return "";
             }
 
             char[] text = new char[pCmdText.cwActual - 1];

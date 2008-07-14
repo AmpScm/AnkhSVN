@@ -66,7 +66,7 @@ namespace Ankh.Diff.DiffUtils.Controls
                 {
                     //A - Shows Deletes and Changes
                     //B - Shows Inserts and Changes
-                    string strText = String.Empty;
+                    string strText = "";
                     int iNumber = -1;
                     if (!bDummyLine)
                     {
