@@ -54,6 +54,13 @@ namespace Ankh.Commands
         /// Directly calls the ankh command handler.
         /// </summary>
         /// <param name="command">The command.</param>
+        /// <returns></returns>
+        bool DirectlyExecCommand(AnkhCommand command);
+
+        /// <summary>
+        /// Directly calls the ankh command handler.
+        /// </summary>
+        /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
         /// <returns></returns>
         bool DirectlyExecCommand(AnkhCommand command, object args);

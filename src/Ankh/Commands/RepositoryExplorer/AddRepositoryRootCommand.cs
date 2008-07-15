@@ -27,6 +27,8 @@ namespace Ankh.Commands.RepositoryExplorer
                 // Allow opening from
                 info = new Uri((string)e.Argument);
             }
+            else if (e.Argument is Uri)
+                info = (Uri)e.Argument;
             else
                 info = shell.ShowAddRepositoryRootDialog();
 
