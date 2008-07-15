@@ -64,6 +64,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             {
                 yield break;
             }
+
+            #region ISelectionContext Members
+
+
+            public bool IsSingleNodeSelection
+            {
+                get { return false; }
+            }
+
+            #endregion
         }
     }
 }

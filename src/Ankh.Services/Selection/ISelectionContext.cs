@@ -60,6 +60,14 @@ namespace Ankh.Selection
         }
 
         /// <summary>
+        /// Gets a boolean indicating whether only a single node is selected in a tree
+        /// </summary>
+        bool IsSingleNodeSelection
+        {
+            get;
+        }
+
+        /// <summary>
         /// Gets the current solution filename (full path)
         /// </summary>
         /// <value>The solution filename.</value>
