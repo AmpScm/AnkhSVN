@@ -21,11 +21,6 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
             IAnkhConfigurationService cs = e.Context.GetService<IAnkhConfigurationService>();
 
             AnkhConfig config = cs.Instance;
