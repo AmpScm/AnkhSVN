@@ -283,14 +283,14 @@ namespace Ankh.UI.PendingChanges
         {
             IAnkhCommandService cmdSvc = state.GetService<IAnkhCommandService>();
             string slnFile = state.GetService<IAnkhSolutionSettings>().SolutionFilename;
+
+            if (slnFile == null)
+                return true;
+
             SvnItem slnItem = state.Cache[slnFile];
 
             if (slnItem.IsVersioned)
                 return true;
-
-            slnItem.MarkDirty();  
-            // HACK: there's a bug in IsVersionable, it's always true when File.Exists, and becomes false after UpdateVersionable()
-            // too much depends on IsVersionable = true intially to change this now.
 
             if (slnItem.IsVersionable)
             {
@@ -318,8 +318,9 @@ namespace Ankh.UI.PendingChanges
             // sln file is either not in a working copy, or user wants to add it to a new working copy.
             cmdSvc.DirectlyExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion, null);
 
+            // Just make sure this gets done (Should be done by add solution handler)
             state.GetService<IFileStatusMonitor>().ScheduleSvnStatus(slnFile);
-            //slnItem.MarkDirty();
+
             return slnItem.IsVersioned;
         }
 
