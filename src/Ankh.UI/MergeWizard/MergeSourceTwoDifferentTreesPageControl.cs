@@ -254,7 +254,7 @@ namespace Ankh.UI.MergeWizard
         {
             TogglePageComplete();
 
-            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceTwo = fromURLTextBox.Text;
+            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceTwo = toURLTextBox.Text;
         }
 
         private void MergeSourceTwoDifferentTreesPageControl_Load(object sender, EventArgs e)
