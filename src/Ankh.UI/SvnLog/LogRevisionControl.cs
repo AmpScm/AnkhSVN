@@ -369,7 +369,10 @@ namespace Ankh.UI.SvnLog
 
             SvnLogArgs args = new SvnLogArgs();
             if (_logItemList.Count > 0)
-                args.Start = _logItemList[_logItemList.Count - 1].Revision - 1;
+            {
+                long startRev = _logItemList[_logItemList.Count - 1].Revision - 1;
+                args.Start = startRev < 0 ? SvnRevision.Zero : startRev;
+            }
             else
             {
                 lock (_logItems)
