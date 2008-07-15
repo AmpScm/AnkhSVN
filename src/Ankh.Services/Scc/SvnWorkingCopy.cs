@@ -130,7 +130,7 @@ namespace Ankh.Scc
                 if (!svnItem.IsVersioned)
                     return parent;
 
-                if (parent.IsVersioned && !parent.IsNestedWorkingCopy)
+                if (parent.IsVersioned && !svnItem.IsNestedWorkingCopy)
                     return parent;
             }
 
