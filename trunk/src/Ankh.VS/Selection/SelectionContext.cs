@@ -43,6 +43,8 @@ namespace Ankh.Selection
         IVsHierarchy _miscFiles;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
+        bool? _isSolutionSelected;
+        bool? _isSingleNodeSelection;
         string _solutionFilename;
 
         public SelectionContext(IAnkhServiceProvider context, SolutionExplorerWindow solutionExplorer)
@@ -120,6 +122,7 @@ namespace Ankh.Selection
             _solutionFilename = null;
             _miscFiles = null;
             _selectedItemsMap = null;
+            _isSolutionSelected = null;
         }
 
         public IVsHierarchy MiscellaneousProject
@@ -254,6 +257,44 @@ namespace Ankh.Selection
                 }
 
                 return _isSolutionExplorer;
+            }
+        }
+
+        public bool IsSingleNodeSelection
+        {
+            get
+            {
+                if (!_isSingleNodeSelection.HasValue)
+                {
+                    if (_currentSelection != null)
+                    {
+                        uint nItems;
+                        int withinSingleHierarchy;
+                        Marshal.ThrowExceptionForHR(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy));
+
+                        if (nItems == 1)
+                            _isSingleNodeSelection = true;
+                        else
+                            _isSingleNodeSelection = false;
+                    }
+                    else if (_currentHierarchy != null)
+                    {
+                        switch (_currentItem)
+                        {
+                            case VSConstants.VSITEMID_SELECTION:
+                            case VSConstants.VSITEMID_NIL:
+                                _isSingleNodeSelection = false;
+                                break;
+                            default:
+                                _isSingleNodeSelection = true;
+                                break;
+                        }
+                    }
+                    else
+                        _isSingleNodeSelection = IsSolutionSelected;
+                }
+
+                return _isSingleNodeSelection.Value;
             }
         }
 
@@ -648,12 +689,19 @@ namespace Ankh.Selection
         {
             get
             {
+                if (_isSolutionSelected.HasValue)
+                    return _isSolutionSelected.Value;
+
                 foreach (SelectionItem item in GetSelectedItems(false))
                 {
                     if (item.IsSolution)
+                    {
+                        _isSolutionSelected = true;
                         return true;
+                    }
                 }
 
+                _isSolutionSelected = false;
                 return false;
             }
         }

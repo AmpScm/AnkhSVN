@@ -29,13 +29,18 @@ namespace Ankh.Commands
 
                     if (count > 1)
                     {
-                        e.Enabled = false;
-                        return;
-                    }
+                        if (e.Selection.IsSingleNodeSelection)
+                            break;
+                        else
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                    }                    
                 }
             }
 
-            if (count != 1)
+            if (count == 0 || (count > 1 && !e.Selection.IsSingleNodeSelection))
                 e.Enabled = false;
         }
         public override void OnExecute(CommandEventArgs e)
