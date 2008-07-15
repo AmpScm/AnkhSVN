@@ -30,11 +30,15 @@ namespace Ankh.UI.SvnLog.Commands
             long min = long.MaxValue;
             long max = long.MinValue;
 
+            bool touched = false;
             foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);
                 max = Math.Max(max, item.Revision);
+                touched = true;
             }
+            if (!touched)
+                return;
 
             SvnRevisionRange range = new SvnRevisionRange(min, max);
             string htmlFile = null;
