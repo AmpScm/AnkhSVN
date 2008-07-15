@@ -52,14 +52,48 @@ namespace Ankh.Scc.ProjectMap
             dt.SetDirty(ProjectFile, true);
         }
 
+        void SetPreCreatedItem(uint itemid)
+        {
+            if (!_loaded)
+                return;
+
+            ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+            if(walker == null)
+                return;
+
+            if (itemid != VSConstants.VSITEMID_NIL)
+                walker.SetPrecreatedFilterItem(ProjectHierarchy, itemid);
+            else
+                walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+
+        }
+
         public int OnItemAdded(uint itemidParent, uint itemidSiblingPrev, uint itemidAdded)
         {
+            string r;
+
+            if(_loaded)
+            {
+                if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r)))
+                {
+                    if (!string.IsNullOrEmpty(r) && SvnItem.IsValidPath(r))
+                    {
+                        if (!System.IO.File.Exists(r) && !System.IO.Directory.Exists(r))
+                            SetPreCreatedItem(itemidAdded);
+                        else
+                            SetPreCreatedItem(VSConstants.VSITEMID_NIL);
+                    }
+                }
+            }
             SetDirty();
             return VSConstants.S_OK;
         }
 
         public int OnItemDeleted(uint itemid)
         {
+            _context.GetService<ISccProjectWalker>().SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+
             SetDirty();
             return VSConstants.S_OK;
         }

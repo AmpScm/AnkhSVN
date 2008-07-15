@@ -307,7 +307,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (walker != null)
                 {
-                    foreach (string file in walker.GetSccFiles(_sccProject, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
+                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
                     {
                         AddPath(file); // GetSccFiles returns normalized paths
                     }
@@ -357,6 +357,11 @@ namespace Ankh.Scc.ProjectMap
 
             if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
             {
+                ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+                if(walker != null)
+                    walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+                
                 IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
 
                 ClearIdCache();

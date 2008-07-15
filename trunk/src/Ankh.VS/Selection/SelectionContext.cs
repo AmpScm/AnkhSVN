@@ -47,6 +47,9 @@ namespace Ankh.Selection
         bool? _isSingleNodeSelection;
         string _solutionFilename;
 
+        IVsHierarchy _filterHierarchy;
+        uint _filterItem;
+
         public SelectionContext(IAnkhServiceProvider context, SolutionExplorerWindow solutionExplorer)
             : base(context)
         {
@@ -99,6 +102,12 @@ namespace Ankh.Selection
                 _currentItem = itemidNew;
                 _currentSelection = pMISNew;
                 _currentContainer = pSCNew;
+            }
+
+            if (itemidOld == _filterItem && pHierOld == _filterHierarchy)
+            {
+                _filterHierarchy = null;
+                _filterItem = VSConstants.VSITEMID_NIL;
             }
 
             ClearCache();
@@ -347,8 +356,11 @@ namespace Ankh.Selection
                     // else skip
                 }
             }
-            else if (_currentHierarchy != null)
+            else if ((_currentHierarchy != null) && (_currentItem != VSConstants.VSITEMID_NIL))
             {
+                if (_currentItem == _filterItem && _currentHierarchy == _filterHierarchy)
+                    yield break;
+
                 yield return new SelectionItem(_currentHierarchy, _currentItem);
             }
             else if (_currentContainer == null)
@@ -633,14 +645,13 @@ namespace Ankh.Selection
         /// <param name="depth"></param>
         /// <returns></returns>
         /// <remarks>The list might contain duplicates if files are included more than once</remarks>
-        public IEnumerable<string> GetSccFiles(object hierarchy, uint id, ProjectWalkDepth depth)
+        public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth)
         {
             // Note: This command is not cached as the other commands on this object!
-
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
 
-            SelectionItem si = new SelectionItem(hierarchy as IVsHierarchy, id);
+            SelectionItem si = new SelectionItem(hierarchy, id);
 
             string[] files;
             if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy))
@@ -667,6 +678,15 @@ namespace Ankh.Selection
                     }
                 }
             }
+        }
+
+        void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
+        {
+            if(id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
+                ClearCache(); // Make sure we use the filter directly
+
+            _filterHierarchy = hierarchy;
+            _filterItem = id;
         }
 
         #endregion

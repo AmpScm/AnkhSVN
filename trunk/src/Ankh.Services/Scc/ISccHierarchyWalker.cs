@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Scc
 {
@@ -23,6 +24,8 @@ namespace Ankh.Scc
         /// <param name="depth"></param>
         /// <returns></returns>
         /// <remarks>The list might contain duplicates if files are included more than once</remarks>
-        IEnumerable<string> GetSccFiles(object hierarchy, uint id, ProjectWalkDepth depth);
+        IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth);
+
+        void SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id);
     }
 }
