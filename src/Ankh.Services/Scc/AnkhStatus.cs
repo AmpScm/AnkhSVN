@@ -18,7 +18,7 @@ namespace Ankh
         readonly bool _switched;
         readonly Uri _uri;
 
-        readonly Guid _repositoryId;
+        readonly string _repositoryId;
         readonly DateTime _lastChangeTime;
         readonly string _lastChangeAuthor;
         readonly long _lastChangeRevision;
@@ -42,7 +42,7 @@ namespace Ankh
                 _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
                 _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
                 _revision = args.WorkingCopyInfo.Revision;
-                _repositoryId = args.WorkingCopyInfo.RepositoryId;
+                _repositoryId = args.WorkingCopyInfo.RepositoryIdValue;
                 _changeList = args.WorkingCopyInfo.ChangeList;
                 _localLocked = args.WorkingCopyInfo.LockToken != null;
             }
@@ -162,18 +162,12 @@ namespace Ankh
 
         public string RepositoryId
         {
-            get 
-            {
-                if (_repositoryId == Guid.Empty)
-                    return null;
-                else
-                    return _repositoryId.ToString(); 
-            }
+            get { return _repositoryId; }
         }
 
         public Guid RepositoryGuid
         {
-            get { return _repositoryId; }
+            get { return (_repositoryId != null) ? new Guid(_repositoryId) : Guid.Empty; }
         }        
        
         /// <summary>
