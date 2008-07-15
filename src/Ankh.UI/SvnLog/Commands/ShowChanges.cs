@@ -36,7 +36,7 @@ namespace Ankh.UI.SvnLog.Commands
                 max = Math.Max(max, item.Revision);
             }
 
-            SvnRevisionRange range = new SvnRevisionRange(min - 1, max);
+            SvnRevisionRange range = new SvnRevisionRange(min, max);
             string htmlFile = null;
             e.GetService<IProgressRunner>().Run("Retrieving changes",
                 delegate(object sender, ProgressWorkerArgs ee)
