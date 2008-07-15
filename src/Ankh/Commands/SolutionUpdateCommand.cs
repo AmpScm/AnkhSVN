@@ -42,12 +42,6 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
-
             if (IsSolutionCommand(e.Command))
             {
                 IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();

@@ -34,11 +34,6 @@ namespace Ankh.Commands
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (!e.State.SccProviderActive)
-            {
-                e.Visible = e.Enabled = false;
-                return;
-            }
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
                 if (i.IsVersioned)
