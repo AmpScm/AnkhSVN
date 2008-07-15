@@ -128,9 +128,13 @@ namespace Ankh.Scc
         /// <summary>
         /// 
         /// </summary>
-        Ignored                 = 0x800000,
+        Ignored                   =  0x800000,
         #endregion
 
-        IsTextFile                = 0x1000000,
+        IsNested                  = 0x1000000,
+
+        IsTextFile                = 0x2000000,
+
+
     }
 }

@@ -87,13 +87,22 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskMustLock) == 0, "UpdateMustLock() set all attributes it should");
             }
 
-            if(0 != (unavailable & MaskTextFile))
+            if (0 != (unavailable & MaskTextFile))
             {
                 UpdateTextFile();
 
                 unavailable = flagsToGet & ~_validState;
 
                 Debug.Assert((~_validState & MaskTextFile) == 0, "UpdateTextFile() set all attributes it should");
+            }
+
+            if (0 != (unavailable & MaskNested))
+            {
+                UpdateNested();
+
+                unavailable = flagsToGet & ~_validState;
+
+                Debug.Assert((~_validState & MaskMustLock) == 0, "UpdateNested() set all attributes it should");
             }
 
             if (unavailable != 0)
@@ -307,7 +316,7 @@ namespace Ankh
                 }
             }
 
-            if(isTextFile)
+            if (isTextFile)
                 SetState(SvnItemState.IsTextFile, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.IsTextFile);
@@ -351,7 +360,60 @@ namespace Ankh
 
             SetState(set, unset);
         }
-        #endregion        
+        #endregion
+
+        #region Nested Info
+        const SvnItemState MaskNested = SvnItemState.IsNested;
+        static readonly Uri parentRefUri = new Uri("../", UriKind.Relative);
+
+        void UpdateNested()
+        {
+            bool isNested;
+            SvnItem parentItem;
+
+            AnkhStatus sMe = Status;
+
+            if (!IsDirectory || !IsVersioned)
+                isNested = false; // Not nested
+            else if(sMe.IsSwitched)
+                isNested = false; // Switched -> Not nested
+            else if((null == (parentItem = Parent)) || !parentItem.IsVersioned)
+                isNested = false; // No versioned parent
+            else 
+            {
+                
+                AnkhStatus sPr = parentItem.Status;
+
+                bool mNull = (sMe.RepositoryId == null);
+                bool pNull = (sPr.RepositoryId == null);
+
+                if ((!mNull && !pNull) && sMe.RepositoryId != sPr.RepositoryId)
+                    isNested = true;
+                else
+                {
+                    Uri pUri = sPr.Uri;
+                    Uri mUri = sMe.Uri;
+                    Uri rUri;
+
+                    if (pUri == null || mUri == null || null == (rUri = mUri.MakeRelativeUri(pUri)))
+                        isNested = false; // SVN fills some properties only after the first commit
+                    else if (rUri != null && rUri != parentRefUri)
+                        isNested = true;
+                    else
+                        isNested = false;
+                }
+            }
+
+            if (isNested)
+                SetState(SvnItemState.IsNested, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.IsNested);
+        }
+        #endregion
+
+
+
+
 
         #region ISvnItemStateUpdate Members
 

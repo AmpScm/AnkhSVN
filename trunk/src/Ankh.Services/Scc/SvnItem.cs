@@ -34,7 +34,7 @@ namespace Ankh
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate
+    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate, ISvnWcReference
     {
         readonly IAnkhServiceProvider _context;
         readonly string _fullPath;
@@ -52,6 +52,7 @@ namespace Ankh
         static readonly Queue<SvnItem> _stateChanged = new Queue<SvnItem>();
         static bool _scheduled;
 
+        ISvnWcReference _workingCopy;
         XBool _statusDirty; // updating, dirty, dirty 
         bool _ticked;
         int _cookie;
@@ -108,6 +109,12 @@ namespace Ankh
                     SetState(SvnItemState.Exists, SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);
                     break;
             }
+        }
+
+        IFileStatusCache StatusCache
+        {
+            [DebuggerStepThrough]
+            get { return _context.GetService<IFileStatusCache>(); }
         }
 
         void RefreshTo(AnkhStatus status)
@@ -324,7 +331,10 @@ namespace Ankh
             _status = lead._status;
             _statusDirty = lead._statusDirty;
 
-            SetState(lead._currentState, ~lead._currentState);
+            SvnItemState current = lead._currentState;
+            SvnItemState valid = lead._validState;
+
+            SetState(current & valid, (~current) & valid);
             _ticked = false;
             _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
         }
@@ -337,6 +347,7 @@ namespace Ankh
 
             _validState = SvnItemState.None;
             _cookie = NextCookie();
+            _workingCopy = null;
         }
 
         bool ISvnItemUpdate.IsStatusClean()
@@ -460,7 +471,7 @@ namespace Ankh
         void RefreshStatus()
         {
             _statusDirty = XBool.None;
-            IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
+            IFileStatusCache statusCache = StatusCache;
 
             try
             {
@@ -610,6 +621,26 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a value indicating whether this node is a nested working copy.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is nested working copy; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsNestedWorkingCopy
+        {
+            get
+            {
+                SvnItemState state;
+                if (!TryGetState(SvnItemState.IsNested, out state))
+                {
+                    EnsureClean();
+                    state = GetState(SvnItemState.IsDiskFile | SvnItemState.Versioned | SvnItemState.IsNested) & SvnItemState.IsNested;
+                }
+                return state != 0;
+            }
+        }
+
+        /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> is explicitly ignored
         /// </summary>
         public bool IsIgnored
@@ -688,7 +719,7 @@ namespace Ankh
                 if (string.IsNullOrEmpty(parentDir) || parentDir.Length >= FullPath.Length)
                     return null; // We are the root folder!
 
-                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+                IFileStatusCache cache = StatusCache;
 
                 if (cache != null)
                     return cache[parentDir];
@@ -706,12 +737,35 @@ namespace Ankh
                 if (string.IsNullOrEmpty(parentDir))
                     return null;
 
-                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+                IFileStatusCache cache = StatusCache;
 
                 if (cache == null)
                     return null;
 
                 return cache.GetDirectory(parentDir);
+            }
+        }
+
+        /// <summary>
+        /// Gets the working copy containing this <see cref="SvnItem"/>
+        /// </summary>
+        /// <value>The working copy.</value>
+        public SvnWorkingCopy WorkingCopy
+        {
+            get
+            {
+                if ((_workingCopy == null) && IsVersionable)
+                {
+                    if (IsDirectory)
+                        _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(this);
+                    else
+                        _workingCopy = Parent;
+                }
+
+                if (_workingCopy != null)
+                    return _workingCopy.WorkingCopy;
+                else
+                    return null;
             }
         }
 
