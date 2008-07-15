@@ -185,6 +185,8 @@ namespace Ankh.Scc
             if (item == null)
                 return;
 
+            file = item.FullPath; // Use existing normalization
+
             if (_pendingChanges.TryGetValue(file, out pc))
             {
                 if (pc.Refresh(RefreshContext, item))
@@ -280,7 +282,7 @@ namespace Ankh.Scc
 
         public IEnumerable<PendingChange> GetAllBelow(string path)
         {
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             path = SvnTools.GetNormalizedFullPath(path);
