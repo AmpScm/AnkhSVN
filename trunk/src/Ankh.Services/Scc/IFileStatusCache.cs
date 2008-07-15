@@ -9,7 +9,7 @@ namespace Ankh.Scc
     /// 
     /// </summary>
     /// <remarks>The default implementation of this service is thread safe</remarks>
-    public interface IFileStatusCache
+    public interface IFileStatusCache : IAnkhServiceProvider
     {
         /// <summary>
         /// Gets the <see cref="Ankh.SvnItem"/> with the specified path.

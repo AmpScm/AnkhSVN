@@ -20,7 +20,6 @@ namespace Ankh.StatusCache
     public sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
-        readonly IAnkhServiceProvider _context;
         readonly SvnClient _client;
         readonly Dictionary<string, SvnItem> _map; // Maps from full-normalized paths to SvnItems
         readonly Dictionary<string, SvnDirectory> _dirMap;
@@ -32,7 +31,6 @@ namespace Ankh.StatusCache
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            _context = context;
             _client = new SvnClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
@@ -83,17 +81,17 @@ namespace Ankh.StatusCache
 
         SvnItem CreateItem(string fullPath, AnkhStatus status)
         {
-            return new SvnItem(_context, fullPath, status);
+            return new SvnItem(this, fullPath, status);
         }
 
         SvnItem CreateItem(string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
         {
-            return new SvnItem(_context, fullPath, status, nodeKind);
+            return new SvnItem(this, fullPath, status, nodeKind);
         }
 
         SvnItem CreateItem(string fullPath, SvnNodeKind nodeKind)
         {
-            return new SvnItem(_context, fullPath, nodeKind);
+            return new SvnItem(this, fullPath, nodeKind);
         }
 
         /// <summary>
@@ -468,7 +466,7 @@ namespace Ankh.StatusCache
                     item.Dispose();
                 }
 
-                StoreItem(item = new SvnItem(_context, path, status));
+                StoreItem(item = new SvnItem(this, path, status));
             }
             else
                 ((ISvnItemUpdate)item).RefreshTo(status);
@@ -606,7 +604,7 @@ namespace Ankh.StatusCache
                         string truePath = SvnTools.GetTruePath(path);
 
                         // Just create an item based on his name. Delay the svn calls as long as we can
-                        StoreItem(item = new SvnItem(_context, truePath ?? path, SvnNodeKind.Unknown));
+                        StoreItem(item = new SvnItem(this, truePath ?? path, SvnNodeKind.Unknown));
 
                         //item.MarkDirty(); // Load status on first access
                     }

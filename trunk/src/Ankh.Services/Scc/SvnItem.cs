@@ -36,7 +36,7 @@ namespace Ankh
     [DebuggerDisplay("Path={FullPath}")]
     public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate, ISvnWcReference
     {
-        readonly IAnkhServiceProvider _context;
+        readonly IFileStatusCache _context;
         readonly string _fullPath;
 
         enum XBool : sbyte
@@ -57,7 +57,7 @@ namespace Ankh
         bool _ticked;
         int _cookie;
 
-        public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status)
+        public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -75,7 +75,7 @@ namespace Ankh
             _enqueued = false;
         }
 
-        public SvnItem(IAnkhServiceProvider context, string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
+        public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
             : this(context, fullPath, status)
         {
             switch (nodeKind) // We assume the caller checked this for us
@@ -89,7 +89,7 @@ namespace Ankh
             }
         }
 
-        public SvnItem(IAnkhServiceProvider context, string fullPath, SvnNodeKind nodeKind)
+        public SvnItem(IFileStatusCache context, string fullPath, SvnNodeKind nodeKind)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -114,7 +114,7 @@ namespace Ankh
         IFileStatusCache StatusCache
         {
             [DebuggerStepThrough]
-            get { return _context.GetService<IFileStatusCache>(); }
+            get { return _context; }
         }
 
         void RefreshTo(AnkhStatus status)
