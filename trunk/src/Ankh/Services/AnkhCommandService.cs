@@ -157,6 +157,11 @@ namespace Ankh
 
         #region IAnkhCommandService Members
 
+        public bool DirectlyExecCommand(AnkhCommand command)
+        {
+            return DirectlyExecCommand(command, null, CommandPrompt.DoDefault);
+        }
+
         public bool DirectlyExecCommand(AnkhCommand command, object args)
         {
             return DirectlyExecCommand(command, args, CommandPrompt.DoDefault);
