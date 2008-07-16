@@ -3,6 +3,7 @@ using System;
 using Ankh.UI;
 using Ankh.Ids;
 using Ankh.Scc;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Commands
 {
@@ -18,18 +19,13 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 
-            using (context.StartOperation("Refreshing"))
-            {
-                IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+            monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
 
-                monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
+            IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
 
-                IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
-
-                pm.Refresh((string)null); // Perform a full incremental refresh on the PC window
-            }
+            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window            
         }
     }
 }
