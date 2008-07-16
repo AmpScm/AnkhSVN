@@ -66,7 +66,19 @@ namespace Ankh.UI
             Config.ChooseDiffMergeManual = cbDiffMergeManual.Checked;
 
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
-            cfgSvc.SaveConfig(Config);
+            try
+            {
+                cfgSvc.SaveConfig(Config);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+
+                throw;
+            }
         }
 
         private void btnDiffExePath_Click(object sender, EventArgs e)

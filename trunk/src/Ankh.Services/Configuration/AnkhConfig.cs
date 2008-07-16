@@ -194,7 +194,8 @@ namespace Ankh.Configuration
                                 return CreateInstance(converterType) as TypeConverter;
                         }
                     }
-                    return null;
+
+                    return baseDescriptor.Converter;
                 }
             }
 
