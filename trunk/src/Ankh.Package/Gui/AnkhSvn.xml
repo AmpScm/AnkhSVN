@@ -638,4 +638,7 @@
       </Group>
     </MenuRef>
   </UI>
+  <UsedCommands>
+    <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->
+  </UsedCommands>
 </VsGui>

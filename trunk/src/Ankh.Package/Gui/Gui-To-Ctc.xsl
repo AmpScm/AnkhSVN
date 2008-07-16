@@ -257,6 +257,7 @@
     <xsl:text>&#9;BITMAPS_BEGIN&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Bitmap ID, Icon Index...&#10;</xsl:text>
     <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
+      <xsl:text>&#9;&#9;</xsl:text>
       <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapId"/>
       <xsl:for-each select="//gui:UI//gui:Button[@iconFile]">
         <xsl:value-of select="', '"/>
@@ -275,21 +276,22 @@
     <xsl:text>CMDS_END&#10;&#10;</xsl:text>
 
     <xsl:text>CMDUSED_SECTION&#10;</xsl:text>
-
+    <xsl:text>&#9;// Command ID&#10;</xsl:text>
+    <xsl:apply-templates select="gui:UsedCommands/gui:Command" />
     <xsl:text>CMDUSED_END&#10;&#10;</xsl:text>
 
     <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
+    <xsl:text>&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
     <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
 
     <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Item ID, Context ID&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
+    <xsl:text>&#9;// Item ID, Context ID&#10;</xsl:text>
+    <xsl:text>&#9;// Buttons&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
-    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
+    <xsl:text>&#9;// Menus&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:Menu/gui:Visibility | gui:UI//gui:MenuRef/gui:Visibility" mode="visibility" />
-    <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
+    <xsl:text>&#9;// Groups&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
     <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
     <xsl:text>/* END */&#10;</xsl:text>
@@ -685,7 +687,7 @@
     </xsl:if>
   </xsl:template>
   <xsl:template match="gui:KeyBinding">
-    <xsl:text>&#9;&#9;</xsl:text>
+    <xsl:text>&#9;</xsl:text>
     <!-- Command Id -->
     <xsl:value-of select="../@id"/>
     <xsl:text>, </xsl:text>
@@ -741,10 +743,15 @@
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
   <xsl:template match="gui:Visibility[parent::gui:*/@id and @context]" mode="visibility">
-    <xsl:text>&#9;&#9;</xsl:text>
+    <xsl:text>&#9;</xsl:text>
     <xsl:value-of select="../@id"/>
     <xsl:text>, </xsl:text>
     <xsl:value-of select="@context"/>
+    <xsl:text>;&#10;</xsl:text>
+  </xsl:template>
+  <xsl:template match="gui:Command">
+    <xsl:text>&#9;</xsl:text>
+    <xsl:value-of select="@id"/>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>
