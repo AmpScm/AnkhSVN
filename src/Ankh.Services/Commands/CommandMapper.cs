@@ -102,6 +102,24 @@ namespace Ankh.Commands
             return false;
         }
 
+        public bool TryGetParameterList(AnkhCommand command, out string definition)
+        {
+            EnsureLoaded();
+
+            CommandMapItem item;
+
+            if (_map.TryGetValue(command, out item))
+            {
+                definition = item.ArgumentDefinition;
+
+                return !string.IsNullOrEmpty(definition);
+            }
+            else
+                definition = null;
+
+            return false;
+        }
+
         /// <summary>
         /// Gets the <see cref="CommandMapItem"/> for the specified command
         /// </summary>
@@ -182,6 +200,7 @@ namespace Ankh.Commands
                             item.ICommand = instance; // hooks all events in compatibility mode
                             item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
                             item.HideWhenDisabled = cmdAttr.HideWhenDisabled;
+                            item.ArgumentDefinition = cmdAttr.ArgumentDefinition;
                         }
                     }
                 }
@@ -374,6 +393,6 @@ namespace Ankh.Commands
             s.Append(text);
             return s.ToString();
         }
-        #endregion
+        #endregion        
     }
 }

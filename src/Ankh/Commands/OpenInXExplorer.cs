@@ -60,12 +60,12 @@ namespace Ankh.Commands
                 }
             }
 
-            if (parent == null)
+            if (parent == null || parent.Status.Uri == null)
                 return;
 
             IAnkhCommandService cmd = e.GetService<IAnkhCommandService>();
             if (cmd.DirectlyExecCommand(AnkhCommand.ShowRepositoryExplorer))
-                cmd.DirectlyExecCommand(AnkhCommand.AddRepositoryRoot, parent.Status.Uri);
+                cmd.DirectlyExecCommand(AnkhCommand.RepositoryBrowse, parent.Status.Uri);
         }
     }
 }

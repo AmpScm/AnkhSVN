@@ -12,6 +12,7 @@ namespace Ankh.Commands
     {
         readonly AnkhCommand _command;
         ICommandHandler _handler;
+        string _argumentDefinition;
 
         public event EventHandler<CommandEventArgs> Execute;
         public event EventHandler<CommandUpdateEventArgs> Update;
@@ -30,6 +31,12 @@ namespace Ankh.Commands
         {
             get { return _handler; }
             set { _handler = value; }
+        }
+
+        public string ArgumentDefinition
+        {
+            get { return _argumentDefinition; }
+            set { _argumentDefinition = value; }
         }
 
         protected internal void OnExecute(CommandEventArgs e)
