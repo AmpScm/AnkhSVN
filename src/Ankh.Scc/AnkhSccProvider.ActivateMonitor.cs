@@ -22,10 +22,10 @@ namespace Ankh.Scc
         {
             get
             {
-                if(_sccContextCookie == 0)
+                if (_sccContextCookie == 0)
                 {
                     Guid gCook = AnkhId.SccProviderGuid;
-                    if(!ErrorHandler.Succeeded(SelectionMonitor.GetCmdUIContextCookie(ref gCook, out _sccContextCookie)))
+                    if (!ErrorHandler.Succeeded(SelectionMonitor.GetCmdUIContextCookie(ref gCook, out _sccContextCookie)))
                         _sccContextCookie = 0;
                 }
                 return _sccContextCookie;
@@ -41,13 +41,11 @@ namespace Ankh.Scc
             }
 
             int active;
-            if(!ErrorHandler.Succeeded(SelectionMonitor.IsCmdUIContextActive(SccContextCookie, out active))
+            if (!ErrorHandler.Succeeded(SelectionMonitor.IsCmdUIContextActive(SccContextCookie, out active))
                 || (active == 0))
             {
-                return; 
+                return;
             }
-
-            _tryRegisteredBefore = true;            
 
             IAnkhCommandStates states = GetService<IAnkhCommandStates>();
 
@@ -66,6 +64,8 @@ namespace Ankh.Scc
 
                 // Set us active; this makes VS initialize the provider
                 RegisterAsPrimarySccProvider();
+
+                _tryRegisteredBefore = true;
             }
         }
     }
