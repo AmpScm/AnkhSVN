@@ -12,14 +12,14 @@ namespace Ankh.Scc.ProjectMap
         internal void Hook(bool hook)
         {
             uint cookie;
-            if(_hierarchyEventsCookie == 0 && hook)
+            if (_hierarchyEventsCookie == 0 && hook)
             {
-                if(ErrorHandler.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
+                if (ErrorHandler.Succeeded(ProjectHierarchy.AdviseHierarchyEvents(this, out cookie)))
                 {
                     _hierarchyEventsCookie = cookie;
                 }
             }
-            else if(!hook && (_hierarchyEventsCookie != 0))
+            else if (!hook && (_hierarchyEventsCookie != 0))
             {
                 cookie = _hierarchyEventsCookie;
                 _hierarchyEventsCookie = 0;
@@ -59,7 +59,7 @@ namespace Ankh.Scc.ProjectMap
 
             ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
 
-            if(walker == null)
+            if (walker == null)
                 return;
 
             if (itemid != VSConstants.VSITEMID_NIL)
@@ -73,39 +73,37 @@ namespace Ankh.Scc.ProjectMap
         {
             string r;
 
-            if(_loaded)
+            if (_loaded)
             {
-                if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r)))
+                if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
+                    && !string.IsNullOrEmpty(r) && SvnItem.IsValidPath(r))
                 {
-                    if (!string.IsNullOrEmpty(r) && SvnItem.IsValidPath(r))
+                    if (!System.IO.File.Exists(r) && !System.IO.Directory.Exists(r))
                     {
-                        if (!System.IO.File.Exists(r) && !System.IO.Directory.Exists(r))
-                            SetPreCreatedItem(itemidAdded);
-                        else
-                            SetPreCreatedItem(VSConstants.VSITEMID_NIL);
+                        SetPreCreatedItem(itemidAdded);
                     }
+                    else
+                        SetPreCreatedItem(VSConstants.VSITEMID_NIL);
                 }
             }
-            SetDirty();
+
             return VSConstants.S_OK;
         }
 
         public int OnItemDeleted(uint itemid)
         {
-            _context.GetService<ISccProjectWalker>().SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
+            SetPreCreatedItem(VSConstants.VSITEMID_NIL);
 
-            SetDirty();
             return VSConstants.S_OK;
         }
 
         public int OnItemsAppended(uint itemidParent)
         {
-            SetDirty();
             return VSConstants.S_OK;
         }
 
         public int OnPropertyChanged(uint itemid, int propid, uint flags)
-        {            
+        {
             return VSConstants.S_OK;
         }
     }

@@ -104,10 +104,14 @@ namespace Ankh.Selection
                 _currentContainer = pSCNew;
             }
 
-            if (itemidOld == _filterItem && pHierOld == _filterHierarchy)
+            if (_filterItem != VSConstants.VSITEMID_NIL)
             {
-                _filterHierarchy = null;
-                _filterItem = VSConstants.VSITEMID_NIL;
+                if (_filterItem != _currentItem || _filterHierarchy != _currentHierarchy)
+                {
+                    // Clear the filter if the selection change is not to exactly the filtered item
+                    _filterHierarchy = null;
+                    _filterItem = VSConstants.VSITEMID_NIL;
+                }
             }
 
             ClearCache();

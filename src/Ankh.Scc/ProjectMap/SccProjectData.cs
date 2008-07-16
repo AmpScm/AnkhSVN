@@ -362,12 +362,9 @@ namespace Ankh.Scc.ProjectMap
                 if(walker != null)
                     walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
                 
-                IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
-
                 ClearIdCache();
 
-                if (tracker != null)
-                    tracker.CheckDirty(ProjectFile);
+                SetDirty();
             }
         }
 
@@ -385,11 +382,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
             {
-                // Some projects don't notify they are dirty to the open document tracker when they are really changed
-                IAnkhOpenDocumentTracker tracker = _context.GetService<IAnkhOpenDocumentTracker>();
-
-                if (tracker != null)
-                    tracker.CheckDirty(ProjectFile);
+                SetDirty();
             }
         }
 
