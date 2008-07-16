@@ -1,4 +1,7 @@
 ﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?ifndef ankhVersion ?>
+  <?define ankhVersion=2.0.0.1 ?>
+  <?endif?>
   <Fragment>
     <ComponentGroup Id="Ankh.Package">
       <ComponentGroupRef Id="Ankh.Ids"/>
@@ -11,13 +14,17 @@
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Package.TargetDir)">
       <Component Id="C_Ankh.Package.dll" Guid="5B34B841-F029-4019-9B97-1C9FC098F178">
-		  <!-- File must be called File_$(Ankh.Package.TargetName).dll for the following includes-->
-		  <File Id="File_Ankh.Package.dll" Name="Ankh.Package.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
-		  <?ifdef Ankh_Pdb?>
-		  <File Id="CF_Ankh.Package.pdb" Name="Ankh.Package.pdb" Checksum="yes" Vital="yes" />
-		  <?endif?>
-		  <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2005.wxi ?>
-		  <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>
+        <!-- File must be called File_$(Ankh.Package.TargetName).dll for the following includes-->
+        <File Id="File_Ankh.Package.dll" Name="Ankh.Package.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+        <?ifdef Ankh_Pdb?>
+        <File Id="CF_Ankh.Package.pdb" Name="Ankh.Package.pdb" Checksum="yes" Vital="yes" />
+        <?endif?>
+        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation" Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
+        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation" Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
+        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
+        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
+        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2005.wxi ?>
+        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>        
       </Component>
     </DirectoryRef>
   </Fragment>
