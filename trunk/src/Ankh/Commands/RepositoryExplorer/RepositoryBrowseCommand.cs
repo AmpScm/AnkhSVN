@@ -14,8 +14,8 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.AddRepositoryRoot)]
-    public class AddRepositoryRootCommand : CommandBase
+    [Command(AnkhCommand.RepositoryBrowse, ArgumentDefinition="u", AlwaysAvailable=true)]
+    class RepositoryBrowseCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {
@@ -34,6 +34,9 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (info != null)
             {
+                IAnkhPackage pkg = e.GetService<IAnkhPackage>();
+                pkg.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
+
                 shell.AddRepositoryRoot(info);
             }
         }

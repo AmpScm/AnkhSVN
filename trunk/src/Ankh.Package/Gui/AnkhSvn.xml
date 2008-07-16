@@ -270,8 +270,9 @@
         <Group id="Grp_RepositoryExplorerToolBar" priority="0x100">
           <Button id="Cmd_Checkout" name="Checkout" priority="0x100"
 								text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png"/>
-          <Button id="Cmd_AddRepositoryRoot" name="AddRepositoryRoot" priority="0x200"
+          <Button id="Cmd_RepositoryBrowse" name="SvnRepositoryBrowse" priority="0x200"
 							  text="A&amp;dd Repository Url"
+                  menuText="Open Url in &amp;Repository Explorer" 
 							  toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
           <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x300"
                 text="&amp;Remove Repository URL"

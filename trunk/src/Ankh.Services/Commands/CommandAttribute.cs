@@ -59,5 +59,33 @@ namespace Ankh.Commands
             get { return _alwaysAvailable; }
             set { _alwaysAvailable = value; }
         }
+
+        string _argumentDefinition;
+        /// <summary>
+        /// Gets or sets the argument definition string
+        /// </summary>
+        /// <remarks>
+        ///     ‘~’ - No autocompletion for this parameter.
+        ///     ‘$’ - This parameter is the rest of the input line (no autocompletion).
+        ///     ‘a’ – An alias.
+        ///     ‘c’ – The canonical name of a command.
+        ///     ‘d’ – A filename from the file system.
+        ///     ‘p’ – The filename from a project in the current solution.
+        ///     ‘u’ – A URL.
+        ///     ‘|’ – Combines two parameter types for the same parameter.
+        ///     ‘*’ – Indicates zero or more occurrences of the previous parameter.
+        ///     
+        /// Some examples:
+        ///     "d|p *" filenames or projects
+        ///     
+        /// “p p” – Command accepts two filenames 
+        /// “u d” – Command accepts one URL and one filename argument.
+        /// “u *” – Command accepts zero or more URL arguments.
+        /// </remarks>
+        public string ArgumentDefinition
+        {
+            get { return _argumentDefinition; }
+            set { _argumentDefinition = value; }
+        }
     }
 }
