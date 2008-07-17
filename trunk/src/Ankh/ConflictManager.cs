@@ -1,5 +1,4 @@
 using System;
-using EnvDTE;
 using System.Diagnostics;
 using System.Collections;
 using System.IO;
@@ -74,13 +73,6 @@ namespace Ankh
 
 
         /// <summary>
-        ///  Event handler for when a conflict task item is clicked in VS
-        ///       
-        private void TaskNavigated(TaskItem taskItem, ref bool navigateHandled)
-        {
-        }
-
-        /// <summary>
         ///  Find the line that the conflict occurs on in the file with a conflict
         /// </summary>
         /// <param name="path">string: Path to file with a conflict</param>
@@ -88,17 +80,7 @@ namespace Ankh
         private ArrayList GetConflictLines(string path)
         {
             return new ArrayList();
-        }
-        /// <summary>
-        ///  Look through the task items and return true is a conflict task item already exists for a file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        private bool TaskExists(String path, int lineNumber, TaskList taskList)
-        {
-            bool exists = false;
-            return exists;
-        }
+        }        
 
         const string ConflictTaskItemCategory = "Conflict";
         const string SvnConflictString = "<<<<<<< .mine";

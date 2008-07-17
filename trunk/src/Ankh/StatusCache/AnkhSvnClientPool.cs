@@ -29,8 +29,17 @@ namespace Ankh
                 _notifyHandler = new NotificationHandler(context);
                 GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
             }
+        }
 
-            SvnClient.AddClientName("AnkhSVN", new System.Reflection.AssemblyName(typeof(AnkhSvnClientPool).Assembly.FullName).Version);
+        bool _ensuredNames;
+        void EnsureNames()
+        {
+            if(_ensuredNames)
+                return;
+            _ensuredNames = true;
+
+            SvnClient.AddClientName("VisualStudio", GetService<IAnkhSolutionSettings>().VisualStudioVersion);
+            SvnClient.AddClientName("AnkhSVN", new System.Reflection.AssemblyName(typeof(AnkhSvnClientPool).Assembly.FullName).Version);            
         }
 
         public SvnPoolClient GetClient()
@@ -57,6 +66,8 @@ namespace Ankh
 
         private SvnPoolClient CreateClient(bool hookUI)
         {
+            EnsureNames();
+
             IAnkhDialogOwner owner = GetService<IAnkhDialogOwner>();
 
             if (owner == null)
