@@ -324,7 +324,7 @@ namespace Ankh
         #endregion
 
         #region Attribute Info
-        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile;
+        const SvnItemState MaskGetAttributes = SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder;
 
         void UpdateAttributeInfo()
         {
@@ -336,8 +336,8 @@ namespace Ankh
             {
                 // File does not exist / no rights, etc.
 
-                SetState(SvnItemState.IsDiskFile, // File allows more optimizations in the svn case
-                    SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.Versionable);
+                SetState(SvnItemState.None,
+                    SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.Versionable | SvnItemState.IsDiskFolder | SvnItemState.IsDiskFile);
 
                 return;
             }
@@ -353,10 +353,13 @@ namespace Ankh
             if ((value & NativeMethods.FILE_ATTRIBUTE_DIRECTORY) != 0)
             {
                 unset |= SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
-                set &= ~SvnItemState.ReadOnly;
+                set = SvnItemState.IsDiskFolder | (set & ~SvnItemState.ReadOnly); // Don't set readonly
             }
             else
+            {
                 set |= SvnItemState.IsDiskFile;
+                unset |= SvnItemState.IsDiskFolder;
+            }
 
             SetState(set, unset);
         }
@@ -375,13 +378,13 @@ namespace Ankh
 
             if (!IsDirectory || !IsVersioned)
                 isNested = false; // Not nested
-            else if(sMe.IsSwitched)
+            else if (sMe.IsSwitched)
                 isNested = false; // Switched -> Not nested
-            else if((null == (parentItem = Parent)) || !parentItem.IsVersioned)
+            else if ((null == (parentItem = Parent)) || !parentItem.IsVersioned)
                 isNested = false; // No versioned parent
-            else 
+            else
             {
-                
+
                 AnkhStatus sPr = parentItem.Status;
 
                 bool mNull = (sMe.RepositoryId == null);
@@ -410,10 +413,6 @@ namespace Ankh
                 SetState(SvnItemState.None, SvnItemState.IsNested);
         }
         #endregion
-
-
-
-
 
         #region ISvnItemStateUpdate Members
 
