@@ -115,6 +115,11 @@ namespace Ankh.UI.PendingChanges
 
             #endregion
 
+            bool IsDirectory(SvnItem item)
+            {
+                return item.IsDirectory || item.NodeKind == SvnNodeKind.Directory;
+            }
+
             public SvnDepth CalculateCommitDepth()
             {
                 SvnDepth depth = SvnDepth.Empty;
@@ -125,7 +130,7 @@ namespace Ankh.UI.PendingChanges
                 {
                     SvnItem item = Cache[path];
 
-                    if (item.IsDirectory)
+                    if (IsDirectory(item))
                     {
                         if (item.IsDeleteScheduled)
                         {
@@ -162,7 +167,7 @@ namespace Ankh.UI.PendingChanges
                         {
                             SvnItem item = Cache[path];
 
-                            if (!item.IsDirectory || item.IsDeleteScheduled)
+                            if (!IsDirectory(item) || item.IsDeleteScheduled)
                                 continue; // Only check not to be deleted directories
 
                             if (!cl.Status(path, sa,
