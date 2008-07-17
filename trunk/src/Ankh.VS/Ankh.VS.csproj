@@ -65,6 +65,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extenders\ExtenderProvider.cs" />
+    <Compile Include="Extenders\SvnItemExtender.cs" />
     <Compile Include="TempFileManager.cs" />
     <Compile Include="AnkhVSColor.cs" />
     <Compile Include="Dialogs\AnkhDialogOwner.cs" />

@@ -6,7 +6,7 @@ using Ankh.Ids;
 using Ankh.Selection;
 
 
-namespace Ankh.Extenders
+namespace Ankh.VS.Extenders
 {
     /// <summary>
     /// This is the class factory for extender objects

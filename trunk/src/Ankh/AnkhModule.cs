@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Scc;
 using Ankh.UI;
-using Ankh.Extenders;
 using Ankh.ContextServices;
 using Ankh.Commands;
 using Ankh.Configuration;
@@ -54,9 +53,7 @@ namespace Ankh
                 FileStatusCache fsc = new FileStatusCache(Context);
                 Container.AddService(typeof(IFileStatusCache), fsc);
                 Container.AddService(typeof(ISvnItemChange), fsc);
-            }
-            Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
-            
+            }            
 
 #if !DEBUG
             Container.AddService(typeof(IAnkhErrorHandler), new AnkhErrorHandler(Context));
