@@ -75,9 +75,9 @@ namespace Ankh.WorkingCopyExplorer
 
         public abstract IFileSystemItem[] GetChildren();
 
-        public void Open()
+        public void Open(IAnkhServiceProvider context)
         {
-            this.explorer.OpenItem(this.SvnItem.FullPath);
+            this.explorer.OpenItem(context, SvnItem.FullPath);
         }
 
         [TextProperty("TextStatus", Order = 0, TextWidth = 18)]

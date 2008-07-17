@@ -38,7 +38,7 @@ namespace Ankh.UI
             get;
         }
 
-        void Open();
+        void Open(IAnkhServiceProvider context);
 
         SvnItem SvnItem { get; }
 

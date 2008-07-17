@@ -11,6 +11,10 @@ using Utils;
 using SharpSvn;
 using Ankh.Scc;
 using System.Collections.Generic;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.VS;
+using Microsoft.VisualStudio;
 
 namespace Ankh.WorkingCopyExplorer
 {
@@ -18,7 +22,7 @@ namespace Ankh.WorkingCopyExplorer
     {
         readonly List<FileSystemRootItem> _roots;
         WorkingCopyExplorerControl _control;
-        
+
         public WorkingCopyExplorer(IAnkhServiceProvider context)
             : base(context)
         {
@@ -177,7 +181,7 @@ namespace Ankh.WorkingCopyExplorer
                 }
             }
 
-            foreach(string path in Directory.GetFileSystemEntries(directoryItem.FullPath))
+            foreach (string path in Directory.GetFileSystemEntries(directoryItem.FullPath))
             {
                 string name = Path.GetFileName(path);
                 if (!string.Equals(name, SvnClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase) &&
@@ -192,23 +196,48 @@ namespace Ankh.WorkingCopyExplorer
             return new List<IFileSystemItem>(items.Values).ToArray();
         }
 
-        internal void OpenItem(string path)
+        internal void OpenItem(IAnkhServiceProvider context, string path)
         {
-            EnvDTE._DTE dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
-            if (File.Exists(path))
+            if (!File.Exists(path))
+                return;
+
+            try
             {
-                if (string.Equals(Path.GetExtension(path), ".sln", StringComparison.OrdinalIgnoreCase))
+                IAnkhSolutionSettings settings = context.GetService<IAnkhSolutionSettings>();
+
+                string filter = settings.AllProjectExtensionsFilter;
+
+                string pathExt = Path.GetExtension(path);
+
+                foreach (string ext in filter.Split(';'))
                 {
-                    dte.Solution.Open(path);
+                    string ex = ext.Trim().Replace("*", "");
+
+                    if (StringComparer.OrdinalIgnoreCase.Equals(ex, pathExt))
+                    {
+                        IVsSolution sol = context.GetService<IVsSolution>(typeof(SVsSolution));
+
+                        ErrorHandler.ThrowOnFailure(sol.OpenSolutionFile(0, path)); // This method allows opening projects and solutions
+                        return;
+                    }
                 }
-                else if (path.ToLower().EndsWith("proj"))
-                {
-                    dte.ExecuteCommand("File.OpenProject", path);
-                }
+
+
+                IVsUIHierarchy hier;
+                IVsWindowFrame frame;
+                uint id;
+
+
+                VsShellUtilities.OpenDocument(context, path, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
+            }
+            catch (Exception exception)
+            {
+                IAnkhErrorHandler handler = context.GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(exception);
                 else
-                {
-                    dte.ItemOperations.OpenFile(path, EnvDTE.Constants.vsViewKindPrimary);
-                }
+                    throw;
             }
         }
 
@@ -242,6 +271,6 @@ namespace Ankh.WorkingCopyExplorer
             SvnItem item = StatusCache[directory];
             FileSystemRootItem root = new FileSystemRootItem(Context, this, item);
             return root;
-        }        
+        }
     }
 }

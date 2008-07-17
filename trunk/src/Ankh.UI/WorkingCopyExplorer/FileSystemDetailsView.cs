@@ -148,7 +148,7 @@ namespace Ankh.UI
             }
             else
             {
-                item.Open();
+                item.Open(Context);
             }
         }
 
