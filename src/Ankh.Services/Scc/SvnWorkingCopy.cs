@@ -70,7 +70,7 @@ namespace Ankh.Scc
         /// <returns>
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        bool IEquatable<SvnWorkingCopy>.Equals(SvnWorkingCopy other)
+        bool Equals(SvnWorkingCopy other)
         {
             if((object)other == null)
                 return false;
