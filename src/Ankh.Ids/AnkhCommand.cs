@@ -87,7 +87,7 @@ namespace Ankh.Ids
         UpdateItemSpecific,
         ViewInVsNet,
         ViewInWindows,
-        CheckForOrphanedTreeNodes,
+        SolutionBranch,
 
         ItemOpenFolderInRepositoryExplorer,
         ItemOpenFolderInWorkingCopyExplorer,
@@ -221,7 +221,9 @@ namespace Ankh.Ids
         RevertSolutionToRevision,
 
         SwitchProject,
+        ProjectBranch,
+
         ActivateSccProvider,
-        ActivateVsExtender
+        ActivateVsExtender,
     }
 }

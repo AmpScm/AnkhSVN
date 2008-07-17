@@ -28,8 +28,6 @@ namespace Ankh.Commands
         SvnCommitResult commitInfo;
         string storedLogMessage = null;
 
-        static readonly string DefaultUuid = "";
-
         SvnCommitArgs _args;
 
         public override void OnUpdate(CommandUpdateEventArgs e)
