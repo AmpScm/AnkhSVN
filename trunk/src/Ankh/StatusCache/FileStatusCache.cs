@@ -261,7 +261,7 @@ namespace Ankh.StatusCache
                 {
                     if (((ISvnItemUpdate)walkItem).ShouldRefresh())
                         statSelf = true;
-                    if (walkingDirectory && !walkItem.IsVersioned)
+                    else if (walkingDirectory && !walkItem.IsVersioned)
                         statSelf = true;
                 }
 
