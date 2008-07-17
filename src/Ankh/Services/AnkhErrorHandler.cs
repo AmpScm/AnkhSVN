@@ -13,8 +13,8 @@ using SharpSvn;
 using Ankh.ContextServices;
 using Ankh.Xml;
 using System.Windows.Forms.Design;
-using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.VS;
 
 
 namespace Ankh
@@ -221,9 +221,9 @@ namespace Ankh
                 new System.Collections.Specialized.StringDictionary();
 
 
-            _DTE dte = GetService<_DTE>(typeof(SDTE));
-            if (dte != null)
-                additionalInfo.Add("VS-Version", dte.Version);
+            IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
+            if (ss != null)
+                additionalInfo.Add("VS-Version", ss.VisualStudioVersion.ToString());
 
             additionalInfo.Add("OS-Version", Environment.OSVersion.VersionString);
 
