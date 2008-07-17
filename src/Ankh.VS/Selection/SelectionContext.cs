@@ -92,6 +92,12 @@ namespace Ankh.Selection
             return VSConstants.S_OK;
         }
 
+        Disposer _disposer;
+        Disposer Disposer
+        {
+            get { return _disposer ?? (_disposer = new Disposer()); }
+        }
+
         public int OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld,
                 IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
         {
@@ -136,6 +142,13 @@ namespace Ankh.Selection
             _miscFiles = null;
             _selectedItemsMap = null;
             _isSolutionSelected = null;
+
+            if (_disposer != null)
+            {
+                Disposer d = _disposer;
+                _disposer = null;
+                d.Dispose();
+            }
         }
 
         public IVsHierarchy MiscellaneousProject
@@ -318,12 +331,12 @@ namespace Ankh.Selection
 
         protected IEnumerable<SelectionItem> GetSelectedItems()
         {
-            return _selectionItems ?? (_selectionItems = new CachedEnumerable<SelectionItem>(InternalGetSelectedItems()));
+            return _selectionItems ?? (_selectionItems = new CachedEnumerable<SelectionItem>(InternalGetSelectedItems(), Disposer));
         }
 
         protected IEnumerable<SelectionItem> GetSelectedItemsRecursive()
         {
-            return _selectionItemsRecursive ?? (_selectionItemsRecursive = new CachedEnumerable<SelectionItem>(InternalGetSelectedItemsRecursive()));
+            return _selectionItemsRecursive ?? (_selectionItemsRecursive = new CachedEnumerable<SelectionItem>(InternalGetSelectedItemsRecursive(), Disposer));
         }
 
         /// <summary>
@@ -494,12 +507,12 @@ namespace Ankh.Selection
 
         protected IEnumerable<string> GetSelectedFiles()
         {
-            return _filenames ?? (_filenames = new CachedEnumerable<string>(InternalGetSelectedFiles(false)));
+            return _filenames ?? (_filenames = new CachedEnumerable<string>(InternalGetSelectedFiles(false), Disposer));
         }
 
         protected IEnumerable<string> GetSelectedFilesRecursive()
         {
-            return _filenamesRecursive ?? (_filenamesRecursive = new CachedEnumerable<string>(InternalGetSelectedFiles(true)));
+            return _filenamesRecursive ?? (_filenamesRecursive = new CachedEnumerable<string>(InternalGetSelectedFiles(true), Disposer));
         }
 
         public IEnumerable<string> GetSelectedFiles(bool recursive)
@@ -537,12 +550,12 @@ namespace Ankh.Selection
 
         protected IEnumerable<SvnItem> GetSelectedSvnItems()
         {
-            return _svnItems ?? (_svnItems = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(false)));
+            return _svnItems ?? (_svnItems = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(false), Disposer));
         }
 
         protected IEnumerable<SvnItem> GetSelectedSvnItemsRecursive()
         {
-            return _svnItemsRecursive ?? (_svnItemsRecursive = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(true)));
+            return _svnItemsRecursive ?? (_svnItemsRecursive = new CachedEnumerable<SvnItem>(InternalGetSelectedSvnItems(true), Disposer));
         }
 
         public IEnumerable<SvnItem> GetSelectedSvnItems(bool recursive)
@@ -564,12 +577,12 @@ namespace Ankh.Selection
 
         protected IEnumerable<SvnProject> GetOwnerProjects()
         {
-            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(false)));
+            return _selectedProjects ?? (_selectedProjects = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(false), Disposer));
         }
 
         protected IEnumerable<SvnProject> GetOwnerProjectsRecursive()
         {
-            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(true)));
+            return _selectedProjectsRecursive ?? (_selectedProjectsRecursive = new CachedEnumerable<SvnProject>(InternalGetOwnerProjects(true), Disposer));
         }
 
         public IEnumerable<SvnProject> GetOwnerProjects(bool recursive)
@@ -737,7 +750,7 @@ namespace Ankh.Selection
             if (_selectedItemsMap != null && _selectedItemsMap.TryGetValue(typeof(T), out enumerable))
                 return (IEnumerable<T>)enumerable;
 
-            IEnumerable<T> v = new CachedEnumerable<T>(InternalGetSelection<T>());
+            IEnumerable<T> v = new CachedEnumerable<T>(InternalGetSelection<T>(), Disposer);
 
             if (_selectedItemsMap == null)
                 _selectedItemsMap = new Dictionary<Type, IEnumerable>();
