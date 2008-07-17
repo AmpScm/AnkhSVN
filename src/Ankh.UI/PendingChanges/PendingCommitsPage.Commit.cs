@@ -331,20 +331,20 @@ namespace Ankh.UI.PendingChanges
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
         {
-            string guid = null;
+            SvnWorkingCopy wc = null;
             foreach (PendingChange pc in state.Changes)
             {
                 SvnItem item = pc.Item;
 
                 if (item.IsVersioned)
                 {
-                    string id = item.Status.RepositoryId;
+                    SvnWorkingCopy w = item.WorkingCopy;
 
-                    if (guid == null)
-                        id = guid;
-                    else if (guid != id)
+                    if(wc == null)
+                        wc = w;
+                    else if (w != null && w != wc)
                     {
-                        state.MessageBox.Show("You can only commit to one repository at a time", "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+                        state.MessageBox.Show("You can only commit from one working copy at a time", "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
 
                         return false;
                     }

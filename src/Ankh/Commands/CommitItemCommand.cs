@@ -262,32 +262,18 @@ namespace Ankh.Commands
         /// <returns></returns>
         static ICollection<List<SvnItem>> SortByRepository(IEnumerable<SvnItem> items)
         {
-            Dictionary<string, List<SvnItem>> repositories = new Dictionary<string, List<SvnItem>>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<SvnWorkingCopy, List<SvnItem>> wcs = new Dictionary<SvnWorkingCopy, List<SvnItem>>();
             foreach (SvnItem item in items)
             {
-                string uuid = GetUuid(item);
+                SvnWorkingCopy wc = item.WorkingCopy;
 
-                if (string.IsNullOrEmpty(uuid))
-                    uuid = DefaultUuid;
+                if (!wcs.ContainsKey(wc))
+                    wcs.Add(wc, new List<SvnItem>());
 
-                if (!repositories.ContainsKey(uuid))
-                    repositories.Add(uuid, new List<SvnItem>());
-
-                repositories[uuid].Add(item);
+                wcs[wc].Add(item);
             }
 
-            return repositories.Values;
-        }
-
-        static string GetUuid(SvnItem item)
-        {
-            string uuid = null;
-            while (item != null && (null == (uuid = item.Status.RepositoryId)))
-            {
-                item = item.Parent;
-            }
-
-            return uuid;
-        }
+            return wcs.Values;
+        }  
     }
 }
