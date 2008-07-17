@@ -4,14 +4,18 @@ using System.Text;
 using EnvDTE;
 using Microsoft.VisualStudio.CommandBars;
 using System.Diagnostics;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Migrate
 {
     public static class Cleanup
     {
         [CLSCompliant(false)]
-        public static void RemoveOldUI(DTE dte, bool fullSearch)
+        public static void RemoveOldUI(IServiceProvider sp, bool fullSearch)
         {
+            _DTE dte = (_DTE)sp.GetService(typeof(SDTE));
+
+
 			foreach (Command c in dte.Commands)
 			{
                 if (c.Guid == "{1E58696E-C90F-11D2-AAB2-00C04F688DDE}")
