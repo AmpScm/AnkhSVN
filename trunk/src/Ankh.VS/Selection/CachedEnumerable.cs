@@ -5,6 +5,20 @@ using System.Text;
 
 namespace Ankh.Selection
 {
+    sealed class Disposer : IDisposable
+    {
+        bool _disposed;
+
+        public void Dispose()
+        {
+            _disposed = true;
+        }
+
+        public bool IsDisposed
+        {
+            get { return _disposed; }
+        }
+    }
     /// <summary>
     /// Caching IEnumerable wrapper, which only loads whatever is really needed from its inner enumerable, noting
     /// that getting each extra item might be expensive and perhaps unnecessary (as when updating menus)
@@ -15,19 +29,21 @@ namespace Ankh.Selection
     {
         readonly List<T> _cache;
         readonly IEnumerator<T> _enumerator;
+        readonly Disposer _disposer;
         bool _atTheEnd;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedIEnumerable&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="enumerabled">The inner enumerable.</param>
-        public CachedEnumerable(IEnumerable<T> enumerabled)
+        public CachedEnumerable(IEnumerable<T> enumerabled, Disposer disposer)
         {
             if (enumerabled == null)
                 throw new ArgumentNullException("enumerabled");
             
             _cache = new List<T>();
             _enumerator = enumerabled.GetEnumerator();
+            _disposer = disposer ?? new Disposer();
         }
 
         /// <summary>
@@ -88,15 +104,18 @@ namespace Ankh.Selection
             }
             else if (index == _cache.Count)
             {
-                if (!_atTheEnd && _enumerator.MoveNext())
+                if (!_atTheEnd)
                 {
-                    _cache.Add(value = _enumerator.Current);
-                    return true;
-                }
-                else if (!_atTheEnd)
-                {
-                    _enumerator.Dispose();
-                    _atTheEnd = true;
+                    if (!_disposer.IsDisposed && _enumerator.MoveNext())
+                    {
+                        _cache.Add(value = _enumerator.Current);
+                        return true;
+                    }
+                    else
+                    {
+                        _enumerator.Dispose();
+                        _atTheEnd = true;
+                    }
                 }
             }
 
