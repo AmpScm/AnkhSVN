@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using EnvDTE;
 
 namespace Ankh.Commands
 {
-    [Command(Ankh.Ids.AnkhCommand.MigrateSettings, AlwaysAvailable=true)]
+    [Command(Ankh.Ids.AnkhCommand.MigrateSettings, AlwaysAvailable = true)]
     class MigrateAnkhSettings : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -23,8 +22,7 @@ namespace Ankh.Commands
                 upgradeFrom = (int)e.Argument;
             }
 
-			DTE dte = e.GetService<DTE>();
-			Ankh.Migrate.Cleanup.RemoveOldUI(dte, !incremental);
+            Ankh.Migrate.Cleanup.RemoveOldUI(e.Context, !incremental);
         }
     }
 }
