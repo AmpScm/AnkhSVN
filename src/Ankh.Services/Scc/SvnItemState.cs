@@ -58,14 +58,19 @@ namespace Ankh.Scc
         IsDiskFile              = 0x000040,
 
         /// <summary>
+        /// Gets a boolean indicating whether the item is a directory
+        /// </summary>
+        IsDiskFolder            = 0x000080,
+
+        /// <summary>
         /// 
         /// </summary>
-        ReadOnly                = 0x000080,
+        ReadOnly                = 0x000100,
 
         /// <summary>
         /// The file is marked as dirty by the editor that has the file open
         /// </summary>
-        DocumentDirty           = 0x000100,
+        DocumentDirty           = 0x000200,
 
         /// <summary>
         /// Somehow modified in subversion

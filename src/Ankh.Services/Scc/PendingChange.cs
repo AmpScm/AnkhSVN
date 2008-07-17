@@ -238,8 +238,8 @@ namespace Ankh.Scc
         {
             if (Item.Exists)
             {
-                if (Item.IsDirectory)
-                    return context.IconMapper.DirectoryIcon;
+                if (Item.IsDirectory || Item.NodeKind == SvnNodeKind.Directory)
+                    return context.IconMapper.DirectoryIcon; // Is or was a directory
                 else
                     return context.IconMapper.GetIcon(FullPath);
             }
