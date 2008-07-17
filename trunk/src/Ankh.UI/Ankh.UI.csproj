@@ -14,7 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -177,6 +177,12 @@
     </Compile>
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SccManagement\CreateBranch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\CreateBranch.Designer.cs">
+      <DependentUpon>CreateBranch.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectory.cs">
       <SubType>Form</SubType>
@@ -738,6 +744,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeResultsDialog.resx">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\CreateBranch.resx">
+      <DependentUpon>CreateBranch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateDirectory.resx">
