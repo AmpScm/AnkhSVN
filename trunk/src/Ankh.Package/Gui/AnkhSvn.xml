@@ -137,9 +137,11 @@
                   toolTip="Revert this item to a specific revision."
                   iconFile="menu/RevertToVersion.png"
                   defaultInvisible="true"/>
-          <Button id="Cmd_SolutionMerge" priority="0xE0" name="MergeSolution"
+          <Button id="Cmd_SolutionBranch" priority="0xE0" name="BranchSolution"
+                  text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
+          <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
               text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>          
-          <ButtonRef id="Cmd_Refresh" priority="0xF0" />
+          <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
           <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
@@ -187,9 +189,11 @@
                   toolTip="Revert this item to a specific revision." 
                   iconFile="menu/RevertToVersion.png"
                   defaultInvisible="true"/>
-          <Button id="Cmd_ProjectMerge" priority="0xE0" name="MergeProject"
+          <Button id="Cmd_ProjectBranch" priority="0xE0" name="BranchSolution"
+                  text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
+          <Button id="Cmd_ProjectMerge" priority="0xF0" name="MergeProject"
               text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_Refresh" priority="0xF0" />
+          <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
