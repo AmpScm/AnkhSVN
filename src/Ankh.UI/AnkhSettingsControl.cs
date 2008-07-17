@@ -75,7 +75,10 @@ namespace Ankh.UI
                 IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
 
                 if (handler != null)
+                {
                     handler.OnError(ex);
+                    return;
+                }
 
                 throw;
             }
