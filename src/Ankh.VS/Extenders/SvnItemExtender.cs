@@ -9,7 +9,7 @@ using SharpSvn.Implementation;
 using Ankh.Scc;
 
 
-namespace Ankh.Extenders
+namespace Ankh.VS.Extenders
 {
     /// <summary>
     /// Extends <see cref="SvnItem"/> in the property grid

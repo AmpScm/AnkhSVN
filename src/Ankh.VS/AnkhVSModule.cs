@@ -10,6 +10,7 @@ using Ankh.VS.WebBrowser;
 using Ankh.ContextServices;
 using Ankh.Commands;
 using Ankh.VS.Selection;
+using Ankh.VS.Extenders;
 
 namespace Ankh.VS
 {
@@ -49,6 +50,8 @@ namespace Ankh.VS
             Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
             Container.AddService(typeof(IAnkhCommandStates), new CommandState(Context));
             Container.AddService(typeof(IAnkhTempFileManager), new TempFileManager(Context));
+
+            Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
         }
 
         /// <summary>

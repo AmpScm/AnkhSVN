@@ -107,10 +107,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
-    <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\envdte.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -300,7 +296,6 @@
     <Compile Include="Services\SolutionSettings.cs" />
     <Compile Include="StatusCache\FileStatusCleanup.cs" />
     <Compile Include="WorkingCopyExplorer\ExplorersShell.cs" />
-    <Compile Include="WorkingCopyExplorer\IAnkhSelectionContainer.cs" />
     <Compile Include="WorkingCopyExplorer\IExplorersShell.cs" />
     <Compile Include="WorkingCopyExplorer\IWorkingCopyExplorer.cs" />
     <Compile Include="NotificationHandler.cs" />
@@ -314,12 +309,6 @@
     <Compile Include="WorkingCopyExplorer\FileSystemDirectoryItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemItem.cs" />
-    <Compile Include="Extenders\ExtenderProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Extenders\SvnItemExtender.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Services\IContext.cs">
       <SubType>Code</SubType>
     </Compile>
