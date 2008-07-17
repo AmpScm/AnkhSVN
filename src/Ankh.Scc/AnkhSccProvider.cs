@@ -101,12 +101,6 @@ namespace Ankh.Scc
             {
                 _active = true;
 
-                // Enable our custom glyphs when we are set active
-                IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
-
-                if (solutionExplorer != null)
-                    solutionExplorer.EnableAnkhIcons(true);
-
                 // Delayed flush all glyphs of all projects when a user enables us.
                 IProjectNotifier pn = GetService<IProjectNotifier>();
 
@@ -121,6 +115,9 @@ namespace Ankh.Scc
                     pn.MarkDirty(allProjects);
                 }
             }
+
+            _ensureIcons = true;
+            RegisterForSccCleanup();
 
             return VSConstants.S_OK;
         }

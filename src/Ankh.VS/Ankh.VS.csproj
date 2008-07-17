@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="VsActivatorCommand.cs" />
     <Compile Include="Extenders\ExtenderProvider.cs" />
     <Compile Include="Extenders\SvnItemExtender.cs" />
     <Compile Include="TempFileManager.cs" />

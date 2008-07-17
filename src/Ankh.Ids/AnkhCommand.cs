@@ -221,6 +221,7 @@ namespace Ankh.Ids
         RevertSolutionToRevision,
 
         SwitchProject,
-        ActivateSccProvider
+        ActivateSccProvider,
+        ActivateVsExtender
     }
 }

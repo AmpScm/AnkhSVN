@@ -18,7 +18,7 @@ namespace Ankh.VS.SolutionExplorer
     /// <summary>
     /// 
     /// </summary>
-    class SolutionExplorerWindow : IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
+    sealed class SolutionExplorerWindow : IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
     {
         readonly IAnkhServiceProvider _environment;
         readonly SolutionTreeViewManager _manager;
@@ -36,7 +36,10 @@ namespace Ankh.VS.SolutionExplorer
 
             _environment = environment;
             _manager = new SolutionTreeViewManager(environment);
+        }
 
+        internal void Initialize()
+        {
             if (SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
                 _manager.Ensure(this);
         }
