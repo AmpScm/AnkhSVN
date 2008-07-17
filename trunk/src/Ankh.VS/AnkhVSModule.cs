@@ -11,6 +11,7 @@ using Ankh.ContextServices;
 using Ankh.Commands;
 using Ankh.VS.Selection;
 using Ankh.VS.Extenders;
+using Ankh.Ids;
 
 namespace Ankh.VS
 {
@@ -62,7 +63,13 @@ namespace Ankh.VS
             EnsureService<IFileStatusCache>();
             EnsureService<IStatusImageMapper>();
 
-            //throw new NotImplementedException();
+
+            IAnkhCommandService cs = GetService<IAnkhCommandService>();
+
+            if (cs != null)
+            {
+                cs.PostExecCommand(AnkhCommand.ActivateVsExtender); // Delay this until after loading the package
+            }
         }
     }
 }

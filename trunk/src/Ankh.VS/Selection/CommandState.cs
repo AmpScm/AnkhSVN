@@ -11,7 +11,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.VS.Selection
 {
-    class CommandState : AnkhService, IVsSelectionEvents, IAnkhCommandStates
+    sealed class CommandState : AnkhService, IVsSelectionEvents, IAnkhCommandStates
     {
         readonly IVsMonitorSelection _monitor;
         uint _cookie;
@@ -29,7 +29,7 @@ namespace Ankh.VS.Selection
             Marshal.ThrowExceptionForHR(Monitor.AdviseSelectionEvents(this, out _cookie));
         }
 
-        protected IVsMonitorSelection Monitor
+        IVsMonitorSelection Monitor
         {
             get { return _monitor; }
         }

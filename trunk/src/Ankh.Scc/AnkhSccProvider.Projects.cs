@@ -405,10 +405,20 @@ namespace Ankh.Scc
             }
         }
 
+        bool _ensureIcons;
         bool _registeredSccCleanup;
         internal void OnSccCleanup(CommandEventArgs e)
         {
             _registeredSccCleanup = false;
+
+            if (_ensureIcons && IsActive)
+            {
+                // Enable our custom glyphs when we are set active
+                IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
+
+                if (solutionExplorer != null)
+                    solutionExplorer.EnableAnkhIcons(true);
+            }
 
             if (_syncMap)
             {

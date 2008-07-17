@@ -9,24 +9,20 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Ankh.Scc;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VS.SolutionExplorer
 {
-    class SolutionTreeViewManager
+    sealed class SolutionTreeViewManager : AnkhService
     {
-        readonly IAnkhServiceProvider _environment;
-
         bool _useAnkhIcons;
         IntPtr _originalImageList;
 
         Win32TreeView _treeViewControl;
 
-        public SolutionTreeViewManager(IAnkhServiceProvider environment)
+        public SolutionTreeViewManager(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (environment == null)
-                throw new ArgumentNullException("environment");
-
-            _environment = environment;            
         }
 
         public Win32TreeView TreeView
@@ -50,7 +46,7 @@ namespace Ankh.VS.SolutionExplorer
             if (_treeViewControl != null && _treeViewControl.IsValid)
                 return;
 
-            EnvDTE.Window window = Microsoft.VisualStudio.Shell.VsShellUtilities.GetWindowObject(solutionExplorerWindow.SolutionExplorerFrame);
+            EnvDTE.Window window = VsShellUtilities.GetWindowObject(solutionExplorerWindow.SolutionExplorerFrame);
 
             string expCaption = window.Caption;
 
@@ -144,7 +140,7 @@ namespace Ankh.VS.SolutionExplorer
         IStatusImageMapper _statusImageMapper;
         IStatusImageMapper StatusImageMapper
         {
-            get { return _statusImageMapper ?? (_statusImageMapper = _environment.GetService<IStatusImageMapper>()); }
+            get { return _statusImageMapper ?? (_statusImageMapper = GetService<IStatusImageMapper>()); }
         }
 
         void SetIcons()
