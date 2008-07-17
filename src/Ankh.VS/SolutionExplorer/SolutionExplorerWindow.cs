@@ -18,9 +18,8 @@ namespace Ankh.VS.SolutionExplorer
     /// <summary>
     /// 
     /// </summary>
-    sealed class SolutionExplorerWindow : IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
+    sealed class SolutionExplorerWindow : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
     {
-        readonly IAnkhServiceProvider _environment;
         readonly SolutionTreeViewManager _manager;
         
         IVsWindowFrame _solutionExplorer;
@@ -29,13 +28,10 @@ namespace Ankh.VS.SolutionExplorer
         
         uint _cookie;
 
-        public SolutionExplorerWindow(IAnkhServiceProvider environment)
+        public SolutionExplorerWindow(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (environment == null)
-                throw new ArgumentNullException("environment");
-
-            _environment = environment;
-            _manager = new SolutionTreeViewManager(environment);
+            _manager = new SolutionTreeViewManager(Context);
         }
 
         internal void Initialize()
@@ -63,7 +59,7 @@ namespace Ankh.VS.SolutionExplorer
             {
                 if (_solutionExplorer == null)
                 {
-                    IVsUIShell shell = (IVsUIShell)_environment.GetService(typeof(SVsUIShell));
+                    IVsUIShell shell = GetService<IVsUIShell>(typeof(SVsUIShell));
 
                     Debug.Assert(shell != null); // Must be true
 
