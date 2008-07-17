@@ -8,6 +8,8 @@ using Ankh.VS;
 
 using SharpSvn;
 using IServiceProvider = System.IServiceProvider;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh
 {
@@ -31,16 +33,6 @@ namespace Ankh
                 _uiShell = uiShell;
 
             this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
-        }
-
-        EnvDTE._DTE _dte;
-        /// <summary>
-        /// The top level automation object.
-        /// </summary>
-        EnvDTE._DTE DTE
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return _dte ?? (_dte = GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE))); }
         }
 
         IUIShell _uiShell;
@@ -72,65 +64,65 @@ namespace Ankh
             get { return this._clientPool ?? (this._clientPool = GetService<ISvnClientPool>()); }
         }
 
-        bool _operationRunning;
         /// <summary>
-        /// Should be called before starting any lengthy operation
+        /// Was called before starting any lengthy operation
         /// </summary>
         public IDisposable StartOperation(string description)
         {
             //TODO: maybe refactor this?
-            _operationRunning = true;
-            try
-            {
-                this.DTE.StatusBar.Text = description + "...";
-                this.DTE.StatusBar.Animate(true, EnvDTE.vsStatusAnimation.vsStatusAnimationSync);
-            }
-            catch (Exception)
-            {
-                // Swallow, not critical
-            }
+            string oldText = null;
+            bool hadText = false;
+            
+            IVsStatusbar sb = GetService<IVsStatusbar>(typeof(SVsStatusbar));
 
-            return new OperationCompleter(this, this.OutputPane.StartActionText(description));
+            if (sb == null)
+                return null;
+
+            if (ErrorHandler.Succeeded(sb.GetText(out oldText)))
+            {
+                hadText = true;
+                sb.SetText(description);
+
+                object icon = (short)Constants.SBAI_Synch;
+                sb.Animation(1, ref icon);
+            }
+            return new OperationCompleter(OutputPane.StartActionText(description), sb, hadText, oldText);
         }
 
-        class OperationCompleter : IDisposable
+        sealed class OperationCompleter : IDisposable
         {
-            OldAnkhContext _context;
-            IDisposable _disp2;
+            readonly IVsStatusbar _sb;
+            readonly IDisposable _disp2;
+            readonly bool _hadText;
+            readonly string _oldText;
+            bool _disposed;
 
-            public OperationCompleter(OldAnkhContext context, IDisposable disp2)
+            public OperationCompleter(IDisposable disp2, IVsStatusbar sb, bool hadText, string oldText)
             {
-                _context = context;
+                if (sb == null)
+                    throw new ArgumentNullException("sb");
+
+                _sb = sb;
                 _disp2 = disp2;
+                _hadText = hadText;
+                _oldText = oldText;
             }
 
             public void Dispose()
             {
-                _context.EndOperation();
-                _context = null;
-                _disp2.Dispose();
-                _disp2 = null;
-            }
-        }
+                if (_disposed)
+                    return;
+                _disposed = true;
 
-        /// <summary>
-        ///  called at the end of any lengthy operation
-        /// </summary>
-        public void EndOperation()
-        {
-            if (_operationRunning)
-            {
-                try
-                {
-                    this.DTE.StatusBar.Text = "Ready";
-                    this.DTE.StatusBar.Animate(false, EnvDTE.vsStatusAnimation.vsStatusAnimationSync);
-                }
-                catch (Exception)
-                {
-                    // swallow, not critical
-                }
-                _operationRunning = false;
+                if (_hadText)
+                    _sb.SetText(_oldText);
+
+                object v = (short)Constants.SBAI_General;
+                _sb.Animation(0, ref v);
+
+                if (_disp2 != null)
+                    _disp2.Dispose();
             }
-        }
+        }  
     }
 }

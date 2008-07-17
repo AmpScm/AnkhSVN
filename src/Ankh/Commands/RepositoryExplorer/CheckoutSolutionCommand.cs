@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Utils;
-using EnvDTE;
 using Ankh.UI;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;

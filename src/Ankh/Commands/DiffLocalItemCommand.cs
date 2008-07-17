@@ -1,7 +1,6 @@
 // $Id$
 using System.IO;
 using Ankh.UI;
-using EnvDTE;
 using Ankh.Ids;
 using Ankh.VS;
 using System;
