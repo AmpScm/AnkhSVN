@@ -10,10 +10,10 @@ using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
-using EnvDTE;
 
 using Ankh.Ids;
 using Ankh.UI;
+using Ankh.VS;
 
 /*****************************************************************
  * This command performs update checks by calling our webservice
@@ -97,7 +97,7 @@ namespace Ankh.Commands
             }
 
             Version version = CurrentVersion;
-            Version vsVersion = new Version(e.GetService<_DTE>(typeof(SDTE)).Version);
+            Version vsVersion = e.GetService<IAnkhSolutionSettings>().VisualStudioVersion;
             Version osVersion = Environment.OSVersion.Version;
 
             StringBuilder sb = new StringBuilder();

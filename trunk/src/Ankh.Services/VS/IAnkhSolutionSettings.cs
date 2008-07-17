@@ -27,7 +27,13 @@ namespace Ankh.VS
         /// <value>The solution filename.</value>
         string SolutionFilename { get; }
 
+        /// <summary>
+        /// Default path where VS stores its new projects
+        /// </summary>
         string NewProjectLocation { get; }
+
+
+        Version VisualStudioVersion { get; }
 
         /// <summary>
         /// Gets the project root URI.

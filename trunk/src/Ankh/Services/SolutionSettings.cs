@@ -11,6 +11,7 @@ using Microsoft.VisualStudio;
 using Microsoft.Win32;
 using Ankh.UI;
 using System.Security;
+using FileVersionInfo=System.Diagnostics.FileVersionInfo;
 
 namespace Ankh.Settings
 {
@@ -346,6 +347,55 @@ namespace Ankh.Settings
                 return "C:\\";
             }
         }
+
+        Version _vsVersion;
+        public Version VisualStudioVersion
+        {
+            get
+            {
+                if (_vsVersion == null)
+                {
+                    IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+                    if(shell != null)
+                    {
+                        object r;
+                        if(ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out r)))
+                        {
+                            string path = r as string;
+
+                            if(!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
+                                path = Path.Combine(path, "msenv.dll");
+                            else
+                                path = null;
+
+                            if(path != null && File.Exists(path))
+                            {
+                                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(path);
+
+                                string s = fvi.ProductVersion;
+
+                                if (s != null)
+                                {
+                                    int i = 0;
+
+                                    while (i < s.Length && (char.IsDigit(s, i) || s[i] == '.'))
+                                        i++;
+
+                                    if (i < s.Length)
+                                        s = s.Substring(0, i);
+                                }
+
+                                if(!string.IsNullOrEmpty(s))
+                                    _vsVersion = new Version(s);
+                            }
+                        }
+                    }
+                }
+
+                return _vsVersion;
+            }
+        }  
 
         #region IAnkhSolutionSettings Members
 
