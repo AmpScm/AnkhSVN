@@ -4,7 +4,7 @@ using Ankh.UI;
 
 namespace Ankh
 {
-    public interface IWorkingCopyExplorer : IAnkhSelectionContainer
+    public interface IWorkingCopyExplorer
     {
         void AddRoot( string directory );
         bool IsRootSelected { get; }
