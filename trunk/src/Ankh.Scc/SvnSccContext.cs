@@ -820,6 +820,7 @@ namespace Ankh.Scc
                 file.Attributes = FileAttributes.Normal;
                 file.Delete();
             }
+            dir.Attributes = FileAttributes.Normal;
             dir.Delete();
         }        
 
