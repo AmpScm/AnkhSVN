@@ -13,6 +13,8 @@ namespace Ankh.Commands
         Never
     }
 
+    public delegate bool DelayDelegateCheck();
+
     public interface IAnkhCommandService
     {
         // ExecCommand has no args object because it would require a lot 
@@ -118,10 +120,18 @@ namespace Ankh.Commands
         /// <returns></returns>
         bool PostExecCommand(CommandID command, object args, CommandPrompt prompt);
 
+        // And those from the UI thread
         /// <summary>
         /// Updates the command UI.
         /// </summary>
         /// <param name="performImmediately">if set to <c>true</c> [perform immediately].</param>
         void UpdateCommandUI(bool performImmediately);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="check"></param>
+        void DelayPostCommands(DelayDelegateCheck check);
     }
 }
