@@ -629,7 +629,7 @@ namespace Ankh.Scc
                 });
         }
 
-        private static void RetriedRename(string path, string tmp)
+        internal static void RetriedRename(string path, string tmp)
         {
             const int retryCount = 4;
             for (int i = 0; i < retryCount; i++)

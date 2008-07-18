@@ -470,10 +470,14 @@ namespace Ankh.Scc
                             continue; // No backupdir, we can't delete or move it
 
                         if (Directory.Exists(originalDir))
-                            svn.DeleteDirectory(backupDir); // The original has not been deleted by visual studio, must be an exclude.
+                        {
+                            // The original has not been deleted by visual studio, must be an exclude.
+                            svn.DeleteDirectory(backupDir);
+                        }
                         else
                         {
-                            Directory.Move(backupDir, originalDir); // Original is gone, must be a delete, put back backup so we can svn-delete it
+                            // Original is gone, must be a delete, put back backup so we can svn-delete it
+                            SvnSccContext.RetriedRename(backupDir, originalDir); // Use retried rename, to prevent virus-scanner locks
                             svn.WcDelete(originalDir);
                         }
                     }
