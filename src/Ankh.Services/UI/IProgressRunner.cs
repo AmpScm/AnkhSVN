@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using System.ComponentModel;
 
 namespace Ankh
 {
@@ -9,15 +10,17 @@ namespace Ankh
     {
         readonly AnkhContext _context;
         readonly SvnClient _client;
+        readonly ISynchronizeInvoke _sync;
         Exception _exception;
 
-        public ProgressWorkerArgs(IAnkhServiceProvider context, SvnClient client)
+        public ProgressWorkerArgs(IAnkhServiceProvider context, SvnClient client, ISynchronizeInvoke sync)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             _context = context.GetService<AnkhContext>();
             _client = client;
+            _sync = sync;
         }
 
         public SvnClient Client
@@ -34,6 +37,11 @@ namespace Ankh
         {
             get { return _exception; }
             set { _exception = value; }
+        }
+
+        public ISynchronizeInvoke Synchronizer
+        {
+            get { return _sync; }
         }
     }
 

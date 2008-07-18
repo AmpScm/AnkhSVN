@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.RepositoryExplorer;
+using SharpSvn;
 
 namespace Ankh.UI.SccManagement
 {
@@ -71,16 +72,59 @@ namespace Ankh.UI.SccManagement
             set { fromUrlBox.Text = value.AbsoluteUri; }
         }
 
+        public bool CopyFromUri
+        {
+            get { return !this.wcVersionRadio.Checked; }
+        }
+
+        public SvnRevision SelectedRevision
+        {
+            get
+            {
+                if (headVersionRadio.Checked)
+                    return SvnRevision.Head;
+                else if (wcVersionRadio.Checked)
+                    return SvnRevision.Working;
+                else
+                    return new SvnRevision(Revision);
+            }
+        }
+
+
+        bool _noTypeChange;
+
         public long Revision
         {
             get { return (long)versionBox.Value; }
-            set { versionBox.Value = Revision; }
+            set { _noTypeChange = true; versionBox.Value = value; _noTypeChange = false; }
         }
 
-        public string NewDirectoryName
+        public bool SwitchToBranch
         {
-            get { return toUrlBox.Text; }
-            set { toUrlBox.Text = value; }
+            get { return switchBox.Checked; }
+            set { switchBox.Checked = value; }
+        }
+
+        public Uri NewDirectoryName
+        {
+            get 
+            {
+                Uri r;
+
+                if (!string.IsNullOrEmpty(toUrlBox.Text) && Uri.TryCreate(toUrlBox.Text, UriKind.Absolute, out r))
+                {
+                    return r;
+                }
+                else
+                    return null;
+            }
+            set
+            {
+                if (value == null)
+                    toUrlBox.Text = "";
+                else
+                    toUrlBox.Text = value.AbsoluteUri;
+            }
         }
 
         bool _editSource;
@@ -99,9 +143,11 @@ namespace Ankh.UI.SccManagement
         {
 
         }
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            specificVersionRadio.Checked = true;
+            if(!_noTypeChange)
+                specificVersionRadio.Checked = true;
 
         }
 
@@ -126,6 +172,11 @@ namespace Ankh.UI.SccManagement
                         toUrlBox.Text = dlg.SelectedUri.AbsoluteUri;
                 }
             }
+        }
+
+        private void toUrlBox_TextAlignChanged(object sender, EventArgs e)
+        {
+            btnOk.Enabled = (NewDirectoryName != null);
         }
     }
 }

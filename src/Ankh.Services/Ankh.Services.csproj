@@ -54,6 +54,7 @@
     <Compile Include="AnkhModule.cs" />
     <Compile Include="AnkhRuntime.cs" />
     <Compile Include="AnkhService.cs" />
+    <Compile Include="Commands\AnkhAction.cs" />
     <Compile Include="Commands\BaseCommandEventArgs.cs" />
     <Compile Include="Commands\CommandAttribute.cs" />
     <Compile Include="Commands\CommandEventArgs.cs" />
