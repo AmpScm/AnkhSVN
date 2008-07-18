@@ -26,8 +26,8 @@ namespace Ankh.VSPackage
     // We define the toolwindows here. We implement them as some kind of
     // .Net control hosted in this container. This container makes sure
     // user settings are persisted, etc.
-    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
-    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.Float, Transient = false, Width = 600, Height = 300)]
+    [ProvideToolWindow(typeof(WorkingCopyExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
+    [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
