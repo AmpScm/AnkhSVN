@@ -74,7 +74,7 @@ namespace Ankh.VS.SolutionExplorer
         {
             get
             {
-                return (IntPtr)Win32.SendMessage(_hwnd, Msg.TVM_GETIMAGELIST,
+                return Win32.SendMessage(_hwnd, Msg.TVM_GETIMAGELIST,
                     Constants.TVSIL_NORMAL, IntPtr.Zero);
             }
             set

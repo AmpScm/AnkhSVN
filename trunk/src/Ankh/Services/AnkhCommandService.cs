@@ -8,6 +8,8 @@ using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace Ankh
 {
@@ -118,20 +120,40 @@ namespace Ankh
             return PostExecCommand(command, args, CommandPrompt.DoDefault);
         }
 
-        public bool PostExecCommand(System.ComponentModel.Design.CommandID command, object args, CommandPrompt prompt)
+        delegate void PostTask();
+        bool _delayed;
+        readonly List<PostTask> _delayTasks = new List<PostTask>();
+
+        public bool PostExecCommand(CommandID command, object args, CommandPrompt prompt)
         {
             if (command == null)
                 throw new ArgumentNullException("command");
 
-            // TODO: Verify if we should marshal to the UI thread ourselved
+            if(_delayed)
+            {
+                lock(_delayTasks)
+                {
+                    _delayTasks.Add(
+                        delegate
+                        {
+                            PerformPost(command, prompt, args);
+                        });
+                }
 
+                return true;
+            }
+            else
+            {
+                return PerformPost(command, prompt, args);
+            }
+        }
+
+        bool PerformPost(CommandID command, CommandPrompt prompt, object args)
+        {
             IVsUIShell shell = UIShell;
 
             if (shell != null)
             {
-                Guid set = command.Guid;
-                object a = args;
-
                 uint flags;
                 switch (prompt)
                 {
@@ -146,11 +168,75 @@ namespace Ankh
                         break;
                 }
 
-                return VSConstants.S_OK == shell.PostExecCommand(ref set, 
-                    unchecked((uint)command.ID), flags, ref a);
+                Guid set = command.Guid;
+                object a = args;
+
+                return VSConstants.S_OK == shell.PostExecCommand(ref set,
+                        unchecked((uint)command.ID), flags, ref a);
             }
 
             return false;
+        }
+
+        readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();
+        readonly WindowsFormsSynchronizationContext _syncContext = new WindowsFormsSynchronizationContext();
+        public void DelayPostCommands(DelayDelegateCheck check)
+        {
+            if (check == null)
+                throw new ArgumentNullException("check");
+            
+            _checks.Add(check);
+            if (!_delayed)
+            {
+                _delayed = true;
+                _syncContext.Post(TryRelease, null);
+            }
+        }
+
+        void TryRelease(object v)
+        {
+            if(_delayed)
+                TryReleaseDelayed();
+
+            if (_delayed)
+                PostCheck();                
+        }
+
+        void PostCheck()
+        {
+            PostTask pt = delegate()
+            {
+                Thread.Sleep(50);
+                _syncContext.Post(TryRelease, null);
+            };
+
+            pt.BeginInvoke(null, null);
+        }
+
+        void TryReleaseDelayed()
+        {
+            for (int i = 0; i < _checks.Count; i++)
+            {
+                if (!_checks[i]())
+                    _checks.RemoveAt(i--);
+            }
+
+            lock (_delayTasks)
+            {
+                if (_checks.Count == 0)
+                {
+                    try
+                    {
+                        foreach (PostTask dpc in _delayTasks)
+                            dpc();
+                    }
+                    finally
+                    {
+                        _delayTasks.Clear();
+                        _delayed = false;
+                    }
+                }
+            }
         }
 
         #endregion

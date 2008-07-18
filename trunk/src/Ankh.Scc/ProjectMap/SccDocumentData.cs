@@ -9,6 +9,7 @@ using Ankh.Selection;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -192,6 +193,7 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        bool _delayedDirty;
         internal void SetDirty(bool dirty)
         {
             if (dirty == _isDirty)
@@ -202,7 +204,34 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            UpdateGlyph();
+            if (!_delayedDirty)
+            {
+                IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+
+                Guid gV = Guid.Empty;
+                IVsUIHierarchy hier;
+                uint[] openId = new uint[1];
+                IVsWindowFrame wf;
+                int open;
+                if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
+                    out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+                {
+                    IVsTextViewEx tv = VsShellUtilities.GetTextView(wf) as IVsTextViewEx;
+
+                    if ((tv.IsCompletorWindowActive() == 0) || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                    {
+                        _delayedDirty = true;
+                        GetService<IAnkhCommandService>().DelayPostCommands(
+                            delegate
+                            {
+                                if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
+                                    return true; // Keep the delay
+                                else
+                                    return _delayedDirty = false; // Delay completed
+                            });
+                    }
+                }
+            }
 
             IFileStatusCache fcc = GetService<IFileStatusCache>();
 
@@ -213,6 +242,8 @@ namespace Ankh.Scc.ProjectMap
                 if (sisu != null)
                     sisu.SetDocumentDirty(dirty);
             }
+
+            UpdateGlyph();            
         }
 
         internal void CheckDirty()
