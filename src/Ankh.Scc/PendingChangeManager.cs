@@ -29,8 +29,13 @@ namespace Ankh.Scc
                 {
                     _isActive = value;
 
-                    if(Change != null)
-                        Change.SvnItemsChanged += new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
+                    if (Change != null)
+                    {
+                        if (value)
+                            Change.SvnItemsChanged += new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
+                        else
+                            Change.SvnItemsChanged -= new EventHandler<SvnItemsEventArgs>(OnSvnItemsChanged);
+                    }
 
                     OnIsActiveChanged(new PendingChangeEventArgs(this, null));
                 }
