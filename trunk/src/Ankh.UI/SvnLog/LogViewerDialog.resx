@@ -196,7 +196,7 @@
     <value>logViewerControl</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3093.29213, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3119.35996, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Parent" xml:space="preserve">
     <value>$this</value>
