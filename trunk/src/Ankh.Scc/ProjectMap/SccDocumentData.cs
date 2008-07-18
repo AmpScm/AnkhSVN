@@ -45,10 +45,18 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        [DebuggerStepThrough]
         T GetService<T>()
             where T : class
         {
             return _context.GetService<T>();
+        }
+
+        [DebuggerStepThrough]
+        T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return _context.GetService<T>(serviceType);
         }
 
         /// <summary>
