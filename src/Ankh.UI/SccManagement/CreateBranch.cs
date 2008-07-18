@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI.SccManagement
 {
@@ -47,16 +48,46 @@ namespace Ankh.UI.SccManagement
             }
         }
 
+        public string SrcFolder
+        {
+            get { return fromFolderBox.Text; }
+            set { fromFolderBox.Text = value; }
+        }
+
+        public Uri SrcUri
+        {
+            get 
+            {
+                Uri r;
+
+                if (!string.IsNullOrEmpty(fromUrlBox.Text) &&
+                    Uri.TryCreate(fromUrlBox.Text, UriKind.Absolute, out r))
+                {
+                    return r;
+                }
+
+                return null;
+            }
+            set { fromUrlBox.Text = value.AbsoluteUri; }
+        }
+
+        public long Revision
+        {
+            get { return (long)versionBox.Value; }
+            set { versionBox.Value = Revision; }
+        }
+
         public string NewDirectoryName
         {
             get { return toUrlBox.Text; }
             set { toUrlBox.Text = value; }
         }
 
-        public bool NewDirectoryReadonly
+        bool _editSource;
+        public bool EditSource
         {
-            get { return !toUrlBox.Enabled; }
-            set { toUrlBox.Enabled = !value; }
+            get { return _editSource; }
+            set { fromFolderBox.ReadOnly = fromUrlBox.ReadOnly = !(_editSource = value); }
         }
 
         public string LogMessage
@@ -68,10 +99,33 @@ namespace Ankh.UI.SccManagement
         {
 
         }
-
-        private void versionBox_TextChanged(object sender, EventArgs e)
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             specificVersionRadio.Checked = true;
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toUrlBrowse_Click(object sender, EventArgs e)
+        {
+            using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+            {
+                dlg.EnableNewFolderButton = true;
+                Uri r;
+
+                if (Uri.TryCreate(toUrlBox.Text, UriKind.Absolute, out r))
+                    dlg.SelectedUri = r;
+
+                if (dlg.ShowDialog(Context) == DialogResult.OK)
+                {
+                    if (dlg.SelectedUri != null)
+                        toUrlBox.Text = dlg.SelectedUri.AbsoluteUri;
+                }
+            }
         }
     }
 }
