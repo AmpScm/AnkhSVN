@@ -7,6 +7,7 @@ using Ankh.Scc;
 using SharpSvn;
 using Ankh.UI.SccManagement;
 using System.Windows.Forms;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -16,7 +17,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-#if DEBUG // Remove debug check if somewhat functional
             switch (e.Command)
             {
                 case AnkhCommand.SolutionBranch:
@@ -39,7 +39,6 @@ namespace Ankh.Commands
                     }
                     return;
             }
-#endif
             e.Enabled = false;
         }
 
@@ -75,8 +74,67 @@ namespace Ankh.Commands
 
                 dlg.Revision = root.Status.Revision;
 
-                if (DialogResult.OK != dlg.ShowDialog(e.Context))
-                    return;
+                RepositoryLayoutInfo info;
+                if (RepositoryUrlUtils.TryGuessLayout(e.Context, root.Status.Uri, out info))
+                    dlg.NewDirectoryName = new Uri(info.BranchesRoot, ".");
+
+                while(true)
+                {
+                    if (DialogResult.OK != dlg.ShowDialog(e.Context))
+                        return;
+
+                    string msg = dlg.LogMessage;
+
+                    bool retry = false;
+                    bool ok = false;
+                    ProgressRunnerResult rr =
+                        e.GetService<IProgressRunner>().Run("Creating Branch/Tag",
+                        delegate(object sender, ProgressWorkerArgs ee)
+                        {
+                            SvnInfoArgs ia = new SvnInfoArgs();
+                            ia.ThrowOnError =false;
+
+                            if(ee.Client.Info(dlg.NewDirectoryName, ia, null))
+                            {
+                                DialogResult dr = DialogResult.Cancel;
+
+                                ee.Synchronizer.Invoke((AnkhAction)
+                                    delegate
+                                    {
+                                        AnkhMessageBox mb = new AnkhMessageBox(ee.Context);
+
+                                        dr = mb.Show(string.Format("The Branch/Tag at Url {0} already exists, would you like to overwrite it with the specified branch?", dlg.NewDirectoryName),
+                                            "Path Exists", MessageBoxButtons.YesNoCancel);
+                                    }, null);
+
+                                if (dr == DialogResult.No)
+                                {
+                                    retry = true;
+                                    return;
+                                }
+                                else if (dr != DialogResult.Yes)
+                                    return;
+                            }
+
+                            SvnCopyArgs ca = new SvnCopyArgs();
+                            ca.MakeParents = true;
+                            ca.LogMessage = msg;
+
+                            if (dlg.CopyFromUri)
+                                ok = ee.Client.RemoteCopy(new SvnUriTarget(dlg.SrcUri, dlg.SelectedRevision), dlg.NewDirectoryName, ca);
+                            else
+                                ok = ee.Client.RemoteCopy(new SvnPathTarget(dlg.SrcFolder), dlg.NewDirectoryName, ca);
+                        });
+
+                    if(rr.Succeeded && ok && dlg.SwitchToBranch)
+                    {
+                        e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.SolutionSwitchDialog, dlg.NewDirectoryName);
+                    }
+
+                    if (!retry)
+                        break;
+                }
+                
             }
         }
     }

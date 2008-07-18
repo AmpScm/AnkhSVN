@@ -67,6 +67,8 @@ namespace Ankh
                 get { return _cancelled; }
             }
 
+            ISynchronizeInvoke _sync;
+
             /// <summary>
             /// Call this to start the operation.
             /// </summary>
@@ -81,6 +83,7 @@ namespace Ankh
                 using (SvnClient client = pool.GetClient())
                 using (dialog.Bind(client))
                 {
+                    _sync = dialog;
                     dialog.Caption = caption;
                     dialog.Context = _context;
                     thread.Name = "AnkhSVN Worker";
@@ -118,7 +121,7 @@ namespace Ankh
                 SvnClient client = (SvnClient)arg;
                 try
                 {
-                    ProgressWorkerArgs awa = new ProgressWorkerArgs(_context, client);
+                    ProgressWorkerArgs awa = new ProgressWorkerArgs(_context, client, _sync);
                     _worker(null, awa);
 
                     if (_exception == null && awa.Exception != null)
