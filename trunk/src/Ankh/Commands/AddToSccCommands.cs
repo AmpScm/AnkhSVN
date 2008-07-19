@@ -97,7 +97,7 @@ namespace Ankh.Commands
 
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
-            if (!scc.IsSolutionManaged && !cache[e.Selection.SolutionFilename].IsVersioned)
+            if (!scc.IsSolutionManaged || !cache[e.Selection.SolutionFilename].IsVersioned)
             {
                 bool confirmed = false;
                 SvnItem item = cache[e.Selection.SolutionFilename];
@@ -209,7 +209,7 @@ namespace Ankh.Commands
 
             if (mapper != null)
             {
-                if (!e.IsInAutomation)
+                if (!e.DontPrompt && !e.IsInAutomation)
                 {
                     StringBuilder sb = new StringBuilder();
                     bool foundOne = false;
