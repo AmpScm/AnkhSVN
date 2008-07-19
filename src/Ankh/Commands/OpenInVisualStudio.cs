@@ -111,6 +111,19 @@ namespace Ankh.Commands
                                 if (ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
                                 {
                                     hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
+
+                                    // Now try to activate the solution explorer
+                                    IVsWindowFrame solutionExplorer;
+                                    Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
+                                    IVsUIShell shell = e.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                                    if (shell != null)
+                                    {
+                                        shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer);
+
+                                        if (solutionExplorer != null)
+                                            solutionExplorer.Show();
+                                    }
                                 }
                             }
                             break;
