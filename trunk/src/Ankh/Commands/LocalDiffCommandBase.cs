@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Ankh.Scc;
 using System.CodeDom.Compiler;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -246,11 +247,38 @@ namespace Ankh.Commands
                 return item.FullPath;
             }
 
+            string tempFile = context.GetService<IAnkhTempFileManager>().GetTempFile(Path.GetExtension(item.FullPath));
             // we need to get it from the repos
-            CatRunner runner = new CatRunner(revision, item.Status.Uri);
-            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", runner.Work);
+            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
+            { 
+                SvnTarget target;
 
-            return runner.Path;
+                switch(revision.RevisionType)
+                {
+                    case SvnRevisionType.Head:
+                    case SvnRevisionType.Number:
+                    case SvnRevisionType.Time:
+                        target = new SvnUriTarget(item.Status.Uri);
+                        break;
+                    default:
+                        target = new SvnPathTarget(item.FullPath);
+                        break;
+                }
+                SvnWriteArgs args = new SvnWriteArgs();
+                args.Revision = revision;
+                args.SvnError += delegate(object sender, SvnErrorEventArgs eea)
+                {
+                    if (eea.Exception is SvnClientUnrelatedResourcesException)
+                        eea.Cancel = true;
+                };
+                
+                using (FileStream stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
+                {
+                    ee.Client.Write(target, stream, args);
+                }
+            });
+
+            return tempFile;
         }
     }
 }
