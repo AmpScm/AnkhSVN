@@ -18,18 +18,20 @@ namespace Ankh.Migrate
 
 			foreach (Command c in dte.Commands)
 			{
-                if (c.Guid == "{1E58696E-C90F-11D2-AAB2-00C04F688DDE}" && c.Name.StartsWith("Ankh"))
+
+                try
                 {
-                    try
+                    if (c.Guid == "{1E58696E-C90F-11D2-AAB2-00C04F688DDE}" && c.Name.StartsWith("Ankh"))
                     {
+
                         c.Delete();
                     }
-                    catch 
-                    {
-                        // For some weird reason c.Delete() can throw:
-                        //   System.ArgumentException: 
-                        //   Value does not fall within the expected range. 
-                    }
+                }
+                catch
+                {
+                    // For some weird reason c.Delete() can throw:
+                    //   System.ArgumentException: 
+                    //   Value does not fall within the expected range. 
                 }
 			}
 
