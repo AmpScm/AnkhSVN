@@ -71,19 +71,48 @@ namespace Ankh.VS
                 if (!dir.Exists)
                     return;
 
-                foreach (DirectoryInfo sd in dir.GetDirectories())
+                DirectoryInfo[] directories = null;
+                try
                 {
-                    RecursiveDelete(sd);
+                    directories = dir.GetDirectories();
+                }
+                catch
+                { }
+
+                if (directories != null)
+                {
+                    foreach (DirectoryInfo sd in directories)
+                    {
+                        RecursiveDelete(sd);
+                    }
                 }
 
-                foreach (FileInfo file in dir.GetFiles())
+                FileInfo[] files = null;
+                try
                 {
-                    file.Attributes = FileAttributes.Normal;
-                    file.Delete();
+                    files = dir.GetFiles();
+                }
+                catch { }
+
+                if (files != null)
+                {
+                    foreach (FileInfo file in files)
+                    {
+                        try
+                        {
+                            file.Attributes = FileAttributes.Normal;
+                            file.Delete();
+                        }
+                        catch { }
+                    }
                 }
 
-                dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
-                dir.Delete();
+                try
+                {
+                    dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
+                    dir.Delete();
+                }
+                catch { }
             }
 
             public void AddDirectory(string name, bool keepDir)
