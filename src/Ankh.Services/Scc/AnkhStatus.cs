@@ -6,6 +6,13 @@ using System.Diagnostics;
 
 namespace Ankh
 {
+    public enum NoSccStatus
+    {
+        Unknown,
+        NotVersioned,
+        NotExisting
+    }
+
     [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
     public sealed class AnkhStatus
     {
@@ -66,7 +73,7 @@ namespace Ankh
         /// <summary>
         /// Default status for nodes which do exist but are not managed
         /// </summary>
-        public static AnkhStatus NotVersioned
+        internal static AnkhStatus NotVersioned
         {
             get { return _unversioned; }
         }
@@ -74,7 +81,7 @@ namespace Ankh
         /// <summary>
         /// Default status for nodes which don't exist and are not managed
         /// </summary>
-        public static AnkhStatus NotExisting
+        internal static AnkhStatus NotExisting
         {
             get { return _none; }
         }
