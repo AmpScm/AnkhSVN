@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.UI
 {
@@ -24,18 +25,21 @@ namespace Ankh.UI
 
         public SvnDepth Depth
         {
+            [DebuggerStepThrough]
             get { return _depth; }
             set { _depth = value; }
         }
 
         public SvnRevision RevisionStart
         {
+            [DebuggerStepThrough]
             get { return _start; }
             set { _start = value; }
         }
 
         public SvnRevision RevisionEnd
         {
+            [DebuggerStepThrough]
             get { return _end; }
             set { _end = value; }
         }
@@ -43,14 +47,13 @@ namespace Ankh.UI
 
         public IList<SvnItem> Selection
         {
-            get
-            {
-                return _selection;
-            }
+            [DebuggerStepThrough]
+            get { return _selection; }
         }
 
         public bool Succeeded
         {
+            [DebuggerStepThrough]
             get { return _succeeded; }
         }
     }
