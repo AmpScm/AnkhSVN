@@ -51,6 +51,7 @@ namespace Ankh.VS
             Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
             Container.AddService(typeof(IAnkhCommandStates), new CommandState(Context));
             Container.AddService(typeof(IAnkhTempFileManager), new TempFileManager(Context));
+            Container.AddService(typeof(IAnkhTempDirManager), new TempDirManager(Context));
 
             Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
         }
