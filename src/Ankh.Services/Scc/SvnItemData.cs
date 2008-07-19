@@ -55,7 +55,12 @@ namespace Ankh.Scc
                     {
                         ISvnProjectInfo info = mapper.GetProjectInfo(p);
 
-                        if (info != null)
+                        if (info == null)
+                        {
+                            if (string.Equals(FullPath, mapper.SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                                return "<Solution>";
+                        }
+                        else
                         {
                             if (sb.Length > 0)
                                 sb.Append(';');

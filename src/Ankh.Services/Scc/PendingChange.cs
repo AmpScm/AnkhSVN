@@ -218,7 +218,12 @@ namespace Ankh.Scc
                 ISvnProjectInfo info = context.ProjectFileMapper.GetProjectInfo(project);
 
                 if (info == null)
+                {
+                    // Handle the case the solution file is in a project (Probably website)
+                    if (string.Equals(FullPath, context.SolutionSettings.SolutionFilename))
+                        return "<Solution>";
                     continue;
+                }
 
                 if (name != null)
                     name += ";" + info.UniqueProjectName;
