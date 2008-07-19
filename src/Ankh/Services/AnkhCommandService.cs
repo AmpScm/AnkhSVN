@@ -40,24 +40,29 @@ namespace Ankh
 
         #region IAnkhCommandService Members
 
-        public bool ExecCommand(Ankh.Ids.AnkhCommand command)
+        public CommandResult ExecCommand(Ankh.Ids.AnkhCommand command)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
             return ExecCommand(command, false);
         }
 
-        public bool ExecCommand(Ankh.Ids.AnkhCommand command, bool verifyEnabled)
+        public CommandResult ExecCommand(Ankh.Ids.AnkhCommand command, bool verifyEnabled)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
             return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), verifyEnabled);
         }
 
-        public bool ExecCommand(System.ComponentModel.Design.CommandID command)
+        public CommandResult ExecCommand(System.ComponentModel.Design.CommandID command)
         {
             return ExecCommand(command, true);
         }
 
-        public bool ExecCommand(System.ComponentModel.Design.CommandID command, bool verifyEnabled)
+        public CommandResult ExecCommand(System.ComponentModel.Design.CommandID command, bool verifyEnabled)
+        {
+            return ExecCommand(command, verifyEnabled, null);
+        }
+
+        public CommandResult ExecCommand(System.ComponentModel.Design.CommandID command, bool verifyEnabled, object argument)
         {
             if (command == null)
                 throw new ArgumentNullException("command");
@@ -67,7 +72,7 @@ namespace Ankh
             IOleCommandTarget dispatcher = CommandDispatcher;
 
             if(dispatcher == null)
-                return false;
+                return new CommandResult(false);
 
             Guid g = command.Guid;
 
@@ -77,19 +82,57 @@ namespace Ankh
                 cmd[0].cmdID = unchecked((uint)command.ID);
 
                 if (VSConstants.S_OK != dispatcher.QueryStatus(ref g, 1, cmd, IntPtr.Zero))
-                    return false;
+                    return new CommandResult(false);
 
                 OLECMDF flags = (OLECMDF)cmd[0].cmdf;
 
                 if ((flags & OLECMDF.OLECMDF_SUPPORTED) == (OLECMDF)0)
-                    return false; // Not supported
+                    return new CommandResult(false); // Not supported
 
                 if ((flags & OLECMDF.OLECMDF_ENABLED) == (OLECMDF)0)
-                    return false; // Not enabled
+                    return new CommandResult(false); // Not enabled
             }
 
-            return ErrorHandler.Succeeded(dispatcher.Exec(ref g, 
-                unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero));
+            IntPtr vIn = IntPtr.Zero;
+            IntPtr vOut = IntPtr.Zero;
+            try
+            {
+                vOut = Marshal.AllocCoTaskMem(128);
+                NativeMethods.VariantInit(vOut);
+                
+                if (argument != null)
+                {
+                    vIn = Marshal.AllocCoTaskMem(128);
+                    Marshal.GetNativeVariantForObject(argument, vIn);
+                }
+
+                bool ok = ErrorHandler.Succeeded(dispatcher.Exec(ref g,
+                    unchecked((uint)command.ID), (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero));
+
+                return new CommandResult(ok, Marshal.GetObjectForNativeVariant(vOut));
+            }
+            finally
+            {
+                if (vIn != IntPtr.Zero)
+                {
+                    NativeMethods.VariantClear(vIn);
+                    Marshal.FreeCoTaskMem(vIn);
+                }
+                if (vOut != IntPtr.Zero)
+                {
+                    NativeMethods.VariantClear(vOut);
+                    Marshal.FreeCoTaskMem(vOut);
+                }
+            }
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("oleaut32.dll")]
+            public static extern int VariantClear(IntPtr v);
+
+            [DllImport("oleaut32.dll")]
+            public static extern int VariantInit(IntPtr v);
         }
 
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
@@ -243,26 +286,29 @@ namespace Ankh
 
         #region IAnkhCommandService Members
 
-        public bool DirectlyExecCommand(AnkhCommand command)
+        public CommandResult DirectlyExecCommand(AnkhCommand command)
         {
             return DirectlyExecCommand(command, null, CommandPrompt.DoDefault);
         }
 
-        public bool DirectlyExecCommand(AnkhCommand command, object args)
+        public CommandResult DirectlyExecCommand(AnkhCommand command, object args)
         {
             return DirectlyExecCommand(command, args, CommandPrompt.DoDefault);
         }
 
-        public bool DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt)
+        public CommandResult DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt)
         {
             // TODO: Assert that we are in the UI thread
 
             CommandMapper mapper = GetService<CommandMapper>();
 
             if (mapper == null)
-                return false;
+                return new CommandResult(false, null);
 
-            return mapper.Execute(command, new CommandEventArgs(command, AnkhContext, args, prompt == CommandPrompt.Always, prompt == CommandPrompt.Never));
+            CommandEventArgs e = new CommandEventArgs(command, AnkhContext, args, prompt == CommandPrompt.Always, prompt == CommandPrompt.Never);
+            bool ok = mapper.Execute(command, e);
+
+            return new CommandResult(ok, e.Result);
         }        
 
         #endregion
