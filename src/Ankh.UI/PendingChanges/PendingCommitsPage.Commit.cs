@@ -311,17 +311,33 @@ namespace Ankh.UI.PendingChanges
                     i = i.Parent;
 
                 // Ask wether we should ask to detected working copy
-                if (DialogResult.Yes == state.MessageBox.Show(string.Format("Existing working copy detected\r\n" + 
-                    "Do you want to add the solution to:\r\n" + 
-                    "{0}", i.FullPath), 
-                    "AnkhSvn", 
-                    MessageBoxButtons.YesNo, 
+                if (i != null)
+                {
+                    switch (state.MessageBox.Show(string.Format("Existing working copy detected\r\n" +
+                    "Do you want to add the solution to:\r\n" +
+                    "{0} at {1}", i.FullPath, i.Status.Uri),
+                    "AnkhSvn",
+                    MessageBoxButtons.YesNoCancel,
                     MessageBoxIcon.Question))
-                    return true;
+                    {
+                        case DialogResult.No:
+                            break;
+                        case DialogResult.Yes:
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
             }
 
             // sln file is either not in a working copy, or user wants to add it to a new working copy.
-            cmdSvc.DirectlyExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion, null);
+            CommandResult cr = cmdSvc.DirectlyExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion);
+
+            if (!cr.Success)
+                return false;
+
+            if (!(cr.Result is bool) || !(bool)cr.Result) // Didn't add to subversion
+                return false;
 
             // Just make sure this gets done (Should be done by add solution handler)
             state.GetService<IFileStatusMonitor>().ScheduleSvnStatus(slnFile);
