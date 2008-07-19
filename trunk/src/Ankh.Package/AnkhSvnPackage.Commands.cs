@@ -71,7 +71,7 @@ namespace Ankh.VSPackage
                         return VSConstants.E_POINTER;
 
                     string definition;
-                    if(CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
+                    if(pvaOut != IntPtr.Zero && CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
                     {
                         Marshal.GetNativeVariantForObject(definition, pvaOut);
 
