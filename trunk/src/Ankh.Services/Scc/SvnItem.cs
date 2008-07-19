@@ -21,6 +21,7 @@ namespace Ankh
     public interface ISvnItemUpdate
     {
         void RefreshTo(AnkhStatus status);
+        void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind);
         void RefreshTo(SvnItem lead);
         void TickItem();
         bool IsItemTicked();
@@ -75,10 +76,18 @@ namespace Ankh
             _enqueued = false;
         }
 
-        public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
-            : this(context, fullPath, status)
+        public SvnItem(IFileStatusCache context, string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
         {
-            InitializeFromKind(nodeKind);
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (string.IsNullOrEmpty(fullPath))
+                throw new ArgumentNullException("fullPath");
+
+            _context = context;
+            _fullPath = fullPath;
+            _enqueued = true;
+            RefreshTo(status, nodeKind);
+            _enqueued = false;
         }
 
         void InitializeFromKind(SvnNodeKind nodeKind)
@@ -94,24 +103,52 @@ namespace Ankh
             }
         }
 
-        public SvnItem(IFileStatusCache context, string fullPath, SvnNodeKind nodeKind)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            else if (string.IsNullOrEmpty(fullPath))
-                throw new ArgumentNullException("fullPath");
-
-            _statusDirty = XBool.True;
-            _context = context;
-            _fullPath = fullPath;
-
-            InitializeFromKind(nodeKind);
-        }
-
         IFileStatusCache StatusCache
         {
             [DebuggerStepThrough]
             get { return _context; }
+        }
+
+        void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
+        {
+            _cookie = NextCookie();
+            _statusDirty = XBool.False;
+
+            SvnItemState set = SvnItemState.None;
+            SvnItemState unset = SvnItemState.Modified | SvnItemState.Added | SvnItemState.HasCopyOrigin 
+                | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored 
+                | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned 
+                | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted
+                | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested 
+                | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin
+                | SvnItemState.ContentConflicted;
+
+            switch (status)
+            {
+                case NoSccStatus.NotExisting:
+                    SetState(set, SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder | SvnItemState.Versionable unset );
+                    _status = AnkhStatus.NotExisting;
+                    break;
+
+                case NoSccStatus.NotVersioned:
+                    SetState(SvnItemState.Exists | set, SvnItemState.None | unset);
+                    _status = AnkhStatus.NotVersioned;
+                    break;
+                case NoSccStatus.Unknown:
+                default:
+                    SetDirty(set | unset);
+                    _statusDirty = XBool.True;
+                    break;
+            }
+
+            InitializeFromKind(nodeKind);
+        }
+
+        void ISvnItemUpdate.RefreshTo(NoSccStatus status, SvnNodeKind nodeKind)
+        {
+            Debug.Assert(status == NoSccStatus.NotExisting || status == NoSccStatus.NotVersioned);
+            _ticked = false;
+            RefreshTo(status, nodeKind);            
         }
 
         void RefreshTo(AnkhStatus status)
@@ -133,8 +170,8 @@ namespace Ankh
                 return;
             }
             else if (
-                (((status.LocalContentStatus == SvnStatus.NotVersioned) && status != AnkhStatus.NotVersioned)
-                || (status.LocalContentStatus == SvnStatus.Ignored)) && IsDirectory)
+                ((status.LocalContentStatus == SvnStatus.NotVersioned) || (status.LocalContentStatus == SvnStatus.Ignored)) 
+                && IsDirectory)
             {
                 // A not versioned directory might be a working copy by itself!
 
@@ -145,7 +182,7 @@ namespace Ankh
                 {
                     _statusDirty = XBool.True; // Walk the path itself to get the data
 
-                    // Extract useful information we got anyay
+                    // Extract useful information we got anyway
 
                     SetState(SvnItemState.Exists | SvnItemState.Versionable | SvnItemState.IsDiskFolder,
                                 SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.MustLock | SvnItemState.IsTextFile);

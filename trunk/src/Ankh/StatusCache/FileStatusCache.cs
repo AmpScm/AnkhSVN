@@ -72,7 +72,7 @@ namespace Ankh.StatusCache
                     Debug.Assert(false, "RefreshPath did not deliver up to date information",
                         "The RefreshPath public api promises delivering up to date data, but none was received");
 
-                    updateItem.RefreshTo(item.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
+                    updateItem.RefreshTo(item.Exists ? NoSccStatus.NotVersioned : NoSccStatus.NotExisting, SvnNodeKind.Unknown);
                 }
             }
 
@@ -84,14 +84,14 @@ namespace Ankh.StatusCache
             return new SvnItem(this, fullPath, status);
         }
 
-        SvnItem CreateItem(string fullPath, AnkhStatus status, SvnNodeKind nodeKind)
+        SvnItem CreateItem(string fullPath, NoSccStatus status, SvnNodeKind nodeKind)
         {
             return new SvnItem(this, fullPath, status, nodeKind);
         }
 
-        SvnItem CreateItem(string fullPath, SvnNodeKind nodeKind)
+        SvnItem CreateItem(string fullPath, NoSccStatus status)
         {
-            return new SvnItem(this, fullPath, nodeKind);
+            return CreateItem(fullPath, status, SvnNodeKind.Unknown);
         }
 
         /// <summary>
@@ -280,11 +280,11 @@ namespace Ankh.StatusCache
                             string truepath = SvnTools.GetFullTruePath(walkPath); // Gets the on-disk casing if it exists
 
                             StoreItem(walkItem = CreateItem(truepath ?? walkPath,
-                                (truepath != null) ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting));
+                                (truepath != null) ? NoSccStatus.NotVersioned : NoSccStatus.NotExisting, SvnNodeKind.Unknown));
                         }
                         else
                         {
-                            ((ISvnItemUpdate)walkItem).RefreshTo(walkItem.Exists ? AnkhStatus.NotVersioned : AnkhStatus.NotExisting);
+                            ((ISvnItemUpdate)walkItem).RefreshTo(walkItem.Exists ? NoSccStatus.NotVersioned : NoSccStatus.NotExisting, SvnNodeKind.Unknown);
                         }
                     }
                 }
@@ -294,7 +294,7 @@ namespace Ankh.StatusCache
                     foreach (ISvnItemUpdate item in directory)
                     {
                         if (item.IsItemTicked()) // These items were not found in the stat calls
-                            item.RefreshTo(AnkhStatus.NotExisting);
+                            item.RefreshTo(NoSccStatus.NotExisting, SvnNodeKind.Unknown);
                     }
 
                     if (updateDir.ScheduleForCleanup)
@@ -308,7 +308,7 @@ namespace Ankh.StatusCache
                 if (!_map.TryGetValue(path, out pathItem))
                 {
                     // We did not; it does not even exist in the cache
-                    StoreItem(pathItem = CreateItem(path, AnkhStatus.NotExisting));
+                    StoreItem(pathItem = CreateItem(path, NoSccStatus.NotExisting));
 
                     if (directory != null)
                     {
@@ -322,7 +322,7 @@ namespace Ankh.StatusCache
 
                     if (!update.IsStatusClean())
                     {
-                        update.RefreshTo(AnkhStatus.NotExisting); // We did not see it in the walker
+                        update.RefreshTo(NoSccStatus.NotExisting, SvnNodeKind.Unknown); // We did not see it in the walker
 
                         if (directory != null)
                         {
@@ -346,14 +346,14 @@ namespace Ankh.StatusCache
             SvnItem item;
             if (!_map.TryGetValue(walkPath, out item))
             {
-                StoreItem(CreateItem(walkPath, AnkhStatus.NotVersioned, SvnNodeKind.Directory));
+                StoreItem(CreateItem(walkPath, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
                 // Mark it as existing if we are sure 
             }
             else
             {
                 ISvnItemUpdate updateItem = item;
                 if (updateItem.ShouldRefresh())
-                    updateItem.RefreshTo(AnkhStatus.NotVersioned);
+                    updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.Directory);
             }
 
             if (depth >= SvnDepth.Files)
@@ -363,12 +363,12 @@ namespace Ankh.StatusCache
                     string path = SvnTools.GetNormalizedFullPath(file.FullName);
 
                     if (!_map.TryGetValue(path, out item))
-                        StoreItem(CreateItem(path, AnkhStatus.NotVersioned, SvnNodeKind.File));
+                        StoreItem(CreateItem(path, NoSccStatus.NotVersioned, SvnNodeKind.File));
                     else
                     {
                         ISvnItemUpdate updateItem = item;
                         if (updateItem.ShouldRefresh())
-                            updateItem.RefreshTo(AnkhStatus.NotVersioned);
+                            updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.File);
                     }
                 }
             }
@@ -383,7 +383,7 @@ namespace Ankh.StatusCache
                         string path = SvnTools.GetNormalizedFullPath(sd.FullName);
                         if (!_map.ContainsKey(path))
                         {
-                            StoreItem(CreateItem(path, AnkhStatus.NotVersioned, SvnNodeKind.Directory));
+                            StoreItem(CreateItem(path, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
                         }
                     }
                 }
@@ -459,14 +459,17 @@ namespace Ankh.StatusCache
             {
                 // We only create an item if we don't have an existing
                 // with a valid path. (No casing changes allowed!)
+                
+                SvnItem newItem = CreateItem(path, status); 
+                StoreItem(newItem);
 
                 if (item != null)
                 {
-                    ((ISvnItemUpdate)item).RefreshTo(status); // Give them a reference to the status (might fo
+                    ((ISvnItemUpdate)item).RefreshTo(newItem); 
                     item.Dispose();
                 }
 
-                StoreItem(item = new SvnItem(this, path, status));
+                item = newItem;
             }
             else
                 ((ISvnItemUpdate)item).RefreshTo(status);
@@ -604,7 +607,7 @@ namespace Ankh.StatusCache
                         string truePath = SvnTools.GetTruePath(path);
 
                         // Just create an item based on his name. Delay the svn calls as long as we can
-                        StoreItem(item = new SvnItem(this, truePath ?? path, SvnNodeKind.Unknown));
+                        StoreItem(item = new SvnItem(this, truePath ?? path, NoSccStatus.Unknown, SvnNodeKind.Unknown));
 
                         //item.MarkDirty(); // Load status on first access
                     }
