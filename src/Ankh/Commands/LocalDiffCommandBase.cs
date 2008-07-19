@@ -157,8 +157,9 @@ namespace Ankh.Commands
                     info.RevisionEnd == SvnRevision.Working && !item.IsModified)
                     continue;
 
-                string quotedLeftPath = GetPath(context, info.RevisionStart, item, selection);
-                string quotedRightPath = GetPath(context, info.RevisionEnd, item, selection);
+                string tempDir = context.GetService<IAnkhTempDirManager>().GetTempDir();
+                string quotedLeftPath = GetPath(context, info.RevisionStart, item, selection, tempDir);
+                string quotedRightPath = GetPath(context, info.RevisionEnd, item, selection, tempDir);
                 string diffString = this.GetExe(context, selection);
                 diffString = diffString.Replace("%base", quotedLeftPath);
                 diffString = diffString.Replace("%mine", quotedRightPath);
@@ -218,36 +219,15 @@ namespace Ankh.Commands
             return null;
         }
 
-        private string GetPath(IAnkhServiceProvider context, SvnRevision revision, SvnItem item, ISelectionContext selection)
+        private string GetPath(IAnkhServiceProvider context, SvnRevision revision, SvnItem item, ISelectionContext selection, string tempDir)
         {
-            // is it local?
-            if (revision == SvnRevision.Base)
-            {
-                if (item.Status.LocalContentStatus == SvnStatus.Added)
-                {
-                    string empty = Path.GetTempFileName();
-                    TempFileCollection.AddFile(empty, false);
-                    File.Create(empty).Close();
-                    return empty;
-                }
-                else
-                {
-                    // BH: We should use Export here instead.. This will give us keyword expansion for free
-                    using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
-                    {
-                        SvnWorkingCopyState result;
-                        client.GetWorkingCopyState(item.FullPath, out result);
-                        return result.WorkingCopyBasePath;
-                    }
-                }
-
-            }
-            else if (revision == SvnRevision.Working)
+            if (revision == SvnRevision.Working)
             {
                 return item.FullPath;
             }
 
-            string tempFile = context.GetService<IAnkhTempFileManager>().GetTempFile(Path.GetExtension(item.FullPath));
+            string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + revision.ToString() + Path.GetExtension(item.Name);
+            tempFile = Path.Combine(tempDir, tempFile);
             // we need to get it from the repos
             context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
             { 
