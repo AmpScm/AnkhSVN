@@ -35,14 +35,14 @@ namespace Ankh.Commands
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
-            if (scc == null)
+            IFileStatusCache fcc = e.GetService<IFileStatusCache>();
+            if (scc == null || fcc == null)
             {
                 e.Enabled = false;
                 return;
             }
 
-
-            if (!scc.IsSolutionManaged)
+            if (!scc.IsSolutionManaged && fcc[e.Selection.SolutionFilename].IsVersioned)
                 return; // Nothing is added unless the solution is added
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
@@ -97,7 +97,7 @@ namespace Ankh.Commands
 
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
-            if (!scc.IsSolutionManaged)
+            if (!scc.IsSolutionManaged && !cache[e.Selection.SolutionFilename].IsVersioned)
             {
                 bool confirmed = false;
                 SvnItem item = cache[e.Selection.SolutionFilename];
@@ -175,12 +175,13 @@ namespace Ankh.Commands
 
                             IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
                             
-
                             if (monitor != null && mapper != null)
                             {
                                 // Make sure all visible glyphs are updated to reflect a new working copy
                                 monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
                             }
+
+                            e.Result = true;
                         }
                         else
                         {
