@@ -428,17 +428,17 @@ namespace Ankh.Scc
                 string nPath = SvnTools.GetNormalizedFullPath(path);
 
                 SccProjectFile file;
-                if (!_fileMap.TryGetValue(nPath, out file))
-                    continue;
-
-                foreach (SccProjectData pd in file.GetOwnerProjects())
+                if (_fileMap.TryGetValue(nPath, out file))
                 {
-                    if (projects.Contains(pd))
-                        continue;
+                    foreach (SccProjectData pd in file.GetOwnerProjects())
+                    {
+                        if (projects.Contains(pd))
+                            continue;
 
-                    projects.Add(pd, pd);
+                        projects.Add(pd, pd);
 
-                    yield return pd.SvnProject;
+                        yield return pd.SvnProject;
+                    }
                 }
 
                 if(string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))

@@ -106,12 +106,9 @@ namespace Ankh.Scc
 
                 if (pn != null)
                 {
-                    List<SvnProject> allProjects = new List<SvnProject>();
+                    List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
+                    allProjects.Add(SvnProject.Solution);
 
-                    foreach (SccProjectData pd in _projectMap.Values)
-                    {
-                        allProjects.Add(pd.SvnProject);
-                    }
                     pn.MarkDirty(allProjects);
                 }
             }
