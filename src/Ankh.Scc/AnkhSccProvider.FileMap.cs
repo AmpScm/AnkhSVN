@@ -295,6 +295,8 @@ namespace Ankh.Scc
 
                 MarkDirty(new string[] { oldName, newName }, true);
             }
+
+            GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SolutionFilename);
         }
 
         /// <summary>
@@ -410,9 +412,12 @@ namespace Ankh.Scc
             {
                 yield return pd.SvnProject;
             }
+
+            if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                yield return SvnProject.Solution;
         }
 
-        public IEnumerable<Ankh.Selection.SvnProject> GetAllProjectsContaining(IEnumerable<string> paths)
+        public IEnumerable<SvnProject> GetAllProjectsContaining(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
@@ -435,6 +440,15 @@ namespace Ankh.Scc
 
                     yield return pd.SvnProject;
                 }
+
+                if(string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                {
+                    if(projects.Contains(SvnProject.Solution))
+                        continue;
+
+                    projects.Add(SvnProject.Solution, SvnProject.Solution);
+                    yield return SvnProject.Solution;
+                }
             }            
         }
 
@@ -447,6 +461,7 @@ namespace Ankh.Scc
             foreach (SccProjectData pd in _projectMap.Values)
                 yield return pd.SvnProject;
         }
+
         /// <summary>
         /// Gets a boolean indicating whether one or more projects (or the solution) contains path
         /// </summary>
@@ -460,7 +475,7 @@ namespace Ankh.Scc
             if (_fileMap.ContainsKey(path))
                 return true;
 
-            if (string.Equals(path, SolutionFilePath, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 return true;
 
             return false;
@@ -475,6 +490,16 @@ namespace Ankh.Scc
         {
             if (project == null)
                 throw new ArgumentNullException("project");
+
+            if (project.IsSolution)
+            {
+                string sf = SolutionFilename;
+
+                if (sf != null)
+                    yield return sf;
+
+                yield break;
+            }
 
             project = ResolveRawProject(project);
 
@@ -491,7 +516,7 @@ namespace Ankh.Scc
             }
         }
 
-        public IEnumerable<string> GetAllFilesOf(ICollection<Ankh.Selection.SvnProject> projects)
+        public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects)
         {
             SortedList<string, string> files = new SortedList<string,string>(StringComparer.OrdinalIgnoreCase);
             Hashtable handled = new Hashtable();
@@ -503,7 +528,12 @@ namespace Ankh.Scc
                 SccProjectData data;
 
                 if (scc == null || !_projectMap.TryGetValue(scc, out data))
+                {
+                    if (p.IsSolution && SolutionFilename != null && !files.ContainsKey(SolutionFilename))
+                        files.Add(SolutionFilename, SolutionFilename);
+
                     continue;
+                }
 
                 if (handled.Contains(data))
                     continue;
@@ -528,8 +558,8 @@ namespace Ankh.Scc
         {
             List<string> files = new List<string>(_fileMap.Count+1);
 
-            if (SolutionFilePath != null && ! _fileMap.ContainsKey(SolutionFilePath))
-                files.Add(SolutionFilePath);
+            if (SolutionFilename != null && ! _fileMap.ContainsKey(SolutionFilename))
+                files.Add(SolutionFilename);
 
             foreach(string file in _fileMap.Keys)
             {
