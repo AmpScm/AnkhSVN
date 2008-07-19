@@ -126,7 +126,7 @@ namespace Ankh
             switch (status)
             {
                 case NoSccStatus.NotExisting:
-                    SetState(set, SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder | SvnItemState.Versionable unset );
+                    SetState(set, SvnItemState.Exists | SvnItemState.ReadOnly | SvnItemState.IsDiskFile | SvnItemState.IsDiskFolder | SvnItemState.Versionable | unset);
                     _status = AnkhStatus.NotExisting;
                     break;
 
