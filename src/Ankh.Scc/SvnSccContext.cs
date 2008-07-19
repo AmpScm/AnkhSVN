@@ -363,6 +363,11 @@ namespace Ankh.Scc
 
         internal void SafeWcDirectoryCopyFixUp(string oldDir, string newDir)
         {
+            if (string.IsNullOrEmpty(oldDir))
+                throw new ArgumentNullException("oldDir");
+            else if (string.IsNullOrEmpty(newDir))
+                throw new ArgumentNullException("newDir");
+
             using (HandsOffRecursive(newDir))
             using (MarkIgnoreRecursive(newDir))
             {
@@ -631,6 +636,11 @@ namespace Ankh.Scc
 
         internal static void RetriedRename(string path, string tmp)
         {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+            else if (string.IsNullOrEmpty(tmp))
+                throw new ArgumentNullException("tmp");
+
             const int retryCount = 4;
             for (int i = 0; i < retryCount; i++)
             {
@@ -804,7 +814,7 @@ namespace Ankh.Scc
 
         private void RecursiveDelete(DirectoryInfo dir)
         {
-            if(dir == null)
+            if (dir == null)
                 throw new ArgumentNullException("dir");
 
             if (!dir.Exists)
@@ -820,9 +830,10 @@ namespace Ankh.Scc
                 file.Attributes = FileAttributes.Normal;
                 file.Delete();
             }
-            dir.Attributes = FileAttributes.Normal;
+
+            dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
             dir.Delete();
-        }        
+        }
 
         static class NativeMethods
         {
@@ -831,6 +842,6 @@ namespace Ankh.Scc
 
 
 
-        }        
+        }
     }
 }
