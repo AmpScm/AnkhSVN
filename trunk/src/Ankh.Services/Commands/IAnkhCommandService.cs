@@ -15,6 +15,41 @@ namespace Ankh.Commands
 
     public delegate bool DelayDelegateCheck();
 
+    public class CommandResult
+    {
+        readonly bool _success;
+        readonly object _result;
+
+        public CommandResult(bool success)
+            : this(success, null)
+        {
+        }
+
+        public CommandResult(bool success, object result)
+        {
+            _success = success;
+            _result = result;            
+        }
+
+        public bool Success
+        {
+            get { return _success; }
+        }
+
+        public object Result
+        {
+            get { return _result; }
+        }
+
+        public static implicit operator bool(CommandResult r)
+        {
+            if (r == null)
+                return false;
+
+            return r.Success;
+        }
+    }
+
     public interface IAnkhCommandService
     {
         // ExecCommand has no args object because it would require a lot 
@@ -28,20 +63,20 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        bool ExecCommand(AnkhCommand command);
+        CommandResult ExecCommand(AnkhCommand command);
 
         /// <summary>
         /// Executes the specified command synchronously
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        bool ExecCommand(AnkhCommand command, bool verifyEnabled);
+        CommandResult ExecCommand(AnkhCommand command, bool verifyEnabled);
         /// <summary>
         /// Executes the specified command synchronously
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        bool ExecCommand(CommandID command);
+        CommandResult ExecCommand(CommandID command);
 
 
         /// <summary>
@@ -50,22 +85,14 @@ namespace Ankh.Commands
         /// <param name="command">The command.</param>
         /// <param name="verifyEnabled">if set to <c>true</c> [verify enabled].</param>
         /// <returns></returns>
-        bool ExecCommand(CommandID command, bool verifyEnabled);
+        CommandResult ExecCommand(CommandID command, bool verifyEnabled);
 
         /// <summary>
         /// Directly calls the ankh command handler.
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        bool DirectlyExecCommand(AnkhCommand command);
-
-        /// <summary>
-        /// Directly calls the ankh command handler.
-        /// </summary>
-        /// <param name="command">The command.</param>
-        /// <param name="args">The args.</param>
-        /// <returns></returns>
-        bool DirectlyExecCommand(AnkhCommand command, object args);
+        CommandResult DirectlyExecCommand(AnkhCommand command);
 
         /// <summary>
         /// Directly calls the ankh command handler.
@@ -73,7 +100,15 @@ namespace Ankh.Commands
         /// <param name="command">The command.</param>
         /// <param name="args">The args.</param>
         /// <returns></returns>
-        bool DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
+        CommandResult DirectlyExecCommand(AnkhCommand command, object args);
+
+        /// <summary>
+        /// Directly calls the ankh command handler.
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        CommandResult DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
         
 
         // These methods can be called from the UI or a background thread
