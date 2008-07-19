@@ -7,6 +7,7 @@ using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.VS;
 using Ankh.Commands;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Scc
 {
@@ -15,7 +16,7 @@ namespace Ankh.Scc
         readonly object _lock = new object();
         volatile bool _posted;
         List<SvnProject> _dirtyProjects;
-        List<SvnProject> _fullRefresh;        
+        List<SvnProject> _fullRefresh;
 
         public ProjectNotifier(IAnkhServiceProvider context)
             : base(context)
@@ -29,7 +30,13 @@ namespace Ankh.Scc
         /// <value>The command service.</value>
         IAnkhCommandService CommandService
         {
-            get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
+            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
+        void PostDirty()
+        {
+            if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+                _posted = true;
         }
 
         public void MarkDirty(SvnProject project)
@@ -45,21 +52,19 @@ namespace Ankh.Scc
                 if (!_dirtyProjects.Contains(project))
                     _dirtyProjects.Add(project);
 
-                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
-                    _posted = true;
+                PostDirty();
             }
-        }
+        }        
 
         public void MarkDirty(IEnumerable<SvnProject> projects)
         {
             if (projects == null)
                 throw new ArgumentNullException("projects");
-            
+
             lock (_lock)
             {
                 if (_dirtyProjects == null)
                     _dirtyProjects = new List<SvnProject>();
-
 
                 foreach (SvnProject project in projects)
                 {
@@ -67,14 +72,13 @@ namespace Ankh.Scc
                         _dirtyProjects.Add(project);
                 }
 
-                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
-                    _posted = true;
+                PostDirty();
             }
         }
 
         public void MarkFullRefresh(SvnProject project)
         {
-            if(project == null)
+            if (project == null)
                 throw new ArgumentNullException("project");
 
             lock (_lock)
@@ -85,8 +89,7 @@ namespace Ankh.Scc
                 if (!_fullRefresh.Contains(project))
                     _fullRefresh.Add(project);
 
-                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
-                    _posted = true;
+                PostDirty();
             }
         }
 
@@ -106,46 +109,51 @@ namespace Ankh.Scc
                         _fullRefresh.Add(project);
                 }
 
-                if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
-                    _posted = true;
+                PostDirty();
             }
-        }        
+        }
 
         internal void HandleEvent(AnkhCommand command)
         {
             List<SvnProject> dirtyProjects;
-            List<SvnProject> fullRefresh;            
-            
-            AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();            
+            List<SvnProject> fullRefresh;
 
-            lock(_lock)
+            AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();
+
+            lock (_lock)
             {
                 _posted = false;
 
-                if(provider == null)
+                if (provider == null)
                     return;
-                    
+
                 dirtyProjects = _dirtyProjects;
                 fullRefresh = _fullRefresh;
                 _dirtyProjects = null;
                 _fullRefresh = null;
             }
-                
-            if(fullRefresh != null)
+
+            if (fullRefresh != null)
             {
-                foreach(SvnProject project in fullRefresh)
+                foreach (SvnProject project in fullRefresh)
                 {
                     // Will handle glyphs and all
-                    provider.RefreshProject(project.RawHandle);
+                    if (project.RawHandle != null)
+                        provider.RefreshProject(project.RawHandle);                    
                 }
             }
 
-            if(dirtyProjects != null)
+            if (dirtyProjects != null)
             {
                 foreach (SvnProject project in dirtyProjects)
                 {
-                    if(project.RawHandle == null)
+                    if (project.RawHandle == null)
+                    {
+                        if (project.IsSolution)
+                            provider.UpdateSolutionGlyph();
+
                         continue; // All IVsSccProjects have a RawHandle
+                    }
 
                     if (fullRefresh == null || !fullRefresh.Contains(project))
                     {
@@ -171,7 +179,7 @@ namespace Ankh.Scc
         IPendingChangesManager ChangeManager
         {
             get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
-        }       
+        }
 
         #region IFileStatusMonitor Members
 
@@ -187,7 +195,7 @@ namespace Ankh.Scc
 
         public void ScheduleSvnStatus(IEnumerable<string> paths)
         {
-            if(paths == null)
+            if (paths == null)
                 throw new ArgumentNullException("paths");
 
             Cache.MarkDirty(paths);
@@ -206,6 +214,9 @@ namespace Ankh.Scc
 
         public void ScheduleGlyphUpdate(IEnumerable<string> paths)
         {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
             MarkDirty(Mapper.GetAllProjectsContaining(paths));
             ChangeManager.Refresh(paths);
         }
@@ -216,7 +227,7 @@ namespace Ankh.Scc
 
         public void ScheduleMonitor(string path)
         {
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             ((PendingChangeManager)ChangeManager).ScheduleMonitor(path);
