@@ -363,7 +363,7 @@ namespace Ankh.Scc
 
                 IProjectFileMapper mapper = _tracker.GetService<IProjectFileMapper>();
 
-                if (!string.IsNullOrEmpty(mapper.SolutionFilePath) && changed.Contains(mapper.SolutionFilePath))
+                if (!string.IsNullOrEmpty(mapper.SolutionFilename) && changed.Contains(mapper.SolutionFilename))
                 {
                     // Ok; we are going to reload the solution itself
                     _tracker.SaveAllDocumentsExcept(changed); // Make sure everything that is dirty is saved
@@ -375,7 +375,7 @@ namespace Ankh.Scc
                     }
 
                     // The solution was just removed; add it back
-                    changed.Add(mapper.SolutionFilePath);
+                    changed.Add(mapper.SolutionFilename);
                 }
 
                 for (int i = 0; i < changed.Count; i++)
@@ -389,7 +389,7 @@ namespace Ankh.Scc
                             string parentDocument = _tracker.GetParentDocument(dd);
 
                             if (string.IsNullOrEmpty(parentDocument))
-                                parentDocument = mapper.SolutionFilePath;
+                                parentDocument = mapper.SolutionFilename;
 
                             if (!string.IsNullOrEmpty(parentDocument) && !changed.Contains(parentDocument))
                             {

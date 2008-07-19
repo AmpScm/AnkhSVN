@@ -152,6 +152,8 @@ namespace Ankh.Scc
                 {
                     pd.SccProject.SccGlyphChanged(0, null, null, null);
                 }
+
+                ClearSolutionGlyph();
             }
 
             return VSConstants.S_OK;

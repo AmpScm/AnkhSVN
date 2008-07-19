@@ -218,11 +218,13 @@ namespace Ankh.Scc
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
             if (mgr != null && mgr.IsActive)
                 mgr.FullRefresh(false);
+
+            UpdateSolutionGlyph();
         }
 
         string _solutionFile;
         string _solutionDirectory;
-        public string SolutionFilePath
+        public string SolutionFilename
         {
             get
             {
@@ -367,6 +369,9 @@ namespace Ankh.Scc
         /// <param name="project"></param>
         internal void RefreshProject(IVsSccProject2 project)
         {
+            if (project == null)
+                throw new ArgumentNullException("project");
+
             SccProjectData data;
             if (_projectMap.TryGetValue(project, out data))
             {
@@ -457,8 +462,6 @@ namespace Ankh.Scc
 
             if (_backupMap.Count > 0)
             {
-                
-
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
                     foreach (KeyValuePair<string, string> dir in _backupMap)

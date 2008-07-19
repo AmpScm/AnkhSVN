@@ -264,6 +264,35 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        public void UpdateSolutionGlyph()
+        {
+            if (!IsActive)
+                return;
+
+            string sf = SolutionFilename;
+            if (string.IsNullOrEmpty(sf))
+                return;
+
+            IVsHierarchy hier = GetService<IVsHierarchy>(typeof(SVsSolution));
+
+            if (hier == null)
+                return;
+
+            AnkhGlyph glp = GetPathGlyph(sf);
+
+            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)glp);
+        }
+
+        void ClearSolutionGlyph()
+        {
+            IVsHierarchy hier = GetService<IVsHierarchy>(typeof(SVsSolution));
+
+            if (hier == null)
+                return;
+
+            hier.SetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_StateIconIndex, (int)AnkhGlyph.Blank);
+        }
+
         uint _baseIndex;
         ImageList _glyphList;
         public int GetCustomGlyphList(uint BaseIndex, out uint pdwImageListHandle)

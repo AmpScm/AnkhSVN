@@ -58,7 +58,7 @@ namespace Ankh.Scc
         /// Gets the solution path.
         /// </summary>
         /// <value>The solution path.</value>
-        string SolutionFilePath { get; }
+        string SolutionFilename { get; }
 
         /// <summary>
         /// Gets a boolean indicating whether the specified path is of a project or the solution
