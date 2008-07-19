@@ -65,19 +65,11 @@ namespace Ankh.Commands
                             {
                                 Ankh.Scc.IProjectFileMapper mapper = e.GetService<Ankh.Scc.IProjectFileMapper>();
 
-                                if (mapper != null) // Opening a project file gives an error. Just jump to the project in the solution explorer
-                                {
-                                    foreach (Ankh.Selection.SvnProject p in mapper.GetAllProjectsContaining(item.FullPath))
-                                    {
-                                        Ankh.Scc.ISvnProjectInfo info = mapper.GetProjectInfo(p);
-
-                                        if (info != null && string.Equals(info.ProjectFile, item.FullPath, StringComparison.OrdinalIgnoreCase))
-                                            goto case AnkhCommand.ItemOpenSolutionExplorer;
-                                    }
-                                }
+                                if (mapper.IsProjectFileOrSolution(item.FullPath))
+                                    goto case AnkhCommand.ItemOpenSolutionExplorer;
                             }
 
-                            if (!item.IsFile)
+                            if (!item.IsFile || !item.Exists)
                                 continue;
 
                             VsShellUtilities.OpenDocument(e.Context, item.FullPath);
