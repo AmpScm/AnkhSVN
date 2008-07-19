@@ -18,7 +18,7 @@ namespace Ankh.Migrate
 
 			foreach (Command c in dte.Commands)
 			{
-                if (c.Guid == "{1E58696E-C90F-11D2-AAB2-00C04F688DDE}")
+                if (c.Guid == "{1E58696E-C90F-11D2-AAB2-00C04F688DDE}" && c.Name.StartsWith("Ankh"))
                 {
                     try
                     {
