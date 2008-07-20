@@ -91,8 +91,10 @@ namespace Ankh.Scc
             }
         }
 
+
+
         void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
-        {
+        {            
             lock (_toRefresh)
             {
                 if (_fullRefresh)
@@ -106,6 +108,7 @@ namespace Ankh.Scc
 
                 ScheduleRefresh();
             }
+            GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(e.ChangedItems));
         }
 
         bool _refreshScheduled;
