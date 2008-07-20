@@ -23,23 +23,10 @@ namespace Ankh.UI
             InitializeComponent();
 
             //Set revision choices in combobox
-            this.revisionPicker.WorkingEnabled = false;
-            this.revisionPicker.BaseEnabled = false;
-            this.revisionPicker.CommittedEnabled = false;
-            this.revisionPicker.PreviousEnabled = false;
 
             this.ValidateAdd();
         }
-
-        /// <summary>
-        /// The revision selected by the user.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SvnRevision Revision
-        {
-            get{ return this.revisionPicker.Revision; }
-        }
-
+   
         /// <summary>
         /// The URL entered in the text box.
         /// </summary>
@@ -82,8 +69,7 @@ namespace Ankh.UI
 
         private void ValidateAdd()
         {
-            this.okButton.Enabled = this.revisionPicker.Valid &&
-                Uri != null;
+            this.okButton.Enabled = Uri != null;
         }
     }
 }
