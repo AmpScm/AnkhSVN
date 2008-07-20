@@ -117,7 +117,7 @@ namespace Ankh.UI.VSSelectionControls
 
                 foreach (T i in new List<T>(_items.Keys))
                 {
-                    if (_owner.Selection.Contains(i))
+                    if (!_owner.Selection.Contains(i))
                     {
                         uint id = (uint)_items[i];
                         _ids.Remove(id);
@@ -208,7 +208,7 @@ namespace Ankh.UI.VSSelectionControls
 						if (lv != null)
 							pvar = _owner.GetText(lv);
 						else
-							pvar = "Pending Change";
+							pvar = ".";
                         break;
                     case __VSHPROPID.VSHPROPID_IconImgList:
                         pvar = (int)_owner.GetImageList();
