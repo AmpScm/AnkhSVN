@@ -1,3 +1,0 @@
-new-provider N:\tools\SvnProvider\SvnProvider\bin\Debug\Svn.cmdletprovider
-new-drive ankh svn http://10.0.0.3/svn/finalproject
-cd ankh:
