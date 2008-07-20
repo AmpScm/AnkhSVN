@@ -95,19 +95,7 @@ namespace Ankh.Scc
 
         void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
         {            
-            lock (_toRefresh)
-            {
-                if (_fullRefresh)
-                    return;
-
-                foreach (SvnItem item in e.ChangedItems)
-                {
-                    if (!_toRefresh.Contains(item.FullPath))
-                        _toRefresh.Add(item.FullPath);
-                }
-
-                ScheduleRefresh();
-            }
+            // This calls .Refresh() on the specified paths
             GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(e.ChangedItems));
         }
 
