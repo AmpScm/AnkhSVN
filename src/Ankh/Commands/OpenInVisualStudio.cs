@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop; 
+using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
 using Ankh.Ids;
@@ -32,8 +32,12 @@ namespace Ankh.Commands
                     {
                         case AnkhCommand.ItemOpenTextEditor:
                         case AnkhCommand.ItemOpenVisualStudio:
-                            if (item.IsFile)
+                            if (!item.IsFile)
+                            {
+                                e.Enabled = false;
                                 return;
+                            }
+                            first = false;
                             break;
                         default:
                             if (!first)
@@ -62,12 +66,12 @@ namespace Ankh.Commands
                     switch (e.Command)
                     {
                         case AnkhCommand.ItemOpenVisualStudio:
-                            {
-                                Ankh.Scc.IProjectFileMapper mapper = e.GetService<Ankh.Scc.IProjectFileMapper>();
+                            Ankh.Scc.IProjectFileMapper mapper = e.GetService<Ankh.Scc.IProjectFileMapper>();
 
-                                if (mapper.IsProjectFileOrSolution(item.FullPath))
-                                    goto case AnkhCommand.ItemOpenSolutionExplorer;
-                            }
+                            if (mapper.IsProjectFileOrSolution(item.FullPath))
+                                goto case AnkhCommand.ItemOpenSolutionExplorer;
+                            else if (item.IsDirectory)
+                                goto case AnkhCommand.ItemOpenFolder;
 
                             if (!item.IsFile || !item.Exists)
                                 continue;
@@ -99,32 +103,35 @@ namespace Ankh.Commands
                             break;
 
                         case AnkhCommand.ItemOpenSolutionExplorer:
-                            IVsUIHierarchyWindow hierWindow = VsShellUtilities.GetUIHierarchyWindow(e.Context, new Guid(ToolWindowGuids80.SolutionExplorer));                            
+                            IVsUIHierarchyWindow hierWindow = VsShellUtilities.GetUIHierarchyWindow(e.Context, new Guid(ToolWindowGuids80.SolutionExplorer));
 
                             IVsProject project = VsShellUtilities.GetProject(e.Context, item.FullPath) as IVsProject;
 
-                            if (project != null && hierWindow != null)
+                            if (hierWindow != null)
                             {
                                 int found;
                                 uint id;
                                 VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
-                                if (ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
+                                if (project != null && ErrorHandler.Succeeded(project.IsDocumentInProject(item.FullPath, out found, prio, out id)) && found != 0)
                                 {
                                     hierWindow.ExpandItem(project as IVsUIHierarchy, id, EXPANDFLAGS.EXPF_SelectItem);
-
-                                    // Now try to activate the solution explorer
-                                    IVsWindowFrame solutionExplorer;
-                                    Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
-                                    IVsUIShell shell = e.GetService<IVsUIShell>(typeof(SVsUIShell));
-
-                                    if (shell != null)
-                                    {
-                                        shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer);
-
-                                        if (solutionExplorer != null)
-                                            solutionExplorer.Show();
-                                    }
                                 }
+                                else if (string.Equals(item.FullPath, e.Selection.SolutionFilename))
+                                    hierWindow.ExpandItem(e.GetService<IVsUIHierarchy>(typeof(SVsSolution)), VSConstants.VSITEMID_ROOT, EXPANDFLAGS.EXPF_SelectItem);
+
+                                // Now try to activate the solution explorer
+                                IVsWindowFrame solutionExplorer;
+                                Guid solutionExplorerGuid = new Guid(ToolWindowGuids80.SolutionExplorer);
+                                IVsUIShell shell = e.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                                if (shell != null)
+                                {
+                                    shell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fForceCreate, ref solutionExplorerGuid, out solutionExplorer);
+
+                                    if (solutionExplorer != null)
+                                        solutionExplorer.Show();
+                                }
+
                             }
                             break;
                     }
@@ -145,8 +152,8 @@ namespace Ankh.Commands
                 {
                     mb.Show(ee.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                    
-            }            
+
+            }
         }
     }
 }
