@@ -107,7 +107,7 @@ namespace Ankh
             }
         }
 
-        public ICollection<SvnItem> CheckedItems
+        ICollection<SvnItem> CheckedItems
         {
             get
             {
