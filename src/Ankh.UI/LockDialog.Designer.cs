@@ -21,6 +21,7 @@ namespace Ankh.UI
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.label2 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -40,11 +41,11 @@ namespace Ankh.UI
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 9);
+            this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Lock message:";
+            this.label1.Text = "Lock &Message:";
             // 
             // btnCancel
             // 
@@ -82,21 +83,22 @@ namespace Ankh.UI
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(12, 9);
+            this.splitContainer1.Location = new System.Drawing.Point(9, 9);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.pathSelectionTreeView);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.logMessageEditor);
-            this.splitContainer1.Size = new System.Drawing.Size(352, 315);
-            this.splitContainer1.SplitterDistance = 157;
+            this.splitContainer1.Size = new System.Drawing.Size(355, 315);
+            this.splitContainer1.SplitterDistance = 156;
             this.splitContainer1.TabIndex = 0;
             // 
             // pathSelectionTreeView
@@ -106,11 +108,11 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pathSelectionTreeView.CheckBoxes = true;
             this.pathSelectionTreeView.Context = null;
-            this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 0);
+            this.pathSelectionTreeView.Location = new System.Drawing.Point(0, 16);
             this.pathSelectionTreeView.Name = "pathSelectionTreeView";
             this.pathSelectionTreeView.Recursive = false;
             this.pathSelectionTreeView.SingleCheck = false;
-            this.pathSelectionTreeView.Size = new System.Drawing.Size(352, 154);
+            this.pathSelectionTreeView.Size = new System.Drawing.Size(355, 137);
             this.pathSelectionTreeView.TabIndex = 0;
             this.pathSelectionTreeView.UrlPaths = false;
             this.pathSelectionTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.pathSelectionTreeView_AfterCheck);
@@ -121,11 +123,20 @@ namespace Ankh.UI
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.logMessageEditor.Location = new System.Drawing.Point(0, 25);
+            this.logMessageEditor.Location = new System.Drawing.Point(0, 16);
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.Size = new System.Drawing.Size(352, 129);
+            this.logMessageEditor.Size = new System.Drawing.Size(355, 139);
             this.logMessageEditor.TabIndex = 1;
             this.logMessageEditor.Text = null;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "&File Paths:";
             // 
             // LockDialog
             // 
@@ -143,6 +154,7 @@ namespace Ankh.UI
             this.Name = "LockDialog";
             this.Text = "Lock";
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
@@ -166,5 +178,6 @@ namespace Ankh.UI
         protected System.Windows.Forms.Button okButton;
         private System.Windows.Forms.CheckBox stealLocksCheckBox;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label label2;
     }
 }
