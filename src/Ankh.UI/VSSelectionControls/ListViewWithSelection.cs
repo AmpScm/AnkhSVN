@@ -65,7 +65,7 @@ namespace Ankh.UI.VSSelectionControls
             if (!_updatingSelection)
             {
                 if (SelectedIndices.Count > 0)
-                    NotifySelectionUpdated();
+                    MaybeNotifySelectionUpdated();
                 else
                     _maybeUnselect = true;
             }
@@ -77,9 +77,11 @@ namespace Ankh.UI.VSSelectionControls
 
             if (!DesignMode && _maybeUnselect && SelectedIndices.Count == 0)
             {
-                NotifySelectionUpdated();
+                MaybeNotifySelectionUpdated();
             }
         }
+
+        bool _shouldUpdate;
 
         bool _strictCheckboxesClick;
         [DefaultValue(false)]
@@ -89,8 +91,12 @@ namespace Ankh.UI.VSSelectionControls
             set { _strictCheckboxesClick = value; }
         }
 
+        int _inWndProc;
         protected override void WndProc(ref Message m)
         {
+            _inWndProc++;
+            try
+            {
             if (!DesignMode)
             {
                 if (m.Msg == 123) // WM_CONTEXT
@@ -119,6 +125,18 @@ namespace Ankh.UI.VSSelectionControls
                 }
             }
             base.WndProc(ref m);
+            }
+            finally
+            {
+                if(0 == --_inWndProc)
+                {
+                    if(_shouldUpdate)
+                    {
+                        _shouldUpdate = false;
+                        NotifySelectionUpdated();
+                    }
+                }
+            }
         }
 
         public event EventHandler ShowContextMenu;
@@ -132,6 +150,14 @@ namespace Ankh.UI.VSSelectionControls
         internal virtual SelectionItemMap SelectionMap
         {
             get { return _selectionItemMap ?? (_selectionItemMap = SelectionItemMap.Create(this)); }
+        }
+
+        void MaybeNotifySelectionUpdated()
+        {
+            if (_inWndProc > 0)
+                _shouldUpdate = true;
+            else
+                NotifySelectionUpdated();
         }
    
         /// <summary>
