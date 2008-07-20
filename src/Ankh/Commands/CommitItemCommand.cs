@@ -217,7 +217,14 @@ namespace Ankh.Commands
                 return;
 
             // we need to commit to each repository separately
-            ICollection<List<SvnItem>> repositories = SortByRepository(operation.SelectedItems);
+            ICollection<List<SvnItem>> repositories = SortByWorkingCopy(operation.SelectedItems);
+
+            if (repositories == null)
+            {
+                throw new InvalidOperationException("One or more of the selected items are not in a working copy");
+                return;
+            }
+                    
 
             this.commitInfo = null;
 
@@ -254,16 +261,19 @@ namespace Ankh.Commands
         }
 
         /// <summary>
-        /// Sort the items by repository.
+        /// Sort the items by working copy.
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        static ICollection<List<SvnItem>> SortByRepository(IEnumerable<SvnItem> items)
+        static ICollection<List<SvnItem>> SortByWorkingCopy(IEnumerable<SvnItem> items)
         {
             Dictionary<SvnWorkingCopy, List<SvnItem>> wcs = new Dictionary<SvnWorkingCopy, List<SvnItem>>();
             foreach (SvnItem item in items)
             {
                 SvnWorkingCopy wc = item.WorkingCopy;
+
+                if (wc == null)
+                    return null;
 
                 if (!wcs.ContainsKey(wc))
                     wcs.Add(wc, new List<SvnItem>());
