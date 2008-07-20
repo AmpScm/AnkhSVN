@@ -57,28 +57,28 @@ namespace Ankh.Commands
 
                 if (info == null)
                     return;
-
-                addItems = info.CheckedItems;
             }
             else
                 result = info.DefaultResult;
+                
+            addItems = info.CheckedItems;
+
             if (!result.Succeeded)
                 return;
 
-            using (context.StartOperation("Adding"))
-            using (SvnClient client = context.ClientPool.GetClient())
-            {
-                SvnAddArgs args = new SvnAddArgs();
-                args.ThrowOnError = false;
-                args.Depth = SvnDepth.Empty;
-                args.AddParents = true;
-
-                foreach (SvnItem item in addItems)
+            e.GetService<IProgressRunner>().Run("Adding",
+                delegate(object sender, ProgressWorkerArgs ee)
                 {
-                    client.Add(item.FullPath, args);
-                }
-                //context.Selection.RefreshSelection();
-            }
+                    SvnAddArgs args = new SvnAddArgs();
+                    args.ThrowOnError = false;
+                    args.Depth = SvnDepth.Empty;
+                    args.AddParents = true;
+
+                    foreach (SvnItem item in addItems)
+                    {
+                        ee.Client.Add(item.FullPath, args);
+                    }
+                });
         }
         #endregion
 
