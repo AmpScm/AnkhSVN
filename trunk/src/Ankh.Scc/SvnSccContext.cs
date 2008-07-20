@@ -710,10 +710,13 @@ namespace Ankh.Scc
             SvnItem item = _statusCache[path];
             string file = Path.GetFileName(path);
 
-            if (item.IsVersioned && item.Name == file)
+            if (!item.Exists || (item.IsVersioned && item.Name == file ))
                 return true; // Item already exists.. Fast
-            else if (!item.Exists && SvnTools.IsBelowManagedPath(path))
-                return true; // Item does not exist.. Fast
+
+            SvnItem parent = item.Parent;
+
+            if(item.IsFile && parent != null && !parent.IsVersioned)
+                return true; // Not in a versioned directory -> Fast out
 
             // Item does exist; check casing
             string parentDir = Path.GetDirectoryName(path);
