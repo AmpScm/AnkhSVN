@@ -299,6 +299,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 Debug.Assert(_files.Count == 0);
 
+                _checkedProjectFile = false;
                 _projectFile = null;
                 _svnProjectInstance = null;                
                 _loaded = true;

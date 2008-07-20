@@ -73,6 +73,13 @@ namespace Ankh.Scc.ProjectMap
         {
             string r;
 
+            object var;
+            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemidAdded, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+                && (bool)var)
+            {
+                return VSConstants.S_OK; // Extra item for show all files
+            }
+
             if (_loaded)
             {
                 if (ErrorHandler.Succeeded(VsProject.GetMkDocument(itemidAdded, out r))
@@ -83,7 +90,11 @@ namespace Ankh.Scc.ProjectMap
                         SetPreCreatedItem(itemidAdded);
                     }
                     else
+                    {
                         SetPreCreatedItem(VSConstants.VSITEMID_NIL);
+
+                        SetDirty();
+                    }
                 }
             }
 
@@ -94,11 +105,21 @@ namespace Ankh.Scc.ProjectMap
         {
             SetPreCreatedItem(VSConstants.VSITEMID_NIL);
 
+            object var;
+            if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(itemid, (int)__VSHPROPID.VSHPROPID_IsNonMemberItem, out var))
+                && (bool)var)
+            {
+                return VSConstants.S_OK; // Extra item for show all files
+            }
+
+            SetDirty();
+
             return VSConstants.S_OK;
         }
 
         public int OnItemsAppended(uint itemidParent)
         {
+            SetDirty();
             return VSConstants.S_OK;
         }
 
