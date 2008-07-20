@@ -20,8 +20,6 @@ namespace Ankh.Commands
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
     [Command(AnkhCommand.CommitItem)]
-    [Command(AnkhCommand.ProjectCommit)]
-    [Command(AnkhCommand.SolutionCommit)]
     public class CommitItemCommand : CommandBase
     {
         ICollection<string> paths;
@@ -222,9 +220,7 @@ namespace Ankh.Commands
             if (repositories == null)
             {
                 throw new InvalidOperationException("One or more of the selected items are not in a working copy");
-                return;
             }
-                    
 
             this.commitInfo = null;
 
