@@ -297,6 +297,18 @@
   <data name="&gt;&gt;addButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="svnItemLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="svnItemLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 23</value>
+  </data>
+  <data name="svnItemLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="svnItemLabel.Text" xml:space="preserve">
+    <value>Selected Svn Item</value>
+  </data>
   <data name="&gt;&gt;svnItemLabel.Name" xml:space="preserve">
     <value>svnItemLabel</value>
   </data>
@@ -333,35 +345,11 @@
   <data name="&gt;&gt;propGroupBox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="svnItemLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 25</value>
-  </data>
-  <data name="svnItemLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>424, 23</value>
-  </data>
-  <data name="svnItemLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="svnItemLabel.Text" xml:space="preserve">
-    <value>Selected Svn Item</value>
-  </data>
-  <data name="&gt;&gt;svnItemLabel.Name" xml:space="preserve">
-    <value>svnItemLabel</value>
-  </data>
-  <data name="&gt;&gt;svnItemLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;svnItemLabel.Parent" xml:space="preserve">
-    <value>propGroupBox</value>
-  </data>
-  <data name="&gt;&gt;svnItemLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="$this.AutoScaleBaseSize" type="System.Drawing.Size, System.Drawing">
-    <value>5, 13</value>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>461, 342</value>

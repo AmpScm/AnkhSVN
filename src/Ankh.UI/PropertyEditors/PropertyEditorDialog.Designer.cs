@@ -99,11 +99,14 @@ namespace Ankh.UI
             // 
             this.AcceptButton = this.addButton;
             resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.Controls.Add(this.propGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "PropertyEditorDialog";
             this.ShowInTaskbar = false;
             this.propGroupBox.ResumeLayout(false);

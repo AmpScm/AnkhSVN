@@ -126,35 +126,37 @@ namespace Ankh.UI
             if (Context != null)
                 ui = Context.GetService<IUIService>();
 
-            PropertyDialog pDialog = new PropertyDialog(item);
-
-            DialogResult dr;
-
-            if (ui != null)
-                dr = ui.ShowDialog(pDialog);
-            else
-                dr = pDialog.ShowDialog(this);
-
-            if (dr != DialogResult.OK)
-                return;
-
-            PropertyItem editedItem = pDialog.GetPropertyItem();
-            if (editedItem != null)
+            using (PropertyDialog pDialog = new PropertyDialog(item))
             {
-                int otherIndex = -1; ;
-                if (!item.Name.Equals(editedItem.Name)
-                    && ((otherIndex = TryFindItem(editedItem.Name)) > -1)
-                    && otherIndex != index)
-                {
-                    // there is already a property with the same name
-                    // TODO
-                    // Delete selected item AND replace the existing item ???
-                }
+
+                DialogResult dr;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(pDialog);
                 else
+                    dr = pDialog.ShowDialog(this);
+
+                if (dr != DialogResult.OK)
+                    return;
+
+                PropertyItem editedItem = pDialog.GetPropertyItem();
+                if (editedItem != null)
                 {
-                    this._propItems[index] = editedItem;
-                    this.PopulateListView();
-                    this.UpdateButtons();
+                    int otherIndex = -1; ;
+                    if (!item.Name.Equals(editedItem.Name)
+                        && ((otherIndex = TryFindItem(editedItem.Name)) > -1)
+                        && otherIndex != index)
+                    {
+                        // there is already a property with the same name
+                        // TODO
+                        // Delete selected item AND replace the existing item ???
+                    }
+                    else
+                    {
+                        this._propItems[index] = editedItem;
+                        this.PopulateListView();
+                        this.UpdateButtons();
+                    }
                 }
             }
         }
@@ -179,9 +181,20 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void addButton_Click(object sender, System.EventArgs e)
         {
-            PropertyDialog propDialog = new PropertyDialog();
-            if (propDialog.ShowDialog(this) == DialogResult.OK)
+            using (PropertyDialog propDialog = new PropertyDialog())
             {
+                DialogResult dr;
+
+                IUIService ui = Context != null ? Context.GetService<IUIService>() : null;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(propDialog);
+                else
+                    dr = propDialog.ShowDialog(this);
+
+                if (dr != DialogResult.OK)
+                    return;
+
                 PropertyItem item = propDialog.GetPropertyItem();
                 if (item != null)
                 {
