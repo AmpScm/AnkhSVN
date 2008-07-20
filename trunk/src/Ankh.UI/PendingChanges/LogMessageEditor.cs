@@ -62,7 +62,7 @@ namespace Ankh.UI.PendingChanges
             _fixUI = true; // Fix the font issues in the next size changed            
         }
 
-        [CLSCompliant(false)]
+        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IOleCommandTarget CommandTarget
         {
             get { return codeEditorNativeWindow; }
@@ -116,7 +116,7 @@ namespace Ankh.UI.PendingChanges
         /// Gets the window pane.
         /// </summary>
         /// <value>The window pane.</value>
-        [CLSCompliant(false)]
+        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IVsWindowPane WindowPane
         {
             get { return codeEditorNativeWindow.WindowPane; }
