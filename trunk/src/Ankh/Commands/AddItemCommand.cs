@@ -54,9 +54,6 @@ namespace Ankh.Commands
                 info.EnableRecursive = false;
 
                 result = uiShell.ShowPathSelector(info);
-
-                if (info == null)
-                    return;
             }
             else
                 result = info.DefaultResult;
