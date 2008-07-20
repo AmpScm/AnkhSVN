@@ -42,7 +42,7 @@ namespace Ankh.Commands
                 return;
             }
 
-            if (!scc.IsSolutionManaged && fcc[e.Selection.SolutionFilename].IsVersioned)
+            if (!scc.IsSolutionManaged || !fcc[e.Selection.SolutionFilename].IsVersioned)
                 return; // Nothing is added unless the solution is added
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
