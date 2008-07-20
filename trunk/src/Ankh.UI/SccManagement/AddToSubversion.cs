@@ -75,6 +75,8 @@ namespace Ankh.UI.SccManagement
                 directory = Path.GetDirectoryName(directory);
                 localFolder.Items.Add(directory);
             }
+            if (localFolder.Items.Count > 0)
+                localFolder.SelectedIndex = 0;
         }
 
         protected override void OnClosed(EventArgs e)
