@@ -61,8 +61,6 @@ namespace Ankh.Commands
             else
                 result = info.DefaultResult;
                 
-            addItems = info.CheckedItems;
-
             if (!result.Succeeded)
                 return;
 
@@ -74,7 +72,7 @@ namespace Ankh.Commands
                     args.Depth = SvnDepth.Empty;
                     args.AddParents = true;
 
-                    foreach (SvnItem item in addItems)
+                    foreach (SvnItem item in result.Selection)
                     {
                         ee.Client.Add(item.FullPath, args);
                     }
