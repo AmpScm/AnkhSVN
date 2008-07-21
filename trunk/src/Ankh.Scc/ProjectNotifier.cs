@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.VS;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
@@ -30,7 +31,29 @@ namespace Ankh.Scc
         /// <value>The command service.</value>
         IAnkhCommandService CommandService
         {
+            [DebuggerStepThrough]
             get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
+        {
+            [DebuggerStepThrough]
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+        }
+
+        IProjectFileMapper _mapper;
+        IProjectFileMapper Mapper
+        {
+            [DebuggerStepThrough]
+            get { return _mapper ?? (_mapper = GetService<IProjectFileMapper>()); }
+        }
+
+        IPendingChangesManager _changeManager;
+        IPendingChangesManager ChangeManager
+        {
+            [DebuggerStepThrough]
+            get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
         }
 
         void PostDirty()
@@ -138,8 +161,15 @@ namespace Ankh.Scc
                 foreach (SvnProject project in fullRefresh)
                 {
                     // Will handle glyphs and all
-                    if (project.RawHandle != null)
-                        provider.RefreshProject(project.RawHandle);                    
+                    if (project.RawHandle == null)
+                    {
+                        if (project.IsSolution)
+                            provider.UpdateSolutionGlyph();
+
+                        continue;
+                    }
+                     
+                    provider.RefreshProject(project.RawHandle);                    
                 }
             }
 
@@ -161,25 +191,7 @@ namespace Ankh.Scc
                     }
                 }
             }
-        }
-
-        IFileStatusCache _statusCache;
-        IFileStatusCache Cache
-        {
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
-        }
-
-        IProjectFileMapper _mapper;
-        IProjectFileMapper Mapper
-        {
-            get { return _mapper ?? (_mapper = GetService<IProjectFileMapper>()); }
-        }
-
-        IPendingChangesManager _changeManager;
-        IPendingChangesManager ChangeManager
-        {
-            get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
-        }
+        }        
 
         #region IFileStatusMonitor Members
 
