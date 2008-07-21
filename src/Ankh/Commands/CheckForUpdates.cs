@@ -150,8 +150,8 @@ namespace Ankh.Commands
             wr.BeginGetResponse(new AsyncCallback(OnResponse), wr);
         }
 
-        bool? _isDevVersion;
-        private bool IsDevVersion()
+        static bool? _isDevVersion;
+        static private bool IsDevVersion()
         {
             if (_isDevVersion.HasValue)
                 return _isDevVersion.Value;
@@ -325,8 +325,10 @@ namespace Ankh.Commands
                 {
                     object fails = rk.GetValue("Fails", 0);
                     rk.DeleteValue("LastCheck", false);
+                    rk.DeleteValue("LastVersion", false);
                     rk.DeleteValue("FailedChecks", false);
                     rk.SetValue("LastCheck", DateTime.UtcNow.Ticks);
+                    rk.SetValue("LastVersion", CurrentVersion.ToString());
                     if (tag != null)
                         rk.SetValue("LastTag", tag);
                     else
@@ -371,17 +373,21 @@ namespace Ankh.Commands
 
                 TimeSpan ts = TimeSpan.FromHours(interval);
 
-                
-                value = rk.GetValue("LastCheck");
-                long lv;
-                if (value is string && long.TryParse((string)value, out lv))
+                value = rk.GetValue("LastVersion");
+
+                if (IsDevVersion() || (value is string && (string)value == CurrentVersion.ToString()))
                 {
-                    DateTime lc = new DateTime(lv, DateTimeKind.Utc);
+                    value = rk.GetValue("LastCheck");
+                    long lv;
+                    if (value is string && long.TryParse((string)value, out lv))
+                    {
+                        DateTime lc = new DateTime(lv, DateTimeKind.Utc);
 
-                    if ((lc + ts) > DateTime.UtcNow)
-                        return;
+                        if ((lc + ts) > DateTime.UtcNow)
+                            return;
 
-                    // TODO: Check the number of fails to increase the check interval
+                        // TODO: Check the number of fails to increase the check interval
+                    }
                 }
             }
 
