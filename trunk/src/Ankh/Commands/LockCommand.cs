@@ -41,12 +41,12 @@ namespace Ankh.Commands
             PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items != null ? items : e.Selection.GetSelectedSvnItems(true));
             psi.VisibleFilter += delegate(SvnItem item)
             {
-                return item.IsFile && !item.IsLocked;
+                return item.IsFile && item.IsVersioned && !item.IsLocked;
             };
 
             psi.CheckedFilter += delegate(SvnItem item)
             {
-                return item.IsFile && !item.IsLocked;
+                return item.IsFile && item.IsVersioned && !item.IsLocked;
             };
 
             PathSelectorResult psr;
