@@ -2,10 +2,9 @@
 <xsl:stylesheet version="1.0"
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:x="inline-doc">
   <msxsl:script implements-prefix="x" language="c#">
-    <msxsl:using namespace="System.Text.RegularExpressions" />
     public string DateTitle()
     {
-    return (DateTime.Now - new TimeSpan(9,0,0)).ToString("yyyy-MM-dd");
+      return (DateTime.Now - new TimeSpan(9,0,0)).ToString("yyyy-MM-dd");
     }
     
     public string MakeMessage(string msg)
@@ -15,7 +14,8 @@
         
       msg = msg.Trim();
         
-      Match m = Regex.Match(msg, "^\\s*\\*\\s+", RegexOptions.Multiline);
+      System.Text.RegularExpressions.Match m
+        = System.Text.RegularExpressions.Regex.Match(msg, "^\\s*\\*\\s+", RegexOptions.Multiline);
       
       if(m.Success)
         msg = msg.Substring(0, m.Index);
@@ -67,9 +67,6 @@
   <xsl:template match="logentry" mode="days">
     <xsl:variable name="me" select="." />
     <xsl:variable name="myDate" select="substring-before(date,'T')"/>
-    <!--b xmlns="http://www.w3.org/1999/xhtml">
-      <xsl:value-of select="$myDate"/>
-    </b>-->
     <xsl:if test="@revision = ../logentry[substring-before(date,'T') = $myDate][1]/@revision">      
       <tr xmlns="http://www.w3.org/1999/xhtml" class="d">
         <td colspan="4">
