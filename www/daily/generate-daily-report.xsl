@@ -48,7 +48,7 @@
           with the exact version.
         </p>
         <h2>
-          The last daily build is <a href="$latestUrl">
+          The last daily build is <a href="{$latestUrl}">
             <xsl:value-of select="$latestName"/>
           </a>
         </h2>
