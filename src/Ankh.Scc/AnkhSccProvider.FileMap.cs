@@ -405,12 +405,12 @@ namespace Ankh.Scc
             path = SvnTools.GetNormalizedFullPath(path);
 
             SccProjectFile file;
-            if (!_fileMap.TryGetValue(path, out file))
-                yield break;
-
-            foreach(SccProjectData pd in file.GetOwnerProjects())
+            if (_fileMap.TryGetValue(path, out file))
             {
-                yield return pd.SvnProject;
+                foreach (SccProjectData pd in file.GetOwnerProjects())
+                {
+                    yield return pd.SvnProject;
+                }
             }
 
             if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
@@ -441,11 +441,9 @@ namespace Ankh.Scc
                     }
                 }
 
-                if(string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                if(!projects.Contains(SvnProject.Solution) 
+                    && string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
-                    if(projects.Contains(SvnProject.Solution))
-                        continue;
-
                     projects.Add(SvnProject.Solution, SvnProject.Solution);
                     yield return SvnProject.Solution;
                 }
@@ -597,14 +595,22 @@ namespace Ankh.Scc
         {
             SccProjectFile file;
 
-            if (_fileMap.TryGetValue(path, out file))
+            if (!_fileMap.TryGetValue(path, out file))
             {
-                foreach (SccProjectFileReference fr in file.GetAllReferences())
+                if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
-                    ProjectIconReference icon;
-                    if (fr.TryGetIcon(out icon))
-                        return icon;
+                    // TODO: Fetch real solution icon
+                    return null;
                 }
+
+                return null;
+            }
+
+            foreach (SccProjectFileReference fr in file.GetAllReferences())
+            {
+                ProjectIconReference icon;
+                if (fr.TryGetIcon(out icon))
+                    return icon;
             }
 
             return null;
@@ -637,11 +643,7 @@ namespace Ankh.Scc
             SccProjectFile file;
             if (!_fileMap.TryGetValue(path, out file))
             {
-                // TODO: Cache this value somewhere after opening the solution
-                IAnkhSolutionSettings solSet = GetService<IAnkhSolutionSettings>();
-
-                if(solSet != null)
-                    return string.Equals(solSet.SolutionFilename, path, StringComparison.OrdinalIgnoreCase);
+                return string.Equals(SolutionFilename, path, StringComparison.OrdinalIgnoreCase);
             }
 
             foreach (SccProjectData pd in file.GetOwnerProjects())
