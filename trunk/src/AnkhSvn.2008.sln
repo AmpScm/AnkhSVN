@@ -39,6 +39,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BEAF04B7-B1BB-4ABA-BF6F-00495274C725}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{E7D88D59-A87F-4939-AB58-315F8C41E20B}"
+	ProjectSection(SolutionItems) = preProject
+		..\www\daily\generate-daily-report.xsl = ..\www\daily\generate-daily-report.xsl
+		..\www\daily\index.html = ..\www\daily\index.html
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Scc", "Ankh.Scc\Ankh.Scc.csproj", "{ECE36A69-DD85-4AAB-B329-12BAE4675056}"
 EndProject
@@ -197,7 +201,7 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {BEAF04B7-B1BB-4ABA-BF6F-00495274C725}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 EndGlobal
