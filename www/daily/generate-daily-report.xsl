@@ -52,7 +52,7 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h2>The last daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
+        <h2>The latest daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
