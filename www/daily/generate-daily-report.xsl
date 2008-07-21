@@ -33,33 +33,47 @@
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
-        <title>
-          AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/>
-        </title>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <title>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></title>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <link rel="Stylesheet" type="text/css" href="daily.css" />
       </head>
       <body>
-        <h1>
-          AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/>
-        </h1>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <h1>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></h1>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
         <p>
           The AnkhSVN project provides Daily builds of the current development tree. These versions
           are not tested, but may contain bugfixes (and new bugs) that are not in released versions. If
           you are testing these daily builds (Thanks!) and find issues in it, please report those issues
           with the exact version.
         </p>
-        <h2>The last daily build is <a href="{$latestUrl}">
-            <xsl:value-of select="$latestName"/>
-          </a>
-        </h2>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <h2>The last daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
         <p>
           You can find older daily releases <a href="http://ankhsvn.net/daily/?all=1">here</a>. Older
           daily builds will be available for at least a week after building.
         </p>
 
+        <xsl:text>&#13;&#10;</xsl:text>
         <h2>Recent changes</h2>
         <table>
+          <xsl:text>&#13;&#10;</xsl:text>
           <xsl:apply-templates select="/log/logentry" mode="days" />
+          <xsl:text>&#13;&#10;</xsl:text>
         </table>
+        <xsl:comment>/Recent changes</xsl:comment>
+        <xsl:text>&#13;&#10;</xsl:text>
       </body>
     </html>
   </xsl:template>
@@ -72,6 +86,7 @@
           <xsl:value-of select="$myDate"/>
         </td>        
       </tr>
+      <xsl:text>&#13;&#10;</xsl:text>
       <xsl:apply-templates select="../logentry[substring-before(date,'T') = $myDate]"/>
     </xsl:if>
   </xsl:template>
