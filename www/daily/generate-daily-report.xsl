@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
-      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:x="inline-doc">
+      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:x="inline-doc"
+                exclude-result-prefixes="x msxsl">
   <msxsl:script implements-prefix="x" language="c#">
     public string DateTitle()
     {
@@ -11,8 +12,6 @@
     {
       if (string.IsNullOrEmpty(msg))
         return null;
-        
-      msg = msg.Trim();
         
       System.Text.RegularExpressions.Match m
         = System.Text.RegularExpressions.Regex.Match(msg, "^\\s*\\*\\s+", RegexOptions.Multiline);
@@ -34,15 +33,11 @@
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <xsl:text>&#13;&#10;</xsl:text>
-        <xsl:text>&#13;&#10;</xsl:text>
         <title>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></title>
-        <xsl:text>&#13;&#10;</xsl:text>
-        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <link rel="Stylesheet" type="text/css" href="daily.css" />
       </head>
       <body>
-        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <h1>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></h1>
         <xsl:text>&#13;&#10;</xsl:text>
@@ -56,7 +51,9 @@
         </p>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
         <h2>The last daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
+        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
@@ -64,14 +61,18 @@
           You can find older daily releases <a href="http://ankhsvn.net/daily/?all=1">here</a>. Older
           daily builds will be available for at least a week after building.
         </p>
-
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <h2>Recent changes</h2>
+        <xsl:text>&#13;&#10;</xsl:text>
         <table>
           <xsl:text>&#13;&#10;</xsl:text>
           <xsl:apply-templates select="/log/logentry" mode="days" />
           <xsl:text>&#13;&#10;</xsl:text>
         </table>
+        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:comment>/Recent changes</xsl:comment>
         <xsl:text>&#13;&#10;</xsl:text>
       </body>
@@ -97,7 +98,7 @@
         <xsl:value-of select="' '"/>
       </td>
       <td class="r">
-        <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">[<xsl:value-of select="@revision"/>]</a>
+        <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">[r<xsl:value-of select="@revision"/>]</a>
       </td>
       <td class="a">
         <xsl:value-of select="author"/>
