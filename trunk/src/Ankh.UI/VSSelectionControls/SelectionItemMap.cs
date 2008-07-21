@@ -222,6 +222,7 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_Expandable:
                     case __VSHPROPID.VSHPROPID_Expanded:
                     case __VSHPROPID.VSHPROPID_ExpandByDefault:
+                    case __VSHPROPID.VSHPROPID_HasEnumerationSideEffects:
                         pvar = false;
                         break;
                     case __VSHPROPID.VSHPROPID_StateIconIndex:
