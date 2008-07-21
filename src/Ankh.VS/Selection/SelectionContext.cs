@@ -478,14 +478,22 @@ namespace Ankh.Selection
             // Note: VS2005 and earlier have all projects on the top level; from VS2008+ projects are nested
             // We can ignore that as we would include the projects anyway
 
-            object child;
+            object value;
+
+            if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+                (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
+            {
+                if ((bool)value)
+                    yield break;
+            }
+
             if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
-                (int)__VSHPROPID.VSHPROPID_FirstChild, out child)))
+                (int)__VSHPROPID.VSHPROPID_FirstChild, out value)))
             {
                 yield break;
             }
 
-            uint childId = GetItemIdFromObject(child);
+            uint childId = GetItemIdFromObject(value);
             while (childId != VSConstants.VSITEMID_NIL)
             {
                 SelectionItem i = new SelectionItem(si.Hierarchy, childId);
@@ -496,9 +504,9 @@ namespace Ankh.Selection
                 }
 
                 Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(i.Id,
-                    (int)__VSHPROPID.VSHPROPID_NextSibling, out child));
+                    (int)__VSHPROPID.VSHPROPID_NextSibling, out value));
 
-                childId = GetItemIdFromObject(child);
+                childId = GetItemIdFromObject(value);
             }
         }
 
