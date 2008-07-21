@@ -50,8 +50,10 @@ namespace Ankh.Commands
             SvnItem theItem = null;
             string path;
 
+            string projectRoot = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
+
             if (e.Command == AnkhCommand.SolutionSwitchDialog)
-                path = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
+                path = projectRoot;
             else if (e.Command == AnkhCommand.SwitchProject)
             {
                 IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
@@ -136,9 +138,21 @@ namespace Ankh.Commands
                     {
                         a.Client.Switch(path, target);
                     });
-                    
+
+
+                // This fixes the PC 'Working on' combo 
+                string solution = e.GetService<IAnkhSolutionSettings>().SolutionFilename;
+                IFileStatusCache cache = e.GetService<IFileStatusCache>();
+
+                if (!string.IsNullOrEmpty(solution))
+                    cache.MarkDirty(solution);
+                if (!string.IsNullOrEmpty(projectRoot))
+                    cache.MarkDirty(projectRoot);
+                // Working on fix
+
+
                 lck.ReloadModified();
             }
-        } 
+        }
     }
 }
