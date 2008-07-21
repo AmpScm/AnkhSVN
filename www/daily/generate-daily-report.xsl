@@ -82,7 +82,9 @@
   <xsl:template match="logentry">
     <xsl:if test="x:MakeMessage(msg)">
     <tr xmlns="http://www.w3.org/1999/xhtml">
-      <td>&#160;</td>
+      <td>
+        <xsl:value-of select="' '"/>
+      </td>
       <td class="r">
         <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">[<xsl:value-of select="@revision"/>]</a>
       </td>
@@ -99,7 +101,9 @@
       </td>
     </tr>
     <tr xmlns="http://www.w3.org/1999/xhtml">
-      <td colspan="2">&#160;</td>
+      <td colspan="2">
+        <xsl:value-of select="' '"/>
+      </td>
       <td class="l" colspan="2">
         <xsl:value-of select="x:MakeMessage(msg)"/>
       </td>
