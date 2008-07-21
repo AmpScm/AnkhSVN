@@ -47,8 +47,7 @@
           you are testing these daily builds (Thanks!) and find issues in it, please report those issues
           with the exact version.
         </p>
-        <h2>
-          The last daily build is <a href="{$latestUrl}">
+        <h2>The last daily build is <a href="{$latestUrl}">
             <xsl:value-of select="$latestName"/>
           </a>
         </h2>
