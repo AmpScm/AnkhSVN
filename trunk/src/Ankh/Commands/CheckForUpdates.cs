@@ -69,9 +69,34 @@ namespace Ankh.Commands
             // Always available
         }
 
-        static Version CurrentVersion
+        static Version _currentVersion;
+        static Version GetCurrentVersion(IAnkhServiceProvider context)
         {
-            get { return typeof(CheckForUpdates).Assembly.GetName().Version; }
+            if(context == null)
+                throw new ArgumentNullException("context");
+
+            if(_currentVersion != null)
+                return _currentVersion;
+                
+            IAnkhPackage pkg = context.GetService<IAnkhPackage>();
+            
+            if(pkg != null)
+                return _currentVersion = pkg.PackageVersion;
+            else
+                return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version; 
+        }
+
+        static Version GetUIVersion(AnkhContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            IAnkhPackage pkg = context.GetService<IAnkhPackage>();
+
+            if (pkg != null)
+                return pkg.UIVersion;
+            else
+                return GetCurrentVersion(context); 
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -97,7 +122,7 @@ namespace Ankh.Commands
                 }
             }
 
-            Version version = CurrentVersion;
+            Version version = GetCurrentVersion(e.Context);
             Version vsVersion = e.GetService<IAnkhSolutionSettings>().VisualStudioVersion;
             Version osVersion = Environment.OSVersion.Version;
 
@@ -196,7 +221,7 @@ namespace Ankh.Commands
                     if (!string.IsNullOrEmpty(version))
                     {
                         uad.newVerLabel.Text = newVersion;
-                        uad.curVerLabel.Text = CurrentVersion.ToString();
+                        uad.curVerLabel.Text = GetUIVersion(e.Context).ToString();
                         uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
                     }
 
@@ -224,7 +249,7 @@ namespace Ankh.Commands
                     }
                 }
             }
-        }
+        }        
 
         public void OnResponse(IAsyncResult ar)
         {
@@ -300,7 +325,7 @@ namespace Ankh.Commands
                     {
                         Version v = new Version(version);
 
-                        if (v <= CurrentVersion)
+                        if (v <= GetCurrentVersion(Context))
                             return;
                     }
 
@@ -330,7 +355,7 @@ namespace Ankh.Commands
                     rk.DeleteValue("LastVersion", false);
                     rk.DeleteValue("FailedChecks", false);
                     rk.SetValue("LastCheck", DateTime.UtcNow.Ticks);
-                    rk.SetValue("LastVersion", CurrentVersion.ToString());
+                    rk.SetValue("LastVersion", GetCurrentVersion(Context).ToString());
                     if (tag != null)
                         rk.SetValue("LastTag", tag);
                     else
@@ -377,7 +402,7 @@ namespace Ankh.Commands
 
                 value = rk.GetValue("LastVersion");
 
-                if (IsDevVersion() || (value is string && (string)value == CurrentVersion.ToString()))
+                if (IsDevVersion() || (value is string && (string)value == GetCurrentVersion(context).ToString()))
                 {
                     value = rk.GetValue("LastCheck");
                     long lv;
