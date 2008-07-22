@@ -27,19 +27,20 @@
   <xsl:param name="latestUrl">http://ankhsvn.net/daily/</xsl:param>
   <xsl:param name="latestVersion">2.0.0000.0</xsl:param>
   <xsl:param name="latestName">AnkhSVN-Daily-2.0.0000.0.msi</xsl:param>
+  <xsl:param name="buildRev">4567</xsl:param>
 
   <xsl:output media-type="text/html" method="html" indent="no"/>
   <xsl:template match="/">
     <html xmlns="http://www.w3.org/1999/xhtml">
       <head>
         <xsl:text>&#13;&#10;</xsl:text>
-        <title>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></title>
+        <title>AnkhSVN-Daily Update - <xsl:value-of select="$latestVersion"/></title>
         <xsl:text>&#13;&#10;</xsl:text>
         <link rel="Stylesheet" type="text/css" href="daily.css" />
       </head>
       <body>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h1>AnkhSVN-Daily Status - <xsl:value-of select="$latestVersion"/></h1>
+        <h1>AnkhSVN-Daily Update - <xsl:value-of select="$latestVersion"/></h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
@@ -58,9 +59,10 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
-          You can find older daily releases <a href="http://ankhsvn.net/daily/?all=1">here</a>. Older
-          daily builds will be available for at least a week after building.
+          You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id={$buildRev}">Subversion Repository</a>.
         </p>
+        <p>Published daily builds will be available for at least a week after they are build.</p>        
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
