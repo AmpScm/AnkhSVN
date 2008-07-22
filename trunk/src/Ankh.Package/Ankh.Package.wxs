@@ -19,10 +19,16 @@
         <?ifdef Ankh_Pdb?>
         <File Id="CF_Ankh.Package.pdb" Name="Ankh.Package.pdb" Checksum="yes" Vital="yes" />
         <?endif?>
-        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation" Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
-        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation" Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
-        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
-        <Registry Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
+        <!-- Allow checking if AnkhSVN is installed -->
+        <RegistryKey Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation">
+          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
+          <RegistryValue Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
+        </RegistryKey>
+        <!-- The 2.0 in the next line MUST match the MainVersion field in AnkhId -->
+        <RegistryKey Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0">
+          <RegistryValue Name="CurrentVersion" Value="$(var.ankhVersion)" Type="string"/>
+          <RegistryValue Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
+        </RegistryKey>
         <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2005.wxi ?>
         <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>        
       </Component>
