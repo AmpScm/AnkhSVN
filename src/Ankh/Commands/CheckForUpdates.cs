@@ -377,7 +377,7 @@ namespace Ankh.Commands
 
                 value = rk.GetValue("LastVersion");
 
-                if (IsDevVersion() || (value is string && value == CurrentVersion.ToString()))
+                if (IsDevVersion() || (value is string && (string)value == CurrentVersion.ToString()))
                 {
                     value = rk.GetValue("LastCheck");
                     long lv;
