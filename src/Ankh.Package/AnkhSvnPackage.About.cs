@@ -6,14 +6,87 @@ using Microsoft.VisualStudio;
 using System.Reflection;
 using SharpSvn;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.Win32;
+using Ankh.Ids;
 
 namespace Ankh.VSPackage
 {
     // This attribute is used to register the informations needed to show the this package
     // in the Help/About dialog of Visual Studio.
     [InstalledProductRegistration(true, null, null, null)]
+    [Ankh.VSPackage.Attributes.ProvideUIVersion]
     public partial class AnkhSvnPackage : IVsInstalledProduct
     {
+        Version _uiVersion, _packageVersion;
+        /// <summary>
+        /// Gets the UI version. Retrieved from the registry after being installed by our MSI
+        /// </summary>
+        /// <value>The UI version.</value>
+        public Version UIVersion
+        {
+            get { return _uiVersion ?? (_uiVersion = GetUIVersion() ?? PackageVersion); }
+        }
+
+        /// <summary>
+        /// Gets the UI version (as might be remapped by the MSI)
+        /// </summary>
+        /// <returns></returns>
+        private Version GetUIVersion()
+        {
+            // We can't use our services here to help us :(
+            // This code might be used from devenv.exe /setup
+
+            ILocalRegistry3 lr = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
+
+            if(lr == null)
+                return null;
+
+            string root;
+            if (!ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
+                return null;
+            
+            RegistryKey baseKey = Registry.LocalMachine;
+
+            // TODO: Find some way to use the VS2008 RANU api
+            if (root.EndsWith("\\UserSettings"))
+            {
+                root = root.Substring(0, root.Length - 13) + "\\Configuration";
+                baseKey = Registry.CurrentUser;
+            }
+
+            using (RegistryKey rk = baseKey.OpenSubKey(root + "\\Packages\\" + typeof(AnkhSvnPackage).GUID.ToString("b"), RegistryKeyPermissionCheck.ReadSubTree))
+            {
+                if(rk == null)
+                    return null;
+
+                string v = rk.GetValue(Ankh.VSPackage.Attributes.ProvideUIVersion.RemapName) as string;
+
+                if(string.IsNullOrEmpty(v))
+                    return null;
+
+                if(v.IndexOf('[') >= 0)
+                    return null; // When not using remapping we can expect "[ProductVersion]" as value
+
+                try
+                {
+                    return new Version(v);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the package version. The assembly version of Ankh.Package.dll
+        /// </summary>
+        /// <value>The package version.</value>
+        public Version PackageVersion
+        {
+            get { return _packageVersion ?? (_packageVersion = typeof(AnkhSvnPackage).Assembly.GetName().Version); }
+        }
+
         #region IVsInstalledProduct Members
 
         public int IdBmpSplash(out uint pIdBmp)
@@ -46,7 +119,8 @@ namespace Ankh.VSPackage
         public int ProductDetails(out string pbstrProductDetails)
         {
             pbstrProductDetails = string.Format(Resources.AboutDetails,
-                new AssemblyName(typeof(AnkhSvnPackage).Assembly.FullName).Version,
+                UIVersion.ToString(),
+                PackageVersion.ToString(),
                 SvnClient.Version,
                 SvnClient.SharpSvnVersion);
 
@@ -55,7 +129,7 @@ namespace Ankh.VSPackage
 
         public int ProductID(out string pbstrPID)
         {
-            pbstrPID = new AssemblyName(typeof(AnkhSvnPackage).Assembly.FullName).Version.ToString();
+            pbstrPID = UIVersion.ToString();
 
             return VSConstants.S_OK;
         }
