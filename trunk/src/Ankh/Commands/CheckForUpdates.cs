@@ -56,6 +56,7 @@ using Ankh.VS;
  *  l:              The link value
  *  v:              The new version (optional). If set the message is only shown on 
  *                  versions older than the specified version
+ *  n:              The version shown as new version
  */
 
 namespace Ankh.Commands
@@ -176,11 +177,11 @@ namespace Ankh.Commands
             }
             catch { return; }
             
-            if (args == null || args.Length < 7)
+            if (args == null || args.Length < 8)
                 return;
 
             string title = args[0], header = args[1], description = args[2], url= args[3], 
-                urltext=args[4], version = args[5], tag = args[6];
+                urltext = args[4], version = args[5], newVersion = args[6], tag = args[7];
 
             using (Ankh.UI.SccManagement.UpdateAvailableDialog uad = new Ankh.UI.SccManagement.UpdateAvailableDialog())
             {
@@ -194,7 +195,7 @@ namespace Ankh.Commands
 
                     if (!string.IsNullOrEmpty(version))
                     {
-                        uad.newVerLabel.Text = version;
+                        uad.newVerLabel.Text = newVersion;
                         uad.curVerLabel.Text = CurrentVersion.ToString();
                         uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
                     }
@@ -289,6 +290,7 @@ namespace Ankh.Commands
                 string urltext = NodeText(doc, "/u/i/l");
 
                 string version = NodeText(doc, "/u/i/v");
+                string newVersion = NodeText(doc, "/u/i/n") ?? version;
 
                 tag = NodeText(doc, "/u/g");
 
@@ -316,7 +318,7 @@ namespace Ankh.Commands
                     IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
 
                     cs.PostExecCommand(AnkhCommand.CheckForUpdates,
-                        new string[] { title, header, description, url, urltext, version, tag });
+                        new string[] { title, header, description, url, urltext, version, newVersion, tag });
                 }
             }
             finally
@@ -375,7 +377,7 @@ namespace Ankh.Commands
 
                 value = rk.GetValue("LastVersion");
 
-                if (IsDevVersion() || (value is string && (string)value == CurrentVersion.ToString()))
+                if (IsDevVersion() || (value is string && value == CurrentVersion.ToString()))
                 {
                     value = rk.GetValue("LastCheck");
                     long lv;
