@@ -121,6 +121,16 @@ namespace Ankh.UI.MergeWizard
                 return new SvnClient();
         }
 
+        public SvnWorkingCopyClient GetWcClient()
+        {
+            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
+
+            if (pool != null)
+                return pool.GetWcClient();
+            else
+                return new SvnWorkingCopyClient();
+        }
+
         /// <summary>
         /// Returns the working copy root for the opened solution.
         /// </summary>

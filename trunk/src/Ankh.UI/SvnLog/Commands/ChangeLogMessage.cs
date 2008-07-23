@@ -4,7 +4,7 @@ using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
 using SharpSvn;
-using SharpSvn.Implementation;
+using SharpSvn;
 using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using Ankh.VS;

@@ -215,9 +215,9 @@ namespace Ankh.UI.SvnLog
         void args_SvnError(object sender, SvnErrorEventArgs e)
         {
             // TODO: replace with specific SvnExceptions when available
-            if (e.Exception.SvnErrorCode == SharpSvn.Implementation.SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES)
+            if (e.Exception.SvnErrorCode == SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES)
                 e.Cancel = true; // File not there, prevent exception
-            else if (e.Exception.SvnErrorCode == SharpSvn.Implementation.SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE)
+            else if (e.Exception.SvnErrorCode == SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE)
                 e.Cancel = true; // Probably requesting merge against 1.4 server
         }
 

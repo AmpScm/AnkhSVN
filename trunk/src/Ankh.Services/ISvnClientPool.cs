@@ -25,6 +25,12 @@ namespace Ankh
         SvnPoolClient GetNoUIClient();
 
         /// <summary>
+        /// Gets a working copy client instance
+        /// </summary>
+        /// <returns></returns>
+        SvnWorkingCopyClient GetWcClient();
+
+        /// <summary>
         /// Returns the client.
         /// </summary>
         /// <param name="poolClient">The pool client.</param>

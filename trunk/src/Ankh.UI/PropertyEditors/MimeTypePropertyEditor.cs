@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using SharpSvn.Implementation;
+using SharpSvn;
 
 namespace Ankh.UI
 {

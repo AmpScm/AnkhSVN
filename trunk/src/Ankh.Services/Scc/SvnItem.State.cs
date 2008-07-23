@@ -4,7 +4,6 @@ using System.Text;
 using System.Diagnostics;
 using Ankh.Scc;
 using SharpSvn;
-using SharpSvn.Implementation;
 
 namespace Ankh
 {
@@ -300,14 +299,13 @@ namespace Ankh
                 isTextFile = false;
             else
             {
-                using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                using (SvnWorkingCopyClient client = _context.GetService<ISvnClientPool>().GetWcClient())
                 {
-                    SvnGetWorkingCopyStateArgs a = new SvnGetWorkingCopyStateArgs();
+                    SvnWorkingCopyStateArgs a = new SvnWorkingCopyStateArgs();
                     a.ThrowOnError = false;
-                    a.RetrieveBaseFile = false;
                     a.RetrieveFileData = true;
                     SvnWorkingCopyState state;
-                    if (client.GetWorkingCopyState(FullPath, out state))
+                    if (client.GetState(FullPath, out state))
                     {
                         isTextFile = state.IsTextFile;
                     }

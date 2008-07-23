@@ -1,20 +1,16 @@
 // $Id$
 using System;
-
-
-using System.IO;
-using System.Collections;
-using Ankh.UI;
-using System.Diagnostics;
-using SharpSvn;
-using System.Collections.ObjectModel;
-using Ankh.Selection;
-using Ankh.Scc;
-using SharpSvn.Implementation;
-using System.Runtime.InteropServices;
 using System.Collections.Generic;
-using Ankh.Commands;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+
+using SharpSvn;
+
 using Ankh.Ids;
+using Ankh.Commands;
+using Ankh.Scc;
+using Ankh.Selection;
 
 namespace Ankh
 {
