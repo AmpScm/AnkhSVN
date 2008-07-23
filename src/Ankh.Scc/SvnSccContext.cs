@@ -148,7 +148,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            path = Path.GetFullPath(path);
+            path = SvnTools.GetNormalizedFullPath(path);
 
             if (File.Exists(path))
                 path = Path.GetDirectoryName(path);
@@ -575,7 +575,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            path = Path.GetFullPath(path);
+            path = SvnTools.GetNormalizedFullPath(path);
             bool isFile = true;
 
             if (!File.Exists(path))

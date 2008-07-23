@@ -8,6 +8,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -126,7 +127,7 @@ namespace Ankh.Scc
                 // Some projects call HandsOffFiles of files they want to add. Use that to collect extra origin information
                 foreach (string file in rgpszMkDocuments)
                 {
-                    string fullFile = Path.GetFullPath(file);
+                    string fullFile = SvnTools.GetNormalizedFullPath(file);
                     if (!_fileHints.Contains(fullFile))
                         _fileHints.Add(fullFile);
                 }
