@@ -130,8 +130,9 @@ namespace Ankh.Commands
             args.IgnoreAncestry = true;
             args.NoDeleted = false;
             args.Depth = info.Depth;
-            if (slndir != null)
-                args.RelativeToPath = slndir;
+
+            string slndirP = slndir + "\\";
+            
             SvnRevisionRange range = new SvnRevisionRange(info.RevisionStart, info.RevisionEnd);
 
             using (MemoryStream stream = new MemoryStream())
@@ -140,6 +141,15 @@ namespace Ankh.Commands
             {
                 foreach (SvnItem item in info.Selection)
                 {
+                    SvnWorkingCopy wc;
+                    if (!string.IsNullOrEmpty(slndir) &&
+                        item.FullPath.StartsWith(slndirP, StringComparison.OrdinalIgnoreCase))
+                        args.RelativeToPath = slndir;
+                    else if ((wc = item.WorkingCopy) != null)
+                        args.RelativeToPath = wc.FullPath;
+                    else
+                        args.RelativeToPath = null;
+
                     client.Diff(item.FullPath, range, args, stream);
                 }
                 stream.Position = 0;
