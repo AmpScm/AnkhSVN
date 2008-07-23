@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Windows.Forms;
+
+using SharpSvn;
 using Ankh.Commands;
 using Ankh.Ids;
-using SharpSvn;
-using SharpSvn;
-using System.Windows.Forms.Design;
-using System.Windows.Forms;
-using Ankh.VS;
-using System.ComponentModel;
 using Ankh.Scc;
+using Ankh.VS;
+
 
 namespace Ankh.UI.SvnLog.Commands
 {

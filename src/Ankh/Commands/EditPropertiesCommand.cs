@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.UI;
-using System.Windows.Forms.Design;
-using System.Windows.Forms;
-using SharpSvn;
 using System.Collections.ObjectModel;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using SharpSvn;
 using Ankh.Ids;
 using Ankh.Scc;
+using Ankh.UI;
+
 
 namespace Ankh.Commands
 {
