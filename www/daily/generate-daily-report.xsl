@@ -35,9 +35,9 @@
         return n.Select("/qqq");
         
       System.Text.RegularExpressions.Regex r 
-        = new System.Text.RegularExpressions.Regex("\\b([Ii][sS][sS][uU][eE]\\s*\\#?" +
+        = new System.Text.RegularExpressions.Regex("(\\b([Ii][sS][sS][uU][eE]\\s*\\#?" +
         "\\s*(?<issue>[0-9]+)" +
-        ")|(r(?<rev>[0-9]+))\\b", RegexOptions.Multiline);
+        ")|(r(?<rev>[0-9]+))\\b)|(?<nl>\r?\n[ \t]*\r?\n)", RegexOptions.Multiline);
         
       while((m = r.Match(msg)).Success)
       {
@@ -53,14 +53,19 @@
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
-        if ((g = m.Groups["rev"]).Success && !string.IsNullOrEmpty(g.Value))
+        else if ((g = m.Groups["rev"]).Success && !string.IsNullOrEmpty(g.Value))
         {
           XmlElement a = doc.CreateElement("a", html);
           a.SetAttribute("href", "http://ankhsvn.net/rev/?r=" + g.Value);
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
-        
+        else if ((g = m.Groups["nl"]).Success && !string.IsNullOrEmpty(g.Value))
+        {
+          XmlElement a = doc.CreateElement("br", html);
+          el.AppendChild(a);
+          el.AppendChild(doc.CreateTextNode("\r\n"));
+        }        
         
         msg = msg.Substring(m.Index+m.Length);
       }      
