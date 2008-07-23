@@ -142,6 +142,12 @@ namespace Ankh.UI.VSSelectionControls
         public event EventHandler ShowContextMenu;
         public virtual void OnShowContextMenu(EventArgs e)
         {
+            if (_shouldUpdate)
+            {
+                _shouldUpdate = false;
+                NotifySelectionUpdated();
+            }
+
             if (ShowContextMenu != null)
                 ShowContextMenu(this, e);
         }
