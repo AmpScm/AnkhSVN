@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.UI.VSSelectionControls;
-using System.Windows.Forms;
 using System.ComponentModel;
-using SharpSvn;
-using System.Runtime.InteropServices;
 using System.Globalization;
-using Ankh.VS;
-using Ankh.Scc;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+
+using SharpSvn;
 using SharpSvn.Implementation;
+
+
+using Ankh.Scc;
+using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 
 namespace Ankh.UI.SvnLog
 {

@@ -6,7 +6,7 @@ using System.Windows.Forms.Design;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.ObjectModel;
-using SharpSvn.Implementation;
+using SharpSvn;
 using Ankh.Ids;
 using Ankh.Scc;
 

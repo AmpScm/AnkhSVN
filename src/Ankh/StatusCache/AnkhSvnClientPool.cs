@@ -64,6 +64,11 @@ namespace Ankh
             }
         }
 
+        public SvnWorkingCopyClient GetWcClient()
+        {
+            return new SvnWorkingCopyClient();
+        }
+
         private SvnPoolClient CreateClient(bool hookUI)
         {
             EnsureNames();

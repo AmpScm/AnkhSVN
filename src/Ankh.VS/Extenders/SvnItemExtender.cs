@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 using SharpSvn;
 using Ankh.Selection;
-using SharpSvn.Implementation;
+using SharpSvn;
 using Ankh.Scc;
 
 

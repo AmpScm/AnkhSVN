@@ -64,13 +64,13 @@ namespace Ankh.UI.MergeWizard
                     return false; // Work around issue where the WizardFramework calls this
                                   // before the MergeUtils is set when instantiating the WizardDialog.
 
-                using (SvnClient client = wizard.MergeUtils.GetClient())
+                using (SvnWorkingCopyClient client = wizard.MergeUtils.GetWcClient())
                 {
                     WizardDialog dialog = (WizardDialog)wizard.Form;
                     SvnItem mergeTarget = wizard.MergeTarget;
                     SvnWorkingCopyVersion wcRevision;
 
-                    client.GetWorkingCopyVersion(wizard.MergeUtils.WorkingCopyRootPath,
+                    client.GetVersion(wizard.MergeUtils.WorkingCopyRootPath,
                         out wcRevision);
                     
                     bool hasLocalModifications = wcRevision.Modified;

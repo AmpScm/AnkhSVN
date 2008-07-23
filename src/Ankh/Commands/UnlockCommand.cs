@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
-using SharpSvn;
-using Ankh.Ids;
-using Ankh.VS;
 using System.Collections.Generic;
-using Ankh.UI;
+using SharpSvn;
+
+using Ankh.Ids;
 using Ankh.Scc;
-using SharpSvn.Implementation;
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
