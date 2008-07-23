@@ -195,6 +195,12 @@ namespace Ankh.UI.PendingChanges
 
                         depth = SvnDepth.Infinity;
                     }
+                    else
+                    {
+                        MessageBox.Show("Subversion does not allow to commit this combination of files and directories at once. (Directory deletions and modifications collide)", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        return SvnDepth.Unknown;
+                    }
+
                 }
 
                 // Returns SvnDepth.Infinity if there are directories scheduled for commit 
@@ -496,11 +502,16 @@ namespace Ankh.UI.PendingChanges
             bool ok = false;
             SvnCommitResult rslt = null;
 
+            SvnDepth depth = state.CalculateCommitDepth();
+
+            if (depth == SvnDepth.Unknown)
+                return false;
+
             ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing...",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnCommitArgs ca = new SvnCommitArgs();
-                    ca.Depth = state.CalculateCommitDepth();
+                    ca.Depth = depth;
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
