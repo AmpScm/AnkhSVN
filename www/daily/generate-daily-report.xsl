@@ -3,26 +3,73 @@
       xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:x="inline-doc"
                 exclude-result-prefixes="x msxsl">
   <msxsl:script implements-prefix="x" language="c#">
+      <![CDATA[
+      
+    const string html = "http://www.w3.org/1999/xhtml";
     public string DateTitle()
     {
       return (DateTime.Now - new TimeSpan(9,0,0)).ToString("yyyy-MM-dd");
     }
     
-    public string MakeMessage(string msg)
+    public System.Xml.XPath.XPathNodeIterator MakeMessage(string msg)
     {
+      XmlDocument doc = new XmlDocument();
+      doc.LoadXml("<html xmlns=\"http://www.w3.org/1999/xhtml\"></html>");
+      
+      XPathNavigator n = doc.DocumentElement.CreateNavigator();
+      
       if (string.IsNullOrEmpty(msg))
-        return null;
+        return n.Select("/qqq");
+        
+      XmlElement el = doc.DocumentElement;
         
       System.Text.RegularExpressions.Match m
         = System.Text.RegularExpressions.Regex.Match(msg, "^\\s*\\*\\s+", RegexOptions.Multiline);
-      
+        
       if(m.Success)
         msg = msg.Substring(0, m.Index);
         
-      msg = msg.Trim();
+      if(string.IsNullOrEmpty(msg))
+        return n.Select("/qqq");
+        
+      System.Text.RegularExpressions.Regex r 
+        = new System.Text.RegularExpressions.Regex("\\b([Ii][sS][sS][uU][eE]\\s*\\#?" +
+        "\\s*(?<issue>[0-9]+)" +
+        ")|(r(?<rev>[0-9]+))\\b", RegexOptions.Multiline);
+        
+      while((m = r.Match(msg)).Success)
+      {
+        string start = msg.Substring(0, m.Index);
+        el.AppendChild(doc.CreateTextNode(start));
+        
+        System.Text.RegularExpressions.Group g;
+        
+        if ((g = m.Groups["issue"]).Success && !string.IsNullOrEmpty(g.Value))
+        {
+          XmlElement a = doc.CreateElement("a", html);
+          a.SetAttribute("href", "http://ankhsvn.net/issues/?id=" + g.Value);
+          a.InnerText = m.Value;
+          el.AppendChild(a);
+        }
+        if ((g = m.Groups["rev"]).Success && !string.IsNullOrEmpty(g.Value))
+        {
+          XmlElement a = doc.CreateElement("a", html);
+          a.SetAttribute("href", "http://ankhsvn.net/rev/?r=" + g.Value);
+          a.InnerText = m.Value;
+          el.AppendChild(a);
+        }
+        
+        
+        msg = msg.Substring(m.Index+m.Length);
+      }      
       
-      return msg;
+      
+      if(!string.IsNullOrEmpty(msg))
+        el.AppendChild(doc.CreateTextNode(msg));
+      
+      return n.Select("./node()");
     }
+    ]]>
   </msxsl:script>
   <xsl:param name="latestUrl">http://ankhsvn.net/daily/</xsl:param>
   <xsl:param name="latestVersion">2.0.0000.0</xsl:param>
@@ -119,7 +166,7 @@
         <xsl:value-of select="' '"/>
       </td>
       <td class="l" colspan="2">
-        <xsl:value-of select="x:MakeMessage(msg)"/>
+        <xsl:copy-of select="x:MakeMessage(msg)"/>
       </td>
     </tr>
     <xsl:text>&#13;&#10;</xsl:text>
