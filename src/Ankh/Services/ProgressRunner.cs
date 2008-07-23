@@ -133,11 +133,19 @@ namespace Ankh
                 }
                 catch (Exception ex)
                 {
-                    this._exception = ex;
+                    _exception = ex;
                 }
                 finally
                 {
-                    OnDone(this, EventArgs.Empty);
+                    try
+                    {
+                        OnDone(this, EventArgs.Empty);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (_exception == null)
+                            _exception = ex;
+                    }
                 }
             }
 
@@ -148,7 +156,15 @@ namespace Ankh
                 if (si != null && si.InvokeRequired)
                 {
                     EventHandler eh = new EventHandler(OnDone);
-                    si.Invoke(eh, new object[] { sender, e });
+                    try
+                    {
+                        si.Invoke(eh, new object[] { sender, e });
+                    }
+                    catch(Exception ex)
+                    { 
+                        /* Not Catching this exception kills VS */
+                        GC.KeepAlive(ex);
+                    }
                     return;
                 }
 
