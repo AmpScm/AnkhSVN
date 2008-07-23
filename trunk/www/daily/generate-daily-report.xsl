@@ -29,6 +29,8 @@
       if(m.Success)
         msg = msg.Substring(0, m.Index);
         
+      msg = msg.Trim();
+        
       if(string.IsNullOrEmpty(msg))
         return n.Select("/qqq");
         
