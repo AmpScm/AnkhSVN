@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Status - 2.0.4784.118</title>
+<title>AnkhSVN-Daily Update - 2.0.4795.119</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Status - 2.0.4784.118</h1>
+<h1>AnkhSVN-Daily Update - 2.0.4795.119</h1>
 
 
 <p>
@@ -12,19 +12,25 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/836/AnkhSvn-Daily-2.0.4784.118.msi">AnkhSvn-Daily-2.0.4784.118.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/837/AnkhSvn-Daily-2.0.4795.119.msi">AnkhSvn-Daily-2.0.4795.119.msi</a></h2>
 
 
 
 <p>
-          You can find older daily releases <a href="http://ankhsvn.net/daily/?all=1">here</a>. Older
-          daily builds will be available for at least a week after building.
-        </p>
+          You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=AnkhSvn-Daily-2.0.4795.119.msi">Subversion Repository</a>.
+        </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-07-22</td></tr>
+<tr><td> </td><td class="r"><a id="4791" href="http://ankhsvn.net/rev/?r=4791">[r4791]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Perform update checks with the package version, but show the UI version.</td></tr>
+<tr><td> </td><td class="r"><a id="4789" href="http://ankhsvn.net/rev/?r=4789">[r4789]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Resources.Designer.cs, src/Ankh.Package/AnkhSvnPackage.About.cs, src/Ankh.Services/IAnkhPackage.cs, src/Ankh.Package/Attributes/ProvideUIVersion.cs, src/Ankh.Package/Ankh.Package.csproj, src/Ankh.Package/Resources.resx</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Write the version shown in the MSI to the registry hive and show this as primary version 
+number in the About box. Added Ankh.Package version to the details of the aboutbox.</td></tr>
+<tr><td> </td><td class="r"><a id="4786" href="http://ankhsvn.net/rev/?r=4786">[r4786]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added support for showing an other version as the 'New Version' than the version that is checked
+against.</td></tr>
 <tr class="d"><td colspan="4">2008-07-21</td></tr>
 <tr><td> </td><td class="r"><a id="4780" href="http://ankhsvn.net/rev/?r=4780">[r4780]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">In non-development versions automatically check for updates if it is 
 the first run of AnkhSVN with a new version.</td></tr>
@@ -288,26 +294,6 @@ from Subversions status call.
 !! This removes the blue '+' glyphs from files in new solutions !!</td></tr>
 <tr><td> </td><td class="r"><a id="4586" href="http://ankhsvn.net/rev/?r=4586">[r4586]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsPage.Commit.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Default PC commit to SvnDepth.Empty when there is no need for depth SvnDepth.Infinity. 
 This makes somes multiple external commit scenarios possible.</td></tr>
-<tr class="d"><td colspan="4">2008-07-08</td></tr>
-<tr><td> </td><td class="r"><a id="4547" href="http://ankhsvn.net/rev/?r=4547">[r4547]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made the update interval be in hours again (Was minutes in one place
-and hours in the call to the webservice)</td></tr>
-<tr><td> </td><td class="r"><a id="4546" href="http://ankhsvn.net/rev/?r=4546">[r4546]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use another url for checking for updates if you are building your own
-AnkhSVN. This allows us to have a test version of the update checker.</td></tr>
-<tr><td> </td><td class="r"><a id="4545" href="http://ankhsvn.net/rev/?r=4545">[r4545]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/Runners/CommitOperation.cs, src/Ankh/Commands/CommitItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix issue where Commit Project and Commit Solution (context menu actions) would 
-commit all items, when not all items were selected in the dialog (Thanks Vincent)</td></tr>
-<tr><td> </td><td class="r"><a id="4544" href="http://ankhsvn.net/rev/?r=4544">[r4544]</a></td><td class="a">rhuijben</td><td class="f">src/lib/MeneesDiffUtils.dll, src/lib/Menees.dll</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed the now unused Menees dlls</td></tr>
-<tr><td> </td><td class="r"><a id="4543" href="http://ankhsvn.net/rev/?r=4543">[r4543]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SccManagement/UpdateAvailableDialog.Designer.cs, src/Ankh/AnkhModule.cs, src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enabled CheckForUpdates on loading the package (TODO: should be delayed!)
-Default interval is once per week; Currently every user will see a placeholder update 
-to test the infrastructure.</td></tr>
-<tr><td> </td><td class="r"><a id="4542" href="http://ankhsvn.net/rev/?r=4542">[r4542]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Votive.wixproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Stop installing SharpSvn xml documentation files in the AnkhSVN directory. 
-(Shaves 800 KByte+ of the installation size)</td></tr>
-<tr class="d"><td colspan="4">2008-07-07</td></tr>
-<tr><td> </td><td class="r"><a id="4541" href="http://ankhsvn.net/rev/?r=4541">[r4541]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SccManagement/UpdateAvailableDialog.Designer.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/SccManagement/UpdateAvailableDialog.cs, src/Ankh/Commands/CheckForUpdates.cs, src/Ankh.UI/SccManagement/UpdateAvailableDialog.resx</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added UpdateAvailableDialog for the CheckForUpdates command</td></tr>
-<tr><td> </td><td class="r"><a id="4540" href="http://ankhsvn.net/rev/?r=4540">[r4540]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CheckForUpdates.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Some initial fixes of the CheckForUpdates plumbing. Compare new
-version with current version. Removed loop. Added OS version</td></tr>
-<tr><td> </td><td class="r"><a id="4539" href="http://ankhsvn.net/rev/?r=4539">[r4539]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.VS.UnitTest/CommandRouting/CommandRoutingTest.cs, src/Ankh/Commands/CheckForUpdates.cs, src/Ankh/Ankh.csproj, src/Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added CheckForUpdates command and added initial plumbing for
-a simple update check.</td></tr>
-<tr><td> </td><td class="r"><a id="4538" href="http://ankhsvn.net/rev/?r=4538">[r4538]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Hook SvnError when calling MergeEligible and MergeMerged, handle SVN_ERR_UNSUPPORTED_FEATURE</td></tr>
 
 </table>
 <!--/Recent changes-->
