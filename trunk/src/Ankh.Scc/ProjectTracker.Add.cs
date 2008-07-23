@@ -281,7 +281,7 @@ namespace Ankh.Scc
                                     {
                                         if (uri.IsFile)
                                         {
-                                            string file = Path.GetFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
+                                            string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
 
                                             if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
                                             {
