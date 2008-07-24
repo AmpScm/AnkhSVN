@@ -227,8 +227,6 @@ namespace Ankh.Scc
                         pdwQSResult = item.ReadOnlyMustLock ? (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel : (uint)tagVSQuerySaveResult.QSR_SaveOK;
                         return VSConstants.S_OK;
                     }
-
-                    item.MarkDirty();
                 }
 
                 MarkDirty(pszMkDocument, true);
