@@ -20,11 +20,16 @@ namespace Ankh
         void RefreshTo(NoSccStatus status, SvnNodeKind nodeKind);
         void RefreshTo(SvnItem lead);
         void TickItem();
+        void UntickItem();
         bool IsItemTicked();
         bool ShouldRefresh();
         bool IsStatusClean();
 
         bool ShouldClean();
+
+        void SetState(SvnItemState set, SvnItemState unset);
+        void SetDirty(SvnItemState dirty);
+        bool TryGetState(SvnItemState get, out SvnItemState value);
     }
 
     /// <summary>
@@ -391,6 +396,14 @@ namespace Ankh
             _ticked = true; // Will be updated soon
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        void ISvnItemUpdate.UntickItem()
+        {
+            _ticked = false;
+        }
+
         public bool ShouldClean()
         {
             return _ticked || (_statusDirty == XBool.False && _status == AnkhStatus.NotExisting);
@@ -664,16 +677,7 @@ namespace Ankh
         /// </value>
         public bool IsNestedWorkingCopy
         {
-            get
-            {
-                SvnItemState state;
-                if (!TryGetState(SvnItemState.IsNested, out state))
-                {
-                    EnsureClean();
-                    state = GetState(SvnItemState.IsDiskFolder | SvnItemState.Versioned | SvnItemState.IsNested) & SvnItemState.IsNested;
-                }
-                return state != 0;
-            }
+            get { return GetState(SvnItemState.IsNested) != 0; }
         }
 
         /// <summary>

@@ -135,9 +135,9 @@ namespace Ankh
             }
         }
 
-        private void SetDirty(SvnItemState p)
+        private void SetDirty(SvnItemState dirty)
         {
-            _validState &= ~p;
+            _validState &= ~dirty;
         }
 
         void SetState(SvnItemState set, SvnItemState unset)
@@ -169,6 +169,19 @@ namespace Ankh
             }
             _validState |= (set | unset);
             _onceValid |= _validState;
+        }
+
+        void ISvnItemUpdate.SetState(SvnItemState set, SvnItemState unset)
+        {
+            SetState(set, unset);
+        }
+        void ISvnItemUpdate.SetDirty(SvnItemState dirty)
+        {
+            SetDirty(dirty);
+        }
+        bool ISvnItemUpdate.TryGetState(SvnItemState get, out SvnItemState value)
+        {
+            return TryGetState(get, out value);
         }
 
         #region Versionable
@@ -382,27 +395,15 @@ namespace Ankh
                 isNested = false; // No versioned parent
             else
             {
+                StatusCache.RefreshNested(this);
+                SvnItemState r;
 
-                AnkhStatus sPr = parentItem.Status;
+                Debug.Assert(TryGetState(SvnItemState.IsNested, out r));
 
-                bool mNull = (sMe.RepositoryId == null);
-                bool pNull = (sPr.RepositoryId == null);
+                if (TryGetState(SvnItemState.IsNested, out r))
+                    return;
 
-                if ((!mNull && !pNull) && sMe.RepositoryId != sPr.RepositoryId)
-                    isNested = true;
-                else
-                {
-                    Uri pUri = sPr.Uri;
-                    Uri mUri = sMe.Uri;
-                    Uri rUri;
-
-                    if (pUri == null || mUri == null || null == (rUri = mUri.MakeRelativeUri(pUri)))
-                        isNested = false; // SVN fills some properties only after the first commit
-                    else if (rUri != null && rUri != parentRefUri)
-                        isNested = true;
-                    else
-                        isNested = false;
-                }
+                isNested = false;
             }
 
             if (isNested)

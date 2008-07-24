@@ -59,6 +59,12 @@ namespace Ankh.Scc
         void RefreshItem(SvnItem item, SvnNodeKind diskNodeKind);
 
         /// <summary>
+        /// Refreshes the nested status of the <see cref="SvnItem"/>
+        /// </summary>
+        /// <param name="item"></param>
+        void RefreshNested(SvnItem item);
+
+        /// <summary>
         /// Gets the <see cref="SvnDirectory"/> of the specified path
         /// </summary>
         /// <param name="path"></param>
