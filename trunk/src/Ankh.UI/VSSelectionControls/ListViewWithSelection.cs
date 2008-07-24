@@ -175,8 +175,11 @@ namespace Ankh.UI.VSSelectionControls
 
             if (SelectionPublishServiceProvider != null)
             {
-                SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);               
+                SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
             }
+
+            if (_selectionChanged != null)
+                _selectionChanged(this, EventArgs.Empty);
         }
 
         public event EventHandler<RetrieveSelectionEventArgs> RetrieveSelection;
@@ -263,10 +266,12 @@ namespace Ankh.UI.VSSelectionControls
 
         #region ISelectionMapOwner<TListViewItem> Members
 
+        EventHandler _selectionChanged;
+
         event EventHandler ISelectionMapOwner<TListViewItem>.SelectionChanged
         {
-            add { SelectedIndexChanged += value; }
-            remove { SelectedIndexChanged -= value; }
+            add { _selectionChanged += value; }
+            remove { _selectionChanged -= value; }
         }
 
         IList ISelectionMapOwner<TListViewItem>.Selection
