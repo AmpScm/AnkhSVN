@@ -101,7 +101,7 @@ namespace Ankh
 
                 unavailable = flagsToGet & ~_validState;
 
-                Debug.Assert((~_validState & MaskMustLock) == 0, "UpdateNested() set all attributes it should");
+                Debug.Assert((~_validState & MaskNested) == 0, "UpdateNested() set all attributes it should");
             }
 
             if (unavailable != 0)
@@ -137,11 +137,17 @@ namespace Ankh
 
         private void SetDirty(SvnItemState dirty)
         {
+            // NOTE: This method is /not/ thread safe, but its callers have race conditions anyway
+            // Setting an integer could worst case completely destroy the integer; nothing a refresh can't fix
+
             _validState &= ~dirty;
         }
 
         void SetState(SvnItemState set, SvnItemState unset)
         {
+            // NOTE: This method is /not/ thread safe, but its callers have race conditions anyway
+            // Setting an integer could worst case completely destroy the integer; nothing a refresh can't fix
+
             SvnItemState st = (_currentState & ~unset) | set;
 
             if (st != _currentState)
@@ -389,8 +395,6 @@ namespace Ankh
 
             if (!IsDirectory || !IsVersioned)
                 isNested = false; // Not nested
-            else if (sMe.IsSwitched)
-                isNested = false; // Switched -> Not nested
             else if ((null == (parentItem = Parent)) || !parentItem.IsVersioned)
                 isNested = false; // No versioned parent
             else
