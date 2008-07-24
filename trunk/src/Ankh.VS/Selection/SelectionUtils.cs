@@ -260,7 +260,7 @@ namespace Ankh.Selection
                     string solutionFilename = SelectionUtils.GetSolutionFileName(_context);
 
                     if (!string.IsNullOrEmpty(solutionFilename))
-                        pCaStringsOut[0] = CreateCALPOLESTR(new string[] { SelectionUtils.GetSolutionFileName(_context) });
+                        pCaStringsOut[0] = CreateCALPOLESTR(new string[] { solutionFilename });
                     else
                         pCaStringsOut[0] = new CALPOLESTR();
 
