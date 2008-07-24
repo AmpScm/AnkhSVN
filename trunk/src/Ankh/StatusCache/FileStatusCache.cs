@@ -21,6 +21,7 @@ namespace Ankh.StatusCache
     {
         readonly object _lock = new object();
         readonly SvnClient _client;
+        readonly SvnWorkingCopyClient _wcClient;
         readonly Dictionary<string, SvnItem> _map; // Maps from full-normalized paths to SvnItems
         readonly Dictionary<string, SvnDirectory> _dirMap;
         IAnkhCommandService _commandService;
@@ -32,6 +33,7 @@ namespace Ankh.StatusCache
                 throw new ArgumentNullException("context");
 
             _client = new SvnClient();
+            _wcClient = new SvnWorkingCopyClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
         }
@@ -53,6 +55,9 @@ namespace Ankh.StatusCache
 
         void Ankh.Scc.IFileStatusCache.RefreshItem(SvnItem item, SvnNodeKind nodeKind)
         {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
             RefreshPath(item.FullPath, nodeKind, SvnDepth.Files);
 
             ISvnItemUpdate updateItem = (ISvnItemUpdate)item;
@@ -77,6 +82,54 @@ namespace Ankh.StatusCache
             }
 
             Debug.Assert(updateItem.IsStatusClean(), "The item requesting to be updated is updated");
+        }
+
+        void Ankh.Scc.IFileStatusCache.RefreshNested(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            Debug.Assert(item.NodeKind == SvnNodeKind.Directory);
+
+            SvnDirectory dir = item.ParentDirectory;
+            SvnItem dirItem;
+            // We retrieve nesting information by walking the entry data of the parent directory
+
+            if (dir == null || (dirItem = dir.Directory) == null)
+            {
+                ((ISvnItemUpdate)item).SetState(SvnItemState.None, SvnItemState.IsNested); // A root directory can't be nested!
+                return;
+            }
+
+            lock (_lock)
+            {
+                ISvnItemUpdate oi = (ISvnItemUpdate)item;
+
+                ((ISvnDirectoryUpdate)dir).TickAll();
+                oi.TickItem();
+
+                SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
+                a.ThrowOnError = false;
+
+                if (_wcClient.ListEntries(dir.FullPath, OnLoadEntry))
+                {
+                    if (oi.IsItemTicked())
+                        oi.SetState(SvnItemState.IsNested, SvnItemState.None);
+                }
+                else
+                    oi.SetState(SvnItemState.None, SvnItemState.IsNested);
+            }
+        }
+
+        void OnLoadEntry(object sender, SvnWorkingCopyEntryEventArgs e)
+        {
+            if (e.NodeKind != SvnNodeKind.Directory || string.IsNullOrEmpty(e.Path))
+                return;
+
+            ISvnItemUpdate ii = (ISvnItemUpdate)this[e.FullPath];
+
+            ii.SetState(SvnItemState.None, SvnItemState.IsNested);
+            ii.UntickItem();
         }
 
         SvnItem CreateItem(string fullPath, AnkhStatus status)
