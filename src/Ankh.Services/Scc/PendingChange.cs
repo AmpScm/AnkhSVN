@@ -41,13 +41,13 @@ namespace Ankh.Scc
             get { return _item; }
         }
 
-        [DisplayName("Full Path"), Category("Subversion")]
+        [DisplayName("Full Path")]
         public string FullPath
         {
             get { return _item.FullPath; }
         }
 
-        [DisplayName("File Name"), Category("Subversion")]
+        [DisplayName("File Name")]
         public string Name
         {
             get { return _item.Name; }
@@ -105,6 +105,36 @@ namespace Ankh.Scc
         public override string GetClassName()
         {
             return "Pending Change";
+        }
+
+        [DisplayName("Url"), Category("Subversion")]
+        public Uri Uri
+        {
+            get { return Item.Status.Uri; }
+        }
+
+        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
+        public string LastCommittedAuthor
+        {
+            get { return Item.Status.LastChangeAuthor; }
+        }
+
+        [Category("Subversion"), Description("Current Revision")]
+        public long Revision
+        {
+            get { return Item.Status.Revision; }
+        }
+
+        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
+        public DateTime LastCommittedDate
+        {
+            get { return Item.Status.LastChangeTime.ToLocalTime(); }
+        }
+
+        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
+        public long LastCommittedRevision
+        {
+            get { return Item.Status.LastChangeRevision; }
         }
 
         TypeConverter _rawDescriptor;
