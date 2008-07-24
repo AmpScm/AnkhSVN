@@ -58,7 +58,7 @@ namespace Ankh.UI.SvnLog
         }
 
         LogMode _mode;
-        [Obsolete]
+        //[Obsolete]
         public LogMode Mode
         {
             get { return _mode; }
