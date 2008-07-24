@@ -111,7 +111,7 @@ namespace Ankh.StatusCache
                 SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
                 a.ThrowOnError = false;
 
-                if (_wcClient.ListEntries(dir.FullPath, OnLoadEntry))
+                if (_wcClient.ListEntries(dir.FullPath, a, OnLoadEntry))
                 {
                     if (oi.IsItemTicked())
                         oi.SetState(SvnItemState.IsNested, SvnItemState.None);
