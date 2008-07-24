@@ -22,7 +22,8 @@ namespace Ankh.UI.VSSelectionControls
         object GetSelectionObject(T item);
 
         T GetItemFromSelectionObject(object item);
-        void SetSelection(T[] items);        
+        void SetSelection(T[] items);
+        event EventHandler HandleDestroyed;
     }
 
     public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
@@ -48,6 +49,14 @@ namespace Ankh.UI.VSSelectionControls
 
             public abstract IList Selection { get; }
             public abstract IList AllItems { get; }
+
+            public event EventHandler HandleDestroyed;
+
+            protected void OnHandleDestroyed(EventArgs e)
+            {
+                if (HandleDestroyed != null)
+                    HandleDestroyed(this, e);
+            }
         }
 
         sealed class MapData<T> : MapData
@@ -63,7 +72,8 @@ namespace Ankh.UI.VSSelectionControls
             {
                 _owner = owner;
                 _owner.SelectionChanged += new EventHandler(OwnerSelectionChanged);
-            }
+                _owner.HandleDestroyed += new EventHandler(OwnerHandleDestroyed);
+            }            
 
             public uint GetId(T item)
             {
@@ -108,6 +118,11 @@ namespace Ankh.UI.VSSelectionControls
             internal override object GetItemObject(uint id)
             {
                 return GetItem(id);
+            }
+
+            void OwnerHandleDestroyed(object sender, EventArgs e)
+            {
+                OnHandleDestroyed(e);
             }
 
             void OwnerSelectionChanged(object sender, EventArgs e)
@@ -259,7 +274,8 @@ namespace Ankh.UI.VSSelectionControls
         protected SelectionItemMap(MapData mapData)
         {
             _data = mapData;
-        }
+            _data.HandleDestroyed += new EventHandler(OnDataHandleDestroyed);
+        }        
 
         public static SelectionItemMap Create<T>(ISelectionMapOwner<T> owner)
             where T : class
@@ -424,14 +440,24 @@ namespace Ankh.UI.VSSelectionControls
             return VSConstants.S_OK;
         }
 
+        object[] _sel;
+        Hashtable _ht;
+
+        bool _allIsSelected;
+        public bool AllIsSelected
+        {
+            get { return _allIsSelected; }
+            set { _allIsSelected = value; }
+        }
+
         int ISelectionContainer.GetObjects(uint dwFlags, uint cObjects, object[] apUnkObjects)
         {
             if (apUnkObjects == null)
                 return VSConstants.E_POINTER;
 
             IList src;
-            if (dwFlags == (uint)Constants.GETOBJS_ALL)
-                src = _data.AllItems;
+            if (dwFlags == (uint)Constants.GETOBJS_ALL )
+                src = AllIsSelected ? _data.Selection : _data.AllItems;
             else if (dwFlags == (uint)Constants.GETOBJS_SELECTED)
                 src = _data.Selection;
             else
@@ -439,6 +465,36 @@ namespace Ankh.UI.VSSelectionControls
 
             if(src == null || cObjects > src.Count)
                 return VSConstants.E_FAIL;
+
+            if(_sel == null && src == _data.Selection)
+            {
+                if(_ht == null)
+                    _ht = new Hashtable();
+
+                // Create cache of wrapper objects
+                object[] from = new object[src.Count];
+                _sel = new object[src.Count];                
+
+                src.CopyTo(from, 0);
+
+                for (int i = 0; i < from.Length; i++)
+                {
+                    object s = from[i];
+                    
+                    _sel[i] = _ht[s] ?? _data.GetSelectionObject(s);
+                }
+                _ht.Clear();
+
+                for (int i = 0; i < from.Length; i++)
+                    _ht[from[i]] = _sel[i];
+            }
+
+            if(_sel != null && src == _data.Selection)
+            {
+                Array.Copy(_sel, apUnkObjects, cObjects);
+
+                return VSConstants.S_OK;
+            }
 
             for (int i = 0; i < cObjects; i++)
             {
@@ -465,10 +521,38 @@ namespace Ankh.UI.VSSelectionControls
 
         #endregion
 
+        IntPtr _hierHandle;
+        IntPtr _selHandle;
+        void OnDataHandleDestroyed(object sender, EventArgs e)
+        {
+            Release();
+        }
+
+        void Release()
+        {
+            _ht = null;
+            _sel = null;
+            if (_hierHandle != IntPtr.Zero)
+            {
+                IntPtr h = _hierHandle;
+                _hierHandle = IntPtr.Zero;
+                Marshal.Release(h);
+            }
+
+            if (_selHandle != IntPtr.Zero)
+            {
+                IntPtr h = _selHandle;
+                _selHandle = IntPtr.Zero;
+                Marshal.Release(h);
+            }            
+        }
+
         public void NotifySelectionUpdated(IServiceProvider serviceProvider)
         {
             if (serviceProvider == null)
                 throw new ArgumentNullException("serviceProvider");
+
+            _sel = null; // Clear wrapper cache
 
             IVsTrackSelectionEx sel = (IVsTrackSelectionEx)serviceProvider.GetService(typeof(SVsTrackSelectionEx));
 
@@ -476,34 +560,34 @@ namespace Ankh.UI.VSSelectionControls
 
             if (sel != null && selectedCount > 0)
             {
-                IntPtr hier = Marshal.GetComInterfaceForObject(this, typeof(IVsHierarchy));
-                IntPtr handle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
+                IntPtr selHandle = _selHandle;
+                IntPtr hier = _hierHandle;
+
+                selHandle = _selHandle;
+
+                if (selHandle == IntPtr.Zero)
+                    selHandle = _selHandle = Marshal.GetComInterfaceForObject(this, typeof(ISelectionContainer));
+
+                if (hier == IntPtr.Zero)
+                    hier = _hierHandle = Marshal.GetComInterfaceForObject(this, typeof(IVsHierarchy));
+
+                uint id;
+
+                IVsMultiItemSelect ms = null;
+
+                if (selectedCount == 1)
+                    id = _data.GetId(_data.Selection[0]);
+                else
+                {
+                    id = VSConstants.VSITEMID_SELECTION; // Look at selection instead of this item
+                    ms = this; // We implement IVsMultiItemSelect
+                }
+
                 try
                 {
-                    uint id;
-
-
-                    IVsMultiItemSelect ms = null;
-
-                    if (selectedCount == 1)
-                        id = _data.GetId(_data.Selection[0]);
-                    else
-                    {
-                        id = VSConstants.VSITEMID_SELECTION; // Look at selection instead of this item
-                        ms = this; // We implement IVsMultiItemSelect
-                    }
-
-                    try
-                    {
-                        sel.OnSelectChangeEx(hier, id, ms, handle);
-                    }
-                    catch { } // Ignore listener exceptions :(
+                    sel.OnSelectChangeEx(hier, id, ms, selHandle);
                 }
-                finally
-                {
-                    Marshal.Release(handle);
-                    Marshal.Release(hier);
-                }
+                catch { } // Ignore listener exceptions :(
             }
             else if (sel != null)
                 sel.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
