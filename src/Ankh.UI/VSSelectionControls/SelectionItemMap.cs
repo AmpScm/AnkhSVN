@@ -46,6 +46,7 @@ namespace Ankh.UI.VSSelectionControls
             internal abstract object GetItemObject(uint id);
 
             internal abstract object[] CreateArray(int count);
+            internal abstract void CleanSelection();
 
             public abstract IList Selection { get; }
             public abstract IList AllItems { get; }
@@ -130,6 +131,11 @@ namespace Ankh.UI.VSSelectionControls
                 if (_items.Count == 0)
                     return;
 
+                CleanSelection();
+            }
+
+            internal override void CleanSelection()
+            {
                 foreach (T i in new List<T>(_items.Keys))
                 {
                     if (!_owner.Selection.Contains(i))
@@ -553,6 +559,7 @@ namespace Ankh.UI.VSSelectionControls
                 throw new ArgumentNullException("serviceProvider");
 
             _sel = null; // Clear wrapper cache
+            _data.CleanSelection();
 
             IVsTrackSelectionEx sel = (IVsTrackSelectionEx)serviceProvider.GetService(typeof(SVsTrackSelectionEx));
 
