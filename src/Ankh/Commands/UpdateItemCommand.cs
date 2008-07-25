@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.UI;
-using Ankh.UI.MergeWizard;
 using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Selection;
@@ -61,43 +60,23 @@ namespace Ankh.Commands
 
             SvnUpdateResult ur = null;
 
-            e.GetService<IProgressRunner>().Run("Updating", 
+            e.GetService<IProgressRunner>().Run("Updating",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     List<string> files = new List<string>();
 
-                    
-                    foreach(SvnItem item in result.Selection)
+
+                    foreach (SvnItem item in result.Selection)
                     {
-                        if(item.IsVersioned)
+                        if (item.IsVersioned)
                             files.Add(item.FullPath);
                     }
                     SvnUpdateArgs ua = new SvnUpdateArgs();
                     ua.Depth = result.Depth;
                     ua.Revision = result.RevisionStart;
-                    ua.Conflict += new EventHandler<SvnConflictEventArgs>(OnConflict);
+                    e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
                     ee.Client.Update(files, ua, out ur);
                 });
         }
-
-
-        MergeConflictHandler currentMergeConflictHandler;
-        private void OnConflict(object sender, SvnConflictEventArgs args)
-        {
-            if (this.currentMergeConflictHandler == null)
-            {
-                this.currentMergeConflictHandler = CreateMergeConflictHandler();
-            }
-            this.currentMergeConflictHandler.OnConflict(args);
-        }
-
-        private MergeConflictHandler CreateMergeConflictHandler()
-        {
-            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
-            mergeConflictHandler.PromptOnBinaryConflict = true;
-            mergeConflictHandler.PromptOnTextConflict = true;
-            return mergeConflictHandler;
-        }
-
     }
 }
