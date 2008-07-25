@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
+using Ankh.UI.MergeWizard;
 
 
 using SharpSvn;
@@ -136,7 +137,9 @@ namespace Ankh.Commands
                     "Switching",
                     delegate(object sender, ProgressWorkerArgs a)
                     {
-                        a.Client.Switch(path, target);
+                        SvnSwitchArgs args = new SvnSwitchArgs();
+                        args.Conflict +=new EventHandler<SvnConflictEventArgs>(OnConflict);
+                        a.Client.Switch(path, target, args);
                     });
 
 
@@ -153,6 +156,24 @@ namespace Ankh.Commands
 
                 lck.ReloadModified();
             }
+        }
+
+        MergeConflictHandler currentMergeConflictHandler;
+        private void OnConflict(object sender, SvnConflictEventArgs args)
+        {
+            if (this.currentMergeConflictHandler == null)
+            {
+                this.currentMergeConflictHandler = CreateMergeConflictHandler();
+            }
+            this.currentMergeConflictHandler.OnConflict(args);
+        }
+
+        private MergeConflictHandler CreateMergeConflictHandler()
+        {
+            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
+            mergeConflictHandler.PromptOnBinaryConflict = true;
+            mergeConflictHandler.PromptOnTextConflict = true;
+            return mergeConflictHandler;
         }
     }
 }
