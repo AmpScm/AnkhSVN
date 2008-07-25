@@ -137,7 +137,7 @@ namespace Ankh.Commands
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
 
-                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);                        
+                        //e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);                        
                         a.Client.Switch(path, target, args);
                     });
 
