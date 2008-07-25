@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
+using System.Windows.Forms.Design;
+using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public class MergeConflictHandler
-    {
+    public class MergeConflictHandler : AnkhService
+    {  
         /// Conflict resolution preference for binary files
         SvnAccept _binaryChoice = SvnAccept.Postpone;
 
@@ -28,19 +30,20 @@ namespace Ankh.UI.MergeWizard
         List<string> currentResolutions = new List<string>();
         Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
 
-        public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
-            : this(binaryChoice, textChoice)
+        public MergeConflictHandler(IAnkhServiceProvider context, SvnAccept binaryChoice, SvnAccept textChoice, SvnAccept propChoice)
+            : this(context, binaryChoice, textChoice)
         {
         }
         
-        public MergeConflictHandler(SvnAccept binaryChoice, SvnAccept textChoice)
-            : this()
+        public MergeConflictHandler(IAnkhServiceProvider context, SvnAccept binaryChoice, SvnAccept textChoice)
+            : this(context)
         {
             this._binaryChoice = binaryChoice;
             this._textChoice = textChoice;
         }
-        
-        public MergeConflictHandler()
+
+        public MergeConflictHandler(IAnkhServiceProvider context)
+            : base(context)
         {
         }
 
@@ -209,30 +212,40 @@ namespace Ankh.UI.MergeWizard
             AddToCurrentResolutions(args);
         }
 
-        private void HandleConflictWithDialog(SvnConflictEventArgs args)
+        private void HandleConflictWithDialog(SvnConflictEventArgs e)
         {
-            using (MergeConflictHandlerDialog dlg = new MergeConflictHandlerDialog(args))
+            using (MergeConflictHandlerDialog dlg = new MergeConflictHandlerDialog(e))
             {
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                IUIService ui = Context.GetService<IUIService>();
+
+                DialogResult dr;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog();
+
+
+                if (dr == DialogResult.OK)
                 {
-                    args.Choice = dlg.ConflictResolution;
+                    e.Choice = dlg.ConflictResolution;
                     bool applyToAll = dlg.ApplyToAll;
                     // modify the preferences based on the conflicted file type
                     if (applyToAll)
                     {
-                        if (args.ConflictType == SvnConflictType.Property)
+                        if (e.ConflictType == SvnConflictType.Property)
                         {
-                            PropertyConflictResolutionChoice = args.Choice;
+                            PropertyConflictResolutionChoice = e.Choice;
                             PromptOnPropertyConflict = false;
                         }
-                        else if (args.IsBinary)
+                        else if (e.IsBinary)
                         {
-                            BinaryConflictResolutionChoice = args.Choice;
+                            BinaryConflictResolutionChoice = e.Choice;
                             PromptOnBinaryConflict = false;
                         }
                         else
                         {
-                            TextConflictResolutionChoice = args.Choice;
+                            TextConflictResolutionChoice = e.Choice;
                             PromptOnTextConflict = false;
                         }
                     }
@@ -240,11 +253,11 @@ namespace Ankh.UI.MergeWizard
                 }
                 else
                 {
-                    args.Choice = SvnAccept.Postpone;
+                    e.Choice = SvnAccept.Postpone;
                 }
             }
 
-            AddToCurrentResolutions(args);
+            AddToCurrentResolutions(e);
         }
 
         private void AddToCurrentResolutions(SvnConflictEventArgs args)

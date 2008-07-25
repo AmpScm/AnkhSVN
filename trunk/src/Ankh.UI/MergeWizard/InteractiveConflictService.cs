@@ -60,7 +60,7 @@ namespace Ankh.UI.MergeWizard
 
             private MergeConflictHandler CreateMergeConflictHandler()
             {
-                MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
+                MergeConflictHandler mergeConflictHandler = new MergeConflictHandler(Context);
                 mergeConflictHandler.PromptOnBinaryConflict = true;
                 mergeConflictHandler.PromptOnTextConflict = true;
                 return mergeConflictHandler;
