@@ -44,11 +44,6 @@
                     KeyPath="yes" Vital="yes" Source="..\lib\msvcm80.dll" />
             </Component>
 <?endif?>
-			<Component Id="C_LIBDB" Guid="5A40F2B8-3F14-474a-B863-7526D87BF515">
-				<File Id="CF_libdb.dll" Name="LibDB44.dll"
-                    KeyPath="yes" Vital="yes" Source="$(var.svn.dir)\db4-win32\bin\libdb44.dll" />
-            </Component>
-
         </DirectoryRef>
     </Module>
 </Wix>

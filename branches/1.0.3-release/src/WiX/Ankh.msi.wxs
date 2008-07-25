@@ -60,7 +60,6 @@
 			<ComponentGroupRef Id="CG_Ankh.UI"/>
 			<ComponentGroupRef Id="CG_Utils"/>
 			<FeatureRef Id="F_Libs" />
-			<ComponentGroupRef Id="CG_AprIconv" />
 		</Feature>
 
 		<CustomAction Id="InstallLib_Install" BinaryKey="InstallLib" 

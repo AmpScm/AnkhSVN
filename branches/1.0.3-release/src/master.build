@@ -19,10 +19,10 @@
 
     <ifnot test="${property::exists('svndir')}">
         <sysinfo />
-        <ifnot test="${property::exists('sys.env.SVNSRC')}">
-            <fail message="Either provide the svndir property, or set the SVNSRC env var to point to the Subversion source tree" />
+        <ifnot test="${property::exists('sys.env.SVNDEV')}">
+            <fail message="Either provide the svndir property, or set the SVNDEV env var to point to the Subversion dev source" />
         </ifnot>
-        <property name="svndir" value="${sys.env.SVNSRC}" />
+        <property name="svndir" value="${sys.env.SVNDEV}" />
     </ifnot>
 
     <nant>
@@ -47,11 +47,6 @@
         <nant buildfile="WiX\NSvn.msm.build" target="build-WiX" inheritall="true" />
     </target>
     
-    <target name="build-apr-iconv.wxs">
-        <exec workingdir="." program="${wix-binary.dir}\candle.exe"
-            commandline="-nologo -w0 -dsvndir=${svndir} WiX\apr-iconv.wxs -out ${installsource.dir}\apr-iconv.wixobj" />
-    </target>
-    
     <target name="wix-MSI">
         <property name="installsource.fullpath" value="${path::get-full-path(installsource.dir)}" />
         <property name="src.fullpath" value="${path::get-full-path(src.dir)}" />
@@ -66,10 +61,10 @@
             
         <!-- Build the Ankh msi -->
         <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\light.exe"
-            commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj apr-iconv.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
+            commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     
-    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-InstallLib, build-apr-iconv.wxs, version, AboutBoxDetails">
+    <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-InstallLib, version, AboutBoxDetails">
         <nant buildfile="Ankh.UI\Ankh.UI.build" target="build-WiX" inheritall="true"/>
         <nant buildfile="Ankh\Ankh.build" target="build-WiX" inheritall="true" />
         <nant buildfile="lib\lib.build" target="build-WiX" inheritall="true" />
@@ -142,8 +137,6 @@
                 <include name="apr\Release\libapr.dll" unless="${debug}" />
                 <include name="apr-util\Debug\libaprutil.dll" if="${debug}" />
                 <include name="apr-util\Release\libaprutil.dll" unless="${debug}" />
-                <include name="apr-iconv\Debug\libapriconv.dll" if="${debug}" />
-                <include name="apr-iconv\Release\libapriconv.dll" unless="${debug}" />
                 <include name="db4-win32\bin\libdb44d.dll" if="${debug}" />
                 <include name="db4-win32\bin\libdb44.dll" unless="${debug}" />
             </fileset>

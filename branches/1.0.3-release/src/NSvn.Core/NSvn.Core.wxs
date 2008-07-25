@@ -7,7 +7,6 @@
       <ComponentRef Id="NSvn.Core.component2" />
       <ComponentRef Id="LibApr.component3" />
       <ComponentRef Id="LibAprUtil.component4" />
-      <ComponentRef Id="LibAprIconv.component5" />
     </ComponentGroup>
         <DirectoryRef Id="appDir" FileSource="..\$(var.builddir)\">
             <Component Id="NSvn.Core.component0" DiskId="1" Guid="07D7100D-D005-4a9d-A591-8D4EB28D8A4A">
@@ -30,15 +29,11 @@
             </Component>
 <?endif?>
             <Component Id="LibApr.component3" DiskId="1" Guid="F8A86574-96D2-4505-B524-9A1758B50CA7">
-                <File Id="LibApr.file3" Name="LIBAPR.DLL" Checksum="yes"
+                <File Id="LibApr.file3" Name="LIBAPR-1.DLL" Checksum="yes"
                     Vital="yes" KeyPath="yes" />
             </Component>
             <Component Id="LibAprUtil.component4" DiskId="1" Guid="965C4B3D-E84A-486f-89BE-5EB202418788">
-                <File Id="LibAprUtil.file4" Name="LibAprUtil.Dll" Checksum="yes"
-                    Vital="yes" KeyPath="yes" />
-            </Component>
-            <Component Id="LibAprIconv.component5" DiskId="1" Guid="A01F9583-A9C5-4276-9A3B-46C231F5070E">
-                <File Id="LibAprIconv.file5" Name="LibAprIconv.Dll" Checksum="yes"
+                <File Id="LibAprUtil.file4" Name="LibAprUtil-1.Dll" Checksum="yes"
                     Vital="yes" KeyPath="yes" />
             </Component>
         </DirectoryRef>

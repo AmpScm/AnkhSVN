@@ -13,20 +13,20 @@ from subprocess import call
 # These variables are specific to Visual Studio.NET and the .NET Framework SDK
 # that will be used during this build process.  The script will work with 2005
 # by default but can be ran in a way to work with 2008 as well.
-VCPROJECTENGINE = "VisualStudio.VCProjectEngine.8.0"
-VSDTE = "VisualStudio.DTE.8.0"
-VSNETVER = "2005"
-DOTNETVER = "2.0"
+VCPROJECTENGINE = "VisualStudio.VCProjectEngine.7.0"
+VSDTE = "VisualStudio.DTE.7.0"
+VSNETVER = "2002"
+DOTNETVER = "1.0"
 
 # The URL to build from
-ANKHSVN_SRC_URL = "http://ankhsvn.open.collab.net/svn/ankhsvn/trunk"
+ANKHSVN_SRC_URL = "http://ankhsvn.open.collab.net/svn/ankhsvn/branches/1.0.3-release"
 
 # Version numbers to put in the filename
-MAJOR, MINOR, PATCH, LABEL = 2, 0, 0, "Snapshot"
+MAJOR, MINOR, PATCH, LABEL = 1, 0, 4, "Snapshot"
 
 # The URL of the Subversion version
-SUBVERSION = "http://subversion.tigris.org/downloads/subversion-1.4.6.tar.gz"
-SUBVERSION_VERSION = "1.4.6"
+SUBVERSION = "http://subversion.tigris.org/downloads/subversion-1.5.0.tar.gz"
+SUBVERSION_VERSION = "1.5.0"
 
 # The URL of neon
 NEON = "http://www.webdav.org/neon/neon-0.25.5.tar.gz"
