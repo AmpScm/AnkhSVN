@@ -198,6 +198,7 @@ namespace Ankh.Commands
                 SvnUpdateArgs ua = new SvnUpdateArgs();
                 ua.Revision = _rev;
                 ua.ThrowOnError = false;
+                e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
 
                 while (_paths.Count > 0)
                 {

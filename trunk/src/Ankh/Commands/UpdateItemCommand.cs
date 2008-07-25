@@ -74,7 +74,7 @@ namespace Ankh.Commands
                     SvnUpdateArgs ua = new SvnUpdateArgs();
                     ua.Depth = result.Depth;
                     ua.Revision = result.RevisionStart;
-                    //e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
+                    e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
                     ee.Client.Update(files, ua, out ur);
                 });
         }
