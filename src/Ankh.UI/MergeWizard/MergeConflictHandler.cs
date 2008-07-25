@@ -5,7 +5,7 @@ using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
-    class MergeConflictHandler
+    public class MergeConflictHandler
     {
         /// Conflict resolution preference for binary files
         SvnAccept _binaryChoice = SvnAccept.Postpone;
