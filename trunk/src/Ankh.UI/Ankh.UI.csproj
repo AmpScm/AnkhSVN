@@ -165,6 +165,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
       <SubType>Form</SubType>

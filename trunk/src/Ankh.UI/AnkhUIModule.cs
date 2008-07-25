@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.UI.PendingChanges;
 using Ankh.UI.Services;
+using Ankh.Scc;
+using Ankh.UI.MergeWizard;
 
 namespace Ankh.UI
 {
@@ -22,6 +24,8 @@ namespace Ankh.UI
             LogMessageLanguageService ls = new LogMessageLanguageService(Context);
             Container.AddService(typeof(LogMessageLanguageService), ls, true);
             ls.SetSite(Container);
+
+            Container.AddService(typeof(IConflictHandler), new InteractiveConflictService(Context));
         }
 
         public override void OnInitialize()
