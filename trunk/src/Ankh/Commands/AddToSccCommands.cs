@@ -16,8 +16,8 @@ using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileSccAddProjectToSubversion, HideWhenDisabled = true)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable=true, HideWhenDisabled=true)]
+    [Command(AnkhCommand.FileSccAddProjectToSubversion)]
+    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -83,6 +83,7 @@ namespace Ankh.Commands
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
             if (scc == null || cache == null || e.Selection.SolutionFilename == null)
                 return;
 
@@ -171,10 +172,8 @@ namespace Ankh.Commands
                             aa.AddParents = true;
                             cl.Add(e.Selection.SolutionFilename, aa);
 
-                            settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+                            settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);                            
 
-                            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-                            
                             if (monitor != null && mapper != null)
                             {
                                 // Make sure all visible glyphs are updated to reflect a new working copy
@@ -243,6 +242,8 @@ namespace Ankh.Commands
                     if (!scc.IsProjectManaged(project))
                     {
                         scc.SetProjectManaged(project, true);
+
+                        monitor.ScheduleSvnStatus(mapper.GetAllFilesOf(project)); // Update for 'New' status
                     }
                 }
             }
