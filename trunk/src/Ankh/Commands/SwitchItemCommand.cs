@@ -138,7 +138,8 @@ namespace Ankh.Commands
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
-                        args.Conflict +=new EventHandler<SvnConflictEventArgs>(OnConflict);
+
+                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);                        
                         a.Client.Switch(path, target, args);
                     });
 
@@ -156,24 +157,6 @@ namespace Ankh.Commands
 
                 lck.ReloadModified();
             }
-        }
-
-        MergeConflictHandler currentMergeConflictHandler;
-        private void OnConflict(object sender, SvnConflictEventArgs args)
-        {
-            if (this.currentMergeConflictHandler == null)
-            {
-                this.currentMergeConflictHandler = CreateMergeConflictHandler();
-            }
-            this.currentMergeConflictHandler.OnConflict(args);
-        }
-
-        private MergeConflictHandler CreateMergeConflictHandler()
-        {
-            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
-            mergeConflictHandler.PromptOnBinaryConflict = true;
-            mergeConflictHandler.PromptOnTextConflict = true;
-            return mergeConflictHandler;
-        }
+        }        
     }
 }
