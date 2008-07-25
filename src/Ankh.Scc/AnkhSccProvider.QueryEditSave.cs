@@ -166,7 +166,7 @@ namespace Ankh.Scc
 
                     if (item.ReadOnlyMustLock)
                     {
-                        if (queryFlags == tagVSQueryEditFlags.QEF_ReportOnly)
+                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
                         {
                             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
                             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
