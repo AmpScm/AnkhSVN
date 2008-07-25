@@ -43,9 +43,9 @@
             this.cbDiffMergeManual.AutoSize = true;
             this.cbDiffMergeManual.Location = new System.Drawing.Point(3, 86);
             this.cbDiffMergeManual.Name = "cbDiffMergeManual";
-            this.cbDiffMergeManual.Size = new System.Drawing.Size(256, 17);
+            this.cbDiffMergeManual.Size = new System.Drawing.Size(269, 17);
             this.cbDiffMergeManual.TabIndex = 4;
-            this.cbDiffMergeManual.Text = "Manually choose between internal or external diff";
+            this.cbDiffMergeManual.Text = "Manually choose between Internal and External Diff";
             this.cbDiffMergeManual.UseVisualStyleBackColor = true;
             // 
             // txtDiffExePath
@@ -62,9 +62,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(-3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 13);
+            this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "External diff path:";
+            this.label1.Text = "External &Diff Path:";
             // 
             // btnDiffExePath
             // 
@@ -82,9 +82,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(-3, 43);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 13);
+            this.label2.Size = new System.Drawing.Size(106, 13);
             this.label2.TabIndex = 5;
-            this.label2.Text = "External merge path:";
+            this.label2.Text = "External &Merge Path:";
             // 
             // txtMergeExePath
             // 
@@ -113,7 +113,7 @@
             this.interactiveMergeOnConflict.Name = "interactiveMergeOnConflict";
             this.interactiveMergeOnConflict.Size = new System.Drawing.Size(218, 17);
             this.interactiveMergeOnConflict.TabIndex = 6;
-            this.interactiveMergeOnConflict.Text = "Start Interactive Merge on Conflict (Beta)";
+            this.interactiveMergeOnConflict.Text = "Start Interactive Merge on &Conflict (Beta)";
             this.interactiveMergeOnConflict.UseVisualStyleBackColor = true;
             // 
             // AnkhSettingsControl
