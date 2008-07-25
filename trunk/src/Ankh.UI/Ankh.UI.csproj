@@ -404,6 +404,9 @@
     <Compile Include="SvnLog\LogRevisionView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VSSelectionControls\ListViewWithSortIcons.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -534,7 +537,6 @@
       <DependentUpon>CheckoutProject.cs</DependentUpon>
     </Compile>
     <Compile Include="VSSelectionControls\ListViewWithSelection.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="PopUpListForm.Designer.cs">
       <DependentUpon>PopUpListForm.cs</DependentUpon>
