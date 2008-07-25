@@ -292,7 +292,7 @@ namespace Ankh.Scc
                 if (pc.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
                 {
                     if ((path.Length == pc.FullPath.Length) ||
-                        (path.Length > pc.FullPath.Length && (pc.FullPath[path.Length] == Path.DirectorySeparatorChar)))
+                        (path.Length < pc.FullPath.Length && (pc.FullPath[path.Length] == Path.DirectorySeparatorChar)))
                     {
                         yield return pc;
                     }
