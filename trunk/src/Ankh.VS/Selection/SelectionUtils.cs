@@ -103,13 +103,15 @@ namespace Ankh.Selection
 
                 if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
                 {
-                    if (string.IsNullOrEmpty(mkDocument) || !IsFilePath(mkDocument))
+                    if (!IsValidPath(mkDocument))
                         files = new string[0];
                     else
                         files = new string[] { mkDocument };
 
                     return true;
                 }
+
+                return ok; // No need to check our interface for projects
             }
 
             IAnkhGetMkDocument getDoc = hierarchy as IAnkhGetMkDocument;
@@ -119,7 +121,7 @@ namespace Ankh.Selection
 
                 if (ErrorHandler.Succeeded(getDoc.GetMkDocument(id, out mkDocument)))
                 {
-                    if (string.IsNullOrEmpty(mkDocument) || !IsFilePath(mkDocument))
+                    if (!IsValidPath(mkDocument))
                         files = new string[0];
                     else
                         files = new string[] { mkDocument };
@@ -131,8 +133,18 @@ namespace Ankh.Selection
             return ok;
         }
 
-        private static bool IsFilePath(string path)
+        /// <summary>
+        /// Determines whether the path is not null and a valid path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the path contains a valid path; otherwise (including null and empty) <c>false</c>.
+        /// </returns>
+        static bool IsValidPath(string path)
         {
+            if(string.IsNullOrEmpty(path))
+                return false;
+
             return SvnItem.IsValidPath(path);
         }
 
@@ -141,18 +153,59 @@ namespace Ankh.Selection
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            return GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial, includeNoScc);
+            if (GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial, includeNoScc))
+            {
+                // The managed package SDK for VS 2005 and VS2008 returns
+                // new string[] { GetMkDocument() }; on the generic HierarchyNode
+                // without checking if GetMkDocument returns a valid path
+
+                // So: Unless the project itself overrides this method it might contain garbage
+                // At least the BlackBerry add-in 1.0.1 has this issue, so we have to check
+
+                int nEmpty = 0;
+
+                foreach (string s in files)
+                {
+                    if (!IsValidPath(s))
+                    {
+                        nEmpty++;
+                    }
+                }
+
+                if (nEmpty == 0)
+                    return true; // No need to copy
+
+                string[] fls = new string[files.Length - nEmpty];
+
+                if (fls.Length > 0)
+                {
+                    int n = 0;
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        string s = files[i];
+                        if (!IsValidPath(s))
+                            continue;
+
+                        fls[n++] = s;
+                    }
+                }
+
+                files = fls;
+                return true;
+            }
+
+            return false;
         }
 
         //[CLSCompliant(false)]
-        internal static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc)
+        static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc)
         {
             int[] flags;
             files = null;
 
             if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc))
                 return false;
-            else if (flags == null || sccProject == null)
+            else if (flags == null || sccProject == null || !includeSpecial)
                 return true;
 
             int n = Math.Min(files.Length, flags.Length);
@@ -168,7 +221,7 @@ namespace Ankh.Selection
                     if (ErrorHandler.Succeeded(sccProject.GetSccSpecialFiles(id, allFiles[i], str, dw)))
                     {
                         files = GetFileNamesFromOleBuffer(str, true);
-                        GC.KeepAlive(GetFlagsFromOleBuffer(dw, true)); // Don't parse the flags as none are defined on special files
+                        GetFlagsFromOleBuffer(dw, true); // Free the flags (No need to parse at this time)
 
                         if (files != null && files.Length > 0)
                             allFiles.AddRange(files);
@@ -190,7 +243,8 @@ namespace Ankh.Selection
 
             IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
-            if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions)))
+            if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
+                && !IsValidPath(solutionFile))
             {
                 return solutionFile;
             }
@@ -201,7 +255,7 @@ namespace Ankh.Selection
         }
 
         //[CLSCompliant(false)]
-        public static IVsSccProject2 GetSolutionAsSccProject(IServiceProvider context)
+        public static IVsSccProject2 GetSolutionAsSccProject(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -219,11 +273,11 @@ namespace Ankh.Selection
 
         class SolutionSccHelper : IVsSccProject2
         {
-            readonly IServiceProvider _context;
+            readonly IAnkhServiceProvider _context;
             IVsSolution _solution;
             IVsHierarchy _solAsHierarchy;
 
-            public SolutionSccHelper(IServiceProvider context)
+            public SolutionSccHelper(IAnkhServiceProvider context)
             {
                 _context = context;
             }
@@ -282,7 +336,7 @@ namespace Ankh.Selection
 
             public int SccGlyphChanged(int cAffectedNodes, uint[] rgitemidAffectedNodes, VsStateIcon[] rgsiNewGlyphs, uint[] rgdwNewSccStatus)
             {
-                IVsSccManager2 sccService = (IVsSccManager2)_context.GetService(typeof(SVsSccManager));
+                IVsSccManager2 sccService = _context.GetService<IVsSccManager2>(typeof(SVsSccManager));
 
                 string[] rgpszFullPaths = new string[1];
                 rgpszFullPaths[0] = GetSolutionFileName(_context);
