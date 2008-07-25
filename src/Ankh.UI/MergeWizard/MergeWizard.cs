@@ -346,6 +346,7 @@ namespace Ankh.UI.MergeWizard
 
         void OnCancel(object sender, SvnCancelEventArgs e)
         {
+            // BH: This method relies on the knowledge that the dialog hooks Cancel before us.
             if (e.Cancel)
             {
                 _mergeActions = null;
@@ -458,7 +459,7 @@ namespace Ankh.UI.MergeWizard
 
         private MergeConflictHandler CreateMergeConflictHandler()
         {
-            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
+            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler(Context);
             if (mergeOptionsPage != null)
             {
                 MergeOptionsPage optionsPage = (MergeOptionsPage)mergeOptionsPage;
