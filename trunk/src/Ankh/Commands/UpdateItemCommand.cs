@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.UI;
+using Ankh.UI.MergeWizard;
 using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Selection;
@@ -74,9 +75,29 @@ namespace Ankh.Commands
                     SvnUpdateArgs ua = new SvnUpdateArgs();
                     ua.Depth = result.Depth;
                     ua.Revision = result.RevisionStart;
-
+                    ua.Conflict += new EventHandler<SvnConflictEventArgs>(OnConflict);
                     ee.Client.Update(files, ua, out ur);
                 });
         }
+
+
+        MergeConflictHandler currentMergeConflictHandler;
+        private void OnConflict(object sender, SvnConflictEventArgs args)
+        {
+            if (this.currentMergeConflictHandler == null)
+            {
+                this.currentMergeConflictHandler = CreateMergeConflictHandler();
+            }
+            this.currentMergeConflictHandler.OnConflict(args);
+        }
+
+        private MergeConflictHandler CreateMergeConflictHandler()
+        {
+            MergeConflictHandler mergeConflictHandler = new MergeConflictHandler();
+            mergeConflictHandler.PromptOnBinaryConflict = true;
+            mergeConflictHandler.PromptOnTextConflict = true;
+            return mergeConflictHandler;
+        }
+
     }
 }
