@@ -56,6 +56,7 @@ namespace Ankh.UI
             txtDiffExePath.Text = Config.DiffExePath;
             txtMergeExePath.Text = Config.MergeExePath;
             cbDiffMergeManual.Checked = Config.ChooseDiffMergeManual;
+            interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
         }
 
 
@@ -64,6 +65,7 @@ namespace Ankh.UI
             Config.DiffExePath = string.IsNullOrEmpty(txtDiffExePath.Text) ? null : txtDiffExePath.Text;
             Config.MergeExePath = string.IsNullOrEmpty(txtMergeExePath.Text) ? null : txtMergeExePath.Text;
             Config.ChooseDiffMergeManual = cbDiffMergeManual.Checked;
+            Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
 
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
             try
