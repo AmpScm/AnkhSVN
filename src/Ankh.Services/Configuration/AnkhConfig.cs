@@ -19,6 +19,7 @@ namespace Ankh.Configuration
 # This template can be modified in Tools->Options->Source Control->Subversion.
 *** # %path%";
         private bool chooseDiffMergeManualField = false;
+        bool _interactiveMergeOnConflict;
 
         /// <remarks/>
         [Category("Diff/Merge")]
@@ -95,6 +96,13 @@ namespace Ankh.Configuration
             {
                 this.chooseDiffMergeManualField = value;
             }
+        }
+
+        [DefaultValue(false)]
+        public bool InteractiveMergeOnConflict
+        {
+            get { return _interactiveMergeOnConflict; }
+            set { _interactiveMergeOnConflict = value; }
         }
 
 
