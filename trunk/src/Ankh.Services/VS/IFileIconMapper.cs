@@ -7,7 +7,8 @@ namespace Ankh.VS
 {
     public enum SpecialIcon
     {
-        SortUp=0,
+        Blank=0,
+        SortUp,
         SortDown,
         Servers,        
         Db,
