@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
-using Ankh.UI.MergeWizard;
-
 
 using SharpSvn;
 using Ankh.Ids;
