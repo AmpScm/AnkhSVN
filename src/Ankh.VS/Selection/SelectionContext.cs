@@ -634,9 +634,6 @@ namespace Ankh.Selection
                 if (projectMapper != null)
                     foreach (string file in files)
                     {
-                        if (file.LastIndexOf(':') > 1)
-                            continue; // Skip URLs
-
                         foreach (SvnProject project in projectMapper.GetAllProjectsContaining(file))
                         {
                             if (project.RawHandle != null)
@@ -672,7 +669,7 @@ namespace Ankh.Selection
         /// <remarks>The list might contain duplicates if files are included more than once</remarks>
         public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth)
         {
-            // Note: This command is not cached as the other commands on this object!
+            // Note: This command is not cached like the other commands on this object!
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
 

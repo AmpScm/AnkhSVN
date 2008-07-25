@@ -883,7 +883,7 @@ namespace Ankh
                 return false;
             else if (lc == 1 && path.IndexOf(Path.DirectorySeparatorChar) == 2)
                 return true;
-            else if (path.StartsWith(@"\\", StringComparison.Ordinal))
+            else if (lc < 0 && path.StartsWith(@"\\", StringComparison.Ordinal))
                 return true;
 
             // TODO: Add more checks. This code is called from the OpenDocumentTracker, Filestatus cache and selection provider
