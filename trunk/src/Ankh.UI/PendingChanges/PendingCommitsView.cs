@@ -5,6 +5,7 @@ using Ankh.Selection;
 using Microsoft.VisualStudio;
 using System.ComponentModel;
 using Ankh.UI.VSSelectionControls;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -15,6 +16,12 @@ namespace Ankh.UI.PendingChanges
             StrictCheckboxesClick = true;
         }
 
+        IAnkhServiceProvider _context;
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; }
+        }
 
         public PendingCommitsView(IContainer container)
         {
