@@ -175,10 +175,10 @@
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.diffPanel);
             this.Controls.Add(this.preferencesGroupBox);
-            this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MergeConflictHandlerDialog";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Handle Conflict";
             this.preferencesGroupBox.ResumeLayout(false);
