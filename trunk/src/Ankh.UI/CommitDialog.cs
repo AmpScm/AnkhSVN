@@ -18,17 +18,12 @@ namespace Ankh.UI
     /// </summary>
     public partial class CommitDialog : VSContainerForm
     {
-        LogMessageTemplate _logMessageTemplate;
-        bool _loaded = false;
-
         public CommitDialog()
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            this.commitItemsTree.AfterCheck += new TreeViewEventHandler(ItemChecked);
 
             ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
@@ -58,7 +53,7 @@ namespace Ankh.UI
         {
             get
             {
-                return this.LogMessageTemplate.PostProcess(this.logMessageBox.Text);
+                return this.logMessageBox.Text;
             }
             set
             {
@@ -81,18 +76,6 @@ namespace Ankh.UI
             }
         }
 
-        /// <summary>
-        /// The template to use for log messages.
-        /// </summary>
-        public LogMessageTemplate LogMessageTemplate
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this._logMessageTemplate; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set { this._logMessageTemplate = value; }
-        }
-
         public ICollection<SvnItem> Items
         {
             get { return commitItemsTree.Items; }
@@ -102,12 +85,6 @@ namespace Ankh.UI
         public IEnumerable<SvnItem> CommitItems
         {
             get { return this.commitItemsTree.CheckedItems; }
-            //set
-            //{ 
-            //    this.commitItemsTree.Items = value;
-            //    this.commitItemsTree.CheckedItems = value;
-
-            //}
         }
 
         public event Predicate<SvnItem> CommitFilter
@@ -157,46 +134,7 @@ namespace Ankh.UI
                 }
             }
             base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Initialize the log message in the text box.
-        /// </summary>
-        public void Initialize()
-        {
-            if (this.logMessageBox.Text.Trim() == "")
-            {
-                ArrayList arr = new ArrayList();
-                foreach (object item in this.commitItemsTree.CheckedItems)
-                    arr.Add(item.ToString());
-                this.LogMessageTemplate.UrlPaths = this.commitItemsTree.UrlPaths;
-                this.logMessageBox.Text = this.LogMessageTemplate.PreProcess(arr);
-
-
-            }
-
-            this.logMessageBox.Select();
-
-            _loaded = true;
-        }
-
-        private void ItemChecked(object sender, TreeViewEventArgs e)
-        {
-            // don't bother if we haven't been loaded
-            if (!this._loaded)
-                return;
-
-            if (e.Node.Checked)
-            {
-                this.logMessageBox.Text = this.LogMessageTemplate.AddItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString());
-            }
-            else
-            {
-                this.logMessageBox.Text = this._logMessageTemplate.RemoveItem(
-                    this.logMessageBox.Text, e.Node.Tag.ToString());
-            }
-        }
+        } 
 
         /// <summary>
         /// Processes a command key.
