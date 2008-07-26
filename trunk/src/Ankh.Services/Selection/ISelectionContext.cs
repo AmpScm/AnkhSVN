@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.Shell.Interop;
+using System.Windows.Forms;
 
 namespace Ankh.Selection
 {
@@ -71,6 +73,30 @@ namespace Ankh.Selection
         /// Gets the current solution filename (full path)
         /// </summary>
         /// <value>The solution filename.</value>
-        string SolutionFilename { get; }
+        string SolutionFilename { get; }        
+
+        /// <summary>
+        /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveFrame"/>
+        /// </summary>
+        Control ActiveFrameControl { get; }
+
+        /// <summary>
+        /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveDocumentFrame"/>
+        /// </summary>
+        Control ActiveDocumentFrameControl { get; }
+    }
+
+    [CLSCompliant(false)]
+    public interface ISelectionContextEx : ISelectionContext
+    {
+        /// <summary>
+        /// Gets the currently active frame (Document or Toolwindow)
+        /// </summary>
+        IVsWindowFrame ActiveFrame { get; }
+
+        /// <summary>
+        /// Gets the frame of the currently active document
+        /// </summary>
+        IVsWindowFrame ActiveDocumentFrame { get; }
     }
 }

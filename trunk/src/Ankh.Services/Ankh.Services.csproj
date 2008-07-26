@@ -68,6 +68,9 @@
     <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Scc\EnlistmentState.cs" />
+    <Compile Include="Scc\UI\AnkhToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Scc\UI\IConflictHandler.cs" />
     <Compile Include="Scc\UI\ILastChangeInfo.cs" />
     <Compile Include="Scc\ISvnLogChangedPathItem.cs" />

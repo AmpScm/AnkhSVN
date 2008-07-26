@@ -18,7 +18,7 @@ namespace Ankh.Selection
     /// <summary>
     /// 
     /// </summary>
-    class SelectionContext : AnkhService, IVsSelectionEvents, IDisposable, ISelectionContext, ISccProjectWalker
+    partial class SelectionContext : AnkhService, IVsSelectionEvents, IDisposable, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
         readonly IFileStatusCache _cache;
         readonly SolutionExplorerWindow _solutionExplorer;
@@ -83,12 +83,6 @@ namespace Ankh.Selection
         public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
         {
             /// Some global state change which might change UI cueues
-            return VSConstants.S_OK;
-        }
-
-        public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
-        {
-            // Some property changed
             return VSConstants.S_OK;
         }
 
@@ -787,6 +781,8 @@ namespace Ankh.Selection
         }
 
 
-        #endregion
+        #endregion        
+    
+        
     }
 }
