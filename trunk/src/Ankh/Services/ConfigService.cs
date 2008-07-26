@@ -80,8 +80,7 @@ namespace Ankh.Configuration
             using (RegistryKey reg = OpenHKLMCommonKey("Configuration"))
             {
                 if (reg != null)
-
-                    foreach (PropertyDescriptor pd in config.GetProperties(null))
+                    foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(config))
                     {
                         string value = reg.GetValue(pd.Name, null) as string;
 
@@ -98,7 +97,7 @@ namespace Ankh.Configuration
             using (RegistryKey reg = OpenHKLMKey("Configuration"))
             {
                 if (reg != null)
-                    foreach (PropertyDescriptor pd in config.GetProperties(null))
+                    foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(config))
                     {
                         string value = reg.GetValue(pd.Name, null) as string;
 
@@ -119,7 +118,7 @@ namespace Ankh.Configuration
                 if (reg == null)
                     return;
 
-                foreach (PropertyDescriptor pd in config.GetProperties(null))
+                foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(config))
                 {
                     string value = reg.GetValue(pd.Name, null) as string;
 
@@ -139,27 +138,25 @@ namespace Ankh.Configuration
         /// <param name="config"></param>
         public void SaveConfig(AnkhConfig config)
         {
+            if(config == null)
+                throw new ArgumentNullException("config");
+
             lock (this._lock)
             {
                 AnkhConfig defaultConfig = new AnkhConfig();
                 SetDefaultsFromRegistry(defaultConfig);
-                PropertyDescriptorCollection defaultsProps = defaultConfig.GetProperties(null);
 
                 using (RegistryKey reg = OpenHKCUKey("Configuration"))
                 {
-                    HybridCollection<string> names = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                    names.AddRange(reg.GetValueNames());
-
-                    foreach (PropertyDescriptor pd in config.GetProperties(null))
+                    PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(defaultConfig);
+                    foreach (PropertyDescriptor pd in pdc)
                     {
                         object value = pd.GetValue(config);
-                        object defaultVal = defaultsProps[pd.Name].GetValue(defaultConfig);
-
+                        
                         // Set the value only if it is already set previously, or if it's different from the default
-                        if(value == null || value.Equals(defaultVal))
+                        if(!pd.ShouldSerializeValue(value))
                         {
-                            if(names.Contains(pd.Name))
-                                reg.DeleteValue(pd.Name);
+                            reg.DeleteValue(pd.Name, false);
                         }
                         else
                             reg.SetValue(pd.Name, pd.Converter.ConvertToInvariantString(value));
