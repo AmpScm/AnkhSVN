@@ -34,7 +34,10 @@ namespace Ankh.UI.PendingChanges
             }
 
             if (pendingCommits != null)
+            {
                 pendingCommits.SelectionPublishServiceProvider = UISite;
+                pendingCommits.Context = UISite;
+            }
 
             UISite.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
