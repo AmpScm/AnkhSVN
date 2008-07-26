@@ -244,7 +244,7 @@ namespace Ankh.Selection
             IVsSolution sol = (IVsSolution)context.GetService(typeof(SVsSolution));
             string solutionDirectory, solutionFile, solutionUserOptions;
             if (ErrorHandler.Succeeded(sol.GetSolutionInfo(out solutionDirectory, out solutionFile, out solutionUserOptions))
-                && !IsValidPath(solutionFile))
+                && IsValidPath(solutionFile))
             {
                 return solutionFile;
             }
