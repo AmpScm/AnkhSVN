@@ -68,8 +68,8 @@
     <Compile Include="ContextServices\IAnkhPackage.cs" />
     <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Scc\EnlistmentState.cs" />
-    <Compile Include="Scc\IConflictHandler.cs" />
-    <Compile Include="Scc\ILastChangeInfo.cs" />
+    <Compile Include="Scc\UI\IConflictHandler.cs" />
+    <Compile Include="Scc\UI\ILastChangeInfo.cs" />
     <Compile Include="Scc\ISvnLogChangedPathItem.cs" />
     <Compile Include="Scc\ISvnLogItem.cs" />
     <Compile Include="Scc\ISvnRepositoryItem.cs" />
@@ -89,6 +89,7 @@
     <Compile Include="Scc\SvnItemData.cs" />
     <Compile Include="Scc\SvnItemState.cs" />
     <Compile Include="Scc\SvnWorkingCopy.cs" />
+    <Compile Include="Scc\UI\IDiffUIHandler.cs" />
     <Compile Include="Selection\IAnkhGetMkDocument.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
