@@ -71,10 +71,6 @@ namespace Ankh
 
             AnkhConfig config = configSvc.Instance;
 
-            string templateText = config.LogMessageTemplate != null ?
-                config.LogMessageTemplate : "";
-            LogMessageTemplate template = new LogMessageTemplate(_context, templateText);
-
             string savedLogMessage = "";
             // is there a previous log message?
             if (!string.IsNullOrEmpty(this.LogMessage))
@@ -95,7 +91,6 @@ namespace Ankh
                 {
                     dialog.Context = _context;
                     dialog.LogMessage = savedLogMessage;
-                    dialog.LogMessageTemplate = template;
                     dialog.Items = _items;
                     dialog.CommitFilter += delegate { return true; };
                     if (dialog.ShowDialog(_context) != DialogResult.OK)
