@@ -507,7 +507,7 @@ namespace Ankh.UI.PendingChanges
             if (depth == SvnDepth.Unknown)
                 return false;
 
-            ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing...",
+            ProgressRunnerResult r = state.GetService<IProgressRunner>().Run("Committing",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnCommitArgs ca = new SvnCommitArgs();
