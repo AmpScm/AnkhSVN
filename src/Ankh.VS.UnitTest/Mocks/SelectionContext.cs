@@ -13,7 +13,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
             return new EmptySelectionContext();
         }
 
-        class EmptySelectionContext : ISelectionContext
+        class EmptySelectionContext : ISelectionContext, ISelectionContextEx
         {
             public IEnumerable<string> GetSelectedFiles()
             {
@@ -71,6 +71,35 @@ namespace AnkhSvn_UnitTestProject.Mocks
             public bool IsSingleNodeSelection
             {
                 get { return false; }
+            }
+
+            #endregion
+
+            #region ISelectionContext Members
+
+
+            public System.Windows.Forms.Control ActiveFrameControl
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public System.Windows.Forms.Control ActiveDocumentFrameControl
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            #endregion
+
+            #region ISelectionContextEx Members
+
+            public Microsoft.VisualStudio.Shell.Interop.IVsWindowFrame ActiveFrame
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public Microsoft.VisualStudio.Shell.Interop.IVsWindowFrame ActiveDocumentFrame
+            {
+                get { throw new NotImplementedException(); }
             }
 
             #endregion
