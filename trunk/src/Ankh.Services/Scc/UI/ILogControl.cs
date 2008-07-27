@@ -10,5 +10,6 @@ namespace Ankh.Scc.UI
         bool ShowLogMessage { get; set; }
         bool StrictNodeHistory { get; set; }
         bool IncludeMergedRevisions { get; set; }
+        void FetchAll();
     }
 }
