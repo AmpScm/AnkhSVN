@@ -103,5 +103,7 @@ namespace Ankh.Scc.UI
     {
         bool RunDiff(AnkhDiffArgs args);
         bool RunMerge(AnkhMergeArgs args);
+
+        void ReleaseDiff(int frameNumber);
     }
 }

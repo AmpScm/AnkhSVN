@@ -283,6 +283,9 @@
     </Compile>
     <Compile Include="Commands\Runners\CommitOperation.cs" />
     <Compile Include="Services\AnkhDiff.cs" />
+    <Compile Include="Services\AnkhDiff.Internal.cs">
+      <DependentUpon>AnkhDiff.cs</DependentUpon>
+    </Compile>
     <Compile Include="Services\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>
