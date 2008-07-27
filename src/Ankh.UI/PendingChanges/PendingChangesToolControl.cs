@@ -10,10 +10,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Ankh.VS;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class PendingChangesToolControl : UserControl
+    public partial class PendingChangesToolControl : AnkhToolWindowControl
     {
         PendingCommitsPage _commitsPage;
         PendingIssuesPage _issuesPage;

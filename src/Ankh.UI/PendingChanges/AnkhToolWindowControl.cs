@@ -4,8 +4,9 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.Services;
 using System.ComponentModel;
+using Ankh.Scc.UI;
 
-namespace Ankh.Scc.UI
+namespace Ankh.UI
 {
     public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl
     {
