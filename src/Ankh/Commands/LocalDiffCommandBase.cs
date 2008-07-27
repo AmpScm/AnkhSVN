@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using Ankh.Scc;
 using System.CodeDom.Compiler;
 using Ankh.VS;
+using Ankh.Scc.UI;
 
 namespace Ankh.Commands
 {
@@ -31,33 +32,18 @@ namespace Ankh.Commands
         protected TempFileCollection TempFileCollection
         {
             get { return _tempFileCollection; }
-        }
-
-        /// <summary>
-        /// Gets path to the diff executable while taking care of config file settings.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns>The exe path.</returns>
-        protected virtual string GetExe(IAnkhServiceProvider context, ISelectionContext selection)
-        {
-            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
-            
-            if (!cs.Instance.ChooseDiffMergeManual)
-                return cs.Instance.DiffExePath;
-            else
-                return null;
-        }
+        }        
 
         protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
         {
-            return GetDiff(context, selection, null);
+            return GetDiff(context, selection, null, false);
         }
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool forceExternal)
         {
             if (selection == null)
                 throw new ArgumentNullException("selection");
@@ -66,7 +52,7 @@ namespace Ankh.Commands
 
             IUIShell uiShell = context.GetService<IUIShell>();
 
-            bool useExternalDiff = GetExe(context, selection) != null;
+            bool useExternalDiff = true;
 
             bool foundModified = false;
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
@@ -81,7 +67,7 @@ namespace Ankh.Commands
             List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
 
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
-            info.VisibleFilter += delegate(SvnItem item) { return true; };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
             if (foundModified)
                 info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
 
@@ -168,62 +154,14 @@ namespace Ankh.Commands
                     continue;
 
                 string tempDir = context.GetService<IAnkhTempDirManager>().GetTempDir();
-                string quotedLeftPath = GetPath(context, info.RevisionStart, item, selection, tempDir);
-                string quotedRightPath = GetPath(context, info.RevisionEnd, item, selection, tempDir);
-                string diffString = this.GetExe(context, selection);
-                diffString = diffString.Replace("%base", quotedLeftPath);
-                diffString = diffString.Replace("%mine", quotedRightPath);
 
-                // We must split the line in program and arguments before running
-                diffString = diffString.TrimStart();
-                string program;
-                string args;
+                AnkhDiffArgs da = new AnkhDiffArgs();
 
-                if (diffString.Length > 0 && diffString[0] == '\"')
-                {
-                    int n = diffString.IndexOf('\"', 1);
+                da.BaseFile = GetPath(context, info.RevisionStart, item, selection, tempDir);
+                da.MineFile = GetPath(context, info.RevisionEnd, item, selection, tempDir);
 
-                    if (n > 0)
-                    {
-                        program = diffString.Substring(1, n - 1).Trim();
-                        args = diffString.Substring(n + 1).TrimStart();
-                    }
-                    else
-                    {
-                        program = diffString;
-                        args = "";
-                    }
-                }
-                else
-                {
-                    char[] spacers = new char[] { ' ', '\t' };
 
-                    int n = diffString.IndexOfAny(spacers);
-                    program = "";
-                    args = "";
-
-                    // We use the algorithm as documented by CreateProcess() in MSDN
-                    // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
-                    while (n >= 0)
-                    {
-                        program = diffString.Substring(0, n);
-
-                        if (File.Exists(program))
-                        {
-                            args = diffString.Substring(n + 1).TrimStart();
-                            break;
-                        }
-                        else
-                            n = diffString.IndexOfAny(spacers, n + 1);
-                    }
-
-                    if (n < 0)
-                    {
-                        program = diffString.Trim();
-                    }
-                }
-
-                Process.Start(program, args);
+                context.GetService<IAnkhDiffHandler>().RunDiff(da);
             }
 
             return null;
