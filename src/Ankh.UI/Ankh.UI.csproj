@@ -165,6 +165,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DiffWindow\DiffToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffWindow\DiffToolWindowControl.Designer.cs">
+      <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiffWindow\MergeToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
+      <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
@@ -751,6 +763,9 @@
     <None Include="Ankh.UI.wxs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
+      <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeConflictHandlerDialog.resx">
       <DependentUpon>MergeConflictHandlerDialog.cs</DependentUpon>
       <SubType>Designer</SubType>

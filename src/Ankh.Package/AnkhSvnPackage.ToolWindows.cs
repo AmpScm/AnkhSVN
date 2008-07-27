@@ -21,6 +21,7 @@ using Ankh.UI.SvnLog;
 using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.DiffWindow;
 using Ankh.Scc.UI;
 
 namespace Ankh.VSPackage
@@ -32,6 +33,8 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(RepositoryExplorerToolWindow), Style = VsDockStyle.MDI, Transient = true)]
     [ProvideToolWindow(typeof(PendingChangesToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = false, Window = ToolWindowGuids80.Outputwindow)]
     [ProvideToolWindow(typeof(LogToolWindow), Style = VsDockStyle.Tabbed, Orientation = ToolWindowOrientation.Bottom, Transient = true)]
+    [ProvideToolWindow(typeof(DiffToolWindow), Style = VsDockStyle.Float, Transient = true)]
+    [ProvideToolWindow(typeof(MergeToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
     public partial class AnkhSvnPackage
     {
@@ -52,6 +55,10 @@ namespace Ankh.VSPackage
                     return typeof(PendingChangesToolWindow);
                 case AnkhToolWindow.Log:
                     return typeof(LogToolWindow);
+                case AnkhToolWindow.Diff:
+                    return typeof(DiffToolWindow);
+                case AnkhToolWindow.Merge:
+                    return typeof(MergeToolWindow);
                 default:
                     throw new ArgumentOutOfRangeException("toolWindow");
             }
@@ -507,6 +514,38 @@ namespace Ankh.VSPackage
             Control = new LogToolWindowControl();
             Caption = "History Viewer";
             
+            BitmapResourceID = 401;
+            BitmapIndex = 5;
+
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+        }
+    }
+
+    [Guid(AnkhId.DiffToolWindowId)]
+    class DiffToolWindow : AnkhToolWindowPane
+    {
+        public DiffToolWindow()
+        {
+            Control = new DiffToolWindowControl();
+            Caption = "Diff";
+
+            BitmapResourceID = 401;
+            BitmapIndex = 5;
+
+            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
+            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+        }
+    }
+
+    [Guid(AnkhId.MergeToolWindowId)]
+    class MergeToolWindow : AnkhToolWindowPane
+    {
+        public MergeToolWindow()
+        {
+            Control = new MergeToolWindowControl();
+            Caption = "Diff";
+
             BitmapResourceID = 401;
             BitmapIndex = 5;
 
