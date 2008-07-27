@@ -7,10 +7,11 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.Services;
 using System.Diagnostics;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogToolWindowControl : UserControl
+    public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
         public LogToolWindowControl()
         {
@@ -21,13 +22,7 @@ namespace Ankh.UI.SvnLog
             :this()
         {
             container.Add(this);
-        }
-
-        [Obsolete]
-        public void Start(IAnkhServiceProvider context, ICollection<string> targets)
-        {
-            logControl.Start(context, targets);
-        }
+        }  
 
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
         {
@@ -57,18 +52,6 @@ namespace Ankh.UI.SvnLog
             {
                 base.Site = value;
                 logControl.Site = value;
-                IAnkhUISite site = value as IAnkhUISite;
-
-                if (site != null)
-                {
-                    _site = site;
-
-                    //logControl.Site = site;
-
-                    // BH: This makes the control single-instance only
-                    if (_site.GetService<LogToolWindowControl>() == null)
-                        _site.Package.AddService(typeof(LogToolWindowControl), this);
-                }
             }
         }
 
@@ -115,5 +98,46 @@ namespace Ankh.UI.SvnLog
         {
             logControl.Restart();
         }
+
+        #region ILogControl Members
+
+        public bool ShowChangedPaths
+        {
+            get
+            {
+                return logControl.ChangedPathsVisible;
+            }
+            set
+            {
+                logControl.ChangedPathsVisible = value;
+            }
+        }
+
+        public bool ShowLogMessage
+        {
+            get
+            {
+                return logControl.LogMessageVisible;
+            }
+            set
+            {
+                logControl.LogMessageVisible = value;
+            }
+        }
+
+        public bool IncludeMergedRevisions
+        {
+            get { return logControl.IncludeMerged; }
+            set
+            {
+                if (value != logControl.IncludeMerged)
+                {
+                    logControl.IncludeMerged = value;
+                    logControl.Restart();
+                }
+            }
+        }
+
+        #endregion
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -10,17 +11,26 @@ namespace Ankh.UI.SvnLog.Commands
     class LogStrictNodeHistory:ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
-
         {
-            LogToolWindowControl logControl = e.Context.GetService<LogToolWindowControl>();
-            e.Latched = logControl != null && logControl.StrictNodeHistory;
+            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+
+            if (lc == null)
+            {
+                e.Enabled = false;
+                return;
+            }
+
+            e.Latched = lc.StrictNodeHistory;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            LogToolWindowControl logControl = e.Context.GetService<LogToolWindowControl>();
-            logControl.StrictNodeHistory = !logControl.StrictNodeHistory;
-            logControl.Restart();
+            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+
+            if (lc == null)
+                return;
+
+            lc.StrictNodeHistory = !lc.StrictNodeHistory;            
         }
     }
 }

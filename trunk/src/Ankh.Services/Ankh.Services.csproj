@@ -91,6 +91,7 @@
     <Compile Include="Scc\SvnItemState.cs" />
     <Compile Include="Scc\SvnWorkingCopy.cs" />
     <Compile Include="Scc\UI\IDiffUIHandler.cs" />
+    <Compile Include="Scc\UI\ILogControl.cs" />
     <Compile Include="Selection\IAnkhGetMkDocument.cs" />
     <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
