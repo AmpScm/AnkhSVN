@@ -49,7 +49,15 @@ namespace Ankh.Diff
             SI.UseShellExecute = true;
             SI.Verb = strVerb;
 
-            Process.Start(SI);
+            try
+            {
+                Process.Start(SI);
+            }
+            catch(Exception e)
+            {
+                // Kills VS if it fails
+                MessageBox.Show(e.ToString());
+            } 
         }
 
         public static string DefaultFolderOpenAction
