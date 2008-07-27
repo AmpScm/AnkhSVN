@@ -745,6 +745,11 @@ namespace Ankh
             // TODO: Mark item as no longer valid
         }
 
+        public string Directory
+        {
+            get { return Path.GetDirectoryName(FullPath); }
+        }
+
         /// <summary>
         /// Gets the <see cref="SvnItem"/> of this instances parent (the directory it is in)
         /// </summary>
@@ -754,9 +759,9 @@ namespace Ankh
         {
             get
             {
-                string parentDir = Path.GetDirectoryName(FullPath);
+                string parentDir = Directory;
 
-                if (string.IsNullOrEmpty(parentDir) || parentDir.Length >= FullPath.Length)
+                if (string.IsNullOrEmpty(parentDir))
                     return null; // We are the root folder!
 
                 IFileStatusCache cache = StatusCache;
