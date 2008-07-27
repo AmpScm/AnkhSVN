@@ -254,5 +254,17 @@ namespace Ankh.Scc
         }
 
         #endregion
+
+        #region IFileStatusMonitor Members
+
+
+        public void ExternallyChanged(string path)
+        {
+            ScheduleSvnStatus(path);
+
+            // TODO: Schedule path for maybe-resolved or something.. to be asked when switched back to VS
+        }
+
+        #endregion
     }
 }
