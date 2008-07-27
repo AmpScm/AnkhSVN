@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -11,11 +12,22 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+
+            if (lc == null)
+            {
+                e.Enabled = false;
+                return;
+            }
         }
         public void OnExecute(CommandEventArgs e)
         {
-            LogToolWindowControl logControl = e.Context.GetService<LogToolWindowControl>();
-            logControl.FetchAll();
+            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+
+            if (lc == null)
+                return;
+
+            lc.FetchAll();
         }
     }
 }

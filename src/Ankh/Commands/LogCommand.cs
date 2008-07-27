@@ -119,7 +119,8 @@ namespace Ankh.Commands
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
-            LogToolWindowControl logToolControl = context.GetService<LogToolWindowControl>();
+
+            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             logToolControl.StartLocalLog(context, targets);
         }
 
@@ -128,7 +129,7 @@ namespace Ankh.Commands
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
-            LogToolWindowControl logToolControl = context.GetService<LogToolWindowControl>();
+            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             logToolControl.StartRemoteLog(context, target); // TODO: revision support
         }
     }

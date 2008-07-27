@@ -69,15 +69,7 @@ namespace Ankh.UI.SvnLog
             get { return logControl.ChangedPathsVisible; }
             [DebuggerStepThrough]
             set { logControl.ChangedPathsVisible = value; }
-        }
-
-        public bool StrictNodeHistory
-        {
-            [DebuggerStepThrough]
-            get { return logControl.StrictNodeHistory; }
-            [DebuggerStepThrough]
-            set { logControl.StrictNodeHistory = value; }
-        }
+        }        
 
         public bool IncludeMerged
         {
@@ -133,6 +125,20 @@ namespace Ankh.UI.SvnLog
                 if (value != logControl.IncludeMerged)
                 {
                     logControl.IncludeMerged = value;
+                    logControl.Restart();
+                }
+            }
+        }
+
+        public bool StrictNodeHistory
+        {
+            [DebuggerStepThrough]
+            get { return logControl.StrictNodeHistory; }
+            set
+            {
+                if (value != StrictNodeHistory)
+                {
+                    logControl.StrictNodeHistory = value;
                     logControl.Restart();
                 }
             }
