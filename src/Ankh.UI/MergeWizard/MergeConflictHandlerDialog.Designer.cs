@@ -153,7 +153,7 @@
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Cancel";
+            this.cancelButton.Text = "Abort";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // applyToAllCheckBox
