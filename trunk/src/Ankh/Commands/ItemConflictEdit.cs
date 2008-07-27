@@ -60,6 +60,12 @@ namespace Ankh.Commands
             da.MineFile = Path.Combine(dir, conflictInfo.ConflictWork);
             da.MergedFile = conflict.FullPath;
 
+            da.BaseTitle = "Base";
+            da.TheirsTitle = "Theirs";
+            da.MineTitle = "Mine";
+            da.MergedTitle = conflict.Name;
+            
+
             e.GetService<IAnkhDiffHandler>().RunMerge(da);
         }
     }
