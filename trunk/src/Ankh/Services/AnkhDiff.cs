@@ -12,7 +12,7 @@ using Microsoft.VisualStudio;
 
 namespace Ankh.Services
 {
-    class AnkhDiff : AnkhService, IAnkhDiffHandler
+    partial class AnkhDiff : AnkhService, IAnkhDiffHandler
     {
         public AnkhDiff(IAnkhServiceProvider context)
             : base(context)
@@ -24,11 +24,11 @@ namespace Ankh.Services
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetDiffPath(bool forceExternal)
+        protected virtual string GetDiffPath(DiffMode mode)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
-            if (forceExternal || !cs.Instance.ChooseDiffMergeManual)
+            if ((mode == DiffMode.PreferExternal) || !cs.Instance.ChooseDiffMergeManual)
                 return cs.Instance.DiffExePath;
             else
                 return null;
@@ -43,7 +43,11 @@ namespace Ankh.Services
 
             bool forceExternal = (args.Mode & DiffMode.PreferExternal) != 0;
 
-            string diffApp = this.GetDiffPath(forceExternal);
+            string diffApp = this.GetDiffPath(args.Mode);
+
+
+            if (string.IsNullOrEmpty(diffApp))
+                return RunInternalDiff(args);
 
             string program;
             string arguments;
@@ -82,7 +86,7 @@ namespace Ankh.Services
                         monitor.Dispose();
                 }
             }
-        }
+        }        
 
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
