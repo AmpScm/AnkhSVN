@@ -44,7 +44,6 @@ namespace Ankh.UI.SvnLog
             logControl.StartRemoteLog(context, remoteTarget);
         }
 
-        IAnkhUISite _site;
         public override ISite Site
         {
             get { return base.Site; }
