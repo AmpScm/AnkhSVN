@@ -6,6 +6,9 @@ using System.IO;
 using System.Diagnostics;
 using Ankh.UI;
 using System.Text.RegularExpressions;
+using Ankh.Scc;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Services
 {
@@ -52,8 +55,33 @@ namespace Ankh.Services
 
             // TODO: Maybe Handle file saves and program exits
 
-            Process.Start(program, arguments);
-            return true;
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(program, arguments);
+
+            string mergedFile = args.MineFile;
+
+            DiffToolMonitor monitor = null;
+            if (!string.IsNullOrEmpty(mergedFile))
+            {
+                monitor = new DiffToolMonitor(Context, mergedFile);
+
+                p.EnableRaisingEvents = true;
+                monitor.Register(p);
+            }
+
+            bool started = false;
+            try
+            {
+                return started = p.Start();
+            }
+            finally
+            {
+                if (!started)
+                {
+                    if (monitor != null)
+                        monitor.Dispose();
+                }
+            }
         }
 
         /// <summary>
@@ -67,10 +95,16 @@ namespace Ankh.Services
 
             string txt = cs.Instance.MergeExePath;
 
-            if(!string.IsNullOrEmpty(txt))
-                return txt;            
+            if (!string.IsNullOrEmpty(txt))
+                return txt;
             else
                 return null;
+        }
+
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
+        {
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         public bool RunMerge(AnkhMergeArgs args)
@@ -92,10 +126,115 @@ namespace Ankh.Services
                 return false;
             }
 
-            // TODO: Maybe Handle file saves and program exits
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(program, arguments);
 
-            Process.Start(program, arguments);
-            return true;
+            string mergedFile = args.MergedFile;
+
+            DiffToolMonitor monitor = null;
+            if (!string.IsNullOrEmpty(mergedFile))
+            {
+                monitor = new DiffToolMonitor(Context, mergedFile);
+
+                p.EnableRaisingEvents = true;
+                monitor.Register(p);
+            }
+
+            bool started = false;
+            try
+            {
+                return started = p.Start();
+            }
+            finally
+            {
+                if (!started)
+                {
+                    if (monitor != null)
+                        monitor.Dispose();
+                }
+            }
+        }
+
+        sealed class DiffToolMonitor : AnkhService, IVsFileChangeEvents
+        {
+            uint _cookie;
+            readonly string _fileToMonitor;
+
+            public DiffToolMonitor(IAnkhServiceProvider context, string monitor)
+                : base(context)
+            {
+                if (string.IsNullOrEmpty(monitor))
+                    throw new ArgumentNullException("monitor");
+                else if (!SvnItem.IsValidPath(monitor))
+                    throw new ArgumentOutOfRangeException("monitor");
+
+                _fileToMonitor = monitor;
+
+                IVsFileChangeEx fx = context.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+
+                if (fx == null || !ErrorHandler.Succeeded(fx.AdviseFileChange(monitor,
+                        (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Time | _VSFILECHANGEFLAGS.VSFILECHG_Size
+                        | _VSFILECHANGEFLAGS.VSFILECHG_Add | _VSFILECHANGEFLAGS.VSFILECHG_Del
+                        | _VSFILECHANGEFLAGS.VSFILECHG_Attr),
+                        this,
+                        out _cookie)))
+                {
+                    _cookie = 0;
+                }
+            }
+
+            public void Dispose()
+            {
+                if (_cookie != 0)
+                {
+                    uint ck = _cookie;
+                    _cookie = 0;
+
+                    IVsFileChangeEx fx = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+                    if(fx != null)
+                        fx.UnadviseFileChange(ck);
+                }
+            }
+
+            public void Register(Process p)
+            {
+                p.Exited += new EventHandler(OnExited);
+            }
+
+            void OnExited(object sender, EventArgs e)
+            {
+                Dispose();
+            }            
+
+            public int DirectoryChanged(string pszDirectory)
+            {
+                return VSConstants.S_OK;
+            }
+
+            public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
+            {
+                if(rgpszFile != null)
+                {
+                    foreach(string file in rgpszFile)
+                    {
+                        if(string.Equals(file, _fileToMonitor, StringComparison.OrdinalIgnoreCase))
+                        {
+                            IFileStatusMonitor m = GetService<IFileStatusMonitor>();
+
+                            if (m != null)
+                                m.ExternallyChanged(_fileToMonitor);
+
+                            break;
+                        }
+                    }
+                }
+
+                return VSConstants.S_OK;
+            }
+
+
         }
 
 
@@ -244,7 +383,7 @@ namespace Ankh.Services
                 }
             }
         }
-        
+
         #endregion
     }
 }

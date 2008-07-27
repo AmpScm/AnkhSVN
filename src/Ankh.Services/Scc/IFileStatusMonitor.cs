@@ -43,5 +43,11 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         void ScheduleMonitor(IEnumerable<string> paths);
+
+        /// <summary>
+        /// Called when a file is changed outside VS (E.g. via a diff tool)
+        /// </summary>
+        /// <param name="path"></param>
+        void ExternallyChanged(string path);
     }
 }
