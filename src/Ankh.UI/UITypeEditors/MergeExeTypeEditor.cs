@@ -16,6 +16,8 @@ namespace Ankh.UI.UITypeEditors
 
         protected override StringEditorTemplate[] GetTemplates()
         {
+            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+
             return new StringEditorTemplate[]{
                         new StringEditorTemplate("%mine", "My version", "My version (%mine)"),
                         new StringEditorTemplate("%base", "Base version", "Base version (%base)"),
@@ -23,29 +25,29 @@ namespace Ankh.UI.UITypeEditors
                         new StringEditorTemplate("%merged", "Merged output", "Merged ouput (%merged)"),
 
                         // TortoiseMerge
-                        new StringEditorTemplate(@"C:\Program Files\TortoiseSVN\bin\TortoiseMerge.exe " +
+                        new StringEditorTemplate("\"" + programFiles + @"\TortoiseSVN\bin\TortoiseMerge.exe " +
                                                  "/base:\"%base\" /theirs:\"%theirs\" /mine:\"%mine\" /merged:\"%merged\"",
                                                  "TortoiseMerge", "TortoiseMerge"),
 
                         // KDiff3
-                        new StringEditorTemplate(@"C:\Program Files\KDiff3\KDiff3.exe " + 
+                        new StringEditorTemplate("\"" + programFiles + @"\KDiff3\KDiff3.exe " + 
                                                  "\"%base\" --fname \"Base version\" \"%theirs\" --fname \"Their version\" " + 
                                                  "\"%mine\" --fname \"My version\" -o \"%merged\"", "KDiff3", "KDiff3"),
 
                         // DiffMerge
-                        new StringEditorTemplate(@"C:\Program Files\SourceGear\DiffMerge\DiffMerge.exe " +
-                                                 "\"%base\" \"%theirs\" \"%mine\" /r=\"%merged\" " +
-                                                 "/t1=\"Base version\" /t2=\"Their version\" /t3=\"My version\"", "DiffMerge", "DiffMerge"),
-
+                        new StringEditorTemplate(("'" + programFiles + @"\SourceGear\DiffMerge\DiffMerge.exe' " +
+                                                 "/m '/r=%merged' '%base' '%mine' '%theirs' " +
+                                                 "'/t1=%bname' '/t2=%yname' '/t3=%tname' '/c=%mname'").Replace('\'', '\"'),
+                                                 "DiffMerge", "DiffMerge"),
                         // WinMerge
-                        new StringEditorTemplate(@"C:\Program Files\WinMerge\WinMergeU.exe -e -x -ub " +
+                        new StringEditorTemplate("\"" + programFiles + @"\WinMerge\WinMergeU.exe -e -x -ub " +
                                                  "-dl \"Base version\" -dr \"My version\" " +
                                                  "\"%base\" \"%mine\" \"%theirs\"", "WinMerge", "WinMerge"),
 
                        
 
                         // Araxis merge
-                        new StringEditorTemplate( @"C:\Program Files\Araxis\Araxis Merge\Compare.exe " +
+                        new StringEditorTemplate( "\"" + programFiles + @"\Araxis\Araxis Merge\Compare.exe " +
                             "/wait /swap /a3 /3 /title1:Base /title2:Theirs /title3:Merged " +
                             "\"%base\" \"%theirs\" \"%mine\" \"%merged\"", "Araxis", "Araxis" ),
 
