@@ -233,26 +233,41 @@ namespace Ankh.UI.MergeWizard
                     // modify the preferences based on the conflicted file type
                     if (applyToAll)
                     {
-                        if (e.ConflictType == SvnConflictType.Property)
+                        PropertyConflictResolutionChoice = e.Choice;
+                        PromptOnPropertyConflict = false;
+                        BinaryConflictResolutionChoice = e.Choice;
+                        PromptOnBinaryConflict = false;
+                        TextConflictResolutionChoice = e.Choice;
+                        PromptOnTextConflict = false;
+                    }
+                    else
+                    {
+                        bool applyToType = dlg.ApplyToType;
+                        if (applyToType)
                         {
-                            PropertyConflictResolutionChoice = e.Choice;
-                            PromptOnPropertyConflict = false;
-                        }
-                        else if (e.IsBinary)
-                        {
-                            BinaryConflictResolutionChoice = e.Choice;
-                            PromptOnBinaryConflict = false;
-                        }
-                        else
-                        {
-                            TextConflictResolutionChoice = e.Choice;
-                            PromptOnTextConflict = false;
+                            if (e.ConflictType == SvnConflictType.Property)
+                            {
+                                PropertyConflictResolutionChoice = e.Choice;
+                                PromptOnPropertyConflict = false;
+                            }
+                            else if (e.IsBinary)
+                            {
+                                BinaryConflictResolutionChoice = e.Choice;
+                                PromptOnBinaryConflict = false;
+                            }
+                            else
+                            {
+                                TextConflictResolutionChoice = e.Choice;
+                                PromptOnTextConflict = false;
+                            }
                         }
                     }
                     // TODO handle merged file option
                 }
                 else
                 {
+                    // TODO cancel the operation. Throws Ankh.ProgressRunnerException.
+                    // e.Cancel = true; 
                     e.Choice = SvnAccept.Postpone;
                 }
             }

@@ -14,6 +14,7 @@ namespace Ankh.UI.MergeWizard
         SvnConflictEventArgs input;
         SvnAccept resolution = SvnAccept.Postpone;
         bool applyToAll = false;
+        bool applyToType = false;
         bool isBinary;
 
         public MergeConflictHandlerDialog()
@@ -32,15 +33,15 @@ namespace Ankh.UI.MergeWizard
                 isBinary = this.input.IsBinary;
                 if (this.input.ConflictType == SvnConflictType.Property)
                 {
-                    applyToCheckBox.Text = "&Apply to all property conflicts";
+                    applyToTypedCheckBox.Text = "All &Property conflicts";
                 }
                 else if (isBinary)
                 {
-                    applyToCheckBox.Text = "&Apply to all binary conflicts";
+                    applyToTypedCheckBox.Text = "All &Binary conflicts";
                 }
                 else
                 {
-                    applyToCheckBox.Text = "&Apply to all text conflicts";
+                    applyToTypedCheckBox.Text = "All &Text conflicts";
                 }
                 ShowDifferences(this.input.MyFile, this.input.TheirFile);
             }
@@ -63,12 +64,25 @@ namespace Ankh.UI.MergeWizard
 
         /// <summary>
         /// Gets applyToAll option.
+        /// If this option is selected, the user choice will be used to resolve all conflicts.
         /// </summary>
         public bool ApplyToAll
         {
             get
             {
                 return applyToAll;
+            }
+        }
+
+        /// <summary>
+        /// Gets applyToType option. 
+        /// If this option is selected, the user choice will be used to resolve all conflicts of the same type.
+        /// </summary>
+        public bool ApplyToType
+        {
+            get
+            {
+                return applyToType;
             }
         }
 
@@ -132,7 +146,16 @@ namespace Ankh.UI.MergeWizard
 
         private void applyToCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            this.applyToAll = this.applyToCheckBox.Checked;
+            this.applyToAll = this.applyToAllCheckBox.Checked;
+
+            // applyToType is implied if applyToAll is checked.
+            this.applyToTypedCheckBox.Checked = this.applyToAll ? true : this.applyToType;
+            this.applyToTypedCheckBox.Enabled = !this.applyToAll;
+        }
+
+        private void applyToTypedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            this.applyToType = this.applyToTypedCheckBox.Checked;
         }
     }
 }
