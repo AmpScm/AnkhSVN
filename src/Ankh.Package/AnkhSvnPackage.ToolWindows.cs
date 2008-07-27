@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -269,10 +270,13 @@ namespace Ankh.VSPackage
         #endregion
     }
 
-    public class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget
+    class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
     {
         readonly AnkhToolWindowSite _site;
         Control _control;
+        IAnkhToolWindowControl _twControl;
+        uint _cookie;
+
 
         protected AnkhToolWindowPane()
             : base(null)
@@ -298,6 +302,12 @@ namespace Ankh.VSPackage
 
             if (Control != null)
                 Control.Site = _site;
+
+            if (_twControl != null)
+            {
+                _twControl.Context = _site;
+                _twControl.OnFrameCreated(EventArgs.Empty);
+            }
         }
 
         public override IWin32Window Window
@@ -324,13 +334,84 @@ namespace Ankh.VSPackage
         {
             return base.GetService(serviceType);
         }
+
+        public override void OnToolWindowCreated()
+        {
+            base.OnToolWindowCreated();
+
+            _twControl = Control as IAnkhToolWindowControl;
+
+            if (_twControl != null)
+            {
+                IVsWindowFrame2 wf2 = Frame as IVsWindowFrame2;
+
+                if (wf2 != null)
+                {
+                    wf2.Advise(this, out _cookie);
+                }
+            }
+        }
+
+        #region IVsWindowFrameNotify* Members
+
+        public int OnClose(ref uint pgrfSaveOptions)
+        {
+            _twControl.OnFrameClose(EventArgs.Empty);
+
+            return VSConstants.S_OK;
+        }
+
+        public int OnDockableChange(int fDockable, int x, int y, int w, int h)
+        {
+            _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            return VSConstants.S_OK;
+        }
+
+        public int OnMove(int x, int y, int w, int h)
+        {
+            _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            return VSConstants.S_OK;
+        }
+
+        public int OnShow(int fShow)
+        {
+            _twControl.OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
+            return VSConstants.S_OK;
+        }
+
+        public int OnSize(int x, int y, int w, int h)
+        {
+            _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            return VSConstants.S_OK;
+        }
+
+        #endregion
+
+        #region IVsWindowFrameNotify Members
+
+        public int OnDockableChange(int fDockable)
+        {
+            return OnDockableChange(fDockable, 0, 0, 0, 0);
+        }
+
+        public int OnMove()
+        {
+            return OnMove(0, 0, 0, 0);
+        }
+
+        public int OnSize()
+        {
+            return OnSize(0, 0, 0, 0);
+        }
+
+        #endregion
     }
 
     /// <summary>
     /// Wrapper for the WorkingCopyExplorer in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.WorkingCopyExplorerToolWindowId)]
-    public class WorkingCopyExplorerToolWindow : AnkhToolWindowPane
+    class WorkingCopyExplorerToolWindow : AnkhToolWindowPane
     {
         public WorkingCopyExplorerToolWindow()
         {
@@ -363,7 +444,7 @@ namespace Ankh.VSPackage
     /// Wrapper for the RepositoryExplorer in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.RepositoryExplorerToolWindowId)]
-    public class RepositoryExplorerToolWindow : AnkhToolWindowPane
+    class RepositoryExplorerToolWindow : AnkhToolWindowPane
     {
         public RepositoryExplorerToolWindow()
         {
@@ -395,7 +476,7 @@ namespace Ankh.VSPackage
     /// Wrapper for the Commit dialog in the Ankh assembly
     /// </summary>
     [Guid(AnkhId.PendingChangesToolWindowId)]
-    public class PendingChangesToolWindow : AnkhToolWindowPane
+    class PendingChangesToolWindow : AnkhToolWindowPane
     {
         public PendingChangesToolWindow()
         {
@@ -418,7 +499,7 @@ namespace Ankh.VSPackage
     }
 
     [Guid(AnkhId.LogToolWindowId)]
-    public class LogToolWindow : AnkhToolWindowPane
+    class LogToolWindow : AnkhToolWindowPane
     {
         public LogToolWindow()
         {

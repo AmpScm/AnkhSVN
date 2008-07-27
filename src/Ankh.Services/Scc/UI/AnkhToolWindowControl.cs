@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace Ankh.Scc.UI
 {
-    public class AnkhToolWindowControl : UserControl
+    public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl
     {
         IAnkhServiceProvider _context;
         IAnkhUISite _site;
@@ -36,22 +36,8 @@ namespace Ankh.Scc.UI
                 if (value == null || value is IAnkhUISite)
                 {
                     _site = (IAnkhUISite)value;
-
-                    if (_site != null)
-                        _context = _site;
-
-                    OnUISiteChanged(EventArgs.Empty);
                 }
             }
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:UISiteChanged"/> event.
-        /// </summary>
-        /// <param name="eventArgs">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnUISiteChanged(EventArgs eventArgs)
-        {
-
         }
 
         /// <summary>
@@ -62,5 +48,81 @@ namespace Ankh.Scc.UI
         {
             get { return _context; }
         }
+
+        /// <summary>
+        /// Sets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        IAnkhServiceProvider IAnkhToolWindowControl.Context
+        {
+            set { _context = value; }
+        }
+
+        #region IAnkhToolWindowControl Members
+
+        /// <summary>
+        /// Called when the frame is created
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnFrameCreated(EventArgs e)
+        {
+        }
+
+        void IAnkhToolWindowControl.OnFrameCreated(EventArgs e)
+        {
+            OnFrameCreated(e);
+        }
+
+        /// <summary>
+        /// Called when the frame is closed
+        /// </summary>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected virtual void OnFrameClose(EventArgs e)
+        {
+        }
+
+        void IAnkhToolWindowControl.OnFrameClose(EventArgs e)
+        {
+            OnFrameClose(e);
+        }
+
+        /// <summary>
+        /// Called when the dockstate is changing
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnFrameDockableChanged(FrameEventArgs e)
+        {
+
+        }
+
+        void IAnkhToolWindowControl.OnFrameDockableChanged(FrameEventArgs e)
+        {
+            OnFrameDockableChanged(e);
+        }
+
+        void IAnkhToolWindowControl.OnFrameMove(FrameEventArgs e)
+        {
+        }
+
+        protected virtual void OnFrameShow(FrameEventArgs e)
+        {
+        }
+
+        void IAnkhToolWindowControl.OnFrameShow(FrameEventArgs e)
+        {
+            OnFrameShow(e);
+        }
+
+        protected virtual void OnFrameSize(FrameEventArgs e)
+        {
+        }
+
+
+        void IAnkhToolWindowControl.OnFrameSize(FrameEventArgs e)
+        {
+            OnFrameSize(e);
+        }
+
+        #endregion
     }
 }
