@@ -73,11 +73,12 @@ namespace Ankh.Ids
         public const string AnkhOutputPaneId = "ba0eec02-577c-424e-b6aa-fc8499d917ba";
 
 
-        public const string RepositoryExplorerToolWindowId = "748becbe-04a1-4ffa-8e1e-46840f91a083";
-        public const string PendingChangesToolWindowId = "896e815d-3862-4978-a1bc-cb6a3e70045c";
-        public const string WorkingCopyExplorerToolWindowId = "a1929d7e-610a-48b0-8152-8e4aa202427f";
+        public const string RepositoryExplorerToolWindowId = "748BECBE-04A1-4FFA-8E1E-46840F91A083";
+        public const string PendingChangesToolWindowId = "896E815D-3862-4978-A1BC-CB6A3E70045C";
+        public const string WorkingCopyExplorerToolWindowId = "A1929D7E-610A-48B0-8152-8E4AA202427F";
         public const string LogToolWindowId = "2FAC1EBF-6B37-4be3-9A44-F9ED32D561CD";
-
+        public const string DiffToolWindowId = "8B17630D-72A5-43AE-8105-DB31004D08AD";
+        public const string MergeToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
 
 
         /// <summary>

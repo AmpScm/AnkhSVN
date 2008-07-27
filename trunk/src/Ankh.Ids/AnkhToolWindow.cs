@@ -9,6 +9,8 @@ namespace Ankh.Ids
         RepositoryExplorer,
         WorkingCopyExplorer,
         PendingChanges,
-        Log
+        Log,
+        Diff,
+        Merge
     }
 }
