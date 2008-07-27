@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.4848.126</title>
+<title>AnkhSVN-Daily Update - 2.0.4863.127</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.4848.126</h1>
+<h1>AnkhSVN-Daily Update - 2.0.4863.127</h1>
 
 
 <p>
@@ -12,19 +12,38 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/852/AnkhSvn-Daily-2.0.4848.126.msi">AnkhSvn-Daily-2.0.4848.126.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/854/AnkhSvn-Daily-2.0.4863.127.msi">AnkhSvn-Daily-2.0.4863.127.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4848">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4863">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-07-26</td></tr>
+<tr><td> </td><td class="r"><a id="4863" href="http://ankhsvn.net/rev/?r=4863">[r4863]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.Services/Selection/ISelectionContext.cs, src/Ankh.VS/Ankh.VS.csproj, src/Ankh.VS.UnitTest/Mocks/SelectionContext.cs, src/Ankh.Services/Scc/UI/AnkhToolWindowControl.cs, src/Ankh.Services/Ankh.Services.csproj, src/Ankh.VS/Selection/SelectionContext.Active.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added support for retrieving the active toolwindow instance on ISelectionContext.</td></tr>
+<tr><td> </td><td class="r"><a id="4862" href="http://ankhsvn.net/rev/?r=4862">[r4862]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/PendingChanges/Compare.png</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed purple dot in right upper corner from Show Changes icon.</td></tr>
+<tr><td> </td><td class="r"><a id="4861" href="http://ankhsvn.net/rev/?r=4861">[r4861]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionUtils.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4824">r4824</a>: Fixed returning the solution file as part of the file selection</td></tr>
+<tr><td> </td><td class="r"><a id="4859" href="http://ankhsvn.net/rev/?r=4859">[r4859]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsView.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added Context property to the PendingCommitsView class, to allow
+using services from its implementation.</td></tr>
+<tr><td> </td><td class="r"><a id="4858" href="http://ankhsvn.net/rev/?r=4858">[r4858]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/IConflictHandler.cs, src/Ankh.Services/Scc/UI, src/Ankh.Services/Scc/UI/IDiffUIHandler.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.Services/Scc/UI/ILastChangeInfo.cs, src/Ankh.Services/Scc/ILastChangeInfo.cs, src/Ankh.Services/Scc/UI/IConflictHandler.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added IDiffUIHandler service to allow moving the diff code to
+one place.</td></tr>
+<tr><td> </td><td class="r"><a id="4857" href="http://ankhsvn.net/rev/?r=4857">[r4857]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/Runners/CommitOperation.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4854">r4854</a>: Fixed references to logtemplates in the
+CommitOperation Runner.</td></tr>
+<tr><td> </td><td class="r"><a id="4856" href="http://ankhsvn.net/rev/?r=4856">[r4856]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/ConfigService.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4855">r4855</a>: Pass the configuration object to ShouldSerializeValue
+instead of the value. (Fixes saving configuration after <a href="http://ankhsvn.net/rev/?r=4855">r4855</a>)</td></tr>
+<tr><td> </td><td class="r"><a id="4855" href="http://ankhsvn.net/rev/?r=4855">[r4855]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed our own fake typedescriptor implementation from the AnkhConfig class</td></tr>
+<tr><td> </td><td class="r"><a id="4854" href="http://ankhsvn.net/rev/?r=4854">[r4854]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/ConfigService.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use default PropertyDescriptor implementation code for determining what
+to serialize into the registry and what not.</td></tr>
+<tr><td> </td><td class="r"><a id="4852" href="http://ankhsvn.net/rev/?r=4852">[r4852]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryOpen/AddUriDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable url suggestions in the Add Subversion Url dialog</td></tr>
+<tr><td> </td><td class="r"><a id="4851" href="http://ankhsvn.net/rev/?r=4851">[r4851]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeConflictHandlerDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4850">r4850</a>: Enable maximize button and set ShowInTaskBar to false</td></tr>
+<tr><td> </td><td class="r"><a id="4850" href="http://ankhsvn.net/rev/?r=4850">[r4850]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeConflictHandlerDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed sizing of the merge conflict dialog. Placed anchors and
+made the diff pane the primary growing control.</td></tr>
 <tr class="d"><td colspan="4">2008-07-25</td></tr>
 <tr><td> </td><td class="r"><a id="4848" href="http://ankhsvn.net/rev/?r=4848">[r4848]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Update reference to SharpSVN to reference 1.5001.628.32294 (Subversion 1.5.1)</td></tr>
 <tr><td> </td><td class="r"><a id="4847" href="http://ankhsvn.net/rev/?r=4847">[r4847]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeConflictHandler.cs, src/Ankh.UI/MergeWizard/InteractiveConflictService.cs, src/Ankh.UI/MergeWizard/MergeWizard.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Provided context argument to the MergeConflictHandler to
@@ -286,8 +305,6 @@ implemented. (They showed up when another SCC provider was active)</td></tr>
 <tr class="d"><td colspan="4">2008-07-11</td></tr>
 <tr><td> </td><td class="r"><a id="4631" href="http://ankhsvn.net/rev/?r=4631">[r4631]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SccManagement/AddToSubversion.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4619">r4619</a>: Really fix resizing of AddToSubversion
 dialog.</td></tr>
-<tr><td> </td><td class="r"><a id="4630" href="http://ankhsvn.net/rev/?r=4630">[r4630]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Votive/Ankh.Votive.wxs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Place the version checks after the FindRelatedProducts (Upgrade) action
-instead of after AppSearch (RegistrySearches)</td></tr>
 
 </table>
 <!--/Recent changes-->
