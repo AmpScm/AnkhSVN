@@ -31,8 +31,6 @@ namespace Ankh.Services
                 return null;
         }
 
-        #region IAnkhDiffHandler Members
-
         public bool RunDiff(AnkhDiffArgs args)
         {
             if (args == null)
@@ -42,17 +40,11 @@ namespace Ankh.Services
 
             bool forceExternal = (args.Mode & DiffMode.PreferExternal) != 0;
 
-
-
-
-
-            string quotedLeftPath = args.BaseFile;
-            string quotedRightPath = args.MineFile;
-            string diffString = this.GetDiffPath(forceExternal);
+            string diffApp = this.GetDiffPath(forceExternal);
 
             string program;
             string arguments;
-            if (!Substitute(diffString, args, out program, out arguments))
+            if (!Substitute(diffApp, args, out program, out arguments))
             {
                 new AnkhMessageBox(Context).Show("Can't find diff program");
                 return false;
@@ -64,6 +56,50 @@ namespace Ankh.Services
             return true;
         }
 
+        /// <summary>
+        /// Gets path to the diff executable while taking care of config file settings.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>The exe path.</returns>
+        protected virtual string GetMergePath(bool forceExternal)
+        {
+            IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
+
+            string txt = cs.Instance.MergeExePath;
+
+            if(!string.IsNullOrEmpty(txt))
+                return txt;            
+            else
+                return null;
+        }
+
+        public bool RunMerge(AnkhMergeArgs args)
+        {
+            if (args == null)
+                throw new ArgumentNullException("args");
+            else if (!args.Validate())
+                throw new ArgumentException("Arguments not filled correctly", "args");
+
+            bool forceExternal = (args.Mode & DiffMode.PreferExternal) != 0;
+
+            string diffApp = this.GetMergePath(forceExternal);
+
+            string program;
+            string arguments;
+            if (!Substitute(diffApp, args, out program, out arguments))
+            {
+                new AnkhMessageBox(Context).Show("Can't find merge program");
+                return false;
+            }
+
+            // TODO: Maybe Handle file saves and program exits
+
+            Process.Start(program, arguments);
+            return true;
+        }
+
+
+        #region Argument Substitution support
         private bool Substitute(string reference, AnkhDiffArgs args, out string program, out string arguments)
         {
             if (string.IsNullOrEmpty(reference))
@@ -200,7 +236,7 @@ namespace Ankh.Services
                                     return MergeArgs.MergedFile;
                                 case "MERGEDNAME":
                                 case "MNAME":
-                                    return MergeArgs.MergedTitle;
+                                    return MergeArgs.MergedTitle ?? Path.GetFileName(MergeArgs.MergedFile); ;
                             }
 
                         // Just replace with "" if unknown
@@ -208,12 +244,7 @@ namespace Ankh.Services
                 }
             }
         }
-
-        public bool RunMerge(AnkhMergeArgs args)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         #endregion
     }
 }

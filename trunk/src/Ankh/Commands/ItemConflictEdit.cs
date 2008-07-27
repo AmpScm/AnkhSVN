@@ -53,7 +53,7 @@ namespace Ankh.Commands
                 return;
 
             AnkhMergeArgs da = new AnkhMergeArgs();
-            string dir = conflict.FullPath;
+            string dir = conflict.Directory;
 
             da.BaseFile = Path.Combine(dir, conflictInfo.ConflictOld);
             da.TheirsFile = Path.Combine(dir, conflictInfo.ConflictNew);
