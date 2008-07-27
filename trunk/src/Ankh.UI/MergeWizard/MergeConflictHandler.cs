@@ -266,9 +266,8 @@ namespace Ankh.UI.MergeWizard
                 }
                 else
                 {
-                    // TODO cancel the operation. Throws Ankh.ProgressRunnerException.
-                    // e.Cancel = true; 
-                    e.Choice = SvnAccept.Postpone;
+                    // Aborts the current operation.
+                    e.Cancel = true;
                 }
             }
 
