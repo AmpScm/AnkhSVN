@@ -533,8 +533,8 @@ namespace Ankh.VSPackage
             BitmapResourceID = 401;
             BitmapIndex = 5;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            //ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
+            //ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 
@@ -549,8 +549,8 @@ namespace Ankh.VSPackage
             BitmapResourceID = 401;
             BitmapIndex = 5;
 
-            ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
-            ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            //ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
+            //ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
         }
     }
 }
