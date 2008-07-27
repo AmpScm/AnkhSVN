@@ -86,6 +86,9 @@ namespace Ankh.Selection
         Control ActiveDocumentFrameControl { get; }
     }
 
+    /// <summary>
+    /// Raw selection access; implemented by the <see cref="ISelectionContext"/> service
+    /// </summary>
     [CLSCompliant(false)]
     public interface ISelectionContextEx : ISelectionContext
     {
@@ -98,5 +101,11 @@ namespace Ankh.Selection
         /// Gets the frame of the currently active document
         /// </summary>
         IVsWindowFrame ActiveDocumentFrame { get; }
+
+        /// <summary>
+        /// Gets the user context.
+        /// </summary>
+        /// <value>The user context.</value>
+        IVsUserContext UserContext { get; }
     }
 }

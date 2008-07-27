@@ -17,7 +17,7 @@ namespace Ankh.Selection
         object _activeDocumentFrameObject;
         Control _activeDocumentControl;
 
-        object _userContext;
+        IVsUserContext _userContext;
 
         public int OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
         {
@@ -32,7 +32,7 @@ namespace Ankh.Selection
                     _activeDocumentFrame = varValueNew as IVsWindowFrame;
                     break;
                 case VSConstants.VSSELELEMID.SEID_UserContext:
-                    IVsUserContext ctxt = varValueNew as IVsUserContext;
+                    _userContext = varValueNew as IVsUserContext;
                     break;
 #if NEVER
                 case VSConstants.VSSELELEMID.SEID_PropertyBrowserSID:
@@ -63,6 +63,11 @@ namespace Ankh.Selection
         public IVsWindowFrame ActiveDocumentFrame
         {
             get { return _activeDocumentFrame; }
+        }
+
+        public IVsUserContext UserContext
+        {
+            get { return _userContext; }
         }
 
         #endregion
