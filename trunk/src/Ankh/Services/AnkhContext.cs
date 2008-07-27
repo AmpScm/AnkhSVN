@@ -117,8 +117,8 @@ namespace Ankh
                 if (_hadText)
                     _sb.SetText(_oldText);
 
-                object v = (short)Constants.SBAI_General;
-                _sb.Animation(0, ref v);
+                object icon = (short)Constants.SBAI_Synch;
+                _sb.Animation(0, ref icon);
 
                 if (_disp2 != null)
                     _disp2.Dispose();
