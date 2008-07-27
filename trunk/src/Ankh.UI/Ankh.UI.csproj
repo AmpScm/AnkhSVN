@@ -179,6 +179,9 @@
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="SccManagement\CreateBranch.cs">
       <SubType>Form</SubType>
     </Compile>
