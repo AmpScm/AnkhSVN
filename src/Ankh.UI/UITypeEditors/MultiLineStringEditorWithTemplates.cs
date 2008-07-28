@@ -9,6 +9,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class MultiLineStringEditorWithTemplates : MultiLineStringTypeEditorDialog
     {
+        PopUpListForm _templatePopup;
 
         public MultiLineStringEditorWithTemplates()
         {
@@ -17,12 +18,12 @@ namespace Ankh.UI
 
         public void SetTemplates(StringEditorTemplate[] templates)
         {
-            this.templatePopup = new PopUpListForm();
-            this.templatePopup.ValueMember = "Value";
-            this.templatePopup.DisplayMember = "Text";
-            this.templatePopup.ToolTipMember = "ToolTip";
-            this.templatePopup.DataSource = templates;
-            this.templatePopup.SelectionCommitted += new EventHandler(templatePopup_SelectionCommitted);
+            _templatePopup = new PopUpListForm();
+            _templatePopup.ValueMember = "Value";
+            _templatePopup.DisplayMember = "Text";
+            _templatePopup.ToolTipMember = "ToolTip";
+            _templatePopup.DataSource = templates;
+            _templatePopup.SelectionCommitted += new EventHandler(templatePopup_SelectionCommitted);
         }
 
         private void MultiLineStringEditorWithTemplates_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
@@ -35,29 +36,26 @@ namespace Ankh.UI
 
         private void ShowTemplatePopup()
         {
-            this.templatePopup.Location = this.textBox.PointToScreen(
+            this._templatePopup.Location = this.textBox.PointToScreen(
                 this.textBox.GetPositionFromCharIndex(this.textBox.SelectionStart));
 
             using (Graphics g = this.textBox.CreateGraphics())
             {
                 SizeF size = g.MeasureString("A", this.textBox.Font);
 
-                this.templatePopup.Top += (int)(size.Height);
-                this.templatePopup.Left -= (int)(size.Width);
+                this._templatePopup.Top += (int)(size.Height);
+                this._templatePopup.Left -= (int)(size.Width);
             }
-            this.templatePopup.Show();
+            this._templatePopup.Show();
         }
 
         void templatePopup_SelectionCommitted(object sender, EventArgs e)
         {
-            if (this.templatePopup.SelectedValue != null)
+            if (this._templatePopup.SelectedValue != null)
             {
-                this.textBox.AppendText((string)this.templatePopup.SelectedValue);
+                this.textBox.AppendText((string)this._templatePopup.SelectedValue);
             }
-        }
-
-
-        private PopUpListForm templatePopup;
+        }        
     }
 
     /// <summary>
@@ -65,15 +63,26 @@ namespace Ankh.UI
     /// </summary>
     public class StringEditorTemplate
     {
-        public string Text { get { return this.text; } }
-        public string Value { get { return this.value; } }
-        public string ToolTip { get { return this.toolTip; } }
+        readonly string _text, _value, _toolTip;
+
+        public string Text
+        {
+            get { return this._text; }
+        }
+        public string Value
+        {
+            get { return this._value; }
+        }
+        public string ToolTip
+        {
+            get { return this._toolTip; }
+        }
 
         public StringEditorTemplate(string value, string toolTip, string text)
         {
-            this.text = text;
-            this.value = value;
-            this.toolTip = toolTip;
+            this._text = text;
+            this._value = value;
+            this._toolTip = toolTip;
         }
 
         public StringEditorTemplate(string value, string toolTip)
@@ -86,7 +95,5 @@ namespace Ankh.UI
         {
 
         }
-
-        private string text, value, toolTip;
     }
 }
