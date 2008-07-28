@@ -97,7 +97,7 @@ namespace Ankh.Commands
                     break;
             }
 
-            if (selectedFiles.Count > 1 || revRange == null)
+            if (e.PromptUser || selectedFiles.Count > 1 || revRange == null)
             {
                 PathSelectorInfo info = new PathSelectorInfo("Select item for Diff", selectedFiles);
                 info.SingleSelection = false;
@@ -109,7 +109,7 @@ namespace Ankh.Commands
 
                 PathSelectorResult result;
                 // should we show the path selector?
-                if (e.PromptUser && !CommandBase.Shift)
+                if (e.PromptUser || !CommandBase.Shift)
                 {
                     IUIShell ui = e.GetService<IUIShell>();
 
@@ -125,6 +125,7 @@ namespace Ankh.Commands
 
                 selectedFiles.Clear();
                 selectedFiles.AddRange(result.Selection);
+                revRange = new SvnRevisionRange(result.RevisionStart, result.RevisionEnd);
             }
 
             List<AnkhDiffArgs> diffArgs = new List<AnkhDiffArgs>();
