@@ -295,6 +295,7 @@ namespace Ankh.Services
                     {
                         program = f;
                         reference = reference.Substring(nTok + 1).TrimStart();
+                        break;
                     }
                     else
                         nFrom = nTok + 1;
