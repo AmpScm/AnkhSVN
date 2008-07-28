@@ -138,8 +138,9 @@ namespace Ankh.Commands
                 da.BaseFile = GetPath(e.Context, revRange.StartRevision, item, tempDir);
                 da.MineFile = GetPath(e.Context, revRange.EndRevision, item, tempDir);
 
-                da.MineTitle = item.Name + " - Mine";
-                da.BaseTitle = item.Name + " - Base";
+                da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
+                da.MineTitle = item.Name + " - " + revRange.EndRevision.ToString();
+                
 
                 diff.RunDiff(da);
             }
