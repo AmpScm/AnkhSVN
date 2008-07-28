@@ -9,19 +9,26 @@ using Ankh.VS;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using System.Diagnostics;
+using Ankh.UI;
+using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
-    sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor
+    sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor, IVsBroadcastMessageEvents
     {
         readonly object _lock = new object();
         volatile bool _posted;
         List<SvnProject> _dirtyProjects;
         List<SvnProject> _fullRefresh;
+        uint _cookie;
 
         public ProjectNotifier(IAnkhServiceProvider context)
             : base(context)
         {
+            uint cookie;
+            if (ErrorHandler.Succeeded(context.GetService<IVsShell>(typeof(SVsShell)).AdviseBroadcastMessages(this, out cookie)))
+                _cookie = cookie;
         }
 
         IAnkhCommandService _commandService;
@@ -257,13 +264,101 @@ namespace Ankh.Scc
 
         #region IFileStatusMonitor Members
 
+        readonly HybridCollection<string> _externallyChanged = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
         public void ExternallyChanged(string path)
         {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
             ScheduleSvnStatus(path);
 
-            // TODO: Schedule path for maybe-resolved or something.. to be asked when switched back to VS
+            lock (_externallyChanged)
+            {
+                if (!_externallyChanged.Contains(path))
+                    _externallyChanged.Add(path);
+            }
         }
+
+        private void ReleaseExternalWrites()
+        {
+            List<string> modified;
+            lock (_externallyChanged)
+            {
+                if(_externallyChanged.Count == 0)
+                    return;
+                
+                modified = new List<string>(_externallyChanged);
+                _externallyChanged.Clear();
+            }
+
+            try
+            {
+                foreach (string file in _externallyChanged)
+                {
+                    SvnItem item = Cache[file];
+
+                    if (item.IsConflicted)
+                    {
+                        AnkhMessageBox mb = new AnkhMessageBox(Context);
+
+                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file), Resources.MergeSucceeded,
+                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+
+                        switch (dr)
+                        {
+                            case DialogResult.Yes:
+                                using (SvnClient c = Context.GetService<ISvnClientPool>().GetNoUIClient())
+                                {
+                                    SvnResolveArgs ra = new SvnResolveArgs();
+                                    ra.ThrowOnError = false;
+
+                                    c.Resolve(file, SvnAccept.Merged, ra);
+                                }
+                                goto case DialogResult.No;
+                            case DialogResult.No:
+                                if (!item.IsModified)
+                                {
+                                    // Reload?
+                                }
+                                break;
+                            default:
+                                // Let VS handle the file
+                                break;
+                        }
+                    }
+                    else if (!item.IsDocumentDirty)
+                    {
+                        // Reload?
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler != null)
+                    handler.OnError(ex);
+            }
+        }
+
+        #endregion
+
+        #region IVsBroadcastMessageEvents Members
+
+        const uint WM_ACTIVATE = 0x0006;
+        const uint WM_ACTIVATEAPP = 0x001C;
+
+        int IVsBroadcastMessageEvents.OnBroadcastMessage(uint msg, IntPtr wParam, IntPtr lParam)
+        {
+            switch (msg)
+            {
+                case WM_ACTIVATEAPP:
+                    ReleaseExternalWrites();
+                    break;
+            }
+            return VSConstants.S_OK;
+        }        
 
         #endregion
     }
