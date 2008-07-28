@@ -23,6 +23,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemComparePrevious)]
     [Command(AnkhCommand.ItemCompareSpecific)]
     [Command(AnkhCommand.ItemShowChanges)]
+    [Command(AnkhCommand.DiffExternalLocalItem)]
     public sealed class DiffLocalItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
