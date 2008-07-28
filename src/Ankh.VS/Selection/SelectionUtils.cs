@@ -130,6 +130,16 @@ namespace Ankh.Selection
                 }
             }
 
+            string name;
+            if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+            {
+                if (IsValidPath(name))
+                {
+                    files = new string[] { name };
+                    return true;
+                }
+            }
+
             return ok;
         }
 

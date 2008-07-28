@@ -270,6 +270,10 @@
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
     </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EDITFILE">
+      <!-- The 'Edit Project' group on unloaded projects -->
+      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x8000" />
+    </GroupRef>
     <GroupRef id="Menu_RepositoryExplorerToolBar">
       <!-- The Repository Explorer Toolbar -->
       <Menu id="Menu_RepositoryExplorerToolBar" name="RepositoryExplorer" priority="0" type="ToolWindowToolbar">
