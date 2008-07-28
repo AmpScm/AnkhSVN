@@ -60,6 +60,11 @@ namespace Ankh.Commands
 
                 return item.IsHandled;
             }
+            else if (_defined.Contains(command))
+            {
+                e.Enabled = e.Visible = false;
+                return true;
+            }
 
             return false;
         }
@@ -97,7 +102,7 @@ namespace Ankh.Commands
                 }
 
                 return item.IsHandled;
-            }
+            }            
 
             return false;
         }
@@ -146,6 +151,7 @@ namespace Ankh.Commands
 
         readonly List<Assembly> _assembliesToLoad = new List<Assembly>();
         readonly List<Assembly> _assembliesLoaded = new List<Assembly>();
+        readonly HybridCollection<AnkhCommand> _defined = new HybridCollection<AnkhCommand>();
 
         public void LoadFrom(Assembly assembly)
         {
@@ -157,9 +163,20 @@ namespace Ankh.Commands
         }
 
         private void EnsureLoaded()
-        {
+        {            
             if(_assembliesToLoad.Count == 0)
                 return;
+
+            if (_defined.Count == 0)
+            {
+                foreach (AnkhCommand cmd in Enum.GetValues(typeof(AnkhCommand)))
+                {
+                    if (cmd <= AnkhCommand.CommandFirst)
+                        continue;
+
+                    _defined.Add(cmd);
+                }                
+            }
 
             while (_assembliesToLoad.Count > 0)
             {

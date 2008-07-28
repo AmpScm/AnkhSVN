@@ -23,6 +23,8 @@ namespace Ankh.Ids
         SccFinishTasks,
         TickRefreshPendingTasks,
         TickRefreshSvnItems,
+        ActivateSccProvider,
+        ActivateVsExtender,
 
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we
@@ -221,9 +223,6 @@ namespace Ankh.Ids
         RevertSolutionToRevision,
 
         SwitchProject,
-        ProjectBranch,
-
-        ActivateSccProvider,
-        ActivateVsExtender,
+        ProjectBranch,        
     }
 }
