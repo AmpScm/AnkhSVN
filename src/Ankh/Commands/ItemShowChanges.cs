@@ -9,6 +9,7 @@ using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Configuration;
 using Ankh.Scc.UI;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -130,6 +131,16 @@ namespace Ankh.Commands
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
             string tempDir = e.GetService<IAnkhTempDirManager>().GetTempDir();
+
+            if (revRange.EndRevision.RevisionType == SvnRevisionType.Working ||
+                revRange.StartRevision.RevisionType == SvnRevisionType.Working)
+            {
+                // Save only the files needed
+
+                IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
+                if (tracker != null)
+                    tracker.SaveDocuments(SvnItem.GetPaths(selectedFiles));
+            }
 
             foreach (SvnItem item in selectedFiles)
             {
