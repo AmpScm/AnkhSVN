@@ -78,13 +78,13 @@ namespace Ankh.UI.DiffWindow
             TextDiff Diff = new TextDiff(HashType.HashCode, false, false);
             EditScript Script = Diff.Execute(A, B);
 
-            string strCaptionA = "Base";
-            string strCaptionB = "Mine";
+            string strCaptionA = args.BaseTitle ?? Path.GetFileName(args.BaseFile);
+            string strCaptionB = args.MineTitle ?? Path.GetFileName(args.MineFile);
             //Ankh.Diff.FileName fnA = new Ankh.Diff.FileName(mine);
             //Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl1.SetData(A, B, Script, strCaptionA, strCaptionB);
 
-            ((IAnkhUISite)Site).Title = (args.MineTitle ?? Path.GetFileName(args.MineFile)) + " - Diff";
+            ((IAnkhUISite)Site).Title = Path.GetFileName(args.MineFile) + " - Diff";
         }
     }
 }
