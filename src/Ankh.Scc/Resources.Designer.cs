@@ -70,6 +70,15 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Merge Succeeded .
+        /// </summary>
+        internal static string MergeSucceeded {
+            get {
+                return ResourceManager.GetString("MergeSucceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The path &apos;{0}&apos; is currently blocked by subversion; do you have a file with a case-only-different name?.
         /// </summary>
         internal static string PathXBlocked {
@@ -147,6 +156,15 @@ namespace Ankh.Scc {
         internal static string ToolTipMustLock {
             get {
                 return ResourceManager.GetString("ToolTipMustLock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your external merge tool saved &apos;{0}&apos;\nWould you like to mark all conflicts of this file as Resolved?.
+        /// </summary>
+        internal static string YourMergeToolSavedXWouldYouLikeItMarkedAsResolved {
+            get {
+                return ResourceManager.GetString("YourMergeToolSavedXWouldYouLikeItMarkedAsResolved", resourceCulture);
             }
         }
     }
