@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.ObjectModel;
 using System.IO;
 using Ankh.Diff.DiffUtils;
+using Ankh.Ids;
 
 namespace Ankh.UI.DiffWindow
 {
@@ -22,6 +23,18 @@ namespace Ankh.UI.DiffWindow
         public DiffToolWindowControl()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Called when the frame is created
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.DiffMergeContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.DiffMergeContextGuid;
         }
 
         int _nFrame;

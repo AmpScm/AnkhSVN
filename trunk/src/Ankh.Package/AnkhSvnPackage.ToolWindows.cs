@@ -276,6 +276,36 @@ namespace Ankh.VSPackage
         }
 
         #endregion
+
+        #region IAnkhToolWindowSite Members
+
+        public Guid KeyboardContext
+        {
+            get { return GetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings); }
+            set { SetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings, value); }
+        }
+
+        public Guid CommandContext
+        {
+            get { return GetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid); }
+            set { SetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid, value); }
+        }
+
+        private Guid GetGuid(__VSFPROPID id)
+        {
+            Guid gResult;
+            if (ErrorHandler.Succeeded(Frame.GetGuidProperty((int)id, out gResult)))
+                return gResult;
+            else
+                return Guid.Empty;
+        }
+
+        private void SetGuid(__VSFPROPID id, Guid value)
+        {
+            ErrorHandler.ThrowOnFailure(Frame.SetGuidProperty((int)id, ref value));
+        }
+
+        #endregion
     }
 
     class AnkhToolWindowPane : ToolWindowPane, IOleCommandTarget, IVsWindowFrameNotify3, IVsWindowFrameNotify2, IVsWindowFrameNotify
@@ -513,7 +543,7 @@ namespace Ankh.VSPackage
         {
             Control = new LogToolWindowControl();
             Caption = "History Viewer";
-            
+
             BitmapResourceID = 401;
             BitmapIndex = 5;
 

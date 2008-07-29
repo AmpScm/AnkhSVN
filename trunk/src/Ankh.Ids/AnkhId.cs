@@ -81,7 +81,9 @@ namespace Ankh.Ids
         public const string DiffToolWindowId = "8B17630D-72A5-43AE-8105-DB31004D08AD";
         public const string MergeToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
 
+        public const string PendingChangeViewContext = "A02C6D65-1F8B-46AC-8DB3-511AE5DBA374";
         public const string DiffMergeViewContext = "6E66DFC4-CB72-4023-BDF5-6B139DF2F19B";
+        public const string SccExplorerViewContext = "FD4828F6-49A3-4E2F-BF36-8304884219CA";
         public const string LogViewContext = "0D2CA125-6CDF-407A-9C03-E8427E27F34D";
 
         /// <summary>
@@ -103,5 +105,10 @@ namespace Ankh.Ids
 
         public static readonly Guid SccProviderGuid = new Guid(SccProviderId);
         public static readonly Guid SccServiceGuid = new Guid(SccServiceId);
+
+        public static readonly Guid PendingChangeContextGuid = new Guid(PendingChangeViewContext);
+        public static readonly Guid DiffMergeContextGuid = new Guid(DiffMergeViewContext);
+        public static readonly Guid SccExplorerContextGuid = new Guid(SccExplorerViewContext);
+        public static readonly Guid LogContextGuid = new Guid(LogViewContext);
     }
 }

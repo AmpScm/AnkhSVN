@@ -11,7 +11,7 @@ namespace Ankh.UI
     public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl
     {
         IAnkhServiceProvider _context;
-        IAnkhUISite _site;
+        IAnkhToolWindowSite _site;
         protected AnkhToolWindowControl()
         {
         }
@@ -34,11 +34,21 @@ namespace Ankh.UI
             {
                 base.Site = value;
 
-                if (value == null || value is IAnkhUISite)
+                if (value == null || value is IAnkhToolWindowSite)
                 {
-                    _site = (IAnkhUISite)value;
+                    _site = (IAnkhToolWindowSite)value;
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the UI site.
+        /// </summary>
+        /// <value>The UI site.</value>
+        [CLSCompliant(false)]
+        public IAnkhToolWindowSite ToolWindowSite
+        {
+            get { return _site; }
         }
 
         /// <summary>

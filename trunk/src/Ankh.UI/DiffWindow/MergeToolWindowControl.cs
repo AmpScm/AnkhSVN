@@ -16,5 +16,13 @@ namespace Ankh.UI.DiffWindow
         {
             InitializeComponent();
         }
+
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.DiffMergeContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.DiffMergeContextGuid;
+        }
     }
 }
