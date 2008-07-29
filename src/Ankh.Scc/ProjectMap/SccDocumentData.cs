@@ -226,7 +226,7 @@ namespace Ankh.Scc.ProjectMap
                 {
                     IVsTextViewEx tv = VsShellUtilities.GetTextView(wf) as IVsTextViewEx;
 
-                    if ((tv.IsCompletorWindowActive() == 0) || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                    if (tv != null && (tv.IsCompletorWindowActive() == 0) || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
                     {
                         _delayedDirty = true;
                         GetService<IAnkhCommandService>().DelayPostCommands(
