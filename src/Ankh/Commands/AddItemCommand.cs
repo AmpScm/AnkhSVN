@@ -44,8 +44,9 @@ namespace Ankh.Commands
 
             PathSelectorInfo info = new PathSelectorInfo("Select items to add",
                 e.Selection.GetSelectedSvnItems(true));
-            info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned; };
-            info.VisibleFilter += delegate(SvnItem item) { return true; };
+
+            info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned && !item.IsIgnored && item.IsVersionable; };
+            info.VisibleFilter += delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; };
 
             PathSelectorResult result = null;
             // are we shifted?
