@@ -18,7 +18,7 @@ using System.Resources;
 [assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 
 // We only want the Connect class to be visible
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
