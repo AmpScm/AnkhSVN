@@ -60,6 +60,9 @@
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService</VSLangAssembly>
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release %28With MSI%29|AnyCPU' ">
+    <DefineConstants>FOR_MSI</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
     <Reference Include="Microsoft.VisualStudio.Package.LanguageService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />

@@ -56,10 +56,11 @@ namespace Ankh.Ids
         //**********************************************************************************
 
         // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
-        public const int MigrateVersion = 5; 
+        public const int MigrateVersion = 5;
 
+        public const string AnkhLoadCompleted = "8057B1AF-21D8-4276-AC27-9C02A1F95BC7";
 
-        public const string LogMessageLanguageServiceId = "1dfe69ce-7f9b-4cc5-b09b-e5bde95e9439";
+        public const string LogMessageLanguageServiceId = "1DFE69CE-7F9B-4CC5-B09B-E5BDE95E9439";
         public const string LogMessageServiceName = "Log Messages (AnkhSVN)";
 
         public const string ExtenderProviderName = "AnkhExtenderProvider";
@@ -67,19 +68,21 @@ namespace Ankh.Ids
         /// <summary>
         /// The guid used for our on-and-only bitmap resource
         /// </summary>
-        public const string BmpId = "9db594ca-ebdd-40e1-9e37-51b7f9ef8df0";
+        public const string BmpId = "9DB594CA-EBDD-40E1-9E37-51B7F9EF8DF0";
 
 
-        public const string AnkhOutputPaneId = "ba0eec02-577c-424e-b6aa-fc8499d917ba";
+        public const string AnkhOutputPaneId = "BA0EEC02-577C-424E-B6AA-FC8499D917BA";
 
 
         public const string RepositoryExplorerToolWindowId = "748BECBE-04A1-4FFA-8E1E-46840F91A083";
         public const string PendingChangesToolWindowId = "896E815D-3862-4978-A1BC-CB6A3E70045C";
         public const string WorkingCopyExplorerToolWindowId = "A1929D7E-610A-48B0-8152-8E4AA202427F";
-        public const string LogToolWindowId = "2FAC1EBF-6B37-4be3-9A44-F9ED32D561CD";
+        public const string LogToolWindowId = "2FAC1EBF-6B37-4BE3-9A44-F9ED32D561CD";
         public const string DiffToolWindowId = "8B17630D-72A5-43AE-8105-DB31004D08AD";
         public const string MergeToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
 
+        public const string DiffMergeViewContext = "6E66DFC4-CB72-4023-BDF5-6B139DF2F19B";
+        public const string LogViewContext = "0D2CA125-6CDF-407A-9C03-E8427E27F34D";
 
         /// <summary>
         /// The command set as a guid
