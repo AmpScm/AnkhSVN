@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges
             base.OnFrameCreated(e);
 
             ToolWindowSite.CommandContext = AnkhId.PendingChangeContextGuid;
-            ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
+            //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
         }
 
         public override ISite Site

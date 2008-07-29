@@ -51,7 +51,7 @@ namespace Ankh.VSPackage
 
     [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
     [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]
-    [ProvideKeyBindingTable(AnkhId.PendingChangeViewContext, 503)]
+    //[ProvideKeyBindingTable(AnkhId.PendingChangeViewContext, 503)] // Won't work at this time
     [ProvideKeyBindingTable(AnkhId.SccExplorerViewContext, 504)]
 
     [CLSCompliant(false)]
