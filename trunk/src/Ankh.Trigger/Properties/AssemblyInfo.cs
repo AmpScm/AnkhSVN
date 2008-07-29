@@ -17,8 +17,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]   
-[assembly: ComVisible(false)]     
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: ComVisible(false)]
+[assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
 
 // Version information for an assembly consists of the following four values:
 //
