@@ -49,6 +49,9 @@ namespace Ankh.VSPackage
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResource(1000, 1)] // The number must match the number in the .csproj file for the ctc task
 
+    [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
+    [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]
+
     [CLSCompliant(false)]
     [ProvideSourceControlProvider("AnkhSVN - Subversion Support for Visual Studio", "#100")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]    
@@ -101,6 +104,31 @@ namespace Ankh.VSPackage
             _runtime.AddModule(new AnkhUIModule(_runtime));
 
             _runtime.Start();
+
+            NotifyLoaded();
+        }
+
+        private void NotifyLoaded()
+        {
+            // We set the user context AnkhLoadCompleted active when we are loaded
+            // This event can be used to trigger loading other packages that depend on AnkhSVN
+            // 
+            // When the use:
+            // [ProvideAutoLoad(AnkhId.AnkhLoadCompleted)]
+            // On their package, they load automatically when we are completely loaded
+            //
+
+            IVsMonitorSelection ms = GetService<IVsMonitorSelection>();
+            if (ms != null)
+            {
+                Guid gAnkhLoaded = new Guid(AnkhId.AnkhLoadCompleted);
+
+                uint cky;
+                if(ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))
+                {
+                    ms.SetCmdUIContext(cky, 1);
+                }
+            }
         }
 
         /// <summary>
