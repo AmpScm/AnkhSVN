@@ -51,6 +51,8 @@ namespace Ankh.VSPackage
 
     [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
     [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]
+    [ProvideKeyBindingTable(AnkhId.PendingChangeViewContext, 503)]
+    [ProvideKeyBindingTable(AnkhId.SccExplorerViewContext, 504)]
 
     [CLSCompliant(false)]
     [ProvideSourceControlProvider("AnkhSVN - Subversion Support for Visual Studio", "#100")]

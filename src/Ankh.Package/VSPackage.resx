@@ -154,4 +154,10 @@
   <data name="502" xml:space="preserve">
     <value>Diff Windows (AnkhSVN)</value>
   </data>
+  <data name="503" xml:space="preserve">
+    <value>Pending Changes (AnkhSVN)</value>
+  </data>
+  <data name="504" xml:space="preserve">
+    <value>Source Control Explorers (AnkhSVN)</value>
+  </data>
 </root>

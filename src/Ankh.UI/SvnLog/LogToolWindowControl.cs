@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Ankh.UI.Services;
 using System.Diagnostics;
 using Ankh.Scc.UI;
+using Ankh.Ids;
 
 namespace Ankh.UI.SvnLog
 {
@@ -22,7 +23,15 @@ namespace Ankh.UI.SvnLog
             :this()
         {
             container.Add(this);
-        }  
+        }
+
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.LogContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.LogContextGuid;
+        }
 
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
         {

@@ -11,6 +11,7 @@ using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Ankh.VS;
 using Ankh.Scc.UI;
+using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -38,6 +39,14 @@ namespace Ankh.UI.PendingChanges
             base.OnLoad(e);
 
             ShowPanel(_commitsPage);
+        }
+
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.PendingChangeContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
         }
 
         public override ISite Site

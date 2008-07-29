@@ -16,7 +16,7 @@ namespace Ankh.UI.RepositoryExplorer
     /// <summary>
     /// Gives a tree view of the repository based on revision.
     /// </summary>
-    public partial class RepositoryExplorerControl : System.Windows.Forms.UserControl
+    public partial class RepositoryExplorerControl : AnkhToolWindowControl
     {
         IAnkhUISite _uiSite;
 
@@ -27,6 +27,14 @@ namespace Ankh.UI.RepositoryExplorer
 
             this.components = new Container();
             treeView.RetrieveItems = SvnDirEntryItems.Kind | SvnDirEntryItems.LastAuthor | SvnDirEntryItems.Revision | SvnDirEntryItems.Size | SvnDirEntryItems.Time;
+        }
+
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.SccExplorerContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.SccExplorerContextGuid;
         }
 
         IAnkhUISite UISite

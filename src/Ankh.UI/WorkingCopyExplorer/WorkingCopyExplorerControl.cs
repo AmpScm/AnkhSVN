@@ -20,12 +20,15 @@ namespace Ankh.UI
         IFileSystemItem[] GetSelectedItems();
     }
 
-    public partial class WorkingCopyExplorerControl : UserControl
+    public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
         public event CancelEventHandler ValidatingNewRoot;
 
         public event EventHandler WantNewRoot;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkingCopyExplorerControl"/> class.
+        /// </summary>
         public WorkingCopyExplorerControl()
         {
             this.InitializeComponent();
@@ -39,6 +42,22 @@ namespace Ankh.UI
             this.newRootTextBox.TextChanged += new EventHandler( newRootTextBox_TextChanged );
         }
 
+        /// <summary>
+        /// Called when the frame is created
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
+            ToolWindowSite.CommandContext = AnkhId.SccExplorerContextGuid;
+            ToolWindowSite.KeyboardContext = AnkhId.SccExplorerContextGuid;
+        }
+
+        /// <summary>
+        /// Gets the new root path.
+        /// </summary>
+        /// <value>The new root path.</value>
         public string NewRootPath
         {
             get { return this.newRootTextBox.Text; }
