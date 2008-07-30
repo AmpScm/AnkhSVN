@@ -24,6 +24,8 @@ namespace Ankh.UI.VSSelectionControls
         T GetItemFromSelectionObject(object item);
         void SetSelection(T[] items);
         event EventHandler HandleDestroyed;
+
+        string GetCanonicalName(T item);
     }
 
     public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
@@ -58,6 +60,8 @@ namespace Ankh.UI.VSSelectionControls
                 if (HandleDestroyed != null)
                     HandleDestroyed(this, e);
             }
+
+            internal abstract string GetCanonicalName(uint itemid);
         }
 
         sealed class MapData<T> : MapData
@@ -197,6 +201,20 @@ namespace Ankh.UI.VSSelectionControls
                 return VSConstants.S_OK;
             }
 
+            internal override string GetCanonicalName(uint itemid)
+            {
+                T lv;
+                if (!_ids.TryGetValue(itemid, out lv) && itemid != VSConstants.VSITEMID_ROOT)
+                {
+                    return null;
+                }
+
+                if (lv != null)
+                    return _owner.GetCanonicalName(lv);
+                else
+                    return null;
+            }
+
             internal override int GetProperty(uint itemid, int propid, out object pvar)
             {
                 T lv;
@@ -315,7 +333,13 @@ namespace Ankh.UI.VSSelectionControls
 
         int IVsHierarchy.GetCanonicalName(uint itemid, out string pbstrName)
         {
-            pbstrName = "{" + itemid + "}";
+            string name = _data.GetCanonicalName(itemid);
+
+            if(name == null)
+                pbstrName = "{" + itemid + "}";
+            else
+                pbstrName = name;
+
             return VSConstants.S_OK;
         }
 
