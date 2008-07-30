@@ -113,6 +113,36 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContextEx Members
+
+
+            public IDisposable PushPopupContext(System.Windows.Forms.Control control)
+            {
+                return null;
+            }
+
+            #endregion
+
+            #region ISelectionContext Members
+
+
+            public System.Windows.Forms.Control ActiveDialogOrFrameControl
+            {
+                get { return ActiveDialog ?? ActiveFrameControl; }
+            }
+
+            #endregion
+
+            #region ISelectionContext Members
+
+
+            public System.Windows.Forms.Control ActiveDialog
+            {
+                get { return null; }
+            }
+
+            #endregion
         }
     }
 }

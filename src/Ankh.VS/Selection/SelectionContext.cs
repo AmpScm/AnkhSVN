@@ -779,10 +779,6 @@ namespace Ankh.Selection
                 }
             }
         }
-
-
         #endregion        
-    
-        
     }
 }

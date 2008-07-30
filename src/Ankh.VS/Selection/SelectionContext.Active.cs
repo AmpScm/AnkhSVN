@@ -134,5 +134,64 @@ namespace Ankh.Selection
         }
 
         #endregion
+
+        readonly Stack<Control> _popups = new Stack<Control>();
+        Control _topPopup;
+
+        public class PopupDisposer : IDisposable
+        {
+            readonly SelectionContext _context;
+            readonly Control _control;
+
+            public PopupDisposer(SelectionContext context, Control control)
+            {
+                if (context == null)
+                    throw new ArgumentNullException("context");
+                else if (control == null)
+                    throw new ArgumentNullException("contrl");
+
+                _context = context;
+                _control = control;
+            }
+
+            public void Dispose()
+            {
+                if (_context._topPopup == _control)
+                {
+                    Stack<Control> _stack = _context._popups;
+                    _stack.Pop();
+
+                    if (_stack.Count > 0)
+                        _context._topPopup = _context._popups.Peek();
+                    else
+                        _context._topPopup = null;
+                }
+            }
+        }
+
+        public IDisposable PushPopupContext(System.Windows.Forms.Control control)
+        {
+            if(control == null)
+                throw new ArgumentNullException("control");
+
+            _popups.Push(control);
+            _topPopup = control;
+
+            return new PopupDisposer(this, control);
+        }
+
+        public System.Windows.Forms.Control ActiveDialog
+        {
+            get { return _topPopup; }
+        }
+
+        /// <summary>
+        /// Gets the active dialog or frame control.
+        /// </summary>
+        /// <value>The active dialog or frame control.</value>
+        public System.Windows.Forms.Control ActiveDialogOrFrameControl
+        {
+            get { return ActiveDialog ?? ActiveFrameControl; }
+        }
 	}
 }
