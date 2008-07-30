@@ -23,6 +23,12 @@ namespace Ankh.Scc
             _item = item;
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public SvnItem SvnItem
+        {
+            get { return _item; }
+        }
+
         [DisplayName("Full Path"), Category("Subversion")]
         public string FullPath
         {
