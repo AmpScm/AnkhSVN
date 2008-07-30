@@ -284,7 +284,8 @@ namespace Ankh.Services
                 int nFrom = 0;
                 int nTok;
 
-                while (0 <= (nTok = reference.IndexOfAny(spacers, nFrom)))
+                while ((nFrom < reference.Length) && 
+                    (0 <= (nTok = reference.IndexOfAny(spacers, nFrom))))
                 {
                     string f = reference.Substring(0, nTok);
 
