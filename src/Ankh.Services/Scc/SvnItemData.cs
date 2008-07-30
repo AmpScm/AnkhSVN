@@ -81,12 +81,21 @@ namespace Ankh.Scc
             }
         }
 
-        [DisplayName("Status"), Category("Subversion")]
+        [DisplayName("Status Content"), Category("Subversion")]
         public string Status
         {
             get 
             {
                 return _item.Status.LocalContentStatus.ToString(); 
+            }
+        }
+
+        [DisplayName("Status Properties"), Category("Subversion")]
+        public string PropertyStatus
+        {
+            get
+            {
+                return _item.Status.LocalPropertyStatus.ToString();
             }
         }
 
