@@ -294,7 +294,7 @@ namespace Ankh.Scc
 
             try
             {
-                foreach (string file in _externallyChanged)
+                foreach (string file in modified)
                 {
                     SvnItem item = Cache[file];
 
@@ -302,7 +302,7 @@ namespace Ankh.Scc
                     {
                         AnkhMessageBox mb = new AnkhMessageBox(Context);
 
-                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file), Resources.MergeSucceeded,
+                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file), Resources.MergeCompleted,
                             MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                         switch (dr)
