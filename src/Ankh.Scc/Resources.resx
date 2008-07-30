@@ -120,8 +120,8 @@
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>
   </data>
-  <data name="MergeSucceeded" xml:space="preserve">
-    <value>File Merge Succeeded </value>
+  <data name="MergeCompleted" xml:space="preserve">
+    <value>File Merge Completed?</value>
   </data>
   <data name="PathXBlocked" xml:space="preserve">
     <value>The path '{0}' is currently blocked by subversion; do you have a file with a case-only-different name?</value>
@@ -151,6 +151,7 @@
     <value>This file must be locked before it can be editted.</value>
   </data>
   <data name="YourMergeToolSavedXWouldYouLikeItMarkedAsResolved" xml:space="preserve">
-    <value>Your external merge tool saved '{0}'\nWould you like to mark all conflicts of this file as Resolved?</value>
+    <value>Your external merge tool saved '{0}'.
+Would you like to mark this conflicted file as resolved?</value>
   </data>
 </root>
