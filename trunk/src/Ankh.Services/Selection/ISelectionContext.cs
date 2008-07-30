@@ -84,6 +84,18 @@ namespace Ankh.Selection
         /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveDocumentFrame"/>
         /// </summary>
         Control ActiveDocumentFrameControl { get; }
+
+        /// <summary>
+        /// Gets the active dialog.
+        /// </summary>
+        /// <value>The active dialog.</value>
+        Control ActiveDialog { get; }
+
+        /// <summary>
+        /// Gets the active dialog or frame control.
+        /// </summary>
+        /// <value>The active dialog or frame control.</value>
+        Control ActiveDialogOrFrameControl { get; }
     }
 
     /// <summary>
@@ -107,5 +119,12 @@ namespace Ankh.Selection
         /// </summary>
         /// <value>The user context.</value>
         IVsUserContext UserContext { get; }
+
+        /// <summary>
+        /// Pushes the popup context.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <returns></returns>
+        IDisposable PushPopupContext(Control control);
     }
 }

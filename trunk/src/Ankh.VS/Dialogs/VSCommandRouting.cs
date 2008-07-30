@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using Microsoft.VisualStudio.Shell;
+using Ankh.Selection;
 
 namespace Ankh.VS.Dialogs
 {
@@ -27,6 +28,7 @@ namespace Ankh.VS.Dialogs
         Panel _panel;
         List<IOleCommandTarget> _ctList;
         List<IVsWindowPane> _paneList;
+        IDisposable _activeStack;
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
@@ -48,6 +50,13 @@ namespace Ankh.VS.Dialogs
             {
                 Marshal.ThrowExceptionForHR(_rPct.RegisterPriorityCommandTarget(0, this, out _csCookie));
             }
+
+            ISelectionContextEx sel = GetService<ISelectionContextEx>(typeof(ISelectionContext));
+
+            if (sel != null)
+            {
+                _activeStack = sel.PushPopupContext(form);
+            }
         }
 
         public static VSCommandRouting FromForm(VSContainerForm form)
@@ -64,6 +73,9 @@ namespace Ankh.VS.Dialogs
 
         public void Dispose()
         {
+            if (_activeStack != null)
+                _activeStack.Dispose();
+
             if (_csCookie != 0 && _rPct != null)
             {
                 _rPct.UnregisterPriorityCommandTarget(_csCookie);
@@ -75,6 +87,7 @@ namespace Ankh.VS.Dialogs
                 _pane.Dispose(); // Unhook
                 _pane = null;
             }
+
             _map.Remove(_form);
             if (_installed)
                 Application.RemoveMessageFilter(this);
