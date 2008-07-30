@@ -206,5 +206,15 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         #endregion
+
+        string ISelectionMapOwner<TNode>.GetCanonicalName(TNode item)
+        {
+            return GetCanonicalName(item);
+        }
+
+        protected virtual string GetCanonicalName(TNode item)
+        {
+            return null;
+        }
     }
 }

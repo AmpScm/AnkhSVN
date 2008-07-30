@@ -320,11 +320,6 @@ namespace Ankh.UI.VSSelectionControls
             return sa.SelectionItem;
         }
 
-        #endregion
-
-        #region ISelectionMapOwner<TListViewItem> Members
-
-
         public TListViewItem GetItemFromSelectionObject(object item)
         {
             ResolveItemEventArgs ra = new ResolveItemEventArgs(item);
@@ -346,6 +341,16 @@ namespace Ankh.UI.VSSelectionControls
             {
                 l.Selected = true;
             }
+        }
+
+        string ISelectionMapOwner<TListViewItem>.GetCanonicalName(TListViewItem item)
+        {
+            return GetCanonicalName(item);
+        }
+
+        protected virtual string GetCanonicalName(TListViewItem item)
+        {
+            return null;
         }
 
         #endregion

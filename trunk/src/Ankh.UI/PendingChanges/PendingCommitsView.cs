@@ -62,5 +62,10 @@ namespace Ankh.UI.PendingChanges
 
             #endregion
         }
+
+        protected override string GetCanonicalName(PendingCommitItem item)
+        {
+            return item.FullPath;
+        }
     }
 }
