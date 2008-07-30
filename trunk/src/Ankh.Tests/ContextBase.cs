@@ -338,7 +338,7 @@ namespace Ankh.Tests
             #region IUIShell Members
 
 
-            public Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
+            public Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl WorkingCopyExplorer
             {
                 get { throw new Exception( "The method or operation is not implemented." ); }
             }

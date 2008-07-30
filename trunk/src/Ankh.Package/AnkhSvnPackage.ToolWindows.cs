@@ -23,6 +23,7 @@ using System.Windows.Forms.Design;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.DiffWindow;
 using Ankh.Scc.UI;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.VSPackage
 {

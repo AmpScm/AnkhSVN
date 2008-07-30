@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using Ankh.UI;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh
 {

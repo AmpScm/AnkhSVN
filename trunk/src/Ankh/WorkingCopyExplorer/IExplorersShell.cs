@@ -30,7 +30,7 @@ namespace Ankh.WorkingCopyExplorer
             get;
         }
 
-        Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
+        Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl WorkingCopyExplorer
         {
             get;
             set;
