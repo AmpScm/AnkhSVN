@@ -7,10 +7,11 @@ using Utils.Win32;
 using System.Runtime.InteropServices;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using Ankh.Scc;
 
-namespace Ankh.UI
+namespace Ankh.UI.WorkingCopyExplorer
 {
-    public class FileSystemDetailsView : ListViewWithSelection<ListViewItem>, IWorkingCopyExplorerSubControl
+    class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>, IWorkingCopyExplorerSubControl
     {
         public event EventHandler CurrentDirectoryChanged;
 
@@ -176,7 +177,9 @@ namespace Ankh.UI
 
                 foreach (IFileSystemItem item in directory.GetChildren())
                 {
-                    ListViewItem lvi = this.Items.Add(item.Text);
+                    FileSystemListViewItem lvi = new FileSystemListViewItem(item.SvnItem);
+
+                    Items.Add(lvi);
 
                     FormatListViewItem(item, lvi);
 
@@ -216,6 +219,7 @@ namespace Ankh.UI
 
         private void InitializeColumns()
         {
+            this.Columns.Clear();
             this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters, HorizontalAlignment.Left);
 
             foreach (PropertyDescriptor pd in this.textPropertyDescriptors)
@@ -236,6 +240,25 @@ namespace Ankh.UI
             {
                 string measureString = "Name of Something To Measure";
                 this.characterWidth = (int)(g.MeasureString(measureString, this.Font).Width / measureString.Length);
+            }
+        }
+
+        protected override void OnRetrieveSelection(ListViewWithSelection<FileSystemListViewItem>.RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = new SvnItemData(Context, e.Item.SvnItem);
+        }
+
+        protected override void OnResolveItem(ListViewWithSelection<FileSystemListViewItem>.ResolveItemEventArgs e)
+        {
+            SvnItemData sid = e.SelectionItem as SvnItemData;
+
+            if(sid == null)
+                return;
+
+            foreach (FileSystemListViewItem lvi in Items)
+            {
+                if (lvi.SvnItem == sid.SvnItem)
+                    e.Item = lvi;
             }
         }
 
@@ -287,6 +310,23 @@ namespace Ankh.UI
         private void InvalidateChildren()
         {
             this.AddChildren(this.currentDirectory);
+        }
+
+        protected override string GetCanonicalName(FileSystemListViewItem item)
+        {
+            if (item != null)
+            {
+                SvnItem i = item.SvnItem;
+
+                string name = i.FullPath;
+
+                if (i.IsDirectory && !name.EndsWith("\\"))
+                    name += "\\"; // VS usualy ends returned folders with '\\'
+
+                return name;
+            }
+
+            return base.GetCanonicalName(item);
         }
 
         private ListViewItem FindListViewItemWithTag(IFileSystemItem fileSystemItem)

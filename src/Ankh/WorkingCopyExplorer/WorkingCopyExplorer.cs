@@ -15,6 +15,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.VS;
 using Microsoft.VisualStudio;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.WorkingCopyExplorer
 {

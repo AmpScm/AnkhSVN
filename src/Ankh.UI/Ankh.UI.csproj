@@ -467,9 +467,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\FileSystemItemAttributes.cs" />
+    <Compile Include="WorkingCopyExplorer\FileSystemListViewItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WorkingCopyExplorer\FileSystemTreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\IFileSystemItem.cs" />
     <Compile Include="LockDialog.Designer.cs">
       <DependentUpon>LockDialog.cs</DependentUpon>
