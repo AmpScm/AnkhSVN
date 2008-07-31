@@ -31,8 +31,8 @@ namespace Ankh.UI.RepositoryExplorer
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
-            { 
+            set
+            {
                 _context = value;
 
                 if (ImageList == null && IconMapper != null)
@@ -232,7 +232,7 @@ namespace Ankh.UI.RepositoryExplorer
             {
                 nUri = SvnTools.GetNormalizedUri(uri);
             }
-            catch(UriFormatException)
+            catch (UriFormatException)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
 
             _running.Add(nUri);
-            
+
             if (_running.Count == 1)
                 OnRetrievingChanged(EventArgs.Empty);
 
@@ -294,31 +294,32 @@ namespace Ankh.UI.RepositoryExplorer
                         client.GetList(uri, la, out items);
                     }
 
-                    BeginInvoke((DoSomething)delegate()
-                    {
-                        if (items != null && items.Count > 0)
+                    if (IsHandleCreated)
+                        BeginInvoke((DoSomething)delegate()
                         {
-                            bool first = true;
-                            foreach (SvnListEventArgs a in items)
+                            if (items != null && items.Count > 0)
                             {
-                                if (first)
+                                bool first = true;
+                                foreach (SvnListEventArgs a in items)
                                 {
-                                    if (a.RepositoryRoot != null)
-                                        EnsureRoot(a.RepositoryRoot);
+                                    if (first)
+                                    {
+                                        if (a.RepositoryRoot != null)
+                                            EnsureRoot(a.RepositoryRoot);
+                                    }
+
+                                    AddItem(a, first);
+                                    first = false;
                                 }
 
-                                AddItem(a, first);
-                                first = false;
+                                MaybeExpand(uri);
                             }
 
-                            MaybeExpand(uri);
-                        }
+                            _running.Remove(nUri);
 
-                        _running.Remove(nUri);
-
-                        if (_running.Count == 0)
-                            OnRetrievingChanged(EventArgs.Empty);
-                    });
+                            if (_running.Count == 0)
+                                OnRetrievingChanged(EventArgs.Empty);
+                        });
 
                     ok = true;
                 }
@@ -371,16 +372,16 @@ namespace Ankh.UI.RepositoryExplorer
         {
             uri = SvnTools.GetNormalizedUri(uri);
             RepositoryTreeNode tn;
-            if(_nodeMap.TryGetValue(uri, out tn))
+            if (_nodeMap.TryGetValue(uri, out tn))
             {
-                if(tn.ExpandAfterLoad || IsLoading(uri))
+                if (tn.ExpandAfterLoad || IsLoading(uri))
                     tn.LoadExpand();
 
                 if (SelectedNode == tn)
                 {
                     OnSelectedNodeRefresh(EventArgs.Empty);
                 }
-            }            
+            }
         }
 
         private bool IsLoading(Uri uri)

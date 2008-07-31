@@ -12,14 +12,36 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [Command(AnkhCommand.Export)]
+    [Command(AnkhCommand.Export,HideWhenDisabled=false)]
     public class ExportCommand : CommandBase
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            bool foundOne = false;
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                if(foundOne || !item.IsVersioned)
+                {
+                    e.Enabled = false;
+                    break;
+                }
+                foundOne = true;
+            }
+
+            if(!foundOne)
+                e.Enabled = false;
+        }
         public override void OnExecute(CommandEventArgs e)
         {
             using (ExportDialog dlg = new ExportDialog(e.Context))
             {
                 IUIService ui = e.GetService<IUIService>();
+
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    dlg.OriginUri = item.Status.Uri;
+                    dlg.OriginPath = item.FullPath;
+                }
 
                 DialogResult dr;
 
@@ -38,7 +60,7 @@ namespace Ankh.Commands
                         args.Depth = dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty;
                         args.Revision = dlg.Revision;
 
-                        wa.Client.Export(new Uri(dlg.Source), dlg.LocalPath, args);
+                        wa.Client.Export(dlg.ExportSource, dlg.LocalPath, args);
                     });
             }
         }
