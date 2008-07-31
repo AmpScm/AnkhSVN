@@ -26,6 +26,7 @@ namespace Ankh.UI
 
         
         public ExportDialog(IAnkhServiceProvider context)
+            : this()
         {
             if (context == null)
                 throw new ArgumentNullException("context");

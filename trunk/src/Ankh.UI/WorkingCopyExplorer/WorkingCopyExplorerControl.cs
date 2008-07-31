@@ -194,10 +194,13 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             SvnWorkingCopy wc = item.WorkingCopy;
 
-            if (wc == null)
-                return;
+            string root;
+            if (wc != null)
+                root = wc.FullPath;
+            else
+                root = item.FullPath;
 
-            string root = wc.FullPath;
+            
 
             FileSystemRootItem rt = CreateRoot(root);
 

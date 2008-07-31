@@ -332,16 +332,16 @@
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="Menu_WorkingCopyExplorerToolBar" name="WorkingCopyExplorer" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_WorkingCopyExplorerToolBar" priority="0x100">
-          <Button id="Cmd_WorkingCopyBrowse" name="Svn.WorkingCopyBrowse" priority="0x301"
+          <Button id="Cmd_WorkingCopyBrowse" name="Svn.WorkingCopyBrowse" priority="0x100"
 						  text="A&amp;dd New Root..."
 						  toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
-          <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x301"
+          <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
 			        text="&amp;Remove Root"
 			        toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
-          <Button id="Cmd_Export" name="Export" priority="0x301"
+          <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport a Repository or Local Folder..."
               toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" defaultInvisible="true"/>
-          <Button id="Cmd_ExportFolder" name="ExportFolder" priority="0x301"
+          <Button id="Cmd_ExportFolder" name="ExportFolder" priority="0x400"
               text="E&amp;xport this folder"
               toolTip="Export this folder." iconFile="menu/Export.png" defaultInvisible="true"/>
         </Group>

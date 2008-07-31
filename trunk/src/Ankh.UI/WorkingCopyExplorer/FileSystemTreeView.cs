@@ -194,6 +194,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             child.ItemChanged += new EventHandler<ItemChangedEventArgs>(child_ItemChanged);
             FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem);
             nodes.Add(ftn);
+            if (ftn.Parent == null)
+                ftn.Text = child.SvnItem.FullPath;
             ftn.Tag = child;
             ftn.SelectedImageIndex = ftn.ImageIndex = this.FolderIndex;
 
