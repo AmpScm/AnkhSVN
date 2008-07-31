@@ -331,23 +331,7 @@ namespace Ankh.VSPackage
                 Debug.Assert(_control == null);
                 _control = value;
             }
-        }
-
-        public override void OnToolBarAdded()
-        {
-            base.OnToolBarAdded();
-
-            _site.Load();
-
-            if (Control != null)
-                Control.Site = _site;
-
-            if (_twControl != null)
-            {
-                _twControl.Context = _site;
-                _twControl.OnFrameCreated(EventArgs.Empty);
-            }
-        }
+        }        
 
         public override IWin32Window Window
         {
@@ -391,36 +375,57 @@ namespace Ankh.VSPackage
             }
         }
 
+        public override void OnToolBarAdded()
+        {
+            base.OnToolBarAdded();
+
+            _site.Load();
+
+            if (Control != null)
+                Control.Site = _site;
+
+            if (_twControl != null)
+            {
+                _twControl.Context = _site;
+                _twControl.OnFrameCreated(EventArgs.Empty);
+            }
+        }
+
         #region IVsWindowFrameNotify* Members
 
         public int OnClose(ref uint pgrfSaveOptions)
         {
-            _twControl.OnFrameClose(EventArgs.Empty);
+            if (_twControl != null)
+                _twControl.OnFrameClose(EventArgs.Empty);
 
             return VSConstants.S_OK;
         }
 
         public int OnDockableChange(int fDockable, int x, int y, int w, int h)
         {
-            _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            if (_twControl != null)
+                _twControl.OnFrameDockableChanged(new FrameEventArgs(fDockable != 0, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
             return VSConstants.S_OK;
         }
 
         public int OnMove(int x, int y, int w, int h)
         {
-            _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            if (_twControl != null)
+                _twControl.OnFrameMove(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
             return VSConstants.S_OK;
         }
 
         public int OnShow(int fShow)
         {
-            _twControl.OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
+            if (_twControl != null)
+                _twControl.OnFrameShow(new FrameEventArgs(false, Rectangle.Empty, (__FRAMESHOW)fShow));
             return VSConstants.S_OK;
         }
 
         public int OnSize(int x, int y, int w, int h)
         {
-            _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
+            if (_twControl != null)
+                _twControl.OnFrameSize(new FrameEventArgs(false, new Rectangle(x, y, w, h), (__FRAMESHOW)0));
             return VSConstants.S_OK;
         }
 
