@@ -5,6 +5,9 @@ using System.Windows.Forms;
 using Utils;
 using SharpSvn;
 using Ankh.Scc;
+using System.IO;
+using Ankh.UI.RepositoryExplorer;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI
 {
@@ -49,7 +52,22 @@ namespace Ankh.UI
             }
         }
 
+        public Uri OriginUri
+        {
+            set
+            {
+                if (value != null && value.IsAbsoluteUri)
+                    urlTextBox.Text = value.AbsoluteUri;
+                else
+                    urlTextBox.Text = "";
+            }
+        }
 
+        public string OriginPath
+        {
+            set { exportFromDirTextBox.Text = value; }
+        }
+            
         /// <summary>
         /// The local path to check out to.
         /// </summary>
@@ -98,20 +116,26 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void ControlsChanged(object sender, System.EventArgs e)
         {
-            IWorkingCopyOperations wcOps = _context.GetService<IWorkingCopyOperations>();
-
             bool enable = false;
-            if (wcOps != null)
+            if (_context != null)
             {
-                if (this.revisionPicker.Valid && this.localDirTextBox.Text.Length > 0)
+                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+
+
+                if (cache != null)
                 {
-                    if (this.radioButtonFromURL.Checked)
+                    if (this.revisionPicker.Valid && ExportSource != null && !string.IsNullOrEmpty(localDirTextBox.Text))
                     {
-                        Uri uri;
-                        enable = !string.IsNullOrEmpty(urlTextBox.Text) && Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out uri);
+                        if (!this.radioButtonFromDir.Checked)
+                            enable = true;
+                        else
+                            try
+                            {
+                                enable = cache[exportFromDirTextBox.Text].IsVersioned;
+                            }
+                            catch
+                            { }
                     }
-                    else
-                        enable = wcOps.IsWorkingCopyPath(this.exportFromDirTextBox.Text);
                 }
             }
 
@@ -125,19 +149,17 @@ namespace Ankh.UI
         /// <param name="e"></param>
         private void radioButtonFromDir_CheckedChanged(object sender, System.EventArgs e)
         {
-            this.urlGroupBox.Visible = false;
-            this.exportFromDirGroupbox.Visible = true;
+            exportFromDirTextBox.Enabled = wcBrowseBtn.Enabled = radioButtonFromDir.Checked;
 
-        }// <summary>
+        }
+        /// <summary>
         ///   User clicked radio button to export from a URL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void radioButtonFromURL_CheckedChanged(object sender, System.EventArgs e)
         {
-
-            this.urlGroupBox.Visible = true;
-            this.exportFromDirGroupbox.Visible = false;
+            urlTextBox.Enabled = urlBrowseBtn.Enabled = radioButtonFromURL.Checked;
         }
 
         /// <summary>
@@ -149,14 +171,22 @@ namespace Ankh.UI
         {
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
+                IUIService ui = null;
+                if (_context != null)
+                    ui = _context.GetService<IUIService>();
+
+                SvnPathTarget pt = ExportSource as SvnPathTarget;
+
+                if (pt != null)
+                    browser.SelectedPath = pt.FullPath;
+
 				browser.ShowNewFolderButton = false;
 
-                if (browser.ShowDialog(this) == DialogResult.OK)
-                {
-                    this.exportFromDirTextBox.Text = browser.SelectedPath;
-                }
+                if (browser.ShowDialog(this) != DialogResult.OK)
+                    return;
+                
+                this.exportFromDirTextBox.Text = browser.SelectedPath;
             }
-
         }
 
         /// <summary>
@@ -168,10 +198,62 @@ namespace Ankh.UI
         {
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
-                if (browser.ShowDialog(this) == DialogResult.OK)
+                if (!string.IsNullOrEmpty(localDirTextBox.Text))
+                    browser.SelectedPath = localDirTextBox.Text;
+
+                if (browser.ShowDialog(this) != DialogResult.OK)
+                    return;
+                
+                this.localDirTextBox.Text = browser.SelectedPath;
+            }
+        }
+
+        private void urlBrowseBtn_Click(object sender, EventArgs e)
+        {
+            using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+            {
+                SvnUriTarget ut = ExportSource as SvnUriTarget;
+
+                if (ut != null)
+                    dlg.SelectedUri = ut.Uri;
+
+                if (dlg.ShowDialog(_context) != DialogResult.OK)
+                    return;
+
+                if (dlg.SelectedUri != null)
+                    urlTextBox.Text = dlg.SelectedUri.AbsoluteUri;
+            }
+        }
+
+        public SvnTarget ExportSource
+        {
+            get
+            {
+                if (radioButtonFromURL.Checked)
                 {
-                    this.localDirTextBox.Text = browser.SelectedPath;
+                    Uri r;
+
+                    string txt = urlTextBox.Text;
+                    if (!string.IsNullOrEmpty(txt) && Uri.TryCreate(txt, UriKind.Absolute, out r))
+                        return new SvnUriTarget(r);
                 }
+                else if (radioButtonFromDir.Checked)
+                {
+                    string txt = this.localDirTextBox.Text;
+                    if (!string.IsNullOrEmpty(txt))
+                        try
+                        {
+                            txt = SvnTools.GetTruePath(SvnTools.GetNormalizedFullPath(Path.GetFullPath(txt)));
+
+                            return new SvnPathTarget(txt);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+                }
+                
+                return null;
             }
         }
     }

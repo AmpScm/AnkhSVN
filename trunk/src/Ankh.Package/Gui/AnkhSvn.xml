@@ -340,10 +340,7 @@
 			        toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
           <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport a Repository or Local Folder..."
-              toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" defaultInvisible="true"/>
-          <Button id="Cmd_ExportFolder" name="ExportFolder" priority="0x400"
-              text="E&amp;xport this folder"
-              toolTip="Export this folder." iconFile="menu/Export.png" defaultInvisible="true"/>
+              toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" />          
         </Group>
       </Menu>
     </GroupRef>
