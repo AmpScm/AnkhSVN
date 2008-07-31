@@ -97,7 +97,7 @@ namespace Ankh.UI.DiffWindow
             //Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl1.SetData(A, B, Script, strCaptionA, strCaptionB);
 
-            ((IAnkhUISite)Site).Title = Path.GetFileName(args.MineFile) + " - Diff";
+            ToolWindowSite.Title = Path.GetFileName(args.MineFile) + " - Diff";
         }
     }
 }
