@@ -419,12 +419,6 @@ namespace Ankh.Tests
 
         #region IContext Members
     
-
-        public IWorkingCopyExplorer WorkingCopyExplorer
-        {
-            get { throw new Exception( "The method or operation is not implemented." ); }
-        }
-
         public IAnkhPackage Package
         {
             get { throw new Exception("The method or operation is not implemented."); }

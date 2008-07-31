@@ -68,16 +68,17 @@ namespace Ankh.UI
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(412, 94);
-            this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.urlTextBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AddRepositoryRootDialog";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Add repository URL";
+            this.Text = "Browse Repository";
             this.ResumeLayout(false);
             this.PerformLayout();
 

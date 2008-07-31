@@ -1,14 +1,15 @@
 using System;
 using System.Text;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.WorkingCopyExplorer
 {
     class FileSystemRootItem : FileSystemDirectoryItem
     {
-        public FileSystemRootItem(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem svnItem ) 
-            : base(context, explorer, svnItem)
+        public FileSystemRootItem(WorkingCopyExplorerControl control, SvnItem svnItem)
+            : base(control, svnItem)
         {
-            
+
         }
 
         public override string Text

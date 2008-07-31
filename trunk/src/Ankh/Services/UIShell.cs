@@ -188,5 +188,44 @@ namespace Ankh
         }
 
         #endregion
+
+        public Uri ShowAddRepositoryRootDialog()
+        {
+            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
+            {
+                IUIService ui = GetService<IUIService>();
+
+                DialogResult dr;
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog();
+
+                if (dr != DialogResult.OK || dlg.Uri == null)
+                    return null;
+
+                return dlg.Uri;
+            }
+        }
+
+        public string ShowAddWorkingCopyExplorerRootDialog()
+        {
+            using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
+            {
+                IUIService ui = GetService<IUIService>();
+
+                DialogResult dr;
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog();
+
+
+                if (dr != DialogResult.OK || string.IsNullOrEmpty(dlg.NewRoot))
+                    return null;
+
+                return dlg.NewRoot;
+            }
+        }
     }
 }

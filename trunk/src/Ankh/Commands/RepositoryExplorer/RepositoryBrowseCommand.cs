@@ -8,6 +8,7 @@ using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 using SharpSvn;
 using Ankh.UI;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -19,7 +20,7 @@ namespace Ankh.Commands.RepositoryExplorer
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IExplorersShell shell = e.GetService<IExplorersShell>();
+            IUIShell shell = e.GetService<IUIShell>();
             Uri info;
 
             if (e.Argument is string)
@@ -34,10 +35,18 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (info != null)
             {
-                IAnkhPackage pkg = e.GetService<IAnkhPackage>();
-                pkg.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
+                RepositoryExplorerControl ctrl = e.Selection.ActiveDialogOrFrameControl as RepositoryExplorerControl;
 
-                shell.AddRepositoryRoot(info);
+                if (ctrl == null)
+                {
+                    IAnkhPackage pkg = e.GetService<IAnkhPackage>();
+                    pkg.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
+                }
+
+                ctrl = e.Selection.ActiveDialogOrFrameControl as RepositoryExplorerControl;
+
+                if (ctrl != null)
+                    ctrl.AddRoot(info);
             }
         }
     }
