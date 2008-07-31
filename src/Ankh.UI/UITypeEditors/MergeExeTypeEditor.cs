@@ -37,14 +37,14 @@ namespace Ankh.UI.UITypeEditors
 
                         // KDiff3
                         new StringEditorTemplate(("'" + programFiles + @"\KDiff3\KDiff3.exe' " + 
-                                                 "'%base' --fname '%basename' '%theirs' --fname '%theirsname' " + 
+                                                 "'%base' --fname '%basename' '%theirs' --fname '%theirname' " + 
                                                  "'%mine' --fname '%minename' -o '%merged'").Replace('\'', '"'), 
                                                  "KDiff3", "KDiff3"),
 
                         // DiffMerge
                         new StringEditorTemplate(("'" + programFiles + @"\SourceGear\DiffMerge\DiffMerge.exe' " +
                                                  "/m '/r=%merged' '%base' '%mine' '%theirs' " +
-                                                 "'/t1=%basename' '/t2=%minename' '/t3=%theirsname' '/c=%mergedname'").Replace('\'', '\"'),
+                                                 "'/t1=%basename' '/t2=%minename' '/t3=%theirname' '/c=%mergedname'").Replace('\'', '\"'),
                                                  "DiffMerge", "DiffMerge"),
                         // WinMerge
                         // BH: This one misses the %merged reference
@@ -55,7 +55,7 @@ namespace Ankh.UI.UITypeEditors
                        
                         // Araxis merge
                         new StringEditorTemplate(("'" + programFiles + @"\Araxis\Araxis Merge\Compare.exe' " +
-                                                "/wait /swap /a3 /3 /title1:'%basename' /title2:'%theirsname' " +
+                                                "/wait /swap /a3 /3 /title1:'%basename' /title2:'%theirname' " +
                                                 "/title3:'%minename' '%base' '%theirs' '%mine' '%merged'").Replace('\'', '"'), 
                                                 "Araxis", "Araxis" ),
                  };
