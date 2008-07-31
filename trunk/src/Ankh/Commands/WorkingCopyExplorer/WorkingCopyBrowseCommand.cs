@@ -9,7 +9,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to add a new root to the Working Copy Explorer.
     /// </summary>
-    [Command(AnkhCommand.AddWorkingCopyExplorerRoot, ArgumentDefinition="d")]
+    [Command(AnkhCommand.WorkingCopyBrowse, ArgumentDefinition="d")]
     public class AddWorkingCopyExplorerRootCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)

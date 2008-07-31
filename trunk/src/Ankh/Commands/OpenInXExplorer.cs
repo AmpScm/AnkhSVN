@@ -11,37 +11,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Command == AnkhCommand.ItemOpenFolderInWorkingCopyExplorer)
-                e.Enabled = e.Visible = false;
-            else
-            {
-                SvnItem parent = null;
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    SvnItem p;
-                    if (item.IsDirectory)
-                        p = item;
-                    else
-                        p = item.Parent;
-
-                    if(parent == null)
-                        parent = p;
-                    else if (parent != null && parent != p)
-                    {
-                        parent = null;
-                        break;
-                    }
-                }
-
-                if (parent == null)
-                    e.Enabled = e.Visible = false;
-            }
-        }
-        public override void OnExecute(CommandEventArgs e)
-        {
-            if (e.Command == AnkhCommand.ItemOpenFolderInWorkingCopyExplorer)
-                return;
-
             SvnItem parent = null;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
@@ -60,12 +29,53 @@ namespace Ankh.Commands
                 }
             }
 
-            if (parent == null || parent.Status.Uri == null)
-                return;
+            if (parent == null)
+                e.Enabled = false;
+            else if (e.Command == AnkhCommand.ItemOpenFolderInRepositoryExplorer && parent.Status.Uri != null)
+            { }
+            else if (e.Command == AnkhCommand.ItemOpenFolderInWorkingCopyExplorer && parent.Exists)
+            { }
+            else
+                e.Enabled = false;
+        }
+        public override void OnExecute(CommandEventArgs e)
+        {
+            SvnItem parent = null;
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            {
+                SvnItem p;
+                if (item.IsDirectory)
+                    p = item;
+                else
+                    p = item.Parent;
+
+                if (parent == null)
+                    parent = p;
+                else if (parent != null && parent != p)
+                {
+                    parent = null;
+                    break;
+                }
+            }
 
             IAnkhCommandService cmd = e.GetService<IAnkhCommandService>();
-            if (cmd.DirectlyExecCommand(AnkhCommand.ShowRepositoryExplorer))
-                cmd.DirectlyExecCommand(AnkhCommand.RepositoryBrowse, parent.Status.Uri);
+            switch (e.Command)
+            {
+                case AnkhCommand.ItemOpenFolderInRepositoryExplorer:
+                    if (parent == null || parent.Status.Uri == null)
+                        return;
+
+                    if (cmd != null)
+                        cmd.DirectlyExecCommand(AnkhCommand.RepositoryBrowse, parent.Status.Uri);
+                    break;
+                case AnkhCommand.ItemOpenFolderInWorkingCopyExplorer:
+                    if (parent == null || !parent.Exists)
+                        return;
+
+                    if (cmd != null)
+                        cmd.DirectlyExecCommand(AnkhCommand.WorkingCopyBrowse, parent.FullPath);
+                    break;
+            }
         }
     }
 }
