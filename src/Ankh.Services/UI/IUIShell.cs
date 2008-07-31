@@ -61,5 +61,17 @@ namespace Ankh
         /// <param name="state">The state.</param>
         /// <returns></returns>
         bool EditEnlistmentState(EnlistmentState state);
+
+        /// <summary>
+        /// Shows the dialog for adding a new root to the repository.
+        /// </summary>
+        /// <returns></returns>
+        Uri ShowAddRepositoryRootDialog();
+
+        /// <summary>
+        /// Shows the add working copy explorer root dialog.
+        /// </summary>
+        /// <returns></returns>
+        string ShowAddWorkingCopyExplorerRootDialog();
     }
 }

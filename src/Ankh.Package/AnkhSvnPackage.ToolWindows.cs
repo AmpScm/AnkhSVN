@@ -465,18 +465,6 @@ namespace Ankh.VSPackage
             // Creating the user control that will be displayed in the window
             Control = new WorkingCopyExplorerControl();
         }
-
-        public override void OnToolBarAdded()
-        {
-            base.OnToolBarAdded();
-
-            IExplorersShell shell = GetService<Ankh.WorkingCopyExplorer.IExplorersShell>();
-
-            if (shell != null)
-            {
-                shell.WorkingCopyExplorer = Control as WorkingCopyExplorerControl;
-            }
-        }
     }
 
     /// <summary>
@@ -496,18 +484,6 @@ namespace Ankh.VSPackage
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
 
             Control = new RepositoryExplorerControl();
-        }
-
-        public override void OnToolBarAdded()
-        {
-            base.OnToolBarAdded();
-
-            IExplorersShell shell = GetService<Ankh.WorkingCopyExplorer.IExplorersShell>();
-
-            if (shell != null)
-            {
-                shell.RepositoryExplorer = Control as RepositoryExplorerControl;
-            }
         }
     }
 
@@ -529,11 +505,6 @@ namespace Ankh.VSPackage
 
             Control = new Ankh.UI.PendingChanges.PendingChangesToolControl();
             //new CommitDialog();
-        }
-
-        public override void OnToolBarAdded()
-        {
-            base.OnToolBarAdded();
         }
     }
 

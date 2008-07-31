@@ -7,36 +7,39 @@ using Utils;
 using System.Collections;
 using SharpSvn;
 using Ankh.Scc;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.WorkingCopyExplorer
 {
-    internal abstract class FileSystemItem : TreeNode, Ankh.UI.IFileSystemItem
+    internal abstract class FileSystemItem : WCTreeNode, Ankh.UI.IFileSystemItem
     {
-        readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
+        readonly WorkingCopyExplorerControl _ctrl;
         public event EventHandler<ItemChangedEventArgs> ItemChanged;
 
-        public FileSystemItem(IAnkhServiceProvider context, FileSystemItem parent, WorkingCopyExplorer explorer, SvnItem svnItem)
+        public FileSystemItem(WorkingCopyExplorerControl control, FileSystemItem parent, SvnItem svnItem)
             : base(parent)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            if (control == null)
+                throw new ArgumentNullException("control");
             else if (svnItem == null)
                 throw new ArgumentNullException("svnItem");
 
-            _context = context;
             _item = svnItem;
+            _ctrl = control;
 
-            this.explorer = explorer;
             this.CurrentStatus = MergeStatuses(_item);
         }
 
         protected IAnkhServiceProvider Context
         {
-            get { return _context; }
+            get { return _ctrl.Context; }
         }
 
-
+        protected WorkingCopyExplorerControl Control
+        {
+            get { return _ctrl; }
+        }
 
         public abstract bool IsContainer { get; }
 
@@ -51,11 +54,6 @@ namespace Ankh.WorkingCopyExplorer
         public SvnItem SvnItem
         {
             get { return _item; }
-        }
-
-        public WorkingCopyExplorer Explorer
-        {
-            get { return this.explorer; }
         }
 
         public override void GetResources(IList list, bool getChildItems, Predicate<SvnItem> filter)
@@ -77,7 +75,7 @@ namespace Ankh.WorkingCopyExplorer
 
         public void Open(IAnkhServiceProvider context)
         {
-            this.explorer.OpenItem(context, SvnItem.FullPath);
+            Control.OpenItem(context, SvnItem.FullPath);
         }
 
         [TextProperty("TextStatus", Order = 0, TextWidth = 18)]
@@ -115,7 +113,7 @@ namespace Ankh.WorkingCopyExplorer
         {
             get
             {
-                return (int)_context.GetService<IStatusImageMapper>().GetStatusImageForSvnItem(SvnItem);
+                return (int)Context.GetService<IStatusImageMapper>().GetStatusImageForSvnItem(SvnItem);
             }
         }
 
@@ -143,15 +141,15 @@ namespace Ankh.WorkingCopyExplorer
             _item.MarkDirty();
         }
 
-        public static FileSystemItem Create(IAnkhServiceProvider context, WorkingCopyExplorer explorer, SvnItem item)
+        public static FileSystemItem Create(WorkingCopyExplorerControl control, SvnItem item)
         {
             if (item.IsDirectory)
             {
-                return new FileSystemDirectoryItem(context, explorer, item);
+                return new FileSystemDirectoryItem(control, item);
             }
             else
             {
-                return new FileSystemFileItem(context, explorer, item);
+                return new FileSystemFileItem(control, item);
             }
         }
 
@@ -185,7 +183,5 @@ namespace Ankh.WorkingCopyExplorer
 
             this.OnItemChanged(ItemChangedType.StatusChanged);
         }
-
-        private WorkingCopyExplorer explorer;
     }
 }

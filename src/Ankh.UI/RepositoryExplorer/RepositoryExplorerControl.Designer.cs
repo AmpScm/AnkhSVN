@@ -20,7 +20,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.treeView = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.toolFolders = new System.Windows.Forms.ToolStrip();
-            this.busyProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
             this.fileView = new Ankh.UI.RepositoryExplorer.RepositoryListView();
             this.fileColumn = new System.Windows.Forms.ColumnHeader();
@@ -77,7 +76,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.toolFolders.CanOverflow = false;
             this.toolFolders.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolFolders.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.busyProgress,
             this.foldersLabel});
             this.toolFolders.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolFolders.Location = new System.Drawing.Point(0, 0);
@@ -88,21 +86,11 @@ namespace Ankh.UI.RepositoryExplorer
             this.toolFolders.TabIndex = 0;
             this.toolFolders.Text = "toolStrip1";
             // 
-            // busyProgress
-            // 
-            this.busyProgress.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.busyProgress.Enabled = false;
-            this.busyProgress.Name = "busyProgress";
-            this.busyProgress.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.busyProgress.Size = new System.Drawing.Size(160, 22);
-            this.busyProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.busyProgress.Visible = false;
-            // 
             // foldersLabel
             // 
             this.foldersLabel.Name = "foldersLabel";
-            this.foldersLabel.Size = new System.Drawing.Size(45, 22);
-            this.foldersLabel.Text = "Folders";
+            this.foldersLabel.Size = new System.Drawing.Size(104, 22);
+            this.foldersLabel.Text = "Repository Folders";
             // 
             // fileView
             // 
@@ -200,6 +188,5 @@ namespace Ankh.UI.RepositoryExplorer
         private ColumnHeader authorColumn;
         private ColumnHeader sizeColumn;
         private ColumnHeader dateColumn;
-        private ToolStripProgressBar busyProgress;
     }
 }

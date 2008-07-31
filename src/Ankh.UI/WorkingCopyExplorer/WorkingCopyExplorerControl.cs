@@ -12,6 +12,8 @@ using Ankh.Ids;
 using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
+using Ankh.WorkingCopyExplorer;
+using SharpSvn;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -23,10 +25,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
     public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
-        public event CancelEventHandler ValidatingNewRoot;
-
-        public event EventHandler WantNewRoot;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkingCopyExplorerControl"/> class.
         /// </summary>
@@ -39,8 +37,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             this.folderTree.MouseDown += new MouseEventHandler(HandleMouseDown);
             this.fileList.MouseDown += new MouseEventHandler(HandleMouseDown);
-
-            this.newRootTextBox.TextChanged += new EventHandler(newRootTextBox_TextChanged);
         }
 
         /// <summary>
@@ -59,26 +55,9 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             folderTree.SelectionPublishServiceProvider = Context;
             fileList.SelectionPublishServiceProvider = Context;
+
+            fileList.StateImageList = Context.GetService<IStatusImageMapper>().StatusImageList;
         }
-
-        /// <summary>
-        /// Gets the new root path.
-        /// </summary>
-        /// <value>The new root path.</value>
-        public string NewRootPath
-        {
-            get { return this.newRootTextBox.Text; }
-        }
-
-
-        public ImageList StateImages
-        {
-            get { return this.fileList.StateImageList; }
-            set { this.fileList.StateImageList = value; }
-        }
-
-
-
 
         public void AddRoot(IFileSystemItem root)
         {
@@ -147,17 +126,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        void newRootTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (this.ValidatingNewRoot != null)
-            {
-                CancelEventArgs args = new CancelEventArgs(true);
-                this.ValidatingNewRoot(this, args);
-
-                this.addButton.Enabled = !args.Cancel;
-            }
-        }
-
         void treeView_SelectedItemChanged(object sender, EventArgs e)
         {
             IFileSystemItem item = this.folderTree.SelectedItem;
@@ -198,35 +166,55 @@ namespace Ankh.UI.WorkingCopyExplorer
             ToolWindowSite.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point.X, point.Y);
         }
 
-        private void newRootTextBox_KeyDown(object sender, KeyEventArgs e)
+        public bool IsWcRootSelected()
         {
-            if (e.KeyCode == Keys.Enter && this.addButton.Enabled)
-            {
-                this.AddNewRoot();
-            }
+            return false;
         }
 
-        private void addButton_Click(object sender, EventArgs e)
+        public void RemoveRoot()
         {
-            AddNewRoot();
+            //
         }
 
-        private void AddNewRoot()
+        IFileStatusCache _cache;
+        protected internal IFileStatusCache StatusCache
         {
-            try
-            {
-                this.Cursor = Cursors.WaitCursor;
-                if (this.WantNewRoot != null)
-                {
-                    this.WantNewRoot(this, EventArgs.Empty);
-                }
+            get { return _cache ?? (_cache = Context.GetService<IFileStatusCache>()); }
+        }
 
-                this.newRootTextBox.Text = "";
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
+        public void BrowsePath(string path)
+        {
+            if(string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SvnItem item = StatusCache[path];
+
+            if(item == null)
+                return;
+
+            SvnWorkingCopy wc = item.WorkingCopy;
+
+            if (wc == null)
+                return;
+
+            string root = wc.FullPath;
+
+            FileSystemRootItem rt = CreateRoot(root);
+
+            AddRoot(rt);
+        }
+
+        private FileSystemRootItem CreateRoot(string directory)
+        {
+            StatusCache.UpdateStatus(directory, SvnDepth.Infinity);
+            SvnItem item = StatusCache[directory];
+            FileSystemRootItem root = new FileSystemRootItem(this, item);
+            return root;
+        }
+
+        internal void OpenItem(IAnkhServiceProvider context, string p)
+        {
+            throw new NotImplementedException();
         }
     }
 }

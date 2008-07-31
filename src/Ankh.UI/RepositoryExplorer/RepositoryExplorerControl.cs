@@ -141,9 +141,25 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        BusyOverlay _bo;
         private void treeView_RetrievingChanged(object sender, EventArgs e)
         {
-            busyProgress.Enabled = busyProgress.Visible = treeView.Retrieving;
+            if (treeView.Retrieving)
+            {
+                if (_bo == null)
+                    _bo = new BusyOverlay(treeView, AnchorStyles.Top | AnchorStyles.Right);
+
+                _bo.Show();
+            }
+            else
+            {
+                if (_bo != null)
+                {
+                    _bo.Hide();
+                    _bo.Dispose();
+                    _bo = null;
+                }
+            }
         }
 
         private void treeView_SelectedNodeRefresh(object sender, EventArgs e)

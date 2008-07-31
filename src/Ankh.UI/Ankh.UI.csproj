@@ -697,6 +697,13 @@
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemDirectoryItem.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemFileItem.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemItem.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemRootItem.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\Trees\NodeStatus.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\Trees\NodeStatusKind.cs" />
+    <Compile Include="WorkingCopyExplorer\OldStore\Trees\WCTreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

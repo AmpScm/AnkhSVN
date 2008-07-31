@@ -39,9 +39,6 @@ namespace Ankh
             Container.AddService(typeof(IProgressRunner), new ProgressRunnerService(Context));
             Container.AddService(typeof(IAnkhDiffHandler), new AnkhDiff(Context));
 
-            Container.AddService(typeof(IExplorersShell), new ExplorersShell(Context), true);
-            
-
             // Ensure old context behaviour
             _context = GetService<IContext>();
             if (_context == null)

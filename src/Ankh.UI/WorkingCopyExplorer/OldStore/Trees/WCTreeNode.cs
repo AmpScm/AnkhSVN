@@ -6,12 +6,12 @@ using SharpSvn;
 
 namespace Ankh
 {
-    public abstract class TreeNode : IDisposable
+    public abstract class WCTreeNode : IDisposable
     {
         public event EventHandler Changed;
 
 
-        public TreeNode( TreeNode parent )
+        public WCTreeNode(WCTreeNode parent)
         {
             this.parent = parent;
             this.children = new ArrayList();
@@ -37,7 +37,7 @@ namespace Ankh
         /// </summary>
         protected void DisposeChildren()
         {
-            foreach ( TreeNode node in this.Children )
+            foreach (WCTreeNode node in this.Children)
             {
                 node.Dispose();
             }
@@ -59,7 +59,7 @@ namespace Ankh
         /// <summary>
         /// The parent node of this node.
         /// </summary>
-        public TreeNode Parent
+        public WCTreeNode Parent
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.parent; }
@@ -70,15 +70,15 @@ namespace Ankh
         /// to the list.
         /// </summary>
         /// <param name="list"></param>
-        public abstract void GetResources( IList list, bool getChildItems,
-            Predicate<SvnItem> filter );
+        public abstract void GetResources(IList list, bool getChildItems,
+            Predicate<SvnItem> filter);
 
         public void Refresh()
         {
-            this.Refresh( true );
+            this.Refresh(true);
         }
 
-        public abstract void Refresh( bool rescan );
+        public abstract void Refresh(bool rescan);
 
         /// <summary>
         /// Override this to "kill" yourself if all resources belonging to you are deleted.
@@ -120,14 +120,14 @@ namespace Ankh
         /// </summary>
         /// <param name="resource"></param>
         /// <returns></returns>
-        protected static NodeStatus GenerateStatus( SvnItem item )
+        protected static NodeStatus GenerateStatus(SvnItem item)
         {
             NodeStatusKind kind;
-            if ( item.Status.LocalContentStatus != SvnStatus.Normal )
+            if (item.Status.LocalContentStatus != SvnStatus.Normal)
             {
                 kind = (NodeStatusKind)item.Status.LocalContentStatus;
             }
-            else if ( item.Status.LocalPropertyStatus != SvnStatus.Normal &&
+            else if (item.Status.LocalPropertyStatus != SvnStatus.Normal &&
                 item.Status.LocalPropertyStatus != SvnStatus.None)
             {
                 kind = (NodeStatusKind)item.Status.LocalPropertyStatus;
@@ -137,7 +137,7 @@ namespace Ankh
                 kind = NodeStatusKind.Normal;
             }
 
-            return new NodeStatus( kind, item.IsReadOnly, item.IsLocked );
+            return new NodeStatus(kind, item.IsReadOnly, item.IsLocked);
         }
 
         /// <summary>
@@ -145,9 +145,9 @@ namespace Ankh
         /// </summary>
         /// <param name="items"></param>
         /// <returns></returns>
-        protected static NodeStatus MergeStatuses( params SvnItem[] items )
+        protected static NodeStatus MergeStatuses(params SvnItem[] items)
         {
-            return MergeStatuses( ( (IList)items ) );
+            return MergeStatuses(((IList)items));
         }
 
         /// <summary>
@@ -155,11 +155,11 @@ namespace Ankh
         /// </summary>
         /// <param name="statuses"></param>
         /// <returns></returns>
-        protected static NodeStatus MergeStatuses( params NodeStatus[] statuses )
+        protected static NodeStatus MergeStatuses(params NodeStatus[] statuses)
         {
             NodeStatus newStatus = new NodeStatus();
-            foreach ( NodeStatus status in statuses )
-                newStatus = newStatus.Merge( status );
+            foreach (NodeStatus status in statuses)
+                newStatus = newStatus.Merge(status);
             return newStatus;
         }
 
@@ -169,7 +169,7 @@ namespace Ankh
         /// </summary>
         /// <param name="items">An IList of SvnItem instances.</param>
         /// <returns></returns>
-        protected static NodeStatus MergeStatuses( IList items )
+        protected static NodeStatus MergeStatuses(IList items)
         {
             NodeStatus newStatus = new NodeStatus();
             if (items != null)
@@ -188,41 +188,41 @@ namespace Ankh
         protected NodeStatus CheckChildStatuses()
         {
             NodeStatus status = new NodeStatus();
-            foreach ( TreeNode node in this.Children )
+            foreach (WCTreeNode node in this.Children)
             {
-                status = status.Merge( node.CurrentStatus );
+                status = status.Merge(node.CurrentStatus);
             }
             return status;
         }
 
 
 
-        protected void GetChildResources( System.Collections.IList list, bool getChildItems,
-            Predicate<SvnItem> filter )
+        protected void GetChildResources(System.Collections.IList list, bool getChildItems,
+            Predicate<SvnItem> filter)
         {
-            if ( getChildItems )
+            if (getChildItems)
             {
-                foreach ( TreeNode node in this.Children )
-                    node.GetResources( list, getChildItems, filter );
+                foreach (WCTreeNode node in this.Children)
+                    node.GetResources(list, getChildItems, filter);
             }
         }
 
-        protected void FilterResources( IList inList, IList outList, Predicate<SvnItem> filter )
+        protected void FilterResources(IList inList, IList outList, Predicate<SvnItem> filter)
         {
-            foreach ( SvnItem item in inList )
+            foreach (SvnItem item in inList)
             {
-                if ( filter == null || filter( item ) )
+                if (filter == null || filter(item))
                 {
-                    outList.Add( item );
+                    outList.Add(item);
                 }
             }
         }
 
         protected void RemoveSelf()
         {
-            if ( this.Parent != null )
+            if (this.Parent != null)
             {
-                this.Parent.Remove( this );
+                this.Parent.Remove(this);
             }
         }
 
@@ -232,30 +232,30 @@ namespace Ankh
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        protected virtual void ChildOrResourceChanged( object sender, EventArgs args )
+        protected virtual void ChildOrResourceChanged(object sender, EventArgs args)
         {
-            if ( !this.IsDeleting )
+            if (!this.IsDeleting)
             {
-                if ( CheckForDeletedTreeNode() )
+                if (CheckForDeletedTreeNode())
                 {
                     return;
                 }
             }
 
-            NodeStatus newStatus = this.ThisNodeStatus().Merge( this.CheckChildStatuses() );
-            if ( newStatus != this.CurrentStatus )
+            NodeStatus newStatus = this.ThisNodeStatus().Merge(this.CheckChildStatuses());
+            if (newStatus != this.CurrentStatus)
             {
                 this.CurrentStatus = newStatus;
                 this.OnChanged();
             }
         }
 
-        protected virtual void ChildrenChanged( object sender, EventArgs args )
+        protected virtual void ChildrenChanged(object sender, EventArgs args)
         {
-            this.Refresh( true );
+            this.Refresh(true);
         }
 
-        protected static void UnhookEvents( IList svnItems, EventHandler del )
+        protected static void UnhookEvents(IList svnItems, EventHandler del)
         {
             //foreach ( SvnItem item in svnItems )
             //{
@@ -275,9 +275,9 @@ namespace Ankh
                 this.IsDeleting = true;
 
                 // If the parent is deleted as well, no point in deleting us.
-                if ( this.Parent != null )
+                if (this.Parent != null)
                 {
-                    if ( this.Parent.CheckForDeletedTreeNode() )
+                    if (this.Parent.CheckForDeletedTreeNode())
                     {
                         return true;
                     }
@@ -298,12 +298,12 @@ namespace Ankh
         {
             try
             {
-                if ( !this.isRefreshing )
+                if (!this.isRefreshing)
                 {
                     this.isRefreshing = true;
 
-                    if ( this.Changed != null )
-                        this.Changed( this, EventArgs.Empty );
+                    if (this.Changed != null)
+                        this.Changed(this, EventArgs.Empty);
                 }
             }
             finally
@@ -312,17 +312,17 @@ namespace Ankh
             }
         }
 
-        private void Remove( TreeNode treeNode )
+        private void Remove(WCTreeNode treeNode)
         {
-            treeNode.Changed -= new EventHandler( this.ChildOrResourceChanged );
-            this.Children.Remove( treeNode );
+            treeNode.Changed -= new EventHandler(this.ChildOrResourceChanged);
+            this.Children.Remove(treeNode);
 
             treeNode.Dispose();
         }
 
         private bool isDeleting;
         private NodeStatus currentStatus;
-        private TreeNode parent;
+        private WCTreeNode parent;
         private IList children;
         private bool isRefreshing;
 
