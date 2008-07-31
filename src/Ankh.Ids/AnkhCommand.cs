@@ -50,7 +50,7 @@ namespace Ankh.Ids
         AddItem,
         RepositoryBrowse,
         CheckForUpdates,
-        AddWorkingCopyExplorerRoot,
+        WorkingCopyBrowse,
         Blame,
         ChangeAdminDirName,
         Checkout,

@@ -128,7 +128,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(IContext), context))
             {
-                CommandTester.TestExecution(AnkhCommand.AddWorkingCopyExplorerRoot);
+                CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
             }
         }
 
