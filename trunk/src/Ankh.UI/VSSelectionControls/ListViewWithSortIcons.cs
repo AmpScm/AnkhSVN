@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -15,6 +16,52 @@ namespace Ankh.UI.VSSelectionControls
 
     public class ListViewWithSortIcons : ListView
     {
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {           
+            if (e.Button == MouseButtons.Right)
+            {
+                ExtendSelection(e.Location, true);
+            }
+
+            base.OnMouseDown(e);
+        }
+
+        private void ExtendSelection(Point p, bool rightClick)
+        {
+            ListViewHitTestInfo hi = HitTest(p);
+
+            // Use indexes to be compatible with the virtual mode users of this class!
+
+            bool onItem = hi.Item != null && hi.Location != ListViewHitTestLocations.None;
+
+            if (rightClick)
+            {
+                // We try to replicate the right click behavior of the Windows Explorer in this method
+
+                if (onItem)
+                {
+                    if (!hi.Item.Selected)
+                    {
+                        // If the clicked item is not selected, make the item the only selected item
+                        SelectedIndices.Clear();
+                        hi.Item.Selected = true;
+                    }
+
+                    // Always set focus to the clicked item
+                    hi.Item.Focused = true;
+                }
+                else if ((ModifierKeys & (Keys.Shift | Keys.Control | Keys.Alt)) == 0)
+                {
+                    // Only clear the selection if no modifier key is pressed
+                    if (SelectedIndices.Count > 0)
+                        SelectedIndices.Clear();
+                }
+            }
+            //else
+            //    throw new NotImplementedException();
+        }
+
         #region SortIcons
         static class NativeMethods
         {
