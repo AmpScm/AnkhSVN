@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Utils;
 using SharpSvn;
 using Ankh.Ids;
+using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
@@ -16,22 +17,29 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-
             using (ExportDialog dlg = new ExportDialog(e.Context))
             {
-                if (dlg.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
+                IUIService ui = e.GetService<IUIService>();
+
+                DialogResult dr;
+
+                if (ui != null)
+                    dr = ui.ShowDialog(dlg);
+                else
+                    dr = dlg.ShowDialog();
+
+                if (dr != DialogResult.OK)
                     return;
 
-                using (context.StartOperation("Exporting"))
-                {
-                    ExportRunner runner = new ExportRunner(
-                        dlg.LocalPath, dlg.Revision, dlg.Source, dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty);
+                e.GetService<IProgressRunner>().Run("Exporting",
+                    delegate(object sender, ProgressWorkerArgs wa)
+                    {
+                        SvnExportArgs args = new SvnExportArgs();
+                        args.Depth = dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                        args.Revision = dlg.Revision;
 
-                    e.GetService<IProgressRunner>().Run(
-                        "Exporting",
-                        runner.Work);
-                }
+                        wa.Client.Export(new Uri(dlg.Source), dlg.LocalPath, args);
+                    });
             }
         }
     }

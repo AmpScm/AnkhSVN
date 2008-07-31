@@ -18,7 +18,7 @@ namespace Ankh.Commands
         {
             WorkingCopyExplorerControl ctrl = e.Selection.ActiveDialogOrFrameControl as WorkingCopyExplorerControl;
 
-            if (ctrl != null)
+            if (ctrl == null)
                 e.Enabled = false;
             else
                 e.Enabled = ctrl.IsWcRootSelected();
