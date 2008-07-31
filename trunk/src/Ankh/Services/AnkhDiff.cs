@@ -269,8 +269,7 @@ namespace Ankh.Services
                 program = reference.Substring(1, nEnd - 1);
                 reference = reference.Substring(nEnd + 1).TrimStart();
 
-                if (program.IndexOf('%') >= 0)
-                    program = Environment.ExpandEnvironmentVariables(program);
+                program = SubstituteArguments(program, args);
 
                 if (string.IsNullOrEmpty(program) || !File.Exists(program))
                     return false; // File not found
@@ -289,8 +288,7 @@ namespace Ankh.Services
                 {
                     string f = reference.Substring(0, nTok);
 
-                    if (f.IndexOf('%') >= 0)
-                        f = Environment.ExpandEnvironmentVariables(f);
+                    f = SubstituteArguments(f, args);
 
                     if (!string.IsNullOrEmpty(f) && File.Exists(f))
                     {
@@ -313,7 +311,7 @@ namespace Ankh.Services
 
         private string SubstituteArguments(string arguments, AnkhDiffArgs diffArgs)
         {
-            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9_]+)\b)|(\$\((?<vs>[a-zA-Z0-9_-]*)\))",
+            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9_]+)\%?\b)|(\$\((?<vs>[a-zA-Z0-9_-]*)\))",
                 new Replacer(diffArgs).Replace);
         }
 
@@ -375,6 +373,7 @@ namespace Ankh.Services
                                     return MergeArgs.TheirsFile;
                                 case "TNAME":
                                 case "THEIRNAME":
+                                case "THEIRSNAME":
                                     return MergeArgs.TheirsTitle ?? Path.GetFileName(MergeArgs.TheirsFile);
 
                                 case "MERGED":
@@ -385,6 +384,10 @@ namespace Ankh.Services
                             }
 
                         // Just replace with "" if unknown
+                        string v = Environment.GetEnvironmentVariable(key);
+                        if (!string.IsNullOrEmpty(v))
+                            return v;
+
                         return "";
                 }
             }
