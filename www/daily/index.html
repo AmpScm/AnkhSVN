@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.4904.132</title>
+<title>AnkhSVN-Daily Update - 2.0.4912.133</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.4904.132</h1>
+<h1>AnkhSVN-Daily Update - 2.0.4912.133</h1>
 
 
 <p>
@@ -12,19 +12,32 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/873/AnkhSvn-Daily-2.0.4904.132.msi">AnkhSvn-Daily-2.0.4904.132.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/877/AnkhSvn-Daily-2.0.4912.133.msi">AnkhSvn-Daily-2.0.4912.133.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4904">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4912">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-07-30</td></tr>
+<tr><td> </td><td class="r"><a id="4912" href="http://ankhsvn.net/rev/?r=4912">[r4912]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectNotifier.cs, src/Ankh.Scc/Resources.resx, src/Ankh.Scc/Resources.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed the modified diff detector to really check the modified
+files for conflicts.</td></tr>
+<tr><td> </td><td class="r"><a id="4911" href="http://ankhsvn.net/rev/?r=4911">[r4911]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.VS/Dialogs/VSCommandRouting.cs, src/Ankh.Services/Selection/ISelectionContext.cs, src/Ankh.VS.UnitTest/Mocks/SelectionContext.cs, src/Ankh.VS/Selection/SelectionContext.Active.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extended selection context to allow retrieving the Active Dialog to
+allow reusing PC commands in the new commit dialog.</td></tr>
+<tr><td> </td><td class="r"><a id="4910" href="http://ankhsvn.net/rev/?r=4910">[r4910]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhDiff.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed possible ArgumentOutOfRangeException when the specified merge/diff
+tool is not found.</td></tr>
+<tr><td> </td><td class="r"><a id="4909" href="http://ankhsvn.net/rev/?r=4909">[r4909]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/SvnItemData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added 'Status Property' field to properties grid for WC explorer</td></tr>
+<tr><td> </td><td class="r"><a id="4908" href="http://ankhsvn.net/rev/?r=4908">[r4908]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/WorkingCopyExplorer/IWorkingCopyExplorer.cs, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.resx, src/Ankh.UI/WorkingCopyExplorer/FileSystemListViewItem.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.Designer.cs, src/Ankh.Package/AnkhSvnPackage.ToolWindows.cs, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, src/Ankh/WorkingCopyExplorer/ExplorersShell.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, src/Ankh/WorkingCopyExplorer/WorkingCopyExplorer.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs, src/Ankh/WorkingCopyExplorer/IExplorersShell.cs, src/Ankh.Tests/ContextBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Working copy explorer cleanup: Added 'Folders' header to folder pane
+and made the implementation less dependant on several implementation
+details of other AnkhSVN parts.</td></tr>
+<tr><td> </td><td class="r"><a id="4906" href="http://ankhsvn.net/rev/?r=4906">[r4906]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsView.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, src/Ankh.UI, src/Ankh.UI/VSSelectionControls/TreeViewWithSelection.cs, src/Ankh.UI/VSSelectionControls/SelectionItemMap.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Allow returning the selected path of our own hierarchy nodes via
+GetCanonicalName(). This improves interop with other tools.</td></tr>
 <tr class="d"><td colspan="4">2008-07-29</td></tr>
 <tr><td> </td><td class="r"><a id="4901" href="http://ankhsvn.net/rev/?r=4901">[r4901]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/AnkhToolWindowControl.cs, src/Ankh.UI/DiffWindow/MergeToolWindowControl.cs, src/Ankh.Services/UI/IAnkhToolWindowSite.cs, src/Ankh.Package/AnkhSvnPackage.ToolWindows.cs, src/Ankh.UI/PendingChanges/PendingChangesToolControl.cs, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, src/Ankh.Package/VSPackage.resx, src/Ankh.UI/DiffWindow/DiffToolWindowControl.cs, src/Ankh.Ids/AnkhId.cs, src/Ankh.UI/SvnLog/LogToolWindowControl.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs, src/Ankh.Package/AnkhSvnPackage.cs, src/Ankh.Services/ContextServices/IAnkhPackage.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Publish User and Keyboard context for all toolwindows. This allows declaring keybindings
 per toolwindow and publicly announces our toolwindows are open (For future AnkhSVN extension packages).</td></tr>
@@ -273,27 +286,6 @@ unused implementation of the old IAnkhSelectionContainer. (interface to be remov
 HKLM\Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation for detecting AnkhSVN X.Y
 and HKLM\Software\AnkhSVN\AnkhSVN\Installation\2.0 for detecting AnkhSVN 2.X<br>
 Below those keys 'CurrentVersion' and 'InstallLocation' values are added</td></tr>
-<tr><td> </td><td class="r"><a id="4678" href="http://ankhsvn.net/rev/?r=4678">[r4678]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/AnkhSettingsControl.cs, src/Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Don't crash on setting a boolean property in the Tools-&gt;Options dialog and show
-an error dialog if we crash anyway.</td></tr>
-<tr><td> </td><td class="r"><a id="4677" href="http://ankhsvn.net/rev/?r=4677">[r4677]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved setting _tryRegisteredBefore to the case where we really register as SCC provider,
-so retrying registration is not skipped.</td></tr>
-<tr><td> </td><td class="r"><a id="4676" href="http://ankhsvn.net/rev/?r=4676">[r4676]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/AnkhSvnPackage.Commands.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4675">r4675</a>: Added missing change in the top level command routing for
-argument completion.</td></tr>
-<tr><td> </td><td class="r"><a id="4675" href="http://ankhsvn.net/rev/?r=4675">[r4675]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/RepositoryBrowseCommand.cs, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.VS.UnitTest/CommandRouting/CommandRoutingTest.cs, src/Ankh/Commands/OpenInXExplorer.cs, src/Ankh.Services/Commands/CommandAttribute.cs, src/Ankh.Services/Commands/CommandMapper.cs, src/Ankh/Commands/RepositoryExplorer/AddRepositoryRootCommand.cs, src/Ankh/Ankh.csproj, src/Ankh.Ids/AnkhCommand.cs, src/Ankh.Services/Commands/CommandMapItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed 'AddRepositoryRoot' to 'RepositoryBrowserGoto'. Adding command completion in the command
-window; and automatically open&amp;goto repository browser.</td></tr>
-<tr><td> </td><td class="r"><a id="4674" href="http://ankhsvn.net/rev/?r=4674">[r4674]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Package/Gui/Gui-To-Ctc.xsl, src/Ankh.Package/Gui/Gui.xsd</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extended GUI language with support for used commands from other definition files. 
-(To allow implementing commands defined in other packages)</td></tr>
-<tr><td> </td><td class="r"><a id="4673" href="http://ankhsvn.net/rev/?r=4673">[r4673]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RefreshCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Stopped logging refresh output to the AnkhSVN-output window.</td></tr>
-<tr><td> </td><td class="r"><a id="4672" href="http://ankhsvn.net/rev/?r=4672">[r4672]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccProjectData.Hierarchy.cs, src/Ankh.Scc/ProjectMap/SccProjectData.cs, src/Ankh.VS/Selection/SelectionContext.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Disable project-dirty from hierarchy events. This fixes 'show all files' marks
-project dirty issues, and allows editting names of new non monniker items 
-(e.g. c++ filters)</td></tr>
-<tr class="d"><td colspan="4">2008-07-15</td></tr>
-<tr><td> </td><td class="r"><a id="4671" href="http://ankhsvn.net/rev/?r=4671">[r4671]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccProjectData.Hierarchy.cs, src/Ankh.Scc/ProjectMap/SccProjectData.cs, src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.Services/Scc/ISccHierarchyWalker.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Filter a new created but unsaved file/directory from the selection context
-This fixes editting new file/folder names in the solution explorer, by making 
-sure the hierarchy is not touched while editting.</td></tr>
-<tr><td> </td><td class="r"><a id="4670" href="http://ankhsvn.net/rev/?r=4670">[r4670]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/LogCommand.cs, src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh/Commands/ResolveConflictExternalCommand.cs, src/Ankh/Commands/AddItemCommand.cs, src/Ankh/Commands/ChangeSourceControlCommand.cs, src/Ankh/Commands/CleanupCommand.cs, src/Ankh/Commands/CommitItemCommand.cs, src/Ankh/Commands/ReverseMergeCommand.cs, src/Ankh/Commands/RefreshCommand.cs, src/Ankh/Commands/SolutionUpdateCommand.cs, src/Ankh/Commands/BlameCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed e.State.SccProviderActive checks from OnUpdate handlers.
-That check is performed from the CommandMapper via the CommandAttribute</td></tr>
-<tr><td> </td><td class="r"><a id="4669" href="http://ankhsvn.net/rev/?r=4669">[r4669]</a></td><td class="a">sander</td><td class="f">src/Ankh.Ids/AnkhId.cs, src/Ankh.Migrate/Cleanup.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Swallow exeptions on Command.Delete()</td></tr>
 
 </table>
 <!--/Recent changes-->
