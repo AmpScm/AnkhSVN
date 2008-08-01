@@ -596,8 +596,8 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingChangesLogMessageMenu">
-      <Menu id="Menu_PendingChangesLogMessageMenu" name="PendingChangesLogMessage" priority="0" type="Context">
+    <GroupRef id="Menu_LogMessageEditorContextMenu">
+      <Menu id="Menu_LogMessageEditorContextMenu" name="LogMessageEditor" priority="0" type="Context">
         <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
                   text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
@@ -613,7 +613,6 @@
           <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x100"  />
           <ButtonRef id="guidVSStd97:cmdidSelectAll"  priority="0x200" />
         </Group>
-        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_SourceControl">

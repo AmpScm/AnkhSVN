@@ -202,7 +202,7 @@ namespace Ankh.UI.PendingChanges
             if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
             {
                 groupGuid = AnkhId.CommandSetGuid;
-                menuId = (int)AnkhCommandMenu.PendingChangesLogMessageMenu;
+                menuId = (int)AnkhCommandMenu.LogMessageEditorContextMenu;
             }
         }
 
