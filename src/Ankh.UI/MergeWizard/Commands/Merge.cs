@@ -26,6 +26,7 @@ namespace Ankh.UI.MergeWizard.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             int n = 0;
+            bool ok = true;
             switch (e.Command)
             {
                 case AnkhCommand.ItemMerge:
@@ -33,8 +34,11 @@ namespace Ankh.UI.MergeWizard.Commands
                     {
                         n++;
 
-                        if (n > 1)
+                        if (n > 1 || !item.IsVersioned)
+                        {
+                            ok = false;
                             break;
+                        }
                     }
                     break;
                 case AnkhCommand.ProjectMerge:
@@ -53,7 +57,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     throw new InvalidOperationException();
             }
 
-            if (n == 0 || n > 1)
+            if (!ok || n == 0 || n > 1)
                 e.Enabled = false;
             else
                 e.Enabled = true;
