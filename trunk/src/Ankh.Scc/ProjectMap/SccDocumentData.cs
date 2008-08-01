@@ -309,27 +309,42 @@ namespace Ankh.Scc.ProjectMap
             {
                 // This method is valid on all text editors and probably many other editors
 
-                if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0)))
-                    return true;
+                try
+                {
+                    if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0)))
+                        return true;
+                }
+                catch
+                { }
             }
 
             IVsPersistHierarchyItem2 vsPersistHierarchyItem2 = RawDocument as IVsPersistHierarchyItem2;
             if (vsPersistHierarchyItem2 != null)
             {
                 // This route works for some project types and at least the solution
-                if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
-                    return true;
+                try
+                {
+                    if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
+                        return true;
+                }
+                catch
+                { }
             }
 
 
             vsPersistHierarchyItem2 = Hierarchy as IVsPersistHierarchyItem2;
 
-            if (vsPersistHierarchyItem2 != null &&
-                ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(ItemId, 0)))
+            try
             {
-                // Our parent reloaded us
-                return true;
+                if (vsPersistHierarchyItem2 != null &&
+                    ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(ItemId, 0)))
+                {
+                    // Our parent reloaded us
+                    return true;
+                }
             }
+            catch
+            { }
 
             return false; // We can't be reloaded by ourselves.. Let our caller reload our parent instead
         }
