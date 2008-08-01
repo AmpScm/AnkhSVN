@@ -345,11 +345,12 @@
       </Menu>
     </GroupRef>
     <GroupRef id="Menu_WorkingCopyExplorerContextMenu">
-      <!-- The Working Copy Explorer Toolbar -->
+      <!-- The Working Copy Explorer Context Menu -->
       <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="Context">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_Refresh" priority="0x500" />
         </Group>
+        <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
@@ -530,7 +531,7 @@
       </Menu>
     </GroupRef>
     <GroupRef id="Menu_PendingChangesContextMenu">
-      <!-- The Working Copy Explorer Toolbar -->
+      <!-- The Pending Changes Context menu -->
       <Menu id="Menu_PendingChangesContextMenu" name="PendingChangesContext" priority="0" type="Context">
         <Group id="Grp_PendingChangesContextMenu" priority="0x100">
           <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
