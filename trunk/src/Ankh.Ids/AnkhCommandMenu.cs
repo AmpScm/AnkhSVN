@@ -35,7 +35,7 @@ namespace Ankh.Ids
 
         PendingChangesContextMenu,
         PendingCommitsSortContextMenu,
-        PendingChangesLogMessageMenu,
+        LogMessageEditorContextMenu,
 
         PendingChangesCommit,
         PendingChangesUpdate,
