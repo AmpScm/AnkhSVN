@@ -13,6 +13,7 @@ namespace Ankh.Commands
         readonly AnkhCommand _command;
         ICommandHandler _handler;
         string _argumentDefinition;
+        bool _dynamicMenuEnd;
 
         public event EventHandler<CommandEventArgs> Execute;
         public event EventHandler<CommandUpdateEventArgs> Update;
@@ -37,6 +38,12 @@ namespace Ankh.Commands
         {
             get { return _argumentDefinition; }
             set { _argumentDefinition = value; }
+        }
+
+        public bool DynamicMenuEnd
+        {
+            get { return _dynamicMenuEnd; }
+            internal set { _dynamicMenuEnd = value; }
         }
 
         protected internal void OnExecute(CommandEventArgs e)
