@@ -151,6 +151,45 @@ namespace Ankh.UI.PendingChanges
             if (_fixUI)
                 FixUI();
 
+            if ((keyData & ~Keys.Modifiers) == Keys.Tab)
+            {
+                Keys mods = ModifierKeys;
+                if ((mods & (Keys.Control | Keys.Alt)) != 0)
+                {
+                    if((mods & (Keys.Control | Keys.Alt)) == Keys.Control)
+                    {
+                        Control c = this;
+                        bool found = false;
+
+                        bool forward = (mods & Keys.Shift) == 0;
+
+                        while(!found && c != null)
+                        {
+                            ContainerControl cc = c.GetContainerControl() as ContainerControl;
+
+                            if(cc == null)
+                                break;
+
+                            if(cc.SelectNextControl(this, forward, true, true, false))
+                            {
+                                found = true;
+                            }
+
+                            c = cc;
+                        }
+
+                        if(!found)
+                        {
+                            ContainerControl cc = c.TopLevelControl as ContainerControl;
+
+                            if(cc != null)
+                                cc.SelectNextControl(this, forward, true, true, true);
+                        }
+                    }
+                    return false;
+                }
+            }
+
             // Since we process each pressed keystroke, the return value is always true.
             return true;
         }
@@ -713,7 +752,20 @@ namespace Ankh.UI.PendingChanges
 
         public bool HasFocus
         {
-            get { return _container.ContainsFocus; }
+            get
+            {
+                if (_container.ContainsFocus)
+                {
+                    IContainerControl p = _container.GetContainerControl();
+
+                    if (p != null && p.ActiveControl != _container)
+                        _container.Select(); // The editor has the focus: then it must be the active control
+
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         internal static class NativeMethods
