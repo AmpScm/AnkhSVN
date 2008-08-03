@@ -227,13 +227,6 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        private void pendingCommits_RetrieveSelection(object sender, PendingCommitsView.RetrieveSelectionEventArgs e)
-        {
-            PendingCommitItem pi = (PendingCommitItem)e.Item;
-
-            e.SelectionItem = pi.PendingChange;
-        }
-
         private void pendingCommits_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ListViewHitTestInfo info = pendingCommits.HitTest(e.X, e.Y);
@@ -250,11 +243,6 @@ namespace Ankh.UI.PendingChanges
 
             if (cmd != null)
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
-        }
-
-        private void pendingCommits_ColumnReordered(object sender, ColumnReorderedEventArgs e)
-        {
-
         }
 
         private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
