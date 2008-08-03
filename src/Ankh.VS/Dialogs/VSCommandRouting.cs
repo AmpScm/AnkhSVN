@@ -126,6 +126,22 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
+            const int WM_KEYFIRST = 0x0100;
+            const int WM_IME_KEYLAST = 0x010F;
+            const int WM_KEYDOWN = 0x0100;
+
+            if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
+                return false; // Only key translation below
+
+            if(m.Msg == WM_KEYDOWN)
+                switch ((int)m.WParam)
+                {
+                    case '\t':
+                        if((Control.ModifierKeys & Keys.Control) != 0)
+                            return false;
+                        break;
+                }
+
             MSG[] messages = new MSG[1];
                 messages[0].hwnd = m.HWnd;
                 messages[0].lParam = m.LParam;

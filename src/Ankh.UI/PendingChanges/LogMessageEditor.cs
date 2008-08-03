@@ -156,7 +156,7 @@ namespace Ankh.UI.PendingChanges
                 Keys mods = ModifierKeys;
                 if ((mods & (Keys.Control | Keys.Alt)) != 0)
                 {
-                    if((mods & (Keys.Control | Keys.Alt)) == Keys.Control)
+                    if((mods & (Keys.Control | Keys.Alt)) == Keys.Control && TopLevelControl is Form)
                     {
                         Control c = this;
                         bool found = false;
