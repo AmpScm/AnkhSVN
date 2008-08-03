@@ -182,8 +182,10 @@ namespace Ankh.UI.VSSelectionControls
             get { return IsXPPlus; }
         }
 
-        private void UpdateSortGlyphs()
+        internal void UpdateSortGlyphs()
         {
+            if (!SupportsSortGlypgs)
+                return;
             //throw new NotImplementedException();
             foreach (ColumnHeader ch in Columns)
             {
