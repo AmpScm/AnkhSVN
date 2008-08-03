@@ -148,8 +148,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns>Always returns true</returns>
         protected override bool IsInputKey(Keys keyData)
         {
-            if (_fixUI)
-                FixUI();
+            FixUI();
 
             if ((keyData & ~Keys.Modifiers) == Keys.Tab)
             {
