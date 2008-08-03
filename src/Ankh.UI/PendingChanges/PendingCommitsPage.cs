@@ -259,8 +259,8 @@ namespace Ankh.UI.PendingChanges
 
         private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
         {
-            //if (!pendingCommits.ContainsFocus)
-            //    Select();
+            if (!pendingCommits.ContainsFocus)
+                Select();
             Point p = MousePosition;
 
             Point clP = pendingCommits.PointToClient(p);
