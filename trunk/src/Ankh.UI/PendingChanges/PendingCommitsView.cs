@@ -7,6 +7,7 @@ using System.ComponentModel;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using System.Windows.Forms;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -118,5 +119,10 @@ namespace Ankh.UI.PendingChanges
         {
             return item.FullPath;
         }
+
+        protected override void OnRetrieveSelection(ListViewWithSelection<PendingCommitItem>.RetrieveSelectionEventArgs e)
+        {
+            e.SelectionItem = e.Item.PendingChange;
+        }        
     }
 }
