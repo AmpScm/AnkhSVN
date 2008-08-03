@@ -79,5 +79,13 @@ namespace Ankh.Ids
         SccExplore,
 
         LogChangedPathsContextMenu,
+
+        ListViewState,
+
+        ListViewSort,
+        ListViewSortOrder,
+        ListViewGroup,
+        ListViewGroupOrder,
+        ListViewShow,
     }
 }

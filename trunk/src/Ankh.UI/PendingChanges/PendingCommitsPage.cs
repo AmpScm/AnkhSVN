@@ -19,6 +19,7 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
+            pendingCommits.Initialize();
         }
 
         bool _createdEditor;
@@ -122,7 +123,7 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Items.Remove(pci);
             }
 
-            pci = new PendingCommitItem(UISite, e.Change);
+            pci = new PendingCommitItem(pendingCommits, e.Change);
             _listItems.Add(path, pci);
             pendingCommits.Items.Add(pci);                            
 
@@ -161,7 +162,7 @@ namespace Ankh.UI.PendingChanges
             {
                 foreach (PendingChange pc in e.Manager.GetAll())
                 {
-                    PendingCommitItem pi = new PendingCommitItem(UISite, pc);
+                    PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
                     _listItems.Add(pc.FullPath, pi);
 
                     if (_checkedItems != null)
@@ -188,7 +189,7 @@ namespace Ankh.UI.PendingChanges
 
             if (!_listItems.TryGetValue(path, out pci))
             {
-                pci = new PendingCommitItem(UISite, e.Change);
+                pci = new PendingCommitItem(pendingCommits, e.Change);
                 _listItems.Add(path, pci);
                 pendingCommits.Items.Add(pci);
             }

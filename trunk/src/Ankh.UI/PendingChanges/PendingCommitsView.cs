@@ -6,6 +6,7 @@ using Microsoft.VisualStudio;
 using System.ComponentModel;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -14,6 +15,56 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsView()
         {
             StrictCheckboxesClick = true;
+        }
+
+        public void Initialize()
+        {
+            SmartColumn path = new SmartColumn(this, PCStrings.PathColumn, 288);
+            SmartColumn project = new SmartColumn(this, PCStrings.ProjectColumn, 76);
+            SmartColumn change = new SmartColumn(this, PCStrings.ChangeColumn, 76);
+            SmartColumn fullPath = new SmartColumn(this, PCStrings.FullPathColumn, 327);
+
+            SmartColumn changeList = new SmartColumn(this, PCStrings.ChangeListColumn, 76);
+            SmartColumn folder = new SmartColumn(this, PCStrings.FolderColumn, 196);
+            SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38);
+            SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76);
+            SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76);
+            SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76);
+            SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76);
+
+            Columns.AddRange(new ColumnHeader[]
+            {
+                path,
+                project,
+                change,
+                fullPath
+            });
+
+            
+            change.Groupable = true;
+            changeList.Groupable = true;
+            folder.Groupable = true;
+            locked.Groupable = true;
+            project.Groupable = true;
+            type.Groupable = true;
+            workingCopy.Groupable = true;
+
+            path.Hideable = false;
+            
+            AllColumns.Add(change);
+            AllColumns.Add(changeList);
+            AllColumns.Add(folder);
+            AllColumns.Add(fullPath);
+            AllColumns.Add(locked);
+            AllColumns.Add(modified);
+            AllColumns.Add(name);
+            AllColumns.Add(path);
+            AllColumns.Add(project);
+            AllColumns.Add(type);
+            AllColumns.Add(workingCopy);
+
+            SortColumns.Add(path);
+            GroupColumns.Add(changeList);
         }
 
         IAnkhServiceProvider _context;
