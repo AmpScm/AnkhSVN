@@ -4,6 +4,8 @@ using System.Text;
 //using System.Windows.Forms;
 using Ankh.Commands;
 using Ankh.Ids;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {
@@ -37,17 +39,40 @@ namespace Ankh.UI.VSSelectionControls.Commands
         protected override void OnExecute(SmartListView list, CommandEventArgs e)
         {
             int n = (int)(e.Command - AnkhCommand.ListViewShow0);
-            if (n >= list.Columns.Count || n < 0)
-                return;
 
-            System.Windows.Forms.ColumnHeader ch = list.Columns[n];
+            SmartColumn sc = list.AllColumns[n];
+            int col = sc.Index;
+            if (col > 0)
+            {
+                list.Columns.Remove(sc);
 
-            int i = ch.DisplayIndex;
+                if (!list.VirtualMode)
+                {
+                    Debug.Assert(sc.Index < 0);
 
-            if(i < 0)
-                ch.DisplayIndex = list.Columns.Count; // Auto fixed?
+                    foreach (ListViewItem li in list.Items)
+                    {
+                        if (li.SubItems.Count > col)
+                            li.SubItems.RemoveAt(col);
+                    }
+                }
+            }
             else
-                ch.DisplayIndex = -1;
+            {
+                list.Columns.Add(sc);
+
+                if (!list.VirtualMode)
+                {
+                    col = sc.Index;
+                    foreach (ListViewItem li in list.Items)
+                    {
+                        SmartListViewItem si = li as SmartListViewItem;
+
+                        if (si != null)
+                            si.SetValue(sc.AllColumnsIndex, si.GetValue(sc.AllColumnsIndex));
+                    }
+                }
+            }            
         }
 
     }

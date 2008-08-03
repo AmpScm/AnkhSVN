@@ -77,7 +77,7 @@ namespace Ankh.UI.VSSelectionControls
                 Group = null;            
         }
 
-        void SetValue(int column, string value)
+        public void SetValue(int column, string value)
         {
             if (column < 0)
                 throw new ArgumentOutOfRangeException("column");
