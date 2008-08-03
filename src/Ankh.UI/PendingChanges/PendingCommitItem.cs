@@ -4,26 +4,23 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.VS;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.PendingChanges
 {
-    class PendingCommitItem : ListViewItem
+    class PendingCommitItem : SmartListViewItem
     {
         readonly PendingChange _change;
 
-        public PendingCommitItem(IAnkhServiceProvider context, PendingChange change)
+        public PendingCommitItem(PendingCommitsView view, PendingChange change)
+            : base(view)
         {
             if (change == null)
                 throw new ArgumentNullException("change");
 
-            _change = change;
+            _change = change;        
 
-            while (SubItems.Count < 6)
-                SubItems.Add("");
-
-            Checked = true;
-
-            RefreshText(context);
+            RefreshText(view.Context);
         }
 
         public void RefreshText(IAnkhServiceProvider context)
@@ -35,9 +32,6 @@ namespace Ankh.UI.PendingChanges
             string start = solSet.ProjectRootWithSeparator;
 
             ImageIndex = PendingChange.IconIndex;
-            SubItems[1].Text = PendingChange.Project;
-           
-
             SvnItem item = cache[FullPath];
 
             if (item == null)
@@ -45,14 +39,18 @@ namespace Ankh.UI.PendingChanges
 
             PendingChangeStatus pcs = PendingChange.Change;
 
-            if (pcs != null)
-            {
-                SubItems[2].Text = pcs.PendingCommitText;
-            }
-            else
-                SubItems[2].Text = "";
-            
-            SubItems[3].Text = item.FullPath;
+            SetValues(
+                pcs.PendingCommitText,
+                PendingChange.ChangeList,
+                PendingChange.Item.Directory,
+                PendingChange.FullPath,
+                "", // Locked
+                "", // Modified
+                PendingChange.Name,
+                PendingChange.RelativePath,
+                PendingChange.Project,
+                System.IO.Path.GetExtension(PendingChange.FullPath),
+                PendingChange.Item.WorkingCopy.FullPath);
 
             ImageIndex = PendingChange.IconIndex;
 

@@ -542,54 +542,30 @@
     </GroupRef>    
     <GroupRef id="Menu_PendingCommitsSortContextMenu">
       <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
-        <Group id="Grp_PendingCommitsMenu" priority="0x100">
-          <Menu id="Menu_PendingCommitsView" priority="0x100" name="View" text="&amp;View Columns">
-            <Group id="Menu_PendingCommitsView" priority="0x100">
-              <Button id="Cmd_PcColViewPath" text="&amp;Path" priority="0x100" />
-              <Button id="Cmd_PcColViewProject" text="P&amp;roject" priority="0x110" />
-              <Button id="Cmd_PcColViewChange" text="&amp;Change" priority="0x120" />
-              <Button id="Cmd_PcColViewChangeList" text="Change &amp;List" priority="0x130" />
-              <Button id="Cmd_PcColViewFullPath" text="&amp;Full Path" priority="0x140" />
-              <Button id="Cmd_PcColViewLocked" text="Loc&amp;ked" priority="0x150" />
-              <Button id="Cmd_PcColViewModified" text="&amp;Modified" priority="0x160" />
-              <Button id="Cmd_PcColViewName" text="&amp;Name" priority="0x170" />
-              <Button id="Cmd_PcColViewType" text="&amp;Type" priority="0x180" />
+        <Group id="Grp_ListViewState" priority="0x100">
+          <Menu id="Menu_ListViewShow" priority="0x1000" name="ShowBy" text="&amp;View Columns">
+            <Group id="Grp_ListViewShow" priority="0x1000">
+              <Button id="Cmd_ListViewShow0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
             </Group>
           </Menu>
-          <Menu id="Menu_PendingCommitsSort" priority="0x100" name="Sort" text="S&amp;ort By">
-            <Group id="Menu_PendingCommitsSort" priority="0x100">
-              <Button id="Cmd_PcSortPath" text="&amp;Path" priority="0x100" />
-              <Button id="Cmd_PcSortProject" text="P&amp;roject" priority="0x110" />
-              <Button id="Cmd_PcSortChange" text="&amp;Change" priority="0x120" />
-              <Button id="Cmd_PcSortChangeList" text="Change &amp;List" priority="0x130" />
-              <Button id="Cmd_PcSortFullPath" text="&amp;Full Path" priority="0x140" />
-              <Button id="Cmd_PcSortLocked" text="Loc&amp;ked" priority="0x150" />
-              <Button id="Cmd_PcSortModified" text="&amp;Modified" priority="0x160" />
-              <Button id="Cmd_PcSortName" text="&amp;Name" priority="0x170" />
-              <Button id="Cmd_PcSortType" text="&amp;Type" priority="0x180" />
+          <Menu id="Menu_ListViewSort" priority="0x2000" name="SortBy" text="&amp;Sort By">
+            <Group id="Grp_ListViewSort" priority="0x1000">
+              <Button id="Cmd_ListViewSort0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
             </Group>
-            <Group id="Grp_PendingCommitsSortActions" priority="0x200">
+            <Group id="Grp_ListViewSortOrder" priority="0x2000">
               <Button id="Cmd_PcSortAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png"/>
               <Button id="Cmd_PcSortDescending" text="&amp;Descending" priority="0x200" iconFile="PendingChanges/SortDescending.png"/>
             </Group>
           </Menu>
-          <Menu id="Menu_PendingCommitsGroup" priority="0x100" name="Group" text="Grou&amp;p By">
-            <Group id="Menu_PendingCommitsGroup" priority="0x100">
-              <Button id="Cmd_PcGroupPath" text="&amp;Path" priority="0x100" />
-              <Button id="Cmd_PcGroupProject" text="P&amp;roject" priority="0x110" />
-              <Button id="Cmd_PcGroupChange" text="&amp;Change" priority="0x120" />
-              <Button id="Cmd_PcGroupChangeList" text="Change &amp;List" priority="0x130" />
-              <Button id="Cmd_PcGroupFullPath" text="&amp;Full Path" priority="0x140" />
-              <Button id="Cmd_PcGroupLocked" text="Loc&amp;ked" priority="0x150" />
-              <Button id="Cmd_PcGroupModified" text="&amp;Modified" priority="0x160" />
-              <Button id="Cmd_PcGroupName" text="&amp;Name" priority="0x170" />
-              <Button id="Cmd_PcGroupType" text="&amp;Type" priority="0x180" />
+          <Menu id="Menu_ListViewGroup" priority="0x3000" name="GroupBy" text="&amp;Group By">
+            <Group id="Grp_ListViewGroup" priority="0x1000">
+              <Button id="Cmd_ListViewGroup0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
             </Group>
-            <Group id="Grp_PendingCommitsGroupActions" priority="0x200">
+            <Group id="Grp_ListViewGroupOrder" priority="0x2000">
               <Button id="Cmd_PcGroupAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png" />
               <Button id="Cmd_PcGroupDescending" text="&amp;Descending" priority="0x200" iconFile="PendingChanges/SortDescending.png"/>
             </Group>
-          </Menu>
+          </Menu>          
         </Group>
         <Group id="Grp_PendingCommitsActions" priority="0x200">
           <ButtonRef id="Cmd_PendingChangesViewLogMessage" priority="0x100" />

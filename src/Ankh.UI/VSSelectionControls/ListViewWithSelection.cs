@@ -15,7 +15,7 @@ namespace Ankh.UI.VSSelectionControls
     /// <summary>
     /// Generic listview with <see cref="ISelectionContainer"/> support
     /// </summary>
-    public class ListViewWithSelection<TListViewItem> : ListViewWithSortIcons, ISelectionMapOwner<TListViewItem>
+    public class ListViewWithSelection<TListViewItem> : SmartListView, ISelectionMapOwner<TListViewItem>
         where TListViewItem : ListViewItem
     {
         bool _provideFullList;

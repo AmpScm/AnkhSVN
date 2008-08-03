@@ -56,5 +56,9 @@ namespace Ankh.Ids
 
         LogViewerContextMenu,
         LogChangedPathsContextMenu,
+
+        ListViewSort,
+        ListViewGroup,
+        ListViewShow
     }
 }

@@ -178,11 +178,7 @@
             // 
             this.pendingCommits.AllowColumnReorder = true;
             this.pendingCommits.CheckBoxes = true;
-            this.pendingCommits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.pathColumn,
-            this.projectColumn,
-            this.changeColumn,
-            this.fullPathColumn});
+   
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
             this.pendingCommits.HideSelection = false;
@@ -200,27 +196,7 @@
             this.pendingCommits.ShowContextMenu += new System.EventHandler(this.pendingCommits_ShowContextMenu);
             this.pendingCommits.RetrieveSelection += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.RetrieveSelectionEventArgs>(this.pendingCommits_RetrieveSelection);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
-            this.pendingCommits.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.pendingCommits_ColumnReordered);
-            // 
-            // pathColumn
-            // 
-            this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 290;
-            // 
-            // projectColumn
-            // 
-            this.projectColumn.Text = "Project";
-            this.projectColumn.Width = 75;
-            // 
-            // changeColumn
-            // 
-            this.changeColumn.Text = "Change";
-            this.changeColumn.Width = 73;
-            // 
-            // fullPathColumn
-            // 
-            this.fullPathColumn.Text = "Full Path";
-            this.fullPathColumn.Width = 327;
+            this.pendingCommits.ColumnReordered += new System.Windows.Forms.ColumnReorderedEventHandler(this.pendingCommits_ColumnReordered);            
             // 
             // PendingCommitsPage
             // 

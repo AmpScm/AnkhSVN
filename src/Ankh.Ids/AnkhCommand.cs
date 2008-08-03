@@ -36,7 +36,7 @@ namespace Ankh.Ids
         FileFileAddFromSubversion,
 
         FileSccOpenFromSubversion,
-        FileSccAddFromSubversion,    
+        FileSccAddFromSubversion,
 
         FileSccAddSolutionToSubversion,
         FileSccAddProjectToSubversion,
@@ -216,13 +216,25 @@ namespace Ankh.Ids
         LogShowChanges,
 
         MigrateSettings,
-		ItemEditProperties,
+        ItemEditProperties,
         ReposExplorerLog,
         LogBlameRevision,
         RevertProjectToRevision,
         RevertSolutionToRevision,
 
         SwitchProject,
-        ProjectBranch,        
+        ProjectBranch,
+
+        ListViewSort0,
+        ListViewSortMax = ListViewSort0+32,
+        ListViewSortAscending,
+        ListViewSortDescending,
+        ListViewGroup0,
+        ListViewGroupMax = ListViewGroup0 + 32,
+        ListViewGroupAscending,
+        ListViewGroupDescending,
+        ListViewShow0,
+        ListViewShowMax = ListViewShow0 + 32,
+
     }
 }
