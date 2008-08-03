@@ -553,18 +553,14 @@
               <Button id="Cmd_ListViewSort0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
             </Group>
             <Group id="Grp_ListViewSortOrder" priority="0x2000">
-              <Button id="Cmd_PcSortAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png"/>
-              <Button id="Cmd_PcSortDescending" text="&amp;Descending" priority="0x200" iconFile="PendingChanges/SortDescending.png"/>
+              <Button id="Cmd_ListViewSortAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png"/>
+              <Button id="Cmd_ListViewSortDescending" text="&amp;Descending" priority="0x200" iconFile="PendingChanges/SortDescending.png"/>
             </Group>
           </Menu>
           <Menu id="Menu_ListViewGroup" priority="0x3000" name="GroupBy" text="&amp;Group By">
             <Group id="Grp_ListViewGroup" priority="0x1000">
               <Button id="Cmd_ListViewGroup0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
-            </Group>
-            <Group id="Grp_ListViewGroupOrder" priority="0x2000">
-              <Button id="Cmd_PcGroupAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png" />
-              <Button id="Cmd_PcGroupDescending" text="&amp;Descending" priority="0x200" iconFile="PendingChanges/SortDescending.png"/>
-            </Group>
+            </Group>            
           </Menu>          
         </Group>
         <Group id="Grp_PendingCommitsActions" priority="0x200">

@@ -36,8 +36,33 @@ namespace Ankh.UI.VSSelectionControls.Commands
 
         protected override void OnExecute(SmartListView list, CommandEventArgs e)
         {
-            //throw new NotImplementedException();
-        }
+            bool extend = ((Control.ModifierKeys & Keys.Shift) != 0);
 
+            int n = (int)(e.Command - AnkhCommand.ListViewSort0);
+            SmartColumn column = list.AllColumns[n];
+
+            if (list.SortColumns.Contains(column))
+            {
+                list.SortColumns.Remove(column);
+
+                list.UpdateSortGlyphs();
+
+                if (list.SortColumns.Count > 0)
+                    list.Sort();
+            }
+            else if (!extend)
+            {
+                list.SortColumns.Clear();
+                list.SortColumns.Add(column);
+                list.UpdateSortGlyphs();
+                list.Sort();
+            }
+            else
+            {
+                list.SortColumns.Add(column);
+                list.UpdateSortGlyphs();
+                list.Sort();
+            }
+        }
     }
 }

@@ -225,16 +225,13 @@ namespace Ankh.Ids
         SwitchProject,
         ProjectBranch,
 
-        ListViewSort0,
-        ListViewSortMax = ListViewSort0+32,
         ListViewSortAscending,
         ListViewSortDescending,
+        ListViewSort0,
+        ListViewSortMax = ListViewSort0+64,        
         ListViewGroup0,
-        ListViewGroupMax = ListViewGroup0 + 32,
-        ListViewGroupAscending,
-        ListViewGroupDescending,
+        ListViewGroupMax = ListViewGroup0 + 64,
         ListViewShow0,
-        ListViewShowMax = ListViewShow0 + 32,
-
+        ListViewShowMax = ListViewShow0 + 64,
     }
 }
