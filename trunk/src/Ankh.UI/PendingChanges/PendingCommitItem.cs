@@ -50,7 +50,7 @@ namespace Ankh.UI.PendingChanges
                 PendingChange.RelativePath,
                 PendingChange.Project,
                 System.IO.Path.GetExtension(PendingChange.FullPath),
-                PendingChange.Item.WorkingCopy.FullPath);
+                SafeWorkingCopy(PendingChange.Item));
 
             ImageIndex = PendingChange.IconIndex;
 
@@ -66,6 +66,15 @@ namespace Ankh.UI.PendingChanges
                 clr = System.Drawing.Color.DarkBlue;
 
             ForeColor = clr;
+        }
+
+        static string SafeWorkingCopy(SvnItem svnItem)
+        {
+            SvnWorkingCopy wc = svnItem.WorkingCopy;
+            if (wc == null)
+                return "";
+
+            return wc.FullPath;
         }
 
         /// <summary>
