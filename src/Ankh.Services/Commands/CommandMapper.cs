@@ -163,8 +163,8 @@ namespace Ankh.Commands
         }
 
         private void EnsureLoaded()
-        {            
-            if(_assembliesToLoad.Count == 0)
+        {
+            if (_assembliesToLoad.Count == 0)
                 return;
 
             if (_defined.Count == 0)
@@ -175,7 +175,7 @@ namespace Ankh.Commands
                         continue;
 
                     _defined.Add(cmd);
-                }                
+                }
             }
 
             while (_assembliesToLoad.Count > 0)
@@ -198,10 +198,13 @@ namespace Ankh.Commands
                         if (cmdAttr.Context != _commandContext)
                             continue;
 
-                        CommandMapItem item = this[cmdAttr.Command];
-
-                        if (item != null)
+                        foreach (AnkhCommand cmdInstance in cmdAttr.GetAllCommands())
                         {
+                            CommandMapItem item = this[cmdInstance];
+
+                            if (item == null)
+                                throw new InvalidOperationException("Invalid command " + cmdInstance.ToString());
+
                             if (instance == null)
                             {
                                 instance = (ICommandHandler)Activator.CreateInstance(type);

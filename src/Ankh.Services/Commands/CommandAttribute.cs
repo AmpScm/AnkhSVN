@@ -10,6 +10,7 @@ namespace Ankh.Commands
     {
         readonly AnkhCommand _command;
         readonly AnkhCommandContext _context;
+        AnkhCommand _lastCommand;
 
         /// <summary>
         /// Defines the class or function as a handler of the specified <see cref="AnkhCommand"/>
@@ -39,6 +40,12 @@ namespace Ankh.Commands
         public AnkhCommandContext Context
         {
             get { return _context; }
+        }
+
+        public AnkhCommand LastCommand
+        {
+            get { return _lastCommand; }
+            set { _lastCommand = value; }
         }
 
         bool _showWhenDisabled;
@@ -86,6 +93,19 @@ namespace Ankh.Commands
         {
             get { return _argumentDefinition; }
             set { _argumentDefinition = value; }
+        }
+
+        internal IEnumerable<AnkhCommand> GetAllCommands()
+        {
+            if (LastCommand == AnkhCommand.None)
+                yield return Command;
+            else if(LastCommand < Command || ((int)LastCommand - (int)Command) > 256)
+                throw new InvalidOperationException("Command range larger then 256 on range starting with" + Command.ToString());
+            else
+                for (AnkhCommand c = Command; c <= LastCommand; c++)
+                {
+                    yield return c;
+                }
         }
     }
 }
