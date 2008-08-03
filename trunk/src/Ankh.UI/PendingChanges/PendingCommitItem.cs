@@ -61,7 +61,7 @@ namespace Ankh.UI.PendingChanges
             else if(item.IsDeleteScheduled)
                 clr = System.Drawing.Color.DarkRed;
             else if(item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added || !item.IsVersioned)
-                clr = System.Drawing.Color.FromArgb(255,100,0,100);
+                clr = System.Drawing.Color.FromArgb(100,0,100);
             else if(item.IsModified)
                 clr = System.Drawing.Color.DarkBlue;
 
