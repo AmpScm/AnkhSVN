@@ -189,12 +189,15 @@ namespace Ankh.UI.VSSelectionControls
             {
                 SmartColumn sc = ch as SmartColumn;
 
-                if (sc != null && SortColumns.Contains(sc))
+                if (sc != null)
                 {
-                    SetSortIcon(sc.Index, sc.ReverseSort ? SortIcon.Descending : SortIcon.Ascending);
+                    if (SortColumns.Contains(sc))
+                    {
+                        SetSortIcon(sc.Index, sc.ReverseSort ? SortIcon.Descending : SortIcon.Ascending);
+                    }
+                    else
+                        SetSortIcon(sc.Index, SortIcon.None);
                 }
-                else
-                    SetSortIcon(sc.Index, SortIcon.None);
 
             }
         }
