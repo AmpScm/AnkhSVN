@@ -106,6 +106,15 @@ namespace Ankh.UI.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked.
+        /// </summary>
+        internal static string LockedValue {
+            get {
+                return ResourceManager.GetString("LockedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Modified.
         /// </summary>
         internal static string ModifiedColumn {

@@ -132,6 +132,9 @@
   <data name="LockedColumn" xml:space="preserve">
     <value>Loc&amp;ked</value>
   </data>
+  <data name="LockedValue" xml:space="preserve">
+    <value>Locked</value>
+  </data>
   <data name="ModifiedColumn" xml:space="preserve">
     <value>&amp;Modified</value>
   </data>
