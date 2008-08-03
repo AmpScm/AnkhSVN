@@ -745,9 +745,22 @@ namespace Ankh
             // TODO: Mark item as no longer valid
         }
 
+        /// <summary>
+        /// Gets the directory.
+        /// </summary>
+        /// <value>The directory.</value>
         public string Directory
         {
             get { return Path.GetDirectoryName(FullPath); }
+        }
+
+        /// <summary>
+        /// Gets the extension.
+        /// </summary>
+        /// <value>The extension.</value>
+        public string Extension
+        {
+            get { return Path.GetExtension(FullPath); }
         }
 
         /// <summary>

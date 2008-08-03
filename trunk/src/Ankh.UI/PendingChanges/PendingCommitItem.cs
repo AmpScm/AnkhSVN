@@ -42,14 +42,14 @@ namespace Ankh.UI.PendingChanges
             SetValues(
                 pcs.PendingCommitText,
                 PendingChange.ChangeList,
-                PendingChange.Item.Directory,
+                GetDirectory(PendingChange.Item),
                 PendingChange.FullPath,
-                "", // Locked
+                PendingChange.Item.IsLocked ? PCStrings.LockedValue : "", // Locked
                 "", // Modified
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
-                System.IO.Path.GetExtension(PendingChange.FullPath),
+                PendingChange.Item.Extension,
                 SafeWorkingCopy(PendingChange.Item));
 
             ImageIndex = PendingChange.IconIndex;
@@ -66,6 +66,14 @@ namespace Ankh.UI.PendingChanges
                 clr = System.Drawing.Color.DarkBlue;
 
             ForeColor = clr;
+        }
+
+        private string GetDirectory(SvnItem svnItem)
+        {
+            if (svnItem.IsDirectory)
+                return svnItem.FullPath;
+            else
+                return svnItem.Directory;
         }
 
         static string SafeWorkingCopy(SvnItem svnItem)
