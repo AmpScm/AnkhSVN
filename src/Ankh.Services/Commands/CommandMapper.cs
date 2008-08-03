@@ -58,6 +58,9 @@ namespace Ankh.Commands
                 if (item.HideWhenDisabled && !e.Enabled)
                     e.Visible = false;
 
+                if (item.DynamicMenuEnd)
+                    e.DynamicMenuEnd = true;
+
                 return item.IsHandled;
             }
             else if (_defined.Contains(command))
@@ -205,6 +208,12 @@ namespace Ankh.Commands
                             if (item == null)
                                 throw new InvalidOperationException("Invalid command " + cmdInstance.ToString());
 
+                            if (cmdAttr.LastCommand == cmdInstance)
+                            {
+                                item.DynamicMenuEnd = true;
+                                continue;
+                            }
+
                             if (instance == null)
                             {
                                 instance = (ICommandHandler)Activator.CreateInstance(type);
@@ -220,7 +229,7 @@ namespace Ankh.Commands
                             item.ICommand = instance; // hooks all events in compatibility mode
                             item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
                             item.HideWhenDisabled = cmdAttr.HideWhenDisabled;
-                            item.ArgumentDefinition = cmdAttr.ArgumentDefinition;
+                            item.ArgumentDefinition = cmdAttr.ArgumentDefinition;                            
                         }
                     }
                 }
