@@ -11,8 +11,8 @@ namespace Ankh.UI.VSSelectionControls
     public enum SortIcon
     {
         None,
-        Up,
-        Down
+        Ascending,
+        Descending
     }
 
     public class SmartListView : ListView
@@ -20,6 +20,12 @@ namespace Ankh.UI.VSSelectionControls
         readonly Collection<SmartColumn> _groupColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _sortColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _allColumns = new Collection<SmartColumn>();
+
+        public SmartListView()
+        {
+            this.ListViewItemSorter = new SmartListSorter(this);
+            //Sorting = SortOrder.Ascending;
+        }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {           
@@ -135,10 +141,10 @@ namespace Ankh.UI.VSSelectionControls
             hdItem.fmt &= ~(NativeMethods.HDF_SORTDOWN | NativeMethods.HDF_SORTUP);
             switch (mode)
             {
-                case SortIcon.Up:
+                case SortIcon.Ascending:
                     hdItem.fmt |= NativeMethods.HDF_SORTUP;
                     break;
-                case SortIcon.Down:
+                case SortIcon.Descending:
                     hdItem.fmt |= NativeMethods.HDF_SORTDOWN;
                     break;
             }
@@ -152,6 +158,82 @@ namespace Ankh.UI.VSSelectionControls
         {
             get { return _groupSeparator; }
             set { _groupSeparator = value; }
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            UpdateSortGlyphs();
+        }
+
+        
+        /// <summary>
+        /// Gets a value indicating whether the listview supports grouping.
+        /// </summary>
+        /// <value><c>true</c> if [supports grouping]; otherwise, <c>false</c>.</value>
+        public static bool SupportsGrouping
+        {
+            get { return IsXPPlus; }
+        }
+
+        public static bool SupportsSortGlypgs
+        {
+            get { return IsXPPlus; }
+        }
+
+        private void UpdateSortGlyphs()
+        {
+            //throw new NotImplementedException();
+            foreach (ColumnHeader ch in Columns)
+            {
+                SmartColumn sc = ch as SmartColumn;
+
+                if (sc != null && SortColumns.Contains(sc))
+                {
+                    SetSortIcon(sc.Index, sc.ReverseSort ? SortIcon.Descending : SortIcon.Ascending);
+                }
+                else
+                    SetSortIcon(sc.Index, SortIcon.None);
+
+            }
+        }
+
+        protected override void OnColumnClick(ColumnClickEventArgs e)
+        {
+            ColumnHeader column = Columns[e.Column];
+
+            SmartColumn sc = column as SmartColumn;
+            if (sc != null && sc.Sortable)
+            {
+                bool extend = (Control.ModifierKeys & Keys.Control) != 0;
+
+                if (!extend)
+                {
+                    if (SortColumns.Count == 1 && SortColumns[0] == sc)
+                        sc.ReverseSort = !sc.ReverseSort;
+                    else
+                    {
+                        SortColumns.Clear();
+                        SortColumns.Add(sc);
+                        sc.ReverseSort = false;
+                    }
+                }
+                else
+                {
+                    if (SortColumns.Contains(sc))
+                        sc.ReverseSort = !sc.ReverseSort;
+                    else
+                    {
+                        sc.ReverseSort = false;
+                        SortColumns.Add(sc);
+                    }
+                }
+                Sort();
+                UpdateSortGlyphs();
+            }
+
+            base.OnColumnClick(e);            
         }
         
         protected internal virtual void UpdateGroup(SmartListViewItem item, string[] values)
@@ -211,7 +293,82 @@ namespace Ankh.UI.VSSelectionControls
                 else
                     ShowGroups = false;
             }
-                
+
         }
+
+        sealed class SmartListSorter : System.Collections.IComparer
+        {
+            SmartListView _view;
+
+            public SmartListSorter(SmartListView view)
+            {
+                if (view == null)
+                    throw new ArgumentNullException("view");
+
+                _view = view;
+            }
+
+            #region IComparer Members
+
+            int System.Collections.IComparer.Compare(object x, object y)
+            {
+                return Compare((ListViewItem)x, (ListViewItem)y);
+            }
+
+            private int Compare(ListViewItem x, ListViewItem y)
+            {
+                foreach (SmartColumn col in _view.SortColumns)
+                {
+                    int n = col.Compare(x, y);
+
+                    if (n != 0)
+                        return n;
+                }
+
+                return 0;
+            }
+
+            #endregion
+        }
+
+        #region XPPlus
+        static readonly object _lck = new object();
+        static int _osLevel;
+
+        internal static int OSLevel
+        {
+            get
+            {
+                lock (_lck)
+                {
+                    if (_osLevel == 0)
+                    {
+                        Version osVersion = Environment.OSVersion.Version;
+
+                        if(osVersion.Major >= 6)
+                            _osLevel = 600;
+                        else if(osVersion.Major == 5)
+                        {
+                            if (osVersion.Minor >= 2)
+                                _osLevel = 520;
+                            else if (osVersion.Minor == 1)
+                                _osLevel = 510;
+                            else
+                                _osLevel = 500;
+                        }
+                        else
+                            _osLevel = 1;
+                    }
+
+                    return _osLevel;
+                }                        
+            }
+        }
+
+        internal static bool IsXPPlus
+        {
+            get { return OSLevel >= 510; }
+        }
+        #endregion
     }
 }
