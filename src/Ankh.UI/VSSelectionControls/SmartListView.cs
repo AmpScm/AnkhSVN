@@ -37,7 +37,7 @@ namespace Ankh.UI.VSSelectionControls
             base.OnMouseDown(e);
         }
 
-        private void ExtendSelection(Point p, bool rightClick)
+        protected virtual void ExtendSelection(Point p, bool rightClick)
         {
             ListViewHitTestInfo hi = HitTest(p);
 
