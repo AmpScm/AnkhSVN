@@ -20,10 +20,9 @@ namespace Ankh.UI.VSSelectionControls
     {
         bool _provideFullList;
 
-		public ListViewWithSelection()
-		{
-			DoubleBuffered = true;
-		}
+        public ListViewWithSelection()
+        {
+        }
 
         IServiceProvider _serviceProvider;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -97,40 +96,40 @@ namespace Ankh.UI.VSSelectionControls
             _inWndProc++;
             try
             {
-            if (!DesignMode)
-            {
-                if (m.Msg == 123) // WM_CONTEXT
+                if (!DesignMode)
                 {
-                    OnShowContextMenu(EventArgs.Empty);
-                    return;
-                }
-                else if (m.Msg == 8270) // WM_REFLECTNOTIFY
-                {
-                    if (CheckBoxes && StrictCheckboxesClick)
+                    if (m.Msg == 123) // WM_CONTEXT
                     {
-                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
-
-                        if (hdr.code == -3) // Double click
+                        OnShowContextMenu(EventArgs.Empty);
+                        return;
+                    }
+                    else if (m.Msg == 8270) // WM_REFLECTNOTIFY
+                    {
+                        if (CheckBoxes && StrictCheckboxesClick)
                         {
-                            Point mp = PointToClient(MousePosition);
-                            ListViewHitTestInfo hi = HitTest(mp);
+                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
 
-                            if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                            if (hdr.code == -3) // Double click
                             {
-                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
-                                return;
+                                Point mp = PointToClient(MousePosition);
+                                ListViewHitTestInfo hi = HitTest(mp);
+
+                                if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                                {
+                                    OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
+                                    return;
+                                }
                             }
                         }
                     }
                 }
-            }
-            base.WndProc(ref m);
+                base.WndProc(ref m);
             }
             finally
             {
-                if(0 == --_inWndProc)
+                if (0 == --_inWndProc)
                 {
-                    if(_shouldUpdate)
+                    if (_shouldUpdate)
                     {
                         _shouldUpdate = false;
                         NotifySelectionUpdated();
@@ -176,7 +175,7 @@ namespace Ankh.UI.VSSelectionControls
             else
                 NotifySelectionUpdated();
         }
-   
+
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
@@ -287,18 +286,18 @@ namespace Ankh.UI.VSSelectionControls
 
         IList ISelectionMapOwner<TListViewItem>.Selection
         {
-            get 
-			{
-				if (!VirtualMode)
-					return SelectedItems;
-				else
-				{
-					List<TListViewItem> lvi = new List<TListViewItem>();
-					foreach (int i in SelectedIndices)
-						lvi.Add((TListViewItem)Items[i]);
-					return lvi;
-				}
-			}
+            get
+            {
+                if (!VirtualMode)
+                    return SelectedItems;
+                else
+                {
+                    List<TListViewItem> lvi = new List<TListViewItem>();
+                    foreach (int i in SelectedIndices)
+                        lvi.Add((TListViewItem)Items[i]);
+                    return lvi;
+                }
+            }
         }
 
         IList ISelectionMapOwner<TListViewItem>.AllItems
