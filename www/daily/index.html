@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.4926.136</title>
+<title>AnkhSVN-Daily Update - 2.0.4944.137</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.4926.136</h1>
+<h1>AnkhSVN-Daily Update - 2.0.4944.137</h1>
 
 
 <p>
@@ -12,19 +12,48 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/892/AnkhSvn-Daily-2.0.4926.136.msi">AnkhSvn-Daily-2.0.4926.136.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/898/AnkhSvn-Daily-2.0.4944.137.msi">AnkhSvn-Daily-2.0.4944.137.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4926">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4944">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-08-03</td></tr>
+<tr><td> </td><td class="r"><a id="4943" href="http://ankhsvn.net/rev/?r=4943">[r4943]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PCStrings.resx, src/Ankh.UI/PendingChanges/PCStrings.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4942">r4942</a> and <a href="http://ankhsvn.net/issues/?id=481">Issue #481</a>: Pending Changes sorting and showing/hiding columns
+should be fully functional now.</td></tr>
+<tr><td> </td><td class="r"><a id="4939" href="http://ankhsvn.net/rev/?r=4939">[r4939]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/Commands/ListViewShow.cs, src/Ankh.UI/VSSelectionControls/SmartListViewItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implemented the 'View Columns' command for the Pending Changes
+toolwindow (and other SmartListView users).</td></tr>
+<tr><td> </td><td class="r"><a id="4937" href="http://ankhsvn.net/rev/?r=4937">[r4937]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewSortOrder.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewSort.cs, src/Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable all sort commands in the Pending Changes window 
+(including currently invisible columns)</td></tr>
+<tr><td> </td><td class="r"><a id="4936" href="http://ankhsvn.net/rev/?r=4936">[r4936]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/SmartListView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4935">r4935</a>: Fixed ordinary ColumnHeaders in
+SmartListView instances (e.g. Working Copy explorer)</td></tr>
+<tr><td> </td><td class="r"><a id="4935" href="http://ankhsvn.net/rev/?r=4935">[r4935]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/Commands/PendingCommitSortCommands.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewGroup.cs, src/Ankh.UI/PendingChanges/Commands/PendingCommitViewCommands.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/Commands/PendingCommitGroupCommands.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.Sort.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enabled Pending Changes sorting via clicking on the column headers. 
+(Ctrl+Click is extends the sorting selection)</td></tr>
+<tr><td> </td><td class="r"><a id="4934" href="http://ankhsvn.net/rev/?r=4934">[r4934]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Commands/CommandMapper.cs, src/Ankh.UI/PendingChanges/LogMessageEditor.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4931">r4931</a>: Really close menu groups when the command is not handled.
+And make sure the list is selected from the PC window to make sure this code is
+never needed any more.</td></tr>
+<tr><td> </td><td class="r"><a id="4933" href="http://ankhsvn.net/rev/?r=4933">[r4933]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/LogMessageEditor.cs, src/Ankh.VS/Dialogs/VSCommandRouting.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4932">r4932</a>: Fixed Ctrl+Tab in VSContainerDialogs. Don't route this
+binding to VS, but use it for dialog focus tasks</td></tr>
+<tr><td> </td><td class="r"><a id="4932" href="http://ankhsvn.net/rev/?r=4932">[r4932]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/LogMessageEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix the .Net focus when the log message editor /is/ the active control
+but .Net thinks another control is.
+Also allow Ctrl+Tab and Ctrl+Shift+Tab to select previous/next controls
+when used in a dialog</td></tr>
+<tr><td> </td><td class="r"><a id="4931" href="http://ankhsvn.net/rev/?r=4931">[r4931]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Commands/CommandMapper.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.Services/Commands/CommandMapItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure all dynamic menus are always finite even when commands 
+are not handled correctly.</td></tr>
+<tr><td> </td><td class="r"><a id="4930" href="http://ankhsvn.net/rev/?r=4930">[r4930]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PCStrings.resx, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/VSSelectionControls/Commands/ListViewGroup.cs, src/Ankh.Services/Commands/CommandUpdateEventArgs.cs, src/Ankh.Ids/AnkhCommandMenu.cs, src/Ankh.UI/VSSelectionControls/SmartListViewItem.cs, src/Ankh.UI/VSSelectionControls/Commands, src/Ankh.Ids/AnkhCommand.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewCommandBase.cs, src/Ankh.UI/VSSelectionControls/SmartColumn.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/PCStrings.Designer.cs, src/Ankh.UI/PendingChanges/PendingCommitsView.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSortIcons.cs, src/Ankh.UI/PendingChanges/PendingCommitItem.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.Designer.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewShow.cs, src/Ankh.Ids/AnkhCommandGroup.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewSort.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Replaced the pending changes specific column/group/sort support with a more
+generic sort/show/group support on the new SmartListView class. Support is still
+incomplete and the PC seems to miss ChangeList changes from its events.</td></tr>
+<tr><td> </td><td class="r"><a id="4929" href="http://ankhsvn.net/rev/?r=4929">[r4929]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Commands/CommandAttribute.cs, src/Ankh.Services/Commands/CommandMapper.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added support for mapping commandranges with a single Command attribute.</td></tr>
+<tr><td> </td><td class="r"><a id="4928" href="http://ankhsvn.net/rev/?r=4928">[r4928]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Votive/Ankh.Votive.wxs, src/Ankh.Votive.wixproj, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated to new SharpSvn and updated our setup to use the new
+SharpSvn-Licenses.wxs script that automatically includes all
+license files of our indirect and direct dependencies.</td></tr>
 <tr class="d"><td colspan="4">2008-08-01</td></tr>
 <tr><td> </td><td class="r"><a id="4925" href="http://ankhsvn.net/rev/?r=4925">[r4925]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccDocumentData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Catch reload exceptions from editors and handle them as: Retry with
 another reload method.</td></tr>
@@ -193,52 +222,6 @@ returns the solution project for the solution file in all cases.</td></tr>
 <tr><td> </td><td class="r"><a id="4748" href="http://ankhsvn.net/rev/?r=4748">[r4748]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/PendingChangeManager.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Schedule a glyph update after an SvnItem change broadcast.
 (Fixes missed solution changed event)</td></tr>
 <tr><td> </td><td class="r"><a id="4747" href="http://ankhsvn.net/rev/?r=4747">[r4747]</a></td><td class="a">sander</td><td class="f">src/Ankh.Services/UI/PathSelectorInfo.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Mark CheckedItems private, is currently only used for determining the default result.</td></tr>
-<tr><td> </td><td class="r"><a id="4746" href="http://ankhsvn.net/rev/?r=4746">[r4746]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/AddItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove null check for item that cannot be null there</td></tr>
-<tr><td> </td><td class="r"><a id="4745" href="http://ankhsvn.net/rev/?r=4745">[r4745]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SccManagement/AddToSubversion.Designer.cs, src/Ankh.UI/SccManagement/AddToSubversion.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Select first item in Local Folder dropdown and enable the
-'Project will be created in' box (But mark it as !TabStop)</td></tr>
-<tr><td> </td><td class="r"><a id="4744" href="http://ankhsvn.net/rev/?r=4744">[r4744]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/AddToSccCommands.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable 'Add Solution to Subversion' if !Managed || !IsVersioned</td></tr>
-<tr><td> </td><td class="r"><a id="4743" href="http://ankhsvn.net/rev/?r=4743">[r4743]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.Designer.cs, src/Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed unused revision UI from the repository browser.</td></tr>
-<tr><td> </td><td class="r"><a id="4742" href="http://ankhsvn.net/rev/?r=4742">[r4742]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/LockDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added missing label and keyboard shortcuts</td></tr>
-<tr><td> </td><td class="r"><a id="4741" href="http://ankhsvn.net/rev/?r=4741">[r4741]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/SolutionCommitCommand.cs, src/Ankh/Commands/CommitItemCommand.cs, src/Ankh/Ankh.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">More disabled plumbing for SolutionCommitCommand.
-Uncomment the //#define TEST_ProjectCommit on top of SolutionCommitCommand.cs
-to test the code.</td></tr>
-<tr><td> </td><td class="r"><a id="4740" href="http://ankhsvn.net/rev/?r=4740">[r4740]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/AddItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure we use the selection, instead of the result of the check filter when adding items.</td></tr>
-<tr><td> </td><td class="r"><a id="4739" href="http://ankhsvn.net/rev/?r=4739">[r4739]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/LogMessageEditor.cs, src/Ankh.UI/SccManagement/ProjectCommitDialog.resx, src/Ankh.UI/SccManagement/ProjectCommitDialog.Designer.cs, src/Ankh.UI/SccManagement/ProjectCommitDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added initial version of PC-Style commit dialog for solution and projects</td></tr>
-<tr><td> </td><td class="r"><a id="4738" href="http://ankhsvn.net/rev/?r=4738">[r4738]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditorDialog.resx, src/Ankh.UI/PropertyEditors/PropertyEditorDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyEditorDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Show all property editor popups using IUIService</td></tr>
-<tr><td> </td><td class="r"><a id="4737" href="http://ankhsvn.net/rev/?r=4737">[r4737]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/OpenInVisualStudio.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable OpenInTextEditor and OpenInVisualStudio if all items are files.<br>
-Handle OpenInVisualStudio as SelectInSolutionExplorer for projects and the solution.
-(And fixed select in solution explorer for the solution file)</td></tr>
-<tr><td> </td><td class="r"><a id="4736" href="http://ankhsvn.net/rev/?r=4736">[r4736]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/VSSelectionControls/SvnItemTreeView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed empty file</td></tr>
-<tr><td> </td><td class="r"><a id="4735" href="http://ankhsvn.net/rev/?r=4735">[r4735]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/SelectionItemMap.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed check on whether to remove selection items. Remove items that are /not/
-part of the selection instead of the other way around.</td></tr>
-<tr><td> </td><td class="r"><a id="4734" href="http://ankhsvn.net/rev/?r=4734">[r4734]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2"><a href="http://ankhsvn.net/issues/?id=462">Issue #462</a>: While handling a window message: send a maximum of 1 selection change from the list view.
-This handless PgUp/PgDn/Shift+Home/Shift+End in batches instead of per item.</td></tr>
-<tr><td> </td><td class="r"><a id="4733" href="http://ankhsvn.net/rev/?r=4733">[r4733]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/CommitItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When sorting working copies return null if one or more files are not in a
-workingcopy at all.</td></tr>
-<tr><td> </td><td class="r"><a id="4732" href="http://ankhsvn.net/rev/?r=4732">[r4732]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SvnSccContext.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Don't call svn status if the parent directory of a file is not versioned when
-checking if the file could be added. (Performance issue)</td></tr>
-<tr><td> </td><td class="r"><a id="4731" href="http://ankhsvn.net/rev/?r=4731">[r4731]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccProjectData.Hierarchy.cs, src/Ankh.Scc/ProjectMap/SccProjectData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Re enable set-dirty on safe tree actions in projects. Check for non-project-items</td></tr>
-<tr><td> </td><td class="r"><a id="4730" href="http://ankhsvn.net/rev/?r=4730">[r4730]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/AddItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed <a href="http://ankhsvn.net/issues/?id=461">issue #461</a>: Shift+AddItemCommand does not add something</td></tr>
-<tr><td> </td><td class="r"><a id="4728" href="http://ankhsvn.net/rev/?r=4728">[r4728]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed selected image in WC explorer tree.
-(Was the first image added to our image cache)</td></tr>
-<tr class="d"><td colspan="4">2008-07-19</td></tr>
-<tr><td> </td><td class="r"><a id="4727" href="http://ankhsvn.net/rev/?r=4727">[r4727]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/AnkhSccProvider.FileMap.cs, src/Ankh.Scc/AnkhSccProvider.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4711">r4711</a>: Fixed returning the solution SvnProject for GetAllProjectsContaining(List-containing-Solution).
-This fixes initialy setting the glyph on the solution and refreshing the solution glyph.</td></tr>
-<tr><td> </td><td class="r"><a id="4726" href="http://ankhsvn.net/rev/?r=4726">[r4726]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS/TempDirManager.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add a few try{} catch{} blocks to ensure more files and directories are deleted</td></tr>
-<tr><td> </td><td class="r"><a id="4725" href="http://ankhsvn.net/rev/?r=4725">[r4725]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/AddToSccCommands.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4713">r4713</a>: Enable AddToSubversion command if !Managed || !Versioned
-(Was !Managed and !Versioned after)</td></tr>
-<tr><td> </td><td class="r"><a id="4724" href="http://ankhsvn.net/rev/?r=4724">[r4724]</a></td><td class="a">sander</td><td class="f">src/Ankh.Migrate/Cleanup.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Move "try" up, just in case Command.Name throws exceptions</td></tr>
-<tr><td> </td><td class="r"><a id="4723" href="http://ankhsvn.net/rev/?r=4723">[r4723]</a></td><td class="a">sander</td><td class="f">src/Ankh.Migrate/Cleanup.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Check for Guid *AND* command name before deleting it. This fixes that we delete other addin's commands :(</td></tr>
-<tr><td> </td><td class="r"><a id="4722" href="http://ankhsvn.net/rev/?r=4722">[r4722]</a></td><td class="a">sander</td><td class="f">src/Ankh.Services/VS/IAnkhTempDirManager.cs, src/Ankh.VS/TempDirManager.cs, src/Ankh.VS/AnkhVSModule.cs, src/Ankh.VS/Ankh.VS.csproj, src/Ankh/Commands/LocalDiffCommandBase.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Create &lt;originalname&gt;.&lt;revision&gt;.&lt;extension&gt; instead of &lt;guid&gt;.&lt;extension&gt; when diffing files. This provides a better indication of what we are diffing.</td></tr>
-<tr><td> </td><td class="r"><a id="4721" href="http://ankhsvn.net/rev/?r=4721">[r4721]</a></td><td class="a">sander</td><td class="f">src/Ankh/Ankh.csproj, src/Ankh/Commands/Runners/CatRunner.cs, src/Ankh/Commands/LocalDiffCommandBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix external diff for working copy specific paths, like Previous. This fixes exceptions when running several combinations of revisions with an external diff tool enabled</td></tr>
-<tr><td> </td><td class="r"><a id="4720" href="http://ankhsvn.net/rev/?r=4720">[r4720]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/OpenInVisualStudio.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When using 'Open in Solution Explorer' switch to the solution explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="4719" href="http://ankhsvn.net/rev/?r=4719">[r4719]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsPage.Commit.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Check for i == null case (no parent working copy at all); resolves a null reference exception.
-Check whether the solution was really added to subversion before continuing.</td></tr>
-<tr><td> </td><td class="r"><a id="4718" href="http://ankhsvn.net/rev/?r=4718">[r4718]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4717">r4717</a>: Added missing | operator</td></tr>
-<tr><td> </td><td class="r"><a id="4717" href="http://ankhsvn.net/rev/?r=4717">[r4717]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/StatusCache/FileStatusCache.cs, src/Ankh.Services/Scc/AnkhStatus.cs, src/Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made AnkhStatus.NotVersioned and AnkhStatus.NotExisting internal. Fixing the
-FileStatusCache api to use a new NoSccStatus enum instead.<br>
-Moving all alternative status walking code to another RefreshTo(NoSccStatus) method.
-(Removes several instance checks from the existing RefreshTo()</td></tr>
 
 </table>
 <!--/Recent changes-->
