@@ -49,8 +49,8 @@ namespace Ankh.UI.VSSelectionControls
             set { _provideFullList = value; }
         }
 
-        bool _updatingSelection = false;
-        bool _maybeUnselect = true;
+        bool _updatingSelection;
+        bool _maybeUnselect;
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Forms.ListView.SelectedIndexChanged"/> event.
         /// </summary>
@@ -139,6 +139,17 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        protected override void ExtendSelection(Point p, bool rightClick)
+        {
+            base.ExtendSelection(p, rightClick);
+
+            if (_shouldUpdate)
+            {
+                _shouldUpdate = false;
+                NotifySelectionUpdated();
+            }
+        }
+
         public event EventHandler ShowContextMenu;
         public virtual void OnShowContextMenu(EventArgs e)
         {
@@ -171,7 +182,7 @@ namespace Ankh.UI.VSSelectionControls
         /// </summary>
         public void NotifySelectionUpdated()
         {
-            _maybeUnselect = true;
+            _maybeUnselect = false;
 
             if (SelectionPublishServiceProvider != null)
             {
