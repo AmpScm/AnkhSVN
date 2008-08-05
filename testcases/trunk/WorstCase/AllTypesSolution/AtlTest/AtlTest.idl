@@ -1,0 +1,18 @@
+// AtlTest.idl : IDL source for AtlTest
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AtlTest.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(5E1897E3-AC16-456C-9E1F-6D213493E4A8),
+	version(1.0),
+	helpstring("AtlTest 1.0 Type Library")
+]
+library AtlTestLib
+{
+	importlib("stdole2.tlb");
+};

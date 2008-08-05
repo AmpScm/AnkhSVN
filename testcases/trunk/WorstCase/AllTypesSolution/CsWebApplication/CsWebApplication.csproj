@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6B0A0667-84D7-4530-AC11-E9E7BEAB314B}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
@@ -72,6 +72,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="NewFolder11\" />
+    <Folder Include="NewFolder12\" />
+    <Folder Include="NewFolder13\" />
+    <Folder Include="NewFolder14\" />
+    <Folder Include="NewFolder15\" />
+    <Folder Include="NewFolder16\" />
+    <Folder Include="NewFolder17\" />
+    <Folder Include="NewFolder1\" />
+    <Folder Include="NewFolder2\" />
+    <Folder Include="NewFolder3\" />
+    <Folder Include="NewFolder4\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -93,6 +104,9 @@
           <IISUrl>
           </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
