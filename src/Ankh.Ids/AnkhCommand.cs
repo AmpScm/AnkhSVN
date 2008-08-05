@@ -166,18 +166,19 @@ namespace Ankh.Ids
         PcLogEditorPasteFileList,
         PcLogEditorPasteRecentLog,
 
-        #region Pending Changes ListView
-        PcSortPath,
-        PcSortProject,
-        PcSortChange,
-        PcSortChangeList,
-        PcSortFullPath,
-        PcSortLocked,
-        PcSortModified,
-        PcSortName,
-        PcSortRepository,
-        PcSortType,
-        PcSortAscending,
+        LogCompareWithWorkingCopy,
+        LogCompareWithPrevious,
+        LogCompareRevisions,
+        LogRevertThisRevisions,
+        LogOpen,
+        LogOpenInVs,
+        LogOpenWith,
+        LogUpdateTo,
+        LogRevertTo,
+        LogMergeTo,
+        LogShowProperties,
+
+        // Currently unused block; values can be reused as they were never really handled        
         PcSortDescending,
 
         PcGroupPath,
@@ -204,7 +205,7 @@ namespace Ankh.Ids
         PcColViewName,
         PcColViewRepository,
         PcColViewType,
-        #endregion
+        // End of unused block
 
         LogStrictNodeHistory,
         LogIncludeMergedRevisions,
