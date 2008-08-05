@@ -33,23 +33,51 @@ namespace Ankh.UI.SvnLog
             ToolWindowSite.KeyboardContext = AnkhId.LogContextGuid;
         }
 
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
+        SvnItem[] _localItems;
+
+        public SvnItem[] LogItems
         {
-            logControl.StartLocalLog(context, targets);
+            get
+            {
+                if (_localItems != null)
+                    return (SvnItem[])_localItems.Clone();
+                else
+                    return new SvnItem[0];
+            }
         }
 
-        public void StartMergesEligible(IAnkhServiceProvider context, string target, Uri source)
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
-            logControl.StartMergesEligible(context, target, source);
+            if (targets == null)
+                throw new ArgumentNullException("targets");
+
+            _localItems = new SvnItem[targets.Count];
+            targets.CopyTo(_localItems, 0);
+
+            logControl.StartLocalLog(context, SvnItem.GetPaths(targets));
         }
 
-        public void StartMergesMerged(IAnkhServiceProvider context, string target, Uri source)
+        public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)
         {
-            logControl.StartMergesMerged(context, target, source);
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            _localItems = new SvnItem[] { target };
+            logControl.StartMergesEligible(context, target.FullPath, source);
+        }
+
+        public void StartMergesMerged(IAnkhServiceProvider context, SvnItem target, Uri source)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            _localItems = new SvnItem[] { target };
+            logControl.StartMergesMerged(context, target.FullPath, source);
         }
 
         public void StartRemoteLog(IAnkhServiceProvider context, Uri remoteTarget)
         {
+            _localItems = null;
             logControl.StartRemoteLog(context, remoteTarget);
         }
 

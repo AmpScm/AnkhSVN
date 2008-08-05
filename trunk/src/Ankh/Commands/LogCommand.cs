@@ -63,7 +63,8 @@ namespace Ankh.Commands
             
 
 
-            List<string> selected = new List<string>();
+            List<SvnItem> selected = new List<SvnItem>();
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             switch (e.Command)
             {
@@ -71,7 +72,7 @@ namespace Ankh.Commands
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
                     {
                         if (i.IsVersioned)
-                            selected.Add(i.FullPath);
+                            selected.Add(i);
                     }
                     LocalLog(e.Context, selected);
                     break;
@@ -81,7 +82,7 @@ namespace Ankh.Commands
                     {
                         IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
-                        selected.Add(settings.ProjectRoot);
+                        selected.Add(cache[settings.ProjectRoot]);
 
                         LocalLog(e.Context, selected);
                     }
@@ -93,7 +94,7 @@ namespace Ankh.Commands
                             ISvnProjectInfo info = mapper.GetProjectInfo(p);
 
                             if (info != null)
-                                selected.Add(info.ProjectDirectory);
+                                selected.Add(cache[info.ProjectDirectory]);
                         }
 
                         LocalLog(e.Context, selected);
@@ -114,7 +115,7 @@ namespace Ankh.Commands
             }
         }
 
-        static void LocalLog(IAnkhServiceProvider context, ICollection<string> targets)
+        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
