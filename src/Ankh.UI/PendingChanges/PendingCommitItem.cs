@@ -20,6 +20,8 @@ namespace Ankh.UI.PendingChanges
 
             _change = change;        
 
+            Checked = true;
+
             RefreshText(view.Context);
         }
 
