@@ -328,5 +328,45 @@ namespace Ankh.UI.PendingChanges
         }
 
         #endregion
+
+        public void DoCommit(bool keepLocks)
+        {
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (pci.Checked)
+                {
+                    changes.Add(pci.PendingChange);
+                }
+            }
+
+            PendingChangeCommitArgs a = new PendingChangeCommitArgs();
+
+            a.LogMessage = logMessageEditor.Text;
+            a.KeepLocks = keepLocks;
+
+            if (UISite.GetService<IPendingChangeHandler>().Commit(changes, a))
+            {
+                logMessageEditor.Text = "";
+            }
+        }
+
+        internal bool CanCommit(bool keepingLocks)
+        {
+            if (_listItems.Count == 0)
+                return false;
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                if (!keepingLocks || pci.PendingChange.Item.IsLocked)
+                    return true;
+            }
+
+            return false;
+        }     
     }
 }
