@@ -226,17 +226,23 @@ namespace Ankh.Scc.ProjectMap
                 {
                     IVsTextViewEx tv = VsShellUtilities.GetTextView(wf) as IVsTextViewEx;
 
-                    if (tv != null && (tv.IsCompletorWindowActive() == 0) || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                    bool delayEvent = false;
+
+                    if (tv != null)
                     {
-                        _delayedDirty = true;
-                        GetService<IAnkhCommandService>().DelayPostCommands(
-                            delegate
-                            {
-                                if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
-                                    return true; // Keep the delay
-                                else
-                                    return _delayedDirty = false; // Delay completed
-                            });
+                        if ((tv.IsCompletorWindowActive() == 0)
+                            || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                        {
+                            _delayedDirty = true;
+                            GetService<IAnkhCommandService>().DelayPostCommands(
+                                delegate
+                                {
+                                    if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
+                                        return true; // Keep the delay
+                                    else
+                                        return _delayedDirty = false; // Delay completed
+                                });
+                        }
                     }
                 }
             }
