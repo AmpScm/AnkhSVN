@@ -226,8 +226,6 @@ namespace Ankh.Scc.ProjectMap
                 {
                     IVsTextViewEx tv = VsShellUtilities.GetTextView(wf) as IVsTextViewEx;
 
-                    bool delayEvent = false;
-
                     if (tv != null)
                     {
                         if ((tv.IsCompletorWindowActive() == 0)
