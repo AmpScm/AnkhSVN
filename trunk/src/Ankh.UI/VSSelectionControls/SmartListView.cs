@@ -243,6 +243,9 @@ namespace Ankh.UI.VSSelectionControls
         
         protected internal virtual void UpdateGroup(SmartListViewItem item, string[] values)
         {
+            if (VirtualMode)
+                return; // Not valid for virtual
+
             StringBuilder sb = new StringBuilder();
 
             foreach(SmartColumn col in GroupColumns)
@@ -258,47 +261,62 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             string g = sb.ToString();
-            bool restart;
-            do
-            {
-                restart = false;
-                foreach (ListViewGroup grp in Groups)
-                {
-                    if (grp.Name == g && !grp.Items.Contains(item))
-                        grp.Items.Add(item);
-                    else if (0 == grp.Items.Count)
-                    {
-                        Groups.Remove(grp);
-                        restart = true;
-                        break;
-                    }
-                }
-            }
-            while (restart);
 
-            if (item.Group == null)
+            if(item.Group != null && item.Group.Name == g)
+                return; // Nothing to do
+
+            item.Group = null;
+
+            ListViewGroup itemGrp = Groups[g];
+
+            if (itemGrp == null)
             {
                 string txt = string.IsNullOrEmpty(g) ? "<Rest>" : g;
-                Groups.Add(g, txt).Items.Add(item);
+                itemGrp = Groups.Add(g, txt);
             }
 
-            if ((Groups.Count > 1) != ShowGroups)
+            itemGrp.Items.Add(item);
+
+            RefreshGroupsAvailable();
+        }
+
+        bool _inRefreshGroupsAvailable;
+        public void RefreshGroupsAvailable()
+        {
+            if (_inRefreshGroupsAvailable)
+                return;
+
+            try
             {
-                if (Groups.Count > 1)
+                _inRefreshGroupsAvailable = true;
+
+                foreach (ListViewGroup g in new System.Collections.ArrayList(Groups))
                 {
-                    ShowGroups = true;
-                    foreach (ListViewItem i in Items)
-                    {
-                        SmartListViewItem si = i as SmartListViewItem;
-
-                        if (si != null)
-                            si.UpdateGroup();
-                    }
+                    if (g.Items.Count == 0)
+                        Groups.Remove(g);
                 }
-                else
-                    ShowGroups = false;
-            }
 
+                if ((Groups.Count > 1) != ShowGroups)
+                {
+                    if (Groups.Count > 1)
+                    {
+                        ShowGroups = true;
+                        foreach (ListViewItem i in Items)
+                        {
+                            SmartListViewItem si = i as SmartListViewItem;
+
+                            if (si != null)
+                                si.UpdateGroup();
+                        }
+                    }
+                    else
+                        ShowGroups = false;
+                }
+            }
+            finally
+            {
+                _inRefreshGroupsAvailable = false;
+            }
         }
 
         sealed class SmartListSorter : System.Collections.IComparer

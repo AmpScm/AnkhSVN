@@ -120,7 +120,7 @@ namespace Ankh.UI.PendingChanges
             {
                 // Should never happend; will refresh checkbox, etc.
                 _listItems.Remove(path);
-                pendingCommits.Items.Remove(pci);
+                pci.Remove();
             }
 
             pci = new PendingCommitItem(pendingCommits, e.Change);
@@ -144,6 +144,7 @@ namespace Ankh.UI.PendingChanges
                 }
                 _listItems.Clear();
                 pendingCommits.Items.Clear();
+                pendingCommits.Groups.Clear();
             }
         }
 
@@ -157,6 +158,7 @@ namespace Ankh.UI.PendingChanges
         {
             _listItems.Clear(); // Make sure we are clear
             pendingCommits.Items.Clear();
+            pendingCommits.Groups.Clear();
             pendingCommits.BeginUpdate();
             try
             {
@@ -206,7 +208,8 @@ namespace Ankh.UI.PendingChanges
             if (_listItems.TryGetValue(path, out pci))
             {
                 _listItems.Remove(path);
-                pendingCommits.Items.Remove(pci);
+                pci.Remove();
+                pendingCommits.RefreshGroupsAvailable();
             }
         }
 
