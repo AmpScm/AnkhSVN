@@ -60,6 +60,11 @@ namespace Ankh.Scc
         EditorDirty,
 
         /// <summary>
+        /// The item is locked locally
+        /// </summary>
+        LockedOnly,
+
+        /// <summary>
         /// The item is in incomplete state
         /// </summary>
         Incomplete,

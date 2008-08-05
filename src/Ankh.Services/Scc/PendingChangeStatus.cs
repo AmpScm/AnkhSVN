@@ -50,6 +50,8 @@ namespace Ankh.Scc
                     return PendingChangeText.StateEdited;
                 case PendingChangeKind.PropertyModified:
                     return PendingChangeText.PropertyModified;
+                case PendingChangeKind.LockedOnly:
+                    return PendingChangeText.Locked;
                 case PendingChangeKind.Incomplete:
                     return PendingChangeText.Incomplete;
                 default:
