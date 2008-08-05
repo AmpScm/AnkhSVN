@@ -77,6 +77,14 @@ namespace Ankh.UI.VSSelectionControls
                 Group = null;            
         }
 
+        public override void Remove()
+        {
+            if (Group != null)
+                Group = null;
+
+            base.Remove();            
+        }
+
         public void SetValue(int column, string value)
         {
             if (column < 0)

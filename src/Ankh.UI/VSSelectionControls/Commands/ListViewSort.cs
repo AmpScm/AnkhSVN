@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {
-    [Command(AnkhCommand.ListViewSort0, LastCommand = AnkhCommand.ListViewSortMax, AlwaysAvailable = true, HideWhenDisabled = false)]
+    [Command(AnkhCommand.ListViewSort0, LastCommand = AnkhCommand.ListViewSortMax, AlwaysAvailable = true)]
     class ListViewSort : ListViewCommandBase
     {
         protected override void OnUpdate(SmartListView list, CommandUpdateEventArgs e)
