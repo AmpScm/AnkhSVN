@@ -508,10 +508,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitItem.cs" />
-    <Compile Include="PendingChanges\PendingCommitsPage.Commit.cs">
-      <DependentUpon>PendingCommitsPage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
