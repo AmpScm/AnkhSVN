@@ -35,7 +35,12 @@ namespace Ankh.UI.SvnLog
 
         SvnItem[] _localItems;
 
-        public SvnItem[] LogItems
+        public bool HasWorkingCopyItems
+        {
+            get { return _localItems != null && _localItems.Length > 0; }
+        }
+
+        public SvnItem[] WorkingCopyItems
         {
             get
             {
@@ -180,6 +185,6 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        #endregion
+        #endregion     
     }
 }
