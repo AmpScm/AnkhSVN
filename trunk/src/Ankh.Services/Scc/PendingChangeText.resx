@@ -120,6 +120,9 @@
   <data name="Incomplete" xml:space="preserve">
     <value>Incomplete</value>
   </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
   <data name="PropertyModified" xml:space="preserve">
     <value>Properties Modified</value>
   </data>

@@ -56,7 +56,7 @@ namespace Ankh.Scc
         [DisplayName("Change List"), Category("Subversion")]
         public string ChangeList
         {
-            get { return _item.Status.ChangeList; }
+            get { return _changeList; }
             set
             {
                 string cl = string.IsNullOrEmpty(value) ? null : value.Trim();
@@ -182,6 +182,7 @@ namespace Ankh.Scc
         string _relativePath;
         PendingChangeStatus _status;
         PendingChangeKind _kind;
+        string _changeList;
 
         [Browsable(false)]
         public int IconIndex
@@ -226,6 +227,7 @@ namespace Ankh.Scc
             RefreshValue(ref m, ref _projects, GetProjects(context));
             RefreshValue(ref m, ref _status, GetStatus(context, item));
             RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
+            RefreshValue(ref m, ref _changeList, Item.Status.ChangeList);
 
             return m || (_status == null);
         }
@@ -332,7 +334,8 @@ namespace Ankh.Scc
 
             if (item.IsDocumentDirty)
                 return new PendingChangeStatus(_kind = PendingChangeKind.EditorDirty);
-            else
+            else if (item.IsLocked)
+                return new PendingChangeStatus(_kind = PendingChangeKind.LockedOnly);
             {
                 _kind = PendingChangeKind.None;
                 return null;
@@ -369,6 +372,8 @@ namespace Ankh.Scc
             else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable)
                 create = true; // To be added
             else if (item.IsVersioned && item.IsDocumentDirty)
+                create = true;
+            else if (item.IsLocked)
                 create = true;
 
             return create;
