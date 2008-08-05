@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.Scc.UI
 {
@@ -105,5 +106,8 @@ namespace Ankh.Scc.UI
         bool RunMerge(AnkhMergeArgs args);
 
         void ReleaseDiff(int frameNumber);
+
+        string GetTempFile(SvnTarget target, SvnRevision revision, bool withProgress);
+        string GetTempFile(SvnItem target, SvnRevision revision, bool withProgress);
     }
 }

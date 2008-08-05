@@ -375,11 +375,13 @@
     </GroupRef>
     <GroupRef id="Menu_LogViewerContextMenu">
       <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" type="Context" priority="0x100">
-        <Group id="Grp_LogViewerContextMenu" priority="0x100">
-          <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0x100"
-                  text="Change log message" textChanges="true" />
-          <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0x200"
-                  text="Show changes" textChanges="true" iconFile="PendingChanges/Compare.png"/>
+        <Group id="Grp_LogViewerContextMenu" priority="0x1000">
+          <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
+                  text="Compare with &amp;working copy" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
+          <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0xB000"
+                  text="Change log message" dynamicVisibility="true"/>
+          <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
+                  text="Show changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
           
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />

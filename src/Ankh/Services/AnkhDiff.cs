@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using Ankh.Scc;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using SharpSvn;
+using Ankh.VS;
 
 namespace Ankh.Services
 {
@@ -392,6 +394,83 @@ namespace Ankh.Services
                 }
             }
         }
+
+        #endregion
+
+        #region IAnkhDiffHandler Members
+
+        string _lastDir;
+        public string GetTempFile(SvnItem target, SharpSvn.SvnRevision revision, bool withProgress)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            else if (revision == null)
+                throw new ArgumentNullException("revision");
+
+            string name = Path.GetFileNameWithoutExtension(target.Name) + "." + revision.ToString() + target.Extension;
+
+            string file;
+            if(_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
+            {
+                _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
+
+                file = Path.Combine(_lastDir, name);
+            }
+
+            if(target.NodeKind != SvnNodeKind.File)
+                throw new InvalidOperationException("Can't create a tempfile from a directory");
+
+            GetService<IProgressRunner>().Run("Getting file",
+                delegate(object sender, ProgressWorkerArgs aa)
+                {
+                    SvnExportArgs ea = new SvnExportArgs();
+                    ea.Revision = revision;
+
+                    aa.Client.Export(new SvnPathTarget(target.FullPath), file, ea);
+                });
+
+            if (File.Exists(file))
+                File.SetAttributes(file, FileAttributes.ReadOnly); // A readonly file does not allow editting from many diff tools
+
+            return file;
+        }
+
+        public string GetTempFile(SharpSvn.SvnTarget target, SharpSvn.SvnRevision revision, bool withProgress)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            else if (revision == null)
+                throw new ArgumentNullException("revision");
+
+            string targetName = target.TargetName;
+            int li = targetName.LastIndexOfAny(new char[] { '/', '\\' });
+
+            targetName = targetName.Substring(li + 1);
+
+            string name = Path.GetFileNameWithoutExtension(targetName) + "." + revision.ToString() + Path.GetExtension(targetName);
+
+            string file;
+            if (_lastDir != null || File.Exists(file = Path.Combine(_lastDir, name)))
+            {
+                _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
+
+                file = Path.Combine(_lastDir, name);
+            }
+
+            GetService<IProgressRunner>().Run("Getting file",
+                delegate(object sender, ProgressWorkerArgs aa)
+                {
+                    SvnExportArgs ea = new SvnExportArgs();
+                    ea.Revision = revision;
+
+                    aa.Client.Export(target, file, ea);
+                });
+
+            if (File.Exists(file))
+                File.SetAttributes(file, FileAttributes.ReadOnly); // A readonly file does not allow editting from many diff tools
+
+            return file;
+        }        
 
         #endregion
     }
