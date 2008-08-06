@@ -15,7 +15,8 @@ namespace Ankh.UI.PendingChanges
     /// Implements a simple VS Languageservice to implement syntaxcoloring on our LogMessages
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
-    public partial class LogMessageLanguageService : LanguageService
+    [GlobalService(typeof(LogMessageLanguageService), PublicService=true)]
+    public partial class LogMessageLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
         readonly IAnkhServiceProvider _context;
@@ -27,6 +28,17 @@ namespace Ankh.UI.PendingChanges
 
             _context = context;
 		}
+
+        public void OnPreInitialize()
+        {
+            // Initialize the language service api
+            SetSite(GetService<IServiceContainer>());
+        }
+
+        public void OnInitialize()
+        {
+            
+        }
 
         internal IAnkhServiceProvider Context
         {
@@ -158,7 +170,21 @@ namespace Ankh.UI.PendingChanges
 			}
 
 			#endregion
-		}        
+		}
+
+        #region IAnkhServiceProvider Members
+
+        public T GetService<T>() where T : class
+        {
+            return Context.GetService<T>();
+        }
+
+        public T GetService<T>(Type serviceType) where T : class
+        {
+            return Context.GetService<T>(serviceType);
+        }
+
+        #endregion
     }
 
     class LogmessageSource : Source

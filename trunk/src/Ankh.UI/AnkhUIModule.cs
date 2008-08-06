@@ -5,6 +5,7 @@ using Ankh.UI.PendingChanges;
 using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.UI.MergeWizard;
+using System.Reflection;
 
 namespace Ankh.UI
 {
@@ -18,14 +19,10 @@ namespace Ankh.UI
 
         public override void OnPreInitialize()
         {
-            Runtime.CommandMapper.LoadFrom(typeof(AnkhUIModule).Assembly);
+            Assembly thisAssembly = typeof(AnkhUIModule).Assembly;
 
-            // Instantiate the logmessage language service
-            LogMessageLanguageService ls = new LogMessageLanguageService(Context);
-            Container.AddService(typeof(LogMessageLanguageService), ls, true);
-            ls.SetSite(Container);
-
-            Container.AddService(typeof(IConflictHandler), new InteractiveConflictService(Context));
+            Runtime.CommandMapper.LoadFrom(thisAssembly);
+            Runtime.LoadServices(Container, thisAssembly);
         }
 
         public override void OnInitialize()
