@@ -80,9 +80,5 @@ namespace Utils.Win32
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr afterChild, string className,
             string windowName);
-
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern int GetLongPathName(string shortPath,
-            StringBuilder longPath, int bufSize);
     }
 }
