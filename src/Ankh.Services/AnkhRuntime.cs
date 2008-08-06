@@ -4,6 +4,7 @@ using System.Text;
 using System.ComponentModel.Design;
 using Ankh.Commands;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Ankh
 {
@@ -172,11 +173,13 @@ namespace Ankh
             return (AnkhRuntime)serviceProvider.GetService(typeof(AnkhRuntime));
         }
 
+        readonly static Type[] _serviceConstructorParams = new Type[] { typeof(IAnkhServiceProvider) };
         public void LoadServices(IServiceContainer container, System.Reflection.Assembly assembly)
         {
             if (assembly == null)
                 throw new ArgumentNullException("assembly");
 
+            object[] constructorArgs = null;
             foreach (Type type in assembly.GetTypes())
             {
                 if (!typeof(IAnkhServiceImplementation).IsAssignableFrom(type))
@@ -188,7 +191,7 @@ namespace Ankh
                     continue;
                 }
 
-                IAnkhServiceImplementation instance = null;
+                IAnkhServiceImplementation instance = null;                
 
                 foreach(GlobalServiceAttribute attr in type.GetCustomAttributes(typeof(GlobalServiceAttribute), false))
                 {
@@ -200,9 +203,33 @@ namespace Ankh
                     if (attr.AllowOtherImplemenations && null != (container.GetService(serviceType)))
                         continue;
 
-                    if(instance == null)
-                        instance = (IAnkhServiceImplementation)Activator.CreateInstance(serviceType, Context);
+                    if (instance == null)
+                    {
+                        ConstructorInfo ci = type.GetConstructor(
+                            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance | BindingFlags.ExactBinding, 
+                            null, _serviceConstructorParams, null);
 
+                        if (ci == null)
+                        {
+                            string msg = string.Format("Servicetype {0} has no valid contructor", serviceType.AssemblyQualifiedName);
+                            Trace.WriteLine(msg);
+
+                            throw new InvalidOperationException(msg);
+                        }
+
+                        if (constructorArgs == null)
+                            constructorArgs = new object[] { Context };
+
+                        try
+                        {
+                            instance = (IAnkhServiceImplementation)ci.Invoke(constructorArgs);
+                        }
+                        catch (Exception e)
+                        {
+                            Trace.WriteLine(e.ToString());
+                            throw;
+                        }
+                    }
                     container.AddService(serviceType, instance, attr.PublicService);
                 }
 
