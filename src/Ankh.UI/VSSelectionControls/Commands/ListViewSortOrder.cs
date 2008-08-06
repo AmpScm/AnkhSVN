@@ -13,7 +13,6 @@ namespace Ankh.UI.VSSelectionControls.Commands
         protected override void OnUpdate(SmartListView list, Ankh.Commands.CommandUpdateEventArgs e)
         {
             bool foundOne = false;
-            bool ok = false;
 
             e.Checked = true;
 
@@ -47,7 +46,6 @@ namespace Ankh.UI.VSSelectionControls.Commands
 
         protected override void OnExecute(SmartListView list, CommandEventArgs e)
         {
-            bool next = false;
             bool value = (e.Command == AnkhCommand.ListViewSortDescending);
 
             foreach (SmartColumn sc in list.SortColumns)

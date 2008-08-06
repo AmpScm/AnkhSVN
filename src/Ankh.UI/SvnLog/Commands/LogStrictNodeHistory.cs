@@ -20,7 +20,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Latched = lc.StrictNodeHistory;
+            e.Checked = lc.StrictNodeHistory;
         }
 
         public void OnExecute(CommandEventArgs e)
