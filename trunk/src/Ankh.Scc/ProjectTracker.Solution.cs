@@ -14,14 +14,14 @@ namespace Ankh.Scc
 
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
-            _sccProvider.OnSolutionOpened(true);
+            SccProvider.OnSolutionOpened(true);
 
             return VSConstants.S_OK;
         }
 
         public int OnBeforeCloseSolution(object pUnkReserved)
         {
-            _sccProvider.OnStartedSolutionClose();
+            SccProvider.OnStartedSolutionClose();
 
             IAnkhTaskManager conflicts = GetService<IAnkhTaskManager>();
 
@@ -33,7 +33,7 @@ namespace Ankh.Scc
 
         public int OnAfterCloseSolution(object pUnkReserved)
         {
-            _sccProvider.OnSolutionClosed();
+            SccProvider.OnSolutionClosed();
 
             return VSConstants.S_OK;
         }
@@ -44,7 +44,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                _sccProvider.OnProjectLoaded(project);
+                SccProvider.OnProjectLoaded(project);
             }
             
             return VSConstants.S_OK;
@@ -56,7 +56,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                _sccProvider.OnProjectOpened(project, fAdded != 0);
+                SccProvider.OnProjectOpened(project, fAdded != 0);
             }
             //else
             //{
@@ -72,7 +72,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                _sccProvider.OnProjectClosed(project, fRemoved != 0);
+                SccProvider.OnProjectClosed(project, fRemoved != 0);
             }
 
             return VSConstants.S_OK;
@@ -144,7 +144,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
-                _sccProvider.OnProjectOpened(project, fAdded != 0);
+                SccProvider.OnProjectOpened(project, fAdded != 0);
             }
 
             return VSConstants.S_OK;

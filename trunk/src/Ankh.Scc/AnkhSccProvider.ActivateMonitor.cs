@@ -35,7 +35,7 @@ namespace Ankh.Scc
         bool _tryRegisteredBefore;
         internal void TryRegisterSccProvider()
         {
-            if (_tryRegisteredBefore)
+            if (_tryRegisteredBefore || IsActive)
             {
                 return;
             }

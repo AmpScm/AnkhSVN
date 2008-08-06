@@ -31,7 +31,7 @@ namespace Ankh.Scc
 
         protected IVsRunningDocumentTable RunningDocumentTable
         {
-            get { return _docTable ?? (_docTable = (IVsRunningDocumentTable)Context.GetService(typeof(SVsRunningDocumentTable))); }
+            get { return _docTable ?? (_docTable = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable))); }
         }
 
         void LoadInitial()

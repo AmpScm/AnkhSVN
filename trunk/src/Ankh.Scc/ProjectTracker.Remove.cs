@@ -46,7 +46,7 @@ namespace Ankh.Scc
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -55,7 +55,7 @@ namespace Ankh.Scc
 
                     string file = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
-                    _sccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
+                    SccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
                 }
             }
             return VSConstants.S_OK;
@@ -74,8 +74,8 @@ namespace Ankh.Scc
             {
                 bool ok = true;
 
-                if (_sccProvider.TrackProjectChanges(sccProject))
-                    _sccProvider.OnBeforeRemoveDirectory(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), out ok);
+                if (SccProvider.TrackProjectChanges(sccProject))
+                    SccProvider.OnBeforeRemoveDirectory(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), out ok);
 
                 if (rgResults != null)
                 {
@@ -112,7 +112,7 @@ namespace Ankh.Scc
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
@@ -121,7 +121,7 @@ namespace Ankh.Scc
 
                     string dir = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]);
 
-                    _sccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
+                    SccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
                 }
             }
 
