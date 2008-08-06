@@ -44,6 +44,7 @@ namespace Ankh
     public abstract class SvnPoolClient : SvnClient, IDisposable
     {
         ISvnClientPool _pool;
+        int _nReturns;
 
         // Note: We can only implement our own Dispose over the existing
         // As VC++ unconditionally calls GC.SuppressFinalize() just before returning
@@ -80,8 +81,13 @@ namespace Ankh
         /// </summary>
         protected virtual void ReturnClient()
         {
-            if (!_pool.ReturnClient(this))
+            if (_nReturns++ > 32 || IsCommandRunning || !_pool.ReturnClient(this))
             {
+                // Recycle the SvnClient if at least one of the following is true
+                // * A command is still active in it (User error)
+                // * The pool doesn't accept the client (Pool error)
+                // * The client has handled 32 sessions (Garbage collection of apr memory)
+
                 _pool = null;
                 InnerDispose();
             }
