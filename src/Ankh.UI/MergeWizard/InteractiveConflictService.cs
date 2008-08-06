@@ -8,6 +8,7 @@ using Ankh.Configuration;
 
 namespace Ankh.UI.MergeWizard
 {
+    [GlobalService(typeof(IConflictHandler))]
     class InteractiveConflictService : AnkhService, IConflictHandler
     {
         public InteractiveConflictService(IAnkhServiceProvider context)
