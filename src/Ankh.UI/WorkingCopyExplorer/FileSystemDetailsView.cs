@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections;
 using System.Drawing;
-using Utils.Win32;
 using System.Runtime.InteropServices;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;

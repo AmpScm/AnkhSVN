@@ -139,7 +139,6 @@ namespace Ankh.UI
             this.commitItemsTree.Size = new System.Drawing.Size(233, 279);
             this.commitItemsTree.TabIndex = 0;
             this.toolTipController.SetToolTip(this.commitItemsTree, "Files you attempt to publish/commit.");
-            this.commitItemsTree.UrlPaths = false;
             // 
             // logMessageBox
             // 
