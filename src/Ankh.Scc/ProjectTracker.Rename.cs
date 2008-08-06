@@ -25,7 +25,7 @@ namespace Ankh.Scc
                 {
                     bool ok = true;
 
-                    _sccProvider.OnBeforeSolutionRenameFile(SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                    SccProvider.OnBeforeSolutionRenameFile(SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
                             SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
                     if (rgResults != null)
@@ -38,14 +38,14 @@ namespace Ankh.Scc
             else
             {
                 IVsSccProject2 sccProject = pProject as IVsSccProject2;
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (int i = 0; i < cFiles; i++)
                 {
                     bool ok = true;
 
                     if (track)
-                        _sccProvider.OnBeforeProjectRenameFile(sccProject, SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
+                        SccProvider.OnBeforeProjectRenameFile(sccProject, SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
                             SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
                     if (rgResults != null)
@@ -86,7 +86,7 @@ namespace Ankh.Scc
                     StatusCache.MarkDirty(s);
             }
 
-            if(_sccProvider.IsActive)
+            if(SccProvider.IsActive)
                 FixWorkingCopyAfterRenames(rgszMkOldNames, rgszMkNewNames);
 
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
@@ -97,14 +97,14 @@ namespace Ankh.Scc
                 {
                     IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                    bool track = _sccProvider.TrackProjectChanges(sccProject);
+                    bool track = SccProvider.TrackProjectChanges(sccProject);
 
                     for (; iFile < iLastFileThisProject; iFile++)
                     {
                         if (sccProject == null || !track)
                             continue; // Not handled by our provider
 
-                        _sccProvider.OnProjectRenamedFile(sccProject,
+                        SccProvider.OnProjectRenamedFile(sccProject,
                             SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
                             SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
                     }
@@ -115,7 +115,7 @@ namespace Ankh.Scc
 
                     for (; iFile < iLastFileThisProject; iFile++)
                     {
-                        _sccProvider.OnSolutionRenamedFile(
+                        SccProvider.OnSolutionRenamedFile(
                             SvnTools.GetNormalizedFullPath(rgszMkOldNames[iFile]),
                             SvnTools.GetNormalizedFullPath(rgszMkNewNames[iFile]), rgFlags[iFile]);
                     }
@@ -204,7 +204,7 @@ namespace Ankh.Scc
                 return VSConstants.E_POINTER;
 
             IVsSccProject2 sccProject = pProject as IVsSccProject2;
-            bool track = _sccProvider.TrackProjectChanges(sccProject);
+            bool track = SccProvider.TrackProjectChanges(sccProject);
 
             if (track)
                 for (int i = 0; i < cDirs; i++)
@@ -220,7 +220,7 @@ namespace Ankh.Scc
                 bool ok = true;
 
                 if (track)
-                    _sccProvider.OnBeforeProjectDirectoryRename(sccProject,
+                    SccProvider.OnBeforeProjectDirectoryRename(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]), rgFlags[i], out ok);
 
@@ -264,14 +264,14 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    _sccProvider.OnProjectDirectoryRenamed(sccProject,
+                    SccProvider.OnProjectDirectoryRenamed(sccProject,
                         SvnTools.GetNormalizedFullPath(rgszMkOldNames[iDirectory]),
                         SvnTools.GetNormalizedFullPath(rgszMkNewNames[iDirectory]), rgFlags[iDirectory]);
                 }

@@ -31,7 +31,7 @@ namespace Ankh.Scc
 
             bool allOk = true;
 
-            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -79,7 +79,7 @@ namespace Ankh.Scc
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
             bool allOk = true;
 
-            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -170,7 +170,7 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -310,7 +310,7 @@ namespace Ankh.Scc
                     }
 
                     if (sccProject != null)
-                        _sccProvider.OnProjectFileAdded(sccProject, newName,
+                        SccProvider.OnProjectFileAdded(sccProject, newName,
                             origin, rgFlags[iFile]);
                     else
                     {
@@ -375,7 +375,7 @@ namespace Ankh.Scc
             if (pProject == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            bool track = _sccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+            bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             bool allOk = true;
             for (int i = 0; i < cDirectories; i++)
@@ -459,7 +459,7 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = _sccProvider.TrackProjectChanges(sccProject);
+                bool track = SccProvider.TrackProjectChanges(sccProject);
 
                 for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
                 {
@@ -467,7 +467,7 @@ namespace Ankh.Scc
                         continue;
 
                     if (sccProject != null)
-                        _sccProvider.OnProjectDirectoryAdded(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]), rgFlags[iDirectory]);
+                        SccProvider.OnProjectDirectoryAdded(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]), rgFlags[iDirectory]);
                 }
             }
 

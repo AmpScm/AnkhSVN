@@ -24,24 +24,33 @@ namespace Ankh.Scc
         bool _hooked;
         uint _projectCookie;
         uint _documentCookie;
-        readonly AnkhSccProvider _sccProvider;
+        AnkhSccProvider _sccProvider;
         bool _collectHints;
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
 
         public ProjectTracker(IAnkhServiceProvider context)
             : base(context)
-        {
-            _sccProvider = context.GetService<AnkhSccProvider>();
+        {            
             _fileOrigins = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+        }
+
+        protected override void  OnInitialize()
+        {
+ 	        base.OnInitialize();
 
             Hook(true);
             LoadInitial();
         }
 
+        AnkhSccProvider SccProvider
+        {
+            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
+        }
+
         private void LoadInitial()
         {
-            IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
+            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
             if(solution == null)
                 return;
@@ -62,11 +71,11 @@ namespace Ankh.Scc
                     IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
 
                     if(p2 != null)
-                        _sccProvider.OnProjectOpened(p2, false);
+                        SccProvider.OnProjectOpened(p2, false);
                 }                
             }
 
-            _sccProvider.OnSolutionOpened(true);
+            SccProvider.OnSolutionOpened(true);
         }
 
         public void Hook(bool enable)
