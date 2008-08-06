@@ -1,20 +1,14 @@
 // $Id$
 using System;
-using System.Collections;
-using System.IO;
-using System.Diagnostics;
-using Ankh.UI;
-using System.Windows.Forms;
-using Utils;
-using SharpSvn;
-using Ankh.Selection;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Ankh.Scc;
 using System.CodeDom.Compiler;
-using Ankh.VS;
+using System.Collections.Generic;
+using System.IO;
+using Ankh.Scc;
 using Ankh.Scc.UI;
+using Ankh.Selection;
+using Ankh.UI;
+using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.Commands
 {

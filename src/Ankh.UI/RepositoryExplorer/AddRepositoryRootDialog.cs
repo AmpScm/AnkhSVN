@@ -5,7 +5,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using Utils;
 using SharpSvn;
 
 namespace Ankh.UI

@@ -2,7 +2,6 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
-using Utils;
 using SharpSvn;
 using Ankh.Ids;
 using System.Windows.Forms.Design;

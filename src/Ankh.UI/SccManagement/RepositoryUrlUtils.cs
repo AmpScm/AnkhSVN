@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Utils;
 using SharpSvn;
 
 namespace Ankh.UI.SccManagement

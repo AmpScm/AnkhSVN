@@ -1,16 +1,13 @@
 // $Id$
 using System;
-
 using System.Collections;
-using System.IO;
-using System.Diagnostics;
-using Utils;
-using SharpSvn;
-using Ankh.Scc;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.StatusCache
 {

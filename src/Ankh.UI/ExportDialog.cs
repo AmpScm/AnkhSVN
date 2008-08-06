@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using Utils;
 using SharpSvn;
 using Ankh.Scc;
 using System.IO;
