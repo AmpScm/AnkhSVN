@@ -132,8 +132,6 @@ namespace Ankh.Commands
 
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
-            string tempDir = e.GetService<IAnkhTempDirManager>().GetTempDir();
-
             if (revRange.EndRevision.RevisionType == SvnRevisionType.Working ||
                 revRange.StartRevision.RevisionType == SvnRevisionType.Working)
             {
@@ -148,8 +146,11 @@ namespace Ankh.Commands
             {
                 AnkhDiffArgs da = new AnkhDiffArgs();
 
-                da.BaseFile = GetPath(e.Context, revRange.StartRevision, item, tempDir);
-                da.MineFile = GetPath(e.Context, revRange.EndRevision, item, tempDir);
+                da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
+                    diff.GetTempFile(item, revRange.StartRevision, true);
+
+                da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
+                    diff.GetTempFile(item, revRange.EndRevision, true);
 
                 da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
                 da.MineTitle = item.Name + " - " + revRange.EndRevision.ToString();
@@ -157,48 +158,6 @@ namespace Ankh.Commands
 
                 diff.RunDiff(da);
             }
-        }
-
-        private string GetPath(IAnkhServiceProvider context, SvnRevision revision, SvnItem item, string tempDir)
-        {
-            if (revision == SvnRevision.Working)
-            {
-                return item.FullPath;
-            }
-
-            string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + revision.ToString() + Path.GetExtension(item.Name);
-            tempFile = Path.Combine(tempDir, tempFile);
-            // we need to get it from the repos
-            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
-            {
-                SvnTarget target;
-
-                switch (revision.RevisionType)
-                {
-                    case SvnRevisionType.Head:
-                    case SvnRevisionType.Number:
-                    case SvnRevisionType.Time:
-                        target = new SvnUriTarget(item.Status.Uri);
-                        break;
-                    default:
-                        target = new SvnPathTarget(item.FullPath);
-                        break;
-                }
-                SvnWriteArgs args = new SvnWriteArgs();
-                args.Revision = revision;
-                args.SvnError += delegate(object sender, SvnErrorEventArgs eea)
-                {
-                    if (eea.Exception is SvnClientUnrelatedResourcesException)
-                        eea.Cancel = true;
-                };
-
-                using (FileStream stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
-                {
-                    ee.Client.Write(target, stream, args);
-                }
-            });
-
-            return tempFile;
-        }
+        }        
     }
 }
