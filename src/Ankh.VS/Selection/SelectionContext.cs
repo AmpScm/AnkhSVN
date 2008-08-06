@@ -63,7 +63,7 @@ namespace Ankh.Selection
             _cache = GetService<IFileStatusCache>();
             _solutionExplorer = GetService<SolutionExplorerWindow>(typeof(IAnkhSolutionExplorerWindow));
 
-            IVsMonitorSelection monitor = context.GetService<IVsMonitorSelection>();
+            IVsMonitorSelection monitor = GetService<IVsMonitorSelection>();
 
             if (monitor != null)
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
