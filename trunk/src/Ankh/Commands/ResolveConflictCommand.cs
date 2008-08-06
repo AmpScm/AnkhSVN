@@ -17,7 +17,7 @@ namespace Ankh.Commands
     /// Command to resolve conflict between changes.
     /// </summary>
     //[Command(AnkhCommand.ResolveConflict)]
-    public class ResolveConflictCommand : CommandBase
+    class ResolveConflictCommand : CommandBase
     {
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.

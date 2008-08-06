@@ -9,7 +9,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// Command to remove a URL from the Repository Explorer.
     /// </summary>
     [Command(AnkhCommand.RemoveRepositoryRoot)]
-    public class RemoveRepositoryRootCommand : CommandBase
+    class RemoveRepositoryRootCommand : CommandBase
     {
         #region Implementation of ICommand
 

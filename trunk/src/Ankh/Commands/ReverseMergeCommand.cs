@@ -22,7 +22,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.RevertToRevision)]
     [Command(AnkhCommand.RevertProjectToRevision)]
     [Command(AnkhCommand.RevertSolutionToRevision)]
-    public class ReverseMergeCommand : CommandBase
+    class ReverseMergeCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

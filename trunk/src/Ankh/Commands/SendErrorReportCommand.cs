@@ -7,7 +7,7 @@ namespace Ankh.Commands
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
     [Command(AnkhCommand.SendFeedback)]
-    public class SendErrorReportCommand : CommandBase
+    class SendErrorReportCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
         {

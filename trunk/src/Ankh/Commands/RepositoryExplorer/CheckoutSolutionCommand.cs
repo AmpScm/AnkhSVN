@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// Command to checkout current solution in Repository Explorer.
     /// </summary>
     [Command(AnkhCommand.CheckoutSolution)]
-    public class CheckoutSolutionCommand : CommandBase
+    class CheckoutSolutionCommand : CommandBase
     {
         #region Implementation of ICommand
 

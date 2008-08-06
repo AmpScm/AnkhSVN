@@ -12,7 +12,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// Command to copy the URL of this item to the clipboard in Repository Explorer.
     /// </summary>
     [Command(AnkhCommand.CopyReposExplorerUrl)]
-    public class CopyReposExplorerUrl : CommandBase
+    class CopyReposExplorerUrl : CommandBase
     {
         #region Implementation of ICommand
 

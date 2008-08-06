@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.RevertItem)]
     [Command(AnkhCommand.ItemRevertBase)]
-    public class RevertItemCommand : CommandBase
+    class RevertItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

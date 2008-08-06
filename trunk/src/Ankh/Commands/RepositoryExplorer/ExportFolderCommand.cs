@@ -11,7 +11,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// Command for exporting a folder
     /// </summary>
     [Command(AnkhCommand.ExportFolder)]
-    public class ExportFolderCommand : CommandBase
+    class ExportFolderCommand : CommandBase
     {
         #region Implementation of ICommand
 

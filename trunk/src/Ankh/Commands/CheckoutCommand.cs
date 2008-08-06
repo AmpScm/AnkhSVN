@@ -14,7 +14,7 @@ namespace Ankh.Commands
     /// Command to checkout a Subversion repository.
     /// </summary>
     [Command(AnkhCommand.Checkout)]
-    public class CheckoutCommand : CommandBase
+    class CheckoutCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

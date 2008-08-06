@@ -18,7 +18,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.SwitchItem)]
     [Command(AnkhCommand.SolutionSwitchDialog)]
     [Command(AnkhCommand.SwitchProject)]
-    public class SwitchItemCommand : CommandBase
+    class SwitchItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

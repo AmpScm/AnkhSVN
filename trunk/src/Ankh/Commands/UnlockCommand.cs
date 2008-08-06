@@ -14,7 +14,7 @@ namespace Ankh.Commands
     /// Command to unlock the selected items.
     /// </summary>
     [Command(AnkhCommand.Unlock, HideWhenDisabled=true)] 
-	public class UnlockCommand : CommandBase
+	class UnlockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

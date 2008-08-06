@@ -13,7 +13,7 @@ namespace Ankh.Commands
     /// Command to export a Subversion repository or local folder.
     /// </summary>
     [Command(AnkhCommand.Export,HideWhenDisabled=false)]
-    public class ExportCommand : CommandBase
+    class ExportCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

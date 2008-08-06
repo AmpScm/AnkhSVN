@@ -18,7 +18,7 @@ namespace Ankh
     /// required by commands.
     /// </summary>
     [GlobalService(typeof(IContext), AllowPreRegistered=true)]
-    public class OldAnkhContext : AnkhService, IContext
+    class OldAnkhContext : AnkhService, IContext
     {
         OutputPaneWriter _outputPane;
 

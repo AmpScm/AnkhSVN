@@ -25,7 +25,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
     [Command(AnkhCommand.ReposExplorerLog)]
-    public class LogCommand : CommandBase
+    class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

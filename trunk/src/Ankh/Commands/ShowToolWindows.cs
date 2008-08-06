@@ -11,7 +11,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ShowPendingChanges)]
     [Command(AnkhCommand.ShowWorkingCopyExplorer)]
     [Command(AnkhCommand.ShowRepositoryExplorer, AlwaysAvailable=true)]
-    public class ShowToolWindows : CommandBase
+    class ShowToolWindows : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

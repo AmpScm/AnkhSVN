@@ -20,7 +20,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.Blame)]
     [Command(AnkhCommand.LogBlameRevision)]
-    public class BlameCommand : CommandBase
+    class BlameCommand : CommandBase
     {
         XslCompiledTransform _transform;
         private const string BlameTransform = "blame.xsl";
