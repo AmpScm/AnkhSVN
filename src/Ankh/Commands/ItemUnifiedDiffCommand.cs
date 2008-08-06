@@ -14,7 +14,6 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
             List<string> selectedFiles = new List<string>();
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
             {
@@ -44,7 +43,7 @@ namespace Ankh.Commands
                     revRange = new SvnRevisionRange(SvnRevision.Previous, SvnRevision.Working);
                     break;
             }
-            string diff = this.GetDiff(context, e.Selection, revRange, forceExternal);
+            string diff = this.GetDiff(e.Context, e.Selection, revRange, forceExternal);
             if (diff != null)
             {
                 // convert it to HTML and store in a temp file

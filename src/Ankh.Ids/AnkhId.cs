@@ -102,8 +102,6 @@ namespace Ankh.Ids
         /// </summary>
         public static readonly Guid BmpGuid = new Guid(BmpId);
 
-        public static readonly Guid AnkhOutputPaneGuid = new Guid(AnkhOutputPaneId);
-
         public static readonly Guid SccProviderGuid = new Guid(SccProviderId);
         public static readonly Guid SccServiceGuid = new Guid(SccServiceId);
 

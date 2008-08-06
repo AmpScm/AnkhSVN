@@ -59,10 +59,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            
-
-
             List<SvnItem> selected = new List<SvnItem>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
 

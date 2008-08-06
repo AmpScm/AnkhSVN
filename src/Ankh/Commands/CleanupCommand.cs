@@ -26,38 +26,37 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-            using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
-            using (context.StartOperation("Running cleanup"))
-            {
-                SortedList<string, SvnItem> list = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            List<SvnItem> items = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
+
+            e.GetService<IProgressRunner>().Run("Running Cleanup",
+                delegate(object sender, ProgressWorkerArgs a)
                 {
-                    if (!item.IsVersioned)
-                        continue;
 
-                    string path = item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath);
-                    if (list.ContainsKey(path))
-                        continue;
+                    SortedList<string, SvnItem> list = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+                    foreach (SvnItem item in items)
+                    {
+                        if (!item.IsVersioned)
+                            continue;
 
-                    list.Add(path, item);
-                }
+                        string path = item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath);
+                        if (list.ContainsKey(path))
+                            continue;
 
-                foreach (string path in new List<string>(list.Keys))
-                {
-                    string parentPath = Path.GetDirectoryName(path);
-                    if (list.ContainsKey(parentPath) && parentPath != path)
-                        list.Remove(path);
-                }
+                        list.Add(path, item);
+                    }
 
-                SvnCleanUpArgs args = new SvnCleanUpArgs();
-                args.ThrowOnError = false;
-                foreach (string path in list.Keys)
-                    client.CleanUp(path, args);
-            }
+                    foreach (string path in new List<string>(list.Keys))
+                    {
+                        string parentPath = Path.GetDirectoryName(path);
+                        if (list.ContainsKey(parentPath) && parentPath != path)
+                            list.Remove(path);
+                    }
+
+                    SvnCleanUpArgs args = new SvnCleanUpArgs();
+                    args.ThrowOnError = false;
+                    foreach (string path in list.Keys)
+                        a.Client.CleanUp(path, args);
+                });
         }
     }
 }
-
-
-

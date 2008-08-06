@@ -49,8 +49,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
-
             /*SaveAllDirtyDocuments( e.Selection, context );
 
             using(context.StartOperation( "Resolving" ))
@@ -73,7 +71,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <param name="item"></param>
-        private void Resolve(IContext context, SvnItem item)
+        private void Resolve(IAnkhServiceProvider context, SvnItem item)
         {
             // TODO: Retrieve live information instead of using the cache
             // BH: We don't cache data to use it on only 1 location

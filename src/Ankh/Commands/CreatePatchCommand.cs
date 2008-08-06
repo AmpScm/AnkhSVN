@@ -19,32 +19,26 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.Context.GetService<IContext>();
+            string diff = this.GetDiff(e.Context, e.Selection);
 
-            using (context.StartOperation("Creating patch"))
+            if (diff == null)
             {
-                string diff = this.GetDiff(context, e.Selection);
-
-                if (diff == null)
-                {
-                    return;
-                }
-
-                using (SaveFileDialog dlg = new SaveFileDialog())
-                {
-                    dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
-                        "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-                    dlg.AddExtension = true;
-
-                    if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
-                    {
-                        using (StreamWriter w = File.CreateText(dlg.FileName))
-                            w.Write(diff);
-                    }
-                }
+                return;
             }
 
-        } // Execute
+            using (SaveFileDialog dlg = new SaveFileDialog())
+            {
+                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
+                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+                dlg.AddExtension = true;
+
+                if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
+                {
+                    using (StreamWriter w = File.CreateText(dlg.FileName))
+                        w.Write(diff);
+                }
+            }
+        }
 
         #endregion
     }
