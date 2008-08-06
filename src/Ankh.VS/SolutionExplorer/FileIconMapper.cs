@@ -4,8 +4,8 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
 using System.Drawing;
-using Utils.Win32;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -40,10 +40,10 @@ namespace Ankh.VS.SolutionExplorer
 
         private int GetOsIcon(string path)
         {
-            SHFILEINFO fileinfo = new SHFILEINFO();
-            IntPtr sysImageList = Win32.SHGetFileInfo(path, 0, ref fileinfo,
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE |
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON);
+            NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
+            IntPtr sysImageList = NativeMethods.SHGetFileInfo(path, 0, ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
+                NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON);
 
             if (sysImageList == IntPtr.Zero)
                 return -1;
@@ -97,7 +97,7 @@ namespace Ankh.VS.SolutionExplorer
                 if (_dirIcon > 0)
                     return _dirIcon - 1;
 
-                int n = GetSpecialIcon("", FileAttribute.Directory);
+                int n = GetSpecialIcon("", FileAttributes.Directory);
 
                 if (n >= 0)
                     _dirIcon = n + 1;
@@ -114,7 +114,7 @@ namespace Ankh.VS.SolutionExplorer
                 if (_fileIcon > 0)
                     return _fileIcon - 1;
 
-                int n = GetSpecialIcon("", FileAttribute.Normal);
+                int n = GetSpecialIcon("", FileAttributes.Normal);
 
                 if (n >= 0)
                     _fileIcon = n + 1;
@@ -123,12 +123,12 @@ namespace Ankh.VS.SolutionExplorer
             }
         }
 
-        int GetSpecialIcon(string name, FileAttribute attr)
+        int GetSpecialIcon(string name, FileAttributes attr)
         {
-            SHFILEINFO fileinfo = new SHFILEINFO();
-            IntPtr sysImageList = Win32.SHGetFileInfo(name, (uint)(int)attr, ref fileinfo,
-                (uint)Marshal.SizeOf(fileinfo), Constants.SHGFI_SHELLICONSIZE |
-                Constants.SHGFI_SYSICONINDEX | Constants.SHGFI_SMALLICON | Constants.SHGFI_USEFILEATTRIBUTES);
+            NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
+            IntPtr sysImageList = NativeMethods.SHGetFileInfo(name, (uint)(int)attr, ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
+                NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON | NativeMethods.SHGFI_USEFILEATTRIBUTES);
 
             if (sysImageList == IntPtr.Zero)
                 return -1;
@@ -143,7 +143,7 @@ namespace Ankh.VS.SolutionExplorer
             if (string.IsNullOrEmpty(ext))
                 return FileIcon;
 
-            return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttribute.Normal);
+            return GetSpecialIcon("c:\\file." + ext.Trim('.'), FileAttributes.Normal);
         }
 
         int _lvUp;
@@ -185,5 +185,30 @@ namespace Ankh.VS.SolutionExplorer
         
 
         #endregion
+
+
+        static class NativeMethods
+        {
+            [StructLayout(LayoutKind.Sequential), CLSCompliant(false)]
+            public struct SHFILEINFO
+            {
+                public IntPtr hIcon;
+                public IntPtr iIcon;
+                public uint dwAttributes;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+                public string szDisplayName;
+                [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+                public string szTypeName;
+            }
+
+            public const uint SHGFI_SMALLICON = 0x1; 
+            public const uint SHGFI_SYSICONINDEX = 0x4000;
+            public const uint SHGFI_SHELLICONSIZE = 0x4;
+            public const uint SHGFI_USEFILEATTRIBUTES = 0x10;
+
+            [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+            public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
+                ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+        }
     }
 }
