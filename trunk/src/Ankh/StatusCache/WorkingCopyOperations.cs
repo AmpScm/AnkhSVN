@@ -7,16 +7,12 @@ using System.IO;
 
 namespace Ankh
 {
-    internal class WorkingCopyOperations : IWorkingCopyOperations
+    [GlobalService(typeof(IWorkingCopyOperations))]
+    class WorkingCopyOperations : AnkhService, IWorkingCopyOperations
     {
-        IAnkhServiceProvider _context;
-
         public WorkingCopyOperations(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
         public bool IsWorkingCopyPath(string path)

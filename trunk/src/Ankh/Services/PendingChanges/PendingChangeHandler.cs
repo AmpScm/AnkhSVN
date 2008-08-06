@@ -14,6 +14,7 @@ namespace Ankh.PendingChanges
     /// <summary>
     /// 
     /// </summary>
+    [GlobalService(typeof(IPendingChangeHandler))]
     partial class PendingChangeHandler : AnkhService, IPendingChangeHandler
     {
         public PendingChangeHandler(IAnkhServiceProvider context)

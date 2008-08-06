@@ -17,7 +17,9 @@ namespace Ankh.StatusCache
     /// <summary>
     /// Maintains path->SvnItem mappings.
     /// </summary>
-    public sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
+    [GlobalService(typeof(IFileStatusCache), AllowPreRegistered=true)]
+    [GlobalService(typeof(ISvnItemChange), AllowPreRegistered=true)]
+    sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
         readonly SvnClient _client;

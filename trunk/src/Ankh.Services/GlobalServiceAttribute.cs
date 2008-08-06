@@ -60,7 +60,7 @@ namespace Ankh
         /// <value>
         /// 	<c>true</c> if [allow other implemenations]; otherwise, <c>false</c>.
         /// </value>
-        public bool AllowOtherImplemenations
+        public bool AllowPreRegistered
         {
             get { return _skipIfPreRegistered; }
             set { _skipIfPreRegistered = value; }
