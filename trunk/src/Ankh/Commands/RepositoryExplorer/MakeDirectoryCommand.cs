@@ -3,7 +3,6 @@ using System;
 using System.Windows.Forms;
 using System.Collections;
 using Ankh.UI;
-using Utils;
 using Ankh.Ids;
 using SharpSvn;
 using Ankh.WorkingCopyExplorer;

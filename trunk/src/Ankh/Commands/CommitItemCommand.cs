@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using System.Collections;
 using System.Threading;
 using System.IO;
-using Utils;
 using SharpSvn;
 using Ankh.Ids;
 using System.Collections.Generic;

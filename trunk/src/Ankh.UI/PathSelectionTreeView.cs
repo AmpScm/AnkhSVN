@@ -5,7 +5,6 @@ using System.Collections;
 using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
-using Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Ankh.Scc;

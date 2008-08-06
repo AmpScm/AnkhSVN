@@ -1,21 +1,15 @@
 using System;
-
-using System.Windows.Forms;
-using Utils;
-using System.Reflection;
 using System.Diagnostics;
-using Ankh.UI;
 using System.IO;
-using System.Collections;
-using Ankh.Configuration;
-using System.Xml.Serialization;
-using SharpSvn;
-using Ankh.ContextServices;
-using Ankh.Xml;
+using System.Reflection;
+using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Xml.Serialization;
+using Ankh.ContextServices;
+using Ankh.UI;
 using Ankh.VS;
-
+using Ankh.Xml;
+using SharpSvn;
 
 namespace Ankh
 {

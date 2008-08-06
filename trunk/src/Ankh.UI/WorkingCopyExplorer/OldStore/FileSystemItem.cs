@@ -3,7 +3,6 @@ using System.Text;
 using Ankh.UI;
 using System.IO;
 
-using Utils;
 using System.Collections;
 using SharpSvn;
 using Ankh.Scc;
