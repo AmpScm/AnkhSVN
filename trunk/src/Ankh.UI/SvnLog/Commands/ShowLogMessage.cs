@@ -20,7 +20,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
             
-            e.Latched = lc.ShowLogMessage;
+            e.Checked = lc.ShowLogMessage;
         }
 
         public void OnExecute(CommandEventArgs e)

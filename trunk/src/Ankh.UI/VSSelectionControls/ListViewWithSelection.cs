@@ -61,13 +61,10 @@ namespace Ankh.UI.VSSelectionControls
             if (DesignMode)
                 return;
 
-            if (!_updatingSelection)
-            {
-                if (SelectedIndices.Count > 0)
-                    MaybeNotifySelectionUpdated();
-                else
-                    _maybeUnselect = true;
-            }
+            if (SelectedIndices.Count > 0)
+                MaybeNotifySelectionUpdated();
+            else
+                _maybeUnselect = true;
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -181,15 +178,26 @@ namespace Ankh.UI.VSSelectionControls
         /// </summary>
         public void NotifySelectionUpdated()
         {
-            _maybeUnselect = false;
+            if (_updatingSelection)
+                return;
 
-            if (SelectionPublishServiceProvider != null)
+            _updatingSelection = true;
+            try
             {
-                SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
-            }
+                _maybeUnselect = false;
 
-            if (_selectionChanged != null)
-                _selectionChanged(this, EventArgs.Empty);
+                if (SelectionPublishServiceProvider != null)
+                {
+                    SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
+                }
+
+                if (_selectionChanged != null)
+                    _selectionChanged(this, EventArgs.Empty);
+            }
+            finally
+            {
+                _updatingSelection = false;
+            }
         }
 
         public event EventHandler<RetrieveSelectionEventArgs> RetrieveSelection;

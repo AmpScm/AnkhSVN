@@ -19,7 +19,7 @@ namespace Ankh.UI.PendingChanges.Commands
                 return;
             }
 
-            e.Latched = page.LogMessageVisible;
+            e.Checked = page.LogMessageVisible;
         }
 
         public void OnExecute(CommandEventArgs e)

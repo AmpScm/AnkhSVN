@@ -20,7 +20,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Latched = lc.IncludeMergedRevisions;
+            e.Checked = lc.IncludeMergedRevisions;
         }
 
         public void OnExecute(CommandEventArgs e)

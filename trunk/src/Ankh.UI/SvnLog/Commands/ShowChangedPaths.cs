@@ -20,7 +20,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Latched = lc.ShowChangedPaths;            
+            e.Checked = lc.ShowChangedPaths;            
         }
 
         public void OnExecute(CommandEventArgs e)
