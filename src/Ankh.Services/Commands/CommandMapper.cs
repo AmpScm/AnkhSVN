@@ -313,7 +313,7 @@ namespace Ankh.Commands
                 if (updateArgs.Enabled)
                     cmdf |= OLECMDF.OLECMDF_ENABLED;
 
-                if (updateArgs.Latched)
+                if (updateArgs.Checked)
                     cmdf |= OLECMDF.OLECMDF_LATCHED;
 
                 if (updateArgs.Ninched)

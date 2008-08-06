@@ -10,7 +10,7 @@ namespace Ankh
     /// <summary>
     /// Generic service baseclass
     /// </summary>
-    public abstract class AnkhService : IAnkhServiceProvider, IComponent
+    public abstract class AnkhService : IAnkhServiceProvider, IComponent, IAnkhServiceImplementation
     {
         readonly IAnkhServiceProvider _context;
         /// <summary>
@@ -23,7 +23,36 @@ namespace Ankh
                 throw new ArgumentNullException("context");
 
             _context = context;
+        }
 
+        /// <summary>
+        /// Called when the service is instantiated
+        /// </summary>
+        protected virtual void OnPreInitialize()
+        {
+        }
+
+        /// <summary>
+        /// Called when the service is instantiated
+        /// </summary>
+        void IAnkhServiceImplementation.OnPreInitialize()
+        {
+            OnInitialize();
+        }
+
+        /// <summary>
+        /// Called after all modules and services received their OnPreInitialize
+        /// </summary>
+        protected virtual void OnInitialize()
+        {
+        }
+
+        /// <summary>
+        /// Called after all modules and services received their OnPreInitialize
+        /// </summary>
+        void IAnkhServiceImplementation.OnInitialize()
+        {
+            OnInitialize();
         }
 
         /// <summary>

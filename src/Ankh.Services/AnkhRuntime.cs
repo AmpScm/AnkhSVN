@@ -12,6 +12,7 @@ namespace Ankh
         readonly IServiceContainer _container;
         readonly CommandMapper _commandMapper;
         readonly AnkhContext _context;
+        readonly List<IAnkhServiceImplementation> _services = new List<IAnkhServiceImplementation>();
         bool _ensureServices;
 
         public AnkhRuntime(IServiceContainer parentContainer)
@@ -156,6 +157,11 @@ namespace Ankh
             {
                 module.OnInitialize();
             }
+
+            foreach (IAnkhServiceImplementation service in _services)
+            {
+                service.OnInitialize();
+            }
         }
 
         public static AnkhRuntime Get(IServiceProvider serviceProvider)
@@ -164,6 +170,48 @@ namespace Ankh
                 throw new ArgumentNullException("serviceProvider");
 
             return (AnkhRuntime)serviceProvider.GetService(typeof(AnkhRuntime));
+        }
+
+        public void LoadServices(IServiceContainer container, System.Reflection.Assembly assembly)
+        {
+            if (assembly == null)
+                throw new ArgumentNullException("assembly");
+
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (!typeof(IAnkhServiceImplementation).IsAssignableFrom(type))
+                {
+#if DEBUG
+                    if(type.GetCustomAttributes(typeof(GlobalServiceAttribute), false).Length > 0)
+                        Debug.WriteLine(string.Format("Ignoring AnkhGlobalServiceAttribute on {0} as it does not implement IAnkhServiceImplementation", type.AssemblyQualifiedName));
+#endif
+                    continue;
+                }
+
+                IAnkhServiceImplementation instance = null;
+
+                foreach(GlobalServiceAttribute attr in type.GetCustomAttributes(typeof(GlobalServiceAttribute), false))
+                {
+                    Type serviceType = attr.ServiceType;
+#if DEBUG
+                    if(!serviceType.IsAssignableFrom(type))
+                        throw new InvalidOperationException(string.Format("{0} does not implement global service {1} but has an attribute that says it does", type.AssemblyQualifiedName, serviceType.FullName));
+#endif
+                    if (attr.AllowOtherImplemenations && null != (container.GetService(serviceType)))
+                        continue;
+
+                    if(instance == null)
+                        instance = (IAnkhServiceImplementation)Activator.CreateInstance(serviceType, Context);
+
+                    container.AddService(serviceType, instance, attr.PublicService);
+                }
+
+                if (instance != null)
+                {                    
+                    _services.Add(instance);
+                    instance.OnPreInitialize();
+                }
+            }            
         }
     }
 }
