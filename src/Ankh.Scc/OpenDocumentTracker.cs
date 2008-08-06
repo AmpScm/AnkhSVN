@@ -9,23 +9,25 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
+    [GlobalService(typeof(IAnkhOpenDocumentTracker))]
     partial class OpenDocumentTracker : AnkhService, IAnkhOpenDocumentTracker, IVsRunningDocTableEvents4, IVsRunningDocTableEvents3, IVsRunningDocTableEvents2, IVsRunningDocTableEvents
     {
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
-        readonly AnkhSccProvider _sccProvider;
         IVsRunningDocumentTable _docTable;
         bool _hooked;
         uint _cookie;
 
-        public OpenDocumentTracker(AnkhContext context)
+        public OpenDocumentTracker(IAnkhServiceProvider context)
             : base(context)
         {
-            _sccProvider = context.GetService<AnkhSccProvider>();
+        }
 
+        protected override void OnInitialize()
+        {
             Hook(true);
             LoadInitial();
-        }
+        } 
 
         protected IVsRunningDocumentTable RunningDocumentTable
         {

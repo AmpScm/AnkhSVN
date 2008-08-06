@@ -15,6 +15,8 @@ using SharpSvn;
 
 namespace Ankh.Scc
 {
+    [GlobalService(typeof(IProjectNotifier))]
+    [GlobalService(typeof(IFileStatusMonitor))]
     sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor, IVsBroadcastMessageEvents
     {
         readonly object _lock = new object();

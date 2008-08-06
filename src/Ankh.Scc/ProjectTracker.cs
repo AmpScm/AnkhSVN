@@ -18,6 +18,7 @@ namespace Ankh.Scc
     }
 
     //[CLSCompliant(false)]
+    [GlobalService(typeof(IAnkhProjectDocumentTracker))]
     partial class ProjectTracker : AnkhService, IAnkhProjectDocumentTracker, IVsTrackProjectDocumentsEvents2, IVsTrackProjectDocumentsEvents3
     {
         bool _hooked;
@@ -28,7 +29,7 @@ namespace Ankh.Scc
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
 
-        public ProjectTracker(AnkhContext context)
+        public ProjectTracker(IAnkhServiceProvider context)
             : base(context)
         {
             _sccProvider = context.GetService<AnkhSccProvider>();

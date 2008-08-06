@@ -9,6 +9,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
+    [GlobalService(typeof(IPendingChangesManager))]
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
         bool _isActive;
