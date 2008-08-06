@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{A3248E1E-8272-4227-AF02-BB86040FBED9}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -99,29 +99,7 @@
     <Compile Include="ErrorMessage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FileUtils.cs" />
-    <Compile Include="ProcessReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UriUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\Constants.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\enums.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\Msg.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\structs.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Win32\Win32.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <None Include="Utils.snk" />
     <None Include="Utils.wxs" />
   </ItemGroup>
