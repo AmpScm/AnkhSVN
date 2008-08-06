@@ -24,6 +24,17 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AnkhGlobalServiceAttribute"/> class.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="publicService">if set to <c>true</c> [public service].</param>
+        public GlobalServiceAttribute(Type serviceType, bool publicService)
+            : this(serviceType)
+        {
+            PublicService = publicService;
+        }
+
+        /// <summary>
         /// Gets the type of the service to register.
         /// </summary>
         /// <value>The type of the service.</value>

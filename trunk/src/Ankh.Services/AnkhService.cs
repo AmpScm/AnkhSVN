@@ -37,7 +37,7 @@ namespace Ankh
         /// </summary>
         void IAnkhServiceImplementation.OnPreInitialize()
         {
-            OnInitialize();
+            OnPreInitialize();
         }
 
         /// <summary>

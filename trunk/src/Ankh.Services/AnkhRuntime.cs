@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using Ankh.Commands;
 using System.Diagnostics;
 using System.Reflection;
+using Ankh.UI;
 
 namespace Ankh
 {
@@ -28,7 +29,7 @@ namespace Ankh
                 _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
 
             _context = (AnkhContext)_container.GetService(typeof(AnkhContext));
-            if(_context == null)
+            if (_context == null)
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
@@ -46,7 +47,7 @@ namespace Ankh
                 _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
 
             _context = (AnkhContext)_container.GetService(typeof(AnkhContext));
-            if(_context == null)
+            if (_context == null)
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
@@ -76,7 +77,7 @@ namespace Ankh
             get { return _ensureServices; }
             set { _ensureServices = value; }
         }
-        
+
         #region IAnkhServiceProvider Members
 
         /// <summary>
@@ -174,10 +175,29 @@ namespace Ankh
         }
 
         readonly static Type[] _serviceConstructorParams = new Type[] { typeof(IAnkhServiceProvider) };
+
+        /// <summary>
+        /// Loads the services from the specified assembly and adds them to the container
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="assembly">The assembly.</param>
         public void LoadServices(IServiceContainer container, System.Reflection.Assembly assembly)
+        {
+            LoadServices(container, assembly, Context);
+        }
+
+        /// <summary>
+        /// Loads the services from the specified assembly and adds them to the specified container; pass context to the services
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="context">The context.</param>
+        public void LoadServices(IServiceContainer container, System.Reflection.Assembly assembly, IAnkhServiceProvider context)
         {
             if (assembly == null)
                 throw new ArgumentNullException("assembly");
+            else if (context == null)
+                throw new ArgumentNullException("context");
 
             object[] constructorArgs = null;
             foreach (Type type in assembly.GetTypes())
@@ -185,19 +205,19 @@ namespace Ankh
                 if (!typeof(IAnkhServiceImplementation).IsAssignableFrom(type))
                 {
 #if DEBUG
-                    if(type.GetCustomAttributes(typeof(GlobalServiceAttribute), false).Length > 0)
+                    if (type.GetCustomAttributes(typeof(GlobalServiceAttribute), false).Length > 0)
                         Debug.WriteLine(string.Format("Ignoring AnkhGlobalServiceAttribute on {0} as it does not implement IAnkhServiceImplementation", type.AssemblyQualifiedName));
 #endif
                     continue;
                 }
 
-                IAnkhServiceImplementation instance = null;                
+                IAnkhServiceImplementation instance = null;
 
-                foreach(GlobalServiceAttribute attr in type.GetCustomAttributes(typeof(GlobalServiceAttribute), false))
+                foreach (GlobalServiceAttribute attr in type.GetCustomAttributes(typeof(GlobalServiceAttribute), false))
                 {
                     Type serviceType = attr.ServiceType;
 #if DEBUG
-                    if(!serviceType.IsAssignableFrom(type))
+                    if (!serviceType.IsAssignableFrom(type))
                         throw new InvalidOperationException(string.Format("{0} does not implement global service {1} but has an attribute that says it does", type.AssemblyQualifiedName, serviceType.FullName));
 #endif
                     if (attr.AllowOtherImplemenations && null != (container.GetService(serviceType)))
@@ -205,40 +225,42 @@ namespace Ankh
 
                     if (instance == null)
                     {
-                        ConstructorInfo ci = type.GetConstructor(
-                            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance | BindingFlags.ExactBinding, 
-                            null, _serviceConstructorParams, null);
-
-                        if (ci == null)
-                        {
-                            string msg = string.Format("Servicetype {0} has no valid contructor", serviceType.AssemblyQualifiedName);
-                            Trace.WriteLine(msg);
-
-                            throw new InvalidOperationException(msg);
-                        }
-
-                        if (constructorArgs == null)
-                            constructorArgs = new object[] { Context };
-
                         try
                         {
+                            ConstructorInfo ci = type.GetConstructor(
+                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance | BindingFlags.ExactBinding,
+                                null, _serviceConstructorParams, null);
+
+                            if (ci == null)
+                            {
+                                string msg = string.Format("Servicetype {0} has no valid contructor", type.AssemblyQualifiedName);
+                                Trace.WriteLine(msg);
+
+                                throw new InvalidOperationException(msg);
+                            }
+
+                            if (constructorArgs == null)
+                                constructorArgs = new object[] { context };
+
                             instance = (IAnkhServiceImplementation)ci.Invoke(constructorArgs);
                         }
                         catch (Exception e)
                         {
-                            Trace.WriteLine(e.ToString());
-                            throw;
+                            AnkhMessageBox mb = new AnkhMessageBox(Context);
+
+                            mb.Show(e.ToString());
+                            continue;
                         }
                     }
                     container.AddService(serviceType, instance, attr.PublicService);
                 }
 
                 if (instance != null)
-                {                    
+                {
                     _services.Add(instance);
                     instance.OnPreInitialize();
                 }
-            }            
+            }
         }
     }
 }
