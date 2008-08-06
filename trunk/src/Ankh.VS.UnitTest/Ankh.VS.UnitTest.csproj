@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30428</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -67,7 +67,6 @@
     <Compile Include="Helpers\CommandExecutor.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ServiceProviderHelper.cs" />
-    <Compile Include="Mocks\AnkhContextMock.cs" />
     <Compile Include="Mocks\AnkhUIShellMock.cs" />
     <Compile Include="Mocks\DteMock.cs" />
     <Compile Include="Mocks\OutputPaneMock.cs" />

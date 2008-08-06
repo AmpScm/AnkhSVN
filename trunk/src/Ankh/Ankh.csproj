@@ -172,9 +172,6 @@
     <Compile Include="Commands\OpenInXExplorer.cs" />
     <Compile Include="Commands\SolutionCommitCommand.cs" />
     <Compile Include="Services\AnkhCommandService.cs" />
-    <Compile Include="Services\AnkhContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AnkhModule.cs" />
     <Compile Include="BlameResult.cs">
       <SubType>Code</SubType>
@@ -303,12 +300,6 @@
     <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
-    <Compile Include="Services\IContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OutputPaneWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Services\ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -104,12 +104,6 @@ namespace Ankh.VSPackage
 			return VSConstants.S_OK;
 		}
 
-		IContext _context;
-		public IContext AnkhContext
-		{
-			get { return _context ?? (_context = GetService<IContext>()); }
-		}
-
         public T GetService<T>()
             where T : class
         {

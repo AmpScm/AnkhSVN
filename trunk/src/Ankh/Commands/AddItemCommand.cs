@@ -35,7 +35,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IContext context = e.GetService<IContext>();
             IUIShell uiShell = e.GetService<IUIShell>();
 
             SortedList<string, SvnItem> paths = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
