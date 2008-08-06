@@ -15,6 +15,7 @@ using FileVersionInfo=System.Diagnostics.FileVersionInfo;
 
 namespace Ankh.Settings
 {
+    [GlobalService(typeof(IAnkhSolutionSettings))]
     class SolutionSettings : AnkhService, IAnkhSolutionSettings
     {
         int _solutionCookie;

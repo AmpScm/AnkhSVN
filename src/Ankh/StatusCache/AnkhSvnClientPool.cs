@@ -12,7 +12,8 @@ using System.ComponentModel;
 
 namespace Ankh
 {
-    public class AnkhSvnClientPool : AnkhService, ISvnClientPool
+    [GlobalService(typeof(ISvnClientPool))]
+    class AnkhSvnClientPool : AnkhService, ISvnClientPool
     {
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();

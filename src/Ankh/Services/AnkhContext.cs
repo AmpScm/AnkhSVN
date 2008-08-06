@@ -17,22 +17,14 @@ namespace Ankh
     /// General context object for the Ankh addin. Contains pointers to objects
     /// required by commands.
     /// </summary>
+    [GlobalService(typeof(IContext), AllowPreRegistered=true)]
     public class OldAnkhContext : AnkhService, IContext
     {
         OutputPaneWriter _outputPane;
 
-        public OldAnkhContext(IAnkhPackage package)
-            : this(package, null)
+        public OldAnkhContext(IAnkhServiceProvider context)
+            : base(context)
         {
-        }
-
-        public OldAnkhContext(IAnkhPackage package, IUIShell uiShell)
-            : base(package)
-        {
-            if (uiShell != null)
-                _uiShell = uiShell;
-
-            this._outputPane = new OutputPaneWriter(this, "AnkhSVN");
         }
 
         IUIShell _uiShell;
@@ -51,7 +43,7 @@ namespace Ankh
         public OutputPaneWriter OutputPane
         {
             [System.Diagnostics.DebuggerStepThrough]
-            get { return this._outputPane; }
+            get { return _outputPane ?? (_outputPane = new OutputPaneWriter(this, "AnkhSVN")); }
         }
 
         ISvnClientPool _clientPool;

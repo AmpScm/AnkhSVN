@@ -14,6 +14,7 @@ using Ankh.VS;
 
 namespace Ankh.Services
 {
+    [GlobalService(typeof(IAnkhDiffHandler))]
     partial class AnkhDiff : AnkhService, IAnkhDiffHandler
     {
         public AnkhDiff(IAnkhServiceProvider context)

@@ -13,6 +13,7 @@ using System.Threading;
 
 namespace Ankh
 {
+    [GlobalService(typeof(IAnkhCommandService))]
     class AnkhCommandService : AnkhService, IAnkhCommandService
     {
         public AnkhCommandService(IAnkhServiceProvider context)

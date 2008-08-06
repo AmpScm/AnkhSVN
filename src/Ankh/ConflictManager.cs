@@ -8,6 +8,7 @@ using Ankh.Selection;
 namespace Ankh
 {
     // TODO: Re-implement using IVsTaskProvider, IVsTaskProvider2 and IVsTaskProvider3
+    [GlobalService(typeof(IAnkhTaskManager))]
     sealed class ConflictManager : AnkhService, IAnkhTaskManager
     {
         /// <summary>

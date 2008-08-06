@@ -20,7 +20,8 @@ namespace Ankh
     /// <summary>
     /// Summary description for UIShell.
     /// </summary>
-    class UIShell : AnkhService, IUIShell
+    [GlobalService(typeof(IUIShell))]
+    sealed class UIShell : AnkhService, IUIShell
     {
         public UIShell(IAnkhServiceProvider context)
             : base(context)

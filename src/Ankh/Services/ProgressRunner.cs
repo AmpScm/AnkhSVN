@@ -11,6 +11,7 @@ using System.Windows.Forms.Design;
 
 namespace Ankh
 {
+    [GlobalService(typeof(IProgressRunner))]
     sealed class ProgressRunnerService : AnkhService, IProgressRunner
     {
         public ProgressRunnerService(IAnkhServiceProvider context)

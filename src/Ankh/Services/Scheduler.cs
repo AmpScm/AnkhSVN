@@ -8,6 +8,7 @@ using Ankh.Commands;
 
 namespace Ankh.Services
 {
+    [GlobalService(typeof(IAnkhScheduler))]
     sealed class AnkhScheduler : AnkhService, IAnkhScheduler
     {
         readonly Timer _timer;

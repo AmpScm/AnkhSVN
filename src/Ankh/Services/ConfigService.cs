@@ -21,6 +21,7 @@ namespace Ankh.Configuration
     /// <summary>
     /// Contains functions used to load and save configuration data.
     /// </summary>
+    [GlobalService(typeof(IAnkhConfigurationService))]
     sealed class ConfigService : AnkhService, IAnkhConfigurationService, IDisposable
     {
         readonly object _lock = new object();
