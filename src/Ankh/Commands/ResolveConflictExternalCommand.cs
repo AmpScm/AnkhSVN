@@ -15,7 +15,7 @@ namespace Ankh.Commands
     /// Command to resolve conflict between changes using external tool.
     /// </summary>
     [Command(AnkhCommand.ResolveConflictExternal)]
-    public class ResolveConflictExternalCommand : ResolveConflictCommand
+    class ResolveConflictExternalCommand : ResolveConflictCommand
     {
         #region Implementation of ICommand
 

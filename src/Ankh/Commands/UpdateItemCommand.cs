@@ -19,7 +19,7 @@ namespace Ankh.Commands
     /// A command that updates an item.
     /// </summary>
     [Command(AnkhCommand.UpdateItem)]
-    public class UpdateItem : CommandBase
+    class UpdateItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

@@ -12,7 +12,7 @@ namespace Ankh.Commands
     /// Command to cleanup the working copy.
     /// </summary>
     [Command(AnkhCommand.Cleanup)]
-    public class Cleanup : CommandBase
+    class Cleanup : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

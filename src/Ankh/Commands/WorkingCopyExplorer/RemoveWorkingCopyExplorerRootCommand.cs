@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// Command to remove current root from the Working Copy Explorer.
     /// </summary>
     [Command(AnkhCommand.RemoveWorkingCopyExplorerRoot)]
-    public class RemoveWorkingCopyExplorerRootCommand : CommandBase
+    class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
         #region Implementation of ICommand
 

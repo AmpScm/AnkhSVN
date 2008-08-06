@@ -10,7 +10,7 @@ namespace Ankh.Commands.RepositoryExplorer
 	/// Command to check out current folder in the Repository Explorer.
 	/// </summary>
     [Command(AnkhCommand.CheckoutFolder)]
-    public class CheckoutFolderCommand : CommandBase
+    class CheckoutFolderCommand : CommandBase
     {
         #region Implementation of ICommand
 

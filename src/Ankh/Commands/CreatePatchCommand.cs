@@ -10,7 +10,7 @@ namespace Ankh.Commands
     /// A command that lets you create a patch.
     /// </summary>
     [Command(AnkhCommand.CreatePatch)]
-    public class CreatePatchCommand : LocalDiffCommandBase
+    class CreatePatchCommand : LocalDiffCommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {

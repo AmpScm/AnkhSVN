@@ -14,7 +14,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
     [Command(AnkhCommand.NewDirectory)]
-    public class MakeDirectoryCommand : CommandBase
+    class MakeDirectoryCommand : CommandBase
     {
         //SvnCommitArgs _args = null;
         #region Implementation of ICommand

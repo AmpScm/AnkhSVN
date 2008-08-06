@@ -20,7 +20,7 @@ namespace Ankh.Commands
     /// Command to commit selected items to the Subversion repository.
     /// </summary>
     [Command(AnkhCommand.CommitItem)]
-    public class CommitItemCommand : CommandBase
+    class CommitItemCommand : CommandBase
     {
         ICollection<string> paths;
         SvnCommitResult commitInfo;

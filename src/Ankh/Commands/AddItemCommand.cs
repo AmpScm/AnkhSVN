@@ -16,7 +16,7 @@ namespace Ankh.Commands
     /// Command to add selected items to the working copy.
     /// </summary>
     [Command(AnkhCommand.AddItem)]
-    public class AddItemCommand : CommandBase
+    class AddItemCommand : CommandBase
     {
         #region Implementation of ICommand
 
