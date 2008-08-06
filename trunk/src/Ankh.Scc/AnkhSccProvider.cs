@@ -22,15 +22,25 @@ namespace Ankh.Scc
     {
     }
 
+    [GlobalService(typeof(AnkhSccProvider), true)]
+    [GlobalService(typeof(IAnkhSccService))]
+    [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]    
     partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
 
-        public AnkhSccProvider(AnkhContext context)
+        public AnkhSccProvider(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            TryRegisterSccProvider();
         }
 
         public void RegisterAsSccProvider()

@@ -15,8 +15,9 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-	partial class AnkhSccProvider : IProjectFileMapper
-	{
+    [GlobalService(typeof(IProjectFileMapper))]
+    partial class AnkhSccProvider : IProjectFileMapper
+    {
         // ********************************************************
         // This file contains two very important features of the Scc provider:
         //  - The tracking of changes in the File <-> Project mapping (Many <-> Many)
@@ -58,18 +59,18 @@ namespace Ankh.Scc
             {
                 Guid addRepos;
                 Guid originRepos;
-                if(!svn.TryGetRepositoryId(filename, out addRepos))
+                if (!svn.TryGetRepositoryId(filename, out addRepos))
                     return; // Adding would fail, don't even try
 
                 if (!svn.TryGetRepositoryId(fileOrigin, out originRepos))
                     return; // We can't copy it to another repository then where it came from..
 
-                if(addRepos != originRepos)
+                if (addRepos != originRepos)
                     return; // We can't copy it to another repository then where it came from..
-                
+
                 svn.SafeWcCopyFixup(fileOrigin, filename);
             }
-        }        
+        }
 
         /// <summary>
         /// Called when a file is removed from a project
@@ -94,7 +95,7 @@ namespace Ankh.Scc
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 SvnStatusEventArgs status = svn.SafeGetStatus(filename);
-                
+
                 if (File.Exists(filename))
                 {
                     // The file was only removed from the project. We should not touch it
@@ -103,7 +104,7 @@ namespace Ankh.Scc
                     if (_delayedDelete == null)
                         _delayedDelete = new List<string>();
 
-                    if(!_delayedDelete.Contains(filename))
+                    if (!_delayedDelete.Contains(filename))
                         _delayedDelete.Add(filename);
 
                     RegisterForSccCleanup();
@@ -218,7 +219,7 @@ namespace Ankh.Scc
 
                 if (svn.IsUnversioned(status))
                     return;
-            }          
+            }
         }
 
         internal void OnBeforeSolutionRenameFile(string oldName, string newName, VSQUERYRENAMEFILEFLAGS flags, out bool ok)
@@ -239,7 +240,7 @@ namespace Ankh.Scc
 
                 if (svn.IsUnversioned(status))
                     return;
-            }        
+            }
         }
 
         /// <summary>
@@ -269,12 +270,12 @@ namespace Ankh.Scc
 
                 if (!svn.IsUnversioned(status))
                 {
-                    if(!Directory.Exists(newName)) // Fails if the new name is a directory!
-                        svn.SafeWcMoveFixup(oldName, newName);                    
+                    if (!Directory.Exists(newName)) // Fails if the new name is a directory!
+                        svn.SafeWcMoveFixup(oldName, newName);
                 }
 
                 MarkDirty(new string[] { oldName, newName }, true);
-            }            
+            }
         }
 
         internal void OnSolutionRenamedFile(string oldName, string newName, VSRENAMEFILEFLAGS flags)
@@ -337,7 +338,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
 
-            if(!IsActive)
+            if (!IsActive)
                 return;
 
             Debug.Assert(!Directory.Exists(oldName));
@@ -357,7 +358,7 @@ namespace Ankh.Scc
             if (rescan)
                 monitor.ScheduleSvnStatus(path);
             else
-                monitor.ScheduleGlyphUpdate(path);                
+                monitor.ScheduleGlyphUpdate(path);
         }
 
         void MarkDirty(IEnumerable<string> paths, bool rescan)
@@ -373,7 +374,7 @@ namespace Ankh.Scc
                 monitor.ScheduleGlyphUpdate(paths);
 
             monitor.ScheduleMonitor(paths);
-        }        
+        }
 
 
         #region ProjectFile
@@ -441,13 +442,13 @@ namespace Ankh.Scc
                     }
                 }
 
-                if(!projects.Contains(SvnProject.Solution) 
+                if (!projects.Contains(SvnProject.Solution)
                     && string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 {
                     projects.Add(SvnProject.Solution, SvnProject.Solution);
                     yield return SvnProject.Solution;
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -507,16 +508,16 @@ namespace Ankh.Scc
             if (scc == null || !_projectMap.TryGetValue(scc, out data))
                 yield break;
 
-            foreach(string file in data.GetAllFiles())
+            foreach (string file in data.GetAllFiles())
             {
-                if (file[file.Length-1] != '\\') // Don't return paths
+                if (file[file.Length - 1] != '\\') // Don't return paths
                     yield return file;
             }
         }
 
         public IEnumerable<string> GetAllFilesOf(ICollection<SvnProject> projects)
         {
-            SortedList<string, string> files = new SortedList<string,string>(StringComparer.OrdinalIgnoreCase);
+            SortedList<string, string> files = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
             Hashtable handled = new Hashtable();
             foreach (SvnProject p in projects)
             {
@@ -549,27 +550,27 @@ namespace Ankh.Scc
                     files.Add(file, file);
                     yield return file;
                 }
-            }            
+            }
         }
 
         public ICollection<string> GetAllFilesOfAllProjects()
         {
-            List<string> files = new List<string>(_fileMap.Count+1);
+            List<string> files = new List<string>(_fileMap.Count + 1);
 
-            if (SolutionFilename != null && ! _fileMap.ContainsKey(SolutionFilename))
+            if (SolutionFilename != null && !_fileMap.ContainsKey(SolutionFilename))
                 files.Add(SolutionFilename);
 
-            foreach(string file in _fileMap.Keys)
+            foreach (string file in _fileMap.Keys)
             {
                 if (file[file.Length - 1] == '\\') // Don't return paths
-                        continue;
+                    continue;
 
                 files.Add(file);
             }
 
             return files.ToArray();
         }
-        
+
         public SvnProject ResolveRawProject(SvnProject project)
         {
             if (project == null)
@@ -622,7 +623,7 @@ namespace Ankh.Scc
                 return null;
 
             SccProjectData pd;
-            if(_projectMap.TryGetValue(project.RawHandle, out pd))
+            if (_projectMap.TryGetValue(project.RawHandle, out pd))
             {
                 return new WrapProjectInfo(pd);
             }
