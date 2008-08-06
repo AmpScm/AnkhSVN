@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Ankh.UI;
-using Utils.Win32;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
-using Ankh.Scc;
 using Microsoft.VisualStudio.Shell;
+
+using Ankh.Scc;
+using Ankh.UI;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -79,9 +79,9 @@ namespace Ankh.VS.SolutionExplorer
             if (handle == IntPtr.Zero)
                 return; // Not found :(
 
-            IntPtr uiHierarchy = Win32.FindWindowEx(handle, IntPtr.Zero,
+            IntPtr uiHierarchy = NativeMethods.FindWindowEx(handle, IntPtr.Zero,
                 UIHIERARCHY, null);
-            IntPtr treeHwnd = Win32.FindWindowEx(uiHierarchy, IntPtr.Zero, TREEVIEW,
+            IntPtr treeHwnd = NativeMethods.FindWindowEx(uiHierarchy, IntPtr.Zero, TREEVIEW,
                 null);
 
             if (treeHwnd == IntPtr.Zero)
@@ -98,7 +98,7 @@ namespace Ankh.VS.SolutionExplorer
         /// <returns></returns>
         private IntPtr SearchFloatingPalettes(string slnExplorerCaption)
         {
-            IntPtr floatingPalette = Win32.FindWindowEx(IntPtr.Zero, IntPtr.Zero, VBFLOATINGPALETTE, null);
+            IntPtr floatingPalette = NativeMethods.FindWindowEx(IntPtr.Zero, IntPtr.Zero, VBFLOATINGPALETTE, null);
             while (floatingPalette != IntPtr.Zero)
             {
                 IntPtr slnExplorer = this.SearchForSolutionExplorer(floatingPalette, slnExplorerCaption);
@@ -106,7 +106,7 @@ namespace Ankh.VS.SolutionExplorer
                 {
                     return slnExplorer;
                 }
-                floatingPalette = Win32.FindWindowEx(IntPtr.Zero, floatingPalette, VBFLOATINGPALETTE, null);
+                floatingPalette = NativeMethods.FindWindowEx(IntPtr.Zero, floatingPalette, VBFLOATINGPALETTE, null);
             }
             return IntPtr.Zero;
         }
@@ -120,11 +120,11 @@ namespace Ankh.VS.SolutionExplorer
         private IntPtr SearchForSolutionExplorer(IntPtr parent, string caption)
         {
             // is it directly under the parent?
-            IntPtr solutionExplorer = Win32.FindWindowEx(parent, IntPtr.Zero, GENERICPANE, caption);
+            IntPtr solutionExplorer = NativeMethods.FindWindowEx(parent, IntPtr.Zero, GENERICPANE, caption);
             if (solutionExplorer != IntPtr.Zero)
                 return solutionExplorer;
 
-            IntPtr win = Win32.FindWindowEx(parent, IntPtr.Zero, null, null);
+            IntPtr win = NativeMethods.FindWindowEx(parent, IntPtr.Zero, null, null);
             while (win != IntPtr.Zero)
             {
                 solutionExplorer = SearchForSolutionExplorer(win, caption);
@@ -132,7 +132,7 @@ namespace Ankh.VS.SolutionExplorer
                 {
                     return solutionExplorer;
                 }
-                win = Win32.FindWindowEx(parent, win, null, null);
+                win = NativeMethods.FindWindowEx(parent, win, null, null);
             }
 
             return IntPtr.Zero;
@@ -194,5 +194,12 @@ namespace Ankh.VS.SolutionExplorer
         const string UIHIERARCHY = "VsUIHierarchyBaseWin";
         const string TREEVIEW = "SysTreeView32";
         const string VBFLOATINGPALETTE = "VBFloatingPalette";
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll", SetLastError = true)]
+            public static extern IntPtr FindWindowEx(IntPtr parent, IntPtr afterChild, string className,
+                string windowName);
+        }
     }
 }
