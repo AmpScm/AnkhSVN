@@ -10,6 +10,7 @@ using Utils.Win32;
 using System.Text;
 using TestUtils;
 using SharpSvn;
+using System.Runtime.InteropServices;
 
 namespace NSvn.Core.Tests
 {
@@ -273,11 +274,18 @@ namespace NSvn.Core.Tests
             return Path.GetFullPath( dir );
         }
 
+        static class NativeMethods
+        {
+            [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+            public static extern int GetLongPathName(string shortPath,
+                StringBuilder longPath, int bufSize);
+        }
+
         protected string GetTempFile()
         {
             // ensure we get a long path
             StringBuilder builder = new StringBuilder( 260 );
-            Win32.GetLongPathName( Path.GetTempFileName(), builder, 260 );
+            NativeMethods.GetLongPathName(Path.GetTempFileName(), builder, 260);
             string tmpPath = builder.ToString();
             File.Delete( tmpPath );
 

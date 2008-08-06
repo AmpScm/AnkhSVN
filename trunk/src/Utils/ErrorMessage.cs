@@ -57,10 +57,10 @@ namespace Utils
             msg += Environment.NewLine + Environment.NewLine + "Version: " +
                 versionString;
 
-            msg = HttpUtility.UrlEncode(msg).Replace("+", "%20");
+            msg = Uri.EscapeDataString(msg);
 
             string command = string.Format("mailto:{0}?subject={1}&body={2}",
-                recipient, HttpUtility.UrlEncode(subject),
+                recipient, Uri.EscapeDataString(subject),
                 msg);
 
             Debug.WriteLine(command);
@@ -85,9 +85,9 @@ namespace Utils
             {
                 string msg = GetMessage(ex);
                 string attributes = GetAttributes(additionalInfo);
-                string assemblyVersion = assembly == null ? "" : HttpUtility.UrlEncode(assembly.GetName().Version.ToString());
+                string assemblyVersion = assembly == null ? "" : Uri.EscapeDataString(assembly.GetName().Version.ToString());
                 string command = string.Format("{0}?message={1}&version={2}&{3}",
-                    url, HttpUtility.UrlEncode(msg), assemblyVersion, attributes);
+                    url, Uri.EscapeDataString(msg), assemblyVersion, attributes);
 
                 Process p = new Process();
                 p.StartInfo.FileName = command;
@@ -149,8 +149,8 @@ namespace Utils
             StringBuilder builder = new StringBuilder();
             foreach (DictionaryEntry de in additionalInfo)
             {
-                builder.AppendFormat("{0}={1}&", HttpUtility.UrlEncode((string)de.Key),
-                    HttpUtility.UrlEncode((string)de.Value));
+                builder.AppendFormat("{0}={1}&", Uri.EscapeDataString((string)de.Key),
+                    Uri.EscapeDataString((string)de.Value));
             }
 
             return builder.ToString();
