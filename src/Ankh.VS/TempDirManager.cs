@@ -5,11 +5,13 @@ using System.IO;
 
 namespace Ankh.VS
 {
-    class TempDirManager : IAnkhTempDirManager
+    [GlobalService(typeof(IAnkhTempDirManager))]
+    class TempDirManager : AnkhService, IAnkhTempDirManager
     {
         readonly TempDirCollection _tempDirs = new TempDirCollection();
 
-        public TempDirManager(IServiceProvider context)
+        public TempDirManager(IAnkhServiceProvider context)
+            : base(context)
         {
         }
 

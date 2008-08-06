@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections;
 using Ankh.Ids;
 using Ankh.Selection;
+using Ankh.Commands;
 
 
 namespace Ankh.VS.Extenders
@@ -11,6 +12,7 @@ namespace Ankh.VS.Extenders
     /// <summary>
     /// This is the class factory for extender objects
     /// </summary>
+    [GlobalService(typeof(AnkhExtenderProvider), true)]
     public sealed class AnkhExtenderProvider : AnkhService, EnvDTE.IExtenderProvider, IDisposable
     {
         public const string ServiceName = AnkhId.ExtenderProviderName;
@@ -35,6 +37,19 @@ namespace Ankh.VS.Extenders
         public AnkhExtenderProvider(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            // This will call Initialize() as postback command
+            IAnkhCommandService cs = GetService<IAnkhCommandService>();
+
+            if (cs != null)
+            {
+                cs.PostExecCommand(AnkhCommand.ActivateVsExtender); // Delay this until after loading the package
+            }
         }
 
         internal void Initialize()

@@ -18,6 +18,7 @@ namespace Ankh.VS.SolutionExplorer
     /// <summary>
     /// 
     /// </summary>
+    [GlobalService(typeof(IAnkhSolutionExplorerWindow))]
     sealed class SolutionExplorerWindow : AnkhService, IVsWindowFrameNotify, IVsWindowFrameNotify2, IDisposable, IAnkhSolutionExplorerWindow
     {
         readonly SolutionTreeViewManager _manager;

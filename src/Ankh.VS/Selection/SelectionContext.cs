@@ -12,16 +12,19 @@ using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
 using Ankh.VS.SolutionExplorer;
 using SharpSvn;
+using Ankh.VS;
 
 namespace Ankh.Selection
 {
     /// <summary>
     /// 
     /// </summary>
+    [GlobalService(typeof(ISelectionContext))]
+    [GlobalService(typeof(ISccProjectWalker))]
     partial class SelectionContext : AnkhService, IVsSelectionEvents, IDisposable, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
-        readonly IFileStatusCache _cache;
-        readonly SolutionExplorerWindow _solutionExplorer;
+        IFileStatusCache _cache;
+        SolutionExplorerWindow _solutionExplorer;
         bool _disposed;
         uint _cookie;
 
@@ -50,14 +53,15 @@ namespace Ankh.Selection
         IVsHierarchy _filterHierarchy;
         uint _filterItem;
 
-        public SelectionContext(IAnkhServiceProvider context, SolutionExplorerWindow solutionExplorer)
+        public SelectionContext(IAnkhServiceProvider context)
             : base(context)
         {
-            if (solutionExplorer == null)
-                throw new ArgumentNullException("solutionExplorer");
+        }
 
-            _cache = context.GetService<IFileStatusCache>();
-            _solutionExplorer = solutionExplorer;
+        protected override void OnInitialize()
+        {
+            _cache = GetService<IFileStatusCache>();
+            _solutionExplorer = GetService<SolutionExplorerWindow>(typeof(IAnkhSolutionExplorerWindow));
 
             IVsMonitorSelection monitor = context.GetService<IVsMonitorSelection>();
 
@@ -249,7 +253,7 @@ namespace Ankh.Selection
         {
             get
             {
-                if (!_deteminedSolutionExplorer)
+                if (!_deteminedSolutionExplorer && _solutionExplorer != null)
                 {
                     _deteminedSolutionExplorer = true;
                     IVsUIHierarchyWindow hw = _solutionExplorer.HierarchyWindow;
@@ -567,6 +571,9 @@ namespace Ankh.Selection
 
         IEnumerable<SvnItem> InternalGetSelectedSvnItems(bool recursive)
         {
+            if (_cache == null)
+                yield break;
+
             foreach (string file in GetSelectedFiles(recursive))
             {
                 yield return _cache[file];

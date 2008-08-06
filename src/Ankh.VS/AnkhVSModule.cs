@@ -12,6 +12,7 @@ using Ankh.Commands;
 using Ankh.VS.Selection;
 using Ankh.VS.Extenders;
 using Ankh.Ids;
+using System.Reflection;
 
 namespace Ankh.VS
 {
@@ -34,26 +35,12 @@ namespace Ankh.VS
         /// </summary>
         public override void OnPreInitialize()
         {
-            Runtime.CommandMapper.LoadFrom(typeof(AnkhVSModule).Assembly);
+            Assembly thisAssembly = typeof(AnkhVSModule).Assembly;
 
-            SolutionExplorerWindow window = new SolutionExplorerWindow(Context);
+            Runtime.CommandMapper.LoadFrom(thisAssembly);
 
-            Container.AddService(typeof(IAnkhSolutionExplorerWindow), window);
+            Runtime.LoadServices(Container, thisAssembly, Context);
 
-            SelectionContext selection = new SelectionContext(Context, window);
-            Container.AddService(typeof(ISelectionContext), selection);
-            Container.AddService(typeof(ISccProjectWalker), selection);
-
-            Container.AddService(typeof(IAnkhDialogOwner), new AnkhDialogOwner(Context));
-            Container.AddService(typeof(IAnkhWebBrowser), new AnkhWebBrowser(Context));
-            Container.AddService(typeof(IStatusImageMapper), new StatusImageMapper(Context));
-            Container.AddService(typeof(IFileIconMapper), new FileIconMapper(Context));
-            Container.AddService(typeof(IAnkhVSColor), new AnkhVSColor(Context));
-            Container.AddService(typeof(IAnkhCommandStates), new CommandState(Context));
-            Container.AddService(typeof(IAnkhTempFileManager), new TempFileManager(Context));
-            Container.AddService(typeof(IAnkhTempDirManager), new TempDirManager(Context));
-
-            Container.AddService(typeof(AnkhExtenderProvider), new AnkhExtenderProvider(Context));
         }
 
         /// <summary>
@@ -63,14 +50,6 @@ namespace Ankh.VS
         {
             EnsureService<IFileStatusCache>();
             EnsureService<IStatusImageMapper>();
-
-
-            IAnkhCommandService cs = GetService<IAnkhCommandService>();
-
-            if (cs != null)
-            {
-                cs.PostExecCommand(AnkhCommand.ActivateVsExtender); // Delay this until after loading the package
-            }
         }
     }
 }
