@@ -416,7 +416,7 @@ namespace Ankh.Scc
         {
             _registeredSccCleanup = false;
 
-            if (_ensureIcons && IsActive)
+            if ((_ensureIcons || _syncMap) && IsActive)
             {
                 // Enable our custom glyphs when we are set active
                 IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
@@ -428,15 +428,6 @@ namespace Ankh.Scc
             if (_syncMap)
             {
                 _syncMap = false;
-
-                if (IsActive)
-                {
-                    // Enable our custom glyphs when we are set active
-                    IAnkhSolutionExplorerWindow solutionExplorer = GetService<IAnkhSolutionExplorerWindow>();
-
-                    if (solutionExplorer != null)
-                        solutionExplorer.EnableAnkhIcons(true);
-                }
 
                 foreach (SccProjectData pd in _projectMap.Values)
                     pd.Load();

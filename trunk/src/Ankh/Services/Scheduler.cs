@@ -12,18 +12,21 @@ namespace Ankh.Services
     sealed class AnkhScheduler : AnkhService, IAnkhScheduler
     {
         readonly Timer _timer;
-        readonly IAnkhCommandService _commands;
+        IAnkhCommandService _commands;
         readonly SortedList<DateTime, KeyValuePair<Delegate, object[]>> _actions = new SortedList<DateTime, KeyValuePair<Delegate, object[]>>();
         Guid _grp = AnkhId.CommandSetGuid;
 
         public AnkhScheduler(IAnkhServiceProvider context)
             : base(context)
         {
-            _commands = GetService<IAnkhCommandService>();
-
             _timer = new Timer();
             _timer.Enabled = false;
             _timer.Elapsed += new ElapsedEventHandler(OnTimerElapsed);
+        }
+
+        IAnkhCommandService Commands
+        {
+            get { return _commands ?? (_commands = GetService<IAnkhCommandService>()); }
         }
 
         void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -105,7 +108,7 @@ namespace Ankh.Services
         {
             return delegate
             {
-                _commands.PostExecCommand(command);
+                Commands.PostExecCommand(command);
             };
         }
 
