@@ -17,6 +17,7 @@ using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
+using Ankh.Diff;
 
 namespace Ankh.VSPackage
 {
@@ -104,13 +105,16 @@ namespace Ankh.VSPackage
             _runtime.AddModule(new AnkhSccModule(_runtime));
             _runtime.AddModule(new AnkhVSModule(_runtime));
             _runtime.AddModule(new AnkhUIModule(_runtime));
+            _runtime.AddModule(new AnkhDiffModule(_runtime));
+
+            NotifyLoaded(false);
 
             _runtime.Start();
 
-            NotifyLoaded();
+            NotifyLoaded(true);
         }
 
-        private void NotifyLoaded()
+        private void NotifyLoaded(bool started)
         {
             // We set the user context AnkhLoadCompleted active when we are loaded
             // This event can be used to trigger loading other packages that depend on AnkhSVN
@@ -123,7 +127,7 @@ namespace Ankh.VSPackage
             IVsMonitorSelection ms = GetService<IVsMonitorSelection>();
             if (ms != null)
             {
-                Guid gAnkhLoaded = new Guid(AnkhId.AnkhLoadCompleted);
+                Guid gAnkhLoaded = new Guid(started ? AnkhId.AnkhRuntimeStarted : AnkhId.AnkhServicesAvailable);
 
                 uint cky;
                 if(ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))

@@ -58,7 +58,8 @@ namespace Ankh.Ids
         // Increase this value when you want to have AnkhCommand.MigrateSettings called on first use
         public const int MigrateVersion = 5;
 
-        public const string AnkhLoadCompleted = "8057B1AF-21D8-4276-AC27-9C02A1F95BC7";
+        public const string AnkhServicesAvailable = "ED044A39-AC7B-4617-A466-A7C4FFA2998D";
+        public const string AnkhRuntimeStarted = "8057B1AF-21D8-4276-AC27-9C02A1F95BC7";
 
         public const string LogMessageLanguageServiceId = "1DFE69CE-7F9B-4CC5-B09B-E5BDE95E9439";
         public const string LogMessageServiceName = "Log Messages (AnkhSVN)";
