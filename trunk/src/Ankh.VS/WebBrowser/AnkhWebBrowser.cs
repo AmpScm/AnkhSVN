@@ -7,16 +7,12 @@ using Microsoft.VisualStudio;
 
 namespace Ankh.VS.WebBrowser
 {
-    class AnkhWebBrowser : IAnkhWebBrowser
+    [GlobalService(typeof(IAnkhWebBrowser))]
+    class AnkhWebBrowser : AnkhService, IAnkhWebBrowser
     {
-        readonly IAnkhServiceProvider _serviceProvider;
-
         public AnkhWebBrowser(IAnkhServiceProvider context)
+            : base(context)
         {
-            if(context == null)
-                throw new ArgumentNullException("context");
-
-            _serviceProvider = context;
         }
 
         public void Navigate(Uri url)
@@ -33,7 +29,7 @@ namespace Ankh.VS.WebBrowser
 
         public void Navigate(Uri url, BrowserArgs args, out BrowserResults results)
         {
-            IVsWebBrowsingService browserSvc = (IVsWebBrowsingService)_serviceProvider.GetService(typeof(SVsWebBrowsingService));
+            IVsWebBrowsingService browserSvc = GetService<IVsWebBrowsingService>(typeof(SVsWebBrowsingService));
 
             Guid windowGuid = new Guid(ToolWindowGuids80.WebBrowserWindow);
             IVsWebBrowser browser;

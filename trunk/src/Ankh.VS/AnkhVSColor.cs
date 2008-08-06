@@ -7,27 +7,18 @@ using System.Drawing;
 
 namespace Ankh.VS
 {
-    class AnkhVSColor : IAnkhVSColor
+    [GlobalService(typeof(IAnkhVSColor))]
+    class AnkhVSColor : AnkhService, IAnkhVSColor
     {
-        readonly IAnkhServiceProvider _context;
-        
         public AnkhVSColor(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
-        IVsUIShell2 _shell;
+        IVsUIShell2 _uiShell;
         IVsUIShell2 UIShell
         {
-            get
-            {
-                if (_shell == null)
-                    _shell = _context.GetService<IVsUIShell2>(typeof(SVsUIShell));
-                return _shell;
-            }
+            get { return _uiShell ?? (_uiShell = GetService<IVsUIShell2>(typeof(SVsUIShell))); }
         }
 
         public bool TryGetColor(__VSSYSCOLOREX vsColor, out Color color)

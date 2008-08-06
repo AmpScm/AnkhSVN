@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.VS.SolutionExplorer
 {
+    [GlobalService(typeof(IFileIconMapper))]
     class FileIconMapper : AnkhService, IFileIconMapper
     {
         readonly ImageList _imageList;

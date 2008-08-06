@@ -11,9 +11,10 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.VS.Selection
 {
+    [GlobalService(typeof(IAnkhCommandStates))]
     sealed class CommandState : AnkhService, IVsSelectionEvents, IAnkhCommandStates
     {
-        readonly IVsMonitorSelection _monitor;
+        IVsMonitorSelection _monitor;
         uint _cookie;
         bool _disposed;
 
@@ -21,9 +22,13 @@ namespace Ankh.VS.Selection
         public CommandState(IAnkhServiceProvider context)
             : base(context)
         {
-            _monitor = GetService<IVsMonitorSelection>();
+        }
 
-            if (_monitor == null)
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            if (Monitor == null)
                 throw new InvalidOperationException();
 
             Marshal.ThrowExceptionForHR(Monitor.AdviseSelectionEvents(this, out _cookie));
@@ -31,7 +36,7 @@ namespace Ankh.VS.Selection
 
         IVsMonitorSelection Monitor
         {
-            get { return _monitor; }
+            get { return _monitor ?? (_monitor = GetService<IVsMonitorSelection>()); }
         }
 
         protected override void Dispose(bool disposing)

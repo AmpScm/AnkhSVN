@@ -6,6 +6,7 @@ using System.IO;
 
 namespace Ankh.VS
 {
+    [GlobalService(typeof(IAnkhTempFileManager))]
     class TempFileManager : AnkhService, IAnkhTempFileManager
     {
         TempFileCollection _tempFileCollection;

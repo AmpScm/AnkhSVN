@@ -13,6 +13,7 @@ using Ankh.UI;
 
 namespace Ankh.VS.Dialogs
 {
+    [GlobalService(typeof(IAnkhDialogOwner))]
     sealed class AnkhDialogOwner : AnkhService, IAnkhDialogOwner
     {
         IVsUIShell _shell;

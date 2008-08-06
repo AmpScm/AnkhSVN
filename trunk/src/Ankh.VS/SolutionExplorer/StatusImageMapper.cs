@@ -10,16 +10,12 @@ using System.Diagnostics;
 
 namespace Ankh.VS.SolutionExplorer
 {
-    sealed class StatusImageMapper : IStatusImageMapper
+    [GlobalService(typeof(IStatusImageMapper))]
+    sealed class StatusImageMapper : AnkhService, IStatusImageMapper
     {
-        readonly IAnkhServiceProvider _context;
-
         public StatusImageMapper(IAnkhServiceProvider context)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
         ImageList _statusImageList;
