@@ -70,19 +70,7 @@ namespace Ankh.UI
                 this.BuildTree();
             }
         }
-
-        /// <summary>
-        /// Whether the paths used are URLs.
-        /// </summary>
-        public bool UrlPaths
-        {
-            get
-            {
-                return this.PathSeparator == "/";
-            }
-            set { this.PathSeparator = value ? "/" : "\\"; }
-        }
-
+     
         /// <summary>
         /// Whether there should be only one single check. Default is false.
         /// </summary>
@@ -308,32 +296,26 @@ namespace Ankh.UI
             string fullPath = item.FullPath;
             string[] components;
 
-            // special treatment for URLs - we want the hostname in one go.
-            if (this.UrlPaths)
-                components = UriUtils.Split(fullPath);
+            int nStart = 0;
+            if (Context != null)
+            {
+                Ankh.VS.IAnkhSolutionSettings ss = Context.GetService<Ankh.VS.IAnkhSolutionSettings>();
+
+                if (ss != null)
+                {
+                    string root = ss.ProjectRootWithSeparator ?? "";
+
+                    if (fullPath.StartsWith(root))
+                        nStart = root.Length - 1;
+                }
+            }
+
+            if (nStart == 0)
+                components = fullPath.Split(this.PathSeparator[0]);
             else
             {
-                int nStart = 0;
-                if (Context != null)
-                {
-                    Ankh.VS.IAnkhSolutionSettings ss = Context.GetService<Ankh.VS.IAnkhSolutionSettings>();
-
-                    if (ss != null)
-                    {
-                        string root = ss.ProjectRootWithSeparator ?? "";
-
-                        if (fullPath.StartsWith(root))
-                            nStart = root.Length - 1;
-                    }
-                }
-
-                if (nStart == 0)
-                    components = fullPath.Split(this.PathSeparator[0]);
-                else
-                {
-                    components = fullPath.Substring(nStart).Split(this.PathSeparator[0]);
-                    components[0] = fullPath.Substring(0, nStart) + components[0];
-                }
+                components = fullPath.Substring(nStart).Split(this.PathSeparator[0]);
+                components[0] = fullPath.Substring(0, nStart) + components[0];
             }
 
             PathTreeNode node = null;

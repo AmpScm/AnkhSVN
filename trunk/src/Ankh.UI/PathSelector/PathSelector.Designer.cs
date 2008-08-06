@@ -146,7 +146,6 @@ namespace Ankh.UI
             this.pathSelectionTreeView.SingleCheck = false;
             this.pathSelectionTreeView.Size = new System.Drawing.Size(336, 202);
             this.pathSelectionTreeView.TabIndex = 3;
-            this.pathSelectionTreeView.UrlPaths = false;
             // 
             // PathSelector
             // 

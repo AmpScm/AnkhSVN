@@ -1,7 +1,6 @@
 // $Id$
 using System;
 using System.Windows.Forms;
-using Utils.Win32;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using Ankh.VS;

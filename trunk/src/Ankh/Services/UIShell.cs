@@ -4,7 +4,6 @@ using Ankh.UI;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.IO;
-using Utils.Win32;
 
 using SharpSvn;
 using Ankh.ContextServices;

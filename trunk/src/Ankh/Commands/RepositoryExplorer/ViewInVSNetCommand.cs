@@ -1,6 +1,5 @@
 using System;
 using Ankh.Ids;
-using Utils.Win32;
 using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
 using Ankh.VS;

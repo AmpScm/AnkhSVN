@@ -92,17 +92,7 @@ namespace Ankh.UI
             add { commitItemsTree.CheckedFilter += value; }
             remove { commitItemsTree.CheckedFilter -= value; }
         }
-
-        public bool UrlPaths
-        {
-            get
-            { return this.commitItemsTree.UrlPaths; }
-            set
-            {
-                this.commitItemsTree.UrlPaths = value;
-            }
-        }
-
+   
         /// <summary>
         /// Whether the Commit/Cancel buttons should be enabled.
         /// </summary>

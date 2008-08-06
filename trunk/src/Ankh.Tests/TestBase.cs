@@ -5,12 +5,11 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using System.Collections;
-using Utils;
-using Utils.Win32;
 using System.Text;
 using TestUtils;
 using SharpSvn;
 using System.Runtime.InteropServices;
+using Utils;
 
 namespace NSvn.Core.Tests
 {
