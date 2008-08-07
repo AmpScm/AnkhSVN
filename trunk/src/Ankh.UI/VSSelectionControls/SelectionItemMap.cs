@@ -75,6 +75,9 @@ namespace Ankh.UI.VSSelectionControls
 
             public MapData(ISelectionMapOwner<T> owner)
             {
+                if (owner == null)
+                    throw new ArgumentNullException("owner");
+
                 _owner = owner;
                 _owner.SelectionChanged += new EventHandler(OwnerSelectionChanged);
                 _owner.HandleDestroyed += new EventHandler(OwnerHandleDestroyed);
