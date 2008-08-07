@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
-    class FileSystemTreeView : TreeViewWithSelection<FileSystemTreeNode>, IWorkingCopyExplorerSubControl
+    class FileSystemTreeView : TreeViewWithSelection<FileSystemTreeNode>
     {
         public event EventHandler SelectedItemChanged;
 
