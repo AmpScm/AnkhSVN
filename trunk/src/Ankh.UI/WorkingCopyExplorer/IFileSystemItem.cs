@@ -26,8 +26,6 @@ namespace Ankh.UI
 
     public interface IFileSystemItem
     {
-        event EventHandler<ItemChangedEventArgs> ItemChanged;
-    
         bool IsContainer
         {
             get;

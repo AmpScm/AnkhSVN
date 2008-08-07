@@ -205,6 +205,30 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        public delegate int SortItem(TListViewItem x, TListViewItem y);
+        protected sealed class SortWrapper : IComparer<ListViewItem>
+        {
+            readonly SortItem _sorter;
+
+            public SortWrapper(SortItem handler)
+            {
+                if (handler == null)
+                    throw new ArgumentNullException("handler");
+
+                _sorter = handler;
+            }
+
+            #region IComparer<ListViewItem> Members
+
+            public int Compare(ListViewItem x, ListViewItem y)
+            {
+                return _sorter((TListViewItem)x, (TListViewItem)y);
+            }
+
+            #endregion
+        }
+
+
         public event EventHandler<RetrieveSelectionEventArgs> RetrieveSelection;
 
         protected virtual void OnRetrieveSelection(RetrieveSelectionEventArgs e)
@@ -286,7 +310,7 @@ namespace Ankh.UI.VSSelectionControls
                 get { return _item; }
             }
         }
-
+        
         #region ISelectionMapOwner<TListViewItem> Members
 
         EventHandler _selectionChanged;

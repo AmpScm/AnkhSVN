@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using Ankh.Scc;
+using System.IO;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -16,11 +17,10 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public FileSystemDetailsView()
         {
-            this.View = View.Details;
-
-            this.HideSelection = false;
-
-            this.ListViewItemSorter = ListViewItemComparer.Instance;
+            View = View.Details;
+            HideSelection = false;
+            FullRowSelect = true;
+            AllowColumnReorder = true;
         }
 
         IAnkhServiceProvider _context;
@@ -38,30 +38,50 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
+        bool _initialized;
+        void TryInitialize()
+        {
+            if (!_initialized)
+            {
+                _initialized = true;
+                InitializeCharacterWidth();
+                InitializeColumns();
+            }
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (IsHandleCreated)
+            {
+                TryInitialize();
+                
+            }
+        }
+
         IFileIconMapper _mapper;
+        IStatusImageMapper _statusMapper;
         
-        IFileIconMapper Mapper
+        internal IFileIconMapper IconMapper
         {
             get { return _mapper ?? (_mapper = Context.GetService<IFileIconMapper>()); }
         }
 
+        internal IStatusImageMapper StatusMapper
+        {
+            get { return _statusMapper ?? (_statusMapper = Context.GetService<IStatusImageMapper>()); }
+        }        
+
         protected virtual void OnContextChanged(EventArgs e)
         {
             if(SmallImageList == null)
-                SmallImageList = Mapper.ImageList;            
+                SmallImageList = IconMapper.ImageList;            
         }
-
-
 
         public void SetDirectory(IFileSystemItem directory)
         {
-            // Initialize these the first time they are needed.
-            if (this.textPropertyDescriptors == null)
-            {
-                this.InitializePropertyDescriptors(directory);
-                this.InitializeCharacterWidth();
-                this.InitializeColumns();
-            }
+            TryInitialize();
 
             AddChildren(directory);
         }
@@ -85,24 +105,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             else
             {
                 return Point.Empty;
-            }
-        }
-
-
-        public IFileSystemItem[] GetSelectedItems()
-        {
-            if (this.SelectedItems.Count == 1)
-            {
-                return new IFileSystemItem[] { (IFileSystemItem)this.SelectedItems[0].Tag };
-            }
-            else
-            {
-                ArrayList list = new ArrayList();
-                foreach (ListViewItem item in this.SelectedItems)
-                {
-                    list.Add(item.Tag);
-                }
-                return (IFileSystemItem[])list.ToArray(typeof(IFileSystemItem));
             }
         }
 
@@ -163,11 +165,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void AddChildren(IFileSystemItem directory)
         {
-            this.UnhookEvents();
-
             this.currentDirectory = directory;
-
-            this.currentDirectory.ItemChanged += new EventHandler<ItemChangedEventArgs>(this.item_Changed);
 
             this.BeginUpdate();
             try
@@ -176,19 +174,21 @@ namespace Ankh.UI.WorkingCopyExplorer
 
                 foreach (IFileSystemItem item in directory.GetChildren())
                 {
-                    FileSystemListViewItem lvi = new FileSystemListViewItem(item.SvnItem);
+                    SvnItem svnItem = item.SvnItem;
+                    FileSystemInfo fif;
+                    if(svnItem.IsDirectory)
+                        fif = new DirectoryInfo(svnItem.FullPath);
+                    else 
+                        fif = new FileInfo(svnItem.FullPath);
+                        
+                    FileSystemListViewItem lvi = new FileSystemListViewItem(this, item.SvnItem, fif);
 
                     Items.Add(lvi);
-
-                    FormatListViewItem(item, lvi);
 
                     lvi.Tag = item;
 
                     // we need to know when this item changes
-                    item.ItemChanged += new EventHandler<ItemChangedEventArgs>(item_Changed);
                 }
-
-                this.Sort();
             }
             finally
             {
@@ -196,41 +196,87 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void InitializePropertyDescriptors(IFileSystemItem directory)
-        {
-            PropertyDescriptorCollection unfilteredProperties = TypeDescriptor.GetProperties(directory);
-            this.textPropertyDescriptors = new PropertyDescriptorCollection(new PropertyDescriptor[] { });
-            foreach (PropertyDescriptor pd in unfilteredProperties)
-            {
-                if (pd.Attributes[typeof(TextPropertyAttribute)] != null)
-                {
-                    this.textPropertyDescriptors.Add(pd);
-                }
-                if (pd.Attributes[typeof(StateImagePropertyAttribute)] != null)
-                {
-                    this.stateImagePropertyDescriptor = pd;
-                }
-            }
-
-            this.textPropertyDescriptors = this.textPropertyDescriptors.Sort(PropertyOrderComparer.Instance);
-
-        }
-
         private void InitializeColumns()
         {
             this.Columns.Clear();
-            this.Columns.Add("Name", this.characterWidth * NameColumnNumberOfCharacters, HorizontalAlignment.Left);
+            SmartColumn name = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
+            SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 20);
+            SmartColumn extension = new SmartColumn(this, "&Type", characterWidth * 7);
+            SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15);
+            SmartColumn propStatus = new SmartColumn(this, "&Property Status", characterWidth * 15);
+            SmartColumn locked = new SmartColumn(this, "&Locked", characterWidth * 8);
+            SmartColumn revision = new SmartColumn(this, "&Revision", characterWidth * 8);
+            SmartColumn lastChangeTime = new SmartColumn(this, "Last C&hange", characterWidth * 20);
+            SmartColumn lastRev = new SmartColumn(this, "Last Re&vision", characterWidth * 8);
+            SmartColumn lastAuthor = new SmartColumn(this, "Last &Author", characterWidth * 8);
+            SmartColumn isCopied = new SmartColumn(this, "C&opied", characterWidth * 6);
+            SmartColumn isConficted = new SmartColumn(this, "Co&nfliced", characterWidth * 6);
+            SmartColumn fullPath = new SmartColumn(this, "Fu&ll Path", characterWidth * 60);
 
-            foreach (PropertyDescriptor pd in this.textPropertyDescriptors)
-            {
-                TextPropertyAttribute attr = pd.Attributes[typeof(TextPropertyAttribute)] as TextPropertyAttribute;
-                if (attr == null)
+            name.Sorter = new SortWrapper(
+                delegate(FileSystemListViewItem x, FileSystemListViewItem y)
                 {
-                    continue;
-                }
+                    if (x.IsDirectory ^ y.IsDirectory)
+                        return x.IsDirectory ? -1 : 1;
 
-                this.Columns.Add(attr.Text, attr.TextWidth * this.characterWidth, HorizontalAlignment.Right);
-            }
+                    return StringComparer.OrdinalIgnoreCase.Compare(x.Text, y.Text);
+                });
+
+            modified.Sorter = new SortWrapper(
+                delegate(FileSystemListViewItem x, FileSystemListViewItem y)
+                {
+                    TimeSpan ts = x.Modified - y.Modified;
+
+                    if(ts.Ticks < 0)
+                        return -1;
+                    else if(ts.Ticks > 0)
+                        return 1;
+                    else
+                        return 0;
+                });
+
+            lastChangeTime.Sorter = new SortWrapper(
+                delegate(FileSystemListViewItem x, FileSystemListViewItem y)
+                {
+                    TimeSpan ts = x.SvnItem.Status.LastChangeTime - y.SvnItem.Status.LastChangeTime;
+
+                    if (ts.Ticks < 0)
+                        return -1;
+                    else if (ts.Ticks > 0)
+                        return 1;
+                    else
+                        return 0;
+                });
+
+            AllColumns.Add(name);
+            AllColumns.Add(modified);
+            AllColumns.Add(extension);
+            AllColumns.Add(contStatus);
+            AllColumns.Add(propStatus);
+            AllColumns.Add(locked);
+            AllColumns.Add(revision);
+            AllColumns.Add(lastChangeTime);
+            AllColumns.Add(lastRev);
+            AllColumns.Add(lastAuthor);
+            AllColumns.Add(isCopied);
+            AllColumns.Add(isConficted);
+            AllColumns.Add(fullPath);
+
+            Columns.AddRange(
+                new ColumnHeader[]
+                {
+                    name,
+                    modified,
+                    extension,
+                    contStatus,
+                    propStatus,
+                    locked,
+                    revision
+                });
+
+            SortColumns.Add(name);
+            FinalSortColumn = name;
+            UpdateSortGlyphs();
         }
 
         private void InitializeCharacterWidth()
@@ -261,54 +307,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void UnhookEvents()
-        {
-            foreach (ListViewItem lvi in this.Items)
-            {
-                IFileSystemItem fileSystemItem = lvi.Tag as IFileSystemItem;
-                if (fileSystemItem != null)
-                {
-                    fileSystemItem.ItemChanged -= new EventHandler<ItemChangedEventArgs>(this.item_Changed);
-                }
-            }
-
-            if (this.currentDirectory != null)
-            {
-                this.currentDirectory.ItemChanged -= new EventHandler<ItemChangedEventArgs>(this.item_Changed);
-            }
-        }
-
         void item_Changed(object sender, ItemChangedEventArgs e)
         {
-            IFileSystemItem fileSystemItem = sender as IFileSystemItem;
-            if (fileSystemItem != null)
-            {
-                HandleItemChange(fileSystemItem, e.ItemChangedType);
-            }
-        }
-
-        private void HandleItemChange(IFileSystemItem fileSystemItem, ItemChangedType changeType)
-        {
-            if (fileSystemItem == this.currentDirectory && changeType == ItemChangedType.ChildrenInvalidated)
-            {
-                this.InvalidateChildren();
-            }
-            else
-            {
-                ListViewItem lvi = this.FindListViewItemWithTag(fileSystemItem);
-                if (lvi != null)
-                {
-                    // Reformat this listview item.
-                    lvi.SubItems.Clear();
-                    lvi.Text = fileSystemItem.Text;
-                    this.FormatListViewItem(fileSystemItem, lvi);
-                }
-            }
-        }
-
-        private void InvalidateChildren()
-        {
-            this.AddChildren(this.currentDirectory);
         }
 
         protected override string GetCanonicalName(FileSystemListViewItem item)
@@ -339,83 +339,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             return null;
         }
-
-        private void FormatListViewItem(IFileSystemItem item, ListViewItem lvi)
-        {
-            foreach (PropertyDescriptor pd in this.textPropertyDescriptors)
-            {
-                string value = pd.GetValue(item).ToString();
-                lvi.SubItems.Add(value);
-            }
-
-            if (item.IsContainer)
-            {
-                lvi.ImageIndex = Mapper.DirectoryIcon;
-            }
-            else
-            {
-                lvi.ImageIndex = Mapper.GetIcon(item.SvnItem.FullPath);
-            }
-
-            if (this.StateImageList != null && this.stateImagePropertyDescriptor != null)
-            {
-                int index = (int)this.stateImagePropertyDescriptor.GetValue(item);
-                lvi.StateImageIndex = index;
-            }
-        }
-
-
-        private class PropertyOrderComparer : IComparer
-        {
-            public int Compare(object x, object y)
-            {
-                PropertyDescriptor pd1 = (PropertyDescriptor)x;
-                PropertyDescriptor pd2 = (PropertyDescriptor)y;
-
-                TextPropertyAttribute attr1 = (TextPropertyAttribute)pd1.Attributes[typeof(TextPropertyAttribute)];
-                TextPropertyAttribute attr2 = (TextPropertyAttribute)pd2.Attributes[typeof(TextPropertyAttribute)];
-
-                return Comparer.Default.Compare(attr1.Order, attr2.Order);
-            }
-            public static readonly PropertyOrderComparer Instance = new PropertyOrderComparer();
-        }
-
-        private class ListViewItemComparer : IComparer
-        {
-            public int Compare(object x, object y)
-            {
-                ListViewItem lvi1 = (ListViewItem)x;
-                ListViewItem lvi2 = (ListViewItem)y;
-
-                IFileSystemItem item1 = (IFileSystemItem)lvi1.Tag;
-                IFileSystemItem item2 = (IFileSystemItem)lvi2.Tag;
-
-                // If one of them is null (happens when a new item is added), just use the default comparer
-                // which handles one of the items being null
-                if ((item1 == null) ^ (item2 == null))
-                {
-                    return Comparer.Default.Compare(item1, item2);
-                }
-
-                // folders always first
-                if (item1.IsContainer ^ item2.IsContainer)
-                {
-                    // one is a container, the other is not
-                    // The minus is necessary to get folders first
-                    return -Comparer.Default.Compare(item1.IsContainer, item2.IsContainer);
-                }
-
-                return Comparer.Default.Compare(item1.Text, item2.Text);
-            }
-            public static readonly ListViewItemComparer Instance = new ListViewItemComparer();
-        }
         
-        private PropertyDescriptorCollection textPropertyDescriptors = null;
-        private PropertyDescriptor stateImagePropertyDescriptor = null;
         private int characterWidth;
-
         private IFileSystemItem currentDirectory;
-
         private const int NameColumnNumberOfCharacters = 50;
     }
 }

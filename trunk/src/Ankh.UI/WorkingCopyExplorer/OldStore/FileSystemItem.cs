@@ -14,7 +14,6 @@ namespace Ankh.WorkingCopyExplorer
     {
         readonly SvnItem _item;
         readonly WorkingCopyExplorerControl _ctrl;
-        public event EventHandler<ItemChangedEventArgs> ItemChanged;
 
         public FileSystemItem(WorkingCopyExplorerControl control, FileSystemItem parent, SvnItem svnItem)
             : base(parent)
@@ -26,8 +25,6 @@ namespace Ankh.WorkingCopyExplorer
 
             _item = svnItem;
             _ctrl = control;
-
-            this.CurrentStatus = MergeStatuses(_item);
         }
 
         protected IAnkhServiceProvider Context
@@ -77,45 +74,6 @@ namespace Ankh.WorkingCopyExplorer
             Control.OpenItem(context, SvnItem.FullPath);
         }
 
-        [TextProperty("TextStatus", Order = 0, TextWidth = 18)]
-        public SvnStatus TextStatus
-        {
-            get { return _item.Status.LocalContentStatus; }
-        }
-
-        [TextProperty("PropertyStatus", Order = 1, TextWidth = 18)]
-        public SvnStatus PropertyStatus
-        {
-            get { return _item.Status.LocalPropertyStatus; }
-        }
-
-        [TextProperty("Locked", Order = 2, TextWidth = 10)]
-        public string Locked
-        {
-            get
-            {
-                return _item.IsLocked ? "Yes" : "";
-            }
-        }
-
-        [TextProperty("Read-only", Order = 3, TextWidth = 13)]
-        public string ReadOnly
-        {
-            get
-            {
-                return _item.IsReadOnly ? "Yes" : "";
-            }
-        }
-
-        [StateImageProperty]
-        public int StateImage
-        {
-            get
-            {
-                return (int)Context.GetService<IStatusImageMapper>().GetStatusImageForSvnItem(SvnItem);
-            }
-        }
-
 
         public override bool Equals(object obj)
         {
@@ -135,11 +93,6 @@ namespace Ankh.WorkingCopyExplorer
             return _item.FullPath.GetHashCode();
         }
 
-        internal new void Refresh()
-        {
-            _item.MarkDirty();
-        }
-
         public static FileSystemItem Create(WorkingCopyExplorerControl control, SvnItem item)
         {
             if (item.IsDirectory)
@@ -150,37 +103,6 @@ namespace Ankh.WorkingCopyExplorer
             {
                 return new FileSystemFileItem(control, item);
             }
-        }
-
-        protected override void DoDispose()
-        {
-            //this.svnItem.Changed -= new EventHandler( this.ChildOrResourceChanged );
-        }
-
-        protected override bool RemoveTreeNodeIfResourcesDeleted()
-        {
-            // TODO: Implement
-            return false;
-        }
-
-        protected override NodeStatus ThisNodeStatus()
-        {
-            return MergeStatuses(_item);
-        }
-
-        protected virtual void OnItemChanged(ItemChangedType changeType)
-        {
-            if (this.ItemChanged != null)
-            {
-                this.ItemChanged(this, new ItemChangedEventArgs(changeType));
-            }
-        }
-
-        protected override void OnChanged()
-        {
-            base.OnChanged();
-
-            this.OnItemChanged(ItemChangedType.StatusChanged);
-        }
+        } 
     }
 }

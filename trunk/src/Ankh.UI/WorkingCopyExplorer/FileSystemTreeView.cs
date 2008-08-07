@@ -191,7 +191,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void AddNode(TreeNodeCollection nodes, IFileSystemItem child)
         {
-            child.ItemChanged += new EventHandler<ItemChangedEventArgs>(child_ItemChanged);
             FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem);
             nodes.Add(ftn);
             if (ftn.Parent == null)
@@ -218,22 +217,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             TreeNode node = this.SearchForNodeRecursivelyByTag(this.Nodes, item);
             if (node != null)
             {
-                this.RecursivelyUnhookFromEvents(node.Nodes);
                 this.FillNode(node);
-            }
-        }
-
-        private void RecursivelyUnhookFromEvents(TreeNodeCollection nodes)
-        {
-            foreach (TreeNode node in nodes)
-            {
-                IFileSystemItem item = node.Tag as IFileSystemItem;
-                if (item != null)
-                {
-                    item.ItemChanged -= new EventHandler<ItemChangedEventArgs>(this.child_ItemChanged);
-                }
-
-                RecursivelyUnhookFromEvents(node.Nodes);
             }
         }
 

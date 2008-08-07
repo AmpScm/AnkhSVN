@@ -50,11 +50,8 @@ namespace Ankh.WorkingCopyExplorer
 
                 this.FindChildren();
 
-                this.OnItemChanged(ItemChangedType.ChildrenInvalidated);
             }
-            this.CurrentStatus = MergeStatuses(this.CheckChildStatuses(), this.ThisNodeStatus());
         }
-
 
         private void FindChildren()
         {
