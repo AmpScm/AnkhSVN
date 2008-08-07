@@ -96,7 +96,7 @@ namespace Ankh.UI.VSSelectionControls
             get { return (_allColumnsIndex >= 0) ? _allColumnsIndex : (_allColumnsIndex = _list.AllColumns.IndexOf(this)); }
         }
 
-        public virtual int Compare(ListViewItem x, ListViewItem y)
+        protected virtual int Compare(ListViewItem x, ListViewItem y)
         {
             int n;
             if (x == null)
@@ -128,7 +128,26 @@ namespace Ankh.UI.VSSelectionControls
                 n = StringComparer.OrdinalIgnoreCase.Compare(vX, vY);
             }
 
-            if (ReverseSort)
+            return n;
+        }
+
+        int IComparer<ListViewItem>.Compare(ListViewItem x, ListViewItem y)
+        {
+            return Compare(x, y);
+        }
+
+        /// <summary>
+        /// Compares the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="reverseSort">if set to <c>true</c> [reverse sort].</param>
+        /// <returns></returns>
+        public int Compare(ListViewItem x, ListViewItem y, bool reverseSort)
+        {
+            int n = Compare(x, y);
+
+            if(reverseSort && ReverseSort)
                 return -n;
             else
                 return n;

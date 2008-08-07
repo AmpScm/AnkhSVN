@@ -66,6 +66,8 @@ namespace Ankh.UI.PendingChanges
 
             SortColumns.Add(path);
             GroupColumns.Add(changeList);
+
+            FinalSortColumn = path;
         }
 
         IAnkhServiceProvider _context;
