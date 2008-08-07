@@ -20,6 +20,7 @@ namespace Ankh.UI.VSSelectionControls
         readonly Collection<SmartColumn> _groupColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _sortColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _allColumns = new Collection<SmartColumn>();
+        SmartColumn _finalSortColumn;
 
         public SmartListView()
         {
@@ -87,6 +88,11 @@ namespace Ankh.UI.VSSelectionControls
             get { return _sortColumns; }
         }
 
+        public SmartColumn FinalSortColumn
+        {
+            get { return _finalSortColumn; }
+            set { _finalSortColumn = value; }
+        }
 
         #region SortIcons
         static class NativeMethods
@@ -342,11 +348,14 @@ namespace Ankh.UI.VSSelectionControls
             {
                 foreach (SmartColumn col in _view.SortColumns)
                 {
-                    int n = col.Compare(x, y);
+                    int n = col.Compare(x, y, true);
 
                     if (n != 0)
                         return n;
                 }
+
+                if (_view.FinalSortColumn != null)
+                    return _view.FinalSortColumn.Compare(x, y, false);
 
                 return 0;
             }
