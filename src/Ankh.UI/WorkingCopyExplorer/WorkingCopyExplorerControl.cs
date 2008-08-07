@@ -155,7 +155,10 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         internal void OpenItem(IAnkhServiceProvider context, string p)
         {
-            throw new NotImplementedException();
+            Ankh.Commands.IAnkhCommandService cmd = context.GetService<Ankh.Commands.IAnkhCommandService>();
+
+            if (cmd != null)
+                cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
         }
     }
 }

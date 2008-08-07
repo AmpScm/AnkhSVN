@@ -179,17 +179,9 @@ namespace Ankh.VS.SolutionExplorer
             _lvUp = _imageList.Images.Count - count + 1;
         }
 
-        #region IFileIconMapper Members
-
-
-        
-
-        #endregion
-
-
         static class NativeMethods
         {
-            [StructLayout(LayoutKind.Sequential), CLSCompliant(false)]
+            [StructLayout(LayoutKind.Sequential)]
             public struct SHFILEINFO
             {
                 public IntPtr hIcon;
