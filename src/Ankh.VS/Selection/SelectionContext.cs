@@ -277,7 +277,7 @@ namespace Ankh.Selection
                     if (ms != _currentSelection)
                         return _isSolutionExplorer = false;
 
-                    _isSolutionExplorer = (hier is IVsSolution) || (hier == null);
+                    _isSolutionExplorer = ((hier is IVsSolution) || (hier == null)) && (SolutionFilename != null);
                 }
 
                 return _isSolutionExplorer;
