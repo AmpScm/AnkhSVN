@@ -31,7 +31,7 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
 
-        #region Implementation of ICommand
+        
 
 
         public override void OnExecute(CommandEventArgs e)
@@ -101,10 +101,6 @@ namespace Ankh.Commands
                 e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
             }
 
-        } // OnExecute
-
-        #endregion
-
-        
+        } // OnExecute        
     }
 }

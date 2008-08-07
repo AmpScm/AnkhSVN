@@ -11,7 +11,7 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.RemoveRepositoryRoot)]
     class RemoveRepositoryRootCommand : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -21,7 +21,5 @@ namespace Ankh.Commands.RepositoryExplorer
         public override void OnExecute(CommandEventArgs e)
         {
         }
-
-        #endregion
     }
 }

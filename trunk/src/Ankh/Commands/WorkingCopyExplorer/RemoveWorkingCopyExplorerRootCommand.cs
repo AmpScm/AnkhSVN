@@ -12,7 +12,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.RemoveWorkingCopyExplorerRoot)]
     class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -31,7 +31,5 @@ namespace Ankh.Commands
             if (ctrl != null)
                 ctrl.RemoveRoot();            
         }
-
-        #endregion
     }
 }

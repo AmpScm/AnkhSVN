@@ -34,7 +34,7 @@ namespace Ankh.Commands
                 return null;
         }
 
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -63,8 +63,6 @@ namespace Ankh.Commands
                 }
             }*/
         }
-
-        #endregion
 
         /// <summary>
         /// Resolve an item.
