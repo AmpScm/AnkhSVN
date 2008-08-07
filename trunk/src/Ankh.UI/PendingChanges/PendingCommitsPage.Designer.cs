@@ -193,7 +193,7 @@
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
-            this.pendingCommits.ShowContextMenu += new System.EventHandler(this.pendingCommits_ShowContextMenu);
+            this.pendingCommits.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_ShowContextMenu);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
             // PendingCommitsPage

@@ -248,23 +248,34 @@ namespace Ankh.UI.PendingChanges
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
         }
 
-        private void pendingCommits_ShowContextMenu(object sender, EventArgs e)
+        private void pendingCommits_ShowContextMenu(object sender, MouseEventArgs e)
         {
             if (!pendingCommits.ContainsFocus || GetContainerControl().ActiveControl != this)
                 pendingCommits.Select();
 
-            Point p = MousePosition;
-
-            Point clP = pendingCommits.PointToClient(p);
-            ListViewHitTestInfo hti = pendingCommits.HitTest(clP);
-
-            bool showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
-            if (!showSort && hti.Item != null)
+            Point p = e.Location;
+            bool showSort = false;
+            if (p != new Point(-1, -1))
             {
-                Rectangle r= hti.Item.GetBounds(ItemBoundsPortion.Entire);
+                // Mouse context menu
+                Point clP = pendingCommits.PointToClient(e.Location);
+                ListViewHitTestInfo hti = pendingCommits.HitTest(clP);
 
-                if(!r.Contains(clP))
-                    showSort = true;
+                showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
+                if (!showSort && hti.Item != null)
+                {
+                    Rectangle r = hti.Item.GetBounds(ItemBoundsPortion.Entire);
+
+                    if (!r.Contains(clP))
+                        showSort = true;
+                }
+            }
+            else
+            {
+                ListViewItem fi = pendingCommits.FocusedItem;
+
+                if (fi != null)
+                    p = pendingCommits.PointToScreen(fi.Position);
             }
 
             if(showSort)

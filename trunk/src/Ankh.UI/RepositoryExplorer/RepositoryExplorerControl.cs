@@ -80,17 +80,19 @@ namespace Ankh.UI.RepositoryExplorer
             get { return null; }
         }
 
-        private void TreeViewMouseDown(object sender, MouseEventArgs e)
+        private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
         {
-            if (UISite == null || e.Button != MouseButtons.Right)
-                return;
-
-            Point screen = this.treeView.PointToScreen(new Point(e.X, e.Y));
-            UISite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : treeView.PointToScreen(new Point(0, 0));
+            ToolWindowSite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 
-        IFileIconMapper _iconMapper;
+        private void OnFileViewShowContextMenu(object sender, MouseEventArgs e)
+        {
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : fileView.PointToScreen(new Point(0, 0));
+            ToolWindowSite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+        }        
 
+        IFileIconMapper _iconMapper;
         IFileIconMapper IconMapper
         {
             get

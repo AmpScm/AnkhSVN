@@ -95,9 +95,14 @@ namespace Ankh.UI.VSSelectionControls
             {
                 if (!DesignMode)
                 {
-                    if (m.Msg == 123) // WM_CONTEXT
+                    if (m.Msg == 123) // WM_CONTEXTMENU
                     {
-                        OnShowContextMenu(EventArgs.Empty);
+                        uint pos = unchecked((uint)m.LParam);
+
+                        OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
+                            unchecked((short)(ushort)(pos & 0xFFFF)),
+                            unchecked((short)(ushort)(pos >> 16)), 0));
+
                         return;
                     }
                     else if (m.Msg == 8270) // WM_REFLECTNOTIFY
@@ -146,8 +151,8 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        public event EventHandler ShowContextMenu;
-        public virtual void OnShowContextMenu(EventArgs e)
+        public event MouseEventHandler ShowContextMenu;
+        public virtual void OnShowContextMenu(MouseEventArgs e)
         {
             if (_shouldUpdate)
             {

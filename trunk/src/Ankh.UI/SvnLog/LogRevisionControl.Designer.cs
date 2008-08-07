@@ -54,7 +54,7 @@
             this.logRevisionControl1.UseCompatibleStateImageBehavior = false;
             this.logRevisionControl1.View = System.Windows.Forms.View.Details;
             this.logRevisionControl1.VirtualMode = true;
-            this.logRevisionControl1.ShowContextMenu += new System.EventHandler(this.logRevisionControl1_ShowContextMenu);
+            this.logRevisionControl1.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
             this.logRevisionControl1.VirtualItemsSelectionRangeChanged += new System.Windows.Forms.ListViewVirtualItemsSelectionRangeChangedEventHandler(this.logRevisionControl1_VirtualItemsSelectionRangeChanged);
             this.logRevisionControl1.SelectedIndexChanged += new System.EventHandler(this.logRevisionControl1_SelectedIndexChanged);
             this.logRevisionControl1.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.logRevisionControl1_RetrieveVirtualItem);

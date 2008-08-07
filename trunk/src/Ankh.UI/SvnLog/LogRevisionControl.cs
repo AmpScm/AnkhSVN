@@ -458,7 +458,7 @@ namespace Ankh.UI.SvnLog
 
 
 
-        private void logRevisionControl1_ShowContextMenu(object sender, EventArgs e)
+        private void logRevisionControl1_ShowContextMenu(object sender, MouseEventArgs e)
         {
             if (UISite != null)
             {

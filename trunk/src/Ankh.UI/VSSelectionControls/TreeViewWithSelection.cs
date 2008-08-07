@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -53,9 +54,14 @@ namespace Ankh.UI.VSSelectionControls
             {
                 if (!DesignMode)
                 {
-                    if (m.Msg == 123) // WM_CONTEXT
+                    if (m.Msg == 123) // WM_CONTEXTMENU
                     {
-                        OnShowContextMenu(EventArgs.Empty);
+                        uint pos = unchecked((uint)m.LParam);
+
+                        OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
+                            unchecked((short)(ushort)(pos & 0xFFFF)),
+                            unchecked((short)(ushort)(pos >> 16)), 0));
+
                         return;
                     }
                 }
@@ -74,8 +80,8 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        public event EventHandler ShowContextMenu;
-        public virtual void OnShowContextMenu(EventArgs e)
+        public event MouseEventHandler ShowContextMenu;
+        public virtual void OnShowContextMenu(MouseEventArgs e)
         {
             if (_shouldUpdate)
             {
@@ -150,7 +156,7 @@ namespace Ankh.UI.VSSelectionControls
         SelectionItemMap _selectionMap;
         internal SelectionItemMap SelectionMap
         {
-            get { return _selectionMap ?? (_selectionMap = SelectionItemMap.Create(this));; }
+            get { return _selectionMap ?? (_selectionMap = SelectionItemMap.Create(this)); }
         }
 
         public sealed class RetrieveSelectionEventArgs : EventArgs
@@ -246,7 +252,7 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         public void SetSelection(TNode[] items)
-        {            
+        {
         }
 
         #endregion
