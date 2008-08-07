@@ -10,7 +10,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
-    class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>, IWorkingCopyExplorerSubControl
+    class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>
     {
         public event EventHandler CurrentDirectoryChanged;
 

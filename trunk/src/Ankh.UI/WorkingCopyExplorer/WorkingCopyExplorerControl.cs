@@ -17,12 +17,6 @@ using SharpSvn;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
-    public interface IWorkingCopyExplorerSubControl
-    {
-        Point GetSelectionPoint();
-        IFileSystemItem[] GetSelectedItems();
-    }
-
     public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
         /// <summary>
@@ -35,9 +29,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
             this.fileList.CurrentDirectoryChanged += new EventHandler(listView_CurrentDirectoryChanged);
 
-            this.folderTree.MouseDown += new MouseEventHandler(HandleMouseDown);
-            this.fileList.MouseDown += new MouseEventHandler(HandleMouseDown);
-        }
+            this.folderTree.ShowContextMenu += new EventHandler(OnFolderTreeShowContextMenu);
+            this.fileList.ShowContextMenu += new EventHandler(OnFileListShowContextMenu);
+        }               
 
         /// <summary>
         /// Called when the frame is created
@@ -73,59 +67,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             throw new System.NotImplementedException();
         }
-
-        public IFileSystemItem[] GetSelectedItems()
-        {
-            if (this.SelectedControl != null)
-            {
-                this.selection = this.SelectedControl.GetSelectedItems();
-            }
-
-            // if none are focused, whatever selection was there before is probably still valid
-
-            return this.selection;
-        }
-
-        protected IWorkingCopyExplorerSubControl SelectedControl
-        {
-            get
-            {
-                if (this.folderTree.Focused)
-                {
-                    return this.folderTree;
-                }
-                else if (this.fileList.Focused)
-                {
-                    return this.fileList;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handle the key combinations for "right click menu" here.
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="keyData"></param>
-        /// <returns></returns>
-        protected override bool ProcessCmdKey(ref System.Windows.Forms.Message msg, Keys keyData)
-        {
-            if (keyData == (Keys)(Keys.F10 | Keys.Shift) || keyData == Keys.Apps)
-            {
-                if (this.SelectedControl != null)
-                {
-                    Point point = this.SelectedControl.GetSelectionPoint();
-                    this.ShowContextMenu(point);
-                    return true;
-                }
-            }
-
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
+       
         void treeView_SelectedItemChanged(object sender, EventArgs e)
         {
             IFileSystemItem item = this.folderTree.SelectedItem;
@@ -143,23 +85,17 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 this.folderTree.SelectedItemChanged += new EventHandler(this.treeView_SelectedItemChanged);
             }
+        }       
+
+        void OnFileListShowContextMenu(object sender, EventArgs e)
+        {
+            ShowContextMenu(Control.MousePosition);
         }
 
-        void HandleMouseDown(object sender, MouseEventArgs e)
+        void OnFolderTreeShowContextMenu(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
-            {
-                Control c = sender as Control;
-                if (c == null)
-                {
-                    return;
-                }
-                Point screen = c.PointToScreen(new Point(e.X, e.Y));
-
-                ShowContextMenu(screen);
-                return;
-            }
-        }        
+            ShowContextMenu(Control.MousePosition);
+        }
 
         private void ShowContextMenu(Point point)
         {

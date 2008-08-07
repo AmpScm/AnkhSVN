@@ -43,6 +43,50 @@ namespace Ankh.UI.VSSelectionControls
             NotifySelectionUpdated();
         }
 
+        int _inWndProc;
+        bool _shouldUpdate;
+        protected override void WndProc(ref Message m)
+        {
+            _inWndProc++;
+
+            try
+            {
+                if (!DesignMode)
+                {
+                    if (m.Msg == 123) // WM_CONTEXT
+                    {
+                        OnShowContextMenu(EventArgs.Empty);
+                        return;
+                    }
+                }
+                base.WndProc(ref m);
+            }
+            finally
+            {
+                if (0 == --_inWndProc)
+                {
+                    if (_shouldUpdate)
+                    {
+                        _shouldUpdate = false;
+                        NotifySelectionUpdated();
+                    }
+                }
+            }
+        }
+
+        public event EventHandler ShowContextMenu;
+        public virtual void OnShowContextMenu(EventArgs e)
+        {
+            if (_shouldUpdate)
+            {
+                _shouldUpdate = false;
+                NotifySelectionUpdated();
+            }
+
+            if (ShowContextMenu != null)
+                ShowContextMenu(this, e);
+        }
+
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
