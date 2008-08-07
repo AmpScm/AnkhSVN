@@ -307,9 +307,21 @@ namespace Ankh.UI.PendingChanges
             switch (e.Command)
             {
                 case AnkhCommand.PcLogEditorPasteFileList:
-                    foreach (PendingCommitItem pci in _listItems.Values)
                     {
-                        if (pci.Checked)
+                        List<ListViewItem> items = new List<ListViewItem>();
+
+                        foreach (PendingCommitItem pci in _listItems.Values)
+                        {
+                            if (pci.Checked)
+                                items.Add(pci);
+                        }
+
+                        IComparer<ListViewItem> sorter = pendingCommits.ListViewItemSorter as IComparer<ListViewItem>;
+
+                        if(sorter != null)
+                            items.Sort(sorter);
+
+                        foreach(PendingCommitItem pci in items)
                         {
                             sb.AppendFormat("* {0}", pci.PendingChange.RelativePath);
                             sb.AppendLine();
