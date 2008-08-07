@@ -14,7 +14,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CheckoutSolution)]
     class CheckoutSolutionCommand : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -48,7 +48,5 @@ namespace Ankh.Commands
 				}
 			}*/
         }
-
-        #endregion
     }
 }

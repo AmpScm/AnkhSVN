@@ -16,7 +16,7 @@ namespace Ankh.Commands.RepositoryExplorer
     class MakeDirectoryCommand : CommandBase
     {
         //SvnCommitArgs _args = null;
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -56,8 +56,6 @@ namespace Ankh.Commands.RepositoryExplorer
             }
             */
         }
-
-        #endregion
 
         private void DoCreateDir(ProgressWorkerArgs e)
         {

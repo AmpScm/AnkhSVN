@@ -17,7 +17,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ResolveConflictExternal)]
     class ResolveConflictExternalCommand : ResolveConflictCommand
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -40,7 +40,5 @@ namespace Ankh.Commands
         {
             return context.GetService<IAnkhConfigurationService>().Instance.MergeExePath;
         }
-
-        #endregion
     }
 }

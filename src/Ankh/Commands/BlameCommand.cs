@@ -26,7 +26,7 @@ namespace Ankh.Commands
         private const string BlameTransform = "blame.xsl";
 
 
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -172,8 +172,6 @@ namespace Ankh.Commands
                 uiShell.DisplayHtml(filename, writer.ToString(), false);
             }
         }
-
-        #endregion
 
         private class BlameRunner
         {

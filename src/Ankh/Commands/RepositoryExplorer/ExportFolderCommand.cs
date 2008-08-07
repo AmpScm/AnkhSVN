@@ -12,7 +12,7 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.ExportFolder)]
     class ExportFolderCommand : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -51,7 +51,5 @@ namespace Ankh.Commands.RepositoryExplorer
                 }
             }*/
         }
-
-        #endregion
     }
 }

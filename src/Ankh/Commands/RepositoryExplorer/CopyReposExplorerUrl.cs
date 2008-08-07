@@ -14,7 +14,7 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.CopyReposExplorerUrl)]
     class CopyReposExplorerUrl : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -63,7 +63,5 @@ namespace Ankh.Commands.RepositoryExplorer
                 return;
             }
         }
-
-        #endregion
     }
 }

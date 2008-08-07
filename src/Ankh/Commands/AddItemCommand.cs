@@ -18,7 +18,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.AddItem)]
     class AddItemCommand : CommandBase
     {
-        #region Implementation of ICommand
+        
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -75,7 +75,5 @@ namespace Ankh.Commands
                     }
                 });
         }
-        #endregion
-
     }
 }

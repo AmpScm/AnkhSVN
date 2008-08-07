@@ -15,7 +15,7 @@ namespace Ankh.Commands
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
         }
-        #region Implementation of ICommand
+        
 
         public override void OnExecute(CommandEventArgs e)
         {
@@ -39,7 +39,5 @@ namespace Ankh.Commands
                 }
             }
         }
-
-        #endregion
     }
 }
