@@ -29,8 +29,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
             this.fileList.CurrentDirectoryChanged += new EventHandler(listView_CurrentDirectoryChanged);
 
-            this.folderTree.ShowContextMenu += new EventHandler(OnFolderTreeShowContextMenu);
-            this.fileList.ShowContextMenu += new EventHandler(OnFileListShowContextMenu);
+            this.folderTree.ShowContextMenu += new MouseEventHandler(OnFolderTreeShowContextMenu);
+            this.fileList.ShowContextMenu += new MouseEventHandler(OnFileListShowContextMenu);
         }               
 
         /// <summary>
@@ -87,14 +87,16 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }       
 
-        void OnFileListShowContextMenu(object sender, EventArgs e)
+        void OnFileListShowContextMenu(object sender, MouseEventArgs e)
         {
-            ShowContextMenu(Control.MousePosition);
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : fileList.PointToScreen(new Point(0, 0));
+            ShowContextMenu(screen);
         }
 
-        void OnFolderTreeShowContextMenu(object sender, EventArgs e)
+        void OnFolderTreeShowContextMenu(object sender, MouseEventArgs e)
         {
-            ShowContextMenu(Control.MousePosition);
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : folderTree.PointToScreen(new Point(0, 0));
+            ShowContextMenu(screen);
         }
 
         private void ShowContextMenu(Point point)

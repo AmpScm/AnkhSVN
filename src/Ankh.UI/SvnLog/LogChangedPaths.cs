@@ -97,7 +97,7 @@ namespace Ankh.UI
 
         
 
-        private void changedPaths_ShowContextMenu(object sender, EventArgs e)
+        private void changedPaths_ShowContextMenu(object sender, MouseEventArgs e)
         {
             Point p = MousePosition;
             _site.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);

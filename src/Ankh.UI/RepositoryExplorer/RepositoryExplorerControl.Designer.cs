@@ -66,9 +66,9 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(233, 400);
             this.treeView.TabIndex = 1;
+            this.treeView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.OnTreeViewShowContextMenu);
             this.treeView.SelectedNodeRefresh += new System.EventHandler(this.treeView_SelectedNodeRefresh);
             this.treeView.RetrievingChanged += new System.EventHandler(this.treeView_RetrievingChanged);
-            this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewMouseDown);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
             // 
             // toolFolders
@@ -103,7 +103,9 @@ namespace Ankh.UI.RepositoryExplorer
             this.dateColumn});
             this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileView.FinalSortColumn = null;
             this.fileView.FullRowSelect = true;
+            this.fileView.GroupSeparator = ", ";
             this.fileView.HideSelection = false;
             this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
@@ -113,6 +115,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.UseCompatibleStateImageBehavior = false;
             this.fileView.View = System.Windows.Forms.View.Details;
             this.fileView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileView_MouseDoubleClick);
+            this.fileView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.OnFileViewShowContextMenu);
             // 
             // fileColumn
             // 

@@ -211,16 +211,6 @@ namespace Ankh.UI.RepositoryExplorer
             set { base.SelectedNode = value; }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                base.SelectedNode = GetNodeAt(e.X, e.Y);
-            }
-
-            base.OnMouseDown(e);
-        }
-
         string _expandTo;
         public void BrowseTo(Uri uri)
         {
