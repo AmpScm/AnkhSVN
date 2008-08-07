@@ -6,47 +6,14 @@ using SharpSvn;
 
 namespace Ankh
 {
-    public abstract class WCTreeNode : IDisposable
+    public abstract class WCTreeNode
     {
-        public event EventHandler Changed;
-
-
         public WCTreeNode(WCTreeNode parent)
         {
             this.parent = parent;
             this.children = new ArrayList();
-        }
+        }  
 
-        /// <summary>
-        /// Make sure we unhook from all events pointing to us.
-        /// </summary>
-        public void Dispose()
-        {
-            this.DoDispose();
-            this.DisposeChildren();
-        }
-
-        public void Remove()
-        {
-            this.RemoveSelf();
-            this.Dispose();
-        }
-
-        /// <summary>
-        /// Calls Dispose on all Children of this node.
-        /// </summary>
-        protected void DisposeChildren()
-        {
-            foreach (WCTreeNode node in this.Children)
-            {
-                node.Dispose();
-            }
-        }
-
-        /// <summary>
-        /// Must be overridden in derived classes to unhook from events and other cleanup.
-        /// </summary>
-        protected abstract void DoDispose();
         /// <summary>
         /// Child nodes of this node
         /// </summary>
@@ -80,123 +47,6 @@ namespace Ankh
 
         public abstract void Refresh(bool rescan);
 
-        /// <summary>
-        /// Override this to "kill" yourself if all resources belonging to you are deleted.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract bool RemoveTreeNodeIfResourcesDeleted();
-
-        protected NodeStatus CurrentStatus
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.currentStatus; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set { this.currentStatus = value; }
-        }
-
-        protected bool IsDeleting
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return this.isDeleting; }
-
-            [System.Diagnostics.DebuggerStepThrough]
-            set { this.isDeleting = value; }
-        }
-
-        /// <summary>
-        /// Gets the status of the resources belonging to one specific node, 
-        /// not including children.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual NodeStatus ThisNodeStatus()
-        {
-            return NodeStatus.None;
-        }
-
-        /// <summary>
-        /// Returns a NodeStatus from a Status, taking into account both text status and 
-        /// property status.
-        /// </summary>
-        /// <param name="resource"></param>
-        /// <returns></returns>
-        protected static NodeStatus GenerateStatus(SvnItem item)
-        {
-            NodeStatusKind kind;
-            if (item.Status.LocalContentStatus != SvnStatus.Normal)
-            {
-                kind = (NodeStatusKind)item.Status.LocalContentStatus;
-            }
-            else if (item.Status.LocalPropertyStatus != SvnStatus.Normal &&
-                item.Status.LocalPropertyStatus != SvnStatus.None)
-            {
-                kind = (NodeStatusKind)item.Status.LocalPropertyStatus;
-            }
-            else
-            {
-                kind = NodeStatusKind.Normal;
-            }
-
-            return new NodeStatus(kind, item.IsReadOnly, item.IsLocked);
-        }
-
-        /// <summary>
-        /// Merges the statuses of the passed items into a single NodeStatus.
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        protected static NodeStatus MergeStatuses(params SvnItem[] items)
-        {
-            return MergeStatuses(((IList)items));
-        }
-
-        /// <summary>
-        /// Merges the passed NodeStatuses into a single NodeStatus.
-        /// </summary>
-        /// <param name="statuses"></param>
-        /// <returns></returns>
-        protected static NodeStatus MergeStatuses(params NodeStatus[] statuses)
-        {
-            NodeStatus newStatus = new NodeStatus();
-            foreach (NodeStatus status in statuses)
-                newStatus = newStatus.Merge(status);
-            return newStatus;
-        }
-
-        /// <summary>
-        /// Merges the statuses of the passed SvnItems into
-        /// a single NodeStatus.
-        /// </summary>
-        /// <param name="items">An IList of SvnItem instances.</param>
-        /// <returns></returns>
-        protected static NodeStatus MergeStatuses(IList items)
-        {
-            NodeStatus newStatus = new NodeStatus();
-            if (items != null)
-            {
-                foreach (SvnItem item in items)
-                    newStatus = newStatus.Merge(GenerateStatus(item));
-            }
-
-            return newStatus;
-        }
-
-        /// <summary>
-        /// Gets the merged NodeStatus from the child nodes.
-        /// </summary>
-        /// <returns></returns>
-        protected NodeStatus CheckChildStatuses()
-        {
-            NodeStatus status = new NodeStatus();
-            foreach (WCTreeNode node in this.Children)
-            {
-                status = status.Merge(node.CurrentStatus);
-            }
-            return status;
-        }
-
-
-
         protected void GetChildResources(System.Collections.IList list, bool getChildItems,
             Predicate<SvnItem> filter)
         {
@@ -218,113 +68,7 @@ namespace Ankh
             }
         }
 
-        protected void RemoveSelf()
-        {
-            if (this.Parent != null)
-            {
-                this.Parent.Remove(this);
-            }
-        }
-
-        /// <summary>
-        /// Event handler for change events in child nodes or resources belonging
-        /// to this node.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        protected virtual void ChildOrResourceChanged(object sender, EventArgs args)
-        {
-            if (!this.IsDeleting)
-            {
-                if (CheckForDeletedTreeNode())
-                {
-                    return;
-                }
-            }
-
-            NodeStatus newStatus = this.ThisNodeStatus().Merge(this.CheckChildStatuses());
-            if (newStatus != this.CurrentStatus)
-            {
-                this.CurrentStatus = newStatus;
-                this.OnChanged();
-            }
-        }
-
-        protected virtual void ChildrenChanged(object sender, EventArgs args)
-        {
-            this.Refresh(true);
-        }
-
-        protected static void UnhookEvents(IList svnItems, EventHandler del)
-        {
-            //foreach ( SvnItem item in svnItems )
-            //{
-            //    item.Changed -= del;
-            //    item.ChildrenChanged -= del;
-            //}
-        }
-
-        /// <summary>
-        /// Check if this treenode is deleted.
-        /// </summary>
-        /// <returns></returns>
-        protected bool CheckForDeletedTreeNode()
-        {
-            try
-            {
-                this.IsDeleting = true;
-
-                // If the parent is deleted as well, no point in deleting us.
-                if (this.Parent != null)
-                {
-                    if (this.Parent.CheckForDeletedTreeNode())
-                    {
-                        return true;
-                    }
-                }
-
-                return RemoveTreeNodeIfResourcesDeleted();
-            }
-            finally
-            {
-                this.IsDeleting = false;
-            }
-        }
-
-        /// <summary>
-        /// Dispatches the Changed event.
-        /// </summary>
-        protected virtual void OnChanged()
-        {
-            try
-            {
-                if (!this.isRefreshing)
-                {
-                    this.isRefreshing = true;
-
-                    if (this.Changed != null)
-                        this.Changed(this, EventArgs.Empty);
-                }
-            }
-            finally
-            {
-                this.isRefreshing = false;
-            }
-        }
-
-        private void Remove(WCTreeNode treeNode)
-        {
-            treeNode.Changed -= new EventHandler(this.ChildOrResourceChanged);
-            this.Children.Remove(treeNode);
-
-            treeNode.Dispose();
-        }
-
-        private bool isDeleting;
-        private NodeStatus currentStatus;
         private WCTreeNode parent;
         private IList children;
-        private bool isRefreshing;
-
     }
 }

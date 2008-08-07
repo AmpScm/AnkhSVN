@@ -29,7 +29,6 @@ namespace Ankh.WorkingCopyExplorer
             {
                 this.SvnItem.MarkDirty();
             }
-            this.CurrentStatus = MergeStatuses(this.CheckChildStatuses(), this.ThisNodeStatus());
         }
     }
 }

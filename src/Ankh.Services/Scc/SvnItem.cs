@@ -755,12 +755,23 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Gets the extension.
+        /// Gets the extension of the item
         /// </summary>
         /// <value>The extension.</value>
+        /// <remarks>By definition directories do not have an extension</remarks>
         public string Extension
         {
-            get { return Path.GetExtension(FullPath); }
+            get { return IsDirectory ? "" : Path.GetExtension(Name); }
+        }
+
+        /// <summary>
+        /// Gets the name of the file without its extension.
+        /// </summary>
+        /// <value>The name without extension.</value>
+        /// <remarks>By definition directories do not have an extension</remarks>
+        public string NameWithoutExtension
+        {
+            get { return IsDirectory ? Name : Path.GetFileNameWithoutExtension(Name); }
         }
 
         /// <summary>

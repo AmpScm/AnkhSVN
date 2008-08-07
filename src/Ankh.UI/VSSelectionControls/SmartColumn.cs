@@ -18,7 +18,27 @@ namespace Ankh.UI.VSSelectionControls
         bool _notDragable;
         bool _reverseSort;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
         public SmartColumn(SmartListView list, string text, string menuText, int width)
+            : this(list,text, menuText, width, HorizontalAlignment.Left)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="align">The align.</param>
+        public SmartColumn(SmartListView list, string text, string menuText, int width, HorizontalAlignment align)
         {
             if(list == null)
                 throw new ArgumentNullException("list");
@@ -29,7 +49,25 @@ namespace Ankh.UI.VSSelectionControls
             Width = width;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
         public SmartColumn(SmartListView list, string menuText, int width)
+            : this(list, menuText, width, HorizontalAlignment.Left)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="align">The align.</param>
+        public SmartColumn(SmartListView list, string menuText, int width, HorizontalAlignment align)
             : this(list, menuText.Replace("&", ""), menuText, width)
         {
         }
