@@ -325,7 +325,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        sealed class SmartListSorter : System.Collections.IComparer
+        sealed class SmartListSorter : System.Collections.IComparer, IComparer<ListViewItem>
         {
             SmartListView _view;
 
@@ -337,14 +337,12 @@ namespace Ankh.UI.VSSelectionControls
                 _view = view;
             }
 
-            #region IComparer Members
-
             int System.Collections.IComparer.Compare(object x, object y)
             {
                 return Compare((ListViewItem)x, (ListViewItem)y);
             }
 
-            private int Compare(ListViewItem x, ListViewItem y)
+            public int Compare(ListViewItem x, ListViewItem y)
             {
                 foreach (SmartColumn col in _view.SortColumns)
                 {
@@ -359,8 +357,6 @@ namespace Ankh.UI.VSSelectionControls
 
                 return 0;
             }
-
-            #endregion
         }
 
         #region XPPlus
