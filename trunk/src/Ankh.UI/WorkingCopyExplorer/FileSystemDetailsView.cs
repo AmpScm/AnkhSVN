@@ -225,27 +225,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             modified.Sorter = new SortWrapper(
                 delegate(FileSystemListViewItem x, FileSystemListViewItem y)
                 {
-                    TimeSpan ts = x.Modified - y.Modified;
-
-                    if(ts.Ticks < 0)
-                        return -1;
-                    else if(ts.Ticks > 0)
-                        return 1;
-                    else
-                        return 0;
+                    return x.Modified.CompareTo(y.Modified);
                 });
 
             lastChangeTime.Sorter = new SortWrapper(
                 delegate(FileSystemListViewItem x, FileSystemListViewItem y)
                 {
-                    TimeSpan ts = x.SvnItem.Status.LastChangeTime - y.SvnItem.Status.LastChangeTime;
-
-                    if (ts.Ticks < 0)
-                        return -1;
-                    else if (ts.Ticks > 0)
-                        return 1;
-                    else
-                        return 0;
+                    return x.SvnItem.Status.LastChangeTime.CompareTo(y.SvnItem.Status.LastChangeTime);
                 });
 
             AllColumns.Add(name);
