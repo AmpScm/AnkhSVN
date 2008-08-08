@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.UI;
 using Ankh.Ids;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -66,7 +67,7 @@ namespace Ankh.Commands
                     switch (e.Command)
                     {
                         case AnkhCommand.ItemOpenVisualStudio:
-                            Ankh.Scc.IProjectFileMapper mapper = e.GetService<Ankh.Scc.IProjectFileMapper>();
+                            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
 
                             if (mapper.IsProjectFileOrSolution(item.FullPath))
                                 goto case AnkhCommand.ItemOpenSolutionExplorer;
