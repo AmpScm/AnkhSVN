@@ -634,6 +634,11 @@ namespace Ankh.Scc
                 });
         }
 
+        /// <summary>
+        /// Performs a few attempts on renaming a directory and only fails if all fail
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="tmp"></param>
         internal static void RetriedRename(string path, string tmp)
         {
             if (string.IsNullOrEmpty(path))
@@ -641,11 +646,11 @@ namespace Ankh.Scc
             else if (string.IsNullOrEmpty(tmp))
                 throw new ArgumentNullException("tmp");
 
-            const int retryCount = 4;
+            const int retryCount = 5;
             for (int i = 0; i < retryCount; i++)
             {
                 // Don't throw an exception on the common case the file is locked
-                // The project just renamed the file so a virusscanner or directory scanner (Tortoise)
+                // The project just renamed the file so a virusscanner or directory scanner (Tortoise, VS itself)
                 // Will now look at the file
                 if (!NativeMethods.MoveFile(path, tmp))
                 {
@@ -660,7 +665,7 @@ namespace Ankh.Scc
 
                     }
                     else
-                        System.Threading.Thread.Sleep(20 * (i + 1));
+                        System.Threading.Thread.Sleep(50 * (i + 1));
                 }
                 else
                     break;
