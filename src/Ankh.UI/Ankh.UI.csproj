@@ -14,7 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30428</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -478,7 +478,6 @@
     <Compile Include="WorkingCopyExplorer\FileSystemDetailsView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WorkingCopyExplorer\FileSystemItemAttributes.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemListViewItem.cs" />
     <Compile Include="WorkingCopyExplorer\FileSystemTreeView.cs">
       <SubType>Component</SubType>
@@ -785,6 +784,7 @@
     <EmbeddedResource Include="PendingChanges\PCStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PCStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateBranch.resx">
       <DependentUpon>CreateBranch.cs</DependentUpon>
