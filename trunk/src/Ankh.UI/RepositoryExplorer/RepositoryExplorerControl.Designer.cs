@@ -22,12 +22,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.toolFolders = new System.Windows.Forms.ToolStrip();
             this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
             this.fileView = new Ankh.UI.RepositoryExplorer.RepositoryListView();
-            this.fileColumn = new System.Windows.Forms.ColumnHeader();
-            this.extensionColumn = new System.Windows.Forms.ColumnHeader();
-            this.revisionColumn = new System.Windows.Forms.ColumnHeader();
-            this.authorColumn = new System.Windows.Forms.ColumnHeader();
-            this.sizeColumn = new System.Windows.Forms.ColumnHeader();
-            this.dateColumn = new System.Windows.Forms.ColumnHeader();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
@@ -94,13 +88,6 @@ namespace Ankh.UI.RepositoryExplorer
             // 
             // fileView
             // 
-            this.fileView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.fileColumn,
-            this.extensionColumn,
-            this.revisionColumn,
-            this.authorColumn,
-            this.sizeColumn,
-            this.dateColumn});
             this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fileView.FinalSortColumn = null;
@@ -115,36 +102,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.UseCompatibleStateImageBehavior = false;
             this.fileView.View = System.Windows.Forms.View.Details;
             this.fileView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileView_MouseDoubleClick);
-            this.fileView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.OnFileViewShowContextMenu);
-            // 
-            // fileColumn
-            // 
-            this.fileColumn.Text = "File";
-            this.fileColumn.Width = 100;
-            // 
-            // extensionColumn
-            // 
-            this.extensionColumn.Text = "Extension";
-            this.extensionColumn.Width = 70;
-            // 
-            // revisionColumn
-            // 
-            this.revisionColumn.Text = "Revision";
-            this.revisionColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // authorColumn
-            // 
-            this.authorColumn.Text = "Author";
-            // 
-            // sizeColumn
-            // 
-            this.sizeColumn.Text = "Size";
-            this.sizeColumn.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // dateColumn
-            // 
-            this.dateColumn.Text = "Date";
-            this.dateColumn.Width = 100;
+            this.fileView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.OnFileViewShowContextMenu);            
             // 
             // RepositoryExplorerControl
             // 
@@ -185,11 +143,5 @@ namespace Ankh.UI.RepositoryExplorer
         private SplitContainer splitContainer;
         private ToolStrip toolFolders;
         private ToolStripLabel foldersLabel;
-        private ColumnHeader fileColumn;
-        private ColumnHeader extensionColumn;
-        private ColumnHeader revisionColumn;
-        private ColumnHeader authorColumn;
-        private ColumnHeader sizeColumn;
-        private ColumnHeader dateColumn;
     }
 }
