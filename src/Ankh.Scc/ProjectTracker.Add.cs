@@ -198,7 +198,7 @@ namespace Ankh.Scc
                         //      the current selection is still the original selection
                         if (selectedFiles == null)
                         {
-                            ISelectionContext selection = Context.GetService<ISelectionContext>();
+                            ISelectionContext selection = GetService<ISelectionContext>();
                             if (selection != null)
                             {
                                 // BH: resx files are not correctly included if we don't retrieve this list recursive
