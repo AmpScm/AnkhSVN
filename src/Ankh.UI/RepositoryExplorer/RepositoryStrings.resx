@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AuthorColumn" xml:space="preserve">
+    <value>&amp;Author</value>
+  </data>
+  <data name="DateColumn" xml:space="preserve">
+    <value>&amp;Modified</value>
+  </data>
+  <data name="ExtensionColumn" xml:space="preserve">
+    <value>&amp;Type</value>
+  </data>
+  <data name="FileColumn" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
   <data name="LocalRepositories" xml:space="preserve">
     <value>Local Repositories</value>
   </data>
+  <data name="RevisionColumn" xml:space="preserve">
+    <value>&amp;Revision</value>
+  </data>
   <data name="RootName" xml:space="preserve">
     <value>Subversion Repositories</value>
+  </data>
+  <data name="SizeColumn" xml:space="preserve">
+    <value>&amp;Size</value>
   </data>
 </root>

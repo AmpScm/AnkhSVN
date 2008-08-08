@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -29,7 +30,7 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
-        {           
+        {
             if (e.Button == MouseButtons.Right)
             {
                 ExtendSelection(e.Location, true);
@@ -73,21 +74,25 @@ namespace Ankh.UI.VSSelectionControls
             //    throw new NotImplementedException();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Collection<SmartColumn> GroupColumns
         {
             get { return _groupColumns; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Collection<SmartColumn> AllColumns
         {
             get { return _allColumns; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Collection<SmartColumn> SortColumns
         {
             get { return _sortColumns; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SmartColumn FinalSortColumn
         {
             get { return _finalSortColumn; }
@@ -131,6 +136,9 @@ namespace Ankh.UI.VSSelectionControls
 
         public void SetSortIcon(int column, SortIcon mode)
         {
+            if (DesignMode)
+                return;
+
             if (column < 0 || column > Columns.Count)
                 throw new ArgumentOutOfRangeException("column", column, "Invalid column number");
 
@@ -173,7 +181,7 @@ namespace Ankh.UI.VSSelectionControls
             UpdateSortGlyphs();
         }
 
-        
+
         /// <summary>
         /// Gets a value indicating whether the listview supports grouping.
         /// </summary>
@@ -190,7 +198,7 @@ namespace Ankh.UI.VSSelectionControls
 
         internal void UpdateSortGlyphs()
         {
-            if (!SupportsSortGlypgs)
+            if (!SupportsSortGlypgs || DesignMode)
                 return;
             //throw new NotImplementedException();
             foreach (ColumnHeader ch in Columns)
@@ -212,41 +220,43 @@ namespace Ankh.UI.VSSelectionControls
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
-            ColumnHeader column = Columns[e.Column];
-
-            SmartColumn sc = column as SmartColumn;
-            if (sc != null && sc.Sortable)
+            if (!DesignMode)
             {
-                bool extend = (Control.ModifierKeys & Keys.Control) != 0;
+                ColumnHeader column = Columns[e.Column];
 
-                if (!extend)
+                SmartColumn sc = column as SmartColumn;
+                if (sc != null && sc.Sortable)
                 {
-                    if (SortColumns.Count == 1 && SortColumns[0] == sc)
-                        sc.ReverseSort = !sc.ReverseSort;
+                    bool extend = (Control.ModifierKeys & Keys.Control) != 0;
+
+                    if (!extend)
+                    {
+                        if (SortColumns.Count == 1 && SortColumns[0] == sc)
+                            sc.ReverseSort = !sc.ReverseSort;
+                        else
+                        {
+                            SortColumns.Clear();
+                            SortColumns.Add(sc);
+                            sc.ReverseSort = false;
+                        }
+                    }
                     else
                     {
-                        SortColumns.Clear();
-                        SortColumns.Add(sc);
-                        sc.ReverseSort = false;
+                        if (SortColumns.Contains(sc))
+                            sc.ReverseSort = !sc.ReverseSort;
+                        else
+                        {
+                            sc.ReverseSort = false;
+                            SortColumns.Add(sc);
+                        }
                     }
+                    Sort();
+                    UpdateSortGlyphs();
                 }
-                else
-                {
-                    if (SortColumns.Contains(sc))
-                        sc.ReverseSort = !sc.ReverseSort;
-                    else
-                    {
-                        sc.ReverseSort = false;
-                        SortColumns.Add(sc);
-                    }
-                }
-                Sort();
-                UpdateSortGlyphs();
             }
-
-            base.OnColumnClick(e);            
+            base.OnColumnClick(e);
         }
-        
+
         protected internal virtual void UpdateGroup(SmartListViewItem item, string[] values)
         {
             if (VirtualMode)
@@ -254,12 +264,12 @@ namespace Ankh.UI.VSSelectionControls
 
             StringBuilder sb = new StringBuilder();
 
-            foreach(SmartColumn col in GroupColumns)
+            foreach (SmartColumn col in GroupColumns)
             {
                 int c = col.AllColumnsIndex;
-                if(c < values.Length)
+                if (c < values.Length)
                 {
-                    if(sb.Length > 0)
+                    if (sb.Length > 0)
                         sb.Append(GroupSeparator);
 
                     sb.Append(values[c]);
@@ -268,7 +278,7 @@ namespace Ankh.UI.VSSelectionControls
 
             string g = sb.ToString();
 
-            if(item.Group != null && item.Group.Name == g)
+            if (item.Group != null && item.Group.Name == g)
                 return; // Nothing to do
 
             item.Group = null;
@@ -373,9 +383,9 @@ namespace Ankh.UI.VSSelectionControls
                     {
                         Version osVersion = Environment.OSVersion.Version;
 
-                        if(osVersion.Major >= 6)
+                        if (osVersion.Major >= 6)
                             _osLevel = 600;
-                        else if(osVersion.Major == 5)
+                        else if (osVersion.Major == 5)
                         {
                             if (osVersion.Minor >= 2)
                                 _osLevel = 520;
@@ -389,7 +399,7 @@ namespace Ankh.UI.VSSelectionControls
                     }
 
                     return _osLevel;
-                }                        
+                }
             }
         }
 

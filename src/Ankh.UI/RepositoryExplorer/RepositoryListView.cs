@@ -3,12 +3,96 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using System.Windows.Forms;
 
 namespace Ankh.UI.RepositoryExplorer
 {
     class RepositoryListView : ListViewWithSelection<RepositoryListItem>
     {
         IAnkhServiceProvider _context;
+
+        public RepositoryListView()
+        {
+            InitializeColumns();
+        }
+
+        private void InitializeColumns()
+        {
+            SmartColumn file = new SmartColumn(this, RepositoryStrings.FileColumn, 100);
+            SmartColumn extension = new SmartColumn(this, RepositoryStrings.ExtensionColumn, 70);
+            SmartColumn revision = new SmartColumn(this, RepositoryStrings.RevisionColumn, 60);
+            SmartColumn author = new SmartColumn(this, RepositoryStrings.AuthorColumn, 60);
+            SmartColumn size = new SmartColumn(this, RepositoryStrings.SizeColumn, 60);
+            SmartColumn date = new SmartColumn(this, RepositoryStrings.DateColumn, 100);
+
+            file.Sorter = new SortWrapper(
+                delegate(RepositoryListItem x, RepositoryListItem y)
+                {
+                    if (x.IsFolder ^ y.IsFolder)
+                    {
+                        return x.IsFolder ? -1 : 1;
+                    }
+
+                    return StringComparer.OrdinalIgnoreCase.Compare(x.Text, y.Text);
+                });
+            size.Sorter = new SortWrapper(
+                delegate(RepositoryListItem x, RepositoryListItem y)
+                {
+                    if (x.IsFolder ^ y.IsFolder)
+                    {
+                        return x.IsFolder ? -1 : 1;
+                    }
+
+                    long lx = x.Info.Entry.FileSize;
+                    long ly = y.Info.Entry.FileSize;
+
+                    if (lx < ly)
+                        return -1;
+                    else if (lx > ly)
+                        return 1;
+                    else
+                        return 0;
+                });
+            date.Sorter = new SortWrapper(
+                delegate(RepositoryListItem x, RepositoryListItem y)
+                {
+                    return x.Info.Entry.Time.CompareTo(y.Info.Entry.Time);
+                });
+
+            AllColumns.Add(file);
+            AllColumns.Add(extension);
+            AllColumns.Add(revision);
+            AllColumns.Add(author);
+            AllColumns.Add(size);            
+            AllColumns.Add(date);
+
+            Columns.AddRange(new ColumnHeader[]
+            {
+                file,
+                extension,
+                revision,
+                author,
+                size,
+                date
+            });
+
+            SortColumns.Add(file);
+            FinalSortColumn = file;
+            UpdateSortGlyphs();
+
+            AllowColumnReorder = true;
+
+        }
+
+        protected override string GetCanonicalName(RepositoryListItem item)
+        {
+            Uri uri = item.Info.EntryUri;
+
+            if (uri != null)
+                return uri.AbsoluteUri;
+            else
+                return null;
+        }
 
         public IAnkhServiceProvider Context
         {

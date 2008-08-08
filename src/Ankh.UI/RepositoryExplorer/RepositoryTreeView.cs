@@ -95,6 +95,16 @@ namespace Ankh.UI.RepositoryExplorer
             GC.KeepAlive(RootNode);
         }
 
+        protected override string GetCanonicalName(RepositoryTreeNode item)
+        {
+            Uri uri = item.RawUri;
+
+            if (uri != null)
+                return uri.AbsoluteUri;
+            else
+                return null;
+        }
+
         public void AddRoot(Uri uri)
         {
             if (uri == null)

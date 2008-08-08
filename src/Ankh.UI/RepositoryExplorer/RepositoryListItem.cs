@@ -5,15 +5,17 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.VS;
 using System.IO;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-    class RepositoryListItem : ListViewItem
+    class RepositoryListItem : SmartListViewItem
     {
         readonly Uri _uri;
         SvnListEventArgs _info;
 
-        public RepositoryListItem(SvnListEventArgs info, IFileIconMapper iconMapper)
+        public RepositoryListItem(RepositoryListView view, SvnListEventArgs info, IFileIconMapper iconMapper)
+            : base(view)
         {
             _info = info;
             _uri = info.EntryUri;
@@ -35,17 +37,13 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
 
-            SubItems.Add(extension);
-            SubItems.Add(info.Entry.Revision.ToString());
-            SubItems.Add(info.Entry.Author);
-            if (info.Entry.NodeKind == SvnNodeKind.File)
-                SubItems.Add(info.Entry.FileSize.ToString());
-            else
-                SubItems.Add("");
-
-            DateTime time = info.Entry.Time.ToLocalTime();
-
-            SubItems.Add(time.ToShortDateString() + " " + time.ToShortTimeString());
+            SetValues(
+                name,
+                extension,
+                info.Entry.Revision.ToString(),
+                info.Entry.Author,
+                IsFolder ? "" : info.Entry.FileSize.ToString(),
+                info.Entry.Time.ToString("g"));
         }
 
         public Uri RawUri
@@ -56,6 +54,11 @@ namespace Ankh.UI.RepositoryExplorer
         public SvnListEventArgs Info
         {
             get { return _info; }
+        }
+
+        public bool IsFolder
+        {
+            get { return Info.Entry.NodeKind == SvnNodeKind.Directory; }
         }
     }
 }

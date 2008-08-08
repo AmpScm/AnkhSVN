@@ -10,6 +10,7 @@ using Ankh.UI.Services;
 using Ankh.Ids;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -121,7 +122,7 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     if (sn.FolderItems.Contains(sn.RawUri))
                     {
-                        RepositoryListItem item = new RepositoryListItem(sn.FolderItems[sn.RawUri], IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], IconMapper);
 
                         fileView.Items.Add(item);
                     }
@@ -130,7 +131,7 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     if (ee.EntryUri != tn.RawUri)
                     {
-                        RepositoryListItem item = new RepositoryListItem(ee, IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, ee, IconMapper);
 
                         fileView.Items.Add(item);
                     }
@@ -138,7 +139,10 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (fileView.Items.Count > 0)
                 {
-                    fileColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    SmartColumn fileColumn = fileView.AllColumns[0];
+
+                    if(fileColumn.DisplayIndex >= 0)
+                        fileColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
                 }
             }
         }
