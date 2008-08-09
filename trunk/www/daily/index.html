@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.4994.141</title>
+<title>AnkhSVN-Daily Update - 2.0.4998.142</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.4994.141</h1>
+<h1>AnkhSVN-Daily Update - 2.0.4998.142</h1>
 
 
 <p>
@@ -12,13 +12,13 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/914/AnkhSvn-Daily-2.0.4994.141.msi">AnkhSvn-Daily-2.0.4994.141.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/915/AnkhSvn-Daily-2.0.4998.142.msi">AnkhSvn-Daily-2.0.4998.142.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4994">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=4998">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -26,6 +26,8 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2008-08-08</td></tr>
+<tr><td> </td><td class="r"><a id="4998" href="http://ankhsvn.net/rev/?r=4998">[r4998]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SvnSccContext.cs, src/Ankh.Scc/ProjectTracker.Add.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added slightly longer delay between retrying move attempts of the SCC fixups</td></tr>
+<tr><td> </td><td class="r"><a id="4997" href="http://ankhsvn.net/rev/?r=4997">[r4997]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryStrings.resx, src/Ankh.UI/RepositoryExplorer/RepositoryListView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryStrings.Designer.cs, src/Ankh.UI/RepositoryExplorer/RepositoryListItem.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.Designer.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated the Repository explorer to use the SmartColumn infrastructure</td></tr>
 <tr><td> </td><td class="r"><a id="4994" href="http://ankhsvn.net/rev/?r=4994">[r4994]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Commit project change that was still in my local working copy; fixing the daily build.</td></tr>
 <tr class="d"><td colspan="4">2008-08-07</td></tr>
 <tr><td> </td><td class="r"><a id="4992" href="http://ankhsvn.net/rev/?r=4992">[r4992]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When pasting a filename list in the pending changes window, use the list
@@ -227,24 +229,6 @@ if interactive merging on conflict is enabled in the settings.</td></tr>
 to opt-in on resolving directly at the moment a conflict occurs.</td></tr>
 <tr><td> </td><td class="r"><a id="4842" href="http://ankhsvn.net/rev/?r=4842">[r4842]</a></td><td class="a">baybora</td><td class="f">src/Ankh/Commands/UpdateItemCommand.cs, src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">disable conflict dialog on switch and update item</td></tr>
 <tr><td> </td><td class="r"><a id="4841" href="http://ankhsvn.net/rev/?r=4841">[r4841]</a></td><td class="a">baybora</td><td class="f">src/Ankh/Commands/UpdateItemCommand.cs, src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">use IConflictHandler on update item (switch is already done)</td></tr>
-<tr><td> </td><td class="r"><a id="4840" href="http://ankhsvn.net/rev/?r=4840">[r4840]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/InteractiveConflictService.cs, src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved the conflict code from the switch handler to the IConflictHandler
-implementation. (No functional change)</td></tr>
-<tr><td> </td><td class="r"><a id="4839" href="http://ankhsvn.net/rev/?r=4839">[r4839]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/AnkhUIModule.cs, src/Ankh.Services/Scc/IConflictHandler.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/MergeWizard/InteractiveConflictService.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added IConflictHandler service with dummy implementation.</td></tr>
-<tr><td> </td><td class="r"><a id="4838" href="http://ankhsvn.net/rev/?r=4838">[r4838]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/VSSelectionControls/ListViewWithSortIcons.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added ListViewWithSortIcons class, that allows to show Vista/XP style sort icons
-on the headers.</td></tr>
-<tr><td> </td><td class="r"><a id="4835" href="http://ankhsvn.net/rev/?r=4835">[r4835]</a></td><td class="a">baybora</td><td class="f">src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Integrated conflict dialog with switch command</td></tr>
-<tr><td> </td><td class="r"><a id="4831" href="http://ankhsvn.net/rev/?r=4831">[r4831]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/AddToSccCommands.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Force status update after marking a project as managed</td></tr>
-<tr><td> </td><td class="r"><a id="4830" href="http://ankhsvn.net/rev/?r=4830">[r4830]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Resources/Busy.gif</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated busy indicator to go clockwise.</td></tr>
-<tr><td> </td><td class="r"><a id="4829" href="http://ankhsvn.net/rev/?r=4829">[r4829]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/PendingChangeManager.Map.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed PendingChangeManager.GetAllBelow() to really return all paths below a
-specific parent directory instead of only the specific directory if it is dirty.</td></tr>
-<tr><td> </td><td class="r"><a id="4827" href="http://ankhsvn.net/rev/?r=4827">[r4827]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionUtils.cs, src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Check all SCC files to verify whether they contain valid file paths and
-remove them from the scc-files list if they don't. This fixes some issues with MPF-Projects
-that inherit HierarchyNode and don't override GetMkDocument(). This triggers a bug in GetSccFiles(),
-making it return invalid paths.<br>
-(Issue triggered by the BlackBerry(r) Add-In)</td></tr>
-<tr class="d"><td colspan="4">2008-07-24</td></tr>
-<tr><td> </td><td class="r"><a id="4825" href="http://ankhsvn.net/rev/?r=4825">[r4825]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/StatusCache/FileStatusCache.cs, src/Ankh.Services/Scc/SvnItem.State.cs, src/Ankh.Services/Scc/AnkhStatus.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed IsSwitched from AnkhStatus and optimized the 
-Nested working copy walker a bit for our current data layout.</td></tr>
 
 </table>
 <!--/Recent changes-->
