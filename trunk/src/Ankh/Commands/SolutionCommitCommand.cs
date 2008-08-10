@@ -1,5 +1,4 @@
-﻿#define TEST_ProjectCommit
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Ids;
@@ -14,21 +13,13 @@ namespace Ankh.Commands
     [Command(AnkhCommand.SolutionCommit)]
     class SolutionCommitCommand : CommandBase
     {
-#if !TEST_ProjectCommit
-        CommitItemCommand itemCommit = new CommitItemCommand();
-#endif
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-#if !TEST_ProjectCommit
-            itemCommit.OnUpdate(e);
-#else
             foreach (PendingChange pc in GetChanges(e))
             {
                 return;
             }
             e.Enabled = false;            
-#endif
         }
 
         public override void OnExecute(CommandEventArgs e)
