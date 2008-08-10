@@ -19,6 +19,13 @@ namespace Ankh.Scc
 
         }
 
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+
+            IsActive = true;
+        }
+
         #region IPendingChangesManager Members
 
         public bool IsActive
@@ -91,8 +98,6 @@ namespace Ankh.Scc
                 }
             }
         }
-
-
 
         void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
         {            

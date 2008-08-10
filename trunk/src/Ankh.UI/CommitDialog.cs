@@ -27,7 +27,7 @@ namespace Ankh.UI
 
             ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
-        
+
         /// <summary>
         /// Raises the ContextChanged event.
         /// </summary>
@@ -92,7 +92,7 @@ namespace Ankh.UI
             add { commitItemsTree.CheckedFilter += value; }
             remove { commitItemsTree.CheckedFilter -= value; }
         }
-   
+
         /// <summary>
         /// Whether the Commit/Cancel buttons should be enabled.
         /// </summary>
@@ -111,6 +111,12 @@ namespace Ankh.UI
             set { this.keepLocksCheckBox.Checked = value; }
         }
 
+        public bool KeepChangeLists
+        {
+            get { return keepChangeListsCheckBox.Checked; }
+            set { keepChangeListsCheckBox.Checked = value; }
+        }
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -124,7 +130,7 @@ namespace Ankh.UI
                 }
             }
             base.Dispose(disposing);
-        } 
+        }
 
         /// <summary>
         /// Processes a command key.
@@ -142,7 +148,7 @@ namespace Ankh.UI
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
-        }     
+        }
     }
 }
 
