@@ -455,6 +455,23 @@ namespace Ankh.Scc
             }
             #endregion
         }
+
+        /// <summary>
+        /// Determines whether the bool is a local change only (e.g. locked) and does not need user selection
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if [is cleanup change]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsCleanupChange()
+        {
+            switch (Change.State)
+            {
+                case PendingChangeKind.LockedOnly:
+                    return true;
+            }
+
+            return false;
+        }
     }
 
     /// <summary>

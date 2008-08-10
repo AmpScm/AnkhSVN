@@ -96,6 +96,15 @@ namespace Ankh.Selection
         /// </summary>
         /// <value>The active dialog or frame control.</value>
         Control ActiveDialogOrFrameControl { get; }
+
+
+        /// <summary>
+        /// Gets the active control of the specified type
+        /// </summary>
+        /// <typeparam name="TControl">The type of the control.</typeparam>
+        /// <returns></returns>
+        TControl GetActiveControl<TControl>()
+            where TControl : class;
     }
 
     /// <summary>

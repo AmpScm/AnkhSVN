@@ -15,6 +15,7 @@ namespace Ankh.UI.SccManagement
         public ProjectCommitDialog()
         {
             InitializeComponent();
+            logMessage.PasteSource = pendingList;
         }
 
         IEnumerable<PendingChange> _changeEnumerator;
@@ -69,6 +70,24 @@ namespace Ankh.UI.SccManagement
                 else
                     pendingList.Items.Add(new PendingCommitItem(pendingList, pc));
             }
+        }
+
+        /// <summary>
+        /// Processes a command key.
+        /// </summary>
+        /// <param name="msg">A <see cref="T:System.Windows.Forms.Message"/>, passed by reference, that represents the Win32 message to process.</param>
+        /// <param name="keyData">One of the <see cref="T:System.Windows.Forms.Keys"/> values that represents the key to process.</param>
+        /// <returns>
+        /// true if the keystroke was processed and consumed by the control; otherwise, false to allow further processing.
+        /// </returns>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Return | Keys.Control))
+            {
+                DialogResult = DialogResult.OK;
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         public IEnumerable<PendingChange> GetSelection()

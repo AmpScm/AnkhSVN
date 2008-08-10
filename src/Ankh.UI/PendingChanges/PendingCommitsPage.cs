@@ -19,6 +19,7 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
+            logMessageEditor.PasteSource = pendingCommits;
         }
 
         bool _createdEditor;
@@ -268,28 +269,6 @@ namespace Ankh.UI.PendingChanges
             StringBuilder sb = new StringBuilder();
             switch (e.Command)
             {
-                case AnkhCommand.PcLogEditorPasteFileList:
-                    {
-                        List<ListViewItem> items = new List<ListViewItem>();
-
-                        foreach (PendingCommitItem pci in _listItems.Values)
-                        {
-                            if (pci.Checked)
-                                items.Add(pci);
-                        }
-
-                        IComparer<ListViewItem> sorter = pendingCommits.ListViewItemSorter as IComparer<ListViewItem>;
-
-                        if(sorter != null)
-                            items.Sort(sorter);
-
-                        foreach(PendingCommitItem pci in items)
-                        {
-                            sb.AppendFormat("* {0}", pci.PendingChange.RelativePath);
-                            sb.AppendLine();
-                        }
-                    }
-                    break;
                 case AnkhCommand.PcLogEditorPasteRecentLog:
                     break;
             }
