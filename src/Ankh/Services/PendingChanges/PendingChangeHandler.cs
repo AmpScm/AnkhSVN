@@ -34,6 +34,7 @@ namespace Ankh.PendingChanges
             using (PendingCommitState state = new PendingCommitState(Context, changes))
             {
                 state.KeepLocks = args.KeepLocks;
+                state.KeepChangeLists = args.KeepChangeLists;
                 state.LogMessage = args.LogMessage;
 
                 if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'

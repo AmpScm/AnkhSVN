@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Ankh.Selection;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -580,19 +581,52 @@ namespace Ankh.UI.VSSelectionControls
             }            
         }
 
-        public void NotifySelectionUpdated(IServiceProvider serviceProvider)
+        IAnkhServiceProvider _context;
+        public IAnkhServiceProvider Context
         {
-            if (serviceProvider == null)
-                throw new ArgumentNullException("serviceProvider");
+            get { return _context; }
+            set 
+            { 
+                _context = value;
+                _tracker = null;
+                GC.KeepAlive(Tracker);
+            }
+        }
+
+        IVsTrackSelectionEx _tracker;
+
+        [CLSCompliant(false)]
+        protected IVsTrackSelectionEx Tracker
+        {
+            get
+            {
+                if (_tracker == null && Context != null)
+                {
+                    _tracker = Context.GetService<IVsTrackSelectionEx>(typeof(SVsTrackSelectionEx));
+
+                    if (_tracker == null)
+                    {
+                        ISelectionContextEx ex = Context.GetService<ISelectionContextEx>(typeof(ISelectionContext));
+
+                        _tracker = ex.GetModalTracker();
+                    }
+                }
+
+                return _tracker;
+            }
+        }
+
+        public void NotifySelectionUpdated()
+        {
+            if (Tracker == null)
+                return;
 
             _sel = null; // Clear wrapper cache
             _data.CleanSelection();
 
-            IVsTrackSelectionEx sel = (IVsTrackSelectionEx)serviceProvider.GetService(typeof(SVsTrackSelectionEx));
-
             int selectedCount = _data.Selection.Count;
 
-            if (sel != null && selectedCount > 0)
+            if (selectedCount > 0)
             {
                 IntPtr selHandle = _selHandle;
                 IntPtr hier = _hierHandle;
@@ -619,13 +653,12 @@ namespace Ankh.UI.VSSelectionControls
 
                 try
                 {
-                    sel.OnSelectChangeEx(hier, id, ms, selHandle);
+                    Tracker.OnSelectChangeEx(hier, id, ms, selHandle);
                 }
                 catch { } // Ignore listener exceptions :(
             }
-            else if (sel != null)
-                sel.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
-
+            else
+                Tracker.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
         }
 
         [CLSCompliant(false)]
