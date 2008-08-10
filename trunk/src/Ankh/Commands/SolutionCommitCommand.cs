@@ -1,10 +1,12 @@
-﻿//#define TEST_ProjectCommit
+﻿#define TEST_ProjectCommit
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.Selection;
+using Ankh.UI.SccManagement;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -31,11 +33,22 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-#if !TEST_ProjectCommit
-            itemCommit.OnExecute(e);
-#else
-            throw new NotImplementedException();
-#endif
+            using(ProjectCommitDialog dlg = new ProjectCommitDialog())
+            {
+                dlg.Context = e.Context;
+
+                dlg.LoadChanges(GetChanges(e));
+
+                if (dlg.ShowDialog(e.Context) == DialogResult.OK)
+                {
+                    PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
+                    // TODO: Commit it!
+                    List<PendingChange> toCommit = new List<PendingChange>(dlg.GetSelection());
+                    dlg.FillArgs(pca);
+
+                    e.GetService<IPendingChangeHandler>().Commit(toCommit, pca);
+                }
+            }
         }
 
         class ProjectListFilter
@@ -85,7 +98,7 @@ namespace Ankh.Commands
                         }
                     }
                 }
-
+                
                 return false;
             }
         }
