@@ -823,7 +823,7 @@ namespace Ankh
         {
             get
             {
-                if ((_workingCopy == null) && IsVersionable)
+                if ((_workingCopy == null) && (IsVersionable || IsVersioned))
                 {
                     if (IsDirectory)
                         _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(this);
