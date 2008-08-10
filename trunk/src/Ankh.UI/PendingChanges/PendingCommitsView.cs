@@ -8,6 +8,10 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using System.Windows.Forms;
 using Ankh.Scc;
+using System.Drawing;
+using System.ComponentModel.Design;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -16,7 +20,20 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsView()
         {
             StrictCheckboxesClick = true;
+            FullRowSelect = true;
+            HideSelection = false;
+            AllowColumnReorder = true;
+            CheckBoxes = true;
+            Sorting = SortOrder.Ascending;
+            Initialize();
         }
+
+        public PendingCommitsView(IContainer container)
+            : this()
+        {
+            container.Add(this);
+        }
+
 
         public void Initialize()
         {
@@ -77,44 +94,19 @@ namespace Ankh.UI.PendingChanges
             set { _context = value; }
         }
 
-        public PendingCommitsView(IContainer container)
-        {
-            container.Add(this);
-            StrictCheckboxesClick = true;
-        }
-
         PendingCommitsSelectionMap _map;
         internal override SelectionItemMap SelectionMap
         {
             get { return _map ?? (_map = new PendingCommitsSelectionMap(this)); }
         }
    
-        sealed class PendingCommitsSelectionMap : SelectionItemMap, IAnkhGetMkDocument
+        sealed class PendingCommitsSelectionMap : SelectionItemMap
         {
             public PendingCommitsSelectionMap(PendingCommitsView view)
                 : base(CreateData(view))
             {
 
-            }
-
-            #region IAnkhGetMkDocument Members
-
-            public int GetMkDocument(uint itemid, out string pbstrMkDocument)
-            {
-                PendingCommitItem pci = (PendingCommitItem)GetItem(itemid);
-
-                if (pci != null)
-                {
-                    pbstrMkDocument = pci.FullPath;
-                    return VSConstants.S_OK;
-                }
-                else
-                    pbstrMkDocument = null;
-
-                return VSConstants.E_FAIL;
-            }
-
-            #endregion
+            }            
         }
 
         protected override string GetCanonicalName(PendingCommitItem item)
@@ -125,6 +117,48 @@ namespace Ankh.UI.PendingChanges
         protected override void OnRetrieveSelection(ListViewWithSelection<PendingCommitItem>.RetrieveSelectionEventArgs e)
         {
             e.SelectionItem = e.Item.PendingChange;
-        }        
+        }
+
+        public override void OnShowContextMenu(MouseEventArgs e)
+        {
+            base.OnShowContextMenu(e);
+
+            if (!ContainsFocus || GetContainerControl().ActiveControl != this)
+                Select();
+
+            Point p = e.Location;
+            bool showSort = false;
+            if (p != new Point(-1, -1))
+            {
+                // Mouse context menu
+                Point clP = PointToClient(e.Location);
+                ListViewHitTestInfo hti = HitTest(clP);
+
+                showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
+                if (!showSort && hti.Item != null)
+                {
+                    Rectangle r = hti.Item.GetBounds(ItemBoundsPortion.Entire);
+
+                    if (!r.Contains(clP))
+                        showSort = true;
+                }
+            }
+            else
+            {
+                ListViewItem fi = FocusedItem;
+
+                if (fi != null)
+                    p = PointToScreen(fi.Position);
+            }
+
+            IAnkhCommandService mcs = Context.GetService<IAnkhCommandService>();
+            if (mcs != null)
+            {
+                if (showSort)
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsSortContextMenu, p);
+                else
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p);
+            }
+        }
     }
 }

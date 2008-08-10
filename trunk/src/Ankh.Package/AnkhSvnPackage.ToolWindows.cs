@@ -193,25 +193,13 @@ namespace Ankh.VSPackage
 
         public bool ShowContextMenu(AnkhCommandMenu menu, int x, int y)
         {
-            return ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), x, y);
-        }
+            IAnkhCommandService cs = GetService<IAnkhCommandService>();
 
-        public bool ShowContextMenu(CommandID menu, int x, int y)
-        {
-            IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-
-            try
-            {
-                mcs.ShowContextMenu(menu, x, y);
-            }
-            catch (COMException)
-            {
-                return false;
-            }
+            cs.ShowContextMenu(menu, x, y);
 
             return true;
         }
-
+       
         #endregion
 
         #region IAnkhServiceProvider Members

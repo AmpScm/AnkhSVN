@@ -52,6 +52,22 @@ namespace Ankh.Commands
 
     public interface IAnkhCommandService
     {
+        /// <summary>
+        /// Shows a context menu at the specified location
+        /// </summary>
+        /// <param name="menu">The menu.</param>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        void ShowContextMenu(AnkhCommandMenu menu, int x, int y);
+
+
+        /// <summary>
+        /// Shows a context menu at the specified location
+        /// </summary>
+        /// <param name="menu">The menu.</param>
+        /// <param name="location">The location.</param>
+        void ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point location);
+
         // ExecCommand has no args object because it would require a lot 
         // of custom interop code to make it work and there are far more 
         // efficient ways to call code than

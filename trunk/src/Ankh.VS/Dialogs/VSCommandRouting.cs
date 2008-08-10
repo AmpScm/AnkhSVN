@@ -82,15 +82,41 @@ namespace Ankh.VS.Dialogs
                 _csCookie = 0;
             }
 
+            if(_panel != null)
+                RestoreLayout();
+
             if (_pane != null)
             {
                 _pane.Dispose(); // Unhook
                 _pane = null;
             }
 
+            if (_panel != null)
+            {
+                _panel.Dispose();
+                _panel = null;
+            }
+
             _map.Remove(_form);
             if (_installed)
                 Application.RemoveMessageFilter(this);
+        }
+
+        private void RestoreLayout()
+        {
+            _form.SizeChanged -= new EventHandler(VSForm_SizeChanged);
+
+            IButtonControl cancelButton = _form.CancelButton;
+            IButtonControl acceptButton = _form.AcceptButton;
+
+            while(_panel.Controls.Count > 0)
+            {
+                Control c = _panel.Controls[0];
+                _form.Controls.Add(c);
+            }
+
+            _form.CancelButton = cancelButton;
+            _form.AcceptButton = acceptButton;
         }
 
         #endregion
@@ -140,6 +166,9 @@ namespace Ankh.VS.Dialogs
                         if((Control.ModifierKeys & Keys.Control) != 0)
                             return false;
                         break;
+                    case 27:
+                        // Escape key should exit dialog
+                        return false;
                 }
 
             MSG[] messages = new MSG[1];

@@ -143,6 +143,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContextEx Members
+
+
+            public Microsoft.VisualStudio.Shell.Interop.IVsTrackSelectionEx GetModalTracker()
+            {
+                return null;
+            }
+
+            #endregion
         }
     }
 }

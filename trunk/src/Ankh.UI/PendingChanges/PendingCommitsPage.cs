@@ -19,7 +19,6 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
-            pendingCommits.Initialize();
         }
 
         bool _createdEditor;
@@ -247,43 +246,6 @@ namespace Ankh.UI.PendingChanges
             if (cmd != null)
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
         }
-
-        private void pendingCommits_ShowContextMenu(object sender, MouseEventArgs e)
-        {
-            if (!pendingCommits.ContainsFocus || GetContainerControl().ActiveControl != this)
-                pendingCommits.Select();
-
-            Point p = e.Location;
-            bool showSort = false;
-            if (p != new Point(-1, -1))
-            {
-                // Mouse context menu
-                Point clP = pendingCommits.PointToClient(e.Location);
-                ListViewHitTestInfo hti = pendingCommits.HitTest(clP);
-
-                showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
-                if (!showSort && hti.Item != null)
-                {
-                    Rectangle r = hti.Item.GetBounds(ItemBoundsPortion.Entire);
-
-                    if (!r.Contains(clP))
-                        showSort = true;
-                }
-            }
-            else
-            {
-                ListViewItem fi = pendingCommits.FocusedItem;
-
-                if (fi != null)
-                    p = pendingCommits.PointToScreen(fi.Position);
-            }
-
-            if(showSort)
-                UISite.ShowContextMenu(AnkhCommandMenu.PendingCommitsSortContextMenu, p.X, p.Y);
-            else
-                UISite.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p.X, p.Y);
-        }        
-
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
         {
             switch (e.Command)

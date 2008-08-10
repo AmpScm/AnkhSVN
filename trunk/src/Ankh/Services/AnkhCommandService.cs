@@ -330,5 +330,32 @@ namespace Ankh
         }
 
         #endregion
+
+        #region IAnkhCommandService Members
+
+        public void ShowContextMenu(AnkhCommandMenu menu, int x, int y)
+        {
+            IMenuCommandService mcs = GetService<IMenuCommandService>();
+
+            IVsUIShell shell = GetService<IVsUIShell>();
+            if (mcs != null)
+            {
+                try
+                {
+                    mcs.ShowContextMenu(new CommandID(AnkhId.CommandSetGuid, (int)menu), x, y);
+                }
+                catch (COMException)
+                {
+                    /* Menu is not declared correctly (no items) */
+                }
+            }            
+        }
+
+        public void ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point location)
+        {
+            ShowContextMenu(menu, location.X, location.Y);
+        }
+
+        #endregion
     }
 }
