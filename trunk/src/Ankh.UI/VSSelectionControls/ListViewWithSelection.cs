@@ -24,9 +24,9 @@ namespace Ankh.UI.VSSelectionControls
         {
         }
 
-        IServiceProvider _serviceProvider;
+        IAnkhServiceProvider _serviceProvider;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IServiceProvider SelectionPublishServiceProvider
+        public IAnkhServiceProvider SelectionPublishServiceProvider
         {
             get { return _serviceProvider; }
             set
@@ -193,7 +193,10 @@ namespace Ankh.UI.VSSelectionControls
 
                 if (SelectionPublishServiceProvider != null)
                 {
-                    SelectionMap.NotifySelectionUpdated(SelectionPublishServiceProvider);
+                    if (SelectionMap.Context != SelectionPublishServiceProvider)
+                        SelectionMap.Context = SelectionPublishServiceProvider;
+
+                    SelectionMap.NotifySelectionUpdated();
                 }
 
                 if (_selectionChanged != null)

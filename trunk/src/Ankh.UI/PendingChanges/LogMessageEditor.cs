@@ -41,6 +41,38 @@ namespace Ankh.UI.PendingChanges
         BorderStyle _borderStyle;
         bool _fixUI;
 
+        public LogMessageEditor()
+        {
+        }
+
+        public LogMessageEditor(IContainer container)
+            : this()
+        {
+            container.Add(this);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            Control c = TopLevelControl;
+
+            VSContainerForm ownerForm = c as VSContainerForm;
+            if (ownerForm == null || !ownerForm.Modal)
+                return;
+
+            if (CommandTarget == null)
+            {
+                Init(ownerForm.Context, true);
+            }
+
+            IAnkhVSContainerForm cf = ownerForm;
+
+            cf.AddCommandTarget(CommandTarget);
+            cf.AddWindowPane(WindowPane);
+            cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;
+        }
+
         #region Methods
 
         /// <summary>
@@ -88,6 +120,17 @@ namespace Ankh.UI.PendingChanges
                         return createParams;
                 }
                 return createParams;
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if(!DesignMode && !e.ClipRectangle.IsEmpty)
+            {
+                _fixUI = true;
+                ForceUIUpdate();
             }
         }
 
@@ -150,43 +193,55 @@ namespace Ankh.UI.PendingChanges
         {
             FixUI();
 
-            if ((keyData & ~Keys.Modifiers) == Keys.Tab)
+            Keys key = (keyData & ~Keys.Modifiers);
+
+            switch (key)
             {
-                Keys mods = ModifierKeys;
-                if ((mods & (Keys.Control | Keys.Alt)) != 0)
-                {
-                    if((mods & (Keys.Control | Keys.Alt)) == Keys.Control && TopLevelControl is Form)
+                case Keys.Tab:
                     {
-                        Control c = this;
-                        bool found = false;
-
-                        bool forward = (mods & Keys.Shift) == 0;
-
-                        while(!found && c != null)
+                        Keys mods = keyData & Keys.Modifiers;
+                        if ((mods & (Keys.Control | Keys.Alt)) != 0)
                         {
-                            ContainerControl cc = c.GetContainerControl() as ContainerControl;
-
-                            if(cc == null)
-                                break;
-
-                            if(cc.SelectNextControl(this, forward, true, true, false))
+                            if ((mods & (Keys.Control | Keys.Alt)) == Keys.Control && TopLevelControl is Form)
                             {
-                                found = true;
+                                Control c = this;
+                                bool found = false;
+
+                                bool forward = (mods & Keys.Shift) == 0;
+
+                                while (!found && c != null)
+                                {
+                                    ContainerControl cc = c.GetContainerControl() as ContainerControl;
+
+                                    if (cc == null)
+                                        break;
+
+                                    if (cc.SelectNextControl(this, forward, true, true, false))
+                                    {
+                                        found = true;
+                                    }
+
+                                    c = cc;
+                                }
+
+                                if (!found)
+                                {
+                                    ContainerControl cc = c.TopLevelControl as ContainerControl;
+
+                                    if (cc != null)
+                                        cc.SelectNextControl(this, forward, true, true, true);
+                                }
                             }
-
-                            c = cc;
-                        }
-
-                        if(!found)
-                        {
-                            ContainerControl cc = c.TopLevelControl as ContainerControl;
-
-                            if(cc != null)
-                                cc.SelectNextControl(this, forward, true, true, true);
+                            return false;
                         }
                     }
-                    return false;
-                }
+                    break;
+                case Keys.Escape:
+                    Form f = TopLevelControl as Form;
+
+                    if (f != null && f.Modal)
+                        return false; // Escape should close a dialog
+                    break;
             }
 
             // Since we process each pressed keystroke, the return value is always true.
@@ -244,7 +299,7 @@ namespace Ankh.UI.PendingChanges
 
         void FixUI()
         {
-            if (!_fixUI)
+            if (!_fixUI || _context == null)
                 return;
 
             IntPtr hwndTop;
