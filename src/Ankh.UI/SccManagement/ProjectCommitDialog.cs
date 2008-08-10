@@ -34,6 +34,12 @@ namespace Ankh.UI.SccManagement
             Reload();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            logMessage.Select();
+        }
+
         private void Reload()
         {
             Dictionary<PendingChange, PendingCommitItem> chk = null;
