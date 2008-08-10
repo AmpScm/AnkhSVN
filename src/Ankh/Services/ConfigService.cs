@@ -155,7 +155,7 @@ namespace Ankh.Configuration
                         object value = pd.GetValue(config);
                         
                         // Set the value only if it is already set previously, or if it's different from the default
-                        if(!pd.ShouldSerializeValue(config))
+                        if(!pd.ShouldSerializeValue(config) && !pd.ShouldSerializeValue(defaultConfig))
                         {
                             reg.DeleteValue(pd.Name, false);
                         }
