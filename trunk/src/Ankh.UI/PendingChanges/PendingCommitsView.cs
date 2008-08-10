@@ -15,7 +15,13 @@ using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
-    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>
+    public interface IPendingChangeSource
+    {
+        bool HasPendingChanges { get; }
+        IEnumerable<PendingChange> PendingChanges { get; }
+    }
+
+    class PendingCommitsView : ListViewWithSelection<PendingCommitItem>, IPendingChangeSource
     {
         public PendingCommitsView()
         {
@@ -85,6 +91,31 @@ namespace Ankh.UI.PendingChanges
             GroupColumns.Add(changeList);
 
             FinalSortColumn = path;
+        }
+
+        bool IPendingChangeSource.HasPendingChanges
+        {
+            get { return CheckedIndices.Count > 0; }
+        }
+
+        IEnumerable<PendingChange> IPendingChangeSource.PendingChanges
+        {
+            get
+            {
+                List<ListViewItem> list = new List<ListViewItem>();
+                foreach (PendingCommitItem pi in CheckedItems)
+                {
+                    list.Add(pi);
+                }
+
+                IComparer<ListViewItem> sorter = ListViewItemSorter as IComparer<ListViewItem>;
+
+                if (sorter != null)
+                    list.Sort(sorter);
+
+                foreach(PendingCommitItem pi in list)
+                    yield return pi.PendingChange;
+            }
         }
 
         IAnkhServiceProvider _context;

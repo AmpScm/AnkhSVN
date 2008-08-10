@@ -25,8 +25,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using IServiceProvider = System.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
-
-
+using System.Collections;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -49,6 +48,17 @@ namespace Ankh.UI.PendingChanges
             : this()
         {
             container.Add(this);
+        }
+
+        IPendingChangeSource _pasteSrc;
+        /// <summary>
+        /// Gets or sets the paste source.
+        /// </summary>
+        /// <value>The paste source.</value>
+        public IPendingChangeSource PasteSource
+        {
+            get { return _pasteSrc; }
+            set { _pasteSrc = value; }
         }
 
         protected override void OnHandleCreated(EventArgs e)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
@@ -12,20 +13,27 @@ namespace Ankh.UI.PendingChanges.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
+            LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if(page == null || !page.Visible)
+            if (lme == null || lme.PasteSource == null || !lme.PasteSource.HasPendingChanges)
                 e.Enabled = false;
-            else
-                page.OnUpdate(e);            
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
+            LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if(page != null)
-                page.OnExecute(e);
+            if (lme == null || lme.PasteSource == null)
+                return;
+
+            StringBuilder sb = new StringBuilder();
+            foreach (PendingChange pci in lme.PasteSource.PendingChanges)
+            {
+                sb.AppendFormat("* {0}", pci.RelativePath);
+                sb.AppendLine();
+            }
+
+            lme.PasteText(sb.ToString());
         }
     }
 }

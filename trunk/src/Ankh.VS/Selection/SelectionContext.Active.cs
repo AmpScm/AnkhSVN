@@ -195,6 +195,40 @@ namespace Ankh.Selection
             get { return ActiveDialog ?? ActiveFrameControl; }
         }
 
+        public TControl GetActiveControl<TControl>()
+            where TControl : class
+        {
+            Control ctrl = ActiveDialogOrFrameControl;
+
+            ContainerControl cc;
+
+            while (null != (cc = ctrl as ContainerControl))
+            {
+                ctrl = cc.ActiveControl;
+
+                if (ctrl == null || ctrl == cc)
+                {
+                    ctrl = cc;
+                    break;
+                }
+            }
+
+            if (ctrl == null)
+                return null;
+
+            while (ctrl != null)
+            {
+                TControl tc = ctrl as TControl;
+
+                if (tc != null)
+                    return tc;
+
+                ctrl = ctrl.Parent;
+            }
+
+            return null;
+        }
+
         IVsTrackSelectionEx ISelectionContextEx.GetModalTracker()
         {
             if (_topPopup != null)

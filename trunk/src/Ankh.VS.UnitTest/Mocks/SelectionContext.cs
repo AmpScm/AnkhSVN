@@ -153,6 +153,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContext Members
+
+
+            public TControl GetActiveControl<TControl>() where TControl : class
+            {
+                return null;
+            }
+
+            #endregion
         }
     }
 }
