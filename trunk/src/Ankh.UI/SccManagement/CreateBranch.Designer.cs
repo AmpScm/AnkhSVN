@@ -101,7 +101,7 @@
             // 
             this.versionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionBox.Location = new System.Drawing.Point(171, 115);
+            this.versionBox.Location = new System.Drawing.Point(171, 118);
             this.versionBox.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -114,8 +114,9 @@
             // 
             // versionBrowse
             // 
+            this.versionBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.versionBrowse.Enabled = false;
-            this.versionBrowse.Location = new System.Drawing.Point(361, 113);
+            this.versionBrowse.Location = new System.Drawing.Point(361, 115);
             this.versionBrowse.Name = "versionBrowse";
             this.versionBrowse.Size = new System.Drawing.Size(30, 23);
             this.versionBrowse.TabIndex = 9;
