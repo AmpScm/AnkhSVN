@@ -209,7 +209,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CommandBase.cs" />
-    <Compile Include="Commands\CommitItemCommand.cs">
+    <Compile Include="Commands\ItemCommitCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\CopyReposExplorerUrl.cs">
