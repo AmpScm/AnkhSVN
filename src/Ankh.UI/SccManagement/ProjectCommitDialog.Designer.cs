@@ -28,20 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pendingList = new System.Windows.Forms.ListView();
-            this.pathColumn = new System.Windows.Forms.ColumnHeader();
-            this.projectColumn = new System.Windows.Forms.ColumnHeader();
-            this.changeColumn = new System.Windows.Forms.ColumnHeader();
-            this.fullPathColumn = new System.Windows.Forms.ColumnHeader();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.keepLocksBox = new System.Windows.Forms.CheckBox();
+            this.keepChangelistsBox = new System.Windows.Forms.CheckBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.pendingList = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
+            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -66,82 +63,31 @@
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.logMessage);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
-            this.splitContainer1.Size = new System.Drawing.Size(457, 326);
-            this.splitContainer1.SplitterDistance = 148;
+            this.splitContainer1.Size = new System.Drawing.Size(600, 336);
+            this.splitContainer1.SplitterDistance = 185;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // pendingList
-            // 
-            this.pendingList.CheckBoxes = true;
-            this.pendingList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.pathColumn,
-            this.projectColumn,
-            this.changeColumn,
-            this.fullPathColumn});
-            this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pendingList.FullRowSelect = true;
-            this.pendingList.HideSelection = false;
-            this.pendingList.Location = new System.Drawing.Point(0, 0);
-            this.pendingList.Name = "pendingList";
-            this.pendingList.Size = new System.Drawing.Size(457, 148);
-            this.pendingList.TabIndex = 0;
-            this.pendingList.UseCompatibleStateImageBehavior = false;
-            this.pendingList.View = System.Windows.Forms.View.Details;
-            // 
-            // pathColumn
-            // 
-            this.pathColumn.Text = "Path";
-            this.pathColumn.Width = 200;
-            // 
-            // projectColumn
-            // 
-            this.projectColumn.DisplayIndex = 2;
-            this.projectColumn.Text = "Project";
-            this.projectColumn.Width = 70;
-            // 
-            // changeColumn
-            // 
-            this.changeColumn.DisplayIndex = 1;
-            this.changeColumn.Text = "Change";
-            this.changeColumn.Width = 70;
-            // 
-            // fullPathColumn
-            // 
-            this.fullPathColumn.Text = "Full Path";
             // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(354, 0);
+            this.textBox1.Location = new System.Drawing.Point(497, 0);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 2;
+            this.textBox1.TabIndex = 3;
             this.textBox1.Visible = false;
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(245, 3);
+            this.label2.Location = new System.Drawing.Point(388, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 17);
-            this.label2.TabIndex = 1;
+            this.label2.TabIndex = 2;
             this.label2.Text = "&Bug/Issue:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.label2.Visible = false;
-            // 
-            // logMessage
-            // 
-            this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.logMessage.Location = new System.Drawing.Point(0, 23);
-            this.logMessage.Name = "logMessage";
-            this.logMessage.Size = new System.Drawing.Size(457, 151);
-            this.logMessage.TabIndex = 3;
-            this.logMessage.Text = null;
             // 
             // label1
             // 
@@ -150,35 +96,35 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "&Log Message:";
+            this.label1.Text = "Log &Message:";
             // 
-            // checkBox1
+            // keepLocksBox
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 344);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(83, 17);
-            this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "Keep &Locks";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.keepLocksBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.keepLocksBox.AutoSize = true;
+            this.keepLocksBox.Location = new System.Drawing.Point(12, 354);
+            this.keepLocksBox.Name = "keepLocksBox";
+            this.keepLocksBox.Size = new System.Drawing.Size(83, 17);
+            this.keepLocksBox.TabIndex = 1;
+            this.keepLocksBox.Text = "Keep &Locks";
+            this.keepLocksBox.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // keepChangelistsBox
             // 
-            this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(12, 361);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(108, 17);
-            this.checkBox2.TabIndex = 2;
-            this.checkBox2.Text = "Keep &Changelists";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.keepChangelistsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.keepChangelistsBox.AutoSize = true;
+            this.keepChangelistsBox.Location = new System.Drawing.Point(12, 371);
+            this.keepChangelistsBox.Name = "keepChangelistsBox";
+            this.keepChangelistsBox.Size = new System.Drawing.Size(108, 17);
+            this.keepChangelistsBox.TabIndex = 2;
+            this.keepChangelistsBox.Text = "Keep &Changelists";
+            this.keepChangelistsBox.UseVisualStyleBackColor = true;
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(394, 355);
+            this.cancelButton.Location = new System.Drawing.Point(537, 365);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 4;
@@ -189,22 +135,55 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(313, 355);
+            this.okButton.Location = new System.Drawing.Point(456, 365);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
+            // pendingList
+            // 
+            this.pendingList.AllowColumnReorder = true;
+            this.pendingList.CheckBoxes = true;
+            this.pendingList.Context = null;
+            this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pendingList.FullRowSelect = true;
+            this.pendingList.GroupSeparator = ", ";
+            this.pendingList.HideSelection = false;
+            this.pendingList.Location = new System.Drawing.Point(0, 0);
+            this.pendingList.Name = "pendingList";
+            this.pendingList.ProvideWholeListForSelection = false;
+            this.pendingList.Size = new System.Drawing.Size(600, 185);
+            this.pendingList.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.pendingList.StrictCheckboxesClick = true;
+            this.pendingList.TabIndex = 0;
+            this.pendingList.UseCompatibleStateImageBehavior = false;
+            this.pendingList.View = System.Windows.Forms.View.Details;
+            // 
+            // logMessage
+            // 
+            this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.logMessage.Location = new System.Drawing.Point(0, 23);
+            this.logMessage.Name = "logMessage";
+            this.logMessage.Size = new System.Drawing.Size(600, 124);
+            this.logMessage.TabIndex = 1;
+            this.logMessage.Text = null;
+            // 
             // ProjectCommitDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(481, 390);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(624, 400);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.checkBox2);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.keepChangelistsBox);
+            this.Controls.Add(this.keepLocksBox);
             this.Controls.Add(this.splitContainer1);
             this.Name = "ProjectCommitDialog";
             this.Text = "Commit to Subversion";
@@ -220,18 +199,14 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.ListView pendingList;
+        private Ankh.UI.PendingChanges.PendingCommitsView pendingList;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox keepLocksBox;
+        private System.Windows.Forms.CheckBox keepChangelistsBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.ColumnHeader pathColumn;
-        private System.Windows.Forms.ColumnHeader projectColumn;
-        private System.Windows.Forms.ColumnHeader changeColumn;
-        private System.Windows.Forms.ColumnHeader fullPathColumn;
     }
 }
