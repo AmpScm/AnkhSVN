@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
+using System.Runtime.InteropServices;
 
 namespace Ankh.Selection
 {
@@ -193,5 +194,88 @@ namespace Ankh.Selection
         {
             get { return ActiveDialog ?? ActiveFrameControl; }
         }
+
+        IVsTrackSelectionEx ISelectionContextEx.GetModalTracker()
+        {
+            if (_topPopup != null)
+                return new ModalSelection(this, _topPopup);
+            else
+                return null;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        sealed class ModalSelection : IVsTrackSelectionEx
+        {
+            SelectionContext _ctx;
+            Control _top;
+            public ModalSelection(SelectionContext ctx, Control top)
+            {
+                if (ctx == null)
+                    throw new ArgumentNullException("ctx");
+
+                _ctx = ctx;
+                _top = top;
+            }
+
+            #region IVsTrackSelectionEx Members
+
+            public int GetCurrentSelection(out IntPtr ppHier, out uint pitemid, out IVsMultiItemSelect ppMIS, out IntPtr ppSC)
+            {
+                ppHier = IntPtr.Zero; // Not used by our code
+                pitemid = VSConstants.VSITEMID_NIL;
+                ppMIS = null;
+                ppSC = IntPtr.Zero;
+                return VSConstants.S_OK;
+            }
+
+            public int IsMyHierarchyCurrent(out int pfCurrent)
+            {
+                pfCurrent = 0; // Not used by our code
+                return VSConstants.S_OK;
+            }
+
+            public int OnElementValueChange(uint elementid, int fDontPropagate, object varValue)
+            {
+                // Not used by our code
+                return VSConstants.S_OK;
+            }
+
+            public int OnSelectChange(ISelectionContainer pSC)
+            {
+                if (_ctx._topPopup == _top)
+                {
+                    _ctx.OnSelectionChanged(_ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, _ctx._currentContainer,
+                        _ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, pSC);
+                }
+
+                return VSConstants.S_OK;                
+            }
+
+            public int OnSelectChangeEx(IntPtr pHier, uint itemid, IVsMultiItemSelect pMIS, IntPtr pSC)
+            {
+                if (_ctx._topPopup == _top)
+                {
+                    IVsHierarchy hier = (pHier != IntPtr.Zero) ? Marshal.GetObjectForIUnknown(pHier) as IVsHierarchy : null;
+                    ISelectionContainer cont = (pSC != IntPtr.Zero) ? Marshal.GetObjectForIUnknown(pSC) as ISelectionContainer : null;
+                    if (_ctx._topPopup == _top)
+                    {
+                        _ctx.OnSelectionChanged(_ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, _ctx._currentContainer,
+                            hier, itemid, pMIS, cont);
+                    }
+                }
+
+                if (pHier != IntPtr.Zero)
+                    Marshal.Release(pHier);
+
+                if (pSC != IntPtr.Zero)
+                    Marshal.Release(pSC);
+
+                return VSConstants.S_OK;
+            }
+
+            #endregion
+        }
+
 	}
 }

@@ -13,6 +13,7 @@ namespace Ankh.Scc
     {
         string _logMessage;
         bool _keepLocks;
+        bool _keepChangeLists;
 
         /// <summary>
         /// Gets or sets the log message.
@@ -32,6 +33,12 @@ namespace Ankh.Scc
         {
             get { return _keepLocks; }
             set { _keepLocks = value; }
+        }
+
+        public bool KeepChangeLists
+        {
+            get { return _keepChangeLists; }
+            set { _keepChangeLists = value; }
         }
     }
 }

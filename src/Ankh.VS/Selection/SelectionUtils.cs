@@ -114,20 +114,9 @@ namespace Ankh.Selection
                 return ok; // No need to check our interface for projects
             }
 
-            IAnkhGetMkDocument getDoc = hierarchy as IAnkhGetMkDocument;
-            if (getDoc != null)
+            if (hierarchy is IVsSolution)
             {
-                string mkDocument;
-
-                if (ErrorHandler.Succeeded(getDoc.GetMkDocument(id, out mkDocument)))
-                {
-                    if (!IsValidPath(mkDocument))
-                        files = new string[0];
-                    else
-                        files = new string[] { mkDocument };
-
-                    return true;
-                }
+                return ok; // Will fail in GetCanonicalName in VS2008 SP1 Beta 1
             }
 
             string name;

@@ -19,7 +19,9 @@ namespace Ankh.UI
     public interface IAnkhVSContainerForm
     {
         //IVsToolWindowToolbarHost ToolBarHost { get; }
-        VSContainerMode ContainerMode { get; }
+        VSContainerMode ContainerMode { get; set; }
+        void AddCommandTarget(IOleCommandTarget commandTarget);
+        void AddWindowPane(IVsWindowPane pane);
     }
 
     [Flags]
@@ -96,7 +98,8 @@ namespace Ankh.UI
 
         VSContainerMode IAnkhVSContainerForm.ContainerMode
         {
-            get { return _mode; }
+            get { return ContainerMode; }
+            set { ContainerMode = value; }
         }
 
         protected virtual void OnContextChanged(EventArgs e)
@@ -295,6 +298,20 @@ namespace Ankh.UI
                 return Context.GetService(serviceType);
 
             return null;
+        }
+
+        #endregion
+
+        #region IAnkhVSContainerForm Members
+
+        void IAnkhVSContainerForm.AddCommandTarget(IOleCommandTarget commandTarget)
+        {
+            AddCommandTarget(commandTarget);
+        }
+
+        void IAnkhVSContainerForm.AddWindowPane(IVsWindowPane pane)
+        {
+            AddWindowPane(pane);
         }
 
         #endregion

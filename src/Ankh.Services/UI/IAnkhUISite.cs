@@ -20,8 +20,6 @@ namespace Ankh.UI.Services
         string OriginalTitle { get; }
         IOleCommandTarget CommandTarget { get; set; }
 
-
         bool ShowContextMenu(AnkhCommandMenu menu, int x, int y);
-        bool ShowContextMenu(CommandID menu, int x, int y);
     }
 }

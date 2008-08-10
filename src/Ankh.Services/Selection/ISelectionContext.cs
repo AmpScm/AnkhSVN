@@ -126,5 +126,11 @@ namespace Ankh.Selection
         /// <param name="control">The control.</param>
         /// <returns></returns>
         IDisposable PushPopupContext(Control control);
+
+        /// <summary>
+        /// Gets a selection tracker that is valid for the current popup context
+        /// </summary>
+        /// <returns></returns>
+        IVsTrackSelectionEx GetModalTracker();
     }
 }

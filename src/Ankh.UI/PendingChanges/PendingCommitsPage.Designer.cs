@@ -176,9 +176,6 @@
             // 
             // pendingCommits
             // 
-            this.pendingCommits.AllowColumnReorder = true;
-            this.pendingCommits.CheckBoxes = true;
-   
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pendingCommits.FullRowSelect = true;
             this.pendingCommits.HideSelection = false;
@@ -193,7 +190,6 @@
             this.pendingCommits.UseCompatibleStateImageBehavior = false;
             this.pendingCommits.View = System.Windows.Forms.View.Details;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
-            this.pendingCommits.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_ShowContextMenu);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
             // PendingCommitsPage
