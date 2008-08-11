@@ -160,12 +160,24 @@
         <xsl:value-of select="author"/>
       </td>
       <td class="f">
-        <xsl:for-each select="paths/path">
+        <xsl:for-each select="paths/path[position() &lt;= 8]">
           <xsl:if test=".!=../path[1]">
             <xsl:value-of select="', '"/>
           </xsl:if>
           <xsl:value-of select="substring-after(., '/trunk/')"/>
         </xsl:for-each>
+        <xsl:if test="count(paths/path) &gt; 8">
+          <xsl:text> (and </xsl:text>
+          <xsl:value-of select="count(paths/path)-8"/>
+          <xsl:choose>
+            <xsl:when test="count(paths/path) = 9">
+              <xsl:text> other path)</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text> other paths)</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:if>
       </td>
     </tr>
     <tr xmlns="http://www.w3.org/1999/xhtml">
