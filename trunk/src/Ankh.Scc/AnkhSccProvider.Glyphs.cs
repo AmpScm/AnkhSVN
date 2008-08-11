@@ -210,7 +210,7 @@ namespace Ankh.Scc
 
             int n = 0;
             // pHierarchy = null if it is t
-            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty))
+            foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
             {
                 SccProjectFile spf;
                 if(_fileMap.TryGetValue(file, out spf))

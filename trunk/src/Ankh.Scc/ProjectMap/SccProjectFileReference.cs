@@ -142,7 +142,7 @@ namespace Ankh.Scc.ProjectMap
 
             ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
 
-            List<string> files = new List<string>(walker.GetSccFiles(Project.ProjectHierarchy, ProjectItemId, ProjectWalkDepth.SpecialFiles));
+            List<string> files = new List<string>(walker.GetSccFiles(Project.ProjectHierarchy, ProjectItemId, ProjectWalkDepth.SpecialFiles, null));
             files.Remove(Filename);
 
             _subFiles = files.AsReadOnly();
@@ -164,6 +164,11 @@ namespace Ankh.Scc.ProjectMap
         {
             _id = 0;
             _subFiles = null;
+        }
+
+        internal void SetId(uint id)
+        {
+            _id = id;
         }
     }
 }

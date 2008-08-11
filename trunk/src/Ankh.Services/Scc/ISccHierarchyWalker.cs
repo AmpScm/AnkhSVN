@@ -19,12 +19,13 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets the list of files specified by the hierarchy (IVsSccProject2 or IVsHierarchy)
         /// </summary>
-        /// <param name="hierarchy"></param>
-        /// <param name="id"></param>
-        /// <param name="depth"></param>
+        /// <param name="hierarchy">The hierarchy.</param>
+        /// <param name="id">The id.</param>
+        /// <param name="depth">The depth.</param>
+        /// <param name="map">The map to receive ids or null if not interested.</param>
         /// <returns></returns>
         /// <remarks>The list might contain duplicates if files are included more than once</remarks>
-        IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth);
+        IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth, IDictionary<string, uint> map);
 
         void SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id);
     }
