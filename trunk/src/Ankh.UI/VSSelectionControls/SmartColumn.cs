@@ -9,7 +9,7 @@ namespace Ankh.UI.VSSelectionControls
     public class SmartColumn : ColumnHeader, IComparer<ListViewItem>
     {
         IComparer<ListViewItem> _sorter;
-        readonly SmartListView _list;
+        readonly SmartListView _view;
         string _menuText;
         bool _notSortable;
         bool _notHideable;
@@ -18,32 +18,65 @@ namespace Ankh.UI.VSSelectionControls
         bool _notDragable;
         bool _reverseSort;
 
+        static SmartListView FindView(IContainer container)
+        {
+            foreach(Component c in container.Components)
+            {
+                SmartListView slv = c as SmartListView;
+
+                if(slv != null)
+                    return slv;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartColumn"/> class.
         /// </summary>
-        /// <param name="list">The list.</param>
-        /// <param name="text">The text.</param>
-        /// <param name="menuText">The menu text.</param>
-        /// <param name="width">The width.</param>
-        public SmartColumn(SmartListView list, string text, string menuText, int width)
-            : this(list,text, menuText, width, HorizontalAlignment.Left)
+        /// <param name="container">The container.</param>
+        public SmartColumn(IContainer container)
+            : this(FindView(container))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartColumn"/> class.
         /// </summary>
-        /// <param name="list">The list.</param>
+        /// <param name="view">The view.</param>
+        public SmartColumn(SmartListView view)
+        {
+            if (view == null)
+                throw new ArgumentNullException("view");
+
+            _view = view;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="menuText">The menu text.</param>
+        /// <param name="width">The width.</param>
+        public SmartColumn(SmartListView view, string text, string menuText, int width)
+            : this(view, text, menuText, width, HorizontalAlignment.Left)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmartColumn"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
         /// <param name="text">The text.</param>
         /// <param name="menuText">The menu text.</param>
         /// <param name="width">The width.</param>
         /// <param name="align">The align.</param>
-        public SmartColumn(SmartListView list, string text, string menuText, int width, HorizontalAlignment align)
+        public SmartColumn(SmartListView view, string text, string menuText, int width, HorizontalAlignment align)
         {
-            if(list == null)
-                throw new ArgumentNullException("list");
+            if (view == null)
+                throw new ArgumentNullException("view");
 
-            _list = list;
+            _view = view;
             Text = text;
             MenuText = menuText;
             Width = width;
@@ -52,32 +85,40 @@ namespace Ankh.UI.VSSelectionControls
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartColumn"/> class.
         /// </summary>
-        /// <param name="list">The list.</param>
+        /// <param name="view">The view.</param>
         /// <param name="menuText">The menu text.</param>
         /// <param name="width">The width.</param>
-        public SmartColumn(SmartListView list, string menuText, int width)
-            : this(list, menuText, width, HorizontalAlignment.Left)
+        public SmartColumn(SmartListView view, string menuText, int width)
+            : this(view, menuText, width, HorizontalAlignment.Left)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmartColumn"/> class.
         /// </summary>
-        /// <param name="list">The list.</param>
+        /// <param name="view">The view.</param>
         /// <param name="menuText">The menu text.</param>
         /// <param name="width">The width.</param>
         /// <param name="align">The align.</param>
-        public SmartColumn(SmartListView list, string menuText, int width, HorizontalAlignment align)
-            : this(list, menuText.Replace("&", ""), menuText, width)
+        public SmartColumn(SmartListView view, string menuText, int width, HorizontalAlignment align)
+            : this(view, menuText.Replace("&", ""), menuText, width)
         {
         }
 
+        /// <summary>
+        /// Gets or sets the menu text.
+        /// </summary>
+        /// <value>The menu text.</value>
         public string MenuText
         {
             get { return _menuText ?? Text; }
             set { _menuText = value ?? ""; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SmartColumn"/> is sortable.
+        /// </summary>
+        /// <value><c>true</c> if sortable; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
         public bool Sortable
         {
@@ -85,6 +126,10 @@ namespace Ankh.UI.VSSelectionControls
             set { _notSortable = !value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SmartColumn"/> is hideable.
+        /// </summary>
+        /// <value><c>true</c> if hideable; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
         public bool Hideable
         {
@@ -92,6 +137,10 @@ namespace Ankh.UI.VSSelectionControls
             set { _notHideable = !value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SmartColumn"/> is moveable.
+        /// </summary>
+        /// <value><c>true</c> if moveable; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
         public bool Moveable
         {
@@ -99,6 +148,10 @@ namespace Ankh.UI.VSSelectionControls
             set { _notMoveable = !value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SmartColumn"/> is dragable.
+        /// </summary>
+        /// <value><c>true</c> if dragable; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
         public bool Dragable
         {
@@ -106,13 +159,21 @@ namespace Ankh.UI.VSSelectionControls
             set { _notDragable = !value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SmartColumn"/> is groupable.
+        /// </summary>
+        /// <value><c>true</c> if groupable; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
         public bool Groupable
         {
             get { return _groupable; }
             set { _groupable = value; }
         }
-       
+
+        /// <summary>
+        /// Gets or sets the sorter.
+        /// </summary>
+        /// <value>The sorter.</value>
         [DefaultValue(null)]
         public IComparer<ListViewItem> Sorter
         {
@@ -120,6 +181,10 @@ namespace Ankh.UI.VSSelectionControls
             set { _sorter = value; }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [reverse sort].
+        /// </summary>
+        /// <value><c>true</c> if [reverse sort]; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
         public bool ReverseSort
         {
@@ -129,11 +194,23 @@ namespace Ankh.UI.VSSelectionControls
 
         int _allColumnsIndex = -1;
 
+        /// <summary>
+        /// Gets the index of all columns.
+        /// </summary>
+        /// <value>The index of all columns.</value>
         public int AllColumnsIndex
         {
-            get { return (_allColumnsIndex >= 0) ? _allColumnsIndex : (_allColumnsIndex = _list.AllColumns.IndexOf(this)); }
+            get { return (_allColumnsIndex >= 0) ? _allColumnsIndex : (_allColumnsIndex = _view.AllColumns.IndexOf(this)); }
         }
 
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
+        /// </returns>
         protected virtual int Compare(ListViewItem x, ListViewItem y)
         {
             int n;
@@ -169,6 +246,14 @@ namespace Ankh.UI.VSSelectionControls
             return n;
         }
 
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>
+        /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
+        /// </returns>
         int IComparer<ListViewItem>.Compare(ListViewItem x, ListViewItem y)
         {
             return Compare(x, y);

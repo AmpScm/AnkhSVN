@@ -143,8 +143,7 @@ namespace Ankh.UI.PendingChanges
                         _checkedItems.Add(pci.FullPath);
                 }
                 _listItems.Clear();
-                pendingCommits.Items.Clear();
-                pendingCommits.Groups.Clear();
+                pendingCommits.ClearItems();
             }
         }
 
@@ -156,10 +155,9 @@ namespace Ankh.UI.PendingChanges
 
         void OnPendingChangesInitialUpdate(object sender, PendingChangeEventArgs e)
         {
-            _listItems.Clear(); // Make sure we are clear
-            pendingCommits.Items.Clear();
-            pendingCommits.Groups.Clear();
             pendingCommits.BeginUpdate();
+            _listItems.Clear(); // Make sure we are clear
+            pendingCommits.ClearItems();            
             try
             {
                 foreach (PendingChange pc in e.Manager.GetAll())
@@ -178,8 +176,7 @@ namespace Ankh.UI.PendingChanges
             finally
             {
                 pendingCommits.EndUpdate();
-                if (_listItems.Count > 0)
-                    pendingCommits.RedrawItems(0, _listItems.Count - 1, true);
+                pendingCommits.Invalidate();
             }
         }
 
