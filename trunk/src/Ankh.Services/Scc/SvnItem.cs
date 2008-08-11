@@ -919,5 +919,28 @@ namespace Ankh
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the item is (below) the specified path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is below path] [the specified path]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsBelowPath(string path)
+        {
+            if(string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            if(!FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            int n = FullPath.Length - path.Length;
+
+            if(n > 0)
+                return (FullPath[n] == '\\');
+            
+            return (n == 0);
+        }
     }
 }
