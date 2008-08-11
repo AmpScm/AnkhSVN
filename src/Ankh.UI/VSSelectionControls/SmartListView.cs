@@ -25,8 +25,16 @@ namespace Ankh.UI.VSSelectionControls
 
         public SmartListView()
         {
+            View = View.Details;
             this.ListViewItemSorter = new SmartListSorter(this);
             //Sorting = SortOrder.Ascending;
+        }
+
+        [DefaultValue(View.Details)]
+        public new View View
+        {
+            get { return base.View; }
+            set { base.View = value; }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -74,25 +82,25 @@ namespace Ankh.UI.VSSelectionControls
             //    throw new NotImplementedException();
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),Browsable(false)]
         public Collection<SmartColumn> GroupColumns
         {
             get { return _groupColumns; }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public Collection<SmartColumn> AllColumns
         {
             get { return _allColumns; }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public Collection<SmartColumn> SortColumns
         {
             get { return _sortColumns; }
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public SmartColumn FinalSortColumn
         {
             get { return _finalSortColumn; }
@@ -132,11 +140,19 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref HDITEM lParam);
+
+            public struct RECT
+            {
+                public int left, top, right, bottom;
+            }
+
+            [DllImport("user32.dll")]
+            public static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
         }
 
         public void SetSortIcon(int column, SortIcon mode)
         {
-            if (DesignMode)
+            if (DesignMode || !IsHandleCreated || View != View.Details)
                 return;
 
             if (column < 0 || column > Columns.Count)
@@ -164,10 +180,47 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             rtn = NativeMethods.SendMessage(hHeader, NativeMethods.HDM_SETITEM, col, ref hdItem);
+
+            GC.KeepAlive(HeaderHeight);
         }
+
+        int GetHeaderHeight()
+        {
+            if (View != View.Details || !IsHandleCreated)
+                return -1;
+
+            IntPtr hHeader = NativeMethods.SendMessage(Handle, NativeMethods.LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
+
+            if (hHeader == IntPtr.Zero)
+                return -1;
+
+            NativeMethods.RECT r = new NativeMethods.RECT();
+
+            if (NativeMethods.GetWindowRect(hHeader, ref r))
+            {
+                return r.bottom - r.top + 1;
+            }
+
+            return -1;
+        }
+
+        int _headerHeight;
+        [Browsable(false)]
+        public int HeaderHeight
+        {
+            get { return Math.Max((_headerHeight > 0) ? _headerHeight-1 : (_headerHeight = GetHeaderHeight())-1, 0); }
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            _headerHeight = 0;
+            base.OnSizeChanged(e);
+        }
+        
         #endregion
 
         string _groupSeparator = ", ";
+        [DefaultValue(", ")]
         public string GroupSeparator
         {
             get { return _groupSeparator; }
@@ -198,7 +251,7 @@ namespace Ankh.UI.VSSelectionControls
 
         internal void UpdateSortGlyphs()
         {
-            if (!SupportsSortGlypgs || DesignMode)
+            if (!SupportsSortGlypgs || DesignMode || View != View.Details)
                 return;
             //throw new NotImplementedException();
             foreach (ColumnHeader ch in Columns)
