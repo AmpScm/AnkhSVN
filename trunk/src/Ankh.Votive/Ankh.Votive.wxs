@@ -35,11 +35,6 @@
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
 
-    <!-- Secure these -->
-    <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
-    <Property Id="EXACTVERSIONINSTALLED" Secure="yes" />
-    <Property Id="NEWERVERSIONINSTALLED" Secure="yes" />
-
     <!-- Errormessages -->
     <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
     <CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
