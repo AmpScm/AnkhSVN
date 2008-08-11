@@ -56,8 +56,7 @@ namespace Ankh.UI.SccManagement
                 }
             }
 
-            pendingList.Items.Clear();
-            pendingList.Groups.Clear();
+            pendingList.ClearItems();
 
             foreach (PendingChange pc in _changeEnumerator)
             {

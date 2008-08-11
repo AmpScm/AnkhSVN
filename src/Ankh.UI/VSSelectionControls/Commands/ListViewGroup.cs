@@ -52,7 +52,26 @@ namespace Ankh.UI.VSSelectionControls.Commands
 
         protected override void OnExecute(SmartListView list, CommandEventArgs e)
         {
-            //throw new NotImplementedException();
+            bool extend = ((Control.ModifierKeys & Keys.Shift) != 0);
+
+            int n = (int)(e.Command - AnkhCommand.ListViewGroup0);
+            SmartColumn column = list.AllColumns[n];
+
+            if (list.GroupColumns.Contains(column))
+            {
+                list.GroupColumns.Remove(column);
+            }
+            else if (!extend)
+            {
+                list.GroupColumns.Clear();
+                list.GroupColumns.Add(column);
+            }
+            else
+            {
+                list.GroupColumns.Add(column);
+            }
+
+            list.RefreshGroups();
         }
     }
 }
