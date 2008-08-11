@@ -24,8 +24,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
 
         /// <summary>
@@ -36,14 +34,6 @@ namespace Ankh.UI
         {
             base.OnContextChanged(e);
             commitItemsTree.Context = Context;
-            logMessageBox.Init(Context, true);
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            AddCommandTarget(logMessageBox.CommandTarget);
-            AddWindowPane(logMessageBox.WindowPane);
         }
 
         /// <summary>
