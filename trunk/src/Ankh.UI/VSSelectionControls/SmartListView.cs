@@ -26,15 +26,59 @@ namespace Ankh.UI.VSSelectionControls
         public SmartListView()
         {
             View = View.Details;
+            FullRowSelect = true;
             this.ListViewItemSorter = new SmartListSorter(this);
             //Sorting = SortOrder.Ascending;
         }
 
+        /// <summary>
+        /// Gets or sets how items are displayed in the control.
+        /// </summary>
+        /// <value></value>
+        /// <returns>One of the <see cref="T:System.Windows.Forms.View"/> values. The default is <see cref="F:System.Windows.Forms.View.LargeIcon"/>.</returns>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value specified is not one of the <see cref="T:System.Windows.Forms.View"/> values. </exception>
         [DefaultValue(View.Details)]
         public new View View
         {
             get { return base.View; }
             set { base.View = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether clicking an item selects all its subitems.
+        /// </summary>
+        /// <value></value>
+        /// <returns>true if clicking an item selects the item and all its subitems; false if clicking an item selects only the item itself. The default is false.</returns>
+        /// <PermissionSet>
+        /// 	<IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// 	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+        /// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// </PermissionSet>
+        [DefaultValue(true)]
+        public new bool FullRowSelect
+        {
+            get { return base.FullRowSelect; }
+            set { base.FullRowSelect = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the sort order for items in the control.
+        /// </summary>
+        /// <value></value>
+        /// <returns>One of the <see cref="T:System.Windows.Forms.SortOrder"/> values. The default is <see cref="F:System.Windows.Forms.SortOrder.None"/>.</returns>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The value specified is not one of the <see cref="T:System.Windows.Forms.SortOrder"/> values. </exception>
+        /// <PermissionSet>
+        /// 	<IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// 	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
+        /// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
+        /// </PermissionSet>
+        [DefaultValue(SortOrder.Ascending)]
+        public new SortOrder Sorting
+        {
+            get { return base.Sorting; }
+            set { base.Sorting = value; }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
@@ -349,6 +393,66 @@ namespace Ankh.UI.VSSelectionControls
             RefreshGroupsAvailable();
         }
 
+        ListViewGroup _defaultGroup;
+        public void ClearItems()
+        {
+            Items.Clear();
+
+            for (int i = 0; i < Groups.Count; i++)
+            {
+                ListViewGroup g = Groups[i];
+
+                if (g != _defaultGroup)
+                {
+                    g.Items.Clear();
+                    Groups.RemoveAt(i--);
+                }
+            }
+            _defaultGroup = Groups.Add(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        }
+
+        public void RefreshGroups()
+        {
+            if (DesignMode || VirtualMode || View != View.Details)
+                return;
+
+            bool inGroups = _inRefreshGroupsAvailable;
+            try
+            {
+                _inRefreshGroupsAvailable = true;
+                foreach (ListViewItem i in Items)
+                {
+                    i.Group = null;
+
+                    SmartListViewItem si = i as SmartListViewItem;
+
+                    if (si != null)
+                        si.UpdateGroup();
+                }
+
+                foreach (ListViewGroup g in new System.Collections.ArrayList(Groups))
+                {
+                    if (g.Items.Count == 0 && g != _defaultGroup)
+                        Groups.Remove(g);
+
+                }
+
+                ShowGroups = (Groups.Count > 2);
+
+                foreach (ListViewGroup g in Groups)
+                {
+                    foreach (ListViewItem i in g.Items)
+                    {
+                        System.Diagnostics.Debug.Assert(Items.Contains(i));
+                    }
+                }
+            }
+            finally
+            {
+                _inRefreshGroupsAvailable = inGroups;
+            }          
+        }
+
         bool _inRefreshGroupsAvailable;
         public void RefreshGroupsAvailable()
         {
@@ -363,6 +467,7 @@ namespace Ankh.UI.VSSelectionControls
                 {
                     if (g.Items.Count == 0)
                         Groups.Remove(g);
+
                 }
 
                 if ((Groups.Count > 1) != ShowGroups)
@@ -386,6 +491,63 @@ namespace Ankh.UI.VSSelectionControls
             {
                 _inRefreshGroupsAvailable = false;
             }
+        }
+
+        bool _noStrictCheckboxesClick;
+        [DefaultValue(true)]
+        public bool StrictCheckboxesClick
+        {
+            get { return !_noStrictCheckboxesClick; }
+            set { _noStrictCheckboxesClick = !value; }
+        }
+
+
+        public event MouseEventHandler ShowContextMenu;
+        public virtual void OnShowContextMenu(MouseEventArgs e)
+        {
+            if (ShowContextMenu != null)
+                ShowContextMenu(this, e);
+        }
+
+        /// <summary>
+        /// Overrides <see cref="M:System.Windows.Forms.Control.WndProc(System.Windows.Forms.Message@)"/>.
+        /// </summary>
+        /// <param name="m">The Windows <see cref="T:System.Windows.Forms.Message"/> to process.</param>
+        protected override void WndProc(ref Message m)
+        {
+            if (!DesignMode)
+            {
+                if (m.Msg == 123) // WM_CONTEXTMENU
+                {
+                    uint pos = unchecked((uint)m.LParam);
+
+                    OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
+                        unchecked((short)(ushort)(pos & 0xFFFF)),
+                        unchecked((short)(ushort)(pos >> 16)), 0));
+
+                    return;
+                }
+                else if (m.Msg == 8270) // WM_REFLECTNOTIFY
+                {
+                    if (CheckBoxes && StrictCheckboxesClick)
+                    {
+                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+
+                        if (hdr.code == -3) // Double click
+                        {
+                            Point mp = PointToClient(MousePosition);
+                            ListViewHitTestInfo hi = HitTest(mp);
+
+                            if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                            {
+                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            base.WndProc(ref m);
         }
 
         sealed class SmartListSorter : System.Collections.IComparer, IComparer<ListViewItem>
@@ -460,6 +622,6 @@ namespace Ankh.UI.VSSelectionControls
         {
             get { return OSLevel >= 510; }
         }
-        #endregion
+        #endregion        
     }
 }
