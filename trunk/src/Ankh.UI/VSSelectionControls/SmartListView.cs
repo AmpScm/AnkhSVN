@@ -393,22 +393,10 @@ namespace Ankh.UI.VSSelectionControls
             RefreshGroupsAvailable();
         }
 
-        ListViewGroup _defaultGroup;
         public void ClearItems()
         {
             Items.Clear();
-
-            for (int i = 0; i < Groups.Count; i++)
-            {
-                ListViewGroup g = Groups[i];
-
-                if (g != _defaultGroup)
-                {
-                    g.Items.Clear();
-                    Groups.RemoveAt(i--);
-                }
-            }
-            _defaultGroup = Groups.Add(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+            Groups.Clear();
         }
 
         public void RefreshGroups()
@@ -420,37 +408,62 @@ namespace Ankh.UI.VSSelectionControls
             try
             {
                 _inRefreshGroupsAvailable = true;
-                foreach (ListViewItem i in Items)
+
+                if (GroupColumns.Count == 0)
                 {
-                    i.Group = null;
-
-                    SmartListViewItem si = i as SmartListViewItem;
-
-                    if (si != null)
-                        si.UpdateGroup();
-                }
-
-                foreach (ListViewGroup g in new System.Collections.ArrayList(Groups))
-                {
-                    if (g.Items.Count == 0 && g != _defaultGroup)
-                        Groups.Remove(g);
-
-                }
-
-                ShowGroups = (Groups.Count > 2);
-
-                foreach (ListViewGroup g in Groups)
-                {
-                    foreach (ListViewItem i in g.Items)
+                    ShowGroups = false;
+                    foreach (ListViewGroup grp in Groups)
                     {
-                        System.Diagnostics.Debug.Assert(Items.Contains(i));
+                        grp.Items.Clear();
                     }
+                    Groups.Clear();
+                }
+                else
+                {
+                    foreach (ListViewItem i in Items)
+                    {
+                        i.Group = null;
+
+                        SmartListViewItem si = i as SmartListViewItem;
+
+                        if (si != null)
+                            si.UpdateGroup();
+                    }
+
+                    FlushGroups();
                 }
             }
             finally
             {
                 _inRefreshGroupsAvailable = inGroups;
             }          
+        }
+
+        void FlushGroups()
+        {
+            for (int i = 0; i < Groups.Count; i++)
+            {
+                ListViewGroup group = Groups[i];
+
+                if (group.Items.Count == 0)
+                    Groups.RemoveAt(i--);
+            }
+
+            bool shouldShow = (Groups.Count > 1);
+
+            if (ShowGroups != shouldShow)
+            {
+                ShowGroups = shouldShow;
+
+                if (shouldShow)
+                {
+                    // Recreate the groups (.Net bug?)
+                    ListViewGroup[] grps = new ListViewGroup[Groups.Count];
+                    Groups.CopyTo(grps, 0);
+                    Groups.Clear();
+                    Groups.AddRange(grps);
+                }
+            }
         }
 
         bool _inRefreshGroupsAvailable;
@@ -463,29 +476,7 @@ namespace Ankh.UI.VSSelectionControls
             {
                 _inRefreshGroupsAvailable = true;
 
-                foreach (ListViewGroup g in new System.Collections.ArrayList(Groups))
-                {
-                    if (g.Items.Count == 0)
-                        Groups.Remove(g);
-
-                }
-
-                if ((Groups.Count > 1) != ShowGroups)
-                {
-                    if (Groups.Count > 1)
-                    {
-                        ShowGroups = true;
-                        foreach (ListViewItem i in Items)
-                        {
-                            SmartListViewItem si = i as SmartListViewItem;
-
-                            if (si != null)
-                                si.UpdateGroup();
-                        }
-                    }
-                    else
-                        ShowGroups = false;
-                }
+                FlushGroups();
             }
             finally
             {
