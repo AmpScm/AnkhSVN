@@ -41,7 +41,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        [Browsable(false)]
+        [Browsable(false), DefaultValue(false)]
         public bool ProvideWholeListForSelection
         {
             get { return _provideFullList; }
@@ -79,52 +79,12 @@ namespace Ankh.UI.VSSelectionControls
 
         bool _shouldUpdate;
 
-        bool _strictCheckboxesClick;
-        [DefaultValue(false)]
-        public bool StrictCheckboxesClick
-        {
-            get { return _strictCheckboxesClick; }
-            set { _strictCheckboxesClick = value; }
-        }
-
         int _inWndProc;
         protected override void WndProc(ref Message m)
         {
             _inWndProc++;
             try
-            {
-                if (!DesignMode)
-                {
-                    if (m.Msg == 123) // WM_CONTEXTMENU
-                    {
-                        uint pos = unchecked((uint)m.LParam);
-
-                        OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
-                            unchecked((short)(ushort)(pos & 0xFFFF)),
-                            unchecked((short)(ushort)(pos >> 16)), 0));
-
-                        return;
-                    }
-                    else if (m.Msg == 8270) // WM_REFLECTNOTIFY
-                    {
-                        if (CheckBoxes && StrictCheckboxesClick)
-                        {
-                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
-
-                            if (hdr.code == -3) // Double click
-                            {
-                                Point mp = PointToClient(MousePosition);
-                                ListViewHitTestInfo hi = HitTest(mp);
-
-                                if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
-                                {
-                                    OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
+            {                
                 base.WndProc(ref m);
             }
             finally
@@ -151,8 +111,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
-        public event MouseEventHandler ShowContextMenu;
-        public virtual void OnShowContextMenu(MouseEventArgs e)
+        public override void OnShowContextMenu(MouseEventArgs e)
         {
             if (_shouldUpdate)
             {
@@ -160,8 +119,7 @@ namespace Ankh.UI.VSSelectionControls
                 NotifySelectionUpdated();
             }
 
-            if (ShowContextMenu != null)
-                ShowContextMenu(this, e);
+            base.OnShowContextMenu(e);
         }
 
         SelectionItemMap _selectionItemMap;

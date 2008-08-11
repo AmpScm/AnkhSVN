@@ -9,36 +9,19 @@ namespace Ankh.UI
     /// The dialog to lock SVN items.
     /// </summary>
     public partial class LockDialog : VSContainerForm
-	{
+    {
         PathSelectorInfo _info;
 
-		public LockDialog()
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
-            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
-		}
-
-        public LockDialog(PathSelectorInfo info) : this()
+        public LockDialog()
         {
-            this._info = info;
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
         }
 
-        bool _initialized, _hooked;
-        void Initialize()
+        public LockDialog(PathSelectorInfo info)
+            : this()
         {
-            if (!_initialized && Context != null)
-            {
-                logMessageEditor.Init(Context, true);
-                _initialized = true;
-            }
-
-            if (!_hooked && _initialized && Context != null && IsHandleCreated)
-            {
-                AddCommandTarget(logMessageEditor.CommandTarget);
-                AddWindowPane(logMessageEditor.WindowPane);
-                _hooked = true;
-            }
+            this._info = info;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -60,19 +43,11 @@ namespace Ankh.UI
             pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
         }
 
-        protected override  void OnContextChanged(EventArgs e)
+        protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
 
             pathSelectionTreeView.Context = Context;
-            Initialize();
-        }
-
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            base.OnVisibleChanged(e);
-
-            Initialize();
         }
 
         /// <summary>

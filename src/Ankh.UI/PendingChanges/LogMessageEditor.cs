@@ -81,6 +81,12 @@ namespace Ankh.UI.PendingChanges
             cf.AddCommandTarget(CommandTarget);
             cf.AddWindowPane(WindowPane);
             cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;
+
+            if (!string.IsNullOrEmpty(_text))
+            {
+                FixUI();
+                Text = _text;
+            }
         }
 
         #region Methods
@@ -341,6 +347,8 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
+        string _text;
+
         [EditorBrowsable(EditorBrowsableState.Always)]
         [Browsable(true)]
         [Bindable(true)]
@@ -350,12 +358,13 @@ namespace Ankh.UI.PendingChanges
             get
             {
                 if (codeEditorNativeWindow != null)
-                    return codeEditorNativeWindow.Text;
+                    return _text = codeEditorNativeWindow.Text;
                 else
-                    return null;
+                    return _text;
             }
             set
             {
+                _text = value;
                 if (codeEditorNativeWindow != null)
                     codeEditorNativeWindow.Text = value;
             }

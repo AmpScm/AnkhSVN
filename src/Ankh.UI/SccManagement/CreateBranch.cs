@@ -15,38 +15,6 @@ namespace Ankh.UI.SccManagement
         public CreateBranch()
         {
             InitializeComponent();
-            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
-        }
-
-        protected override void OnContextChanged(EventArgs e)
-        {
-            base.OnContextChanged(e);
-
-            Initialize();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            Initialize();
-        }
-
-        bool _initialized, _hooked;
-        void Initialize()
-        {
-            if (!_initialized && Context != null)
-            {
-                logMessage.Init(Context, true);
-                _initialized = true;
-            }
-
-            if (!_hooked && _initialized && Context != null && IsHandleCreated)
-            {
-                AddCommandTarget(logMessage.CommandTarget);
-                AddWindowPane(logMessage.WindowPane);
-                _hooked = true;
-            }
         }
 
         public string SrcFolder

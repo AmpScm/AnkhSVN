@@ -81,7 +81,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(388, 3);
+            this.label2.Location = new System.Drawing.Point(385, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 17);
             this.label2.TabIndex = 2;
@@ -92,7 +92,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(-3, 3);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
@@ -148,18 +148,13 @@
             this.pendingList.CheckBoxes = true;
             this.pendingList.Context = null;
             this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pendingList.FullRowSelect = true;
-            this.pendingList.GroupSeparator = ", ";
             this.pendingList.HideSelection = false;
             this.pendingList.Location = new System.Drawing.Point(0, 0);
             this.pendingList.Name = "pendingList";
-            this.pendingList.ProvideWholeListForSelection = false;
             this.pendingList.Size = new System.Drawing.Size(600, 185);
-            this.pendingList.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.pendingList.StrictCheckboxesClick = true;
             this.pendingList.TabIndex = 0;
             this.pendingList.UseCompatibleStateImageBehavior = false;
-            this.pendingList.View = System.Windows.Forms.View.Details;
             // 
             // logMessage
             // 
@@ -169,6 +164,7 @@
             this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessage.Location = new System.Drawing.Point(0, 23);
             this.logMessage.Name = "logMessage";
+            this.logMessage.PasteSource = this.pendingList;
             this.logMessage.Size = new System.Drawing.Size(600, 124);
             this.logMessage.TabIndex = 1;
             this.logMessage.Text = null;

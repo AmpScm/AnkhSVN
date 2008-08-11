@@ -14,7 +14,6 @@ namespace Ankh.UI.SvnLog
         public EditLogMessageDialog()
         {
             InitializeComponent();
-            ContainerMode = VSContainerMode.UseTextEditorScope | VSContainerMode.TranslateKeys;
         }
 
         string _originalText;
@@ -22,38 +21,6 @@ namespace Ankh.UI.SvnLog
         {
             get { return logMessageEditor.Text; }
             set { logMessageEditor.Text = _originalText = value; }
-        }
-
-        protected override void OnContextChanged(EventArgs e)
-        {
-            base.OnContextChanged(e);
-
-            Initialize();
-        }
-
-        bool _initialized, _hooked;
-        void Initialize()
-        {
-            if (!_initialized && Context != null)
-            {
-                logMessageEditor.Init(Context, true);
-                _initialized = true;
-            }
-
-            if(!_hooked && _initialized && Context != null && IsHandleCreated)
-            {
-                AddCommandTarget(logMessageEditor.CommandTarget);
-                AddWindowPane(logMessageEditor.WindowPane);
-                _hooked = true;
-            }
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-
-            Initialize();
-            LogMessage = _originalText;
         }
     }
 }
