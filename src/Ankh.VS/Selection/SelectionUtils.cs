@@ -63,7 +63,7 @@ namespace Ankh.Selection
         }
 
         //[CLSCompliant(false)]
-        public static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags, bool includeNoScc)
+        public static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, out int[] flags, bool includeNoScc, IDictionary<string, uint> map)
         {
             if (hierarchy == null)
                 throw new ArgumentNullException("hierarchy");
@@ -74,62 +74,74 @@ namespace Ankh.Selection
             files = null;
             flags = null;
 
-            if (sccProject != null)
+            try
             {
-                CALPOLESTR[] str = new CALPOLESTR[1];
-                CADWORD[] dw = new CADWORD[1];
 
-                if (ErrorHandler.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
+                if (sccProject != null)
                 {
-                    files = GetFileNamesFromOleBuffer(str, true);
-                    flags = GetFlagsFromOleBuffer(dw, true);
+                    CALPOLESTR[] str = new CALPOLESTR[1];
+                    CADWORD[] dw = new CADWORD[1];
 
-                    if (!includeNoScc || files.Length > 0)
-                        return true; // We have a result
-                    else
-                        ok = true; // Try the GetMkDocument route to find an alternative
-                }
-                else if (hr != VSConstants.E_NOTIMPL)
-                    return false; // 
-            }
+                    if (ErrorHandler.Succeeded(hr = sccProject.GetSccFiles(id, str, dw)))
+                    {
+                        files = GetFileNamesFromOleBuffer(str, true);
+                        flags = GetFlagsFromOleBuffer(dw, true);
 
-            // If sccProject2.GetSccFiles() returns E_NOTIMPL we must try GetMkDocument
-            // We also try this if the item does not implement IVsSccProject2
-
-            IVsProject project = hierarchy as IVsProject;
-            if (project != null)
-            {
-                string mkDocument;
-
-                if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
-                {
-                    if (!IsValidPath(mkDocument))
-                        files = new string[0];
-                    else
-                        files = new string[] { mkDocument };
-
-                    return true;
+                        if (!includeNoScc || files.Length > 0)
+                            return ok = true; // We have a result
+                        else
+                            ok = true; // Try the GetMkDocument route to find an alternative
+                    }
+                    else if (hr != VSConstants.E_NOTIMPL)
+                        return false; // 
                 }
 
-                return ok; // No need to check our interface for projects
-            }
+                // If sccProject2.GetSccFiles() returns E_NOTIMPL we must try GetMkDocument
+                // We also try this if the item does not implement IVsSccProject2
 
-            if (hierarchy is IVsSolution)
-            {
-                return ok; // Will fail in GetCanonicalName in VS2008 SP1 Beta 1
-            }
-
-            string name;
-            if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
-            {
-                if (IsValidPath(name))
+                IVsProject project = hierarchy as IVsProject;
+                if (project != null)
                 {
-                    files = new string[] { name };
-                    return true;
+                    string mkDocument;
+
+                    if (ErrorHandler.Succeeded(project.GetMkDocument(id, out mkDocument)))
+                    {
+                        if (!IsValidPath(mkDocument))
+                            files = new string[0];
+                        else
+                            files = new string[] { mkDocument };
+
+                        return true;
+                    }
+
+                    return ok; // No need to check our interface for projects
+                }
+
+                if (hierarchy is IVsSolution)
+                {
+                    return ok; // Will fail in GetCanonicalName in VS2008 SP1 Beta 1
+                }
+
+                string name;
+                if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+                {
+                    if (IsValidPath(name))
+                    {
+                        files = new string[] { name };
+                        return true;
+                    }
+                }
+
+                return ok;
+            }
+            finally
+            {
+                if (ok && map != null && files != null)
+                {
+                    foreach (string file in files)
+                        map[file] = id;
                 }
             }
-
-            return ok;
         }
 
         /// <summary>
@@ -147,12 +159,12 @@ namespace Ankh.Selection
             return SvnItem.IsValidPath(path);
         }
 
-        internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc)
+        internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            if (GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial, includeNoScc))
+            if (GetSccFiles(item.Hierarchy, item.SccProject, item.Id, out files, includeSpecial, includeNoScc, map))
             {
                 // The managed package SDK for VS 2005 and VS2008 returns
                 // new string[] { GetMkDocument() }; on the generic HierarchyNode
@@ -197,12 +209,12 @@ namespace Ankh.Selection
         }
 
         //[CLSCompliant(false)]
-        static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc)
+        static bool GetSccFiles(IVsHierarchy hierarchy, IVsSccProject2 sccProject, uint id, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)
         {
             int[] flags;
             files = null;
 
-            if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc))
+            if (!GetSccFiles(hierarchy, sccProject, id, out files, out flags, includeNoScc, map))
                 return false;
             else if (flags == null || sccProject == null || !includeSpecial)
                 return true;

@@ -539,7 +539,7 @@ namespace Ankh.Selection
             {
                 string[] files;
 
-                if (SelectionUtils.GetSccFiles(i, out files, true, true))
+                if (SelectionUtils.GetSccFiles(i, out files, true, true, null))
                 {
                     foreach (string file in files)
                     {
@@ -623,7 +623,7 @@ namespace Ankh.Selection
                 string[] files;
 
                 // No need to fetch special files as we only want projects!
-                if (!SelectionUtils.GetSccFiles(si, out files, false, false) || files.Length == 0)
+                if (!SelectionUtils.GetSccFiles(si, out files, false, false, null) || files.Length == 0)
                     continue; // No files selected
 
                 if (projectMapper == null && !searchedProjectMapper)
@@ -668,7 +668,7 @@ namespace Ankh.Selection
         /// <param name="depth"></param>
         /// <returns></returns>
         /// <remarks>The list might contain duplicates if files are included more than once</remarks>
-        public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth)
+        public IEnumerable<string> GetSccFiles(IVsHierarchy hierarchy, uint id, ProjectWalkDepth depth, IDictionary<string, uint> map)
         {
             // Note: This command is not cached like the other commands on this object!
             if (hierarchy == null)
@@ -677,7 +677,7 @@ namespace Ankh.Selection
             SelectionItem si = new SelectionItem(hierarchy, id);
 
             string[] files;
-            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy))
+            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy, map))
                 yield break;
 
             foreach (string file in files)
@@ -692,7 +692,7 @@ namespace Ankh.Selection
 
                 foreach (SelectionItem item in GetDescendants(si, previous, depth))
                 {
-                    if (!SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy))
+                    if (!SelectionUtils.GetSccFiles(item, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy, map))
                         continue;
 
                     foreach (string file in files)

@@ -308,9 +308,10 @@ namespace Ankh.Scc.ProjectMap
 
                 if (walker != null)
                 {
-                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy))
+                    Dictionary<string, uint> ids = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
+                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, VSConstants.VSITEMID_ROOT, ProjectWalkDepth.AllDescendantsInHierarchy, ids))
                     {
-                        AddPath(file); // GetSccFiles returns normalized paths
+                        AddPath(file, ids); // GetSccFiles returns normalized paths
                     }
                 }
 
@@ -326,7 +327,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 _inLoad = false;
             }
-        }
+        }        
 
         internal void Reload()
         {
@@ -366,6 +367,18 @@ namespace Ankh.Scc.ProjectMap
                 ClearIdCache();
 
                 SetDirty();
+            }
+        }
+
+        private void AddPath(string path, Dictionary<string, uint> ids)
+        {
+            AddPath(path);
+
+            uint id;
+            if (ids != null && ids.TryGetValue(path, out id))
+            {
+                // We can be 100% sure the path is available in _files, see implementation of AddPath()
+                _files[path].SetId(id);
             }
         }
 
