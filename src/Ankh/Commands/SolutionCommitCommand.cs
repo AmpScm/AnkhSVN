@@ -82,7 +82,7 @@ namespace Ankh.Commands
                 {
                     foreach (string f in folders)
                     {
-                        if (pc.FullPath.StartsWith(f) && f.Length <= pc.FullPath.Length || pc.FullPath[f.Length] == '\\')
+                        if (pc.IsBelowPath(f))
                         {
                             // Path is not contained in any other project but below one of the project roots
                             return true;

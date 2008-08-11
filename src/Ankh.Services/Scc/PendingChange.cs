@@ -472,6 +472,18 @@ namespace Ankh.Scc
 
             return false;
         }
+
+        /// <summary>
+        /// Determines whether the item is (below) the specified path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the item is (below) the specified path; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsBelowPath(string path)
+        {
+            return Item.IsBelowPath(path);
+        }
     }
 
     /// <summary>

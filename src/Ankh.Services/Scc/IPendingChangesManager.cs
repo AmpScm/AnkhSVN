@@ -153,6 +153,6 @@ namespace Ankh.Scc
         /// <returns>
         /// 	<c>true</c> if the specified path contains path; otherwise, <c>false</c>.
         /// </returns>
-        bool ContainsPath(string path);
+        bool Contains(string path);
     }
 }

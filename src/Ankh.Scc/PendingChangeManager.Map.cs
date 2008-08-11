@@ -289,18 +289,14 @@ namespace Ankh.Scc
 
             foreach (PendingChange pc in _pendingChanges)
             {
-                if (pc.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+                if (pc.IsBelowPath(path))
                 {
-                    if ((path.Length == pc.FullPath.Length) ||
-                        (path.Length < pc.FullPath.Length && (pc.FullPath[path.Length] == Path.DirectorySeparatorChar)))
-                    {
-                        yield return pc;
-                    }
+                    yield return pc;
                 }
             }
         }
 
-        public bool ContainsPath(string path)
+        public bool Contains(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
