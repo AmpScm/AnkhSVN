@@ -8,7 +8,7 @@ using IServiceProvider = System.IServiceProvider;
 using System.Runtime.InteropServices;
 
 
-namespace Ankh.Selection
+namespace Ankh.VS.Selection
 {
     static class SelectionUtils
     {

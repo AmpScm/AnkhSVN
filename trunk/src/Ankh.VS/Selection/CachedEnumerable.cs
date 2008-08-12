@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.Selection
+namespace Ankh.VS.Selection
 {
     sealed class Disposer : IDisposable
     {
