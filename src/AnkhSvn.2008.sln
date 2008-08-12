@@ -201,7 +201,6 @@ Global
 		{CBE396C6-F315-4DA4-BB3B-2FBDE5969BD2} = {BEAF04B7-B1BB-4ABA-BF6F-00495274C725}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
 	EndGlobalSection
 EndGlobal
