@@ -217,7 +217,7 @@ namespace Ankh.VS.Selection
 
             public IVsSccProject2 SccProject
             {
-                get 
+                get
                 {
                     if (_sccProject == null && !_checkedSccProject)
                     {
@@ -225,7 +225,7 @@ namespace Ankh.VS.Selection
                         _sccProject = _hierarchy as IVsSccProject2;
                     }
 
-                    return _sccProject; 
+                    return _sccProject;
                 }
             }
 
@@ -392,8 +392,8 @@ namespace Ankh.VS.Selection
                     }
                 }
             }
-            else if ((_currentHierarchy != null) 
-                && (_currentItem != VSConstants.VSITEMID_NIL) 
+            else if ((_currentHierarchy != null)
+                && (_currentItem != VSConstants.VSITEMID_NIL)
                 && (_currentItem != VSConstants.VSITEMID_SELECTION))
             {
                 if (_currentItem == _filterItem && _currentHierarchy == _filterHierarchy)
@@ -415,8 +415,8 @@ namespace Ankh.VS.Selection
                 {
                     IVsHierarchy hier = (IVsHierarchy)Solution;
 
-                    if(hier != null)
-                        yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT, 
+                    if (hier != null)
+                        yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT,
                             SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
@@ -477,10 +477,10 @@ namespace Ankh.VS.Selection
             {
                 IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
-                
+
                 if (nestedHierarchy == null || (nestedHierarchy == MiscellaneousProject))
                     yield break;
-            
+
                 if (depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
                 {
                     yield break; // Don't walk into sub-hierarchies
@@ -503,8 +503,11 @@ namespace Ankh.VS.Selection
             if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
             {
-                if ((bool)value)
-                    yield break; // Don't step into nodes with side effects
+                if (value != null)
+                {
+                    if ((bool)value)
+                        yield break;
+                }
             }
 
             if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
@@ -730,7 +733,7 @@ namespace Ankh.VS.Selection
 
         void ISccProjectWalker.SetPrecreatedFilterItem(IVsHierarchy hierarchy, uint id)
         {
-            if(id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
+            if (id != VSConstants.VSITEMID_NIL || _filterItem != VSConstants.VSITEMID_NIL)
                 ClearCache(); // Make sure we use the filter directly
 
             _filterHierarchy = hierarchy;
@@ -811,6 +814,6 @@ namespace Ankh.VS.Selection
                 }
             }
         }
-        #endregion        
+        #endregion
     }
 }
