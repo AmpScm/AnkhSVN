@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using System.Runtime.InteropServices;
 using System.Collections;
-using Microsoft.VisualStudio.OLE.Interop;
-using IServiceProvider = System.IServiceProvider;
-using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
-using Microsoft.VisualStudio.Shell;
-using Ankh.Scc;
-using Ankh.VS.SolutionExplorer;
-using SharpSvn;
-using Ankh.VS;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-namespace Ankh.Selection
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using ShellConstants = Microsoft.VisualStudio.Shell.Interop.Constants;
+using SharpSvn;
+
+using Ankh.Scc;
+using Ankh.Selection;
+using Ankh.VS.SolutionExplorer;
+
+
+namespace Ankh.VS.Selection
 {
     /// <summary>
     /// 
@@ -191,10 +192,12 @@ namespace Ankh.Selection
             readonly IVsHierarchy _hierarchy;
             IVsSccProject2 _sccProject;
             readonly uint _id;
+            bool _checkedSccProject;
 
             public SelectionItem(IVsHierarchy hierarchy, uint id)
             {
-                // Hierarchy can be null in the solution case
+                if (hierarchy == null)
+                    throw new ArgumentNullException("hierarchy");
 
                 _hierarchy = hierarchy;
                 _id = id;
@@ -208,12 +211,22 @@ namespace Ankh.Selection
 
             public IVsHierarchy Hierarchy
             {
+                [DebuggerStepThrough]
                 get { return _hierarchy; }
             }
 
             public IVsSccProject2 SccProject
             {
-                get { return _sccProject ?? (_sccProject = _hierarchy as IVsSccProject2); }
+                get 
+                {
+                    if (_sccProject == null && !_checkedSccProject)
+                    {
+                        _checkedSccProject = true;
+                        _sccProject = _hierarchy as IVsSccProject2;
+                    }
+
+                    return _sccProject; 
+                }
             }
 
             public uint Id
@@ -294,12 +307,15 @@ namespace Ankh.Selection
                     {
                         uint nItems;
                         int withinSingleHierarchy;
-                        Marshal.ThrowExceptionForHR(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy));
-
-                        if (nItems == 1)
-                            _isSingleNodeSelection = true;
+                        if (ErrorHandler.Succeeded(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                        {
+                            if (nItems == 1)
+                                _isSingleNodeSelection = true;
+                            else
+                                _isSingleNodeSelection = false;
+                        }
                         else
-                            _isSingleNodeSelection = false;
+                            _isSingleNodeSelection = true;
                     }
                     else if (_currentHierarchy != null)
                     {
@@ -347,31 +363,38 @@ namespace Ankh.Selection
             {
                 uint nItems;
                 int withinSingleHierarchy;
-                Marshal.ThrowExceptionForHR(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy));
+
+                if (!ErrorHandler.Succeeded(_currentSelection.GetSelectionInfo(out nItems, out withinSingleHierarchy)))
+                    yield break;
 
                 uint flags = 0;
 
-                bool singleHierarchy = (withinSingleHierarchy != 0);
-
-                if (singleHierarchy && _currentHierarchy != null)
+                if ((withinSingleHierarchy != 0) && _currentHierarchy != null)
                     flags = (uint)__VSGSIFLAGS.GSI_fOmitHierPtrs; // Don't marshal the hierarchy for every item
 
                 VSITEMSELECTION[] items = new VSITEMSELECTION[nItems];
 
-                Marshal.ThrowExceptionForHR(_currentSelection.GetSelectedItems(flags, nItems, items));
+                if (!ErrorHandler.Succeeded(_currentSelection.GetSelectedItems(flags, nItems, items)))
+                    yield break;
 
                 for (int i = 0; i < nItems; i++)
                 {
-                    SelectionItem si = new SelectionItem(singleHierarchy ? _currentHierarchy : items[i].pHier, items[i].itemid);
+                    IVsHierarchy hier = items[i].pHier ?? _currentHierarchy;
 
-                    if (si.Hierarchy != null)
-                        yield return si;
-                    else if (si.Id == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
-                        yield return new SelectionItem((IVsHierarchy)Solution, si.Id, SelectionUtils.GetSolutionAsSccProject(Context));
-                    // else skip
+                    if (hier != null)
+                        yield return new SelectionItem(hier, items[i].itemid);
+                    else
+                    {
+                        if (items[i].itemid == VSConstants.VSITEMID_ROOT && MightBeSolutionExplorerSelection)
+                            yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT,
+                                SelectionUtils.GetSolutionAsSccProject(Context));
+                        // else skip
+                    }
                 }
             }
-            else if ((_currentHierarchy != null) && (_currentItem != VSConstants.VSITEMID_NIL))
+            else if ((_currentHierarchy != null) 
+                && (_currentItem != VSConstants.VSITEMID_NIL) 
+                && (_currentItem != VSConstants.VSITEMID_SELECTION))
             {
                 if (_currentItem == _filterItem && _currentHierarchy == _filterHierarchy)
                     yield break;
@@ -390,7 +413,11 @@ namespace Ankh.Selection
 
                 if (MightBeSolutionExplorerSelection)
                 {
-                    yield return new SelectionItem((IVsHierarchy)Solution, _currentItem, SelectionUtils.GetSolutionAsSccProject(Context));
+                    IVsHierarchy hier = (IVsHierarchy)Solution;
+
+                    if(hier != null)
+                        yield return new SelectionItem((IVsHierarchy)Solution, VSConstants.VSITEMID_ROOT, 
+                            SelectionUtils.GetSolutionAsSccProject(Context));
                 }
             }
         }
@@ -417,7 +444,7 @@ namespace Ankh.Selection
             }
         }
 
-        private static uint GetItemIdFromObject(object pvar)
+        static uint GetItemIdFromObject(object pvar)
         {
             if (pvar == null) return VSConstants.VSITEMID_NIL;
             if (pvar is int) return (uint)(int)pvar;
@@ -428,6 +455,7 @@ namespace Ankh.Selection
             return VSConstants.VSITEMID_NIL;
         }
 
+        static Guid hierarchyId = typeof(IVsHierarchy).GUID;
         /// <summary>
         /// Gets the descendants of a selection item; yielding for each result to allow delay loading
         /// </summary>
@@ -441,31 +469,25 @@ namespace Ankh.Selection
 
             // A hierarchy node can have 2 identities. We only need the inner one
 
-            bool isNested = false;
-            IVsHierarchy nestedHierarchy = null;
             uint subId;
-
-            Guid hierarchyId = typeof(IVsHierarchy).GUID;
-
             IntPtr hierPtr;
             int hr = si.Hierarchy.GetNestedHierarchy(si.Id, ref hierarchyId, out hierPtr, out subId);
 
             if (ErrorHandler.Succeeded(hr) && hierPtr != IntPtr.Zero)
             {
-                nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
+                IVsHierarchy nestedHierarchy = Marshal.GetObjectForIUnknown(hierPtr) as IVsHierarchy;
                 Marshal.Release(hierPtr);
-                isNested = true;
-
+                
                 if (nestedHierarchy == null || (nestedHierarchy == MiscellaneousProject))
                     yield break;
+            
+                if (depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
+                {
+                    yield break; // Don't walk into sub-hierarchies
+                }
+                else
+                    si = new SelectionItem(nestedHierarchy, subId);
             }
-
-            if (isNested && depth <= ProjectWalkDepth.AllDescendantsInHierarchy)
-            {
-                yield break; // Don't walk into sub-hierarchies
-            }
-            else if (isNested)
-                si = new SelectionItem(nestedHierarchy, subId);
 
             if (!previous.ContainsKey(si))
             {
@@ -482,7 +504,7 @@ namespace Ankh.Selection
                 (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
             {
                 if ((bool)value)
-                    yield break;
+                    yield break; // Don't step into nodes with side effects
             }
 
             if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
@@ -501,8 +523,11 @@ namespace Ankh.Selection
                     yield return ii;
                 }
 
-                Marshal.ThrowExceptionForHR(si.Hierarchy.GetProperty(i.Id,
-                    (int)__VSHPROPID.VSHPROPID_NextSibling, out value));
+                if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(i.Id,
+                    (int)__VSHPROPID.VSHPROPID_NextSibling, out value)))
+                {
+                    yield break;
+                }
 
                 childId = GetItemIdFromObject(value);
             }

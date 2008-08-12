@@ -5,8 +5,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Ankh.Selection;
 
-namespace Ankh.Selection
+namespace Ankh.VS.Selection
 {
 	partial class SelectionContext
 	{
