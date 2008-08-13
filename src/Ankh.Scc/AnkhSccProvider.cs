@@ -40,7 +40,11 @@ namespace Ankh.Scc
         {
             base.OnInitialize();
 
-            TryRegisterSccProvider();
+            GetService<AnkhServiceEvents>().RuntimeStarted 
+                += delegate
+                {
+                    TryRegisterSccProvider();
+                };
         }
 
         public void RegisterAsSccProvider()
@@ -126,6 +130,8 @@ namespace Ankh.Scc
             _ensureIcons = true;
             RegisterForSccCleanup();
 
+            GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
+
             return VSConstants.S_OK;
         }
 
@@ -162,6 +168,8 @@ namespace Ankh.Scc
 
                 ClearSolutionGlyph();
             }
+
+            GetService<IAnkhServiceEvents>().OnSccProviderDeactivated(EventArgs.Empty);
 
             return VSConstants.S_OK;
         }
