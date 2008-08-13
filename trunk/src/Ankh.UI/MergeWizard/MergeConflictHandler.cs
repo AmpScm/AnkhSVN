@@ -4,6 +4,8 @@ using System.Text;
 using SharpSvn;
 using System.Windows.Forms.Design;
 using System.Windows.Forms;
+using Ankh.Scc.UI;
+using System.IO;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -195,7 +197,14 @@ namespace Ankh.UI.MergeWizard
                 {
                     if (PromptOnTextConflict)
                     {
-                        HandleConflictWithDialog(args);
+                        if (UseExternalMergeTool())
+                        {
+                            HandleConflictWithExternalMergeTool(args);
+                        }
+                        else
+                        {
+                            HandleConflictWithDialog(args);
+                        }
                         return;
                     }
                     else
@@ -274,6 +283,64 @@ namespace Ankh.UI.MergeWizard
             AddToCurrentResolutions(e);
         }
 
+        private void HandleConflictWithExternalMergeTool(SvnConflictEventArgs e)
+        {
+            IAnkhDiffHandler handler = GetService<IAnkhDiffHandler>();
+            if (handler == null)
+            {
+                HandleConflictWithDialog(e);
+            }
+            else
+            {
+                //Temporary file for the working copy file
+                string workingTempFile = CreateTempFile();
+
+                //copy working file contents to temporary working file
+                CopyFile(e.MyFile, workingTempFile);
+
+                //Temporary file for the merged file (in case user quits editing and original nerged file needs to be restored)
+                string mergeTempFile = CreateTempFile();
+                string mergeFilePath = e.MergedFile;
+
+                //Copy original merged file to the temporary merged file
+                CopyFile(mergeFilePath, mergeTempFile);
+                string conflictOldFile = e.BaseFile;
+                string conflictNewFile = e.TheirFile;
+
+                AnkhMergeArgs ama = new AnkhMergeArgs();
+                //Replace "/" with "\\" otherwise 
+                //DiffToolMonitor constructor throws argument exception validatig the file path to be monitored.
+                ama.BaseFile = conflictOldFile.Replace("/",@"\\");
+                ama.TheirsFile = conflictNewFile.Replace("/", @"\\"); ;
+                ama.MineFile = workingTempFile.Replace("/", @"\\"); ;
+                ama.MergedFile = mergeFilePath.Replace("/", @"\\"); ;
+                ama.Mode = DiffMode.PreferExternal;
+                ama.BaseTitle = "Base";
+                ama.TheirsTitle = "Theirs";
+                ama.MineTitle = "Mine";
+                ama.MergedTitle = new System.IO.FileInfo(e.Path).Name;
+                bool merged = handler.RunMerge(ama);       
+                if (merged)
+                {
+                    IUIService ui = Context.GetService<IUIService>();
+                    string message = "Did you resolve all of the conflicts in the file (Mark this file resolved)?";
+                    string caption = "Resolve Conflict";
+                    DialogResult result = ui.ShowMessage(message, caption, MessageBoxButtons.YesNo);
+                    merged = result == DialogResult.Yes;
+                }
+                if (!merged)
+                {
+                    //Restore original merged file.
+                    CopyFile(mergeTempFile, mergedFilePath);
+                    HandleConflictWithDialog(e);
+                }
+                else
+                {
+                    e.Choice = SvnAccept.Merged;
+                }
+            }
+        }
+
         private void AddToCurrentResolutions(SvnConflictEventArgs args)
         {
             if (args != null && args.Choice != SvnAccept.Postpone)
@@ -290,6 +357,27 @@ namespace Ankh.UI.MergeWizard
                 }
                 conflictTypes.Add(args.ConflictType);
             }
+        }
+
+        private bool UseExternalMergeTool()
+        {
+            return false;
+            /*
+            IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
+            if (cs == null) { return false; }
+            string mergePath = cs.Instance.MergeExePath;
+            return !string.IsNullOrEmpty(mergePath);
+            */
+        }
+
+        private string CreateTempFile()
+        {
+            return Path.GetTempFileName();
+        }
+
+        private void CopyFile(string from, string to)
+        {
+            File.Copy(from, to, true);
         }
 
     }
