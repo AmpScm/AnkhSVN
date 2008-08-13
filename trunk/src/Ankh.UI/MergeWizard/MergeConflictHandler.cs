@@ -331,7 +331,7 @@ namespace Ankh.UI.MergeWizard
                 if (!merged)
                 {
                     //Restore original merged file.
-                    CopyFile(mergeTempFile, mergedFilePath);
+                    CopyFile(mergeTempFile, mergeFilePath);
                     HandleConflictWithDialog(e);
                 }
                 else
