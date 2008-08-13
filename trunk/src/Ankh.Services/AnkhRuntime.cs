@@ -15,6 +15,7 @@ namespace Ankh
         readonly CommandMapper _commandMapper;
         readonly AnkhContext _context;
         readonly List<IAnkhServiceImplementation> _services = new List<IAnkhServiceImplementation>();
+        readonly AnkhServiceEvents _events;
         bool _ensureServices;
 
         public AnkhRuntime(IServiceContainer parentContainer)
@@ -33,6 +34,8 @@ namespace Ankh
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
+
+            _events = GetService<AnkhServiceEvents>();
         }
 
         public AnkhRuntime(IServiceProvider parentProvider)
@@ -51,16 +54,25 @@ namespace Ankh
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
             InitializeServices();
+
+            _events = GetService<AnkhServiceEvents>();
         }
 
         void InitializeServices()
         {
-            if (_container.GetService(typeof(AnkhRuntime)) == null)
+            if (GetService<AnkhRuntime>() == null)
             {
                 _container.AddService(typeof(AnkhRuntime), this, true);
 
                 if (_container.GetService(typeof(IAnkhServiceProvider)) == null)
                     _container.AddService(typeof(IAnkhServiceProvider), this);
+            }
+
+            if (GetService<AnkhServiceEvents>() == null)
+            {
+                AnkhServiceEvents se = new AnkhServiceEvents(Context);
+                _container.AddService(typeof(AnkhServiceEvents), se);
+                _container.AddService(typeof(IAnkhServiceEvents), se);
             }
 
 #if DEBUG
@@ -91,7 +103,7 @@ namespace Ankh
         public T GetService<T>()
             where T : class
         {
-            return GetService(typeof(T)) as T;
+            return GetService<T>(typeof(T));
         }
 
         /// <summary>
@@ -163,6 +175,12 @@ namespace Ankh
             foreach (IAnkhServiceImplementation service in _services)
             {
                 service.OnInitialize();
+            }
+
+            if (_events != null)
+            {
+                _events.OnRuntimeLoaded(EventArgs.Empty);
+                _events.OnRuntimeStarted(EventArgs.Empty);
             }
         }
 
