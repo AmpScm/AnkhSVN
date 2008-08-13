@@ -56,7 +56,7 @@ namespace Ankh.Services
             string arguments;
             if (!Substitute(diffApp, args, out program, out arguments))
             {
-                new AnkhMessageBox(Context).Show("Can't find diff program");
+				new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program));
                 return false;
             }
 
@@ -129,7 +129,7 @@ namespace Ankh.Services
             string arguments;
             if (!Substitute(diffApp, args, out program, out arguments))
             {
-                new AnkhMessageBox(Context).Show("Can't find merge program");
+				new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program));
                 return false;
             }
 
@@ -314,7 +314,7 @@ namespace Ankh.Services
 
         private string SubstituteArguments(string arguments, AnkhDiffArgs diffArgs)
         {
-            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9_]+)\%?\b)|(\$\((?<vs>[a-zA-Z0-9_-]*)\))",
+            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)\))",
                 new Replacer(diffArgs).Replace);
         }
 
