@@ -27,11 +27,10 @@ namespace Ankh.UI.PendingChanges
 
         public void RefreshText(IAnkhServiceProvider context)
         {
-            IAnkhSolutionSettings solSet = context.GetService<IAnkhSolutionSettings>();
-            IFileStatusCache cache = context.GetService<IFileStatusCache>();
+            if (context == null)
+                throw new ArgumentNullException("context");
 
-            Text = PendingChange.RelativePath;
-            string start = solSet.ProjectRootWithSeparator;
+            IFileStatusCache cache = context.GetService<IFileStatusCache>();
 
             ImageIndex = PendingChange.IconIndex;
             SvnItem item = cache[FullPath];
@@ -44,17 +43,15 @@ namespace Ankh.UI.PendingChanges
             SetValues(
                 pcs.PendingCommitText,
                 PendingChange.ChangeList,
-                GetDirectory(PendingChange.Item),
+                GetDirectory(item),
                 PendingChange.FullPath,
-                PendingChange.Item.IsLocked ? PCStrings.LockedValue : "", // Locked
+                item.IsLocked ? PCStrings.LockedValue : "", // Locked
                 "", // Modified
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
-                PendingChange.Item.Extension,
-                SafeWorkingCopy(PendingChange.Item));
-
-            ImageIndex = PendingChange.IconIndex;
+                item.Extension,
+                SafeWorkingCopy(item));
 
             System.Drawing.Color clr = System.Drawing.Color.Black;
 
