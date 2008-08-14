@@ -21,11 +21,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CommitItem)]
     class ItemCommitCommand : CommandBase
     {
-        ICollection<string> paths;
-        SvnCommitResult commitInfo;
         string storedLogMessage = null;
-
-        SvnCommitArgs _args;
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -91,8 +87,6 @@ namespace Ankh.Commands
             if (resources.Count == 0)
                 return;
 
-            _args = new SvnCommitArgs();
-
             ICollection<List<SvnItem>> repositories;
             List<SvnItem> allItems;
             PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
@@ -125,8 +119,6 @@ namespace Ankh.Commands
                 throw new InvalidOperationException("One or more of the selected items are not in a working copy");
             }
 
-            this.commitInfo = null;
-
             using (DocumentLock dl = tracker.LockDocuments(SvnItem.GetPaths(allItems), DocumentLockType.NoReload))
             {
                 dl.MonitorChanges();
@@ -156,13 +148,6 @@ namespace Ankh.Commands
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
             this.storedLogMessage = null;
-        }
-
-
-
-        private void DoCommit(object sender, ProgressWorkerArgs e)
-        {
-            e.Client.Commit(this.paths, _args, out commitInfo);
         }
 
         /// <summary>
