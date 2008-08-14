@@ -136,6 +136,36 @@ namespace Ankh.UI.VSSelectionControls
                 NotifySelectionUpdated();
         }
 
+        public void SelectAllItems()
+        {
+            if(!MultiSelect)
+                return;
+
+            bool unchanged = true;
+            _inWndProc++;
+            try
+            {
+                foreach (ListViewItem i in this.Items)
+                {
+                    if (unchanged && !i.Selected)
+                        unchanged = false;
+
+                    i.Selected = true;
+                }
+            }
+            finally
+            {
+                if (0 == --_inWndProc)
+                {
+                    if (_shouldUpdate || !unchanged)
+                    {
+                        _shouldUpdate = false;
+                        NotifySelectionUpdated();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
