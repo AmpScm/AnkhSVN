@@ -8,7 +8,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl
+    public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl, IAnkhCommandHookAccessor
     {
         IAnkhServiceProvider _context;
         IAnkhToolWindowSite _site;
@@ -132,6 +132,17 @@ namespace Ankh.UI
         void IAnkhToolWindowControl.OnFrameSize(FrameEventArgs e)
         {
             OnFrameSize(e);
+        }
+
+        #endregion
+
+        #region IAnkhCommandHookAccessor Members
+
+        AnkhCommandHook _hook;
+        AnkhCommandHook IAnkhCommandHookAccessor.CommandHook
+        {
+            get { return _hook; }
+            set { _hook = value; }
         }
 
         #endregion

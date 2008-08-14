@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Ids;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.Commands
 {
@@ -117,6 +118,26 @@ namespace Ankh.Commands
         public string OriginalText
         {
             get { return _originalText; }
+        }
+
+        /// <summary>
+        /// Updates the ole flags from the command status
+        /// </summary>
+        /// <param name="cmdf">The CMDF.</param>
+        /// <remarks>Used by the commandmappers</remarks>
+        public void UpdateFlags(ref OLECMDF cmdf)
+        {
+            if (Enabled)
+                cmdf |= OLECMDF.OLECMDF_ENABLED;
+
+            if (Checked)
+                cmdf |= OLECMDF.OLECMDF_LATCHED;
+
+            if (Ninched)
+                cmdf |= OLECMDF.OLECMDF_NINCHED;
+
+            if (!Visible)
+                cmdf |= OLECMDF.OLECMDF_INVISIBLE;
         }
     }
 }

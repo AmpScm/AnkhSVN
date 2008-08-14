@@ -14,7 +14,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30428</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{906E3F01-CD79-4F80-BCA7-1105224328C4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -89,9 +89,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
+    <Compile Include="Dialogs\VSCommandInstaller.cs" />
     <Compile Include="Selection\SelectionContext.Active.cs">
       <DependentUpon>SelectionContext.cs</DependentUpon>
-	</Compile>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
