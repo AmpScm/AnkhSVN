@@ -391,6 +391,12 @@ namespace Ankh.VS.Dialogs
                         break;
                 }
             }
+
+            if (!ErrorHandler.Succeeded(hr) &&
+                (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97 || pguidCmdGroup == VSConstants.VSStd2K))
+            {
+                return VSConstants.S_OK;
+            }
             
             return hr;
         }
@@ -407,6 +413,19 @@ namespace Ankh.VS.Dialogs
                     if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
                         break;
                 }
+            }
+
+            if (((hr == (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) || (hr == (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)) &&
+                (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97 || pguidCmdGroup == VSConstants.VSStd2K))
+            {
+                // Ok, none of the other handlers handled the command
+                // By default we disable all standard keyboard commands to remove strange context switches
+                // Eg. building from the commit box
+
+                // We let all other commands pass unmodified!
+
+                prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED;
+                return VSConstants.S_OK;
             }
             
             return hr;
