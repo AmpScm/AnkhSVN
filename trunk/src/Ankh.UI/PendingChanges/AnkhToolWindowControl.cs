@@ -10,35 +10,9 @@ namespace Ankh.UI
 {
     public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl, IAnkhCommandHookAccessor
     {
-        IAnkhServiceProvider _context;
-        IAnkhToolWindowSite _site;
+        IAnkhToolWindowHost _host;
         protected AnkhToolWindowControl()
         {
-        }
-
-        /// <summary>
-        /// Gets or sets the site of the control.
-        /// </summary>
-        /// <value></value>
-        /// <returns>The <see cref="T:System.ComponentModel.ISite"/> associated with the <see cref="T:System.Windows.Forms.Control"/>, if any.</returns>
-        /// <PermissionSet>
-        /// 	<IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
-        /// 	<IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
-        /// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
-        /// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
-        /// </PermissionSet>
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-
-                if (value == null || value is IAnkhToolWindowSite)
-                {
-                    _site = (IAnkhToolWindowSite)value;
-                }
-            }
         }
 
         /// <summary>
@@ -46,9 +20,10 @@ namespace Ankh.UI
         /// </summary>
         /// <value>The UI site.</value>
         [CLSCompliant(false)]
-        public IAnkhToolWindowSite ToolWindowSite
+        public IAnkhToolWindowHost ToolWindowHost
         {
-            get { return _site; }
+            get { return _host; }
+			set { _host = value; }
         }
 
         /// <summary>
@@ -57,16 +32,7 @@ namespace Ankh.UI
         /// <value>The context.</value>
         public IAnkhServiceProvider Context
         {
-            get { return _context; }
-        }
-
-        /// <summary>
-        /// Sets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        IAnkhServiceProvider IAnkhToolWindowControl.Context
-        {
-            set { _context = value; }
+            get { return _host; }
         }
 
         #region IAnkhToolWindowControl Members

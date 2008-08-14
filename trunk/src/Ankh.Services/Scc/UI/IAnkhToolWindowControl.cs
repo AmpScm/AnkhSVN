@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.UI;
 
 namespace Ankh.Scc.UI
 {
+	[CLSCompliant(false)]
     public interface IAnkhToolWindowControl 
     {
-        /// <summary>
-        /// Sets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        IAnkhServiceProvider Context { set; }
+		IAnkhToolWindowHost ToolWindowHost { get; set; }
 
         /// <summary>
         /// Called when the frame is created

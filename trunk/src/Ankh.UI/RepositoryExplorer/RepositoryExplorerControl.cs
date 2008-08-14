@@ -14,182 +14,161 @@ using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-    /// <summary>
-    /// Gives a tree view of the repository based on revision.
-    /// </summary>
-    public partial class RepositoryExplorerControl : AnkhToolWindowControl
-    {
-        IAnkhUISite _uiSite;
+	/// <summary>
+	/// Gives a tree view of the repository based on revision.
+	/// </summary>
+	public partial class RepositoryExplorerControl : AnkhToolWindowControl
+	{
+		public RepositoryExplorerControl()
+		{
+			// This call is required by the Windows.Forms Form Designer.
+			InitializeComponent();
 
-        public RepositoryExplorerControl()
-        {
-            // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();
+			this.components = new Container();
+			treeView.RetrieveItems = SvnDirEntryItems.Kind | SvnDirEntryItems.LastAuthor | SvnDirEntryItems.Revision | SvnDirEntryItems.Size | SvnDirEntryItems.Time;
+		}
 
-            this.components = new Container();
-            treeView.RetrieveItems = SvnDirEntryItems.Kind | SvnDirEntryItems.LastAuthor | SvnDirEntryItems.Revision | SvnDirEntryItems.Size | SvnDirEntryItems.Time;
-        }
+		protected override void OnFrameCreated(EventArgs e)
+		{
+			base.OnFrameCreated(e);
 
-        protected override void OnFrameCreated(EventArgs e)
-        {
-            base.OnFrameCreated(e);
+			ToolWindowHost.CommandContext = AnkhId.SccExplorerContextGuid;
+			ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
+		}
 
-            ToolWindowSite.CommandContext = AnkhId.SccExplorerContextGuid;
-            ToolWindowSite.KeyboardContext = AnkhId.SccExplorerContextGuid;
-        }
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			treeView.Context = Context;
+			fileView.Context = Context;
+			treeView.SelectionPublishServiceProvider = Context;
+			fileView.SelectionPublishServiceProvider = Context;
+		}
 
-        IAnkhUISite UISite
-        {
-            get { return _uiSite; }
-        }
+		/// <summary>
+		/// Add a new URL root to the tree.
+		/// </summary>
+		/// <param name="text"></param>
+		/// <param name="node"></param>
+		public void AddRoot(Uri uri)
+		{
+			this.treeView.AddRoot(uri);
+		}
 
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-                if (value is IAnkhUISite)
-                {
-                    _uiSite = value as IAnkhUISite;
+		public Uri SelectedUri
+		{
+			get { return null; }
+		}
 
-                    OnUISiteChanged(EventArgs.Empty);
-                }
-            }
-        }
+		private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
+		{
+			Point screen = (e.Location != new Point(-1, -1)) ? e.Location : treeView.PointToScreen(new Point(0, 0));
+			ToolWindowHost.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+		}
 
-        private void OnUISiteChanged(EventArgs eventArgs)
-        {
-            treeView.Context = _uiSite;
-            fileView.Context = _uiSite;
-            treeView.SelectionPublishServiceProvider = _uiSite;
-            fileView.SelectionPublishServiceProvider = _uiSite;
-        }
+		private void OnFileViewShowContextMenu(object sender, MouseEventArgs e)
+		{
+			Point screen = (e.Location != new Point(-1, -1)) ? e.Location : fileView.PointToScreen(new Point(0, 0));
+			ToolWindowHost.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+		}
 
-        /// <summary>
-        /// Add a new URL root to the tree.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="node"></param>
-        public void AddRoot(Uri uri)
-        {
-            this.treeView.AddRoot(uri);
-        }
+		IFileIconMapper _iconMapper;
+		IFileIconMapper IconMapper
+		{
+			get
+			{
+				if (_iconMapper == null && Context != null)
+					_iconMapper = Context.GetService<IFileIconMapper>();
 
-        public Uri SelectedUri
-        {
-            get { return null; }
-        }
+				return _iconMapper;
+			}
+		}
 
-        private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
-        {
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : treeView.PointToScreen(new Point(0, 0));
-            ToolWindowSite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
-        }
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			RefreshFileList();
+		}
 
-        private void OnFileViewShowContextMenu(object sender, MouseEventArgs e)
-        {
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : fileView.PointToScreen(new Point(0, 0));
-            ToolWindowSite.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
-        }        
+		void RefreshFileList()
+		{
+			fileView.Items.Clear();
 
-        IFileIconMapper _iconMapper;
-        IFileIconMapper IconMapper
-        {
-            get
-            {
-                if (_iconMapper == null && UISite != null)
-                    _iconMapper = UISite.GetService<IFileIconMapper>();
+			RepositoryTreeNode tn = treeView.SelectedNode as RepositoryTreeNode;
 
-                return _iconMapper;
-            }
-        }
+			if (tn != null)
+			{
+				foreach (RepositoryTreeNode sn in tn.Nodes)
+				{
+					if (sn.FolderItems.Contains(sn.RawUri))
+					{
+						RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], IconMapper);
 
-        private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            RefreshFileList();
-        }
+						fileView.Items.Add(item);
+					}
+				}
+				foreach (SvnListEventArgs ee in tn.FolderItems)
+				{
+					if (ee.EntryUri != tn.RawUri)
+					{
+						RepositoryListItem item = new RepositoryListItem(fileView, ee, IconMapper);
 
-        void RefreshFileList()
-        {
-            fileView.Items.Clear();
+						fileView.Items.Add(item);
+					}
+				}
 
-            RepositoryTreeNode tn = treeView.SelectedNode as RepositoryTreeNode;
+				if (fileView.Items.Count > 0)
+				{
+					SmartColumn fileColumn = fileView.AllColumns[0];
 
-            if (tn != null)
-            {
-                foreach (RepositoryTreeNode sn in tn.Nodes)
-                {
-                    if (sn.FolderItems.Contains(sn.RawUri))
-                    {
-                        RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], IconMapper);
+					if (fileColumn.DisplayIndex >= 0)
+						fileColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+				}
+			}
+		}
 
-                        fileView.Items.Add(item);
-                    }
-                }
-                foreach (SvnListEventArgs ee in tn.FolderItems)
-                {
-                    if (ee.EntryUri != tn.RawUri)
-                    {
-                        RepositoryListItem item = new RepositoryListItem(fileView, ee, IconMapper);
+		BusyOverlay _bo;
+		private void treeView_RetrievingChanged(object sender, EventArgs e)
+		{
+			if (treeView.Retrieving)
+			{
+				if (_bo == null)
+					_bo = new BusyOverlay(treeView, AnchorStyles.Top | AnchorStyles.Right);
 
-                        fileView.Items.Add(item);
-                    }
-                }
+				_bo.Show();
+			}
+			else
+			{
+				if (_bo != null)
+				{
+					_bo.Hide();
+					_bo.Dispose();
+					_bo = null;
+				}
+			}
+		}
 
-                if (fileView.Items.Count > 0)
-                {
-                    SmartColumn fileColumn = fileView.AllColumns[0];
+		private void treeView_SelectedNodeRefresh(object sender, EventArgs e)
+		{
+			RefreshFileList();
+		}
 
-                    if(fileColumn.DisplayIndex >= 0)
-                        fileColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-                }
-            }
-        }
+		private void fileView_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			ListViewHitTestInfo ht = fileView.HitTest(e.X, e.Y);
 
-        BusyOverlay _bo;
-        private void treeView_RetrievingChanged(object sender, EventArgs e)
-        {
-            if (treeView.Retrieving)
-            {
-                if (_bo == null)
-                    _bo = new BusyOverlay(treeView, AnchorStyles.Top | AnchorStyles.Right);
+			RepositoryListItem li = ht.Item as RepositoryListItem;
 
-                _bo.Show();
-            }
-            else
-            {
-                if (_bo != null)
-                {
-                    _bo.Hide();
-                    _bo.Dispose();
-                    _bo = null;
-                }
-            }
-        }
+			if (ht.Location == ListViewHitTestLocations.None || li == null)
+				return;
 
-        private void treeView_SelectedNodeRefresh(object sender, EventArgs e)
-        {
-            RefreshFileList();
-        }
-
-        private void fileView_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            ListViewHitTestInfo ht = fileView.HitTest(e.X, e.Y);
-
-            RepositoryListItem li = ht.Item as RepositoryListItem;
-
-            if(ht.Location == ListViewHitTestLocations.None || li == null)
-                return;
-
-            if (li.Info.Entry.NodeKind == SvnNodeKind.Directory)
-            {
-                treeView.BrowseTo(li.RawUri);
-            }
-            else
-            {
-                // TODO: Perform default(?) action
-            }
-        }        
-    }
+			if (li.Info.Entry.NodeKind == SvnNodeKind.Directory)
+			{
+				treeView.BrowseTo(li.RawUri);
+			}
+			else
+			{
+				// TODO: Perform default(?) action
+			}
+		}
+	}
 }

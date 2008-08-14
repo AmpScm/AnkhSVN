@@ -13,6 +13,7 @@ using Ankh.UI.Services;
 using Ankh.Ids;
 using Ankh.UI.RepositoryExplorer;
 using System.Diagnostics;
+using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog
 {
@@ -53,34 +54,17 @@ namespace Ankh.UI.SvnLog
             container.Add(this);
         }
 
-        IAnkhUISite _site;
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-
-                IAnkhUISite site = value as IAnkhUISite;
-
-                if (site != null)
-                {
-                    _site = site;
-
-                    OnUISiteChanged(EventArgs.Empty);
-                }
-            }
-        }
-        [Browsable(false), CLSCompliant(false)]
-        public IAnkhUISite UISite
-        {
-            get { return _site; }
-        }
-
-        protected void OnUISiteChanged(EventArgs e)
-        {
-            logRevisionControl1.SelectionPublishServiceProvider = _site;
-        }
+		IAnkhServiceProvider _qcontext;
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public IAnkhServiceProvider Context
+		{
+			get { return _qcontext; }
+			set
+			{
+				_qcontext = value;
+				logRevisionControl1.SelectionPublishServiceProvider = value;
+			}
+		}
 
         public ICollection<string> LocalTargets
         {
@@ -460,11 +444,12 @@ namespace Ankh.UI.SvnLog
 
         private void logRevisionControl1_ShowContextMenu(object sender, MouseEventArgs e)
         {
-            if (UISite != null)
-            {
-                Point p = MousePosition;
-                UISite.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
-            }
+			if (Context != null)
+			{
+				Point p = MousePosition;
+				IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+				cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
+			}
         }
 
 		private void logRevisionControl1_CacheVirtualItems(object sender, CacheVirtualItemsEventArgs e)

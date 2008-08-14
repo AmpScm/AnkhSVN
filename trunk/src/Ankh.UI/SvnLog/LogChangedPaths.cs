@@ -10,6 +10,7 @@ using Ankh.UI.SvnLog;
 using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.Ids;
+using Ankh.Commands;
 
 namespace Ankh.UI
 {
@@ -27,30 +28,17 @@ namespace Ankh.UI
 
         }
 
-        IAnkhUISite _site;
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-
-                IAnkhUISite site = value as IAnkhUISite;
-
-                if (site != null)
-                {
-                    _site = site;
-
-                    OnUISiteChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        protected void OnUISiteChanged(EventArgs e)
-        {
-            changedPaths.SelectionPublishServiceProvider = _site;
-        }
-
+		IAnkhServiceProvider _context;
+		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public IAnkhServiceProvider Context
+		{
+			get { return _context; }
+			set
+			{
+				_context = value;
+				changedPaths.SelectionPublishServiceProvider = value;
+			}
+		}
 
         #region ICurrentItemDestination<ISvnLogItem> Members
         ICurrentItemSource<ISvnLogItem> itemSource;
@@ -100,7 +88,12 @@ namespace Ankh.UI
         private void changedPaths_ShowContextMenu(object sender, MouseEventArgs e)
         {
             Point p = MousePosition;
-            _site.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
+
+			if(Context != null)
+			{
+				IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+				cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
+			}
         }
     }
 }

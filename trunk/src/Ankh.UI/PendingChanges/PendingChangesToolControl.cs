@@ -17,13 +17,13 @@ namespace Ankh.UI.PendingChanges
 {
     public partial class PendingChangesToolControl : AnkhToolWindowControl
     {
-        PendingCommitsPage _commitsPage;
-        PendingIssuesPage _issuesPage;
-        RecentChangesPage _changesPage;
-        PendingConflictsPage _conflictsPage;
-        PendingChangesPage _currentPage;
+		readonly List<PendingChangesPage> _pages;
+		readonly PendingCommitsPage _commitsPage;
+		readonly PendingIssuesPage _issuesPage;
+		readonly RecentChangesPage _changesPage;
+		readonly PendingConflictsPage _conflictsPage;
+		PendingChangesPage _currentPage;
         
-        IAnkhUISite _site;
         public PendingChangesToolControl()
         {
             InitializeComponent();
@@ -32,10 +32,22 @@ namespace Ankh.UI.PendingChanges
             _issuesPage = new PendingIssuesPage();
             _changesPage = new RecentChangesPage();
             _conflictsPage = new PendingConflictsPage();
+
+			_pages = new List<PendingChangesPage>();
+			_pages.Add(_commitsPage);
+			_pages.Add(_issuesPage);
+			_pages.Add(_changesPage);
+			_pages.Add(_conflictsPage);
         }
 
         protected override void OnLoad(EventArgs e)
         {
+			foreach (PendingChangesPage p in _pages)
+			{
+				p.Context = Context;
+				p.ToolControl = this;
+			}
+
             base.OnLoad(e);
 
             ShowPanel(_commitsPage);
@@ -45,40 +57,19 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnFrameCreated(e);
 
-            ToolWindowSite.CommandContext = AnkhId.PendingChangeContextGuid;
+            ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
             //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
-        }
-
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-
-                IAnkhUISite site = value as IAnkhUISite;
-
-                if (site != null)
-                {
-                    _site = site;
-                    foreach (PendingChangesPage page in panel1.Controls)
-                    {
-                        page.UISite = site;
-                    }
-
-                    UpdateColors();
-                    UpdateCaption();
-                }
-            }
-        }
+			UpdateColors();
+            UpdateCaption();
+        }       
 
         private void UpdateColors()
         {
-            if (UISite == null)
+            if (Context == null)
                 return;
 
             // We should use the VS colors instead of the ones provided by the OS
-            IAnkhVSColor colorSvc = UISite.GetService<IAnkhVSColor>();
+			IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
             
             Color color;
             if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
@@ -89,13 +80,7 @@ namespace Ankh.UI.PendingChanges
 
             if(colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
                 pendingChangesTabs.ForeColor = color;
-        }
-
-        [CLSCompliant(false)]
-        public IAnkhUISite UISite
-        {
-            get { return _site; }
-        }
+        }   
 
         void ShowPanel(PendingChangesPage page)
         {
@@ -121,12 +106,7 @@ namespace Ankh.UI.PendingChanges
             if (!foundPage)
             {
                 panel1.Controls.Add(page);
-                page.Dock = DockStyle.Fill;
-
-                if (UISite != null)
-                {
-                    page.UISite = UISite;
-                }
+                page.Dock = DockStyle.Fill;                
             }
 
             _currentPage = page;
@@ -137,9 +117,9 @@ namespace Ankh.UI.PendingChanges
             conflictsButton.Checked = (page == _conflictsPage);
             page.Select();
 
-            if (UISite != null)
+            if (Context != null)
             {
-                IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+				IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
                 if (cmd != null)
                     cmd.UpdateCommandUI(false);
@@ -150,12 +130,12 @@ namespace Ankh.UI.PendingChanges
 
         void UpdateCaption()
         {
-            if (UISite != null)
+			if (ToolWindowHost != null)
             {
                 if (_currentPage == null || string.IsNullOrEmpty(_currentPage.Text))
-                    UISite.Title = UISite.OriginalTitle;
+					ToolWindowHost.Title = ToolWindowHost.OriginalTitle;
                 else
-                    UISite.Title = UISite.OriginalTitle + " - " + _currentPage.Text;
+					ToolWindowHost.Title = ToolWindowHost.OriginalTitle + " - " + _currentPage.Text;
             }
         }
 

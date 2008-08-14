@@ -33,8 +33,8 @@ namespace Ankh.UI.DiffWindow
         {
             base.OnFrameCreated(e);
 
-            ToolWindowSite.CommandContext = AnkhId.DiffMergeContextGuid;
-            ToolWindowSite.KeyboardContext = AnkhId.DiffMergeContextGuid;
+            ToolWindowHost.CommandContext = AnkhId.DiffMergeContextGuid;
+            ToolWindowHost.KeyboardContext = AnkhId.DiffMergeContextGuid;
         }
 
         int _nFrame;
@@ -97,7 +97,7 @@ namespace Ankh.UI.DiffWindow
             //Ankh.Diff.FileName fnB = new Ankh.Diff.FileName(theirs);
             diffControl1.SetData(A, B, Script, strCaptionA, strCaptionB);
 
-            ToolWindowSite.Title = Path.GetFileName(args.MineFile) + " - Diff";
+            ToolWindowHost.Title = Path.GetFileName(args.MineFile) + " - Diff";
         }
     }
 }

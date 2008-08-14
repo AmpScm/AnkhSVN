@@ -16,8 +16,6 @@ namespace Ankh.UI.SvnLog
 {
     public partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
-        IAnkhUISite _site;
-
         public LogControl()
         {
             InitializeComponent();
@@ -38,24 +36,18 @@ namespace Ankh.UI.SvnLog
             container.Add(this);
         }
 
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
+		IAnkhServiceProvider _context;
+		public IAnkhServiceProvider Context
+		{
+			get { return _context; }
+			set
+			{
+				_context = value;
 
-                IAnkhUISite site = value as IAnkhUISite;
-
-                if (site != null)
-                {
-                    _site = site;
-
-                    logRevisionControl1.Site = site;
-                    logChangedPaths1.Site = site;
-                }
-            }
-        }
+				logRevisionControl1.Context = value;
+                logChangedPaths1.Context = value;
+			}
+		}
 
         LogMode _mode;
         //[Obsolete]
@@ -164,7 +156,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(_site.GetService<IAnkhServiceProvider>(), Mode);
+            logRevisionControl1.Start(Context.GetService<IAnkhServiceProvider>(), Mode);
         }
 
         public bool IncludeMerged
