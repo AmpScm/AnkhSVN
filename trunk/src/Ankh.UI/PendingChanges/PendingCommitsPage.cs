@@ -75,6 +75,8 @@ namespace Ankh.UI.PendingChanges
                 _manager.IsActive = true;
                 _manager.FullRefresh(false);
             }
+            else
+                PerformInitialUpdate(_manager);
         }
 
         protected IPendingChangesManager Manager
@@ -155,12 +157,20 @@ namespace Ankh.UI.PendingChanges
 
         void OnPendingChangesInitialUpdate(object sender, PendingChangeEventArgs e)
         {
+            PerformInitialUpdate(e.Manager);
+        }
+
+        void PerformInitialUpdate(IPendingChangesManager manager)
+        {
+            if (manager == null)
+                throw new ArgumentNullException("manager");
+
             pendingCommits.BeginUpdate();
             _listItems.Clear(); // Make sure we are clear
             pendingCommits.ClearItems();            
             try
             {
-                foreach (PendingChange pc in e.Manager.GetAll())
+                foreach (PendingChange pc in manager.GetAll())
                 {
                     PendingCommitItem pi = new PendingCommitItem(pendingCommits, pc);
                     _listItems.Add(pc.FullPath, pi);
