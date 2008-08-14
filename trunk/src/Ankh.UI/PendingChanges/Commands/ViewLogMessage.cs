@@ -13,7 +13,7 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
 
-            if(page == null || !page.Visible)
+            if(page == null || !page.Visible || e.Selection.ActiveDialog != null)
             {
                 e.Enabled = false;
                 return;

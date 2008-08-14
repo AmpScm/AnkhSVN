@@ -97,8 +97,18 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnHandleCreated(e);
 
+            HookCommands();
+        }
+
+        bool _hooked;
+        public void HookCommands()
+        {
+            if (_hooked)
+                return;
+
 			if (Context != null)
 			{
+                _hooked = true;
 				VSCommandHandler.Install(Context, this,
 					new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
 					OnSelectAll);

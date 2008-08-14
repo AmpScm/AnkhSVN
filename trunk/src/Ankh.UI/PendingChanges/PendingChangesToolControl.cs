@@ -46,6 +46,12 @@ namespace Ankh.UI.PendingChanges
 			{
 				p.Context = Context;
 				p.ToolControl = this;
+
+                if (!panel1.Controls.Contains(p))
+                {
+                    p.Enabled = p.Visible = false;
+                    panel1.Controls.Add(p);
+                }
 			}
 
             base.OnLoad(e);
