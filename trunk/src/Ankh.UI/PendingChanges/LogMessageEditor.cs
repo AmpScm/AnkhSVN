@@ -320,6 +320,8 @@ namespace Ankh.UI.PendingChanges
 
             IntPtr hwndTop;
 
+            codeEditorNativeWindow.Size = ClientRectangle.Size;
+
             IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
 
             if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out hwndTop)))
