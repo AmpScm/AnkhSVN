@@ -93,6 +93,20 @@ namespace Ankh.UI.PendingChanges
             FinalSortColumn = path;
         }
 
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            if (Context != null)
+                VSCommandHandler.Install(Context, this,
+                    new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
+                    delegate
+                    {
+                        foreach (PendingCommitItem i in Items)
+                            i.Selected = true;
+                    });
+        }
+
         bool IPendingChangeSource.HasPendingChanges
         {
             get { return CheckedIndices.Count > 0; }
