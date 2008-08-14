@@ -71,7 +71,7 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(497, 0);
+            this.textBox1.Location = new System.Drawing.Point(500, 0);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 3;
@@ -81,7 +81,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(385, 3);
+            this.label2.Location = new System.Drawing.Point(388, 3);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(106, 17);
             this.label2.TabIndex = 2;
@@ -92,7 +92,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(-3, 3);
+            this.label1.Location = new System.Drawing.Point(-3, 7);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 13);
             this.label1.TabIndex = 0;
@@ -152,7 +152,6 @@
             this.pendingList.Location = new System.Drawing.Point(0, 0);
             this.pendingList.Name = "pendingList";
             this.pendingList.Size = new System.Drawing.Size(600, 185);
-            this.pendingList.StrictCheckboxesClick = true;
             this.pendingList.TabIndex = 0;
             this.pendingList.UseCompatibleStateImageBehavior = false;
             // 

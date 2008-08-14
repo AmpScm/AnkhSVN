@@ -39,6 +39,7 @@ namespace Ankh.UI.PendingChanges
 			{
 				pendingCommits.SelectionPublishServiceProvider = Context;
 				pendingCommits.Context = Context;
+                pendingCommits.HookCommands();
 			}
 
 			Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
