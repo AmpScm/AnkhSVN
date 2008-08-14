@@ -38,7 +38,7 @@ namespace Ankh.UI
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
-    public class VSContainerForm : System.Windows.Forms.Form, IAnkhVSContainerForm, IAnkhServiceProvider
+    public class VSContainerForm : System.Windows.Forms.Form, IAnkhVSContainerForm, IAnkhServiceProvider, IAnkhCommandHookAccessor
     {
         IAnkhServiceProvider _context;
         IAnkhDialogOwner _dlgOwner;
@@ -312,6 +312,17 @@ namespace Ankh.UI
         void IAnkhVSContainerForm.AddWindowPane(IVsWindowPane pane)
         {
             AddWindowPane(pane);
+        }
+
+        #endregion
+
+        #region IAnkhCommandHookAccessor Members
+
+        AnkhCommandHook _hook;
+        AnkhCommandHook IAnkhCommandHookAccessor.CommandHook
+        {
+            get { return _hook; }
+            set { _hook = value; }
         }
 
         #endregion

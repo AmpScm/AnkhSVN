@@ -108,6 +108,7 @@
     <Compile Include="UI\IUIShell.cs" />
     <Compile Include="UI\PathSelectorInfo.cs" />
     <Compile Include="UI\PathSelectorResult.cs" />
+    <Compile Include="UI\VSCommandHandler.cs" />
     <Compile Include="VS\ComStreamWrapper.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />

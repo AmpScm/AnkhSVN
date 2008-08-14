@@ -310,17 +310,7 @@ namespace Ankh.Commands
 
             if (PerformUpdate(updateArgs.Command, updateArgs))
             {
-                if (updateArgs.Enabled)
-                    cmdf |= OLECMDF.OLECMDF_ENABLED;
-
-                if (updateArgs.Checked)
-                    cmdf |= OLECMDF.OLECMDF_LATCHED;
-
-                if (updateArgs.Ninched)
-                    cmdf |= OLECMDF.OLECMDF_NINCHED;
-
-                if (!updateArgs.Visible)
-                    cmdf |= OLECMDF.OLECMDF_INVISIBLE;
+                updateArgs.UpdateFlags(ref cmdf);
             }
                 
             if (updateArgs.DynamicMenuEnd)
@@ -334,7 +324,7 @@ namespace Ankh.Commands
             prgCmds[0].cmdf = (uint)cmdf;
 
             return 0; // S_OK
-        }
+        }        
 
         #region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
 
