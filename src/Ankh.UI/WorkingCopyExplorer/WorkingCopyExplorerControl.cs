@@ -41,8 +41,8 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             base.OnFrameCreated(e);
 
-            ToolWindowSite.CommandContext = AnkhId.SccExplorerContextGuid;
-            ToolWindowSite.KeyboardContext = AnkhId.SccExplorerContextGuid;
+            ToolWindowHost.CommandContext = AnkhId.SccExplorerContextGuid;
+            ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
             folderTree.Context = Context;
             fileList.Context = Context;
@@ -101,7 +101,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void ShowContextMenu(Point point)
         {
-            ToolWindowSite.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point.X, point.Y);
+            ToolWindowHost.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point.X, point.Y);
         }
 
         public bool IsWcRootSelected()

@@ -13,12 +13,13 @@ namespace Ankh.UI.Services
     /// Site as set on package hosted components
     /// </summary>
     [CLSCompliant(false)]
-    public interface IAnkhUISite : ISite, IAnkhServiceProvider
+    public interface IAnkhUISite : IAnkhServiceProvider
     {
         IAnkhPackage Package { get; }
         string Title { get; set; }
         string OriginalTitle { get; }
-        IOleCommandTarget CommandTarget { get; set; }
+
+		void AddCommandTarget(IOleCommandTarget target);
 
         bool ShowContextMenu(AnkhCommandMenu menu, int x, int y);
     }

@@ -22,43 +22,44 @@ namespace Ankh.UI.PendingChanges
             logMessageEditor.PasteSource = pendingCommits;
         }
 
-        bool _createdEditor;
-        protected override void OnUISiteChanged()
-        {
-            base.OnUISiteChanged();
+        bool _createdEditor;    
 
-            if (!_createdEditor)
-            {
-                logMessageEditor.Init(UISite, false);
-                UISite.CommandTarget = logMessageEditor.CommandTarget;
-                _createdEditor = true;
-            }
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
 
-            if (pendingCommits != null)
-            {
-                pendingCommits.SelectionPublishServiceProvider = UISite;
-                pendingCommits.Context = UISite;
-            }
+			if (!_createdEditor)
+			{
+				logMessageEditor.Init(Context, false);
+				ToolControl.ToolWindowHost.AddCommandTarget(logMessageEditor.CommandTarget);
+				_createdEditor = true;
+			}
 
-            UISite.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
+			if (pendingCommits != null)
+			{
+				pendingCommits.SelectionPublishServiceProvider = Context;
+				pendingCommits.Context = Context;
+			}
 
-            HookList();
-        }
+			Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
+
+			HookList();
+		}
 
         IPendingChangesManager _manager;
         private void HookList()
         {
-            if (_manager != null || UISite == null)
+            if (_manager != null || Context == null)
                 return;
 
             if (pendingCommits.SmallImageList == null)
             {
-                IFileIconMapper mapper = UISite.GetService<IFileIconMapper>();
+				IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
                 pendingCommits.SmallImageList = mapper.ImageList;
             }
 
-            _manager = UISite.GetService<IPendingChangesManager>();
+			_manager = Context.GetService<IPendingChangesManager>();
 
             if (_manager == null)
                 return;
@@ -203,7 +204,7 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Items.Add(pci);
             }
             else
-                pci.RefreshText(UISite);
+                pci.RefreshText(Context);
         }
 
         void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
@@ -222,7 +223,7 @@ namespace Ankh.UI.PendingChanges
 
         internal void RefreshList()
         {
-            UISite.GetService<IFileStatusCache>().ClearCache();
+			Context.GetService<IFileStatusCache>().ClearCache();
             Manager.FullRefresh(true);
         }
 
@@ -249,7 +250,7 @@ namespace Ankh.UI.PendingChanges
 
             pendingCommits.RedrawItems(info.Item.Index, info.Item.Index, false);
 
-            IAnkhCommandService cmd = UISite.GetService<IAnkhCommandService>();
+			IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null)
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
@@ -317,7 +318,7 @@ namespace Ankh.UI.PendingChanges
             a.LogMessage = logMessageEditor.Text;
             a.KeepLocks = keepLocks;
 
-            if (UISite.GetService<IPendingChangeHandler>().Commit(changes, a))
+			if (Context.GetService<IPendingChangeHandler>().Commit(changes, a))
             {
                 logMessageEditor.Text = "";
             }

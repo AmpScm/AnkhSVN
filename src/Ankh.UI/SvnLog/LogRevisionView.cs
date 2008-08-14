@@ -20,8 +20,10 @@ namespace Ankh.UI.SvnLog
     {
         public LogRevisionView()
         {
+			Sorting = SortOrder.None;
         }
         public LogRevisionView(IContainer container)
+			: this()
         {
             container.Add(this);
         }

@@ -29,8 +29,9 @@ namespace Ankh.UI.SvnLog
         {
             base.OnFrameCreated(e);
 
-            ToolWindowSite.CommandContext = AnkhId.LogContextGuid;
-            ToolWindowSite.KeyboardContext = AnkhId.LogContextGuid;
+            ToolWindowHost.CommandContext = AnkhId.LogContextGuid;
+            ToolWindowHost.KeyboardContext = AnkhId.LogContextGuid;
+			logControl.Context = Context;
         }
 
         SvnItem[] _localItems;

@@ -12,7 +12,6 @@ namespace Ankh.UI.PendingChanges
 {
     partial class PendingChangesPage : UserControl
     {
-        IAnkhUISite _uiSite;
         bool _registered;
         public PendingChangesPage()
         {
@@ -41,22 +40,26 @@ namespace Ankh.UI.PendingChanges
             get { return null; }
         }
 
-        [Browsable(false)]
-        public IAnkhUISite UISite
-        {
-            get { return _uiSite; }
-            set
-            {
-                _uiSite = value;
+		IAnkhServiceProvider _context;
+		[Browsable(false)]
+		public IAnkhServiceProvider Context
+		{
+			get { return _context; }
+			set { _context = value; }
+		}
 
-                if (value != null)
-                    OnUISiteChanged();
-            }
-        }
+		PendingChangesToolControl _toolControl;
+		public PendingChangesToolControl ToolControl
+		{
+			get { return _toolControl; }
+			set { _toolControl = value; }
+		}
 
-        protected virtual void OnUISiteChanged()
-        {
-            Register(true);
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			Register(true);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -79,10 +82,10 @@ namespace Ankh.UI.PendingChanges
 
             if(register)
             {
-                if(_container == null && UISite == null)
+                if(_container == null && Context == null)
                     return;
 
-                _container = UISite.GetService<IServiceContainer>();
+				_container = Context.GetService<IServiceContainer>();
 
                 if(_container == null)
                     return;

@@ -73,7 +73,7 @@
     <Compile Include="Configuration\AnkhConfig.cs" />
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="Scc\IPendingChangeHandler.cs" />
-    <Compile Include="UI\IAnkhToolWindowSite.cs" />
+    <Compile Include="UI\IAnkhToolWindowHost.cs" />
     <Compile Include="IAnkhScheduler.cs" />
     <Compile Include="Scc\EnlistmentState.cs" />
     <Compile Include="Scc\UI\IAnkhToolWindowControl.cs" />
@@ -139,7 +139,7 @@
     <Compile Include="Selection\RemoteSvnItem.cs" />
     <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="UI\IAnkhConfigurationService.cs" />
-    <Compile Include="UI\IAnkhUISite.cs" />
+    <Compile Include="UI\IAnkhUIHost.cs" />
     <Compile Include="UI\VSContainerForm.cs">
       <SubType>Form</SubType>
     </Compile>
