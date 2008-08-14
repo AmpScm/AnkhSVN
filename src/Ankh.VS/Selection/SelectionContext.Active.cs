@@ -135,6 +135,28 @@ namespace Ankh.VS.Selection
             get { return _activeDocumentControl ?? (_activeDocumentControl = FindControl(ActiveDocumentFrameObject)); }
         }
 
+        bool _shouldRefresh;
+        IVsHierarchy _hierCached;
+        uint _idCached;
+        IVsMultiItemSelect _misCached;
+        ISelectionContainer _contCached;
+
+        private void RefreshContext()
+        {
+            if(_shouldRefresh)
+            {
+                _shouldRefresh = false;
+            
+                // TODO: Perhaps get the global context again instead of returning cached values
+                OnSelectionChanged(_currentHierarchy, _currentItem, _currentSelection, _currentContainer,
+                    _hierCached, _idCached, _misCached, _contCached);
+
+                _hierCached = null;
+                _misCached = null;
+                _contCached = null;
+            }
+        }
+
         #endregion
 
         readonly Stack<Control> _popups = new Stack<Control>();
@@ -167,6 +189,9 @@ namespace Ankh.VS.Selection
                         _context._topPopup = _context._popups.Peek();
                     else
                         _context._topPopup = null;
+
+                    if(_context._topPopup == null)
+                        _context.RefreshContext();
                 }
             }
         }
@@ -175,6 +200,15 @@ namespace Ankh.VS.Selection
         {
             if(control == null)
                 throw new ArgumentNullException("control");
+
+            if (!_shouldRefresh)
+            {
+                _shouldRefresh = true;
+                _hierCached = _currentHierarchy;
+                _idCached = _currentItem;
+                _misCached = _currentSelection;
+                _contCached = _currentContainer;
+            }
 
             _popups.Push(control);
             _topPopup = control;
