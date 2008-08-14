@@ -361,13 +361,10 @@ namespace Ankh.UI.MergeWizard
 
         private bool UseExternalMergeTool()
         {
-            return false;
-            /*
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
             if (cs == null) { return false; }
             string mergePath = cs.Instance.MergeExePath;
             return !string.IsNullOrEmpty(mergePath);
-            */
         }
 
         private string CreateTempFile()
