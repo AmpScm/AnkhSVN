@@ -50,6 +50,7 @@ namespace Ankh.UI.PendingChanges
                 if (!panel1.Controls.Contains(p))
                 {
                     p.Enabled = p.Visible = false;
+                    p.Dock = DockStyle.Fill;
                     panel1.Controls.Add(p);
                 }
 			}
