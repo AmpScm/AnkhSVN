@@ -8,6 +8,7 @@ using System.ComponentModel.Design;
 using Ankh.Commands;
 using Ankh.Ids;
 using Microsoft.VisualStudio;
+using Ankh.Scc.UI;
 
 namespace Ankh.VS.Dialogs
 {
@@ -18,7 +19,6 @@ namespace Ankh.VS.Dialogs
             : base(context)
         {
         }
-        #region IVSCommandHandlerService Members
 
         public void Install(Control control, System.ComponentModel.Design.CommandID command, EventHandler<Ankh.Commands.CommandEventArgs> handler, EventHandler<Ankh.Commands.CommandUpdateEventArgs> updateHandler)
         {
@@ -46,6 +46,17 @@ namespace Ankh.VS.Dialogs
             }
 
             Control topParent = control.TopLevelControl;
+
+            if (topParent == null)
+            {
+                Control p = control;
+                while (p != null)
+                {
+                    topParent = p;
+                    p = p.Parent;
+                }
+            }
+
             IAnkhVSContainerForm ct = topParent as IAnkhVSContainerForm;
 
             if (ct != null)
@@ -54,10 +65,20 @@ namespace Ankh.VS.Dialogs
                 acc.CommandHook = cx;
                 cx.Install(control, command, handler, updateHandler);
                 ct.AddCommandTarget(cx);
+                return;
+            }
+
+            IAnkhToolWindowControl toolWindow = topParent as IAnkhToolWindowControl;
+            if (toolWindow != null && toolWindow.ToolWindowHost != null)
+            {
+                ContextCommandHandler cx = new ContextCommandHandler(this, topParent);
+                acc.CommandHook = cx;
+                cx.Install(control, command, handler, updateHandler);
+                toolWindow.ToolWindowHost.AddCommandTarget(cx);
+                return;
             }
         }
 
-        #endregion
     }
 
     class ContextCommandHandler : AnkhCommandHook, IOleCommandTarget
@@ -87,7 +108,7 @@ namespace Ankh.VS.Dialogs
             CommandData cd = new CommandData(control, handler, updateHandler);
 
             List<CommandData> items;
-            if(!_data.TryGetValue(command, out items))
+            if (!_data.TryGetValue(command, out items))
                 _data[command] = items = new List<CommandData>();
 
             items.Add(cd);
@@ -158,7 +179,7 @@ namespace Ankh.VS.Dialogs
 
                 prgCmds[0].cmdf = (uint)cmdf;
 
-                return VSConstants.S_OK;                
+                return VSConstants.S_OK;
             }
 
             return (int)Constants.OLECMDERR_E_NOTSUPPORTED;

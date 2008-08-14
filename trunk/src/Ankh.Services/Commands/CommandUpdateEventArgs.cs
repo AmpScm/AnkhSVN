@@ -125,7 +125,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="cmdf">The CMDF.</param>
         /// <remarks>Used by the commandmappers</remarks>
-		[CLSCompliant(false)]
+        [CLSCompliant(false)]
         public void UpdateFlags(ref OLECMDF cmdf)
         {
             if (Enabled)

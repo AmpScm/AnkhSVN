@@ -97,15 +97,18 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnHandleCreated(e);
 
-            if (Context != null)
-                VSCommandHandler.Install(Context, this,
-                    new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
-                    delegate
-                    {
-                        foreach (PendingCommitItem i in Items)
-                            i.Selected = true;
-                    });
+			if (Context != null)
+			{
+				VSCommandHandler.Install(Context, this,
+					new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
+					OnSelectAll);
+			}
         }
+
+		void OnSelectAll(object sender, CommandEventArgs e)
+		{
+            SelectAllItems();
+		}
 
         bool IPendingChangeSource.HasPendingChanges
         {
@@ -136,7 +139,10 @@ namespace Ankh.UI.PendingChanges
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set { _context = value; }
+            set 
+			{ 
+				_context = value;
+			}
         }
 
         PendingCommitsSelectionMap _map;
