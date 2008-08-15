@@ -336,6 +336,7 @@ namespace Ankh.Scc
                 return new PendingChangeStatus(_kind = PendingChangeKind.EditorDirty);
             else if (item.IsLocked)
                 return new PendingChangeStatus(_kind = PendingChangeKind.LockedOnly);
+            else
             {
                 _kind = PendingChangeKind.None;
                 return null;
