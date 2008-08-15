@@ -38,7 +38,7 @@ namespace Ankh.UI.PendingChanges
             if (item == null)
                 throw new InvalidOperationException(); // Item no longer valued
 
-            PendingChangeStatus pcs = PendingChange.Change;
+            PendingChangeStatus pcs = PendingChange.Change ?? new PendingChangeStatus(PendingChangeKind.None);
 
             SetValues(
                 pcs.PendingCommitText,
