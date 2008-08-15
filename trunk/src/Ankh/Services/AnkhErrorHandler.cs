@@ -222,7 +222,7 @@ namespace Ankh
             if (ss != null)
                 additionalInfo.Add("VS-Version", ss.VisualStudioVersion.ToString());
 
-            additionalInfo.Add("OS-Version", Environment.OSVersion.VersionString);
+            additionalInfo.Add("OS-Version", Environment.OSVersion.Version.ToString());
 
             using (ErrorDialog dlg = new ErrorDialog())
             {
