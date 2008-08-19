@@ -2,11 +2,11 @@
 
 Usage of the Ankh build environment requires at least:
 
-  * Visual Studio 2008 (or 2005) Standard Edition or Higher
+  * Visual Studio 2008 (or 2005) Standard Edition or Higher (C# and C/C++ installed)
   * Visual Studio 2008 SDK (or Visual Studio 2005 SDK (4.0) for VS 2005)
   * A subversion client (e.g. AnkhSVN itself)
   * When using the VS 2005 SDK administrative permissions are required
-
+  
 And if you wish to build your own installers:
 
   * Votive (Including Wix 3.0) beta
