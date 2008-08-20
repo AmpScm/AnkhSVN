@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5056.155</title>
+<title>AnkhSVN-Daily Update - 2.0.5059.156</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5056.155</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5059.156</h1>
 
 
 <p>
@@ -12,19 +12,22 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/971/AnkhSvn-Daily-2.0.5056.155.msi">AnkhSvn-Daily-2.0.5056.155.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/974/AnkhSvn-Daily-2.0.5059.156.msi">AnkhSvn-Daily-2.0.5059.156.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5056">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5059">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-08-19</td></tr>
+<tr><td> </td><td class="r"><a id="5059" href="http://ankhsvn.net/rev/?r=5059">[r5059]</a></td><td class="a">rhuijben</td><td class="f">src/BUILD.txt</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added note to BUILD.txt on C# and C/C++ requirement for building AnkhSVN</td></tr>
+<tr><td> </td><td class="r"><a id="5058" href="http://ankhsvn.net/rev/?r=5058">[r5058]</a></td><td class="a">rhuijben</td><td class="f">src/AnkhSvn.2005.sln</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4525">r4525</a>: Added missing Ankh.Diff project to VS 2005 solution</td></tr>
 <tr class="d"><td colspan="4">2008-08-18</td></tr>
 <tr><td> </td><td class="r"><a id="5056" href="http://ankhsvn.net/rev/?r=5056">[r5056]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated SharpSvn reference to SharpSvn 1.5001.714.
 (Several bugfixes, ListMerge* from local paths and other cleanups)</td></tr>
@@ -140,20 +143,6 @@ the new common diff framework introduced last week.</td></tr>
 <tr><td> </td><td class="r"><a id="4957" href="http://ankhsvn.net/rev/?r=4957">[r4957]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/LogCommand.cs, src/Ankh.UI/SvnLog/LogToolWindowControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Track the original SvnItem instances used for starting the log
 command, to enable 'Compare to WorkingCopy'-like commands.</td></tr>
 <tr><td> </td><td class="r"><a id="4956" href="http://ankhsvn.net/rev/?r=4956">[r4956]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4930">r4930</a>: Pending changes should be checked by default.</td></tr>
-<tr><td> </td><td class="r"><a id="4955" href="http://ankhsvn.net/rev/?r=4955">[r4955]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh/AnkhModule.cs, src/Ankh/Services/PendingChanges/PendingChangeHandler.cs, src/Ankh.Services/Scc/IPendingChangeHandler.cs, src/Ankh/Services/PendingChanges, src/Ankh/Ankh.csproj, src/Ankh.UI/PendingChanges/PendingCommitsPage.Commit.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extracted the commit code from the pending changes window and
-moved it to the new IPendingChangeHandler service for reuse by
-the commit dialogs.</td></tr>
-<tr><td> </td><td class="r"><a id="4953" href="http://ankhsvn.net/rev/?r=4953">[r4953]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccDocumentData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4925">r4925</a>: Fixed obscured null reference exception on non text documents
-by splitting the check code.</td></tr>
-<tr><td> </td><td class="r"><a id="4952" href="http://ankhsvn.net/rev/?r=4952">[r4952]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Votive/Ankh.Votive.wxs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Set Compressionlevel to High on our primary cabinet file. 
-(Should shrink the MSI by 10-15%)</td></tr>
-<tr><td> </td><td class="r"><a id="4951" href="http://ankhsvn.net/rev/?r=4951">[r4951]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/PendingChange.cs, src/Ankh.Services/Scc/PendingChangeText.resx, src/Ankh.Services/Scc/PendingChangeStatus.cs, src/Ankh.Services/Scc/PendingChangeText.Designer.cs, src/Ankh.Services/Scc/PendingChangeKind.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made 'Locked Locally' a pending change, to make sure whe unlock on commit.
-The Pending Change UI should filter this change if required by the user</td></tr>
-<tr><td> </td><td class="r"><a id="4950" href="http://ankhsvn.net/rev/?r=4950">[r4950]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/SolutionExplorer/StatusGlyphs.bmp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Replaced our custom 'Needs Lock' glyph with the default VS version of
-the same icon. (From black to blue and added some alphablending)</td></tr>
-<tr><td> </td><td class="r"><a id="4949" href="http://ankhsvn.net/rev/?r=4949">[r4949]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/Commands/ListViewGroup.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/VSSelectionControls/SmartListViewItem.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/VSSelectionControls/Commands/ListViewSort.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated SmartListView grouping code to really work on the ChangeList testcase.</td></tr>
-<tr class="d"><td colspan="4">2008-08-04</td></tr>
-<tr><td> </td><td class="r"><a id="4947" href="http://ankhsvn.net/rev/?r=4947">[r4947]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Don't enable double buffering by default in the generic listview.</td></tr>
 
 </table>
 <!--/Recent changes-->
