@@ -12,7 +12,7 @@
 
     <Upgrade Id="F5BC3C04-5CC8-405B-94EB-63F0FD3C8AC1">
       <UpgradeVersion Property="PREVIOUSVERSIONSINSTALLED" 
-                      Minimum="1.0.4" IncludeMinimum="yes"
+                      Minimum="1.0.0" IncludeMinimum="yes"
                       Maximum="$(var.ankhversion)" IncludeMaximum="no"
                       MigrateFeatures="yes" />
       <UpgradeVersion Property="NEWERVERSIONFOUND" 
