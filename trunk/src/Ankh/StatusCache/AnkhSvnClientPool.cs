@@ -9,15 +9,18 @@ using Ankh.VS;
 using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
+using SharpSvn.UI;
+using System.Windows.Forms.Design;
 
 namespace Ankh
 {
     [GlobalService(typeof(ISvnClientPool))]
-    class AnkhSvnClientPool : AnkhService, ISvnClientPool
+    sealed class AnkhSvnClientPool : AnkhService, ISvnClientPool
     {
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
         readonly NotificationHandler _notifyHandler;
+        readonly Control _syncher;
         const int MaxPoolSize = 10;
 
         public AnkhSvnClientPool(IAnkhServiceProvider context)
@@ -30,6 +33,11 @@ namespace Ankh
                 _notifyHandler = new NotificationHandler(context);
                 GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
             }
+
+            _syncher = new Control();
+            _syncher.Visible = false;
+            _syncher.Text = "AnkhSVN Synchronizer";
+            _syncher.CreateControl();
         }
 
         bool _ensuredNames;
@@ -84,7 +92,12 @@ namespace Ankh
             if (hookUI)
             {
                 // Let SharpSvnUI handle login and SSL dialogs
-                SharpSvn.UI.SharpSvnUI.Bind(client, new OwnerWrapper(owner));
+                SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+                bindArgs.ParentWindow = new OwnerWrapper(owner);
+                bindArgs.UIService = GetService<IUIService>();
+                bindArgs.Synchronizer = _syncher;
+
+                SvnUI.Bind(client, bindArgs);
             }
 
             return client;
@@ -195,7 +208,7 @@ namespace Ankh
                     InnerDispose();
                 }
             }
-        }
+        }        
     }
 
     sealed class OwnerWrapper : IWin32Window
