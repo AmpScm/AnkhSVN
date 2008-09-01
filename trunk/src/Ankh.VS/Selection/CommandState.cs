@@ -8,17 +8,16 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Microsoft.Win32;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using Ankh.Selection;
 
 namespace Ankh.VS.Selection
 {
     [GlobalService(typeof(IAnkhCommandStates))]
-    sealed class CommandState : AnkhService, IVsSelectionEvents, IAnkhCommandStates
+    sealed class CommandState : AnkhService, IAnkhCommandStates
     {
         IVsMonitorSelection _monitor;
-        uint _cookie;
         bool _disposed;
 
-        #region Initialization
         public CommandState(IAnkhServiceProvider context)
             : base(context)
         {
@@ -28,10 +27,7 @@ namespace Ankh.VS.Selection
         {
             base.OnInitialize();
 
-            if (Monitor == null)
-                throw new InvalidOperationException();
-
-            Marshal.ThrowExceptionForHR(Monitor.AdviseSelectionEvents(this, out _cookie));
+			GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += new EventHandler(OnCmdUIContextChanged);
         }
 
         IVsMonitorSelection Monitor
@@ -39,42 +35,10 @@ namespace Ankh.VS.Selection
             get { return _monitor ?? (_monitor = GetService<IVsMonitorSelection>()); }
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (!_disposed)
-                {
-                    _disposed = true;
-                    IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
-
-                    if (_cookie != 0)
-                        Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
-                    ClearState();
-                }
-            }
-            finally
-            {
-                base.Dispose(disposing);
-            }
-        }
-
-        int IVsSelectionEvents.OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
+		void OnCmdUIContextChanged(object sender, EventArgs e)
         {
             ClearState();
-            return VSConstants.S_OK;
         }
-
-        int IVsSelectionEvents.OnElementValueChanged(uint elementid, object varValueOld, object varValueNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        int IVsSelectionEvents.OnSelectionChanged(IVsHierarchy pHierOld, uint itemidOld, IVsMultiItemSelect pMISOld, ISelectionContainer pSCOld, IVsHierarchy pHierNew, uint itemidNew, IVsMultiItemSelect pMISNew, ISelectionContainer pSCNew)
-        {
-            return VSConstants.S_OK;
-        }
-        #endregion
 
         void ClearState()
         {

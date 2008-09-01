@@ -85,8 +85,12 @@ namespace Ankh.VS.Selection
 
         #region IVsSelectionEvents Members
 
+		public event EventHandler CmdUIContextChanged;
+
         public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
         {
+			if (CmdUIContextChanged != null)
+				CmdUIContextChanged(this, EventArgs.Empty);
             /// Some global state change which might change UI cueues
             return VSConstants.S_OK;
         }
