@@ -1,249 +1,691 @@
 using System;
-using Ankh.Configuration;
+using Ankh.Config;
 using EnvDTE;
 using NSvn.Core;
 using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 
-using IServiceProvider = System.IServiceProvider;
-using SharpSvn;
-using Ankh.UI.Services;
-using Ankh.UI;
-using System.Diagnostics;
+using IServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.Tests
 {
-
-
-    public class ErrorHandlerImpl : IAnkhErrorHandler
-    {
-        public Exception Exception;
-
-        #region IErrorHandler Members
-
-        public virtual void OnError(Exception ex)
-        {
-            this.Exception = ex;
-        }
-
-        public virtual void SendReport()
-        {
-            // empty
-        }
-
-        public void Write(string message, Exception ex, TextWriter writer)
-        {
-            // empty
-        }
-
-        #endregion
-
-        #region IErrorHandler Members
-
-        public void LogException(Exception exception, string message, params object[] args)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        #endregion
-    }
-
     /// <summary>
-    /// An ISynchronizeInvoke for which InvokeRequired will always return false.
+    /// Summary description for ContextBase.
     /// </summary>
-    public class NoSynch : System.ComponentModel.ISynchronizeInvoke
-    {
-        #region ISynchronizeInvoke Members
-
-        public object EndInvoke(IAsyncResult result)
+    public class ContextBase : IContext
+    {        
+        public ContextBase()
         {
-            // TODO:  Add NoSynch.EndInvoke implementation
-            return null;
+            this.config = this.CreateConfig();
+            this.control = new Control();
+        }
+        #region IContext Members
+
+        public virtual void EndOperation()
+        {
+            // TODO:  Add ContextBase.EndOperation implementation
         }
 
-        public object Invoke(Delegate method, object[] args)
-        {
-            // TODO:  Add NoSynch.Invoke implementation
-            return null;
-        }
-
-        public bool InvokeRequired
+        public virtual OutputPaneWriter OutputPane
         {
             get
             {
-                return false;
+                if ( this.outputPane == null )
+                    this.outputPane = new OutputPaneWriter( this.DTE, "Test" );
+                return this.outputPane;
             }
         }
 
-        public IAsyncResult BeginInvoke(Delegate method, object[] args)
+        public IServiceProvider ServiceProvider
         {
-            // TODO:  Add NoSynch.BeginInvoke implementation
-            return null;
+            [System.Diagnostics.DebuggerStepThrough]
+            get
+            {
+                return this.dte as IServiceProvider;
+            }
         }
 
-        #endregion
-
-    }
-
-    public class UIShellImpl : IUIShell
-    {
-        #region IUIShell Members
-
-        public virtual Ankh.UI.RepositoryExplorer.RepositoryExplorerControl RepositoryExplorer
+        public virtual System.Windows.Forms.IWin32Window HostWindow
         {
             get
             {
-                // TODO:  Add UIShellImpl.RepositoryExplorer getter implementation
+                // TODO:  Add ContextBase.HostWindow getter implementation
                 return null;
             }
         }
 
-        public virtual System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+        public virtual EnvDTE._DTE DTE
         {
-            get { return new NoSynch(); }
+            get
+            {
+                if ( this.dte == null )
+                {
+                    this.dte = DteFactory.Create2003().Create();
+                }
+                return this.dte;
+            }
         }
 
-        public virtual void SetRepositoryExplorerSelection(object[] selection)
+        public virtual Ankh.RepositoryExplorer.Controller RepositoryExplorer
         {
-            // TODO:  Add UIShellImpl.SetRepositoryExplorerSelection implementation
+            get
+            {
+                // TODO:  Add ContextBase.RepositoryExplorer getter implementation
+                return null;
+            }
         }
 
-        public virtual void ShowRepositoryExplorer(bool show)
+        public virtual string SolutionDirectory
         {
-            // TODO:  Add UIShellImpl.ShowRepositoryExplorer implementation
+            get{ return null; }
         }
 
-        public virtual bool RepositoryExplorerHasFocus()
+        public virtual void SolutionClosing()
         {
+            // TODO:  Add ContextBase.SolutionClosing implementation
+        }
+
+        public virtual bool ReloadSolutionIfNecessary()
+        {
+            // TODO:  Add ContextBase.ReloadSolutionIfNecessary implementation
             return false;
         }
 
-        public virtual void ToggleCommitDialog(bool show)
+        public virtual Ankh.Config.Config Config
         {
-            // TODO: add implementation
+            get
+            {
+                return this.config;
+            }
         }
 
-        public virtual void ResetCommitDialog()
+        public virtual ConflictManager ConflictManager
         {
-            // TODO: add implementation
+            get
+            {
+                // TODO:  Add ContextBase.ConflictManager getter implementation
+                return null;
+            }
         }
 
-        public virtual DialogResult QueryWhetherAnkhShouldLoad()
+        public virtual StatusCache StatusCache
         {
-            // TODO:  Add UIShellImpl.QueryWhetherAnkhShouldLoad implementation
-            return new DialogResult();
+            get
+            {
+                if ( this.statusCache == null )
+                    this.statusCache = new StatusCache( this.Client );
+                return this.statusCache;
+            }
         }
 
-        public virtual DialogResult ShowMessageBox(string text,
-            string caption, MessageBoxButtons buttons,
-            MessageBoxIcon icon)
+        public virtual IUIShell UIShell
         {
-            // TODO:  Add UIShellImpl.ShowMessageBox implementation
-            return new DialogResult();
+            get
+            {
+                if ( this.uiShell == null )
+                    this.uiShell = new UIShellImpl();
+                return this.uiShell;
+            }
+
+            set
+            {
+                this.uiShell = value;
+            }
         }
 
-        public virtual System.Windows.Forms.DialogResult ShowMessageBox(string text,
-            string caption, System.Windows.Forms.MessageBoxButtons buttons)
+        public virtual IErrorHandler ErrorHandler
         {
-            // TODO:  Add UIShellImpl.Ankh.IUIShell.ShowMessageBox implementation
-            return new System.Windows.Forms.DialogResult();
+            get
+            {
+                if ( this.errorHandler == null )
+                    this.errorHandler = new ErrorHandlerImpl();
+                return this.errorHandler;
+            }
         }
 
-        public virtual void DisplayHtml(string caption, string html, bool reuse)
+        public virtual FileWatcher ProjectFileWatcher
         {
-            // TODO: 
+            get
+            {
+                if ( this.projectFileWatcher == null )
+                    this.projectFileWatcher = new FileWatcher( this.Client );
+                return this.projectFileWatcher;
+            }
         }
 
-        public virtual PathSelectorInfo ShowPathSelector(PathSelectorInfo info)
+        public virtual VSCommandBars CommandBars
         {
-            return null;
+            get
+            {
+                if ( this.commandBars == null )
+                    this.commandBars = VSCommandBars.Create( this );
+                return this.commandBars;
+            }
         }
 
-        public virtual string ShowNewDirectoryDialog()
+        public virtual void StartOperation(string description)
         {
-            return null;
+            // TODO:  Add ContextBase.StartOperation implementation
         }
 
-        public virtual Uri ShowAddRepositoryRootDialog()
+        public virtual void Shutdown()
         {
-            return null;
+            // TODO:  Add ContextBase.Shutdown implementation
+        }
+
+        public virtual Ankh.Config.ConfigLoader ConfigLoader
+        {
+            get
+            {
+                if ( this.configLoader == null )
+                    this.configLoader = new ConfigLoader( Path.GetTempPath() );
+                return this.configLoader;
+            }
+        }
+
+        public virtual void EnableAnkhForLoadedSolution()
+        {
+            // TODO:  Add ContextBase.SolutionOpened implementation
+        }
+
+        public virtual SvnClient Client
+        {
+            get
+            {
+                if ( this.client == null )
+                    this.client = new SvnClient( this );
+                return this.client;
+            }
+        }
+
+        public virtual bool OperationRunning
+        {
+            get
+            {
+                // TODO:  Add ContextBase.OperationRunning getter implementation
+                return false;
+            }
+        }
+
+        public virtual bool SolutionIsOpen
+        {
+            get
+            {
+                // TODO:  Add ContextBase.SolutionIsOpen getter implementation
+                return false;
+            }
+        }
+
+        public virtual EnvDTE.AddIn AddIn
+        {
+            get
+            {
+                // TODO:  Add ContextBase.AddIn getter implementation
+                return null;
+            }
+        }
+
+        public virtual ISolutionExplorer SolutionExplorer
+        {
+            get
+            {
+                if ( this.explorer == null )
+                    this.explorer = new ExplorerImpl(this);
+                return this.explorer;
+            }
+            set
+            {
+                this.explorer = value;
+            }
+        }
+
+        public event System.EventHandler Unloading;
+
+        public virtual bool AnkhLoadedForSolution
+        {
+            get
+            {
+                // TODO:  Add ContextBase.AnkhLoadedForSolution getter implementation
+                return false;
+            }
         }
 
         #endregion
 
-        #region IUIShell Members
-
-
-        public DialogResult ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+        public void CheckForException()
         {
-            return DialogResult.None;
+            ContextBase.ErrorHandlerImpl handler = 
+                (ContextBase.ErrorHandlerImpl)this.ErrorHandler;
+            if ( handler.Exception != null )
+                throw new Exception( "Exception thrown", handler.Exception );            
+        }
+
+        public class ErrorHandlerImpl : IErrorHandler
+        {
+            public Exception Exception;
+
+            #region IErrorHandler Members
+
+            public virtual void Handle(Exception ex)
+            {
+                this.Exception = ex;
+            }
+
+            public virtual void SendReport()
+            {
+                // empty
+            }
+
+            public void Write( string message, Exception ex, TextWriter writer )
+            {
+                // empty
+            }
+
+            #endregion
+
+            #region IErrorHandler Members
+
+            public void LogException( Exception exception, string message, params object[] args )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+}
+
+        /// <summary>
+        /// An ISynchronizeInvoke for which InvokeRequired will always return false.
+        /// </summary>
+        public class NoSynch : System.ComponentModel.ISynchronizeInvoke
+        {
+            #region ISynchronizeInvoke Members
+
+            public object EndInvoke(IAsyncResult result)
+            {
+                // TODO:  Add NoSynch.EndInvoke implementation
+                return null;
+            }
+
+            public object Invoke(Delegate method, object[] args)
+            {
+                // TODO:  Add NoSynch.Invoke implementation
+                return null;
+            }
+
+            public bool InvokeRequired
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
+            public IAsyncResult BeginInvoke(Delegate method, object[] args)
+            {
+                // TODO:  Add NoSynch.BeginInvoke implementation
+                return null;
+            }
+
+            #endregion
+
+        }
+
+        public class ExplorerImpl : ISolutionExplorer
+        {
+            public ExplorerImpl( IContext ctx )
+            {
+                this.context = ctx;
+            }
+
+            #region ISolutionExplorer Members
+
+            public virtual System.Collections.IList GetItemResources(ProjectItem item, bool recursive)
+            {
+                ArrayList list = new ArrayList();
+                for( short i = 1; i <= item.FileCount; i++ )
+                {
+                    string path = item.get_FileNames(i);
+                    list.Add( new SvnItem( path, this.context.Client.SingleStatus(path) ) );
+                }
+                return list;
+            }
+
+            public virtual void Unload()
+            {
+                // TODO:  Add Explorer.Unload implementation
+            }
+
+            public virtual void VisitSelectedNodes(Ankh.Solution.INodeVisitor visitor)
+            {
+                // TODO:  Add Explorer.VisitSelectedNodes implementation
+            }
+
+            public virtual ProjectItem GetSelectedProjectItem()
+            {
+                // TODO:  Add Explorer.GetSelectedProjectItem implementation
+                return null;
+            }
+
+            public virtual void Refresh(ProjectItem item)
+            {
+                // TODO:  Add Explorer.Refresh implementation
+            }
+
+            void Ankh.ISolutionExplorer.Refresh(Project project)
+            {
+                // TODO:  Add Explorer.Ankh.ISolutionExplorer.Refresh implementation
+            }
+
+
+            public bool RenameInProgress
+            {
+                get { return false; }
+            }
+
+
+            #endregion
+
+            #region ISelectionContainer Members
+
+            public virtual void RefreshSelectionParents()
+            {
+                // TODO:  Add Explorer.RefreshSelectionParents implementation
+            }
+
+            public virtual void SyncAll()
+            {
+                // TODO:  Add Explorer.SyncAll implementation
+            }
+
+            public virtual System.Collections.IList GetSelectionResources(bool getChildItems, Ankh.ResourceFilterCallback filter)
+            {
+                // TODO:  Add Explorer.GetSelectionResources implementation
+                ArrayList resources = new ArrayList();
+                foreach( SvnItem item in this.Selection )
+                {
+                    if ( filter == null || filter(item) )
+                        resources.Add(item);
+                }
+                return resources;
+            }
+
+            System.Collections.IList Ankh.ISelectionContainer.GetSelectionResources(bool getChildItems)
+            {
+                // TODO:  Add Explorer.Ankh.ISelectionContainer.GetSelectionResources implementation
+                return this.GetSelectionResources( getChildItems, null );
+            }
+
+            public virtual void RefreshSelection()
+            {
+                // TODO:  Add Explorer.RefreshSelection implementation
+            }
+
+            public virtual System.Collections.IList GetAllResources(Ankh.ResourceFilterCallback filter)
+            {
+                // TODO:  Add Explorer.GetAllResources implementation
+                return null;
+            }
+
+            #endregion
+
+            private IContext context;
+
+            public IList Selection = new object[]{};
+
+            #region ISolutionExplorer Members
+
+
+            public void SetUpDelayedProjectRefresh(Project project)
+            {
+            }
+
+            public void SetUpDelayedSolutionRefresh()
+            {
+            }
+
+            #endregion
+
+            #region ISolutionExplorer Members
+
+
+            public void RemoveProject( Project project )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public void SetUpDelayedProjectRefresh( Ankh.Solution.IRefreshableProject project )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+        }
+
+
+        public class UIShellImpl : IUIShell
+        {
+            #region IUIShell Members
+
+            public virtual Ankh.UI.RepositoryExplorerControl RepositoryExplorer
+            {
+                get
+                {
+                    // TODO:  Add UIShellImpl.RepositoryExplorer getter implementation
+                    return null;
+                }
+            }
+
+            public virtual IContext Context
+            {
+                get
+                {
+                   return this.context;
+                }
+                set
+                {
+                    this.context = value;
+                }
+            }
+
+            public virtual System.ComponentModel.ISynchronizeInvoke SynchronizingObject
+            {
+                get{ return new NoSynch(); }
+            }
+
+            public virtual void SetRepositoryExplorerSelection(object[] selection)
+            {
+                // TODO:  Add UIShellImpl.SetRepositoryExplorerSelection implementation
+            }
+
+            public virtual void ShowRepositoryExplorer(bool show)
+            {
+                // TODO:  Add UIShellImpl.ShowRepositoryExplorer implementation
+            }
+
+            public virtual bool RepositoryExplorerHasFocus()
+            {
+                return false;
+            }
+
+            public virtual CommitContext ShowCommitDialogModal( CommitContext ctx )
+            {
+                // TODO: Add implementation
+                return null;
+            }
+
+            public virtual void ToggleCommitDialog( bool show )
+            {
+                // TODO: add implementation
+            }
+
+            public virtual void ResetCommitDialog()
+            {
+                // TODO: add implementation
+            }
+
+            public virtual bool RunWithProgressDialog( IProgressWorker worker, string caption )
+            {
+                worker.Work( this.Context );
+                return true;
+            }
+
+            public virtual DialogResult QueryWhetherAnkhShouldLoad()
+            {
+                // TODO:  Add UIShellImpl.QueryWhetherAnkhShouldLoad implementation
+                return new DialogResult ();
+            }
+
+            public virtual DialogResult ShowMessageBox(string text, 
+                string caption, MessageBoxButtons buttons, 
+                MessageBoxIcon icon)
+            {
+                // TODO:  Add UIShellImpl.ShowMessageBox implementation
+                return new DialogResult ();
+            }
+
+            public virtual System.Windows.Forms.DialogResult ShowMessageBox(string text, 
+                string caption, System.Windows.Forms.MessageBoxButtons buttons)
+            {
+                // TODO:  Add UIShellImpl.Ankh.IUIShell.ShowMessageBox implementation
+                return new System.Windows.Forms.DialogResult ();
+            }
+
+            public virtual void DisplayHtml( string caption, string html, bool reuse )
+            {
+                // TODO: 
+            }
+
+            public virtual PathSelectorInfo ShowPathSelector( PathSelectorInfo info )
+            {
+                return null;
+            }
+
+            public virtual LockDialogInfo ShowLockDialog( LockDialogInfo info )
+            {
+                return null;
+            }
+
+            public virtual LogDialogInfo ShowLogDialog( LogDialogInfo info )
+            {
+                return null;
+            }
+            
+            public virtual SwitchDialogInfo ShowSwitchDialog( SwitchDialogInfo info )
+            {
+                return null;
+            }
+
+            public virtual string ShowNewDirectoryDialog()
+            {
+                return null;
+            }
+
+            public virtual RepositoryRootInfo ShowAddRepositoryRootDialog()
+            {
+                return null;
+            }
+
+            private IContext context;
+
+            #endregion
+
+            #region IUIShell Members
+
+
+            public DialogResult ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
+            {
+                return DialogResult.None;
+            }
+
+            #endregion
+
+            #region IUIShell Members
+
+
+            public Ankh.UI.WorkingCopyExplorerControl WorkingCopyExplorer
+            {
+                get { throw new Exception( "The method or operation is not implemented." ); }
+            }
+
+            public bool WorkingCopyExplorerHasFocus()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public bool SolutionExplorerHasFocus()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public string ShowAddWorkingCopyExplorerRootDialog()
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            public void ShowWorkingCopyExplorer( bool p )
+            {
+                throw new Exception( "The method or operation is not implemented." );
+            }
+
+            #endregion
+        }
+
+
+        protected virtual Config.Config CreateConfig()
+        {
+            Config.Config config = new Config.Config();
+            config.AutoAddNewFiles = true;
+            config.AutoAddNewFiles = true;
+            config.LogMessageTemplate = "";
+            config.DisableSolutionReload = true;
+            return config;
+        }
+
+        protected virtual void OnUnloading()
+        {
+            if ( this.Unloading != null )
+            {
+                this.Unloading( this, EventArgs.Empty );
+            }
+
+        }
+
+        public FileWatcher projectFileWatcher;
+        public Config.Config config;
+        public _DTE dte;
+        public SvnClient client;
+        public StatusCache statusCache;
+        public IErrorHandler errorHandler;
+        public OutputPaneWriter outputPane;
+        public ISolutionExplorer explorer;
+        public IUIShell uiShell;
+        private ConfigLoader configLoader;
+        private VSCommandBars commandBars;
+        private Control control;
+
+        #region IContext Members
+
+        bool IContext.EnableAnkhForLoadedSolution()
+        {
+            throw new Exception( "The method or operation is not implemented." );
         }
 
         #endregion
 
-        #region IUIShell Members
+        #region IContext Members
 
 
-        public Ankh.UI.WorkingCopyExplorer.WorkingCopyExplorerControl WorkingCopyExplorer
+        public IWorkingCopyExplorer WorkingCopyExplorer
         {
-            get { throw new Exception("The method or operation is not implemented."); }
+            get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
-        public bool WorkingCopyExplorerHasFocus()
+        public ISelectionContainer Selection
         {
-            throw new Exception("The method or operation is not implemented.");
+            get { throw new Exception( "The method or operation is not implemented." ); }
         }
 
-        public bool SolutionExplorerHasFocus()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public string ShowAddWorkingCopyExplorerRootDialog()
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        public void ShowWorkingCopyExplorer(bool p)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-
-        #endregion
-
-        #region IUIShell Members
-
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons)
-        {
-            throw new NotImplementedException();
-        }
-
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-        {
-            throw new NotImplementedException();
-        }
-
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IUIShell.DisplayHtml(string caption, string html, bool reuse)
-        {
-            throw new NotImplementedException();
-        }
-
-        PathSelectorResult IUIShell.ShowPathSelector(PathSelectorInfo info)
-        {
-            throw new NotImplementedException();
-        }
-
-        bool IUIShell.EditEnlistmentState(Ankh.Scc.EnlistmentState state)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
     }
-
 }

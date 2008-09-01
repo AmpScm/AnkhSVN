@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="NSvn.Core" default="rebuild">
+    <property name="verbose" value="false"/>
+    <property name="src.dir" value="."/>
+    <property name="warninglevel" value="/warn:3"/>
+    <property name="installsource.dir" value="..\${installsource.dir}"/>
+
+    <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb44d.lib" 
+        if="${debug}" />
+    <property name="bdb.lib" value="${svndir}\db4-win32\lib\libdb44.lib" 
+        unless="${debug}" />
+
+    <property name="bdb.dll" value="libdb44d.dll" if="${debug}" />
+    <property name="bdb.dll" value="libdb44.dll" unless="${debug}" />
+
+    <property name="cl.options" value='/Od /I "${svndir}include\apr" 
+        /I "${svndir}\include\apr-util" 
+        /I "${svndir}\include" 
+        /AI "..\Utils\${build.dir}"
+        /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /MDd /GS /W3 
+        /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\' 
+        if="${debug}"/>
+    
+    <property name="cl.options" value='/Od /I "${svndir}\include\apr" 
+        /I "${svndir}\include\apr-util" 
+        /I "${svndir}\include"
+        /AI "..\Utils\${build.dir}"
+        /D "WIN32" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /MD /GS  /W3 
+        /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
+        unless="${debug}"/>
+        
+    <echo message="${cl.options}" />
+
+    <property name="link.options" value='/NOLOGO /DLL /DEBUG 
+        /DELAYLOAD:${bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\lib 
+        /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib 
+        rpcrt4.lib shlwapi.lib  
+        ${svndir}\lib\libsvn_repos-1.lib 
+        ${svndir}\lib\libsvn_fs-1.lib 
+        ${svndir}\lib\libsvn_fs_fs-1.lib 
+        ${svndir}\lib\libsvn_fs_base-1.lib 
+        ${svndir}\lib\libsvn_ra_local-1.lib 
+        ${svndir}\lib\libsvn_ra-1.lib 
+        ${svndir}\lib\libsvn_ra_svn-1.lib 
+        ${svndir}\lib\neon\libneonD.lib 
+        ${svndir}\lib\neon\zlibstatD.lib
+        ${svndir}\lib\libsvn_wc-1.lib 
+        ${svndir}\lib\libsvn_subr-1.lib 
+        ${svndir}\lib\libsvn_client-1.lib 
+        ${svndir}\lib\libsvn_delta-1.lib 
+        ${svndir}\lib\libsvn_diff-1.lib 
+        ${svndir}\lib\apr\libapr.lib 
+        ${svndir}\lib\apr-util\libaprutil.lib 
+        ${svndir}\lib\apr-util\xml.lib
+         kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
+         shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib' 
+        if="${debug}"/>
+    
+    <property name="link.options" value='/NOLOGO /DLL /DEBUG 
+        /INCREMENTAL:NO /LIBPATH:"${svndir}\lib 
+        comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib
+        ${svndir}\lib\libsvn_repos-1.lib 
+        ${svndir}\lib\libsvn_fs-1.lib 
+        ${svndir}\lib\libsvn_fs_fs-1.lib 
+        ${svndir}\lib\libsvn_fs_base-1.lib 
+        ${svndir}\lib\libsvn_ra_local-1.lib 
+        ${svndir}\lib\libsvn_ra-1.lib 
+        ${svndir}\lib\libsvn_ra_svn-1.lib 
+        ${svndir}\lib\neon\libneon.lib 
+        ${svndir}\lib\neon\zlibstat.lib
+        ${svndir}\lib\libsvn_wc-1.lib 
+        ${svndir}\lib\libsvn_subr-1.lib 
+        ${svndir}\lib\libsvn_client-1.lib 
+        ${svndir}\lib\libsvn_delta-1.lib 
+        ${svndir}\lib\libsvn_diff-1.lib 
+        ${svndir}\lib\apr\libapr.lib 
+        ${svndir}\lib\apr-util\libaprutil.lib 
+        ${svndir}\lib\apr-util\xml.lib  
+        kernel32.lib user32.lib 
+        gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
+        shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
+        unless="${debug}"/>
+
+    
+    <target name="rebuild">
+        <call target="clean"/>
+        <call target="build"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="build-Release" verbose="${verbose}" failonerror="false" />
+        <delete dir="build-Debug" verbose="${verbose}" failonerror="false" />
+    </target>
+    
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    
+    <target name="build">
+        <call target="compile"/>  
+        <call target="link"/>              
+    </target>
+    
+    <target name="compile" depends="init">
+        <property name="cl.options" value="${cl.options} /D ALT_ADMIN_DIR" if="${alt.admin.dir}"/>
+
+        <cl outputdir="${build.dir}" verbose="${verbose}"
+             options="${cl.options}">
+            <sources>
+                <include name="**/*.cpp"/>
+                <exclude name="**/*.mrg.cpp"/>
+            </sources>
+            
+        </cl>
+    </target>
+    
+    <target name="link" depends="compile, init">
+        <link output="${build.dir}\NSvn.Core.dll" options="${link.options}" verbose="${verbose}">
+            <sources>
+                <include name="${build.dir}\*.obj"/>
+            </sources>
+        </link>
+    </target>
+    
+    <target name="build-WiX" depends="build">
+		<copy todir="${build.dir}">
+			<fileset basedir="${svndir}\bin">
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+        <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
+            commandline="-nologo -w0 -dbuilddir=${build.dir} -dvs_version=${vs_version} -dsvndir=${svndir} NSvn.Core.wxs -out ${installsource.dir}\NSvn.Core.wixobj" />
+    </target>
+    
+</project>
+
+

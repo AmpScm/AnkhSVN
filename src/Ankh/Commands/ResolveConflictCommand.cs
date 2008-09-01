@@ -1,57 +1,61 @@
 // $Id$
 using System;
+using EnvDTE;
+
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-
-using SharpSvn;
-using Ankh.Ids;
-using Ankh.ContextServices;
+using NSvn.Core;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to resolve conflict between changes.
     /// </summary>
-    //[Command(AnkhCommand.ResolveConflict)]
-    class ResolveConflictCommand : CommandBase
-    {
+    [VSNetCommand( "ResolveConflict",
+         Text = "Res&olve Conflict...",  
+         Bitmap = ResourceBitmaps.ResolveConflict, 
+         Tooltip = "Resolve conflict between changes."),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
+    public class ResolveConflictCommand : CommandBase
+    {    
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetExe(IAnkhServiceProvider context)
+        protected virtual string GetExe( Ankh.IContext context )
         {
-            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
-
-            if (!cs.Instance.ChooseDiffMergeManual)
-                return cs.Instance.MergeExePath;
+            if ( !context.Config.ChooseDiffMergeManual )
+                return context.Config.MergeExePath;
             else
                 return null;
         }
 
-        
+        #region Implementation of ICommand
 
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-            {
-                if (item.IsConflicted)
-                    return;
-            }
+            int count = context.Selection.GetSelectionResources(false, 
+                new ResourceFilterCallback(SvnItem.ConflictedFilter) ).Count;
 
-            e.Enabled = e.Visible = false;
+            if ( count > 0 )
+                return Enabled;
+            else
+                return Disabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(IContext context, string parameters)
         {
-            /*SaveAllDirtyDocuments( e.Selection, context );
+            this.SaveAllDirtyDocuments( context );
 
-            using(context.StartOperation( "Resolving" ))
+            context.StartOperation( "Resolving" );
+
+            try
             {
                 IList items = context.Selection.GetSelectionResources(false, 
                      new ResourceFilterCallback(SvnItem.ConflictedFilter) );
@@ -59,105 +63,97 @@ namespace Ankh.Commands
                 foreach( SvnItem item in items )
                 {
                     this.Resolve( context, item );
-                    item.MarkDirty();
+                    item.Refresh( context.Client );
                 }
-            }*/
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }
+
+        #endregion
 
         /// <summary>
         /// Resolve an item.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="item"></param>
-        private void Resolve(IAnkhServiceProvider context, SvnItem item)
+        private void Resolve(IContext context, SvnItem item)
         {
-            // TODO: Retrieve live information instead of using the cache
-            // BH: We don't cache data to use it on only 1 location
 
-
-            /*string mergeExe = GetExe( context );
-            SvnWorkingCopyInfo entry = item.Status.WorkingCopyInfo;
-            SvnWorkingCopyState state;
-            bool binary = false;
-
-            using (SvnClient client = context.ClientPool.GetNoUIClient())
+            string mergeExe = GetExe( context );
+            Entry entry = item.Status.Entry;
+            bool binary = context.Client.HasBinaryProp(item.Path);
+            if ( binary || mergeExe == null )
             {
-                if (client.GetWorkingCopyState(item.Path, out state))
-                    binary = !state.IsTextFile;
-                if (binary || mergeExe == null)
-                {
-                    string selection;
+                string selection;
 
-                    using (ConflictDialog dialog = new ConflictDialog())
-                    {
-                        entry = item.Status.WorkingCopyInfo;
-                        dialog.Filenames = new string[]{
-                                                       entry.ConflictWorkFile,
-                                                       entry.ConflictNewFile,
-                                                       entry.ConflictOldFile,
+                using( ConflictDialog dialog = new ConflictDialog(  ) )
+                {
+                    entry = item.Status.Entry;
+                    dialog.Filenames = new string[]{
+                                                       entry.ConflictWorking,
+                                                       entry.ConflictNew,
+                                                       entry.ConflictOld,
                                                        item.Path
                                                    };
-                        dialog.Binary = binary;
+                    dialog.Binary = binary;
 
-                        if (dialog.ShowDialog(context.GetService<IAnkhDialogOwner>().DialogOwner) != DialogResult.OK)
-                            return;
+                    if ( dialog.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                        return;
+                        
+                    selection = dialog.Selection;
+                }   
+    
+                if ( selection != item.Path )
+                    this.Copy( item.Path, selection );
 
-                        selection = dialog.Selection;
-                    }
+                context.Client.Resolved( item.Path, Recurse.None );
+                context.OutputPane.WriteLine( 
+                    "Resolved conflicted state of {0}", item.Path );
+                
+                // delete the associated conflict task item
+                context.ConflictManager.RemoveTaskItem(item.Path);
 
-                    if (selection != item.Path)
-                        this.Copy(item.Path, selection);
+            }
+            else
+            {
+                string itemPath = Path.GetDirectoryName( item.Path );
+                string oldPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictOld ));
+                string newPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictNew ));
+                string workingPath = String.Format("\"{0}\"", Path.Combine( itemPath, item.Status.Entry.ConflictWorking ));
+                string mergedPath = String.Format("\"{0}\"", item.Path);
 
-                    SvnResolvedArgs args = new SvnResolvedArgs();
-                    args.Depth = SvnDepth.Empty;
-                    client.Resolved(item.Path, args);
-                    context.OutputPane.WriteLine(
-                        "Resolved conflicted state of {0}", item.Path);
+                string mergeString = mergeExe;
+                mergeString = mergeString.Replace( "%merged", mergedPath );
+                mergeString = mergeString.Replace( "%base", oldPath );
+                mergeString = mergeString.Replace( "%theirs", newPath );
+                mergeString = mergeString.Replace( "%mine", workingPath );
 
-                    // delete the associated conflict task item
-                    context.ConflictManager.RemoveTaskItem(item.Path);
+                // We can't use System.Diagnostics.Process here because we want to keep the
+                // program path and arguments together, which it doesn't allow.
+                Utils.Exec exec = new Utils.Exec();
+                exec.ExecPath( mergeString );
+                exec.WaitForExit();
 
-                }
-                else
+                if ( MessageBox.Show( "Have all conflicts been resolved?",
+                    "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question ) == DialogResult.Yes )
                 {
-                    string itemPath = Path.GetDirectoryName(item.Path);
-                    string oldPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictOldFile));
-                    string newPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictNewFile));
-                    string workingPath = String.Format("\"{0}\"", Path.Combine(itemPath, item.Status.WorkingCopyInfo.ConflictWorkFile));
-                    string mergedPath = String.Format("\"{0}\"", item.Path);
-
-                    string mergeString = mergeExe;
-                    mergeString = mergeString.Replace("%merged", mergedPath);
-                    mergeString = mergeString.Replace("%base", oldPath);
-                    mergeString = mergeString.Replace("%theirs", newPath);
-                    mergeString = mergeString.Replace("%mine", workingPath);
-
-                    // We can't use System.Diagnostics.Process here because we want to keep the
-                    // program path and arguments together, which it doesn't allow.
-                    Utils.Exec exec = new Utils.Exec();
-                    exec.ExecPath(mergeString);
-                    exec.WaitForExit();
-
-                    if (MessageBox.Show("Have all conflicts been resolved?",
-                        "Resolve", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        SvnResolvedArgs args = new SvnResolvedArgs();
-                        args.Depth = SvnDepth.Empty;
-                        client.Resolved(item.Path, args);
-                    }
+                    context.Client.Resolved( item.Path, Recurse.None );
                 }
-            }*/
-        }
+            }
+        }        
 
-        private void Copy(string toPath, string fromFile)
+        private void Copy( string toPath, string fromFile )
         {
-            string dir = Path.GetDirectoryName(toPath);
-            string fromPath = Path.Combine(dir, fromFile);
-            File.Copy(fromPath, toPath, true);
+            string dir = Path.GetDirectoryName( toPath );
+            string fromPath = Path.Combine( dir, fromFile );
+            File.Copy( fromPath, toPath,  true );
         }
 
-
-        private readonly Regex NUMBER = new Regex(@".*\.r(\d+)");
+      
+        private readonly Regex NUMBER = new Regex( @".*\.r(\d+)" );
 
     }
 }

@@ -1,62 +1,42 @@
 // $Id$
 using System;
+using EnvDTE;
 using System.Collections;
-using Ankh.Ids;
-using System.Collections.Generic;
-using System.IO;
-using SharpSvn;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to cleanup the working copy.
     /// </summary>
-    [Command(AnkhCommand.Cleanup)]
-    class Cleanup : CommandBase
+    [VSNetCommand( "Cleanup",
+         Text="Cle&anup",
+         Tooltip = "Cleanup the working copy.", 
+         Bitmap = ResourceBitmaps.Cleanup ),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 11)]
+    public class Cleanup : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if (item.IsVersioned)
-                    return;
-            }
-            e.Enabled = false;
+            return Enabled;
+        }
+    
+        public override void Execute(IContext context, string parameters)
+        {
+            context.StartOperation( "Running cleanup" );
+
+            IList resources = context.Selection.GetSelectionResources( false,
+                new ResourceFilterCallback(SvnItem.DirectoryFilter) );
+            foreach( SvnItem item in resources )
+                context.Client.Cleanup( item.Path );
+
+            context.EndOperation();
         }
 
-        public override void OnExecute(CommandEventArgs e)
-        {
-            List<SvnItem> items = new List<SvnItem>(e.Selection.GetSelectedSvnItems(true));
-
-            e.GetService<IProgressRunner>().Run("Running Cleanup",
-                delegate(object sender, ProgressWorkerArgs a)
-                {
-
-                    SortedList<string, SvnItem> list = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-                    foreach (SvnItem item in items)
-                    {
-                        if (!item.IsVersioned)
-                            continue;
-
-                        string path = item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath);
-                        if (list.ContainsKey(path))
-                            continue;
-
-                        list.Add(path, item);
-                    }
-
-                    foreach (string path in new List<string>(list.Keys))
-                    {
-                        string parentPath = Path.GetDirectoryName(path);
-                        if (list.ContainsKey(parentPath) && parentPath != path)
-                            list.Remove(path);
-                    }
-
-                    SvnCleanUpArgs args = new SvnCleanUpArgs();
-                    args.ThrowOnError = false;
-                    foreach (string path in list.Keys)
-                        a.Client.CleanUp(path, args);
-                });
-        }
+        #endregion
     }
 }
+
+
+

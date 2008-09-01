@@ -1,133 +1,85 @@
 // $Id$
 using System;
-
+using NSvn.Core;
 using System.Diagnostics;
 using System.Xml;
 using System.Xml.Xsl;
 using System.IO;
 using System.Collections;
-using SharpSvn;
-using System.Collections.ObjectModel;
-using Ankh.Ids;
-using System.Collections.Generic;
-using Ankh.UI;
-using Ankh.UI.SvnLog;
-using Ankh.Selection;
-using Ankh.VS;
-using Ankh.Scc;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to show the change log for the selected item.
     /// </summary>
-    [Command(AnkhCommand.Log)]
-    [Command(AnkhCommand.ProjectHistory)]
-    [Command(AnkhCommand.SolutionHistory)]
-    [Command(AnkhCommand.ReposExplorerLog)]
-    class LogCommand : CommandBase
+    [VSNetCommand("Log",
+         Text = "&Log...",
+         Tooltip = "Show the change log for the selected item.",
+         Bitmap = ResourceBitmaps.Log),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 6 )]
+	public class LogCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            switch (e.Command)
+            if ( context.Selection.GetSelectionResources( false, 
+                new ResourceFilterCallback( SvnItem.VersionedFilter ) ).Count > 0 )
+                return Enabled;
+            else
+                return Disabled;
+        }
+
+        public override void Execute(IContext context, string parameters)
+        {
+            IList resources = context.Selection.GetSelectionResources(
+                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
+
+            this.info = new LogDialogInfo( resources, resources );
+            this.info.RevisionStart = Revision.FromNumber( 0 );
+            this.info.RevisionEnd = Revision.Head;
+
+            // is Shift down?
+            if ( !CommandBase.Shift )
             {
-                case AnkhCommand.Log:
-                case AnkhCommand.ProjectHistory:
-                case AnkhCommand.SolutionHistory:
-                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-                    {
-                        if (item.IsVersioned)
-                            return;
-                    }
-                    break;
-                case AnkhCommand.ReposExplorerLog:
-                    int i = 0;
-                    foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
-                    {
-                        if (item == null || item.Uri == null)
-                            continue;
-                        i++;
-                        if (i > 1)
-                            break;
-                    }
-                    if (i == 1)
-                        return;
-                    break;
+                this.info = context.UIShell.ShowLogDialog( info );
+                if ( this.info == null )
+                    return;
             }
-            e.Enabled = false;
+
+            this.result = null;
+
+            context.UIShell.RunWithProgressDialog( new SimpleProgressWorker( 
+                new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Retrieving log" );
+
+            Debug.Assert( this.result != null );
+
+            // transform it to HTML and display it
+            XslTransform transform = CommandBase.GetTransform( context, "log.xsl" );
+            StringWriter writer = new StringWriter();
+            this.result.Transform( transform, writer );
+
+            // display the HTML with the filename as caption
+            context.UIShell.DisplayHtml( "Log", writer.ToString(), false );
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        #endregion
+
+        private void ProgressCallback( IContext context )
         {
-            List<SvnItem> selected = new List<SvnItem>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            this.result = new LogResult();
+            this.result.Start();
 
-            switch (e.Command)
-            {
-                case AnkhCommand.Log:
-                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
-                    {
-                        if (i.IsVersioned)
-                            selected.Add(i);
-                    }
-                    LocalLog(e.Context, selected);
-                    break;
-                case AnkhCommand.ProjectHistory:
-                case AnkhCommand.SolutionHistory:
-                    if (e.Selection.IsSolutionSelected)
-                    {
-                        IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+            string[] paths = SvnItem.GetPaths( info.CheckedItems );
+            context.Client.Log( paths, info.RevisionEnd, info.RevisionStart, true, 
+                info.StopOnCopy, new LogMessageReceiver(result.Receive) );
 
-                        selected.Add(cache[settings.ProjectRoot]);
-
-                        LocalLog(e.Context, selected);
-                    }
-                    else
-                    {
-                        IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                        foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
-                        {
-                            ISvnProjectInfo info = mapper.GetProjectInfo(p);
-
-                            if (info != null)
-                                selected.Add(cache[info.ProjectDirectory]);
-                        }
-
-                        LocalLog(e.Context, selected);
-                    }
-                    break;
-                case AnkhCommand.ReposExplorerLog:
-                    ISvnRepositoryItem item = null;
-                    foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
-                    {
-                        if(i!= null && i.Uri != null)
-                            item = i;
-                        break;
-                    }
-
-                    if (item != null)
-                        RemoteLog(e.Context, item.Uri);
-                    break;
-            }
+            this.result.End();
         }
 
-        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
-        {
-            IAnkhPackage package = context.GetService<IAnkhPackage>();
 
-            package.ShowToolWindow(AnkhToolWindow.Log);
-
-            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            logToolControl.StartLocalLog(context, targets);
-        }
-
-        static void RemoteLog(IAnkhServiceProvider context, Uri target)
-        {
-            IAnkhPackage package = context.GetService<IAnkhPackage>();
-
-            package.ShowToolWindow(AnkhToolWindow.Log);
-            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            logToolControl.StartRemoteLog(context, target); // TODO: revision support
-        }
-    }
+        private LogDialogInfo info;
+        private LogResult result;
+      
+	}
 }

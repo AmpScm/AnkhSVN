@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System.IO;
 using Utils;
 
-namespace Utils.Tests
+namespace Utils.Tests._2003
 {
     [TestFixture]
     public class FileUtilsTest
@@ -21,7 +21,7 @@ namespace Utils.Tests
         [TearDown]
         public void TearDown()
         {
-            RecursiveDelete( this.dirStructure );
+            PathUtils.RecursiveDelete( this.dirStructure );
         }
 
         [Test]
@@ -100,24 +100,6 @@ namespace Utils.Tests
             {
                 writer.Write( random.Next( 1000 ) );
             }
-        }
-
-        /// <summary>
-        /// Recursively deletes a directory.
-        /// </summary>
-        /// <param name="path"></param>
-        public static void RecursiveDelete(string path)
-        {
-            foreach (string dir in Directory.GetDirectories(path))
-            {
-                RecursiveDelete(dir);
-            }
-
-            foreach (string file in Directory.GetFiles(path))
-                File.SetAttributes(file, FileAttributes.Normal);
-
-            File.SetAttributes(path, FileAttributes.Normal);
-            Directory.Delete(path, true);
         }
 
         private const int MaxDepth = 3;

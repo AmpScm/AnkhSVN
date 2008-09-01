@@ -4,7 +4,6 @@ using Ankh.Commands;
 using System.IO;
 using NUnit.Framework;
 using EnvDTE;
-using AnkhSvn.Ids;
 
 namespace Ankh.Tests
 {
@@ -26,13 +25,14 @@ namespace Ankh.Tests
             this.uiShell = new MyUIShellImpl();
             this.ctx = new ContextBase( );
             this.uiShell.Context = this.ctx;
+            this.explorer = new ContextBase.ExplorerImpl( this.ctx );            
             this.ctx.UIShell = this.uiShell;
+            this.ctx.SolutionExplorer = this.explorer;
         }
 
         [Test]
         public void TestQueryStatus()
         {
-            /*
             // not enabled for an empty selection
             Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
                 cmd.QueryStatus( this.ctx ) );
@@ -68,7 +68,6 @@ namespace Ankh.Tests
             this.explorer.Selection = new SvnItem[]{ folder };
             Assert.AreEqual( vsCommandStatus.vsCommandStatusSupported, 
                 cmd.QueryStatus( this.ctx ) );
-             */
         }
 
         [Test]
@@ -76,10 +75,11 @@ namespace Ankh.Tests
         {
             string path = Path.Combine( this.WcPath, "Class1.cs" );
             SvnItem item = this.ctx.StatusCache[path];
+            this.explorer.Selection = new SvnItem[]{ item };
 
-            this.cmd.OnExecute(new CommandEventArgs(AnkhCommand.Blame, this.ctx));
+            this.cmd.Execute( this.ctx, "" );
             Assert.IsTrue( this.uiShell.Called );
-            Assert.IsFalse( this.uiShell.Html == "" );
+            Assert.IsFalse( this.uiShell.Html == String.Empty );
             Assert.IsFalse( this.uiShell.Reuse );
             Assert.IsTrue( this.uiShell.ProgressDialogCalled );
             Assert.IsTrue( this.uiShell.ShowPathSelectorCalled );
@@ -121,5 +121,10 @@ namespace Ankh.Tests
 
         private MyUIShellImpl uiShell;
         private ContextBase ctx;
+        private ContextBase.ExplorerImpl explorer;
+
+        private ICommand cmd;
+
+        
     }
 }

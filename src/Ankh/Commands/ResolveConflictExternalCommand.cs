@@ -1,34 +1,36 @@
 // $Id: ResolveConflictCommand.cs 1580 2004-07-24 01:44:31Z Arild $
 using System;
+using EnvDTE;
+
 using Ankh.UI;
 using System.Windows.Forms;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Collections;
-using Ankh.Ids;
-using Ankh.Configuration;
+using NSvn.Core;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to resolve conflict between changes using external tool.
     /// </summary>
-    [Command(AnkhCommand.ResolveConflictExternal)]
-    class ResolveConflictExternalCommand : ResolveConflictCommand
+    [VSNetCommand( "ResolveConflictExternalCommand",
+         Text = "Resolve Conflict E&xternal...",
+         Bitmap = ResourceBitmaps.ResolveConflict, 
+         Tooltip = "Resolve conflict between changes using external tool."),
+         VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 6)]
+    public class ResolveConflictExternalCommand : ResolveConflictCommand
     {
-        
+        #region Implementation of ICommand
 
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            IAnkhConfigurationService cs = e.Context.GetService<IAnkhConfigurationService>();
-
-            AnkhConfig config = cs.Instance;
-
-            if (!config.ChooseDiffMergeManual || config.MergeExePath == null)
-            {
-                e.Enabled = e.Visible = false;
-            }
+            // Allow external merge if enabled in config file
+            if ( context.Config.ChooseDiffMergeManual && context.Config.MergeExePath != null )
+                return Enabled;
+            else 
+                return vsCommandStatus.vsCommandStatusInvisible;
         }
 
         /// <summary>
@@ -36,9 +38,11 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected override string GetExe(IAnkhServiceProvider context)
+        protected override string GetExe( Ankh.IContext context )
         {
-            return context.GetService<IAnkhConfigurationService>().Instance.MergeExePath;
+            return context.Config.MergeExePath;
         }
+
+        #endregion
     }
 }

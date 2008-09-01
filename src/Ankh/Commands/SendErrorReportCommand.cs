@@ -1,22 +1,29 @@
 using System;
-using Ankh.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to send the AnkhSVN team comments and suggestions.
     /// </summary>
-    [Command(AnkhCommand.SendFeedback)]
-    class SendErrorReportCommand : CommandBase
+    [VSNetCommand("SendErrorReport",
+         Text = "Send Feedback...", 
+         Tooltip = "Send the AnkhSVN team comments and suggestions.",
+         Bitmap = ResourceBitmaps.SendSuggest),
+         VSNetControl( "Tools.AnkhSVN", Position = 7 )]
+    public class SendErrorReportCommand : CommandBase
     {
-        public override void OnExecute(CommandEventArgs e)
-        {
-            IAnkhErrorHandler handler = e.Context.GetService<IAnkhErrorHandler>();
+        #region Implementation of ICommand
 
-            if (handler != null)
-            {
-                handler.SendReport();
-            }
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            return Enabled;
         }
+
+        public override void Execute(IContext context, string parameters)
+        {
+            context.ErrorHandler.SendReport();
+        }
+
+        #endregion
     }
 }

@@ -2,148 +2,107 @@ using System;
 using System.Collections;
 using Ankh.UI;
 using System.Windows.Forms;
-
-
+using NSvn.Core;
+using NSvn.Common;
 using System.IO;
-using SharpSvn;
-using Ankh.Ids;
-using System.Windows.Forms.Design;
-using Ankh.Scc;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Ankh.VS;
-using Ankh.Selection;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to revert current item to a specific revision.
     /// </summary>
-    [Command(AnkhCommand.RevertToRevision)]
-    [Command(AnkhCommand.RevertProjectToRevision)]
-    [Command(AnkhCommand.RevertSolutionToRevision)]
-    class ReverseMergeCommand : CommandBase
+    [VSNetCommand( "ReverseMerge",
+         Text = "Re&vert to Revision...", 
+         Tooltip = "Revert this item to a specific revision.", 
+         Bitmap = ResourceBitmaps.RevertToVersion),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 4 )]
+    public class ReverseMergeCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            int count = 0;
-
-            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
-            IAnkhSolutionSettings solSettings = e.GetService<IAnkhSolutionSettings>();
-
-            switch (e.Command)
-            {
-                case AnkhCommand.RevertToRevision:
-
-                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                    {
-                        if (item.IsVersioned)
-                        {
-                            count++;
-                            if (count > 1)
-                                break;
-                        }
-                    }
-                    break;
-                case AnkhCommand.RevertSolutionToRevision:
-                    if (string.IsNullOrEmpty(solSettings.ProjectRoot))
-                        break;
-                    SvnItem i = statusCache[solSettings.ProjectRoot];
-                    if (i.IsVersioned)
-                        count++;
-                    break;
-                case AnkhCommand.RevertProjectToRevision:
-                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
-                    {
-                        if (p.IsSolution || string.IsNullOrEmpty(p.FullPath))
-                            continue;
-
-                        SvnItem ii = statusCache[p.FullPath];
-                        if (ii.IsVersioned)
-                        {
-                            count++;
-                            if (count > 1)
-                                break;
-                        }
-                    }
-                    break;
-            }
-
-            e.Enabled = count == 1;
+            IList resources = context.Selection.GetSelectionResources(
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
+            if ( resources.Count > 0 )
+                return Enabled;
+            else
+                return Disabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(IContext context, string parameters)
         {
-            SvnItem item = null;
-            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
-            IAnkhSolutionSettings solSettings = e.GetService<IAnkhSolutionSettings>();
+            this.SaveAllDirtyDocuments( context );
 
-            switch (e.Command)
+            IList resources = context.Selection.GetSelectionResources(
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
+            context.StartOperation( "Merging" );
+            try
             {
-
-                case AnkhCommand.RevertSolutionToRevision:
-                    SvnItem i = statusCache[solSettings.ProjectRoot];
-                    if(i.IsVersioned)
-                        item = i;
-                    break;
-                case AnkhCommand.RevertToRevision:
-                    foreach (SvnItem ii in e.Selection.GetSelectedSvnItems(false))
-                    {
-                        if (ii.IsVersioned)
-                        {
-                            item = ii;
-                            break;
-                        }
-                    }
-                    break;
-                case AnkhCommand.RevertProjectToRevision:
-                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
-                    {
-                        if (p.IsSolution || string.IsNullOrEmpty(p.FullPath))
-                            continue;
-                        SvnItem iii = statusCache[p.FullPath];
-                        if (iii.IsVersioned)
-                        {
-                            item = iii;
-                            break;
-                        }
-                    }
-                    break;
-            }
-
-            if (item == null)
-                return;
-
-            Execute(item, e);
-        }
-
-        void Execute(SvnItem item, CommandEventArgs e)
-        {
-            List<SvnRevisionRange> revisions = new List<SvnRevisionRange>();
-            IUIService ui = e.GetService<IUIService>();
-            using (LogViewerDialog dialog = new LogViewerDialog(item.FullPath, e.Context))
-            {
-                dialog.Text = "Select Revisions to revert";
-                if (ui.ShowDialog(dialog) == DialogResult.OK)
+                using ( ReverseMergeDialog dlg = new ReverseMergeDialog() )
                 {
-                    foreach(ISvnLogItem revision in dialog.SelectedItems)
+                    dlg.GetPathInfo += new ResolvingPathInfoHandler(SvnItem.GetPathInfo);
+                    dlg.Items = resources;
+                    dlg.CheckedItems = resources;
+                    dlg.Recursive = true;
+
+                    if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
+                        return;
+
+                    context.ProjectFileWatcher.StartWatchingForChanges();
+               
+                    ReverseMergeRunner runner = new ReverseMergeRunner(
+                        dlg.CheckedItems, dlg.Revision, dlg.Recursive ? Recurse.Full : Recurse.None,
+                        dlg.DryRun );
+                    context.UIShell.RunWithProgressDialog( runner, "Merging" );
+
+                    // we need to refresh every item, not just those selected since 
+                    // the operation might be recursive
+                    if ( !context.ReloadSolutionIfNecessary() )
                     {
-                        revisions.Add(new SvnRevisionRange(SvnRevision.Working, revision.Revision));
+                        foreach( SvnItem item in resources )
+                            item.Refresh( context.Client);
                     }
                 }
             }
-
-            
-            using (e.Context.BeginOperation("Reverse merging"))
+            finally
             {
-                SaveAllDirtyDocuments(e.Selection, e.Context);
-
-                e.GetService<IProgressRunner>().Run("Merging", delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    ee.Client.Merge(item.FullPath, new SvnPathTarget(item.FullPath), revisions);
-                });
+                context.EndOperation();
             }
-            
+        }
+
+        #endregion
+
+        /// <summary>
+        /// A progressrunner for reverse merges.
+        /// </summary>
+        private class ReverseMergeRunner : IProgressWorker
+        {
+            public ReverseMergeRunner(  IList items, Revision revision,
+                Recurse recurse, bool dryRun ) 
+            {
+                this.items = items;
+                this.revision = revision;
+                this.recurse = recurse;
+                this.dryRun = dryRun;
+            }
+
+            public void Work( IContext context )
+            {
+                foreach( SvnItem item in this.items )
+                {
+                    context.Client.Merge( 
+                        item.Path, Revision.Working,
+                        item.Path, this.revision,
+                        item.Path, this.recurse,
+                        false, false, this.dryRun );
+                }
+            }
+
+            private IList items;
+            private Revision revision;
+            private Recurse recurse;
+            private bool dryRun;
         }
     }
 }

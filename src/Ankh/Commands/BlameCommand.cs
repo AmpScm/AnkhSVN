@@ -2,215 +2,125 @@ using System;
 using System.Xml;
 using System.Xml.Xsl;
 using System.Xml.XPath;
-
-
+using NSvn.Core;
+using NSvn.Common;
 using System.IO;
 using System.Collections;
 using System.Diagnostics;
-using SharpSvn;
-using Ankh.Ids;
-using System.Collections.Generic;
-using Ankh.UI;
-using Ankh.Scc;
 
 namespace Ankh.Commands
 {
-    /// <summary>
+	/// <summary>
     /// Command to identify which users to blame for which lines.
-    /// </summary>
-    [Command(AnkhCommand.Blame)]
-    [Command(AnkhCommand.LogBlameRevision)]
-    class BlameCommand : CommandBase
+	/// </summary>
+    [VSNetCommand("Blame",
+        Text = "&Blame...",
+        Tooltip = "Identify which users to blame for which lines.",
+        Bitmap = ResourceBitmaps.Blame),
+    VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 10)]
+	public class BlameCommand : CommandBase
     {
-        XslCompiledTransform _transform;
-        private const string BlameTransform = "blame.xsl";
+        #region Implementation of ICommand
 
-
-        
-
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            switch (e.Command)
-            {
-                case AnkhCommand.Blame:
-                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                    {
-                        if (item.IsVersioned && item.IsFile)
-                            return;
-                    }
-                    break;
-                case AnkhCommand.LogBlameRevision:
-                    // Disabled for now, see TODO belows
-                    e.Visible = e.Enabled = false;
-                    return;
-
-                    /*int count = 0;
-                    foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
-                    {
-                        count++;
-                        if (count > 1)
-                            break;
-                    }
-                    if (count == 1)
-                        return;
-                    break;*/
-            }
-            e.Enabled = false;
+            if ( context.Selection.GetSelectionResources( true, 
+                new ResourceFilterCallback( SvnItem.VersionedSingleFileFilter) ).Count > 0 )
+                return Enabled;
+            else
+                return Disabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(IContext context, string parameters)
         {
-            switch (e.Command)
-            {
-                case AnkhCommand.Blame:
-                    BlameItem(e);
-                    break;
-                case AnkhCommand.LogBlameRevision:
-                    BlameRevision(e);
-                    break;
-            }
-        }
+            IList resources = context.Selection.GetSelectionResources( true, 
+                new ResourceFilterCallback( SvnItem.VersionedFilter) );
 
-        void BlameRevision(CommandEventArgs e)
-        {
-            IUIShell uiShell = e.GetService<IUIShell>();
-            ISvnLogChangedPathItem item = null;
-            foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+            if ( resources.Count == 0 )
             {
-                item = logItem;
-                break;
-            }
-            if (item == null)
                 return;
+            }
 
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = item.Revision;
-
-            BlameResult blameResult = new BlameResult();
-
-            blameResult.Start();
-            // TODO: we need the real filesystem path and/or url here
-            BlameRunner runner = new BlameRunner(item.Path,
-                revisionStart, revisionEnd, blameResult);
-            
-            e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-            blameResult.End();
-
-            // transform it to HTML
-            StringWriter writer = new StringWriter();
-            blameResult.Transform(GetTransform(e.Context), writer);
-
-            // display the HTML with the filename as caption
-            uiShell.DisplayHtml(string.Format("Revision {0}", item.Revision), writer.ToString(), false);
-        }
-
-        void BlameItem(CommandEventArgs e)
-        {
-            IUIShell uiShell = e.GetService<IUIShell>();
-
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = SvnRevision.Head;
-
-            SvnItem firstItem = null;
-            PathSelectorResult result = null;
-            PathSelectorInfo info = new PathSelectorInfo("Blame",
-                e.Selection.GetSelectedSvnItems(true));
-
-            info.CheckedFilter += delegate(SvnItem item)
-            {
-                if (firstItem == null && item.IsFile)
-                    firstItem = item;
-
-                return (item == firstItem);
-            };
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
+            Revision revisionStart = Revision.FromNumber(0);
+            Revision revisionEnd = Revision.Head;
 
             // is shift depressed?
-            if (!CommandBase.Shift)
+            if ( !CommandBase.Shift )
             {
-
+                PathSelectorInfo info = new PathSelectorInfo( "Blame", resources, new SvnItem[] {(SvnItem)resources[0]} );
                 info.RevisionStart = revisionStart;
                 info.RevisionEnd = revisionEnd;
                 info.EnableRecursive = false;
-                info.Depth = SvnDepth.Empty;
+                info.Recurse = Recurse.None;
                 info.SingleSelection = true;
 
                 // show the selector dialog
-                result = uiShell.ShowPathSelector(info);
-                if (info == null)
+                info = context.UIShell.ShowPathSelector( info );
+                if ( info == null )
                     return;
 
                 revisionStart = info.RevisionStart;
                 revisionEnd = info.RevisionEnd;
+                resources = info.CheckedItems;
             }
             else
             {
-                result = info.DefaultResult;
+                resources = new SvnItem[] { (SvnItem)resources[0] };
             }
 
-            if (!result.Succeeded)
-                return;
+            XslTransform transform = CommandBase.GetTransform( 
+                context, BlameTransform );
 
-            foreach (SvnItem item in result.Selection)
+            foreach( SvnItem item in resources )
             {
                 // do the blame thing
-                BlameResult blameResult = new BlameResult();
+                BlameResult result = new BlameResult();
 
-                blameResult.Start();
-                BlameRunner runner = new BlameRunner(new SvnPathTarget(item.FullPath),
-                    revisionStart, revisionEnd, blameResult);
-
-                e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-                blameResult.End();
-
+                result.Start();
+                BlameRunner runner = new BlameRunner( item.Path, 
+                    revisionStart, revisionEnd, result );
+                context.UIShell.RunWithProgressDialog( runner, "Figuring out who to blame" );
+                result.End();
+               
                 // transform it to HTML
                 StringWriter writer = new StringWriter();
-                blameResult.Transform(GetTransform(e.Context), writer);
+                result.Transform( transform, writer );
 
                 // display the HTML with the filename as caption
-                string filename = Path.GetFileName(item.FullPath);
-                uiShell.DisplayHtml(filename, writer.ToString(), false);
+                string filename = Path.GetFileName( item.Path );
+                context.UIShell.DisplayHtml( filename, writer.ToString(), false );
             }
         }
 
-        private class BlameRunner
+        #endregion
+
+        private class BlameRunner : IProgressWorker
         {
-            public BlameRunner(SvnTarget target, SvnRevision start, SvnRevision end,
-                BlameResult result)
+            public BlameRunner( string path, Revision start, Revision end, 
+                BlameResult result )
             {
-                this.target = target;
+                this.path = path; 
                 this.start = start;
                 this.end = end;
                 this.result = result;
             }
 
-            public void Work(ProgressWorkerArgs e)
+            public void Work(IContext context)
             {
-                SvnBlameArgs args = new SvnBlameArgs();
-                args.Start = start;
-                args.End = end;
-                //args.IgnoreLineEndings
-                //args.IgnoreMimeType
-                //args.IgnoreSpacing
-                //args.IncludeMergedRevisions
-
-                e.Client.Blame(this.target, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
+                context.Client.Blame( this.path, this.start, this.end,
+                    new BlameReceiver( this.result.Receive ) );
             }
 
-            private SvnTarget target;
-            private SvnRevision start;
-            private SvnRevision end;
+            private string path;
+            private Revision start;
+            private Revision end;
             private BlameResult result;
-
-            public void Work(object sender, ProgressWorkerArgs e)
-            {
-                Work(e);
-            }
         }
 
-        XslCompiledTransform GetTransform(IAnkhServiceProvider context)
-        {
-            return _transform ?? (_transform = CommandBase.GetTransform(context, BlameTransform));
-        }
-    }
+        
+
+        private const string BlameTransform = "blame.xsl";
+
+
+	}
 }

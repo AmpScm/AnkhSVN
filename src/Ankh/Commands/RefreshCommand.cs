@@ -1,31 +1,40 @@
 // $Id$
 using System;
+using EnvDTE;
 using Ankh.UI;
-using Ankh.Ids;
-using Ankh.Scc;
-using Microsoft.VisualStudio;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to refresh this view.
     /// </summary>
-    [Command(AnkhCommand.Refresh)]
-    class RefreshCommand : CommandBase
+    [VSNetCommand("Refresh",
+         Text = "Refres&h",
+         Tooltip = "Refresh this view.", 
+         Bitmap = ResourceBitmaps.Refresh),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 2 )]
+    public class RefreshCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(Ankh.IContext context)
         {
+            return Enabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(Ankh.IContext context, string parameters)
         {
-            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-
-            monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
-
-            IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
-
-            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window            
+            try
+            {
+                context.StartOperation( "Refreshing" );
+                context.Selection.RefreshSelection();
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }
+
+        #endregion
     }
 }

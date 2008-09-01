@@ -2,66 +2,51 @@
 using System;
 using Ankh.UI;
 using System.Windows.Forms;
-using SharpSvn;
-using Ankh.Ids;
-using System.Windows.Forms.Design;
+using Utils;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [Command(AnkhCommand.Export,HideWhenDisabled=false)]
-    class ExportCommand : CommandBase
+    [VSNetCommand("Export",
+         Text = "E&xport a Repository or Local Folder...", 
+         Tooltip = "Export a Subversion repository or local folder.", 
+         Bitmap = ResourceBitmaps.Export),
+         VSNetControl( "Tools.AnkhSVN", Position = 3 )]
+    public class ExportCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
-        {
-            bool foundOne = false;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-            {
-                if(foundOne || !item.IsVersioned)
-                {
-                    e.Enabled = false;
-                    break;
-                }
-                foundOne = true;
-            }
+        #region Implementation of ICommand
 
-            if(!foundOne)
-                e.Enabled = false;
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            return Enabled;
         }
-        public override void OnExecute(CommandEventArgs e)
+
+        public override void Execute(IContext context, string parameters)
         {
-            using (ExportDialog dlg = new ExportDialog(e.Context))
+            using(ExportDialog dlg = new ExportDialog())
             {
-                IUIService ui = e.GetService<IUIService>();
-
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    dlg.OriginUri = item.Status.Uri;
-                    dlg.OriginPath = item.FullPath;
-                }
-
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
-
-                if (dr != DialogResult.OK)
+                if ( dlg.ShowDialog( context.HostWindow ) != DialogResult.OK )
                     return;
 
-                e.GetService<IProgressRunner>().Run("Exporting",
-                    delegate(object sender, ProgressWorkerArgs wa)
-                    {
-                        SvnExportArgs args = new SvnExportArgs();
-                        args.Depth = dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty;
-                        args.Revision = dlg.Revision;
+                context.StartOperation( "Exporting" );
+                try
+                {
+                    ExportRunner runner = new ExportRunner( 
+                        dlg.LocalPath, dlg.Revision, dlg.Source, !dlg.NonRecursive );
+                    context.UIShell.RunWithProgressDialog( runner, "Exporting" );
 
-                        wa.Client.Export(dlg.ExportSource, dlg.LocalPath, args);
-                    });
+                    // make sure it's remembered
+                    RegistryUtils.CreateNewTypedUrl( dlg.Source);
+                }
+                finally
+                {
+                    context.EndOperation();
+                }
             }
         }
+
+        #endregion
     }
 }

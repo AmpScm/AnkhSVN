@@ -3,158 +3,95 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 using Ankh.UI;
-
-using SharpSvn;
-using Ankh.Ids;
-using Ankh.VS;
-using Ankh.Scc;
-using Ankh.Selection;
+using NSvn.Core;
+using NSvn.Common;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to switch current item to a different URL.
     /// </summary>
-    [Command(AnkhCommand.SwitchItem)]
-    [Command(AnkhCommand.SolutionSwitchDialog)]
-    [Command(AnkhCommand.SwitchProject)]
-    class SwitchItemCommand : CommandBase
+    [VSNetCommand("SwitchItem",
+         Text = "&Switch...", 
+         Tooltip = "Switch this item to a different URL.", 
+         Bitmap = ResourceBitmaps.Switch ),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 7 )]
+    public class SwitchItemCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            if (e.Command == AnkhCommand.SolutionSwitchDialog)
-            {
-                if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
-                    e.Enabled = false;
-                return;
-            }
-
-            bool foundOne = false, error = false;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-            {
-                if (item.IsVersioned && !foundOne)
-                    foundOne = true;
-                else
-                {
-                    error = true;
-                    break;
-                }
-            }
-
-            e.Enabled = foundOne && !error;
+            IList resources = context.Selection.GetSelectionResources(
+                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
+            if ( resources.Count > 0 )
+                return Enabled;
+            else
+                return Disabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(IContext context, string parameters)
         {
-            SvnItem theItem = null;
-            string path;
+            this.SaveAllDirtyDocuments( context );
 
-            string projectRoot = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
+            IList resources = context.Selection.GetSelectionResources(
+                false, new ResourceFilterCallback( SvnItem.VersionedFilter ) );
 
-            if (e.Command == AnkhCommand.SolutionSwitchDialog)
-                path = projectRoot;
-            else if (e.Command == AnkhCommand.SwitchProject)
+            if ( resources.Count == 0 )
+                return;
+
+            SwitchDialogInfo info = new SwitchDialogInfo( resources, 
+                new object[]{resources[0]} );
+
+            info = context.UIShell.ShowSwitchDialog( info );
+
+            if ( info == null ) 
+                return;
+
+            context.StartOperation( "Switching" );
+            context.ProjectFileWatcher.StartWatchingForChanges();
+            try
             {
-                IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                path = null;
-
-                foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
+                SwitchRunner runner = new SwitchRunner(info.Path, info.SwitchToUrl, 
+                    info.RevisionStart, info.Recurse );
+                context.UIShell.RunWithProgressDialog( runner, "Switching" );
+                if ( !context.ReloadSolutionIfNecessary() )
                 {
-                    ISvnProjectInfo pi = mapper.GetProjectInfo(item);
-
-                    if (pi == null)
-                        continue;
-
-                    path = pi.ProjectDirectory;
-                    break;
-                }
-
-                if (string.IsNullOrEmpty(path))
-                    return;
-            }
-            else
-            {
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    if (item.IsVersioned)
-                    {
-                        theItem = item;
-                        break;
-                    }
-                    return;
-                }
-                path = theItem.FullPath;
-            }
-
-            Uri uri;
-
-            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
-            {
-                uri = cl.GetUriFromWorkingCopy(path);
-            }
-
-            SvnUriTarget target;
-
-            if (e.Argument is string)
-                target = SvnUriTarget.FromString((string)e.Argument);
-            else
-            {
-                using (SwitchDialog dlg = new SwitchDialog())
-                {
-                    dlg.Context = e.Context;
-
-                    dlg.LocalPath = path;
-                    dlg.SwitchToUri = uri;
-
-                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
-                        return;
-
-                    target = dlg.SwitchToUri;
+                    context.Selection.RefreshSelection();
                 }
             }
-
-            // Get a list of all documents below the specified paths that are open in editors inside VS
-            HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
-
-            foreach (string file in documentTracker.GetDocumentsBelow(path))
+            finally
             {
-                if (!lockPaths.Contains(file))
-                    lockPaths.Add(file);
+                context.EndOperation();
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// A progress runner that runs the switch operation.
+        /// </summary>
+        private class SwitchRunner : IProgressWorker
+        {
+            public SwitchRunner( string path, string url, Revision revision,
+                Recurse recurse )                 
+            {
+                this.path = path;
+                this.url = url;
+                this.revision = revision;
+                this.recurse = recurse;
             }
 
-            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
-
-            using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
+            public void Work( IContext context )
             {
-                lck.MonitorChanges();
-
-                // TODO: Monitor conflicts!!
-
-                e.GetService<IProgressRunner>().Run(
-                    "Switching",
-                    delegate(object sender, ProgressWorkerArgs a)
-                    {
-                        SvnSwitchArgs args = new SvnSwitchArgs();
-
-                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);                        
-                        a.Client.Switch(path, target, args);
-                    });
-
-
-                // This fixes the PC 'Working on' combo 
-                string solution = e.GetService<IAnkhSolutionSettings>().SolutionFilename;
-                IFileStatusCache cache = e.GetService<IFileStatusCache>();
-
-                if (!string.IsNullOrEmpty(solution))
-                    cache.MarkDirty(solution);
-                if (!string.IsNullOrEmpty(projectRoot))
-                    cache.MarkDirty(projectRoot);
-                // Working on fix
-
-
-                lck.ReloadModified();
+                context.Client.Switch( this.path, this.url, 
+                    this.revision, this.recurse );
             }
-        }        
+
+            private string path;
+            private string url;
+            private Revision revision;
+            private Recurse recurse;
+        }
     }
 }

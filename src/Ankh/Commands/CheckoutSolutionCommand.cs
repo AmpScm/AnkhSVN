@@ -5,57 +5,58 @@ using Utils;
 using EnvDTE;
 using Ankh.RepositoryExplorer;
 using Ankh.UI;
-using AnkhSvn.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to checkout current solution in Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.CheckoutSolution)]
-    public class CheckoutSolutionCommand : CommandBase
+    [VSNetCommand("CheckoutSolution",
+         Text = "Checkout &Solution...",
+         Tooltip = "Checkout this solution.", 
+         Bitmap = ResourceBitmaps.CheckoutSolution),
+         VSNetControl( "ReposExplorer", Position = 2 )]
+	public class CheckoutSolutionCommand : CommandBase
     {
         #region Implementation of ICommand
 
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
         {
-            IContext context = e.Context.GetService<IContext>();
-
             IRepositoryTreeNode node = context.RepositoryExplorer.SelectedNode;
-            if (node != null && !node.IsDirectory &&
-                node.Name.EndsWith(".sln", StringComparison.OrdinalIgnoreCase))
+            if ( node!= null && !node.IsDirectory && 
+                node.Name.ToLower().EndsWith(".sln" ) )
             {
-                // e.Enabled = true;
+                return Enabled;
             }
             else
-                e.Enabled = false;
+                return Disabled;
         }
 
-        public override void OnExecute(CommandEventArgs e)
+        public override void Execute(IContext context, string parameters)
         {
-            IContext context = e.GetService<IContext>();
-            EnvDTE._DTE dte = e.GetService<EnvDTE._DTE>(typeof(Microsoft.VisualStudio.Shell.Interop.SDTE));
-
             /// first get the parent folder
-			using (FolderBrowserDialog browser = new FolderBrowserDialog())
-			{
-				/// give a chance to the user to bail
-				if (browser.ShowDialog() != DialogResult.OK)
-					return;
+            FolderBrowser browser = new FolderBrowser();
 
-				using(context.StartOperation("Checking out"))
-				{
-					INode node = context.RepositoryExplorer.SelectedNode;
-					INode parent = node.Parent;
+            /// give a chance to the user to bail
+            if ( browser.ShowDialog() != DialogResult.OK) 
+                return;
 
-					CheckoutRunner runner = new CheckoutRunner(browser.SelectedPath, parent.Revision, new Uri(parent.Url));
-                    e.GetService<IProgressRunner>().Run(
-                        "Checking out solution",
-                        runner.Work);
+            try
+            {
+                context.StartOperation( "Checking out" );
 
-					dte.Solution.Open(Path.Combine(browser.SelectedPath, node.Name));
-				}
-			}
+                INode node = context.RepositoryExplorer.SelectedNode;
+                INode parent = node.Parent;
+
+                CheckoutRunner runner = new CheckoutRunner( browser.DirectoryPath, parent.Revision, parent.Url);
+                context.UIShell.RunWithProgressDialog( runner, "Checking out solution" );
+
+                context.DTE.Solution.Open( System.IO.Path.Combine( browser.DirectoryPath, node.Name ) );
+            }
+            finally
+            {
+                context.EndOperation();
+            }
         }
 
         #endregion

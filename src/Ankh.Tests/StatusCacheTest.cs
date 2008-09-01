@@ -2,8 +2,9 @@ using System;
 using NUnit.Framework;
 using Ankh;
 using System.IO;
+using NSvn.Core;
+using NSvn.Common;
 using System.Collections;
-using SharpSvn;
 
 
 namespace Ankh.Tests
@@ -27,19 +28,19 @@ namespace Ankh.Tests
         [Test]
         public void TestVariousPathVariations()
         {
-            StatusCache cache = new StatusCache();
-            cache.Status(this.WcPath, SvnDepth.Infinity);
+            StatusCache cache = new StatusCache( this.Client );
+            cache.Status( this.WcPath );
 
             string formPath = Path.Combine(this.WcPath, "Form1.cs");
 
             SvnItem item = cache[formPath];
-            Assert.AreEqual( SvnStatus.Normal, item.Status.LocalContentStatus );
+            Assert.AreEqual( StatusKind.Normal, item.Status.TextStatus );
 
             item = cache[formPath.ToLower()];
-			Assert.AreEqual(SvnStatus.Normal, item.Status.LocalContentStatus);
+            Assert.AreEqual( StatusKind.Normal, item.Status.TextStatus );
 
             item = cache[formPath.ToUpper()];
-			Assert.AreEqual(SvnStatus.Normal, item.Status.LocalContentStatus);
+            Assert.AreEqual( StatusKind.Normal, item.Status.TextStatus );
         }
 
         /// <summary>
@@ -48,17 +49,19 @@ namespace Ankh.Tests
         [Test]
         public void TestGetDeletions()
         {
-            StatusCache cache = new StatusCache();
-            this.Client.Delete(Path.Combine( this.WcPath, "Class1.cs" ));
-            this.Client.Delete(Path.Combine( this.WcPath, "WindowsApplication.sln" ));
+            StatusCache cache = new StatusCache( this.Client );
+            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, 
+                true);
+            this.Client.Delete( new string[]{Path.Combine( this.WcPath, "WindowsApplication.sln" )}, 
+                true);
             
             // should be two deletions now
-            cache.Status(this.WcPath, SvnDepth.Infinity);
+            cache.Status( this.WcPath );
             IList deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 2, deletions.Count );
 
             // undelete one
-            this.Client.Revert(Path.Combine( this.WcPath, "Class1.cs" ));
+            this.Client.Revert(  new string[]{Path.Combine( this.WcPath, "Class1.cs" )}, Recurse.None );
             deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 1, deletions.Count );
 
@@ -67,9 +70,7 @@ namespace Ankh.Tests
                 ((SvnItem)deletions[0]).Path);  
 
             // undelete all
-			SvnRevertArgs a = new SvnRevertArgs();
-			a.Depth = SvnDepth.Infinity;
-            this.Client.Revert(this.WcPath, a);
+            this.Client.Revert( new string[]{this.WcPath}, Recurse.Full );
             deletions = cache.GetDeletions( this.WcPath );
             Assert.AreEqual( 0, deletions.Count );
         }
@@ -80,13 +81,13 @@ namespace Ankh.Tests
         [Test]
         public void TestGetPathNotInInitialStatus()
         {
-            StatusCache cache = new StatusCache();
-            cache.Status(Path.Combine(this.WcPath, "doc"), SvnDepth.Infinity);
+            StatusCache cache = new StatusCache(this.Client);
+            cache.Status( Path.Combine(this.WcPath, "doc") );
             using( StreamWriter w = new StreamWriter(Path.Combine(this.WcPath, "Form1.cs")) )
                 w.WriteLine( "Foo" );
 
             SvnItem item = cache[Path.Combine(this.WcPath, "Form1.cs")];
-            Assert.AreEqual( SvnStatus.Modified, item.Status.LocalContentStatus );            
+            Assert.AreEqual( StatusKind.Modified, item.Status.TextStatus );            
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace Ankh.Tests
         [Test]
         public void TestGetUnversionedItem()
         {
-            StatusCache cache = new StatusCache();
+            StatusCache cache = new StatusCache(this.Client);
 
             string path = Path.GetTempFileName();
             SvnItem item = cache[path];

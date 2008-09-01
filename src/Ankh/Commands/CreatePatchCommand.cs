@@ -2,42 +2,55 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
-using Ankh.Ids;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// A command that lets you create a patch.
     /// </summary>
-    [Command(AnkhCommand.CreatePatch)]
-    class CreatePatchCommand : LocalDiffCommandBase
+    [VSNetCommand( "CreatePatch",
+         Text = "Create &Patch...", 
+         Tooltip = "Create a patch file of changes.", 
+         Bitmap = ResourceBitmaps.CreatePatch),
+        VSNetItemControl(VSNetControlAttribute.AnkhSubMenu, Position = 9)]
+    public class CreatePatchCommand : LocalDiffCommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override void Execute(IContext context, string parameters)
         {
-        }
-        
+            this.SaveAllDirtyDocuments( context );
 
-        public override void OnExecute(CommandEventArgs e)
-        {
-            string diff = this.GetDiff(e.Context, e.Selection);
-
-            if (diff == null)
+            context.StartOperation( "Creating patch" );
+            try
             {
-                return;
-            }
-
-            using (SaveFileDialog dlg = new SaveFileDialog())
-            {
-                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
-                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-                dlg.AddExtension = true;
-
-                if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
+                string diff = this.GetDiff( context );
+                
+                if ( diff == null )
                 {
-                    using (StreamWriter w = File.CreateText(dlg.FileName))
-                        w.Write(diff);
+                    MessageBox.Show( context.HostWindow, "Nothing to diff here. Move along." );
+                    return;
+                }
+
+                using( SaveFileDialog dlg = new SaveFileDialog() )
+                {
+                    dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
+                        "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+                    dlg.AddExtension = true;
+
+                    if ( dlg.ShowDialog( context.HostWindow ) == DialogResult.OK )
+                    {
+                        using( StreamWriter w = File.CreateText(dlg.FileName) )
+                            w.Write( diff );
+                    }
                 }
             }
-        }
-    }
+            finally
+            {
+                context.EndOperation();
+            }
+        } // Execute
+
+        #endregion
+    } 
 }

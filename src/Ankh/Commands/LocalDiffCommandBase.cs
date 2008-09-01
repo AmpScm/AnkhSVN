@@ -1,14 +1,14 @@
 // $Id$
 using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
+using System.Collections;
 using System.IO;
-using Ankh.Scc;
-using Ankh.Scc.UI;
-using Ankh.Selection;
+using System.Diagnostics;
+using NSvn.Core;
+using NSvn.Common;
+using EnvDTE;
 using Ankh.UI;
-using Ankh.VS;
-using SharpSvn;
+using System.Windows.Forms;
+using Utils;
 
 namespace Ankh.Commands
 {
@@ -17,190 +17,183 @@ namespace Ankh.Commands
     /// </summary>
     public abstract class LocalDiffCommandBase : CommandBase
     {
-        readonly TempFileCollection _tempFileCollection = new TempFileCollection();
+        #region Implementation of ICommand
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            // always allow diff - worst case you get an empty diff            
+            return Enabled;
+        }
+
+        #endregion
 
         /// <summary>
-        /// Gets the temp file collection.
+        /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
-        /// <value>The temp file collection.</value>
-        protected TempFileCollection TempFileCollection
+        /// <param name="context"></param>
+        /// <returns>The exe path.</returns>
+        protected virtual string GetExe( Ankh.IContext context )
         {
-            get { return _tempFileCollection; }
-        }        
-
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
-        {
-            return GetDiff(context, selection, null, false);
+            if ( !context.Config.ChooseDiffMergeManual )
+                return context.Config.DiffExePath;
+            else 
+                return null;
         }
+
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool forceExternal)
+        protected virtual string GetDiff( IContext context )
         {
-            if (selection == null)
-                throw new ArgumentNullException("selection");
-            else if (context == null)
-                throw new ArgumentNullException("context");
+            bool useExternalDiff = GetExe( context ) != null;
 
-            IUIShell uiShell = context.GetService<IUIShell>();
+            // We use VersionedFilter here to allow diffs between arbitrary revisions
+            IList resources = context.Selection.GetSelectionResources(
+                true, new ResourceFilterCallback(SvnItem.VersionedFilter) );
 
-            bool useExternalDiff = true;
-
-            bool foundModified = false;
-            foreach (SvnItem item in selection.GetSelectedSvnItems(true))
+            // filter out directories
+            ArrayList checkedResources = new ArrayList();
+            foreach ( SvnItem item in resources )
             {
-                if (item.IsModified || item.IsDocumentDirty)
+                if ( item.IsFile )
                 {
-                    foundModified = true;
-                    break; // no need (yet) to keep searching
+                    checkedResources.Add( item );
                 }
             }
 
-            List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
-
-            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
-            if (foundModified)
-                info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
-
-            info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
-            info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
+            // are we shifted?
+            PathSelectorInfo info = new PathSelectorInfo( "Select items for diffing", 
+                resources, checkedResources );
+            info.RevisionStart = Revision.Base;
+            info.RevisionEnd = Revision.Working;
 
             // "Recursive" doesn't make much sense if using an external diff
             info.EnableRecursive = !useExternalDiff;
-            info.Depth = useExternalDiff ? SvnDepth.Empty : SvnDepth.Infinity;
+            info.Recurse = useExternalDiff ? Recurse.None : Recurse.Full;
 
-            PathSelectorResult result;
+            // default to textbase vs wc diff                
+            Revision revisionStart = Revision.Base;
+            Revision revisionEnd = Revision.Working;
+
             // should we show the path selector?
-            if (!CommandBase.Shift && (revisions == null || !foundModified))
+            if ( !CommandBase.Shift && resources.Count != 1 )
             {
-                result = uiShell.ShowPathSelector(info);
-                if (!result.Succeeded)
-                    return null;
-
-                if (info == null)
+                info = context.UIShell.ShowPathSelector( info );
+                    
+                if ( info == null )
                     return null;
             }
-            else
-                result = info.DefaultResult;
 
-            if (!result.Succeeded)
-                return null;
-
-            SaveAllDirtyDocuments(selection, context);
-
-            if (useExternalDiff)
+            if ( useExternalDiff )
             {
-                return DoExternalDiff(context, result, selection);
+                return DoExternalDiff( info, context );
             }
             else
             {
-                return DoInternalDiff(context, result, selection);
+                return DoInternalDiff( info, context );
             }
         }
-
-        private string DoInternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
+        
+        private string DoInternalDiff( PathSelectorInfo info, IContext context )
         {
-            Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
-            string slndir = ss.ProjectRoot;
+            string curdir = Environment.CurrentDirectory;
+                
+            // we go to the solution directory so that the diff paths will be relative 
+            // to that directory
+            string slndir = context.SolutionDirectory;
 
-            SvnDiffArgs args = new SvnDiffArgs();
-            args.IgnoreAncestry = true;
-            args.NoDeleted = false;
-            args.Depth = info.Depth;
-
-            string slndirP = slndir + "\\";
-            
-            SvnRevisionRange range = new SvnRevisionRange(info.RevisionStart, info.RevisionEnd);
-
-            using (MemoryStream stream = new MemoryStream())
-            using (StreamReader reader = new StreamReader(stream))
-            using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
+            try
             {
-                foreach (SvnItem item in info.Selection)
+                // switch to the solution dir, so we can get relative paths.
+                // if a solution isn't open, don't bother
+                if ( slndir != null )
                 {
-                    SvnWorkingCopy wc;
-                    if (!string.IsNullOrEmpty(slndir) &&
-                        item.FullPath.StartsWith(slndirP, StringComparison.OrdinalIgnoreCase))
-                        args.RelativeToPath = slndir;
-                    else if ((wc = item.WorkingCopy) != null)
-                        args.RelativeToPath = wc.FullPath;
-                    else
-                        args.RelativeToPath = null;
-
-                    client.Diff(item.FullPath, range, args, stream);
+                    Environment.CurrentDirectory = slndir;
                 }
-                stream.Position = 0;
 
-                return reader.ReadToEnd();
+                MemoryStream stream = new MemoryStream();
+                foreach( SvnItem item in info.CheckedItems )
+                {
+                    // try to get a relative path to the item from the solution directory
+                    string path = null;
+
+                    if ( slndir != null )
+                    {
+                        path = Utils.Win32.Win32.PathRelativePathTo( slndir,
+                                        Utils.Win32.FileAttribute.Directory, item.Path,
+                                        Utils.Win32.FileAttribute.Normal ); 
+                    }
+
+                    // We can't use a path with more than two .. relative paths as input to svn diff (see svn issue #2448)
+                    if ( path == null || path.IndexOf( @"..\..\.." ) >= 0 )
+                    {
+                        path = item.Path;
+                    }
+
+                    context.Client.Diff( new string[]{}, path, info.RevisionStart, 
+                        path, info.RevisionEnd, info.Recurse, true, false, 
+                        stream, Stream.Null );
+                }
+
+                return System.Text.Encoding.Default.GetString( stream.ToArray() );
             }
+            finally
+            {
+                Environment.CurrentDirectory = curdir;
+            }
+                
         }
-
-        private string DoExternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
+        
+        private string DoExternalDiff( PathSelectorInfo info, IContext context )
         {
-            foreach (SvnItem item in info.Selection)
+            foreach ( SvnItem item in info.CheckedItems )
             {
                 // skip unmodified for a diff against the textbase
-                if (info.RevisionStart == SvnRevision.Base &&
-                    info.RevisionEnd == SvnRevision.Working && !item.IsModified)
+                if ( info.RevisionStart == Revision.Base && 
+                    info.RevisionEnd == Revision.Working && !item.IsModified )
                     continue;
 
-                string tempDir = context.GetService<IAnkhTempDirManager>().GetTempDir();
+                string quotedLeftPath = GetPath( info.RevisionStart, item, context );
+                string quotedRightPath = GetPath( info.RevisionEnd, item, context );
+                string diffString = this.GetExe( context );
+                diffString = diffString.Replace( "%base", quotedLeftPath );
+                diffString = diffString.Replace( "%mine", quotedRightPath );
 
-                AnkhDiffArgs da = new AnkhDiffArgs();
-
-                da.BaseFile = GetPath(context, info.RevisionStart, item, selection, tempDir);
-                da.MineFile = GetPath(context, info.RevisionEnd, item, selection, tempDir);
-
-
-                context.GetService<IAnkhDiffHandler>().RunDiff(da);
+                // We can't use System.Diagnostics.Process here because we want to keep the
+                // program path and arguments together, which it doesn't allow.
+                Utils.Exec exec = new Utils.Exec();
+                exec.ExecPath( diffString );
             }
 
             return null;
         }
 
-        private string GetPath(IAnkhServiceProvider context, SvnRevision revision, SvnItem item, ISelectionContext selection, string tempDir)
+        private string GetPath( Revision revision, SvnItem item, IContext context )
         {
-            if (revision == SvnRevision.Working)
+            // is it local?
+            if ( revision == Revision.Base )
             {
-                return item.FullPath;
+                if ( item.Status.TextStatus == StatusKind.Added )
+                {
+                    string empty = Path.GetTempFileName();
+                    File.Create(empty).Close();
+                    return empty;
+                }
+                else
+                    return context.Client.GetPristinePath( item.Path );
+            }
+            else if ( revision == Revision.Working )
+            {
+                return item.Path;
             }
 
-            string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + revision.ToString() + Path.GetExtension(item.Name);
-            tempFile = Path.Combine(tempDir, tempFile);
             // we need to get it from the repos
-            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
-            { 
-                SvnTarget target;
-
-                switch(revision.RevisionType)
-                {
-                    case SvnRevisionType.Head:
-                    case SvnRevisionType.Number:
-                    case SvnRevisionType.Time:
-                        target = new SvnUriTarget(item.Status.Uri);
-                        break;
-                    default:
-                        target = new SvnPathTarget(item.FullPath);
-                        break;
-                }
-                SvnWriteArgs args = new SvnWriteArgs();
-                args.Revision = revision;
-                args.SvnError += delegate(object sender, SvnErrorEventArgs eea)
-                {
-                    if (eea.Exception is SvnClientUnrelatedResourcesException)
-                        eea.Cancel = true;
-                };
-                
-                using (FileStream stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
-                {
-                    ee.Client.Write(target, stream, args);
-                }
-            });
-
-            return tempFile;
+            CatRunner runner = new CatRunner( revision, item.Status.Entry.Url );
+            context.UIShell.RunWithProgressDialog( runner, "Retrieving file for diffing" );
+            //			runner.Work( context );
+            return runner.Path;
         }
     }
 }

@@ -1,106 +1,102 @@
 using System;
 using System.Collections;
-
+using NSvn.Core;
 using System.Text;
-using SharpSvn;
-using Ankh.Ids;
-using System.Collections.Generic;
-using Ankh.UI;
-using System.Windows.Forms;
-using Ankh.Scc;
-using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [Command(AnkhCommand.Lock, HideWhenDisabled=true)]
-    class LockCommand : CommandBase
+    [VSNetCommand("Lock",
+         Text = "Loc&k...",
+         Tooltip = "Lock the selected item.",
+         Bitmap = ResourceBitmaps.Lock),
+         VSNetItemControl( VSNetControlAttribute.AnkhSubMenu, Position = 8 )]
+    public class LockCommand : CommandBase
     {
-        public override void OnUpdate(CommandUpdateEventArgs e)
+        #region Implementation of ICommand
+
+        public override void Execute(IContext context, string parameters)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            IList resources = context.Selection.GetSelectionResources(true, 
+                new ResourceFilterCallback( SvnItem.NotLockedAndLockableFilter ) );
+
+            this.info = new LockDialogInfo( resources, resources );
+            
+            // is Shift down?
+            if ( !CommandBase.Shift )
             {
-                if (item.IsFile && item.IsVersioned && !item.IsLocked)
-                {
+                this.info = context.UIShell.ShowLockDialog( this.info );
+                if( this.info == null)
                     return;
-                }
-
-            }
-            e.Enabled = false;
-        }
-
-        
-
-
-        public override void OnExecute(CommandEventArgs e)
-        {
-            IEnumerable<SvnItem> items = e.Argument as IEnumerable<SvnItem>;
-
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items != null ? items : e.Selection.GetSelectedSvnItems(true));
-            psi.VisibleFilter += delegate(SvnItem item)
-            {
-                return item.IsFile && item.IsVersioned && !item.IsLocked;
-            };
-
-            psi.CheckedFilter += delegate(SvnItem item)
-            {
-                return item.IsFile && item.IsVersioned && !item.IsLocked;
-            };
-
-            PathSelectorResult psr;
-            bool stealLocks = false;
-            string comment = "";
-
-            if (e.PromptUser || !(CommandBase.Shift || e.DontPrompt))
-            {
-                IUIService uiService = e.GetService<IUIService>();
-                using (LockDialog dlg = new LockDialog(psi))
-                {
-                    bool succeeded = (dlg.ShowDialog(e.Context)== DialogResult.OK);
-                    psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
-                    stealLocks = dlg.StealLocks;
-                    comment = dlg.Message;
-                }
-
-            }
-            else
-                psr = psi.DefaultResult;
-
-            if (!psr.Succeeded)
-                return;
-
-            List<string> files = new List<string>();
-
-            foreach (SvnItem item in psr.Selection)
-            {
-                if (item.IsFile) // svn lock is only for files
-                {
-                    files.Add(item.FullPath);
-                }
             }
 
-            if (files.Count == 0)
-                return;
-
+            this.lockFailedFiles = new ArrayList();
+            context.Client.Notification += new NotificationDelegate( OnClientNotification );
             try
             {
-                e.GetService<IProgressRunner>().Run("Locking",
-                    delegate(object sender, ProgressWorkerArgs ee)
-                    {
-                        SvnLockArgs la = new SvnLockArgs();
-                        la.StealLock = stealLocks;
-                        la.Comment = comment;
-                        ee.Client.Lock(files, la);
-                    });
+                context.UIShell.RunWithProgressDialog( new SimpleProgressWorker(
+                    new SimpleProgressWorkerCallback( this.ProgressCallback ) ), "Locking files" );
+                foreach ( SvnItem item in info.CheckedItems )
+                    item.Refresh( context.Client );
             }
             finally
             {
-                // TODO: this can be removed when switching to Subversion 1.6
-                e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
+                context.Client.Notification -= new NotificationDelegate( OnClientNotification );
             }
 
-        } // OnExecute        
+            if ( this.lockFailedFiles.Count > 0 )
+            {
+                this.ShowLockFailedMessage( context );
+            }
+        }
+
+        #endregion
+
+        private void ShowLockFailedMessage( IContext context )
+        {
+            StringBuilder sb = new StringBuilder();
+            bool onlyOne = this.lockFailedFiles.Count == 1;
+
+            sb.AppendFormat("The following file{0} {1} out of date and could not be locked:", 
+                onlyOne ? "" : "s", 
+                onlyOne ? "was" : "were");
+            sb.Append( Environment.NewLine );
+            sb.Append( Environment.NewLine );
+
+            foreach ( string path in this.lockFailedFiles )
+            {
+                sb.Append( path );
+                sb.Append( Environment.NewLine );
+            }
+
+            context.UIShell.ShowMessageBox( sb.ToString(), "Lock failed", System.Windows.Forms.MessageBoxButtons.OK );
+        }
+
+        void OnClientNotification( object sender, NotificationEventArgs args )
+        {
+            if ( args.Action == NotifyAction.FailedLock )
+            {
+                this.lockFailedFiles.Add( args.Path );
+            }
+        }
+
+        private void ProgressCallback( IContext context )
+        {
+            string[] paths = SvnItem.GetPaths( info.CheckedItems );
+            
+            context.Client.Lock( paths, this.info.Message, this.info.StealLocks );
+        }
+
+        public override EnvDTE.vsCommandStatus QueryStatus(IContext context)
+        {
+            IList resources = context.Selection.GetSelectionResources( true,
+                new ResourceFilterCallback(SvnItem.NotLockedAndLockableFilter) );
+            return resources.Count > 0 ? Enabled : Disabled;
+        }
+        
+        private LockDialogInfo info;
+        private ArrayList lockFailedFiles;
     }
 }

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using EnvDTE;
 using Ankh.Commands;
 using System.IO;
-using AnkhSvn.Ids;
 
 namespace Ankh.Tests.Commands
 {
@@ -28,9 +27,9 @@ namespace Ankh.Tests.Commands
         public void TestQueryStatus()
         {
             SendErrorReportCommand cmd = new SendErrorReportCommand();
-            /*Assert.AreEqual( vsCommandStatus.vsCommandStatusEnabled | 
+            Assert.AreEqual( vsCommandStatus.vsCommandStatusEnabled | 
                              vsCommandStatus.vsCommandStatusSupported,
-                cmd.QueryStatus( this.context ) );*/
+                cmd.QueryStatus( this.context ) );
 
         }
 
@@ -43,7 +42,7 @@ namespace Ankh.Tests.Commands
             SendErrorReportCommand cmd = new SendErrorReportCommand();
 
             // just ensure the message is sent.
-            cmd.OnExecute( new CommandEventArgs(AnkhCommand.SendFeedback, this.context));
+            cmd.Execute( this.context, "" );
             Assert.IsTrue( ((TestErrorHandler)this.context.ErrorHandler).Sent );
         }
 
@@ -68,13 +67,13 @@ namespace Ankh.Tests.Commands
             }
         }
 
-        private class TestErrorHandler : IAnkhErrorHandler
+        private class TestErrorHandler : IErrorHandler
         {
             public bool Sent = false;
 
             #region IErrorHandler Members
 
-            public void OnError(Exception ex)
+            public void Handle(Exception ex)
             {
                 // TODO:  Add TestErrorHandler.Handle implementation
             }
