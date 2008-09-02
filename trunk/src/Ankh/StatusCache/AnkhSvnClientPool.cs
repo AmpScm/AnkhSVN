@@ -37,7 +37,7 @@ namespace Ankh
             _syncher = new Control();
             _syncher.Visible = false;
             _syncher.Text = "AnkhSVN Synchronizer";
-            _syncher.CreateControl();
+            GC.KeepAlive(_syncher.Handle); // Ensure the window is created
         }
 
         bool _ensuredNames;
