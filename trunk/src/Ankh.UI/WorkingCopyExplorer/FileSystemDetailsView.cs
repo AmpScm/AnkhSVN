@@ -8,6 +8,8 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using Ankh.Scc;
 using System.IO;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -277,6 +279,28 @@ namespace Ankh.UI.WorkingCopyExplorer
         protected override void OnRetrieveSelection(ListViewWithSelection<FileSystemListViewItem>.RetrieveSelectionEventArgs e)
         {
             e.SelectionItem = new SvnItemData(Context, e.Item.SvnItem);
+        }
+
+        public override void OnShowContextMenu(MouseEventArgs e)
+        {
+            base.OnShowContextMenu(e);
+
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : PointToScreen(new Point(0, 0));
+
+            IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
+
+            Point p = PointToClient(e.Location);
+
+            AnkhCommandMenu menu;
+            if (p.Y < HeaderHeight)
+            {
+                Select(); // Must be the active control for the menu to work
+                menu = AnkhCommandMenu.ListViewHeader;
+            }
+            else
+                menu = AnkhCommandMenu.WorkingCopyExplorerContextMenu;
+
+            sc.ShowContextMenu(menu, screen);
         }
 
         protected override void OnResolveItem(ListViewWithSelection<FileSystemListViewItem>.ResolveItemEventArgs e)
