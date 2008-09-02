@@ -59,6 +59,7 @@ namespace Ankh.Ids
 
         ListViewSort,
         ListViewGroup,
-        ListViewShow
+        ListViewShow,
+        ListViewHeader
     }
 }

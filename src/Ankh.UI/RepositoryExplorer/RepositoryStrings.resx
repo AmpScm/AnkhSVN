@@ -132,6 +132,9 @@
   <data name="LocalRepositories" xml:space="preserve">
     <value>Local Repositories</value>
   </data>
+  <data name="LockOwnerColumn" xml:space="preserve">
+    <value>&amp;Lock Owner</value>
+  </data>
   <data name="RevisionColumn" xml:space="preserve">
     <value>&amp;Revision</value>
   </data>

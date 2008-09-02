@@ -4,6 +4,9 @@ using System.Text;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using System.Windows.Forms;
+using System.Drawing;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -24,6 +27,7 @@ namespace Ankh.UI.RepositoryExplorer
             SmartColumn author = new SmartColumn(this, RepositoryStrings.AuthorColumn, 60);
             SmartColumn size = new SmartColumn(this, RepositoryStrings.SizeColumn, 60);
             SmartColumn date = new SmartColumn(this, RepositoryStrings.DateColumn, 100);
+            SmartColumn lockOwner = new SmartColumn(this, RepositoryStrings.LockOwnerColumn, 100);
 
             file.Sorter = new SortWrapper(
                 delegate(RepositoryListItem x, RepositoryListItem y)
@@ -63,8 +67,9 @@ namespace Ankh.UI.RepositoryExplorer
             AllColumns.Add(extension);
             AllColumns.Add(revision);
             AllColumns.Add(author);
-            AllColumns.Add(size);            
+            AllColumns.Add(size);
             AllColumns.Add(date);
+            AllColumns.Add(lockOwner);
 
             Columns.AddRange(new ColumnHeader[]
             {
@@ -73,7 +78,8 @@ namespace Ankh.UI.RepositoryExplorer
                 revision,
                 author,
                 size,
-                date
+                date,
+                lockOwner
             });
 
             SortColumns.Add(file);
@@ -81,7 +87,6 @@ namespace Ankh.UI.RepositoryExplorer
             UpdateSortGlyphs();
 
             AllowColumnReorder = true;
-
         }
 
         protected override string GetCanonicalName(RepositoryListItem item)
@@ -97,12 +102,34 @@ namespace Ankh.UI.RepositoryExplorer
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
-            { 
+            set
+            {
                 _context = value;
                 if (value != null)
                     OnContextChanged(EventArgs.Empty);
             }
+        }
+
+        public override void OnShowContextMenu(MouseEventArgs e)
+        {
+            base.OnShowContextMenu(e);
+
+            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : PointToScreen(new Point(0, 0));
+
+            IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
+
+            Point p = PointToClient(e.Location);
+
+            AnkhCommandMenu menu;
+            if (p.Y < HeaderHeight)
+            {
+                Select(); // Must be the active control for the menu to work
+                menu = AnkhCommandMenu.ListViewHeader;
+            }
+            else
+                menu = AnkhCommandMenu.RepositoryExplorerContextMenu;
+
+            sc.ShowContextMenu(menu, screen);
         }
 
         private void OnContextChanged(EventArgs eventArgs)

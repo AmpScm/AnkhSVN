@@ -204,11 +204,19 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         SvnDirEntryItems _retrieveItems = SvnDirEntryItems.SvnListDefault | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision;
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Localizable(false), DefaultValue(SvnDirEntryItems.SvnListDefault | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision)]
         public SvnDirEntryItems RetrieveItems
         {
             get { return _retrieveItems; }
             set { _retrieveItems = value | SvnDirEntryItems.Kind | SvnDirEntryItems.Revision; }
+        }
+
+        bool _retrieveLocks;
+        [Localizable(false), DefaultValue(false), Description("Boolean indicating whether to retrieve lock information")]
+        public bool RetrieveLocks
+        {
+            get { return _retrieveLocks; }
+            set { _retrieveLocks = value; }
         }
 
         List<Uri> _running = new List<Uri>();
@@ -285,6 +293,7 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     SvnListArgs la = new SvnListArgs();
                     la.RetrieveEntries = RetrieveItems;
+                    la.RetrieveLocks = RetrieveLocks;
                     la.Depth = SvnDepth.Children;
                     la.ThrowOnError = false;
 
@@ -599,6 +608,7 @@ namespace Ankh.UI.RepositoryExplorer
             return tn;
         }
 
+        [Browsable(false)]
         public bool Retrieving
         {
             get { return _running.Count > 0; }

@@ -43,7 +43,8 @@ namespace Ankh.UI.RepositoryExplorer
                 info.Entry.Revision.ToString(),
                 info.Entry.Author,
                 IsFolder ? "" : info.Entry.FileSize.ToString(),
-                info.Entry.Time.ToString("g"));
+                info.Entry.Time.ToString("g"),
+                (info.Lock != null) ? info.Lock.Owner : "");
         }
 
         public Uri RawUri

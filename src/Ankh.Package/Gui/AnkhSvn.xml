@@ -541,9 +541,9 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
-    </GroupRef>    
-    <GroupRef id="Menu_PendingCommitsSortContextMenu">
-      <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
+    </GroupRef>
+    <GroupRef id="Menu_ListViewHeader">
+      <Menu id="Menu_ListViewHeader" name="ListViewHeader" priority="0" type="Context">
         <Group id="Grp_ListViewState" priority="0x100">
           <Menu id="Menu_ListViewShow" priority="0x1000" name="ShowBy" text="&amp;View Columns">
             <Group id="Grp_ListViewShow" priority="0x1000">
@@ -562,9 +562,14 @@
           <Menu id="Menu_ListViewGroup" priority="0x3000" name="GroupBy" text="&amp;Group By">
             <Group id="Grp_ListViewGroup" priority="0x1000">
               <Button id="Cmd_ListViewGroup0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
-            </Group>            
-          </Menu>          
+            </Group>
+          </Menu>
         </Group>
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Menu_PendingCommitsSortContextMenu">
+      <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
+        <GroupRef id="Grp_ListViewState" priority="0x100" />
         <Group id="Grp_PendingCommitsActions" priority="0x200">
           <ButtonRef id="Cmd_PendingChangesViewLogMessage" priority="0x100" />
           <ButtonRef id="Cmd_RefreshPendingChanges" priority="0x200" />

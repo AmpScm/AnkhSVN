@@ -28,7 +28,7 @@ namespace Ankh.UI.VSSelectionControls
             View = View.Details;
             FullRowSelect = true;
             this.ListViewItemSorter = new SmartListSorter(this);
-            //Sorting = SortOrder.Ascending;
+            Sorting = SortOrder.Ascending;
         }
 
         /// <summary>
