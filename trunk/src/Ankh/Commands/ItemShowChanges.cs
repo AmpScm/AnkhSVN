@@ -82,6 +82,7 @@ namespace Ankh.Commands
                 case AnkhCommand.DiffExternalLocalItem:
                     goto case AnkhCommand.DiffLocalItem;
                 case AnkhCommand.DiffLocalItem:
+                    break; // revRange null -> show selector
                 case AnkhCommand.ItemCompareBase:
                 case AnkhCommand.ItemShowChanges:
                     revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
