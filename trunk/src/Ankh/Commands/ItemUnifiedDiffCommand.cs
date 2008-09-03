@@ -22,11 +22,11 @@ namespace Ankh.Commands
             }
 
             SvnRevisionRange revRange = null;
-            bool forceExternal = false;
+            //bool forceExternal = false;
             switch (e.Command)
             {
                 case AnkhCommand.DiffExternalLocalItem:
-                    forceExternal = true;
+                    //forceExternal = true;
                     goto case AnkhCommand.DiffLocalItem;
                 case AnkhCommand.DiffLocalItem:
                 case AnkhCommand.ItemCompareBase:
@@ -43,7 +43,7 @@ namespace Ankh.Commands
                     revRange = new SvnRevisionRange(SvnRevision.Previous, SvnRevision.Working);
                     break;
             }
-            string diff = this.GetDiff(e.Context, e.Selection, revRange, forceExternal);
+            string diff = this.GetDiff(e.Context, e.Selection, revRange, false);
             if (diff != null)
             {
                 // convert it to HTML and store in a temp file

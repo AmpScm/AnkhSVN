@@ -19,7 +19,15 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            string diff = this.GetDiff(e.Context, e.Selection);
+            string diff = this.GetDiff(
+                e.Context,
+                e.Selection,
+                null,
+                true,
+                delegate(SvnItem item)
+                {
+                    return item.IsModified;
+                });
 
             if (diff == null)
             {

@@ -30,14 +30,35 @@ namespace Ankh.Commands
 
         protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection)
         {
-            return GetDiff(context, selection, null, false);
+            return GetDiff(
+                context, 
+                selection, 
+                null, 
+                false);
         }
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool forceExternal)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool unified)
+        {
+            return GetDiff(
+                context, 
+                selection, 
+                revisions, 
+                unified, 
+                delegate(SvnItem item) 
+                { 
+                    return item.IsVersioned; 
+                });
+        }
+        /// <summary>
+        /// Generates the diff from the current selection.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>The diff as a string.</returns>
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool unified, Predicate<SvnItem> visibleFilter)
         {
             if (selection == null)
                 throw new ArgumentNullException("selection");
@@ -45,8 +66,6 @@ namespace Ankh.Commands
                 throw new ArgumentNullException("context");
 
             IUIShell uiShell = context.GetService<IUIShell>();
-
-            bool useExternalDiff = true;
 
             bool foundModified = false;
             foreach (SvnItem item in selection.GetSelectedSvnItems(true))
@@ -61,16 +80,12 @@ namespace Ankh.Commands
             List<SvnItem> resources = new List<SvnItem>(selection.GetSelectedSvnItems(true));
 
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", selection.GetSelectedSvnItems(true));
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
+            info.VisibleFilter += visibleFilter;
             if (foundModified)
                 info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
 
             info.RevisionStart = revisions == null ? SvnRevision.Base : revisions.StartRevision;
             info.RevisionEnd = revisions == null ? SvnRevision.Working : revisions.EndRevision;
-
-            // "Recursive" doesn't make much sense if using an external diff
-            info.EnableRecursive = !useExternalDiff;
-            info.Depth = useExternalDiff ? SvnDepth.Empty : SvnDepth.Infinity;
 
             PathSelectorResult result;
             // should we show the path selector?
@@ -91,17 +106,13 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments(selection, context);
 
-            if (useExternalDiff)
-            {
-                return DoExternalDiff(context, result, selection);
-            }
+            if (unified)
+                return DoUnifiedDiff(context, result, selection);
             else
-            {
-                return DoInternalDiff(context, result, selection);
-            }
+                return DoExternalDiff(context, result, selection);
         }
 
-        private string DoInternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
+        private string DoUnifiedDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
         {
             Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
             string slndir = ss.ProjectRoot;
