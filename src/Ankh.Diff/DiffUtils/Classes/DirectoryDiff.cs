@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 
 	DirectoryDiff.cs
-	Copyright © 2002 Bill Menees.  All rights reserved.
+	Copyright (c) 2002 Bill Menees.  All rights reserved.
 	Bill@Menees.com
 
 	Who		When		What
