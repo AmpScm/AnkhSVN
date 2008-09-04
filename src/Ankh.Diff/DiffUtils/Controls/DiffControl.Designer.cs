@@ -17,7 +17,8 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.Overview = new Ankh.Diff.DiffUtils.Controls.DiffOverview();
             this.ViewA = new Ankh.Diff.DiffUtils.Controls.DiffView();
             this.CtxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsSep7 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuTextDiff = new System.Windows.Forms.ToolStripMenuItem();
             this.ViewB = new Ankh.Diff.DiffUtils.Controls.DiffView();
             this.pnlSeparator = new System.Windows.Forms.Panel();
             this.pnlMiddle = new System.Windows.Forms.Panel();
@@ -30,31 +31,26 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.ViewLineDiff = new Ankh.Diff.DiffUtils.Controls.DiffView();
             this.BottomSplitter = new System.Windows.Forms.Splitter();
             this.ToolBar = new System.Windows.Forms.ToolStrip();
-            this.tsSep1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsSep2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsSep3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsSep4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsSep5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsSep6 = new System.Windows.Forms.ToolStripSeparator();
-            this.lblPosition = new System.Windows.Forms.ToolStripLabel();
-            this.mnuViewFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuTextDiff = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnViewFile = new System.Windows.Forms.ToolStripButton();
             this.btnCopy = new System.Windows.Forms.ToolStripButton();
             this.btnTextDiff = new System.Windows.Forms.ToolStripButton();
+            this.tsSep2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnFind = new System.Windows.Forms.ToolStripButton();
             this.btnFindNext = new System.Windows.Forms.ToolStripButton();
             this.btnFindPrevious = new System.Windows.Forms.ToolStripButton();
+            this.tsSep3 = new System.Windows.Forms.ToolStripSeparator();
             this.btnFirstDiff = new System.Windows.Forms.ToolStripButton();
             this.btnPrevDiff = new System.Windows.Forms.ToolStripButton();
             this.btnNextDiff = new System.Windows.Forms.ToolStripButton();
             this.btnLastDiff = new System.Windows.Forms.ToolStripButton();
+            this.tsSep4 = new System.Windows.Forms.ToolStripSeparator();
             this.btnGotoLine = new System.Windows.Forms.ToolStripButton();
             this.btnRecompare = new System.Windows.Forms.ToolStripButton();
+            this.tsSep5 = new System.Windows.Forms.ToolStripSeparator();
             this.lblDelete = new System.Windows.Forms.ToolStripLabel();
             this.lblChange = new System.Windows.Forms.ToolStripLabel();
             this.lblInsert = new System.Windows.Forms.ToolStripLabel();
+            this.tsSep6 = new System.Windows.Forms.ToolStripSeparator();
+            this.lblPosition = new System.Windows.Forms.ToolStripLabel();
             this.CtxMenu.SuspendLayout();
             this.pnlMiddle.SuspendLayout();
             this.pnlRight.SuspendLayout();
@@ -92,25 +88,36 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.ViewA.TabIndex = 2;
             this.ViewA.Text = "diffView1";
             this.ViewA.VScrollPos = 0;
-            this.ViewA.HScrollPosChanged += new System.EventHandler(this.ViewA_HScrollPosChanged);
             this.ViewA.SelectionChanged += new System.EventHandler(this.View_PositionChanged);
             this.ViewA.VScrollPosChanged += new System.EventHandler(this.ViewA_VScrollPosChanged);
+            this.ViewA.HScrollPosChanged += new System.EventHandler(this.ViewA_HScrollPosChanged);
             this.ViewA.PositionChanged += new System.EventHandler(this.View_PositionChanged);
             // 
             // CtxMenu
             // 
             this.CtxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuViewFile,
-            this.tsSep7,
             this.mnuCopy,
             this.mnuTextDiff});
             this.CtxMenu.Name = "CtxMenu";
-            this.CtxMenu.Size = new System.Drawing.Size(155, 76);
+            this.CtxMenu.Size = new System.Drawing.Size(158, 70);
             // 
-            // tsSep7
+            // mnuCopy
             // 
-            this.tsSep7.Name = "tsSep7";
-            this.tsSep7.Size = new System.Drawing.Size(151, 6);
+            this.mnuCopy.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.Copy;
+            this.mnuCopy.ImageTransparentColor = System.Drawing.Color.Fuchsia;
+            this.mnuCopy.Name = "mnuCopy";
+            this.mnuCopy.Size = new System.Drawing.Size(157, 22);
+            this.mnuCopy.Text = "&Copy";
+            this.mnuCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            // 
+            // mnuTextDiff
+            // 
+            this.mnuTextDiff.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.ShowDifferences;
+            this.mnuTextDiff.ImageTransparentColor = System.Drawing.Color.Fuchsia;
+            this.mnuTextDiff.Name = "mnuTextDiff";
+            this.mnuTextDiff.Size = new System.Drawing.Size(157, 22);
+            this.mnuTextDiff.Text = "Compare &Text...";
+            this.mnuTextDiff.Click += new System.EventHandler(this.mnuTextDiff_Click);
             // 
             // ViewB
             // 
@@ -128,9 +135,9 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.ViewB.TabIndex = 4;
             this.ViewB.Text = "diffView2";
             this.ViewB.VScrollPos = 0;
-            this.ViewB.HScrollPosChanged += new System.EventHandler(this.ViewB_HScrollPosChanged);
             this.ViewB.SelectionChanged += new System.EventHandler(this.View_PositionChanged);
             this.ViewB.VScrollPosChanged += new System.EventHandler(this.ViewB_VScrollPosChanged);
+            this.ViewB.HScrollPosChanged += new System.EventHandler(this.ViewB_HScrollPosChanged);
             this.ViewB.PositionChanged += new System.EventHandler(this.View_PositionChanged);
             // 
             // pnlSeparator
@@ -227,8 +234,8 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.ViewLineDiff.Text = "diffView1";
             this.ViewLineDiff.VScrollPos = 0;
             this.ViewLineDiff.SelectionChanged += new System.EventHandler(this.View_PositionChanged);
-            this.ViewLineDiff.PositionChanged += new System.EventHandler(this.View_PositionChanged);
             this.ViewLineDiff.SizeChanged += new System.EventHandler(this.ViewLineDiff_SizeChanged);
+            this.ViewLineDiff.PositionChanged += new System.EventHandler(this.View_PositionChanged);
             // 
             // BottomSplitter
             // 
@@ -243,8 +250,6 @@ namespace Ankh.Diff.DiffUtils.Controls
             // 
             this.ToolBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.ToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnViewFile,
-            this.tsSep1,
             this.btnCopy,
             this.btnTextDiff,
             this.tsSep2,
@@ -271,79 +276,6 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.ToolBar.TabIndex = 7;
             this.ToolBar.Text = "toolStrip1";
             // 
-            // tsSep1
-            // 
-            this.tsSep1.Name = "tsSep1";
-            this.tsSep1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsSep2
-            // 
-            this.tsSep2.Name = "tsSep2";
-            this.tsSep2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsSep3
-            // 
-            this.tsSep3.Name = "tsSep3";
-            this.tsSep3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsSep4
-            // 
-            this.tsSep4.Name = "tsSep4";
-            this.tsSep4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsSep5
-            // 
-            this.tsSep5.Name = "tsSep5";
-            this.tsSep5.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsSep6
-            // 
-            this.tsSep6.Name = "tsSep6";
-            this.tsSep6.Size = new System.Drawing.Size(6, 25);
-            // 
-            // lblPosition
-            // 
-            this.lblPosition.Name = "lblPosition";
-            this.lblPosition.Size = new System.Drawing.Size(58, 22);
-            this.lblPosition.Text = "Ln 1, Col 1";
-            // 
-            // mnuViewFile
-            // 
-            this.mnuViewFile.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.View;
-            this.mnuViewFile.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-            this.mnuViewFile.Name = "mnuViewFile";
-            this.mnuViewFile.Size = new System.Drawing.Size(154, 22);
-            this.mnuViewFile.Text = "&View File";
-            this.mnuViewFile.Click += new System.EventHandler(this.btnViewFile_Click);
-            // 
-            // mnuCopy
-            // 
-            this.mnuCopy.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.Copy;
-            this.mnuCopy.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-            this.mnuCopy.Name = "mnuCopy";
-            this.mnuCopy.Size = new System.Drawing.Size(154, 22);
-            this.mnuCopy.Text = "&Copy";
-            this.mnuCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
-            // mnuTextDiff
-            // 
-            this.mnuTextDiff.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.ShowDifferences;
-            this.mnuTextDiff.ImageTransparentColor = System.Drawing.Color.Fuchsia;
-            this.mnuTextDiff.Name = "mnuTextDiff";
-            this.mnuTextDiff.Size = new System.Drawing.Size(154, 22);
-            this.mnuTextDiff.Text = "Compare &Text...";
-            this.mnuTextDiff.Click += new System.EventHandler(this.mnuTextDiff_Click);
-            // 
-            // btnViewFile
-            // 
-            this.btnViewFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnViewFile.Image = global::Ankh.Diff.DiffUtils.Properties.Resources.View;
-            this.btnViewFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnViewFile.Name = "btnViewFile";
-            this.btnViewFile.Size = new System.Drawing.Size(23, 22);
-            this.btnViewFile.Text = "View File";
-            this.btnViewFile.Click += new System.EventHandler(this.btnViewFile_Click);
-            // 
             // btnCopy
             // 
             this.btnCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -363,6 +295,11 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.btnTextDiff.Size = new System.Drawing.Size(23, 22);
             this.btnTextDiff.Text = "Compare Text";
             this.btnTextDiff.Click += new System.EventHandler(this.mnuTextDiff_Click);
+            // 
+            // tsSep2
+            // 
+            this.tsSep2.Name = "tsSep2";
+            this.tsSep2.Size = new System.Drawing.Size(6, 25);
             // 
             // btnFind
             // 
@@ -393,6 +330,11 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.btnFindPrevious.Size = new System.Drawing.Size(23, 22);
             this.btnFindPrevious.Text = "Find Previous";
             this.btnFindPrevious.Click += new System.EventHandler(this.btnFindPrevious_Click);
+            // 
+            // tsSep3
+            // 
+            this.tsSep3.Name = "tsSep3";
+            this.tsSep3.Size = new System.Drawing.Size(6, 25);
             // 
             // btnFirstDiff
             // 
@@ -435,6 +377,11 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.btnLastDiff.Text = "Last Difference";
             this.btnLastDiff.Click += new System.EventHandler(this.btnLastDiff_Click);
             // 
+            // tsSep4
+            // 
+            this.tsSep4.Name = "tsSep4";
+            this.tsSep4.Size = new System.Drawing.Size(6, 25);
+            // 
             // btnGotoLine
             // 
             this.btnGotoLine.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -454,6 +401,11 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.btnRecompare.Size = new System.Drawing.Size(23, 22);
             this.btnRecompare.Text = "Recompare";
             this.btnRecompare.Click += new System.EventHandler(this.btnRecompare_Click);
+            // 
+            // tsSep5
+            // 
+            this.tsSep5.Name = "tsSep5";
+            this.tsSep5.Size = new System.Drawing.Size(6, 25);
             // 
             // lblDelete
             // 
@@ -493,6 +445,17 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.lblInsert.Text = "Inserted";
             this.lblInsert.ToolTipText = "Inserted";
             this.lblInsert.Paint += new System.Windows.Forms.PaintEventHandler(this.ColorLegend_Paint);
+            // 
+            // tsSep6
+            // 
+            this.tsSep6.Name = "tsSep6";
+            this.tsSep6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // lblPosition
+            // 
+            this.lblPosition.Name = "lblPosition";
+            this.lblPosition.Size = new System.Drawing.Size(62, 22);
+            this.lblPosition.Text = "Ln 1, Col 1";
             // 
             // DiffControl
             // 
