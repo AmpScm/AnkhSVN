@@ -362,10 +362,10 @@ namespace Ankh.Diff.DiffPatch
             if (checklines)
             {
                 // Scan the text on a line-by-line basis first.
-                Object[] b = diff_linesToChars(text1, text2);
-                text1 = (String)b[0];
-                text2 = (String)b[1];
-                linearray = (List<String>)b[2];
+                DiffCharResult b = diff_linesToChars(text1, text2);
+                text1 = b.Chars1;
+                text2 = b.Chars2;
+                linearray = b.Lines;
             }
 
             diffs = diff_map(text1, text2);
@@ -434,6 +434,24 @@ namespace Ankh.Diff.DiffPatch
             return diffs;
         }
 
+        protected sealed class DiffCharResult
+        {
+            readonly string _chars1;
+            readonly string _chars2;
+            readonly List<string> _lines;
+
+            public DiffCharResult(string chars1, string chars2, List<string> lines)
+            {
+                _chars1 = chars1;
+                _chars2 = chars2;
+                _lines = lines;
+            }
+
+            public string Chars1 { get { return _chars1; } }
+            public string Chars2 { get { return _chars2; } }
+            public List<string> Lines { get { return _lines; } }
+        }
+
 
         /**
          * Split two texts into a list of strings.  Reduce the texts to a string of
@@ -444,7 +462,7 @@ namespace Ankh.Diff.DiffPatch
          *     encoded text2 and the List of unique strings.  The zeroth element
          *     of the List of unique strings is intentionally blank.
          */
-        protected Object[] diff_linesToChars(String text1, String text2)
+        protected DiffCharResult diff_linesToChars(String text1, String text2)
         {
             List<String> lineArray = new List<String>();
             Dictionary<String, int> lineHash = new Dictionary<String, int>();
@@ -457,7 +475,7 @@ namespace Ankh.Diff.DiffPatch
 
             String chars1 = diff_linesToCharsMunge(text1, lineArray, lineHash);
             String chars2 = diff_linesToCharsMunge(text2, lineArray, lineHash);
-            return new Object[] { chars1, chars2, lineArray };
+            return new DiffCharResult(chars1, chars2, lineArray);
         }
 
 
@@ -2175,6 +2193,27 @@ namespace Ankh.Diff.DiffPatch
             return patches;
         }
 
+        public class ApplyResult
+        {
+            readonly string _text;
+            readonly bool[] _results;
+
+            public ApplyResult(string text, bool[] results)
+            {
+                _text = text;
+                _results = results;
+            }
+
+            public string Text
+            {
+                get { return _text; }
+            }
+
+            public bool[] Results
+            {
+                get { return _results; }
+            }
+        }
 
         /**
          * Merge a set of patches onto the text.  Return a patched text, as well
@@ -2184,11 +2223,11 @@ namespace Ankh.Diff.DiffPatch
          * @return Two element Object array, containing the new text and an array of
          *      bool values
          */
-        public Object[] patch_apply(LinkedList<Patch> patches, String text)
+        public ApplyResult patch_apply(LinkedList<Patch> patches, String text)
         {
             if (patches.Count == 0)
             {
-                return new Object[] { text, new bool[0] };
+                return new ApplyResult(text, new bool[0]);
             }
 
             // Deep copy the patches so that no changes are made to originals.
@@ -2284,7 +2323,7 @@ namespace Ankh.Diff.DiffPatch
             // Strip the padding off.
             text = text.Substring(nullPadding.Length, text.Length
                 - nullPadding.Length);
-            return new Object[] { text, results };
+            return new ApplyResult(text, results);
         }
 
         /**
@@ -2563,7 +2602,7 @@ namespace Ankh.Diff.DiffPatch
                     {
                         sign = text.First.Value[0];
                     }
-                    catch (IndexOutOfRangeException e)
+                    catch (IndexOutOfRangeException)
                     {
                         // Blank line?  Whatever.
                         text.RemoveFirst();
