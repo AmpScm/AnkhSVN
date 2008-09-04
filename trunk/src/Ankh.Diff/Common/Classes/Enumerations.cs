@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 
 	Enumerations.cs
-	Copyright © 2003 Bill Menees.  All rights reserved.
+	Copyright (c) 2003 Bill Menees.  All rights reserved.
 	Bill@Menees.com
 
 	Who		When		What

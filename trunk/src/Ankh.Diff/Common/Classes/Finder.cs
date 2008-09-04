@@ -2,7 +2,7 @@
 
 /*---------------------------------------------------------------------------
 
-	Copyright © 2003 Bill Menees.  All rights reserved.
+	Copyright (c) 2003 Bill Menees.  All rights reserved.
 	Bill@Menees.com
 
 	$History: Finder.cs $
