@@ -4,6 +4,7 @@
 # Module imports
 import datetime, getopt, glob, os, shutil, sys, tarfile, threading, struct
 import time, urllib, win32api, win32com.client, win32con, win32gui, zipfile
+import fileinput
 
 from cStringIO import StringIO
 from subprocess import call
@@ -142,13 +143,40 @@ def build_ankhsvn():
     
     shutil.copy(os.path.join(ankhsvn_src_dir, "installsource", "Ankh.msi"), msi_path)
 
+def patchfiles(directories, suffixes, searches):
+    for search in searches:
+        print "%s - %s" % (search[0], search[1])
+    for dir in directories:
+        for root, dirs, files in os.walk(dir):
+            for name in files:
+                if name.endswith(".hw"):
+                    print name
+                for suffix in suffixes:
+                    if name.endswith(suffix[0]):
+                        filename = os.path.join(root, name)
+                        newfile = filename.replace(suffix[0], suffix[1])
+                        
+                        if filename != newfile:
+                            shutil.copy(filename, newfile)
+                        
+
+                        #print "Going to patch %s" % newfile
+                        for line in fileinput.input(os.path.join(root, newfile), inplace=1):
+                            for search in searches:
+                                if line.find(search[0]) > -1:
+                                    line = line.replace(search[0], search[1])
+                                    #if search[0] == "SVN_USE_WIN32_CRASHHANDLER;":
+                                    #    print >> sys.stderr, line
+                            print line,
+                        
+    
 def build_subversion():
     """Builds Subversion."""
     subversion_source_root = os.path.join(BUILDDIR,"subversion")
     subversion_dir_base = SUBVERSION.split("/")[-1][:-7]
     subversion_sln_file = os.path.join(subversion_source_root, "subversion_vcnet.sln")
     log_file = os.path.join(LOGDIR, "subversion.log")
-    svn_gen_make_call = ["python", "gen-make.py", "-t", "vcproj", "--vsnet-version", VSNETVER,
+    svn_gen_make_call = ["python", "gen-make.py", "-t", "vcproj", "--disable-shared", "--vsnet-version", VSNETVER,
                          "--with-berkeley-db=%s" % os.path.join(subversion_source_root, "db4-win32"),
                          "--with-openssl=%s" % os.path.join(subversion_source_root, "openssl"),
                          "--with-zlib=%s" % os.path.join(subversion_source_root, "zlib")]
@@ -166,6 +194,20 @@ def build_subversion():
     
     download_and_extract(SUBVERSION, subversion_dir_base)
     
+    print "Patching apr"
+    aprDir = os.path.join(subversion_source_root, "apr")
+    aprUtilDir = os.path.join(subversion_source_root, "apr-util")
+    
+    patchfiles(
+        (aprDir, aprUtilDir), 
+        ((".hw", ".h"), ("expat.h.in", "expat.h")), 
+        (("#define APU_HAVE_APR_ICONV", "#define APU_HAVE_APR_ICONV     0 //"),
+        ("#define APR_HAVE_IPV6", "#define APR_HAVE_IPV6 0 //")
+        ))
+    
+    
+    print "done patching"
+    
     if os.path.exists(os.path.join(subversion_source_root, subversion_dir_base)):
         copy_glob(os.path.join(subversion_source_root, subversion_dir_base) + "/*",
               subversion_source_root)
@@ -173,7 +215,7 @@ def build_subversion():
         shutil.rmtree(os.path.join(subversion_source_root, subversion_dir_base))
     
     if VERBOSE:
-        print "    Generating Subversion VS.NET solution file"
+        print "    Generating Subversion VS.NET solution file"    
     
     tempfile = open(log_file, 'w')
     
@@ -185,6 +227,17 @@ def build_subversion():
     
     tempfile.close()
     
+    print "Patching subversion"
+    vcprojDir = os.path.join(subversion_source_root, "build", "win32", "vcnet-vcproj")
+    patchfiles(
+        (vcprojDir,),
+        ((".vcproj", ".vcproj"),),
+        (("SVN_USE_WIN32_CRASHHANDLER;",""),
+        ('				Optimization="2"', '				Optimization="1"'),
+        ('				FavorSizeOrSpeed="1"', '				FavorSizeOrSpeed="2"')
+        ))
+    print "Done patching"
+    
     # Build Subversion
     if CONFIG == "__ALL__":
         if VERBOSE:
@@ -194,7 +247,7 @@ def build_subversion():
         
         if call(svn_debug_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
             print "Problem building Subversion.  Details can be found in %s" % log_file
-            sys.exit(1)
+            #sys.exit(1)
         
         tempfile.close()
         
@@ -205,7 +258,7 @@ def build_subversion():
         
         if call(svn_release_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
             print "Problem building Subversion.  Details can be found in %s" % log_file
-            sys.exit(1)
+            #sys.exit(1)
         
         tempfile.close()
     else:
@@ -216,7 +269,7 @@ def build_subversion():
         
         if call(svn_build_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
             print "Problem building Subversion.  Details can be found in %s" % log_file
-            sys.exit(1)
+            #sys.exit(1)
         
         tempfile.close()
 
