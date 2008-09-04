@@ -118,6 +118,11 @@
                     AssemblyName = "System.Windows.Forms"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.0.3705\System.Windows.Forms.dll"
                 />
+                <Reference
+                    Name = "Utils"
+                    Project = "{A3248E1E-8272-4227-AF02-BB86040FBED9}"
+                    Package = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
+                />
             </References>
         </Build>
         <Files>
@@ -156,6 +161,11 @@
                 />
                 <File
                     RelPath = "PropListItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SvnEnums.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
