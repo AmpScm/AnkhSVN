@@ -87,6 +87,16 @@
                     AssemblyName = "SharpZipLib"
                     HintPath = "..\lib\SharpZipLib.dll"
                 />
+                <Reference
+                    Name = "stdole"
+                    AssemblyName = "stdole"
+                    HintPath = "..\lib\stdole.dll"
+                />
+                <Reference
+                    Name = "Microsoft.mshtml"
+                    AssemblyName = "Microsoft.mshtml"
+                    HintPath = "..\lib\Microsoft.mshtml.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -112,6 +122,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "FileUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "FolderBrowser.cs"
                     SubType = "Component"
                     BuildAction = "Compile"
@@ -120,6 +135,11 @@
                     RelPath = "FolderBrowser.resx"
                     DependentUpon = "FolderBrowser.cs"
                     BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "HashUtils.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "PathUtils.cs"
@@ -153,6 +173,56 @@
                 <File
                     RelPath = "Utils.wxs"
                     BuildAction = "None"
+                />
+                <File
+                    RelPath = "VersionAttribute.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\ICustomDoc.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\ICustomMethods.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IDocHostShowUI.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IDocHostUIHandler.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleClientSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleDocumentSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleInPlaceSite.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\IOleObject.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Ole\Site.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Win32\Constants.cs"

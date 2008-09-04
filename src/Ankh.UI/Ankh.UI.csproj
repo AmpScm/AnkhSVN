@@ -39,7 +39,7 @@
                 />
                 <Config
                     Name = "Release"
-                    AllowUnsafeBlocks = "false"
+                    AllowUnsafeBlocks = "true"
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
@@ -125,10 +125,30 @@
                     AssemblyName = "Office"
                     HintPath = "I:\WINNT\Microsoft.NET\Framework\v1.1.4322\office.dll"
                 />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Design.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "AddRepositoryRootDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddRepositoryRootDialog.resx"
+                    DependentUpon = "AddRepositoryRootDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
                 <File
                     RelPath = "AddSolutionDialog.cs"
                     SubType = "Form"
@@ -137,6 +157,16 @@
                 <File
                     RelPath = "AddSolutionDialog.resx"
                     DependentUpon = "AddSolutionDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AddWorkingCopyExplorerRootDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AddWorkingCopyExplorerRootDialog.resx"
+                    DependentUpon = "AddWorkingCopyExplorerRootDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -200,6 +230,16 @@
                 <File
                     RelPath = "CommitDialog.resx"
                     DependentUpon = "CommitDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "ConfigurationDialog.cs"
+                    SubType = "code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ConfigurationDialog.resx"
+                    DependentUpon = "ConfigurationDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -283,6 +323,31 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "FileSystemDetailsView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileSystemItemAttributes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "FileSystemTreeView.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IContextMenu.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "IFileSystemItem.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "IgnorePropertyEditor.cs"
                     SubType = "UserControl"
                     BuildAction = "Compile"
@@ -310,6 +375,26 @@
                 <File
                     RelPath = "KeywordsPropertyEditor.resx"
                     DependentUpon = "KeywordsPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "LockDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LockDialog.resx"
+                    DependentUpon = "LockDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "LogDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "LogDialog.resx"
+                    DependentUpon = "LogDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -345,6 +430,36 @@
                 <File
                     RelPath = "MimeTypePropertyEditor.resx"
                     DependentUpon = "MimeTypePropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "MultiLineStringEditorWithTemplates.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MultiLineStringEditorWithTemplates.resx"
+                    DependentUpon = "MultiLineStringEditorWithTemplates.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "MultiLineStringTypeEditorDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MultiLineStringTypeEditorDialog.resx"
+                    DependentUpon = "MultiLineStringTypeEditorDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "NewDirectoryDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "NewDirectoryDialog.resx"
+                    DependentUpon = "NewDirectoryDialog.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -385,6 +500,16 @@
                 <File
                     RelPath = "PlainPropertyEditor.resx"
                     DependentUpon = "PlainPropertyEditor.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "PopUpListForm.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "PopUpListForm.resx"
+                    DependentUpon = "PopUpListForm.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -498,6 +623,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "TypeConverters.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TypeEditors.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "UpdateDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -515,6 +650,30 @@
                 <File
                     RelPath = "ViewLogDialog.resx"
                     DependentUpon = "ViewLogDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "WCExplorer.cd"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Win32TreeView.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Win32TreeViewHost.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorerControl.cs"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "WorkingCopyExplorerControl.resx"
+                    DependentUpon = "WorkingCopyExplorerControl.cs"
                     BuildAction = "EmbeddedResource"
                 />
             </Include>
