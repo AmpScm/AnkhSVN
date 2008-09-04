@@ -56,28 +56,12 @@ namespace Ankh.Diff.DiffPatch
         }
     }
 
-    public class ArrayList<T> : List<T>
-    {
-    }
-
     public class Set<T> : KeyedCollection<T, T>
     {
         protected override T GetKeyForItem(T item)
         {
             return item;
         }
-    }
-
-    public class HashSet<T> : Set<T>
-    {
-    }
-
-    public class Map<TKey, TValue> : Dictionary<TKey, TValue>
-    {
-    }
-
-    public class HashMap<TKey, TValue> : Map<TKey, TValue>
-    {
     }
 
     public class ListIterator<T> : IEnumerator<T>
@@ -374,14 +358,14 @@ namespace Ankh.Diff.DiffPatch
             {
                 checklines = false;  // Too trivial for the overhead.
             }
-            ArrayList<String> linearray = null;
+            List<String> linearray = null;
             if (checklines)
             {
                 // Scan the text on a line-by-line basis first.
                 Object[] b = diff_linesToChars(text1, text2);
                 text1 = (String)b[0];
                 text2 = (String)b[1];
-                linearray = (ArrayList<String>)b[2];
+                linearray = (List<String>)b[2];
             }
 
             diffs = diff_map(text1, text2);
@@ -462,8 +446,8 @@ namespace Ankh.Diff.DiffPatch
          */
         protected Object[] diff_linesToChars(String text1, String text2)
         {
-            List<String> lineArray = new ArrayList<String>();
-            Map<String, int> lineHash = new HashMap<String, int>();
+            List<String> lineArray = new List<String>();
+            Dictionary<String, int> lineHash = new Dictionary<String, int>();
             // e.g. linearray[4] == "Hello\n"
             // e.g. linehash.get("Hello\n") == 4
 
@@ -486,7 +470,7 @@ namespace Ankh.Diff.DiffPatch
          * @return Encoded string
          */
         private String diff_linesToCharsMunge(String text, List<String> lineArray,
-                                              Map<String, int> lineHash)
+                                              Dictionary<String, int> lineHash)
         {
             int lineStart = 0;
             int lineEnd = -1;
@@ -553,15 +537,15 @@ namespace Ankh.Diff.DiffPatch
             DateTime msEnd = DateTime.Now + TimeSpan.FromSeconds(Diff_Timeout);
             int max_d = text1.Length + text2.Length - 1;
             bool doubleEnd = Diff_DualThreshold * 2 < max_d;
-            List<Set<long>> v_map1 = new ArrayList<Set<long>>();
-            List<Set<long>> v_map2 = new ArrayList<Set<long>>();
-            Map<int, int> v1 = new HashMap<int, int>();
-            Map<int, int> v2 = new HashMap<int, int>();
+            List<Set<long>> v_map1 = new List<Set<long>>();
+            List<Set<long>> v_map2 = new List<Set<long>>();
+            Dictionary<int, int> v1 = new Dictionary<int, int>();
+            Dictionary<int, int> v2 = new Dictionary<int, int>();
             v1[1] = 0;
             v2[1] = 0;
             int x, y;
             long footstep = 0L;  // Used to track overlapping paths.
-            Map<long, int> footsteps = new HashMap<long, int>();
+            Dictionary<long, int> footsteps = new Dictionary<long, int>();
             bool done = false;
             // If the total number of characters is odd, then the front path will
             // collide with the reverse path.
@@ -575,7 +559,7 @@ namespace Ankh.Diff.DiffPatch
                 }
 
                 // Walk the front path one step.
-                v_map1.Add(new HashSet<long>());  // Adds at index 'd'.
+                v_map1.Add(new Set<long>());  // Adds at index 'd'.
                 for (int k = -d; k <= d; k += 2)
                 {
                     if (k == -d || k != d && v1[k - 1] < v1[k + 1])
@@ -638,7 +622,7 @@ namespace Ankh.Diff.DiffPatch
                 if (doubleEnd)
                 {
                     // Walk the reverse path one step.
-                    v_map2.Add(new HashSet<long>());  // Adds at index 'd'.
+                    v_map2.Add(new Set<long>());  // Adds at index 'd'.
                     for (int k = -d; k <= d; k += 2)
                     {
                         if (k == -d || k != d && v2[k - 1] < v2[k + 1])
@@ -1859,7 +1843,7 @@ namespace Ankh.Diff.DiffPatch
                 "Pattern too long for this application.");
 
             // Initialise the alphabet.
-            Map<char, int> s = match_alphabet(pattern);
+            Dictionary<char, int> s = match_alphabet(pattern);
 
             int score_text_length = text.Length;
             // Coerce the text length between reasonable maximums and minimums.
@@ -2001,9 +1985,9 @@ namespace Ankh.Diff.DiffPatch
          * @param pattern The text to encode
          * @return Hash of character locations
          */
-        protected Map<char, int> match_alphabet(String pattern)
+        protected Dictionary<char, int> match_alphabet(String pattern)
         {
-            Map<char, int> s = new HashMap<char, int>();
+            Dictionary<char, int> s = new Dictionary<char, int>();
             char[] char_pattern = pattern.ToCharArray();
             foreach (char c in char_pattern)
             {
@@ -2621,151 +2605,149 @@ namespace Ankh.Diff.DiffPatch
             }
             return patches;
         }
+    }
 
-
-        /**
-         * Class representing one diff operation.
-         */
-        public sealed class Diff
-        {
-            public Operation operation;
-            // One of: INSERT, DELETE or EQUAL.
-            public String text;
-            // The text associated with this diff operation.
-
-            /**
-             * Constructor.  Initializes the diff with the provided values.
-             * @param operation One of INSERT, DELETE or EQUAL
-             * @param text The text being applied
-             */
-            public Diff(Operation operation, String text)
-            {
-                // Construct a diff with the specified operation and text.
-                this.operation = operation;
-                this.text = text;
-            }
-
-            /**
-             * Display a human-readable version of this Diff.
-             * @return text version
-             */
-            public override String ToString()
-            {
-                String prettyText = this.text.Replace('\n', '\u00b6');
-                return "Diff(" + this.operation + ",\"" + prettyText + "\")";
-            }
-
-            /**
-             * Is this Diff equivalent to another Diff?
-             * @param d Another Diff to compare against
-             * @return true or false
-             */
-            public override bool Equals(Object d)
-            {
-                return Equals(d as Diff);
-            }
-
-            public bool Equals(Diff d)
-            {
-                if (d == null)
-                    return false;
-
-                return d.operation == this.operation && d.text == this.text;
-            }
-
-            public override int GetHashCode()
-            {
-                return operation.GetHashCode() ^ text.GetHashCode();
-            }
-        }
-
+    /**
+     * Class representing one diff operation.
+     */
+    public sealed class Diff
+    {
+        public Operation operation;
+        // One of: INSERT, DELETE or EQUAL.
+        public String text;
+        // The text associated with this diff operation.
 
         /**
-         * Class representing one patch operation.
+         * Constructor.  Initializes the diff with the provided values.
+         * @param operation One of INSERT, DELETE or EQUAL
+         * @param text The text being applied
          */
-        public sealed class Patch
+        public Diff(Operation operation, String text)
         {
-            public LinkedList<Diff> diffs;
-            public int start1;
-            public int start2;
-            public int length1;
-            public int length2;
-
-            /**
-             * Constructor.  Initializes with an empty list of diffs.
-             */
-            public Patch()
-            {
-                this.diffs = new LinkedList<Diff>();
-            }
-
-            /**
-             * Emmulate GNU diff's format.
-             * Header: @@ -382,8 +481,9 @@
-             * Indicies are printed as 1-based, not 0-based.
-             * @return The GNU diff string
-             */
-            public override String ToString()
-            {
-                String coords1, coords2;
-                if (this.length1 == 0)
-                {
-                    coords1 = this.start1 + ",0";
-                }
-                else if (this.length1 == 1)
-                {
-                    coords1 = (this.start1 + 1).ToString(CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    coords1 = (this.start1 + 1) + "," + this.length1;
-                }
-                if (this.length2 == 0)
-                {
-                    coords2 = this.start2 + ",0";
-                }
-                else if (this.length2 == 1)
-                {
-                    coords2 = (this.start2 + 1).ToString(CultureInfo.InvariantCulture);
-                }
-                else
-                {
-                    coords2 = (this.start2 + 1) + "," + this.length2;
-                }
-                StringBuilder txt = new StringBuilder();
-                txt.Append("@@ -" + coords1 + " +" + coords2 + " @@\n");
-                // Escape the body of the patch with %xx notation.
-                foreach (Diff aDiff in this.diffs)
-                {
-                    switch (aDiff.operation)
-                    {
-                        case Operation.INSERT:
-                            txt.Append('+');
-                            break;
-                        case Operation.DELETE:
-                            txt.Append('-');
-                            break;
-                        case Operation.EQUAL:
-                            txt.Append(' ');
-                            break;
-                    }
-
-                    txt.Append(Uri.EscapeDataString(aDiff.text).Replace('+', ' ')
-                        + "\n");
-                }
-                // Unescape selected chars for compatability with JavaScript's encodeURI.
-                // In speed critical applications this could be dropped since the
-                // receiving application will probably decode these fine.
-                txt.Replace("%21", "!").Replace("%7E", "~")
-                    .Replace("%27", "'").Replace("%28", "(").Replace("%29", ")")
-                    .Replace("%3B", ";").Replace("%2F", "/").Replace("%3F", "?")
-                    .Replace("%3A", ":").Replace("%40", "@").Replace("%26", "&")
-                    .Replace("%3D", "=").Replace("%2B", "+").Replace("%24", "$")
-                    .Replace("%2C", ",").Replace("%23", "#");
-                return txt.ToString();
-            }
+            // Construct a diff with the specified operation and text.
+            this.operation = operation;
+            this.text = text;
         }
 
+        /**
+         * Display a human-readable version of this Diff.
+         * @return text version
+         */
+        public override String ToString()
+        {
+            String prettyText = this.text.Replace('\n', '\u00b6');
+            return "Diff(" + this.operation + ",\"" + prettyText + "\")";
+        }
+
+        /**
+         * Is this Diff equivalent to another Diff?
+         * @param d Another Diff to compare against
+         * @return true or false
+         */
+        public override bool Equals(Object d)
+        {
+            return Equals(d as Diff);
+        }
+
+        public bool Equals(Diff d)
+        {
+            if (d == null)
+                return false;
+
+            return d.operation == this.operation && d.text == this.text;
+        }
+
+        public override int GetHashCode()
+        {
+            return operation.GetHashCode() ^ text.GetHashCode();
+        }
+    }
+
+
+    /**
+     * Class representing one patch operation.
+     */
+    public sealed class Patch
+    {
+        public LinkedList<Diff> diffs;
+        public int start1;
+        public int start2;
+        public int length1;
+        public int length2;
+
+        /**
+         * Constructor.  Initializes with an empty list of diffs.
+         */
+        public Patch()
+        {
+            this.diffs = new LinkedList<Diff>();
+        }
+
+        /**
+         * Emmulate GNU diff's format.
+         * Header: @@ -382,8 +481,9 @@
+         * Indicies are printed as 1-based, not 0-based.
+         * @return The GNU diff string
+         */
+        public override String ToString()
+        {
+            String coords1, coords2;
+            if (this.length1 == 0)
+            {
+                coords1 = this.start1 + ",0";
+            }
+            else if (this.length1 == 1)
+            {
+                coords1 = (this.start1 + 1).ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                coords1 = (this.start1 + 1) + "," + this.length1;
+            }
+            if (this.length2 == 0)
+            {
+                coords2 = this.start2 + ",0";
+            }
+            else if (this.length2 == 1)
+            {
+                coords2 = (this.start2 + 1).ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                coords2 = (this.start2 + 1) + "," + this.length2;
+            }
+            StringBuilder txt = new StringBuilder();
+            txt.Append("@@ -" + coords1 + " +" + coords2 + " @@\n");
+            // Escape the body of the patch with %xx notation.
+            foreach (Diff aDiff in this.diffs)
+            {
+                switch (aDiff.operation)
+                {
+                    case Operation.INSERT:
+                        txt.Append('+');
+                        break;
+                    case Operation.DELETE:
+                        txt.Append('-');
+                        break;
+                    case Operation.EQUAL:
+                        txt.Append(' ');
+                        break;
+                }
+
+                txt.Append(Uri.EscapeDataString(aDiff.text).Replace('+', ' ')
+                    + "\n");
+            }
+            // Unescape selected chars for compatability with JavaScript's encodeURI.
+            // In speed critical applications this could be dropped since the
+            // receiving application will probably decode these fine.
+            txt.Replace("%21", "!").Replace("%7E", "~")
+                .Replace("%27", "'").Replace("%28", "(").Replace("%29", ")")
+                .Replace("%3B", ";").Replace("%2F", "/").Replace("%3F", "?")
+                .Replace("%3A", ":").Replace("%40", "@").Replace("%26", "&")
+                .Replace("%3D", "=").Replace("%2B", "+").Replace("%24", "$")
+                .Replace("%2C", ",").Replace("%23", "#");
+            return txt.ToString();
+        }
     }
 }
 
