@@ -3,7 +3,7 @@
 /*---------------------------------------------------------------------------
 
 	DiffControl.cs
-	Copyright © 2002 Bill Menees.  All rights reserved.
+	Copyright (c) 2002 Bill Menees.  All rights reserved.
 	Bill@Menees.com
 
 	Who		When		What
@@ -323,23 +323,6 @@ namespace Ankh.Diff.DiffUtils.Controls
             }
         }
 
-        public void ViewFile()
-        {
-            if (!CanViewFile) return;
-
-            string strFileName;
-            if (ViewA.Focused || edtLeft.Focused)
-            {
-                strFileName = edtLeft.Text;
-            }
-            else
-            {
-                strFileName = edtRight.Text;
-            }
-
-            Utilities.ShellExecute(this, strFileName, "open");
-        }
-
         public bool CanCompareSelectedText
         {
             get
@@ -553,8 +536,6 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         private void UpdateButtons()
         {
-            btnViewFile.Enabled = CanViewFile;
-            mnuViewFile.Enabled = btnViewFile.Enabled;
 
             btnCopy.Enabled = CanCopy;
             mnuCopy.Enabled = btnCopy.Enabled;
@@ -631,11 +612,6 @@ namespace Ankh.Diff.DiffUtils.Controls
             }
         }
 
-        private void btnViewFile_Click(object sender, System.EventArgs e)
-        {
-            ViewFile();
-        }
-
         private void mnuTextDiff_Click(object sender, System.EventArgs e)
         {
             CompareSelectedText();
@@ -683,8 +659,6 @@ namespace Ankh.Diff.DiffUtils.Controls
         private bool m_bShowToolbar = true;
         private bool m_bShowColorLegend = true;
         private ToolStrip ToolBar;
-        private ToolStripButton btnViewFile;
-        private ToolStripSeparator tsSep1;
         private ToolStripButton btnCopy;
         private ToolStripButton btnTextDiff;
         private ToolStripSeparator tsSep2;
@@ -704,8 +678,6 @@ namespace Ankh.Diff.DiffUtils.Controls
         private ToolStripLabel lblPosition;
         private ContextMenuStrip CtxMenu;
         private IContainer components;
-        private ToolStripMenuItem mnuViewFile;
-        private ToolStripSeparator tsSep7;
         private ToolStripMenuItem mnuCopy;
         private ToolStripMenuItem mnuTextDiff;
         private ToolStripButton btnRecompare;
