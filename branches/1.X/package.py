@@ -205,8 +205,8 @@ def build_subversion():
         ("#define APR_HAVE_IPV6", "#define APR_HAVE_IPV6 0 //")
         ))
     
-    
     print "done patching"
+
     
     if os.path.exists(os.path.join(subversion_source_root, subversion_dir_base)):
         copy_glob(os.path.join(subversion_source_root, subversion_dir_base) + "/*",
@@ -237,6 +237,23 @@ def build_subversion():
         ('				FavorSizeOrSpeed="1"', '				FavorSizeOrSpeed="2"')
         ))
     print "Done patching"
+    
+    convert_dsw_to_sln(os.path.join(subversion_source_root, "apr-util", "aprutil.dsw"))
+    apr_release_call = ["devenv", os.path.join(subversion_source_root, "apr", "libapr.vcproj"), "/Build", "Release"]
+    apr_util_release_call = ["devenv", os.path.join(subversion_source_root, "apr-util", "aprutil.sln"), "/Build", "Release"]
+
+    tempfile = open(log_file, 'a')
+    
+    if call(apr_release_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
+        print "Problem building APR.  Details can be found in %s" % log_file
+        sys.exit(1)
+
+    if call(apr_util_release_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
+        print "Problem building APR-util.  Details can be found in %s" % log_file
+        sys.exit(1)
+
+    tempfile.close()
+
     
     # Build Subversion
     if CONFIG == "__ALL__":
