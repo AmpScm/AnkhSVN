@@ -200,16 +200,19 @@
       <DependentUpon>PCStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateBranch.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranch.Designer.cs">
       <DependentUpon>CreateBranch.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectory.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateDirectory.Designer.cs">
       <DependentUpon>CreateDirectory.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.Designer.cs">
       <DependentUpon>ProjectCommitDialog.cs</DependentUpon>
@@ -349,6 +352,7 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -370,11 +374,13 @@
       <DependentUpon>AddUriDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\AddToSubversion.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddToSubversion.Designer.cs">
       <DependentUpon>AddToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.Designer.cs">
       <DependentUpon>SccEditEnlistment.cs</DependentUpon>
@@ -387,6 +393,7 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
@@ -401,6 +408,7 @@
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -447,6 +455,7 @@
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="CommitDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="CommitDialog.Designer.cs">
       <DependentUpon>CommitDialog.cs</DependentUpon>
@@ -637,6 +646,7 @@
     <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
     <Compile Include="UITypeEditors\MergeExeTypeEditor.cs" />
     <Compile Include="LockDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogChangedPaths.cs">
       <SubType>UserControl</SubType>
