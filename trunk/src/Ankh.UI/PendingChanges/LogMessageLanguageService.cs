@@ -54,32 +54,17 @@ namespace Ankh.UI.PendingChanges
         {
             return new LogMessageViewFilter(this, mgr, newView);
         }
-        
+
+        LanguagePreferences _preferences;
 		public override LanguagePreferences GetLanguagePreferences()
 		{
-            LanguagePreferences lp = new LanguagePreferences(this.Site, typeof(LogMessageLanguageService).GUID, ServiceName);
+            if (_preferences == null)
+            {
+                _preferences = new LanguagePreferences(this.Site, typeof(LogMessageLanguageService).GUID, ServiceName);
+                _preferences.Init();
+            }
 
-			lp.AutoListMembers = false;
-			lp.AutoOutlining = false;
-			lp.EnableCodeSense = false;
-			lp.EnableCommenting = true;
-			lp.EnableFormatSelection = false;
-			lp.EnableLeftClickForURLs = true;
-			lp.EnableMatchBraces = false;
-			lp.EnableMatchBracesAtCaret = false;
-			lp.EnableQuickInfo = false;
-			lp.EnableShowMatchingBrace = false;
-			lp.HideAdvancedMembers = false;
-			lp.IndentStyle = IndentingStyle.Block;
-			lp.InsertTabs = false;
-			lp.ParameterInformation = false;
-			lp.ShowNavigationBar = false;
-			lp.TabSize = 2;			
-			lp.VirtualSpace = false;
-			lp.WordWrap = true;
-			lp.WordWrapGlyphs = true;
-
-			return lp;
+			return _preferences;
 		}
 
 		CommentScanner _scanner;
