@@ -21,12 +21,16 @@
         /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\' 
         if="${debug}"/>
     
-    <property name="cl.options" value='/Od /I "${svndir}\include\apr" 
-        /I "${svndir}\include\apr-util" 
-        /I "${svndir}\include"
-        /AI "..\Utils\${build.dir}"
-        /D "WIN32" /D "_MBCS" /D "_WINDLL" /D "SVN_NEON_0_25=1" /FD /MD /GS  /W3 
-        /nologo /c /Zi /clr /TP /AI ..\NSvn.Common\${build.dir}\'
+    <property name="cl.options" value='/O1 /Og /Ob1 /Os 
+      /I "${svndir}\apr\include" 
+      /I "${svndir}\apr-iconv\include" 
+      /I "${svndir}\apr-util\include" 
+      /I "${svndir}\subversion\include" 
+      /AI "..\NSvn.Common\${build.dir}"
+      /AI "..\Utils\${build.dir}"
+      /D "WIN32" /D "NDEBUG" /D "ALT_ADMIN_DIR" 
+      /D "SVN_NEON_0_25=1"
+      /D "_MBCS" /D "_WINDLL" /FD /EHsc /MD /Fo"Release/" /Fd"Release/vc70.pdb" /W3 /nologo /c /clr /TP'
         unless="${debug}"/>
         
     <echo message="${cl.options}" />
@@ -35,52 +39,52 @@
         /DELAYLOAD:${bdb.dll} /INCREMENTAL:NO /LIBPATH:"${svndir}\lib 
         /PDB:"${build.dir}/NSvn.Core.pdb" comctl32.lib mswsock.lib ws2_32.lib 
         rpcrt4.lib shlwapi.lib  
-        ${svndir}\lib\libsvn_repos-1.lib 
-        ${svndir}\lib\libsvn_fs-1.lib 
-        ${svndir}\lib\libsvn_fs_fs-1.lib 
-        ${svndir}\lib\libsvn_fs_base-1.lib 
-        ${svndir}\lib\libsvn_ra_local-1.lib 
-        ${svndir}\lib\libsvn_ra-1.lib 
-        ${svndir}\lib\libsvn_ra_svn-1.lib 
+        ${svndir}\Debug\subversion\libsvn_repos\libsvn_repos-1.lib 
+        ${svndir}\Debug\subversion\libsvn_fs\libsvn_fs-1.lib 
+        ${svndir}\Debug\subversion\libsvn_fs_fs\libsvn_fs_fs-1.lib 
+        ${svndir}\Debug\subversion\libsvn_fs_base\libsvn_fs_base-1.lib 
+        ${svndir}\Debug\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+        ${svndir}\Debug\subversion\libsvn_ra\libsvn_ra-1.lib 
+        ${svndir}\Debug\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
         ${svndir}\lib\neon\libneonD.lib 
         ${svndir}\lib\neon\zlibstatD.lib
-        ${svndir}\lib\libsvn_wc-1.lib 
-        ${svndir}\lib\libsvn_subr-1.lib 
-        ${svndir}\lib\libsvn_client-1.lib 
-        ${svndir}\lib\libsvn_delta-1.lib 
-        ${svndir}\lib\libsvn_diff-1.lib 
-        ${svndir}\lib\apr\libapr.lib 
-        ${svndir}\lib\apr-util\libaprutil.lib 
-        ${svndir}\lib\apr-util\xml.lib
+        ${svndir}\Debug\subversion\libsvn_wc\libsvn_wc-1.lib 
+        ${svndir}\Debug\subversion\libsvn_subr\libsvn_subr-1.lib 
+        ${svndir}\Debug\subversion\libsvn_client\libsvn_client-1.lib 
+        ${svndir}\Debug\subversion\libsvn_delta\libsvn_delta-1.lib 
+        ${svndir}\Debug\subversion\libsvn_diff\libsvn_diff-1.lib 
+        ${svndir}\apr\Debug\libapr-1.lib 
+        ${svndir}\apr-util\Debug\libaprutil-1.lib 
          kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
          shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib' 
         if="${debug}"/>
-    
     <property name="link.options" value='/NOLOGO /DLL /DEBUG 
-        /INCREMENTAL:NO /LIBPATH:"${svndir}\lib 
+        /INCREMENTAL:NO /LIBPATH:"${svndir}\lib /DELAYLOAD:${bdb.dll}
         comctl32.lib mswsock.lib ws2_32.lib rpcrt4.lib shlwapi.lib
-        ${svndir}\lib\libsvn_repos-1.lib 
-        ${svndir}\lib\libsvn_fs-1.lib 
-        ${svndir}\lib\libsvn_fs_fs-1.lib 
-        ${svndir}\lib\libsvn_fs_base-1.lib 
-        ${svndir}\lib\libsvn_ra_local-1.lib 
-        ${svndir}\lib\libsvn_ra-1.lib 
-        ${svndir}\lib\libsvn_ra_svn-1.lib 
-        ${svndir}\lib\neon\libneon.lib 
-        ${svndir}\lib\neon\zlibstat.lib
-        ${svndir}\lib\libsvn_wc-1.lib 
-        ${svndir}\lib\libsvn_subr-1.lib 
-        ${svndir}\lib\libsvn_client-1.lib 
-        ${svndir}\lib\libsvn_delta-1.lib 
-        ${svndir}\lib\libsvn_diff-1.lib 
-        ${svndir}\lib\apr\libapr.lib 
-        ${svndir}\lib\apr-util\libaprutil.lib 
-        ${svndir}\lib\apr-util\xml.lib  
+        ${svndir}\Release\subversion\libsvn_repos\libsvn_repos-1.lib 
+        ${svndir}\Release\subversion\libsvn_fs\libsvn_fs-1.lib 
+        ${svndir}\Release\subversion\libsvn_fs_fs\libsvn_fs_fs-1.lib 
+        ${svndir}\Release\subversion\libsvn_fs_util\libsvn_fs_util-1.lib 
+        ${svndir}\Release\subversion\libsvn_fs_base\libsvn_fs_base-1.lib 
+        ${svndir}\Release\subversion\libsvn_ra_local\libsvn_ra_local-1.lib 
+        ${svndir}\Release\subversion\libsvn_ra\libsvn_ra-1.lib 
+        ${svndir}\Release\subversion\libsvn_ra_svn\libsvn_ra_svn-1.lib 
+        ${svndir}\Release\subversion\libsvn_ra_neon\libsvn_ra_neon-1.lib 
+        ${svndir}\neon\libneon.lib 
+        ${svndir}\zlib\zlibstat.lib
+        ${svndir}\Release\subversion\libsvn_wc\libsvn_wc-1.lib 
+        ${svndir}\Release\subversion\libsvn_subr\libsvn_subr-1.lib 
+        ${svndir}\Release\subversion\libsvn_client\libsvn_client-1.lib 
+        ${svndir}\Release\subversion\libsvn_delta\libsvn_delta-1.lib 
+        ${svndir}\Release\subversion\libsvn_diff\libsvn_diff-1.lib 
+        ${svndir}\apr\Release\libapr-1.lib 
+        ${svndir}\apr-util\Release\libaprutil-1.lib 
+        ${svndir}\apr-util\xml\expat\lib\LibR\xml.lib
+        ${bdb.lib}
         kernel32.lib user32.lib 
         gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
         shell32.lib ole32.lib oleaut32.lib uuid.lib DelayImp.lib'
         unless="${debug}"/>
-
     
     <target name="rebuild">
         <call target="clean"/>
@@ -112,6 +116,11 @@
             </sources>
             
         </cl>
+        <copy todir="${build.dir}" verbose="true" flatten="true">
+          <fileset basedir="${svndir}">
+            <include name="**\*.dll" />
+          </fileset>
+        </copy>
     </target>
     
     <target name="link" depends="compile, init">
@@ -123,11 +132,7 @@
     </target>
     
     <target name="build-WiX" depends="build">
-		<copy todir="${build.dir}">
-			<fileset basedir="${svndir}\bin">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
+
         <exec workingdir="${src.dir}" program="${wix-binary.dir}\candle.exe"
             commandline="-nologo -w0 -dbuilddir=${build.dir} -dvs_version=${vs_version} -dsvndir=${svndir} NSvn.Core.wxs -out ${installsource.dir}\NSvn.Core.wixobj" />
     </target>

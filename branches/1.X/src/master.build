@@ -61,7 +61,7 @@
             
         <!-- Build the Ankh msi -->
         <exec workingdir="${installsource.dir}" program="${wix-binary.dir}\light.exe"
-            commandline="-nologo -w0 Ankh-UI.wixobj Ankh.msi.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
+            commandline="-nologo -w0 -sice:ICE61 Ankh-UI.wixobj Ankh.msi.wixobj Ankh.wixobj Ankh.UI.wixobj ReposInstaller.wixobj Utils.wixobj lib.wixobj -out Ankh.msi" />
     </target>
     
     <target name="wix" description="Builds installer file(s)" depends="build-NSvn.msm, build-InstallLib, version, AboutBoxDetails">
