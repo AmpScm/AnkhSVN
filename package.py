@@ -30,16 +30,16 @@ SUBVERSION = "http://subversion.tigris.org/downloads/subversion-1.5.2.tar.gz"
 SUBVERSION_VERSION = "1.5.2"
 
 # The URL of neon
-NEON = "http://www.webdav.org/neon/neon-0.25.5.tar.gz"
-NEON_VERSION = "0.25.5"
+NEON = "http://www.webdav.org/neon/neon-0.28.3.tar.gz"
+NEON_VERSION = "0.28.3"
 
 # Berkeley DB
 BDB = "ftp://ftp.sleepycat.com/releases/db-4.4.20.tar.gz"
 BDB_VERSION = "4.4.20"
 
 # OpenSSL
-OPENSSL = "http://www.openssl.org/source/openssl-0.9.8e.tar.gz"
-OPENSSL_VERSION = "0.9.8-e"
+OPENSSL = "http://www.openssl.org/source/openssl-0.9.8g.tar.gz"
+OPENSSL_VERSION = "0.9.8-g"
 
 # Whether to build openssl as a static library
 # Must be an environment variable so that neon.mak picks up on it
@@ -52,16 +52,16 @@ ZLIB = "http://www.zlib.net/zlib-1.2.3.tar.gz"
 ZLIB_VERSION = "1.2.3"
 
 # APR
-APR = "http://archive.apache.org/dist/apr/apr-0.9.12-win32-src.zip"
-APR_VERSION = "0.9.12"
+APR = "http://archive.apache.org/dist/apr/apr-1.3.3-win32-src.zip"
+APR_VERSION = "1.3.3"
 
 # APR-UTIL
-APR_UTIL = "http://archive.apache.org/dist/apr/apr-util-0.9.12-win32-src.zip"
-APR_UTIL_VERSION = "0.9.12"
+APR_UTIL = "http://archive.apache.org/dist/apr/apr-util-1.3.4-win32-src.zip"
+APR_UTIL_VERSION = "1.3.4"
 
 # APR-ICONV
-APR_ICONV = "http://archive.apache.org/dist/apr/apr-iconv-0.9.7-win32-src-r2.zip"
-APR_ICONV_VERSION = "0.9.7-r2"
+APR_ICONV = "http://archive.apache.org/dist/apr/apr-iconv-1.2.1-win32-src.zip"
+APR_ICONV_VERSION = "1.2.1"
 
 # The build directory
 BUILDDIR = os.path.join(os.path.dirname(__file__), "build")
@@ -144,8 +144,6 @@ def build_ankhsvn():
     shutil.copy(os.path.join(ankhsvn_src_dir, "installsource", "Ankh.msi"), msi_path)
 
 def patchfiles(directories, suffixes, searches):
-    for search in searches:
-        print "%s - %s" % (search[0], search[1])
     for dir in directories:
         for root, dirs, files in os.walk(dir):
             for name in files:
@@ -194,7 +192,6 @@ def build_subversion():
     
     download_and_extract(SUBVERSION, subversion_dir_base)
     
-    print "Patching apr"
     aprDir = os.path.join(subversion_source_root, "apr")
     aprUtilDir = os.path.join(subversion_source_root, "apr-util")
     
@@ -204,8 +201,6 @@ def build_subversion():
         (("#define APU_HAVE_APR_ICONV", "#define APU_HAVE_APR_ICONV     0 //"),
         ("#define APR_HAVE_IPV6", "#define APR_HAVE_IPV6 0 //")
         ))
-    
-    print "done patching"
 
     
     if os.path.exists(os.path.join(subversion_source_root, subversion_dir_base)):
@@ -227,7 +222,6 @@ def build_subversion():
     
     tempfile.close()
     
-    print "Patching subversion"
     vcprojDir = os.path.join(subversion_source_root, "build", "win32", "vcnet-vcproj")
     patchfiles(
         (vcprojDir,),
@@ -236,13 +230,19 @@ def build_subversion():
         ('				Optimization="2"', '				Optimization="1"'),
         ('				FavorSizeOrSpeed="1"', '				FavorSizeOrSpeed="2"')
         ))
-    print "Done patching"
     
-    convert_dsw_to_sln(os.path.join(subversion_source_root, "apr-util", "aprutil.dsw"))
-    apr_release_call = ["devenv", os.path.join(subversion_source_root, "apr", "libapr.vcproj"), "/Build", "Release"]
-    apr_util_release_call = ["devenv", os.path.join(subversion_source_root, "apr-util", "aprutil.sln"), "/Build", "Release"]
-
+    bdb_inc_dir = os.path.join(subversion_source_root, "db4-win32", "include")
+    bdb_lib_dir = os.path.join(subversion_source_root, "db4-win32", "lib")
+    apr_util_fix_call = ["perl", os.path.join(subversion_source_root, "apr-util", "build", "w32locatedb.pl"), "dll", bdb_inc_dir, bdb_lib_dir]
+    apr_release_call = ["devenv", os.path.join(subversion_source_root, "apr", "libapr.vcproj"), "/Build", "Release", "/project", "libapr"]
+    apr_util_release_call = ["devenv", os.path.join(subversion_source_root, "apr-util", "aprutil.sln"), "/Build", "Release", "/project", "libaprutil"]
     tempfile = open(log_file, 'a')
+    
+    if call(apr_util_fix_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
+        print "Problem running w32locatedb.pl. Details can be found in %s" % log_file
+        sys.exit(1)
+
+    convert_dsw_to_sln(os.path.join(subversion_source_root, "apr-util", "aprutil.dsw"))
     
     if call(apr_release_call, cwd=subversion_source_root, stderr=tempfile, stdout=tempfile, env=os.environ, shell=True):
         print "Problem building APR.  Details can be found in %s" % log_file
@@ -349,7 +349,7 @@ def build_berkeley_db():
     # Create log file
     open(log_file, 'w').close()
     
-    if CONFIG == "__ALL__":
+    if 1 == 1:
         # Handle Debug build
         if build_debug:
             if VERBOSE:
@@ -426,7 +426,7 @@ def build_berkeley_db():
         copy_glob(os.path.join(bdb_source_root, "build_win32") + "/*.h", 
             os.path.join(bdb_target_root, "include"))
 
-    if CONFIG == "__ALL__":
+    if 1 == 1:
         d_dlls = len(glob.glob(os.path.join(bdb_source_root, "build_win32", "Debug") + "/*.dll"))
         r_dlls = len(glob.glob(os.path.join(bdb_source_root, "build_win32", "Release") + "/*.dll"))
         t_dlls = len(glob.glob(os.path.join(bdb_target_root, "bin") + "/*.dll"))
@@ -488,62 +488,26 @@ def build_berkeley_db():
 def build_apr():
     """Builds apr, apr-util and apr-iconv.  (Really doesn't build them but it does download them so Subversion can.)"""
     subversion_source_root = os.path.join(BUILDDIR,"subversion")
-    projects_to_convert = []
+    solutions_to_convert = []
     
-    print "Staging APR, APR-UTIL and APR-ICONV..."
+    print "Staging APR, APR-UTIL"
     
     download_and_extract(APR, "apr")
     download_and_extract(APR_UTIL, "apr-util")
     download_and_extract(APR_ICONV, "apr-iconv");
     
-    if not os.path.exists(os.path.join(subversion_source_root, "apr", "libapr.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr", "libapr.dsp"))
+    if not os.path.exists(os.path.join(subversion_source_root, "apr", "apr.sln")):
+        convert_dsw_to_sln(os.path.join(subversion_source_root, "apr", "apr.dsw"))
     else:
         if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr", "libapr.vcproj")
-    
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-iconv", "libapriconv.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-iconv", "libapriconv.dsp"))
+            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr", "apr.sln")
+
+    if not os.path.exists(os.path.join(subversion_source_root, "apr-util", "aprutil.sln")):
+        convert_dsw_to_sln(os.path.join(subversion_source_root, "apr-util", "aprutil.dsw"))
     else:
         if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-iconv", "libapriconv.vcproj")
+            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-util", "aprutil.sln")
     
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-iconv", "ccs", "libapriconv_ccs_modules.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-iconv", "ccs", "libapriconv_ccs_modules.dsp"))
-    else:
-        if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-iconv", "ccs", "libapriconv_ccs_modules.vcproj")
-    
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-iconv", "ces", "libapriconv_ces_modules.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-iconv", "ces", "libapriconv_ces_modules.dsp"))
-    else:
-        if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-iconv", "ces", "libapriconv_ces_modules.vcproj")
-    
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-util", "libaprutil.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-util", "libaprutil.dsp"))
-    else:
-        if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-util", "libaprutil.vcproj")
-    
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-util", "uri", "gen_uri_delims.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-util", "uri", "gen_uri_delims.dsp"))
-    else:
-        if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-util", "uri", "gen_uri_delims.vcproj")
-    
-    if not os.path.exists(os.path.join(subversion_source_root, "apr-util", "xml", "expat", "lib", "xml.vcproj")):
-        projects_to_convert.append(os.path.join(subversion_source_root, "apr-util", "xml", "expat", "lib", "xml.dsp"))
-    else:
-        if VERBOSE:
-            print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-util", "xml", "expat", "lib", "xml.vcproj")
-    
-    # Convert VS.NET projects
-    if len(projects_to_convert) > 0:
-        if VERBOSE:
-            print "    Upgrading VS projects VS.NET projects"
-    
-        convert_dsp_to_vcproj(projects_to_convert)
 
 def build_zlib():
     """Builds zlib.  (Really doesn't build zlib but it does download so that Subversion can build.)"""
@@ -600,8 +564,8 @@ def build_openssl():
             print "    OpenSSL already built.  Using %s" % openssl_source_root
     # Build OpenSSL
     else:
-        perl_call = ["perl","Configure","VC-WIN32"]
-        masm_call = [os.path.join(openssl_source_root,"ms","do_masm.bat")]
+        perl_call = ["perl","Configure","VC-WIN32", "-D_CRT_NONSTDC_NO_DEPRECATE", "-D_CRT_SECURE_NO_DEPRECATE", "no-dso", "no-kr5", "no-hw"]
+        masm_call = [os.path.join(openssl_source_root,"ms","do_ms.bat")]
         nmake_static_call = ["nmake","-f",os.path.join(openssl_source_root,"ms","nt.mak")]
         nmake_shared_call = ["nmake","-f",os.path.join(openssl_source_root,"ms","ntdll.mak")]
         
@@ -726,15 +690,18 @@ the EnvDTE COM interface."""
     vcproj = win32com.client.Dispatch(VCPROJECTENGINE)
     
     for dsp in dspFiles:
-        dspFile = os.path.abspath(dsp)
-        root, ext = os.path.splitext(dspFile)
-        vcprojFile = root + ".vcproj"
-        
-        if VERBOSE:
-            print "    Converting %s to %s" % (dspFile, vcprojFile)
-        project = vcproj.LoadProject(dspFile)
-        
-        project.Save()
+        try:
+            dspFile = os.path.abspath(dsp)
+            root, ext = os.path.splitext(dspFile)
+            vcprojFile = root + ".vcproj"
+            
+            if VERBOSE:
+                print "    Converting %s to %s" % (dspFile, vcprojFile)
+            project = vcproj.LoadProject(dspFile)
+            
+            project.Save()
+        except:
+          pass
     
     os.chdir(pushd)
 
@@ -1147,19 +1114,19 @@ def download_and_extract(url, targetname):
         shutil.move(paths[0], target_path)
 
 def extract_tar_file(filename, dir):
-	"""Extracts the contents of filename to dir"""
-	tf = tarfile.open(filename)
-	
-	for member in tf.getmembers():
-		if member.isdir():
-			os.makedirs(os.path.join(dir, member.name))
-		elif member.isfile():
-			parent = os.path.join(os.path.dirname(dir), member.name)
-			
-			if not os.path.exists(parent):
-				os.makedirs(parent)
-			
-			tf.extract(member, dir)
+    """Extracts the contents of filename to dir"""
+    tf = tarfile.open(filename)
+
+    for member in tf.getmembers():
+        if member.isdir():
+            os.makedirs(os.path.join(dir, member.name))
+        elif member.isfile():
+            parent = os.path.dirname(os.path.join(dir, member.name))
+            if not os.path.exists(parent):
+                os.makedirs(parent)
+
+            #print "Extracting file %s to %s" % (member.name, parent)
+            tf.extract(member, dir)
 
 def extract_zip_file(filename, dir):
 	"""Extracts the contents of filename to dir"""
