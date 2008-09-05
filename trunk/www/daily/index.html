@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5090.173</title>
+<title>AnkhSVN-Daily Update - 2.0.5100.174</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5090.173</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5100.174</h1>
 
 
 <p>
@@ -12,19 +12,24 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1018/AnkhSvn-Daily-2.0.5090.173.msi">AnkhSvn-Daily-2.0.5090.173.msi</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1023/AnkhSvn-Daily-2.0.5100.174.msi">AnkhSvn-Daily-2.0.5100.174.msi</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5090">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5100">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-09-04</td></tr>
+<tr><td> </td><td class="r"><a id="5099" href="http://ankhsvn.net/rev/?r=5099">[r5099]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Diff/DiffUtils/Controls/DiffControl.Designer.cs, src/Ankh.Diff/DiffUtils/Controls/DiffControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed the ViewFile Button and support from the ToolStrip of the Visual Diff viewer.</td></tr>
+<tr><td> </td><td class="r"><a id="5095" href="http://ankhsvn.net/rev/?r=5095">[r5095]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Diff/DiffPatch/diff_match_patch.cs, src/Ankh.Diff/Ankh.Diff.csproj, src/Ankh.Diff/DiffPatch</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added raw conversion of google patch, match diff code to c#.
+(Needs cleanup and a lot of testing and should be moved to
+a more sensible location)</td></tr>
 <tr class="d"><td colspan="4">2008-09-03</td></tr>
 <tr><td> </td><td class="r"><a id="5088" href="http://ankhsvn.net/rev/?r=5088">[r5088]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh/Commands/ItemUnifiedDiffCommand.cs, src/Ankh/Commands/LocalDiffCommandBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure the patch command works again, this fixes <a href="http://ankhsvn.net/issues/?id=496">issue #496</a>. Also make sure the selection filter doesn't contain useless (non-modified) items</td></tr>
 <tr class="d"><td colspan="4">2008-09-02</td></tr>
@@ -105,33 +110,6 @@ setting.</td></tr>
 <tr><td> </td><td class="r"><a id="4997" href="http://ankhsvn.net/rev/?r=4997">[r4997]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryStrings.resx, src/Ankh.UI/RepositoryExplorer/RepositoryListView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryStrings.Designer.cs, src/Ankh.UI/RepositoryExplorer/RepositoryListItem.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.Designer.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated the Repository explorer to use the SmartColumn infrastructure</td></tr>
 <tr><td> </td><td class="r"><a id="4994" href="http://ankhsvn.net/rev/?r=4994">[r4994]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Commit project change that was still in my local working copy; fixing the daily build.</td></tr>
 <tr class="d"><td colspan="4">2008-08-07</td></tr>
-<tr><td> </td><td class="r"><a id="4992" href="http://ankhsvn.net/rev/?r=4992">[r4992]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When pasting a filename list in the pending changes window, use the list
-sorting instead of the raw pending change order.</td></tr>
-<tr><td> </td><td class="r"><a id="4991" href="http://ankhsvn.net/rev/?r=4991">[r4991]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.UI/VSSelectionControls/SelectionItemMap.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Selection Context: Verify if a solution is actually open before returning 
-true on 'MaybeSolution'. (Fixes crash on closing VS 2008 SP1 Beta 1 with 
-current focus on the pending changes window)</td></tr>
-<tr><td> </td><td class="r"><a id="4990" href="http://ankhsvn.net/rev/?r=4990">[r4990]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/WorkingCopyExplorer/FileSystemItemAttributes.cs, src/Ankh.UI/VSSelectionControls/SmartColumn.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemListViewItem.cs, src/Ankh.UI/WorkingCopyExplorer/IFileSystemItem.cs, src/Ankh.UI/WorkingCopyExplorer/OldStore/Trees/WCTreeNode.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, src/Ankh.UI/WorkingCopyExplorer/OldStore/FileSystemFileItem.cs, src/Ankh.UI/WorkingCopyExplorer/OldStore/FileSystemItem.cs (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use the SmartListView for the Working copy explorer and more WC-Explorer cleanup.
-Allowing to sort columns, etc.</td></tr>
-<tr><td> </td><td class="r"><a id="4989" href="http://ankhsvn.net/rev/?r=4989">[r4989]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/SolutionExplorer/FileIconMapper.cs, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed <a href="http://ankhsvn.net/issues/?id=483">issue #483</a>: VS Crashes when doubleclicking on a file in the working copy explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="4988" href="http://ankhsvn.net/rev/?r=4988">[r4988]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionControl.Designer.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.Designer.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, src/Ankh.UI/VSSelectionControls/TreeViewWithSelection.cs (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4987">r4987</a>: Extend WM_CONTEXTMENU handler to parse passed mouse
-position and send that information to the eventhandlers.</td></tr>
-<tr><td> </td><td class="r"><a id="4987" href="http://ankhsvn.net/rev/?r=4987">[r4987]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, src/Ankh.UI/VSSelectionControls/TreeViewWithSelection.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added OnShowContextMenu handler to TreeViewWithSelection and use .ShowContext
-to show the context menu in the working copy explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="4985" href="http://ankhsvn.net/rev/?r=4985">[r4985]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/SmartColumn.cs, src/Ankh.UI/PendingChanges/PendingCommitsView.cs, src/Ankh.UI/VSSelectionControls/SmartListView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added support for an hidden extra sort column ('Path' for the Pending Changes Window)
-that makes sure items are always sorted in some sensible way even if their sort value
-is the same.</td></tr>
-<tr class="d"><td colspan="4">2008-08-06</td></tr>
-<tr><td> </td><td class="r"><a id="4981" href="http://ankhsvn.net/rev/?r=4981">[r4981]</a></td><td class="a">rhuijben</td><td class="f">src/TestUtils/TestUtils.csproj, src/Utils/Utils.csproj, src/Utils.Tests/Utils.Tests.csproj, src/Utils/Win32, src/TestUtils/FileUtils.cs, src/Utils/FileUtils.cs, src/Utils/UriUtils.cs, src/TestUtils/ProcessReader.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved test-only code to TestUtils and removed unused utility code.</td></tr>
-<tr><td> </td><td class="r"><a id="4980" href="http://ankhsvn.net/rev/?r=4980">[r4980]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/ViewInVSNetCommand.cs, src/Ankh.UI/CommitDialog.Designer.cs, src/Ankh.UI/LockDialog.Designer.cs, src/Ankh.UI/PathTreeView.cs, src/Ankh.UI/CommitDialog.cs, src/Ankh.UI/PathSelector/PathSelector.Designer.cs, src/Ankh/Services/UIShell.cs, src/Ankh.UI/PathSelectionTreeView.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed unused uri path code from PathTreeView and removed unused util namespaces</td></tr>
-<tr><td> </td><td class="r"><a id="4979" href="http://ankhsvn.net/rev/?r=4979">[r4979]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/SolutionExplorer/FileIconMapper.cs, src/Ankh.VS/SolutionExplorer/Win32TreeView.cs, src/Ankh.VS/SolutionExplorer/SolutionTreeViewManager.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved treeview interop code to a NativeMethods class
-(fxcop recommendation)</td></tr>
-<tr><td> </td><td class="r"><a id="4978" href="http://ankhsvn.net/rev/?r=4978">[r4978]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS.UnitTest/CommandRouting/CommandRoutingTest.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh.VS.UnitTest/Mocks/AnkhContextMock.cs, src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, src/Ankh/Commands/CleanupCommand.cs, src/Ankh/Commands/ItemUnifiedDiffCommand.cs, src/Ankh.VS.UnitTest/PackageTest.cs (and 10 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed the last few references to the AnkhSVN 1.X IContext interface.</td></tr>
-<tr><td> </td><td class="r"><a id="4977" href="http://ankhsvn.net/rev/?r=4977">[r4977]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/ExportCommand.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh/Commands/RevertItemCommand.cs, src/Ankh/Commands/CleanupCommand.cs, src/Ankh/Commands/RepositoryExplorer/CopyReposExplorerUrl.cs, src/Ankh/Commands/WorkingCopyExplorer/WorkingCopyBrowseCommand.cs, src/Ankh/Commands/ShowToolWindows.cs (and 20 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made several command and service classes private. We communicate
-with them over their interfaces.</td></tr>
-<tr><td> </td><td class="r"><a id="4976" href="http://ankhsvn.net/rev/?r=4976">[r4976]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs, src/Ankh.Scc/OpenDocumentTracker.cs, src/Ankh.Scc/ProjectTracker.Solution.cs, src/Ankh.Scc/ProjectTracker.Remove.cs, src/Ankh.Scc/ProjectTracker.cs, src/Ankh.Scc/ProjectTracker.Rename.cs, src/Ankh.Scc/ProjectTracker.Add.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Initialize the project and open document tracker services in 
-the OnInitialize instead of in the constructor.</td></tr>
-<tr><td> </td><td class="r"><a id="4975" href="http://ankhsvn.net/rev/?r=4975">[r4975]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/Scheduler.cs, src/Ankh.Scc/AnkhSccProvider.Projects.cs, src/Ankh.UI/SccManagement/ProjectCommitDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed the initialization of the Scheduler after the service 
-registration changes</td></tr>
 
 </table>
 <!--/Recent changes-->
