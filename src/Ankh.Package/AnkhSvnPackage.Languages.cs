@@ -10,11 +10,9 @@ namespace Ankh.VSPackage
         AutoOutlining = false,
         CodeSense = false,
         DefaultToInsertSpaces = true,
-        DefaultToNonHotURLs = false,
         EnableAdvancedMembersOption=false,
         EnableAsyncCompletion=false,
         EnableCommenting=true,
-        EnableFormatSelection=true,
         EnableLineNumbers=false,
         MatchBraces=true,
         MatchBracesAtCaret=true,
@@ -22,12 +20,10 @@ namespace Ankh.VSPackage
         QuickInfo=false,
         RequestStockColors=false,
         ShowCompletion=false,
-        ShowDropDownOptions=false,
         ShowHotURLs=true,
         ShowMatchingBrace=true,
         ShowSmartIndent=true,
-        SingleCodeWindowOnly=true,
-        SupportCopyPasteOfHTML=false)]
+        SingleCodeWindowOnly=true)]
     [ProvideService(typeof(LogMessageLanguageService))]
     partial class AnkhSvnPackage
     {        
