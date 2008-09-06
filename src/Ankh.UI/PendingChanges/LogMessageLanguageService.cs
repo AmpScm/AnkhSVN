@@ -15,19 +15,19 @@ namespace Ankh.UI.PendingChanges
     /// Implements a simple VS Languageservice to implement syntaxcoloring on our LogMessages
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
-    [GlobalService(typeof(LogMessageLanguageService), PublicService=true)]
+    [GlobalService(typeof(LogMessageLanguageService), PublicService = true)]
     public partial class LogMessageLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
         readonly IAnkhServiceProvider _context;
-        
+
         public LogMessageLanguageService(IAnkhServiceProvider context)
-		{
+        {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             _context = context;
-		}
+        }
 
         public void OnPreInitialize()
         {
@@ -37,7 +37,7 @@ namespace Ankh.UI.PendingChanges
 
         public void OnInitialize()
         {
-            
+
         }
 
         internal IAnkhServiceProvider Context
@@ -45,10 +45,10 @@ namespace Ankh.UI.PendingChanges
             get { return _context; }
         }
 
-		public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
-		{
-			base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
-		}
+        public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
+        {
+            base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
+        }
 
         public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
         {
@@ -56,106 +56,106 @@ namespace Ankh.UI.PendingChanges
         }
 
         LanguagePreferences _preferences;
-		public override LanguagePreferences GetLanguagePreferences()
-		{
+        public override LanguagePreferences GetLanguagePreferences()
+        {
             if (_preferences == null)
             {
                 _preferences = new LanguagePreferences(this.Site, typeof(LogMessageLanguageService).GUID, ServiceName);
                 _preferences.Init();
             }
 
-			return _preferences;
-		}
+            return _preferences;
+        }
 
-		CommentScanner _scanner;
-		public override IScanner GetScanner(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
-		{
-			if (_scanner == null)
-				_scanner = new CommentScanner();
-			return _scanner;
-		}
+        CommentScanner _scanner;
+        public override IScanner GetScanner(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
+        {
+            if (_scanner == null)
+                _scanner = new CommentScanner();
+            return _scanner;
+        }
 
-		public override string Name
-		{
-			get { return ServiceName; }
-		}
+        public override string Name
+        {
+            get { return ServiceName; }
+        }
 
-		public override AuthoringScope ParseSource(ParseRequest req)
-		{
-			return null;
-		}
+        public override AuthoringScope ParseSource(ParseRequest req)
+        {
+            return null;
+        }
 
         public override Source CreateSource(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
         {
             return new LogmessageSource(this, buffer, GetColorizer(buffer));
-        }     
+        }
 
-		class CommentScanner : IScanner
-		{
-			int _offset;
-			string _line;
-			#region IScanner Members
+        class CommentScanner : IScanner
+        {
+            int _offset;
+            string _line;
+            #region IScanner Members
 
-			public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
-			{
-				if (string.IsNullOrEmpty(_line) || _offset >= _line.Length)
-					return false;
+            public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
+            {
+                if (string.IsNullOrEmpty(_line) || _offset >= _line.Length)
+                    return false;
 
-				int pState = state;
-				state = 0;
+                int pState = state;
+                state = 0;
 
-				if (_offset == 0)
-				{
-					while (_offset < _line.Length)
-					{
-						if (char.IsWhiteSpace(_line, _offset))
-							_offset++;
-						else
-							break;
-					}
+                if (_offset == 0)
+                {
+                    while (_offset < _line.Length)
+                    {
+                        if (char.IsWhiteSpace(_line, _offset))
+                            _offset++;
+                        else
+                            break;
+                    }
 
-					if (_offset < _line.Length)
-					{
-						switch (_line[_offset])
-						{
-							case '#':
-								if (tokenInfo != null)
-								{
-									tokenInfo.Color = TokenColor.Comment;
-									tokenInfo.StartIndex = _offset;
-									tokenInfo.EndIndex = _line.Length;
-									tokenInfo.Trigger = TokenTriggers.None;
-									tokenInfo.Type = TokenType.LineComment;
-								}
-								state = 1;
-								_offset = _line.Length;
-								return true;
-							default:
-								if (tokenInfo != null)
-								{
-									tokenInfo.Color = TokenColor.Text;
-									tokenInfo.StartIndex = _offset;
-									tokenInfo.EndIndex = _line.Length;
-									tokenInfo.Trigger = TokenTriggers.None;
-									tokenInfo.Type = TokenType.Text;
-								}
-								state = 0;
-								_offset = _line.Length;
-								return true;
-						}
-					}
-				}
-				return false;
-			}
+                    if (_offset < _line.Length)
+                    {
+                        switch (_line[_offset])
+                        {
+                            case '#':
+                                if (tokenInfo != null)
+                                {
+                                    tokenInfo.Color = TokenColor.Comment;
+                                    tokenInfo.StartIndex = _offset;
+                                    tokenInfo.EndIndex = _line.Length;
+                                    tokenInfo.Trigger = TokenTriggers.None;
+                                    tokenInfo.Type = TokenType.LineComment;
+                                }
+                                state = 1;
+                                _offset = _line.Length;
+                                return true;
+                            default:
+                                if (tokenInfo != null)
+                                {
+                                    tokenInfo.Color = TokenColor.Text;
+                                    tokenInfo.StartIndex = _offset;
+                                    tokenInfo.EndIndex = _line.Length;
+                                    tokenInfo.Trigger = TokenTriggers.None;
+                                    tokenInfo.Type = TokenType.Text;
+                                }
+                                state = 0;
+                                _offset = _line.Length;
+                                return true;
+                        }
+                    }
+                }
+                return false;
+            }
 
-			public void SetSource(string source, int offset)
-			{
-				_line = source;
-				_offset = offset;
-			}
+            public void SetSource(string source, int offset)
+            {
+                _line = source;
+                _offset = offset;
+            }
 
-			#endregion
-		}
+            #endregion
+        }
 
         #region IAnkhServiceProvider Members
 
@@ -225,7 +225,7 @@ namespace Ankh.UI.PendingChanges
         /// <returns></returns>
         public override int GetDataTipText(TextSpan[] aspan, out string textValue)
         {
-            if(aspan == null || aspan.Length != 1 || aspan[0].iEndLine != aspan[0].iStartLine)
+            if (aspan == null || aspan.Length != 1 || aspan[0].iEndLine != aspan[0].iStartLine)
                 return base.GetDataTipText(aspan, out textValue);
 
             textValue = null;
@@ -247,7 +247,7 @@ namespace Ankh.UI.PendingChanges
                     break;
             }
 
-            while (iTo+1 < line.Length)
+            while (iTo + 1 < line.Length)
             {
                 if (!char.IsWhiteSpace(line, iTo) && "*?;".IndexOf(line[iTo]) < 0)
                     iTo++;
@@ -262,7 +262,7 @@ namespace Ankh.UI.PendingChanges
 
             IPendingChangesManager mgr = _service.Context.GetService<IPendingChangesManager>();
             PendingChange change = null;
-            if(mgr == null || !mgr.TryMatchFile(text, out change))
+            if (mgr == null || !mgr.TryMatchFile(text, out change))
                 return VSConstants.E_FAIL;
 
             aspan[0].iStartIndex = iFrom;
@@ -285,6 +285,6 @@ namespace Ankh.UI.PendingChanges
         {
             // TODO: determine what the word break characters of a log message should be
             return base.GetWordExtent(line, index, flags, span);
-        }        
+        }
     }
 }

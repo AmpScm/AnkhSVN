@@ -161,7 +161,7 @@ namespace Ankh.Commands
                     }
                 }
 
-                if(da.BaseFile == null)
+                if (da.BaseFile == null)
                 {
                     da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
                         diff.GetTempFile(item, revRange.StartRevision, true);
@@ -172,7 +172,7 @@ namespace Ankh.Commands
 
                 da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
                 da.MineTitle = item.Name + " - " + revRange.EndRevision.ToString();
-                
+
 
                 diff.RunDiff(da);
             }
@@ -198,6 +198,6 @@ namespace Ankh.Commands
                     });
             }
             return copiedFrom;
-        }        
+        }
     }
 }
