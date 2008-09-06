@@ -451,7 +451,7 @@ namespace Ankh.Services
             string name = Path.GetFileNameWithoutExtension(targetName) + "." + revision.ToString() + Path.GetExtension(targetName);
 
             string file;
-            if (_lastDir != null || File.Exists(file = Path.Combine(_lastDir, name)))
+            if (_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
             {
                 _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
 
