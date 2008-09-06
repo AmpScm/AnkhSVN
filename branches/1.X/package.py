@@ -59,10 +59,6 @@ APR_VERSION = "1.3.3"
 APR_UTIL = "http://archive.apache.org/dist/apr/apr-util-1.3.4-win32-src.zip"
 APR_UTIL_VERSION = "1.3.4"
 
-# APR-ICONV
-APR_ICONV = "http://archive.apache.org/dist/apr/apr-iconv-1.2.1-win32-src.zip"
-APR_ICONV_VERSION = "1.2.1"
-
 # The build directory
 BUILDDIR = os.path.join(os.path.dirname(__file__), "build")
 BUILDDIR_CUSTOM = False
@@ -197,7 +193,7 @@ def build_subversion():
     
     patchfiles(
         (aprDir, aprUtilDir), 
-        ((".hw", ".h"), ("expat.h.in", "expat.h")), 
+        ((".hw", ".h"), (".hw", ".hw"), ("expat.h.in", "expat.h")), 
         (("#define APU_HAVE_APR_ICONV", "#define APU_HAVE_APR_ICONV     0 //"),
         ("#define APR_HAVE_IPV6", "#define APR_HAVE_IPV6 0 //")
         ))
@@ -486,7 +482,7 @@ def build_berkeley_db():
                 os.path.join(bdb_target_root, "lib"))
 
 def build_apr():
-    """Builds apr, apr-util and apr-iconv.  (Really doesn't build them but it does download them so Subversion can.)"""
+    """Builds apr and apr-util.  (Really doesn't build them but it does download them so Subversion can.)"""
     subversion_source_root = os.path.join(BUILDDIR,"subversion")
     solutions_to_convert = []
     
@@ -494,7 +490,6 @@ def build_apr():
     
     download_and_extract(APR, "apr")
     download_and_extract(APR_UTIL, "apr-util")
-    download_and_extract(APR_ICONV, "apr-iconv");
     
     if not os.path.exists(os.path.join(subversion_source_root, "apr", "apr.sln")):
         convert_dsw_to_sln(os.path.join(subversion_source_root, "apr", "apr.dsw"))
@@ -507,7 +502,7 @@ def build_apr():
     else:
         if VERBOSE:
             print "    Project already converted.  Using %s" % os.path.join(subversion_source_root, "apr-util", "aprutil.sln")
-    
+
 
 def build_zlib():
     """Builds zlib.  (Really doesn't build zlib but it does download so that Subversion can build.)"""
@@ -970,7 +965,7 @@ using namespace System::Runtime::CompilerServices;
     add_version("ZLib", ZLIB_VERSION, assemblyinfo_cs_path, assemblyinfo_cpp_path)
     add_version("apr", APR_VERSION, assemblyinfo_cs_path, assemblyinfo_cpp_path)
     add_version("apr-util", APR_UTIL_VERSION, assemblyinfo_cs_path, assemblyinfo_cpp_path)
-    add_version("apr-iconv", APR_ICONV_VERSION, assemblyinfo_cs_path, assemblyinfo_cpp_path)
+#    add_version("apr-iconv", APR_ICONV_VERSION, assemblyinfo_cs_path, assemblyinfo_cpp_path)
     add_version("Ankh", ankhversion, assemblyinfo_cs_path, assemblyinfo_cpp_path)
 
     shutil.copy(assemblyinfo_cs_path, os.path.join(basedir, "src", "Ankh", "AssemblyInfo.cs"))
