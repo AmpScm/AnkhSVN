@@ -139,17 +139,6 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-
-            if(!DesignMode && !e.ClipRectangle.IsEmpty)
-            {
-                _fixUI = true;
-                ForceUIUpdate();
-            }
-        }
-
         [Category("Appearance"), DefaultValue(BorderStyle.None)]
         public BorderStyle BorderStyle
         {
