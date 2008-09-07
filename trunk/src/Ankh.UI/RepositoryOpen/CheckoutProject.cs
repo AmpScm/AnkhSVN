@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Collections;
 using Ankh.VS;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -51,11 +52,11 @@ namespace Ankh.UI.RepositoryOpen
                 _projectUri = value;
                 projectUrl.Text = (value != null) ? value.ToString() : "";
 
-                if (Context != null)
+                if (Context != null && value != null)
                 {
                     IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
-                    string txt = Path.GetExtension(value.PathAndQuery.Split('?')[0].Trim('/'));
+                    string txt = Path.GetExtension(SvnTools.GetFileName(value));
 
                     int ico = mapper.GetIconForExtension(txt);
 

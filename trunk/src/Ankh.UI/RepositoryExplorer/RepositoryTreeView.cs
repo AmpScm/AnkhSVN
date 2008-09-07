@@ -549,21 +549,6 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        internal static string UriItemName(Uri uri)
-        {
-            string v = uri.AbsoluteUri;
-
-            if (v.EndsWith("/"))
-                v = v.TrimEnd('/');
-
-            int lS = v.LastIndexOf('/');
-
-            if (lS >= 0)
-                return Uri.UnescapeDataString(v.Substring(lS + 1));
-            else
-                return Uri.UnescapeDataString(v);
-        }
-
         private RepositoryTreeNode EnsureFolderUri(Uri uri)
         {
             Uri nUri = SvnTools.GetNormalizedUri(uri);
