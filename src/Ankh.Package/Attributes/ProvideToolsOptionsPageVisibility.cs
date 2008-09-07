@@ -13,7 +13,7 @@ namespace Ankh.VSPackage.Attributes
     /// of declaring the options page visibility, so a custom attribute needs to be used.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public sealed class ProvideToolsOptionsPageVisibility : MsVsShell.RegistrationAttribute
+    public sealed class ProvideToolsOptionsPageVisibilityAttribute : MsVsShell.RegistrationAttribute
     {
         private string _categoryName = null;
         private string _pageName = null;
@@ -21,7 +21,7 @@ namespace Ankh.VSPackage.Attributes
 
         /// <summary>
         /// </summary>
-        public ProvideToolsOptionsPageVisibility(string categoryName, string pageName, string commandUIGuid)
+        public ProvideToolsOptionsPageVisibilityAttribute(string categoryName, string pageName, string commandUIGuid)
         {
             _categoryName = categoryName;
             _pageName = pageName;
@@ -71,7 +71,7 @@ namespace Ankh.VSPackage.Attributes
             using (Key childKey = context.CreateKey(RegistryPath))
             {
                 // Set the value for the command UI guid.
-                childKey.SetValue(CommandUIGuid.ToString("B"), 1);
+                childKey.SetValue(CommandUIGuid.ToString("B").ToUpperInvariant(), 1);
             }
         }
 

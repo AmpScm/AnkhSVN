@@ -10,11 +10,11 @@ namespace Ankh.VSPackage.Attributes
     /// This attribute registers the package as a solution property parser
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    internal sealed class ProvideSolutionProperties : RegistrationAttribute
+    internal sealed class ProvideSolutionPropertiesAttribute : RegistrationAttribute
     {
         private string _propName;
 
-        public ProvideSolutionProperties(string propName)
+        public ProvideSolutionPropertiesAttribute(string propName)
         {
             _propName = propName;
         }
@@ -29,7 +29,7 @@ namespace Ankh.VSPackage.Attributes
             {
                 childKey = context.CreateKey(string.Format(CultureInfo.InvariantCulture, "{0}\\{1}", "SolutionPersistence", PropName));
 
-                childKey.SetValue(string.Empty, context.ComponentType.GUID.ToString("B"));
+                childKey.SetValue(string.Empty, context.ComponentType.GUID.ToString("B").ToUpperInvariant());
             }
             finally
             {

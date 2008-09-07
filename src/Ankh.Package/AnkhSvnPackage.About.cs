@@ -59,7 +59,7 @@ namespace Ankh.VSPackage
                 if(rk == null)
                     return null;
 
-                string v = rk.GetValue(Ankh.VSPackage.Attributes.ProvideUIVersion.RemapName) as string;
+                string v = rk.GetValue(Ankh.VSPackage.Attributes.ProvideUIVersionAttribute.RemapName) as string;
 
                 if(string.IsNullOrEmpty(v))
                     return null;
