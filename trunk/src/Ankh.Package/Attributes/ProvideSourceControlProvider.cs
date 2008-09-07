@@ -11,14 +11,14 @@ namespace Ankh.VSPackage.Attributes
     /// This attribute registers the package as source control provider.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    internal sealed class ProvideSourceControlProvider : RegistrationAttribute
+    internal sealed class ProvideSourceControlProviderAttribute : RegistrationAttribute
     {
         private string _regName = null;
         private string _uiName = null;
 
         /// <summary>
         /// </summary>
-        public ProvideSourceControlProvider(string regName, string uiName)
+        public ProvideSourceControlProviderAttribute(string regName, string uiName)
         {
             _regName = regName;
             _uiName = uiName;
@@ -85,12 +85,12 @@ namespace Ankh.VSPackage.Attributes
                 using (Key sccProviderKey = sccProviders.CreateSubkey(RegGuid.ToString("B").ToUpperInvariant()))
                 {
                     sccProviderKey.SetValue("", RegName);
-                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B"));
+                    sccProviderKey.SetValue("Service", SccProviderService.ToString("B").ToUpperInvariant());
 
                     using (Key sccProviderNameKey = sccProviderKey.CreateSubkey("Name"))
                     {
                         sccProviderNameKey.SetValue("", UIName);
-                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B"));
+                        sccProviderNameKey.SetValue("Package", UINamePkg.ToString("B").ToUpperInvariant());
 
                         sccProviderNameKey.Close();
                     }
