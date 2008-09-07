@@ -72,7 +72,7 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dynamically linked to:.
+        ///   Looks up a localized string similar to AnkhSVN is Dynamically linked to: .
         /// </summary>
         internal static string AboutDynamicallyLinkedTo {
             get {
@@ -81,7 +81,7 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked to:.
+        ///   Looks up a localized string similar to AnkhSVN is Linked to: .
         /// </summary>
         internal static string AboutLinkedTo {
             get {
