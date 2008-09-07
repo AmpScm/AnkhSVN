@@ -228,7 +228,7 @@ namespace Ankh.Scc
 
             if ((info.CopyFromUri != null) && (info.Uri != info.CopyFromUri))
                 return;
-            else if (info.CopyFromRev >= 0 && info.CopyFromRev != info.Revision)
+            else if (info.CopyFromRevision >= 0 && info.CopyFromRevision != info.Revision)
                 return;
 
             // Ok, the file was copied back to its original location!

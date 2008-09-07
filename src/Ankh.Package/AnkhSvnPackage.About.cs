@@ -118,11 +118,42 @@ namespace Ankh.VSPackage
 
         public int ProductDetails(out string pbstrProductDetails)
         {
-            pbstrProductDetails = string.Format(Resources.AboutDetails,
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat(Resources.AboutDetails,
                 UIVersion.ToString(),
                 PackageVersion.ToString(),
                 SvnClient.Version,
                 SvnClient.SharpSvnVersion);
+
+            sb.AppendLine();
+            sb.AppendLine();
+            sb.Append(Resources.AboutLinkedTo);
+            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            {
+                if (!lib.DynamicallyLinked)
+                {
+                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
+                    sb.Append(", ");
+                }
+            }
+
+            sb.Length -= 2;
+
+            sb.AppendLine();
+
+            sb.Append(Resources.AboutDynamicallyLinkedTo);
+            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            {
+                if (lib.DynamicallyLinked)
+                {
+                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
+                    sb.Append(", ");
+                }
+            }
+
+            sb.Length -= 2;
+
+            pbstrProductDetails = sb.ToString();
 
             return VSConstants.S_OK;
         }

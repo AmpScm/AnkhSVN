@@ -408,7 +408,7 @@ namespace Ankh.Services
             else if (revision == null)
                 throw new ArgumentNullException("revision");
 
-            string name = Path.GetFileNameWithoutExtension(target.Name) + "." + revision.ToString() + target.Extension;
+            string name = target.NameWithoutExtension + "." + revision.ToString() + target.Extension;
 
             string file;
             if(_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
@@ -443,11 +443,7 @@ namespace Ankh.Services
             else if (revision == null)
                 throw new ArgumentNullException("revision");
 
-            string targetName = target.TargetName;
-            int li = targetName.LastIndexOfAny(new char[] { '/', '\\' });
-
-            targetName = targetName.Substring(li + 1);
-
+            string targetName = target.FileName;
             string name = Path.GetFileNameWithoutExtension(targetName) + "." + revision.ToString() + Path.GetExtension(targetName);
 
             string file;

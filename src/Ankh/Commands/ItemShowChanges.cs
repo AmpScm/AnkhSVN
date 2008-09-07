@@ -158,6 +158,8 @@ namespace Ankh.Commands
                             revRange = new SvnRevisionRange(copiedFrom.Revision, revRange.EndRevision);
 
                         da.BaseFile = diff.GetTempFile(copiedFrom, revRange.StartRevision, true);
+
+                        da.BaseTitle = copiedFrom.FileName + " - " + revRange.StartRevision.ToString();
                     }
                 }
 
@@ -165,12 +167,14 @@ namespace Ankh.Commands
                 {
                     da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
                         diff.GetTempFile(item, revRange.StartRevision, true);
+
+                    da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
                 }
 
                 da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
                     diff.GetTempFile(item, revRange.EndRevision, true);
 
-                da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
+                
                 da.MineTitle = item.Name + " - " + revRange.EndRevision.ToString();
 
 
@@ -193,7 +197,7 @@ namespace Ankh.Commands
                     {
                         if (ee.CopyFromUri != null)
                         {
-                            copiedFrom = new SvnUriTarget(ee.CopyFromUri, ee.CopyFromRev);
+                            copiedFrom = new SvnUriTarget(ee.CopyFromUri, ee.CopyFromRevision);
                         }
                     });
             }

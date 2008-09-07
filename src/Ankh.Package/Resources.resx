@@ -122,6 +122,12 @@
  * Ankh.Package {1}
  * Subversion {2} via SharpSvn {3}</value>
   </data>
+  <data name="AboutDynamicallyLinkedTo" xml:space="preserve">
+    <value>Dynamically linked to:</value>
+  </data>
+  <data name="AboutLinkedTo" xml:space="preserve">
+    <value>Linked to:</value>
+  </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
   </data>
