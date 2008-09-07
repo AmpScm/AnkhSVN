@@ -62,7 +62,7 @@ namespace Ankh.Commands
 
             string path = settings.NewProjectLocation;
 
-            string name = Path.GetFileNameWithoutExtension(selectedUri.PathAndQuery.Split('?')[0].Trim('/'));
+            string name = SvnTools.GetFileName(selectedUri);
 
             string newPath;
             int n = 0;

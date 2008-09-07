@@ -20,8 +20,7 @@ namespace Ankh.UI.RepositoryExplorer
             _info = info;
             _uri = info.EntryUri;
 
-            string name = RepositoryTreeView.UriItemName(info.EntryUri);
-            Text = name;
+            string name = SvnTools.GetFileName(info.EntryUri);
 
             bool isFile = (info.Entry.NodeKind == SvnNodeKind.File);
 
