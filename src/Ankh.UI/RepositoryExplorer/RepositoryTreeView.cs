@@ -124,6 +124,32 @@ namespace Ankh.UI.RepositoryExplorer
             BrowseRoot(serverNode, uri);
         }
 
+        public void RemoveRootOf(Uri uri)
+        {
+            if (this.Retrieving || uri == null) { return; }
+            Uri serverUri;
+            RepositoryTreeNode serverNode = FindServer(uri, out serverUri);
+            if (serverNode != null)
+            {
+                #region clean up uri-tree node cache
+                List<Uri> removeUris = new List<Uri>();
+                foreach (Uri cachedUri in _nodeMap.Keys)
+                {
+                    if (serverUri.IsBaseOf(cachedUri))
+                    {
+                        removeUris.Add(cachedUri);
+                    }
+                }
+
+                foreach (Uri removeUri in removeUris)
+                {
+                    _nodeMap.Remove(removeUri);
+                }
+                #endregion
+                this.RootNode.Nodes.Remove(serverNode);
+            }
+        }
+
         private RepositoryTreeNode EnsureServerOf(Uri uri)
         {
             Uri serverUri;
