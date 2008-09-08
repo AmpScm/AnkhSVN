@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class EolStylePropertyEditor
     {
@@ -79,7 +79,7 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.eolStyleGroupBox);
             this.Name = "EolStylePropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
+            this.Size = new System.Drawing.Size(348, 196);
             this.eolStyleGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 

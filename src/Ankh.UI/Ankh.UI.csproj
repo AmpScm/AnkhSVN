@@ -166,13 +166,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.Designer.cs">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffWindow\MergeToolWindowControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
@@ -198,6 +198,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PCStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="PropertyEditors\PropertyEditControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranch.cs">
       <SubType>Form</SubType>
@@ -402,7 +405,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnLog\LogToolWindowControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogToolWindowControl.Designer.cs">
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
@@ -614,7 +617,7 @@
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.Designer.cs">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
@@ -708,7 +711,7 @@
     <Compile Include="WorkingCopyExplorer\OldStore\Trees\NodeStatusKind.cs" />
     <Compile Include="WorkingCopyExplorer\OldStore\Trees\WCTreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.Designer.cs">
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>

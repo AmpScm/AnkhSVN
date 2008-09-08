@@ -7,12 +7,12 @@ using System.Data;
 using System.Windows.Forms;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Property editor for executable properties.
     /// </summary>
-    internal partial class ExecutablePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    internal partial class ExecutablePropertyEditor : PropertyEditControl, IPropertyEditor
     {
 		
         public event EventHandler Changed;

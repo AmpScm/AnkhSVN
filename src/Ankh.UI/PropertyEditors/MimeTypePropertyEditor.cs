@@ -8,12 +8,12 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Editor for the mime-type properties.
     /// </summary>
-    public partial class MimeTypePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    partial class MimeTypePropertyEditor : PropertyEditControl, IPropertyEditor
     {
         public event EventHandler Changed;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class IgnorePropertyEditor
     {
@@ -56,7 +56,6 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.ignoreGroupBox);
             this.Name = "IgnorePropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
             this.ignoreGroupBox.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

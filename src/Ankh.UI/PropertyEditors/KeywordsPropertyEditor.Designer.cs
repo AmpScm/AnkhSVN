@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class KeywordsPropertyEditor
     {
@@ -14,97 +14,42 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.urlCheckBox = new System.Windows.Forms.CheckBox();
-            this.revisionCheckBox = new System.Windows.Forms.CheckBox();
-            this.authorCheckBox = new System.Windows.Forms.CheckBox();
-            this.allCheckBox = new System.Windows.Forms.CheckBox();
-            this.dateCheckBox = new System.Windows.Forms.CheckBox();
-            this.keywordsGoupBox = new System.Windows.Forms.GroupBox();
             this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.keywordsGoupBox.SuspendLayout();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
-            // urlCheckBox
+            // checkedListBox1
             // 
-            this.urlCheckBox.Location = new System.Drawing.Point(6, 93);
-            this.urlCheckBox.Name = "urlCheckBox";
-            this.urlCheckBox.Size = new System.Drawing.Size(104, 20);
-            this.urlCheckBox.TabIndex = 5;
-            this.urlCheckBox.Tag = "URL";
-            this.urlCheckBox.Text = "URL";
-            this.urlCheckBox.Click += new System.EventHandler(this.CheckBox_Click);
-            // 
-            // revisionCheckBox
-            // 
-            this.revisionCheckBox.Location = new System.Drawing.Point(6, 43);
-            this.revisionCheckBox.Name = "revisionCheckBox";
-            this.revisionCheckBox.Size = new System.Drawing.Size(104, 20);
-            this.revisionCheckBox.TabIndex = 3;
-            this.revisionCheckBox.Tag = "Revision";
-            this.revisionCheckBox.Text = "Revision";
-            this.revisionCheckBox.Click += new System.EventHandler(this.CheckBox_Click);
-            // 
-            // authorCheckBox
-            // 
-            this.authorCheckBox.Location = new System.Drawing.Point(6, 68);
-            this.authorCheckBox.Name = "authorCheckBox";
-            this.authorCheckBox.Size = new System.Drawing.Size(104, 20);
-            this.authorCheckBox.TabIndex = 4;
-            this.authorCheckBox.Tag = "Author";
-            this.authorCheckBox.Text = "Author";
-            this.authorCheckBox.Click += new System.EventHandler(this.CheckBox_Click);
-            // 
-            // allCheckBox
-            // 
-            this.allCheckBox.Location = new System.Drawing.Point(6, 117);
-            this.allCheckBox.Name = "allCheckBox";
-            this.allCheckBox.Size = new System.Drawing.Size(104, 20);
-            this.allCheckBox.TabIndex = 6;
-            this.allCheckBox.Text = "All";
-            this.allCheckBox.Click += new System.EventHandler(this.CheckBox_Click);
-            // 
-            // dateCheckBox
-            // 
-            this.dateCheckBox.Location = new System.Drawing.Point(6, 17);
-            this.dateCheckBox.Name = "dateCheckBox";
-            this.dateCheckBox.Size = new System.Drawing.Size(104, 20);
-            this.dateCheckBox.TabIndex = 7;
-            this.dateCheckBox.Tag = "Date";
-            this.dateCheckBox.Text = "Date";
-            this.dateCheckBox.Click += new System.EventHandler(this.CheckBox_Click);
-            // 
-            // keywordsGoupBox
-            // 
-            this.keywordsGoupBox.Controls.Add(this.dateCheckBox);
-            this.keywordsGoupBox.Controls.Add(this.revisionCheckBox);
-            this.keywordsGoupBox.Controls.Add(this.allCheckBox);
-            this.keywordsGoupBox.Controls.Add(this.urlCheckBox);
-            this.keywordsGoupBox.Controls.Add(this.authorCheckBox);
-            this.keywordsGoupBox.Location = new System.Drawing.Point(5, 6);
-            this.keywordsGoupBox.Name = "keywordsGoupBox";
-            this.keywordsGoupBox.Size = new System.Drawing.Size(242, 141);
-            this.keywordsGoupBox.TabIndex = 8;
-            this.keywordsGoupBox.TabStop = false;
-            this.keywordsGoupBox.Text = "Select what to substitute";
+            this.checkedListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Items.AddRange(new object[] {
+            "Author",
+            "Date",
+            "HeadURL",
+            "Id",
+            "LastChangedBy",
+            "LastChangedDate",
+            "LastChangedRevision",
+            "Rev",
+            "Revision",
+            "URL"});
+            this.checkedListBox1.Location = new System.Drawing.Point(0, 0);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(348, 184);
+            this.checkedListBox1.TabIndex = 1;
+            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             // 
             // KeywordsPropertyEditor
             // 
-            this.Controls.Add(this.keywordsGoupBox);
+            this.Controls.Add(this.checkedListBox1);
             this.Name = "KeywordsPropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
-            this.keywordsGoupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
         #endregion
 
-        private System.Windows.Forms.CheckBox dateCheckBox;
-        private System.Windows.Forms.CheckBox urlCheckBox;
-        private System.Windows.Forms.CheckBox revisionCheckBox;
-        private System.Windows.Forms.CheckBox allCheckBox;
-        private System.Windows.Forms.CheckBox authorCheckBox;
-        private System.Windows.Forms.GroupBox keywordsGoupBox;
         private System.Windows.Forms.ToolTip conflictToolTip;
         private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }

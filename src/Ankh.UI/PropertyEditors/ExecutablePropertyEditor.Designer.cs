@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class ExecutablePropertyEditor
     {
@@ -32,7 +32,6 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.executableCheckBox);
             this.Name = "ExecutablePropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
             this.ResumeLayout(false);
 
         }

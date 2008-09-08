@@ -7,12 +7,12 @@ using System.Data;
 using System.Windows.Forms;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Property editor for the predefined ignore property.
     /// </summary>
-    public partial class IgnorePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    partial class IgnorePropertyEditor : PropertyEditControl, IPropertyEditor
     {
         public event EventHandler Changed;
 

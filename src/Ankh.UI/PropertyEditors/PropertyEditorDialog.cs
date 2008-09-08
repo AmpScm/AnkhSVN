@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Windows.Forms.Design;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Dialog for editing svn properties. 

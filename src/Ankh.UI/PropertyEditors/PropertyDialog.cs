@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     public partial class PropertyDialog : Form
     {
@@ -114,6 +114,7 @@ namespace Ankh.UI
             //Clear the editor panel and add the new editor.
             this.editorPanel.Controls.Clear();
             this.editorPanel.Controls.Add((Control)editor);
+            ((Control)editor).Dock = DockStyle.Fill;
 
             //Sets the current editor to match the selected item.
             this.currentEditor = editor;
