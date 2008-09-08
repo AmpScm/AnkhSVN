@@ -55,6 +55,7 @@
             this.pendingChangesTabs.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.pendingChangesTabs.Size = new System.Drawing.Size(36, 300);
             this.pendingChangesTabs.TabIndex = 0;
+            this.pendingChangesTabs.TabStop = true;
             this.pendingChangesTabs.Text = "toolStrip1";
             // 
             // fileChangesButton
@@ -111,10 +112,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(804, 300);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pendingChangesTabs);
             this.Name = "PendingChangesToolControl";
-            this.Size = new System.Drawing.Size(804, 300);
             this.pendingChangesTabs.ResumeLayout(false);
             this.pendingChangesTabs.PerformLayout();
             this.ResumeLayout(false);
