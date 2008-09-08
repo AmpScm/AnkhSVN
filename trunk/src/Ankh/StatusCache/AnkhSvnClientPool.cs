@@ -103,10 +103,8 @@ namespace Ankh
             return client;
         }
 
-        internal bool ReturnClient(SvnPoolClient poolClient, HybridCollection<string> changedPaths, IList<string> deleted)
+        internal void NotifyChanges(HybridCollection<string> changedPaths, IList<string> deleted)
         {
-            bool ok = ReturnClient(poolClient);
-
             if (deleted != null && deleted.Count > 0)
             {
                 if (changedPaths == null)
@@ -118,7 +116,7 @@ namespace Ankh
                 {
                     foreach (SvnItem item in cache.GetCachedBelow(deleted))
                     {
-                        if(!changedPaths.Contains(item.FullPath))
+                        if (!changedPaths.Contains(item.FullPath))
                             changedPaths.Add(item.FullPath);
                     }
                 }
@@ -134,8 +132,6 @@ namespace Ankh
                     monitor.ScheduleSvnStatus(changedPaths);
                 }
             }
-
-            return ok;
         }
 
         public bool ReturnClient(SvnPoolClient poolClient)
@@ -203,7 +199,12 @@ namespace Ankh
                 paths.AddRange(_touchedPaths);
                 _touchedPaths.Clear();
                 _deleted.Clear();
-                if (!((AnkhSvnClientPool)SvnClientPool).ReturnClient(this, paths, deleted))
+
+                AnkhSvnClientPool pool = (AnkhSvnClientPool)SvnClientPool;
+
+                pool.NotifyChanges(paths, deleted);
+
+                if (base.IsCommandRunning || base.IsDisposed || !pool.ReturnClient(this))
                 {
                     InnerDispose();
                 }
