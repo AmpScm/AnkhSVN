@@ -348,9 +348,22 @@ namespace Ankh.VSPackage
             }
         }
 
+        bool _created;
         public override IWin32Window Window
         {
-            get { return _control; }
+            get
+            {
+                if (!_created)
+                {
+                    _created = true;
+                    if (!_control.IsHandleCreated)
+                    {
+                        _control.Visible = true; // If .Visible = false no window is created!
+                        _control.CreateControl();
+                    }
+                }
+                return _control;
+            }
         }
 
         [DebuggerStepThrough]
