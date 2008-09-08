@@ -8,11 +8,37 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl, IAnkhCommandHookAccessor
+    public class AnkhToolWindowControl : Form, IAnkhToolWindowControl, IAnkhCommandHookAccessor
     {
         IAnkhToolWindowHost _host;
         protected AnkhToolWindowControl()
         {
+            base.FormBorderStyle = FormBorderStyle.None;
+        }
+
+        [DefaultValue(FormBorderStyle.None), Localizable(false)]
+        public new FormBorderStyle FormBorderStyle
+        {
+            get { return base.FormBorderStyle; }
+            set { base.FormBorderStyle = value; }
+        }
+
+        public override string Text
+        {
+            get 
+            { 
+                if(_host != null)
+                    return _host.Title;
+                else
+                    return base.Text;
+            }
+            set
+            {
+                if (_host != null)
+                    _host.Title = value;
+
+                base.Text = value;
+            }
         }
 
         /// <summary>
@@ -81,8 +107,15 @@ namespace Ankh.UI
         {
         }
 
+        /// <summary>
+        /// Occurs when the frame show state changed
+        /// </summary>
+        public event EventHandler<FrameEventArgs> FrameShow;
+
         protected virtual void OnFrameShow(FrameEventArgs e)
         {
+            if (FrameShow != null)
+                FrameShow(this, e);
         }
 
         void IAnkhToolWindowControl.OnFrameShow(FrameEventArgs e)
