@@ -55,9 +55,25 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.AddRoot(uri);
         }
 
+        /// <summary>
+        /// Remove the root(server) of the node identified by the <paramref name="uri"/>
+        /// </summary>
+        /// <param name="uri">URI of the tree node</param>
+        public void RemoveRootOf(Uri uri)
+        {
+            this.treeView.RemoveRootOf(uri);
+        }
+
+        /// <summary>
+        /// Get the URI of the selected node
+        /// </summary>
         public Uri SelectedUri
         {
-            get { return null; }
+            get
+            {
+                RepositoryTreeNode selected = this.treeView.SelectedNode;
+                return selected == null ? null : selected.RawUri;
+            }
         }
 
         private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
