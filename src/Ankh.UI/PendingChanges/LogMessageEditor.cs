@@ -26,6 +26,7 @@ using IServiceProvider = System.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using System.Collections;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -65,12 +66,26 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnHandleCreated(e);
 
-            Control c = TopLevelControl;
+            Control topParent = TopLevelControl;
 
-            VSContainerForm ownerForm = c as VSContainerForm;
-            if (ownerForm == null || !ownerForm.Modal)
+            VSContainerForm ownerForm = topParent as VSContainerForm;
+            if (ownerForm != null && ownerForm.Modal)
+            {
+                InitializeForm(ownerForm);
                 return;
+            }
 
+            IAnkhToolWindowControl toolWindow = topParent as IAnkhToolWindowControl;
+
+            if (toolWindow != null)
+            {
+                InitializeToolWindow(toolWindow);
+                return;
+            }
+        }
+
+        void InitializeForm(VSContainerForm ownerForm)
+        {
             if (CommandTarget == null)
             {
                 Init(ownerForm.Context, true);
@@ -86,6 +101,23 @@ namespace Ankh.UI.PendingChanges
             {
                 FixUI();
                 Text = _text;
+            }
+        }
+
+        void InitializeToolWindow(IAnkhToolWindowControl toolWindow)
+        {
+            toolWindow.FrameShow += new EventHandler<FrameEventArgs>(OnToolWindowFrameShow);
+            Init(toolWindow.ToolWindowHost, false);
+            toolWindow.ToolWindowHost.AddCommandTarget(CommandTarget);
+        }
+
+        void OnToolWindowFrameShow(object sender, FrameEventArgs e)
+        {
+            switch (e.Show)
+            {
+                case __FRAMESHOW.FRAMESHOW_WinShown:
+                    _fixUI = true;
+                    break;
             }
         }
 

@@ -22,18 +22,9 @@ namespace Ankh.UI.PendingChanges
             logMessageEditor.PasteSource = pendingCommits;
         }
 
-        bool _createdEditor;    
-
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-
-			if (!_createdEditor)
-			{
-				logMessageEditor.Init(Context, false);
-				ToolControl.ToolWindowHost.AddCommandTarget(logMessageEditor.CommandTarget);
-				_createdEditor = true;
-			}
 
 			if (pendingCommits != null)
 			{
@@ -90,12 +81,6 @@ namespace Ankh.UI.PendingChanges
 
                 return _manager;
             }
-        }
-
-        protected override void OnHandleDestroyed(EventArgs e)
-        {
-            base.OnHandleDestroyed(e);
-            _createdEditor = false;
         }
 
         protected override Type PageType
