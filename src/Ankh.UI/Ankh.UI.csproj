@@ -192,7 +192,7 @@
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PendingChanges\PCStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -540,7 +540,7 @@
       <DependentUpon>PendingChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesToolControl.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesToolControl.Designer.cs">
       <DependentUpon>PendingChangesToolControl.cs</DependentUpon>

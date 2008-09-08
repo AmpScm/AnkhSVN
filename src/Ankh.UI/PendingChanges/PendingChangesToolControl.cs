@@ -17,13 +17,13 @@ namespace Ankh.UI.PendingChanges
 {
     public partial class PendingChangesToolControl : AnkhToolWindowControl
     {
-		readonly List<PendingChangesPage> _pages;
-		readonly PendingCommitsPage _commitsPage;
-		readonly PendingIssuesPage _issuesPage;
-		readonly RecentChangesPage _changesPage;
-		readonly PendingConflictsPage _conflictsPage;
-		PendingChangesPage _currentPage;
-        
+        readonly List<PendingChangesPage> _pages;
+        readonly PendingCommitsPage _commitsPage;
+        readonly PendingIssuesPage _issuesPage;
+        readonly RecentChangesPage _changesPage;
+        readonly PendingConflictsPage _conflictsPage;
+        PendingChangesPage _currentPage;
+
         public PendingChangesToolControl()
         {
             InitializeComponent();
@@ -33,19 +33,19 @@ namespace Ankh.UI.PendingChanges
             _changesPage = new RecentChangesPage();
             _conflictsPage = new PendingConflictsPage();
 
-			_pages = new List<PendingChangesPage>();
-			_pages.Add(_commitsPage);
-			_pages.Add(_issuesPage);
-			_pages.Add(_changesPage);
-			_pages.Add(_conflictsPage);
+            _pages = new List<PendingChangesPage>();
+            _pages.Add(_commitsPage);
+            _pages.Add(_issuesPage);
+            _pages.Add(_changesPage);
+            _pages.Add(_conflictsPage);
         }
 
         protected override void OnLoad(EventArgs e)
         {
-			foreach (PendingChangesPage p in _pages)
-			{
-				p.Context = Context;
-				p.ToolControl = this;
+            foreach (PendingChangesPage p in _pages)
+            {
+                p.Context = Context;
+                p.ToolControl = this;
 
                 if (!panel1.Controls.Contains(p))
                 {
@@ -53,7 +53,7 @@ namespace Ankh.UI.PendingChanges
                     p.Dock = DockStyle.Fill;
                     panel1.Controls.Add(p);
                 }
-			}
+            }
 
             base.OnLoad(e);
 
@@ -66,9 +66,9 @@ namespace Ankh.UI.PendingChanges
 
             ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
             //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
-			UpdateColors();
+            UpdateColors();
             UpdateCaption();
-        }       
+        }
 
         private void UpdateColors()
         {
@@ -76,18 +76,18 @@ namespace Ankh.UI.PendingChanges
                 return;
 
             // We should use the VS colors instead of the ones provided by the OS
-			IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
-            
+            IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+
             Color color;
             if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
                 BackColor = color;
 
-            if(colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
                 pendingChangesTabs.BackColor = color;
 
-            if(colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
                 pendingChangesTabs.ForeColor = color;
-        }   
+        }
 
         void ShowPanel(PendingChangesPage page)
         {
@@ -113,7 +113,7 @@ namespace Ankh.UI.PendingChanges
             if (!foundPage)
             {
                 panel1.Controls.Add(page);
-                page.Dock = DockStyle.Fill;                
+                page.Dock = DockStyle.Fill;
             }
 
             _currentPage = page;
@@ -126,7 +126,7 @@ namespace Ankh.UI.PendingChanges
 
             if (Context != null)
             {
-				IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+                IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
                 if (cmd != null)
                     cmd.UpdateCommandUI(false);
@@ -137,12 +137,12 @@ namespace Ankh.UI.PendingChanges
 
         void UpdateCaption()
         {
-			if (ToolWindowHost != null)
+            if (ToolWindowHost != null)
             {
                 if (_currentPage == null || string.IsNullOrEmpty(_currentPage.Text))
-					ToolWindowHost.Title = ToolWindowHost.OriginalTitle;
+                    ToolWindowHost.Title = ToolWindowHost.OriginalTitle;
                 else
-					ToolWindowHost.Title = ToolWindowHost.OriginalTitle + " - " + _currentPage.Text;
+                    ToolWindowHost.Title = ToolWindowHost.OriginalTitle + " - " + _currentPage.Text;
             }
         }
 
