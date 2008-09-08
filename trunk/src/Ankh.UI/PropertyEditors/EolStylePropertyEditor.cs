@@ -7,12 +7,12 @@ using System.Data;
 using System.Windows.Forms;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Summary description for EolStylePropertyEditor.
     /// </summary>
-    internal partial class EolStylePropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    internal partial class EolStylePropertyEditor : PropertyEditControl, IPropertyEditor
     {
         public event EventHandler Changed;
 

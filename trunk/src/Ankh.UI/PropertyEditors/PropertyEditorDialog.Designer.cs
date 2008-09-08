@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class PropertyEditorDialog
     {

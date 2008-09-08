@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class MimeTypePropertyEditor
     {
@@ -32,9 +32,10 @@ namespace Ankh.UI
             // mimeGroupBox
             // 
             this.mimeGroupBox.Controls.Add(this.mimeTextBox);
-            this.mimeGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.mimeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mimeGroupBox.Location = new System.Drawing.Point(0, 0);
             this.mimeGroupBox.Name = "mimeGroupBox";
-            this.mimeGroupBox.Size = new System.Drawing.Size(244, 144);
+            this.mimeGroupBox.Size = new System.Drawing.Size(348, 196);
             this.mimeGroupBox.TabIndex = 3;
             this.mimeGroupBox.TabStop = false;
             this.mimeGroupBox.Text = "Enter mime-type property";
@@ -43,7 +44,6 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.mimeGroupBox);
             this.Name = "MimeTypePropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
             this.mimeGroupBox.ResumeLayout(false);
             this.mimeGroupBox.PerformLayout();
             this.ResumeLayout(false);

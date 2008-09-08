@@ -1,7 +1,7 @@
 //$Id$
 using System;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Interface which has to be implemented by property editor user controls

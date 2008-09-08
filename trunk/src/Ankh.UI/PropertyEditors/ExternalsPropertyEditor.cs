@@ -7,7 +7,7 @@ using System.Data;
 using System.Windows.Forms;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Editor for externals properties.

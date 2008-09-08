@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     partial class ExternalsPropertyEditor
     {
@@ -57,7 +57,7 @@ namespace Ankh.UI
             // 
             this.Controls.Add(this.externalsGroupBox);
             this.Name = "ExternalsPropertyEditor";
-            this.Size = new System.Drawing.Size(250, 150);
+            this.Size = new System.Drawing.Size(348, 196);
             this.externalsGroupBox.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

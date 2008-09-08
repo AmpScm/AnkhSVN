@@ -6,12 +6,12 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 
-namespace Ankh.UI
+namespace Ankh.UI.PropertyEditors
 {
     /// <summary>
     /// Property editor for plain properties
     /// </summary>
-    internal partial class PlainPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    internal partial class PlainPropertyEditor : PropertyEditControl, IPropertyEditor
     {
         public event EventHandler Changed;
         
