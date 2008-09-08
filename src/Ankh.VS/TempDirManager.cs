@@ -17,7 +17,7 @@ namespace Ankh.VS
 
         public string GetTempDir()
         {
-            string name = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            string name = Path.Combine(Path.GetTempPath(), "AnkhSVN\\" + Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(name);
             _tempDirs.AddDirectory(name, false);
             return name;
@@ -38,8 +38,14 @@ namespace Ankh.VS
 
             public void Dispose()
             {
-                GC.SuppressFinalize(this);
-                Dispose(true);
+                try
+                {
+                    Dispose(true);
+                }
+                finally
+                {
+                    GC.SuppressFinalize(this);
+                }
             }
 
             void Dispose(bool disposing)
