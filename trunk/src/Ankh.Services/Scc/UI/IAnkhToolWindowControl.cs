@@ -46,6 +46,12 @@ namespace Ankh.Scc.UI
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Scc.UI.FrameEventArgs"/> instance containing the event data.</param>
         void OnFrameSize(FrameEventArgs e);
+
+
+        /// <summary>
+        /// Occurs when the frame show state changed
+        /// </summary>
+        event EventHandler<FrameEventArgs> FrameShow;
     }
 
     /// <summary>
