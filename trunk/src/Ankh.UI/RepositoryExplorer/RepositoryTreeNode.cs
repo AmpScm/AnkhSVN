@@ -98,7 +98,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             if (!_loaded)
             {
-                if(RawUri != null)
+                if(RawUri != null && this.IsRepositoryPath)
                     TreeView.BrowseItem(RawUri);
                 _loaded = true;
             }
