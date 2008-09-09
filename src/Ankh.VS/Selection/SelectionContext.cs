@@ -692,6 +692,11 @@ namespace Ankh.VS.Selection
 
         #region ISccProjectWalker Members
 
+        bool IncludeNoScc(ProjectWalkDepth depth)
+        {
+            return (depth != ProjectWalkDepth.AllDescendantsInHierarchy) && (depth != ProjectWalkDepth.SpecialFiles);
+        }
+
         /// <summary>
         /// Gets the list of files specified by the hierarchy (IVsSccProject2 or IVsHierarchy)
         /// </summary>
@@ -709,7 +714,7 @@ namespace Ankh.VS.Selection
             SelectionItem si = new SelectionItem(hierarchy, id);
 
             string[] files;
-            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, depth != ProjectWalkDepth.AllDescendantsInHierarchy, map))
+            if (!SelectionUtils.GetSccFiles(si, out files, depth >= ProjectWalkDepth.SpecialFiles, IncludeNoScc(depth), map))
                 yield break;
 
             foreach (string file in files)
