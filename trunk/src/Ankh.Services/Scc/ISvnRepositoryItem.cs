@@ -30,5 +30,10 @@ namespace Ankh.Scc
         /// Refreshes the item.
         /// </summary>
         void RefreshItem(bool refreshParent);
+
+        /// <summary>
+        /// Gets whether this item's URI points to an actual remote repository item.
+        /// </summary>
+        bool IsRepositoryItem { get; }
     }
 }

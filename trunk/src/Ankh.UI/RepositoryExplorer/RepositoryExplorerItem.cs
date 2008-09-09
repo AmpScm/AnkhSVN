@@ -126,16 +126,25 @@ namespace Ankh.UI.RepositoryExplorer
         {
             get { return null; }
         }
-        #endregion
-
-        #region ISvnRepositoryItem Members
-
 
         public void RefreshItem(bool refreshParent)
         {
             //throw new NotImplementedException();
         }
 
+        [Browsable(false)]
+        public bool IsRepositoryItem
+        {
+            get
+            {
+                if (this._uri == null) { return false; }
+                if (this._tn != null)
+                {
+                    return this._tn.IsRepositoryPath;
+                }
+                return true;
+            }
+        }
         #endregion
     }
 }
