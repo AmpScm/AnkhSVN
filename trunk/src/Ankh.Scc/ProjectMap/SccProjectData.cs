@@ -351,7 +351,39 @@ namespace Ankh.Scc.ProjectMap
         }
 
         internal void AddPath(string path)
-        {
+        {            
+            if (_loaded && IsWebSite)
+            {                
+                uint fid = VSConstants.VSITEMID_NIL;
+
+                if (TryGetProjectFileId(path, out fid))
+                {
+                    // OK: Websites try to add everything they see below their directory
+                    // We only add these files if they are actually SCC items
+
+                    bool add = false;
+                    ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+
+                    foreach (string file in walker.GetSccFiles(ProjectHierarchy, fid, ProjectWalkDepth.SpecialFiles, null))
+                    {
+                        if (string.Equals(file, path, StringComparison.OrdinalIgnoreCase))
+                        {
+                            add = true;
+                            break;
+                        }
+                    }
+
+                    if (!add)
+                        return;
+                }
+                else
+                {
+                    // File is either not in project or a scc special file
+                    // Pass
+                }
+            }
+
+
             if (_files.Contains(path))
                 _files[path].AddReference();
             else

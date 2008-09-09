@@ -8,7 +8,13 @@ namespace Ankh.Scc
     public enum ProjectWalkDepth
     {
         Empty,
+        /// <summary>
+        /// The file and its SCC items. (Walks only SCC items)
+        /// </summary>
         SpecialFiles,
+        /// <summary>
+        /// All descendants in the specified hierarchy only (Walks only SCC items)
+        /// </summary>
         AllDescendantsInHierarchy,
         AllDescendants
     }
