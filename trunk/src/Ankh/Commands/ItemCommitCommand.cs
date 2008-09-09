@@ -93,7 +93,7 @@ namespace Ankh.Commands
 
                 storedLogMessage = pcd.LogMessageText;
 
-                if (pcd.ShowDialog(e.Context) != DialogResult.OK)
+                if (dr != DialogResult.OK)
                     return;
 
                 PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
