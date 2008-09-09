@@ -29,7 +29,7 @@
       <title localize="false" />
     </component>
     <component visibility="1" type="Html" order="8">
-      <title localize="false">Feedback</title>
+      <title localize="false" />
       <filename>HtmlSnippet6.html</filename>
     </component>
   </component_list>
