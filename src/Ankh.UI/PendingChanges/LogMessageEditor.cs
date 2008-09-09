@@ -118,6 +118,7 @@ namespace Ankh.UI.PendingChanges
             {
                 case __FRAMESHOW.FRAMESHOW_WinShown:
                     _fixSize = true;
+                    FixUI();
                     break;
             }
         }
