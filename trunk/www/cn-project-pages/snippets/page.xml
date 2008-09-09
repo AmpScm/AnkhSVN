@@ -28,6 +28,10 @@
     <component visibility="1" type="Subproject" order="7">
       <title localize="false" />
     </component>
+    <component visibility="1" type="Html" order="8">
+      <title localize="false">Feedback</title>
+      <filename>HtmlSnippet6.html</filename>
+    </component>
   </component_list>
 </page>
 
