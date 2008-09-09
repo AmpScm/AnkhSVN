@@ -40,6 +40,7 @@ namespace Ankh.UI.PendingChanges
         private CodeEditorNativeWindow codeEditorNativeWindow;
         BorderStyle _borderStyle;
         bool _fixUI;
+        bool _fixSize;
 
         public LogMessageEditor()
         {
@@ -116,7 +117,7 @@ namespace Ankh.UI.PendingChanges
             switch (e.Show)
             {
                 case __FRAMESHOW.FRAMESHOW_WinShown:
-                    _fixUI = true;
+                    _fixSize = true;
                     break;
             }
         }
@@ -310,7 +311,7 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            ForceUIUpdate();
+            ForceSizeUpdate();
         }
 
         /// <summary>
@@ -321,42 +322,46 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnLocationChanged(e);
 
-            ForceUIUpdate();
+            ForceSizeUpdate();
         }
 
-        public void ForceUIUpdate()
+        public void ForceSizeUpdate()
         {
-            if (codeEditorNativeWindow != null)
-            {
-                codeEditorNativeWindow.Size = ClientRectangle.Size;
-
-                FixUI();
-            }
+            _fixSize = true;
+            FixUI();
         }
 
         void FixUI()
         {
-            if (!_fixUI || _context == null)
+            if ((!_fixUI && !_fixSize) || _context == null || codeEditorNativeWindow == null)
                 return;
 
             IntPtr hwndTop;
 
-            codeEditorNativeWindow.Size = ClientRectangle.Size;
-
-            IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
-
-            if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out hwndTop)))
+            if (_fixSize)
             {
-                if (!CodeEditorNativeWindow.NativeMethods.IsWindow(hwndTop) ||
-                    (hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
-                {
-                    // For some reason VS gives an invalid window (the desktop) while loading
-                    return;
-                }
+                _fixSize = false;
+                codeEditorNativeWindow.Size = ClientRectangle.Size;
+            }
 
-                // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
-                CodeEditorNativeWindow.NativeMethods.PostMessage(hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
-                _fixUI = false;
+            if (_fixUI)
+            {
+
+                IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out hwndTop)))
+                {
+                    if (!CodeEditorNativeWindow.NativeMethods.IsWindow(hwndTop) ||
+                        (hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
+                    {
+                        // For some reason VS gives an invalid window (the desktop) while loading
+                        return;
+                    }
+
+                    // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
+                    CodeEditorNativeWindow.NativeMethods.PostMessage(hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
+                    _fixUI = false;
+                }
             }
         }
 
@@ -365,7 +370,7 @@ namespace Ankh.UI.PendingChanges
             base.OnVisibleChanged(e);
 
             if (Visible)
-                ForceUIUpdate();
+                FixUI();
         }
 
         #endregion
