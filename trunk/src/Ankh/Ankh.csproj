@@ -276,7 +276,6 @@
     <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Runners\CommitOperation.cs" />
     <Compile Include="Services\AnkhDiff.cs" />
     <Compile Include="Services\AnkhDiff.Internal.cs">
       <DependentUpon>AnkhDiff.cs</DependentUpon>
