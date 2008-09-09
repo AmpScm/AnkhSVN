@@ -234,8 +234,6 @@ namespace Ankh.UI.PendingChanges
             if (info.Location == ListViewHitTestLocations.StateImage)
                 return; // Just check the item
 
-            pendingCommits.RedrawItems(info.Item.Index, info.Item.Index, false);
-
 			IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null)
