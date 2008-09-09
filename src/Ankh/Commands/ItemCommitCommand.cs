@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using Ankh.Scc;
 using Ankh.Selection;
 using Ankh.VS;
+using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands
 {
@@ -62,12 +63,6 @@ namespace Ankh.Commands
                 }
             }
 
-            // make sure all files are saved
-            IAnkhOpenDocumentTracker tracker = e.Context.GetService<IAnkhOpenDocumentTracker>();
-            IFileStatusCache statusCache = e.Context.GetService<IFileStatusCache>();
-            
-            IAnkhSolutionSettings sc = e.GetService<IAnkhSolutionSettings>();
-
             Collection<SvnItem> resources = new Collection<SvnItem>();
 
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
@@ -87,91 +82,31 @@ namespace Ankh.Commands
             if (resources.Count == 0)
                 return;
 
-            ICollection<List<SvnItem>> repositories;
-            List<SvnItem> allItems;
-            PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
-            using(CommitDialog dlg = new CommitDialog())
+            using (ProjectCommitDialog pcd = new ProjectCommitDialog())
             {
-                dlg.LogMessage = storedLogMessage;
-                dlg.Context = e.Context;
-                dlg.Items = resources;
-                dlg.CommitFilter += delegate { return true; };
+                pcd.Context = e.Context;
+                pcd.LogMessageText = storedLogMessage;
 
-                DialogResult dr = dlg.ShowDialog(e.Context);
+                pcd.LoadItems(e.Selection.GetSelectedSvnItems(true));
 
-                storedLogMessage = dlg.LogMessage;
+                DialogResult dr = pcd.ShowDialog(e.Context);
 
-                if(DialogResult.OK != dr)
+                storedLogMessage = pcd.LogMessageText;
+
+                if (pcd.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
-                pca.LogMessage = dlg.LogMessage;
-                pca.KeepLocks = dlg.KeepLocks;
-                pca.KeepChangeLists = dlg.KeepChangeLists;
+                PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
+                // TODO: Commit it!
+                List<PendingChange> toCommit = new List<PendingChange>(pcd.GetSelection());
+                pcd.FillArgs(pca);
 
-                allItems = new List<SvnItem>(dlg.CommitItems);
-
-                repositories = SortByWorkingCopy(allItems);
-            }
-
-            // we need to commit to each repository separately
-            if (repositories == null)
-            {
-                throw new InvalidOperationException("One or more of the selected items are not in a working copy");
-            }
-
-            using (DocumentLock dl = tracker.LockDocuments(SvnItem.GetPaths(allItems), DocumentLockType.NoReload))
-            {
-                dl.MonitorChanges();
-
-                foreach (List<SvnItem> items in repositories)
-                {
-                    List<PendingChange> chg = new List<PendingChange>();
-
-                    foreach (SvnItem i in items)
-                    {
-                        PendingChange pc;
-
-                        if (changes.TryGetValue(i.FullPath, out pc))
-                            chg.Add(pc);
-                    }
-
-                    if (!e.GetService<IPendingChangeHandler>().Commit(chg, pca))
-                    {
-                        // TODO: Failure!
-                        return;
-                    }
-                }
-
-                dl.ReloadModified();
-            }
+                e.GetService<IPendingChangeHandler>().Commit(toCommit, pca);
+            }            
 
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
             this.storedLogMessage = null;
         }
-
-        /// <summary>
-        /// Sort the items by working copy.
-        /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
-        static ICollection<List<SvnItem>> SortByWorkingCopy(IEnumerable<SvnItem> items)
-        {
-            Dictionary<SvnWorkingCopy, List<SvnItem>> wcs = new Dictionary<SvnWorkingCopy, List<SvnItem>>();
-            foreach (SvnItem item in items)
-            {
-                SvnWorkingCopy wc = item.WorkingCopy;
-
-                if (wc == null)
-                    return null;
-
-                if (!wcs.ContainsKey(wc))
-                    wcs.Add(wc, new List<SvnItem>());
-
-                wcs[wc].Add(item);
-            }
-
-            return wcs.Values;
-        }  
     }
 }

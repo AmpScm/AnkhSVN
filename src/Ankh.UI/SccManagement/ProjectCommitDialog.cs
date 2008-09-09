@@ -104,5 +104,75 @@ namespace Ankh.UI.SccManagement
             pca.KeepLocks = keepLocksBox.Checked;
             pca.KeepChangeLists = keepChangelistsBox.Checked;
         }
+
+        public string LogMessageText
+        {
+            get { return logMessage.Text; }
+            set { logMessage.Text = value ?? ""; }
+        }
+
+        class ItemLister : AnkhService, IEnumerable<PendingChange>
+        {
+            readonly IEnumerable<SvnItem> _items;
+
+            IPendingChangesManager _pcm;
+            readonly PendingChange.RefreshContext _rc;
+            public ItemLister(IAnkhServiceProvider context,  IEnumerable<SvnItem> items)
+                : base(context)
+            {
+                if (items == null)
+                    throw new ArgumentNullException("items");
+                _items = items;
+                _rc = new PendingChange.RefreshContext(context);
+            }
+
+            #region IEnumerable<PendingChange> Members
+
+            IPendingChangesManager Manager
+            {
+                get { return _pcm ?? (_pcm = GetService<IPendingChangesManager>()); }
+            }
+
+            readonly Dictionary<string, PendingChange> _pcs = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
+
+            public IEnumerator<PendingChange> GetEnumerator()
+            {
+                foreach (SvnItem item in _items)
+                {
+                    if(PendingChange.IsPending(item))
+                    {
+                        PendingChange pc = Manager[item.FullPath];
+
+                        if(pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
+                        {
+                            PendingChange.CreateIfPending(_rc, item, out pc);
+                        }
+
+                        if(pc == null)
+                            yield break; // Not a pending change
+
+                        _pcs[item.FullPath] = pc;
+
+                        yield return pc;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region IEnumerable Members
+
+            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            #endregion
+        }
+
+        public void LoadItems(IEnumerable<SvnItem> iEnumerable)
+        {
+            LoadChanges(new ItemLister(Context, iEnumerable));
+        }
     }
 }
