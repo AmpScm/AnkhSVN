@@ -87,5 +87,7 @@ namespace Ankh.Ids
         ListViewGroup,
         ListViewGroupOrder,
         ListViewShow,
+
+        ItemIgnore,
     }
 }
