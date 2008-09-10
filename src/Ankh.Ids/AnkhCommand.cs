@@ -178,8 +178,9 @@ namespace Ankh.Ids
         LogMergeTo,
         LogShowProperties,
 
-        // Currently unused block; values can be reused as they were never really handled        
-        PcSortDescending,
+        ItemIgnoreFolder,
+
+        // Currently unused block; values can be reused as they were never really handled                
 
         PcGroupPath,
         PcGroupProject,

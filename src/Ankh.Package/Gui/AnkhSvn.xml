@@ -267,6 +267,20 @@
 								text="Refres&amp;h"
 								toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
         </Group>
+        <Group id="Grp_ItemIgnore" priority="0xE000">
+          <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
+            <Group id="Menu_ItemIgnore" priority="0x100">
+              <Button id="Cmd_ItemIgnoreFile" priority="0x1000" name="SvnIgnoreFile"
+                      defaultInvisible="true" textChanges="true" text="Ignore &amp;File (file.c)" />
+              <Button id="Cmd_ItemIgnoreFileType" priority="0x1100" name="SvnIgnoreFileType"
+                      defaultInvisible="true" textChanges="true" text="Ignore File&amp;type (*.c)" />
+              <Button id="Cmd_ItemIgnoreFilesInFolder" priority="0x1200" name="SvnIgnoreFilesInFolder"
+                      defaultInvisible="true" text="Ignore Files in Folder (*)" />
+              <Button id="Cmd_ItemIgnoreFolder" priority="0x1300" name="SvnIgnoreFolder"
+                      defaultInvisible="true" textChanges="true" text="Ignore Parent Folder" />
+            </Group>
+          </Menu>
+        </Group>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
     </GroupRef>
