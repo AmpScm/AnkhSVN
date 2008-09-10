@@ -23,9 +23,11 @@ namespace Ankh.UI.PropertyEditors
             // 
             // mimeTextBox
             // 
+            this.mimeTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.mimeTextBox.Location = new System.Drawing.Point(6, 19);
             this.mimeTextBox.Name = "mimeTextBox";
-            this.mimeTextBox.Size = new System.Drawing.Size(232, 20);
+            this.mimeTextBox.Size = new System.Drawing.Size(336, 20);
             this.mimeTextBox.TabIndex = 2;
             this.mimeTextBox.TextChanged += new System.EventHandler(this.mimeTextBox_TextChanged);
             // 

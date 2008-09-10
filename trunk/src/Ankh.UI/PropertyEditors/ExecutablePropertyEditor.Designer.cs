@@ -21,11 +21,11 @@ namespace Ankh.UI.PropertyEditors
             // 
             // executableCheckBox
             // 
-            this.executableCheckBox.Location = new System.Drawing.Point(3, 13);
+            this.executableCheckBox.Location = new System.Drawing.Point(3, 3);
             this.executableCheckBox.Name = "executableCheckBox";
             this.executableCheckBox.Size = new System.Drawing.Size(160, 24);
             this.executableCheckBox.TabIndex = 1;
-            this.executableCheckBox.Text = "Executable";
+            this.executableCheckBox.Text = "E&xecutable";
             this.executableCheckBox.Click += new System.EventHandler(this.executableCheckBox_Click);
             // 
             // ExecutablePropertyEditor

@@ -30,6 +30,7 @@ namespace Ankh.UI.PropertyEditors
             this.valueTextBox.Location = new System.Drawing.Point(6, 19);
             this.valueTextBox.Multiline = true;
             this.valueTextBox.Name = "valueTextBox";
+            this.valueTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.valueTextBox.Size = new System.Drawing.Size(336, 174);
             this.valueTextBox.TabIndex = 0;
             this.valueTextBox.TextChanged += new System.EventHandler(this.valueTextBox_TextChanged);

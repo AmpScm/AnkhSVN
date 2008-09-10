@@ -28,38 +28,38 @@ namespace Ankh.UI.PropertyEditors
             this.nativeRadioButton.Checked = true;
             this.nativeRadioButton.Location = new System.Drawing.Point(6, 19);
             this.nativeRadioButton.Name = "nativeRadioButton";
-            this.nativeRadioButton.Size = new System.Drawing.Size(104, 24);
+            this.nativeRadioButton.Size = new System.Drawing.Size(241, 24);
             this.nativeRadioButton.TabIndex = 1;
             this.nativeRadioButton.TabStop = true;
             this.nativeRadioButton.Tag = "";
-            this.nativeRadioButton.Text = "native";
+            this.nativeRadioButton.Text = "&Native";
             this.nativeRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // lfRadioButton
             // 
             this.lfRadioButton.Location = new System.Drawing.Point(6, 49);
             this.lfRadioButton.Name = "lfRadioButton";
-            this.lfRadioButton.Size = new System.Drawing.Size(104, 24);
+            this.lfRadioButton.Size = new System.Drawing.Size(241, 24);
             this.lfRadioButton.TabIndex = 3;
-            this.lfRadioButton.Text = "LF";
+            this.lfRadioButton.Text = "&LF (Unix)";
             this.lfRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // crRadioButton
             // 
             this.crRadioButton.Location = new System.Drawing.Point(6, 79);
             this.crRadioButton.Name = "crRadioButton";
-            this.crRadioButton.Size = new System.Drawing.Size(104, 24);
+            this.crRadioButton.Size = new System.Drawing.Size(241, 24);
             this.crRadioButton.TabIndex = 4;
-            this.crRadioButton.Text = "CR";
+            this.crRadioButton.Text = "&CR (MacOS)";
             this.crRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // crlfRdioButton
             // 
             this.crlfRdioButton.Location = new System.Drawing.Point(6, 109);
             this.crlfRdioButton.Name = "crlfRdioButton";
-            this.crlfRdioButton.Size = new System.Drawing.Size(104, 24);
+            this.crlfRdioButton.Size = new System.Drawing.Size(241, 24);
             this.crlfRdioButton.TabIndex = 5;
-            this.crlfRdioButton.Text = "CRLF";
+            this.crlfRdioButton.Text = "CRLF (Windows)";
             this.crlfRdioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // eolStyleGroupBox
@@ -68,9 +68,10 @@ namespace Ankh.UI.PropertyEditors
             this.eolStyleGroupBox.Controls.Add(this.crlfRdioButton);
             this.eolStyleGroupBox.Controls.Add(this.lfRadioButton);
             this.eolStyleGroupBox.Controls.Add(this.crRadioButton);
-            this.eolStyleGroupBox.Location = new System.Drawing.Point(3, 6);
+            this.eolStyleGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.eolStyleGroupBox.Location = new System.Drawing.Point(0, 0);
             this.eolStyleGroupBox.Name = "eolStyleGroupBox";
-            this.eolStyleGroupBox.Size = new System.Drawing.Size(244, 141);
+            this.eolStyleGroupBox.Size = new System.Drawing.Size(348, 196);
             this.eolStyleGroupBox.TabIndex = 6;
             this.eolStyleGroupBox.TabStop = false;
             this.eolStyleGroupBox.Text = "Select eol-style";
@@ -79,7 +80,6 @@ namespace Ankh.UI.PropertyEditors
             // 
             this.Controls.Add(this.eolStyleGroupBox);
             this.Name = "EolStylePropertyEditor";
-            this.Size = new System.Drawing.Size(348, 196);
             this.eolStyleGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
