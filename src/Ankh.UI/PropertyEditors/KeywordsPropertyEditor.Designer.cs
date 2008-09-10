@@ -13,13 +13,12 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.checkedListBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
@@ -35,7 +34,7 @@ namespace Ankh.UI.PropertyEditors
             "URL"});
             this.checkedListBox1.Location = new System.Drawing.Point(0, 0);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(348, 184);
+            this.checkedListBox1.Size = new System.Drawing.Size(348, 182);
             this.checkedListBox1.TabIndex = 1;
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             // 
@@ -48,7 +47,6 @@ namespace Ankh.UI.PropertyEditors
         }
         #endregion
 
-        private System.Windows.Forms.ToolTip conflictToolTip;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
