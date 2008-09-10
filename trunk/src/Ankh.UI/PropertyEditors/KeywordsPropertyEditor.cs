@@ -38,6 +38,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Indicates whether the selection is valid.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),Browsable(false)]
         public bool Valid
         {
             get
