@@ -8,7 +8,7 @@ using Ankh.VSPackage.Attributes;
 
 namespace Ankh.VSPackage
 {
-    /*[ProvideLanguageService(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, 301,
+    [ProvideLanguageService(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, 301,
         AutoOutlining = false,
         CodeSense = false,
         DefaultToInsertSpaces = true,
@@ -20,12 +20,12 @@ namespace Ankh.VSPackage
         MatchBracesAtCaret = true,
         MaxErrorMessages = 10,
         QuickInfo = false,
-        RequestStockColors = false,
+        RequestStockColors = true,
         ShowCompletion = false,
         ShowHotURLs = true,
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
-    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 301, 301)]*/
+    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 301, 301)]
     [ProvideService(typeof(LogMessageLanguageService), ServiceName = AnkhId.LogMessageServiceName)]
     partial class AnkhSvnPackage
     {
