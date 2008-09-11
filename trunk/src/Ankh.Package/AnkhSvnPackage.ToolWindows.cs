@@ -5,7 +5,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
@@ -17,14 +16,12 @@ using ShellPackage = Microsoft.VisualStudio.Shell.Package;
 using Ankh.Ids;
 using Ankh.Commands;
 using Ankh.UI;
-using Ankh.Selection;
 using Ankh.UI.SvnLog;
-using Ankh.WorkingCopyExplorer;
 using System.Windows.Forms.Design;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.WorkingCopyExplorer;
 using Ankh.UI.DiffWindow;
 using Ankh.Scc.UI;
-using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.VSPackage
 {

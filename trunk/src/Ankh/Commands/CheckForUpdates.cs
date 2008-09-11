@@ -72,18 +72,18 @@ namespace Ankh.Commands
         static Version _currentVersion;
         static Version GetCurrentVersion(IAnkhServiceProvider context)
         {
-            if(context == null)
+            if (context == null)
                 throw new ArgumentNullException("context");
 
-            if(_currentVersion != null)
+            if (_currentVersion != null)
                 return _currentVersion;
-                
+
             IAnkhPackage pkg = context.GetService<IAnkhPackage>();
-            
-            if(pkg != null)
+
+            if (pkg != null)
                 return _currentVersion = pkg.PackageVersion;
             else
-                return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version; 
+                return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version;
         }
 
         static Version GetUIVersion(AnkhContext context)
@@ -96,7 +96,7 @@ namespace Ankh.Commands
             if (pkg != null)
                 return pkg.UIVersion;
             else
-                return GetCurrentVersion(context); 
+                return GetCurrentVersion(context);
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -110,7 +110,7 @@ namespace Ankh.Commands
             int interval = 24 * 7; // 1 week
             IAnkhConfigurationService config = e.GetService<IAnkhConfigurationService>();
             using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
-            {                
+            {
                 object value = rk.GetValue("Interval");
 
                 if (value is int)
@@ -153,7 +153,7 @@ namespace Ankh.Commands
                 {
                     string type = ni.NetworkInterfaceType.ToString();
 
-                    if(type.Contains("Ethernet") || type.Contains("Wireless"))
+                    if (type.Contains("Ethernet") || type.Contains("Wireless"))
                         x ^= ni.GetPhysicalAddress().GetHashCode();
                 }
             }
@@ -201,11 +201,11 @@ namespace Ankh.Commands
                 args = (string[])e.Argument;
             }
             catch { return; }
-            
+
             if (args == null || args.Length < 8)
                 return;
 
-            string title = args[0], header = args[1], description = args[2], url= args[3], 
+            string title = args[0], header = args[1], description = args[2], url = args[3],
                 urltext = args[4], version = args[5], newVersion = args[6], tag = args[7];
 
             using (Ankh.UI.SccManagement.UpdateAvailableDialog uad = new Ankh.UI.SccManagement.UpdateAvailableDialog())
@@ -225,7 +225,7 @@ namespace Ankh.Commands
                         uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
                     }
 
-                    if(string.IsNullOrEmpty(tag))
+                    if (string.IsNullOrEmpty(tag))
                         uad.sameCheck.Enabled = uad.sameCheck.Visible = false;
                 }
                 catch
@@ -249,7 +249,7 @@ namespace Ankh.Commands
                     }
                 }
             }
-        }        
+        }
 
         public void OnResponse(IAsyncResult ar)
         {
@@ -299,8 +299,8 @@ namespace Ankh.Commands
                     failed = false;
                     return;
                 }
-                
-                if(body[0] != '<' || body[body.Length - 1] != '>')
+
+                if (body[0] != '<' || body[body.Length - 1] != '>')
                     return; // No valid xml or empty
 
                 failed = false;
@@ -347,7 +347,7 @@ namespace Ankh.Commands
                 }
             }
             finally
-            {                
+            {
                 using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
                 {
                     object fails = rk.GetValue("Fails", 0);
@@ -390,11 +390,11 @@ namespace Ankh.Commands
                 int interval = 24 * 7; // 1 week
                 object value = rk.GetValue("Interval");
 
-                if(value is int)
+                if (value is int)
                 {
                     interval = (int)value;
 
-                    if(interval <= 0)
+                    if (interval <= 0)
                         return;
                 }
 
@@ -418,7 +418,7 @@ namespace Ankh.Commands
                 }
             }
 
-            context.GetService<IAnkhScheduler>().Schedule(new TimeSpan(0,1,0), AnkhCommand.CheckForUpdates);
+            context.GetService<IAnkhScheduler>().Schedule(new TimeSpan(0, 0, 20), AnkhCommand.CheckForUpdates);
         }
 
         private string NodeText(XmlDocument doc, string xpath)
