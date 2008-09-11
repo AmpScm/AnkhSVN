@@ -55,10 +55,11 @@ namespace Ankh.UI.SvnLog
 
         void RefreshText()
         {
-            Text = _args.Revision.ToString(CultureInfo.CurrentCulture);
-            SubItems.Add(new ListViewSubItem(this, _args.Author));
-            SubItems.Add(new ListViewSubItem(this, _args.Time.ToString(CultureInfo.CurrentCulture)));
-            SubItems.Add(new ListViewSubItem(this, _args.LogMessage));
+            Text = Revision.ToString(CultureInfo.CurrentCulture);
+
+            SubItems.Add(Author);
+            SubItems.Add(Date.ToString(CultureInfo.CurrentCulture));
+            SubItems.Add(LogMessage);
         }
 
 		internal DateTime Date
