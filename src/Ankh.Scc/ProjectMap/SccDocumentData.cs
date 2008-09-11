@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
-using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Commands;
-using Ankh.Ids;
-using Ankh.Selection;
-using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
+
+using Ankh.Commands;
+
+
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -224,23 +227,26 @@ namespace Ankh.Scc.ProjectMap
                 if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
                     out hier, openId, out wf, out open)) && (open != 0) && wf != null)
                 {
-                    IVsTextViewEx tv = VsShellUtilities.GetTextView(wf) as IVsTextViewEx;
-
-                    if (tv != null)
+                    IntPtr handle;
+                    object vw = VsShellUtilities.GetTextView(wf);
+                    if (vw != null)
                     {
-                        if ((tv.IsCompletorWindowActive() == 0)
-                            || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                        IVsTextViewEx tv = vw as IVsTextViewEx;
+
+                        if (tv != null)
                         {
-                            _delayedDirty = true;
-                            GetService<IAnkhCommandService>().DelayPostCommands(
-                                delegate
-                                {
-                                    if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
-                                        return true; // Keep the delay
-                                    else
-                                        return _delayedDirty = false; // Delay completed
-                                });
+                            if ((tv.IsCompletorWindowActive() == 0)
+                                || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
+                            {
+                                _delayedDirty = true;
+                                InstallDelayHandler(tv);
+                            }
                         }
+                    }
+                    else if (IsEditBoxActive(out handle))
+                    {
+                        _delayedDirty = true;
+                        InstallDelayHandler(handle);
                     }
                 }
             }
@@ -255,7 +261,69 @@ namespace Ankh.Scc.ProjectMap
                     sisu.SetDocumentDirty(dirty);
             }
 
-            UpdateGlyph();            
+            UpdateGlyph();
+        }
+
+        private void InstallDelayHandler(IVsTextViewEx tv)
+        {
+            GetService<IAnkhCommandService>().DelayPostCommands(
+                delegate
+                {
+                    if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
+                        return true; // Keep the delay
+                    else
+                        return _delayedDirty = false; // Delay completed
+                });
+        }
+
+        private bool IsEditBoxActive(out IntPtr handle)
+        {
+            handle = IntPtr.Zero;
+
+            IntPtr focus = NativeMethods.GetFocus();
+            handle = focus;
+            if (focus != IntPtr.Zero)
+            {
+                StringBuilder sb = new StringBuilder(32);
+                NativeMethods.GetClassName(focus, sb, 32);
+
+                string cls = sb.ToString();
+
+                if (cls.StartsWith("WindowsForms"))
+                {
+                    Control c = Control.FromHandle(focus);
+
+                    if (c is TextBox)
+                    {
+                        if (c is DataGridViewTextBoxEditingControl)
+                            return true; // At least true in the String Resource
+                        // else: What else?
+                    }
+                }
+                else
+                    switch (cls)
+                    {
+                        //case "Edit":
+                        //	return true;
+                        // Filter what?
+                        default:
+                            break;
+                    }
+            }
+            handle = IntPtr.Zero;
+            return false;
+        }
+
+        private void InstallDelayHandler(IntPtr handle)
+        {
+            GetService<IAnkhCommandService>().DelayPostCommands(
+                delegate
+                {
+                    if (NativeMethods.GetFocus() == handle)
+                        return true; // Keep the delay
+                    else
+                        return _delayedDirty = false; // Delay completed
+                });
         }
 
         internal void CheckDirty()
@@ -511,6 +579,15 @@ namespace Ankh.Scc.ProjectMap
             }
 
             return false;
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetFocus();
+
+            [DllImport("user32.dll")]
+            public static extern int GetClassName(IntPtr hWnd, StringBuilder sb, int nMaxCount);
         }
     }
 }
