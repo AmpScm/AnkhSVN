@@ -141,6 +141,4 @@ namespace Ankh.Diff.DiffUtils
         private string m_strA;
         private string m_strB;
     }
-
-    public delegate void DifferenceEventHandler(object sender, DifferenceEventArgs e);
 }

@@ -178,7 +178,7 @@ namespace Ankh.Diff.DiffUtils.Controls
         /// <summary>
         /// Fired when the user clicks and/or drags to move the view.
         /// </summary>
-        public event DiffLineClickEventHandler LineClick;
+        public event EventHandler<Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs> LineClick;
 
         #endregion
 
@@ -497,8 +497,6 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         private int m_iLine;
     }
-
-    public delegate void DiffLineClickEventHandler(object sender, DiffLineClickEventArgs e);
 
     #endregion
 }

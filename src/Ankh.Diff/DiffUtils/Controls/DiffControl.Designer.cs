@@ -70,7 +70,7 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.Overview.TabIndex = 0;
             this.Overview.TabStop = false;
             this.Overview.Text = "diffOverview1";
-            this.Overview.LineClick += new Ankh.Diff.DiffUtils.Controls.DiffLineClickEventHandler(this.Overview_LineClick);
+            this.Overview.LineClick += new System.EventHandler<Ankh.Diff.DiffUtils.Controls.DiffLineClickEventArgs>(this.Overview_LineClick);
             // 
             // ViewA
             // 

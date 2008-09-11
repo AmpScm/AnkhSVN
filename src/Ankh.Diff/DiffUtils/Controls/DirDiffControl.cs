@@ -198,7 +198,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         #region Public Events
 
-        public event DifferenceEventHandler ShowFileDifferences;
+        public event EventHandler<DifferenceEventArgs> ShowFileDifferences;
 
         public event EventHandler RecompareNeeded;
 
