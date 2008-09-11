@@ -585,11 +585,11 @@ namespace Ankh.UI.PendingChanges
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, 0, 0,
                         value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
-                if (commandHwnd != IntPtr.Zero)
+                /*if (commandHwnd != IntPtr.Zero)
                 {
                     NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, 0, 0,
                         value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
-                }
+                }*/
             }
         }
 
@@ -624,7 +624,6 @@ namespace Ankh.UI.PendingChanges
             uint initViewFlags =
                 (uint)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
                 (uint)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
-                (uint)TextViewInitFlags.VIF_VSCROLL |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSBORDER |
                 (uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES;
