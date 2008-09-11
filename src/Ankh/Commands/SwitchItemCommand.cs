@@ -97,6 +97,8 @@ namespace Ankh.Commands
 
             if (e.Argument is string)
                 target = SvnUriTarget.FromString((string)e.Argument);
+            else if (e.Argument is Uri)
+                target = (Uri)e.Argument;
             else
             {
                 using (SwitchDialog dlg = new SwitchDialog())
