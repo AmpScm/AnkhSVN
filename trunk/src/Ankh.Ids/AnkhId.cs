@@ -62,7 +62,7 @@ namespace Ankh.Ids
         public const string AnkhRuntimeStarted = "8057B1AF-21D8-4276-AC27-9C02A1F95BC7";
 
         public const string LogMessageLanguageServiceId = "1DFE69CE-7F9B-4CC5-B09B-E5BDE95E9439";
-        public const string LogMessageServiceName = "Log Messages (AnkhSVN)";
+        public const string LogMessageServiceName = "AnkhSVN Log Messages";
 
         public const string ExtenderProviderName = "AnkhExtenderProvider";
 
