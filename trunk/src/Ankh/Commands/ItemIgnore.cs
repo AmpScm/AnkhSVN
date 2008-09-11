@@ -217,6 +217,9 @@ namespace Ankh.Commands
                             e.Client.SetProperty(path, SvnPropertyNames.SvnIgnore, sb.ToString());
                         }
                     });
+
+                // Make sure a changed directory is visible in the PC Window
+                context.GetService<IFileStatusMonitor>().ScheduleMonitor(path); 
             }
             finally
             {
