@@ -8,13 +8,6 @@ using System.Collections.ObjectModel;
 namespace Ankh.Scc
 {
     /// <summary>
-    /// Used to decide whether this particular SvnItem should be included in a collection.
-    /// </summary>
-    [Obsolete("Use Predicate<SvnItem>")]
-    public delegate bool ResourceFilterCallback(SvnItem item);
-
-
-    /// <summary>
     /// A bunch of <see cref="Predicate{SvnItem}"/> methods
     /// </summary>
     public static class SvnItemFilters

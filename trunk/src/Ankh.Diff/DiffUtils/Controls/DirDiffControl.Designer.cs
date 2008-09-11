@@ -88,12 +88,12 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.TreeB.ShowLines = false;
             this.TreeB.Size = new System.Drawing.Size(195, 115);
             this.TreeB.TabIndex = 0;
-            this.TreeB.MouseWheelMsg += new Ankh.Diff.DiffUtils.Controls.Win32MessageEventHandler(this.TreeB_MouseWheelMsg);
+            this.TreeB.MouseWheelMsg += new System.EventHandler<Ankh.Diff.DiffUtils.Controls.Win32MessageEventArgs>(this.TreeB_MouseWheelMsg);
             this.TreeB.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_StateChange);
             this.TreeB.Enter += new System.EventHandler(this.TreeView_Enter);
             this.TreeB.DoubleClick += new System.EventHandler(this.TreeView_DoubleClick);
             this.TreeB.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_SelectChanged);
-            this.TreeB.VScroll += new Ankh.Diff.DiffUtils.Controls.Win32MessageEventHandler(this.TreeB_VScroll);
+            this.TreeB.VScroll += new System.EventHandler<Ankh.Diff.DiffUtils.Controls.Win32MessageEventArgs>(this.TreeB_VScroll);
             this.TreeB.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeB_KeyDown);
             this.TreeB.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_StateChange);
             // 
@@ -161,12 +161,12 @@ namespace Ankh.Diff.DiffUtils.Controls
             this.TreeA.ShowLines = false;
             this.TreeA.Size = new System.Drawing.Size(196, 115);
             this.TreeA.TabIndex = 0;
-            this.TreeA.MouseWheelMsg += new Ankh.Diff.DiffUtils.Controls.Win32MessageEventHandler(this.TreeA_MouseWheelMsg);
+            this.TreeA.MouseWheelMsg += new System.EventHandler<Ankh.Diff.DiffUtils.Controls.Win32MessageEventArgs>(this.TreeA_MouseWheelMsg);
             this.TreeA.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_StateChange);
             this.TreeA.Enter += new System.EventHandler(this.TreeView_Enter);
             this.TreeA.DoubleClick += new System.EventHandler(this.TreeView_DoubleClick);
             this.TreeA.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_SelectChanged);
-            this.TreeA.VScroll += new Ankh.Diff.DiffUtils.Controls.Win32MessageEventHandler(this.TreeA_VScroll);
+            this.TreeA.VScroll += new System.EventHandler<Ankh.Diff.DiffUtils.Controls.Win32MessageEventArgs>(this.TreeA_VScroll);
             this.TreeA.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeA_KeyDown);
             this.TreeA.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.TreeNode_StateChange);
             // 

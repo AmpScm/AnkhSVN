@@ -159,8 +159,8 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         #region Public Events
 
-        public event Win32MessageEventHandler VScroll;
-        public event Win32MessageEventHandler MouseWheelMsg;
+        public event EventHandler<Win32MessageEventArgs> VScroll;
+        public event EventHandler<Win32MessageEventArgs> MouseWheelMsg;
 
         #endregion
 
@@ -433,8 +433,6 @@ namespace Ankh.Diff.DiffUtils.Controls
         private IntPtr m_WParam;
         private IntPtr m_LParam;
     }
-
-    public delegate void Win32MessageEventHandler(object sender, Win32MessageEventArgs e);
 
     #endregion
 }

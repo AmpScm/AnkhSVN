@@ -56,17 +56,6 @@ namespace Ankh.Commands
         }
 
         /// <summary>
-        /// See <see cref="Checked"/>
-        /// </summary>
-        [Obsolete("Use .Checked instead")]
-        public bool Latched
-        {
-            get { return Checked; }
-            set { Checked = value; }
-        }
-
-
-        /// <summary>
         /// The command is an on-off toggle and is currently on. (VS term: Latched)
         /// </summary>
         /// <value><c>true</c> if checked; otherwise, <c>false</c>.</value>

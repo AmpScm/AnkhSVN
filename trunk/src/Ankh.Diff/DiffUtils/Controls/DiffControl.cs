@@ -368,7 +368,7 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         #region Public Events
 
-        public event DifferenceEventHandler ShowTextDifferences;
+        public event EventHandler<DifferenceEventArgs> ShowTextDifferences;
 
         public event EventHandler LineDiffSizeChanged;
 

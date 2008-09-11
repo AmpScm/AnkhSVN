@@ -502,9 +502,8 @@ namespace Ankh.Scc
 
         sealed class DelegateRunner : IDisposable
         {
-            public delegate void Runner();
-            Runner _runner;
-            public DelegateRunner(Runner runner)
+            AnkhAction _runner;
+            public DelegateRunner(AnkhAction runner)
             {
                 if (runner == null)
                     throw new ArgumentNullException("runner");
@@ -513,7 +512,7 @@ namespace Ankh.Scc
 
             public void Dispose()
             {
-                Runner runner = _runner;
+                AnkhAction runner = _runner;
                 _runner = null;
                 runner();
             }
