@@ -19,6 +19,7 @@ namespace Ankh.UI.PendingChanges
         public PendingCommitsPage()
         {
             InitializeComponent();
+            logMessageEditor.ShowHorizontalScrollBar = false;
             logMessageEditor.PasteSource = pendingCommits;
         }
 

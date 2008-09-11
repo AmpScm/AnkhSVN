@@ -39,8 +39,6 @@ namespace Ankh.UI.PendingChanges
         IAnkhServiceProvider _context;
         private CodeEditorNativeWindow codeEditorNativeWindow;
         BorderStyle _borderStyle;
-        bool _fixUI;
-        bool _fixSize;
 
         public LogMessageEditor()
         {
@@ -61,6 +59,23 @@ namespace Ankh.UI.PendingChanges
         {
             get { return _pasteSrc; }
             set { _pasteSrc = value; }
+        }
+
+        bool _hideHorizontalScrollBar;
+
+        [Localizable(false)]
+        public bool ShowHorizontalScrollBar
+        {
+            get { return !_hideHorizontalScrollBar; }
+            set 
+            { 
+                _hideHorizontalScrollBar = !value;
+                if (codeEditorNativeWindow != null)
+                {
+                    codeEditorNativeWindow.ShowHorizontalScrollBar = value;
+                    codeEditorNativeWindow.Size = ClientSize;
+                }
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -100,27 +115,15 @@ namespace Ankh.UI.PendingChanges
 
             if (!string.IsNullOrEmpty(_text))
             {
-                FixUI();
                 Text = _text;
             }
         }
 
         void InitializeToolWindow(IAnkhToolWindowControl toolWindow)
         {
-            toolWindow.FrameShow += new EventHandler<FrameEventArgs>(OnToolWindowFrameShow);
+            //toolWindow.FrameShow += new EventHandler<FrameEventArgs>(OnToolWindowFrameShow);
             Init(toolWindow.ToolWindowHost, false);
             toolWindow.ToolWindowHost.AddCommandTarget(CommandTarget);
-        }
-
-        void OnToolWindowFrameShow(object sender, FrameEventArgs e)
-        {
-            switch (e.Show)
-            {
-                case __FRAMESHOW.FRAMESHOW_WinShown:
-                    _fixSize = true;
-                    FixUI();
-                    break;
-            }
         }
 
         #region Methods
@@ -139,9 +142,8 @@ namespace Ankh.UI.PendingChanges
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
             codeEditorNativeWindow.Init(allowModal);
-            codeEditorNativeWindow.Size = Size;
-
-            _fixUI = true; // Fix the font issues in the next size changed            
+            codeEditorNativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
+            codeEditorNativeWindow.Size = ClientSize;
         }
 
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -156,17 +158,20 @@ namespace Ankh.UI.PendingChanges
             get
             {
                 CreateParams createParams = base.CreateParams;
-                createParams.ExStyle |= 65536;
-                createParams.ExStyle &= -513;
-                createParams.Style &= -8388609;
+                // style = 0x56010000 = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_TABSTOP
+                // exstyle = 0x10000 = WS_EX_CONTROLPARENT
+
+                // Remove border settings
+                createParams.ExStyle &= ~0x00000200; // WS_EX_CLIENTEDGE
+                createParams.Style &= ~0x00800000; // WS_BORDER
                 switch (_borderStyle)
                 {
                     case BorderStyle.FixedSingle:
-                        createParams.Style |= 8388608;
+                        createParams.Style |= 0x00800000; // WS_BORDER
                         return createParams;
 
                     case BorderStyle.Fixed3D:
-                        createParams.ExStyle |= 512;
+                        createParams.ExStyle |= 0x00000200; // WS_EX_CLIENTEDGE
                         return createParams;
                 }
                 return createParams;
@@ -230,8 +235,6 @@ namespace Ankh.UI.PendingChanges
         /// <returns>Always returns true</returns>
         protected override bool IsInputKey(Keys keyData)
         {
-            FixUI();
-
             Keys key = (keyData & ~Keys.Modifiers);
 
             switch (key)
@@ -312,67 +315,9 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            ForceSizeUpdate();
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Windows.Forms.Control.LocationChanged"/> event.
-        /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
-        protected override void OnLocationChanged(EventArgs e)
-        {
-            base.OnLocationChanged(e);
-
-            ForceSizeUpdate();
-        }
-
-        public void ForceSizeUpdate()
-        {
-            _fixSize = true;
-            FixUI();
-        }
-
-        void FixUI()
-        {
-            if ((!_fixUI && !_fixSize) || _context == null || codeEditorNativeWindow == null)
-                return;
-
-            IntPtr hwndTop;
-
-            if (_fixSize)
-            {
-                _fixSize = false;
-                codeEditorNativeWindow.Size = ClientRectangle.Size;
-            }
-
-            if (_fixUI)
-            {
-
-                IVsUIShell shell = _context.GetService<IVsUIShell>(typeof(SVsUIShell));
-
-                if (shell != null && ErrorHandler.Succeeded(shell.GetDialogOwnerHwnd(out hwndTop)))
-                {
-                    if (!CodeEditorNativeWindow.NativeMethods.IsWindow(hwndTop) ||
-                        (hwndTop == CodeEditorNativeWindow.NativeMethods.GetDesktopWindow()))
-                    {
-                        // For some reason VS gives an invalid window (the desktop) while loading
-                        return;
-                    }
-
-                    // Send WM_SYSCOLORCHANGE to the toplevel window to fix the font in the editor :(
-                    CodeEditorNativeWindow.NativeMethods.PostMessage(hwndTop, 21, IntPtr.Zero, IntPtr.Zero);
-                    _fixUI = false;
-                }
-            }
-        }
-
-        protected override void OnVisibleChanged(EventArgs e)
-        {
-            base.OnVisibleChanged(e);
-
-            if (Visible)
-                FixUI();
-        }
+            if(codeEditorNativeWindow != null)
+                codeEditorNativeWindow.Size = ClientSize;
+        }   
 
         #endregion
 
@@ -582,15 +527,25 @@ namespace Ankh.UI.PendingChanges
             {
                 if (editorHwnd != IntPtr.Zero)
                 {
+                    // Around our editor is a VS Splitter window that is responsible for showing the scroll bars
+                    // As we don't know a valid method to hide those; we just move them out of the visual area
+
+                    int width = value.Width;
+                    int height = value.Height;
+                    if(!ShowHorizontalScrollBar)
+                        height += SystemInformation.HorizontalScrollBarHeight;
+
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, 0, 0,
-                        value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
+                        width, height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
                 }
-                /*if (commandHwnd != IntPtr.Zero)
-                {
-                    NativeMethods.SetWindowPos(this.commandHwnd, IntPtr.Zero, 0, 0,
-                        value.Width, value.Height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
-                }*/
             }
+        }
+
+        bool _hideHorizontalScrollBar;
+        public bool ShowHorizontalScrollBar
+        {
+            get { return !_hideHorizontalScrollBar; }
+            set { _hideHorizontalScrollBar = !value; }
         }
 
         #endregion
@@ -625,7 +580,7 @@ namespace Ankh.UI.PendingChanges
                 (uint)TextViewInitFlags.VIF_SET_WIDGET_MARGIN |
                 (uint)TextViewInitFlags.VIF_SET_SELECTION_MARGIN |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSBORDER |
-                (uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
+                //(uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES;
 
             if (allowModel)
