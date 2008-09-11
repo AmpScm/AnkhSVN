@@ -130,7 +130,7 @@ namespace Ankh.VSPackage
             sb.Append(Resources.AboutLinkedTo);
             foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
             {
-                if (!lib.DynamicallyLinked)
+                if (!lib.DynamicallyLinked && !lib.Optional)
                 {
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
                     sb.Append(", ");
@@ -144,7 +144,20 @@ namespace Ankh.VSPackage
             sb.Append(Resources.AboutDynamicallyLinkedTo);
             foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
             {
-                if (lib.DynamicallyLinked)
+                if (lib.DynamicallyLinked && !lib.Optional)
+                {
+                    sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
+                    sb.Append(", ");
+                }
+            }
+
+            sb.Length -= 2;
+            sb.AppendLine();
+
+            sb.Append(Resources.AboutOptionallyLinkedTo);
+            foreach (SharpSvn.Implementation.SvnLibrary lib in SvnClient.SvnLibraries)
+            {
+                if (lib.Optional)
                 {
                     sb.AppendFormat("{0} {1}", lib.Name, lib.VersionString);
                     sb.Append(", ");
