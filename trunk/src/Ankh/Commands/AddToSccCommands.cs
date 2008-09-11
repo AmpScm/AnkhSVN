@@ -152,7 +152,7 @@ namespace Ankh.Commands
                                     {
                                         // Create uri (including optional /trunk if required)
                                         SvnCreateDirectoryArgs cdArg = new SvnCreateDirectoryArgs();
-                                        cdArg.MakeParents = true;
+                                        cdArg.CreateParents = true;
                                         cdArg.LogMessage = createDialog.LogMessage;
 
                                         cl.RemoteCreateDirectory(dialog.RepositoryAddUrl, cdArg);

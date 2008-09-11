@@ -102,7 +102,7 @@ namespace Ankh.UI.SccManagement
                 if (dialog.ShowDialog(Context) == DialogResult.OK)
                 { 
                     SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
-                    args.MakeParents = true;
+                    args.CreateParents = true;
                     Uri newDir = new Uri(u, dialog.NewDirectoryName);
                     args.LogMessage = dialog.LogMessage;
                     Client.RemoteCreateDirectory(newDir, args);

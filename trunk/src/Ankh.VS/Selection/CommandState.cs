@@ -16,7 +16,6 @@ namespace Ankh.VS.Selection
     sealed class CommandState : AnkhService, IAnkhCommandStates
     {
         IVsMonitorSelection _monitor;
-        bool _disposed;
 
         public CommandState(IAnkhServiceProvider context)
             : base(context)
