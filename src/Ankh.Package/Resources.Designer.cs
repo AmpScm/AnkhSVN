@@ -90,6 +90,15 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AnkhSVN is Optionally linked to:.
+        /// </summary>
+        internal static string AboutOptionallyLinkedTo {
+            get {
+                return ResourceManager.GetString("AboutOptionallyLinkedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}.
         /// </summary>
         internal static string AboutProductId {
