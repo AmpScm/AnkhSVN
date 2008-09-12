@@ -86,6 +86,7 @@ namespace Ankh.UI.RepositoryExplorer
             FinalSortColumn = file;
             UpdateSortGlyphs();
 
+            FinalSortColumn = file;
             AllowColumnReorder = true;
         }
 
