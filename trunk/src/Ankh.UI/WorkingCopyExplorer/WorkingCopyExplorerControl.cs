@@ -28,8 +28,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
             this.fileList.CurrentDirectoryChanged += new EventHandler(listView_CurrentDirectoryChanged);
-
-            this.fileList.ShowContextMenu += new MouseEventHandler(OnFileListShowContextMenu);
         }               
 
         /// <summary>
@@ -85,17 +83,6 @@ namespace Ankh.UI.WorkingCopyExplorer
                 this.folderTree.SelectedItemChanged += new EventHandler(this.treeView_SelectedItemChanged);
             }
         }       
-
-        void OnFileListShowContextMenu(object sender, MouseEventArgs e)
-        {
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : fileList.PointToScreen(new Point(0, 0));
-            ShowContextMenu(screen);
-        }        
-
-        private void ShowContextMenu(Point point)
-        {
-            ToolWindowHost.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, point.X, point.Y);
-        }
 
         public bool IsWcRootSelected()
         {
