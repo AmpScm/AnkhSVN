@@ -201,14 +201,17 @@ namespace Ankh.Scc
 
             foreach (SccProjectData data in _projectMap.Values)
             {
-                if (data.IsSolutionFolder || data.IsWebSite)
+                if (data.IsSolutionFolder)
                 {
                     // Solution folders don't save their Scc management state
                     // We let them follow the solution settings
 
-                    if(IsSolutionManaged)
+                    if (IsSolutionManaged)
                         data.SetManaged(true);
+                }
 
+                if (data.IsSolutionFolder || data.IsWebSite)
+                {
                     // Flush the glyph cache of solution folders
                     // (Well known VS bug: Initially clear)
                     data.SccProject.SccGlyphChanged(0, null, null, null);
@@ -346,17 +349,15 @@ namespace Ankh.Scc
 
             if (data.IsSolutionFolder || data.IsWebSite)
             {
-                // Solution folders are projects without Scc state
-                // Web sites are Solution-only projects with scc state
-                data.SccProject.SccGlyphChanged(0, null, null, null);
-
                 if (IsSolutionManaged)
                 {
                     // We let them follow the solution settings (See OnSolutionOpen() for the not added case
-                    if (added)
+                    if (added && data.IsSolutionFolder)
                         data.SetManaged(true);
-
                 }
+
+                // Solution folders are projects without Scc state                
+                data.SccProject.SccGlyphChanged(0, null, null, null);
             }
 
             _syncMap = true;
