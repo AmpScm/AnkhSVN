@@ -532,8 +532,23 @@ namespace Ankh.UI.PendingChanges
 
                     int width = value.Width;
                     int height = value.Height;
-                    if(!ShowHorizontalScrollBar)
-                        height += SystemInformation.HorizontalScrollBarHeight;
+
+                    if (!ShowHorizontalScrollBar)
+                    {
+                        IVsTextManager2 manager = _context.GetService<IVsTextManager2>(typeof(SVsTextManager));
+
+                        if (manager != null)
+                        {
+                            FRAMEPREFERENCES2[] items = new FRAMEPREFERENCES2[1];
+
+                            if (ErrorHandler.Succeeded(manager.GetUserPreferences2(null, items, null, null)))
+                            {
+                                // Only hide the horizontal scrollbar if one would have been visible 
+                                if(items[0].fHorzScrollbar != 0)
+                                    height += SystemInformation.HorizontalScrollBarHeight;
+                            }
+                        }
+                    }
 
                     NativeMethods.SetWindowPos(editorHwnd, IntPtr.Zero, 0, 0,
                         width, height, 0x16); // 0x16 = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOMOVE
