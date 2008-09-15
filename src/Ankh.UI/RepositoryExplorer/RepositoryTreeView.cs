@@ -646,7 +646,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override void OnRetrieveSelection(TreeViewWithSelection<RepositoryTreeNode>.RetrieveSelectionEventArgs e)
         {
-            e.SelectionItem = new RepositoryExplorerItem((RepositoryTreeNode)e.SelectionItem);
+            e.SelectionItem = new RepositoryExplorerItem(Context, (RepositoryTreeNode)e.SelectionItem);
             base.OnRetrieveSelection(e);
         }
 

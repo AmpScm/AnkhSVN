@@ -10,26 +10,33 @@ namespace Ankh.UI.RepositoryExplorer
 {
     sealed class RepositoryExplorerItem : CustomTypeDescriptor, ISvnRepositoryItem
     {
-        RepositoryTreeNode _tn;
-        RepositoryListItem _li;
-        string _name;
-        Uri _uri;
+        readonly IAnkhServiceProvider _context;
+        readonly RepositoryTreeNode _tn;
+        readonly RepositoryListItem _li;        
+        readonly string _name;
+        readonly Uri _uri;
 
-        public RepositoryExplorerItem(RepositoryTreeNode tn)
+        public RepositoryExplorerItem(IAnkhServiceProvider context, RepositoryTreeNode tn)
         {
-            if (tn == null)
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (tn == null)
                 throw new ArgumentNullException("tn");
 
+            _context = context;
             _tn = tn;
             _uri = tn.RawUri;
             _name = tn.Text;
         }
 
-        public RepositoryExplorerItem(RepositoryListItem li)
+        public RepositoryExplorerItem(IAnkhServiceProvider context, RepositoryListItem li)
         {
-            if (li == null)
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (li == null)
                 throw new ArgumentNullException("li");
 
+            _context = context;
             _li = li;
             _uri = li.RawUri;
             _name = li.Text;
@@ -173,29 +180,27 @@ namespace Ankh.UI.RepositoryExplorer
         }
         #endregion
 
-        //TODO better way to get to the repository explorer control
         private RepositoryExplorerControl GetRepositoryExplorerControl()
         {
-            IAnkhServiceProvider ctx = null;
-            if (this.TreeNode != null)
+            // TODO: Implement a better way to get to the repository explorer control
+            // For now we just find the parent control        
+
+            Control control = null;
+            if (TreeNode != null)
             {
-                ctx = ((RepositoryTreeView)this.TreeNode.TreeView).Context;
+                control = this.TreeNode.TreeView;
             }
-            else if (this.ListViewItem != null)
+            else if (ListViewItem != null)
             {
-                ctx = ((RepositoryListView)this.ListViewItem.ListView).Context;
+                control = ListViewItem.ListView;
             }
 
-            if (ctx is IAnkhToolWindowHost
-                && ((IAnkhToolWindowHost)ctx).Pane is Microsoft.VisualStudio.Shell.WindowPane)
-            {
-                Microsoft.VisualStudio.Shell.WindowPane pane = (Microsoft.VisualStudio.Shell.WindowPane)((IAnkhToolWindowHost)ctx).Pane;
-                if (pane.Window is RepositoryExplorerControl)
-                {
-                    return (RepositoryExplorerControl)pane.Window;
-                }
-            }
-            return null;
+            RepositoryExplorerControl rc = null;
+
+            while (control != null && (null == (rc = control as RepositoryExplorerControl)))
+                control = control.Parent;
+
+            return rc;
         }
     }
 }
