@@ -297,6 +297,7 @@
     </Compile>
     <Compile Include="Services\PendingChanges\PendingCommitState.cs" />
     <Compile Include="Services\PendingChanges\PendingChangeHandler.cs" />
+    <Compile Include="Services\RegistryLifoList.cs" />
     <Compile Include="Services\Scheduler.cs" />
     <Compile Include="Services\SolutionSettings.cs" />
     <Compile Include="StatusCache\FileStatusCleanup.cs" />
