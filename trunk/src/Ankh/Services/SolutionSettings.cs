@@ -512,6 +512,9 @@ namespace Ankh.Settings
             {
                 string value = rk.GetValue(name) as string;
 
+                if (value != null && !value.EndsWith("/"))
+                    value += "/";
+
                 Uri uri;
                 if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
                 {
