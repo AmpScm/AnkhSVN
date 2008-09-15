@@ -61,15 +61,15 @@ namespace Ankh.UI.PendingChanges
             set { _pasteSrc = value; }
         }
 
-        bool _hideHorizontalScrollBar;
+        bool _showHorizontalScrollBar;
 
-        [Localizable(false)]
+        [Localizable(false), DefaultValue(false)]
         public bool ShowHorizontalScrollBar
         {
-            get { return !_hideHorizontalScrollBar; }
+            get { return _showHorizontalScrollBar; }
             set 
-            { 
-                _hideHorizontalScrollBar = !value;
+            {
+                _showHorizontalScrollBar = value;
                 if (codeEditorNativeWindow != null)
                 {
                     codeEditorNativeWindow.ShowHorizontalScrollBar = value;
@@ -556,11 +556,11 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        bool _hideHorizontalScrollBar;
+        bool _showHorizontalScrollBar;
         public bool ShowHorizontalScrollBar
         {
-            get { return !_hideHorizontalScrollBar; }
-            set { _hideHorizontalScrollBar = !value; }
+            get { return _showHorizontalScrollBar; }
+            set { _showHorizontalScrollBar = value; }
         }
 
         #endregion
