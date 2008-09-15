@@ -398,7 +398,40 @@ namespace Ankh.Services
 
         #endregion
 
-        #region IAnkhDiffHandler Members
+        public string GetTitle(SvnItem target, SvnRevision revision)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (revision == null)
+                throw new ArgumentNullException("revision");
+
+            return GetTitle(target.Name, revision);
+        }
+
+        public string GetTitle(SvnTarget target, SvnRevision revision)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            if (revision == null)
+                throw new ArgumentNullException("revision");
+
+            return GetTitle(target.FileName, revision);
+        }
+
+        static string GetTitle(string fileName, SvnRevision revision)
+        {
+            string strRev = revision.RevisionType == SvnRevisionType.Time ?
+                revision.Time.ToLocalTime().ToString("g") : revision.ToString();
+
+            return fileName + " - " + strRev;
+        }
+
+        static string PathSafeRevision(SvnRevision revision)
+        {
+            if (revision.RevisionType == SvnRevisionType.Time)
+                return revision.Time.ToLocalTime().ToString("yyyyMMdd_hhmmss");
+            return revision.ToString();
+        }
 
         string _lastDir;
         public string GetTempFile(SvnItem target, SharpSvn.SvnRevision revision, bool withProgress)
@@ -408,7 +441,8 @@ namespace Ankh.Services
             else if (revision == null)
                 throw new ArgumentNullException("revision");
 
-            string name = target.NameWithoutExtension + "." + revision.ToString() + target.Extension;
+            
+            string name = target.NameWithoutExtension + "." + PathSafeRevision(revision) + target.Extension;
 
             string file;
             if(_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
@@ -444,7 +478,7 @@ namespace Ankh.Services
                 throw new ArgumentNullException("revision");
 
             string targetName = target.FileName;
-            string name = Path.GetFileNameWithoutExtension(targetName) + "." + revision.ToString() + Path.GetExtension(targetName);
+            string name = Path.GetFileNameWithoutExtension(targetName) + "." + PathSafeRevision(revision) + Path.GetExtension(targetName);
 
             string file;
             if (_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
@@ -468,7 +502,5 @@ namespace Ankh.Services
 
             return file;
         }        
-
-        #endregion
     }
 }

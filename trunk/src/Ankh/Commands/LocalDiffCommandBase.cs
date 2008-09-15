@@ -179,7 +179,12 @@ namespace Ankh.Commands
                 return item.FullPath;
             }
 
-            string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + revision.ToString() + Path.GetExtension(item.Name);
+            string strRevision;
+            if (revision.RevisionType == SvnRevisionType.Time)
+                strRevision = revision.Time.ToLocalTime().ToString("yyyyMMdd_hhmmss");
+            else
+                strRevision = revision.ToString();
+            string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + strRevision + Path.GetExtension(item.Name);
             tempFile = Path.Combine(tempDir, tempFile);
             // we need to get it from the repos
             context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
