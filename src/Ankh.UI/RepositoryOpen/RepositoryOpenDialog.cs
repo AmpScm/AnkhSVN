@@ -686,15 +686,17 @@ namespace Ankh.UI.RepositoryOpen
         {
             foreach (ListViewItem item in dirView.SelectedItems)
             {
-                SelectItem(item);
+                SelectItem(item, false);
                 break;
             }
         }
 
-        void SelectItem(ListViewItem item)
+        void SelectItem(ListViewItem item, bool fullUrl)
         {
             if (item.Tag == null)
                 fileNameBox.Text = "";
+            else if(fullUrl)
+                fileNameBox.Text = ((Uri)item.Tag).AbsoluteUri;
             else if (item.ImageIndex == _dirOffset)
                 fileNameBox.Text = item.Text + '/';
             else
@@ -707,7 +709,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (info != null && info.Location != ListViewHitTestLocations.None)
             {
-                SelectItem(info.Item);
+                SelectItem(info.Item, true);
                 ProcessOk();
             }
         }
