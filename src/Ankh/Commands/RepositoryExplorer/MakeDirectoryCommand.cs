@@ -1,11 +1,11 @@
 // $Id$
 using System;
 using System.Windows.Forms;
-using System.Collections;
-using Ankh.UI;
 using Ankh.Ids;
 using SharpSvn;
-using Ankh.WorkingCopyExplorer;
+using Ankh.Selection;
+using Ankh.Scc;
+using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -15,54 +15,74 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.NewDirectory)]
     class MakeDirectoryCommand : CommandBase
     {
-        //SvnCommitArgs _args = null;
-        
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            e.Enabled = false;
+            bool enabled = false;
+            
+            ISvnRepositoryItem item = GetValidSelectedItem(e.Selection);
+            if (item != null
+                && item.NodeKind == SvnNodeKind.Directory)
+            {
+                enabled = true;
+            }
+            e.Enabled = enabled;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            /*
-            IContext context = e.Context.GetService<IContext>();
+            ISvnRepositoryItem selected = GetValidSelectedItem(e.Selection);
+            if (selected == null) { return; }
+            
+            string directoryName = string.Empty;
 
-            INode node = context.RepositoryExplorer.SelectedNode;
-            System.Diagnostics.Debug.Assert(node != null);
-
-            string dirname = context.UIShell.ShowNewDirectoryDialog();
-
-            // did the user bail out?
-            if (dirname == null)
-                return;
-
-            // first show the log message dialog
-            this.url = UriUtils.Combine(node.Url, dirname);
-            CommitOperation operation = new CommitOperation(
-                _args,
-                new SimpleProgressWorker(new SimpleProgressWorkerCallback(this.DoCreateDir)),
-                new string[] { this.url },
-                e.Context);
-            operation.UrlPaths = true;
-
-            if (!operation.ShowLogMessageDialog())
-                return;
-
-            using (context.StartOperation("Creating directory " + url))
+            using (CreateDirectory dlg = new CreateDirectory())
             {
-                operation.Run("Creating directory");
-                context.RepositoryExplorer.Refresh(context.RepositoryExplorer.SelectedNode);
+                DialogResult result = dlg.ShowDialog(e.Context);
+                if (result == DialogResult.OK
+                    && !string.IsNullOrEmpty(directoryName = dlg.NewDirectoryName))
+                {
+                    string log = dlg.LogMessage;
+                    Uri uri = new Uri(selected.Uri, directoryName);
+                    ProgressRunnerResult prResult = 
+                        e.GetService<IProgressRunner>().Run(
+                        "Making New Directory/ies",
+                        delegate(object sender, ProgressWorkerArgs ee)
+                        {
+                            SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
+                            args.ThrowOnError = false;
+                            args.CreateParents = true;
+                            args.LogMessage = log;
+                            ee.Client.RemoteCreateDirectory(uri, args);
+                        }
+                        );
+                    if (prResult.Succeeded)
+                    {
+                        selected.RefreshItem(false);
+                    }
+                }
             }
-            */
         }
 
-        private void DoCreateDir(ProgressWorkerArgs e)
+        /// <summary>
+        /// Get the selected ISvnRepositoryItem
+        /// </summary>
+        /// <param name="context">ISelectionContext</param>
+        /// <returns>ISvnRepositoryItem or null</returns>
+        private Ankh.Scc.ISvnRepositoryItem GetValidSelectedItem(ISelectionContext context)
         {
-            e.Client.RemoteCreateDirectory(this.url);
+            Ankh.Scc.ISvnRepositoryItem result = null;
+            int counter = 0;
+            foreach (Ankh.Scc.ISvnRepositoryItem i in context.GetSelection<Ankh.Scc.ISvnRepositoryItem>())
+            {
+                counter++;
+                if (counter > 1) { return null; } // multiple selection
+                if (i.IsRepositoryItem)
+                {
+                    result = i;
+                }
+            }
+            return result;
         }
-
-        Uri url = null;
     }
 }
 
