@@ -129,7 +129,33 @@ namespace Ankh.UI.RepositoryExplorer
 
         public void RefreshItem(bool refreshParent)
         {
-            //throw new NotImplementedException();
+            if (this.TreeNode != null)
+            {
+                Uri uri = null;
+                if (refreshParent && this.TreeNode.Parent is RepositoryTreeNode)
+                {
+                    uri = ((RepositoryTreeNode)this.TreeNode.Parent).RawUri;
+                }
+                else
+                {
+                    uri = this.TreeNode.RawUri;
+                }
+                if (uri != null
+                    && this.TreeNode.TreeView is RepositoryTreeView)
+                {
+                    RepositoryTreeView rtv = (RepositoryTreeView)this.TreeNode.TreeView;
+                    rtv.Reload(uri);
+                }
+            }
+            else if (this.ListViewItem != null)
+            {
+                RepositoryExplorerControl rec = GetRepositoryExplorerControl();
+                if (rec != null)
+                {
+                    Uri uri = new Uri(this.Uri, "../"); // parent uri
+                    rec.Reload(uri);
+                }
+            }
         }
 
         [Browsable(false)]
@@ -146,5 +172,30 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
         #endregion
+
+        //TODO better way to get to the repository explorer control
+        private RepositoryExplorerControl GetRepositoryExplorerControl()
+        {
+            IAnkhServiceProvider ctx = null;
+            if (this.TreeNode != null)
+            {
+                ctx = ((RepositoryTreeView)this.TreeNode.TreeView).Context;
+            }
+            else if (this.ListViewItem != null)
+            {
+                ctx = ((RepositoryListView)this.ListViewItem.ListView).Context;
+            }
+
+            if (ctx is IAnkhToolWindowHost
+                && ((IAnkhToolWindowHost)ctx).Pane is Microsoft.VisualStudio.Shell.WindowPane)
+            {
+                Microsoft.VisualStudio.Shell.WindowPane pane = (Microsoft.VisualStudio.Shell.WindowPane)((IAnkhToolWindowHost)ctx).Pane;
+                if (pane.Window is RepositoryExplorerControl)
+                {
+                    return (RepositoryExplorerControl)pane.Window;
+                }
+            }
+            return null;
+        }
     }
 }
