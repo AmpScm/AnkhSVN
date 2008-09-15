@@ -13,12 +13,11 @@ namespace Ankh.Commands.RepositoryExplorer
     class RefreshRepositoryItemCommand : CommandBase
     {
         
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (ISvnRepositoryItem it in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
-                if (it.Uri != null)
+                if (it.IsRepositoryItem)
                     return;
             }
 

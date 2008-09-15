@@ -131,21 +131,7 @@ namespace Ankh.UI.RepositoryExplorer
             RepositoryTreeNode serverNode = FindServer(uri, out serverUri);
             if (serverNode != null)
             {
-                #region clean up uri-tree node cache
-                List<Uri> removeUris = new List<Uri>();
-                foreach (Uri cachedUri in _nodeMap.Keys)
-                {
-                    if (serverUri.IsBaseOf(cachedUri))
-                    {
-                        removeUris.Add(cachedUri);
-                    }
-                }
-
-                foreach (Uri removeUri in removeUris)
-                {
-                    _nodeMap.Remove(removeUri);
-                }
-                #endregion
+                CleanupCacheFor(serverUri, true);
                 this.RootNode.Nodes.Remove(serverNode);
             }
         }
@@ -372,6 +358,26 @@ namespace Ankh.UI.RepositoryExplorer
             };
 
             d.BeginInvoke(null, null);
+        }
+
+        public void Reload(Uri uri)
+        {
+            if (uri == null)
+            {
+                // This might be useful when repository roots are persisted across sessions
+                // and might be used to trigger the re-read of the persisted repositories
+            }
+            else
+            {
+                Uri nUri = SvnTools.GetNormalizedUri(uri);
+                RepositoryTreeNode tn = null;
+                if (_nodeMap.TryGetValue(nUri, out tn))
+                {
+                    CleanupCacheFor(uri, false);
+                    tn.Nodes.Clear();
+                    this.BrowseItem(uri);
+                }
+            }
         }
 
         [DefaultValue(false)]
@@ -643,7 +649,45 @@ namespace Ankh.UI.RepositoryExplorer
             e.SelectionItem = new RepositoryExplorerItem((RepositoryTreeNode)e.SelectionItem);
             base.OnRetrieveSelection(e);
         }
+
+        private void CleanupCacheFor(Uri uri, bool includeBase)
+        {
+            if (uri != null)
+            {
+                Uri nUri = SvnTools.GetNormalizedUri(uri);
+                Uri serverUri = new Uri(nUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped));
+                string[] segments = uri.Segments;
+                string segment = string.Join("", segments, 0, segments.Length);
+                List<Uri> removeUris = new List<Uri>();
+                foreach (Uri cachedUri in _nodeMap.Keys)
+                {
+                    if (includeBase && cachedUri.Equals(nUri))
+                    {
+                        removeUris.Add(cachedUri);
+                    }
+                    else
+                    {
+                        Uri cachedUriServer = new Uri(cachedUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped));
+                        if (serverUri.Equals(cachedUriServer))
+                        {
+                            string[] cachedUriSegments = cachedUri.Segments;
+                            if (cachedUriSegments.Length >= segments.Length)
+                            {
+                                string cachedSegment = string.Join("", cachedUriSegments, 0, segments.Length);
+                                if (cachedSegment.Equals(segment))
+                                {
+                                    removeUris.Add(cachedUri);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                foreach (Uri removeUri in removeUris)
+                {
+                    _nodeMap.Remove(removeUri);
+                }
+            }
+        }
     }
-
-
 }

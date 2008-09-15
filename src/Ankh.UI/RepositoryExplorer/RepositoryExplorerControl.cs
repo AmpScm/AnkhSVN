@@ -65,6 +65,15 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         /// <summary>
+        /// Reloads the node identified by the <paramref name="uri"/><br/>
+        /// </summary>
+        /// <param name="uri">URI of the tree node</param>
+        public void Reload(Uri uri)
+        {
+            this.treeView.Reload(uri);
+        }
+
+        /// <summary>
         /// Get the URI of the selected node
         /// </summary>
         public Uri SelectedUri

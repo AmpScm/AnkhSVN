@@ -173,7 +173,6 @@ namespace Ankh
 
         #region IUIShell Members
 
-
         public bool EditEnlistmentState(Ankh.Scc.EnlistmentState state)
         {
             if (state == null)
@@ -186,8 +185,6 @@ namespace Ankh
                 return editor.ShowDialog(Context) == DialogResult.OK;
             }
         }
-
-        #endregion
 
         public Uri ShowAddRepositoryRootDialog()
         {
@@ -227,5 +224,8 @@ namespace Ankh
                 return dlg.NewRoot;
             }
         }
+
+        #endregion
+
     }
 }
