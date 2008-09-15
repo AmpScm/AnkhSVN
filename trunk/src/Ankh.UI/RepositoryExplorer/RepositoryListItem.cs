@@ -46,6 +46,11 @@ namespace Ankh.UI.RepositoryExplorer
                 (info.Lock != null) ? info.Lock.Owner : "");
         }
 
+        protected internal new RepositoryListView ListView
+        {
+            get { return (RepositoryListView)base.ListView; }
+        }
+
         public Uri RawUri
         {
             get { return _uri; }
