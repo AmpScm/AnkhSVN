@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Ankh.Configuration;
 using Ankh.Scc.UI;
 using Ankh.Scc;
+using System.Globalization;
 
 namespace Ankh.Commands
 {
@@ -159,7 +160,7 @@ namespace Ankh.Commands
 
                         da.BaseFile = diff.GetTempFile(copiedFrom, revRange.StartRevision, true);
 
-                        da.BaseTitle = copiedFrom.FileName + " - " + revRange.StartRevision.ToString();
+                        da.BaseTitle = diff.GetTitle(copiedFrom, revRange.StartRevision);
                     }
                 }
 
@@ -168,15 +169,15 @@ namespace Ankh.Commands
                     da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
                         diff.GetTempFile(item, revRange.StartRevision, true);
 
-                    da.BaseTitle = item.Name + " - " + revRange.StartRevision.ToString();
+                    SvnRevision startRev = revRange.StartRevision;
+                    da.BaseTitle = diff.GetTitle(item, revRange.StartRevision);
                 }
 
                 da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
                     diff.GetTempFile(item, revRange.EndRevision, true);
 
-                
-                da.MineTitle = item.Name + " - " + revRange.EndRevision.ToString();
 
+                da.MineTitle = diff.GetTitle(item, revRange.EndRevision);
 
                 diff.RunDiff(da);
             }

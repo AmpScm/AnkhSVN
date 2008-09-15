@@ -109,5 +109,7 @@ namespace Ankh.Scc.UI
 
         string GetTempFile(SvnTarget target, SvnRevision revision, bool withProgress);
         string GetTempFile(SvnItem target, SvnRevision revision, bool withProgress);
+        string GetTitle(SvnTarget target, SvnRevision revision);
+        string GetTitle(SvnItem target, SvnRevision revision);
     }
 }
