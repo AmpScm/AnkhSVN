@@ -1,6 +1,6 @@
 ﻿namespace Ankh.UI.SccManagement
 {
-    partial class CreateBranch
+    partial class CreateBranchDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -47,7 +48,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.switchBox = new System.Windows.Forms.CheckBox();
-            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.versionBox)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -61,7 +62,7 @@
             this.btnCancel.Location = new System.Drawing.Point(334, 412);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -72,7 +73,7 @@
             this.btnOk.Location = new System.Drawing.Point(253, 412);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 4;
+            this.btnOk.TabIndex = 5;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
@@ -93,7 +94,7 @@
             this.groupBox3.Location = new System.Drawing.Point(18, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(397, 151);
-            this.groupBox3.TabIndex = 6;
+            this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "From:";
             // 
@@ -211,7 +212,7 @@
             this.groupBox1.Location = new System.Drawing.Point(18, 169);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(397, 56);
-            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "&To:";
             // 
@@ -253,7 +254,7 @@
             this.label5.Location = new System.Drawing.Point(15, 228);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(74, 13);
-            this.label5.TabIndex = 1;
+            this.label5.TabIndex = 2;
             this.label5.Text = "Log Message:";
             this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
@@ -264,7 +265,7 @@
             this.switchBox.Location = new System.Drawing.Point(27, 412);
             this.switchBox.Name = "switchBox";
             this.switchBox.Size = new System.Drawing.Size(172, 17);
-            this.switchBox.TabIndex = 3;
+            this.switchBox.TabIndex = 4;
             this.switchBox.Text = "S&witch to Branch after creation";
             this.switchBox.UseVisualStyleBackColor = true;
             // 
@@ -276,11 +277,13 @@
             this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessage.Location = new System.Drawing.Point(18, 244);
             this.logMessage.Name = "logMessage";
+            this.logMessage.PasteSource = null;
+            this.logMessage.ShowHorizontalScrollBar = true;
             this.logMessage.Size = new System.Drawing.Size(397, 155);
-            this.logMessage.TabIndex = 2;
+            this.logMessage.TabIndex = 3;
             this.logMessage.Text = null;
             // 
-            // CreateBranch
+            // CreateBranchDialog
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -294,7 +297,7 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
-            this.Name = "CreateBranch";
+            this.Name = "CreateBranchDialog";
             this.Text = "Create Branch/Tag";
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();

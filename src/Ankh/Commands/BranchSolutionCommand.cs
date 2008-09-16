@@ -66,7 +66,7 @@ namespace Ankh.Commands
             if (cache == null || null == (root = cache[path]) || root.Status.Uri == null)
                 return;
 
-            using (CreateBranch dlg = new CreateBranch())
+            using (CreateBranchDialog dlg = new CreateBranchDialog())
             {
                 dlg.SrcFolder = root.FullPath;
                 dlg.SrcUri = root.Status.Uri;

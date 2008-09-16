@@ -13,7 +13,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
     [Command(AnkhCommand.NewDirectory)]
-    class MakeDirectoryCommand : CommandBase
+    class CreateDirectoryCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -32,33 +32,39 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             ISvnRepositoryItem selected = GetValidSelectedItem(e.Selection);
             if (selected == null) { return; }
-            
+
             string directoryName = string.Empty;
 
-            using (CreateDirectory dlg = new CreateDirectory())
+            using (CreateDirectoryDialog dlg = new CreateDirectoryDialog())
             {
                 DialogResult result = dlg.ShowDialog(e.Context);
-                if (result == DialogResult.OK
-                    && !string.IsNullOrEmpty(directoryName = dlg.NewDirectoryName))
-                {
-                    string log = dlg.LogMessage;
-                    Uri uri = new Uri(selected.Uri, directoryName);
-                    ProgressRunnerResult prResult = 
-                        e.GetService<IProgressRunner>().Run(
-                        "Making New Directory/ies",
-                        delegate(object sender, ProgressWorkerArgs ee)
-                        {
-                            SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
-                            args.ThrowOnError = false;
-                            args.CreateParents = true;
-                            args.LogMessage = log;
-                            ee.Client.RemoteCreateDirectory(uri, args);
-                        }
-                        );
-                    if (prResult.Succeeded)
+
+                directoryName = dlg.NewDirectoryName;
+
+                if (result != DialogResult.OK || string.IsNullOrEmpty(directoryName))
+                    return;
+
+                string log = dlg.LogMessage;
+
+                // Handle special characters like on local path
+                Uri uri = SvnTools.AppendPathSuffix(selected.Uri, directoryName);
+
+                ProgressRunnerResult prResult =
+                    e.GetService<IProgressRunner>().Run(
+                    CommandStrings.CreatingDirectories,
+                    delegate(object sender, ProgressWorkerArgs ee)
                     {
-                        selected.RefreshItem(false);
+                        SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
+                        args.ThrowOnError = false;
+                        args.CreateParents = true;
+                        args.LogMessage = log;
+                        ee.Client.RemoteCreateDirectory(uri, args);
                     }
+                    );
+
+                if (prResult.Succeeded)
+                {
+                    selected.RefreshItem(false);
                 }
             }
         }

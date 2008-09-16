@@ -5,31 +5,32 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.UI.SccManagement
 {
-    public partial class CreateDirectory : VSContainerForm
+    public partial class CreateDirectoryDialog : VSContainerForm
     {
-        public CreateDirectory()
+        public CreateDirectoryDialog()
         {
             InitializeComponent();
         }
 
         public string NewDirectoryName
         {
-            get { return textBox1.Text; }
-            set { textBox1.Text = value; }
+            get { return directoryNameBox.Text; }
+            set { directoryNameBox.Text = value; }
         }
 
         public bool NewDirectoryReadonly
         {
-            get { return !textBox1.Enabled; }
-            set { textBox1.Enabled = !value; }
+            get { return !directoryNameBox.Enabled; }
+            set { directoryNameBox.Enabled = !value; }
         }
 
         public string LogMessage
         {
             get { return logMessage.Text; }
-        }
+        }       
     }
 }

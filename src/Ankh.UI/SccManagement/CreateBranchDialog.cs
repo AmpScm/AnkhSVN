@@ -10,9 +10,9 @@ using SharpSvn;
 
 namespace Ankh.UI.SccManagement
 {
-    public partial class CreateBranch : VSContainerForm
+    public partial class CreateBranchDialog : VSContainerForm
     {
-        public CreateBranch()
+        public CreateBranchDialog()
         {
             InitializeComponent();
         }

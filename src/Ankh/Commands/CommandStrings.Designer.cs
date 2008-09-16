@@ -70,6 +70,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating Directories.
+        /// </summary>
+        internal static string CreatingDirectories {
+            get {
+                return ResourceManager.GetString("CreatingDirectories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignore in Subversion.
         /// </summary>
         internal static string IgnoreCaption {
