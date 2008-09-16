@@ -97,17 +97,17 @@ namespace Ankh.UI.SccManagement
             if (treeView1.SelectedNode == null)
                 return;
             Uri u = treeView1.SelectedNode.RawUri;
-            using (CreateDirectory dialog = new CreateDirectory())
+            using (CreateDirectoryDialog dialog = new CreateDirectoryDialog())
             {
-                if (dialog.ShowDialog(Context) == DialogResult.OK)
-                { 
-                    SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
-                    args.CreateParents = true;
-                    Uri newDir = new Uri(u, dialog.NewDirectoryName);
-                    args.LogMessage = dialog.LogMessage;
-                    Client.RemoteCreateDirectory(newDir, args);
-                    treeView1.AddRoot(newDir);
-                }
+                if (dialog.ShowDialog(Context) != DialogResult.OK)
+                    return;
+
+                SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
+                args.CreateParents = true;
+                Uri newDir = new Uri(u, dialog.NewDirectoryName);
+                args.LogMessage = dialog.LogMessage;
+                Client.RemoteCreateDirectory(newDir, args);
+                treeView1.AddRoot(newDir);
             }
         }
 

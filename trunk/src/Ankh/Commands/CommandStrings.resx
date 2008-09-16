@@ -135,4 +135,7 @@
   <data name="WouldYouLikeToAddXToTheIgnorePropertyOnY" xml:space="preserve">
     <value>Would you like to add {0} to the svn:ignore property on '{1}'?</value>
   </data>
+  <data name="CreatingDirectories" xml:space="preserve">
+    <value>Creating Directories</value>
+  </data>
 </root>

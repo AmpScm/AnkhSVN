@@ -240,7 +240,7 @@
     <Compile Include="Commands\LogCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RepositoryExplorer\MakeDirectoryCommand.cs">
+    <Compile Include="Commands\RepositoryExplorer\CreateDirectoryCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RefreshCommand.cs">

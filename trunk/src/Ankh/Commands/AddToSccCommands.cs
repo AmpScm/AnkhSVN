@@ -142,7 +142,7 @@ namespace Ankh.Commands
                             ia.ThrowOnError = false;
                             if (!cl.GetInfo(new SvnUriTarget(dialog.RepositoryAddUrl), ia, out info))
                             {
-                                using (CreateDirectory createDialog = new CreateDirectory())
+                                using (CreateDirectoryDialog createDialog = new CreateDirectoryDialog())
                                 {
                                     createDialog.Text = dialog.Text; // Override dialog title with text from other dialog
 
