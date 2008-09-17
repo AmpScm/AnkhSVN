@@ -21,6 +21,18 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
+            // TODO: Remove this code when we're able to handle directories
+            SvnItem first = null;
+            foreach (SvnItem i in logWindow.WorkingCopyItems)
+            {
+                first = i;
+            }
+            if (first == null || first.IsDirectory)
+            {
+                e.Enabled = false;
+                return;
+            }
+
             bool one = false;
             foreach (ISvnLogItem li in e.Selection.GetSelection<ISvnLogItem>())
             {
