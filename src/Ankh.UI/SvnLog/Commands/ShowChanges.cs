@@ -54,7 +54,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             bool touched = false;
 
-            List<string> logItems = new List<string>();
+            List<string> changedPaths = new List<string>();
             foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);
@@ -63,8 +63,8 @@ namespace Ankh.UI.SvnLog.Commands
 
                 foreach (SvnChangeItem change in item.ChangedPaths)
                 {
-                    if(!logItems.Contains(change.Path))
-                        logItems.Add(change.Path);
+                    if(!changedPaths.Contains(change.Path))
+                        changedPaths.Add(change.Path);
                 }
             }
             if (!touched)
@@ -74,7 +74,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
 
-            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, logItems);
+            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, changedPaths);
             
             // TODO: show dialog when more than one item is returned
             SvnItem workingCopyItem = null;
