@@ -133,6 +133,10 @@
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
+          <Button id="Cmd_SolutionEditProperties" priority="0x90" defaultDisabled="true"
+									text="Solution Prop&amp;erties..."
+									toolTip="View/Edit Solution Subversion Properties"
+                  iconFile="menu/Properties.png" defaultInvisible="true"/>
           <Button id="Cmd_RevertSolutionToRevision" priority="0xD0"
                   text="Revert solution to revision..."
                   toolTip="Revert this item to a specific revision."
@@ -185,6 +189,10 @@
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_Blame" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
+          <Button id="Cmd_ProjectEditProperties" priority="0x90" defaultDisabled="true"
+									text="Project Prop&amp;erties..."
+									toolTip="View/Edit Project Subversion Properties"
+                  iconFile="menu/Properties.png" defaultInvisible="true"/>
 
           <Button id="Cmd_RevertProjectToRevision" priority="0xD0" 
                   text="Revert project to revision..." 

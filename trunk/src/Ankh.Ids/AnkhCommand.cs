@@ -235,5 +235,8 @@ namespace Ankh.Ids
         ListViewGroupMax = ListViewGroup0 + 64,
         ListViewShow0,
         ListViewShowMax = ListViewShow0 + 64,
+
+        SolutionEditProperties,
+        ProjectEditProperties,
     }
 }
