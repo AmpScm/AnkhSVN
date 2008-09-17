@@ -72,9 +72,26 @@ namespace Ankh.UI.SvnLog
 			get { return _args.Author; }
 		}
 
+        string _logMessage;
 		internal string LogMessage
 		{
-			get { return _args.LogMessage; }
+			get 
+            {
+                if (_logMessage == null && _args.LogMessage != null)
+                {
+                    // Don't show carriage return linefeed in the listview
+                    string[] lines = _args.LogMessage.Split('\r', '\n');
+                    foreach (string line in lines)
+                    {
+                        if (line.Trim().Length > 0)
+                        {
+                            _logMessage = line;
+                            break;
+                        }
+                    }
+                }
+                return _logMessage;
+            }
 		}
 
 		internal long Revision
@@ -127,7 +144,7 @@ namespace Ankh.UI.SvnLog
 		[DisplayName("Log message")]
 		public string LogMessage
 		{
-			get { return _lvi.LogMessage; }
+			get { return _lvi.RawData.LogMessage; }
 		}
 
 		[Category("Subversion")]
