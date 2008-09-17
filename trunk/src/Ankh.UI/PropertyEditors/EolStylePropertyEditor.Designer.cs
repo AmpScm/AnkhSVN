@@ -31,7 +31,7 @@ namespace Ankh.UI.PropertyEditors
             this.nativeRadioButton.Size = new System.Drawing.Size(241, 24);
             this.nativeRadioButton.TabIndex = 1;
             this.nativeRadioButton.TabStop = true;
-            this.nativeRadioButton.Tag = "";
+            this.nativeRadioButton.Tag = "native";
             this.nativeRadioButton.Text = "&Native";
             this.nativeRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
@@ -41,6 +41,7 @@ namespace Ankh.UI.PropertyEditors
             this.lfRadioButton.Name = "lfRadioButton";
             this.lfRadioButton.Size = new System.Drawing.Size(241, 24);
             this.lfRadioButton.TabIndex = 3;
+            this.lfRadioButton.Tag = "LF";
             this.lfRadioButton.Text = "&LF (Unix)";
             this.lfRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
@@ -50,6 +51,7 @@ namespace Ankh.UI.PropertyEditors
             this.crRadioButton.Name = "crRadioButton";
             this.crRadioButton.Size = new System.Drawing.Size(241, 24);
             this.crRadioButton.TabIndex = 4;
+            this.crRadioButton.Tag = "CR";
             this.crRadioButton.Text = "&CR (MacOS)";
             this.crRadioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
@@ -59,6 +61,7 @@ namespace Ankh.UI.PropertyEditors
             this.crlfRdioButton.Name = "crlfRdioButton";
             this.crlfRdioButton.Size = new System.Drawing.Size(241, 24);
             this.crlfRdioButton.TabIndex = 5;
+            this.crlfRdioButton.Tag = "CRLF";
             this.crlfRdioButton.Text = "CRLF (Windows)";
             this.crlfRdioButton.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 

@@ -15,6 +15,7 @@ namespace Ankh.UI.PropertyEditors
     internal partial class EolStylePropertyEditor : PropertyEditControl, IPropertyEditor
     {
         public event EventHandler Changed;
+        public string existingValue;
 
         public EolStylePropertyEditor()
         {
@@ -24,7 +25,13 @@ namespace Ankh.UI.PropertyEditors
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
-            this.selectedValue = "native";
+            existingValue = string.Empty;
+            this.dirty = true;
+            RadioButton rb = ToRadioButton("native");
+            if (rb != null)
+            {
+                rb.Checked = true;
+            }
         }
 
         public void Reset()
@@ -47,7 +54,6 @@ namespace Ankh.UI.PropertyEditors
 
         public PropertyItem PropertyItem
         {
-
             get
             {
                 if( !this.Valid)
@@ -61,7 +67,12 @@ namespace Ankh.UI.PropertyEditors
             set
             {
                 TextPropertyItem item = (TextPropertyItem)value;
-                this.dirty = false;
+                existingValue = item.Text;
+                RadioButton rb = ToRadioButton(existingValue);
+                if (rb != null)
+                {
+                    rb.Checked = true;
+                }
             }
         }
 
@@ -85,16 +96,14 @@ namespace Ankh.UI.PropertyEditors
             base.Dispose( disposing );
         }
 
-		
-
         private void RadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
+            string newValue = (string)((RadioButton)sender).Tag;
+            this.selectedValue = newValue;
+
             // Enables save button
-            this.dirty = true;
-            if ( Changed != null )
-                Changed(this, EventArgs.Empty);
-    
-            selectedValue = ((RadioButton)sender).Text;
+            this.Dirty = !string.IsNullOrEmpty(newValue)
+                && !newValue.Equals(existingValue);
         }
 
         private void CreateMyToolTip()
@@ -105,15 +114,45 @@ namespace Ankh.UI.PropertyEditors
             conflictToolTip.SetToolTip( this.crRadioButton, "End of line style is CR");
             conflictToolTip.SetToolTip( this.crlfRdioButton, "End of line style is CRLF");
         }
-        
+
+        private bool Dirty
+        {
+            set
+            {
+                if (this.dirty != value)
+                {
+                    this.dirty = value;
+                    if (Changed != null)
+                    {
+                        Changed(this, EventArgs.Empty);
+                    }
+                }
+            }
+        }
+
+        private RadioButton ToRadioButton(string propertyValue)
+        {
+            if (string.IsNullOrEmpty(propertyValue))
+            {
+                return null;
+            }
+            foreach (Control c in this.eolStyleGroupBox.Controls)
+            {
+                if (c is RadioButton
+                    && c.Tag is string
+                    && propertyValue.Equals((string) c.Tag))
+                {
+                    return (RadioButton)c;
+                }
+            }
+            return null;
+        }
+
         private string selectedValue;
         /// <summary>
         /// Flag for enabling/disabling save button
         /// </summary>
         private bool dirty;
-
-      
-
        
     }
 }
