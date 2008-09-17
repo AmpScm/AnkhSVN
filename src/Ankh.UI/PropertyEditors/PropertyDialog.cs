@@ -118,6 +118,7 @@ namespace Ankh.UI.PropertyEditors
 
             //Sets the current editor to match the selected item.
             this.currentEditor = editor;
+            UpdateButtons(); // allow new peoperty editor to determine the initial button states
             this.currentEditor.Changed += new EventHandler(
                 this.currentEditor_Changed);
         }
