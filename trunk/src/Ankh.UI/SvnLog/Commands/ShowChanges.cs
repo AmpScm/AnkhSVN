@@ -9,6 +9,7 @@ using System.CodeDom.Compiler;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Ids;
 using Ankh.Scc.UI;
+using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -52,11 +53,19 @@ namespace Ankh.UI.SvnLog.Commands
             long max = long.MinValue;
 
             bool touched = false;
+
+            List<string> logItems = new List<string>();
             foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);
                 max = Math.Max(max, item.Revision);
                 touched = true;
+
+                foreach (SvnChangeItem change in item.ChangedPaths)
+                {
+                    if(!logItems.Contains(change.Path))
+                        logItems.Add(change.Path);
+                }
             }
             if (!touched)
                 return;
@@ -65,11 +74,17 @@ namespace Ankh.UI.SvnLog.Commands
 
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
 
-            SvnItem[] files = logWindow.WorkingCopyItems;
-            if (files == null || files.Length == 0)
+            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, logItems);
+            
+            // TODO: show dialog when more than one item is returned
+            SvnItem workingCopyItem = null;
+            foreach (SvnItem item in intersectedItems)
+            {
+                workingCopyItem = item;
+                break;
+            }
+            if (workingCopyItem == null)
                 return;
-
-            SvnItem workingCopyItem = files[0];
 
             SvnRevisionRange range = new SvnRevisionRange(min, max);
 
@@ -81,6 +96,24 @@ namespace Ankh.UI.SvnLog.Commands
             da.MineFile = diff.GetTempFile(diffTarget, range.EndRevision, false);
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
             diff.RunDiff(da);
+        }
+    }
+
+    static class LogHelper
+    {
+        public static IEnumerable<SvnItem> IntersectWorkingCopyItemsWithChangedPaths(IEnumerable<SvnItem> workingCopyItems, IEnumerable<string> changedPaths)
+        {
+            foreach (SvnItem i in workingCopyItems)
+            {
+                foreach (string s in changedPaths)
+                {
+                    if (i.Status.Uri.ToString().EndsWith(s))
+                    {
+                        yield return i;
+                        break;
+                    }
+                }
+            }
         }
     }
 }
