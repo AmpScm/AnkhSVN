@@ -414,6 +414,7 @@
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogBlameRevision" name="LogBlameRevision" priority="0x300"
                   text="Blame revision" iconFile="menu/Blame.png"/>
+          <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
         </Group>
       </Menu>
     </GroupRef>
