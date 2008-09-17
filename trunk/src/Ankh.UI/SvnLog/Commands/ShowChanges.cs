@@ -8,6 +8,7 @@ using System.IO;
 using System.CodeDom.Compiler;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Ids;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -17,6 +18,26 @@ namespace Ankh.UI.SvnLog.Commands
         TempFileCollection _collection = new TempFileCollection();
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+
+            if ((logWindow == null) || !logWindow.HasWorkingCopyItems)
+            {
+                e.Enabled = false;
+                return;
+            }
+
+            // TODO: Remove this code when we're able to handle directories
+            SvnItem first = null;
+            foreach (SvnItem i in logWindow.WorkingCopyItems)
+            {
+                first = i;
+            }
+            if (first == null || first.IsDirectory)
+            {
+                e.Enabled = false;
+                return;
+            }
+
             foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 return;
@@ -39,45 +60,27 @@ namespace Ankh.UI.SvnLog.Commands
             }
             if (!touched)
                 return;
+            if (min == max)
+                min--;
+
+            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+
+            SvnItem[] files = logWindow.WorkingCopyItems;
+            if (files == null || files.Length == 0)
+                return;
+
+            SvnItem workingCopyItem = files[0];
 
             SvnRevisionRange range = new SvnRevisionRange(min, max);
-            string htmlFile = null;
-            e.GetService<IProgressRunner>().Run("Retrieving changes",
-                delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    htmlFile = Path.GetTempFileName();
-                    _collection.AddFile(htmlFile, false);
 
-                    using (MemoryStream ms = new MemoryStream())
-                    using (StreamReader reader = new StreamReader(ms))
-                    {
-                        // BH: Why do we always diff over the project root instead of the selected location?
-                        ee.Client.Diff(new SvnUriTarget(e.GetService<IAnkhSolutionSettings>().ProjectRootUri), range, ms);
-                        ms.Flush();
-                        ms.Position = 0;
-
-                        DiffHtmlModel model = new DiffHtmlModel(reader.ReadToEnd());
-
-                        using (FileStream fs = File.OpenWrite(htmlFile))
-                        using (StreamWriter writer = new StreamWriter(fs))
-                        {
-                            writer.Write(model.GetHtml());
-                        }
-                    }
-
-                });
-
-            if (htmlFile != null)
-            {
-                IAnkhWebBrowser browser = e.Context.GetService<IAnkhWebBrowser>();
-                BrowserArgs args = new BrowserArgs();
-                args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
-                    __VSCREATEWEBBROWSER.VSCWB_NoHistory |
-                    __VSCREATEWEBBROWSER.VSCWB_StartCustom |
-                    __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
-                args.BaseCaption = "Subversion";
-                browser.Navigate(new Uri("file:///" + htmlFile), args);
-            }
+            SvnTarget diffTarget = new SvnPathTarget(workingCopyItem.FullPath);
+            IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
+            AnkhDiffArgs da = new AnkhDiffArgs();
+            da.BaseFile = diff.GetTempFile(diffTarget, range.StartRevision, false);
+            da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);
+            da.MineFile = diff.GetTempFile(diffTarget, range.EndRevision, false);
+            da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
+            diff.RunDiff(da);
         }
     }
 }
