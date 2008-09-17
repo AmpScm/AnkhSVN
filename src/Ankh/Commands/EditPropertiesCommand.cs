@@ -8,52 +8,106 @@ using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.UI;
 using Ankh.UI.PropertyEditors;
+using Ankh.Selection;
+using Ankh.VS;
 
 
 namespace Ankh.Commands
 {
+    /// <remarks>
+    /// If project/solution (logical) node is selected, target for this command is the project/solution (physical) folder.
+    /// </remarks>
     [Command(AnkhCommand.ItemEditProperties, HideWhenDisabled = true)]
+    [Command(AnkhCommand.ProjectEditProperties, HideWhenDisabled = true)]
+    [Command(AnkhCommand.SolutionEditProperties, HideWhenDisabled = true)]
     class EditPropertiesCommand : CommandBase
     {
-        // TODO: We should probably add commands for projects and solutions specific too
-        // To handle the common directory != project file case
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             int count = 0;
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            switch (e.Command)
             {
-                if (i.IsVersioned)
-                {
-                    count++;
-
-                    if (count > 1)
+                case AnkhCommand.ItemEditProperties:
+                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (e.Selection.IsSingleNodeSelection)
-                            break;
-                        else
+                        if (i.IsVersioned)
                         {
-                            e.Enabled = false;
-                            return;
-                        }
-                    }                    
-                }
-            }
+                            count++;
 
+                            if (count > 1)
+                            {
+                                if (e.Selection.IsSingleNodeSelection)
+                                    break;
+                                else
+                                {
+                                    e.Enabled = false;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case AnkhCommand.ProjectEditProperties:
+                    foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
+                    {
+                        count++;
+
+                        if (count > 1)
+                            break;
+                    }
+                    break;
+                case AnkhCommand.SolutionEditProperties:
+                    count = 1;
+                    break;
+                default:
+                    throw new InvalidOperationException();
+            }
             if (count == 0 || (count > 1 && !e.Selection.IsSingleNodeSelection))
                 e.Enabled = false;
         }
+
         public override void OnExecute(CommandEventArgs e)
         {
             SvnItem firstVersioned = null;
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            switch (e.Command)
             {
-                if (i.IsVersioned)
-                {
-                    firstVersioned = i;
+                case AnkhCommand.ItemEditProperties:
+                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+                    {
+                        if (i.IsVersioned)
+                        {
+                            firstVersioned = i;
+                            break;
+                        }
+                    }
                     break;
-                }
+                case AnkhCommand.ProjectEditProperties: // use project folder
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                    {
+                        IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                        if (pfm != null)
+                        {
+                            ISvnProjectInfo info = pfm.GetProjectInfo(p);
+                            if (info != null)
+                            {
+                                firstVersioned = cache[info.ProjectDirectory];
+                            }
+                            if (firstVersioned != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                case AnkhCommand.SolutionEditProperties: // use solution folder
+                    IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+                    if (solutionSettings != null)
+                    {
+                        firstVersioned = cache[solutionSettings.ProjectRoot];
+                    }
+                    break;
             }
             if (firstVersioned == null)
                 return; // exceptional case
