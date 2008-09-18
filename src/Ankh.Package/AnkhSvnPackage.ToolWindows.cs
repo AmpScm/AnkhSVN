@@ -357,7 +357,7 @@ namespace Ankh.VSPackage
                     {
                         _control.Visible = true; // If .Visible = false no window is created!
                         _control.CreateControl();
-                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #502
+                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507
                     }
                 }
                 return _control;
