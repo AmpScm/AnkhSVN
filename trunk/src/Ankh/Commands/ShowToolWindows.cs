@@ -2,6 +2,8 @@
 using System;
 using Ankh.Ids;
 using Ankh.UI;
+using Ankh.UI.RepositoryExplorer;
+using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -44,6 +46,19 @@ namespace Ankh.Commands
             }
 
             package.ShowToolWindow(toolWindow);
+
+            if (e.Command == AnkhCommand.ShowRepositoryExplorer)
+            {
+                IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+
+                if (ss.ProjectRootUri != null)
+                {
+                    RepositoryExplorerControl ctrl = e.Selection.ActiveDialogOrFrameControl as RepositoryExplorerControl;
+
+                    if (ctrl != null)
+                        ctrl.AddRoot(ss.ProjectRootUri);
+                }
+            }
         }
     }
 }

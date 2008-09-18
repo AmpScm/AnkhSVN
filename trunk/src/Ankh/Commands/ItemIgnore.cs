@@ -80,7 +80,7 @@ namespace Ankh.Commands
                         while (p != null && (pp = p.Parent) != null && !pp.IsVersioned)
                             p = pp;
 
-                        e.Text = string.Format(CommandStrings.IgnoreFolder, (pp != null) ? pp.Name : "");
+                        e.Text = string.Format(CommandStrings.IgnoreFolder, (p != null) ? p.Name : "");
                         break;
                 }
         }
