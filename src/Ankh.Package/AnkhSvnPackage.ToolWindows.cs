@@ -357,6 +357,7 @@ namespace Ankh.VSPackage
                     {
                         _control.Visible = true; // If .Visible = false no window is created!
                         _control.CreateControl();
+                        _control.Visible = false;
                     }
                 }
                 return _control;
