@@ -95,5 +95,17 @@ namespace Ankh.UI
 				cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
 			}
         }
+
+        private void changedPaths_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Point mp = changedPaths.PointToClient(MousePosition);
+            ListViewHitTestInfo info = changedPaths.HitTest(mp);
+            PathListViewItem lvi = info.Item as PathListViewItem;
+            if (lvi != null)
+            {
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.PostExecCommand(AnkhCommand.LogShowChanges);
+            }
+        }
     }
 }
