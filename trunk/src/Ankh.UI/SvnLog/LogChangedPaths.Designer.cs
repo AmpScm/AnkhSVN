@@ -54,6 +54,7 @@ namespace Ankh.UI
             this.changedPaths.ProvideWholeListForSelection = false;
             this.changedPaths.UseCompatibleStateImageBehavior = false;
             this.changedPaths.View = System.Windows.Forms.View.Details;
+            this.changedPaths.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.changedPaths_MouseDoubleClick);
             this.changedPaths.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.changedPaths_ShowContextMenu);
             // 
             // columnHeader1
