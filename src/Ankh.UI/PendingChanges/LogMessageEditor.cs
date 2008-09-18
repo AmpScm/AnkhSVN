@@ -373,11 +373,6 @@ namespace Ankh.UI.PendingChanges
         private IntPtr editorHwnd;
 
         /// <summary>
-        /// Command window handle
-        /// </summary>
-        private IntPtr commandHwnd;
-
-        /// <summary>
         /// The IOleCommandTarget interface enables objects and their containers to dispatch commands to each other.
         /// For example, an object's toolbars may contain buttons for commands such as Print, Print Preview, Save, New, and Zoom. 
         /// </summary>
@@ -386,9 +381,9 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Reference to VsCodeWindow object
         /// </summary>
-        private IVsCodeWindow codeWindow;
+        IVsCodeWindow _codeWindow;
 
-        IVsTextBuffer textBuffer;
+        IVsTextBuffer _textBuffer;
         IVsTextView _textView;
 
         #endregion
@@ -409,10 +404,10 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                if (textBuffer == null)
+                if (_textBuffer == null)
                     return null;
 
-                IVsTextLines lines = textBuffer as IVsTextLines;
+                IVsTextLines lines = _textBuffer as IVsTextLines;
 
                 if (lines == null)
                     return null;
@@ -425,13 +420,13 @@ namespace Ankh.UI.PendingChanges
             }
             set
             {
-                if (textBuffer == null)
+                if (_textBuffer == null)
                     return;
 
                 if (string.IsNullOrEmpty(value))
                     value = "";
 
-                IVsTextLines lines = textBuffer as IVsTextLines;
+                IVsTextLines lines = _textBuffer as IVsTextLines;
 
                 if (lines == null)
                     return;
@@ -466,7 +461,7 @@ namespace Ankh.UI.PendingChanges
             if (string.IsNullOrEmpty(text))
                 return true;
 
-            IVsTextLines lines = textBuffer as IVsTextLines;
+            IVsTextLines lines = _textBuffer as IVsTextLines;
 
             if (lines == null || _textView == null)
                 return false;
@@ -613,16 +608,16 @@ namespace Ankh.UI.PendingChanges
 
             // set buffer
             Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
-            textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
+            _textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
             Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
 
-            hr = textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);
+            hr = _textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);
             if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
             }
 
-            hr = codeWindow.SetBuffer((IVsTextLines)textBuffer);
+            hr = codeWindow.SetBuffer((IVsTextLines)_textBuffer);
             if (!ErrorHandler.Succeeded(hr))
             {
                 Marshal.ThrowExceptionForHR(hr);
@@ -710,11 +705,11 @@ namespace Ankh.UI.PendingChanges
         public void Init(bool allowModal)
         {
             //Create window            
-            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, out codeWindow);
-            commandTarget = codeWindow as IOleCommandTarget;
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, out _codeWindow);
+            commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
-            int hr = codeWindow.GetPrimaryView(out textView);
+            int hr = _codeWindow.GetPrimaryView(out textView);
 
             if (!ErrorHandler.Succeeded(hr))
             {
@@ -722,8 +717,6 @@ namespace Ankh.UI.PendingChanges
             }
 
             _textView = textView;
-            commandHwnd = textView.GetWindowHandle();
-
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
         }
 
@@ -773,10 +766,10 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         public void Dispose()
         {
-            if (codeWindow != null)
+            if (_codeWindow != null)
             {
-                codeWindow.Close();
-                codeWindow = null;
+                _codeWindow.Close();
+                _codeWindow = null;
             }
         }
 
