@@ -57,7 +57,7 @@ namespace Ankh.UI.PendingChanges
 
             base.OnLoad(e);
 
-            ShowPanel(_commitsPage);
+            ShowPanel(_commitsPage, false);
         }
 
         protected override void OnFrameCreated(EventArgs e)
@@ -89,7 +89,7 @@ namespace Ankh.UI.PendingChanges
                 pendingChangesTabs.ForeColor = color;
         }
 
-        void ShowPanel(PendingChangesPage page)
+        void ShowPanel(PendingChangesPage page, bool select)
         {
             if (page == null)
                 throw new ArgumentNullException("page");
@@ -122,7 +122,9 @@ namespace Ankh.UI.PendingChanges
             issuesButton.Checked = (page == _issuesPage);
             recentChangesButton.Checked = (page == _changesPage);
             conflictsButton.Checked = (page == _conflictsPage);
-            page.Select();
+
+            if(select)
+                page.Select();
 
             if (Context != null)
             {
@@ -148,22 +150,22 @@ namespace Ankh.UI.PendingChanges
 
         private void fileChangesButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_commitsPage);
+            ShowPanel(_commitsPage, true);
         }
 
         private void issuesButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_issuesPage);
+            ShowPanel(_issuesPage, true);
         }
 
         private void recentChangesButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_changesPage);
+            ShowPanel(_changesPage, true);
         }
 
         private void conflictsButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(_conflictsPage);
+            ShowPanel(_conflictsPage, true);
         }
     }
 }
