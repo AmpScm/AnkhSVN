@@ -52,6 +52,10 @@ namespace Ankh.Scc.UI
         /// Occurs when the frame show state changed
         /// </summary>
         event EventHandler<FrameEventArgs> FrameShow;
+        /// <summary>
+        /// Occurs when the frame size changed
+        /// </summary>
+        event EventHandler<FrameEventArgs> FrameSize;
     }
 
     /// <summary>
