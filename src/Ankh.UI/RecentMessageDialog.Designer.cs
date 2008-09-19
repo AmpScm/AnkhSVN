@@ -74,12 +74,12 @@
             // 
             // previewBox
             // 
-            this.previewBox.BackColor = System.Drawing.SystemColors.Window;
             this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.previewBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewBox.Location = new System.Drawing.Point(0, 0);
             this.previewBox.Name = "previewBox";
             this.previewBox.PasteSource = null;
+            this.previewBox.ReadOnly = true;
             this.previewBox.Size = new System.Drawing.Size(498, 34);
             this.previewBox.TabIndex = 0;
             this.previewBox.Text = null;
