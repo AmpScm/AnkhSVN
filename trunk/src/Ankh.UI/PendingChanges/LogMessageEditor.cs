@@ -79,7 +79,7 @@ namespace Ankh.UI.PendingChanges
                 if (codeEditorNativeWindow != null)
                 {
                     codeEditorNativeWindow.ShowHorizontalScrollBar = value;
-                    codeEditorNativeWindow.Size = ClientSize;
+                    UpdateSize();
                 }
             }
         }
@@ -138,9 +138,10 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        bool _inToolWindow;
         void InitializeToolWindow(IAnkhToolWindowControl toolWindow)
         {
-            //toolWindow.FrameShow += new EventHandler<FrameEventArgs>(OnToolWindowFrameShow);
+            _inToolWindow = true;
             Init(toolWindow.ToolWindowHost, false);
             toolWindow.ToolWindowHost.AddCommandTarget(CommandTarget);
         }
@@ -164,6 +165,25 @@ namespace Ankh.UI.PendingChanges
             codeEditorNativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
             codeEditorNativeWindow.Size = ClientSize;
             codeEditorNativeWindow.SetReadOnly(_readOnly);
+        }
+
+        void UpdateSize()
+        {
+            if (codeEditorNativeWindow != null)
+            {
+                if (!_inToolWindow)
+                    codeEditorNativeWindow.Size = ClientSize;
+                else
+                {
+                    // Delay until sizing of toolwindow completed
+                    BeginInvoke((AnkhAction)
+                        delegate
+                        {
+                            codeEditorNativeWindow.Size = ClientSize;
+                        });
+                }
+                
+            }
         }
 
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -338,8 +358,7 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            if (codeEditorNativeWindow != null)
-                codeEditorNativeWindow.Size = ClientSize;
+            UpdateSize();
         }
 
         #endregion
