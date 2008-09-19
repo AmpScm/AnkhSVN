@@ -740,9 +740,15 @@ namespace Ankh.UI.PendingChanges
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
         }
 
+        bool _ro;
         internal void SetReadOnly(bool value)
         {
-            //throw new NotImplementedException();
+            if (_textBuffer != null && _ro != value)
+            {
+                _ro = value;
+
+                _textBuffer.SetStateFlags(value ? (uint)BUFFERSTATEFLAGS.BSF_USER_READONLY : 0);
+            }
         }
 
         /// <summary>
