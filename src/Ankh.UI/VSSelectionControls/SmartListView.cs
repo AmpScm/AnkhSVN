@@ -192,6 +192,41 @@ namespace Ankh.UI.VSSelectionControls
 
             [DllImport("user32.dll")]
             public static extern bool GetWindowRect(IntPtr hWnd, ref RECT lpRect);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            public static extern bool GetScrollInfo(IntPtr hwnd, int fnBar, ref SCROLLINFO lpsi);
+
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct SCROLLINFO
+            {
+                public uint cbSize;
+                public uint fMask;
+                public int nMin;
+                public int nMax;
+                public uint nPage;
+                public int nPos;
+                public int nTrackPos;
+            }
+
+            public enum ScrollBarDirection
+            {
+                SB_HORZ = 0,
+                SB_VERT = 1,
+                SB_CTL = 2,
+                SB_BOTH = 3
+            }
+
+            public enum ScrollInfoMask
+            {
+                SIF_RANGE = 0x1,
+                SIF_PAGE = 0x2,
+                SIF_POS = 0x4,
+                SIF_DISABLENOSCROLL = 0x8,
+                SIF_TRACKPOS = 0x10,
+                SIF_ALL = SIF_RANGE + SIF_PAGE + SIF_POS + SIF_TRACKPOS
+            }
         }
 
         public void SetSortIcon(int column, SortIcon mode)
@@ -614,5 +649,59 @@ namespace Ankh.UI.VSSelectionControls
             get { return OSLevel >= 510; }
         }
         #endregion        
+
+        public int HScrollPos
+        {
+            get
+            {
+                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
+                si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
+                si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_TRACKPOS | NativeMethods.ScrollInfoMask.SIF_POS);
+
+                if (NativeMethods.GetScrollInfo(Handle, (int)NativeMethods.ScrollBarDirection.SB_HORZ, ref si))
+                    return si.nPos;
+                return -1;
+            }
+        }
+        public int HScrollMax
+        {
+            get
+            {
+                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
+                si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
+                si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_RANGE);
+
+                if (NativeMethods.GetScrollInfo(Handle, (int)NativeMethods.ScrollBarDirection.SB_HORZ, ref si))
+                    return si.nMax;
+                return -1;
+            }
+        }
+
+        public int VScrollPos
+        {
+            get
+            {
+                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
+                si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
+                si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_TRACKPOS | NativeMethods.ScrollInfoMask.SIF_POS);
+
+                if (NativeMethods.GetScrollInfo(Handle, (int)NativeMethods.ScrollBarDirection.SB_VERT, ref si))
+                    return si.nPos;
+                return -1;
+            }
+        }
+        public int VScrollMax
+        {
+            get
+            {
+                NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
+                si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
+                si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_RANGE);
+
+                if (NativeMethods.GetScrollInfo(Handle, (int)NativeMethods.ScrollBarDirection.SB_VERT, ref si))
+                    return si.nMax;
+                return -1;
+            }
+        }       
     }
 }

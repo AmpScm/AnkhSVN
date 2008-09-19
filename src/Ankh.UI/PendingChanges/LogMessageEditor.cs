@@ -862,5 +862,34 @@ namespace Ankh.UI.PendingChanges
                 return false;
             }
         }
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+            internal static extern IntPtr SetFocus(IntPtr hWnd);
+
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.U1)]
+            internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+            //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            //internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool IsWindow(IntPtr hWnd);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern bool IsChild(IntPtr hWndParent, IntPtr hWnd);
+
+            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
+            internal static extern IntPtr GetDesktopWindow();
+        }
     }
 }

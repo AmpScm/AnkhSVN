@@ -191,7 +191,6 @@
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="NativeMethods.cs" />
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>

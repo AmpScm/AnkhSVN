@@ -326,16 +326,8 @@ namespace Ankh.UI.SvnLog
                         {
                             _running = true;
 
-                            SCROLLINFO si = new SCROLLINFO();
-                            si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf( si );
-                            si.fMask = (int) (ScrollInfoMask.SIF_RANGE | ScrollInfoMask.SIF_TRACKPOS|ScrollInfoMask.SIF_POS);
-
-                            if (NativeMethods.GetScrollInfo(logRevisionControl1.Handle, (int)ScrollBarDirection.SB_VERT, ref si))
-                            {
-                                if (si.nPos < si.nMax - 30)
-                                    return;
-                            }
-
+                            if (logRevisionControl1.VScrollPos < logRevisionControl1.VScrollMax - 30)
+                                return;
                             
                             SvnLogArgs args = new SvnLogArgs();
                             args.Start = li.Revision - 1;
