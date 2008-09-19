@@ -1,3 +1,4 @@
+using Ankh.UI.PendingChanges;
 namespace Ankh.UI
 {
     partial class LogMessageView
@@ -29,7 +30,7 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogMessageView));
-			this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new LogMessageEditor();
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -60,7 +61,7 @@ namespace Ankh.UI
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private LogMessageEditor textBox1;
         private System.Windows.Forms.Label label1;
     }
 }
