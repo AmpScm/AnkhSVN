@@ -785,9 +785,9 @@ namespace Ankh.UI.PendingChanges
             if (ErrorHandler.Succeeded(_textBuffer.GetStateFlags(out state)))
             {
                 if (value)
-                    state |= (uint)BUFFERSTATEFLAGS.BSF_FILESYS_READONLY;
+                    state |= (uint)BUFFERSTATEFLAGS.BSF_USER_READONLY;
                 else
-                    state &= ~(uint)BUFFERSTATEFLAGS.BSF_FILESYS_READONLY;
+                    state &= ~(uint)BUFFERSTATEFLAGS.BSF_USER_READONLY;
 
                 _textBuffer.SetStateFlags(state);
             }
