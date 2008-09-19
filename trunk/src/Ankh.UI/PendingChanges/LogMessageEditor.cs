@@ -259,8 +259,11 @@ namespace Ankh.UI.PendingChanges
 
             switch (key)
             {
-                case Keys.Tab:
+                case Keys.Tab:                    
                     {
+                        if (_readOnly)
+                            return false; // Allow using tab for dialog navigation
+
                         Keys mods = keyData & Keys.Modifiers;
                         if ((mods & (Keys.Control | Keys.Alt)) != 0)
                         {
