@@ -123,8 +123,15 @@ namespace Ankh.UI
             OnFrameShow(e);
         }
 
+        /// <summary>
+        /// Occurs when the frame show size changed
+        /// </summary>
+        public event EventHandler<FrameEventArgs> FrameSize;
+
         protected virtual void OnFrameSize(FrameEventArgs e)
         {
+            if (FrameSize != null)
+                FrameSize(this, e);
         }
 
 
