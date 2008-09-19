@@ -42,6 +42,7 @@ namespace Ankh.UI.PendingChanges
 
         public LogMessageEditor()
         {
+            BackColor = SystemColors.Window;
         }
 
         public LogMessageEditor(IContainer container)
@@ -49,6 +50,14 @@ namespace Ankh.UI.PendingChanges
         {
             container.Add(this);
         }
+
+        [Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Color BackColor
+        {
+            get { return base.BackColor; }
+            set { base.BackColor = value; }
+        }
+
 
         IPendingChangeSource _pasteSrc;
         /// <summary>
@@ -75,6 +84,19 @@ namespace Ankh.UI.PendingChanges
                     codeEditorNativeWindow.ShowHorizontalScrollBar = value;
                     codeEditorNativeWindow.Size = ClientSize;
                 }
+            }
+        }
+
+        bool _readOnly;
+        [Localizable(false), DefaultValue(false)]
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set
+            {
+                _readOnly = value;
+                if (codeEditorNativeWindow != null)
+                    codeEditorNativeWindow.SetReadOnly(value);
             }
         }
 
@@ -144,6 +166,7 @@ namespace Ankh.UI.PendingChanges
             codeEditorNativeWindow.Init(allowModal);
             codeEditorNativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
             codeEditorNativeWindow.Size = ClientSize;
+            codeEditorNativeWindow.SetReadOnly(_readOnly);
         }
 
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -720,6 +743,11 @@ namespace Ankh.UI.PendingChanges
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
         }
 
+        internal void SetReadOnly(bool value)
+        {
+            //throw new NotImplementedException();
+        }
+
         /// <summary>
         ///  This method is used to get service of specified type
         /// </summary>
@@ -859,6 +887,6 @@ namespace Ankh.UI.PendingChanges
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern IntPtr GetDesktopWindow();
-        }
+        }        
     }
 }

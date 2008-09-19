@@ -77,7 +77,6 @@
             this.logMessage.Location = new System.Drawing.Point(12, 67);
             this.logMessage.Name = "logMessage";
             this.logMessage.PasteSource = null;
-            this.logMessage.ShowHorizontalScrollBar = true;
             this.logMessage.Size = new System.Drawing.Size(380, 125);
             this.logMessage.TabIndex = 3;
             this.logMessage.Text = null;

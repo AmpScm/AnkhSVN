@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.Scc;
+using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
@@ -15,7 +16,9 @@ namespace Ankh.UI.PendingChanges.Commands
         {
             LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if (lme == null || lme.PasteSource == null || !lme.PasteSource.HasPendingChanges)
+            if (lme == null || lme.PasteSource == null)
+                e.Enabled = false;
+            else if(e.Command == AnkhCommand.PcLogEditorPasteFileList && !lme.PasteSource.HasPendingChanges)
                 e.Enabled = false;
         }
 
@@ -26,6 +29,19 @@ namespace Ankh.UI.PendingChanges.Commands
             if (lme == null || lme.PasteSource == null)
                 return;
 
+            switch (e.Command)
+            {
+                case AnkhCommand.PcLogEditorPasteFileList:
+                    OnPasteList(e, lme);
+                    break;
+                case AnkhCommand.PcLogEditorPasteRecentLog:
+                    OnPasteRecent(e, lme);
+                    break;
+            }
+        }
+
+        void OnPasteList(CommandEventArgs e, LogMessageEditor lme)
+        {
             StringBuilder sb = new StringBuilder();
             foreach (PendingChange pci in lme.PasteSource.PendingChanges)
             {
@@ -34,6 +50,19 @@ namespace Ankh.UI.PendingChanges.Commands
             }
 
             lme.PasteText(sb.ToString());
+        }
+
+        void OnPasteRecent(CommandEventArgs e, LogMessageEditor lme)
+        {
+            using (RecentMessageDialog rmd = new RecentMessageDialog())
+            {
+                rmd.Context = e.Context;
+
+                if (DialogResult.OK != rmd.ShowDialog(e.Context))
+                    return;
+
+                lme.PasteText(rmd.SelectedText);
+            }
         }
     }
 }

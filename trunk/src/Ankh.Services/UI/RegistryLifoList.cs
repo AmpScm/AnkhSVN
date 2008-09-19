@@ -6,7 +6,7 @@ using Ankh.VS;
 using Ankh.UI;
 using System.Globalization;
 
-namespace Ankh.Services
+namespace Ankh.UI
 {
     public class RegistryLifoList : AnkhService, ICollection<string>, IEnumerable<KeyValuePair<string, string>>
     {
@@ -32,7 +32,7 @@ namespace Ankh.Services
 
         RegistryKey OpenFifoKey(bool readOnly)
         {
-            return ConfigService.OpenInstanceKey(_name);
+            return ConfigService.OpenUserInstanceKey(_name);
         }
 
         public bool AllowWhitespace
@@ -51,7 +51,7 @@ namespace Ankh.Services
             {
                 int nSize;
                 int nPos;
-                if (!int.TryParse(key.GetValue("_size", 32).ToString(), out nSize) || nSize < 1)
+                if (!TryGetIntValue(key, "_size", out nSize) || nSize < 1)
                 {
                     nSize = _defaultSize;
                     key.SetValue("_size", _defaultSize);
@@ -61,9 +61,9 @@ namespace Ankh.Services
                 // two VS instances.
                 // We ignore this as it is just UI helper code and a user can't edit
                 //  two windows at the same time
-                if (!int.TryParse(key.GetValue("_pos", -1).ToString(), out nPos) || (nPos < 0) || (nPos >= nSize))
+                if (!TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
                 {
-                    nPos = -1;
+                    nPos = 0;
                 }
 
                 if (nPos < 0 || nPos >= nSize)
@@ -194,6 +194,29 @@ namespace Ankh.Services
 
         #endregion
 
+        bool TryGetIntValue(RegistryKey key, string name, out int value)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            object val = key.GetValue(name);
+
+            value = -1;
+
+            if (val != null)
+            {
+                if (val is int)
+                {
+                    value = (int)val;
+                    return true;
+                }
+                else if (int.TryParse(value.ToString(), out value))
+                    return true;
+            }
+
+            return false;
+        }
+
         #region IEnumerable<KeyValuePair<string,string>> Members
 
         IEnumerator<KeyValuePair<string, string>> IEnumerable<KeyValuePair<string, string>>.GetEnumerator()
@@ -202,17 +225,17 @@ namespace Ankh.Services
             {
                 int nSize;
                 int nPos;
-                if (!int.TryParse(key.GetValue("_size", 32).ToString(), out nSize) || nSize < 1)
+
+                if (!TryGetIntValue(key, "_size", out nSize) || nSize < 1)
                 {
                     nSize = _defaultSize;
-                    key.SetValue("_size", _defaultSize);
                 }
 
                 // This gives a very tiny race condition if used at the same time in 
                 // two VS instances.
                 // We ignore this as it is just UI helper code and a user can't edit
                 //  two windows at the same time
-                if (!int.TryParse(key.GetValue("_pos", -1).ToString(), out nPos) || (nPos < 0) || (nPos >= nSize))
+                if (!TryGetIntValue(key, "_pos", out nPos) || (nPos < 0) || (nPos >= nSize))
                 {
                     nPos = 0;
                 }

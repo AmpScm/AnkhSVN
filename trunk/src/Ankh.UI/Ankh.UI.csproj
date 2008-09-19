@@ -202,6 +202,12 @@
     <Compile Include="PropertyEditors\PropertyEditControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="RecentMessageDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RecentMessageDialog.Designer.cs">
+      <DependentUpon>RecentMessageDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -778,6 +784,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PCStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RecentMessageDialog.resx">
+      <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateBranchDialog.resx">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>
