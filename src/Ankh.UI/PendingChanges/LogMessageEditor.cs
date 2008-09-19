@@ -464,14 +464,14 @@ namespace Ankh.UI.PendingChanges
                     if (_ro)
                         InternalSetReadOnly(false);
 
-                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
-
-                    if (_ro)
-                        InternalSetReadOnly(true);
+                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));                    
                 }
                 finally
                 {
                     Marshal.FreeCoTaskMem(pText);
+
+                    if (_ro)
+                        InternalSetReadOnly(true);
                 }
             }
         }
