@@ -7,6 +7,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VS;
+using Ankh.Scc.UI;
 
 
 namespace Ankh.UI.SvnLog.Commands
@@ -30,6 +31,7 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
+            ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
             IAnkhSolutionSettings slnSettings = e.GetService<IAnkhSolutionSettings>();
 			List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
             if (logItems.Count != 1)
@@ -49,6 +51,9 @@ namespace Ankh.UI.SvnLog.Commands
                     {
                         client.SetRevisionProperty(new SvnUriTarget(slnSettings.ProjectRootUri, logItems[0].Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
                     }
+                    
+                    logWindow.Restart();
+                    // TODO: Somehow repair scroll position/number of items loaded
                 }
             }
         }   

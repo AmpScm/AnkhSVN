@@ -11,6 +11,7 @@ namespace Ankh.Scc.UI
         bool StrictNodeHistory { get; set; }
         bool IncludeMergedRevisions { get; set; }
         void FetchAll();
+        void Restart();
 
         bool HasWorkingCopyItems { get; }
         SvnItem[] WorkingCopyItems { get; }
