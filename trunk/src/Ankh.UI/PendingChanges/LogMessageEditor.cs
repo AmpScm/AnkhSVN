@@ -73,7 +73,7 @@ namespace Ankh.UI.PendingChanges
         public bool ShowHorizontalScrollBar
         {
             get { return _showHorizontalScrollBar; }
-            set 
+            set
             {
                 _showHorizontalScrollBar = value;
                 if (codeEditorNativeWindow != null)
@@ -259,7 +259,7 @@ namespace Ankh.UI.PendingChanges
 
             switch (key)
             {
-                case Keys.Tab:                    
+                case Keys.Tab:
                     {
                         if (_readOnly)
                             return false; // Allow using tab for dialog navigation
@@ -338,9 +338,9 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            if(codeEditorNativeWindow != null)
+            if (codeEditorNativeWindow != null)
                 codeEditorNativeWindow.Size = ClientSize;
-        }   
+        }
 
         #endregion
 
@@ -461,7 +461,13 @@ namespace Ankh.UI.PendingChanges
                 IntPtr pText = Marshal.StringToCoTaskMemUni(value);
                 try
                 {
+                    if (_ro)
+                        InternalSetReadOnly(false);
+
                     ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
+
+                    if (_ro)
+                        InternalSetReadOnly(true);
                 }
                 finally
                 {
@@ -562,7 +568,7 @@ namespace Ankh.UI.PendingChanges
                             if (ErrorHandler.Succeeded(manager.GetUserPreferences2(null, items, null, null)))
                             {
                                 // Only hide the horizontal scrollbar if one would have been visible 
-                                if(items[0].fHorzScrollbar != 0)
+                                if (items[0].fHorzScrollbar != 0)
                                     height += SystemInformation.HorizontalScrollBarHeight;
                             }
                         }
@@ -750,9 +756,24 @@ namespace Ankh.UI.PendingChanges
             {
                 _ro = value;
 
-                _textBuffer.SetStateFlags(value ? (uint)BUFFERSTATEFLAGS.BSF_USER_READONLY : 0);
+                InternalSetReadOnly(value);                
             }
         }
+
+        void InternalSetReadOnly(bool value)
+        {
+            uint state;
+            if (ErrorHandler.Succeeded(_textBuffer.GetStateFlags(out state)))
+            {
+                if (value)
+                    state |= (uint)BUFFERSTATEFLAGS.BSF_FILESYS_READONLY;
+                else
+                    state &= ~(uint)BUFFERSTATEFLAGS.BSF_FILESYS_READONLY;
+
+                _textBuffer.SetStateFlags(state);
+            }
+        }
+
 
         /// <summary>
         ///  This method is used to get service of specified type
@@ -896,3 +917,4 @@ namespace Ankh.UI.PendingChanges
         }
     }
 }
+
