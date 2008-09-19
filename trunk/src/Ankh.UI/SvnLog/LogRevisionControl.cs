@@ -324,15 +324,27 @@ namespace Ankh.UI.SvnLog
                     {
                         if (!_running && _logItemList.Count == fetchCount)
                         {
+                            _running = true;
+
+                            SCROLLINFO si = new SCROLLINFO();
+                            si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf( si );
+                            si.fMask = (int) (ScrollInfoMask.SIF_RANGE | ScrollInfoMask.SIF_TRACKPOS|ScrollInfoMask.SIF_POS);
+
+                            if (NativeMethods.GetScrollInfo(logRevisionControl1.Handle, (int)ScrollBarDirection.SB_VERT, ref si))
+                            {
+                                if (si.nPos < si.nMax - 30)
+                                    return;
+                            }
+
+                            
                             SvnLogArgs args = new SvnLogArgs();
                             args.Start = li.Revision - 1;
                             args.End = EndRevision;
                             args.Limit = 20;
                             args.StrictNodeHistory = StrictNodeHistory;
                             args.RetrieveMergedRevisions = IncludeMergedRevisions;
-                            //args.RetrieveChangedPaths = false;
 
-							ShowBusyIndicator();
+                            ShowBusyIndicator();
                             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
                         }
                     }
