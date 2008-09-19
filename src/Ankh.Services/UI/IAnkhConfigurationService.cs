@@ -42,5 +42,12 @@ namespace Ankh.UI
         /// <param name="subKey">The sub key.</param>
         /// <returns></returns>
         RegistryKey OpenGlobalKey(string subKey);
+
+
+        /// <summary>
+        /// Gets the recent log messages.
+        /// </summary>
+        /// <returns></returns>
+        RegistryLifoList GetRecentLogMessages();
     }
 }

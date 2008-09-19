@@ -216,5 +216,19 @@ namespace Ankh.Configuration
         }
 
         #endregion
+
+        #region IAnkhConfigurationService Members
+
+
+        /// <summary>
+        /// Gets the recent log messages.
+        /// </summary>
+        /// <returns></returns>
+        public RegistryLifoList GetRecentLogMessages()
+        {
+            return new RegistryLifoList(Context, "RecentLogMessages", 32);
+        }
+
+        #endregion
     }
 }

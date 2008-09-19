@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Ankh.VS;
 using Ankh.Commands;
 using System.Windows.Forms;
+using Ankh.UI;
 
 namespace Ankh.PendingChanges
 {
@@ -73,7 +74,16 @@ namespace Ankh.PendingChanges
                     if (Commit_CommitToRepository(state))
                     {
                         ok = true;
-                        // TODO: Store the logmessage!
+
+                        if (!string.IsNullOrEmpty(state.LogMessage))
+                        {
+                            IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
+
+                            if (config != null)
+                            {
+                                config.GetRecentLogMessages().Add(state.LogMessage);
+                            }
+                        }
 
                         //logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded                        
                     }

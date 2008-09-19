@@ -604,8 +604,8 @@
         <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
                   text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
-          <!--Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
-                  text="Paste &amp;Recent Message" /-->
+          <Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
+                  text="Paste &amp;Recent Message" />
         </Group>
         <Group id="Grp_PendingChangesLogEditor" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
