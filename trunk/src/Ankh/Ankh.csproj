@@ -257,9 +257,6 @@
     <Compile Include="Commands\ResolveConflictExternalCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\ReverseMergeCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\RevertItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>

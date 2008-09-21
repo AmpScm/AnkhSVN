@@ -375,19 +375,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [TestMethod]
-        public void ReverseMergeCommand()
-        {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
-                CommandTester.TestExecution(AnkhCommand.RevertToRevision);
-            }
-        }
-
-        [TestMethod]
         public void RevertItemCommand()
         {
             mocks = new MockRepository();
