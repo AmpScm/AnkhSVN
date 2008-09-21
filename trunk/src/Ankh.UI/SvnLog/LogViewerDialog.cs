@@ -13,7 +13,7 @@ using System.IO;
 
 namespace Ankh.UI
 {
-    public partial class LogViewerDialog : Form
+    public partial class LogViewerDialog : VSContainerForm
     {
         private string _logTarget;
         private IAnkhServiceProvider _context;
