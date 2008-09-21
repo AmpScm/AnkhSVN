@@ -129,7 +129,7 @@
     <value>AnkhSVN is Linked to: </value>
   </data>
   <data name="AboutOptionallyLinkedTo" xml:space="preserve">
-    <value>AnkhSVN is Optionally linked to:</value>
+    <value>AnkhSVN is Optionally linked to: </value>
   </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
