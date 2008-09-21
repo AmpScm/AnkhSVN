@@ -137,11 +137,6 @@
 									text="Solution Prop&amp;erties..."
 									toolTip="View/Edit Solution Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
-          <Button id="Cmd_RevertSolutionToRevision" priority="0xD0"
-                  text="Revert solution to revision..."
-                  toolTip="Revert this item to a specific revision."
-                  iconFile="menu/RevertToVersion.png"
-                  defaultInvisible="true"/>
           <Button id="Cmd_SolutionBranch" priority="0xE0" name="BranchSolution"
                   text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
@@ -194,11 +189,6 @@
 									toolTip="View/Edit Project Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
 
-          <Button id="Cmd_RevertProjectToRevision" priority="0xD0" 
-                  text="Revert project to revision..." 
-                  toolTip="Revert this item to a specific revision." 
-                  iconFile="menu/RevertToVersion.png"
-                  defaultInvisible="true"/>
           <Button id="Cmd_ProjectBranch" priority="0xE0" name="BranchSolution"
                   text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_ProjectMerge" priority="0xF0" name="MergeProject"
@@ -265,9 +255,6 @@
 									text="Prop&amp;erties..."
 									toolTip="View/Edit Subversion Properties" 
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
-          <Button id="Cmd_RevertToRevision" name="RevertToRevision" priority="0xD0" defaultInvisible="true"
-							text="Re&amp;vert to Revision..."
-							toolTip="Revert this item to a specific revision." iconFile="menu/RevertToVersion.png" />
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
 					
@@ -404,7 +391,10 @@
                   text="Change log message" dynamicVisibility="true"/>
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
                   text="Show changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
-          
+          <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
+                  text="Revert to this revision" dynamicVisibility="true"/>
+          <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
+                  text="Revert changes from revision(s)" dynamicVisibility="true"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

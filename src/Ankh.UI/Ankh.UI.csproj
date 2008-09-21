@@ -234,6 +234,7 @@
       <DependentUpon>UpdateAvailableDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SvnLog\Commands\CompareWithWorkingCopy.cs" />
+    <Compile Include="SvnLog\Commands\RevertChanges.cs" />
     <Compile Include="SvnLog\LogViewerDialog.cs">
       <SubType>Form</SubType>
     </Compile>

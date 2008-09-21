@@ -75,6 +75,8 @@ namespace Ankh.Ids
         RemoveWorkingCopyExplorerRoot,
         ResolveConflict,
         ResolveConflictExternal,
+
+        [Obsolete("Unused command", true)]
         RevertToRevision,
         RevertItem,
         SaveToFile,
@@ -221,7 +223,10 @@ namespace Ankh.Ids
         ItemEditProperties,
         ReposExplorerLog,
         LogBlameRevision,
+        
+        [Obsolete("Unused command", true)]
         RevertProjectToRevision,
+        [Obsolete("Unused command", true)]
         RevertSolutionToRevision,
 
         SwitchProject,
