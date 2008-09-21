@@ -8,11 +8,20 @@ using System.Globalization;
 
 namespace Ankh.UI
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RegistryLifoList : AnkhService, ICollection<string>, IEnumerable<KeyValuePair<string, string>>
     {
         readonly string _name;
         readonly int _defaultSize;
         bool _allowWhiteSpace;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegistryLifoList"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultSize">The default size.</param>
         public RegistryLifoList(IAnkhServiceProvider context, string name, int defaultSize)
             : base(context)
         {
@@ -23,6 +32,19 @@ namespace Ankh.UI
 
             _name = "FifoTables\\" + name;
             _defaultSize = defaultSize;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegistryLifoList"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="defaultSize">The default size.</param>
+        /// <param name="allowWhitespace">if set to <c>true</c> [allow whitespace].</param>
+        public RegistryLifoList(IAnkhServiceProvider context, string name, int defaultSize, bool allowWhitespace)
+            : this(context, name, defaultSize)
+        {
+            _allowWhiteSpace = allowWhitespace;
         }
 
         IAnkhConfigurationService ConfigService
