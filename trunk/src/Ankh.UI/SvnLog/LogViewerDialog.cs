@@ -16,7 +16,6 @@ namespace Ankh.UI
     public partial class LogViewerDialog : VSContainerForm
     {
         private string _logTarget;
-        private IAnkhServiceProvider _context;
 
         public LogViewerDialog()
         {
@@ -37,16 +36,6 @@ namespace Ankh.UI
         public LogControl LogControl
         {
             get { return logViewerControl; }
-        }
-
-        /// <summary>
-        /// The context.
-        /// </summary>
-        public IAnkhServiceProvider Context
-        {
-            [DebuggerStepThrough]
-            get { return _context; }
-            set { _context = value; }
         }
 
         /// <summary>

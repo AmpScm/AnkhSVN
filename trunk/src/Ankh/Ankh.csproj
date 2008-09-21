@@ -163,6 +163,9 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
+    <Compile Include="Services\SolutionSettings.Commit.cs">
+      <DependentUpon>SolutionSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Commands\BranchSolutionCommand.cs" />
     <Compile Include="Commands\CheckForUpdates.cs" />
     <Compile Include="Commands\CommandStrings.Designer.cs">

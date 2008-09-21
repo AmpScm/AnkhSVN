@@ -60,12 +60,6 @@ namespace Ankh.VS
         bool NummericIssueIds { get; }
 
         /// <summary>
-        /// Gets the raw log issue regexes.
-        /// </summary>
-        /// <value>The raw log issue regexes.</value>
-        ICollection<string> RawLogIssueRegexes { get; }
-
-        /// <summary>
         /// Gets the issue references from the specified logmessage
         /// </summary>
         /// <param name="logmessage">The logmessage.</param>
