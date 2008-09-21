@@ -1,4 +1,5 @@
 using Ankh.UI.PendingChanges;
+using System.Windows.Forms;
 namespace Ankh.UI
 {
     partial class LogMessageView
@@ -30,17 +31,27 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogMessageView));
-            this.textBox1 = new LogMessageEditor();
+            this.logMessageEditor = new LogMessageEditor();
+            this.logMessageTextBox = new TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
-			// textBox1
+            // logMessageEditor
 			// 
-			resources.ApplyResources(this.textBox1, "textBox1");
-			this.textBox1.BackColor = System.Drawing.SystemColors.Window;
-			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
+            resources.ApplyResources(this.logMessageEditor, "logMessageEditor");
+			this.logMessageEditor.BackColor = System.Drawing.SystemColors.Window;
+			this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.logMessageEditor.Name = "logMessageEditor";
+			this.logMessageEditor.ReadOnly = true;
+            // 
+            // logMessageTextBox
+            // 
+            resources.ApplyResources(this.logMessageTextBox, "logMessageTextBox");
+            this.logMessageTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.logMessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.logMessageTextBox.Name = "logMessageTextBox";
+            this.logMessageTextBox.ReadOnly = true;
+            this.logMessageTextBox.Visible = false;
 			// 
 			// label1
 			// 
@@ -51,7 +62,8 @@ namespace Ankh.UI
 			// 
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.logMessageEditor);
+            this.Controls.Add(this.logMessageTextBox);
 			this.Controls.Add(this.label1);
 			this.Name = "LogMessageView";
 			this.ResumeLayout(false);
@@ -61,7 +73,8 @@ namespace Ankh.UI
 
         #endregion
 
-        private LogMessageEditor textBox1;
+        private LogMessageEditor logMessageEditor;
+        private TextBox logMessageTextBox;
         private System.Windows.Forms.Label label1;
     }
 }
