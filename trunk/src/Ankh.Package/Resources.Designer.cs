@@ -90,7 +90,7 @@ namespace Ankh.VSPackage {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AnkhSVN is Optionally linked to:.
+        ///   Looks up a localized string similar to AnkhSVN is Optionally linked to: .
         /// </summary>
         internal static string AboutOptionallyLinkedTo {
             get {
