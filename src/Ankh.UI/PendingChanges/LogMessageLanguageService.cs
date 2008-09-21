@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -71,7 +72,7 @@ namespace Ankh.UI.PendingChanges
         public override IScanner GetScanner(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
         {
             if (_scanner == null)
-                _scanner = new CommentScanner();
+                _scanner = new CommentScanner(Context);
             return _scanner;
         }
 
@@ -90,12 +91,34 @@ namespace Ankh.UI.PendingChanges
             return new LogmessageSource(this, buffer, GetColorizer(buffer));
         }
 
-        class CommentScanner : IScanner
+        class CommentScanner : AnkhService, IScanner
         {
             int _offset;
             string _line;
             #region IScanner Members
 
+            public CommentScanner(IAnkhServiceProvider context)
+                : base(context)
+            {
+            }
+
+            IProjectCommitSettings _projectCommitSettings;
+
+            IProjectCommitSettings CommitSettings
+            {
+                get { return _projectCommitSettings ?? (_projectCommitSettings = GetService<IProjectCommitSettings>()); }
+            }
+
+            IEnumerable<IssueMarker> _issueIds;
+            IEnumerator<IssueMarker> _mover;
+            IssueMarker _nextIssue;
+
+            /// <summary>
+            /// Scans the token and provide info about it.
+            /// </summary>
+            /// <param name="tokenInfo">The token info.</param>
+            /// <param name="state">The state.</param>
+            /// <returns></returns>
             public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
             {
                 if (string.IsNullOrEmpty(_line) || _offset >= _line.Length)
@@ -103,9 +126,11 @@ namespace Ankh.UI.PendingChanges
 
                 int pState = state;
                 state = 0;
+                bool atStart = false;
 
                 if (_offset == 0)
                 {
+                    atStart = true;
                     while (_offset < _line.Length)
                     {
                         if (char.IsWhiteSpace(_line, _offset))
@@ -113,36 +138,91 @@ namespace Ankh.UI.PendingChanges
                         else
                             break;
                     }
+                }
 
-                    if (_offset < _line.Length)
+                if (_offset < _line.Length)
+                {
+                    switch (_line[_offset])
                     {
-                        switch (_line[_offset])
-                        {
-                            case '#':
-                                if (tokenInfo != null)
+                        case '#':
+                            if(!atStart)
+                                goto default;
+                            if (tokenInfo != null)
+                            {
+                                tokenInfo.Color = TokenColor.Comment;
+                                tokenInfo.StartIndex = _offset;
+                                tokenInfo.EndIndex = _line.Length;
+                                tokenInfo.Trigger = TokenTriggers.None;
+                                tokenInfo.Type = TokenType.LineComment;
+                            }
+                            state = 1;
+                            _offset = _line.Length;
+                            return true;
+                        default:
+                            if (_issueIds == null)
+                            {
+                                _issueIds = CommitSettings.GetIssues(_line);
+                                _mover = _issueIds.GetEnumerator();
+                                if (_mover.MoveNext())
+                                    _nextIssue = _mover.Current;
+                                else
+                                    _nextIssue = null;
+                            }
+
+                            while (_nextIssue != null && _mover.Current.Index < _offset)
+                            {
+                                if (_mover.MoveNext())
+                                    _nextIssue = _mover.Current;
+                                else
+                                    _nextIssue = null;
+                            }
+
+                            if (_nextIssue != null)
+                            {
+                                if (_offset < _nextIssue.Index)
                                 {
-                                    tokenInfo.Color = TokenColor.Comment;
-                                    tokenInfo.StartIndex = _offset;
-                                    tokenInfo.EndIndex = _line.Length;
-                                    tokenInfo.Trigger = TokenTriggers.None;
-                                    tokenInfo.Type = TokenType.LineComment;
+                                    // Text before the issue
+
+                                    if (tokenInfo != null)
+                                    {
+                                        tokenInfo.Color = TokenColor.Text;
+                                        tokenInfo.StartIndex = _offset;
+                                        tokenInfo.EndIndex = _nextIssue.Index -1;
+                                        tokenInfo.Trigger = TokenTriggers.None;
+                                        tokenInfo.Type = TokenType.Text;
+                                    }
+                                    _offset = _nextIssue.Index;
+                                    return true;
                                 }
-                                state = 1;
-                                _offset = _line.Length;
-                                return true;
-                            default:
-                                if (tokenInfo != null)
+                                else if (_offset == _nextIssue.Index)
                                 {
-                                    tokenInfo.Color = TokenColor.Text;
-                                    tokenInfo.StartIndex = _offset;
-                                    tokenInfo.EndIndex = _line.Length;
-                                    tokenInfo.Trigger = TokenTriggers.None;
-                                    tokenInfo.Type = TokenType.Text;
+                                    if (tokenInfo != null)
+                                    {
+                                        tokenInfo.Color = TokenColor.Keyword;
+                                        tokenInfo.StartIndex = _offset;
+                                        tokenInfo.EndIndex = _offset + _nextIssue.Length-1;
+                                        tokenInfo.Trigger = TokenTriggers.None;
+                                        tokenInfo.Type = TokenType.Keyword;
+                                    }
+
+                                    state = 2;
+
+                                    _offset += _nextIssue.Length;
+                                    return true;
                                 }
-                                state = 0;
-                                _offset = _line.Length;
-                                return true;
-                        }
+                            }
+
+                            if (tokenInfo != null)
+                            {
+                                tokenInfo.Color = TokenColor.Text;
+                                tokenInfo.StartIndex = _offset;
+                                tokenInfo.EndIndex = _line.Length;
+                                tokenInfo.Trigger = TokenTriggers.None;
+                                tokenInfo.Type = TokenType.Text;
+                            }
+                            state = 0;
+                            _offset = _line.Length;
+                            return true;
                     }
                 }
                 return false;
@@ -152,6 +232,8 @@ namespace Ankh.UI.PendingChanges
             {
                 _line = source;
                 _offset = offset;
+                _issueIds = null;
+                _nextIssue = null;
             }
 
             #endregion

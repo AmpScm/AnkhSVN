@@ -11,12 +11,14 @@ using Microsoft.VisualStudio;
 using Microsoft.Win32;
 using Ankh.UI;
 using System.Security;
-using FileVersionInfo=System.Diagnostics.FileVersionInfo;
+using FileVersionInfo = System.Diagnostics.FileVersionInfo;
+using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Settings
 {
     [GlobalService(typeof(IAnkhSolutionSettings))]
-    class SolutionSettings : AnkhService, IAnkhSolutionSettings
+    partial class SolutionSettings : AnkhService, IAnkhSolutionSettings
     {
         int _solutionCookie;
         bool _inRanu = false;
@@ -63,196 +65,371 @@ namespace Ankh.Settings
             public string SolutionFilename;
             public string ProjectRoot;
             public Uri ProjectRootUri;
+
+            public int SolutionCookie;
+            public int RootCookie;
+
+            public Uri RepositoryRoot;
+
+            public bool? BugTrackAppend;
+            public string BugTrackLabel;
+            public string BugTrackLogRegexes;
+            public string BugTrackMessage;
+            public bool? BugTrackNumber;
+            public string BugTrackUrl;
+            public bool? BugTrackWarnIfNoIssue;
+
+            public int? LogMessageMinSize;
+            public int? LockMessageMinSize;
+            public int? LogWidth;
+
+            public ReadOnlyCollection<string> LogRegexes;
+            public Regex AllInOneRe;
+            public Regex PrepareRe;
+            public Regex SplitRe;
+
+            public bool BrokenRegex;
         }
+
+        ISelectionContext _selectionContext;
+        IFileStatusCache _statusCache;
+        ISelectionContext SelectionContext
+        {
+            get { return _selectionContext ?? (_selectionContext = GetService<ISelectionContext>()); }
+        }
+
+        IFileStatusCache StatusCache
+        {
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+        }
+
 
         SettingsCache _cache = new SettingsCache();
 
-        private void ClearIfDirty()
+        bool IsDirty()
         {
-            ISelectionContext selection = GetService<ISelectionContext>();
-            IFileStatusCache cache = GetService<IFileStatusCache>();
-            bool dirty = false;
-            SvnItem solutionItem = null;
+            string solutionFile = SelectionContext.SolutionFilename;
 
-            if (string.IsNullOrEmpty(selection.SolutionFilename))
-                dirty = true;
-            else if (null == (solutionItem = cache[selection.SolutionFilename]))
-                dirty = true;
-            else if (solutionItem.ChangeCookie != _solutionCookie)
-                dirty = true;
+            SettingsCache cache = _cache;
+            if (cache == null)
+                return true;
 
-            if (dirty)
+            if (cache.SolutionFilename != solutionFile)
+                return true;
+
+            if(solutionFile == null)
+                return false;
+            
+            SvnItem item = StatusCache[solutionFile];
+
+            if (item == null || item.ChangeCookie != cache.SolutionCookie)
+                return true;
+
+            string path = _cache.ProjectRoot;
+
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            item = StatusCache[_cache.ProjectRoot];
+
+            if (item == null || item.ChangeCookie != cache.RootCookie)
+                return true;
+
+            return false;
+        }
+
+        private void RefreshIfDirty()
+        {
+            if (!IsDirty() && _cache != null)
+                return;
+
+            _cache = null;
+            SettingsCache cache = new SettingsCache();
+            try
             {
-                _cache = new SettingsCache();
 
-                if (solutionItem != null)
-                    _solutionCookie = solutionItem.ChangeCookie;
+                string solutionFile = SelectionContext.SolutionFilename;
+
+                if (string.IsNullOrEmpty(solutionFile))
+                    return;
+
+                SvnItem item = StatusCache[solutionFile];
+
+                if (item == null)
+                    return;
+
+                cache.SolutionFilename = item.FullPath;
+                cache.SolutionCookie = item.ChangeCookie;
+
+                SvnItem parent = item.Parent;
+
+                if (parent != null)
+                {
+                    cache.ProjectRoot = parent.FullPath;
+                    cache.ProjectRootUri = parent.Status.Uri;
+                }
+
+                LoadSolutionProperties(cache, item);
+
+                if (cache.ProjectRoot != null)
+                {
+                    item = StatusCache[cache.ProjectRoot];
+
+                    if (item == null)
+                        return;
+
+                    cache.RootCookie = item.ChangeCookie;
+
+                    LoadRootProperties(cache, item);
+                }
             }
+            finally
+            {
+                _cache = cache;
+            }
+        }
+
+        private void LoadSolutionProperties(SettingsCache cache, SvnItem item)
+        {
+            // Subversion -1.5 loads all properties in memory at once; loading them 
+            // all is always faster than loading a few
+            // We must change this algorithm if Subversions implementation changes
+            SvnPropertyCollection pc = GetAllProperties(item.FullPath);
+
+            if (pc != null)
+                foreach (SvnPropertyValue pv in pc)
+                {
+                    switch (pv.Key)
+                    {
+                        case "vs:project-root":
+                            SetProjectRootViaProperty(cache, pv.StringValue);
+                            break;
+                        default:
+                            LoadPropertyBoth(cache, pv);
+                            break;
+                    }
+                }
+        }
+
+        private void SetProjectRootViaProperty(SettingsCache cache, string value)
+        {
+            string dir = value;
+            string solutionFile = cache.SolutionFilename;
+
+            SvnItem directory = StatusCache[solutionFile].Parent;
+            SvnWorkingCopy wc = directory.WorkingCopy;
+
+            if (directory == null)
+                return;
+
+            int up = 0;
+
+            while (dir.StartsWith("../"))
+            {
+                up++;
+                dir = dir.Substring(3);
+                if (directory != null)
+                    directory = directory.Parent;
+            }
+
+            if (directory == null)
+                return; // Invalid value
+
+            if (directory.WorkingCopy != wc)
+                return; // Outside workingcopy
+
+            if (dir.Length == 0)
+            {
+                cache.ProjectRoot = directory.FullPath;
+                cache.ProjectRootUri = directory.Status.Uri;
+            }
+        }
+
+        private void LoadRootProperties(SettingsCache cache, SvnItem item)
+        {
+            // Subversion -1.5 loads all properties in memory at once; loading them 
+            // all at once is always faster than loading a few
+            // We must change this algorithm if Subversions implementation changes
+            SvnPropertyCollection pc = GetAllProperties(item.FullPath);
+
+            if (pc != null)
+                foreach (SvnPropertyValue pv in pc)
+                {
+                    switch (pv.Key)
+                    {
+                        default:
+                            LoadPropertyBoth(cache, pv);
+                            break;
+                    }
+                }
+        }
+
+        private void LoadPropertyBoth(SettingsCache cache, SvnPropertyValue pv)
+        {
+            bool boolValue;
+            int intValue;
+            switch (pv.Key)
+            {
+                case SvnPropertyNames.BugTrackAppend:
+                    if (!cache.BugTrackAppend.HasValue && TryParseBool(pv, out boolValue))
+                        cache.BugTrackAppend = boolValue;
+                    break;
+                case SvnPropertyNames.BugTrackLabel:
+                    if (cache.BugTrackLabel == null)
+                        cache.BugTrackLabel = pv.StringValue;
+                    break;
+                case SvnPropertyNames.BugTrackLogRegex:
+                    if (cache.BugTrackLogRegexes == null)
+                        cache.BugTrackLogRegexes = pv.StringValue;
+                    break;
+                case SvnPropertyNames.BugTrackMessage:
+                    if (cache.BugTrackMessage == null)
+                        cache.BugTrackMessage = pv.StringValue;
+                    break;
+                case SvnPropertyNames.BugTrackNumber:
+                    if (!cache.BugTrackNumber.HasValue && TryParseBool(pv, out boolValue))
+                        cache.BugTrackNumber = boolValue;
+                    break;
+                case SvnPropertyNames.BugTrackUrl:
+                    if (cache.BugTrackUrl == null)
+                        cache.BugTrackUrl = pv.StringValue;
+                    break;
+                case SvnPropertyNames.BugTrackWarnIfNoIssue:
+                    if (!cache.BugTrackWarnIfNoIssue.HasValue && TryParseBool(pv, out boolValue))
+                        cache.BugTrackWarnIfNoIssue = boolValue;
+                    break;
+                case SvnPropertyNames.TortoiseSvnLogMinSize:
+                    if (!cache.LogMessageMinSize.HasValue && !string.IsNullOrEmpty(pv.StringValue)
+                        && int.TryParse(pv.StringValue, out intValue))
+                    {
+                        cache.LogMessageMinSize = intValue;
+                    }
+                    break;
+                case SvnPropertyNames.TortoiseSvnLockMsgMinSize:
+                    if (!cache.LockMessageMinSize.HasValue && !string.IsNullOrEmpty(pv.StringValue)
+                        && int.TryParse(pv.StringValue, out intValue))
+                    {
+                        cache.LockMessageMinSize = intValue;
+                    }
+                    break;
+            }
+        }
+
+        private bool TryParseBool(SvnPropertyValue pv, out bool boolValue)
+        {
+            string val = pv.StringValue;
+
+            boolValue = false;
+            if (string.IsNullOrEmpty(val))
+                return false;
+
+            if (string.Equals(val, "true", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(val, "yes", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(val, SvnPropertyNames.SvnBooleanValue, StringComparison.OrdinalIgnoreCase))
+            {
+                boolValue = true;
+                return true;
+            }
+
+            if (string.Equals(val, "false", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
+            {
+                boolValue = true;
+                return true;
+            }
+
+            return false;
+        }
+
+        SvnPropertyCollection GetAllProperties(string path)
+        {
+            // Subversion -1.5 loads all properties in memory at once; loading them 
+            // all at once is always faster than loading a few
+            // We must change this algorithm if Subversions implementation changes
+            SvnPropertyCollection pc = null;
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                SvnPropertyListArgs pl = new SvnPropertyListArgs();
+                pl.ThrowOnError = false;
+                client.PropertyList(path, pl,
+                    delegate(object sender, SvnPropertyListEventArgs e)
+                    {
+                        e.Detach();
+                        pc = e.Properties;
+                    });
+            }
+
+            return pc;
         }
 
         public string SolutionFilename
         {
             get
             {
-                ClearIfDirty();
+                RefreshIfDirty();
 
-                return _cache.SolutionFilename ?? (_cache.SolutionFilename = GetService<ISelectionContext>().SolutionFilename);
+                return _cache.SolutionFilename;
             }
         }
-
-        bool SameRepository(SvnItem item1, SvnItem item2)
-        {
-            bool oneNull = (item1 == null || item1.Status == null);
-                bool twoNull = (item2 == null || item2.Status == null);
-
-            if(oneNull || twoNull)
-                return oneNull && twoNull;
-
-            AnkhStatus s1 = item1.Status;
-            AnkhStatus s2 = item2.Status;
-
-            if(s1.RepositoryId != null && s2.RepositoryId != null)
-                return s1.RepositoryId == s2.RepositoryId;
-
-            if (!item1.IsVersioned || !item2.IsVersioned)
-                return false;
-
-            using(SvnClient svn = GetService<ISvnClientPool>().GetNoUIClient())
-            {
-                Uri r1 = svn.GetRepositoryRoot(item1.FullPath);
-                Uri r2 = svn.GetRepositoryRoot(item2.FullPath);
-
-                return r1 == r2;
-            }
-        }
-
-
-        string GetSvnWcRoot(string directory)
-        {
-            if (string.IsNullOrEmpty(directory))
-                throw new ArgumentNullException("directory");
-
-            IFileStatusCache cache = GetService<IFileStatusCache>();
-
-            if (cache == null)
-                return directory;
-
-            SvnItem item = cache[directory];
-
-            while (item != null && item.Status != null && item.Status.Uri != null)
-            {
-                SvnItem parent = item.Parent;
-                if (parent == null || !parent.IsVersioned || parent.Status == null || parent.Status.Uri == null)
-                    break;
-
-                if (!SameRepository(parent, item))
-                    break;
-
-                Uri uri = new Uri(item.Status.Uri, "../");
-
-                if (parent.Status.Uri != uri)
-                    break;
-
-                item = parent;
-            }
-
-            return item.FullPath;
-        }
-
-
 
         public string ProjectRoot
         {
             get
             {
-                ClearIfDirty();
+                RefreshIfDirty();
 
-                if (_cache.ProjectRoot != null)
-                    return _cache.ProjectRoot;
-
-                string solutionFilename = SolutionFilename;
-
-                if (string.IsNullOrEmpty(solutionFilename))
+                SettingsCache cache = _cache;
+                if (cache != null)
+                    return cache.ProjectRoot;
+                else
                     return null;
-
-                string wcRoot = GetSvnWcRoot(Path.GetDirectoryName(SolutionFilename)).TrimEnd('\\') + '\\';
-
-                using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
-                {
-                    string value;
-
-                    if (client.TryGetProperty(new SvnPathTarget(_cache.SolutionFilename), "vs:project-root", out value))                            
-                    {
-                        if (string.IsNullOrEmpty(value) && value != null)
-                            value = "./";
-
-                        if (!string.IsNullOrEmpty(value))
-                        {
-                            Uri solution, relative;
-
-                            if (!Uri.TryCreate("file:///" + SvnTools.PathToRelativeUri(_cache.SolutionFilename.Replace(Path.DirectorySeparatorChar, '/')).ToString(), UriKind.Absolute, out solution)
-                                || !Uri.TryCreate(value, UriKind.Relative, out relative))
-                            {
-                                return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
-                            }
-
-                            if (value != "./")
-                            {
-                                string r = value;
-                                while (r.StartsWith("../"))
-                                    r = r.Substring(3);
-
-                                if (!string.IsNullOrEmpty(r))
-                                    return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
-                            }
-
-                            if (!Uri.TryCreate(value, UriKind.Relative, out relative))
-                                return null;
-
-                            Uri combined = new Uri(solution, relative);
-
-                            string vv = SvnTools.UriPartToPath(combined.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
-
-                            return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(vv);
-                        }
-                    }
-
-                    return _cache.ProjectRoot = SvnTools.GetNormalizedFullPath(wcRoot);
-                }
             }
             set
             {
-                ClearIfDirty();
-                if (SolutionFilename == null)
+                if (string.Equals(value, ProjectRoot, StringComparison.OrdinalIgnoreCase))
                     return;
 
-                string sd = SvnTools.PathToRelativeUri(Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\').ToString();
-                string v = SvnTools.PathToRelativeUri(SvnTools.GetNormalizedFullPath(value)).ToString();
+                SettingsCache cache = _cache;
+                if (cache == null || string.IsNullOrEmpty(SolutionFilename))
+                    throw new InvalidOperationException();
 
-                if (!v.EndsWith("/"))
-                    v += "/";
-
-                if (!sd.StartsWith(v, StringComparison.OrdinalIgnoreCase))
-                    return;
-
-                Uri solUri;
-                Uri resUri;
-
-                if (!Uri.TryCreate("file:///" + sd.Replace('\\', '/'), UriKind.Absolute, out solUri)
-                    || !Uri.TryCreate("file:///" + v.Replace('\\', '/'), UriKind.Absolute, out resUri))
-                    return;
-
-                using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
-                {
-                    SvnSetPropertyArgs ps = new SvnSetPropertyArgs();
-                    ps.ThrowOnError = false;
-
-                    client.SetProperty(SolutionFilename, "vs:project-root", solUri.MakeRelativeUri(resUri).ToString(), ps);
-
-                    GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
-                    // The getter will reload the settings for us
-                }
+                SetProjectRootValue(value);
             }
+        }
+
+        void SetProjectRootValue(string value)
+        {
+            if (SolutionFilename == null)
+                return;
+
+            string sd = SvnTools.PathToRelativeUri(Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\').ToString();
+            string v = SvnTools.PathToRelativeUri(SvnTools.GetNormalizedFullPath(value)).ToString();
+
+            if (!v.EndsWith("/"))
+                v += "/";
+
+            if (!sd.StartsWith(v, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            Uri solUri;
+            Uri resUri;
+
+            if (!Uri.TryCreate("file:///" + sd.Replace('\\', '/'), UriKind.Absolute, out solUri)
+                || !Uri.TryCreate("file:///" + v.Replace('\\', '/'), UriKind.Absolute, out resUri))
+                return;
+
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                SvnSetPropertyArgs ps = new SvnSetPropertyArgs();
+                ps.ThrowOnError = false;
+
+                client.SetProperty(SolutionFilename, "vs:project-root", solUri.MakeRelativeUri(resUri).ToString(), ps);
+
+                GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
+                // The getter will reload the settings for us
+            }
+
+            _cache = null;
         }
 
         public string ProjectRootWithSeparator
@@ -272,21 +449,12 @@ namespace Ankh.Settings
         {
             get
             {
-                ClearIfDirty();
+                RefreshIfDirty();
 
                 if (_cache.ProjectRootUri != null)
                     return _cache.ProjectRootUri;
-
-                string projectroot = ProjectRoot;
-
-                if (string.IsNullOrEmpty(projectroot))
+                else
                     return null;
-
-                IFileStatusCache cache = GetService<IFileStatusCache>();
-
-                SvnItem rootItem = cache[projectroot];
-
-                return _cache.ProjectRootUri = rootItem.Status.Uri;
             }
         }
 
@@ -358,19 +526,19 @@ namespace Ankh.Settings
                 {
                     IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
-                    if(shell != null)
+                    if (shell != null)
                     {
                         object r;
-                        if(ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out r)))
+                        if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out r)))
                         {
                             string path = r as string;
 
-                            if(!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
+                            if (!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
                                 path = Path.Combine(path, "msenv.dll");
                             else
                                 path = null;
 
-                            if(path != null && File.Exists(path))
+                            if (path != null && File.Exists(path))
                             {
                                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(path);
 
@@ -387,7 +555,7 @@ namespace Ankh.Settings
                                         s = s.Substring(0, i);
                                 }
 
-                                if(!string.IsNullOrEmpty(s))
+                                if (!string.IsNullOrEmpty(s))
                                     _vsVersion = new Version(s);
                             }
                         }
@@ -396,7 +564,7 @@ namespace Ankh.Settings
 
                 return _vsVersion;
             }
-        }  
+        }
 
         #region IAnkhSolutionSettings Members
 
@@ -451,6 +619,29 @@ namespace Ankh.Settings
         public string RegistryHiveSuffix
         {
             get { return _hiveSuffix; }
+        }
+
+        public Uri RepositoryRoot
+        {
+            get
+            {
+                RefreshIfDirty();
+
+                return _cache.RepositoryRoot ?? (_cache.RepositoryRoot = GetRepositoryRoot());
+            }
+        }
+
+        private Uri GetRepositoryRoot()
+        {
+            SettingsCache cache = _cache;
+
+            if (cache.SolutionFilename == null)
+                return null;
+
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                return cache.RepositoryRoot = client.GetRepositoryRoot(cache.SolutionFilename);
+            }
         }
 
         #endregion
