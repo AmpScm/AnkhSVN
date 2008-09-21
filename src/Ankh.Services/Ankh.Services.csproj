@@ -152,6 +152,7 @@
     <Compile Include="VS\IAnkhVSColor.cs" />
     <Compile Include="VS\IAnkhWebBrowser.cs" />
     <Compile Include="VS\IFileIconMapper.cs" />
+    <Compile Include="VS\IProjectCommitSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
@@ -166,8 +167,8 @@
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="SSvn-1.5002.777.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/1058/</Url>
+    <DependencyDownload Include="SSvn-1.5002.793.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/1083/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
