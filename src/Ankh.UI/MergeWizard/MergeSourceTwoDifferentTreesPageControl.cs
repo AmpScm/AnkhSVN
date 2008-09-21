@@ -121,7 +121,7 @@ namespace Ankh.UI.MergeWizard
             {
                 dialog.LogControl.StrictNodeHistory = true;
 
-                if (dialog.ShowDialog(WizardPage.Form) == DialogResult.OK)
+                if (dialog.ShowDialog(WizardPage.Context) == DialogResult.OK)
                 {
                     IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
                     long low = -1;
