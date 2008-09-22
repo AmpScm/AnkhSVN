@@ -164,7 +164,7 @@ namespace Ankh.Settings
                 SvnWorkingCopy wc = item.WorkingCopy;
                 SvnItem parent;
                 if (wc != null)
-                    parent = StatusCache[cache.ProjectRoot];
+                    parent = StatusCache[wc.FullPath];
                 else
                     parent = item.Parent;
 
