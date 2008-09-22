@@ -719,7 +719,7 @@ namespace Ankh.Scc
 
             SvnItem parent = item.Parent;
 
-            if (BelowAdminDir(item) || string.Equals(item.Name, SvnClient.AdministrativeDirectoryName))
+            if (BelowAdminDir(item))
                 return false;
 
             if (item.IsFile && parent != null && !parent.IsVersioned)
@@ -754,8 +754,17 @@ namespace Ankh.Scc
         string _adminDir;
         private bool BelowAdminDir(SvnItem item)
         {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
             if (_adminDir == null)
+            {
+                // Caching in this instance should be safe
                 _adminDir = '\\' + SvnClient.AdministrativeDirectoryName + '\\';
+            }
+
+            if (string.Equals(item.Name, SvnClient.AdministrativeDirectoryName))
+                return true;
 
             return item.FullPath.IndexOf(_adminDir, StringComparison.OrdinalIgnoreCase) >= 0;
         }
