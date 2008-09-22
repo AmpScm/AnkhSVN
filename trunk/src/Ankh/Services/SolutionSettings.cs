@@ -161,11 +161,15 @@ namespace Ankh.Settings
                 cache.SolutionFilename = item.FullPath;
                 cache.SolutionCookie = item.ChangeCookie;
 
-                SvnItem parent = item.Parent;
+                SvnWorkingCopy wc = item.WorkingCopy;
+                SvnItem parent;
+                if (wc != null)
+                    parent = StatusCache[cache.ProjectRoot];
+                else
+                    parent = item.Parent;
 
                 if (parent != null)
                 {
-                    cache.ProjectRoot = parent.FullPath;
                     cache.ProjectRootUri = parent.Status.Uri;
                 }
 
@@ -173,14 +177,14 @@ namespace Ankh.Settings
 
                 if (cache.ProjectRoot != null)
                 {
-                    item = StatusCache[cache.ProjectRoot];
+                    parent = StatusCache[cache.ProjectRoot];
 
-                    if (item == null)
+                    if (parent == null)
                         return;
 
-                    cache.RootCookie = item.ChangeCookie;
+                    cache.RootCookie = parent.ChangeCookie;
 
-                    LoadRootProperties(cache, item);
+                    LoadRootProperties(cache, parent);
                 }
             }
             finally

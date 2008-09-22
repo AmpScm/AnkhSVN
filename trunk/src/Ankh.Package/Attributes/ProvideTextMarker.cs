@@ -25,7 +25,8 @@ namespace Ankh.VSPackage.Attributes
         /// <param name="regName">Name of the reg.</param>
         public ProvideTextMarkerAttribute(Type providerType, Type markerType, string displayName, string regName)
         {
-            _type = type;
+            _providerType = providerType;
+            _markerType = markerType;
             _displayName = displayName;
             _regname = regName;
         }
