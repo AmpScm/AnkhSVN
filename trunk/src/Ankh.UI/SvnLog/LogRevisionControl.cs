@@ -324,11 +324,13 @@ namespace Ankh.UI.SvnLog
                     {
                         if (!_running && _logItemList.Count == fetchCount)
                         {
-                            _running = true;
 
                             if (logRevisionControl1.VScrollPos < logRevisionControl1.VScrollMax - 30)
                                 return;
-                            
+
+                            _running = true;
+
+
                             SvnLogArgs args = new SvnLogArgs();
                             args.Start = li.Revision - 1;
                             args.End = EndRevision;
@@ -460,8 +462,6 @@ namespace Ankh.UI.SvnLog
 		{
 			//Debug.WriteLine(string.Format("CacheVirtualItems start: {0}, end: {1}", e.StartIndex, e.EndIndex));
 		}
-
-        
     }
 
     public sealed class BatchFinishedEventArgs : EventArgs
