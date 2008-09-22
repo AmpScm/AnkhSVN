@@ -57,11 +57,24 @@ namespace Ankh.Scc
         /// </summary>
         protected void ShowQueryErrorDialog()
         {
-            IVsUIShell shell = (IVsUIShell)Context.GetService(typeof(SVsUIShell));
+            try
+            {
+                if (_batchErrors.Count > 0)
+                {
+                    Ankh.UI.AnkhMessageBox mb = new Ankh.UI.AnkhMessageBox(Context);
 
-            // TODO: Show dialog containing a summary of the errors in _batchErrors
-            // shell.ShowMessageBox(....)
-            _batchErrors.Clear();
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (string message in _batchErrors)
+                        sb.AppendLine(message);
+
+                    mb.Show(sb.ToString());
+                }
+            }
+            finally
+            {
+                _batchErrors.Clear();
+            }
         }
 
         void AddBatchError(string message)
