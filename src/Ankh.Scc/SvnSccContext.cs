@@ -719,7 +719,10 @@ namespace Ankh.Scc
 
             SvnItem parent = item.Parent;
 
-            if(item.IsFile && parent != null && !parent.IsVersioned)
+            if (BelowAdminDir(item) || string.Equals(item.Name, SvnClient.AdministrativeDirectoryName))
+                return false;
+
+            if (item.IsFile && parent != null && !parent.IsVersioned)
                 return true; // Not in a versioned directory -> Fast out
 
             // Item does exist; check casing
@@ -746,6 +749,15 @@ namespace Ankh.Scc
                 });
 
             return ok;
+        }
+
+        string _adminDir;
+        private bool BelowAdminDir(SvnItem item)
+        {
+            if (_adminDir == null)
+                _adminDir = '\\' + SvnClient.AdministrativeDirectoryName + '\\';
+
+            return item.FullPath.IndexOf(_adminDir, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         /// <summary>
