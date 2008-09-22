@@ -160,6 +160,7 @@
     <Compile Include="Attributes\ProvideLanguageSettings.cs" />
     <Compile Include="Attributes\ProvideSolutionProperties.cs" />
     <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
+    <Compile Include="Attributes\ProvideTextMarker.cs" />
     <Compile Include="Attributes\ProvideToolsOptionsPageVisibility.cs" />
     <Compile Include="Attributes\ProvideUIVersion.cs" />
     <Content Include="Ankh.Package.wxs" />
