@@ -170,6 +170,7 @@ namespace Ankh.Settings
 
                 if (parent != null)
                 {
+                    cache.ProjectRoot = parent.FullPath;
                     cache.ProjectRootUri = parent.Status.Uri;
                 }
 
