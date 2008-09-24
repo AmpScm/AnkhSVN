@@ -33,6 +33,7 @@ namespace Ankh.Scc
         public int OnCancelQueryBatch()
         {
             _inBatch = _batchOk = false;
+            _batchErrors.Clear();
             RegisterForSccCleanup();
             return VSConstants.S_OK;
         }
@@ -46,6 +47,7 @@ namespace Ankh.Scc
         /// </returns>
         public int OnEndQueryBatch(out int pfActionOK)
         {
+            ShowQueryErrorDialog();
             pfActionOK = _inBatch && _batchOk ? 1 : 0;
             _inBatch = _batchOk = false;
             RegisterForSccCleanup();
