@@ -76,7 +76,25 @@ namespace Ankh.VS.SolutionExplorer
 
             using (handle)
             {
-                _imageList.Images.Add(Icon.FromHandle(handle.GetHandle()));
+                IntPtr iconHandle = handle.GetHandle();
+
+                if (iconHandle == IntPtr.Zero)
+                    return -1;
+
+                Icon icon = Icon.FromHandle(iconHandle);
+
+                if (icon == null)
+                    return -1;
+
+                try
+                {
+                    _imageList.Images.Add(icon);
+                }
+                catch(InvalidOperationException) 
+                {
+                    // Unmanaged add icon operation failed (Reported on mailinglist)
+                    return -1;
+                }
             }
 
             int n = _imageList.Images.Count - 1;
