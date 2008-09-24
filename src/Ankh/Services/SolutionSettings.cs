@@ -20,7 +20,6 @@ namespace Ankh.Settings
     [GlobalService(typeof(IAnkhSolutionSettings))]
     partial class SolutionSettings : AnkhService, IAnkhSolutionSettings
     {
-        int _solutionCookie;
         bool _inRanu = false;
         string _vsUserRoot;
         string _vsAppRoot;
@@ -315,6 +314,13 @@ namespace Ankh.Settings
                         && int.TryParse(pv.StringValue, out intValue))
                     {
                         cache.LockMessageMinSize = intValue;
+                    }
+                    break;
+                case SvnPropertyNames.TortoiseSvnLogWidthLine:
+                    if (!cache.LogWidth.HasValue && !string.IsNullOrEmpty(pv.StringValue)
+                        && int.TryParse(pv.StringValue, out intValue))
+                    {
+                        cache.LogWidth = intValue;
                     }
                     break;
             }
