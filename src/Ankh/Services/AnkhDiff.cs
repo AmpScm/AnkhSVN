@@ -125,6 +125,13 @@ namespace Ankh.Services
 
             string diffApp = this.GetMergePath(forceExternal);
 
+            if (string.IsNullOrEmpty(diffApp))
+            {
+                new AnkhMessageBox(Context).Show("Please specify a merge tool in Tools->Options->SourceControl->Subversion", "AnkhSVN - No visual merge tool is available");
+                    
+                return false;
+            }
+
             string program;
             string arguments;
             if (!Substitute(diffApp, args, out program, out arguments))
