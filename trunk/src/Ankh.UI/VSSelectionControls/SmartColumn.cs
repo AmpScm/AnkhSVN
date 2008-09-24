@@ -80,6 +80,7 @@ namespace Ankh.UI.VSSelectionControls
             Text = text;
             MenuText = menuText;
             Width = width;
+            TextAlign = align;
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace Ankh.UI.VSSelectionControls
         /// <param name="width">The width.</param>
         /// <param name="align">The align.</param>
         public SmartColumn(SmartListView view, string menuText, int width, HorizontalAlignment align)
-            : this(view, menuText.Replace("&", ""), menuText, width)
+            : this(view, menuText.Replace("&", ""), menuText, width, align)
         {
         }
 

@@ -29,6 +29,14 @@ namespace Ankh.UI.VSSelectionControls
             FullRowSelect = true;
             this.ListViewItemSorter = new SmartListSorter(this);
             Sorting = SortOrder.Ascending;
+            base.UseCompatibleStateImageBehavior = false;
+        }
+
+        [DefaultValue(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new bool UseCompatibleStateImageBehavior
+        {
+            get { return base.UseCompatibleStateImageBehavior; }
+            set { base.UseCompatibleStateImageBehavior = value; }
         }
 
         /// <summary>
@@ -352,7 +360,7 @@ namespace Ankh.UI.VSSelectionControls
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
-            if (!DesignMode)
+            if (!DesignMode && !VirtualMode)
             {
                 ColumnHeader column = Columns[e.Column];
 
