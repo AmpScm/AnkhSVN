@@ -30,15 +30,15 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.pendingList = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.keepLocksBox = new System.Windows.Forms.CheckBox();
             this.keepChangelistsBox = new System.Windows.Forms.CheckBox();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.pendingList = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
-            this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -67,6 +67,17 @@
             this.splitContainer1.SplitterDistance = 185;
             this.splitContainer1.TabIndex = 0;
             // 
+            // pendingList
+            // 
+            this.pendingList.AllowColumnReorder = true;
+            this.pendingList.CheckBoxes = true;
+            this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pendingList.HideSelection = false;
+            this.pendingList.Location = new System.Drawing.Point(0, 0);
+            this.pendingList.Name = "pendingList";
+            this.pendingList.Size = new System.Drawing.Size(600, 185);
+            this.pendingList.TabIndex = 0;
+            // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -88,6 +99,19 @@
             this.label2.Text = "&Bug/Issue:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.label2.Visible = false;
+            // 
+            // logMessage
+            // 
+            this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.logMessage.Location = new System.Drawing.Point(0, 23);
+            this.logMessage.Name = "logMessage";
+            this.logMessage.PasteSource = this.pendingList;
+            this.logMessage.Size = new System.Drawing.Size(600, 124);
+            this.logMessage.TabIndex = 1;
+            this.logMessage.Text = null;
             // 
             // label1
             // 
@@ -141,32 +165,6 @@
             this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            // 
-            // pendingList
-            // 
-            this.pendingList.AllowColumnReorder = true;
-            this.pendingList.CheckBoxes = true;
-            this.pendingList.Context = null;
-            this.pendingList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pendingList.HideSelection = false;
-            this.pendingList.Location = new System.Drawing.Point(0, 0);
-            this.pendingList.Name = "pendingList";
-            this.pendingList.Size = new System.Drawing.Size(600, 185);
-            this.pendingList.TabIndex = 0;
-            this.pendingList.UseCompatibleStateImageBehavior = false;
-            // 
-            // logMessage
-            // 
-            this.logMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.logMessage.Location = new System.Drawing.Point(0, 23);
-            this.logMessage.Name = "logMessage";
-            this.logMessage.PasteSource = this.pendingList;
-            this.logMessage.Size = new System.Drawing.Size(600, 124);
-            this.logMessage.TabIndex = 1;
-            this.logMessage.Text = null;
             // 
             // ProjectCommitDialog
             // 
