@@ -34,7 +34,7 @@
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lastRevLabel = new System.Windows.Forms.Label();
             this.lastRevBox = new System.Windows.Forms.TextBox();
@@ -176,19 +176,15 @@
             // 
             // pendingCommits
             // 
+            this.pendingCommits.AllowColumnReorder = true;
+            this.pendingCommits.CheckBoxes = true;
             this.pendingCommits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pendingCommits.FullRowSelect = true;
             this.pendingCommits.HideSelection = false;
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
-            this.pendingCommits.ProvideWholeListForSelection = false;
             this.pendingCommits.ShowItemToolTips = true;
             this.pendingCommits.Size = new System.Drawing.Size(768, 214);
-            this.pendingCommits.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.pendingCommits.StrictCheckboxesClick = true;
             this.pendingCommits.TabIndex = 0;
-            this.pendingCommits.UseCompatibleStateImageBehavior = false;
-            this.pendingCommits.View = System.Windows.Forms.View.Details;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
