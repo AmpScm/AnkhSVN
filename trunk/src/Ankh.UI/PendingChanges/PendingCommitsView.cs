@@ -146,6 +146,7 @@ namespace Ankh.UI.PendingChanges
         }
 
         IAnkhServiceProvider _context;
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public IAnkhServiceProvider Context
         {
             get { return _context; }

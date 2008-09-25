@@ -61,6 +61,7 @@ namespace Ankh.UI.PendingChanges
         /// Gets or sets the paste source.
         /// </summary>
         /// <value>The paste source.</value>
+        [DefaultValue(null)]
         public IPendingChangeSource PasteSource
         {
             get { return _pasteSrc; }
