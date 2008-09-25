@@ -394,7 +394,7 @@
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
                   text="&amp;Revert to this Revision" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
-                  text="Revert changes from this revision" dynamicVisibility="true"/>
+                  text="Revert &amp;Changes from this revision" dynamicVisibility="true"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

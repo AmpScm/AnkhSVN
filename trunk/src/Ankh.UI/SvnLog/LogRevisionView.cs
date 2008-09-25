@@ -21,11 +21,45 @@ namespace Ankh.UI.SvnLog
         public LogRevisionView()
         {
 			Sorting = SortOrder.None;
+            Init();
         }
         public LogRevisionView(IContainer container)
 			: this()
         {
             container.Add(this);
+        }
+
+        void Init()
+        {
+            SmartColumn revision = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
+            SmartColumn author = new SmartColumn(this, "&Author", 73);
+            SmartColumn date = new SmartColumn(this, "&Date", 118);
+            SmartColumn issue = new SmartColumn(this, "&Issue", 60);
+            SmartColumn message = new SmartColumn(this, "&Message", 300);
+
+            revision.Sortable = author.Sortable = date.Sortable = issue.Sortable = message.Sortable = false;
+
+
+            AllColumns.Add(revision);
+            AllColumns.Add(author);
+
+            AllColumns.Add(date);
+            AllColumns.Add(issue);
+            AllColumns.Add(message);
+
+            // The listview can't align the first column right. We switch their display position
+            // to work around this            
+            Columns.AddRange(
+                new ColumnHeader[]
+                {
+                    author,
+                    revision,
+                    date,
+                    message
+                });
+
+            author.DisplayIndex = 1;
+            revision.DisplayIndex = 0;
         }
 
 		protected override void OnRetrieveSelection(ListViewWithSelection<LogListViewItem>.RetrieveSelectionEventArgs e)
@@ -42,11 +76,12 @@ namespace Ankh.UI.SvnLog
 
     }
 
-    public class LogListViewItem : ListViewItem
+    public class LogListViewItem : SmartListViewItem
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnLoggingEventArgs _args;
-        public LogListViewItem(IAnkhServiceProvider context, SvnLoggingEventArgs e)
+        public LogListViewItem(LogRevisionView listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
+            : base(listView)
         {
             _args = e;
             _context = context;
@@ -55,11 +90,12 @@ namespace Ankh.UI.SvnLog
 
         void RefreshText()
         {
-            Text = Revision.ToString(CultureInfo.CurrentCulture);
-
-            SubItems.Add(Author);
-            SubItems.Add(Date.ToString(CultureInfo.CurrentCulture));
-            SubItems.Add(LogMessage);
+            SetValues(
+                Revision.ToString(CultureInfo.CurrentCulture),
+                Author,
+                Date.ToString(CultureInfo.CurrentCulture),
+                "", // Issue
+                LogMessage);
         }
 
 		internal DateTime Date

@@ -14,11 +14,39 @@ namespace Ankh.UI.SvnLog
 
         public LogChangedPathsView()
         {
+            Init();
         }
 
         public LogChangedPathsView(IContainer container)
+            : this()
         {
+
             container.Add(this);
+        }
+
+        void Init()
+        {
+            SmartColumn action = new SmartColumn(this, "&Action", 60);
+            SmartColumn path = new SmartColumn(this, "&Path", 342);
+            SmartColumn copy = new SmartColumn(this, "&Copy", 60);
+            SmartColumn copyRev = new SmartColumn(this, "Copy &Revision", 60);
+
+            AllColumns.Add(action);
+            AllColumns.Add(path);
+            AllColumns.Add(copy);
+            AllColumns.Add(copyRev);
+
+            Columns.AddRange(
+                new ColumnHeader[]
+                {
+                    action,
+                    path,
+                    copy,
+                    copyRev
+                });
+
+            SortColumns.Add(path);
+            FinalSortColumn = path;            
         }
 
         protected override void OnRetrieveSelection(ListViewWithSelection<PathListViewItem>.RetrieveSelectionEventArgs e)
@@ -34,12 +62,13 @@ namespace Ankh.UI.SvnLog
         }
     }
 
-    sealed class PathListViewItem : ListViewItem
+    sealed class PathListViewItem : SmartListViewItem
     {
         readonly ISvnLogItem _logItem;
         readonly SvnChangeItem _change;
-        
-        public PathListViewItem(ISvnLogItem logItem, SvnChangeItem change)
+
+        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change)
+            : base(view)
         {
             if(logItem == null)
                 throw new ArgumentNullException("logItem");
@@ -52,10 +81,12 @@ namespace Ankh.UI.SvnLog
 
         void RefreshText()
         {
-            Text = _change.Path;
-            SubItems.Add(new ListViewSubItem(this, _change.Action.ToString()));
-            if (_change.CopyFromRevision != -1)
-                SubItems.Add(new ListViewSubItem(this, "Copied"));
+            SetValues(
+                _change.Action.ToString(),
+                _change.Path,
+                _change.CopyFromPath ?? "",
+                _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
+            );
         }
 
         internal SvnChangeAction Action
