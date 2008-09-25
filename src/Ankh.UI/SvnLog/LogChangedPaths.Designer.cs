@@ -32,9 +32,6 @@ namespace Ankh.UI
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogChangedPaths));
             this.label1 = new System.Windows.Forms.Label();
             this.changedPaths = new Ankh.UI.SvnLog.LogChangedPathsView(this.components);
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // label1
@@ -45,29 +42,10 @@ namespace Ankh.UI
             // changedPaths
             // 
             resources.ApplyResources(this.changedPaths, "changedPaths");
-            this.changedPaths.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.changedPaths.FullRowSelect = true;
+            this.changedPaths.HideSelection = false;
             this.changedPaths.Name = "changedPaths";
-            this.changedPaths.ProvideWholeListForSelection = false;
-            this.changedPaths.UseCompatibleStateImageBehavior = false;
-            this.changedPaths.View = System.Windows.Forms.View.Details;
             this.changedPaths.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.changedPaths_MouseDoubleClick);
             this.changedPaths.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.changedPaths_ShowContextMenu);
-            // 
-            // columnHeader1
-            // 
-            resources.ApplyResources(this.columnHeader1, "columnHeader1");
-            // 
-            // columnHeader2
-            // 
-            resources.ApplyResources(this.columnHeader2, "columnHeader2");
-            // 
-            // columnHeader3
-            // 
-            resources.ApplyResources(this.columnHeader3, "columnHeader3");
             // 
             // LogChangedPaths
             // 
@@ -85,8 +63,5 @@ namespace Ankh.UI
 
         private Ankh.UI.SvnLog.LogChangedPathsView changedPaths;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
     }
 }

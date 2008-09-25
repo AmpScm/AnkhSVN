@@ -74,7 +74,7 @@ namespace Ankh.UI
             if (e != null && e.ChangedPaths != null)
             {
                 foreach (SvnChangeItem i in e.ChangedPaths)
-                    changedPaths.Items.Add(new PathListViewItem(e, i));
+                    changedPaths.Items.Add(new PathListViewItem(changedPaths, e, i));
             }
         }
 

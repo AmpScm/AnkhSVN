@@ -156,18 +156,6 @@
   <data name="changedPaths.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="columnHeader1.Text" xml:space="preserve">
-    <value>Path</value>
-  </data>
-  <data name="columnHeader1.Width" type="System.Int32, mscorlib">
-    <value>342</value>
-  </data>
-  <data name="columnHeader2.Text" xml:space="preserve">
-    <value>Action</value>
-  </data>
-  <data name="columnHeader3.Text" xml:space="preserve">
-    <value>Copied</value>
-  </data>
   <data name="changedPaths.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 16</value>
   </data>
@@ -181,7 +169,7 @@
     <value>changedPaths</value>
   </data>
   <data name="&gt;&gt;changedPaths.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.0.3098.954, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogChangedPathsView, Ankh.UI, Version=2.0.3190.20005, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;changedPaths.Parent" xml:space="preserve">
     <value>$this</value>
@@ -197,24 +185,6 @@
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>537, 294</value>
-  </data>
-  <data name="&gt;&gt;columnHeader1.Name" xml:space="preserve">
-    <value>columnHeader1</value>
-  </data>
-  <data name="&gt;&gt;columnHeader1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader2.Name" xml:space="preserve">
-    <value>columnHeader2</value>
-  </data>
-  <data name="&gt;&gt;columnHeader2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;columnHeader3.Name" xml:space="preserve">
-    <value>columnHeader3</value>
-  </data>
-  <data name="&gt;&gt;columnHeader3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>LogChangedPaths</value>

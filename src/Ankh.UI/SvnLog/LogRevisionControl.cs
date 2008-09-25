@@ -62,7 +62,7 @@ namespace Ankh.UI.SvnLog
 			set
 			{
 				_qcontext = value;
-				logRevisionControl1.SelectionPublishServiceProvider = value;
+				logView.SelectionPublishServiceProvider = value;
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Ankh.UI.SvnLog
             _logItems.Clear();
             _logItemList.Clear();
             fetchCount = 0;
-            logRevisionControl1.VirtualListSize = 0;
+            logView.VirtualListSize = 0;
         }
 
         int fetchCount = 0;
@@ -213,7 +213,7 @@ namespace Ankh.UI.SvnLog
             lock (_logItems)
             {
                 e.Detach();
-                _logItems.Enqueue(new LogListViewItem(_context, e));
+                _logItems.Enqueue(new LogListViewItem(logView, _context, e));
             }
 
             _syncContext.Post(_sopCallback, null);
@@ -227,7 +227,7 @@ namespace Ankh.UI.SvnLog
             lock (_logItems)
             {
                 e.Detach();
-                _logItems.Enqueue(new LogListViewItem(_context, e));
+                _logItems.Enqueue(new LogListViewItem(logView,_context, e));
             }
 
             _syncContext.Post(_sopCallback, null);
@@ -241,7 +241,7 @@ namespace Ankh.UI.SvnLog
             lock(_logItems)
             {
                 e.Detach();
-                _logItems.Enqueue(new LogListViewItem(_context, e));
+                _logItems.Enqueue(new LogListViewItem(logView, _context, e));
             }
 
             _syncContext.Post(_sopCallback, null);
@@ -257,7 +257,7 @@ namespace Ankh.UI.SvnLog
 
                 }
             }
-            logRevisionControl1.VirtualListSize = _logItemList.Count;
+            logView.VirtualListSize = _logItemList.Count;
             //columnHeader1.Width = -3;
             //columnHeader2.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             //columnHeader3.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -295,7 +295,7 @@ namespace Ankh.UI.SvnLog
 			else
 			{
 				if (_busyOverlay == null)
-					_busyOverlay = new BusyOverlay(logRevisionControl1, AnchorStyles.Bottom | AnchorStyles.Right);
+					_busyOverlay = new BusyOverlay(logView, AnchorStyles.Bottom | AnchorStyles.Right);
 				_busyOverlay.Show();
 			}
 		}
@@ -325,7 +325,7 @@ namespace Ankh.UI.SvnLog
                         if (!_running && _logItemList.Count == fetchCount)
                         {
 
-                            if (logRevisionControl1.VScrollPos < logRevisionControl1.VScrollMax - 30)
+                            if (logView.VScrollPos < logView.VScrollMax - 30)
                                 return;
 
                             _running = true;
@@ -395,10 +395,10 @@ namespace Ankh.UI.SvnLog
         {
             get
             {
-                if (logRevisionControl1.FocusedItem == null)
+                if (logView.FocusedItem == null)
                     return null;
 
-                return new LogItem((LogListViewItem)logRevisionControl1.FocusedItem);
+                return new LogItem((LogListViewItem)logView.FocusedItem);
             }
         }
 
@@ -439,8 +439,8 @@ namespace Ankh.UI.SvnLog
         void OnSelectionChanged()
         {
             _selectedItems.Clear();
-            foreach (int i in logRevisionControl1.SelectedIndices)
-                _selectedItems.Add(new LogItem((LogListViewItem)logRevisionControl1.Items[i]));
+            foreach (int i in logView.SelectedIndices)
+                _selectedItems.Add(new LogItem((LogListViewItem)logView.Items[i]));
 
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
