@@ -97,14 +97,13 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.Name = "fileView";
             this.fileView.Size = new System.Drawing.Size(534, 425);
             this.fileView.TabIndex = 1;
-            this.fileView.UseCompatibleStateImageBehavior = false;
             this.fileView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileView_MouseDoubleClick);
             // 
             // RepositoryExplorerControl
             // 
+            this.ClientSize = new System.Drawing.Size(771, 425);
             this.Controls.Add(this.splitContainer);
             this.Name = "RepositoryExplorerControl";
-            this.Size = new System.Drawing.Size(771, 425);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
             this.splitContainer.Panel2.ResumeLayout(false);
