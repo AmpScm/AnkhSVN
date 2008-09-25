@@ -386,15 +386,15 @@
       <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" type="Context" priority="0x100">
         <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
-                  text="Compare with &amp;working copy" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
+                  text="Compare with &amp;Working copy" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogChangeLogMessage" name="LogChangeLogMessage" priority="0xB000"
-                  text="Change log message" dynamicVisibility="true"/>
+                  text="Change Log &amp;Message" dynamicVisibility="true"/>
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
-                  text="Show changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
+                  text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
-                  text="Revert to this revision" dynamicVisibility="true"/>
+                  text="&amp;Revert to this Revision" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
-                  text="Revert changes from revision(s)" dynamicVisibility="true"/>
+                  text="Revert changes from this revision" dynamicVisibility="true"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
