@@ -17,8 +17,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.foldersStrip = new System.Windows.Forms.ToolStrip();
             this.foldersLabel = new System.Windows.Forms.ToolStripLabel();
             this.fileList = new Ankh.UI.WorkingCopyExplorer.FileSystemDetailsView();
-            this.fileColumn = new System.Windows.Forms.ColumnHeader();
-            this.extensionColumn = new System.Windows.Forms.ColumnHeader();
             this.explorerPanel.SuspendLayout();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -83,37 +81,22 @@ namespace Ankh.UI.WorkingCopyExplorer
             // 
             // fileList
             // 
-            this.fileList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.fileColumn,
-            this.extensionColumn});
+            this.fileList.AllowColumnReorder = true;
             this.fileList.Context = null;
             this.fileList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fileList.HideSelection = false;
             this.fileList.Location = new System.Drawing.Point(0, 0);
             this.fileList.Name = "fileList";
-            this.fileList.ProvideWholeListForSelection = false;
             this.fileList.Size = new System.Drawing.Size(598, 633);
             this.fileList.TabIndex = 0;
-            this.fileList.UseCompatibleStateImageBehavior = false;
-            this.fileList.View = System.Windows.Forms.View.Details;
-            // 
-            // fileColumn
-            // 
-            this.fileColumn.Text = "File";
-            this.fileColumn.Width = 100;
-            // 
-            // extensionColumn
-            // 
-            this.extensionColumn.Text = "Extension";
-            this.extensionColumn.Width = 70;
             // 
             // WorkingCopyExplorerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(902, 633);
             this.Controls.Add(this.explorerPanel);
             this.Name = "WorkingCopyExplorerControl";
-            this.Size = new System.Drawing.Size(902, 633);
             this.explorerPanel.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
@@ -134,7 +117,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         private ToolStrip foldersStrip;
         private ToolStripLabel foldersLabel;
         private FileSystemTreeView folderTree;
-        private ColumnHeader fileColumn;
-        private ColumnHeader extensionColumn;
+        private System.ComponentModel.IContainer components;
     }
 }

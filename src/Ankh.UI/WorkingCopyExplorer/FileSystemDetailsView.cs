@@ -23,6 +23,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             HideSelection = false;
             FullRowSelect = true;
             AllowColumnReorder = true;
+
+            InitializeColumns();
         }
 
         IAnkhServiceProvider _context;
