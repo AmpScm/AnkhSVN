@@ -409,8 +409,8 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             if (ids != null && ids.TryGetValue(path, out id))
             {
-                // We can be 100% sure the path is available in _files, see implementation of AddPath()
-                _files[path].SetId(id);
+                if(_files.Contains(path))
+                    _files[path].SetId(id);
             }
         }
 
