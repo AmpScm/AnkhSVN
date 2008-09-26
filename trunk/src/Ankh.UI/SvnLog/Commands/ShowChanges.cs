@@ -28,17 +28,32 @@ namespace Ankh.UI.SvnLog.Commands
             }
 
             bool one = false;
-            foreach (ISvnLogChangedPathItem change in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+            ISvnLogChangedPathItem change = null;
+            foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
-                if (one)
+                if (change != null)
                 {
                     e.Enabled = false;
                     break;
                 }
-                one = true;
+                change = c;
             }
-            if (one)
+            if (change != null)
+            {
+                // Skip all the files we cannot diff
+                switch(change.Action)
+                {
+                    case SvnChangeAction.Add:
+                        if (change.CopyFromRevision >= 0)
+                            break; // We can retrieve this file using CopyFromPath
+                        e.Enabled = false;
+                        break;
+                    case SvnChangeAction.Delete:
+                        e.Enabled =false;
+                        break;
+                }
                 return;
+            }
 
             // TODO: Remove this code when we're able to handle directories
             SvnItem first = null;
@@ -139,7 +154,6 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
 
             Uri target = new Uri(repositoryRoot, change.Path.TrimStart('/'));
-
             ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), new SvnUriTarget(target, change.Revision));
         }
 
