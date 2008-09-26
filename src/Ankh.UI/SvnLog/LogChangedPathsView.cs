@@ -6,6 +6,7 @@ using Ankh.UI.VSSelectionControls;
 using SharpSvn;
 using Ankh.Scc;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace Ankh.UI.SvnLog
 {
@@ -77,6 +78,7 @@ namespace Ankh.UI.SvnLog
             _logItem = logItem;
             _change = change;
             RefreshText();
+            UpdateColors();
         }
 
         void RefreshText()
@@ -87,6 +89,24 @@ namespace Ankh.UI.SvnLog
                 _change.CopyFromPath ?? "",
                 _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
             );
+
+            
+        }
+
+        void UpdateColors()
+        {
+            switch (_change.Action)
+            {
+                case SvnChangeAction.Add:
+                    ForeColor = Color.FromArgb(100, 0, 100);
+                    break;
+                case SvnChangeAction.Delete:
+                    ForeColor = Color.DarkRed;
+                    break;
+                case SvnChangeAction.Modify:
+                    ForeColor = Color.DarkBlue;
+                    break;
+            }
         }
 
         internal SvnChangeAction Action
