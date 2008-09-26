@@ -13,6 +13,7 @@ using SharpSvn.Implementation;
 using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
+using System.Drawing;
 
 namespace Ankh.UI.SvnLog
 {
@@ -86,6 +87,7 @@ namespace Ankh.UI.SvnLog
             _args = e;
             _context = context;
             RefreshText();
+            UpdateColors();
         }
 
         void RefreshText()
@@ -96,6 +98,15 @@ namespace Ankh.UI.SvnLog
                 Date.ToString(CultureInfo.CurrentCulture),
                 "", // Issue
                 LogMessage);
+        }
+
+        void UpdateColors()
+        {
+            foreach (SvnChangeItem ci in _args.ChangedPaths)
+            {
+                if (ci.CopyFromRevision >= 0)
+                    ForeColor = Color.DarkBlue;
+            }
         }
 
 		internal DateTime Date
