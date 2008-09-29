@@ -117,6 +117,5 @@ namespace Ankh.UI.WorkingCopyExplorer
         private ToolStrip foldersStrip;
         private ToolStripLabel foldersLabel;
         private FileSystemTreeView folderTree;
-        private System.ComponentModel.IContainer components;
     }
 }

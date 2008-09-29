@@ -27,7 +27,6 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            bool one = false;
             ISvnLogChangedPathItem change = null;
             foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
