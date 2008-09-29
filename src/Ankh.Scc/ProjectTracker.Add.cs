@@ -11,6 +11,13 @@ namespace Ankh.Scc
 {
     partial class ProjectTracker
     {
+        ISelectionContext _selectionContext;
+
+        ISelectionContext SelectionContext
+        {
+            get { return _selectionContext ?? (_selectionContext = GetService<ISelectionContext>()); }
+        }
+
         /// <summary>
         /// This method notifies the client when a project has requested to add files.
         /// </summary>
@@ -32,6 +39,9 @@ namespace Ankh.Scc
             bool allOk = true;
 
             bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+
+            if (_baseDocumentName == null && SelectionContext != null)
+                _baseDocumentName = SelectionContext.ActiveDocumentFilename;
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -80,6 +90,9 @@ namespace Ankh.Scc
             bool allOk = true;
 
             bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
+
+            if (_baseDocumentName == null && SelectionContext != null)
+                _baseDocumentName = SelectionContext.ActiveDocumentFilename;
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -197,12 +210,11 @@ namespace Ankh.Scc
                         // 2 -  If the file is drag&dropped in the solution explorer
                         //      the current selection is still the original selection
                         if (selectedFiles == null)
-                        {
-                            ISelectionContext selection = GetService<ISelectionContext>();
-                            if (selection != null)
+                        {                            
+                            if (SelectionContext != null)
                             {
                                 // BH: resx files are not correctly included if we don't retrieve this list recursive
-                                selectedFiles = new List<string>(selection.GetSelectedFiles(true));
+                                selectedFiles = new List<string>(SelectionContext.GetSelectedFiles(true));
                             }
                             else
                                 selectedFiles = new List<string>();
@@ -277,36 +289,52 @@ namespace Ankh.Scc
                                     string s = part.Trim();
                                     Uri uri;
 
-                                    if (Uri.TryCreate(s, UriKind.Absolute, out uri))
+                                    if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
+                                        break;
+
+                                    if (uri.IsFile)
                                     {
-                                        if (uri.IsFile)
+                                        string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
+
+                                        if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
                                         {
-                                            string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
+                                            FileInfo orgInfo = new FileInfo(file);
 
-                                            if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                                            if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
                                             {
-                                                FileInfo orgInfo = new FileInfo(file);
+                                                // BH: Don't verify filedates, etc; as they shouldn't be copied
 
-                                                if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
+                                                if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
                                                 {
-                                                    // BH: Don't verify filedates, etc; as they shouldn't be copied
+                                                    // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
+                                                    _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
 
-                                                    if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                                    {
-                                                        // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                                        _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
-
-                                                        break;
-                                                    }
+                                                    break;
                                                 }
                                             }
                                         }
                                     }
                                 }
+
                             }
                         }
 
                         // The clipboard seems to have some other format which might contain other info
+
+                        if (origin == null &&
+                            !string.IsNullOrEmpty(_baseDocumentName) &&
+                            !string.Equals(newName, _baseDocumentName, StringComparison.OrdinalIgnoreCase) &&
+                            string.Equals(SelectionContext.ActiveDocumentFilename, newName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // The new file is the active document
+                            // AND in OnQueryAdd the active document name was different
+
+                            // Assume the user saved a document under a new name (File -> Save As)
+
+                            origin = _baseDocumentName;
+                        }
+                        else
+                            _baseDocumentName = null;
                     }
 
                     if (sccProject != null)

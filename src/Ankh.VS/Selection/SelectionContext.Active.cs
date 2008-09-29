@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.Selection;
+using SharpSvn;
 
 namespace Ankh.VS.Selection
 {
@@ -133,6 +134,25 @@ namespace Ankh.VS.Selection
         public Control ActiveDocumentFrameControl
         {
             get { return _activeDocumentControl ?? (_activeDocumentControl = FindControl(ActiveDocumentFrameObject)); }
+        }
+
+        public string ActiveDocumentFilename
+        {
+            get 
+            {
+                if (_activeDocumentFrame != null)
+                {
+                    object value;
+                    string path;
+                    if (ErrorHandler.Succeeded(_activeDocumentFrame.GetProperty((int)__VSFPROPID.VSFPROPID_pszMkDocument, out value))
+                        && null != (path = value as string))
+                    {
+                        if (SvnItem.IsValidPath(path))
+                            return SvnTools.GetNormalizedFullPath(path);                        
+                    }
+                }
+                return null;
+            }
         }
 
         bool _shouldRefresh;
