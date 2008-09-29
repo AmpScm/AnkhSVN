@@ -163,6 +163,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContext Members
+
+
+            public string ActiveDocumentFilename
+            {
+                get { return null; }
+            }
+
+            #endregion
         }
     }
 }
