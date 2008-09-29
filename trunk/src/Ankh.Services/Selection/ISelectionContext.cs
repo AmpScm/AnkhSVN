@@ -73,7 +73,13 @@ namespace Ankh.Selection
         /// Gets the current solution filename (full path)
         /// </summary>
         /// <value>The solution filename.</value>
-        string SolutionFilename { get; }        
+        string SolutionFilename { get; }
+
+        /// <summary>
+        /// Gets the name of the active document file (full path)
+        /// </summary>
+        /// <value>The name of the active document file.</value>
+        string ActiveDocumentFilename { get; }
 
         /// <summary>
         /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveFrame"/>
