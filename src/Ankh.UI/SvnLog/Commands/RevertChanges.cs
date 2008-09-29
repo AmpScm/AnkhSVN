@@ -67,8 +67,9 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
 
             IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
-            tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
+            if(logWindow.WorkingCopyItems != null && logWindow.WorkingCopyItems.Length > 0)
+                tracker.SaveDocuments(SvnItem.GetPaths(logWindow.WorkingCopyItems));
 
             progressRunner.Run("Reverting",
                 delegate(object sender, ProgressWorkerArgs ee)
@@ -84,7 +85,7 @@ namespace Ankh.UI.SvnLog.Commands
 
                             foreach (SvnRevision rev in revisions)
                             {
-                                ee.Client.Merge(target, source, new SvnRevisionRange(rev.Revision - 1, rev.Revision));
+                                ee.Client.Merge(target, source, new SvnRevisionRange(rev.Revision, rev.Revision-1));
                             }
                         }
                         dl.ReloadModified();
