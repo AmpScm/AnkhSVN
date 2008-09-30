@@ -36,12 +36,13 @@ namespace Ankh
         /// Used to run lengthy operations in a separate thread while 
         /// displaying a modal progress dialog in the main thread.
         /// </summary>
-        class ProgressRunner
+        sealed class ProgressRunner
         {
             readonly IAnkhServiceProvider _context;
             readonly EventHandler<ProgressWorkerArgs> _worker;
             Form _invoker;
             bool _cancelled;
+            bool _closed;
             Exception _exception;
 
             /// <summary>
@@ -97,12 +98,24 @@ namespace Ankh
 
                     IUIService service = _context.GetService<IUIService>();
 
-                    if (service == null)
-                        dialog.ShowDialog(dialogOwner.DialogOwner);
-                    else
-                        service.ShowDialog(dialog);
+                    do
+                    {
+                        if (!_closed)
+                        {
+                            if (service == null)
+                                dialog.ShowDialog(dialogOwner.DialogOwner);
+                            else
+                                service.ShowDialog(dialog);
+                        }
 
-                    thread.Join();
+                        // Show the dialog again if the thread join times out
+                        // Do this to handle the acase where the service wants to
+                        // pop up a dialog before canceling.
+
+                        // BH: Experienced this 2008-09-29 when our repository server
+                        //     accepted http connections but didn't handle them in time
+                    }
+                    while (!thread.Join(2500)); 
                 }
                 if (_cancelled)
                 {
@@ -138,6 +151,7 @@ namespace Ankh
                 }
                 finally
                 {
+                    _closed = true;
                     try
                     {
                         OnDone(this, EventArgs.Empty);
