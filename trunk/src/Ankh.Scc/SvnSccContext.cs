@@ -676,7 +676,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
             else if (string.IsNullOrEmpty(contentFrom))
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException("contentFrom");
 
             IDisposable moveAway = null;
 
