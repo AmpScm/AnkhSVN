@@ -185,8 +185,7 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnShowContextMenu(e);
 
-            if (!ContainsFocus || GetContainerControl().ActiveControl != this)
-                Select();
+            Select();
 
             Point p = e.Location;
             bool showSort = false;
