@@ -555,6 +555,8 @@ namespace Ankh.UI.VSSelectionControls
                 {
                     uint pos = unchecked((uint)m.LParam);
 
+                    Select();
+
                     OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
                         unchecked((short)(ushort)(pos & 0xFFFF)),
                         unchecked((short)(ushort)(pos >> 16)), 0));
