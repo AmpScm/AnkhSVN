@@ -205,16 +205,14 @@ namespace Ankh.UI.SccManagement
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
+            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
             {
-                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
                 SvnProject project = row.Tag as SvnProject;
                 scc.SetProjectManaged(project, true);
             }
 
             RefreshGrid(false);
         }
-
         private void disconnectButton_Click(object sender, EventArgs e)
         {
             if (Context == null)
