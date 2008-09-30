@@ -645,6 +645,36 @@ namespace Ankh.Scc
             return true;
         }
 
+        static string RemoveEndSlash(string path, out char end)
+        {
+            end = '\0';
+            if(SvnItem.IsValidPath(path))
+            {
+                string p = SvnTools.GetNormalizedFullPath(path);
+
+                if(p.Length == path.Length-1 && string.Equals(p, path.Substring(0, p.Length), StringComparison.OrdinalIgnoreCase))
+                {
+                    char c = path[path.Length-1];
+ 
+                    if(c == '\\' || c == '/')
+                    {
+                        end = c;
+                        return p;
+                    }
+                }
+            }
+
+            return path;
+        }
+
+        static string AddEndSlash(string path, char end)
+        {
+            if(end != '\0')
+                return path.TrimEnd(end) + end;
+            else
+                return path;
+        }
+
         /// <summary>
         /// Translates a physical project path to a (possibly) virtual project path.
         /// </summary>
@@ -657,6 +687,20 @@ namespace Ankh.Scc
         {
             if (!_enlistCompleted)
                 PerformEnlist();
+
+            char end;
+            string path = RemoveEndSlash(lpszEnlistmentPath, out end);
+
+            SccTranslateData td;
+            if (_sccPaths.TryGetValue(lpszEnlistmentPath, out td) && !string.IsNullOrEmpty(td.StoredPathName))
+            {
+                if(SvnItem.IsValidPath(td.StoredPathName))
+                    pbstrProjectPath = AddEndSlash(td.StoredPathName, end);
+                else
+                    pbstrProjectPath = td.StoredPathName;
+
+                return VSConstants.S_OK;
+            }
 
             pbstrProjectPath = lpszEnlistmentPath;
             return VSConstants.S_OK;
@@ -676,12 +720,22 @@ namespace Ankh.Scc
             if (!_enlistCompleted)
                 PerformEnlist();
 
-            string sp = SvnTools.GetNormalizedFullPath(lpszProjectPath);
-            SccTranslateData td;
-            if (_storedPaths.TryGetValue(sp, out td) && !string.IsNullOrEmpty(td.SccPathName))
+            char end = '\0';
+            string path;
+
+            if (SvnItem.IsValidPath(lpszProjectPath))
             {
-                pbstrEnlistmentPath = td.EnlistPathName ?? td.SccPathName;
-                pbstrEnlistmentPathUNC = td.SccPathName;
+                path = RemoveEndSlash(lpszProjectPath, out end);
+                path = SvnTools.GetNormalizedFullPath(lpszProjectPath);
+            }
+            else
+                path = lpszProjectPath;
+
+            SccTranslateData td;
+            if (_storedPaths.TryGetValue(path, out td) && !string.IsNullOrEmpty(td.SccPathName))
+            {
+                pbstrEnlistmentPath = AddEndSlash(td.EnlistPathName ?? td.SccPathName, end);
+                pbstrEnlistmentPathUNC = AddEndSlash(td.SccPathName, end);
 
                 return VSConstants.S_OK;
             }
