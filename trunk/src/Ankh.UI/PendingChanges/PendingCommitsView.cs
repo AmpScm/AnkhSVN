@@ -185,8 +185,6 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnShowContextMenu(e);
 
-            Select();
-
             Point p = e.Location;
             bool showSort = false;
             if (p != new Point(-1, -1))
