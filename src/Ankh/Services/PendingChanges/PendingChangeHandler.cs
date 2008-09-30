@@ -44,9 +44,6 @@ namespace Ankh.PendingChanges
                 if (!PreCommit_VerifyLogMessage(state))
                     return false;
 
-                if (!PreCommit_CheckSolutionAdded(state))
-                    return false;
-
                 if (!PreCommit_SaveDirty(state))
                     return false;
 
@@ -93,67 +90,6 @@ namespace Ankh.PendingChanges
 
                 return ok;
             }
-        }
-
-        private bool PreCommit_CheckSolutionAdded(PendingCommitState state)
-        {
-            IAnkhCommandService cmdSvc = state.GetService<IAnkhCommandService>();
-            string slnFile = state.GetService<IAnkhSolutionSettings>().SolutionFilename;
-
-            if (slnFile == null)
-                return true;
-
-            SvnItem slnItem = state.Cache[slnFile];
-
-            if (slnItem.IsVersioned)
-                return true;
-
-            if (slnItem.IsVersionable)
-            {
-                if (slnItem.Parent.IsVersioned)
-                {
-                    // Direct parent is versioned, cannot add to a 'fresh' working copy, lets add to this one
-                    return true;
-                }
-
-                // detect working copy
-                SvnItem i = slnItem.Parent;
-                while (i != null && !i.IsVersioned)
-                    i = i.Parent;
-
-                // Ask wether we should ask to detected working copy
-                if (i != null)
-                {
-                    switch (state.MessageBox.Show(string.Format("Existing working copy detected\r\n" +
-                    "Do you want to add the solution to:\r\n" +
-                    "{0} at {1}", i.FullPath, i.Status.Uri),
-                    "AnkhSvn",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question))
-                    {
-                        case DialogResult.No:
-                            break;
-                        case DialogResult.Yes:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            }
-
-            // sln file is either not in a working copy, or user wants to add it to a new working copy.
-            CommandResult cr = cmdSvc.DirectlyExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion);
-
-            if (!cr.Success)
-                return false;
-
-            if (!(cr.Result is bool) || !(bool)cr.Result) // Didn't add to subversion
-                return false;
-
-            // Just make sure this gets done (Should be done by add solution handler)
-            state.GetService<IFileStatusMonitor>().ScheduleSvnStatus(slnFile);
-
-            return slnItem.IsVersioned;
         }
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
