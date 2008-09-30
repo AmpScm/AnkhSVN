@@ -288,6 +288,18 @@ namespace Ankh.Scc.ProjectMap
             _loaded = false;
         }
 
+        bool _disposed;
+        internal void Dispose()
+        {
+            _disposed = true;
+            Hook(false);            
+        }
+
+        public bool IsDisposed
+        {
+            get { return _disposed; }
+        }
+
         bool _inLoad;
         internal void Load()
         {

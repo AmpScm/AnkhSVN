@@ -90,6 +90,9 @@
     <Compile Include="Commands\PendingChangeTicker.cs" />
     <Compile Include="Commands\ActivateSccProvider.cs">
     </Compile>
+    <Compile Include="ProjectMap\SccEditorData.cs" />
+    <Compile Include="ProjectMap\SccTranslateEnlistData.cs" />
+    <Compile Include="ProjectMap\SccTranslateData.cs" />
     <Compile Include="TextEditingTracker.cs" />
     <Compile Include="OpenDocumentTracker.cs" />
     <Compile Include="OpenDocumentTracker.Api.cs">
