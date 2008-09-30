@@ -31,9 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.logMessageList = new System.Windows.Forms.ListView();
-            this.previewBox = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.previewBox = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -62,6 +62,8 @@
             // logMessageList
             // 
             this.logMessageList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logMessageList.FullRowSelect = true;
+            this.logMessageList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.logMessageList.HideSelection = false;
             this.logMessageList.Location = new System.Drawing.Point(0, 0);
             this.logMessageList.MultiSelect = false;
@@ -69,20 +71,8 @@
             this.logMessageList.Size = new System.Drawing.Size(498, 197);
             this.logMessageList.TabIndex = 0;
             this.logMessageList.UseCompatibleStateImageBehavior = false;
-            this.logMessageList.View = System.Windows.Forms.View.List;
+            this.logMessageList.View = System.Windows.Forms.View.Details;
             this.logMessageList.SelectedIndexChanged += new System.EventHandler(this.logMessageList_SelectedIndexChanged);
-            // 
-            // previewBox
-            // 
-            this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.previewBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.previewBox.Location = new System.Drawing.Point(0, 0);
-            this.previewBox.Name = "previewBox";
-            this.previewBox.PasteSource = null;
-            this.previewBox.ReadOnly = true;
-            this.previewBox.Size = new System.Drawing.Size(498, 34);
-            this.previewBox.TabIndex = 0;
-            this.previewBox.Text = null;
             // 
             // okButton
             // 
@@ -105,6 +95,17 @@
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // previewBox
+            // 
+            this.previewBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.previewBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.previewBox.Location = new System.Drawing.Point(0, 0);
+            this.previewBox.Name = "previewBox";
+            this.previewBox.ReadOnly = true;
+            this.previewBox.Size = new System.Drawing.Size(498, 34);
+            this.previewBox.TabIndex = 0;
+            this.previewBox.Text = null;
             // 
             // RecentMessageDialog
             // 
