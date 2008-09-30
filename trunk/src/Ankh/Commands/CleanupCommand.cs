@@ -5,6 +5,7 @@ using Ankh.Ids;
 using System.Collections.Generic;
 using System.IO;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -31,30 +32,22 @@ namespace Ankh.Commands
             e.GetService<IProgressRunner>().Run("Running Cleanup",
                 delegate(object sender, ProgressWorkerArgs a)
                 {
+                    HybridCollection<string> wcs = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-                    SortedList<string, SvnItem> list = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
                     foreach (SvnItem item in items)
                     {
                         if (!item.IsVersioned)
                             continue;
 
-                        string path = item.IsDirectory ? item.FullPath : Path.GetDirectoryName(item.FullPath);
-                        if (list.ContainsKey(path))
-                            continue;
+                        SvnWorkingCopy wc = item.WorkingCopy;
 
-                        list.Add(path, item);
-                    }
-
-                    foreach (string path in new List<string>(list.Keys))
-                    {
-                        string parentPath = Path.GetDirectoryName(path);
-                        if (list.ContainsKey(parentPath) && parentPath != path)
-                            list.Remove(path);
+                        if (wc != null && !wcs.Contains(wc.FullPath))
+                            wcs.Add(wc.FullPath);
                     }
 
                     SvnCleanUpArgs args = new SvnCleanUpArgs();
                     args.ThrowOnError = false;
-                    foreach (string path in list.Keys)
+                    foreach (string path in wcs)
                         a.Client.CleanUp(path, args);
                 });
         }
