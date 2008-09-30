@@ -10,6 +10,10 @@ using System.Diagnostics;
 
 namespace Ankh.Scc
 {
+    /// <summary>
+    /// Identical to Microsoft.VisualStudio.Shell.Interop.__SccStatus 
+    /// in Microsoft.VisualStudio.Shell.Interop.9.0
+    /// </summary>
     enum SccStatus
     {
         SCC_STATUS_INVALID = -1,
@@ -198,10 +202,10 @@ namespace Ankh.Scc
             if (walker == null || StatusCache == null)
                 return VSConstants.S_OK;
 
-            if(phierHierarchy == null)
+            if (phierHierarchy == null)
                 phierHierarchy = GetService<IVsHierarchy>(typeof(SVsSolution));
 
-            if(phierHierarchy == null)
+            if (phierHierarchy == null)
                 return VSConstants.S_OK;
 
             StringBuilder sb = new StringBuilder();
@@ -213,18 +217,18 @@ namespace Ankh.Scc
             foreach (string file in walker.GetSccFiles(phierHierarchy, itemidNode, ProjectWalkDepth.Empty, null))
             {
                 SccProjectFile spf;
-                if(_fileMap.TryGetValue(file, out spf))
+                if (_fileMap.TryGetValue(file, out spf))
                 {
                     if (files.Contains(spf))
                         files.Remove(spf); // Must have been added as a subfile and normal file :(
 
                     files.Insert(n++, spf);
 
-                    foreach(string subfile in spf.FirstReference.GetSubFiles())
+                    foreach (string subfile in spf.FirstReference.GetSubFiles())
                     {
-                        if(_fileMap.TryGetValue(subfile, out spf))
+                        if (_fileMap.TryGetValue(subfile, out spf))
                         {
-                            if(!files.Contains(spf))
+                            if (!files.Contains(spf))
                                 files.Add(spf);
                         }
                     }
@@ -232,7 +236,7 @@ namespace Ankh.Scc
             }
 
             string format = (files.Count > 0) ? "{0}: {1}" : "{1}";
-            for(int i = 0; i < files.Count; i++)
+            for (int i = 0; i < files.Count; i++)
             {
                 SvnItem item = StatusCache[files[i].FullPath];
 
@@ -254,7 +258,7 @@ namespace Ankh.Scc
                 if (!item.Exists)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipDoesNotExist).AppendLine();
 
-                if(item.IsLocked)
+                if (item.IsLocked)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipLocked).AppendLine();
             }
 

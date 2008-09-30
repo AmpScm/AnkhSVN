@@ -22,9 +22,9 @@ namespace Ankh.Scc
     {
     }
 
-    [GlobalService(typeof(AnkhSccProvider), true)]
+    [GlobalService(typeof(AnkhSccProvider))]
     [GlobalService(typeof(IAnkhSccService))]
-    [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]    
+    [GlobalService(typeof(ITheAnkhSvnSccProvider), true)]
     partial class AnkhSccProvider : AnkhService, ITheAnkhSvnSccProvider, IVsSccProvider, IVsSccControlNewSolution, IAnkhSccService, IVsSccEnlistmentPathTranslation
     {
         bool _active;
@@ -40,7 +40,7 @@ namespace Ankh.Scc
         {
             base.OnInitialize();
 
-            GetService<AnkhServiceEvents>().RuntimeStarted 
+            GetService<AnkhServiceEvents>().RuntimeStarted
                 += delegate
                 {
                     TryRegisterSccProvider();
@@ -263,6 +263,6 @@ namespace Ankh.Scc
         {
             return VSConstants.E_NOTIMPL;
         }
-        #endregion        
+        #endregion
     }
 }
