@@ -36,12 +36,19 @@ namespace Ankh.Scc
         readonly Dictionary<string, EnlistBase> _enlistStore = new Dictionary<string, EnlistBase>();
         readonly List<EnlistData> _enlistState = new List<EnlistData>();
         bool _enlistCompleted;// = false;
+        readonly List<SccTranslateData> _translations = new List<SccTranslateData>();
+        readonly Dictionary<string, SccTranslateData> _storedPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, SccTranslateData> _sccPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
 
         void ClearEnlistState()
         {
             _enlistStore.Clear();
             _enlistState.Clear();
             _enlistCompleted = false;
+
+            _translations.Clear();
+            _storedPaths.Clear();
+            _sccPaths.Clear();
         }
 
         protected IEnumerable<IVsHierarchy> GetAllProjectsInSolutionRaw()
@@ -669,9 +676,85 @@ namespace Ankh.Scc
             if (!_enlistCompleted)
                 PerformEnlist();
 
+            string sp = SvnTools.GetNormalizedFullPath(lpszProjectPath);
+            SccTranslateData td;
+            if (_storedPaths.TryGetValue(sp, out td) && !string.IsNullOrEmpty(td.SccPathName))
+            {
+                pbstrEnlistmentPath = td.EnlistPathName ?? td.SccPathName;
+                pbstrEnlistmentPathUNC = td.SccPathName;
+
+                return VSConstants.S_OK;
+            }
+
             pbstrEnlistmentPath = lpszProjectPath;
             pbstrEnlistmentPathUNC = lpszProjectPath;
             return VSConstants.S_OK;
+        }
+
+
+        /// <summary>
+        /// Called by SccTranslateData.set_StoredPath
+        /// </summary>
+        internal bool Translate_SetStoredPath(SccTranslateData translateData, string value)
+        {
+            if (translateData == null)
+                throw new ArgumentNullException("translateData");
+
+            SccTranslateData td;
+
+            if (!string.IsNullOrEmpty(translateData.StoredPathName))
+            {
+                
+                if (_storedPaths.TryGetValue(translateData.StoredPathName, out td))
+                {
+                    Debug.Assert(translateData == td, "Same translation");
+
+                    _storedPaths.Remove(translateData.StoredPathName);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (!_storedPaths.TryGetValue(value, out td))
+                    _storedPaths.Add(value, translateData);
+                else if (td != translateData)
+                    throw new InvalidOperationException("Can't store a path twice");
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Called by SccTranslateData.set_SccPath
+        /// </summary>
+        internal bool Translate_SetSccPath(SccTranslateData translateData, string value)
+        {
+            if (translateData == null)
+                throw new ArgumentNullException("translateData");
+
+            SccTranslateData td;
+
+            if (!string.IsNullOrEmpty(translateData.SccPathName) &&
+                !string.Equals(translateData.SccPathName, translateData.EnlistPathName, StringComparison.OrdinalIgnoreCase))
+            {                
+                if (_sccPaths.TryGetValue(translateData.SccPathName, out td))
+                {
+                    Debug.Assert(translateData == td, "Same translation");
+
+                    // Keep the value in the list if the EnlistPathName still has this value
+                    _storedPaths.Remove(translateData.StoredPathName);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (!_storedPaths.TryGetValue(value, out td))
+                    _storedPaths.Add(value, translateData);
+                else if (td != translateData)
+                    throw new InvalidOperationException("Can't store a path twice");
+            }
+
+            return true;
         }
 
         #region IVsAsynchOpenFromScc Members
@@ -682,6 +765,13 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+        /// <summary>
+        /// This method begins loading the specified project asynchronously.
+        /// </summary>
+        /// <param name="lpszProjectPath">[in] Physical path to the project to be loaded from source control.</param>
+        /// <returns>
+        /// If the method succeeds, it returns <see cref="F:Microsoft.VisualStudio.VSConstants.S_OK"/>. If it fails, it returns an error code.
+        /// </returns>
         public int LoadProject(string lpszProjectPath)
         {
             return VSConstants.S_OK; // The project is available

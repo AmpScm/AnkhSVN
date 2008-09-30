@@ -127,6 +127,17 @@ namespace Ankh.Scc
             data.SetManaged(managed);
         }
 
+        internal SccProjectData GetSccProject(Guid projectId)
+        {
+            foreach (SccProjectData pd in _projectMap.Values)
+            {
+                if (pd.ProjectGuid == projectId)
+                    return pd;
+            }
+
+            return null;
+        }
+
         public bool IsSolutionDirty
         {
             // TODO: Only return true if the solution was not previously managed by Ankh
@@ -290,7 +301,7 @@ namespace Ankh.Scc
 
             foreach (SccProjectData pd in _projectMap.Values)
             {
-                pd.Hook(false);
+                pd.Dispose();
             }
 
 #if !DEBUG
