@@ -717,6 +717,11 @@ namespace Ankh.Scc
         /// </returns>
         public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
+            // Summarized: lpszProjectPath         = Path as stored in the .sln
+            //             pbstrEnlistmentPath     = Path used to load the project (e.g. http://localhost/site)
+            //             pbstrEnlistmentPathUNC  = UNC Path to the project on disk
+            //                                       (e.g. c:\inetpub\wwwroot\site for http://localhost/site
+
             if (!_enlistCompleted)
                 PerformEnlist();
 
