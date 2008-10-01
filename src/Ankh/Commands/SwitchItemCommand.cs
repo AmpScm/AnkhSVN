@@ -22,26 +22,61 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Command == AnkhCommand.SolutionSwitchDialog)
-            {
-                if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
-                    e.Enabled = false;
-                return;
-            }
+            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
 
-            bool foundOne = false, error = false;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            switch (e.Command)
             {
-                if (item.IsVersioned && !foundOne)
-                    foundOne = true;
-                else
-                {
-                    error = true;
+                case AnkhCommand.SolutionSwitchDialog:
+                    if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+                    SvnItem solutionItem = statusCache[e.Selection.SolutionFilename];
+                    if (!solutionItem.IsVersioned)
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
                     break;
-                }
-            }
 
-            e.Enabled = foundOne && !error;
+                case AnkhCommand.SwitchProject:
+                    IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                    foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
+                    {
+                        ISvnProjectInfo pi = pfm.GetProjectInfo(item);
+
+                        if (pi == null)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+
+                        SvnItem projectItem = statusCache[pi.ProjectDirectory];
+                        if (!projectItem.IsVersioned)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                    }
+                    break;
+
+                case AnkhCommand.SwitchItem:
+                    bool foundOne = false, error = false;
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                    {
+                        if (item.IsVersioned && !foundOne)
+                            foundOne = true;
+                        else
+                        {
+                            error = true;
+                            break;
+                        }
+                    }
+
+                    e.Enabled = foundOne && !error;
+                    break;
+            }
         }
 
         public override void OnExecute(CommandEventArgs e)

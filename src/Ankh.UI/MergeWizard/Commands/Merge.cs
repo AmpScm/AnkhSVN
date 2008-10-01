@@ -20,11 +20,10 @@ namespace Ankh.UI.MergeWizard.Commands
     [Command(AnkhCommand.SolutionMerge)]
     class Merge : ICommandHandler
     {
-        #region ICommandHandler Members
-
         /// <see cref="Ankh.Commands.ICommandHandler.OnUpdate" />
         public void OnUpdate(CommandUpdateEventArgs e)
         {
+            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
             int n = 0;
             bool ok = true;
             switch (e.Command)
@@ -32,18 +31,35 @@ namespace Ankh.UI.MergeWizard.Commands
                 case AnkhCommand.ItemMerge:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
+                        if (!item.IsVersioned)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+
                         n++;
 
-                        if (n > 1 || !item.IsVersioned)
-                        {
-                            ok = false;
+                        if (n > 1)
                             break;
-                        }
                     }
                     break;
                 case AnkhCommand.ProjectMerge:
+                    IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                     foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
+                        ISvnProjectInfo projInfo = pfm.GetProjectInfo(project);
+                        if (projInfo == null)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                        SvnItem projectDir = statusCache[projInfo.ProjectDirectory];
+                        if (!projectDir.IsVersioned)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+
                         n++;
 
                         if (n > 1)
@@ -51,7 +67,15 @@ namespace Ankh.UI.MergeWizard.Commands
                     }
                     break;
                 case AnkhCommand.SolutionMerge:
-                    n = 1;
+                    IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+                    if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+                    SvnItem solutionItem = statusCache[solutionSettings.ProjectRoot];
+                    if (solutionItem.IsVersioned)
+                        n = 1;
                     break;
                 default:
                     throw new InvalidOperationException();
@@ -117,7 +141,5 @@ namespace Ankh.UI.MergeWizard.Commands
                 }
             }
         }
-
-        #endregion  
     }
 }
