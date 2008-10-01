@@ -22,8 +22,14 @@ namespace Ankh.Commands
     [Command(AnkhCommand.SolutionEditProperties, HideWhenDisabled = true)]
     class EditPropertiesCommand : CommandBase
     {
+        /// <summary>
+        /// Raises the <see cref="E:Update"/> event.
+        /// </summary>
+        /// <param name="e">The <see cref="Ankh.Commands.CommandUpdateEventArgs"/> instance containing the event data.</param>
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+
             int count = 0;
             switch (e.Command)
             {
@@ -48,16 +54,34 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.ProjectEditProperties:
+                    IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                     foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
-                        count++;
+                        ISvnProjectInfo info = pfm.GetProjectInfo(project);
+                        if (info == null)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                        SvnItem projectFolder = cache[info.ProjectDirectory];
+
+                        if(projectFolder.IsVersioned)
+                            count++;
 
                         if (count > 1)
                             break;
                     }
                     break;
                 case AnkhCommand.SolutionEditProperties:
-                    count = 1;
+                    IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+                    if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+                    SvnItem solutionItem = cache[solutionSettings.ProjectRoot];
+                    if(solutionItem.IsVersioned)
+                        count = 1;
                     break;
                 default:
                     throw new InvalidOperationException();
