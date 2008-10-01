@@ -847,6 +847,7 @@ namespace Ankh
             /// <returns></returns>
             public static uint GetFileAttributes(string filename)
             {
+                // This method assumes filename is an absolute and/or rooted path
                 if (string.IsNullOrEmpty(filename))
                     throw new ArgumentNullException("filename");
 
