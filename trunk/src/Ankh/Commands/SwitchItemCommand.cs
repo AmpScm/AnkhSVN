@@ -22,17 +22,19 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
 
+            IFileStatusCache statusCache;
             switch (e.Command)
             {
                 case AnkhCommand.SolutionSwitchDialog:
-                    if (string.IsNullOrEmpty(e.Selection.SolutionFilename))
+                    IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+                    if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
                     {
                         e.Enabled = false;
                         return;
                     }
-                    SvnItem solutionItem = statusCache[e.Selection.SolutionFilename];
+                    statusCache = e.GetService<IFileStatusCache>();
+                    SvnItem solutionItem = statusCache[solutionSettings.ProjectRoot];
                     if (!solutionItem.IsVersioned)
                     {
                         e.Enabled = false;
@@ -41,6 +43,7 @@ namespace Ankh.Commands
                     break;
 
                 case AnkhCommand.SwitchProject:
+                    statusCache = e.GetService<IFileStatusCache>();
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
                     foreach (SvnProject item in e.Selection.GetSelectedProjects(true))
                     {

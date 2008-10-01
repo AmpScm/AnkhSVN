@@ -28,7 +28,7 @@ namespace Ankh.Commands
         /// <param name="e">The <see cref="Ankh.Commands.CommandUpdateEventArgs"/> instance containing the event data.</param>
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            IFileStatusCache cache;
 
             int count = 0;
             switch (e.Command)
@@ -55,6 +55,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.ProjectEditProperties:
                     IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                    cache = e.GetService<IFileStatusCache>();
                     foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo info = pfm.GetProjectInfo(project);
@@ -73,6 +74,7 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.SolutionEditProperties:
+                    cache = e.GetService<IFileStatusCache>();
                     IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
                     if (solutionSettings == null || string.IsNullOrEmpty(solutionSettings.ProjectRoot))
                     {
