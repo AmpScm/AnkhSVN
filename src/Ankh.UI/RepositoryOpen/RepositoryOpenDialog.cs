@@ -305,7 +305,7 @@ namespace Ankh.UI.RepositoryOpen
             {
                 Uri combined = SvnTools.AppendPathSuffix(dirUri, fileText);
 
-                DoSomething fill = delegate()
+                AnkhAction fill = delegate()
                 {
                     CheckResult(combined);
                 };
@@ -333,7 +333,7 @@ namespace Ankh.UI.RepositoryOpen
                         if (!IsHandleCreated)
                             return;
 
-                        Invoke((DoSomething)delegate
+                        Invoke((AnkhAction)delegate
                         {
                             if (e.NodeKind == SvnNodeKind.Directory)
                             {
@@ -442,20 +442,19 @@ namespace Ankh.UI.RepositoryOpen
 			using (AddUriDialog dialog = new AddUriDialog())
 			{
 				IUIService uiService = _context.GetService<IUIService>();
-				if (DialogResult.OK == uiService.ShowDialog(dialog))
-				{
-					Uri dirUri;
-					if (Uri.TryCreate(dialog.UrlText, UriKind.Absolute, out dirUri))
-					{
-						//Uri combined = SvnTools.AppendPathSuffix(dirUri, fileText);
+                if (DialogResult.OK != uiService.ShowDialog(dialog))
+                    return;
 
-						DoSomething fill = delegate()
-						{
-							CheckResult(dirUri, true);
-						};
-						fill.BeginInvoke(null, null);
-					}
-				}
+				Uri dirUri;
+				if (!Uri.TryCreate(dialog.UrlText, UriKind.Absolute, out dirUri))
+                    return;
+
+                AnkhAction action = delegate
+                {
+                    CheckResult(dirUri);
+                };
+
+                action.BeginInvoke(null, null);
 			}
 		}
 
@@ -489,8 +488,6 @@ namespace Ankh.UI.RepositoryOpen
                 RefreshBox(parentUri);
             }
         }
-
-        delegate void DoSomething();
 
         Uri _currentUri;
         BusyOverlay _busy;
@@ -532,7 +529,7 @@ namespace Ankh.UI.RepositoryOpen
                 }
             }
 
-            DoSomething fill = delegate()
+            AnkhAction fill = delegate()
             {
                 OnFill(uri);
             };
@@ -576,7 +573,7 @@ namespace Ankh.UI.RepositoryOpen
 
                     if (IsHandleCreated)
                     {
-                        Invoke((DoSomething)delegate()
+                        Invoke((AnkhAction)delegate()
                         {
                             if (uri == _currentUri)
                             {
@@ -617,7 +614,7 @@ namespace Ankh.UI.RepositoryOpen
             }
             finally
             {
-                Invoke((DoSomething)delegate()
+                Invoke((AnkhAction)delegate()
                 {
                     lock (_running)
                     {
