@@ -39,6 +39,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ExternalSite", "..\External
 		SccLocalPath = "Svn"
 		SccProvider = "SubversionScc"
 		TargetFramework = "3.5"
+		ProjectReferences = "{AE644D45-BD60-44EE-B275-FEB5E7A14B31}|CsClassLibrary.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/ExternalSite"
 		Debug.AspNetCompiler.PhysicalPath = "..\ExternalSite\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ExternalSite\"
@@ -87,6 +88,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppIgnoreProject", "CppIgnoreProject\CppIgnoreProject.vcproj", "{5BEFA670-8404-4D75-A5F2-E99997916668}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "プログラミング#Silverlight", "プログラミング#Silverlight\プログラミング#Silverlight.csproj", "{1352538B-A347-4368-A087-DEEACA1A0813}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "External CsLibrary", "..\External CsLibrary\External CsLibrary.csproj", "{BF236045-30D1-49E1-A857-113895B40B81}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtlTest", "AtlTest\AtlTest.vcproj", "{B3578AB5-5DA5-434C-AAC7-7120E3C781C8}"
 EndProject
@@ -307,6 +310,20 @@ Global
 		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Win32.ActiveCfg = Release|Win32
 		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|Win32.Build.0 = Release|Win32
 		{5BEFA670-8404-4D75-A5F2-E99997916668}.Release|x86.ActiveCfg = Release|Win32
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|.NET.ActiveCfg = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|Win32.ActiveCfg = Release|Any CPU
+		{BF236045-30D1-49E1-A857-113895B40B81}.Release|x86.ActiveCfg = Release|Any CPU
 		{B3578AB5-5DA5-434C-AAC7-7120E3C781C8}.Debug|.NET.ActiveCfg = Debug|Win32
 		{B3578AB5-5DA5-434C-AAC7-7120E3C781C8}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{B3578AB5-5DA5-434C-AAC7-7120E3C781C8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
