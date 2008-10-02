@@ -19,14 +19,14 @@
       <Group id="Grp_FileFileOpen" priority="0x800">
         <!-- The bottom of the File->Open->* menu-->
         <Button id="Cmd_FileFileOpenFromSubversion" text="Subve&amp;rsion Project..." name="OpenFromSubversion" priority="0x100"
-                toolTip="Open a Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png" />
+                toolTip="Open a Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png" allowParams="true"/>
       </Group>
     </MenuRef>
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_ADD">
       <Group id="Grp_FileFileAdd" priority="0x800">
         <!-- The bottom of the File->Add->* menu-->
         <Button id="Cmd_FileFileAddFromSubversion" text="Subve&amp;rsion Project..." name="AddFromSubversion" priority="0x100"
-                toolTip="Add an existing Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png"
+                toolTip="Add an existing Project or Solution from Subversion" iconFile="PendingChanges/PendingChanges.png" allowParams="true"
                 dynamicVisibility="true">
           <!-- Only show Add when not debugging, etc -->
           <Visibility context="UICONTEXT_SolutionExistsAndNotBuildingAndNotDebugging" />
@@ -392,9 +392,9 @@
           <Button id="Cmd_LogShowChanges" name="LogShowChanges" priority="0xB100"
                   text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
           <Button id="Cmd_LogRevertTo" name="LogRevertTo" priority="0xB200"
-                  text="&amp;Revert to this Revision" dynamicVisibility="true"/>
+                  text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
-                  text="Revert &amp;Changes from this revision" dynamicVisibility="true"/>
+                  text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

@@ -11,11 +11,12 @@ using SharpSvn;
 using System.IO;
 using System.Windows.Forms.Design;
 using Ankh.Scc;
+using System.Diagnostics;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable=true)]
-    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable=true)]
+    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable=true, ArgumentDefinition="u")]
+    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable=true, ArgumentDefinition="u")]
     [Command(AnkhCommand.FileSccOpenFromSubversion)]
     [Command(AnkhCommand.FileSccAddFromSubversion)]
     class OpenFromSubversion : CommandBase
@@ -32,32 +33,55 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IUIService ui = e.GetService<IUIService>();
-            Uri selectedUri;
+            Uri selectedUri = null;
             Uri rootUri;
+
+            if (e.Argument is string && Uri.TryCreate((string)e.Argument, UriKind.Absolute, out selectedUri))
+            { }
+            else if (e.Argument is Uri)
+                selectedUri = (Uri)e.Argument;
+
+
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
-            using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
+
+            if (e.PromptUser || selectedUri == null)
             {
-                dlg.Context = e.Context;
+                using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
+                {                    
+                    dlg.Context = e.Context;
+                    dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
 
-                dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
+                    if (selectedUri != null)
+                        dlg.SelectedUri = selectedUri;
 
-                if (e.Command != AnkhCommand.FileFileOpenFromSubversion && e.Command != AnkhCommand.FileSccOpenFromSubversion)
-                {
-                    dlg.Filter = dlg.Filter.Replace("*.sln;", "").Replace("*.dsw;", "");
+                    if (e.Command != AnkhCommand.FileFileOpenFromSubversion && e.Command != AnkhCommand.FileSccOpenFromSubversion)
+                    {
+                        foreach (string ext in settings.SolutionFilter.Split(';'))
+                        {
+                            dlg.Filter = dlg.Filter.Replace(ext.Trim() + ';', "");
+                        }
+                    }
+
+                    DialogResult dr;
+
+                    if (ui != null)
+                        dr = ui.ShowDialog(dlg);
+                    else
+                        dr = dlg.ShowDialog(e.Context.DialogOwner);
+
+                    if (dr != DialogResult.OK)
+                        return;
+
+                    selectedUri = dlg.SelectedUri;
+                    rootUri = dlg.SelectedRepositoryRoot;
                 }
-
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog(e.Context.DialogOwner);
-
-                if(dr != DialogResult.OK)
-                    return;
-
-                selectedUri = dlg.SelectedUri;
-                rootUri = dlg.SelectedRepositoryRoot;
+            }
+            else
+            {
+                using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
+                {
+                    rootUri = client.GetRepositoryRoot(selectedUri);
+                }
             }
 
             string path = settings.NewProjectLocation;
@@ -142,11 +166,34 @@ namespace Ankh.Commands
 
         private void OpenProject(CommandEventArgs e, string projectFile)
         {
+            IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
             IVsSolution solution = e.GetService<IVsSolution>(typeof(SVsSolution));
 
-            if (File.Exists(projectFile))
+            if (!File.Exists(projectFile))
+                return;
+
+            string ext = Path.GetExtension(projectFile);
+            bool isSolution = false;
+            foreach (string x in ss.SolutionFilter.Split(';'))
             {
-                solution.OpenSolutionFile(0, projectFile);
+                if (string.Equals(ext, Path.GetExtension(x).Replace('*', '!').Replace('?', '!'), StringComparison.OrdinalIgnoreCase))
+                {
+                    isSolution = true;
+                    break;
+                }
+            }
+
+            if (isSolution)
+                ErrorHandler.ThrowOnFailure(solution.OpenSolutionFile(0, projectFile));
+            else
+            {
+                Guid gnull = Guid.Empty;
+                Guid gInterface = Guid.Empty;
+                IntPtr pProj = IntPtr.Zero;
+
+                ErrorHandler.ThrowOnFailure(solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj));
+
+                Debug.Assert(pProj == IntPtr.Zero); // no pProj as gInterface = Guid.Empty
             }
         }
 

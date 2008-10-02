@@ -82,6 +82,13 @@ namespace Ankh.VS
         /// <value>The registry hive suffix.</value>
         string RegistryHiveSuffix { get; }
 
+
+        /// <summary>
+        /// Gets the solution filter.
+        /// </summary>
+        /// <value>The solution filter.</value>
+        string SolutionFilter { get; }
+
         /// <summary>
         /// Gets a list of Uris for url dropdowns
         /// </summary>
