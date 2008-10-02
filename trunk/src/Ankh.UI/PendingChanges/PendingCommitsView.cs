@@ -64,6 +64,11 @@ namespace Ankh.UI.PendingChanges
                 fullPath
             });
 
+            modified.Sorter = new SortWrapper(
+                delegate(PendingCommitItem x, PendingCommitItem y)
+                {
+                    return x.PendingChange.Item.Modified.CompareTo(y.PendingChange.Item.Modified);
+                });
             
             change.Groupable = true;
             changeList.Groupable = true;
