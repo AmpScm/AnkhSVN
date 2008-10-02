@@ -404,13 +404,20 @@ namespace Ankh.UI.RepositoryOpen
                 {
                     // We have an absolute url. Split it in file and directory
 
-                    string path = nameUri.AbsolutePath;
+                    string path = nameUri.GetComponents(UriComponents.PathAndQuery, UriFormat.SafeUnescaped);
 
                     int dirEnd = path.LastIndexOf('/');
 
                     if (dirEnd >= 0)
                     {
-                        Uri dir = new Uri(new Uri(nameUri, path.Substring(0, dirEnd + 1)).ToString()); // Normalize to UI Url
+                        path = path.Substring(0, dirEnd + 1);
+
+                        Uri uriRoot = new Uri(nameUri.GetComponents(UriComponents.StrongAuthority | UriComponents.SchemeAndServer, UriFormat.SafeUnescaped));
+
+                        if (uriRoot.IsFile)
+                            path = path.TrimStart('/'); // Fixup for UNC paths
+
+                        Uri dir = new Uri(uriRoot, path);
                         nameUri = dir.MakeRelativeUri(nameUri); 
 
                         SetDirectory(dir);
