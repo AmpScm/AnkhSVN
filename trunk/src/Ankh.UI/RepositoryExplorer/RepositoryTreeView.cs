@@ -521,7 +521,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             foreach (RepositoryTreeNode reposRoot in serverNode.Nodes)
             {
-                if (reposRoot.RawUri == uri)
+                if (reposRoot.NormalizedUri == nUri)
                     return reposRoot;
             }
 
@@ -531,7 +531,9 @@ namespace Ankh.UI.RepositoryExplorer
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
 
             serverNode.Nodes.Add(rtn);
-            _nodeMap.Add(SvnTools.GetNormalizedUri(rtn.RawUri), rtn);
+
+            if (!_nodeMap.ContainsKey(rtn.NormalizedUri))
+                _nodeMap.Add(rtn.NormalizedUri, rtn);
 
             if (!serverNode.IsExpanded || IsLoading(nUri))
                 serverNode.LoadExpand();

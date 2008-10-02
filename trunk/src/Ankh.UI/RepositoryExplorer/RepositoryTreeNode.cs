@@ -18,6 +18,7 @@ namespace Ankh.UI.RepositoryExplorer
     class RepositoryTreeNode : TreeNode
     {
         readonly Uri _uri;
+        readonly Uri _normalizedUri;
         RepositoryTreeNode _dummy;
         ListItemCollection _items;
         bool _loaded;
@@ -27,6 +28,8 @@ namespace Ankh.UI.RepositoryExplorer
         public RepositoryTreeNode(Uri uri, bool inRepository)
         {
             _uri = uri;
+            if (uri != null)
+                _normalizedUri = SvnTools.GetNormalizedUri(uri);
             _inRepository = inRepository;
         }
 
@@ -39,6 +42,11 @@ namespace Ankh.UI.RepositoryExplorer
         public Uri RawUri
         {
             get { return _uri; }
+        }
+
+        public Uri NormalizedUri
+        {
+            get { return _normalizedUri; }
         }
 
         public bool IsRepositoryPath
