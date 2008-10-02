@@ -46,7 +46,7 @@ namespace Ankh.UI.PendingChanges
                 GetDirectory(item),
                 PendingChange.FullPath,
                 item.IsLocked ? PCStrings.LockedValue : "", // Locked
-                "", // Modified
+                SafeDate(item.Modified), // Modified
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
@@ -65,6 +65,19 @@ namespace Ankh.UI.PendingChanges
                 clr = System.Drawing.Color.DarkBlue;
 
             ForeColor = clr;
+        }
+
+        private string SafeDate(DateTime dateTime)
+        {
+            if (dateTime.Ticks == 0 || dateTime.Ticks == 1)
+                return "";
+
+            DateTime n = dateTime.ToLocalTime();
+
+            if (n < DateTime.Now - new TimeSpan(24, 0, 0))
+                return n.ToString("d");
+            else
+                return n.ToString("T");
         }
 
         private string GetDirectory(SvnItem svnItem)
