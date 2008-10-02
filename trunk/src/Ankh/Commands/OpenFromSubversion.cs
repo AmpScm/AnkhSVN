@@ -62,7 +62,7 @@ namespace Ankh.Commands
 
             string path = settings.NewProjectLocation;
 
-            string name = SvnTools.GetFileName(selectedUri);
+            string name = Path.GetFileNameWithoutExtension(SvnTools.GetFileName(selectedUri));
 
             string newPath;
             int n = 0;
