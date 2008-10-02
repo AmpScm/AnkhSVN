@@ -725,6 +725,16 @@ namespace Ankh.Settings
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the solution filter.
+        /// </summary>
+        /// <value>The solution filter.</value>
+        public string SolutionFilter
+        {
+            // TODO: Find a way to fetch the real list
+            get { return "*.sln;*.dsw"; }
+        }
     }
 }
 
