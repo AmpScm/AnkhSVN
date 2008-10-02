@@ -58,6 +58,7 @@ namespace Ankh
         XBool _statusDirty; // updating, dirty, dirty 
         bool _ticked;
         int _cookie;
+        DateTime _modified;
 
         public SvnItem(IFileStatusCache context, string fullPath, AnkhStatus status)
         {
@@ -369,6 +370,7 @@ namespace Ankh
 
             SetState(current & valid, (~current) & valid);
             _ticked = false;
+            _modified = new DateTime();
             _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
         }
 
@@ -381,6 +383,7 @@ namespace Ankh
             _validState = SvnItemState.None;
             _cookie = NextCookie();
             _workingCopy = null;
+            _modified = new DateTime();
         }
 
         bool ISvnItemUpdate.IsStatusClean()
@@ -431,6 +434,26 @@ namespace Ankh
         public int ChangeCookie
         {
             get { return _cookie; }
+        }
+
+        /// <summary>
+        /// Gets the (cached) modification time of the file/directory
+        /// </summary>
+        /// <value>The modified.</value>
+        public DateTime Modified
+        {
+            get
+            {
+                if (_modified.Ticks == 0 && Exists)
+                {
+                    try
+                    {
+                        _modified = File.GetLastWriteTimeUtc(FullPath);
+                    }
+                    catch { }
+                }
+                return _modified;
+            }
         }
 
         /// <summary>
