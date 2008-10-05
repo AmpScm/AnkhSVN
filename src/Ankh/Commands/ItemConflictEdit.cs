@@ -57,7 +57,12 @@ namespace Ankh.Commands
 
             da.BaseFile = Path.Combine(dir, conflictInfo.ConflictOld);
             da.TheirsFile = Path.Combine(dir, conflictInfo.ConflictNew);
-            da.MineFile = Path.Combine(dir, conflictInfo.ConflictWork);
+
+            if (!string.IsNullOrEmpty(conflictInfo.ConflictWork))
+                da.MineFile = Path.Combine(dir, conflictInfo.ConflictWork);
+            else
+                da.MineFile = conflict.FullPath;
+
             da.MergedFile = conflict.FullPath;
 
             da.BaseTitle = "Base";
