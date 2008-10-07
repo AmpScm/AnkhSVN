@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5344</title>
+<title>AnkhSVN-Daily Update - 2.0.5348</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5344</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5348</h1>
 
 
 <p>
@@ -12,19 +12,20 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1119/AnkhSvn-Daily-2.0.5344.219.msi">AnkhSVN 2.0.5344</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1121/AnkhSvn-Daily-2.0.5348.220.msi">AnkhSVN 2.0.5348</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5344">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5348">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-10-06</td></tr>
 <tr class="d"><td colspan="4">2008-10-05</td></tr>
 <tr><td> </td><td class="r"><a id="5344" href="http://ankhsvn.net/rev/?r=5344">[r5344]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/ItemConflictEdit.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">On a binary conflict use the item path as the mine file for the merge tool.</td></tr>
 <tr class="d"><td colspan="4">2008-10-04</td></tr>
@@ -214,18 +215,6 @@ versioning. These commands are only available on unversioned files below a versi
 1.X style commit dialog)</td></tr>
 <tr class="d"><td colspan="4">2008-09-08</td></tr>
 <tr><td> </td><td class="r"><a id="5129" href="http://ankhsvn.net/rev/?r=5129">[r5129]</a></td><td class="a">baybora</td><td class="f">src/Ankh/Commands/RepositoryExplorer/RemoveRepositoryRootCommand.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2"><a href="http://ankhsvn.net/issues/?id=442">Issue 442</a> : Remove URL from repository explorer does not work</td></tr>
-<tr><td> </td><td class="r"><a id="5128" href="http://ankhsvn.net/rev/?r=5128">[r5128]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryTreeNode.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Don't call SvnClient.List on the server root; only on repository paths.
-This should close <a href="http://ankhsvn.net/issues/?id=502">issue #502</a>.</td></tr>
-<tr><td> </td><td class="r"><a id="5127" href="http://ankhsvn.net/rev/?r=5127">[r5127]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditControl.cs, src/Ankh.UI/PropertyEditors/ExecutablePropertyEditor.Designer.cs, src/Ankh.UI/PropertyEditors/ExecutablePropertyEditor.cs, src/Ankh.UI/PropertyEditors/IgnorePropertyEditor.Designer.cs, src/Ankh.UI/PropertyEditors/IgnorePropertyEditor.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.cs, src/Ankh.UI/PropertyEditors/IPropertyEditor.cs (and 15 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Give the property editors more space and allow setting all current keywords values.</td></tr>
-<tr><td> </td><td class="r"><a id="5123" href="http://ankhsvn.net/rev/?r=5123">[r5123]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PendingChangesToolControl.Designer.cs, src/Ankh.UI/PendingChanges/LogMessageEditor.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Let the LogMessageEditor initialize itself when running in a ToolWindow.</td></tr>
-<tr><td> </td><td class="r"><a id="5122" href="http://ankhsvn.net/rev/?r=5122">[r5122]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/AnkhToolWindowControl.cs, src/Ankh.Services/Scc/UI/IAnkhToolWindowControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Change the AnkhToolWindowControl base class to a Form; this allows the form
-to handle specific form events sent to it via WindowPane.</td></tr>
-<tr class="d"><td colspan="4">2008-09-07</td></tr>
-<tr><td> </td><td class="r"><a id="5118" href="http://ankhsvn.net/rev/?r=5118">[r5118]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/AnkhSvnPackage.Languages.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Disable registration of text editor settings until we find a way to
-make the settings work and edittable. (Currently the options pages work
-until the PC Window is visible for the first time; but the settings are not
-applied).</td></tr>
-<tr><td> </td><td class="r"><a id="5117" href="http://ankhsvn.net/rev/?r=5117">[r5117]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/OpenFromSubversion.cs, src/Ankh.UI/RepositoryExplorer/RepositoryListItem.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/RepositoryOpen/CheckoutProject.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use SvnTools.GetFileName(Uri) for calculating a filename from a Uri</td></tr>
 
 </table>
 <!--/Recent changes-->
