@@ -12,6 +12,8 @@ using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
 using Ankh.Scc;
+using Ankh.UI.Blame;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -60,10 +62,15 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            IAnkhPackage p = e.GetService<IAnkhPackage>();
+            p.ShowToolWindow(AnkhToolWindow.Blame);
+            BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
+            blameToolControl.Init(e.Context);
+
             switch (e.Command)
             {
                 case AnkhCommand.Blame:
-                    BlameItem(e);
+                    BlameItem(e, blameToolControl);
                     break;
                 case AnkhCommand.LogBlameRevision:
                     BlameRevision(e);
@@ -104,7 +111,7 @@ namespace Ankh.Commands
             uiShell.DisplayHtml(string.Format("Revision {0}", item.Revision), writer.ToString(), false);
         }
 
-        void BlameItem(CommandEventArgs e)
+        void BlameItem(CommandEventArgs e, BlameToolWindowControl blameToolControl)
         {
             IUIShell uiShell = e.GetService<IUIShell>();
 
@@ -153,23 +160,38 @@ namespace Ankh.Commands
 
             foreach (SvnItem item in result.Selection)
             {
+
+                blameToolControl.LoadFile(firstItem.FullPath);
+
+                e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
+                {
+                    ee.Client.Blame(new SvnPathTarget(firstItem.FullPath), delegate(object blameSender, SvnBlameEventArgs eee)
+                    {
+                        eee.Detach();
+                        blameToolControl.AddLine(eee);
+                    });
+                });
+
                 // do the blame thing
-                BlameResult blameResult = new BlameResult();
+                //BlameResult blameResult = new BlameResult();
 
-                blameResult.Start();
-                BlameRunner runner = new BlameRunner(new SvnPathTarget(item.FullPath),
-                    revisionStart, revisionEnd, blameResult);
+                //blameResult.Start();
+                //BlameRunner runner = new BlameRunner(new SvnPathTarget(item.FullPath),
+                    //revisionStart, revisionEnd, blameResult);
 
-                e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-                blameResult.End();
+                //e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
+                //blameResult.End();
 
                 // transform it to HTML
-                StringWriter writer = new StringWriter();
-                blameResult.Transform(GetTransform(e.Context), writer);
+                //StringWriter writer = new StringWriter();
+                //blameResult.Transform(GetTransform(e.Context), writer);
 
                 // display the HTML with the filename as caption
-                string filename = Path.GetFileName(item.FullPath);
-                uiShell.DisplayHtml(filename, writer.ToString(), false);
+                //string filename = Path.GetFileName(item.FullPath);
+                //uiShell.DisplayHtml(filename, writer.ToString(), false);
+
+                // TODO open multiple blame editors
+                break;
             }
         }
 
