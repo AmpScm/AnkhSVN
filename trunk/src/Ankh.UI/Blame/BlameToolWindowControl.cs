@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using SharpSvn;
 
 namespace Ankh.UI.Blame
 {
@@ -22,31 +24,10 @@ namespace Ankh.UI.Blame
             this.blameMarginControl1.Init(this, blameSections);
         }
 
-        public void LoadFile(string path)
+        public void LoadFile(string projectFile, string exportedFile)
         {
-            editorHost1.LoadFile(path);
-        }
-
-        public void AddLine(SharpSvn.SvnBlameEventArgs e)
-        {
-            BlameSection section;
-
-            if (blameSections.Count == 0)
-            {
-                section = new BlameSection(e);
-                blameSections.Add(section);
-            }
-            else
-            {
-                section = blameSections[blameSections.Count - 1];
-                if (section.Revision != e.Revision)
-                {
-                    section.EndLine = (int)e.LineNumber - 1;
-                    section = new BlameSection(e);
-                    blameSections.Add(section);
-                }
-            }
-            blameMarginControl1.Invalidate();
+            this.Text = Path.GetFileName(projectFile) + " (Annotated)"; 
+            editorHost1.LoadFile(projectFile, exportedFile);
         }
 
         internal int GetLineHeight()
@@ -61,5 +42,31 @@ namespace Ankh.UI.Blame
         }
 
 
+        public void AddLines(System.Collections.ObjectModel.Collection<SharpSvn.SvnBlameEventArgs> blameResult)
+        {
+            BlameSection section = null;
+
+            foreach (SvnBlameEventArgs e in blameResult)
+            {
+                if (blameSections.Count == 0)
+                {
+                    section = new BlameSection(e);
+                    blameSections.Add(section);
+                }
+                else
+                {
+                    if(section.Revision == e.Revision)
+                        section.EndLine = (int)e.LineNumber;
+                    else
+                    {
+                        section = new BlameSection(e);
+                        blameSections.Add(section);
+                    }
+                }
+
+                
+            }
+            blameMarginControl1.Invalidate();
+        }
     }
 }

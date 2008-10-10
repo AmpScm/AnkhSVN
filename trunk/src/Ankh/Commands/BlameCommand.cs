@@ -14,6 +14,8 @@ using Ankh.UI;
 using Ankh.Scc;
 using Ankh.UI.Blame;
 using Ankh.Selection;
+using Ankh.VS;
+using System.Collections.ObjectModel;
 
 namespace Ankh.Commands
 {
@@ -120,7 +122,7 @@ namespace Ankh.Commands
 
             SvnItem firstItem = null;
             PathSelectorResult result = null;
-            PathSelectorInfo info = new PathSelectorInfo("Blame",
+            PathSelectorInfo info = new PathSelectorInfo("Annotate",
                 e.Selection.GetSelectedSvnItems(true));
 
             info.CheckedFilter += delegate(SvnItem item)
@@ -161,16 +163,23 @@ namespace Ankh.Commands
             foreach (SvnItem item in result.Selection)
             {
 
-                blameToolControl.LoadFile(firstItem.FullPath);
+                
+                    SvnTarget target = new SvnPathTarget(item.FullPath);
 
-                e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    ee.Client.Blame(new SvnPathTarget(firstItem.FullPath), delegate(object blameSender, SvnBlameEventArgs eee)
+                    IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
+                    string tempFile = tempMgr.GetTempFile();
+
+                    Collection<SvnBlameEventArgs> blameResult = null;
+                    e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
                     {
-                        eee.Detach();
-                        blameToolControl.AddLine(eee);
+
+                        ee.Client.Export(target, tempFile);
+                        
+                        ee.Client.GetBlame(target, out blameResult);
                     });
-                });
+
+                    blameToolControl.LoadFile(firstItem.FullPath, tempFile);
+                    blameToolControl.AddLines(blameResult);
 
                 // do the blame thing
                 //BlameResult blameResult = new BlameResult();

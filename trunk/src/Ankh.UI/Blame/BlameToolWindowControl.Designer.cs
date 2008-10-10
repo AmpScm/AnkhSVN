@@ -37,9 +37,9 @@
             this.editorHost1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorHost1.Location = new System.Drawing.Point(91, 0);
+            this.editorHost1.Location = new System.Drawing.Point(116, 0);
             this.editorHost1.Name = "editorHost1";
-            this.editorHost1.Size = new System.Drawing.Size(210, 301);
+            this.editorHost1.Size = new System.Drawing.Size(185, 301);
             this.editorHost1.TabIndex = 0;
             this.editorHost1.Text = "editorHost1";
             // 
@@ -47,9 +47,9 @@
             // 
             this.blameMarginControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
-            this.blameMarginControl1.Location = new System.Drawing.Point(-1, 0);
+            this.blameMarginControl1.Location = new System.Drawing.Point(0, 0);
             this.blameMarginControl1.Name = "blameMarginControl1";
-            this.blameMarginControl1.Size = new System.Drawing.Size(86, 301);
+            this.blameMarginControl1.Size = new System.Drawing.Size(115, 301);
             this.blameMarginControl1.TabIndex = 1;
             this.blameMarginControl1.Text = "blameMarginControl1";
             // 

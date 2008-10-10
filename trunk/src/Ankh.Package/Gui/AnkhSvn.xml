@@ -49,7 +49,7 @@
 								text="&amp;Revert"
 								toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
             <Button id="Cmd_Blame" name="Blame" priority="0x400"
-								text="&amp;Blame..."
+								text="&amp;Annotate..."
 								toolTip="Identify which user wrote which lines." iconFile="menu/Blame.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
 								text="Di&amp;ff..."
@@ -403,7 +403,7 @@
       <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" type="Context" priority="0x100">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogBlameRevision" name="LogBlameRevision" priority="0x300"
-                  text="Blame revision" iconFile="menu/Blame.png"/>
+                  text="Annotate revision" iconFile="menu/Blame.png"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
         </Group>
       </Menu>

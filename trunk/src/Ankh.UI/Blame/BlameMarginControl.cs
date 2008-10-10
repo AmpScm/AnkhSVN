@@ -37,28 +37,35 @@ namespace Ankh.UI.Blame
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (DesignMode)
+                return;
 
-            foreach (BlameSection section in _sections.ToArray())
+            using (Font f = new Font(Font.FontFamily, 7F))
+            using (Pen border = new Pen(Color.Gray))
+            using (Brush black = new SolidBrush(Color.Black))
+            using (Brush bg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), Color.White, Color.LightGray))
             {
-                if (section.EndLine < _firstLine)
-                    continue;
-                if (section.StartLine > _lastLine)
-                    continue;
-
-
-                // TODO: handle scroll
-                int top = (section.StartLine - _firstLine) * LineHeight;
-                int height = (section.EndLine - section.StartLine + 1) * LineHeight;
-
-                using (Font f = new Font(FontFamily.GenericSansSerif, 6))
-                using (Pen border = new Pen(Color.Black))
-                using (Brush black = new SolidBrush(Color.Black))
-                using (Brush bg = new LinearGradientBrush(new Point(0, 0), new Point(0, height), Color.White, Color.LightBlue))
+                foreach (BlameSection section in _sections.ToArray())
                 {
-                    e.Graphics.FillRectangle(bg, new Rectangle(1, top + 1, Width - 2, height -2));
+                    if (section.EndLine < _firstLine)
+                        continue;
+                    if (section.StartLine > _lastLine)
+                        continue;
+
+                    int top = (section.StartLine - _firstLine) * LineHeight;
+                    int height = (section.EndLine - section.StartLine + 1) * LineHeight;
+
+
+                    e.Graphics.FillRectangle(bg, new Rectangle(1, top + 1, Width - 2, height - 2));
                     e.Graphics.DrawRectangle(border, new Rectangle(0, top, Width, height));
 
-                    e.Graphics.DrawString(section.Revision.ToString(), f, black, new Point(5, top + 3));
+                    StringFormat sf = new StringFormat();
+                    sf.Alignment = StringAlignment.Far;
+
+                    e.Graphics.DrawString(section.Revision.ToString(), f, black, new RectangleF(3, top + 2, 30, LineHeight), sf);
+                    e.Graphics.DrawString(section.Author, f, black, new RectangleF(35, top + 2, 40, LineHeight));
+                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, black, new RectangleF(Width - 60,top + 2, 58,LineHeight), sf);
+
                 }
             }
         }

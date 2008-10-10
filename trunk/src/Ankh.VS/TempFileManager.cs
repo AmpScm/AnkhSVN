@@ -23,6 +23,17 @@ namespace Ankh.VS
 
         #region IAnkhTempFileManager Members
 
+        public string GetTempFile()
+        {
+            string name = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+
+            using (FileStream fs = File.Create(name))
+            {
+            }
+            TempFileCollection.AddFile(name, false);
+            return name;            
+        }
+
         public string GetTempFile(string extension)
         {
             string name = Path.ChangeExtension(

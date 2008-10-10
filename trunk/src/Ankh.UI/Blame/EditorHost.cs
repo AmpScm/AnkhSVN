@@ -48,10 +48,39 @@ namespace Ankh.UI.Blame
             HostEditor();
         }
 
-        public void LoadFile(string filename)
+        public void LoadFile(string projectFile, string exportedFile)
         {
+            IAnkhPackage package = GetService<IAnkhPackage>();
+            IVsTextBuffer tempBuffer = (IVsTextBuffer)package.CreateInstance(ref textBufferClassId, ref textLinesId, typeof(IVsTextBuffer));
+            ((IObjectWithSite)tempBuffer).SetSite(_serviceProvider);
+
+            IVsPersistDocData2 tempDocData = (IVsPersistDocData2)tempBuffer;
+            tempDocData.LoadDocData(exportedFile);
+
             IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
-            docData.LoadDocData(filename);
+            docData.LoadDocData(projectFile);
+            
+
+            int size;
+            IVsTextStream tempStream = (IVsTextStream)tempBuffer;
+            ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
+            
+            IntPtr buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
+            try
+            {
+                ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+                
+                IVsTextStream destStream = (IVsTextStream)_textBuffer;
+                int oldDestSize;
+                ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+
+                destStream.ReplaceStream(0, oldDestSize, buffer, size);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(buffer);
+            }
+
             docData.SetDocDataReadOnly(1);
         }
 
@@ -84,6 +113,8 @@ namespace Ankh.UI.Blame
             _textBuffer = (IVsTextBuffer)package.CreateInstance(ref textBufferClassId, ref textLinesId, typeof(IVsTextBuffer));
             ((IObjectWithSite)_textBuffer).SetSite(_serviceProvider);
             _codeWindow = (IVsCodeWindow)package.CreateInstance(ref codeWindowClassId, ref codeWindowId, typeof(IVsCodeWindow));
+
+            
 
 
             INITVIEW[] initviewArray = new INITVIEW[1];
