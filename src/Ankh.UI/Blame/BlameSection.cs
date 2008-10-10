@@ -22,6 +22,16 @@ namespace Ankh.UI.Blame
             get { return _args.Revision; }
         }
 
+        public string Author
+        {
+            get { return _args.Author; }
+        }
+
+        public DateTime Time
+        {
+            get { return _args.Time.ToLocalTime(); }
+        }
+
         public int StartLine
         {
             get { return (int)_args.LineNumber; }
