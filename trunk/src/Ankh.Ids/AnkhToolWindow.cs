@@ -11,6 +11,7 @@ namespace Ankh.Ids
         PendingChanges,
         Log,
         Diff,
-        Merge
+        Merge,
+        Blame
     }
 }

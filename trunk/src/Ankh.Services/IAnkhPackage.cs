@@ -24,5 +24,7 @@ namespace Ankh.UI
 
         void ShowToolWindow(AnkhToolWindow window);
         void ShowToolWindow(AnkhToolWindow window, int id, bool create);
+
+        object CreateInstance(ref Guid clsid, ref Guid iid, Type type);
     }
 }
