@@ -202,7 +202,7 @@
     <Compile Include="Commands\SolutionUpdateCommand.cs" />
     <Compile Include="Commands\RepositoryExplorer\ViewRepositoryFileCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\WorkingCopyBrowseCommand.cs" />
-    <Compile Include="Commands\BlameCommand.cs">
+    <Compile Include="Commands\ItemAnnotateCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CheckoutCommand.cs">

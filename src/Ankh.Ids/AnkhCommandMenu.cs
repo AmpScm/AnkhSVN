@@ -60,6 +60,9 @@ namespace Ankh.Ids
         ListViewSort,
         ListViewGroup,
         ListViewShow,
-        ListViewHeader
+        ListViewHeader,
+
+        SolutionFileScc,
+        ProjectFileScc,
     }
 }
