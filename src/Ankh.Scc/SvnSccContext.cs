@@ -240,6 +240,70 @@ namespace Ankh.Scc
             _client.Revert(path, ra);
         }
 
+        /// <summary>
+        /// Safes the wc copy to dir fixup.
+        /// </summary>
+        /// <param name="files">The files a dictionary mapping the result to the origin</param>
+        /// <param name="toDir">To dir.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Files can't be renamed by this action!
+        /// </remarks>
+        public bool SafeWcCopyToDirFixup(IDictionary<string, string> files, string toDir)
+        {
+            if (files == null)
+                throw new ArgumentNullException("files");
+            else if(string.IsNullOrEmpty(toDir))
+                throw new ArgumentNullException("toDir");
+
+            List<string> from = new List<string>(files.Values);
+
+            foreach(string f in from)
+                if(!File.Exists(f))
+                    throw new InvalidOperationException();
+
+            using (MarkIgnoreFiles(files.Keys))
+            {
+                List<string> setReadOnly = null;
+                using (MoveAwayFiles(files.Keys, true))
+                {
+                    EnsureAdded(toDir);
+
+                    SvnCopyArgs ca = new SvnCopyArgs();
+                    ca.AlwaysCopyAsChild = false;
+                    ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ca.ThrowOnError = false;
+                    ca.AlwaysCopyAsChild = true;
+
+                    List<SvnPathTarget> pt = new List<SvnPathTarget>();
+                    foreach(string f in files.Values)
+                        pt.Add(f);
+
+                    bool ok = _client.Copy(pt, toDir, ca);
+
+                    if (ok)
+                    {
+                        foreach (string f in files.Keys)
+                        {
+                            if ((int)(File.GetAttributes(f) & FileAttributes.ReadOnly) != 0)
+                            {
+                                setReadOnly = new List<string>();
+                                setReadOnly.Add(f);
+                            }
+
+                            MaybeRevertReplaced(f);
+                        }                        
+                    }
+                }
+
+                if(setReadOnly != null)
+                    foreach(string f in setReadOnly)
+                        File.SetAttributes(f, File.GetAttributes(f) | FileAttributes.ReadOnly);
+            }
+
+            return true;
+        }
+
         public bool SafeWcCopyFixup(string fromPath, string toPath)
         {
             if (string.IsNullOrEmpty(fromPath))
@@ -258,27 +322,14 @@ namespace Ankh.Scc
                 {
                     string toDir = Path.GetDirectoryName(toPath);
 
-                    if (!SvnTools.IsManagedPath(toDir))
-                    {
-                        SvnAddArgs aa = new SvnAddArgs();
-                        aa.Depth = SvnDepth.Empty;
-                        aa.AddParents = true;
-                        aa.Force = true;
-                        aa.ThrowOnError = false;
-
-                        if (!_client.Add(toDir, aa))
-                            return false;
-                    }
-
-                    Debug.Assert(SvnTools.IsManagedPath(toDir));
+                    EnsureAdded(toDir);
 
                     SvnCopyArgs ca = new SvnCopyArgs();
                     ca.AlwaysCopyAsChild = false;
                     ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
                     ca.ThrowOnError = false;
 
-                    ok = _client.Copy(new SvnPathTarget(fromPath), toPath, ca);
-
+                    ok = _client.Copy(fromPath, toPath, ca);
 
                     if (ok && File.Exists(toPath))
                     {
@@ -293,6 +344,23 @@ namespace Ankh.Scc
             }
 
             return ok;
+        }
+
+        private void EnsureAdded(string toDir)
+        {
+            if (!SvnTools.IsManagedPath(toDir))
+            {
+                SvnAddArgs aa = new SvnAddArgs();
+                aa.Depth = SvnDepth.Empty;
+                aa.AddParents = true;
+                aa.Force = true;
+                aa.ThrowOnError = false;
+
+                if (!_client.Add(toDir, aa))
+                    throw new InvalidOperationException();
+            }
+
+            Debug.Assert(SvnTools.IsManagedPath(toDir));
         }
 
         public bool WcDelete(string path)
@@ -569,6 +637,34 @@ namespace Ankh.Scc
                 return null;
         }
 
+        public IDisposable MarkIgnoreFiles(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            List<IDisposable> disps = new List<IDisposable>();
+
+            foreach (string path in paths)
+            {
+                IDisposable d = MarkIgnoreFile(path);
+
+                if (d != null)
+                    disps.Add(d);
+            }
+
+            if (disps.Count > 0)
+                return new DelegateRunner(
+                    delegate
+                    {
+                        foreach (IDisposable d in disps)
+                        {
+                            d.Dispose();
+                        }
+                    });
+            else
+                return null;
+        }
+
         public IDisposable MoveAway(string path, bool touch)
         {
             if (string.IsNullOrEmpty(path))
@@ -631,6 +727,34 @@ namespace Ankh.Scc
                         File.SetAttributes(path, attrs);
                     }
                 });
+        }
+
+        public IDisposable MoveAwayFiles(IEnumerable<string> paths, bool touch)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            List<IDisposable> disps = new List<IDisposable>();
+
+            foreach (string path in paths)
+            {
+                IDisposable d = MoveAway(path, touch);
+
+                if (d != null)
+                    disps.Add(d);
+            }
+
+            if (disps.Count > 0)
+                return new DelegateRunner(
+                    delegate
+                    {
+                        foreach (IDisposable d in disps)
+                        {
+                            d.Dispose();
+                        }
+                    });
+            else
+                return null;
         }
 
         /// <summary>
