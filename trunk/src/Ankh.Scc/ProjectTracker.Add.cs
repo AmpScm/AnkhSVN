@@ -167,6 +167,7 @@ namespace Ankh.Scc
             RegisterForSccCleanup(); // Clear the origins table after adding
 
             List<string> selectedFiles = null;
+            SortedList<string, string> copies = null;
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -204,13 +205,13 @@ namespace Ankh.Scc
                         //  5 - The file is added via drag&drop from another application (OLE drop)
                         //
                         // The only way to determine is walking through these options
-                        
+
                         FileInfo newInfo = new FileInfo(newName);
 
                         // 2 -  If the file is drag&dropped in the solution explorer
                         //      the current selection is still the original selection
                         if (selectedFiles == null)
-                        {                            
+                        {
                             if (SelectionContext != null)
                             {
                                 // BH: resx files are not correctly included if we don't retrieve this list recursive
@@ -340,12 +341,74 @@ namespace Ankh.Scc
                     if (sccProject != null)
                         SccProvider.OnProjectFileAdded(sccProject, newName,
                             origin, rgFlags[iFile]);
-                    else
+
+                    if (!string.IsNullOrEmpty(origin) && SccProvider.IsActive)
                     {
-                        // TODO: Just track svn changes?
+                        if (copies == null)
+                            copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+                        copies[newName] = origin;
                     }
                 }
             }
+
+            if (copies != null)
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    while (copies.Count > 0)
+                    {
+                        string toFile = copies.Keys[0];
+                        string fromFile = copies.Values[0];
+                        string dir = Path.GetDirectoryName(copies.Keys[0]);
+
+                        copies.RemoveAt(0);
+                        Guid addGuid;
+
+                        if (!svn.TryGetRepositoryId(dir, out addGuid))
+                        {
+                            continue; // No repository to fix up
+                        }
+
+                        Guid fileGuid;
+
+                        if (!svn.TryGetRepositoryId(fromFile, out fileGuid) || fileGuid != addGuid)
+                            continue; // Can't fix history for this file
+
+                        if (string.Equals(Path.GetFileName(fromFile), Path.GetFileName(toFile), StringComparison.OrdinalIgnoreCase))
+                        {
+                            // If the names are the same we can handle all files to the same directory
+                            // without a sleep penalty             
+                            SortedList<string, string> now = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+                            now.Add(toFile, fromFile);
+
+                            for (int i = 0; i < copies.Count; i++)
+                            {
+                                string fl = copies.Keys[i];
+                                string tl = copies.Values[i];
+
+                                if (string.Equals(Path.GetDirectoryName(fl), dir, StringComparison.OrdinalIgnoreCase) &&
+                                    string.Equals(Path.GetFileName(fl), Path.GetFileName(tl), StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Guid fromGuid;
+                                    if (svn.TryGetRepositoryId(tl, out fromGuid) && (fromGuid == addGuid))
+                                        now.Add(fl, tl); // We can copy this item at the same time
+                                    // else 
+                                        // This copy comes from another repository, no history to save
+
+                                    copies.RemoveAt(i--);
+                                }
+                            }
+
+                            // Now contains all the files we are receiving in a single directory
+                            if(now.Count > 0)
+                                svn.SafeWcCopyToDirFixup(now, dir);
+                            else
+                                svn.SafeWcCopyFixup(fromFile, toFile);
+                        }
+                        else
+                            svn.SafeWcCopyFixup(fromFile, toFile);
+                    }
+                }
+
             return VSConstants.S_OK;
         }
 
