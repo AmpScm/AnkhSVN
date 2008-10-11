@@ -136,7 +136,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
 
-                CommandTester.TestExecution(AnkhCommand.Blame);
+                CommandTester.TestExecution(AnkhCommand.ItemAnnotate);
             }
         }
 

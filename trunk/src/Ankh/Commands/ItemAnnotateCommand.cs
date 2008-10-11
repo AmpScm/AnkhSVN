@@ -22,9 +22,9 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to identify which users to blame for which lines.
     /// </summary>
-    [Command(AnkhCommand.Blame)]
-    [Command(AnkhCommand.LogBlameRevision)]
-    class BlameCommand : CommandBase
+    [Command(AnkhCommand.ItemAnnotate)]
+    [Command(AnkhCommand.LogAnnotateRevision)]
+    class ItemAnnotateCommand : CommandBase
     {
         XslCompiledTransform _transform;
         private const string BlameTransform = "blame.xsl";
@@ -36,14 +36,14 @@ namespace Ankh.Commands
         {
             switch (e.Command)
             {
-                case AnkhCommand.Blame:
+                case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
                         if (item.IsVersioned && item.IsFile)
                             return;
                     }
                     break;
-                case AnkhCommand.LogBlameRevision:
+                case AnkhCommand.LogAnnotateRevision:
                     // Disabled for now, see TODO belows
                     e.Visible = e.Enabled = false;
                     return;
@@ -71,10 +71,10 @@ namespace Ankh.Commands
 
             switch (e.Command)
             {
-                case AnkhCommand.Blame:
+                case AnkhCommand.ItemAnnotate:
                     BlameItem(e, blameToolControl);
                     break;
-                case AnkhCommand.LogBlameRevision:
+                case AnkhCommand.LogAnnotateRevision:
                     BlameRevision(e);
                     break;
             }

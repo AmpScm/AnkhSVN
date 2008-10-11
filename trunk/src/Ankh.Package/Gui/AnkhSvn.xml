@@ -48,7 +48,7 @@
             <Button id="Cmd_RevertItem" name="RevertItem" priority="0x300"
 								text="&amp;Revert"
 								toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
-            <Button id="Cmd_Blame" name="Blame" priority="0x400"
+            <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
 								text="&amp;Annotate..."
 								toolTip="Identify which user wrote which lines." iconFile="menu/Blame.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
@@ -125,6 +125,7 @@
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
+        <Visibility context="Ankh_SccProviderGuid"/>
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x20" />
@@ -152,6 +153,16 @@
                       text="Open Folder in &amp;Repository Explorer" defaultInvisible="true">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
+        </Group>
+      </Menu>
+      <Menu id="Menu_SolutionFileScc" name="SolutionFile" priority="0x3000" text="So&amp;lution File" defaultInvisible="true">
+        <Visibility context="Ankh_SccProviderGuid"/>
+        <Group id="Menu_SolutionFileScc" priority="0x100">
+          <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
+          <ButtonRef id="Cmd_CommitItem" priority="0x200" />
+          <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
+          <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
         </Group>
       </Menu>
     </GroupRef>
@@ -182,7 +193,7 @@
           <ButtonRef id="Cmd_Lock" priority="0x45" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
-          <ButtonRef id="Cmd_Blame" priority="0x70" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_ProjectEditProperties" priority="0x90" defaultDisabled="true"
 									text="Project Prop&amp;erties..."
@@ -196,6 +207,16 @@
           <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
+      </Menu>
+      <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File" defaultInvisible="true">
+        <Visibility context="Ankh_SccProviderGuid"/>
+        <Group id="Menu_ProjectFileScc" priority="0x100">
+          <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
+          <ButtonRef id="Cmd_CommitItem" priority="0x200" />
+          <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
+          <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
+        </Group>
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
@@ -247,7 +268,7 @@
           <Button id="Cmd_Cleanup" name="Cleanup" priority="0x60" defaultInvisible="true"
               text="Cl&amp;eanup"
               toolTip="Cleanup the working copy." iconFile="menu/Cleanup.png"/>
-          <ButtonRef id="Cmd_Blame" priority="0x70" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
               toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
@@ -402,7 +423,7 @@
     <GroupRef id="Menu_LogChangedPathsContextMenu">
       <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" type="Context" priority="0x100">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
-          <Button id="Cmd_LogBlameRevision" name="LogBlameRevision" priority="0x300"
+          <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
                   text="Annotate revision" iconFile="menu/Blame.png"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
         </Group>

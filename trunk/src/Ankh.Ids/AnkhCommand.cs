@@ -51,7 +51,8 @@ namespace Ankh.Ids
         RepositoryBrowse,
         CheckForUpdates,
         WorkingCopyBrowse,
-        Blame,
+        ItemAnnotate,
+        [Obsolete("Unused")]
         ChangeAdminDirName,
         Checkout,
         CheckoutFolder,
@@ -222,7 +223,7 @@ namespace Ankh.Ids
         MigrateSettings,
         ItemEditProperties,
         ReposExplorerLog,
-        LogBlameRevision,
+        LogAnnotateRevision,
         
         [Obsolete("Unused command", true)]
         RevertProjectToRevision,
