@@ -35,6 +35,31 @@ namespace Ankh.UI.Blame
             }
         }
 
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            foreach (BlameSection section in _sections.ToArray())
+            {
+                int top = (section.StartLine - _firstLine) * LineHeight;
+                int height = (section.EndLine - section.StartLine + 1) * LineHeight;
+
+
+                Rectangle rect = new Rectangle(0, top, Width, height);
+
+                section.Hovered = rect.Contains(e.Location);
+
+            }
+            Invalidate();
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            foreach (BlameSection section in _sections)
+                section.Hovered = false;
+            Invalidate();
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (DesignMode)
@@ -43,7 +68,8 @@ namespace Ankh.UI.Blame
             using (Font f = new Font(Font.FontFamily, 7F))
             using (Pen border = new Pen(Color.Gray))
             using (Brush black = new SolidBrush(Color.Black))
-            using (Brush bg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), Color.White, Color.LightGray))
+            using (Brush grayBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.DarkGray))
+            using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, SystemColors.Highlight))
             {
                 foreach (BlameSection section in _sections.ToArray())
                 {
@@ -55,8 +81,10 @@ namespace Ankh.UI.Blame
                     int top = (section.StartLine - _firstLine) * LineHeight;
                     int height = (section.EndLine - section.StartLine + 1) * LineHeight;
 
-
-                    e.Graphics.FillRectangle(bg, new Rectangle(1, top + 1, Width - 2, height - 2));
+                    if(section.Hovered)
+                        e.Graphics.FillRectangle(blueBg, new Rectangle(0, top, Width, height));
+                    else
+                        e.Graphics.FillRectangle(grayBg, new Rectangle(0, top, Width, height));
                     e.Graphics.DrawRectangle(border, new Rectangle(0, top, Width, height));
 
                     StringFormat sf = new StringFormat();

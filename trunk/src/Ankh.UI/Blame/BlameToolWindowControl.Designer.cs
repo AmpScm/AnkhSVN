@@ -38,12 +38,13 @@
             this.logMessageEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessageEditor1.Location = new System.Drawing.Point(121, 0);
+            this.logMessageEditor1.Location = new System.Drawing.Point(137, 0);
             this.logMessageEditor1.Name = "logMessageEditor1";
-            this.logMessageEditor1.Size = new System.Drawing.Size(180, 301);
+            this.logMessageEditor1.Size = new System.Drawing.Size(164, 301);
+            this.logMessageEditor1.SkipLogLanguageService = false;
             this.logMessageEditor1.TabIndex = 2;
             this.logMessageEditor1.Text = "logMessageEditor1";
-            this.logMessageEditor1.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(logMessageEditor1_Scroll);
+            this.logMessageEditor1.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
             // 
             // blameMarginControl1
             // 

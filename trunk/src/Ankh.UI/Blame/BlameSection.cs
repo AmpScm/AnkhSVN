@@ -9,8 +9,8 @@ namespace Ankh.UI.Blame
     {
         readonly SvnBlameEventArgs _args;
         long _endLine;
-        
 
+        internal bool Hovered;
         public BlameSection(SvnBlameEventArgs e)
         {
             _args = e;
