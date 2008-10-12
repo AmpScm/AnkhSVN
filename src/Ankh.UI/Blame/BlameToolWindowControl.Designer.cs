@@ -28,20 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.editorHost1 = new Ankh.UI.Blame.EditorHost();
+            this.components = new System.ComponentModel.Container();
+            this.logMessageEditor1 = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.blameMarginControl1 = new Ankh.UI.Blame.BlameMarginControl();
             this.SuspendLayout();
             // 
-            // editorHost1
+            // logMessageEditor1
             // 
-            this.editorHost1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.logMessageEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorHost1.Location = new System.Drawing.Point(116, 0);
-            this.editorHost1.Name = "editorHost1";
-            this.editorHost1.Size = new System.Drawing.Size(185, 301);
-            this.editorHost1.TabIndex = 0;
-            this.editorHost1.Text = "editorHost1";
+            this.logMessageEditor1.Location = new System.Drawing.Point(121, 0);
+            this.logMessageEditor1.Name = "logMessageEditor1";
+            this.logMessageEditor1.Size = new System.Drawing.Size(180, 301);
+            this.logMessageEditor1.TabIndex = 2;
+            this.logMessageEditor1.Text = "logMessageEditor1";
+            this.logMessageEditor1.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(logMessageEditor1_Scroll);
             // 
             // blameMarginControl1
             // 
@@ -58,8 +60,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(300, 300);
+            this.Controls.Add(this.logMessageEditor1);
             this.Controls.Add(this.blameMarginControl1);
-            this.Controls.Add(this.editorHost1);
             this.Name = "BlameToolWindowControl";
             this.ResumeLayout(false);
 
@@ -67,7 +69,7 @@
 
         #endregion
 
-        private EditorHost editorHost1;
         private BlameMarginControl blameMarginControl1;
+        private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor1;
     }
 }

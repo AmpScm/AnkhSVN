@@ -175,9 +175,6 @@
     <Compile Include="Blame\BlameToolWindowControl.Designer.cs">
       <DependentUpon>BlameToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Blame\EditorHost.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
