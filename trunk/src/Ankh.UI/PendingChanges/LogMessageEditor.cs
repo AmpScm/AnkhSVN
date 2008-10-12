@@ -85,6 +85,14 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        bool _skipLanguageService;
+        [DefaultValue(true)]
+        public bool SkipLogLanguageService
+        {
+            get { return _skipLanguageService;}
+            set { _skipLanguageService = value; }
+        }
+
         bool _readOnly;
         [Localizable(false), DefaultValue(false)]
         public bool ReadOnly
@@ -96,6 +104,35 @@ namespace Ankh.UI.PendingChanges
                 if (codeEditorNativeWindow != null)
                     codeEditorNativeWindow.SetReadOnly(value);
             }
+        }
+
+        public int LineHeight
+        {
+            get
+            {
+                if (codeEditorNativeWindow == null)
+                    throw new InvalidOperationException("Code editor not initialized");
+
+                return codeEditorNativeWindow.LineHeight;
+            }
+        }
+
+        public event EventHandler<TextViewScrollEventArgs> Scroll;
+
+        public void OpenFile(string path)
+        {
+            if (codeEditorNativeWindow == null)
+                throw new InvalidOperationException("Code editor not initialized");
+
+            codeEditorNativeWindow.LoadFile(path);
+        }
+
+        public void ReplaceContents(string pathToReplaceWith)
+        {
+            if (codeEditorNativeWindow == null)
+                throw new InvalidOperationException("Code editor not initialized");
+
+            codeEditorNativeWindow.ReplaceContents(pathToReplaceWith);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -162,10 +199,18 @@ namespace Ankh.UI.PendingChanges
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
-            codeEditorNativeWindow.Init(allowModal);
+            codeEditorNativeWindow.Init(allowModal, !SkipLogLanguageService);
             codeEditorNativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
             codeEditorNativeWindow.Size = ClientSize;
             codeEditorNativeWindow.SetReadOnly(_readOnly);
+
+            codeEditorNativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
+        }
+
+        void codeEditorNativeWindow_Scroll(object sender, TextViewScrollEventArgs e)
+        {
+            if (Scroll != null)
+                Scroll(sender, e);
         }
 
         void UpdateSize()
@@ -401,7 +446,7 @@ namespace Ankh.UI.PendingChanges
     /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
     /// </summary>
     /// <seealso cref="NativeWindow"/>
-    internal class CodeEditorNativeWindow : IOleCommandTarget, IDisposable
+    internal class CodeEditorNativeWindow : IOleCommandTarget, IDisposable, IVsTextViewEvents
     {
         #region Fields
 
@@ -618,7 +663,7 @@ namespace Ankh.UI.PendingChanges
         /// <param name="place">The place.</param>
         /// <param name="allowModel">if set to <c>true</c> [allow model].</param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModel, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModel, bool registerLanguageService, out IVsCodeWindow codeWindow)
         {
             ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
 
@@ -658,12 +703,13 @@ namespace Ankh.UI.PendingChanges
             // set buffer
             Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
             _textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
-            Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
-
-            hr = _textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService);
-            if (!ErrorHandler.Succeeded(hr))
+            
+            if (registerLanguageService)
             {
-                Marshal.ThrowExceptionForHR(hr);
+                Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
+
+                ErrorHandler.ThrowOnFailure(
+                    _textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService));
             }
 
             hr = codeWindow.SetBuffer((IVsTextLines)_textBuffer);
@@ -751,10 +797,10 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="serviceProvider">IOleServiceProvider</param>
         /// <param name="parent">Control, that can be used to create other controls</param>
-        public void Init(bool allowModal)
+        public void Init(bool allowModal, bool registerLanguageService)
         {
             //Create window            
-            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, out _codeWindow);
+            CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, registerLanguageService, out _codeWindow);
             commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
@@ -767,6 +813,8 @@ namespace Ankh.UI.PendingChanges
 
             _textView = textView;
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
+
+            HookEvents(true);
         }
 
         bool _ro;
@@ -843,6 +891,7 @@ namespace Ankh.UI.PendingChanges
         {
             if (_codeWindow != null)
             {
+                HookEvents(false);
                 _codeWindow.Close();
                 _codeWindow = null;
             }
@@ -934,6 +983,160 @@ namespace Ankh.UI.PendingChanges
 
             [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
             internal static extern IntPtr GetDesktopWindow();
+        }
+
+        internal void ReplaceContents(string pathToReplaceWith)
+        {
+            ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
+
+            Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
+
+            IVsTextBuffer tempBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
+            ((IObjectWithSite)tempBuffer).SetSite(_serviceProvider);
+
+            IVsPersistDocData2 tempDocData = (IVsPersistDocData2)tempBuffer;
+            tempDocData.LoadDocData(pathToReplaceWith);
+
+            IVsTextStream tempStream = (IVsTextStream)tempBuffer;
+
+            int size;
+            ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
+
+            IntPtr buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
+            try
+            {
+                if(_ro)
+                    InternalSetReadOnly(false);
+                ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+
+                IVsTextStream destStream = (IVsTextStream)_textBuffer;
+                int oldDestSize;
+                ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+
+                destStream.ReplaceStream(0, oldDestSize, buffer, size);
+            }
+            finally
+            {
+                Marshal.FreeCoTaskMem(buffer);
+                Marshal.ReleaseComObject(tempBuffer);
+
+                if (_ro)
+                    InternalSetReadOnly(true);
+            }
+        }
+
+        internal void LoadFile(string path)
+        {
+            IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
+            ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+        }
+
+        internal int LineHeight
+        {
+            get
+            {
+                int height;
+                ErrorHandler.ThrowOnFailure(_textView.GetLineHeight(out height));
+                return height;
+            }
+        }
+
+        public void OnChangeCaretLine(IVsTextView pView, int iNewLine, int iOldLine)
+        {
+        }
+
+
+        public event EventHandler<TextViewScrollEventArgs> Scroll;
+        public void OnChangeScrollInfo(IVsTextView pView, int iBar, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
+        {
+            if (Scroll != null)
+            {
+                ScrollOrientation orientation = iBar == 1 ? ScrollOrientation.VerticalScroll : ScrollOrientation.HorizontalScroll;
+                TextViewScrollEventArgs ea = new TextViewScrollEventArgs(orientation, iMinUnit, iMaxUnits, iVisibleUnits, iFirstVisibleUnit);
+
+                Scroll(this, ea);
+            }
+        }
+
+        public void OnKillFocus(IVsTextView pView)
+        {
+        }
+
+        public void OnSetBuffer(IVsTextView pView, IVsTextLines pBuffer)
+        {
+        }
+
+        public void OnSetFocus(IVsTextView pView)
+        {
+        }
+
+        uint _textEventsCookie;
+        void HookEvents(bool hook)
+        {
+            IConnectionPointContainer container = _textView as IConnectionPointContainer;
+            if (container != null)
+            {
+                IConnectionPoint point;
+                Guid textViewEventsId = typeof(IVsTextViewEvents).GUID;
+                container.FindConnectionPoint(ref textViewEventsId, out point);
+                if (point != null)
+                {
+                    if (hook)
+                    {
+                        point.Advise(this, out _textEventsCookie);
+                    }
+                    else
+                    {
+                        point.Unadvise(_textEventsCookie);
+                        _textEventsCookie = 0;
+                    }
+                }
+            }
+        }
+    }
+
+    public class TextViewScrollEventArgs : EventArgs
+    {
+
+        readonly ScrollOrientation _orientation;
+        readonly int _iMinUnit;
+        readonly int _iMaxUnits;
+        readonly int _iVisibleUnits;
+        readonly int _iFirstVisibleUnit;
+
+        public TextViewScrollEventArgs(ScrollOrientation orientiation, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
+        {
+            _orientation = orientiation;
+
+            _iMinUnit = iMinUnit;
+            _iMaxUnits = iMaxUnits;
+            _iVisibleUnits = iVisibleUnits;
+            _iFirstVisibleUnit = iFirstVisibleUnit;
+        }
+
+        public ScrollOrientation Orientation
+        {
+            get { return _orientation; }
+        }
+
+        public int MinUnit
+        {
+            get { return _iMinUnit; }
+        }
+
+        public int MaxUnit
+        {
+            get { return _iMaxUnits; }
+        }
+
+        public int VisibleUnits
+        {
+            get { return _iVisibleUnits; }
+        }
+
+        public int FirstVisibleUnit
+        {
+            get { return _iFirstVisibleUnit; }
         }
     }
 }
