@@ -118,7 +118,7 @@ namespace Ankh.Commands
             IUIShell uiShell = e.GetService<IUIShell>();
 
             SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = SvnRevision.Head;
+            SvnRevision revisionEnd = SvnRevision.Base;
 
             SvnItem firstItem = null;
             PathSelectorResult result = null;
@@ -157,49 +157,38 @@ namespace Ankh.Commands
                 result = info.DefaultResult;
             }
 
+
+
             if (!result.Succeeded)
                 return;
-
+            
             foreach (SvnItem item in result.Selection)
             {
+                SvnExportArgs ea = new SvnExportArgs();
+                ea.Revision = revisionEnd;
 
+                SvnBlameArgs ba = new SvnBlameArgs();
+                ba.Start = revisionStart;
+                ba.End = revisionEnd;
                 
-                    SvnTarget target = new SvnPathTarget(item.FullPath);
+                SvnTarget target = new SvnPathTarget(item.FullPath);
 
-                    IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
-                    string tempFile = tempMgr.GetTempFile();
+                IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
+                string tempFile = tempMgr.GetTempFile();
 
-                    Collection<SvnBlameEventArgs> blameResult = null;
-                    e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
-                    {
+                Collection<SvnBlameEventArgs> blameResult = null;
+                e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
+                {
 
-                        ee.Client.Export(target, tempFile);
-                        
-                        ee.Client.GetBlame(target, out blameResult);
-                    });
+                    ee.Client.Export(target, tempFile, ea);
+                    
+                    ee.Client.GetBlame(target, ba, out blameResult);
+                });
 
-                    blameToolControl.LoadFile(firstItem.FullPath, tempFile);
-                    blameToolControl.AddLines(blameResult);
+                blameToolControl.LoadFile(firstItem.FullPath, tempFile);
+                blameToolControl.AddLines(blameResult);
 
-                // do the blame thing
-                //BlameResult blameResult = new BlameResult();
-
-                //blameResult.Start();
-                //BlameRunner runner = new BlameRunner(new SvnPathTarget(item.FullPath),
-                    //revisionStart, revisionEnd, blameResult);
-
-                //e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-                //blameResult.End();
-
-                // transform it to HTML
-                //StringWriter writer = new StringWriter();
-                //blameResult.Transform(GetTransform(e.Context), writer);
-
-                // display the HTML with the filename as caption
-                //string filename = Path.GetFileName(item.FullPath);
-                //uiShell.DisplayHtml(filename, writer.ToString(), false);
-
-                // TODO open multiple blame editors
+                // TODO open multiple blame editors ?
                 break;
             }
         }
