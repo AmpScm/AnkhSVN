@@ -18,6 +18,7 @@ namespace Ankh.UI.Blame
         {
             _control = control;
             _sections = sections;
+            DoubleBuffered = true;
         }
 
         bool _setLineHeight;
@@ -38,6 +39,8 @@ namespace Ankh.UI.Blame
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+
+            bool changed = false;
             foreach (BlameSection section in _sections.ToArray())
             {
                 int top = (section.StartLine - _firstLine) * LineHeight;
@@ -45,19 +48,34 @@ namespace Ankh.UI.Blame
 
 
                 Rectangle rect = new Rectangle(0, top, Width, height);
-
-                section.Hovered = rect.Contains(e.Location);
+                bool hovered = rect.Contains(e.Location);
+                if (section.Hovered != hovered)
+                {
+                    section.Hovered = hovered;
+                    changed = true;
+                }
 
             }
-            Invalidate();
+            if (changed)
+            {
+                Invalidate();
+            }
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
+            bool changed = false;
+
             foreach (BlameSection section in _sections)
+            {
+                if (section.Hovered == true)
+                    changed = true;
+
                 section.Hovered = false;
-            Invalidate();
+            }
+            if(changed)
+                Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -65,11 +83,18 @@ namespace Ankh.UI.Blame
             if (DesignMode)
                 return;
 
+            StringFormat sfr = new StringFormat();
+            sfr.Alignment = StringAlignment.Far;
+
+            StringFormat sfl = new StringFormat();
+            sfl.Trimming = StringTrimming.EllipsisCharacter;
+            sfl.FormatFlags = StringFormatFlags.NoWrap;
+
             using (Font f = new Font(Font.FontFamily, 7F))
             using (Pen border = new Pen(Color.Gray))
             using (Brush black = new SolidBrush(Color.Black))
-            using (Brush grayBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.DarkGray))
-            using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, SystemColors.Highlight))
+            using (Brush grayBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightGray))
+            using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
             {
                 foreach (BlameSection section in _sections.ToArray())
                 {
@@ -87,12 +112,10 @@ namespace Ankh.UI.Blame
                         e.Graphics.FillRectangle(grayBg, new Rectangle(0, top, Width, height));
                     e.Graphics.DrawRectangle(border, new Rectangle(0, top, Width, height));
 
-                    StringFormat sf = new StringFormat();
-                    sf.Alignment = StringAlignment.Far;
 
-                    e.Graphics.DrawString(section.Revision.ToString(), f, black, new RectangleF(3, top + 2, 30, LineHeight), sf);
-                    e.Graphics.DrawString(section.Author, f, black, new RectangleF(35, top + 2, 40, LineHeight));
-                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, black, new RectangleF(Width - 60,top + 2, 58,LineHeight), sf);
+                    e.Graphics.DrawString(section.Revision.ToString(), f, black, new RectangleF(3, top + 2, 30, LineHeight), sfr);
+                    e.Graphics.DrawString(section.Author, f, black, new RectangleF(35, top + 2, 40, LineHeight), sfl);
+                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, black, new RectangleF(Width - 60,top + 2, 58,LineHeight), sfr);
 
                 }
             }
