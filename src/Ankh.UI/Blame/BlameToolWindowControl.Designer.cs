@@ -31,16 +31,18 @@
             this.components = new System.ComponentModel.Container();
             this.logMessageEditor1 = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.blameMarginControl1 = new Ankh.UI.Blame.BlameMarginControl();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // logMessageEditor1
             // 
-            this.logMessageEditor1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.logMessageEditor1.Location = new System.Drawing.Point(137, 0);
+            this.logMessageEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logMessageEditor1.Location = new System.Drawing.Point(0, 0);
             this.logMessageEditor1.Name = "logMessageEditor1";
-            this.logMessageEditor1.Size = new System.Drawing.Size(164, 301);
+            this.logMessageEditor1.Size = new System.Drawing.Size(184, 300);
             this.logMessageEditor1.SkipLogLanguageService = false;
             this.logMessageEditor1.TabIndex = 2;
             this.logMessageEditor1.Text = "logMessageEditor1";
@@ -48,22 +50,43 @@
             // 
             // blameMarginControl1
             // 
-            this.blameMarginControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.blameMarginControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.blameMarginControl1.Location = new System.Drawing.Point(0, 0);
             this.blameMarginControl1.Name = "blameMarginControl1";
-            this.blameMarginControl1.Size = new System.Drawing.Size(115, 301);
+            this.blameMarginControl1.Size = new System.Drawing.Size(115, 300);
             this.blameMarginControl1.TabIndex = 1;
             this.blameMarginControl1.Text = "blameMarginControl1";
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.IsSplitterFixed = true;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.blameMarginControl1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.logMessageEditor1);
+            this.splitContainer1.Size = new System.Drawing.Size(300, 300);
+            this.splitContainer1.SplitterDistance = 115;
+            this.splitContainer1.SplitterWidth = 1;
+            this.splitContainer1.TabIndex = 3;
             // 
             // BlameToolWindowControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(300, 300);
-            this.Controls.Add(this.logMessageEditor1);
-            this.Controls.Add(this.blameMarginControl1);
+            this.Controls.Add(this.splitContainer1);
             this.Name = "BlameToolWindowControl";
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -72,5 +95,6 @@
 
         private BlameMarginControl blameMarginControl1;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
