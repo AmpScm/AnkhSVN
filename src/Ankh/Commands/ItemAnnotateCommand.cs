@@ -149,8 +149,8 @@ namespace Ankh.Commands
                 if (info == null)
                     return;
 
-                revisionStart = info.RevisionStart;
-                revisionEnd = info.RevisionEnd;
+                revisionStart = result.RevisionStart;
+                revisionEnd = result.RevisionEnd;
             }
             else
             {
