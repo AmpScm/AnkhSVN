@@ -297,7 +297,7 @@ namespace Ankh.Scc.ProjectMap
                     {
                         if (c is DataGridViewTextBoxEditingControl)
                             return true; // At least true in the String Resource
-                        // else: What else?
+                        return true; // Just to be sure
                     }
                 }
                 else
