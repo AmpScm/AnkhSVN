@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 
 namespace Ankh.UI.Blame
 {
@@ -106,11 +107,15 @@ namespace Ankh.UI.Blame
                     int top = (section.StartLine - _firstLine) * LineHeight;
                     int height = (section.EndLine - section.StartLine + 1) * LineHeight;
 
+                    Rectangle rect = new Rectangle(0, top, Width, height);
+                    if (!e.ClipRectangle.IntersectsWith(rect))
+                        continue;
+
                     if(section.Hovered)
-                        e.Graphics.FillRectangle(blueBg, new Rectangle(0, top, Width, height));
+                        e.Graphics.FillRectangle(blueBg, rect);
                     else
-                        e.Graphics.FillRectangle(grayBg, new Rectangle(0, top, Width, height));
-                    e.Graphics.DrawRectangle(border, new Rectangle(0, top, Width, height));
+                        e.Graphics.FillRectangle(grayBg, rect);
+                    e.Graphics.DrawRectangle(border, rect);
 
 
                     e.Graphics.DrawString(section.Revision.ToString(), f, black, new RectangleF(3, top + 2, 30, LineHeight), sfr);
@@ -123,10 +128,24 @@ namespace Ankh.UI.Blame
 
         internal void NotifyScroll(int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
         {
+            int dy = (_firstLine - iFirstVisibleUnit) * LineHeight;
             _firstLine = iFirstVisibleUnit;
             _lastLine = iVisibleUnits + iFirstVisibleUnit;
 
-            Invalidate();
+            NativeMethods.ScrollWindowEx(Handle, 0, dy, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, NativeMethods.SW_INVALIDATE);
+            //Invalidate();
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern int ScrollWindowEx(IntPtr hwnd, int dx, int dy, IntPtr prcScroll, IntPtr prcClip, IntPtr hrgnUpdate, IntPtr prcUpdate, uint flags);
+
+            public const uint SW_SCROLLCHILDREN = 0x0001;  /* Scroll children within *lprcScroll. */
+            public const uint SW_INVALIDATE = 0x0002;  /* Invalidate after scrolling */
+            public const uint SW_ERASE = 0x0004;  /* If SW_INVALIDATE, don't send WM_ERASEBACKGROUND */
+
+            public const uint SW_SMOOTHSCROLL = 0x0010;
         }
     }
 }
