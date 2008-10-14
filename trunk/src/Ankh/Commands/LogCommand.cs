@@ -15,6 +15,7 @@ using Ankh.UI.SvnLog;
 using Ankh.Selection;
 using Ankh.VS;
 using Ankh.Scc;
+using Ankh.Scc.UI;
 
 namespace Ankh.Commands
 {
@@ -25,6 +26,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
     [Command(AnkhCommand.ReposExplorerLog)]
+    [Command(AnkhCommand.BlameShowLog)]
     class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -53,6 +55,27 @@ namespace Ankh.Commands
                     if (i == 1)
                         return;
                     break;
+                case AnkhCommand.BlameShowLog:
+
+                    IBlameControl blameWindow = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
+
+                    if ((blameWindow == null) || !blameWindow.HasWorkingCopyItems)
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+
+                    int j = 0;
+                    foreach (IBlameSection section in e.Selection.GetSelection<IBlameSection>())
+                    {
+                        if (section == null)
+                            continue;
+                        j++;
+                    }
+
+                    if (j == 1)
+                        return;
+                    break;
             }
             e.Enabled = false;
         }
@@ -70,7 +93,7 @@ namespace Ankh.Commands
                         if (i.IsVersioned)
                             selected.Add(i);
                     }
-                    LocalLog(e.Context, selected);
+                    LocalLog(e.Context, selected, null);
                     break;
                 case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
@@ -80,7 +103,7 @@ namespace Ankh.Commands
 
                         selected.Add(cache[settings.ProjectRoot]);
 
-                        LocalLog(e.Context, selected);
+                        LocalLog(e.Context, selected, null);
                     }
                     else
                     {
@@ -93,7 +116,7 @@ namespace Ankh.Commands
                                 selected.Add(cache[info.ProjectDirectory]);
                         }
 
-                        LocalLog(e.Context, selected);
+                        LocalLog(e.Context, selected, null);
                     }
                     break;
                 case AnkhCommand.ReposExplorerLog:
@@ -108,10 +131,33 @@ namespace Ankh.Commands
                     if (item != null)
                         RemoteLog(e.Context, item.Uri);
                     break;
+                case AnkhCommand.BlameShowLog:
+
+                    IBlameControl blameWindow = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
+
+                    if ((blameWindow == null) || !blameWindow.HasWorkingCopyItems)
+                        return;
+
+                    SvnItem firstItem = null;
+                    foreach (SvnItem i in blameWindow.WorkingCopyItems)
+                        firstItem = i;
+
+                    IBlameSection section = null;
+                    foreach (IBlameSection s in e.Selection.GetSelection<IBlameSection>())
+                    {
+                        section = s;
+                        break;
+                    }
+                    if (section == null)
+                        return;
+
+                    LocalLog(e.Context, new SvnItem[]{firstItem}, section.Revision);
+                    
+                    break;
             }
         }
 
-        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
+        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision end)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -124,7 +170,7 @@ namespace Ankh.Commands
 
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if(logToolControl != null)
-                logToolControl.StartLocalLog(context, targets);
+                logToolControl.StartLocalLog(context, targets, end);
         }
 
         static void RemoteLog(IAnkhServiceProvider context, Uri target)

@@ -10,13 +10,15 @@ using SharpSvn;
 using Ankh.UI.PendingChanges;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Scc;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.Blame
 {
-    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IBlameSection>
+    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IBlameSection>, IBlameControl
     {
         List<BlameSection> blameSections = new List<BlameSection>();
         SelectionItemMap _map;
+        SvnItem _wcItem;
 
         public BlameToolWindowControl()
         {
@@ -48,8 +50,10 @@ namespace Ankh.UI.Blame
         }
 
 
-        public void AddLines(System.Collections.ObjectModel.Collection<SharpSvn.SvnBlameEventArgs> blameResult)
+        public void AddLines(SvnItem workingCopyItem, System.Collections.ObjectModel.Collection<SharpSvn.SvnBlameEventArgs> blameResult)
         {
+            _wcItem = workingCopyItem;
+
             BlameSection section = null;
             blameSections.Clear();
 
@@ -154,6 +158,20 @@ namespace Ankh.UI.Blame
         {
             BlameSection section = (BlameSection)item;
             return section.Author + section.StartLine + section.Revision;
+        }
+
+        #endregion
+
+        #region IBlameControl Members
+
+        public bool HasWorkingCopyItems
+        {
+            get { return true; }
+        }
+
+        public SvnItem[] WorkingCopyItems
+        {
+            get { return new SvnItem[] { _wcItem }; }
         }
 
         #endregion

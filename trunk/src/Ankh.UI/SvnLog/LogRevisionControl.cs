@@ -115,10 +115,13 @@ namespace Ankh.UI.SvnLog
             SvnLogArgs args = new SvnLogArgs();
             args.Start = StartRevision;
             args.End = EndRevision;
-            args.Limit = 10;
+            
+            // If we have EndRevision set, we want all items until End
+            if(args.End == null || args.End.RevisionType == SvnRevisionType.None)
+                args.Limit = 10;
+
             args.StrictNodeHistory = StrictNodeHistory;
             args.RetrieveMergedRevisions = IncludeMergedRevisions;
-            //args.RetrieveChangedPaths = false;
 
             _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
 			ShowBusyIndicator();

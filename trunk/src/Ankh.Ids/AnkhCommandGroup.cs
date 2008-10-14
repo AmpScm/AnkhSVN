@@ -89,5 +89,6 @@ namespace Ankh.Ids
         ListViewShow,
 
         ItemIgnore,
+        BlameContextMenu,
     }
 }

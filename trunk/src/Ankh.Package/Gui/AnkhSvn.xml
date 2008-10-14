@@ -429,6 +429,14 @@
         </Group>
       </Menu>
     </GroupRef>
+    <GroupRef id="Menu_BlameContextMenu">
+      <Menu id="Menu_BlameContextMenu" name="BlameContextMenu" type="Context" priority="0x100">
+        <Group id="Grp_BlameContextMenu" priority="0x100">
+          <Button id="Cmd_BlameShowLog" priority="0x100" name="BlameShowLog" text="View history"
+                  iconFile="PendingChanges/ViewHistory.png" />
+        </Group>
+      </Menu>
+    </GroupRef>
     <GroupRef id="ToolBar_PendingChanges">
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">
@@ -658,6 +666,7 @@
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_ActivateSccProvider" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_BlameShowLog" text="." priority="0" commandWellOnly="true"/>
       </Group>
     </MenuRef>
   </UI>

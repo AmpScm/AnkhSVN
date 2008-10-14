@@ -7,6 +7,8 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using Ankh.Selection;
 using Ankh.UI.VSSelectionControls;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.Blame
 {
@@ -104,8 +106,21 @@ namespace Ankh.UI.Blame
             BlameSection section = GetSection(e.Location);
             _control.SetSelection(section);
             Invalidate();
+
+            if (e.Button == MouseButtons.Right)
+                ShowContextMenu();
         }
 
+        private void ShowContextMenu()
+        {
+            Point p = MousePosition;
+
+            if (_context != null)
+            {
+                IAnkhCommandService cs = _context.GetService<IAnkhCommandService>();
+                cs.ShowContextMenu(AnkhCommandMenu.BlameContextMenu, p.X, p.Y);
+            }
+        }
 
 
         protected override void OnPaint(PaintEventArgs e)
