@@ -90,6 +90,8 @@
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
+    <Compile Include="Dialogs\VSDocumentFormPane.cs">
+    </Compile>
     <Compile Include="Selection\SelectionContext.Active.cs">
       <DependentUpon>SelectionContext.cs</DependentUpon>
     </Compile>

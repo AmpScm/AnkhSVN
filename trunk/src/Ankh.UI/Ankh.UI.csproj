@@ -175,6 +175,12 @@
     <Compile Include="Blame\BlameToolWindowControl.Designer.cs">
       <DependentUpon>BlameToolWindowControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Blame\TstForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Blame\TstForm.Designer.cs">
+      <DependentUpon>TstForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -781,6 +787,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Blame\BlameToolWindowControl.resx">
       <DependentUpon>BlameToolWindowControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Blame\TstForm.resx">
+      <DependentUpon>TstForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
