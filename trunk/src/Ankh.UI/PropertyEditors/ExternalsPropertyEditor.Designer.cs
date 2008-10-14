@@ -16,8 +16,8 @@ namespace Ankh.UI.PropertyEditors
         {
             this.components = new System.ComponentModel.Container();
             this.externalsGroupBox = new System.Windows.Forms.GroupBox();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.externalsTextBox = new System.Windows.Forms.TextBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.externalsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +43,7 @@ namespace Ankh.UI.PropertyEditors
             this.externalsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.externalsTextBox.Size = new System.Drawing.Size(342, 177);
             this.externalsTextBox.TabIndex = 3;
+            this.externalsTextBox.TextChanged += new System.EventHandler(this.externalsTextBox_TextChanged);
             // 
             // ExternalsPropertyEditor
             // 

@@ -16,8 +16,8 @@ namespace Ankh.UI.PropertyEditors
         {
             this.components = new System.ComponentModel.Container();
             this.ignoreGroupBox = new System.Windows.Forms.GroupBox();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ignoreTextBox = new System.Windows.Forms.TextBox();
+            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.ignoreGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +43,7 @@ namespace Ankh.UI.PropertyEditors
             this.ignoreTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.ignoreTextBox.Size = new System.Drawing.Size(342, 177);
             this.ignoreTextBox.TabIndex = 3;
+            this.ignoreTextBox.TextChanged += new System.EventHandler(this.ignoreTextBox_TextChanged);
             // 
             // IgnorePropertyEditor
             // 
