@@ -8,12 +8,16 @@ using System.Windows.Forms;
 using System.IO;
 using SharpSvn;
 using Ankh.UI.PendingChanges;
+using Ankh.UI.VSSelectionControls;
+using Ankh.Scc;
 
 namespace Ankh.UI.Blame
 {
-    public partial class BlameToolWindowControl : AnkhToolWindowControl
+    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IBlameSection>
     {
         List<BlameSection> blameSections = new List<BlameSection>();
+        SelectionItemMap _map;
+
         public BlameToolWindowControl()
         {
             InitializeComponent();
@@ -21,18 +25,18 @@ namespace Ankh.UI.Blame
             logMessageEditor1.ReadOnly = true;
         }
 
-        public void Init(IAnkhServiceProvider ankhContext)
+        public void Init()
         {
-            //this.editorHost1.Init(this, ankhContext);
-            //logMessageEditor1.ReadOnly = true;
-      //      this.logMessageEditor1.Init(ankhContext, false);
-            this.blameMarginControl1.Init(this, blameSections);
+            _map = SelectionItemMap.Create<IBlameSection>(this);
+            _map.Context = ToolWindowHost;
+            //_map.NotifySelectionUpdated();
+
+            this.blameMarginControl1.Init(ToolWindowHost, this, blameSections);
         }
 
         public void LoadFile(string projectFile, string exportedFile)
         {
-            this.Text = Path.GetFileName(projectFile) + " (Annotated)"; 
-//            editorHost1.LoadFile(projectFile, exportedFile);
+            this.Text = Path.GetFileName(projectFile) + " (Annotated)";
             logMessageEditor1.OpenFile(projectFile);
             logMessageEditor1.ReplaceContents(exportedFile);
 
@@ -76,5 +80,82 @@ namespace Ankh.UI.Blame
         {
             blameMarginControl1.NotifyScroll(e.MinUnit, e.MaxUnit, e.VisibleUnits, e.FirstVisibleUnit);
         }
+
+        BlameSection _selected;
+        internal BlameSection Selected
+        {
+            get { return _selected; }
+        }
+
+        internal void SetSelection(IBlameSection section)
+        {
+            _selected = (BlameSection)section;
+
+            if (SelectionChanged != null)
+                SelectionChanged(this, EventArgs.Empty);
+
+            _map.NotifySelectionUpdated();
+        }
+
+        #region ISelectionMapOwner<IBlameSection> Members
+
+        public event EventHandler SelectionChanged;
+
+        public System.Collections.IList Selection
+        {
+            get
+            {
+                if (_selected == null)
+                    return new IBlameSection[] { };
+
+                return new IBlameSection[] { _selected };
+            }
+        }
+
+        public System.Collections.IList AllItems
+        {
+            get { return blameSections; }
+        }
+
+        public IntPtr GetImageList()
+        {
+            return IntPtr.Zero;
+        }
+
+        public int GetImageListIndex(IBlameSection item)
+        {
+            return 0;
+        }
+
+        public string GetText(IBlameSection item)
+        {
+            return item.Revision.ToString();
+        }
+
+        public object GetSelectionObject(IBlameSection item)
+        {
+            return item;
+        }
+
+        public IBlameSection GetItemFromSelectionObject(object item)
+        {
+            return (IBlameSection)item;
+        }
+
+        public void SetSelection(IBlameSection[] items)
+        {
+            if (items.Length > 0)
+                SetSelection(items[0]);
+            else
+                SetSelection((IBlameSection)null);
+        }
+
+        public string GetCanonicalName(IBlameSection item)
+        {
+            BlameSection section = (BlameSection)item;
+            return section.Author + section.StartLine + section.Revision;
+        }
+
+        #endregion
     }
 }

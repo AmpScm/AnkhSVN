@@ -5,6 +5,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
+using Ankh.Selection;
+using Ankh.UI.VSSelectionControls;
 
 namespace Ankh.UI.Blame
 {
@@ -14,12 +16,14 @@ namespace Ankh.UI.Blame
         BlameToolWindowControl _control;
         int _firstLine;
         int _lastLine;
+        IAnkhServiceProvider _context;
+        
 
-        internal void Init(BlameToolWindowControl control, List<BlameSection> sections)
+        internal void Init(IAnkhServiceProvider context, BlameToolWindowControl control, List<BlameSection> sections)
         {
+            _context = context;
             _control = control;
             _sections = sections;
-            DoubleBuffered = true;
         }
 
         bool _setLineHeight;
@@ -37,25 +41,39 @@ namespace Ankh.UI.Blame
             }
         }
 
+        Rectangle GetRectangle(BlameSection section)
+        {
+            int top = (section.StartLine - _firstLine) * LineHeight;
+            int height = (section.EndLine - section.StartLine + 1) * LineHeight;
+
+            return new Rectangle(0, top, Width, height);
+        }
+
+        BlameSection GetSection(Point location)
+        {
+            foreach (BlameSection section in _sections)
+            {
+                Rectangle rect = GetRectangle(section);
+                if (rect.Contains(location))
+                    return section;
+            }
+            return null;
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
             bool changed = false;
-            foreach (BlameSection section in _sections.ToArray())
+            foreach (BlameSection section in _sections)
             {
-                int top = (section.StartLine - _firstLine) * LineHeight;
-                int height = (section.EndLine - section.StartLine + 1) * LineHeight;
-
-
-                Rectangle rect = new Rectangle(0, top, Width, height);
+                Rectangle rect = GetRectangle(section);
                 bool hovered = rect.Contains(e.Location);
                 if (section.Hovered != hovered)
                 {
                     section.Hovered = hovered;
                     changed = true;
                 }
-
             }
             if (changed)
             {
@@ -79,6 +97,17 @@ namespace Ankh.UI.Blame
                 Invalidate();
         }
 
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+
+            BlameSection section = GetSection(e.Location);
+            _control.SetSelection(section);
+            Invalidate();
+        }
+
+
+
         protected override void OnPaint(PaintEventArgs e)
         {
             if (DesignMode)
@@ -93,9 +122,11 @@ namespace Ankh.UI.Blame
 
             using (Font f = new Font(Font.FontFamily, 7F))
             using (Pen border = new Pen(Color.Gray))
-            using (Brush black = new SolidBrush(Color.Black))
+            using (Brush textColor = new SolidBrush(Color.Black))
+            using (Brush selectedTextColor = new SolidBrush(SystemColors.HighlightText))
             using (Brush grayBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightGray))
             using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
+            using (Brush selectedBg = new SolidBrush(SystemColors.Highlight))
             {
                 foreach (BlameSection section in _sections.ToArray())
                 {
@@ -104,24 +135,25 @@ namespace Ankh.UI.Blame
                     if (section.StartLine > _lastLine)
                         continue;
 
-                    int top = (section.StartLine - _firstLine) * LineHeight;
-                    int height = (section.EndLine - section.StartLine + 1) * LineHeight;
-
-                    Rectangle rect = new Rectangle(0, top, Width, height);
+                    Rectangle rect = GetRectangle(section);
                     if (!e.ClipRectangle.IntersectsWith(rect))
                         continue;
 
-                    if(section.Hovered)
-                        e.Graphics.FillRectangle(blueBg, rect);
+                    if (_control.Selected == section)
+                        e.Graphics.FillRectangle(selectedBg, rect);
                     else
-                        e.Graphics.FillRectangle(grayBg, rect);
+                    {
+                        if (section.Hovered)
+                            e.Graphics.FillRectangle(blueBg, rect);
+                        else
+                            e.Graphics.FillRectangle(grayBg, rect);
+                    }
                     e.Graphics.DrawRectangle(border, rect);
 
-
-                    e.Graphics.DrawString(section.Revision.ToString(), f, black, new RectangleF(3, top + 2, 30, LineHeight), sfr);
-                    e.Graphics.DrawString(section.Author, f, black, new RectangleF(35, top + 2, 40, LineHeight), sfl);
-                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, black, new RectangleF(Width - 60,top + 2, 58,LineHeight), sfr);
-
+                    Brush color = _control.Selected == section ? selectedTextColor : textColor;
+                    e.Graphics.DrawString(section.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, 30, LineHeight), sfr);
+                    e.Graphics.DrawString(section.Author, f, color, new RectangleF(35, rect.Top + 2, 40, LineHeight), sfl);
+                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
                 }
             }
         }
@@ -133,7 +165,6 @@ namespace Ankh.UI.Blame
             _lastLine = iVisibleUnits + iFirstVisibleUnit;
 
             NativeMethods.ScrollWindowEx(Handle, 0, dy, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, NativeMethods.SW_INVALIDATE);
-            //Invalidate();
         }
 
         static class NativeMethods
@@ -147,5 +178,9 @@ namespace Ankh.UI.Blame
 
             public const uint SW_SMOOTHSCROLL = 0x0010;
         }
+
+
+
+        
     }
 }
