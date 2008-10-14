@@ -113,12 +113,18 @@ namespace Ankh.Commands
 
         static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (targets == null)
+                throw new ArgumentNullException("targets");
+
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
 
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            logToolControl.StartLocalLog(context, targets);
+            if(logToolControl != null)
+                logToolControl.StartLocalLog(context, targets);
         }
 
         static void RemoteLog(IAnkhServiceProvider context, Uri target)
@@ -127,7 +133,8 @@ namespace Ankh.Commands
 
             package.ShowToolWindow(AnkhToolWindow.Log);
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            logToolControl.StartRemoteLog(context, target); // TODO: revision support
+            if (logToolControl != null) 
+                logToolControl.StartRemoteLog(context, target); // TODO: revision support
         }
     }
 }
