@@ -64,15 +64,10 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IAnkhPackage p = e.GetService<IAnkhPackage>();
-            p.ShowToolWindow(AnkhToolWindow.Blame);
-            BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
-            blameToolControl.Init(e.Context);
-
             switch (e.Command)
             {
                 case AnkhCommand.ItemAnnotate:
-                    BlameItem(e, blameToolControl);
+                    BlameItem(e);
                     break;
                 case AnkhCommand.LogAnnotateRevision:
                     BlameRevision(e);
@@ -113,8 +108,11 @@ namespace Ankh.Commands
             uiShell.DisplayHtml(string.Format("Revision {0}", item.Revision), writer.ToString(), false);
         }
 
-        void BlameItem(CommandEventArgs e, BlameToolWindowControl blameToolControl)
+        void BlameItem(CommandEventArgs e)
         {
+            IAnkhPackage p = e.GetService<IAnkhPackage>();
+
+
             IUIShell uiShell = e.GetService<IUIShell>();
 
             SvnRevision revisionStart = SvnRevision.Zero;
@@ -184,6 +182,10 @@ namespace Ankh.Commands
                     
                     ee.Client.GetBlame(target, ba, out blameResult);
                 });
+
+                p.ShowToolWindow(AnkhToolWindow.Blame);
+                BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
+                blameToolControl.Init();
 
                 blameToolControl.LoadFile(firstItem.FullPath, tempFile);
                 blameToolControl.AddLines(blameResult);
