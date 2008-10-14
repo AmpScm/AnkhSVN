@@ -29,11 +29,20 @@ namespace Ankh.UI.Blame
 
         public void Init()
         {
+            this.blameMarginControl1.Init(ToolWindowHost, this, blameSections);
+        }
+
+        protected override void OnFrameCreated(EventArgs e)
+        {
+            base.OnFrameCreated(e);
+
             _map = SelectionItemMap.Create<IBlameSection>(this);
             _map.Context = ToolWindowHost;
-            //_map.NotifySelectionUpdated();
 
-            this.blameMarginControl1.Init(ToolWindowHost, this, blameSections);
+            if (SelectionChanged != null)
+                SelectionChanged(this, EventArgs.Empty);
+            // Set Notify that we have a selection, otherwise the first selection request fails.
+            _map.NotifySelectionUpdated();
         }
 
         public void LoadFile(string projectFile, string exportedFile)
@@ -93,6 +102,10 @@ namespace Ankh.UI.Blame
 
         internal void SetSelection(IBlameSection section)
         {
+            // Check if necessary
+            //Focus();
+            //Select();
+
             _selected = (BlameSection)section;
 
             if (SelectionChanged != null)
