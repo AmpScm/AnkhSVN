@@ -101,11 +101,11 @@ namespace Ankh.UI.Blame
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            base.OnMouseClick(e);
-
             BlameSection section = GetSection(e.Location);
             _control.SetSelection(section);
             Invalidate();
+
+            base.OnMouseClick(e);
 
             if (e.Button == MouseButtons.Right)
                 ShowContextMenu();
