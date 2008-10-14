@@ -54,5 +54,7 @@ namespace Ankh.VS
         /// <param name="vSContainerForm">The v S container form.</param>
         /// <param name="pane">The pane.</param>
         void AddWindowPane(VSContainerForm vSContainerForm, IVsWindowPane pane);
+
+        void CreateDocumentForm(VSDocumentForm vSDocumentForm);
     }    
 }

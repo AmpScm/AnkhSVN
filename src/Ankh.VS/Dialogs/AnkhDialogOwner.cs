@@ -98,5 +98,19 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
+
+        #region IAnkhDialogOwner Members
+
+
+        public void CreateDocumentForm(VSDocumentForm form)
+        {
+            VSDocumentFormPane pane = new VSDocumentFormPane(this, form);
+
+            pane.Show();
+            /*pane./
+            throw new NotImplementedException();*/
+        }
+
+        #endregion
     }
 }
