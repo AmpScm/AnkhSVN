@@ -77,8 +77,7 @@ namespace Ankh.Ids
         ResolveConflict,
         ResolveConflictExternal,
 
-        [Obsolete("Unused command", true)]
-        RevertToRevision,
+        BlameShowLog,
         RevertItem,
         SaveToFile,
         SendFeedback,

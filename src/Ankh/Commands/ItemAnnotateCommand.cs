@@ -188,7 +188,7 @@ namespace Ankh.Commands
                 blameToolControl.Init();
 
                 blameToolControl.LoadFile(firstItem.FullPath, tempFile);
-                blameToolControl.AddLines(blameResult);
+                blameToolControl.AddLines(firstItem, blameResult);
 
                 // TODO open multiple blame editors ?
                 break;

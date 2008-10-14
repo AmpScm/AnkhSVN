@@ -9,6 +9,7 @@ using Ankh.UI.Services;
 using System.Diagnostics;
 using Ankh.Scc.UI;
 using Ankh.Ids;
+using SharpSvn;
 
 namespace Ankh.UI.SvnLog
 {
@@ -54,13 +55,17 @@ namespace Ankh.UI.SvnLog
 
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
+            StartLocalLog(context, targets, null);
+        }
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision end)
+        {
             if (targets == null)
                 throw new ArgumentNullException("targets");
 
             _localItems = new SvnItem[targets.Count];
             targets.CopyTo(_localItems, 0);
 
-            logControl.StartLocalLog(context, SvnItem.GetPaths(targets));
+            logControl.StartLocalLog(context, SvnItem.GetPaths(targets), end);
         }
 
         public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)
