@@ -136,24 +136,23 @@ namespace Ankh.UI.SvnLog.Commands
 
         void ExecuteChangedPaths(CommandEventArgs e, ISvnLogChangedPathItem change)
         {
-            IWorkingCopyOperations wcOper = e.GetService<IWorkingCopyOperations>();
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            ISvnClientPool clientPool = e.GetService<ISvnClientPool>();
 
-            Uri repositoryRoot = null;
-            using(SvnClient client = clientPool.GetClient())
+            IEnumerable<SvnItem> items = 
+                LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, new string[] { change.Path });
+
+            SvnItem firstItem = null;
+            foreach (SvnItem i in items)
             {
-                client.Info(new SvnPathTarget(logWindow.WorkingCopyItems[0].FullPath),
-                    delegate(object sender, SvnInfoEventArgs infoEventArgs)
-                    {
-                        repositoryRoot = infoEventArgs.RepositoryRoot;
-                    });
+                firstItem = i;
+                break;
             }
-            if (repositoryRoot == null)
+            if (firstItem == null)
                 return;
 
-            Uri target = new Uri(repositoryRoot, change.Path.TrimStart('/'));
-            ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), new SvnUriTarget(target, change.Revision));
+
+            SvnPathTarget target = new SvnPathTarget(firstItem.FullPath);
+            ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), target);
         }
 
         void ExecuteDiff(CommandEventArgs e, SvnRevisionRange range, SvnTarget diffTarget)
