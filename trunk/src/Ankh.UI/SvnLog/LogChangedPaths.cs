@@ -11,6 +11,8 @@ using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.Ids;
 using Ankh.Commands;
+using Ankh.Selection;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
@@ -37,6 +39,8 @@ namespace Ankh.UI
 			{
 				_context = value;
 				changedPaths.SelectionPublishServiceProvider = value;
+
+
 			}
 		}
 
@@ -58,14 +62,50 @@ namespace Ankh.UI
                     itemSource.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(SelectionChanged);
                     itemSource.FocusChanged += new FocusChangedEventHandler<ISvnLogItem>(FocusChanged);
                 }
+
             }
         }
 
         #endregion
 
+        IEnumerable<SvnItem> _wcItems;
+        IEnumerable<SvnItem> WcItems
+        {
+            get
+            {
+                if (_wcItems != null)
+                    return _wcItems;
+
+                ISelectionContext selection = Context == null ? null : Context.GetService<ISelectionContext>();
+
+                ILogControl logControl = selection == null ? null : selection.ActiveDialogOrFrameControl as ILogControl;
+
+                if (logControl == null || !logControl.HasWorkingCopyItems)
+                    _wcItems = null;
+                else
+                    _wcItems = logControl.WorkingCopyItems;
+
+                return _wcItems;
+            }
+        }
+        bool IsWorkingCopyItem(SvnChangeItem item)
+        {
+            if (WcItems == null)
+                return true; // Don't gray out
+
+            foreach (SvnItem i in WcItems)
+            {
+                if (i.Status.Uri.ToString().EndsWith(item.Path))
+                    return true;
+            }
+            return false;
+        }
+
         void SelectionChanged(object sender, IList<ISvnLogItem> e)
         {
         }
+
+
 
         void FocusChanged(object sender, ISvnLogItem e)
         {
@@ -75,7 +115,10 @@ namespace Ankh.UI
             {
                 List<PathListViewItem> paths = new List<PathListViewItem>();
                 foreach (SvnChangeItem i in e.ChangedPaths)
-                    paths.Add(new PathListViewItem(changedPaths, e, i));
+                {
+                        
+                    paths.Add(new PathListViewItem(changedPaths, e, i, IsWorkingCopyItem(i)));
+                }
 
                 changedPaths.Items.AddRange(paths.ToArray());
             }
