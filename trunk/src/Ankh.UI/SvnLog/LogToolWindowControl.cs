@@ -15,7 +15,7 @@ namespace Ankh.UI.SvnLog
 {
     public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
-            string _originalText;
+        string _originalText;
         public LogToolWindowControl()
         {
             InitializeComponent();
