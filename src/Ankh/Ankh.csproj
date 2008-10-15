@@ -312,9 +312,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatusCache\WorkingCopyOperations.cs" />
-    <Compile Include="XmlResultBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <EmbeddedResource Include="CommandResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
