@@ -49,5 +49,11 @@ namespace Ankh.UI
         /// </summary>
         /// <returns></returns>
         RegistryLifoList GetRecentLogMessages();
+
+        /// <summary>
+        /// Gets the recent Repository Urls
+        /// </summary>
+        /// <returns></returns>
+        RegistryLifoList GetRecentReposUrls();
     }
 }

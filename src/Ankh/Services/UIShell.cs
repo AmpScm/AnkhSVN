@@ -188,17 +188,12 @@ namespace Ankh
 
         public Uri ShowAddRepositoryRootDialog()
         {
-            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
+            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(Context))
             {
                 IUIService ui = GetService<IUIService>();
 
-                DialogResult dr;
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
 
-                if (dr != DialogResult.OK || dlg.Uri == null)
+                if (ui.ShowDialog(dlg) != DialogResult.OK || dlg.Uri == null)
                     return null;
 
                 return dlg.Uri;
