@@ -297,6 +297,12 @@
   <data name="&gt;&gt;addButton.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="propGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="svnItemLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
   <data name="svnItemLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 25</value>
   </data>

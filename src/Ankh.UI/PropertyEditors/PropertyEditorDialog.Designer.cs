@@ -81,18 +81,19 @@ namespace Ankh.UI.PropertyEditors
             // 
             // propGroupBox
             // 
+            resources.ApplyResources(this.propGroupBox, "propGroupBox");
             this.propGroupBox.Controls.Add(this.svnItemLabel);
             this.propGroupBox.Controls.Add(this.propListView);
             this.propGroupBox.Controls.Add(this.addButton);
             this.propGroupBox.Controls.Add(this.deleteButton);
             this.propGroupBox.Controls.Add(this.editButton);
-            resources.ApplyResources(this.propGroupBox, "propGroupBox");
             this.propGroupBox.Name = "propGroupBox";
             this.propGroupBox.TabStop = false;
             // 
             // svnItemLabel
             // 
             resources.ApplyResources(this.svnItemLabel, "svnItemLabel");
+            this.svnItemLabel.AutoEllipsis = true;
             this.svnItemLabel.Name = "svnItemLabel";
             // 
             // PropertyEditorDialog
@@ -104,7 +105,6 @@ namespace Ankh.UI.PropertyEditors
             this.Controls.Add(this.propGroupBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PropertyEditorDialog";
