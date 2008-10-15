@@ -81,7 +81,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             bool touched = false;
 
-            List<string> changedPaths = new List<string>();
+            HybridCollection<string> changedPaths = new HybridCollection<string>();
             foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);

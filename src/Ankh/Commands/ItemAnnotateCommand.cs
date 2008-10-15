@@ -123,12 +123,13 @@ namespace Ankh.Commands
             ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
             IUIShell uiShell = e.GetService<IUIShell>();
 
-            List<string> changedPaths = new List<string>();
+            HybridCollection<string> changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
             ISvnLogChangedPathItem item = null;
             foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
-                changedPaths.Add(logItem.Path);
+                if(!changedPaths.Contains(logItem.Path))
+                    changedPaths.Add(logItem.Path);
                 item = logItem;
                 break;
             }
