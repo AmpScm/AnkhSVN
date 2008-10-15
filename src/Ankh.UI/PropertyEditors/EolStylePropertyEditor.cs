@@ -22,15 +22,16 @@ namespace Ankh.UI.PropertyEditors
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
 
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             CreateMyToolTip();
 
             existingValue = string.Empty;
-            this.dirty = true;
+            _dirty = true;
             RadioButton rb = ToRadioButton("native");
             if (rb != null)
             {
                 rb.Checked = true;
+                _selectedValue = (string)rb.Tag;
             }
         }
 
@@ -42,7 +43,7 @@ namespace Ankh.UI.PropertyEditors
         {
             get 
             {
-                if (!this.dirty)
+                if (!_dirty)
                 {
                     return false;
                 }
@@ -56,13 +57,13 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {
-                if( !this.Valid)
+                if( !Valid)
                 {
                     throw new InvalidOperationException(
                         "Can not get a property item when Valid is false");
                 }
           
-                return new TextPropertyItem(selectedValue);
+                return new TextPropertyItem(_selectedValue);
             }
             set
             {
@@ -99,29 +100,29 @@ namespace Ankh.UI.PropertyEditors
         private void RadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
             string newValue = (string)((RadioButton)sender).Tag;
-            this.selectedValue = newValue;
+            _selectedValue = newValue;
 
             // Enables save button
-            this.Dirty = !string.IsNullOrEmpty(newValue)
+            Dirty = !string.IsNullOrEmpty(newValue)
                 && !newValue.Equals(existingValue);
         }
 
         private void CreateMyToolTip()
         {
             // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip( this.nativeRadioButton, "Default. Line endings dependant on operating system");
-            conflictToolTip.SetToolTip( this.lfRadioButton, "End of line style is LF (Line Feed)");
-            conflictToolTip.SetToolTip( this.crRadioButton, "End of line style is CR");
-            conflictToolTip.SetToolTip( this.crlfRdioButton, "End of line style is CRLF");
+            conflictToolTip.SetToolTip( nativeRadioButton, "Default. Line endings dependant on operating system");
+            conflictToolTip.SetToolTip( lfRadioButton, "End of line style is LF (Line Feed)");
+            conflictToolTip.SetToolTip( crRadioButton, "End of line style is CR");
+            conflictToolTip.SetToolTip( crlfRdioButton, "End of line style is CRLF");
         }
 
         private bool Dirty
         {
             set
             {
-                if (this.dirty != value)
+                if (_dirty != value)
                 {
-                    this.dirty = value;
+                    _dirty = value;
                     if (Changed != null)
                     {
                         Changed(this, EventArgs.Empty);
@@ -136,7 +137,7 @@ namespace Ankh.UI.PropertyEditors
             {
                 return null;
             }
-            foreach (Control c in this.eolStyleGroupBox.Controls)
+            foreach (Control c in eolStyleGroupBox.Controls)
             {
                 if (c is RadioButton
                     && c.Tag is string
@@ -148,11 +149,11 @@ namespace Ankh.UI.PropertyEditors
             return null;
         }
 
-        private string selectedValue;
+        string _selectedValue;
         /// <summary>
         /// Flag for enabling/disabling save button
         /// </summary>
-        private bool dirty;
+        bool _dirty;
        
     }
 }
