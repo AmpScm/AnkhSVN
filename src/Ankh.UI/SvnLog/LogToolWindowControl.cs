@@ -15,9 +15,11 @@ namespace Ankh.UI.SvnLog
 {
     public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
+            string _originalText;
         public LogToolWindowControl()
         {
             InitializeComponent();
+            
         }
 
         public LogToolWindowControl(IContainer container)
@@ -29,6 +31,8 @@ namespace Ankh.UI.SvnLog
         protected override void OnFrameCreated(EventArgs e)
         {
             base.OnFrameCreated(e);
+            
+            _originalText = Text;
 
             ToolWindowHost.CommandContext = AnkhId.LogContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.LogContextGuid;
@@ -53,6 +57,21 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        void SetTitle(ICollection<SvnItem> targets)
+        {
+            Text = _originalText;
+            if(targets.Count != 1)
+            {
+                return;
+            }
+
+            foreach (SvnItem i in targets)
+            {
+                Text += string.Format(" - {0}", i.Name);
+                break;
+            }
+        }
+
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
             StartLocalLog(context, targets, null, null);
@@ -65,6 +84,7 @@ namespace Ankh.UI.SvnLog
             _localItems = new SvnItem[targets.Count];
             targets.CopyTo(_localItems, 0);
 
+            SetTitle(targets);
             logControl.StartLocalLog(context, SvnItem.GetPaths(targets), start, end);
         }
 
@@ -74,6 +94,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             _localItems = new SvnItem[] { target };
+            SetTitle(_localItems);
             logControl.StartMergesEligible(context, target.FullPath, source);
         }
 
@@ -83,6 +104,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             _localItems = new SvnItem[] { target };
+            SetTitle(_localItems);
             logControl.StartMergesMerged(context, target.FullPath, source);
         }
 
