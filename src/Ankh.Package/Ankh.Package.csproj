@@ -135,6 +135,7 @@
     <None Include="Resources\AnkhLogo32x32.pdn" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnkhEditorFactories.cs" />
     <Compile Include="AnkhSourceControlSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -145,6 +146,7 @@
     <Compile Include="AnkhSvnPackage.Commands.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhSvnPackage.Editors.cs" />
     <Compile Include="AnkhSvnPackage.Languages.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>

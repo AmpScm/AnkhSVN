@@ -107,6 +107,8 @@ namespace Ankh.VSPackage
             _runtime.AddModule(new AnkhUIModule(_runtime));
             _runtime.AddModule(new AnkhDiffModule(_runtime));
 
+            RegisterEditors();
+
             NotifyLoaded(false);
 
             _runtime.Start();
