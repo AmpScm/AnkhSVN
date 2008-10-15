@@ -23,35 +23,37 @@ namespace Ankh.UI.MergeWizard
         public static void ResizeDropDownForLongestEntry(ComboBox comboBox)
         {
             int width = comboBox.DropDownWidth;
-            Graphics g = comboBox.CreateGraphics();
-            Font font = comboBox.Font;
-            int vertScrollBarWidth = (comboBox.Items.Count > comboBox.MaxDropDownItems)
-                ? SystemInformation.VerticalScrollBarWidth : 0;
-            int newWidth;
-
-            foreach (object o in comboBox.Items)
+            using (Graphics g = comboBox.CreateGraphics())
             {
-                string s = "";
+                Font font = comboBox.Font;
+                int vertScrollBarWidth = (comboBox.Items.Count > comboBox.MaxDropDownItems)
+                    ? SystemInformation.VerticalScrollBarWidth : 0;
+                int newWidth;
 
-                if (o is string)
-                    s = (string)o;
-                else if (o is KeyValuePair<SvnDepth, string>)
+                foreach (object o in comboBox.Items)
                 {
-                    s = ((KeyValuePair<SvnDepth, string>)o).Value;
-                }
-                else
-                {
-                    return;
-                }
+                    string s = "";
 
-                newWidth = (int)g.MeasureString(s, font).Width
-                    + vertScrollBarWidth;
-                if (width < newWidth)
-                {
-                    width = newWidth;
+                    if (o is string)
+                        s = (string)o;
+                    else if (o is KeyValuePair<SvnDepth, string>)
+                    {
+                        s = ((KeyValuePair<SvnDepth, string>)o).Value;
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    newWidth = (int)g.MeasureString(s, font).Width
+                        + vertScrollBarWidth;
+                    if (width < newWidth)
+                    {
+                        width = newWidth;
+                    }
                 }
+                comboBox.DropDownWidth = width;
             }
-            comboBox.DropDownWidth = width;
         }
 
         public static Uri DisplayBrowseDialogAndGetResult(WizardPage page, SvnItem target, string baseUri)
