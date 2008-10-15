@@ -146,7 +146,9 @@
     <Compile Include="AnkhSvnPackage.Commands.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSvnPackage.Editors.cs" />
+    <Compile Include="AnkhSvnPackage.Editors.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
     <Compile Include="AnkhSvnPackage.Languages.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
