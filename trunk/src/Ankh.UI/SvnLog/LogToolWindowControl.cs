@@ -55,9 +55,9 @@ namespace Ankh.UI.SvnLog
 
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
-            StartLocalLog(context, targets, null);
+            StartLocalLog(context, targets, null, null);
         }
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision end)
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
         {
             if (targets == null)
                 throw new ArgumentNullException("targets");
@@ -65,7 +65,7 @@ namespace Ankh.UI.SvnLog
             _localItems = new SvnItem[targets.Count];
             targets.CopyTo(_localItems, 0);
 
-            logControl.StartLocalLog(context, SvnItem.GetPaths(targets), end);
+            logControl.StartLocalLog(context, SvnItem.GetPaths(targets), start, end);
         }
 
         public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)

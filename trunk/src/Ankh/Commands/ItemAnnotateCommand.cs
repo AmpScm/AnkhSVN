@@ -16,6 +16,8 @@ using Ankh.UI.Blame;
 using Ankh.Selection;
 using Ankh.VS;
 using System.Collections.ObjectModel;
+using Ankh.Scc.UI;
+using Ankh.UI.SvnLog.Commands;
 
 namespace Ankh.Commands
 {
@@ -24,18 +26,29 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.ItemAnnotate)]
     [Command(AnkhCommand.LogAnnotateRevision)]
+    [Command(AnkhCommand.BlameShowBlame)]
     class ItemAnnotateCommand : CommandBase
     {
-        XslCompiledTransform _transform;
-        private const string BlameTransform = "blame.xsl";
-
-
-        
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             switch (e.Command)
             {
+                case AnkhCommand.BlameShowBlame:
+                    IBlameControl blameControl = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
+                    if (blameControl == null || !blameControl.HasWorkingCopyItems)
+                    {
+                        e.Enabled = e.Visible = false;
+                        return;
+                    }
+
+                    int blameCount = 0;
+                    foreach (IBlameSection blameItem in e.Selection.GetSelection<IBlameSection>())
+                    {
+                        blameCount++;
+                    }
+                    if (blameCount == 1)
+                        return;
+                    break;
                 case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
@@ -44,11 +57,14 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.LogAnnotateRevision:
-                    // Disabled for now, see TODO belows
-                    e.Visible = e.Enabled = false;
-                    return;
+                    ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+                    if (logControl == null || !logControl.HasWorkingCopyItems)
+                    {
+                        e.Visible = e.Enabled = false;
+                        return;
+                    }
 
-                    /*int count = 0;
+                    int count = 0;
                     foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
                     {
                         count++;
@@ -57,7 +73,7 @@ namespace Ankh.Commands
                     }
                     if (count == 1)
                         return;
-                    break;*/
+                    break;
             }
             e.Enabled = false;
         }
@@ -72,47 +88,69 @@ namespace Ankh.Commands
                 case AnkhCommand.LogAnnotateRevision:
                     BlameRevision(e);
                     break;
+                case AnkhCommand.BlameShowBlame:
+                    BlameBlame(e);
+                    break;
             }
+        }
+
+        void BlameBlame(CommandEventArgs e)
+        {
+            IBlameControl blameControl = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
+
+            IBlameSection blameSection = null;
+            foreach (IBlameSection blame in e.Selection.GetSelection<IBlameSection>())
+            {
+                blameSection = blame;
+                break;
+            }
+
+            SvnItem item = null;
+            foreach(SvnItem i in blameControl.WorkingCopyItems)
+            {
+                item = i;
+            }
+
+
+            SvnRevision revisionStart = SvnRevision.Zero;
+            SvnRevision revisionEnd = blameSection.Revision;
+
+            DoBlame(e, item, revisionStart, revisionEnd); 
         }
 
         void BlameRevision(CommandEventArgs e)
         {
+            ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
             IUIShell uiShell = e.GetService<IUIShell>();
+
+            List<string> changedPaths = new List<string>();
+
             ISvnLogChangedPathItem item = null;
             foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
+                changedPaths.Add(logItem.Path);
                 item = logItem;
                 break;
             }
-            if (item == null)
+
+            SvnItem svnItem = null;
+            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logControl.WorkingCopyItems, changedPaths);
+            foreach (SvnItem i in intersectedItems)
+            {
+                svnItem = i;
+                break;
+            }
+            if (svnItem == null)
                 return;
 
             SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = item.Revision;
 
-            BlameResult blameResult = new BlameResult();
-
-            blameResult.Start();
-            // TODO: we need the real filesystem path and/or url here
-            BlameRunner runner = new BlameRunner(item.Path,
-                revisionStart, revisionEnd, blameResult);
-            
-            e.GetService<IProgressRunner>().Run("Annotating", runner.Work);
-            blameResult.End();
-
-            // transform it to HTML
-            StringWriter writer = new StringWriter();
-            blameResult.Transform(GetTransform(e.Context), writer);
-
-            // display the HTML with the filename as caption
-            uiShell.DisplayHtml(string.Format("Revision {0}", item.Revision), writer.ToString(), false);
+            DoBlame(e, svnItem, revisionStart, revisionEnd);
         }
 
         void BlameItem(CommandEventArgs e)
         {
-            IAnkhPackage p = e.GetService<IAnkhPackage>();
-
-
             IUIShell uiShell = e.GetService<IUIShell>();
 
             SvnRevision revisionStart = SvnRevision.Zero;
@@ -155,84 +193,46 @@ namespace Ankh.Commands
                 result = info.DefaultResult;
             }
 
-
-
             if (!result.Succeeded)
                 return;
-            
-            foreach (SvnItem item in result.Selection)
-            {
-                SvnExportArgs ea = new SvnExportArgs();
-                ea.Revision = revisionEnd;
 
-                SvnBlameArgs ba = new SvnBlameArgs();
-                ba.Start = revisionStart;
-                ba.End = revisionEnd;
-                
-                SvnTarget target = new SvnPathTarget(item.FullPath);
+            SvnItem blameItem = null;
+            foreach (SvnItem i in result.Selection)
+                blameItem = i;
 
-                IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
-                string tempFile = tempMgr.GetTempFile();
-
-                Collection<SvnBlameEventArgs> blameResult = null;
-                e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
-                {
-
-                    ee.Client.Export(target, tempFile, ea);
-                    
-                    ee.Client.GetBlame(target, ba, out blameResult);
-                });
-
-                p.ShowToolWindow(AnkhToolWindow.Blame);
-                BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
-                blameToolControl.Init();
-
-                blameToolControl.LoadFile(firstItem.FullPath, tempFile);
-                blameToolControl.AddLines(firstItem, blameResult);
-
-                // TODO open multiple blame editors ?
-                break;
-            }
+            DoBlame(e, blameItem, result.RevisionStart, result.RevisionEnd);
         }
 
-        private class BlameRunner
+        void DoBlame(CommandEventArgs e, SvnItem item, SvnRevision revisionStart, SvnRevision revisionEnd)
         {
-            public BlameRunner(SvnTarget target, SvnRevision start, SvnRevision end,
-                BlameResult result)
+            IAnkhPackage p = e.GetService<IAnkhPackage>();
+            SvnExportArgs ea = new SvnExportArgs();
+            ea.Revision = revisionEnd;
+
+            SvnBlameArgs ba = new SvnBlameArgs();
+            ba.Start = revisionStart;
+            ba.End = revisionEnd;
+
+            SvnTarget target = new SvnPathTarget(item.FullPath);
+
+            IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
+            string tempFile = tempMgr.GetTempFile();
+
+            Collection<SvnBlameEventArgs> blameResult = null;
+            e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
-                this.target = target;
-                this.start = start;
-                this.end = end;
-                this.result = result;
-            }
 
-            public void Work(ProgressWorkerArgs e)
-            {
-                SvnBlameArgs args = new SvnBlameArgs();
-                args.Start = start;
-                args.End = end;
-                //args.IgnoreLineEndings
-                //args.IgnoreMimeType
-                //args.IgnoreSpacing
-                //args.IncludeMergedRevisions
+                ee.Client.Export(target, tempFile, ea);
 
-                e.Client.Blame(this.target, args, new EventHandler<SvnBlameEventArgs>(this.result.Receive));
-            }
+                ee.Client.GetBlame(target, ba, out blameResult);
+            });
 
-            private SvnTarget target;
-            private SvnRevision start;
-            private SvnRevision end;
-            private BlameResult result;
+            p.ShowToolWindow(AnkhToolWindow.Blame);
+            BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
+            blameToolControl.Init();
 
-            public void Work(object sender, ProgressWorkerArgs e)
-            {
-                Work(e);
-            }
-        }
-
-        XslCompiledTransform GetTransform(IAnkhServiceProvider context)
-        {
-            return _transform ?? (_transform = CommandBase.GetTransform(context, BlameTransform));
+            blameToolControl.LoadFile(item.FullPath, tempFile);
+            blameToolControl.AddLines(item, blameResult);
         }
     }
 }

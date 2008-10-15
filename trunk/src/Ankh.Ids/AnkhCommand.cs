@@ -52,8 +52,10 @@ namespace Ankh.Ids
         CheckForUpdates,
         WorkingCopyBrowse,
         ItemAnnotate,
-        [Obsolete("Unused")]
-        ChangeAdminDirName,
+        /// <summary>
+        /// Execute blame command from blame window
+        /// </summary>
+        BlameShowBlame,
         Checkout,
         CheckoutFolder,
         CheckoutSolution,
