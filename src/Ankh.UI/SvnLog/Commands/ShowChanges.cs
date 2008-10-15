@@ -168,7 +168,7 @@ namespace Ankh.UI.SvnLog.Commands
         }
     }
 
-    static class LogHelper
+    public static class LogHelper
     {
         public static IEnumerable<SvnItem> IntersectWorkingCopyItemsWithChangedPaths(IEnumerable<SvnItem> workingCopyItems, IEnumerable<string> changedPaths)
         {

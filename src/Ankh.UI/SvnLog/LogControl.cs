@@ -59,9 +59,9 @@ namespace Ankh.UI.SvnLog
 
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
         {
-            StartLocalLog(context, targets, null);
+            StartLocalLog(context, targets, null, null);
         }
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets, SvnRevision end)
+        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets, SvnRevision start, SvnRevision end)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -69,8 +69,9 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("targets");
 
             logRevisionControl1.LocalTargets = targets;
-            if (end != null)
-                logRevisionControl1.EndRevision = end;
+
+            logRevisionControl1.StartRevision = start;
+            logRevisionControl1.EndRevision = end;
 
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();

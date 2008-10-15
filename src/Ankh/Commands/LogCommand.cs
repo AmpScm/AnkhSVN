@@ -93,7 +93,7 @@ namespace Ankh.Commands
                         if (i.IsVersioned)
                             selected.Add(i);
                     }
-                    LocalLog(e.Context, selected, null);
+                    LocalLog(e.Context, selected);
                     break;
                 case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
@@ -103,7 +103,7 @@ namespace Ankh.Commands
 
                         selected.Add(cache[settings.ProjectRoot]);
 
-                        LocalLog(e.Context, selected, null);
+                        LocalLog(e.Context, selected);
                     }
                     else
                     {
@@ -116,7 +116,7 @@ namespace Ankh.Commands
                                 selected.Add(cache[info.ProjectDirectory]);
                         }
 
-                        LocalLog(e.Context, selected, null);
+                        LocalLog(e.Context, selected);
                     }
                     break;
                 case AnkhCommand.ReposExplorerLog:
@@ -151,13 +151,17 @@ namespace Ankh.Commands
                     if (section == null)
                         return;
 
-                    LocalLog(e.Context, new SvnItem[]{firstItem}, section.Revision);
+                    LocalLog(e.Context, new SvnItem[]{firstItem}, section.Revision, null);
                     
                     break;
             }
         }
 
-        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision end)
+        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
+        {
+            LocalLog(context, targets, null, null);
+        }
+        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -170,7 +174,7 @@ namespace Ankh.Commands
 
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if(logToolControl != null)
-                logToolControl.StartLocalLog(context, targets, end);
+                logToolControl.StartLocalLog(context, targets, start, end);
         }
 
         static void RemoteLog(IAnkhServiceProvider context, Uri target)

@@ -320,7 +320,6 @@
       <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Commands\blame.xsl" />
     <EmbeddedResource Include="Commands\CommandStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>
