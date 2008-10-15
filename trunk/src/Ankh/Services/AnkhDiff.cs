@@ -465,10 +465,11 @@ namespace Ankh.Services
             GetService<IProgressRunner>().Run("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
-                    SvnExportArgs ea = new SvnExportArgs();
-                    ea.Revision = revision;
+                    SvnWriteArgs wa = new SvnWriteArgs();
+                    wa.Revision = revision;
 
-                    aa.Client.Export(new SvnPathTarget(target.FullPath), file, ea);
+                    using (Stream s = File.Create(file))
+                        aa.Client.Write(new SvnPathTarget(target.FullPath), s, wa);
                 });
 
             if (File.Exists(file))
@@ -498,10 +499,11 @@ namespace Ankh.Services
             GetService<IProgressRunner>().Run("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
-                    SvnExportArgs ea = new SvnExportArgs();
-                    ea.Revision = revision;
+                    SvnWriteArgs wa = new SvnWriteArgs();
+                    wa.Revision = revision;
 
-                    aa.Client.Export(target, file, ea);
+                    using(Stream s = File.Create(file))
+                        aa.Client.Write(target, s, wa);
                 });
 
             if (File.Exists(file))
