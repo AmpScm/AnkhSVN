@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -161,9 +161,9 @@
     <Content Include="AnkhContextTest.cs">
       <SubType>Code</SubType>
     </Content>
-    <Compile Include="BlameResultTest.cs">
+    <None Include="BlameResultTest.cs">
       <SubType>Code</SubType>
-    </Compile>
+    </None>
     <Content Include="Commands\BlameCommandTest.cs">
       <SubType>Code</SubType>
     </Content>
