@@ -160,4 +160,10 @@
   <data name="504" xml:space="preserve">
     <value>Source Control Explorers (AnkhSVN)</value>
   </data>
+  <data name="302" xml:space="preserve">
+    <value>AnkhSVN Diff Editor</value>
+  </data>
+  <data name="303" xml:space="preserve">
+    <value>AnkhSVN Annotation Editor</value>
+  </data>
 </root>
