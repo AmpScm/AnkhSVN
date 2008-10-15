@@ -8,9 +8,31 @@ using Microsoft.VisualStudio.Shell;
 using Ankh.Ids;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Package;
+using Ankh.UI.Blame;
+using Ankh.VS.Dialogs;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.VSPackage
 {
+    [ComVisible(true)]
+    class AnkhMiniDoc: IOleCommandTarget
+    {
+
+        #region IOleCommandTarget Members
+
+        public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+    }
+
     abstract class AnkhEditorFactory : AnkhService, IVsEditorFactory, IVsEditorFactory2
     {
         IOleServiceProvider _site;
@@ -29,7 +51,22 @@ namespace Ankh.VSPackage
 
         public int CreateEditorInstance(uint grfCreateDoc, string pszMkDocument, string pszPhysicalView, IVsHierarchy pvHier, uint itemid, IntPtr punkDocDataExisting, out IntPtr ppunkDocView, out IntPtr ppunkDocData, out string pbstrEditorCaption, out Guid pguidCmdUI, out int pgrfCDW)
         {
-            throw new NotImplementedException();
+            ppunkDocData = IntPtr.Zero;
+            ppunkDocView = IntPtr.Zero;
+            pbstrEditorCaption = "QWQ";
+            pguidCmdUI = new Guid("{00000000-0000-0000-e4e7-120000008400}");
+            pgrfCDW = 0;
+            // Validate inputs
+            if ((grfCreateDoc & (VSConstants.CEF_OPENFILE | VSConstants.CEF_SILENT)) == 0)
+            {
+                return VSConstants.E_INVALIDARG;
+            }
+
+            TstForm tst = new TstForm();
+            VSDocumentFormPane pane = new VSDocumentFormPane(Context, tst);
+            ppunkDocView = Marshal.GetIUnknownForObject(pane);
+            ppunkDocData = Marshal.GetIUnknownForObject(pane);
+            return VSConstants.S_OK;
         }
 
         public virtual int MapLogicalView(ref Guid rguidLogicalView, out string pbstrPhysicalView)
