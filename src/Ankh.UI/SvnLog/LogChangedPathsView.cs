@@ -67,8 +67,9 @@ namespace Ankh.UI.SvnLog
     {
         readonly ISvnLogItem _logItem;
         readonly SvnChangeItem _change;
+        readonly bool _isInSelection;
 
-        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change)
+        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, bool isInSelection)
             : base(view)
         {
             if(logItem == null)
@@ -77,6 +78,8 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("change");
             _logItem = logItem;
             _change = change;
+            _isInSelection = isInSelection;
+
             RefreshText();
             UpdateColors();
         }
@@ -95,17 +98,22 @@ namespace Ankh.UI.SvnLog
 
         void UpdateColors()
         {
-            switch (_change.Action)
+            if (!_isInSelection)
+                ForeColor = Color.Gray;
+            else
             {
-                case SvnChangeAction.Add:
-                    ForeColor = Color.FromArgb(100, 0, 100);
-                    break;
-                case SvnChangeAction.Delete:
-                    ForeColor = Color.DarkRed;
-                    break;
-                case SvnChangeAction.Modify:
-                    ForeColor = Color.DarkBlue;
-                    break;
+                switch (_change.Action)
+                {
+                    case SvnChangeAction.Add:
+                        ForeColor = Color.FromArgb(100, 0, 100);
+                        break;
+                    case SvnChangeAction.Delete:
+                        ForeColor = Color.DarkRed;
+                        break;
+                    case SvnChangeAction.Modify:
+                        ForeColor = Color.DarkBlue;
+                        break;
+                }
             }
         }
 
