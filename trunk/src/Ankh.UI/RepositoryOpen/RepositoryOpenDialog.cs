@@ -100,6 +100,7 @@ namespace Ankh.UI.RepositoryOpen
             }
 
             if (Config != null)
+            {
                 // Add last used url
                 using (RegistryKey rk = Config.OpenUserInstanceKey("Dialogs"))
                 {
@@ -115,6 +116,19 @@ namespace Ankh.UI.RepositoryOpen
                         }
                     }
                 }
+
+                foreach (string value in Config.GetRecentReposUrls())
+                {
+                    Uri uri;
+                    if (value != null && Uri.TryCreate(value, UriKind.Absolute, out uri))
+                    {
+                        if (!urlBox.Items.Contains(uri))
+                            urlBox.Items.Add(uri);
+                    }
+                }
+            }
+
+
 
             if (SolutionSettings != null)
                 foreach (Uri uri in SolutionSettings.GetRepositoryUris(true))
@@ -444,26 +458,18 @@ namespace Ankh.UI.RepositoryOpen
             RefreshBox(uri);
         }
 
-		void ShowAddUriDialog()
-		{
-			using (AddUriDialog dialog = new AddUriDialog())
-			{
-				IUIService uiService = _context.GetService<IUIService>();
-                if (DialogResult.OK != uiService.ShowDialog(dialog))
-                    return;
+        void ShowAddUriDialog()
+        {
+            IUIShell uiShell = _context.GetService<IUIShell>();
+            Uri dirUri = uiShell.ShowAddRepositoryRootDialog();
+            
+            AnkhAction action = delegate
+            {
+                CheckResult(dirUri, true);
+            };
 
-				Uri dirUri;
-				if (!Uri.TryCreate(dialog.UrlText, UriKind.Absolute, out dirUri))
-                    return;
-
-                AnkhAction action = delegate
-                {
-                    CheckResult(dirUri);
-                };
-
-                action.BeginInvoke(null, null);
-			}
-		}
+            action.BeginInvoke(null, null);
+        }
 
         private void toolStripSplitButton1_ButtonClick(object sender, EventArgs e)
         {

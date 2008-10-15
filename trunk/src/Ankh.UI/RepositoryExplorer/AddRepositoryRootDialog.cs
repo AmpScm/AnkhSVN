@@ -14,6 +14,7 @@ namespace Ankh.UI
     /// </summary>
     public partial class AddRepositoryRootDialog : System.Windows.Forms.Form
     {
+        readonly IAnkhServiceProvider _context;
         public AddRepositoryRootDialog()
         {
             //
@@ -25,6 +26,21 @@ namespace Ankh.UI
 
             this.ValidateAdd();
         }
+
+        public AddRepositoryRootDialog(IAnkhServiceProvider context)
+            :this()
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+
+            foreach (string url in _context.GetService<IAnkhConfigurationService>().GetRecentReposUrls())
+            {
+                urlTextBox.Items.Add(url);
+            }
+        }
+
    
         /// <summary>
         /// The URL entered in the text box.
@@ -69,6 +85,18 @@ namespace Ankh.UI
         private void ValidateAdd()
         {
             this.okButton.Enabled = Uri != null;
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            RegistryLifoList recentUrls = _context.GetService<IAnkhConfigurationService>().GetRecentReposUrls();
+
+            Uri unused;
+            if (!string.IsNullOrEmpty(urlTextBox.Text) && Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out unused))
+            {
+                if (!recentUrls.Contains(urlTextBox.Text))
+                    recentUrls.Add(urlTextBox.Text);
+            }
         }
     }
 }

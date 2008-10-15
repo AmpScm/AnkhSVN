@@ -215,10 +215,6 @@ namespace Ankh.Configuration
             return OpenHKLMCommonKey(subKey);
         }
 
-        #endregion
-
-        #region IAnkhConfigurationService Members
-
 
         /// <summary>
         /// Gets the recent log messages.
@@ -227,6 +223,15 @@ namespace Ankh.Configuration
         public RegistryLifoList GetRecentLogMessages()
         {
             return new RegistryLifoList(Context, "RecentLogMessages", 32);
+        }
+
+        /// <summary>
+        /// Gets the recent Repository Urls
+        /// </summary>
+        /// <returns></returns>
+        public RegistryLifoList GetRecentReposUrls()
+        {
+            return new RegistryLifoList(Context, "RecentRepositoryUrls", 32);
         }
 
         #endregion
