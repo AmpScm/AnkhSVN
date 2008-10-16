@@ -165,21 +165,21 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blame\BlameMarginControl.cs">
+    <Compile Include="Annotate\AnnotateMarginControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Blame\BlameSection.cs" />
-    <Compile Include="Blame\BlameToolWindowControl.cs">
+    <Compile Include="Annotate\AnnotateSection.cs" />
+    <Compile Include="Annotate\AnnotateToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Blame\BlameToolWindowControl.Designer.cs">
-      <DependentUpon>BlameToolWindowControl.cs</DependentUpon>
+    <Compile Include="Annotate\AnnotateToolWindowControl.Designer.cs">
+      <DependentUpon>AnnotateToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Blame\TstForm.cs">
+    <Compile Include="Annotate\AnnotateViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Blame\TstForm.Designer.cs">
-      <DependentUpon>TstForm.cs</DependentUpon>
+    <Compile Include="Annotate\AnnotateViewForm.Designer.cs">
+      <DependentUpon>AnnotateViewForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>Form</SubType>
@@ -779,11 +779,8 @@
     <None Include="Ankh.UI.wxs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Blame\BlameToolWindowControl.resx">
-      <DependentUpon>BlameToolWindowControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Blame\TstForm.resx">
-      <DependentUpon>TstForm.cs</DependentUpon>
+    <EmbeddedResource Include="Annotate\AnnotateToolWindowControl.resx">
+      <DependentUpon>AnnotateToolWindowControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>

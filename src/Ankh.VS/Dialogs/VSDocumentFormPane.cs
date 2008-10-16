@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.VS.Dialogs
 {
-    [ComVisible(true),CLSCompliant(true)]
+    [ComVisible(true), CLSCompliant(false)]
     public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget, IVsPersistDocData,
                                 IPersistFileFormat
     {
@@ -26,13 +26,11 @@ namespace Ankh.VS.Dialogs
             _form = form;
         }
 
-        Control ctrl;
         bool _created;
         public override IWin32Window Window
         {
             get
             {
-               
                 if (!_created)
                 {
                     _created = true;
@@ -172,6 +170,6 @@ namespace Ankh.VS.Dialogs
 
 
 
-   
+
     }
 }

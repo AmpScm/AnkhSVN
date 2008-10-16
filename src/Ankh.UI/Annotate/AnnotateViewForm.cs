@@ -6,11 +6,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Ankh.UI.Blame
+namespace Ankh.UI.Annotate
 {
-    public partial class TstForm : VSDocumentForm
+    public partial class AnnotateViewForm : VSDocumentForm
     {
-        public TstForm()
+        public AnnotateViewForm()
         {
             InitializeComponent();
         }
