@@ -63,8 +63,12 @@ namespace Ankh.Commands
             foreach (Ankh.Scc.ISvnRepositoryItem i in context.GetSelection<Ankh.Scc.ISvnRepositoryItem>())
             {
                 counter++;
-                if (counter > 1) { return null; } // multiple selection
-                if (i.IsRepositoryItem)
+                if (counter > 1) 
+                {
+                    return null; 
+                } // multiple selection
+
+                if (i.RepositoryRoot != null)
                 {
                     result = i;
                 }

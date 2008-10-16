@@ -111,5 +111,9 @@ namespace Ankh.Scc.UI
         string GetTempFile(SvnItem target, SvnRevision revision, bool withProgress);
         string GetTitle(SvnTarget target, SvnRevision revision);
         string GetTitle(SvnItem target, SvnRevision revision);
+
+        SvnUriTarget GetCopyOrigin(SvnItem item);
+
+
     }
 }

@@ -36,12 +36,46 @@ namespace Ankh.Commands
                 case AnkhCommand.Log:
                 case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
-                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                    int itemCount = 0;
+                    int needsRemoteCount = 0;
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (item.IsVersioned)
+                        if (!item.IsVersioned)
+                        {
+                            e.Enabled = false;
                             return;
+                        }
+
+                        if (item.IsReplaced || item.IsAdded)
+                        {
+                            if (item.HasCopyableHistory)
+                                needsRemoteCount++;
+                            else
+                            {
+                                e.Enabled = false;
+                                return;
+                            }
+                        }
+                        itemCount++;
                     }
-                    break;
+                    if (itemCount == 0 || (needsRemoteCount != 0 && itemCount > 1))
+                    {
+                        e.Enabled = false;
+                        return;
+                    }
+                    if (needsRemoteCount >= 1)
+                    {
+                        // One remote log
+                        Debug.Assert(needsRemoteCount == 1);
+                        return;
+                    }
+                    else
+                    {
+                        // Local log only
+                        return;
+                    }
+                    
+                    //break;
                 case AnkhCommand.ReposExplorerLog:
                     int i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
@@ -88,12 +122,37 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.Log:
-                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
+                    SvnUriTarget remoteUri = null;
+                    IAnkhDiffHandler diffHandler = e.GetService<IAnkhDiffHandler>();
+                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
-                        if (i.IsVersioned)
+                        Debug.Assert(i.IsVersioned);
+
+                        if (i.IsReplaced || i.IsAdded)
+                        {
+                            Debug.Assert(i.HasCopyableHistory);
+
+                            remoteUri = diffHandler.GetCopyOrigin(i);
                             selected.Add(i);
+                            break;
+                        }   
+
+                        selected.Add(i);
                     }
-                    LocalLog(e.Context, selected);
+                    if (remoteUri != null)
+                    {
+                        Debug.Assert(selected.Count == 1);
+
+                        Uri rootUri;
+                        using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
+                        {
+                            rootUri = client.GetRepositoryRoot(remoteUri.Uri);
+                        }
+                        
+                        RemoteLog(e.Context, new RepositoryItem(remoteUri, selected[0], rootUri));
+                    }
+                    else
+                        LocalLog(e.Context, selected);
                     break;
                 case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
@@ -185,6 +244,56 @@ namespace Ankh.Commands
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if (logToolControl != null) 
                 logToolControl.StartRemoteLog(context, target);
+        }
+
+
+        sealed class RepositoryItem : ISvnRepositoryItem
+        {
+            readonly SvnUriTarget _target;
+            readonly SvnItem _item;
+            readonly Uri _repositoryRoot;
+
+            public RepositoryItem(SvnUriTarget target, SvnItem item, Uri repositoryRoot)
+            {
+                _target = target;
+                _item = item;
+                _repositoryRoot = repositoryRoot;
+            }
+
+            public Uri Uri
+            {
+                get { return _target.Uri; }
+            }
+
+            public SvnNodeKind NodeKind
+            {
+                get { return _item.NodeKind; }
+            }
+
+            public SvnRevision Revision
+            {
+                get { return _target.Revision; }
+            }
+
+            public string Name
+            {
+                get { return _item.Name; }
+            }
+
+            public void RefreshItem(bool refreshParent)
+            {
+            }
+
+            [Obsolete]
+            public bool IsRepositoryItem
+            {
+                get { return true; }
+            }
+
+            public Uri RepositoryRoot
+            {
+                get { return _repositoryRoot; }
+            }
         }
     }
 }

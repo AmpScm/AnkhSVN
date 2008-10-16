@@ -17,7 +17,7 @@ namespace Ankh.Commands.RepositoryExplorer
         {
             foreach (ISvnRepositoryItem it in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
-                if (it.IsRepositoryItem)
+                if (it.RepositoryRoot != null)
                     return;
             }
 

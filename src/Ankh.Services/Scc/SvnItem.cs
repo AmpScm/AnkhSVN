@@ -526,6 +526,10 @@ namespace Ankh
             get { return GetState(SvnItemState.IsDiskFolder) == SvnItemState.IsDiskFolder; }
         }
 
+
+        /// <summary>
+        /// Gets a boolean indicating wether a copy of this file has history
+        /// </summary>
         public bool HasCopyableHistory
         {
             get
@@ -533,7 +537,7 @@ namespace Ankh
                 if (!IsVersioned)
                     return false;
 
-                if (GetState(SvnItemState.Added) != 0)
+                if (GetState(SvnItemState.Added|SvnItemState.Replaced) != 0)
                     return GetState(SvnItemState.HasCopyOrigin) != 0;
                 else
                     return true;
@@ -624,6 +628,14 @@ namespace Ankh
         public bool ReadOnlyMustLock
         {
             get { return GetState(SvnItemState.MustLock) != 0; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsAdded
+        {
+            get { return GetState(SvnItemState.Added) != 0; }
         }
 
         /// <summary>

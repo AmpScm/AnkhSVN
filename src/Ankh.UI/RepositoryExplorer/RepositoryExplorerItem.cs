@@ -174,17 +174,10 @@ namespace Ankh.UI.RepositoryExplorer
         }
 
         [Browsable(false)]
+        [Obsolete]
         public bool IsRepositoryItem
         {
-            get
-            {
-                if (this._uri == null) { return false; }
-                if (this._tn != null)
-                {
-                    return this._tn.IsRepositoryPath;
-                }
-                return true;
-            }
+            get { return RepositoryRoot != null; }
         }
 
         public Uri RepositoryRoot

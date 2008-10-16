@@ -36,6 +36,9 @@ namespace Ankh.Scc
         /// </summary>
         bool IsRepositoryItem { get; }
 
+        /// <summary>
+        /// Gets the URI to the root of the repository, or null when the node is a dummy.
+        /// </summary>
         Uri RepositoryRoot { get; }
     }
 }
