@@ -166,4 +166,7 @@
   <data name="303" xml:space="preserve">
     <value>AnkhSVN Annotation Editor</value>
   </data>
+  <data name="304" xml:space="preserve">
+    <value>AnkhSVN Patch Editor</value>
+  </data>
 </root>

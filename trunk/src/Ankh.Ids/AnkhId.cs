@@ -64,6 +64,9 @@ namespace Ankh.Ids
         public const string LogMessageLanguageServiceId = "1DFE69CE-7F9B-4CC5-B09B-E5BDE95E9439";
         public const string LogMessageServiceName = "AnkhSVN Log Messages";
 
+        public const string UnifiedDiffLanguageServiceId = "9E5AB2DC-5A41-4D39-AB71-5DCA5908AA32";
+        public const string UnifiedDiffServiceName = "AnkhSVN Unified Diff";
+
         public const string ExtenderProviderName = "AnkhExtenderProvider";
 
         /// <summary>

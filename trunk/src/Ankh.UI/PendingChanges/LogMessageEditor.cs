@@ -24,6 +24,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
+using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -706,7 +707,7 @@ namespace Ankh.UI.PendingChanges
             
             if (registerLanguageService)
             {
-                Guid CLSID_LogMessageService = typeof(LogMessageLanguageService).GUID;
+                Guid CLSID_LogMessageService = new Guid(AnkhId.LogMessageLanguageServiceId);
 
                 ErrorHandler.ThrowOnFailure(
                     _textBuffer.SetLanguageServiceID(ref CLSID_LogMessageService));

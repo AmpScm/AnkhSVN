@@ -128,7 +128,7 @@
         <Visibility context="Ankh_SccProviderGuid"/>
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
-          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x20" />
+          <Button id="Cmd_UnifiedDiff" priority="0x20" name="UnifiedDiff" text="&amp;Unified Diff" defaultInvisible="true" />
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x30" />
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
@@ -186,7 +186,7 @@
 								text="&amp;Add..."
 								toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
-          <ButtonRef id="Cmd_DiffExternalLocalItem" priority="0x30" />
+          <ButtonRef  id="Cmd_UnifiedDiff" priority="0x30" />
           <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x40" defaultInvisible="true"
 								text="&amp;Switch Project..." allowParams="true"
 								toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
@@ -253,9 +253,7 @@
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
-          <Button id="Cmd_DiffExternalLocalItem" name="DiffExternalLocalItem" priority="0x30"
-              text="Diff E&amp;xternal"
-              toolTip="Diff against local text base using external tool." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+          <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x40" defaultInvisible="true"
 								text="&amp;Switch..." allowParams="true"
 								toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>

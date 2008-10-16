@@ -24,17 +24,10 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemComparePrevious)]
     [Command(AnkhCommand.ItemCompareSpecific)]
     [Command(AnkhCommand.ItemShowChanges)]
-    [Command(AnkhCommand.DiffExternalLocalItem)]
     public sealed class DiffLocalItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            if (e.Command == AnkhCommand.DiffExternalLocalItem)
-            {
-                e.Enabled = false; // Unsupported for now
-                return;
-            }
-
             bool noConflictDiff = e.Command == AnkhCommand.ItemShowChanges;
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -85,8 +78,6 @@ namespace Ankh.Commands
             SvnRevisionRange revRange = null;
             switch (e.Command)
             {
-                case AnkhCommand.DiffExternalLocalItem:
-                    goto case AnkhCommand.DiffLocalItem;
                 case AnkhCommand.DiffLocalItem:
                     break; // revRange null -> show selector
                 case AnkhCommand.ItemCompareBase:

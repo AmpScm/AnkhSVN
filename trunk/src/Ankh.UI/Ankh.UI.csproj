@@ -103,14 +103,9 @@
   <PropertyGroup>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
-    <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService</VSLangAssembly>
-    <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
-    <LogMessageFile Condition="'$(VsSdkVersion)' == '8.0'">PendingChanges\LogMessageLanguageService.VS2005.cs</LogMessageFile>
-    <LogMessageFile Condition="'$(VsSdkVersion)' == '9.0'">PendingChanges\LogMessageLanguageService.VS2008.cs</LogMessageFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
-    <Reference Include="$(VSLangAssembly)" />
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
@@ -542,10 +537,6 @@
     </Compile>
     <Compile Include="PendingChanges\PendingIssuesPage.Designer.cs">
       <DependentUpon>PendingIssuesPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PendingChanges\LogMessageLanguageService.cs" />
-    <Compile Include="$(LogMessageFile)">
-      <DependentUpon>LogMessageLanguageService.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesPage.cs">
       <SubType>UserControl</SubType>

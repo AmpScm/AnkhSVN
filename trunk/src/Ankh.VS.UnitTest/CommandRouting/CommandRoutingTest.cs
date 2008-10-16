@@ -214,17 +214,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [TestMethod]
-        public void DiffExternalLocalItem()
-        {
-            mocks = new MockRepository();
-
-            using (mocks.Playback())
-            {
-                CommandTester.TestExecution(AnkhCommand.DiffExternalLocalItem);
-            }
-        }
-
-        [TestMethod]
         public void DiffLocalItem()
         {
             mocks = new MockRepository();
