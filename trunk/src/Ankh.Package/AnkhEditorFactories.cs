@@ -11,6 +11,8 @@ using Microsoft.VisualStudio.Package;
 using Ankh.UI.Blame;
 using Ankh.VS.Dialogs;
 using Microsoft.VisualStudio.OLE.Interop;
+using Ankh.UI.Annotate;
+using Ankh.UI;
 
 namespace Ankh.VSPackage
 {
@@ -62,12 +64,15 @@ namespace Ankh.VSPackage
                 return VSConstants.E_INVALIDARG;
             }
 
-            TstForm tst = new TstForm();
-            VSDocumentFormPane pane = new VSDocumentFormPane(Context, tst);
+            VSDocumentForm form = CreateForm();
+
+            VSDocumentFormPane pane = new VSDocumentFormPane(Context, form);
             ppunkDocView = Marshal.GetIUnknownForObject(pane);
             ppunkDocData = Marshal.GetIUnknownForObject(pane);
             return VSConstants.S_OK;
         }
+
+        protected abstract VSDocumentForm CreateForm();
 
         public virtual int MapLogicalView(ref Guid rguidLogicalView, out string pbstrPhysicalView)
         {
@@ -129,6 +134,11 @@ namespace Ankh.VSPackage
 
             return VSConstants.E_NOTIMPL;
         }
+
+        protected override VSDocumentForm CreateForm()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Guid(AnkhId.AnnotateEditorId), ComVisible(true)]
@@ -151,6 +161,11 @@ namespace Ankh.VSPackage
             }
 
             return VSConstants.E_NOTIMPL;
+        }
+
+        protected override VSDocumentForm CreateForm()
+        {
+            return new AnnotateViewForm();
         }
     }
 }
