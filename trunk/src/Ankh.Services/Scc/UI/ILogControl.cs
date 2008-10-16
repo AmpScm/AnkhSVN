@@ -15,5 +15,8 @@ namespace Ankh.Scc.UI
 
         bool HasWorkingCopyItems { get; }
         SvnItem[] WorkingCopyItems { get; }
+
+        bool HasRemoteItems { get; }
+        ISvnRepositoryItem[] RemoteItems { get; }
     }
 }

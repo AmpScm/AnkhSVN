@@ -129,7 +129,7 @@ namespace Ankh.Commands
                     }
 
                     if (item != null)
-                        RemoteLog(e.Context, item.Uri);
+                        RemoteLog(e.Context, item);
                     break;
                 case AnkhCommand.BlameShowLog:
 
@@ -177,14 +177,14 @@ namespace Ankh.Commands
                 logToolControl.StartLocalLog(context, targets, start, end);
         }
 
-        static void RemoteLog(IAnkhServiceProvider context, Uri target)
+        static void RemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem target)
         {
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if (logToolControl != null) 
-                logToolControl.StartRemoteLog(context, target); // TODO: revision support
+                logToolControl.StartRemoteLog(context, target);
         }
     }
 }

@@ -10,12 +10,14 @@ using System.Diagnostics;
 using Ankh.Scc.UI;
 using Ankh.Ids;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
     public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
         string _originalText;
+        ISvnRepositoryItem _remoteTarget;
         public LogToolWindowControl()
         {
             InitializeComponent();
@@ -46,6 +48,11 @@ namespace Ankh.UI.SvnLog
             get { return _localItems != null && _localItems.Length > 0; }
         }
 
+        public bool HasRemoteItems
+        {
+            get { return _remoteTarget != null; }
+        }
+
         public SvnItem[] WorkingCopyItems
         {
             get
@@ -54,6 +61,16 @@ namespace Ankh.UI.SvnLog
                     return (SvnItem[])_localItems.Clone();
                 else
                     return new SvnItem[0];
+            }
+        }
+
+        public ISvnRepositoryItem[] RemoteItems
+        {
+            get
+            {
+                if (_remoteTarget != null)
+                    return new ISvnRepositoryItem[] { _remoteTarget };
+                return new ISvnRepositoryItem[] { };
             }
         }
 
@@ -82,6 +99,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("targets");
 
             _localItems = new SvnItem[targets.Count];
+            _remoteTarget = null;
             targets.CopyTo(_localItems, 0);
 
             SetTitle(targets);
@@ -94,6 +112,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             _localItems = new SvnItem[] { target };
+            _remoteTarget = null;
             SetTitle(_localItems);
             logControl.StartMergesEligible(context, target.FullPath, source);
         }
@@ -104,13 +123,15 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             _localItems = new SvnItem[] { target };
+            _remoteTarget = null;
             SetTitle(_localItems);
             logControl.StartMergesMerged(context, target.FullPath, source);
         }
 
-        public void StartRemoteLog(IAnkhServiceProvider context, Uri remoteTarget)
+        public void StartRemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem remoteTarget)
         {
             _localItems = null;
+            _remoteTarget = remoteTarget;
             logControl.StartRemoteLog(context, remoteTarget);
         }
 

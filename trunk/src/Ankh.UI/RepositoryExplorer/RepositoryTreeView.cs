@@ -71,7 +71,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RepositoryTreeNode rootNode;
 
-            rootNode = new RepositoryTreeNode(null, false);
+            rootNode = new RepositoryTreeNode(null, null, false);
             rootNode.Text = RepositoryStrings.RootName;
 
             if (IconMapper != null)
@@ -143,7 +143,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             if (serverNode == null)
             {
-                serverNode = new RepositoryTreeNode(serverUri, false);
+                serverNode = new RepositoryTreeNode(serverUri, null, false);
                 serverNode.Text = serverUri.ToString();
 
                 if (IconMapper != null)
@@ -525,7 +525,7 @@ namespace Ankh.UI.RepositoryExplorer
                     return reposRoot;
             }
 
-            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, true);
+            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, null, true);
             rtn.Text = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
             if (IconMapper != null)
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
@@ -555,11 +555,13 @@ namespace Ankh.UI.RepositoryExplorer
             else
                 folderUri = uri;
 
-            RepositoryTreeNode s = EnsureFolderUri(folderUri);
+            RepositoryTreeNode s = EnsureFolderUri(folderUri, item.RepositoryRoot);
 
             if (s != null)
             {
                 s.AddItem(item);
+
+                s.Revision = item.Entry.Revision;
 
                 if (s.ExpandAfterLoad)
                 {
@@ -583,7 +585,7 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        private RepositoryTreeNode EnsureFolderUri(Uri uri)
+        private RepositoryTreeNode EnsureFolderUri(Uri uri, Uri repositoryUri)
         {
             Uri nUri = SvnTools.GetNormalizedUri(uri);
             RepositoryTreeNode tn;
@@ -595,11 +597,11 @@ namespace Ankh.UI.RepositoryExplorer
                 if (parentUri == uri)
                     return null;
 
-                RepositoryTreeNode parent = EnsureFolderUri(parentUri);
+                RepositoryTreeNode parent = EnsureFolderUri(parentUri, repositoryUri);
 
                 if (parent != null)
                 {
-                    tn = new RepositoryTreeNode(uri, true);
+                    tn = new RepositoryTreeNode(uri, repositoryUri, true);
                     string name = uri.ToString();
                     int nS = name.LastIndexOf('/', name.Length - 2);
 

@@ -131,7 +131,15 @@ namespace Ankh.UI.RepositoryExplorer
 
         SharpSvn.SvnRevision ISvnRepositoryItem.Revision
         {
-            get { return null; }
+            get 
+            {
+                if (ListViewItem != null)
+                    return ListViewItem.Info.Entry.Revision;
+                if (TreeNode != null)
+                    return TreeNode.Revision;
+
+                return null;
+            }
         }
 
         public void RefreshItem(bool refreshParent)
@@ -176,6 +184,19 @@ namespace Ankh.UI.RepositoryExplorer
                     return this._tn.IsRepositoryPath;
                 }
                 return true;
+            }
+        }
+
+        public Uri RepositoryRoot
+        {
+            get
+            {
+                if (TreeNode != null)
+                    return TreeNode.RepositoryRoot;
+                if (ListViewItem != null)
+                    return ListViewItem.Info.RepositoryRoot;
+
+                return null;
             }
         }
         #endregion
