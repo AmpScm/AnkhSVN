@@ -13,5 +13,6 @@ namespace Silverlight
     public class Class1
     {
 
+
     }
 }
