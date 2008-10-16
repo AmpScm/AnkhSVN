@@ -64,6 +64,7 @@ namespace Ankh.Ids
         CopyReposExplorerUrl,
         CreatePatch,
         ItemShowChanges,
+        [Obsolete("", true)]
         DiffExternalLocalItem,
         DiffLocalItem,
         Export,
@@ -225,9 +226,9 @@ namespace Ankh.Ids
         ItemEditProperties,
         ReposExplorerLog,
         LogAnnotateRevision,
-        
-        [Obsolete("Unused command", true)]
-        RevertProjectToRevision,
+
+
+        UnifiedDiff,
         [Obsolete("Unused command", true)]
         RevertSolutionToRevision,
 

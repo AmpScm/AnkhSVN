@@ -17,34 +17,15 @@ namespace Ankh.UI.PendingChanges
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
     [GlobalService(typeof(LogMessageLanguageService), PublicService = true)]
-    public partial class LogMessageLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
+    public partial class LogMessageLanguageService : AnkhLanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
-        readonly IAnkhServiceProvider _context;
 
         public LogMessageLanguageService(IAnkhServiceProvider context)
+            :base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
         }
 
-        public void OnPreInitialize()
-        {
-            // Initialize the language service api
-            SetSite(GetService<IServiceContainer>());
-        }
-
-        public void OnInitialize()
-        {
-
-        }
-
-        internal IAnkhServiceProvider Context
-        {
-            get { return _context; }
-        }
 
         public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
         {
@@ -238,20 +219,6 @@ namespace Ankh.UI.PendingChanges
 
             #endregion
         }
-
-        #region IAnkhServiceProvider Members
-
-        public T GetService<T>() where T : class
-        {
-            return Context.GetService<T>();
-        }
-
-        public T GetService<T>(Type serviceType) where T : class
-        {
-            return Context.GetService<T>(serviceType);
-        }
-
-        #endregion
     }
 
     class LogmessageSource : Source
@@ -278,7 +245,7 @@ namespace Ankh.UI.PendingChanges
         }
     }
 
-    partial class LogMessageViewFilter : ViewFilter
+    partial class LogMessageViewFilter : AnkhViewFilter
     {
         readonly LogMessageLanguageService _service;
         public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
@@ -290,7 +257,7 @@ namespace Ankh.UI.PendingChanges
             _service = service;
         }
 
-        public void PrepareLogMessageContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
+        public override void PrepareContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
         {
             if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
             {

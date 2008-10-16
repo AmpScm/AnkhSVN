@@ -19,7 +19,7 @@ namespace Ankh.VS
         /// <summary>
         /// Gets a temporary file with the specified extension
         /// </summary>
-        /// <param name="extension">The extension.</param>
+        /// <param name="extension">The extension (with or without a leading period). </param>
         /// <returns></returns>
         /// <remarks>The file is created as a 0 byte unique file before this function returns
         /// and will be removed after AnkhSVN exits</remarks>
