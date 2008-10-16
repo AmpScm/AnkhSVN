@@ -20,12 +20,14 @@ namespace Ankh.UI.SvnLog.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-
-            if ((logWindow == null) || !logWindow.HasWorkingCopyItems)
+            
+            if ((logWindow == null) || (!logWindow.HasWorkingCopyItems && !logWindow.HasRemoteItems))
             {
                 e.Enabled = false;
                 return;
             }
+            bool workingCopy = logWindow.HasWorkingCopyItems;
+            bool remote = logWindow.HasRemoteItems;
 
             ISvnLogChangedPathItem change = null;
             foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
@@ -60,9 +62,17 @@ namespace Ankh.UI.SvnLog.Commands
             {
                 first = i;
             }
-            if (first == null || first.IsDirectory)
+
+
+            if (workingCopy && (first == null || first.IsDirectory))
             {
                 e.Enabled = false;
+                return;
+            }
+
+            if (remote)
+            {
+                e.Enabled = logWindow.RemoteItems[0].NodeKind == SvnNodeKind.File;
                 return;
             }
 
@@ -75,6 +85,55 @@ namespace Ankh.UI.SvnLog.Commands
         }
 
         public void OnExecute(CommandEventArgs e)
+        {
+            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            if (logWindow.HasWorkingCopyItems)
+                ExecuteWorkingCopy(e, logWindow);
+            else if (logWindow.HasRemoteItems)
+                ExecuteRemote(e, logWindow);
+        }
+
+        static void ExecuteRemote(CommandEventArgs e, ILogControl logWindow)
+        {
+            long min = long.MaxValue;
+            long max = long.MinValue;
+
+            bool touched = false;
+
+            HybridCollection<string> changedPaths = new HybridCollection<string>();
+            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+            {
+                min = Math.Min(min, item.Revision);
+                max = Math.Max(max, item.Revision);
+                touched = true;
+            }
+            if (touched)
+            {
+                ISvnRepositoryItem reposItem = logWindow.RemoteItems[0];
+
+                ExecuteDiff(e, new SvnRevisionRange(min - 1, max), new SvnUriTarget(reposItem.Uri, reposItem.Revision));   
+            }
+            else
+            {
+                ISvnLogChangedPathItem change = null;
+                foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+                {
+                    change = c;
+                    touched = true;
+                    break;
+                }
+                if (change != null)
+                {
+                    ISvnRepositoryItem reposItem = logWindow.RemoteItems[0];
+                    Uri fileUri = new Uri(reposItem.RepositoryRoot, SvnTools.PathToRelativeUri(change.Path.TrimStart('/'))); 
+
+                    ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), new SvnUriTarget(fileUri, reposItem.Revision));
+                    return;
+                }
+            }
+        }
+
+        static void ExecuteWorkingCopy(CommandEventArgs e, ILogControl logWindow)
         {
             long min = long.MaxValue;
             long max = long.MinValue;
@@ -115,7 +174,6 @@ namespace Ankh.UI.SvnLog.Commands
             if (min == max)
                 min--;
 
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
 
             IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, changedPaths);
             
@@ -134,7 +192,7 @@ namespace Ankh.UI.SvnLog.Commands
             ExecuteDiff(e, range, diffTarget);
         }
 
-        void ExecuteChangedPaths(CommandEventArgs e, ISvnLogChangedPathItem change)
+        static void ExecuteChangedPaths(CommandEventArgs e, ISvnLogChangedPathItem change)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
 
@@ -155,7 +213,7 @@ namespace Ankh.UI.SvnLog.Commands
             ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), target);
         }
 
-        void ExecuteDiff(CommandEventArgs e, SvnRevisionRange range, SvnTarget diffTarget)
+        static void ExecuteDiff(CommandEventArgs e, SvnRevisionRange range, SvnTarget diffTarget)
         {
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             AnkhDiffArgs da = new AnkhDiffArgs();

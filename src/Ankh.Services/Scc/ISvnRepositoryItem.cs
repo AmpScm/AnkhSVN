@@ -35,5 +35,7 @@ namespace Ankh.Scc
         /// Gets whether this item's URI points to an actual remote repository item.
         /// </summary>
         bool IsRepositoryItem { get; }
+
+        Uri RepositoryRoot { get; }
     }
 }

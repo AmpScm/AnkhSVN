@@ -94,6 +94,21 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Start(context, LogMode.Remote);
         }
 
+        public void StartRemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem remoteTarget)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            if (remoteTarget == null)
+                throw new ArgumentNullException("remoteTarget");
+
+            logRevisionControl1.RemoteTarget = remoteTarget.Uri;
+
+            logRevisionControl1.Reset();
+            logChangedPaths1.Reset();
+            logMessageView1.Reset();
+            logRevisionControl1.Start(context, LogMode.Remote);
+        }
+
         public void StartMergesEligible(IAnkhServiceProvider context, string target, Uri source)
         {
             if (context == null)

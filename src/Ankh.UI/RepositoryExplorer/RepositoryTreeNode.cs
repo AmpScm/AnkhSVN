@@ -19,15 +19,20 @@ namespace Ankh.UI.RepositoryExplorer
     {
         readonly Uri _uri;
         readonly Uri _normalizedUri;
+        readonly Uri _repositoryUri;
+        SvnRevision _revision;
+
         RepositoryTreeNode _dummy;
         ListItemCollection _items;
         bool _loaded;
         bool _expandAfterLoad;
         bool _inRepository;
 
-        public RepositoryTreeNode(Uri uri, bool inRepository)
+        public RepositoryTreeNode(Uri uri, Uri repositoryUri, bool inRepository)
         {
             _uri = uri;
+            _repositoryUri = repositoryUri;
+
             if (uri != null)
                 _normalizedUri = SvnTools.GetNormalizedUri(uri);
             _inRepository = inRepository;
@@ -52,6 +57,17 @@ namespace Ankh.UI.RepositoryExplorer
         public bool IsRepositoryPath
         {
             get { return _inRepository; }
+        }
+
+        public Uri RepositoryRoot
+        {
+            get { return _repositoryUri; }
+        }
+
+        public SvnRevision Revision
+        {
+            get { return _revision; }
+            internal set { _revision = value; }
         }
 
         public new void Expand()
@@ -80,7 +96,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             if (Nodes.Count == 0 && _dummy == null)
             {
-                _dummy = new RepositoryTreeNode(RawUri, false);
+                _dummy = new RepositoryTreeNode(RawUri, null, false);
                 _dummy.Name = _dummy.Text = "<dummy>";
                 Nodes.Add(_dummy);
             }
