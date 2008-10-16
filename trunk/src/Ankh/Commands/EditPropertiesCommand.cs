@@ -216,7 +216,8 @@ namespace Ankh.Commands
             } // using
 
             // TODO: this can be removed when switching to Subversion 1.6
-            e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
+            firstVersioned.MarkDirty();
+            e.GetService<IFileStatusMonitor>().ScheduleMonitor(firstVersioned.FullPath);
         } // OnExecute
     }
 }
