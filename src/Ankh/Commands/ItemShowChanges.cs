@@ -39,6 +39,11 @@ namespace Ankh.Commands
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
+                if (item.IsDirectory)
+                {
+                    e.Enabled = false;
+                    return;
+                }
                 if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
                 {
                     if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
