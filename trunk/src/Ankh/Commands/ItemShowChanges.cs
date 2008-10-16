@@ -151,7 +151,7 @@ namespace Ankh.Commands
                 if (item.Status.IsCopied && !item.IsReplaced && (!revRange.StartRevision.RequiresWorkingCopy || revRange.StartRevision == SvnRevision.Base))
                 {
                     // The file is copied, compare it with is origin
-                    SvnUriTarget copiedFrom = GetCopyOrigin(e.Context, item);
+                    SvnUriTarget copiedFrom = diff.GetCopyOrigin(item);
 
                     if (copiedFrom != null)
                     {
@@ -183,26 +183,6 @@ namespace Ankh.Commands
             }
         }
 
-        private static SvnUriTarget GetCopyOrigin(IAnkhServiceProvider e, SvnItem item)
-        {
-            SvnUriTarget copiedFrom = null;
-            using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
-            {
-                SvnInfoArgs ia = new SvnInfoArgs();
-                ia.ThrowOnError = false;
-                ia.Depth = SvnDepth.Empty;
-
-
-                client.Info(item.FullPath, ia,
-                    delegate(object sender, SvnInfoEventArgs ee)
-                    {
-                        if (ee.CopyFromUri != null)
-                        {
-                            copiedFrom = new SvnUriTarget(ee.CopyFromUri, ee.CopyFromRevision);
-                        }
-                    });
-            }
-            return copiedFrom;
-        }
+        
     }
 }

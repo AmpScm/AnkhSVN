@@ -169,6 +169,28 @@ namespace Ankh.Services
             }
         }
 
+        public SvnUriTarget GetCopyOrigin(SvnItem item)
+        {
+            SvnUriTarget copiedFrom = null;
+            using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.ThrowOnError = false;
+                ia.Depth = SvnDepth.Empty;
+
+
+                client.Info(item.FullPath, ia,
+                    delegate(object sender, SvnInfoEventArgs ee)
+                    {
+                        if (ee.CopyFromUri != null)
+                        {
+                            copiedFrom = new SvnUriTarget(ee.CopyFromUri, ee.CopyFromRevision);
+                        }
+                    });
+            }
+            return copiedFrom;
+        }
+
         sealed class DiffToolMonitor : AnkhService, IVsFileChangeEvents
         {
             uint _cookie;
