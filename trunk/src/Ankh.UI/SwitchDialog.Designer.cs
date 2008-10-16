@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.switchBox = new System.Windows.Forms.GroupBox();
             this.pathLabel = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
@@ -41,9 +42,11 @@
             this.browseVersion = new System.Windows.Forms.Button();
             this.versionBox = new System.Windows.Forms.ComboBox();
             this.versionLabel = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.switchBox.SuspendLayout();
             this.toBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // switchBox
@@ -114,8 +117,9 @@
             this.toUrlBox.FormattingEnabled = true;
             this.toUrlBox.Location = new System.Drawing.Point(62, 19);
             this.toUrlBox.Name = "toUrlBox";
-            this.toUrlBox.Size = new System.Drawing.Size(406, 21);
+            this.toUrlBox.Size = new System.Drawing.Size(391, 21);
             this.toUrlBox.TabIndex = 1;
+            this.toUrlBox.Validating += new System.ComponentModel.CancelEventHandler(this.toUrlBox_Validating);
             // 
             // urlLabel
             // 
@@ -129,8 +133,9 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.CausesValidation = false;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(405, 190);
+            this.cancelButton.Location = new System.Drawing.Point(457, 190);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
@@ -141,7 +146,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(324, 190);
+            this.okButton.Location = new System.Drawing.Point(376, 190);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 2;
@@ -180,7 +185,7 @@
             this.versionBox.FormattingEnabled = true;
             this.versionBox.Location = new System.Drawing.Point(62, 19);
             this.versionBox.Name = "versionBox";
-            this.versionBox.Size = new System.Drawing.Size(406, 21);
+            this.versionBox.Size = new System.Drawing.Size(391, 21);
             this.versionBox.TabIndex = 1;
             // 
             // versionLabel
@@ -191,6 +196,10 @@
             this.versionLabel.Size = new System.Drawing.Size(45, 13);
             this.versionLabel.TabIndex = 0;
             this.versionLabel.Text = "&Version:";
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // SwitchDialog
             // 
@@ -212,6 +221,7 @@
             this.toBox.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -231,5 +241,6 @@
         private System.Windows.Forms.Button browseVersion;
         private System.Windows.Forms.ComboBox versionBox;
         private System.Windows.Forms.Label versionLabel;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

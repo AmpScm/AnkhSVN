@@ -61,5 +61,17 @@ namespace Ankh.UI
                     toUrlBox.Text = value.AbsoluteUri;
             }
         }
+
+        private void toUrlBox_Validating(object sender, CancelEventArgs e)
+        {
+            bool invalid = SwitchToUri == null;
+            e.Cancel = invalid;
+            if (invalid)
+                errorProvider1.SetError(toUrlBox, @"Enter a valid url (like scheme://domain.tld/repos/svn/path), 
+where scheme is http://, file:///, svn://, svn+ssh://
+or use the browse button.");
+            else
+                errorProvider1.SetError(toUrlBox, null);
+        }
     }
 }
