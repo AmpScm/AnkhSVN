@@ -469,9 +469,6 @@
     <Compile Include="CheckoutDialog.Designer.cs">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiffHtmlModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ErrorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
