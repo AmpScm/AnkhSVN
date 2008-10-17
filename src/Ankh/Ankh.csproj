@@ -221,9 +221,6 @@
     <Compile Include="Commands\RepositoryExplorer\CopyReposExplorerUrl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\CreatePatchCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\ItemShowChanges.cs">
       <SubType>Code</SubType>
     </Compile>

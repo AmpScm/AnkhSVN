@@ -8,62 +8,105 @@ using System.IO;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
+using Ankh.Scc;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.UnifiedDiff)]
-    class ItemUnifiedDiffCommand : LocalDiffCommandBase
+    [Command(AnkhCommand.CreatePatch)]
+    class ItemUnifiedDiffCommand : CommandBase
     {
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
-            List<string> selectedFiles = new List<string>();
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            PathSelectorResult result = ShowDialog(e);
+            if (!result.Succeeded)
+                return;
+
+            SvnRevisionRange revRange = new SvnRevisionRange(result.RevisionStart, result.RevisionEnd);
+
+            IAnkhTempFileManager tempfiles = e.GetService<IAnkhTempFileManager>();
+            string tempFile = tempfiles.GetTempFile(".patch");
+
+            IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+            string slndir = ss.ProjectRoot;
+            string slndirP = slndir + "\\";
+
+            SvnDiffArgs args = new SvnDiffArgs();
+            args.IgnoreAncestry = true;
+            args.NoDeleted = false;
+            args.Depth = result.Depth;
+
+            using (MemoryStream stream = new MemoryStream())
             {
-                if (i.IsModified)
-                    selectedFiles.Add(i.FullPath);
-            }
+                e.Context.GetService<IProgressRunner>().Run("Diffing",
+                    delegate(object sender, ProgressWorkerArgs ee)
+                    {
+                        foreach (SvnItem item in result.Selection)
+                        {
+                            SvnWorkingCopy wc;
+                            if (!string.IsNullOrEmpty(slndir) &&
+                                item.FullPath.StartsWith(slndirP, StringComparison.OrdinalIgnoreCase))
+                                args.RelativeToPath = slndir;
+                            else if ((wc = item.WorkingCopy) != null)
+                                args.RelativeToPath = wc.FullPath;
+                            else
+                                args.RelativeToPath = null;
 
-            SvnRevisionRange revRange = null;
-            //bool forceExternal = false;
-            switch (e.Command)
+                            ee.Client.Diff(item.FullPath, revRange, args, stream);
+                        }
+
+                        stream.Flush();
+                        stream.Position = 0;
+                    });
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    switch (e.Command)
+                    {
+                        case AnkhCommand.UnifiedDiff:
+                            File.WriteAllText(tempFile, sr.ReadToEnd(), Encoding.UTF8);
+                            VsShellUtilities.OpenDocument(e.Context, tempFile);
+                            break;
+                        case AnkhCommand.CreatePatch:
+                            using (SaveFileDialog dlg = new SaveFileDialog())
+                            {
+                                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
+                                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+                                dlg.AddExtension = true;
+
+                                if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
+                                {
+                                    File.WriteAllText(dlg.FileName, sr.ReadToEnd(), Encoding.UTF8);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+        PathSelectorResult ShowDialog(CommandEventArgs e)
+        {
+            PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", e.Selection.GetSelectedSvnItems(true));
+            IUIShell uiShell = e.GetService<IUIShell>();
+            info.VisibleFilter += delegate { return true; };
+            info.CheckedFilter += delegate(SvnItem item) { return item.IsFile && (item.IsModified || item.IsDocumentDirty); };
+
+            info.RevisionStart = SvnRevision.Base;
+            info.RevisionEnd = SvnRevision.Working;
+
+            // should we show the path selector?
+            if (!CommandBase.Shift)
             {
-                case AnkhCommand.DiffLocalItem:
-                case AnkhCommand.ItemCompareBase:
-                case AnkhCommand.ItemShowChanges:
-                    revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
-                    break;
-                case AnkhCommand.ItemCompareCommitted:
-                    revRange = new SvnRevisionRange(SvnRevision.Committed, SvnRevision.Working);
-                    break;
-                case AnkhCommand.ItemCompareHead:
-                    revRange = new SvnRevisionRange(SvnRevision.Head, SvnRevision.Working);
-                    break;
-                case AnkhCommand.ItemComparePrevious:
-                    revRange = new SvnRevisionRange(SvnRevision.Previous, SvnRevision.Working);
-                    break;
+                return uiShell.ShowPathSelector(info);
             }
-            string diff = this.GetDiff(e.Context, e.Selection, revRange, e.Command == AnkhCommand.UnifiedDiff);
-            if (diff != null)
-            {
-                //// convert it to HTML and store in a temp file
-                //DiffHtmlModel model = new DiffHtmlModel(diff);
+            else
+                return info.DefaultResult;
 
-                string patchFile = e.GetService<IAnkhTempFileManager>().GetTempFile(".patch");
-                TempFileCollection.AddFile(patchFile, false);
-                using (StreamWriter w = new StreamWriter(patchFile, false, System.Text.Encoding.Default))
-                    w.Write(diff);
 
-                VsShellUtilities.OpenDocument(e.Context, patchFile);
-
-                //IAnkhWebBrowser browser = e.Context.GetService<IAnkhWebBrowser>();
-                //BrowserArgs args = new BrowserArgs();
-                //args.CreateFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
-                //    __VSCREATEWEBBROWSER.VSCWB_NoHistory |
-                //    __VSCREATEWEBBROWSER.VSCWB_StartCustom |
-                //    __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
-                //args.BaseCaption = selectedFiles.Count == 1 ? Path.GetFileName(selectedFiles[0]) : "Subversion";
-                //browser.Navigate(new Uri("file:///" + htmlFile), args);
-            }
         }
     }
 }

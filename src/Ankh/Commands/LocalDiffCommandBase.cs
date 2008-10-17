@@ -33,21 +33,19 @@ namespace Ankh.Commands
             return GetDiff(
                 context, 
                 selection, 
-                null, 
-                false);
+                null);
         }
         /// <summary>
         /// Generates the diff from the current selection.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool unified)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions)
         {
             return GetDiff(
                 context, 
                 selection, 
                 revisions, 
-                unified, 
                 delegate(SvnItem item) 
                 { 
                     return item.IsVersioned; 
@@ -58,7 +56,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The diff as a string.</returns>
-        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, bool unified, Predicate<SvnItem> visibleFilter)
+        protected virtual string GetDiff(IAnkhServiceProvider context, ISelectionContext selection, SvnRevisionRange revisions, Predicate<SvnItem> visibleFilter)
         {
             if (selection == null)
                 throw new ArgumentNullException("selection");
@@ -106,47 +104,7 @@ namespace Ankh.Commands
 
             SaveAllDirtyDocuments(selection, context);
 
-            if (unified)
-                return DoUnifiedDiff(context, result, selection);
-            else
-                return DoExternalDiff(context, result, selection);
-        }
-
-        private string DoUnifiedDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
-        {
-            Ankh.VS.IAnkhSolutionSettings ss = context.GetService<Ankh.VS.IAnkhSolutionSettings>();
-            string slndir = ss.ProjectRoot;
-
-            SvnDiffArgs args = new SvnDiffArgs();
-            args.IgnoreAncestry = true;
-            args.NoDeleted = false;
-            args.Depth = info.Depth;
-
-            string slndirP = slndir + "\\";
-            
-            SvnRevisionRange range = new SvnRevisionRange(info.RevisionStart, info.RevisionEnd);
-
-            using (MemoryStream stream = new MemoryStream())
-            using (StreamReader reader = new StreamReader(stream))
-            using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
-            {
-                foreach (SvnItem item in info.Selection)
-                {
-                    SvnWorkingCopy wc;
-                    if (!string.IsNullOrEmpty(slndir) &&
-                        item.FullPath.StartsWith(slndirP, StringComparison.OrdinalIgnoreCase))
-                        args.RelativeToPath = slndir;
-                    else if ((wc = item.WorkingCopy) != null)
-                        args.RelativeToPath = wc.FullPath;
-                    else
-                        args.RelativeToPath = null;
-
-                    client.Diff(item.FullPath, range, args, stream);
-                }
-                stream.Position = 0;
-
-                return reader.ReadToEnd();
-            }
+            return DoExternalDiff(context, result, selection);
         }
 
         private string DoExternalDiff(IAnkhServiceProvider context, PathSelectorResult info, ISelectionContext selection)
