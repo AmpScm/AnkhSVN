@@ -50,6 +50,8 @@
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
     <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhLanguageServiceFile>
     <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' == '9.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhLanguageServiceFile>
+    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhOtherLanguageServiceFile>
+    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' == '9.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhOtherLanguageServiceFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(ShellAssembly)" />
@@ -106,6 +108,9 @@
     <Compile Include="$(AnkhLanguageServiceFile)">
       <DependentUpon>AnkhLanguageService.cs</DependentUpon>
     </Compile>
+    <None Include="$(AnkhOtherLanguageServiceFile)">
+      <DependentUpon>AnkhLanguageService.cs</DependentUpon>
+    </None>
     <Compile Include="LanguageServices\LogMessageLanguageService.cs" />
     <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
     <Compile Include="Selection\SelectionContext.Active.cs">
