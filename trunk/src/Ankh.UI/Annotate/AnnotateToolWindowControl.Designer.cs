@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.logMessageEditor1 = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
+            this.logMessageEditor1 = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
             this.blameMarginControl1 = new Ankh.UI.Blame.BlameMarginControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -43,7 +43,6 @@
             this.logMessageEditor1.Location = new System.Drawing.Point(0, 0);
             this.logMessageEditor1.Name = "logMessageEditor1";
             this.logMessageEditor1.Size = new System.Drawing.Size(184, 300);
-            this.logMessageEditor1.SkipLogLanguageService = false;
             this.logMessageEditor1.TabIndex = 2;
             this.logMessageEditor1.Text = "logMessageEditor1";
             this.logMessageEditor1.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
@@ -94,7 +93,7 @@
         #endregion
 
         private BlameMarginControl blameMarginControl1;
-        private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor1;
+        private Ankh.UI.PendingChanges.VSTextEditor logMessageEditor1;
         private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
