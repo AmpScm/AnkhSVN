@@ -10,7 +10,7 @@ using Microsoft.VisualStudio;
 using Ankh.Scc;
 using Ankh.VS;
 
-namespace Ankh.UI.PendingChanges
+namespace Ankh.VS.LanguageServices
 {
     /// <summary>
     /// Implements a simple VS Languageservice to implement syntaxcoloring on our LogMessages

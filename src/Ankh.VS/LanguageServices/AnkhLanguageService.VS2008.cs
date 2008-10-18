@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.VS
+namespace Ankh.VS.LanguageServices
 {
 	partial class AnkhLanguageService
 	{
