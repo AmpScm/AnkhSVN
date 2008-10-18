@@ -31,11 +31,37 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            IProjectFileMapper pfm;
+            int i;
+
             switch (e.Command)
             {
-                case AnkhCommand.Log:
                 case AnkhCommand.ProjectHistory:
+                    SvnProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
+                    if(p == null)
+                        break;
+                        
+                    ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+
+                    if(pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
+                        return; // No project location
+
+                    if(e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
+                        return; // Ok, we have history!                                           
+
+                    break; // No history
+
                 case AnkhCommand.SolutionHistory:
+                    IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+
+                    if (string.IsNullOrEmpty(ss.ProjectRoot))
+                        break;
+
+                    if (e.GetService<IFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
+                        return; // Ok, we have history!
+
+                    break; // No history
+                case AnkhCommand.Log:                
                     int itemCount = 0;
                     int needsRemoteCount = 0;
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -77,7 +103,7 @@ namespace Ankh.Commands
                     
                     //break;
                 case AnkhCommand.ReposExplorerLog:
-                    int i = 0;
+                    i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
                         if (item == null || item.Uri == null)
@@ -90,24 +116,15 @@ namespace Ankh.Commands
                         return;
                     break;
                 case AnkhCommand.BlameShowLog:
-
-                    IBlameControl blameWindow = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
-
-                    if ((blameWindow == null) || !blameWindow.HasWorkingCopyItems)
-                    {
-                        e.Enabled = false;
-                        return;
-                    }
-
-                    int j = 0;
+                    i = 0;
                     foreach (IBlameSection section in e.Selection.GetSelection<IBlameSection>())
                     {
                         if (section == null)
                             continue;
-                        j++;
+                        i++;
                     }
 
-                    if (j == 1)
+                    if (i == 1)
                         return;
                     break;
             }
@@ -128,10 +145,8 @@ namespace Ankh.Commands
                     {
                         Debug.Assert(i.IsVersioned);
 
-                        if (i.IsReplaced || i.IsAdded)
+                        if ((i.IsReplaced || i.IsAdded) && i.HasCopyableHistory)
                         {
-                            Debug.Assert(i.HasCopyableHistory);
-
                             remoteUri = diffHandler.GetCopyOrigin(i);
                             selected.Add(i);
                             break;
@@ -154,18 +169,14 @@ namespace Ankh.Commands
                     else
                         LocalLog(e.Context, selected);
                     break;
-                case AnkhCommand.ProjectHistory:
                 case AnkhCommand.SolutionHistory:
-                    if (e.Selection.IsSolutionSelected)
-                    {
-                        IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                    IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
-                        selected.Add(cache[settings.ProjectRoot]);
+                    selected.Add(cache[settings.ProjectRoot]);
 
-                        LocalLog(e.Context, selected);
-                    }
-                    else
-                    {
+                    LocalLog(e.Context, selected);
+                    break;
+                case AnkhCommand.ProjectHistory:
                         IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
                         foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
                         {
@@ -176,7 +187,6 @@ namespace Ankh.Commands
                         }
 
                         LocalLog(e.Context, selected);
-                    }
                     break;
                 case AnkhCommand.ReposExplorerLog:
                     ISvnRepositoryItem item = null;
