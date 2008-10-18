@@ -35,7 +35,7 @@ namespace Ankh.VSPackage
         #endregion
     }
 
-    abstract class AnkhEditorFactory : AnkhService, IVsEditorFactory, IVsEditorFactory2
+    abstract class AnkhEditorFactory : AnkhService, IVsEditorFactory
     {
         IOleServiceProvider _site;
 
@@ -97,19 +97,6 @@ namespace Ankh.VSPackage
 
         #endregion
 
-        #region IVsEditorFactory2 Members
-
-        public int RetargetCodeOrDesignerToOpen(string pszMkDocumentSource, ref Guid rguidLogicalViewSource, IVsHierarchy pvHier, uint itemidSource, out uint pitemidTarget, out uint pgrfEditorFlags, out Guid pguidEditorTypeTarget, out string pbstrPhysicalViewTarget, out Guid pguidLogicalViewTarget)
-        {
-            pitemidTarget = VSConstants.VSITEMID_NIL;
-            pgrfEditorFlags = 0;
-            pguidEditorTypeTarget = Guid.Empty;
-            pbstrPhysicalViewTarget = null;
-            pguidLogicalViewTarget = Guid.Empty;
-            return VSConstants.S_OK; // Don't retarget
-        }
-
-        #endregion
     }
 
     [Guid(AnkhId.DiffEditorId), ComVisible(true)]
