@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System.ComponentModel.Design;
 
-namespace Ankh.VS
+namespace Ankh.VS.LanguageServices
 {
     [CLSCompliant(false)]
     public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
