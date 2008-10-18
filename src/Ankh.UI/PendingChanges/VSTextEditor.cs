@@ -94,12 +94,13 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int LineHeight
         {
             get
             {
-                if (codeEditorNativeWindow == null)
-                    throw new InvalidOperationException("Code editor not initialized");
+                if (DesignMode || codeEditorNativeWindow == null)
+                    return 0; // Designer scenario
 
                 return codeEditorNativeWindow.LineHeight;
             }
@@ -127,6 +128,9 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnHandleCreated(e);
 
+            if (DesignMode)
+                return;
+
             Control topParent = TopLevelControl;
 
             VSContainerForm ownerForm = topParent as VSContainerForm;
@@ -140,14 +144,7 @@ namespace Ankh.UI.PendingChanges
 
             if (toolWindow != null)
             {
-                try
-                {
-                    InitializeToolWindow(toolWindow);
-                }
-                catch (Exception ee)
-                {
-                    MessageBox.Show(ee.ToString());
-                }
+                InitializeToolWindow(toolWindow);
                 return;
             }
         }
@@ -275,7 +272,8 @@ namespace Ankh.UI.PendingChanges
                         throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
                     }
                     _borderStyle = value;
-                    base.UpdateStyles();
+                    if(!DesignMode)
+                        base.UpdateStyles();
                 }
             }
         }
@@ -399,7 +397,8 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            UpdateSize();
+            if(!DesignMode)
+                UpdateSize();
         }
 
         #endregion
