@@ -53,18 +53,16 @@ namespace Ankh.UI
             cfgSvc.LoadConfig(); // Load most recent settings from registry
             _config = null; 
 
-            txtDiffExePath.Text = Config.DiffExePath;
-            txtMergeExePath.Text = Config.MergeExePath;
-            cbDiffMergeManual.Checked = Config.ChooseDiffMergeManual;
+            diffExeBox.Text = Config.DiffExePath;
+            mergeExeBox.Text = Config.MergeExePath;
             interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
         }
 
 
         public void SaveSettings()
         {
-            Config.DiffExePath = string.IsNullOrEmpty(txtDiffExePath.Text) ? null : txtDiffExePath.Text;
-            Config.MergeExePath = string.IsNullOrEmpty(txtMergeExePath.Text) ? null : txtMergeExePath.Text;
-            Config.ChooseDiffMergeManual = cbDiffMergeManual.Checked;
+            Config.DiffExePath = string.IsNullOrEmpty(diffExeBox.Text) ? null : diffExeBox.Text;
+            Config.MergeExePath = string.IsNullOrEmpty(mergeExeBox.Text) ? null : mergeExeBox.Text;
             Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
 
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
@@ -89,13 +87,13 @@ namespace Ankh.UI
         private void btnDiffExePath_Click(object sender, EventArgs e)
         {
             DiffExeTypeEditor typeEditor = new DiffExeTypeEditor();
-            txtDiffExePath.Text = (string)typeEditor.EditValue(Context, Config.DiffExePath);
+            diffExeBox.Text = (string)typeEditor.EditValue(Context, Config.DiffExePath);
         }
 
         private void btnMergePath_Click(object sender, EventArgs e)
         {
             MergeExeTypeEditor typeEditor = new MergeExeTypeEditor();
-            txtMergeExePath.Text = (string)typeEditor.EditValue(Context, Config.MergeExePath);
+            mergeExeBox.Text = (string)typeEditor.EditValue(Context, Config.MergeExePath);
         }
     }
 }
