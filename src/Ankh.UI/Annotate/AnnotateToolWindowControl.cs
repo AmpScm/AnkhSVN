@@ -23,7 +23,6 @@ namespace Ankh.UI.Blame
         public BlameToolWindowControl()
         {
             InitializeComponent();
-            logMessageEditor1.SkipLogLanguageService = true;
             logMessageEditor1.ReadOnly = true;
         }
 

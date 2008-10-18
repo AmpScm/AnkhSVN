@@ -245,7 +245,7 @@ namespace Ankh.VS.LanguageServices
         }
     }
 
-    partial class LogMessageViewFilter : AnkhViewFilter
+    class LogMessageViewFilter : AnkhViewFilter
     {
         readonly LogMessageLanguageService _service;
         public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
@@ -320,20 +320,6 @@ namespace Ankh.VS.LanguageServices
             textValue = change.LogMessageToolTipText;
 
             return VSConstants.S_OK;
-        }
-
-        /// <summary>
-        /// Gets the word extent.
-        /// </summary>
-        /// <param name="line">The line.</param>
-        /// <param name="index">The index.</param>
-        /// <param name="flags">The flags.</param>
-        /// <param name="span">The span.</param>
-        /// <returns></returns>
-        public override int GetWordExtent(int line, int index, uint flags, TextSpan[] span)
-        {
-            // TODO: determine what the word break characters of a log message should be
-            return base.GetWordExtent(line, index, flags, span);
         }
     }
 }

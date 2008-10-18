@@ -205,6 +205,9 @@
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PendingChanges\LogMessageEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PendingChanges\PCStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -510,7 +513,7 @@
     <Compile Include="PendingChanges\Commands\PendingChangeLocationCombo.cs" />
     <Compile Include="PendingChanges\Commands\ViewLogMessage.cs" />
     <Compile Include="PendingChanges\Commands\RefreshPendingChanges.cs" />
-    <Compile Include="PendingChanges\LogMessageEditor.cs">
+    <Compile Include="PendingChanges\VSTextEditor.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitItem.cs" />
