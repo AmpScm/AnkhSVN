@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -17,16 +18,24 @@ namespace Ankh.Scc
     public sealed class SvnWorkingCopy : IEquatable<SvnWorkingCopy>, ISvnWcReference
     {
         readonly SvnItem _rootItem;
+        IAnkhServiceProvider _context;
+        bool _checkedUri;
+        Uri _repositoryRoot;
+        bool _checkedId;
+        Guid? _reposId;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnWorkingCopy"/> class.
         /// </summary>
         /// <param name="rootItem">The root item.</param>
-        public SvnWorkingCopy(SvnItem rootItem)
+        SvnWorkingCopy(IAnkhServiceProvider context, SvnItem rootItem)
         {
-            if (rootItem == null)
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (rootItem == null)
                 throw new ArgumentNullException("rootItem");
 
+            _context = context;
             _rootItem = rootItem;
         }
 
@@ -117,7 +126,7 @@ namespace Ankh.Scc
             get { return this; }
         }
 
-        internal static ISvnWcReference CalculateWorkingCopy(SvnItem svnItem)
+        internal static ISvnWcReference CalculateWorkingCopy(IAnkhServiceProvider context, SvnItem svnItem)
         {
             if (svnItem == null)
                 throw new ArgumentNullException("svnItem");
@@ -134,7 +143,52 @@ namespace Ankh.Scc
                     return parent;
             }
 
-            return new SvnWorkingCopy(svnItem);
+            return new SvnWorkingCopy(context, svnItem);
+        }
+
+        public Uri RepositoryRoot
+        {
+            get { return _repositoryRoot ?? GetRepositoryRoot(); }
+        }
+
+        private Uri GetRepositoryRoot()
+        {
+            if (_checkedUri)
+                return null;
+
+
+            _checkedUri = true;
+            using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                return _repositoryRoot = client.GetRepositoryRoot(FullPath);
+            }
+        }
+
+        public Guid RepositoryId
+        {
+            get { return _reposId ?? GetReposId(); }
+        }
+
+        private Guid GetReposId()
+        {
+            if (_checkedId)
+                return Guid.Empty;
+
+            _checkedId = true;
+
+            // Theoretically this can connect the server (if upgraded from a really old workingcopy)
+            using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
+            {
+                Guid value;
+
+                if (client.TryGetRepositoryId(FullPath, out value))
+                {
+                    _reposId = value;
+                    return value;
+                }
+
+                return Guid.Empty;
+            }
         }
     }
 }

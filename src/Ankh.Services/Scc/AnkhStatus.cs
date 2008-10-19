@@ -24,7 +24,6 @@ namespace Ankh
         readonly SvnStatus _localPropertyStatus;
         readonly Uri _uri;
 
-        readonly string _repositoryId;
         readonly DateTime _lastChangeTime;
         readonly string _lastChangeAuthor;
         readonly long _lastChangeRevision;
@@ -47,7 +46,6 @@ namespace Ankh
                 _lastChangeRevision = args.WorkingCopyInfo.LastChangeRevision;
                 _lastChangeAuthor = args.WorkingCopyInfo.LastChangeAuthor;
                 _revision = args.WorkingCopyInfo.Revision;
-                _repositoryId = args.WorkingCopyInfo.RepositoryIdValue;
                 _changeList = args.WorkingCopyInfo.ChangeList;
                 _localLocked = args.WorkingCopyInfo.LockToken != null;
             }
@@ -165,16 +163,6 @@ namespace Ankh
             get { return _revision; }
         }
 
-        public string RepositoryId
-        {
-            get { return _repositoryId; }
-        }
-
-        public Guid RepositoryGuid
-        {
-            get { return (_repositoryId != null) ? new Guid(_repositoryId) : Guid.Empty; }
-        }        
-       
         /// <summary>
         /// Gets a boolean indicating whether the file is copied in the working copy
         /// </summary>
