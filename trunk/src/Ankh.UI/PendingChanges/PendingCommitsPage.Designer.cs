@@ -74,7 +74,7 @@
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.topLayoutPanel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -103,7 +103,7 @@
             this.topLayoutPanel.RowCount = 2;
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(766, 81);
+            this.topLayoutPanel.Size = new System.Drawing.Size(764, 79);
             this.topLayoutPanel.TabIndex = 0;
             // 
             // label2
@@ -111,7 +111,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(583, 3);
+            this.label2.Location = new System.Drawing.Point(581, 3);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
@@ -136,7 +136,7 @@
             this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
             this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
+            this.logMessageEditor.Size = new System.Drawing.Size(764, 59);
             this.logMessageEditor.TabIndex = 4;
             this.logMessageEditor.Text = null;
             // 
@@ -144,7 +144,7 @@
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(621, 0);
+            this.textBox1.Location = new System.Drawing.Point(619, 0);
             this.textBox1.Margin = new System.Windows.Forms.Padding(0);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(144, 20);
@@ -155,7 +155,7 @@
             // 
             this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(237, 3);
+            this.lastRevLabel.Location = new System.Drawing.Point(236, 3);
             this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(69, 13);
@@ -167,7 +167,7 @@
             // 
             this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(312, 3);
+            this.lastRevBox.Location = new System.Drawing.Point(311, 3);
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
             this.lastRevBox.Size = new System.Drawing.Size(74, 13);
