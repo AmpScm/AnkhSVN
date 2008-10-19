@@ -861,7 +861,7 @@ namespace Ankh
                 if ((_workingCopy == null) && (IsVersionable || IsVersioned))
                 {
                     if (IsDirectory)
-                        _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(this);
+                        _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(_context, this);
                     else
                         _workingCopy = Parent;
                 }
