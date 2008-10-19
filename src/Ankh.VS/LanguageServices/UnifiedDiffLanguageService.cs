@@ -7,7 +7,7 @@ using Ankh.Ids;
 
 namespace Ankh.VS.LanguageServices
 {
-    [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
+    [Guid(AnkhId.UnifiedDiffLanguageServiceId), ComVisible(true), CLSCompliant(false)]
     [GlobalService(typeof(UnifiedDiffLanguageService), PublicService = true)]
     public class UnifiedDiffLanguageService : AnkhLanguageService
     {
