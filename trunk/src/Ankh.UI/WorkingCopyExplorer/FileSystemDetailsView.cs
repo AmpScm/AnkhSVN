@@ -23,8 +23,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             HideSelection = false;
             FullRowSelect = true;
             AllowColumnReorder = true;
-
-            InitializeColumns();
         }
 
         IAnkhServiceProvider _context;
@@ -202,6 +200,8 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void InitializeColumns()
         {
+            AllColumns.Clear();
+            SortColumns.Clear();
             this.Columns.Clear();
             SmartColumn name = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
             SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 20);
