@@ -31,7 +31,6 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            IProjectFileMapper pfm;
             int i;
 
             switch (e.Command)
