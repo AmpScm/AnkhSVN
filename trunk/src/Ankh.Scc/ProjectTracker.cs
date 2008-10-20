@@ -29,6 +29,7 @@ namespace Ankh.Scc
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
         string _baseDocumentName;
+        IVsWindowFrame _baseDocumentFrame;
 
         public ProjectTracker(IAnkhServiceProvider context)
             : base(context)
@@ -170,6 +171,7 @@ namespace Ankh.Scc
             _fileHints.Clear();
             _fileOrigins.Clear();
             _baseDocumentName = null;
+            _baseDocumentFrame = null;
 
             if (_delayedDeletes.Count > 0)
             {

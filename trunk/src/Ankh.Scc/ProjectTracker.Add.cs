@@ -41,7 +41,10 @@ namespace Ankh.Scc
             bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
 
             if (_baseDocumentName == null && SelectionContext != null)
+            {
+                _baseDocumentFrame = ((ISelectionContextEx)SelectionContext).ActiveDocumentFrame;
                 _baseDocumentName = SelectionContext.ActiveDocumentFilename;
+            }
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -331,11 +334,12 @@ namespace Ankh.Scc
                             // AND in OnQueryAdd the active document name was different
 
                             // Assume the user saved a document under a new name (File -> Save As)
-
-                            origin = _baseDocumentName;
+                            if (((ISelectionContextEx)SelectionContext).ActiveDocumentFrame == _baseDocumentFrame)
+                                origin = _baseDocumentName;
                         }
-                        else
-                            _baseDocumentName = null;
+
+                        _baseDocumentName = null;
+                        _baseDocumentFrame = null;
                     }
 
                     if (sccProject != null)
