@@ -102,20 +102,10 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { throw new NotImplementedException(); }
             }
 
-            #endregion
-
-            #region ISelectionContextEx Members
-
-
             public Microsoft.VisualStudio.Shell.Interop.IVsUserContext UserContext
             {
                 get { throw new NotImplementedException(); }
             }
-
-            #endregion
-
-            #region ISelectionContextEx Members
-
 
             public IDisposable PushPopupContext(System.Windows.Forms.Control control)
             {
@@ -132,42 +122,27 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return ActiveDialog ?? ActiveFrameControl; }
             }
 
-            #endregion
-
-            #region ISelectionContext Members
-
-
             public System.Windows.Forms.Control ActiveDialog
             {
                 get { return null; }
             }
-
-            #endregion
-
-            #region ISelectionContextEx Members
-
 
             public Microsoft.VisualStudio.Shell.Interop.IVsTrackSelectionEx GetModalTracker()
             {
                 return null;
             }
 
-            #endregion
-
-            #region ISelectionContext Members
-
-
             public TControl GetActiveControl<TControl>() where TControl : class
             {
                 return null;
             }
 
-            #endregion
-
-            #region ISelectionContext Members
-
-
             public string ActiveDocumentFilename
+            {
+                get { return null; }
+            }
+
+            public object ActiveDocumentInstance
             {
                 get { return null; }
             }
