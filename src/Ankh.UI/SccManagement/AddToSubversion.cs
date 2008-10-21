@@ -168,7 +168,7 @@ namespace Ankh.UI.SccManagement
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.ThrowOnError=false;
                 Collection<SvnInfoEventArgs> info;
-                if (treeView1.SelectedNode.IsRepositoryPath || Client.GetInfo(new SvnUriTarget(treeView1.SelectedNode.RawUri), ia, out info))
+                if (treeView1.SelectedNode.IsRepositoryPath || Client.GetInfo(treeView1.SelectedNode.NormalizedUri, ia, out info))
                     createFolderButton.Enabled = true;
                 else 
                     createFolderButton.Enabled = false;
