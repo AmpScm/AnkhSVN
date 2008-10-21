@@ -16,7 +16,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public partial class LogChangedPaths : UserControl, ICurrentItemDestination<ISvnLogItem>
+    partial class LogChangedPaths : UserControl, ICurrentItemDestination<ISvnLogItem>
     {
         public LogChangedPaths()
         {
@@ -27,7 +27,13 @@ namespace Ankh.UI
             : this()
         {
             container.Add(this);
+        }
 
+        LogDataSource _dataSource;
+        public LogDataSource LogSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
 
 		IAnkhServiceProvider _context;
@@ -68,38 +74,7 @@ namespace Ankh.UI
 
         #endregion
 
-        IEnumerable<SvnItem> _wcItems;
-        IEnumerable<SvnItem> WcItems
-        {
-            get
-            {
-                if (_wcItems != null)
-                    return _wcItems;
-
-                ISelectionContext selection = Context == null ? null : Context.GetService<ISelectionContext>();
-
-                ILogControl logControl = selection == null ? null : selection.ActiveDialogOrFrameControl as ILogControl;
-
-                if (logControl == null || !logControl.HasWorkingCopyItems)
-                    _wcItems = null;
-                else
-                    _wcItems = logControl.WorkingCopyItems;
-
-                return _wcItems;
-            }
-        }
-        bool IsWorkingCopyItem(SvnChangeItem item)
-        {
-            if (WcItems == null)
-                return true; // Don't gray out
-
-            foreach (SvnItem i in WcItems)
-            {
-                if (i.Status.Uri.ToString().EndsWith(item.Path))
-                    return true;
-            }
-            return false;
-        }
+        
 
         void SelectionChanged(object sender, IList<ISvnLogItem> e)
         {
@@ -115,13 +90,17 @@ namespace Ankh.UI
             {
                 List<PathListViewItem> paths = new List<PathListViewItem>();
                 foreach (SvnChangeItem i in e.ChangedPaths)
-                {
-                        
-                    paths.Add(new PathListViewItem(changedPaths, e, i, IsWorkingCopyItem(i)));
+                {                        
+                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(i)));
                 }
 
                 changedPaths.Items.AddRange(paths.ToArray());
             }
+        }
+
+        private bool HasFocus(SvnChangeItem i)
+        {
+            return true;
         }
 
         internal void Reset()

@@ -58,7 +58,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.LogAnnotateRevision:
                     ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-                    if (logControl == null || !logControl.HasWorkingCopyItems)
+                    if (logControl == null || logControl.Origins == null)
                     {
                         e.Visible = e.Enabled = false;
                         return;
@@ -135,12 +135,14 @@ namespace Ankh.Commands
             }
 
             SvnItem svnItem = null;
-            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logControl.WorkingCopyItems, changedPaths);
+            throw new InvalidOperationException();
+            // BH: Intersecting to find a single item in a command that doesn't depend on a workingcopy?
+            /*IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logControl.WorkingCopyItems, changedPaths);
             foreach (SvnItem i in intersectedItems)
             {
                 svnItem = i;
                 break;
-            }
+            }*/
             if (svnItem == null)
                 return;
 

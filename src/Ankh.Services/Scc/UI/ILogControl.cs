@@ -13,10 +13,6 @@ namespace Ankh.Scc.UI
         void FetchAll();
         void Restart();
 
-        bool HasWorkingCopyItems { get; }
-        SvnItem[] WorkingCopyItems { get; }
-
-        bool HasRemoteItems { get; }
-        ISvnRepositoryItem[] RemoteItems { get; }
+        IList<SvnOrigin> Origins { get; }        
     }
 }

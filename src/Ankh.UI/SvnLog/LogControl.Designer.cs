@@ -63,15 +63,10 @@
             // logRevisionControl1
             // 
             this.logRevisionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logRevisionControl1.EndRevision = null;
             this.logRevisionControl1.IncludeMergedRevisions = false;
-            this.logRevisionControl1.LocalTargets = null;
             this.logRevisionControl1.Location = new System.Drawing.Point(0, 0);
             this.logRevisionControl1.Name = "logRevisionControl1";
-            this.logRevisionControl1.RemoteTarget = null;
             this.logRevisionControl1.Size = new System.Drawing.Size(716, 291);
-            this.logRevisionControl1.StartRevision = null;
-            this.logRevisionControl1.StrictNodeHistory = false;
             this.logRevisionControl1.TabIndex = 0;
             // 
             // splitContainer2

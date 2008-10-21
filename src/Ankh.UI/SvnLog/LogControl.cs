@@ -14,13 +14,25 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
+    partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
         public LogControl()
         {
             InitializeComponent();
             ItemSource = logRevisionControl1;
             logRevisionControl1.BatchDone += new EventHandler<BatchFinishedEventArgs>(logRevisionControl1_BatchDone);
+
+            LogSource = new LogDataSource();
+
+            logChangedPaths1.LogSource = LogSource;
+            logRevisionControl1.LogSource = LogSource;
+        }
+
+        LogDataSource _dataSource;
+        public LogDataSource LogSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
 
         void logRevisionControl1_BatchDone(object sender, BatchFinishedEventArgs e)
@@ -57,69 +69,41 @@ namespace Ankh.UI.SvnLog
             set { _mode = value; }
         }
 
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets)
-        {
-            StartLocalLog(context, targets, null, null);
-        }
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<string> targets, SvnRevision start, SvnRevision end)
+        public void StartLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
             if (targets == null)
                 throw new ArgumentNullException("targets");
 
-            logRevisionControl1.LocalTargets = targets;
-
+            logRevisionControl1.Targets = targets;
             logRevisionControl1.StartRevision = start;
             logRevisionControl1.EndRevision = end;
 
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.Local);
+            logRevisionControl1.Start(context, LogMode.Log);
         }
 
-        public void StartRemoteLog(IAnkhServiceProvider context, Uri remoteTarget)
+        /// <summary>
+        /// Starts the merges eligible logger. Checking whick revisions of source (Commonly Uri) 
+        /// are eligeable for mergeing to target (Commonly path)
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="target">The target.</param>
+        /// <param name="source">The source.</param>
+        public void StartMergesEligible(IAnkhServiceProvider context, SvnOrigin target, SvnTarget source)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            if (remoteTarget == null)
-                throw new ArgumentNullException("remoteTarget");
-
-            logRevisionControl1.RemoteTarget = remoteTarget;
-
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.Remote);
-        }
-
-        public void StartRemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem remoteTarget)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            if (remoteTarget == null)
-                throw new ArgumentNullException("remoteTarget");
-
-            logRevisionControl1.RemoteTarget = remoteTarget.Uri;
-
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.Remote);
-        }
-
-        public void StartMergesEligible(IAnkhServiceProvider context, string target, Uri source)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            if (target == null)
+            else if (target == null)
                 throw new ArgumentNullException("target");
-            if (source == null)
+            else if (source == null)
                 throw new ArgumentNullException("source");
 
-            logRevisionControl1.LocalTargets = new string[]{target};
-            logRevisionControl1.RemoteTarget = source;
+            logRevisionControl1.Targets = new SvnOrigin[]
+            { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
 
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -127,45 +111,22 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Start(context, LogMode.MergesEligible);
         }
 
-        public void StartMergesMerged(IAnkhServiceProvider context, string target, Uri source)
+        public void StartMergesMerged(IAnkhServiceProvider context, SvnOrigin target, SvnTarget source)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            if (target == null)
+            else  if (target == null)
                 throw new ArgumentNullException("target");
-            if (source == null)
+            else if (source == null)
                 throw new ArgumentNullException("source");
 
-            logRevisionControl1.LocalTargets = new string[]{target};
-            logRevisionControl1.RemoteTarget = source;
+            logRevisionControl1.Targets = new SvnOrigin[] 
+            { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
 
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
             logRevisionControl1.Start(context, LogMode.MergesMerged);
-        }
-
-        [Obsolete]
-        public void Start(IAnkhServiceProvider context, ICollection<string> targets)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            if (targets == null)
-                throw new ArgumentNullException("targets");
-
-            switch (Mode)
-            {
-                case LogMode.Local:
-                    logRevisionControl1.LocalTargets = targets;
-                    break;
-                case LogMode.Remote:
-                    logRevisionControl1.RemoteTarget = new Uri(new List<string>(targets)[0]);
-                    break;
-            }
-            logRevisionControl1.Reset();
-            logChangedPaths1.Reset();
-            logMessageView1.Reset();
-            logRevisionControl1.Start(context, Mode);
         }
 
         internal void FetchAll()

@@ -12,7 +12,6 @@ namespace Ankh.UI.SvnLog
 {
     class LogChangedPathsView : ListViewWithSelection<PathListViewItem>
     {
-
         public LogChangedPathsView()
         {
             Init();
@@ -23,6 +22,13 @@ namespace Ankh.UI.SvnLog
         {
 
             container.Add(this);
+        }
+
+        LogDataSource _dataSource;
+        public LogDataSource DataSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
 
         void Init()
@@ -68,8 +74,9 @@ namespace Ankh.UI.SvnLog
         readonly ISvnLogItem _logItem;
         readonly SvnChangeItem _change;
         readonly bool _isInSelection;
+        readonly SvnOrigin _origin;
 
-        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, bool isInSelection)
+        public PathListViewItem(LogChangedPathsView view, ISvnLogItem logItem, SvnChangeItem change, Uri reposRoot, bool isInSelection)
             : base(view)
         {
             if(logItem == null)
@@ -79,9 +86,15 @@ namespace Ankh.UI.SvnLog
             _logItem = logItem;
             _change = change;
             _isInSelection = isInSelection;
+            _origin = new SvnOrigin(new SvnUriTarget(SvnTools.AppendPathSuffix(reposRoot, change.Path.TrimStart('/')), logItem.Revision), reposRoot);
 
             RefreshText();
             UpdateColors();
+        }
+
+        public SvnOrigin Origin
+        {
+            get { return _origin; }
         }
 
         void RefreshText()
@@ -151,6 +164,12 @@ namespace Ankh.UI.SvnLog
             if (lvi == null)
                 throw new ArgumentNullException("lvi");
             _lvi = lvi;
+        }
+
+        [Browsable(false)]
+        public SvnOrigin Origin
+        {
+            get { return _lvi.Origin; }
         }
 
         internal PathListViewItem ListViewItem

@@ -55,7 +55,7 @@
             this.logViewerControl.ChangedPathsVisible = true;
             this.logViewerControl.IncludeMerged = false;
             this.logViewerControl.LogMessageVisible = true;
-            this.logViewerControl.Mode = Ankh.UI.SvnLog.LogMode.Remote;
+            this.logViewerControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logViewerControl.Name = "logViewerControl";
             this.logViewerControl.StrictNodeHistory = false;
             // 

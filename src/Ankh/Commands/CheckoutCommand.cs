@@ -68,7 +68,7 @@ namespace Ankh.Commands
                     return null; 
                 } // multiple selection
 
-                if (i.RepositoryRoot != null)
+                if (i.Origin != null)
                 {
                     result = i;
                 }

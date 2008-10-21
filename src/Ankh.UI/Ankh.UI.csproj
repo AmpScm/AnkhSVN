@@ -249,6 +249,12 @@
     </Compile>
     <Compile Include="SvnLog\Commands\CompareWithWorkingCopy.cs" />
     <Compile Include="SvnLog\Commands\RevertChanges.cs" />
+    <Compile Include="SvnLog\LogDataSource.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SvnLog\LogDataSource.Designer.cs">
+      <DependentUpon>LogDataSource.cs</DependentUpon>
+    </Compile>
     <Compile Include="SvnLog\LogViewerDialog.cs">
       <SubType>Form</SubType>
     </Compile>

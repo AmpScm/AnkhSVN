@@ -40,7 +40,7 @@
             this.logControl.IncludeMerged = false;
             this.logControl.Location = new System.Drawing.Point(0, 0);
             this.logControl.LogMessageVisible = true;
-            this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Local;
+            this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logControl.Name = "logControl";
             this.logControl.Size = new System.Drawing.Size(482, 254);
             this.logControl.StrictNodeHistory = false;

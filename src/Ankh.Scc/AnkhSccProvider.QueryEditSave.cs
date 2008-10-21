@@ -7,6 +7,7 @@ using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.Selection;
 using Ankh.Commands;
+using Ankh.Scc.ProjectMap;
 
 namespace Ankh.Scc
 {
@@ -126,6 +127,50 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
+
+        /// <summary>
+        /// Gets the SvnItem of the document file and all subdocument files (SccSpecial files)
+        /// </summary>
+        /// <param name="document">The document.</param>
+        /// <returns></returns>
+        IEnumerable<SvnItem> GetAllDocumentItems(string document)
+        {
+            if (string.IsNullOrEmpty(document))
+                throw new ArgumentNullException("document");
+
+            SvnItem item = StatusCache[document];
+
+            if (item == null)
+                yield break;
+
+            yield return item;
+
+            SccProjectFile pf;
+            if (_fileMap.TryGetValue(item.FullPath, out pf))
+            {
+                HybridCollection<string> subFiles = null;
+
+                if (pf.FirstReference != null)
+                    foreach (string path in pf.FirstReference.GetSubFiles())
+                    {
+                        if (subFiles == null)
+                        {
+                            subFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                            subFiles.Add(item.FullPath);
+                        }
+
+                        if (subFiles.Contains(path))
+                            continue;
+
+                        item = StatusCache[path];
+                        if (item != null)
+                            yield return item;
+
+                        subFiles.Add(item.FullPath);
+                    }
+            }
+        }
+
         /// <summary>
         /// Called by projects and editors before modifying a file
         /// The function allows the source control systems to take the necessary actions (checkout, flip attributes)
@@ -154,40 +199,51 @@ namespace Ankh.Scc
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
 
-            List<SvnItem> mustLockFiles = null;
+            HybridCollection<string> mustLockFiles = null;
+            List<SvnItem> mustLockItems = null;
             if (rgpszMkDocuments != null)
-            {
+            {                
                 for (int i = 0; i < cFiles; i++)
                 {
-                    SvnItem item = StatusCache[rgpszMkDocuments[i]];
-
-                    if (item == null || !item.IsVersioned)
-                        continue;
-
-                    if (item.ReadOnlyMustLock)
+                    foreach (SvnItem item in GetAllDocumentItems(rgpszMkDocuments[i]))
                     {
-                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
-                        {
-                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
-                                | tagVSQueryEditResultFlags.QER_EditNotPossible
-                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
-                            break;
-                        }
+                        if (!item.IsVersioned)
+                            continue;
 
-                        if(mustLockFiles == null)
-                            mustLockFiles = new List<SvnItem>();
-                        mustLockFiles.Add(item);
+                        if (item.ReadOnlyMustLock)
+                        {
+                            if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
+                            {
+                                pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                                    | tagVSQueryEditResultFlags.QER_EditNotPossible
+                                    | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+
+                                return VSConstants.S_OK;
+                            }
+
+                            if (mustLockItems == null)
+                            {
+                                mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                                mustLockItems = new List<SvnItem>();
+                            }
+
+                            if (!mustLockFiles.Contains(item.FullPath))
+                            {
+                                mustLockFiles.Add(item.FullPath);
+                                mustLockItems.Add(item);
+                            }
+                        }
                     }
                 }
             }
-            if (mustLockFiles != null)
+            if (mustLockItems != null)
             {
                 IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
                 
-                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockFiles, CommandPrompt.Always);
+                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockItems, CommandPrompt.Always);
 
-                foreach (SvnItem i in mustLockFiles)
+                foreach (SvnItem i in mustLockItems)
                 {
                     if (i.ReadOnlyMustLock)
                     {

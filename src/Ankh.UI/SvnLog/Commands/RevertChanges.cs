@@ -16,7 +16,16 @@ namespace Ankh.UI.SvnLog.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            if (logWindow == null || !logWindow.HasWorkingCopyItems)
+
+            if (logWindow == null)
+            {
+                e.Enabled = false;
+                return;
+            }
+
+            SvnOrigin origin = EnumTools.GetSingle(logWindow.Origins);
+
+            if(origin == null || !(origin.Target is SvnPathTarget))
             {
                 e.Enabled = false;
                 return;
@@ -48,28 +57,53 @@ namespace Ankh.UI.SvnLog.Commands
         public void OnExecute(CommandEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            if (logWindow == null || !logWindow.HasWorkingCopyItems)
+            IProgressRunner progressRunner = e.GetService<IProgressRunner>();
+
+            if (logWindow == null)
                 return;
 
-            IProgressRunner progressRunner = e.GetService<IProgressRunner>();
-            IWorkingCopyOperations wcOperations = e.GetService<IWorkingCopyOperations>();
+            List<SvnRevisionRange> revisions = new List<SvnRevisionRange>();
 
-            List<SvnRevision> revisions = new List<SvnRevision>();
-            foreach (ISvnLogItem item in e.Selection.GetSelection<ISvnLogItem>())
+            if (e.Command == AnkhCommand.LogRevertTo)
             {
-                revisions.Add(item.Revision);
+                ISvnLogItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
+
+                if (item == null)
+                    return;
+
+                // Revert to revision, is revert everything after
+                revisions.Add(new SvnRevisionRange(SvnRevision.Working, item.Revision));
+            }
+            else
+            {
+                foreach (ISvnLogItem item in e.Selection.GetSelection<ISvnLogItem>())
+                {
+                    revisions.Add(new SvnRevisionRange(item.Revision, item.Revision - 1));
+                }
             }
 
             if (revisions.Count == 0)
                 return;
 
-            if (e.Command == AnkhCommand.LogRevertTo && revisions.Count > 1)
-                return;
-
             IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
 
-            if(logWindow.WorkingCopyItems != null && logWindow.WorkingCopyItems.Length > 0)
-                tracker.SaveDocuments(SvnItem.GetPaths(logWindow.WorkingCopyItems));
+            HybridCollection<string> nodes = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach(SvnOrigin o in logWindow.Origins)
+            {
+                SvnPathTarget pt = o.Target as SvnPathTarget;
+                if(pt != null)
+                    continue;
+
+                foreach(string file in tracker.GetDocumentsBelow(pt.FullPath))
+                {
+                    if(!nodes.Contains(file))
+                        nodes.Add(file);
+                }
+            }
+
+            if(nodes.Count > 0)
+                tracker.SaveDocuments(nodes); // Saves all open documents below all specified origins
 
             progressRunner.Run("Reverting",
                 delegate(object sender, ProgressWorkerArgs ee)
@@ -78,15 +112,17 @@ namespace Ankh.UI.SvnLog.Commands
                     {
                         dl.MonitorChanges();
 
-                        foreach (SvnItem item in logWindow.WorkingCopyItems)
-                        {
-                            SvnTarget source = new SvnPathTarget(item.FullPath);
-                            string target = item.FullPath;
+                        SvnMergeArgs ma = new SvnMergeArgs();
 
-                            foreach (SvnRevision rev in revisions)
-                            {
-                                ee.Client.Merge(target, source, new SvnRevisionRange(rev.Revision, rev.Revision-1));
-                            }
+
+                        foreach (SvnOrigin item in logWindow.Origins)
+                        {
+                            SvnPathTarget target = item.Target as SvnPathTarget;
+
+                            if (target == null)
+                                continue;
+
+                            ee.Client.Merge(target.FullPath, target, revisions, ma);
                         }
                         dl.ReloadModified();
                     }

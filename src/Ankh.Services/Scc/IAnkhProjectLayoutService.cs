@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Ankh.Selection;
 
 namespace Ankh
 {
@@ -9,7 +10,8 @@ namespace Ankh
         /// <summary>
         /// Gets all update roots of the current open solution
         /// </summary>
+        /// <param name="project">The project specified or <c>null</c> to use all projects</param>
         /// <returns></returns>
-        IEnumerable<SvnItem> GetUpdateRoots();
+        IEnumerable<SvnItem> GetUpdateRoots(SvnProject project);
     }    
 }

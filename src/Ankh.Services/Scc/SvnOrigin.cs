@@ -9,7 +9,7 @@ namespace Ankh.Scc
     /// <summary>
     /// Container of a <see cref="SvnTarget"/>, its repository Uri and its repository root.
     /// </summary>
-    public class SvnOrigin
+    public class SvnOrigin : IEquatable<SvnOrigin>
     {
         SvnTarget _target;
         Uri _uri;
@@ -135,6 +135,77 @@ namespace Ankh.Scc
         public SvnTarget Target
         {
             get { return _target; }
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// The <paramref name="obj"/> parameter is null.
+        /// </exception>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SvnOrigin);
+        }
+
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
+        public bool Equals(SvnOrigin other)
+        {
+            if (other == null)
+                return false;
+
+            return other.Target == Target && other.Uri == Uri;
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return Uri.GetHashCode();
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="o1">The o1.</param>
+        /// <param name="o2">The o2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator ==(SvnOrigin o1, SvnOrigin o2)
+        {
+            bool n1 = (object)o1 == null;
+            bool n2 = (object)o2 == null;
+
+            if (n1 ^ n2)
+                return false;
+            else if (n1 && n2)
+                return true;
+
+            return o1.Target == o2.Target && o1.RepositoryRoot == o2.RepositoryRoot && o1.Uri == o2.Uri;
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="o1">The o1.</param>
+        /// <param name="o2">The o2.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(SvnOrigin o1, SvnOrigin o2)
+        {
+            return !(o1 == o2);
         }
     }
 }
