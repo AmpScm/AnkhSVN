@@ -504,6 +504,11 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        /// <summary>
+        /// The ensure the repository root
+        /// </summary>
+        /// <param name="uri">Always the repository root</param>
+        /// <returns></returns>
         private RepositoryTreeNode EnsureRoot(Uri uri)
         {
             EnsureServerOf(uri);
@@ -525,7 +530,8 @@ namespace Ankh.UI.RepositoryExplorer
                     return reposRoot;
             }
 
-            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, null, true);
+            // uri is always the repos root here
+            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, uri, true);
             rtn.Text = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
             if (IconMapper != null)
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
