@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -18,24 +19,25 @@ namespace Ankh.UI.RepositoryExplorer
     class RepositoryTreeNode : TreeNode
     {
         readonly Uri _uri;
-        readonly Uri _normalizedUri;
-        readonly Uri _repositoryUri;
-        SvnRevision _revision;
+        SvnOrigin _origin;
+        long _revision;
 
         RepositoryTreeNode _dummy;
         ListItemCollection _items;
         bool _loaded;
         bool _expandAfterLoad;
-        bool _inRepository;
+        
 
         public RepositoryTreeNode(Uri uri, Uri repositoryUri, bool inRepository)
         {
             _uri = uri;
-            _repositoryUri = repositoryUri;
 
-            if (uri != null)
-                _normalizedUri = SvnTools.GetNormalizedUri(uri);
-            _inRepository = inRepository;
+            if (inRepository)
+            {
+                _origin = new SvnOrigin(
+                    SvnTools.GetNormalizedUri(uri),
+                    repositoryUri);
+            }
         }
 
         public int IconIndex
@@ -49,25 +51,36 @@ namespace Ankh.UI.RepositoryExplorer
             get { return _uri; }
         }
 
+        public SvnOrigin Origin
+        {
+            get { return _origin; }
+        }
+
         public Uri NormalizedUri
         {
-            get { return _normalizedUri; }
+            get { return (_origin != null) ? _origin.Uri : null; }
         }
 
         public bool IsRepositoryPath
         {
-            get { return _inRepository; }
+            get { return (_origin != null); }
         }
 
         public Uri RepositoryRoot
         {
-            get { return _repositoryUri; }
+            get { return (_origin != null) ? _origin.RepositoryRoot : null; }
         }
 
-        public SvnRevision Revision
+        public long Revision
         {
             get { return _revision; }
-            internal set { _revision = value; }
+            internal set 
+            { 
+                _revision = value;
+
+                if (_origin != null)
+                    _origin = new SvnOrigin(new SvnUriTarget(_origin.Uri, value), _origin.RepositoryRoot);
+            }
         }
 
         public new void Expand()

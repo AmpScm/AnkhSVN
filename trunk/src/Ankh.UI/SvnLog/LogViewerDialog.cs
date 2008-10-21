@@ -33,7 +33,7 @@ namespace Ankh.UI
         /// <summary>
         /// Gets an instance of the <code>LogControl</code>.
         /// </summary>
-        public LogControl LogControl
+        internal LogControl LogControl
         {
             get { return logViewerControl; }
         }
@@ -62,7 +62,7 @@ namespace Ankh.UI
 
             if (LogTarget != null && File.Exists(LogTarget) || Directory.Exists(LogTarget))
             {
-                logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
+                logViewerControl.StartLog(Context, new SvnOrigin[] { new SvnOrigin(Context.GetService<IFileStatusCache>()[LogTarget]) }, null, null);
             }
             else
             {
@@ -76,7 +76,7 @@ namespace Ankh.UI
                 }
 
                 if (LogTarget != null)
-                    logViewerControl.StartRemoteLog(Context, uri);
+                    logViewerControl.StartLog(Context, new SvnOrigin[] { new SvnOrigin(Context, uri, null) }, null, null);
             }
                 //logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
         }

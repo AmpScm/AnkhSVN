@@ -305,7 +305,6 @@
     <Compile Include="Services\UIShell.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StatusCache\WorkingCopyOperations.cs" />
     <EmbeddedResource Include="CommandResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>

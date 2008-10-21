@@ -32,13 +32,9 @@ namespace Ankh.Scc
         void RefreshItem(bool refreshParent);
 
         /// <summary>
-        /// Gets whether this item's URI points to an actual remote repository item.
+        /// Gets the origin.
         /// </summary>
-        bool IsRepositoryItem { get; }
-
-        /// <summary>
-        /// Gets the URI to the root of the repository, or null when the node is a dummy.
-        /// </summary>
-        Uri RepositoryRoot { get; }
+        /// <value>The origin.</value>
+        SvnOrigin Origin { get; }
     }
 }

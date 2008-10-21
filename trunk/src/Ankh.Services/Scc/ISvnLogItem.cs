@@ -13,5 +13,7 @@ namespace Ankh.Scc
 		string LogMessage { get; }
 		long Revision { get; }
         SvnChangeItemCollection ChangedPaths { get; }
+
+        Uri RepositoryRoot { get; }
 	}
 }

@@ -5,6 +5,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.Scc.UI;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.UI.SvnLog.Commands
 {
@@ -13,68 +14,45 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            ISvnLogItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
 
-            if ((logWindow == null) || !logWindow.HasWorkingCopyItems)
+            if (item != null)
             {
-                e.Enabled = false;
-                return;
-            }
+                ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
 
-            // TODO: Remove this code when we're able to handle directories
-            SvnItem first = null;
-            foreach (SvnItem i in logWindow.WorkingCopyItems)
-            {
-                first = i;
-            }
-            if (first == null || first.IsDirectory)
-            {
-                e.Enabled = false;
-                return;
-            }
-
-            bool one = false;
-            foreach (ISvnLogItem li in e.Selection.GetSelection<ISvnLogItem>())
-            {
-                if (one)
+                if (logWindow != null)
                 {
-                    e.Enabled = false;
-                    return;
+                    SvnOrigin origin = EnumTools.GetSingle(logWindow.Origins);
+
+                    if (origin != null)
+                    {
+                        SvnPathTarget pt = origin.Target as SvnPathTarget;
+
+                        SvnItem svnItem = e.GetService<IFileStatusCache>()[pt.FullPath];
+
+                        if (svnItem != null && !svnItem.IsDirectory)
+                            return;
+                    }
                 }
-                one = true;
             }
 
-            if (!one)
-                e.Enabled = false;
+            e.Enabled = false;
         }
-
+   
         public void OnExecute(CommandEventArgs e)
         {
+            // All checked in OnUpdate            
             ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
-            ISvnLogItem logItem = null;
-            foreach (ISvnLogItem li in e.Selection.GetSelection<ISvnLogItem>())
-            {
-                logItem = li;
-                break;
-            }
-
-            if(logItem == null || logWindow == null || !logWindow.HasWorkingCopyItems)
-                return;
-
-            SvnItem[] files = logWindow.WorkingCopyItems;
-
-            if(files == null || files.Length == 0)
-                return;
-
-            SvnItem firstFile = files[0];
+            SvnOrigin origin = EnumTools.GetSingle(logWindow.Origins);
+            ISvnLogItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
 
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
             AnkhDiffArgs da = new AnkhDiffArgs();
-            da.BaseFile = diff.GetTempFile(firstFile, logItem.Revision, true); 
-            da.MineFile = firstFile.FullPath;
-            da.BaseTitle = "Base";
-            da.MineTitle = "Mine";
+            da.BaseFile = diff.GetTempFile(origin.Target, item.Revision, true); 
+            da.MineFile = ((SvnPathTarget)origin.Target).FullPath;
+            da.BaseTitle = string.Format("Base (r{0})", item.Revision);
+            da.MineTitle = "Mine/Working";
 
             diff.RunDiff(da);
         }

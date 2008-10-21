@@ -37,15 +37,15 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.ProjectHistory:
                     SvnProject p = EnumTools.GetFirst(e.Selection.GetSelectedProjects(false));
-                    if(p == null)
+                    if (p == null)
                         break;
-                        
+
                     ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
-                    if(pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
+                    if (pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
                         return; // No project location
 
-                    if(e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
+                    if (e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
                         return; // Ok, we have history!                                           
 
                     break; // No history
@@ -60,7 +60,7 @@ namespace Ankh.Commands
                         return; // Ok, we have history!
 
                     break; // No history
-                case AnkhCommand.Log:                
+                case AnkhCommand.Log:
                     int itemCount = 0;
                     int needsRemoteCount = 0;
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -99,8 +99,8 @@ namespace Ankh.Commands
                         // Local log only
                         return;
                     }
-                    
-                    //break;
+
+                //break;
                 case AnkhCommand.ReposExplorerLog:
                     i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
@@ -138,35 +138,24 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.Log:
-                    SvnUriTarget remoteUri = null;
                     IAnkhDiffHandler diffHandler = e.GetService<IAnkhDiffHandler>();
+                    List<SvnOrigin> items = new List<SvnOrigin>();
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
                         Debug.Assert(i.IsVersioned);
 
-                        if ((i.IsReplaced || i.IsAdded) && i.HasCopyableHistory)
+                        if (i.IsReplaced || i.IsAdded)
                         {
-                            remoteUri = diffHandler.GetCopyOrigin(i);
-                            selected.Add(i);
-                            break;
-                        }   
+                            if (!i.HasCopyableHistory)
+                                continue;
 
-                        selected.Add(i);
-                    }
-                    if (remoteUri != null)
-                    {
-                        Debug.Assert(selected.Count == 1);
-
-                        Uri rootUri;
-                        using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
-                        {
-                            rootUri = client.GetRepositoryRoot(remoteUri.Uri);
+                            items.Add(new SvnOrigin(diffHandler.GetCopyOrigin(i), i.WorkingCopy.RepositoryRoot));
+                            continue;
                         }
-                        
-                        RemoteLog(e.Context, new RepositoryItem(remoteUri, selected[0], rootUri));
+
+                        items.Add(new SvnOrigin(i));
                     }
-                    else
-                        LocalLog(e.Context, selected);
+                    PerformLog(e.Context, items, null, null);
                     break;
                 case AnkhCommand.SolutionHistory:
                     IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
@@ -176,28 +165,28 @@ namespace Ankh.Commands
                     LocalLog(e.Context, selected);
                     break;
                 case AnkhCommand.ProjectHistory:
-                        IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-                        foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
-                        {
-                            ISvnProjectInfo info = mapper.GetProjectInfo(p);
+                    IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                    foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
+                    {
+                        ISvnProjectInfo info = mapper.GetProjectInfo(p);
 
-                            if (info != null)
-                                selected.Add(cache[info.ProjectDirectory]);
-                        }
+                        if (info != null)
+                            selected.Add(cache[info.ProjectDirectory]);
+                    }
 
-                        LocalLog(e.Context, selected);
+                    LocalLog(e.Context, selected);
                     break;
                 case AnkhCommand.ReposExplorerLog:
                     ISvnRepositoryItem item = null;
                     foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
-                        if(i!= null && i.Uri != null)
+                        if (i != null && i.Uri != null)
                             item = i;
                         break;
                     }
 
                     if (item != null)
-                        RemoteLog(e.Context, item);
+                        PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
                     break;
                 case AnkhCommand.BlameShowLog:
 
@@ -219,42 +208,51 @@ namespace Ankh.Commands
                     if (section == null)
                         return;
 
-                    LocalLog(e.Context, new SvnItem[]{firstItem}, section.Revision, null);
-                    
+                    LocalLog(e.Context, new SvnItem[] { firstItem }, section.Revision, null);
+
                     break;
             }
         }
 
         static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
-            LocalLog(context, targets, null, null);
+            List<SvnOrigin> origins = new List<SvnOrigin>();
+
+            foreach (SvnItem item in targets)
+            {
+                origins.Add(new SvnOrigin(item));
+            }
+
+            PerformLog(context, origins, null, null);
         }
+
         static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            if (targets == null)
+            else if (targets == null)
                 throw new ArgumentNullException("targets");
 
-            IAnkhPackage package = context.GetService<IAnkhPackage>();
+            List<SvnOrigin> origins = new List<SvnOrigin>();
 
-            package.ShowToolWindow(AnkhToolWindow.Log);
+            foreach (SvnItem item in targets)
+            {
+                origins.Add(new SvnOrigin(item));
+            }
 
-            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            if(logToolControl != null)
-                logToolControl.StartLocalLog(context, targets, start, end);
+            PerformLog(context, origins, start, end);
         }
 
-        static void RemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem target)
+        static void PerformLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             IAnkhPackage package = context.GetService<IAnkhPackage>();
 
             package.ShowToolWindow(AnkhToolWindow.Log);
-            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
-            if (logToolControl != null) 
-                logToolControl.StartRemoteLog(context, target);
-        }
 
+            LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
+            if (logToolControl != null)
+                logToolControl.StartLog(context, targets, start, end);
+        }
 
         sealed class RepositoryItem : ISvnRepositoryItem
         {
@@ -303,6 +301,16 @@ namespace Ankh.Commands
             {
                 get { return _repositoryRoot; }
             }
+
+            #region ISvnRepositoryItem Members
+
+
+            public SvnOrigin Origin
+            {
+                get { return new SvnOrigin(_target, _repositoryRoot); }
+            }
+
+            #endregion
         }
     }
 }

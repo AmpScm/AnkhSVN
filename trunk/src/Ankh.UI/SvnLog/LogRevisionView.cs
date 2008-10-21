@@ -17,7 +17,7 @@ using System.Drawing;
 
 namespace Ankh.UI.SvnLog
 {
-    public class LogRevisionView : ListViewWithSelection<LogListViewItem>
+    class LogRevisionView : ListViewWithSelection<LogListViewItem>
     {
         public LogRevisionView()
         {
@@ -28,6 +28,13 @@ namespace Ankh.UI.SvnLog
 			: this()
         {
             container.Add(this);
+        }
+
+        LogDataSource _dataSource;
+        public LogDataSource LogSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
 
         void Init()
@@ -65,7 +72,7 @@ namespace Ankh.UI.SvnLog
 
 		protected override void OnRetrieveSelection(ListViewWithSelection<LogListViewItem>.RetrieveSelectionEventArgs e)
 		{
-			e.SelectionItem = new LogItem((LogListViewItem)e.Item);
+			e.SelectionItem = new LogItem((LogListViewItem)e.Item, LogSource.RepositoryRoot);
 			base.OnRetrieveSelection(e);
 		}
 
@@ -77,7 +84,7 @@ namespace Ankh.UI.SvnLog
 
     }
 
-    public class LogListViewItem : SmartListViewItem
+    class LogListViewItem : SmartListViewItem
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnLoggingEventArgs _args;
@@ -163,19 +170,31 @@ namespace Ankh.UI.SvnLog
 	sealed class LogItem : ISvnLogItem
 	{
 		readonly LogListViewItem _lvi;
+        public Uri _repositoryRoot;
 
-		public LogItem(LogListViewItem lvi)
+		public LogItem(LogListViewItem lvi, Uri repositoryRoot)
 		{
 			if (lvi == null)
 				throw new ArgumentNullException("lvi");
 
 			_lvi = lvi;
+            _repositoryRoot = repositoryRoot;
 		}
 
 		internal LogListViewItem ListViewItem
 		{
 			get { return _lvi; }
 		}
+
+        /// <summary>
+        /// Gets the repository root.
+        /// </summary>
+        /// <value>The repository root.</value>
+        [Browsable(false)]
+        public Uri RepositoryRoot
+        {
+            get { return _repositoryRoot; }
+        }
 
 		[Category("Subversion")]
 		[DisplayName("Commit date")]

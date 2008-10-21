@@ -16,7 +16,7 @@ namespace Ankh.Scc
     /// 
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
-    partial class AnkhSccProvider : IProjectFileMapper
+    partial class AnkhSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
     {
         // ********************************************************
         // This file contains two very important features of the Scc provider:
@@ -24,7 +24,13 @@ namespace Ankh.Scc
         //  - The persistance of history on project add/remove/rename actions
         //
         readonly Dictionary<string, SccProjectFile> _fileMap = new Dictionary<string, SccProjectFile>(StringComparer.OrdinalIgnoreCase);
+        IAnkhSolutionSettings _solutionSettings;
         bool _syncMap;
+
+        IAnkhSolutionSettings SolutionSettings
+        {
+            get { return _solutionSettings ?? (_solutionSettings = GetService<IAnkhSolutionSettings>()); }
+        }
 
         /// <summary>
         /// Called when a file is added to a project
@@ -634,6 +640,49 @@ namespace Ankh.Scc
 
         #endregion
 
+        public IEnumerable<SvnItem> GetUpdateRoots(SvnProject project)
+        {
+            if (project != null)
+                return GetSingleProjectRoots(project);
+
+            return GetSolutionProjectRoots();
+        }
+
+        private IEnumerable<SvnItem> GetSolutionProjectRoots()
+        {
+
+            throw new NotImplementedException();
+        }
+
+        private IEnumerable<SvnItem> GetSingleProjectRoots(SvnProject project)
+        {
+            SccProjectData pd;
+            if(project.RawHandle == null || !_projectMap.TryGetValue(project.RawHandle, out pd))
+                yield break;
+
+            SvnItem projectRootItem = null;
+            if(!string.IsNullOrEmpty(pd.ProjectDirectory))
+            {
+                projectRootItem = StatusCache[pd.ProjectDirectory];
+
+                if(projectRootItem.IsVersioned)
+                    yield return projectRootItem;
+            }
+
+            string file = pd.ProjectFile;
+
+            if(string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
+                yield break;
+
+            SvnItem projectFileItem = StatusCache[file];
+
+            if(projectFileItem.IsVersioned &&
+                (projectRootItem == null || !projectFileItem.IsBelowPath(projectRootItem.FullPath)))
+            {
+                yield return projectFileItem;
+            }
+        }
+
         /// <summary>
         /// Wrapper class providing a public api to the data contained within <see cref="SccProjectData"/>
         /// </summary>
@@ -694,6 +743,6 @@ namespace Ankh.Scc
             }
 
             #endregion
-        }
+        }        
     }
 }

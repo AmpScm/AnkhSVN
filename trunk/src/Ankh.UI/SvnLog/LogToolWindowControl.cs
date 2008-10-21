@@ -17,93 +17,102 @@ namespace Ankh.UI.SvnLog
     public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
         string _originalText;
-        ISvnRepositoryItem _remoteTarget;
+        IList<SvnOrigin> _origins;
         public LogToolWindowControl()
         {
             InitializeComponent();
-            
+            LogSource = logControl.LogSource;
         }
 
         public LogToolWindowControl(IContainer container)
-            :this()
+            : this()
         {
             container.Add(this);
+        }
+
+        LogDataSource _dataSource;
+        internal LogDataSource LogSource
+        {
+            get { return _dataSource; }
+            set { _dataSource = value; }
         }
 
         protected override void OnFrameCreated(EventArgs e)
         {
             base.OnFrameCreated(e);
-            
+
             _originalText = Text;
 
             ToolWindowHost.CommandContext = AnkhId.LogContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.LogContextGuid;
-			logControl.Context = Context;
+            logControl.Context = Context;
         }
 
-        SvnItem[] _localItems;
-
-        public bool HasWorkingCopyItems
-        {
-            get { return _localItems != null && _localItems.Length > 0; }
-        }
-
-        public bool HasRemoteItems
-        {
-            get { return _remoteTarget != null; }
-        }
-
-        public SvnItem[] WorkingCopyItems
+        public IList<SvnOrigin> Origins
         {
             get
             {
-                if (_localItems != null)
-                    return (SvnItem[])_localItems.Clone();
-                else
-                    return new SvnItem[0];
+                if (_origins == null)
+                    return null;
+
+                return new List<SvnOrigin>(_origins);
             }
         }
 
-        public ISvnRepositoryItem[] RemoteItems
-        {
-            get
-            {
-                if (_remoteTarget != null)
-                    return new ISvnRepositoryItem[] { _remoteTarget };
-                return new ISvnRepositoryItem[] { };
-            }
-        }
-
-        void SetTitle(ICollection<SvnItem> targets)
+        void UpdateTitle()
         {
             Text = _originalText;
-            if(targets.Count != 1)
+            if (_origins != null || _origins.Count != 1)
             {
                 return;
             }
 
-            foreach (SvnItem i in targets)
+            foreach (SvnOrigin origin in _origins)
             {
-                Text += string.Format(" - {0}", i.Name);
+                Text += string.Format(" - {0}", origin.Target.TargetName);
                 break;
             }
         }
 
+        public void StartLog(IAnkhServiceProvider context, SvnOrigin target, SvnRevision start, SvnRevision end)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            StartLog(context, new SvnOrigin[] { target }, start, end);
+        }
+
+        public void StartLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
+        {
+            if (targets == null)
+                throw new ArgumentNullException("targets");
+
+            _origins = new List<SvnOrigin>(targets);
+
+            UpdateTitle();
+
+            logControl.StartLog(context, _origins, start, end);
+        }
+
+        [Obsolete("Pass SvnOrigins")]
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
         {
             StartLocalLog(context, targets, null, null);
         }
+
+        [Obsolete("Pass SvnOrigins")]
         public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
         {
             if (targets == null)
                 throw new ArgumentNullException("targets");
 
-            _localItems = new SvnItem[targets.Count];
-            _remoteTarget = null;
-            targets.CopyTo(_localItems, 0);
+            List<SvnOrigin> t = new List<SvnOrigin>();
+            foreach (SvnItem item in targets)
+            {
+                t.Add(new SvnOrigin(item));
+            }
 
-            SetTitle(targets);
-            logControl.StartLocalLog(context, SvnItem.GetPaths(targets), start, end);
+            StartLog(context, t, start, end);
         }
 
         public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)
@@ -111,10 +120,10 @@ namespace Ankh.UI.SvnLog
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            _localItems = new SvnItem[] { target };
-            _remoteTarget = null;
-            SetTitle(_localItems);
-            logControl.StartMergesEligible(context, target.FullPath, source);
+            SvnOrigin origin = new SvnOrigin(target);
+            _origins = new SvnOrigin[] { origin };
+            UpdateTitle();
+            logControl.StartMergesEligible(context, origin, source);
         }
 
         public void StartMergesMerged(IAnkhServiceProvider context, SvnItem target, Uri source)
@@ -122,17 +131,16 @@ namespace Ankh.UI.SvnLog
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            _localItems = new SvnItem[] { target };
-            _remoteTarget = null;
-            SetTitle(_localItems);
-            logControl.StartMergesMerged(context, target.FullPath, source);
+            SvnOrigin origin = new SvnOrigin(target);
+            _origins = new SvnOrigin[] { origin };
+            UpdateTitle();
+            logControl.StartMergesMerged(context, origin, source);
         }
 
+        [Obsolete("Please pass origin directly")]
         public void StartRemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem remoteTarget)
         {
-            _localItems = null;
-            _remoteTarget = remoteTarget;
-            logControl.StartRemoteLog(context, remoteTarget);
+            StartLog(context, remoteTarget.Origin, null, null);
         }
 
         public override ISite Site
@@ -159,7 +167,7 @@ namespace Ankh.UI.SvnLog
             get { return logControl.ChangedPathsVisible; }
             [DebuggerStepThrough]
             set { logControl.ChangedPathsVisible = value; }
-        }        
+        }
 
         public bool IncludeMerged
         {
@@ -234,6 +242,6 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        #endregion     
+        #endregion
     }
 }

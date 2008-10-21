@@ -21,14 +21,55 @@ namespace Ankh.UI.SvnLog.Commands
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
             
-            if ((logWindow == null) || (!logWindow.HasWorkingCopyItems && !logWindow.HasRemoteItems))
+            if (logWindow == null || logWindow.Origins == null)
             {
                 e.Enabled = false;
                 return;
             }
-            bool workingCopy = logWindow.HasWorkingCopyItems;
-            bool remote = logWindow.HasRemoteItems;
 
+            if (UpdateForChangedFiles(e))
+                return;
+
+            UpdateForRevChanges(logWindow, e);
+        }
+
+        void UpdateForRevChanges(ILogControl logWindow, CommandUpdateEventArgs e)
+        {
+            SvnOrigin first = null;
+            foreach (SvnOrigin origin in logWindow.Origins)
+            {
+                if (first != null)
+                {
+                    // We can't diff multiple items
+                    e.Enabled = false;
+                    return;
+                }
+                first = origin;
+            }
+
+            if(first == null)
+            {
+                e.Enabled = false;
+                return;
+            }
+
+            SvnPathTarget pt = first.Target as SvnPathTarget;
+
+            if (pt != null)
+            {
+                if (e.GetService<IFileStatusCache>()[pt.FullPath].IsDirectory)
+                {
+                    // We can't diff directories at this time
+                    e.Enabled = false;
+                    return;
+                }
+            }
+
+            // Note: We can't have a local directory, but we can have a remote one.
+        }
+
+        bool UpdateForChangedFiles(CommandUpdateEventArgs e)
+        {
             ISvnLogChangedPathItem change = null;
             foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
@@ -42,7 +83,7 @@ namespace Ankh.UI.SvnLog.Commands
             if (change != null)
             {
                 // Skip all the files we cannot diff
-                switch(change.Action)
+                switch (change.Action)
                 {
                     case SvnChangeAction.Add:
                         if (change.CopyFromRevision >= 0)
@@ -50,50 +91,26 @@ namespace Ankh.UI.SvnLog.Commands
                         e.Enabled = false;
                         break;
                     case SvnChangeAction.Delete:
-                        e.Enabled =false;
+                        e.Enabled = false;
                         break;
                 }
-                return;
+                return true;
             }
 
-            // TODO: Remove this code when we're able to handle directories
-            SvnItem first = null;
-            foreach (SvnItem i in logWindow.WorkingCopyItems)
-            {
-                first = i;
-            }
-
-
-            if (workingCopy && (first == null || first.IsDirectory))
-            {
-                e.Enabled = false;
-                return;
-            }
-
-            if (remote)
-            {
-                e.Enabled = logWindow.RemoteItems[0].NodeKind == SvnNodeKind.File;
-                return;
-            }
-
-            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
-            {
-                return;
-            }
-
-            e.Enabled = false;
+            return false;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            if (logWindow.HasWorkingCopyItems)
-                ExecuteWorkingCopy(e, logWindow);
-            else if (logWindow.HasRemoteItems)
-                ExecuteRemote(e, logWindow);
+
+            if (PerformRevisionChanges(logWindow, e))
+                return;
+
+            PerformFileChanges(e);
         }
 
-        static void ExecuteRemote(CommandEventArgs e, ILogControl logWindow)
+        bool PerformRevisionChanges(ILogControl log, CommandEventArgs e)
         {
             long min = long.MaxValue;
             long max = long.MinValue;
@@ -107,114 +124,44 @@ namespace Ankh.UI.SvnLog.Commands
                 max = Math.Max(max, item.Revision);
                 touched = true;
             }
-            if (touched)
-            {
-                ISvnRepositoryItem reposItem = logWindow.RemoteItems[0];
 
-                ExecuteDiff(e, new SvnRevisionRange(min - 1, max), new SvnUriTarget(reposItem.Uri, reposItem.Revision));   
-            }
-            else
+            if(touched)
             {
-                ISvnLogChangedPathItem change = null;
-                foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
-                {
-                    change = c;
-                    touched = true;
-                    break;
-                }
-                if (change != null)
-                {
-                    ISvnRepositoryItem reposItem = logWindow.RemoteItems[0];
-                    Uri fileUri = new Uri(reposItem.RepositoryRoot, SvnTools.PathToRelativeUri(change.Path.TrimStart('/'))); 
-
-                    ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), new SvnUriTarget(fileUri, reposItem.Revision));
-                    return;
-                }
+                ExecuteDiff(e, log.Origins, new SvnRevisionRange(min-1, max));
+                return true;
             }
+
+            return false;
         }
-
-        static void ExecuteWorkingCopy(CommandEventArgs e, ILogControl logWindow)
+        
+        void PerformFileChanges(CommandEventArgs e)
         {
-            long min = long.MaxValue;
-            long max = long.MinValue;
+            ISvnLogChangedPathItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogChangedPathItem>());
 
-            bool touched = false;
-
-            HybridCollection<string> changedPaths = new HybridCollection<string>();
-            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+            if(item != null)
             {
-                min = Math.Min(min, item.Revision);
-                max = Math.Max(max, item.Revision);
-                touched = true;
+                switch(item.Action)
+                {
+                    case SvnChangeAction.Delete:
+                        return;
+                    case SvnChangeAction.Add:
+                    case SvnChangeAction.Replace:
+                        if(item.CopyFromRevision < 0)
+                            return;
+                        return;
+                }
 
-                foreach (SvnChangeItem change in item.ChangedPaths)
-                {
-                    if(!changedPaths.Contains(change.Path))
-                        changedPaths.Add(change.Path);
-                }
-            }
-            if (!touched)
-            {
-                ISvnLogChangedPathItem change = null;
-                foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
-                {
-                    change = c;
-                    touched = true;
-                    break;
-                }
-                if(change != null)
-                {
-                    ExecuteChangedPaths(e, change);
-                    return;
-                }
-            }
-            if(!touched)
+                ExecuteDiff(e, new SvnOrigin[] { item.Origin }, new SvnRevisionRange(item.Revision-1, item.Revision));
+            }            
+        }        
+
+        void ExecuteDiff(CommandEventArgs e, ICollection<SvnOrigin> targets, SvnRevisionRange range)
+        {
+            if (targets.Count != 1)
                 return;
 
-            if (min == max)
-                min--;
+            SvnTarget diffTarget = EnumTools.GetSingle(targets).Target;
 
-
-            IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, changedPaths);
-            
-            // TODO: show dialog when more than one item is returned
-            SvnItem workingCopyItem = null;
-            foreach (SvnItem item in intersectedItems)
-            {
-                workingCopyItem = item;
-                break;
-            }
-            if (workingCopyItem == null)
-                return;
-
-            SvnRevisionRange range = new SvnRevisionRange(min, max);
-            SvnTarget diffTarget = new SvnPathTarget(workingCopyItem.FullPath);
-            ExecuteDiff(e, range, diffTarget);
-        }
-
-        static void ExecuteChangedPaths(CommandEventArgs e, ISvnLogChangedPathItem change)
-        {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-
-            IEnumerable<SvnItem> items = 
-                LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logWindow.WorkingCopyItems, new string[] { change.Path });
-
-            SvnItem firstItem = null;
-            foreach (SvnItem i in items)
-            {
-                firstItem = i;
-                break;
-            }
-            if (firstItem == null)
-                return;
-
-
-            SvnPathTarget target = new SvnPathTarget(firstItem.FullPath);
-            ExecuteDiff(e, new SvnRevisionRange(change.Revision - 1, change.Revision), target);
-        }
-
-        static void ExecuteDiff(CommandEventArgs e, SvnRevisionRange range, SvnTarget diffTarget)
-        {
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             AnkhDiffArgs da = new AnkhDiffArgs();
             da.BaseFile = diff.GetTempFile(diffTarget, range.StartRevision, false);

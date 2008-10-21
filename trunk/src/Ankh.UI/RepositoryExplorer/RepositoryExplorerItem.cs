@@ -129,14 +129,41 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        public SvnOrigin Origin
+        {
+            get
+            {
+                if (TreeNode != null)
+                    return TreeNode.Origin;
+                if (ListViewItem != null)
+                    return ListViewItem.Origin;
+
+                throw new InvalidOperationException();
+            }
+        }
+
+        public Uri RepositoryRoot
+        {
+            get
+            {
+                SvnOrigin origin = Origin;
+
+                if (origin != null)
+                    return origin.RepositoryRoot;       
+                return null;
+            }
+        }
+        #endregion
+
+
         SharpSvn.SvnRevision ISvnRepositoryItem.Revision
         {
             get 
             {
-                if (ListViewItem != null)
-                    return ListViewItem.Info.Entry.Revision;
-                if (TreeNode != null)
-                    return TreeNode.Revision;
+                SvnOrigin origin = Origin;
+
+                if (origin != null)
+                    return origin.Target.Revision;
 
                 return null;
             }
@@ -172,27 +199,6 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
         }
-
-        [Browsable(false)]
-        [Obsolete]
-        public bool IsRepositoryItem
-        {
-            get { return RepositoryRoot != null; }
-        }
-
-        public Uri RepositoryRoot
-        {
-            get
-            {
-                if (TreeNode != null)
-                    return TreeNode.RepositoryRoot;
-                if (ListViewItem != null)
-                    return ListViewItem.Info.RepositoryRoot;
-
-                return null;
-            }
-        }
-        #endregion
 
         private RepositoryExplorerControl GetRepositoryExplorerControl()
         {

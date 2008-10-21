@@ -12,5 +12,7 @@ namespace Ankh.Scc
 		long CopyFromRevision { get; }
 		string Path { get; }
         long Revision { get; }
+
+        SvnOrigin Origin { get; }
 	}
 }
