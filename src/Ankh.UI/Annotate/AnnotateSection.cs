@@ -10,14 +10,16 @@ namespace Ankh.UI.Blame
     public class BlameSection : IBlameSection
     {
         readonly SvnBlameEventArgs _args;
+        readonly SvnOrigin _origin;
         long _endLine;
 
         internal bool Hovered;
 
-        public BlameSection(SvnBlameEventArgs e)
+        public BlameSection(SvnBlameEventArgs e, SvnOrigin origin)
         {
             _args = e;
             _endLine = _args.LineNumber;
+            _origin = origin;
         }
 
         [Category("Subversion")]
@@ -47,6 +49,12 @@ namespace Ankh.UI.Blame
         {
             get { return (int)_endLine; }
             set { _endLine = value; }
+        }
+
+        [Browsable(false)]
+        public SvnOrigin Origin
+        {
+            get { return _origin; }
         }
     }
 }

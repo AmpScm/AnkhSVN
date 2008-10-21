@@ -61,6 +61,7 @@ namespace Ankh.UI.Blame
         public void AddLines(SvnItem workingCopyItem, System.Collections.ObjectModel.Collection<SharpSvn.SvnBlameEventArgs> blameResult)
         {
             _wcItem = workingCopyItem;
+            SvnOrigin origin = new SvnOrigin(workingCopyItem);
 
             BlameSection section = null;
             blameSections.Clear();
@@ -69,7 +70,7 @@ namespace Ankh.UI.Blame
             {
                 if (blameSections.Count == 0)
                 {
-                    section = new BlameSection(e);
+                    section = new BlameSection(e, origin);
                     blameSections.Add(section);
                 }
                 else
@@ -78,7 +79,7 @@ namespace Ankh.UI.Blame
                         section.EndLine = (int)e.LineNumber;
                     else
                     {
-                        section = new BlameSection(e);
+                        section = new BlameSection(e, origin);
                         blameSections.Add(section);
                     }
                 }
