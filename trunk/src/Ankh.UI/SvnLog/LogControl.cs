@@ -23,6 +23,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.BatchDone += new EventHandler<BatchFinishedEventArgs>(logRevisionControl1_BatchDone);
 
             LogSource = new LogDataSource();
+            LogSource.Synchronizer = this;
 
             logChangedPaths1.LogSource = LogSource;
             logRevisionControl1.LogSource = LogSource;

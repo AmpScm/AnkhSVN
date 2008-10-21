@@ -22,6 +22,13 @@ namespace Ankh.UI.SvnLog
             InitializeComponent();
         }
 
+        ISynchronizeInvoke _synchronizer;
+        public ISynchronizeInvoke Synchronizer
+        {
+            get { return _synchronizer; }
+            set { _synchronizer = value; }
+        }
+
         ICollection<SvnOrigin> _targets;
         SvnOrigin _mergeTarget;
         public ICollection<SvnOrigin> Targets

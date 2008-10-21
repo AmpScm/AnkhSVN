@@ -19,7 +19,7 @@ namespace Ankh.UI.SvnLog
 {
     partial class LogRevisionControl : UserControl, ICurrentItemSource<ISvnLogItem>
     {
-        readonly Action<LogDataSource> _logAction;
+        readonly Action<SvnLogArgs> _logAction;
         readonly object _instanceLock = new object();
         readonly Queue<LogListViewItem> _logItems = new Queue<LogListViewItem>();
         readonly List<LogListViewItem> _logItemList = new List<LogListViewItem>();
@@ -38,7 +38,7 @@ namespace Ankh.UI.SvnLog
             InitializeComponent();
             _syncContext = SynchronizationContext.Current;
             _sopCallback = new SendOrPostCallback(SopCallback);
-            _logAction = new Action<LogDataSource>(DoFetch);
+            _logAction = new Action<SvnLogArgs>(DoFetch);
             _logReceiver = new EventHandler<SvnLogEventArgs>(ReceiveItem);
             _mergesEligibleReceiver = new EventHandler<SvnMergesEligibleEventArgs>(ReceiveItem);
             _mergesMergedReceiver = new EventHandler<SvnMergesMergedEventArgs>(ReceiveItem);
@@ -108,13 +108,19 @@ namespace Ankh.UI.SvnLog
         {
             _mode = mode;
             _context = context;
-            _cancel = false;            
+            _cancel = false;
+            SvnLogArgs args = new SvnLogArgs();
+            args.Start = StartRevision;
+            args.End = EndRevision;
             
             // If we have EndRevision set, we want all items until End
-            if(LogSource.End == null || LogSource.End.RevisionType == SvnRevisionType.None)
-                LogSource.Limit = 10;            
+            if(args.End == null || args.End.RevisionType == SvnRevisionType.None)
+                args.Limit = 10;
 
-            _logRunner = _logAction.BeginInvoke(LogSource, _logComplete, null);
+            args.StrictNodeHistory = StrictNodeHistory;
+            args.RetrieveMergedRevisions = IncludeMergedRevisions;
+
+            _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
 			ShowBusyIndicator();
         }
 
@@ -145,7 +151,7 @@ namespace Ankh.UI.SvnLog
         int fetchCount = 0;
         bool _running;
         bool _cancel;
-        void DoFetch(LogDataSource args)
+        void DoFetch(SvnLogArgs args)
         {
             lock (_instanceLock)
             {
@@ -172,11 +178,11 @@ namespace Ankh.UI.SvnLog
                         case LogMode.Log:
                             SvnLogArgs la = new SvnLogArgs();
                             la.SvnError += new EventHandler<SvnErrorEventArgs>(la_SvnError);
-                            la.Start = LogSource.Start;
-                            la.End = LogSource.End;
-                            la.Limit = LogSource.Limit;
-                            la.StrictNodeHistory = LogSource.StrictNodeHistory;
-                            la.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
+                            la.Start = args.Start;
+                            la.End = args.End;
+                            la.Limit = args.Limit;
+                            la.StrictNodeHistory = args.StrictNodeHistory;
+                            la.RetrieveMergedRevisions = args.RetrieveMergedRevisions;
 
                             client.Log(uris, la, _logReceiver);
                             break;
@@ -346,7 +352,7 @@ namespace Ankh.UI.SvnLog
                             args.RetrieveMergedRevisions = IncludeMergedRevisions;
 
                             ShowBusyIndicator();
-                            _logRunner = _logAction.BeginInvoke(LogSource, _logComplete, null);
+                            _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
                         }
                     }
                 }
@@ -388,7 +394,7 @@ namespace Ankh.UI.SvnLog
             args.RetrieveMergedRevisions = IncludeMergedRevisions;
             //args.RetrieveChangedPaths = false;
 
-            _logRunner = _logAction.BeginInvoke(LogSource, _logComplete, null);
+            _logRunner = _logAction.BeginInvoke(args, _logComplete, null);
 			ShowBusyIndicator();
         }
 
