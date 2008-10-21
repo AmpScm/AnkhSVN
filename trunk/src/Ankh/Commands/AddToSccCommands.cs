@@ -140,7 +140,7 @@ namespace Ankh.Commands
                             Collection<SvnInfoEventArgs> info;
                             SvnInfoArgs ia = new SvnInfoArgs();
                             ia.ThrowOnError = false;
-                            if (!cl.GetInfo(new SvnUriTarget(dialog.RepositoryAddUrl), ia, out info))
+                            if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
                             {
                                 using (CreateDirectoryDialog createDialog = new CreateDirectoryDialog())
                                 {
