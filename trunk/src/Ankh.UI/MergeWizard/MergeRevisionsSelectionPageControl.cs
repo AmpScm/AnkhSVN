@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using WizardFramework;
 using SharpSvn;
 using Ankh.UI.SvnLog;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -46,14 +47,14 @@ namespace Ankh.UI.MergeWizard
         /// Gets or sets the merge source.
         /// </summary>
         /// <value>The merge source.</value>
-        public string MergeSource
+        public SvnOrigin MergeSource
         {
             get { return ((MergeWizard)WizardPage.Wizard).MergeSource; }
         }
 
-        public string MergeTarget
+        public SvnOrigin MergeTarget
         {
-            get { return ((MergeWizard)WizardPage.Wizard).MergeTarget.FullPath; }
+            get { return new SvnOrigin(((MergeWizard)WizardPage.Wizard).MergeTarget); }
         }
 
         protected void PopulateUI()
@@ -63,14 +64,14 @@ namespace Ankh.UI.MergeWizard
             {
                 case LogMode.MergesEligible:
                     logToolControl1.IncludeMerged = false;
-                    logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, new Uri(MergeSource));
+                    logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, MergeSource.Target);
                     break;
                 case LogMode.MergesMerged:
                     logToolControl1.IncludeMerged = true;
-                    logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, new Uri(MergeSource));
+                    logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, MergeSource.Target);
                     break;
-                case LogMode.Remote:
-                    logToolControl1.StartRemoteLog(WizardPage.Context, new Uri(MergeSource));
+                case LogMode.Log:
+                    logToolControl1.StartLog(WizardPage.Context, new SvnOrigin[] { new SvnOrigin(WizardPage.Context, MergeSource.Target, MergeTarget.RepositoryRoot)}, null, null);
                     break;
             }
         }

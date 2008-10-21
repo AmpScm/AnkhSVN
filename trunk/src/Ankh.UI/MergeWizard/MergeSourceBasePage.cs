@@ -49,7 +49,7 @@ namespace Ankh.UI.MergeWizard
             base.OnPageChanging(e);
 
             // Set the MergeSource before the page changes
-            ((MergeWizard)Wizard).MergeSource = MergeSource;
+            //((MergeWizard)Wizard).MergeSource = MergeSource;
         }
 
         internal string MergeSource

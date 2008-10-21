@@ -39,7 +39,7 @@
             this.logToolControl1.IncludeMerged = false;
             resources.ApplyResources(this.logToolControl1, "logToolControl1");
             this.logToolControl1.LogMessageVisible = true;
-            this.logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Local;
+            this.logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logToolControl1.Name = "logToolControl1";
             this.logToolControl1.StrictNodeHistory = false;
             this.logToolControl1.BatchFinished += new System.EventHandler<Ankh.UI.SvnLog.BatchFinishedEventArgs>(this.logToolControl1_BatchFinished);

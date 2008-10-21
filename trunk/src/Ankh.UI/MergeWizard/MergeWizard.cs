@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.SvnLog;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -267,7 +268,7 @@ namespace Ankh.UI.MergeWizard
                             // Set whether or not this is a dry run
                             args.DryRun = PerformDryRun;
 
-                            ee.Client.ReintegrationMerge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                            ee.Client.ReintegrationMerge(MergeTarget.FullPath, MergeSource.Target,
                                 args);
                         }
                         else
@@ -307,7 +308,7 @@ namespace Ankh.UI.MergeWizard
                                     Collection<SvnMergesEligibleEventArgs> availableMerges;
 
                                     ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
-                                        SvnUriTarget.FromString(MergeSource), lArgs, out availableMerges);
+                                        MergeSource.Target, lArgs, out availableMerges);
 
                                     foreach (SvnMergesEligibleEventArgs entries in availableMerges)
                                     {
@@ -318,7 +319,7 @@ namespace Ankh.UI.MergeWizard
                                 }
                             }
 
-                            ee.Client.Merge(MergeTarget.FullPath, SvnTarget.FromString(MergeSource),
+                            ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target,
                                     mergeRevisions.Count == 0 ? null : mergeRevisions, args);
                         }
                     }
@@ -391,12 +392,12 @@ namespace Ankh.UI.MergeWizard
             set { _mergeTarget = value; }
         }
 
-        string _mergeSource;
+        SvnOrigin _mergeSource;
         /// <summary>
         /// Gets or sets the merge source.
         /// </summary>
         /// <value>The merge source.</value>
-        public string MergeSource
+        public SvnOrigin MergeSource
         {
             get { return _mergeSource; }
             set { _mergeSource = value; }
@@ -437,7 +438,7 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        LogMode _logMode = LogMode.Remote;
+        LogMode _logMode = LogMode.Log;
         /// <summary>
         /// Gets or sets the log mode.
         /// </summary>
