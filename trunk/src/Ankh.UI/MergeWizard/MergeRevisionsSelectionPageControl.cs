@@ -98,6 +98,10 @@ namespace Ankh.UI.MergeWizard
             {
                 WizardPage.Message = new WizardMessage(Resources.NoLogItems, WizardMessage.MessageType.ERROR);
             }
+            else
+            {
+                WizardPage.Message = new WizardMessage("", WizardMessage.MessageType.NONE);
+            }
         }
     }
 }
