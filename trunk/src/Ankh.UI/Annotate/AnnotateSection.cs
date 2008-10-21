@@ -4,20 +4,23 @@ using System.Text;
 using SharpSvn;
 using Ankh.Scc;
 using System.ComponentModel;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.Blame
 {
-    public class BlameSection : IBlameSection
+    class AnnotateSection : IAnnotateSection
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
         long _endLine;
 
+        // BH: TODO: We should copy the values to release the cached lines in the SvnBlameEventArgs
+
         internal bool Hovered;
 
-        public BlameSection(SvnBlameEventArgs e, SvnOrigin origin)
+        public AnnotateSection(SvnBlameEventArgs blameArgs, SvnOrigin origin)
         {
-            _args = e;
+            _args = blameArgs;
             _endLine = _args.LineNumber;
             _origin = origin;
         }

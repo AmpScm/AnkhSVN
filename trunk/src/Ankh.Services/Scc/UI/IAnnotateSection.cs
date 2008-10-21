@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.Scc
+namespace Ankh.Scc.UI
 {
-    public interface IBlameSection
+    public interface IAnnotateSection
     {
         string Author { get; }
         long Revision { get; }

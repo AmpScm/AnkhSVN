@@ -14,14 +14,14 @@ namespace Ankh.UI.Blame
 {
     class BlameMarginControl :Control
     {
-        List<BlameSection> _sections;
+        List<AnnotateSection> _sections;
         BlameToolWindowControl _control;
         int _firstLine;
         int _lastLine;
         IAnkhServiceProvider _context;
         
 
-        internal void Init(IAnkhServiceProvider context, BlameToolWindowControl control, List<BlameSection> sections)
+        internal void Init(IAnkhServiceProvider context, BlameToolWindowControl control, List<AnnotateSection> sections)
         {
             _context = context;
             _control = control;
@@ -43,7 +43,7 @@ namespace Ankh.UI.Blame
             }
         }
 
-        Rectangle GetRectangle(BlameSection section)
+        Rectangle GetRectangle(AnnotateSection section)
         {
             int top = (section.StartLine - _firstLine) * LineHeight;
             int height = (section.EndLine - section.StartLine + 1) * LineHeight;
@@ -51,9 +51,9 @@ namespace Ankh.UI.Blame
             return new Rectangle(0, top, Width, height);
         }
 
-        BlameSection GetSection(Point location)
+        AnnotateSection GetSection(Point location)
         {
-            foreach (BlameSection section in _sections)
+            foreach (AnnotateSection section in _sections)
             {
                 Rectangle rect = GetRectangle(section);
                 if (rect.Contains(location))
@@ -67,7 +67,7 @@ namespace Ankh.UI.Blame
             base.OnMouseMove(e);
 
             bool changed = false;
-            foreach (BlameSection section in _sections)
+            foreach (AnnotateSection section in _sections)
             {
                 Rectangle rect = GetRectangle(section);
                 bool hovered = rect.Contains(e.Location);
@@ -88,7 +88,7 @@ namespace Ankh.UI.Blame
             base.OnMouseLeave(e);
             bool changed = false;
 
-            foreach (BlameSection section in _sections)
+            foreach (AnnotateSection section in _sections)
             {
                 if (section.Hovered == true)
                     changed = true;
@@ -101,7 +101,7 @@ namespace Ankh.UI.Blame
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            BlameSection section = GetSection(e.Location);
+            AnnotateSection section = GetSection(e.Location);
             _control.SetSelection(section);
             Invalidate();
 
@@ -143,7 +143,7 @@ namespace Ankh.UI.Blame
             using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
             using (Brush selectedBg = new SolidBrush(SystemColors.Highlight))
             {
-                foreach (BlameSection section in _sections.ToArray())
+                foreach (AnnotateSection section in _sections.ToArray())
                 {
                     if (section.EndLine < _firstLine)
                         continue;

@@ -75,9 +75,8 @@
     <Compile Include="IAnkhServiceImplementation.cs" />
     <Compile Include="Scc\IAnkhProjectLayoutService.cs" />
     <Compile Include="Scc\IAnkhTextEditingTracker.cs" />
-    <Compile Include="Scc\ISvnBlameSection.cs" />
+    <Compile Include="Scc\UI\IAnnotateSection.cs" />
     <Compile Include="Scc\SvnOrigin.cs" />
-    <Compile Include="Scc\UI\IBlameControl.cs" />
     <Compile Include="UI\RegistryLifoList.cs" />
     <Compile Include="Scc\IPendingChangeHandler.cs" />
     <Compile Include="UI\IAnkhToolWindowHost.cs" />

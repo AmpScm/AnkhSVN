@@ -116,7 +116,7 @@ namespace Ankh.Commands
                     break;
                 case AnkhCommand.BlameShowLog:
                     i = 0;
-                    foreach (IBlameSection section in e.Selection.GetSelection<IBlameSection>())
+                    foreach (IAnnotateSection section in e.Selection.GetSelection<IAnnotateSection>())
                     {
                         if (section == null)
                             continue;
@@ -187,8 +187,8 @@ namespace Ankh.Commands
                         PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
                     break;
                 case AnkhCommand.BlameShowLog:
-                    IBlameSection section = null;
-                    foreach (IBlameSection s in e.Selection.GetSelection<IBlameSection>())
+                    IAnnotateSection section = null;
+                    foreach (IAnnotateSection s in e.Selection.GetSelection<IAnnotateSection>())
                     {
                         section = s;
                         break;

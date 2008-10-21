@@ -11,14 +11,15 @@ using Ankh.UI.PendingChanges;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Scc;
 using Ankh.Scc.UI;
+using System.Collections.ObjectModel;
 
 namespace Ankh.UI.Blame
 {
-    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IBlameSection>, IBlameControl
+    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IAnnotateSection>
     {
-        List<BlameSection> blameSections = new List<BlameSection>();
+        List<AnnotateSection> blameSections = new List<AnnotateSection>();
         SelectionItemMap _map;
-        SvnItem _wcItem;
+        SvnOrigin _origin;
 
         public BlameToolWindowControl()
         {
@@ -35,7 +36,7 @@ namespace Ankh.UI.Blame
         {
             base.OnFrameCreated(e);
 
-            _map = SelectionItemMap.Create<IBlameSection>(this);
+            _map = SelectionItemMap.Create<IAnnotateSection>(this);
             _map.Context = ToolWindowHost;
 
             if (SelectionChanged != null)
@@ -58,19 +59,18 @@ namespace Ankh.UI.Blame
         }
 
 
-        public void AddLines(SvnItem workingCopyItem, System.Collections.ObjectModel.Collection<SharpSvn.SvnBlameEventArgs> blameResult)
+        public void AddLines(SvnOrigin origin, Collection<SharpSvn.SvnBlameEventArgs> blameResult)
         {
-            _wcItem = workingCopyItem;
-            SvnOrigin origin = new SvnOrigin(workingCopyItem);
+            _origin = origin;
 
-            BlameSection section = null;
+            AnnotateSection section = null;
             blameSections.Clear();
 
             foreach (SvnBlameEventArgs e in blameResult)
             {
                 if (blameSections.Count == 0)
                 {
-                    section = new BlameSection(e, origin);
+                    section = new AnnotateSection(e, origin);
                     blameSections.Add(section);
                 }
                 else
@@ -79,12 +79,10 @@ namespace Ankh.UI.Blame
                         section.EndLine = (int)e.LineNumber;
                     else
                     {
-                        section = new BlameSection(e, origin);
+                        section = new AnnotateSection(e, origin);
                         blameSections.Add(section);
                     }
                 }
-
-                
             }
             blameMarginControl1.Invalidate();
         }
@@ -94,19 +92,19 @@ namespace Ankh.UI.Blame
             blameMarginControl1.NotifyScroll(e.MinUnit, e.MaxUnit, e.VisibleUnits, e.FirstVisibleUnit);
         }
 
-        BlameSection _selected;
-        internal BlameSection Selected
+        AnnotateSection _selected;
+        internal AnnotateSection Selected
         {
             get { return _selected; }
         }
 
-        internal void SetSelection(IBlameSection section)
+        internal void SetSelection(IAnnotateSection section)
         {
             // Check if necessary
             //Focus();
             //Select();
 
-            _selected = (BlameSection)section;
+            _selected = (AnnotateSection)section;
 
             if (SelectionChanged != null)
                 SelectionChanged(this, EventArgs.Empty);
@@ -123,9 +121,9 @@ namespace Ankh.UI.Blame
             get
             {
                 if (_selected == null)
-                    return new IBlameSection[] { };
+                    return new IAnnotateSection[] { };
 
-                return new IBlameSection[] { _selected };
+                return new IAnnotateSection[] { _selected };
             }
         }
 
@@ -139,54 +137,40 @@ namespace Ankh.UI.Blame
             return IntPtr.Zero;
         }
 
-        public int GetImageListIndex(IBlameSection item)
+        public int GetImageListIndex(IAnnotateSection item)
         {
             return 0;
         }
 
-        public string GetText(IBlameSection item)
+        public string GetText(IAnnotateSection item)
         {
             return item.Revision.ToString();
         }
 
-        public object GetSelectionObject(IBlameSection item)
+        public object GetSelectionObject(IAnnotateSection item)
         {
             return item;
         }
 
-        public IBlameSection GetItemFromSelectionObject(object item)
+        public IAnnotateSection GetItemFromSelectionObject(object item)
         {
-            return (IBlameSection)item;
+            return (IAnnotateSection)item;
         }
 
-        public void SetSelection(IBlameSection[] items)
+        public void SetSelection(IAnnotateSection[] items)
         {
             if (items.Length > 0)
                 SetSelection(items[0]);
             else
-                SetSelection((IBlameSection)null);
+                SetSelection((IAnnotateSection)null);
         }
 
-        public string GetCanonicalName(IBlameSection item)
+        public string GetCanonicalName(IAnnotateSection item)
         {
-            BlameSection section = (BlameSection)item;
+            AnnotateSection section = (AnnotateSection)item;
             return section.Author + section.StartLine + section.Revision;
         }
 
-        #endregion
-
-        #region IBlameControl Members
-
-        public bool HasWorkingCopyItems
-        {
-            get { return true; }
-        }
-
-        public SvnItem[] WorkingCopyItems
-        {
-            get { return new SvnItem[] { _wcItem }; }
-        }
-
-        #endregion
+        #endregion    
     }
 }

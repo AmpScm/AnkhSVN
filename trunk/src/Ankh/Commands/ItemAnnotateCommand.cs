@@ -34,20 +34,8 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.BlameShowBlame:
-                    IBlameControl blameControl = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
-                    if (blameControl == null || !blameControl.HasWorkingCopyItems)
-                    {
-                        e.Enabled = e.Visible = false;
-                        return;
-                    }
-
-                    int blameCount = 0;
-                    foreach (IBlameSection blameItem in e.Selection.GetSelection<IBlameSection>())
-                    {
-                        blameCount++;
-                    }
-                    if (blameCount == 1)
-                        return;
+                    if (null == EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>()))
+                        e.Enabled = false;
                     break;
                 case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -96,26 +84,12 @@ namespace Ankh.Commands
 
         void BlameBlame(CommandEventArgs e)
         {
-            IBlameControl blameControl = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
+            IAnnotateSection blameSection = EnumTools.GetFirst(e.Selection.GetSelection<IAnnotateSection>());
 
-            IBlameSection blameSection = null;
-            foreach (IBlameSection blame in e.Selection.GetSelection<IBlameSection>())
-            {
-                blameSection = blame;
-                break;
-            }
-
-            SvnItem item = null;
-            foreach(SvnItem i in blameControl.WorkingCopyItems)
-            {
-                item = i;
-            }
-
-
-            SvnRevision revisionStart = SvnRevision.Zero;
+            SvnRevision revisionStart = SvnRevision.Zero; // Copy from original blame?
             SvnRevision revisionEnd = blameSection.Revision;
 
-            DoBlame(e, item, revisionStart, revisionEnd); 
+            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd); 
         }
 
         void BlameRevision(CommandEventArgs e)
@@ -134,22 +108,10 @@ namespace Ankh.Commands
                 break;
             }
 
-            SvnItem svnItem = null;
-            throw new InvalidOperationException();
-            // BH: Intersecting to find a single item in a command that doesn't depend on a workingcopy?
-            /*IEnumerable<SvnItem> intersectedItems = LogHelper.IntersectWorkingCopyItemsWithChangedPaths(logControl.WorkingCopyItems, changedPaths);
-            foreach (SvnItem i in intersectedItems)
-            {
-                svnItem = i;
-                break;
-            }*/
-            if (svnItem == null)
-                return;
-
             SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = item.Revision;
 
-            DoBlame(e, svnItem, revisionStart, revisionEnd);
+            DoBlame(e, item.Origin, revisionStart, revisionEnd);
         }
 
         void BlameItem(CommandEventArgs e)
@@ -203,10 +165,10 @@ namespace Ankh.Commands
             foreach (SvnItem i in result.Selection)
                 blameItem = i;
 
-            DoBlame(e, blameItem, result.RevisionStart, result.RevisionEnd);
+            DoBlame(e, new SvnOrigin(blameItem), result.RevisionStart, result.RevisionEnd);
         }
 
-        void DoBlame(CommandEventArgs e, SvnItem item, SvnRevision revisionStart, SvnRevision revisionEnd)
+        void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd)
         {
             IAnkhPackage p = e.GetService<IAnkhPackage>();
             SvnExportArgs ea = new SvnExportArgs();
@@ -216,7 +178,7 @@ namespace Ankh.Commands
             ba.Start = revisionStart;
             ba.End = revisionEnd;
 
-            SvnTarget target = new SvnPathTarget(item.FullPath);
+            SvnTarget target = item.Target;
 
             IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
             string tempFile = tempMgr.GetTempFile();
@@ -224,7 +186,6 @@ namespace Ankh.Commands
             Collection<SvnBlameEventArgs> blameResult = null;
             e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
-
                 ee.Client.Export(target, tempFile, ea);
 
                 ee.Client.GetBlame(target, ba, out blameResult);
@@ -234,7 +195,17 @@ namespace Ankh.Commands
             BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
             blameToolControl.Init();
 
-            blameToolControl.LoadFile(item.FullPath, tempFile);
+            SvnPathTarget pt = target as SvnPathTarget;
+
+            if (pt != null)
+            {
+                blameToolControl.LoadFile(pt.FullPath, tempFile);
+            }
+            else
+            {
+                blameToolControl.LoadFile(tempMgr.GetTempFile(Path.GetExtension(target.FileName)), tempFile);
+            }
+
             blameToolControl.AddLines(item, blameResult);
         }
     }
