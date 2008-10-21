@@ -91,16 +91,22 @@ namespace Ankh.UI
                 List<PathListViewItem> paths = new List<PathListViewItem>();
                 foreach (SvnChangeItem i in e.ChangedPaths)
                 {                        
-                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(i)));
+                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(e, i)));
                 }
 
                 changedPaths.Items.AddRange(paths.ToArray());
             }
         }
 
-        private bool HasFocus(SvnChangeItem i)
+        private bool HasFocus(ISvnLogItem e, SvnChangeItem i)
         {
-            return true;
+            string itemUri = new Uri(e.RepositoryRoot, i.Path.TrimStart('/')).ToString();
+            foreach (SvnOrigin origin in LogSource.Targets)
+            {
+                if (itemUri.StartsWith(origin.Uri.ToString()))
+                    return true;
+            }
+            return false;
         }
 
         internal void Reset()
