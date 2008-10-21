@@ -9,5 +9,6 @@ namespace Ankh.Scc
         string Author { get; }
         long Revision { get; }
         DateTime Time { get; }
+        SvnOrigin Origin { get; }
     }
 }

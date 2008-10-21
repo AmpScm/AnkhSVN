@@ -132,7 +132,7 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            List<SvnItem> selected = new List<SvnItem>();
+            List<SvnOrigin> selected = new List<SvnOrigin>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
 
             switch (e.Command)
@@ -160,9 +160,7 @@ namespace Ankh.Commands
                 case AnkhCommand.SolutionHistory:
                     IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
-                    selected.Add(cache[settings.ProjectRoot]);
-
-                    LocalLog(e.Context, selected);
+                    PerformLog(e.Context, new SvnOrigin[] { new SvnOrigin(cache[settings.ProjectRoot]) }, null, null);
                     break;
                 case AnkhCommand.ProjectHistory:
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
@@ -171,10 +169,10 @@ namespace Ankh.Commands
                         ISvnProjectInfo info = mapper.GetProjectInfo(p);
 
                         if (info != null)
-                            selected.Add(cache[info.ProjectDirectory]);
+                            selected.Add(new SvnOrigin(cache[info.ProjectDirectory]));
                     }
 
-                    LocalLog(e.Context, selected);
+                    PerformLog(e.Context, selected, null, null);
                     break;
                 case AnkhCommand.ReposExplorerLog:
                     ISvnRepositoryItem item = null;
@@ -189,16 +187,6 @@ namespace Ankh.Commands
                         PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
                     break;
                 case AnkhCommand.BlameShowLog:
-
-                    IBlameControl blameWindow = e.Selection.ActiveDialogOrFrameControl as IBlameControl;
-
-                    if ((blameWindow == null) || !blameWindow.HasWorkingCopyItems)
-                        return;
-
-                    SvnItem firstItem = null;
-                    foreach (SvnItem i in blameWindow.WorkingCopyItems)
-                        firstItem = i;
-
                     IBlameSection section = null;
                     foreach (IBlameSection s in e.Selection.GetSelection<IBlameSection>())
                     {
@@ -208,41 +196,12 @@ namespace Ankh.Commands
                     if (section == null)
                         return;
 
-                    LocalLog(e.Context, new SvnItem[] { firstItem }, section.Revision, null);
+                    PerformLog(e.Context, new SvnOrigin[] { section.Origin }, section.Revision, null);
 
                     break;
             }
-        }
-
-        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
-        {
-            List<SvnOrigin> origins = new List<SvnOrigin>();
-
-            foreach (SvnItem item in targets)
-            {
-                origins.Add(new SvnOrigin(item));
-            }
-
-            PerformLog(context, origins, null, null);
-        }
-
-        static void LocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
-        {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            else if (targets == null)
-                throw new ArgumentNullException("targets");
-
-            List<SvnOrigin> origins = new List<SvnOrigin>();
-
-            foreach (SvnItem item in targets)
-            {
-                origins.Add(new SvnOrigin(item));
-            }
-
-            PerformLog(context, origins, start, end);
-        }
-
+        }        
+        
         static void PerformLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             IAnkhPackage package = context.GetService<IAnkhPackage>();
@@ -252,65 +211,6 @@ namespace Ankh.Commands
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if (logToolControl != null)
                 logToolControl.StartLog(context, targets, start, end);
-        }
-
-        sealed class RepositoryItem : ISvnRepositoryItem
-        {
-            readonly SvnUriTarget _target;
-            readonly SvnItem _item;
-            readonly Uri _repositoryRoot;
-
-            public RepositoryItem(SvnUriTarget target, SvnItem item, Uri repositoryRoot)
-            {
-                _target = target;
-                _item = item;
-                _repositoryRoot = repositoryRoot;
-            }
-
-            public Uri Uri
-            {
-                get { return _target.Uri; }
-            }
-
-            public SvnNodeKind NodeKind
-            {
-                get { return _item.NodeKind; }
-            }
-
-            public SvnRevision Revision
-            {
-                get { return _target.Revision; }
-            }
-
-            public string Name
-            {
-                get { return _item.Name; }
-            }
-
-            public void RefreshItem(bool refreshParent)
-            {
-            }
-
-            [Obsolete]
-            public bool IsRepositoryItem
-            {
-                get { return true; }
-            }
-
-            public Uri RepositoryRoot
-            {
-                get { return _repositoryRoot; }
-            }
-
-            #region ISvnRepositoryItem Members
-
-
-            public SvnOrigin Origin
-            {
-                get { return new SvnOrigin(_target, _repositoryRoot); }
-            }
-
-            #endregion
         }
     }
 }
