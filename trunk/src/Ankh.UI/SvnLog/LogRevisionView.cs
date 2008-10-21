@@ -102,6 +102,9 @@ namespace Ankh.UI.SvnLog
 
         void UpdateColors()
         {
+            if (_args.ChangedPaths == null)
+                return;
+
             foreach (SvnChangeItem ci in _args.ChangedPaths)
             {
                 if (ci.CopyFromRevision >= 0)
