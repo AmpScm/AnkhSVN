@@ -194,7 +194,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                ((MergeWizard)WizardPage.Wizard).MergeSource = mergeFromComboBox.Text;
+                //((MergeWizard)WizardPage.Wizard).MergeSource = mergeFromComboBox.Text;
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
             }
         }
