@@ -126,7 +126,6 @@
     <Compile Include="AnkhContext.cs" />
     <Compile Include="IAnkhPackage.cs" />
     <Compile Include="IAnkhRuntimeInfo.cs" />
-    <Compile Include="Scc\IWorkingCopyOperations.cs" />
     <Compile Include="Scc\IAnkhSccService.cs" />
     <Compile Include="IAnkhServiceProvider.cs" />
     <Compile Include="ISvnClientPool.cs" />
