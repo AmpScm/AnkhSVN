@@ -82,7 +82,9 @@ namespace Ankh.Commands.RepositoryExplorer
             {
                 counter++;
                 if (counter > 1) { return null; } // multiple selection
-                if (i.Origin.RepositoryRoot != null)
+                
+                // null for 'dummy' nodes
+                if (i.Origin != null && i.Origin.RepositoryRoot != null)
                 {
                     result = i;
                 }
