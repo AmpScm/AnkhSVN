@@ -182,6 +182,7 @@ namespace Ankh.UI.SvnLog
                         }
                         SvnMergesEligibleArgs meArgs = new SvnMergesEligibleArgs();
                         meArgs.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
+                        meArgs.RetrieveChangedPaths = true;
                         client.ListMergesEligible(target, RemoteTarget, meArgs, _mergesEligibleReceiver);
                         break;
                     case LogMode.MergesMerged:
