@@ -49,7 +49,7 @@ namespace Ankh.UI.SvnLog.Commands
 
                     using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
                     {
-                        client.SetRevisionProperty(new SvnUriTarget(slnSettings.ProjectRootUri, logItems[0].Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
+                        client.SetRevisionProperty(new SvnUriTarget(logItems[0].RepositoryRoot, logItems[0].Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
                     }
                     
                     logWindow.Restart();
