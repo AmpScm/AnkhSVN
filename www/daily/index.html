@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5427</title>
+<title>AnkhSVN-Daily Update - 2.0.5442</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5427</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5442</h1>
 
 
 <p>
@@ -12,19 +12,36 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1176/AnkhSvn-Daily-2.0.5427.239.msi">AnkhSVN 2.0.5427</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1177/AnkhSvn-Daily-2.0.5442.240.msi">AnkhSVN 2.0.5442</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5427">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5442">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-10-21</td></tr>
+<tr><td> </td><td class="r"><a id="5441" href="http://ankhsvn.net/rev/?r=5441">[r5441]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogChangedPaths.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement HasFocus method based on wether the changed item is below one of the origins.
+This method controls wether the changed paths are grayed out or not</td></tr>
+<tr><td> </td><td class="r"><a id="5440" href="http://ankhsvn.net/rev/?r=5440">[r5440]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Avoid some exceptions when opening the repository explorer.</td></tr>
+<tr><td> </td><td class="r"><a id="5437" href="http://ankhsvn.net/rev/?r=5437">[r5437]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/UI/IBlameControl.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh.UI/Annotate/AnnotateSection.cs, src/Ankh.UI/Annotate/AnnotateToolWindowControl.cs, src/Ankh/Commands/ItemAnnotateCommand.cs, src/Ankh.UI/Annotate/AnnotateMarginControl.cs, src/Ankh.Services/Scc/UI/IAnnotateSection.cs, src/Ankh.Services/Scc/ISvnBlameSection.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use SvnOrigin for blame command handling.</td></tr>
+<tr><td> </td><td class="r"><a id="5436" href="http://ankhsvn.net/rev/?r=5436">[r5436]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/LogCommand.cs, src/Ankh.UI/Annotate/AnnotateSection.cs, src/Ankh.UI/Annotate/AnnotateToolWindowControl.cs, src/Ankh.Services/Scc/ISvnBlameSection.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">More origin cleanup</td></tr>
+<tr><td> </td><td class="r"><a id="5434" href="http://ankhsvn.net/rev/?r=5434">[r5434]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/IWorkingCopyOperations.cs, src/Ankh/StatusCache/WorkingCopyOperations.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove unused WorkingCopyOperations service.
+(Most code is on SvnTools anyway)</td></tr>
+<tr><td> </td><td class="r"><a id="5433" href="http://ankhsvn.net/rev/?r=5433">[r5433]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryTreeNode.cs, src/Ankh.Services/Scc/ISvnLogChangedPathItem.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh/Commands/ItemAnnotateCommand.cs, src/Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, src/Ankh.Services/Scc/IAnkhProjectLayoutService.cs, src/Ankh.Services/Scc/ISvnLogItem.cs (and 26 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Rebuild the entire log/history infrastructure to use SvnOrigin instances 
+everywhere. This commit breaks compilation of the merge infrastructure.
+[Part of a cleanup batch]</td></tr>
+<tr><td> </td><td class="r"><a id="5432" href="http://ankhsvn.net/rev/?r=5432">[r5432]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/SvnOrigin.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Complete the SvnOrigin class: A container of a SvnTarget the repository root
+and the Uri of the item.</td></tr>
+<tr><td> </td><td class="r"><a id="5431" href="http://ankhsvn.net/rev/?r=5431">[r5431]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Set RetrieveChangedPaths to true when calling MergesEligible</td></tr>
+<tr><td> </td><td class="r"><a id="5430" href="http://ankhsvn.net/rev/?r=5430">[r5430]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/MergeWizard/MergeRevisionsSelectionPageControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Reset the error message to an empty one when we receive a good result.</td></tr>
+<tr><td> </td><td class="r"><a id="5429" href="http://ankhsvn.net/rev/?r=5429">[r5429]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Prevent NullReferenceException when used in the 
+merge wizard. This fixes <a href="http://ankhsvn.net/issues/?id=528">issue #528</a></td></tr>
 <tr class="d"><td colspan="4">2008-10-20</td></tr>
 <tr><td> </td><td class="r"><a id="5427" href="http://ankhsvn.net/rev/?r=5427">[r5427]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectTracker.cs, src/Ankh.VS.UnitTest/Mocks/SelectionContext.cs, src/Ankh.Scc/ProjectTracker.Add.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed <a href="http://ankhsvn.net/issues/?id=529">issue #529</a>: When checking if a user saved a document with a new name,
 check whether he is really saving the same document instance.</td></tr>
@@ -170,11 +187,6 @@ column management, etc.)</td></tr>
 <tr><td> </td><td class="r"><a id="5268" href="http://ankhsvn.net/rev/?r=5268">[r5268]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhDiff.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Show a somewhat more friendly error if no merge tool is available</td></tr>
 <tr><td> </td><td class="r"><a id="5267" href="http://ankhsvn.net/rev/?r=5267">[r5267]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectTracker.Batching.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Clear the batch error list if the query batch is canceled and show the
 batch error dialog if errors are queueued in OnEndQueryBatch.</td></tr>
-<tr class="d"><td colspan="4">2008-09-23</td></tr>
-<tr><td> </td><td class="r"><a id="5252" href="http://ankhsvn.net/rev/?r=5252">[r5252]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/log.xsl, src/Ankh/Ankh.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Delete unused log.xsl</td></tr>
-<tr class="d"><td colspan="4">2008-09-22</td></tr>
-<tr><td> </td><td class="r"><a id="5248" href="http://ankhsvn.net/rev/?r=5248">[r5248]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectTracker.Batching.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement showing the SCC error batches. This provides the missing feedback
-on failed adds, etc.</td></tr>
 
 </table>
 <!--/Recent changes-->
