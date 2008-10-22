@@ -89,23 +89,44 @@ namespace Ankh.UI
             if (e != null && e.ChangedPaths != null)
             {
                 List<PathListViewItem> paths = new List<PathListViewItem>();
+
+                List<string> origins = new List<string>();
+                foreach (SvnOrigin o in LogSource.Targets)
+                {
+                    string origin = SvnTools.UriPartToPath(o.RepositoryRoot.MakeRelativeUri(o.Uri).ToString()).Replace('\\', '/');
+                    if (origin.Length == 0 || origin[0] != '/')
+                        origin = "/" + origin;
+                    origins.Add(origin);
+                }
+
                 foreach (SvnChangeItem i in e.ChangedPaths)
-                {                        
-                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(e, i)));
+                {
+                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(origins, i.Path)));
                 }
 
                 changedPaths.Items.AddRange(paths.ToArray());
             }
         }
 
-        private bool HasFocus(ISvnLogItem e, SvnChangeItem i)
+        static bool HasFocus(IEnumerable<string> originPaths, string itemPath)
         {
-            string itemUri = new Uri(e.RepositoryRoot, i.Path.TrimStart('/')).ToString();
-            foreach (SvnOrigin origin in LogSource.Targets)
+            foreach (string origin in originPaths)
             {
-                if (itemUri.StartsWith(origin.Uri.ToString()))
+                if (!itemPath.StartsWith(origin))
+                    continue;
+
+                int n = itemPath.Length - origin.Length;
+
+                if (n == 0)
                     return true;
+
+                if (n > 0)
+                {
+                    if (itemPath[origin.Length] == '/')
+                        return true;
+                }
             }
+
             return false;
         }
 
