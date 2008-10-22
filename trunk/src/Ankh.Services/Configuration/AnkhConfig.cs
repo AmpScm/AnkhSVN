@@ -38,14 +38,6 @@ namespace Ankh.Configuration
             set { _diffExePathField = value; }
         }
 
-        /// <remarks/>
-        [DefaultValue(false)]
-        public bool ChooseDiffMergeManual
-        {
-            get { return _chooseDiffMergeManualField; }
-            set { _chooseDiffMergeManualField = value; }
-        }
-
         [DefaultValue(false)]
         public bool InteractiveMergeOnConflict
         {
