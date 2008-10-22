@@ -28,10 +28,13 @@ namespace Ankh.UI.SvnLog.Commands
                     {
                         SvnPathTarget pt = origin.Target as SvnPathTarget;
 
-                        SvnItem svnItem = e.GetService<IFileStatusCache>()[pt.FullPath];
+                        if (pt != null)
+                        {
+                            SvnItem svnItem = e.GetService<IFileStatusCache>()[pt.FullPath];
 
-                        if (svnItem != null && !svnItem.IsDirectory)
-                            return;
+                            if (svnItem != null && !svnItem.IsDirectory)
+                                return;
+                        }
                     }
                 }
             }
