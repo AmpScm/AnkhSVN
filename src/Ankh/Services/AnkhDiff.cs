@@ -31,7 +31,7 @@ namespace Ankh.Services
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
-            if ((mode == DiffMode.PreferExternal) || !cs.Instance.ChooseDiffMergeManual)
+            if (mode == DiffMode.PreferExternal)
                 return cs.Instance.DiffExePath;
             else
                 return null;

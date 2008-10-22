@@ -26,12 +26,7 @@ namespace Ankh.Commands
         /// <returns>The exe path.</returns>
         protected virtual string GetExe(IAnkhServiceProvider context)
         {
-            IAnkhConfigurationService cs = context.GetService<IAnkhConfigurationService>();
-
-            if (!cs.Instance.ChooseDiffMergeManual)
-                return cs.Instance.MergeExePath;
-            else
-                return null;
+            return null; // Internal resolve conflict doesn't have an exe
         }
 
         

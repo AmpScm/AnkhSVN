@@ -25,7 +25,7 @@ namespace Ankh.Commands
 
             AnkhConfig config = cs.Instance;
 
-            if (!config.ChooseDiffMergeManual || config.MergeExePath == null)
+            if (config.MergeExePath == null)
             {
                 e.Enabled = e.Visible = false;
             }
