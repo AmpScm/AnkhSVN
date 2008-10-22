@@ -137,18 +137,26 @@ namespace Ankh.Scc
 
             for (int i = 0; i < rgszMkOldNames.Length; i++)
             {
-                string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]);
                 string newName = SvnTools.GetNormalizedFullPath(rgszMkNewNames[i]);
+                string oldName = SvnTools.GetNormalizedFullPath(rgszMkOldNames[i]);
+                
+                string oldDir;
+                string newDir;
+                bool safeRename =false;
 
-                string oldDir = Path.GetDirectoryName(oldName);
-                string newDir = Path.GetDirectoryName(newName);
-
-                if (Directory.Exists(newName))
+                if (!Directory.Exists(newName))
                 {
-                    // The item itself is the directory
+                    // Try to fix the parent of the new item
+                     oldDir = Path.GetDirectoryName(oldName);
+                     newDir = Path.GetDirectoryName(newName);
+                }
+                else
+                {
+                    // The item itself is the directory to fix
                     oldDir = oldName;
                     newDir = newName;
-                }
+                    safeRename = true;
+                }                                
 
                 if (Directory.Exists(oldDir))
                     continue; // Nothing to fix up
@@ -185,9 +193,10 @@ namespace Ankh.Scc
                     else if (!SvnTools.IsManagedPath(newDir))
                         continue; // Not a wc root at all
 
-                    svn.SafeWcDirectoryCopyFixUp(oldDir, newDir); // Recreate the old WC directory
+                    svn.SafeWcDirectoryCopyFixUp(oldDir, newDir, safeRename); // Recreate the old WC directory
 
                     _delayedDeletes.Add(oldDir); // Delete everything in the old wc when done
+                    // TODO: Once Subversion understands true renames, fixup the renames in the delayed hook
                     RegisterForSccCleanup();
 
                     // We have all files of the old wc directory unversioned in the new location now

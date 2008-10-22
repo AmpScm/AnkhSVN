@@ -429,7 +429,7 @@ namespace Ankh.Scc
             return ok;
         }
 
-        internal void SafeWcDirectoryCopyFixUp(string oldDir, string newDir)
+        internal void SafeWcDirectoryCopyFixUp(string oldDir, string newDir, bool safeRename)
         {
             if (string.IsNullOrEmpty(oldDir))
                 throw new ArgumentNullException("oldDir");
@@ -441,7 +441,10 @@ namespace Ankh.Scc
             {
                 RetriedRename(newDir, oldDir);
 
-                RecursiveCopyNotVersioned(oldDir, newDir);
+                if (safeRename)
+                    RecursiveCopyWc(oldDir, newDir);
+                else
+                    RecursiveCopyNotVersioned(oldDir, newDir, false);
             }
         }
 
@@ -503,9 +506,10 @@ namespace Ankh.Scc
         /// <summary>
         /// Creates an unversioned copy of <paramref name="from"/> in <paramref name="to"/>. (Recursive copy skipping administrative directories)
         /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        private void RecursiveCopyNotVersioned(string from, string to)
+        /// <param name="from">From.</param>
+        /// <param name="to">To.</param>
+        /// <param name="force">if set to <c>true</c> [force].</param>
+        private void RecursiveCopyNotVersioned(string from, string to, bool force)
         {
             DirectoryInfo fromDir = new DirectoryInfo(from);
             DirectoryInfo toDir = new DirectoryInfo(to);
@@ -518,14 +522,41 @@ namespace Ankh.Scc
 
             foreach (FileInfo file in fromDir.GetFiles())
             {
-                File.Copy(file.FullName, Path.Combine(to, file.Name));
+                string toFile = Path.Combine(to, file.Name);
+                if (force)
+                {
+                    // toFile might be read only
+                    FileInfo toInfo = new FileInfo(toFile);
+
+                    if (toInfo.Exists && (toInfo.Attributes & FileAttributes.ReadOnly) != 0)
+                    {
+                        toInfo.Attributes &= ~FileAttributes.ReadOnly;
+                    }
+                }
+
+                File.Copy(file.FullName, toFile, force);
             }
 
             foreach (DirectoryInfo dir in fromDir.GetDirectories())
             {
-                if (!string.Equals(dir.Name, SvnClient.AdministrativeDirectoryName))
-                    RecursiveCopyNotVersioned(dir.FullName, Path.Combine(to, dir.Name));
+                if (!string.Equals(dir.Name, SvnClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase))
+                    RecursiveCopyNotVersioned(dir.FullName, Path.Combine(to, dir.Name), force);
             }
+        }
+
+        private void RecursiveCopyWc(string from, string to)
+        {
+            // First, copy the way subversion likes it
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.AlwaysCopyAsChild = false;
+            ca.MakeParents = false;
+            ca.ThrowOnError = false;
+            _client.Copy(from, to, ca);
+
+            // Now copy everything unversioned from our local backup back
+            // into the new workingcopy, to be 100% sure VS finds what it expects
+
+            RecursiveCopyNotVersioned(from, to, true); 
         }
 
         public bool SafeDeleteFile(string path)
