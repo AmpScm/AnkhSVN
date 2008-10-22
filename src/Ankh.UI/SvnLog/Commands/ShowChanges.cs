@@ -168,6 +168,7 @@ namespace Ankh.UI.SvnLog.Commands
             da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);
             da.MineFile = diff.GetTempFile(diffTarget, range.EndRevision, false);
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
+            da.Mode = DiffMode.PreferExternal;
             diff.RunDiff(da);
         }
     }
