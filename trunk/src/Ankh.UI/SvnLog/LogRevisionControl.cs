@@ -17,6 +17,9 @@ using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog
 {
+    /// <summary>
+    /// 
+    /// </summary>
     partial class LogRevisionControl : UserControl, ICurrentItemSource<ISvnLogItem>
     {
         readonly Action<SvnLogArgs> _logAction;
@@ -177,7 +180,7 @@ namespace Ankh.UI.SvnLog
                     {
                         case LogMode.Log:
                             SvnLogArgs la = new SvnLogArgs();
-                            la.SvnError += new EventHandler<SvnErrorEventArgs>(la_SvnError);
+                            la.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
                             la.Start = args.Start;
                             la.End = args.End;
                             la.Limit = args.Limit;
@@ -206,11 +209,6 @@ namespace Ankh.UI.SvnLog
                 lock (_instanceLock)
                     _running = false;
             }
-        }
-
-        void la_SvnError(object sender, SvnErrorEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         void args_SvnError(object sender, SvnErrorEventArgs e)
