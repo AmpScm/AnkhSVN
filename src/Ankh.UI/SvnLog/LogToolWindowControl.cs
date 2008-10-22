@@ -62,16 +62,20 @@ namespace Ankh.UI.SvnLog
         void UpdateTitle()
         {
             Text = _originalText;
-            if (_origins != null || _origins.Count != 1)
-            {
+            if (_origins == null)
                 return;
-            }
+
+            StringBuilder sb = new StringBuilder(Text);
+            int n = 0;
 
             foreach (SvnOrigin origin in _origins)
             {
-                Text += string.Format(" - {0}", origin.Target.TargetName);
-                break;
+                sb.Append((n++ == 0) ? " - " : ", ");
+                    
+                sb.Append(origin.Target.FileName);
             }
+
+            Text = sb.ToString();
         }
 
         public void StartLog(IAnkhServiceProvider context, SvnOrigin target, SvnRevision start, SvnRevision end)

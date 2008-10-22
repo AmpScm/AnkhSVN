@@ -96,7 +96,8 @@ namespace Ankh.UI
                     string origin = SvnTools.UriPartToPath(o.RepositoryRoot.MakeRelativeUri(o.Uri).ToString()).Replace('\\', '/');
                     if (origin.Length == 0 || origin[0] != '/')
                         origin = "/" + origin;
-                    origins.Add(origin);
+
+                    origins.Add(origin.TrimEnd('/'));
                 }
 
                 foreach (SvnChangeItem i in e.ChangedPaths)
