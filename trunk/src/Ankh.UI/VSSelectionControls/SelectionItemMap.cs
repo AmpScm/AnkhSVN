@@ -661,6 +661,33 @@ namespace Ankh.UI.VSSelectionControls
                 Tracker.OnSelectChangeEx(IntPtr.Zero, VSConstants.VSITEMID_NIL, null, IntPtr.Zero);
         }
 
+        internal void EnsureSelection()
+        {
+            if (Tracker == null)
+                return;
+
+            IntPtr ppHier;
+            uint itemid;
+            IVsMultiItemSelect ms;
+            IntPtr ppSc;
+            if(!ErrorHandler.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
+                return;
+            
+            if(ppHier != IntPtr.Zero)
+                Marshal.Release(ppHier);
+
+            if(ppSc != IntPtr.Zero)
+            {
+                object me = Marshal.GetObjectForIUnknown(ppSc);
+                Marshal.Release(ppSc);
+
+                if(me == this)
+                    return; 
+            }
+
+            NotifySelectionUpdated();            
+        }
+
         [CLSCompliant(false)]
         protected object GetItem(uint id)
         {

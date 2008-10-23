@@ -67,6 +67,12 @@ namespace Ankh.UI.VSSelectionControls
                 _maybeUnselect = true;
         }
 
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+            EnsureSelection();
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
@@ -84,7 +90,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             _inWndProc++;
             try
-            {                
+            {
                 base.WndProc(ref m);
             }
             finally
@@ -138,7 +144,7 @@ namespace Ankh.UI.VSSelectionControls
 
         public void SelectAllItems()
         {
-            if(!MultiSelect)
+            if (!MultiSelect)
                 return;
 
             bool unchanged = true;
@@ -193,6 +199,17 @@ namespace Ankh.UI.VSSelectionControls
             finally
             {
                 _updatingSelection = false;
+            }
+        }
+
+        protected void EnsureSelection()
+        {
+            if (SelectionPublishServiceProvider != null)
+            {
+                if (SelectionMap.Context != SelectionPublishServiceProvider)
+                    SelectionMap.Context = SelectionPublishServiceProvider;
+
+                SelectionMap.EnsureSelection();
             }
         }
 
@@ -301,7 +318,7 @@ namespace Ankh.UI.VSSelectionControls
                 get { return _item; }
             }
         }
-        
+
         #region ISelectionMapOwner<TListViewItem> Members
 
         EventHandler _selectionChanged;
