@@ -50,7 +50,7 @@
 								toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
             <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
 								text="&amp;Annotate..."
-								toolTip="Identify which user wrote which lines." iconFile="menu/Blame.png" defaultInvisible="true"/>
+								toolTip="Identify which user wrote which lines." iconFile="PendingChanges/Annotate.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
 								text="Di&amp;ff..."
 								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
@@ -424,7 +424,7 @@
       <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" type="Context" priority="0x100">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
-                  text="Annotate revision" iconFile="menu/Blame.png"/>
+                  text="Annotate revision" iconFile="PendingChanges/Annotate.png"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
         </Group>
       </Menu>
@@ -435,7 +435,7 @@
           <Button id="Cmd_BlameShowLog" priority="0x100" name="BlameShowLog" text="View history"
                   iconFile="PendingChanges/ViewHistory.png" />
           <Button id="Cmd_BlameShowBlame" priority="0x200" name="AnnotateShowAnnotate" text="&amp;Annotate this version"
-                  iconFile="menu/Blame.png"/>
+                  iconFile="PendingChanges/Annotate.png"/>
         </Group>
       </Menu>
     </GroupRef>
