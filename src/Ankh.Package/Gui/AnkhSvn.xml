@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <VsGui version="1.0"  xmlns="http://schemas.studioturtle.net/2007/01/gui/"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://schemas.studioturtle.net/2007/01/gui/ Gui.xsd">
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://schemas.studioturtle.net/2007/01/gui/ Gui.xsd">
   <Imports>
     <Import include="stdidcmd.h" />
     <Import include="vsshlids.h" />
@@ -40,20 +40,20 @@
           <Group id="Grp_FileSccMenuTasks" priority="0x0100">
             <Button id="Cmd_MigrateSettings" text="Migrate AnkhSVN Settings from future versions" name="AnkhSVN.MigrateSettings" priority="0" commandWellOnly="true" allowParams="true" postExec="true"/>
             <Button id="Cmd_UpdateItem" name="UpdateItem" priority="0x100"
-								text="&amp;Update..."
-								toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                text="&amp;Update..."
+                toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
             <Button id="Cmd_CommitItem" name="CommitItem" priority="0x200"
-								text="&amp;Commit..."
-								toolTip="Commit selected items to the Subversion repository." iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
+                text="&amp;Commit..."
+                toolTip="Commit selected items to the Subversion repository." iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
             <Button id="Cmd_RevertItem" name="RevertItem" priority="0x300"
-								text="&amp;Revert"
-								toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
+                text="&amp;Revert"
+                toolTip="Revert this item to last updated revision." iconFile="menu/Revert.png" defaultInvisible="true"/>
             <Button id="Cmd_ItemAnnotate" name="Annotate" priority="0x400"
-								text="&amp;Annotate..."
-								toolTip="Identify which user wrote which lines." iconFile="PendingChanges/Annotate.png" defaultInvisible="true"/>
+                text="&amp;Annotate..."
+                toolTip="Identify which user wrote which lines." iconFile="PendingChanges/Annotate.png" defaultInvisible="true"/>
             <Button id="Cmd_DiffLocalItem" name="DiffLocalItem" priority="0x500"
-								text="Di&amp;ff..."
-								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+                text="Di&amp;ff..."
+                toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
             <ButtonRef id="Cmd_Log" priority="0x600" />
           </Group>
           <Group id="Grp_FileSccItem" priority="0x0190">
@@ -72,13 +72,13 @@
           </Group>
           <Group id="Grp_FileSccAdd" priority="0x01B0">
             <Button id="Cmd_FileSccAddSolutionToSubversion" name="AddSolutionToRepository" priority="0x100"
-							  text="Add &amp;Solution to Subversion..."
-							  toolTip="Add this solution to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
+                text="Add &amp;Solution to Subversion..."
+                toolTip="Add this solution to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
             <Button id="Cmd_FileSccAddProjectToSubversion" name="AddProjectToRepository" priority="0x200"
-							  text="Add S&amp;elected Projects to Subversion..."
-							  toolTip="Add the selected projects to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
+                text="Add S&amp;elected Projects to Subversion..."
+                toolTip="Add the selected projects to a Subversion repository." iconFile="PendingChanges/AddToSourceControl.ico">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
           </Group>
@@ -96,18 +96,18 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
       <!-- View - The Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
-								text="Show &amp;Pending Changes"
-								toolTip="Show the Pending Changes Window." iconFile="menu/PendingChanges.png" defaultInvisible="true">
+                text="Show &amp;Pending Changes"
+                toolTip="Show the Pending Changes Window." iconFile="menu/PendingChanges.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="c" />
       </Button>
       <Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
-						text="Repositor&amp;y Explorer"
-						toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
+            text="Repositor&amp;y Explorer"
+            toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="r"/>
       </Button>
       <Button id="Cmd_ShowWorkingCopyExplorer" name="WorkingCopyExplorer" priority="0x902"
-					text="&amp;Working Copy Explorer"
-					toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png" defaultInvisible="true">
+          text="&amp;Working Copy Explorer"
+          toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
     </GroupRef>
@@ -124,7 +124,7 @@
       <Button id="Cmd_SolutionHistory" priority="0x1800" name="SolutionHistory" defaultInvisible="true"
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
-      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
+      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
         <Visibility context="Ankh_SccProviderGuid"/>
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
@@ -135,13 +135,13 @@
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_SolutionEditProperties" priority="0x90" defaultDisabled="true"
-									text="Solution Prop&amp;erties..."
-									toolTip="View/Edit Solution Subversion Properties"
+                  text="Solution Prop&amp;erties..."
+                  toolTip="View/Edit Solution Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
           <Button id="Cmd_SolutionBranch" priority="0xE0" name="BranchSolution"
                   text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
-              text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>          
+              text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
@@ -178,27 +178,27 @@
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <Button id="Cmd_ProjectHistory" priority="0x1800" name="ProjectHistory"
-              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>      
+              text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
-      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
+      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
         <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
-								text="&amp;Add..."
-								toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
+                text="&amp;Add..."
+                toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef  id="Cmd_UnifiedDiff" priority="0x30" />
           <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x40" defaultInvisible="true"
-								text="&amp;Switch Project..." allowParams="true"
-								toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
+                text="&amp;Switch Project..." allowParams="true"
+                toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
           <ButtonRef id="Cmd_Lock" priority="0x45" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_ProjectEditProperties" priority="0x90" defaultDisabled="true"
-									text="Project Prop&amp;erties..."
-									toolTip="View/Edit Project Subversion Properties"
+                  text="Project Prop&amp;erties..."
+                  toolTip="View/Edit Project Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
 
           <Button id="Cmd_ProjectBranch" priority="0xE0" name="BranchSolution"
@@ -227,11 +227,11 @@
       <ButtonRef id="Cmd_CommitItem" priority="0x1600" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <Button id="Cmd_ItemShowChanges" name="Svn.Compare" priority="0x1800"
-								text="Show C&amp;hanges"
-								toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+                text="Show C&amp;hanges"
+                toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
       <Button id="Cmd_Log" name="ViewHistory" priority="0x1900"
-								text="View &amp;History"
-								toolTip="Show the Log Viewer for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>      
+                text="View &amp;History"
+                toolTip="Show the Log Viewer for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
       <Menu id="Menu_ItemResolve" priority="0x1A00" name="Resolve" text="Resol&amp;ve">
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
@@ -251,14 +251,14 @@
         </Group>
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
-      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
+      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x40" defaultInvisible="true"
-								text="&amp;Switch..." allowParams="true"
-								toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
+                text="&amp;Switch..." allowParams="true"
+                toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
@@ -272,19 +272,19 @@
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
               toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
-					<Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
-									text="Prop&amp;erties..."
-									toolTip="View/Edit Subversion Properties" 
+          <Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
+                  text="Prop&amp;erties..."
+                  toolTip="View/Edit Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
-					
+
           <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
-								text="Refres&amp;h"
-								toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
+                text="Refres&amp;h"
+                toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
         </Group>
         <Group id="Grp_ItemIgnore" priority="0xE000">
-          <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
+          <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore" defaultInvisible="true">
             <Group id="Menu_ItemIgnore" priority="0x100">
               <Button id="Cmd_ItemIgnoreFile" priority="0x1000" name="SvnIgnoreFile"
                       defaultInvisible="true" textChanges="true" text="Ignore &amp;File (file.c)" />
@@ -310,38 +310,38 @@
 
         <Group id="Grp_RepositoryExplorerToolBar" priority="0x100">
           <Button id="Cmd_Checkout" name="Checkout" priority="0x100"
-								text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png"/>
+                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png"/>
           <Button id="Cmd_RepositoryBrowse" name="SvnRepositoryBrowse" priority="0x200"
-							  text="A&amp;dd Repository Url"
-                  menuText="Open Url in &amp;Repository Explorer" 
-							  toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
+                text="A&amp;dd Repository Url"
+                  menuText="Open Url in &amp;Repository Explorer"
+                toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
           <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x300"
                 text="&amp;Remove Repository URL"
                 toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>
           <Button id="Cmd_CopyReposExplorerUrl" name="CopyReposExplorerUrl" priority="0x400"
-							  text="Copy &amp;Url"
-							  toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />
+                text="Copy &amp;Url"
+                toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />
           <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
-							  text="Ne&amp;w Directory..."
-							  toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" />
+                text="Ne&amp;w Directory..."
+                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" />
           <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0x600"
-							  text="Refres&amp;h"
-							  toolTip="Refresh this item." iconFile="menu/Refresh.png"/>
+                text="Refres&amp;h"
+                toolTip="Refresh this item." iconFile="menu/Refresh.png"/>
           <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x700"
-							  text="In &amp;Visual Studio"
-							  toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
+                text="In &amp;Visual Studio"
+                toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
           <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x800"
-							text="In Wi&amp;ndows"
-							toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+              text="In Wi&amp;ndows"
+              toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
           <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x900"
-							  text="Chec&amp;kout Folder..."
-							  toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
+                text="Chec&amp;kout Folder..."
+                toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
               toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" />
           <Button id="Cmd_CheckoutSolution" name="CheckoutSolution" priority="0xB00"
-								text="Checkout &amp;Solution..."
-								toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.png" defaultInvisible="true"/>
+                text="Checkout &amp;Solution..."
+                toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.png" defaultInvisible="true"/>
         </Group>
       </Menu>
     </GroupRef>
@@ -363,14 +363,14 @@
       <Menu id="Menu_WorkingCopyExplorerToolBar" name="WorkingCopyExplorer" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_WorkingCopyExplorerToolBar" priority="0x100">
           <Button id="Cmd_WorkingCopyBrowse" name="Svn.WorkingCopyBrowse" priority="0x100"
-						  text="A&amp;dd New Root..."
-						  toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
+              text="A&amp;dd New Root..."
+              toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
           <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
-			        text="&amp;Remove Root"
-			        toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
+              text="&amp;Remove Root"
+              toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
           <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport a Repository or Local Folder..."
-              toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" />          
+              toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" />
         </Group>
       </Menu>
     </GroupRef>
@@ -444,26 +444,26 @@
       <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_PendingChangesSolutionCommands" priority="0x100">
           <Button id="Cmd_PendingChangesSpacer" name="Spacer" text=" " iconAndText="true" priority="0x001"
-							toolTip="AnkhSVN" />
+              toolTip="AnkhSVN" />
           <Menu id="Menu_PendingChangesCommit" name="Commit" text="Co&amp;mmit" priority="0x100" type="MenuControllerLatched" iconAndText="true">
             <Group id="Menu_PendingChangesCommit" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
-									text="&amp;Commit Changes"
-									toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png"/>
+                  text="&amp;Commit Changes"
+                  toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png"/>
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
-									text="&amp;Commit &amp;Keeping Locks"
-									toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
+                  text="&amp;Commit &amp;Keeping Locks"
+                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
             </Group>
           </Menu>
           <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
             <Group id="Menu_PendingChangesUpdate" priority="0x100">
               <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
-									text="U&amp;pdate to Latest Version"
-									toolTip="Update your solution to the HEAD version"
-									fixMenuController="true" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                  text="U&amp;pdate to Latest Version"
+                  toolTip="Update your solution to the HEAD version"
+                  fixMenuController="true" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200"
-									text="Update to a specific &amp;Version"
-									toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
+                  text="Update to a specific &amp;Version"
+                  toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
             </Group>
           </Menu>
         </Group>
@@ -471,67 +471,67 @@
           <Menu id="Menu_PendingChangesView" priority="0x100" name="View" type="MenuControllerLatched">
             <Group id="Menu_PendingChangesView" priority="0x100">
               <Button id="Cmd_PendingChangesViewFlat" name="ViewFlat" priority="0x100"
-									text="&amp;Flat"
-									toolTip="Flat changes view" iconFile="PendingChanges/FlatView.png" fixMenuController="true"/>
+                  text="&amp;Flat"
+                  toolTip="Flat changes view" iconFile="PendingChanges/FlatView.png" fixMenuController="true"/>
               <Button id="Cmd_PendingChangesViewProject" name="ViewProject" priority="0x200"
-									text="&amp;Project"
-									toolTip="Project changes view" />
+                  text="&amp;Project"
+                  toolTip="Project changes view" />
               <Button id="Cmd_PendingChangesViewChangeList" name="ViewChangeList" priority="0x300"
-									text="&amp;ChangeList"
-									toolTip="ChangeList changes view" />
+                  text="&amp;ChangeList"
+                  toolTip="ChangeList changes view" />
               <Button id="Cmd_PendingChangesViewFolder" name="ViewFolder" priority="0x400"
-									text="&amp;Folders"
-									toolTip="Folder changes view" />
+                  text="&amp;Folders"
+                  toolTip="Folder changes view" />
             </Group>
           </Menu>
           <Button id="Cmd_PendingChangesViewAll" priority="0x200" name="ViewAll"
-							text="View &amp;All" iconFile="PendingChanges/ShowAll.png"/>
+              text="View &amp;All" iconFile="PendingChanges/ShowAll.png"/>
           <Button id="Cmd_PendingChangesViewLogMessage" priority="0x300" name="ViewLogMessage"
-							text="View &amp;Message" iconFile="PendingChanges/ShowComment.png"/>
+              text="View &amp;Message" iconFile="PendingChanges/ShowComment.png"/>
         </Group>
         <Group id="Grp_PendingChangesItems" priority="0x300">
           <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuControllerLatched">
             <Group id="Menu_ItemConflict" priority="0x100">
               <Button id="Cmd_ItemConflictEdit" name="ItemConflictEdit" priority="0x100" defaultInvisible="true"
-									text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" dynamicVisibility="true" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
+                  text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" dynamicVisibility="true" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
               <Button id="Cmd_ItemConflictEditVisualStudio" name="ItemConflictEditVisualStudio" priority="0x200"
-									text="Edit in &amp;Visual Studio" dynamicVisibility="true"/>
+                  text="Edit in &amp;Visual Studio" dynamicVisibility="true"/>
               <Button id="Cmd_ItemConflictResolvedMerged" name="ItemConflictResolvedMerged" priority="0x300"
-									text="Mark as &amp;Resolved" dynamicVisibility="true"/>
+                  text="Mark as &amp;Resolved" dynamicVisibility="true"/>
               <Button id="Cmd_ItemConflictResolvedMineFull" name="ItemConflictResolvedMineFull" priority="0x400"
-									text="Resolve using &amp;My Version" dynamicVisibility="true"/>
+                  text="Resolve using &amp;My Version" dynamicVisibility="true"/>
               <Button id="Cmd_ItemConflictResolvedTheirsFull" name="ItemConflictResolvedTheirsFull" priority="0x500"
-									text="Resolve using &amp;Their Version" dynamicVisibility="true"/>
+                  text="Resolve using &amp;Their Version" dynamicVisibility="true"/>
             </Group>
           </Menu>
           <Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuControllerLatched" dynamicVisibility="true">
             <Group id="Menu_ItemCompare" priority="0x100">
               <Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
-									text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
+                  text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
               <Button id="Cmd_ItemCompareHead" name="CompareHead" priority="0x200"
-									text="Compare to &amp;HEAD Version" />
+                  text="Compare to &amp;HEAD Version" />
               <Button id="Cmd_ItemCompareCommitted" name="ComparePrevious" priority="0x300"
-									text="Compare to Co&amp;mmitted Version" />
+                  text="Compare to Co&amp;mmitted Version" />
               <Button id="Cmd_ItemComparePrevious" name="ComparePrevious" priority="0x400"
-									text="Compare to &amp;Previous Version" />
+                  text="Compare to &amp;Previous Version" />
               <Button id="Cmd_ItemCompareSpecific" name="CompareSpecific" priority="0x500"
-									text="Compare to a &amp;Specific Version" />
+                  text="Compare to a &amp;Specific Version" />
             </Group>
           </Menu>
           <Menu id="Menu_ItemOpen" priority="0x300" name="Open" type="MenuControllerLatched">
             <Group id="Menu_ItemOpen" priority="0x100">
               <Button id="Cmd_ItemOpenVisualStudio" name="OpenVisualStudio" priority="0x100"
-									text="&amp;Open in Visual Studio" fixMenuController="true" iconFile="PendingChanges/Open.png"/>
+                  text="&amp;Open in Visual Studio" fixMenuController="true" iconFile="PendingChanges/Open.png"/>
               <Button id="Cmd_ItemOpenWindows" name="OpenWindows" priority="0x200"
-									text="Open with &amp;Default Application" />
+                  text="Open with &amp;Default Application" />
               <Button id="Cmd_ItemOpenTextEditor" name="OpenText" priority="0x300"
-									text="Open as &amp;Text" />
+                  text="Open as &amp;Text" />
             </Group>
             <Group id="Grp_PendingChangesOpenEx" priority="0x200">
               <Button id="Cmd_ItemOpenFolder" name="OpenFolder" priority="0x100"
-									text="Open Containing &amp;Folder" iconFile="PendingChanges/OpenFolder.png"/>
+                  text="Open Containing &amp;Folder" iconFile="PendingChanges/OpenFolder.png"/>
               <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
-									text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
+                  text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
               <Button id="Cmd_ItemOpenInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
                   text="Open in &amp;Repository Explorer" />
             </Group>
@@ -539,9 +539,9 @@
           <Menu id="Menu_ItemRevert" priority="0x300" name="Revert" type="MenuControllerLatched">
             <Group id="Menu_ItemRevert" priority="0x100">
               <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x100" fixMenuController="true"
-									text="&amp;Revert to BASE Version" iconFile="PendingChanges/Revert.png"/>
+                  text="&amp;Revert to BASE Version" iconFile="PendingChanges/Revert.png"/>
               <Button id="Cmd_ItemRevertSpecific" name="RevertSpecific" priority="0x100"
-									text="&amp;Revert to a Specific Version" />
+                  text="&amp;Revert to a Specific Version" />
             </Group>
           </Menu>
         </Group>
@@ -549,27 +549,27 @@
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
             <Group id="Menu_ItemIgnore" priority="0x100">
               <Button id="Cmd_ItemIgnoreFile" name="IgnoreFile" priority="0x100"
-									text="Ignore &amp;File" iconFile="PendingChanges/Ignore.png"/>
+                  text="Ignore &amp;File" iconFile="PendingChanges/Ignore.png"/>
               <Button id="Cmd_ItemIgnoreFileType" name="IgnoreFileType" priority="0x200" textChanges="true"
-									text="Ignore File &amp;Type" />
+                  text="Ignore File &amp;Type" />
               <Button id="Cmd_ItemIgnoreFilesInFolder" name="IgnoreFilesInFolder" priority="0x300" textChanges="true"
-									text="Ignore &amp;All Files in ..." />
+                  text="Ignore &amp;All Files in ..." />
             </Group>
           </Menu-->
           <Button id="Cmd_RefreshPendingChanges" name="RefreshPendingChanges" priority="0x200"
-							text="Refresh Pending Changes" menuText="&amp;Refresh" iconFile="PendingChanges/Refresh.png"/>
+              text="Refresh Pending Changes" menuText="&amp;Refresh" iconFile="PendingChanges/Refresh.png"/>
         </Group>
         <Group id="Grp_PendingChangesSwitch" priority="0x500">
           <ComboBox id="Cmd_SolutionSwitchCombo" type="DropDownCombo" width="100" priority="0x100"
-							  fillCommand="Cmd_SolutionSwitchComboFill_IdOnly"
-							  caseSensitive="true"
-							  stretchHorizontally="true"
-							  toolTip="Switch to"
-							  text="Wo&amp;rking on:"
-							  iconAndText="true"
-							  />
+                fillCommand="Cmd_SolutionSwitchComboFill_IdOnly"
+                caseSensitive="true"
+                stretchHorizontally="true"
+                toolTip="Switch to"
+                text="Wo&amp;rking on:"
+                iconAndText="true"
+                />
           <Button id="Cmd_SolutionSwitchDialog" name="SwitchDialog" priority="0x200" allowParams="true"
-							text="&amp;Switch Solution..." iconFile="PendingChanges/Switch.png" defaultInvisible="true"/>
+              text="&amp;Switch Solution..." iconFile="PendingChanges/Switch.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_PendingChangesToolBar" priority="0x1000">
 
