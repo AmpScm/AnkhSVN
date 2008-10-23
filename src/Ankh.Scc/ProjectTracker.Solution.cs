@@ -157,6 +157,13 @@ namespace Ankh.Scc
 
         public int OnAfterRenameProject(IVsHierarchy pHierarchy)
         {
+            IVsSccProject2 project = pHierarchy as IVsSccProject2;
+
+            if (project != null)
+            {
+                SccProvider.OnProjectRenamed(project);
+            }
+
             return VSConstants.S_OK;
         }
 
