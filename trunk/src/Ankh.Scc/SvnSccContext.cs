@@ -271,7 +271,7 @@ namespace Ankh.Scc
 
                     SvnCopyArgs ca = new SvnCopyArgs();
                     ca.AlwaysCopyAsChild = false;
-                    ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ca.CreateParents = false; // We just did that ourselves. Use Svn for this?
                     ca.ThrowOnError = false;
                     ca.AlwaysCopyAsChild = true;
 
@@ -326,7 +326,7 @@ namespace Ankh.Scc
 
                     SvnCopyArgs ca = new SvnCopyArgs();
                     ca.AlwaysCopyAsChild = false;
-                    ca.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ca.CreateParents = false; // We just did that ourselves. Use Svn for this?
                     ca.ThrowOnError = false;
 
                     ok = _client.Copy(fromPath, toPath, ca);
@@ -408,7 +408,7 @@ namespace Ankh.Scc
 
                     SvnMoveArgs ma = new SvnMoveArgs();
                     ma.AlwaysMoveAsChild = false;
-                    ma.MakeParents = false; // We just did that ourselves. Use Svn for this?
+                    ma.CreateParents = false; // We just did that ourselves. Use Svn for this?
                     ma.Force = true;
                     ma.ThrowOnError = false;
 
@@ -549,7 +549,7 @@ namespace Ankh.Scc
             // First, copy the way subversion likes it
             SvnCopyArgs ca = new SvnCopyArgs();
             ca.AlwaysCopyAsChild = false;
-            ca.MakeParents = false;
+            ca.CreateParents = false;
             ca.ThrowOnError = false;
             _client.Copy(from, to, ca);
 
