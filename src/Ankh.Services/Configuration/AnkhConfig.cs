@@ -13,7 +13,6 @@ namespace Ankh.Configuration
     {
         string _mergeExePathField;
         string _diffExePathField;
-        bool _chooseDiffMergeManualField;
         bool _interactiveMergeOnConflict;
 
         /// <summary>

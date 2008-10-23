@@ -117,7 +117,7 @@ namespace Ankh.Commands
                             }
 
                             SvnCopyArgs ca = new SvnCopyArgs();
-                            ca.MakeParents = true;
+                            ca.CreateParents = true;
                             ca.LogMessage = msg;
 
                             if (dlg.CopyFromUri)
