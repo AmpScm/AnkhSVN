@@ -31,10 +31,13 @@ namespace Ankh.Services
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
-            if (mode == DiffMode.PreferExternal)
-                return cs.Instance.DiffExePath;
-            else
-                return null;
+            switch (mode)
+            {
+                case DiffMode.PreferInternal:
+                    return null;
+                default:
+                    return cs.Instance.DiffExePath;
+            }
         }
 
         public bool RunDiff(AnkhDiffArgs args)
@@ -43,8 +46,6 @@ namespace Ankh.Services
                 throw new ArgumentNullException("args");
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
-
-            bool forceExternal = (args.Mode & DiffMode.PreferExternal) != 0;
 
             string diffApp = this.GetDiffPath(args.Mode);
 
@@ -96,16 +97,17 @@ namespace Ankh.Services
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetMergePath(bool forceExternal)
+        protected virtual string GetMergePath(DiffMode mode)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
-            string txt = cs.Instance.MergeExePath;
-
-            if (!string.IsNullOrEmpty(txt))
-                return txt;
-            else
-                return null;
+            switch (mode)
+            {
+                case DiffMode.PreferInternal:
+                    return null;
+                default:
+                    return cs.Instance.MergeExePath;
+            }
         }
 
         IFileStatusCache _statusCache;
@@ -121,9 +123,7 @@ namespace Ankh.Services
             else if (!args.Validate())
                 throw new ArgumentException("Arguments not filled correctly", "args");
 
-            bool forceExternal = (args.Mode & DiffMode.PreferExternal) != 0;
-
-            string diffApp = this.GetMergePath(forceExternal);
+            string diffApp = this.GetMergePath(args.Mode);
 
             if (string.IsNullOrEmpty(diffApp))
             {
