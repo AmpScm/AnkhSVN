@@ -104,7 +104,7 @@ namespace Ankh.Commands
                         AddIgnore(add, i.Parent, "*" + i.Extension);
                         break;
                     case AnkhCommand.ItemIgnoreFilesInFolder:
-                        AddIgnore(add, i.Parent, "*" + i.Extension);
+                        AddIgnore(add, i.Parent, "*");
                         break;
                     case AnkhCommand.ItemIgnoreFolder:
                         SvnItem p = i.Parent;
