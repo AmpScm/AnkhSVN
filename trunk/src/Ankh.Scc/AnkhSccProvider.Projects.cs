@@ -349,19 +349,19 @@ namespace Ankh.Scc
 
         internal void OnProjectRenamed(IVsSccProject2 project)
         {
-            if (!string.IsNullOrEmpty(_solutionFile))
-            {
-                SccProjectData data;
-                if (!_projectMap.TryGetValue(project, out data))
-                    return;
+            if (string.IsNullOrEmpty(SolutionFilename))
+                return;
 
-                SccProjectData newData = new SccProjectData(Context, project);
-                if (newData.ProjectFile.Equals(data.ProjectFile, StringComparison.OrdinalIgnoreCase))
-                    return; // Project rename, without renaming the project file (C++ project for instance)
+            SccProjectData data;
+            if (!_projectMap.TryGetValue(project, out data))
+                return;
 
-                // Mark the sln file edited, so it shows up in Pending Changes/Commit
-                DocumentTracker.SetDirty(_solutionFile, true);
-            }
+            SccProjectData newData = new SccProjectData(Context, project);
+            if (newData.ProjectFile.Equals(data.ProjectFile, StringComparison.OrdinalIgnoreCase))
+                return; // Project rename, without renaming the project file (C++ project for instance)
+
+            // Mark the sln file edited, so it shows up in Pending Changes/Commit
+            DocumentTracker.SetDirty(_solutionFile, true);
         }
 
         /// <summary>
