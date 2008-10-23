@@ -63,7 +63,6 @@
             // logRevisionControl1
             // 
             this.logRevisionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logRevisionControl1.IncludeMergedRevisions = false;
             this.logRevisionControl1.Location = new System.Drawing.Point(0, 0);
             this.logRevisionControl1.Name = "logRevisionControl1";
             this.logRevisionControl1.Size = new System.Drawing.Size(716, 291);

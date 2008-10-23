@@ -77,9 +77,9 @@ namespace Ankh.UI.SvnLog
             if (targets == null)
                 throw new ArgumentNullException("targets");
 
-            logRevisionControl1.Targets = targets;
-            logRevisionControl1.StartRevision = start;
-            logRevisionControl1.EndRevision = end;
+            LogSource.Targets = targets;
+            LogSource.Start = start;
+            LogSource.End = end;
 
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -103,7 +103,7 @@ namespace Ankh.UI.SvnLog
             else if (source == null)
                 throw new ArgumentNullException("source");
 
-            logRevisionControl1.Targets = new SvnOrigin[]
+            LogSource.Targets = new SvnOrigin[]
             { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
 
             logRevisionControl1.Reset();
@@ -121,7 +121,7 @@ namespace Ankh.UI.SvnLog
             else if (source == null)
                 throw new ArgumentNullException("source");
 
-            logRevisionControl1.Targets = new SvnOrigin[] 
+            LogSource.Targets = new SvnOrigin[] 
             { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
 
             logRevisionControl1.Reset();
@@ -145,14 +145,14 @@ namespace Ankh.UI.SvnLog
 
         public bool IncludeMerged
         {
-            get { return logRevisionControl1.IncludeMergedRevisions; }
-            set { logRevisionControl1.IncludeMergedRevisions = value; }
+            get { return LogSource.IncludeMergedRevisions; }
+            set { LogSource.IncludeMergedRevisions = value; }
         }
 
         public bool StrictNodeHistory
         {
-            get { return logRevisionControl1.StrictNodeHistory; }
-            set { logRevisionControl1.StrictNodeHistory = value; }
+            get { return LogSource.StrictNodeHistory; }
+            set { LogSource.StrictNodeHistory = value; }
         }
 
         bool _logMessageVisible = true;
