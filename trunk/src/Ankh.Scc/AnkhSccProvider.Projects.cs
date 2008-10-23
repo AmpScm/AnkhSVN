@@ -347,6 +347,23 @@ namespace Ankh.Scc
                 _projectMap.Add(project, new SccProjectData(Context, project));
         }
 
+        internal void OnProjectRenamed(IVsSccProject2 project)
+        {
+            if (!string.IsNullOrEmpty(_solutionFile))
+            {
+                SccProjectData data;
+                if (!_projectMap.TryGetValue(project, out data))
+                    return;
+
+                SccProjectData newData = new SccProjectData(Context, project);
+                if (newData.ProjectFile.Equals(data.ProjectFile, StringComparison.OrdinalIgnoreCase))
+                    return; // Project rename, without renaming the project file (C++ project for instance)
+
+                // Mark the sln file edited, so it shows up in Pending Changes/Commit
+                DocumentTracker.SetDirty(_solutionFile, true);
+            }
+        }
+
         /// <summary>
         /// Called by ProjectDocumentTracker when a scc-capable project is opened
         /// </summary>
