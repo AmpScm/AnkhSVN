@@ -15,6 +15,24 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     public class MergeWizard : AnkhWizard
     {
+        private WizardPage mergeTypePage;
+        private WizardPage bestPracticesPage;
+        private WizardPage mergeSourceRangeOfRevisionsPage;
+        private WizardPage mergeSourceReintegratePage;
+        private WizardPage mergeSourceTwoDifferentTreesPage;
+        private WizardPage mergeSourceManuallyRecordPage;
+        private WizardPage mergeSourceManuallyRemovePage;
+        private WizardPage mergeRevisionsSelectionPage;
+        private WizardPage mergeOptionsPage;
+        private WizardPage mergeSummaryPage;
+
+        MergeUtils _mergeUtils = null;
+        SvnItem _mergeTarget = null;
+        long[] _mergeRevisions = null;
+        bool _performDryRun = false;
+        List<SvnNotifyEventArgs> _mergeActions;
+        Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts;
+
         /// <summary>
         /// Enumeration of available merge types.
         /// </summary>
@@ -268,8 +286,7 @@ namespace Ankh.UI.MergeWizard
                             // Set whether or not this is a dry run
                             args.DryRun = PerformDryRun;
 
-                            ee.Client.ReintegrationMerge(MergeTarget.FullPath, MergeSource.Target,
-                                args);
+                            ee.Client.ReintegrationMerge(MergeTarget.FullPath, MergeSource.Target, args);
                         }
                         else
                         {
@@ -307,7 +324,7 @@ namespace Ankh.UI.MergeWizard
                                     SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
                                     Collection<SvnMergesEligibleEventArgs> availableMerges;
 
-                                    ee.Client.GetMergesEligible(SvnTarget.FromUri(MergeTarget.Status.Uri),
+                                    ee.Client.GetMergesEligible(MergeTarget.FullPath,
                                         MergeSource.Target, lArgs, out availableMerges);
 
                                     foreach (SvnMergesEligibleEventArgs entries in availableMerges)
@@ -537,24 +554,6 @@ namespace Ankh.UI.MergeWizard
         public Dictionary<string, List<SvnConflictType>> ResolvedMergeConflicts
         {
             get { return _resolvedMergeConflicts; }
-        }
-
-        private WizardPage mergeTypePage;
-        private WizardPage bestPracticesPage;
-        private WizardPage mergeSourceRangeOfRevisionsPage;
-        private WizardPage mergeSourceReintegratePage;
-        private WizardPage mergeSourceTwoDifferentTreesPage;
-        private WizardPage mergeSourceManuallyRecordPage;
-        private WizardPage mergeSourceManuallyRemovePage;
-        private WizardPage mergeRevisionsSelectionPage;
-        private WizardPage mergeOptionsPage;
-        private WizardPage mergeSummaryPage;
-
-        MergeUtils _mergeUtils = null;
-        SvnItem _mergeTarget = null;
-        long[] _mergeRevisions = null;
-        bool _performDryRun = false;
-        List<SvnNotifyEventArgs> _mergeActions;
-        Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts;
+        }        
     }
 }

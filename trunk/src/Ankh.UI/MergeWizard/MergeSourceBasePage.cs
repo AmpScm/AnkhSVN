@@ -4,6 +4,7 @@ using System.Text;
 using WizardFramework;
 using System.Drawing;
 using System.Windows.Forms;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -49,10 +50,10 @@ namespace Ankh.UI.MergeWizard
             base.OnPageChanging(e);
 
             // Set the MergeSource before the page changes
-            //((MergeWizard)Wizard).MergeSource = MergeSource;
+            ((MergeWizard)Wizard).MergeSource = MergeSource;
         }
 
-        internal string MergeSource
+        internal SvnOrigin MergeSource
         {
             get { return ((MergeSourceBasePageControlImpl)PageControl).MergeSource; }
         }

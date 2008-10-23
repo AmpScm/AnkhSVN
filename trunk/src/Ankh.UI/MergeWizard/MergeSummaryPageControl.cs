@@ -40,7 +40,8 @@ namespace Ankh.UI.MergeWizard
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
                     mergeSource1TextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeSourceOne;
                 else
-                { /*mergeSource1TextBox.Text = mergeWizard.MergeSource;*/}
+                    mergeSource1TextBox.Text = mergeWizard.MergeSource.Target.ToString();
+
                 // Populate Merge Source 2
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
                     if (((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).HasSecondMergeSourceUrl)

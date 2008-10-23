@@ -13,6 +13,7 @@ using System.Threading;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.RepositoryOpen;
 using System.IO;
+using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -41,9 +42,9 @@ namespace Ankh.UI.MergeWizard
         }
 
         #region Base Functionality
-        internal string MergeSource
+        internal SvnOrigin MergeSource
         {
-            get { return mergeFromComboBox.Text; }
+            get { return new SvnOrigin(WizardPage.Context, SvnUriTarget.FromString(mergeFromComboBox.Text), null); }
         }
 
         MergeSourceBasePage _wizardPage;
@@ -194,7 +195,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                //((MergeWizard)WizardPage.Wizard).MergeSource = mergeFromComboBox.Text;
+                ((MergeWizard)WizardPage.Wizard).MergeSource = new SvnOrigin(WizardPage.Context, new Uri(mergeFromComboBox.Text), null);
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
             }
         }
