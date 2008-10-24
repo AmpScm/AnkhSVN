@@ -373,8 +373,9 @@ namespace Ankh.Scc.ProjectMap
         /// Reloads the document and optionally clears the undo state
         /// </summary>
         /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
+        /// <param name="ignoreNextChange">if set to <c>true</c> [ignore next change].</param>
         /// <returns></returns>
-        public bool Reload(bool clearUndo)
+        public bool Reload(bool clearUndo, bool ignoreNextChange)
         {
             IVsPersistDocData vsPersistDocData = RawDocument as IVsPersistDocData;
             if (vsPersistDocData != null)
@@ -383,7 +384,16 @@ namespace Ankh.Scc.ProjectMap
 
                 try
                 {
-                    if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(clearUndo ? (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack : 0)))
+                    uint flags = 0;
+                    if (clearUndo)
+                        flags |= (uint)_VSRELOADDOCDATA.RDD_RemoveUndoStack;
+                    if (ignoreNextChange)
+                        flags |= (uint)_VSRELOADDOCDATA.RDD_IgnoreNextFileChange;
+
+                    if (ignoreNextChange)
+                        IgnoreFileChanges(true);
+
+                    if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(flags)))
                         return true;
                 }
                 catch

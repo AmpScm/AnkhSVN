@@ -65,6 +65,13 @@ namespace Ankh.Scc
             get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
         }
 
+        IAnkhOpenDocumentTracker _tracker;
+        IAnkhOpenDocumentTracker DocumentTracker
+        {
+            [DebuggerStepThrough]
+            get { return _tracker ?? (_tracker = GetService<IAnkhOpenDocumentTracker>()); }
+        }
+
         void PostDirty()
         {
             if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
@@ -298,6 +305,9 @@ namespace Ankh.Scc
             {
                 foreach (string file in modified)
                 {
+                    // TODO: Enable when we can suppress the 'Would you like to reload this document' dialog
+                    //DocumentTracker.ReloadIfNotDirty(file, false);
+
                     SvnItem item = Cache[file];
 
                     if (item.IsConflicted)
