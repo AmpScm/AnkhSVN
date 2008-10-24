@@ -167,7 +167,7 @@ namespace Ankh.UI.SvnLog
 		}
     }
 
-	sealed class LogItem : ISvnLogItem
+    sealed class LogItem : AnkhPropertyGridItem, ISvnLogItem
 	{
 		readonly LogListViewItem _lvi;
         public Uri _repositoryRoot;
@@ -227,5 +227,23 @@ namespace Ankh.UI.SvnLog
         {
             get { return _lvi.RawData.ChangedPaths; }
         }
-	}
+
+        /// <summary>
+        /// Gets the light/second name shown in the gridview header
+        /// </summary>
+        /// <value></value>
+        protected override string ClassName
+        {
+            get { return "Revision Information"; }
+        }
+
+        /// <summary>
+        /// Gets the bold/first name shown in the gridview header
+        /// </summary>
+        /// <value></value>
+        protected override string ComponentName
+        {
+            get { return string.Format("r{0}", Revision); }
+        }
+    }
 }

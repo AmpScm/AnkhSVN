@@ -156,7 +156,7 @@ namespace Ankh.UI.SvnLog
         }
     }
 
-    sealed class PathItem : ISvnLogChangedPathItem
+    sealed class PathItem : AnkhPropertyGridItem, ISvnLogChangedPathItem
     {
         readonly PathListViewItem _lvi;
         public PathItem(PathListViewItem lvi)
@@ -209,6 +209,24 @@ namespace Ankh.UI.SvnLog
         public long Revision
         {
             get { return _lvi.LogItem.Revision; }
+        }
+
+        /// <summary>
+        /// Gets the light/second name shown in the gridview header
+        /// </summary>
+        /// <value></value>
+        protected override string ClassName
+        {
+            get { return "Changed Path"; }
+        }
+
+        /// <summary>
+        /// Gets the bold/first name shown in the gridview header
+        /// </summary>
+        /// <value></value>
+        protected override string ComponentName
+        {
+            get { return Origin.Target.FileName; }
         }
     }
 }
