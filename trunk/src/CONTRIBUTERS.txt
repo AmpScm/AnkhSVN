@@ -9,6 +9,7 @@ Committers:
 * Damien Guard
 * Bert Huijben
 * Jeremy Whitlock
+* Baybora Aksoy
 
 Patches:
 
@@ -26,3 +27,6 @@ Patches:
 * Frank Rast
 * Steven Haworth
 * Sean Aitken
+* Ste Robbins
+* Daniël Hoelbling
+* Luc Morin
