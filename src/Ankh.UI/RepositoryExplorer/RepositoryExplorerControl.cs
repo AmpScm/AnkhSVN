@@ -11,6 +11,7 @@ using Ankh.Ids;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
+using Ankh.Commands;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -187,7 +188,10 @@ namespace Ankh.UI.RepositoryExplorer
             }
             else
             {
-                // TODO: Perform default(?) action
+                IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+
+                if (cmd != null)
+                    cmd.ExecCommand(AnkhCommand.ViewInVsNet, true);
             }
         }
     }
