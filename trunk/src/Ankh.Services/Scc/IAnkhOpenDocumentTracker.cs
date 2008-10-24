@@ -61,5 +61,13 @@ namespace Ankh.Scc
         /// <param name="ProjectFile">The project file.</param>
         /// <param name="sure">if sure set to <c>true</c>.. <c>false</c> if the editory should be queried.</param>
         void SetDirty(string path, bool sure);
+
+        /// <summary>
+        /// Reloads the specified file if the document is open and not dirty
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
+        /// <returns></returns>
+        bool ReloadIfNotDirty(string file, bool clearUndo);
     }
 }
