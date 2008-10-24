@@ -138,10 +138,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="WizardFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4d734c443eb4978e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\WizardFramework.dll</HintPath>
-    </Reference>
     <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
       <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
       <Name>Ankh.Diff</Name>
@@ -202,6 +198,24 @@
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeWizard\WizardFramework\IWizard.cs" />
+    <Compile Include="MergeWizard\WizardFramework\IWizardContainer.cs" />
+    <Compile Include="MergeWizard\WizardFramework\IWizardNode.cs" />
+    <Compile Include="MergeWizard\WizardFramework\IWizardPage.cs" />
+    <Compile Include="MergeWizard\WizardFramework\IWizardPageChangeProvider.cs" />
+    <Compile Include="MergeWizard\WizardFramework\Properties\Resources.Designer.cs" />
+    <Compile Include="MergeWizard\WizardFramework\Wizard.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\WizardFramework\WizardDialog.Designer.cs">
+      <DependentUpon>WizardDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MergeWizard\WizardFramework\WizardMessage.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardPage.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardPageChangeEventArgs.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs" />
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -791,6 +805,10 @@
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx" />
+    <EmbeddedResource Include="MergeWizard\WizardFramework\WizardDialog.resx">
+      <DependentUpon>WizardDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PCStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PCStrings.Designer.cs</LastGenOutput>
@@ -1050,6 +1068,11 @@
     <Content Include="MergeWizard\images\ManuallyRemove.png" />
     <None Include="Resources\folderCloseButton.Image.png" />
     <None Include="Resources\Busy.gif" />
+    <Content Include="MergeWizard\WizardFramework\images\help.gif" />
+    <Content Include="MergeWizard\WizardFramework\images\message_error.gif" />
+    <Content Include="MergeWizard\WizardFramework\images\message_info.gif" />
+    <Content Include="MergeWizard\WizardFramework\images\message_warning.gif" />
+    <Content Include="MergeWizard\WizardFramework\README.txt" />
     <Content Include="PropertyEditors\Images\Properties.ico" />
     <Content Include="Resources\TabConflicts.png" />
   </ItemGroup>
