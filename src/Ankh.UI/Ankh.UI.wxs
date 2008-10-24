@@ -3,7 +3,7 @@
 		<ComponentGroup Id="Ankh.UI">
       <ComponentGroupRef Id="Ankh.Ids"/>
       <ComponentGroupRef Id="Ankh.Services"/>
-      <ComponentGroupRef Id="WizardFramework"/>
+      <!--ComponentGroupRef Id="WizardFramework"/-->
       <ComponentGroupRef Id="Ankh.Diff"/>
 			<ComponentRef Id="C_Ankh.UI.dll"/>
 		</ComponentGroup>
