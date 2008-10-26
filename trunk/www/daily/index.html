@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5467</title>
+<title>AnkhSVN-Daily Update - 2.0.5472</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5467</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5472</h1>
 
 
 <p>
@@ -12,13 +12,13 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1191/AnkhSvn-Daily-2.0.5467.244.msi">AnkhSVN 2.0.5467</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1192/AnkhSvn-Daily-2.0.5472.245.msi">AnkhSVN 2.0.5472</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5467">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5472">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -26,6 +26,12 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2008-10-24</td></tr>
+<tr><td> </td><td class="r"><a id="5472" href="http://ankhsvn.net/rev/?r=5472">[r5472]</a></td><td class="a">sander</td><td class="f">src/CONTRIBUTERS.txt, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix <a href="http://ankhsvn.net/issues/?id=520">issue #520</a>. Call the view in VS command, this is the same behavior as in the WC explorer.
+Patch by: Luc Morin</td></tr>
+<tr><td> </td><td class="r"><a id="5471" href="http://ankhsvn.net/rev/?r=5471">[r5471]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/IAnkhOpenDocumentTracker.cs, src/Ankh.Scc/OpenDocumentTracker.Api.cs, src/Ankh.Scc/ProjectMap/SccDocumentData.cs, src/Ankh.Scc/ProjectNotifier.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Lay some plumbing for automatically reloading files editted in the diff/merge tools.</td></tr>
+<tr><td> </td><td class="r"><a id="5469" href="http://ankhsvn.net/rev/?r=5469">[r5469]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/WizardFramework/README.txt, src/Ankh.UI/MergeWizard/WizardFramework/IWizard.cs, src/Ankh.UI/Ankh.UI.wxs, src/Ankh.UI/MergeWizard/WizardFramework/WizardPageChangingEventArgs.cs, src/Ankh.UI/MergeWizard/WizardFramework/IWizardContainer.cs, src/Ankh.UI/MergeWizard/WizardFramework/images/message_warning.gif, src/Ankh.UI/MergeWizard/WizardFramework/IWizardNode.cs, src/Ankh.UI/MergeWizard/WizardFramework/WizardDialog.Designer.cs (and 18 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Import CollabNet Wizard framework to work out some existing UI problems.
+For now it is just included. We should work out whether we are maintaining
+it as an AnkhSVN wizard, or provide patches to the original project.</td></tr>
 <tr><td> </td><td class="r"><a id="5467" href="http://ankhsvn.net/rev/?r=5467">[r5467]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/UI/AnkhPropertyGridItem.cs, src/Ankh.UI/SvnLog/LogChangedPathsView.cs, src/Ankh.UI/SvnLog/LogRevisionView.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Give the log view items and changed path items a custom title in
 the Visual Studio Property window.</td></tr>
 <tr class="d"><td colspan="4">2008-10-23</td></tr>
@@ -211,12 +217,6 @@ the double shortcut issue for VS 2005 users.</td></tr>
 to the project. When the added file is the Active Document and the active
 document had another name in the OnQueryAdd, mark the file as copied
 instead of new.</td></tr>
-<tr class="d"><td colspan="4">2008-09-26</td></tr>
-<tr><td> </td><td class="r"><a id="5282" href="http://ankhsvn.net/rev/?r=5282">[r5282]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/Commands/ShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Disable ShowChanges for ChangeItems that were added or deleted.</td></tr>
-<tr><td> </td><td class="r"><a id="5281" href="http://ankhsvn.net/rev/?r=5281">[r5281]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogChangedPathsView.cs, src/Ankh.UI/SvnLog/LogRevisionView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add some color to the history viewer</td></tr>
-<tr class="d"><td colspan="4">2008-09-25</td></tr>
-<tr><td> </td><td class="r"><a id="5277" href="http://ankhsvn.net/rev/?r=5277">[r5277]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/SvnLog/LogRevisionControl.Designer.cs, src/Ankh.UI/SvnLog/LogControl.Designer.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/SvnLog/LogChangedPathsView.cs, src/Ankh.UI/SvnLog/LogChangedPaths.resx, src/Ankh.UI/SvnLog/LogToolWindowControl.Designer.cs, src/Ankh.UI/SvnLog/LogChangedPaths.Designer.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use SmartListView infrastructure in the log viewer where possible. (Updates
-column management, etc.)</td></tr>
 
 </table>
 <!--/Recent changes-->
