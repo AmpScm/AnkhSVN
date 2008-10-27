@@ -974,7 +974,7 @@ namespace Ankh
             int n = FullPath.Length - path.Length;
 
             if(n > 0)
-                return (FullPath[n] == '\\');
+                return (FullPath[path.Length] == '\\');
             
             return (n == 0);
         }
