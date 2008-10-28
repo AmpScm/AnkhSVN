@@ -31,7 +31,8 @@
           <RegistryValue Name="InstallLocation" Value="[INSTALLLOCATION]" Type="string"/>
         </RegistryKey>
         <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2005.wxi ?>
-        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>        
+        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>
+        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2010.wxi ?>
       </Component>
     </DirectoryRef>
   </Fragment>
