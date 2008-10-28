@@ -629,4 +629,62 @@
       </Property>
     </Fragment>
 
+  
+ <!-- Visual Studio 2010 CTP -->
+ <Fragment>
+    <Property Id="VS100DEVENV" Secure="yes">
+      <RegistrySearch Id="VS100DevEnvSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\10.0\Setup\VS" Name="EnvironmentPath" Type="raw" />
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS100_ITEMTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS100DevEnvForItemTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\10.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS100ItemTemplatesPathSearch" Path="ItemTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS100_PROJECTTEMPLATES_DIR" Secure="yes">
+      <RegistrySearch Id="VS100DevEnvForProjectTemplatesSearch" Root="HKLM" Key="SOFTWARE\Microsoft\VisualStudio\10.0\Setup\VS" Name="EnvironmentPath" Type="raw">
+        <DirectorySearch Id="VS100ProjectTemplatesPathSearch" Path="ProjectTemplates" Depth="1" />
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <Property Id="VS100_SCHEMAS_DIR" Secure="yes">
+      <RegistrySearch Id="VS100ProductPathSearch" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw">
+        <DirectorySearch Id="VS100XmlPathSearch" Path="Xml" Depth="1">
+          <DirectorySearch Id="VS100XmlSchemasPathSearch" Path="Schemas" Depth="1" />
+        </DirectorySearch>
+      </RegistrySearch>
+    </Property>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS100Setup" Property="VS100DEVENV" ExeCommand="/setup" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS100DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS100Setup" Before="InstallFinalize" Overridable="yes">VS100DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
+    <CustomAction Id="VS100InstallVSTemplates" Property="VS100DEVENV" ExeCommand="/InstallVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS100DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS100InstallVSTemplates" Before="InstallFinalize" Overridable="yes">VS100DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <!-- Location of the Visual Studio 2008 root installation directory. -->
+  <Fragment>
+    <Property Id="VS100_ROOT_FOLDER" Secure="yes">
+      <RegistrySearch Id="SearchForVS100RootPath" Root="HKLM" Key="Software\Microsoft\VisualStudio\SxS\VS7" Name="10.0" Type="raw" />
+    </Property>
+  </Fragment>
 </Wix>
