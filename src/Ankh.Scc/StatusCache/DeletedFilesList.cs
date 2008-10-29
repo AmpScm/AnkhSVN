@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.ObjectModel;
 
-namespace Ankh.StatusCache
+namespace Ankh.Scc.StatusCache
 {
     public class DeletedSvnItemList : KeyedCollection<string, SvnItem>
     {

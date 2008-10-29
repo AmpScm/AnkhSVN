@@ -163,6 +163,7 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
+    <Compile Include="Services\AnkhSvnClientPool.cs" />
     <Compile Include="Services\SolutionSettings.Commit.cs">
       <DependentUpon>SolutionSettings.cs</DependentUpon>
     </Compile>
@@ -293,12 +294,7 @@
     <Compile Include="Services\PendingChanges\PendingChangeHandler.cs" />
     <Compile Include="Services\Scheduler.cs" />
     <Compile Include="Services\SolutionSettings.cs" />
-    <Compile Include="StatusCache\FileStatusCleanup.cs" />
-    <Compile Include="NotificationHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusCache\AnkhSvnClientPool.cs" />
-    <Compile Include="StatusCache\DeletedFilesList.cs" />
-    <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="Services\ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>

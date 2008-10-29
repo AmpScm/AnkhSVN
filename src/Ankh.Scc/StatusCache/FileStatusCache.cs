@@ -9,7 +9,7 @@ using Ankh.Ids;
 using Ankh.Scc;
 using SharpSvn;
 
-namespace Ankh.StatusCache
+namespace Ankh.Scc.StatusCache
 {
     /// <summary>
     /// Maintains path->SvnItem mappings.
