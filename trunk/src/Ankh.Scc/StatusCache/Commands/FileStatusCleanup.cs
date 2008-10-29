@@ -5,7 +5,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Ids;
 
-namespace Ankh.StatusCache
+namespace Ankh.Scc.StatusCache.Commands
 {
     [Command(AnkhCommand.FileCacheFinishTasks)]
     [Command(AnkhCommand.TickRefreshSvnItems)]

@@ -12,28 +12,19 @@ using System.ComponentModel;
 using SharpSvn.UI;
 using System.Windows.Forms.Design;
 
-namespace Ankh
+namespace Ankh.Services
 {
     [GlobalService(typeof(ISvnClientPool))]
     sealed class AnkhSvnClientPool : AnkhService, ISvnClientPool
     {
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
-        readonly NotificationHandler _notifyHandler;
         readonly Control _syncher;
         const int MaxPoolSize = 10;
 
         public AnkhSvnClientPool(IAnkhServiceProvider context)
             : base(context)
         {
-            _notifyHandler = context.GetService<NotificationHandler>();
-
-            if (_notifyHandler == null)
-            {
-                _notifyHandler = new NotificationHandler(context);
-                GetService<IServiceContainer>().AddService(typeof(NotificationHandler), _notifyHandler);
-            }
-
             _syncher = new Control();
             _syncher.Visible = false;
             _syncher.Text = "AnkhSVN Synchronizer";
