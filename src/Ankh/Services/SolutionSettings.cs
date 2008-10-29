@@ -160,6 +160,9 @@ namespace Ankh.Settings
                 cache.SolutionFilename = item.FullPath;
                 cache.SolutionCookie = item.ChangeCookie;
 
+                if (!item.Exists)
+                    return;
+
                 SvnWorkingCopy wc = item.WorkingCopy;
                 SvnItem parent;
                 if (wc != null)
