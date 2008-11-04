@@ -42,6 +42,7 @@ namespace Ankh.Ids
 
         public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
         public const string SccServiceId = "d8c473d2-9634-4513-91d5-e1a671fe2df4";
+        public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
 
 
         //************ Special contexts managed by our Trigger package *********************        
