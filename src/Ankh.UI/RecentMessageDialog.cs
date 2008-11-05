@@ -29,7 +29,7 @@ namespace Ankh.UI
 
         private void SizeColumn()
         {
-            column.Width = logMessageList.Width - SystemInformation.VerticalScrollBarWidth - 1;
+            column.Width = logMessageList.Width - SystemInformation.VerticalScrollBarWidth - 4;
         }
 
         public string SelectedText
