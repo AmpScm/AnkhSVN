@@ -49,7 +49,12 @@ namespace Ankh.UI.SccManagement
                 int n = r.LastIndexOf('/', r.Length - 1);
 
                 if (n >= 0)
-                    r = r.Substring(0, n);
+                {
+                    int lastCharIndex = r.Length - 1;
+                    // if '/' is the last character, strip and continue
+                    // otherwise include '/' to give "/trunk/" check a chance
+                    r = r.Substring(0, (n == lastCharIndex) ? n : (n+1));
+                }
                 else
                     r = "";
             }
@@ -70,7 +75,12 @@ namespace Ankh.UI.SccManagement
                 int n = r.LastIndexOf('/', r.Length - 1);
 
                 if (n >= 0)
-                    r = r.Substring(0, n);
+                {
+                    int lastCharIndex = r.Length - 1;
+                    // if '/' is the last character, strip and continue
+                    // otherwise include '/' to give "/branches/" check a chance
+                    r = r.Substring(0, (n == lastCharIndex) ? n : (n + 1));
+                }
                 else
                     r = "";
             }
@@ -82,7 +92,7 @@ namespace Ankh.UI.SccManagement
                 string dir = (path.Length > r.Length) ? path.Substring(0, path.IndexOf('/', r.Length)) : path;
 
                 info.WorkingRoot = new Uri(uri, dir);
-                info.WholeProjectRoot = new Uri(uri, r);
+                info.WholeProjectRoot = new Uri(uri, r.Substring(0, r.Length - 9));
                 info.BranchesRoot = new Uri(info.WholeProjectRoot, r.Substring(r.Length - 9, 9)); // 'branches/' but with repos casing
                 return true;
             }
@@ -94,7 +104,12 @@ namespace Ankh.UI.SccManagement
                 int n = r.LastIndexOf('/', r.Length - 1);
 
                 if (n >= 0)
-                    r = r.Substring(0, n);
+                {
+                    int lastCharIndex = r.Length - 1;
+                    // if '/' is the last character, strip and continue
+                    // otherwise include '/' to give "/tags/" check a chance
+                    r = r.Substring(0, (n == lastCharIndex) ? n : (n + 1));
+                }
                 else
                     r = "";
             }
