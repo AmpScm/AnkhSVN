@@ -44,6 +44,31 @@ namespace Ankh.UI.VSSelectionControls
             NotifySelectionUpdated();
         }
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                ExtendSelection(e.Location, true);
+            }
+
+            base.OnMouseDown(e);
+        }
+
+        protected virtual void ExtendSelection(Point p, bool rightClick)
+        {
+            TreeViewHitTestInfo hi = HitTest(p);
+            
+            bool onItem = hi.Node != null && hi.Location != TreeViewHitTestLocations.None;
+
+            if (rightClick)
+            {
+                if (hi.Node != SelectedNode)
+                {
+                    SelectedNode = hi.Node;                    
+                }
+            }
+        }
+
         int _inWndProc;
         bool _shouldUpdate;
         protected override void WndProc(ref Message m)
