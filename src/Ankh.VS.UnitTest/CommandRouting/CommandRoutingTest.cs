@@ -335,33 +335,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             {
                 CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot);
             }
-        }
-
-        [TestMethod]
-        public void ResolveConflictCommand()
-        {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
-                CommandTester.TestExecution(AnkhCommand.ResolveConflict);
-            }
-        }
-
-        [TestMethod]
-        public void ResolveConflictExternalCommand()
-        {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
-                CommandTester.TestExecution(AnkhCommand.ResolveConflictExternal);
-            }
-        }
+        }       
 
         [TestMethod]
         public void RevertItemCommand()
