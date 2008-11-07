@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.Scc;
-using Ankh.Selection;
-using Ankh.UI;
-using Ankh.VS.Dialogs;
-using Ankh.VS.SolutionExplorer;
-using Ankh.VS.WebBrowser;
-using Ankh.ContextServices;
-using Ankh.Commands;
-using Ankh.VS.Selection;
-using Ankh.VS.Extenders;
-using Ankh.Ids;
 using System.Reflection;
+using System.Text;
+
+using Ankh.Scc;
 
 namespace Ankh.VS
 {

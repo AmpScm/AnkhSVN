@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Ankh.ContextServices;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Ankh.VS;
@@ -16,7 +15,6 @@ namespace Ankh
     public class AnkhContext : AnkhService, IAnkhServiceProvider
     {
         readonly IAnkhServiceProvider _runtime;
-        IAnkhOperationLogger _logger;
 
         protected AnkhContext(IAnkhServiceProvider context)
             : base(context)
@@ -25,24 +23,6 @@ namespace Ankh
                 throw new ArgumentNullException("context");
 
             _runtime = GetService<AnkhRuntime>();
-        }
-
-        // Only add members which are really needed
-        // Implementations should always ask their parent service provider for an instance first
-
-        /// <summary>
-        /// Starts a logged operation which can be closed by disposing the returned <see cref="IDisposable"/>
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns>A disposable object to end the loggin</returns>
-        public IDisposable BeginOperation(string message)
-        {
-            IAnkhOperationLogger logger = _logger ?? (_logger = GetService<IAnkhOperationLogger>());
-
-            if (logger != null)
-                return logger.BeginOperation(message);
-
-            return null;
         }
 
         /// <summary>

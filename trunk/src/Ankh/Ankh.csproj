@@ -249,19 +249,10 @@
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\RemoveRepositoryRootCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\RemoveWorkingCopyExplorerRootCommand.cs" />
-    <Compile Include="Commands\ResolveConflictCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ResolveConflictExternalCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\RevertItemCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\SendErrorReportCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ShowToolWindows.cs">

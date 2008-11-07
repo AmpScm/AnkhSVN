@@ -1,17 +1,14 @@
 // $Id$
 using System;
-using Ankh.UI;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using System.IO;
 
 using SharpSvn;
-using Ankh.ContextServices;
+
+using Ankh.UI;
 using Ankh.VS;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Collections.Generic;
-using Ankh.WorkingCopyExplorer;
-using System.Windows.Forms.Design;
 using Ankh.UI.SccManagement;
 
 namespace Ankh

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Ankh.ContextServices;
 using System.Windows.Forms;
 using System.Runtime.Remoting.Contexts;
 using Ankh.VS;

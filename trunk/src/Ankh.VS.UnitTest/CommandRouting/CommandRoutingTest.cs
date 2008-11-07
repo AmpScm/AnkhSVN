@@ -390,24 +390,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [TestMethod]
-        public void SendErrorReportCommand()
-        {
-            mocks = new MockRepository();
-
-            IAnkhErrorHandler errorHandler = mocks.DynamicMock<IAnkhErrorHandler>();
-            using (mocks.Record())
-            {
-                errorHandler.SendReport();
-                LastCall.Repeat.Once();
-            }
-
-            using (mocks.Playback())
-            {
-                CommandTester.TestExecution(AnkhCommand.SendFeedback);
-            }
-        }
-
-        [TestMethod]
         public void ShowCommitDialog()
         {
 

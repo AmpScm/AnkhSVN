@@ -88,7 +88,6 @@ namespace Ankh.Commands
             }
 
             // perform the actual revert 
-            using (e.Context.BeginOperation("Reverting"))
             using (DocumentLock dl = documentTracker.LockDocuments(paths, DocumentLockType.NoReload))
             {
                 dl.MonitorChanges();

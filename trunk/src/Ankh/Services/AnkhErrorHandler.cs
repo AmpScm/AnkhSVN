@@ -5,11 +5,12 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using System.Xml.Serialization;
-using Ankh.ContextServices;
+
+using SharpSvn;
+
 using Ankh.UI;
 using Ankh.VS;
 using Ankh.Xml;
-using SharpSvn;
 
 namespace Ankh
 {
@@ -158,18 +159,7 @@ namespace Ankh
         {
             DoLogException(ex);
             ShowErrorDialog(ex, true, true);
-        }
-
-        public void LogException(Exception ex, string message, params object[] args)
-        {
-            IAnkhOperationLogger logger = Context.GetService<IAnkhOperationLogger>();
-
-            if (logger != null)
-            {
-                logger.WriteLine(string.Format(message, args));
-                logger.WriteLine(ex.ToString());
-            }
-        }
+        }  
 
         private void DoLogException(Exception ex)
         {
