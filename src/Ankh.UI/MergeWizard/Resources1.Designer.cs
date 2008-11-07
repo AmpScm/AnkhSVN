@@ -159,6 +159,13 @@ namespace Ankh.UI.MergeWizard {
             }
         }
         
+        internal static System.Drawing.Bitmap ErrorIcon {
+            get {
+                object obj = ResourceManager.GetObject("ErrorIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ErrorImage {
             get {
                 object obj = ResourceManager.GetObject("ErrorImage", resourceCulture);
@@ -181,6 +188,20 @@ namespace Ankh.UI.MergeWizard {
         internal static string HEAD {
             get {
                 return ResourceManager.GetString("HEAD", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap HelpIcon {
+            get {
+                object obj = ResourceManager.GetObject("HelpIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap InfoIcon {
+            get {
+                object obj = ResourceManager.GetObject("InfoIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -660,6 +681,13 @@ namespace Ankh.UI.MergeWizard {
         internal static string Updated {
             get {
                 return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
+        
+        internal static System.Drawing.Bitmap WarningIcon {
+            get {
+                object obj = ResourceManager.GetObject("WarningIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

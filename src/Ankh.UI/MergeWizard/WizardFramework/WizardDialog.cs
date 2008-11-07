@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.UI.Properties;
 
 /* 
  * WizardDialog.cs
@@ -300,19 +299,19 @@ namespace WizardFramework
             if (message != null && message.Message != null)
             {
                 // Display the message panel
-                // Bora: statusIcon images are set be read from the Ankh.UI assembly resources.
+                // Bora: statusIcon images are set be read from the MergeWizard resources.
                 // otherwise, runtime throws an exception and quits the Wizard.
                 if (message.Type == WizardMessage.MessageType.NONE)
                     statusIcon.Image = null;
 
-                if (message.Type == WizardMessage.MessageType.ERROR && statusIcon.Image != Resources.ErrorIcon)
-                    statusIcon.Image = Resources.ErrorIcon;
+                if (message.Type == WizardMessage.MessageType.ERROR && statusIcon.Image != Ankh.UI.MergeWizard.Resources.ErrorIcon)
+                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.ErrorIcon;
 
-                if (message.Type == WizardMessage.MessageType.INFORMATION && statusIcon.Image != Resources.InfoIcon)
-                    statusIcon.Image = Resources.InfoIcon;
+                if (message.Type == WizardMessage.MessageType.INFORMATION && statusIcon.Image != Ankh.UI.MergeWizard.Resources.InfoIcon)
+                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.InfoIcon;
 
-                if (message.Type == WizardMessage.MessageType.WARNING && statusIcon.Image != Resources.WarningIcon)
-                    statusIcon.Image = Resources.WarningIcon;
+                if (message.Type == WizardMessage.MessageType.WARNING && statusIcon.Image != Ankh.UI.MergeWizard.Resources.WarningIcon)
+                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.WarningIcon;
 
                 if (message.Message != null && statusMessage.Text != message.Message)
                     statusMessage.Text = message.Message;
