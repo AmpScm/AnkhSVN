@@ -95,7 +95,7 @@ namespace Ankh.Scc
                     {
                         _reposRoot = client.GetRepositoryRoot(ut.Uri);
 
-                        if (_reposRoot != null)
+                        if (_reposRoot == null)
                             throw new InvalidOperationException("Can't retrieve the repository root of the UriTarget");
 
 #if DEBUG
