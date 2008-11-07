@@ -77,12 +77,15 @@ namespace Ankh.Ids
         RefreshRepositoryItem,
         RemoveRepositoryRoot,
         RemoveWorkingCopyExplorerRoot,
+        [Obsolete()]
         ResolveConflict,
+        [Obsolete()]
         ResolveConflictExternal,
 
         BlameShowLog,
         RevertItem,
         SaveToFile,
+        [Obsolete()]
         SendFeedback,
         ShowPendingChanges,
         ShowRepositoryExplorer,

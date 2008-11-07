@@ -1,13 +1,13 @@
 using System;
-using System.Threading;
-using SharpSvn;
-
-using Ankh.ContextServices;
-using Ankh.UI;
-using Ankh.VS;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+
+using SharpSvn;
+
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh
 {
@@ -119,12 +119,7 @@ namespace Ankh
                 }
                 if (_cancelled)
                 {
-                    IAnkhOperationLogger logger = _context.GetService<IAnkhOperationLogger>();
-
-                    if (logger != null)
-                    {
-                        logger.WriteLine("Cancelled");
-                    }
+                    // NOOP
                 }
                 else if (_exception != null)
                     throw new ProgressRunnerException(this._exception);

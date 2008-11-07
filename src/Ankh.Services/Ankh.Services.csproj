@@ -122,7 +122,6 @@
     <Compile Include="VS\ComStreamWrapper.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
     <Compile Include="ContextServices\IAnkhErrorHandler.cs" />
-    <Compile Include="ContextServices\IAnkhOperationLogger.cs" />
     <Compile Include="AnkhContext.cs" />
     <Compile Include="IAnkhPackage.cs" />
     <Compile Include="IAnkhRuntimeInfo.cs" />
