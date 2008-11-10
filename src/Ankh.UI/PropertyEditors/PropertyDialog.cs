@@ -28,8 +28,6 @@ namespace Ankh.UI.PropertyEditors
 
         private void InitializeEditors()
         {
-            //TODO this list needs to be filtered based on the context
-            // some properties can only be set for directories and some for only files
             IPropertyEditor propEditor = new ExecutablePropertyEditor();
             AddPropertyEditor(propEditor);
 
