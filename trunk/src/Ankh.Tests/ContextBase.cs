@@ -214,21 +214,6 @@ namespace Ankh.Tests
 
         #region IUIShell Members
 
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons)
-        {
-            throw new NotImplementedException();
-        }
-
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
-        {
-            throw new NotImplementedException();
-        }
-
-        DialogResult IUIShell.ShowMessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton)
-        {
-            throw new NotImplementedException();
-        }
-
         void IUIShell.DisplayHtml(string caption, string html, bool reuse)
         {
             throw new NotImplementedException();
