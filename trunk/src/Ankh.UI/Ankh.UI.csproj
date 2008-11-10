@@ -830,6 +830,9 @@
       <LastGenOutput>PCStrings.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\NeedsLockPropertyEditor.resx">
+      <DependentUpon>NeedsLockPropertyEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </EmbeddedResource>
