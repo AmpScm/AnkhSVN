@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
-    partial class RevisionPicker
+    partial class VersionSelector
     {
 
         #region Component Designer generated code

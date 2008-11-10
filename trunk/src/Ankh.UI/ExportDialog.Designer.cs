@@ -27,7 +27,7 @@ namespace Ankh.UI
             this.versionLabel = new System.Windows.Forms.Label();
             this.urlBrowseBtn = new System.Windows.Forms.Button();
             this.urlTextBox = new System.Windows.Forms.TextBox();
-            this.revisionPicker = new Ankh.UI.RevisionPicker();
+            this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
             this.localDirGroupBox.SuspendLayout();
             this.radioButtonGroupbox.SuspendLayout();
             this.SuspendLayout();
@@ -232,7 +232,7 @@ namespace Ankh.UI
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
-        private Ankh.UI.RevisionPicker revisionPicker;
+        private Ankh.UI.PathSelector.VersionSelector revisionPicker;
         private System.Windows.Forms.GroupBox localDirGroupBox;
         private System.Windows.Forms.TextBox localDirTextBox;
         private System.Windows.Forms.Button toDirBrowseButton;

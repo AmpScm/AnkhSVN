@@ -7,7 +7,7 @@ using SharpSvn;
 using System.Collections.Generic;
 using Ankh.Scc;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
     public enum PathSelectorOptions
     {
@@ -311,12 +311,12 @@ namespace Ankh.UI
             get { return this.cancelButton; }
         }
 
-        protected RevisionPicker RevisionPickerStart
+        protected VersionSelector RevisionPickerStart
         {
             get { return this.revisionPickerStart; }
         }
 
-        protected RevisionPicker RevisionPickerEnd
+        protected VersionSelector RevisionPickerEnd
         {
             get { return this.revisionPickerEnd; }
         }

@@ -15,7 +15,7 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.revisionGroupBox = new System.Windows.Forms.GroupBox();
-            this.revisionPicker = new Ankh.UI.RevisionPicker();
+            this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
             this.urlGroupBox = new System.Windows.Forms.GroupBox();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.localDirGroupBox = new System.Windows.Forms.GroupBox();
@@ -161,7 +161,7 @@ namespace Ankh.UI
         #endregion
 
         private System.Windows.Forms.GroupBox revisionGroupBox;
-        private Ankh.UI.RevisionPicker revisionPicker;
+        private Ankh.UI.PathSelector.VersionSelector revisionPicker;
         private System.Windows.Forms.GroupBox urlGroupBox;
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.GroupBox localDirGroupBox;
