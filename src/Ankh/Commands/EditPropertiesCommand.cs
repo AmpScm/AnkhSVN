@@ -140,7 +140,7 @@ namespace Ankh.Commands
 
             IUIService ui = e.GetService<IUIService>();
             using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
-            using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned.FullPath))
+            using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned))
             {
                 dialog.Context = e.Context;
 
@@ -203,12 +203,30 @@ namespace Ankh.Commands
                             if (item is BinaryPropertyItem)
                             {
                                 ICollection<byte> data = ((BinaryPropertyItem)item).Data;
-                                client.SetProperty(firstVersioned.FullPath, key, data);
+                                if (item.Recursive)
+                                {
+                                    SvnSetPropertyArgs pArgs = new SvnSetPropertyArgs();
+                                    pArgs.Depth = SvnDepth.Infinity;
+                                    client.SetProperty(firstVersioned.FullPath, key, data, pArgs);
+                                }
+                                else
+                                {
+                                    client.SetProperty(firstVersioned.FullPath, key, data);
+                                }
                             }
                             else if (item is TextPropertyItem)
                             {
                                 string data = ((TextPropertyItem)item).Text;
-                                client.SetProperty(firstVersioned.FullPath, key, data);
+                                if (item.Recursive)
+                                {
+                                    SvnSetPropertyArgs pArgs = new SvnSetPropertyArgs();
+                                    pArgs.Depth = SvnDepth.Infinity;
+                                    client.SetProperty(firstVersioned.FullPath, key, data, pArgs);
+                                }
+                                else
+                                {
+                                    client.SetProperty(firstVersioned.FullPath, key, data);
+                                }
                             }
                         }
                     }
