@@ -26,24 +26,12 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public void Reset()
-        {
-            this.executableCheckBox.Checked = false;
-            this.dirty = false;
-        }
+        public void Reset() { }
 
         public bool Valid
         {
 			
-            get
-            { 
-                if (!this.dirty)
-                {
-                    return false;
-                }
-                else 
-                    return this.executableCheckBox.Checked; 
-            }
+            get { return true; }
         }
 
         public PropertyItem PropertyItem
@@ -61,9 +49,15 @@ namespace Ankh.UI.PropertyEditors
 
             set
             {
-                this.executableCheckBox.Checked = true;
-                this.dirty = false;
             }
+        }
+
+        /// <summary>
+        /// File property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.File;
         }
 
         public override string ToString()
@@ -86,24 +80,11 @@ namespace Ankh.UI.PropertyEditors
             base.Dispose( disposing );
         }
 
-        private void executableCheckBox_Click(object sender, System.EventArgs e)
-        {
-            // Enables save button
-            this.dirty = true;
-            if (Changed != null)
-                Changed (this, EventArgs.Empty );
-        }
-
         private void CreateMyToolTip()
         {
-            // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip( this.executableCheckBox, "File is executable");
+            // Set up the ToolTip text for the Button and Textbox.
+            conflictToolTip.SetToolTip( this.executableTextBox, "File is executable");
         }
-        
-        /// <summary>
-        /// Flag for enabling/disabling save button
-        /// </summary>
-        private bool dirty;      
     }
 	
 

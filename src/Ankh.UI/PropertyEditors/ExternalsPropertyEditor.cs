@@ -85,6 +85,14 @@ namespace Ankh.UI.PropertyEditors
             return SvnPropertyNames.SvnExternals;
         }
 
+        /// <summary>
+        /// Directory property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.Directory;
+        }
+
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>

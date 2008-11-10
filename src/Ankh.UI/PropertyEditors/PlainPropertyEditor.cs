@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
+using SharpSvn;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -52,6 +53,14 @@ namespace Ankh.UI.PropertyEditors
                 TextPropertyItem item = (TextPropertyItem)value;
                 this.valueTextBox.Text = item.Text;
             }
+        }
+
+        /// <summary>
+        /// Custom property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.Directory | SvnNodeKind.File;
         }
 
         /// <summary> 

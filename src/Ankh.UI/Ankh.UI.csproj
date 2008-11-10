@@ -233,6 +233,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PCStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="PropertyEditors\NeedsLockPropertyEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PropertyEditors\NeedsLockPropertyEditor.Designer.cs">
+      <DependentUpon>NeedsLockPropertyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="PropertyEditors\PropertyEditControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

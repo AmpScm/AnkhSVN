@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Windows.Forms.Design;
+using SharpSvn;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -17,6 +18,7 @@ namespace Ankh.UI.PropertyEditors
         IAnkhServiceProvider _context;
         readonly List<PropertyItem> _propItems;
         IPropertyEditor _currentEditor;
+        SvnNodeKind _currentNodeKind;
 
         public PropertyEditorDialog(string svnItemPath)
         {
@@ -28,6 +30,11 @@ namespace Ankh.UI.PropertyEditors
             _propItems = new List<PropertyItem>();
 
             this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
+        }
+
+        public PropertyEditorDialog(SvnItem svnItem) : this(svnItem.FullPath)
+        {
+            _currentNodeKind = svnItem.NodeKind;
         }
 
         public IAnkhServiceProvider Context
@@ -126,7 +133,7 @@ namespace Ankh.UI.PropertyEditors
             if (Context != null)
                 ui = Context.GetService<IUIService>();
 
-            using (PropertyDialog pDialog = new PropertyDialog(item))
+            using (PropertyDialog pDialog = new PropertyDialog(item, _currentNodeKind))
             {
 
                 DialogResult dr;
@@ -181,7 +188,7 @@ namespace Ankh.UI.PropertyEditors
         /// <param name="e"></param>
         private void addButton_Click(object sender, System.EventArgs e)
         {
-            using (PropertyDialog propDialog = new PropertyDialog())
+            using (PropertyDialog propDialog = new PropertyDialog(_currentNodeKind))
             {
                 DialogResult dr;
 
@@ -199,6 +206,7 @@ namespace Ankh.UI.PropertyEditors
                 if (item != null)
                 {
                     int index = this.TryFindItem(item.Name);
+                    item.Recursive = propDialog.ApplyRecursively();
                     if (index > -1)
                     {
                         // There is already a property with the same name.
@@ -316,7 +324,14 @@ namespace Ankh.UI.PropertyEditors
             set { this.name = value; }
         }
 
+        public bool Recursive
+        {
+            get { return this.recursive; }
+            set { this.recursive = value; }
+        }
+
         private string name;
+        private bool recursive;
     }
     /// <summary>
     /// Represents a text property.

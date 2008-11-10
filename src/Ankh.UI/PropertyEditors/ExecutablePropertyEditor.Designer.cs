@@ -15,30 +15,33 @@ namespace Ankh.UI.PropertyEditors
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.executableCheckBox = new System.Windows.Forms.CheckBox();
             this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.executableTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // executableCheckBox
+            // executableTextBox
             // 
-            this.executableCheckBox.Location = new System.Drawing.Point(3, 3);
-            this.executableCheckBox.Name = "executableCheckBox";
-            this.executableCheckBox.Size = new System.Drawing.Size(160, 24);
-            this.executableCheckBox.TabIndex = 1;
-            this.executableCheckBox.Text = "E&xecutable";
-            this.executableCheckBox.Click += new System.EventHandler(this.executableCheckBox_Click);
+            this.executableTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.executableTextBox.Location = new System.Drawing.Point(0, 0);
+            this.executableTextBox.Multiline = true;
+            this.executableTextBox.Name = "executableTextBox";
+            this.executableTextBox.ReadOnly = true;
+            this.executableTextBox.Size = new System.Drawing.Size(348, 196);
+            this.executableTextBox.TabIndex = 0;
+            this.executableTextBox.Text = "File is executable.";
             // 
             // ExecutablePropertyEditor
             // 
-            this.Controls.Add(this.executableCheckBox);
+            this.Controls.Add(this.executableTextBox);
             this.Name = "ExecutablePropertyEditor";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         #endregion
 
-        private System.Windows.Forms.CheckBox executableCheckBox;
         private System.Windows.Forms.ToolTip conflictToolTip;
         private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.TextBox executableTextBox;
     }
 }

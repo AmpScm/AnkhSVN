@@ -87,6 +87,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Start(context, LogMode.Log);
         }
 
+
         /// <summary>
         /// Starts the merges eligible logger. Checking whick revisions of source (Commonly Uri) 
         /// are eligeable for mergeing to target (Commonly path)
