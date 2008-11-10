@@ -9,17 +9,16 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
-
     /// <summary>
     /// A control that allows the user to pick a revision.
     /// </summary>
-    public partial class RevisionPicker : System.Windows.Forms.UserControl
+    public partial class VersionSelector : System.Windows.Forms.UserControl
     {
         public event EventHandler Changed;
 
-        public RevisionPicker()
+        public VersionSelector()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();

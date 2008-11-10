@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
     partial class PathSelector
     {
@@ -17,9 +17,9 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.revisionStartGroupBox = new System.Windows.Forms.GroupBox();
-            this.revisionPickerStart = new Ankh.UI.RevisionPicker();
+            this.revisionPickerStart = new Ankh.UI.PathSelector.VersionSelector();
             this.revisionEndGroupBox = new System.Windows.Forms.GroupBox();
-            this.revisionPickerEnd = new Ankh.UI.RevisionPicker();
+            this.revisionPickerEnd = new Ankh.UI.PathSelector.VersionSelector();
             this.suppressGroupBox = new System.Windows.Forms.GroupBox();
             this.suppressLabel = new System.Windows.Forms.Label();
             this.bottomPanel = new System.Windows.Forms.Panel();
@@ -186,9 +186,9 @@ namespace Ankh.UI
         /// </summary>
         private System.ComponentModel.Container components = null;
         protected System.Windows.Forms.GroupBox revisionStartGroupBox;
-        private Ankh.UI.RevisionPicker revisionPickerStart;
+        private Ankh.UI.PathSelector.VersionSelector revisionPickerStart;
         protected System.Windows.Forms.GroupBox revisionEndGroupBox;
-        private Ankh.UI.RevisionPicker revisionPickerEnd;
+        private Ankh.UI.PathSelector.VersionSelector revisionPickerEnd;
         protected System.Windows.Forms.Label suppressLabel;
         protected System.Windows.Forms.GroupBox suppressGroupBox;
         private System.Windows.Forms.Panel bottomPanel;
