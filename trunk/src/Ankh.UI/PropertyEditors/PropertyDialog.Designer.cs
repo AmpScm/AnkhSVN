@@ -35,6 +35,7 @@
             this.okButton = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.recursiveCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -74,12 +75,19 @@
             resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
             // 
+            // recursiveCheckBox
+            // 
+            resources.ApplyResources(this.recursiveCheckBox, "recursiveCheckBox");
+            this.recursiveCheckBox.Name = "recursiveCheckBox";
+            this.recursiveCheckBox.UseVisualStyleBackColor = true;
+            // 
             // PropertyDialog
             // 
             this.AcceptButton = this.okButton;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
+            this.Controls.Add(this.recursiveCheckBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.okButton);
@@ -104,5 +112,6 @@
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox recursiveCheckBox;
     }
 }

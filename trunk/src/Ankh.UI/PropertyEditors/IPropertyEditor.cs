@@ -1,5 +1,6 @@
 //$Id$
 using System;
+using SharpSvn;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -31,7 +32,12 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         void Reset();
 
-        
+        /// <summary>
+        /// Gets the allowed <code>SharpSvn.SvnNodeKind</code>s.
+        /// </summary>
+        /// <returns>SvnNodeKind</returns>
+        SvnNodeKind GetAllowedNodeKind();
+
         /// <summary>
         /// Fired whenever the editor's state changes
         /// </summary>

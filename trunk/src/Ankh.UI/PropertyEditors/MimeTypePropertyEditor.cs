@@ -31,8 +31,7 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         public void Reset()
         {
-            this.mimeTextBox.Text = "";
-            this.dirty = false;
+            this.mimeTextBox.Text = this.originalValue;
         }
 
         /// <summary>
@@ -71,9 +70,17 @@ namespace Ankh.UI.PropertyEditors
             set
             {
                 TextPropertyItem item = (TextPropertyItem)value;
-                this.mimeTextBox.Text = item.Text;
-                this.dirty = false;
+                this.originalValue = item.Text;
+                this.mimeTextBox.Text = this.originalValue;
             }
+        }
+
+        /// <summary>
+        /// File property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.File;
         }
 
         /// <summary>
@@ -107,7 +114,8 @@ namespace Ankh.UI.PropertyEditors
         private void mimeTextBox_TextChanged(object sender, System.EventArgs e)
         {
             // Enables save button
-            this.dirty = true;
+            string newValue = this.mimeTextBox.Text;
+            this.dirty = !newValue.Equals(this.originalValue);
             if ( Changed != null  )
                 Changed(this, EventArgs.Empty);
         }
@@ -125,7 +133,9 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Flag for enabled/disabled save button
         /// </summary>
-        private bool dirty; 
+        private bool dirty;
+
+        private string originalValue = string.Empty;
     }
 }
 

@@ -125,6 +125,13 @@ namespace Ankh.UI.PropertyEditors
             return SvnPropertyNames.SvnKeywords;
         }
 
+        /// <summary>
+        /// File property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.File;
+        }
 
         /// <summary> 
         /// Clean up any resources being used.

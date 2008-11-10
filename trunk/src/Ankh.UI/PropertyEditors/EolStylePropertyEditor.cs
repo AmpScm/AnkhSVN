@@ -77,6 +77,14 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
+        /// <summary>
+        /// File property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.File;
+        }
+
         public override string ToString()
         {
             return SvnPropertyNames.SvnEolStyle;

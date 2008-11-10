@@ -27,8 +27,7 @@ namespace Ankh.UI.PropertyEditors
 
         public void Reset()
         {
-            this.ignoreTextBox.Text = "";
-            this.dirty = false;
+            this.ignoreTextBox.Text = this.originalValue;
         }
 
         public bool Valid
@@ -41,7 +40,8 @@ namespace Ankh.UI.PropertyEditors
                 }
                 else 
                 {
-                    return ( this.ignoreTextBox.Text.Trim() != "");
+                    string value = this.ignoreTextBox.Text.Trim();
+                    return (!string.IsNullOrEmpty(value));
                 }
             }
         }
@@ -61,9 +61,17 @@ namespace Ankh.UI.PropertyEditors
             set
             {
                 TextPropertyItem item = (TextPropertyItem) value;
-                this.ignoreTextBox.Text = item.Text;
-                this.dirty = false;
+                this.originalValue = item.Text;
+                this.ignoreTextBox.Text = this.originalValue;
             }
+        }
+
+        /// <summary>
+        /// Directory property
+        /// </summary>
+        public SvnNodeKind GetAllowedNodeKind()
+        {
+            return SvnNodeKind.Directory;
         }
 
         public override string ToString()
@@ -88,8 +96,9 @@ namespace Ankh.UI.PropertyEditors
 
         private void ignoreTextBox_TextChanged(object sender, System.EventArgs e)
         {
-            // Enables save button
-            this.dirty = true;
+            string newValue = this.ignoreTextBox.Text;
+            // Enables/Disables save button
+            this.dirty = !newValue.Equals(this.originalValue);
             if (Changed != null)
                 Changed( this, EventArgs.Empty );
         }
@@ -104,7 +113,9 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Flag for enabling/disabling save button
         /// </summary>
-        private bool dirty;        
+        private bool dirty;
+
+        private string originalValue = string.Empty;
     }
 }
 
