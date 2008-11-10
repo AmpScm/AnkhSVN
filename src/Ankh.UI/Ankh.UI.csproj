@@ -216,6 +216,12 @@
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangeEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs" />
+    <Compile Include="PathSelector\VersionResolverService.cs" />
+    <Compile Include="PathSelector\VersionStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VersionStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -808,6 +814,10 @@
     <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx" />
     <EmbeddedResource Include="MergeWizard\WizardFramework\WizardDialog.resx">
       <DependentUpon>WizardDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathSelector\VersionStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VersionStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PCStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 using System.Text.RegularExpressions;
 using SharpSvn;
+using Ankh.Scc.UI;
+using Ankh.Scc;
+using System.Collections.Generic;
 
 namespace Ankh.UI.PathSelector
 {
@@ -23,15 +26,15 @@ namespace Ankh.UI.PathSelector
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
 
-            this.revisionTypeBox.Items.AddRange( new object[]{
-                                                                 RevisionChoice.Head,
-                                                                 RevisionChoice.Committed,
-                                                                 RevisionChoice.Base,
-                                                                 RevisionChoice.Previous,
-                                                                 RevisionChoice.Working } );
-            this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
-            this.dateRevisionChoice = new DateRevisionChoice( this.datePicker );
-            this.revisionTypeBox.Items.Add( this.dateRevisionChoice ); 
+            /*            this.revisionTypeBox.Items.AddRange( new object[]{
+                                                                             RevisionChoice.Head,
+                                                                             RevisionChoice.Committed,
+                                                                             RevisionChoice.Base,
+                                                                             RevisionChoice.Previous,
+                                                                             RevisionChoice.Working } );
+                        this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
+                        this.dateRevisionChoice = new DateRevisionChoice( this.datePicker );
+                        this.revisionTypeBox.Items.Add( this.dateRevisionChoice ); */
         }
 
         /// <summary>
@@ -40,208 +43,164 @@ namespace Ankh.UI.PathSelector
         public bool Valid
         {
             get
-            { 
-                if ( this.revisionTypeBox.SelectedItem == null )
+            {
+                /*if ( this.revisionTypeBox.SelectedItem == null )
                     return NUMBER.IsMatch( this.revisionTypeBox.Text ); 
-                else
-                    return true;
+                else*/
+                return true;
             }
         }
 
+        IAnkhServiceProvider _context;
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; }
+        }
+
+        IAnkhRevisionResolver _resolver;
+        /// <summary>
+        /// Gets the revision resolver.
+        /// </summary>
+        /// <value>The revision resolver.</value>
+        public IAnkhRevisionResolver RevisionResolver
+        {
+            get
+            {
+                if (_resolver == null && Context != null)
+                    return _resolver = Context.GetService<IAnkhRevisionResolver>();
+
+                return _resolver;
+            }
+        }
+
+        AnkhRevisionType _currentRevType;
+        List<AnkhRevisionType> _revTypes;
         /// <summary>
         /// The revision selected by the user.
         /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public SvnRevision Revision
         {
             get
             {
-                if ( this.Valid )
-                {
-                    if ( this.revisionTypeBox.SelectedItem == null )
-                        return new SvnRevision(
-                            int.Parse( this.revisionTypeBox.Text ) );
-                    else
-                        return ((RevisionChoice)
-                            this.revisionTypeBox.SelectedItem).Revision;
-                }
+                if (_currentRevType != null)
+                    return _currentRevType.CurrentValue;
                 else
                     return null;
             }
             set
             {
-                switch( value.RevisionType )
+                if (value == null || RevisionResolver == null)
                 {
-                    case SvnRevisionType.Number:
-                        this.revisionTypeBox.SelectedItem = null;
-                        this.revisionTypeBox.Text = value.Revision.ToString();
-                        break;
-                    case SvnRevisionType.Time:
-                        this.datePicker.Value = value.Time;
-                        this.revisionTypeBox.SelectedItem = this.dateRevisionChoice;
-                        this.datePicker.Enabled = true;
-                        break;
-                    case SvnRevisionType.Base:
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Base;
-                        break;
-
-                    case SvnRevisionType.Working:
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Working;
-                        break;
-
-                    case SvnRevisionType.Committed:
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Committed;
-                        break;
-
-                    case SvnRevisionType.Head:
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
-                        break;
-
-                    case SvnRevisionType.Previous:
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Previous;
-                        break;
-                    default:
-                        throw new ArgumentException( "Invalid revision" );
+                    SetRevision(null);
                 }
+                else
+                    SetRevision(RevisionResolver.Resolve(SvnOrigin, value));
             }
         }
 
-        public bool HeadEnabled
+        SvnOrigin _origin;
+        public SvnOrigin SvnOrigin
         {
-            set{ this.Toggle( RevisionChoice.Head, value ); }
+            get { return _origin; }
+            set { _origin = value; EnsureList(); }
         }
 
-        public bool CommittedEnabled
+        protected override void OnLoad(EventArgs e)
         {
-            set{ this.Toggle( RevisionChoice.Committed, value ); }
+            base.OnLoad(e);
+
+            EnsureList();
         }
 
-        public bool BaseEnabled
+        bool _ensured;
+        private void EnsureList()
         {
-            set{ this.Toggle( RevisionChoice.Base, value ); }
+            if (_ensured || RevisionResolver == null || SvnOrigin == null)
+                return;
+
+            if (_revTypes != null)
+                foreach (AnkhRevisionType rt in _revTypes)
+                {
+                    if (rt.IsValidOn(SvnOrigin))
+                        typeCombo.Items.Add(rt);
+                }
+            else
+                _revTypes = new List<AnkhRevisionType>();
+
+            foreach (AnkhRevisionType rt in RevisionResolver.GetRevisionTypes(SvnOrigin))
+            {
+                if (_revTypes.Contains(rt))
+                    continue;
+
+                _revTypes.Add(rt);
+                typeCombo.Items.Add(rt);
+            }
+
+            _ensured = true;
         }
 
-        public bool PreviousEnabled
+        void SetRevision(AnkhRevisionType rev)
         {
-            set{ this.Toggle( RevisionChoice.Previous, value ); }
-        }
+            if (rev == _currentRevType)
+                return;
 
-        public bool WorkingEnabled
-        {
-            set{ this.Toggle( RevisionChoice.Working, value ); }
-        }
+            if (_revTypes == null)
+                _revTypes = new List<AnkhRevisionType>();
 
-        public bool DateEnabled
-        {
-            set{ this.Toggle( this.dateRevisionChoice, value ); }
+            if (!_revTypes.Contains(_currentRevType))
+                _revTypes.Add(_currentRevType);
+
+            if (rev != null && !_revTypes.Contains(rev))
+                _revTypes.Add(rev);
+
+            EnsureList();
+
+            foreach (Control c in versionTypePanel.Controls)
+            {
+                c.Visible = false;
+            }
+
+            _currentRevType = rev;
+
+            if (rev.HasUI)
+            {
+                if (rev.CurrentControl != null)
+                    rev.CurrentControl.Visible = true;
+                else
+                    rev.InstantiateUIIn(versionTypePanel, EventArgs.Empty);
+            }
+
+            typeCombo.SelectedItem = _currentRevType;
         }
 
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
-        /// <summary>
-        /// Adds or removes a choice from the combo box.
-        /// </summary>
-        /// <param name="choice"></param>
-        /// <param name="enabled"></param>
-        private void Toggle( RevisionChoice choice, bool enabled )
+        private void typeCombo_SelectedValueChanged(object sender, EventArgs e)
         {
-            if ( enabled && !this.revisionTypeBox.Items.Contains( choice ) )
-                this.revisionTypeBox.Items.Add( choice );
-            else if ( !enabled && this.revisionTypeBox.Items.Contains( choice ) )
-                this.revisionTypeBox.Items.Remove( choice );
+            AnkhRevisionType rev = typeCombo.SelectedValue as AnkhRevisionType;
+
+            if (rev != null)
+                SetRevision(rev);
         }
-
-        private void revisionTypeBox_SelectionChangeCommitted(object sender, System.EventArgs e)
-        {
-            this.OnChanged( EventArgs.Empty );
-        }
-
-        private void revisionTypeBox_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
-        {
-            this.OnChanged( EventArgs.Empty );
-        }
-
-        protected virtual void OnChanged( EventArgs args )
-        {
-            this.datePicker.Enabled = 
-                this.revisionTypeBox.SelectedItem == this.dateRevisionChoice;
-
-            if ( this.Changed != null )
-                this.Changed( this, args );
-        }
-
-
-        /// <summary>
-        /// Represents a revision type.
-        /// </summary>
-        private class RevisionChoice
-        {
-            public RevisionChoice( string name, SvnRevision revision )
-            {
-                this.name = name;
-                this.revision = revision;
-            }
-
-            public override string ToString()
-            {
-                return this.name;
-            }
-
-            public virtual SvnRevision Revision
-            {
-                get{ return this.revision; }
-            }
-
-            public static readonly RevisionChoice Head = 
-                new RevisionChoice( "Head", SvnRevision.Head );
-            public static readonly RevisionChoice Committed =
-                new RevisionChoice("Committed", SvnRevision.Committed);
-            public static readonly RevisionChoice Base =
-                new RevisionChoice("Base", SvnRevision.Base);
-            public static readonly RevisionChoice Working =
-                new RevisionChoice("Working", SvnRevision.Working);
-            public static readonly RevisionChoice Previous =
-                new RevisionChoice("Previous", SvnRevision.Previous);
-
-
-            private SvnRevision revision;
-            private string name;
-        }
-
-        /// <summary>
-        /// Represents a date revision type.
-        /// </summary>
-        private class DateRevisionChoice : RevisionChoice
-        {
-            public DateRevisionChoice( DateTimePicker picker ) :
-                base( "Date", null )
-            {
-                this.picker = picker;
-            }
-
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public override SvnRevision Revision
-            {
-                get{ return new SvnRevision(this.picker.Value ); }
-            }
-
-            private DateTimePicker picker;
-        }
-
-        private static readonly Regex NUMBER = new Regex(@"\d+");
-        private RevisionChoice dateRevisionChoice;
     }
 }

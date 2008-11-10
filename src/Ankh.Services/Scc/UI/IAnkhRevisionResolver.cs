@@ -139,5 +139,17 @@ namespace Ankh.Scc.UI
 
             return UniqueName == other.UniqueName;
         }
+
+        /// <summary>
+        /// Determines whether [is valid on] [the specified SVN origin].
+        /// </summary>
+        /// <param name="SvnOrigin">The SVN origin.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is valid on] [the specified SVN origin]; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool IsValidOn(SvnOrigin SvnOrigin)
+        {
+            return true;
+        }
     }
 }

@@ -14,47 +14,59 @@ namespace Ankh.UI.PathSelector
         /// </summary>
         private void InitializeComponent()
         {
-            this.revisionTypeBox = new System.Windows.Forms.ComboBox();
-            this.datePicker = new System.Windows.Forms.DateTimePicker();
+            this.typeCombo = new System.Windows.Forms.ComboBox();
+            this.typeLabel = new System.Windows.Forms.Label();
+            this.versionTypePanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // revisionTypeBox
+            // typeCombo
             // 
-            this.revisionTypeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.typeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.typeCombo.FormattingEnabled = true;
+            this.typeCombo.Location = new System.Drawing.Point(41, 2);
+            this.typeCombo.Name = "typeCombo";
+            this.typeCombo.Size = new System.Drawing.Size(121, 21);
+            this.typeCombo.TabIndex = 1;
+            this.typeCombo.SelectedValueChanged += new System.EventHandler(this.typeCombo_SelectedValueChanged);
+            // 
+            // typeLabel
+            // 
+            this.typeLabel.AutoSize = true;
+            this.typeLabel.Location = new System.Drawing.Point(1, 5);
+            this.typeLabel.Name = "typeLabel";
+            this.typeLabel.Size = new System.Drawing.Size(34, 13);
+            this.typeLabel.TabIndex = 2;
+            this.typeLabel.Text = "&Type:";
+            // 
+            // versionTypePanel
+            // 
+            this.versionTypePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionTypeBox.Location = new System.Drawing.Point(0, 0);
-            this.revisionTypeBox.Name = "revisionTypeBox";
-            this.revisionTypeBox.Size = new System.Drawing.Size(200, 21);
-            this.revisionTypeBox.TabIndex = 0;
-            this.revisionTypeBox.SelectionChangeCommitted += new System.EventHandler(this.revisionTypeBox_SelectionChangeCommitted);
-            this.revisionTypeBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.revisionTypeBox_KeyUp);
+            this.versionTypePanel.Location = new System.Drawing.Point(168, 0);
+            this.versionTypePanel.Name = "versionTypePanel";
+            this.versionTypePanel.Size = new System.Drawing.Size(237, 25);
+            this.versionTypePanel.TabIndex = 3;
             // 
-            // datePicker
+            // VersionSelector
             // 
-            this.datePicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.datePicker.Enabled = false;
-            this.datePicker.Location = new System.Drawing.Point(200, 0);
-            this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(144, 20);
-            this.datePicker.TabIndex = 1;
-            // 
-            // RevisionPicker
-            // 
-            this.Controls.Add(this.datePicker);
-            this.Controls.Add(this.revisionTypeBox);
-            this.Name = "RevisionPicker";
-            this.Size = new System.Drawing.Size(344, 20);
+            this.Controls.Add(this.versionTypePanel);
+            this.Controls.Add(this.typeLabel);
+            this.Controls.Add(this.typeCombo);
+            this.Name = "VersionSelector";
+            this.Size = new System.Drawing.Size(405, 25);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
         #endregion
 
-
-        private System.Windows.Forms.ComboBox revisionTypeBox;
-        private System.Windows.Forms.DateTimePicker datePicker;
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
+        private System.Windows.Forms.ComboBox typeCombo;
+        private System.Windows.Forms.Label typeLabel;
+        private System.Windows.Forms.Panel versionTypePanel;
     }
 }
