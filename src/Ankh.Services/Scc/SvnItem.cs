@@ -767,6 +767,49 @@ namespace Ankh
             return paths;
         }
 
+        /// <summary>
+        /// Gets the common parent of a list of SvnItems
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <returns></returns>
+        public static SvnItem GetCommonParent(IEnumerable<SvnItem> items)
+        {
+            if (items == null)
+                throw new ArgumentNullException("items");
+
+            SvnItem parent = null;
+
+            foreach (SvnItem i in items)
+            {
+                string p = i.FullPath;
+
+                if (parent == null)
+                {
+                    parent = i;
+                    continue;
+                }
+
+                SvnItem j;
+                if (i.FullPath.Length < parent.FullPath.Length)
+                {
+                    j = parent;
+                    parent = i;
+                }
+                else
+                {
+                    j = i;
+                }
+                    
+                while (parent != null && !j.IsBelowPath(parent.FullPath))
+                    parent = parent.Parent;
+
+                if (j == null)
+                    return null;
+            }
+
+            return parent;
+        }
+
         void EnsureClean()
         {
             Debug.Assert(_statusDirty != XBool.None, "Recursive refresh call");
