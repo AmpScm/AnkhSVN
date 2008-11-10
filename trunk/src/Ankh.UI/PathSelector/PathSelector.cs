@@ -104,6 +104,8 @@ namespace Ankh.UI.PathSelector
                 if (value != _context)
                 {
                     _context = value;
+                    revisionPickerStart.Context = value;
+                    revisionPickerEnd.Context = value;
                     OnContextChanged(EventArgs.Empty);
                 }
             }
@@ -136,7 +138,17 @@ namespace Ankh.UI.PathSelector
         public ICollection<SvnItem> Items
         {
             get { return this.pathSelectionTreeView.Items; }
-            set { this.pathSelectionTreeView.Items = value; }
+            set
+            {
+                this.pathSelectionTreeView.Items = value;
+                if (value != null)
+                {
+                    SvnItem parent = SvnItem.GetCommonParent(value);
+
+                    if (parent != null)
+                        revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
+                }
+            }
         }
 
         ///// <summary>
