@@ -94,16 +94,10 @@ namespace WizardFramework
                 this.CurrentPage.Visible = false;
             }
 
-            bool isNewPage = true;
-
             // Only add pages if they are not already added
             if (!PageContainer.Controls.Contains(page.Control))
             {
                 PageContainer.Controls.Add(page.Control);
-            }
-            else
-            {
-                isNewPage = false;
             }
 
             currPage_prop = page;
