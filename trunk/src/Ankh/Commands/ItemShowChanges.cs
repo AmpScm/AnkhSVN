@@ -24,10 +24,21 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemComparePrevious)]
     [Command(AnkhCommand.ItemCompareSpecific)]
     [Command(AnkhCommand.ItemShowChanges)]
+    [Command(AnkhCommand.DocumentShowChanges)]
     public sealed class DiffLocalItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (e.Command == AnkhCommand.DocumentShowChanges)
+            {
+                SvnItem sel = e.Selection.ActiveDocumentItem;
+
+                if (sel == null || !sel.IsVersioned || !(sel.IsModified || sel.IsDocumentDirty))
+                    e.Enabled = false;
+
+                return;
+            }
+
             bool noConflictDiff = e.Command == AnkhCommand.ItemShowChanges;
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -61,19 +72,28 @@ namespace Ankh.Commands
         {
             List<SvnItem> selectedFiles = new List<SvnItem>();
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            if (e.Command == AnkhCommand.DocumentShowChanges)
             {
-                if (!item.IsVersioned || (item.Status.CombinedStatus == SvnStatus.Added && !item.Status.IsCopied))
-                    continue;
+                SvnItem item = e.Selection.ActiveDocumentItem;
 
-                if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
-                {
-                    if (!(item.IsModified || item.IsDocumentDirty))
-                        continue;
-                }
-
+                if(item == null)
+                    return;
                 selectedFiles.Add(item);
             }
+            else
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (!item.IsVersioned || (item.Status.CombinedStatus == SvnStatus.Added && !item.Status.IsCopied))
+                        continue;
+
+                    if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
+                    {
+                        if (!(item.IsModified || item.IsDocumentDirty))
+                            continue;
+                    }
+
+                    selectedFiles.Add(item);
+                }
 
             SvnRevisionRange revRange = null;
             switch (e.Command)

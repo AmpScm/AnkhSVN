@@ -82,8 +82,7 @@ namespace Ankh.Ids
         BlameShowLog,
         RevertItem,
         SaveToFile,
-        [Obsolete()]
-        SendFeedback,
+        DocumentConflictEdit,
         ShowPendingChanges,
         ShowRepositoryExplorer,
         ShowWorkingCopyExplorer,
