@@ -35,6 +35,7 @@
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.browseButton.Enabled = false;
             this.browseButton.Location = new System.Drawing.Point(221, 0);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(28, 23);

@@ -132,6 +132,7 @@ namespace Ankh.Commands
             }
 
             SvnUriTarget target;
+            SvnRevision revision = SvnRevision.None;
 
             if (e.Argument is string)
                 target = SvnUriTarget.FromString((string)e.Argument);
@@ -144,12 +145,15 @@ namespace Ankh.Commands
                     dlg.Context = e.Context;
 
                     dlg.LocalPath = path;
+                    dlg.RepositoryRoot = e.GetService<IFileStatusCache>()[path].WorkingCopy.RepositoryRoot;
                     dlg.SwitchToUri = uri;
+                    dlg.Revision = SvnRevision.Head;
 
                     if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                         return;
 
                     target = dlg.SwitchToUri;
+                    revision = dlg.Revision;
                 }
             }
 
@@ -176,8 +180,10 @@ namespace Ankh.Commands
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
+                        if (revision != SvnRevision.None)
+                            args.Revision = revision;
 
-                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);                        
+                        e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
                         a.Client.Switch(path, target, args);
                     });
 
@@ -195,6 +201,6 @@ namespace Ankh.Commands
 
                 lck.ReloadModified();
             }
-        }        
+        }
     }
 }

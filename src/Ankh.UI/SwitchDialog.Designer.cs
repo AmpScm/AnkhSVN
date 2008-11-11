@@ -39,10 +39,8 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.browseVersion = new System.Windows.Forms.Button();
-            this.versionBox = new System.Windows.Forms.ComboBox();
-            this.versionLabel = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.versionSelector = new Ankh.UI.PathSelector.VersionSelector();
             this.switchBox.SuspendLayout();
             this.toBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -77,10 +75,10 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pathBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.pathBox.Location = new System.Drawing.Point(62, 22);
+            this.pathBox.Location = new System.Drawing.Point(52, 22);
             this.pathBox.Name = "pathBox";
             this.pathBox.ReadOnly = true;
-            this.pathBox.Size = new System.Drawing.Size(452, 13);
+            this.pathBox.Size = new System.Drawing.Size(462, 13);
             this.pathBox.TabIndex = 1;
             // 
             // toBox
@@ -115,11 +113,12 @@
             this.toUrlBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.toUrlBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.toUrlBox.FormattingEnabled = true;
-            this.toUrlBox.Location = new System.Drawing.Point(62, 19);
+            this.toUrlBox.Location = new System.Drawing.Point(52, 19);
             this.toUrlBox.Name = "toUrlBox";
-            this.toUrlBox.Size = new System.Drawing.Size(391, 21);
+            this.toUrlBox.Size = new System.Drawing.Size(401, 21);
             this.toUrlBox.TabIndex = 1;
             this.toUrlBox.Validating += new System.ComponentModel.CancelEventHandler(this.toUrlBox_Validating);
+            this.toUrlBox.TextChanged += new System.EventHandler(this.toUrlBox_TextChanged);
             // 
             // urlLabel
             // 
@@ -157,10 +156,7 @@
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Controls.Add(this.browseVersion);
-            this.groupBox3.Controls.Add(this.versionBox);
-            this.groupBox3.Controls.Add(this.versionLabel);
-            this.groupBox3.Enabled = false;
+            this.groupBox3.Controls.Add(this.versionSelector);
             this.groupBox3.Location = new System.Drawing.Point(12, 128);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(520, 52);
@@ -168,38 +164,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Version:";
             // 
-            // browseVersion
-            // 
-            this.browseVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseVersion.Location = new System.Drawing.Point(474, 19);
-            this.browseVersion.Name = "browseVersion";
-            this.browseVersion.Size = new System.Drawing.Size(40, 23);
-            this.browseVersion.TabIndex = 2;
-            this.browseVersion.Text = "...";
-            this.browseVersion.UseVisualStyleBackColor = true;
-            // 
-            // versionBox
-            // 
-            this.versionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionBox.FormattingEnabled = true;
-            this.versionBox.Location = new System.Drawing.Point(62, 19);
-            this.versionBox.Name = "versionBox";
-            this.versionBox.Size = new System.Drawing.Size(391, 21);
-            this.versionBox.TabIndex = 1;
-            // 
-            // versionLabel
-            // 
-            this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(6, 22);
-            this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(45, 13);
-            this.versionLabel.TabIndex = 0;
-            this.versionLabel.Text = "&Version:";
-            // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // versionSelector
+            // 
+            this.versionSelector.Location = new System.Drawing.Point(52, 20);
+            this.versionSelector.Name = "versionSelector";
+            this.versionSelector.Size = new System.Drawing.Size(462, 26);
+            this.versionSelector.SvnOrigin = null;
+            this.versionSelector.TabIndex = 0;
             // 
             // SwitchDialog
             // 
@@ -220,7 +195,6 @@
             this.toBox.ResumeLayout(false);
             this.toBox.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
@@ -238,9 +212,7 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button browseVersion;
-        private System.Windows.Forms.ComboBox versionBox;
-        private System.Windows.Forms.Label versionLabel;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private Ankh.UI.PathSelector.VersionSelector versionSelector;
     }
 }

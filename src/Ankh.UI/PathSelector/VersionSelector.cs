@@ -60,7 +60,17 @@ namespace Ankh.UI.PathSelector
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set { _context = value; }
+            set 
+            { 
+                bool set = (_context == null);
+                _context = value;
+
+                if (value != null && set && _newValue != null)
+                {
+                    EnsureList();
+                    Revision = _newValue;                    
+                }
+            }
         }
 
         IAnkhRevisionResolver _resolver;
@@ -68,6 +78,7 @@ namespace Ankh.UI.PathSelector
         /// Gets the revision resolver.
         /// </summary>
         /// <value>The revision resolver.</value>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhRevisionResolver RevisionResolver
         {
             get
@@ -81,6 +92,7 @@ namespace Ankh.UI.PathSelector
 
         AnkhRevisionType _currentRevType;
         List<AnkhRevisionType> _revTypes;
+        SvnRevision _newValue;
         /// <summary>
         /// The revision selected by the user.
         /// </summary>
@@ -96,8 +108,10 @@ namespace Ankh.UI.PathSelector
             }
             set
             {
+                _newValue = null;
                 if (value == null || RevisionResolver == null)
                 {
+                    _newValue = value;
                     SetRevision(null);
                 }
                 else
@@ -143,6 +157,9 @@ namespace Ankh.UI.PathSelector
                 typeCombo.Items.Add(rt);
             }
 
+            if(_currentRevType != null)
+                typeCombo.SelectedItem = _currentRevType;
+
             _ensured = true;
         }
 
@@ -154,7 +171,7 @@ namespace Ankh.UI.PathSelector
             if (_revTypes == null)
                 _revTypes = new List<AnkhRevisionType>();
 
-            if (!_revTypes.Contains(_currentRevType))
+            if (_currentRevType != null && !_revTypes.Contains(_currentRevType))
                 _revTypes.Add(_currentRevType);
 
             if (rev != null && !_revTypes.Contains(rev))
