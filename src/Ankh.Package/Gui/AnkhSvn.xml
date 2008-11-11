@@ -94,7 +94,9 @@
       </Group>
     </MenuRef>
     <MenuRef id="guidSHLMainMenu:IDM_VS_CTXT_CODEWIN">
+      <!-- Context menu of all common editors -->
       <Group id="Grp_CodeEditorScc" priority="0xFEFF">
+        <!-- Just before the other SCC menu of VSS -->
         <Menu id="Menu_EditorScc" priority="0x1000" name="SvnMenu" text="Subve&amp;rsion">
           <Group id="Menu_EditorScc" priority="0x1000">
             <Button id="Cmd_DocumentHistory" priority="0x1000"
