@@ -42,9 +42,9 @@ namespace Ankh.UI.PathSelector
 
         private void SaveSizes()
         {
-            _revStartOffset = revisionStartGroupBox.Top - pathSelectionTreeView.Bottom;
-            _revEndOffset = revisionEndGroupBox.Top - revisionStartGroupBox.Bottom;
-            _suppressOffset = suppressGroupBox.Top - revisionEndGroupBox.Bottom;
+            _revStartOffset = fromPanel.Top - pathSelectionTreeView.Bottom;
+            _revEndOffset = toPanel.Top - fromPanel.Bottom;
+            _suppressOffset = suppressGroupBox.Top - toPanel.Bottom;
             _buttonOffset = bottomPanel.Top - suppressGroupBox.Bottom;
             _bottomSpacing = ClientSize.Height - bottomPanel.Bottom;
         }
@@ -224,18 +224,16 @@ namespace Ankh.UI.PathSelector
                 switch (value)
                 {
                     case PathSelectorOptions.NoRevision:
-                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = false;
-                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = false;
+                        toPanel.Visible = toPanel.Enabled = false;
+                        fromPanel.Visible = fromPanel.Enabled = false;
                         break;
                     case PathSelectorOptions.DisplaySingleRevision:
-                        revisionStartGroupBox.Text = "Revision";
-                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = true;
-                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = false;
+                        fromPanel.Visible = fromPanel.Enabled = true;
+                        toPanel.Visible = toPanel.Enabled = false;
                         break;
                     case PathSelectorOptions.DisplayRevisionRange:
-                        revisionStartGroupBox.Visible = revisionStartGroupBox.Enabled = true;
-                        revisionStartGroupBox.Text = "Revision start";
-                        revisionEndGroupBox.Visible = revisionEndGroupBox.Enabled = true;
+                        fromPanel.Visible = fromPanel.Enabled = true;
+                        toPanel.Visible = toPanel.Enabled = true;
                         break;
                     default:
                         throw new ArgumentException("Invalid value for Options");
@@ -266,20 +264,20 @@ namespace Ankh.UI.PathSelector
                 y = suppressGroupBox.Top - _suppressOffset;
             }
 
-            if (revisionEndGroupBox.Visible)
+            if (toPanel.Visible)
             {
-                if (y != revisionEndGroupBox.Bottom)
-                    revisionEndGroupBox.Top = y - revisionEndGroupBox.Height;
+                if (y != toPanel.Bottom)
+                    toPanel.Top = y - toPanel.Height;
 
-                y = revisionEndGroupBox.Top - _revEndOffset;
+                y = toPanel.Top - _revEndOffset;
             }
 
-            if (revisionStartGroupBox.Visible)
+            if (fromPanel.Visible)
             {
-                if (y != revisionStartGroupBox.Bottom)
-                    revisionStartGroupBox.Top = y - revisionStartGroupBox.Height;
+                if (y != fromPanel.Bottom)
+                    fromPanel.Top = y - fromPanel.Height;
 
-                y = revisionStartGroupBox.Top - _revStartOffset;
+                y = fromPanel.Top - _revStartOffset;
             }
 
             y -= _revStartOffset;
