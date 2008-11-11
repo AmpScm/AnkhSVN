@@ -23,11 +23,12 @@ namespace Ankh.Commands
     /// Command to show the change log for the selected item.
     /// </summary>
     [Command(AnkhCommand.Log)]
+    [Command(AnkhCommand.DocumentHistory)]
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
     [Command(AnkhCommand.ReposExplorerLog)]
-    [Command(AnkhCommand.BlameShowLog)]
-    class LogCommand : CommandBase
+    [Command(AnkhCommand.BlameShowLog)]    
+    sealed class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -59,6 +60,11 @@ namespace Ankh.Commands
                     if (e.GetService<IFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
                         return; // Ok, we have history!
 
+                    break; // No history
+                case AnkhCommand.DocumentHistory:
+                    SvnItem docitem = e.Selection.ActiveDocumentItem;
+                    if (docitem != null && docitem.HasCopyableHistory)
+                        return;
                     break; // No history
                 case AnkhCommand.Log:
                     int itemCount = 0;
@@ -173,6 +179,12 @@ namespace Ankh.Commands
                     }
 
                     PerformLog(e.Context, selected, null, null);
+                    break;
+                case AnkhCommand.DocumentHistory:
+                    SvnItem docItem = e.Selection.ActiveDocumentItem;
+                    Debug.Assert(docItem != null);
+
+                    PerformLog(e.Context, new SvnOrigin[] { new SvnOrigin(docItem) }, null, null);
                     break;
                 case AnkhCommand.ReposExplorerLog:
                     ISvnRepositoryItem item = null;

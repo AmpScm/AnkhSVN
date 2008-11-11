@@ -66,5 +66,7 @@ namespace Ankh.Ids
         ProjectFileScc,
         
         BlameContextMenu,
+
+        EditorScc,
     }
 }

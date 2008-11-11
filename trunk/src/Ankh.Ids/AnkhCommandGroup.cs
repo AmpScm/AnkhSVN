@@ -90,5 +90,7 @@ namespace Ankh.Ids
 
         ItemIgnore,
         BlameContextMenu,
+
+        CodeEditorScc,
     }
 }

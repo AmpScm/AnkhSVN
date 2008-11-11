@@ -82,6 +82,12 @@ namespace Ankh.Selection
         string ActiveDocumentFilename { get; }
 
         /// <summary>
+        /// Gets the active document SvnItem.
+        /// </summary>
+        /// <value>The active document item.</value>
+        SvnItem ActiveDocumentItem { get; }
+
+        /// <summary>
         /// Gets the .Net control of the <see cref="ISelectionContextEx.ActiveFrame"/>
         /// </summary>
         Control ActiveFrameControl { get; }

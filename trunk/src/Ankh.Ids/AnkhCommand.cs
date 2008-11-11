@@ -64,8 +64,7 @@ namespace Ankh.Ids
         CopyReposExplorerUrl,
         CreatePatch,
         ItemShowChanges,
-        [Obsolete("", true)]
-        DiffExternalLocalItem,
+        DocumentShowChanges,
         DiffLocalItem,
         Export,
         ExportFolder,
@@ -77,10 +76,8 @@ namespace Ankh.Ids
         RefreshRepositoryItem,
         RemoveRepositoryRoot,
         RemoveWorkingCopyExplorerRoot,
-        [Obsolete()]
-        ResolveConflict,
-        [Obsolete()]
-        ResolveConflictExternal,
+        DocumentAnnotate,
+        DocumentHistory,
 
         BlameShowLog,
         RevertItem,
