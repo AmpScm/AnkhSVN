@@ -164,17 +164,17 @@ namespace Ankh.UI.PathSelector
 
             foreach (Control c in versionTypePanel.Controls)
             {
-                c.Visible = false;
+                c.Enabled = c.Visible = false;
             }
 
             _currentRevType = rev;
 
             if (rev.HasUI)
             {
-                if (rev.CurrentControl != null)
-                    rev.CurrentControl.Visible = true;
-                else
+                if (rev.CurrentControl == null)
                     rev.InstantiateUIIn(versionTypePanel, EventArgs.Empty);
+
+                rev.CurrentControl.Visible = rev.CurrentControl.Enabled = true;                    
             }
 
             typeCombo.SelectedItem = _currentRevType;
@@ -197,7 +197,7 @@ namespace Ankh.UI.PathSelector
 
         private void typeCombo_SelectedValueChanged(object sender, EventArgs e)
         {
-            AnkhRevisionType rev = typeCombo.SelectedValue as AnkhRevisionType;
+            AnkhRevisionType rev = typeCombo.SelectedItem as AnkhRevisionType;
 
             if (rev != null)
                 SetRevision(rev);

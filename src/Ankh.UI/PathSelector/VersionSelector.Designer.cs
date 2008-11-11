@@ -45,7 +45,7 @@ namespace Ankh.UI.PathSelector
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.versionTypePanel.Location = new System.Drawing.Point(168, 0);
             this.versionTypePanel.Name = "versionTypePanel";
-            this.versionTypePanel.Size = new System.Drawing.Size(237, 25);
+            this.versionTypePanel.Size = new System.Drawing.Size(252, 25);
             this.versionTypePanel.TabIndex = 3;
             // 
             // VersionSelector
@@ -54,7 +54,7 @@ namespace Ankh.UI.PathSelector
             this.Controls.Add(this.typeLabel);
             this.Controls.Add(this.typeCombo);
             this.Name = "VersionSelector";
-            this.Size = new System.Drawing.Size(405, 25);
+            this.Size = new System.Drawing.Size(420, 25);
             this.ResumeLayout(false);
             this.PerformLayout();
 
