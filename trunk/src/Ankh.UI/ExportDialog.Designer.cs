@@ -20,13 +20,13 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.radioButtonGroupbox = new System.Windows.Forms.GroupBox();
-            this.radioButtonFromDir = new System.Windows.Forms.RadioButton();
-            this.radioButtonFromURL = new System.Windows.Forms.RadioButton();
-            this.wcBrowseBtn = new System.Windows.Forms.Button();
-            this.exportFromDirTextBox = new System.Windows.Forms.TextBox();
             this.versionLabel = new System.Windows.Forms.Label();
             this.urlBrowseBtn = new System.Windows.Forms.Button();
+            this.wcBrowseBtn = new System.Windows.Forms.Button();
             this.urlTextBox = new System.Windows.Forms.TextBox();
+            this.exportFromDirTextBox = new System.Windows.Forms.TextBox();
+            this.radioButtonFromDir = new System.Windows.Forms.RadioButton();
+            this.radioButtonFromURL = new System.Windows.Forms.RadioButton();
             this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
             this.localDirGroupBox.SuspendLayout();
             this.radioButtonGroupbox.SuspendLayout();
@@ -115,6 +115,60 @@ namespace Ankh.UI
             this.radioButtonGroupbox.TabStop = false;
             this.radioButtonGroupbox.Text = "&Export From:";
             // 
+            // versionLabel
+            // 
+            this.versionLabel.AutoSize = true;
+            this.versionLabel.Location = new System.Drawing.Point(23, 120);
+            this.versionLabel.Name = "versionLabel";
+            this.versionLabel.Size = new System.Drawing.Size(45, 13);
+            this.versionLabel.TabIndex = 6;
+            this.versionLabel.Text = "Version:";
+            // 
+            // urlBrowseBtn
+            // 
+            this.urlBrowseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlBrowseBtn.Location = new System.Drawing.Point(409, 42);
+            this.urlBrowseBtn.Name = "urlBrowseBtn";
+            this.urlBrowseBtn.Size = new System.Drawing.Size(24, 23);
+            this.urlBrowseBtn.TabIndex = 3;
+            this.urlBrowseBtn.Text = "...";
+            this.urlBrowseBtn.Click += new System.EventHandler(this.urlBrowseBtn_Click);
+            // 
+            // wcBrowseBtn
+            // 
+            this.wcBrowseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.wcBrowseBtn.Enabled = false;
+            this.wcBrowseBtn.Location = new System.Drawing.Point(409, 87);
+            this.wcBrowseBtn.Name = "wcBrowseBtn";
+            this.wcBrowseBtn.Size = new System.Drawing.Size(24, 23);
+            this.wcBrowseBtn.TabIndex = 5;
+            this.wcBrowseBtn.Text = "...";
+            this.wcBrowseBtn.Click += new System.EventHandler(this.exportFromDirButton_Click);
+            // 
+            // urlTextBox
+            // 
+            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.urlTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
+            this.urlTextBox.Location = new System.Drawing.Point(26, 44);
+            this.urlTextBox.Name = "urlTextBox";
+            this.urlTextBox.Size = new System.Drawing.Size(377, 20);
+            this.urlTextBox.TabIndex = 2;
+            // 
+            // exportFromDirTextBox
+            // 
+            this.exportFromDirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.exportFromDirTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.exportFromDirTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
+            this.exportFromDirTextBox.Enabled = false;
+            this.exportFromDirTextBox.Location = new System.Drawing.Point(26, 89);
+            this.exportFromDirTextBox.Name = "exportFromDirTextBox";
+            this.exportFromDirTextBox.Size = new System.Drawing.Size(377, 20);
+            this.exportFromDirTextBox.TabIndex = 4;
+            this.exportFromDirTextBox.TextChanged += new System.EventHandler(this.ControlsChanged);
+            // 
             // radioButtonFromDir
             // 
             this.radioButtonFromDir.Location = new System.Drawing.Point(8, 64);
@@ -136,66 +190,13 @@ namespace Ankh.UI
             this.radioButtonFromURL.Text = "Export From &Url:";
             this.radioButtonFromURL.CheckedChanged += new System.EventHandler(this.radioButtonFromURL_CheckedChanged);
             // 
-            // wcBrowseBtn
-            // 
-            this.wcBrowseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.wcBrowseBtn.Enabled = false;
-            this.wcBrowseBtn.Location = new System.Drawing.Point(409, 87);
-            this.wcBrowseBtn.Name = "wcBrowseBtn";
-            this.wcBrowseBtn.Size = new System.Drawing.Size(24, 23);
-            this.wcBrowseBtn.TabIndex = 5;
-            this.wcBrowseBtn.Text = "...";
-            this.wcBrowseBtn.Click += new System.EventHandler(this.exportFromDirButton_Click);
-            // 
-            // exportFromDirTextBox
-            // 
-            this.exportFromDirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.exportFromDirTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.exportFromDirTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.exportFromDirTextBox.Enabled = false;
-            this.exportFromDirTextBox.Location = new System.Drawing.Point(26, 89);
-            this.exportFromDirTextBox.Name = "exportFromDirTextBox";
-            this.exportFromDirTextBox.Size = new System.Drawing.Size(377, 20);
-            this.exportFromDirTextBox.TabIndex = 4;
-            this.exportFromDirTextBox.TextChanged += new System.EventHandler(this.ControlsChanged);
-            // 
-            // versionLabel
-            // 
-            this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(23, 120);
-            this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(45, 13);
-            this.versionLabel.TabIndex = 6;
-            this.versionLabel.Text = "Version:";
-            // 
-            // urlBrowseBtn
-            // 
-            this.urlBrowseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.urlBrowseBtn.Location = new System.Drawing.Point(409, 42);
-            this.urlBrowseBtn.Name = "urlBrowseBtn";
-            this.urlBrowseBtn.Size = new System.Drawing.Size(24, 23);
-            this.urlBrowseBtn.TabIndex = 3;
-            this.urlBrowseBtn.Text = "...";
-            this.urlBrowseBtn.Click += new System.EventHandler(this.urlBrowseBtn_Click);
-            // 
-            // urlTextBox
-            // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.urlTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.urlTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
-            this.urlTextBox.Location = new System.Drawing.Point(26, 44);
-            this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(377, 20);
-            this.urlTextBox.TabIndex = 2;
-            // 
             // revisionPicker
             // 
             this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionPicker.Location = new System.Drawing.Point(26, 136);
             this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(377, 20);
+            this.revisionPicker.Size = new System.Drawing.Size(407, 29);
+            this.revisionPicker.SvnOrigin = null;
             this.revisionPicker.TabIndex = 7;
             this.revisionPicker.Changed += new System.EventHandler(this.ControlsChanged);
             // 
