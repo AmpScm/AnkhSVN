@@ -106,6 +106,8 @@
             <Button id="Cmd_DocumentAnnotate" priority="0x1200"
                   name="DocumentAnnotate" defaultInvisible="true"
                   text="&amp;Annotate" iconFile="PendingChanges/Annotate.png" />
+            <Button id="Cmd_DocumentConflictEdit" name="DocumentConflictEdit" priority="0x3000" defaultInvisible="true"
+                  text="&amp;Edit Conflicts" iconFile="PendingChanges/EditConflict.png" />
           </Group>
         </Menu>
       </Group>
@@ -510,7 +512,7 @@
           <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuControllerLatched">
             <Group id="Menu_ItemConflict" priority="0x100">
               <Button id="Cmd_ItemConflictEdit" name="ItemConflictEdit" priority="0x100" defaultInvisible="true"
-                  text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" dynamicVisibility="true" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
+                  text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
               <Button id="Cmd_ItemConflictEditVisualStudio" name="ItemConflictEditVisualStudio" priority="0x200"
                   text="Edit in &amp;Visual Studio" dynamicVisibility="true"/>
               <Button id="Cmd_ItemConflictResolvedMerged" name="ItemConflictResolvedMerged" priority="0x300"

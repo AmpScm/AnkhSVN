@@ -201,6 +201,14 @@ namespace Ankh.UI.PathSelector
 
             if (rev != null)
                 SetRevision(rev);
+
+            OnChanged(EventArgs.Empty);
+        }
+
+        protected virtual void OnChanged(EventArgs e)
+        {
+            if (Changed != null)
+                Changed(this, e);
         }
     }
 }

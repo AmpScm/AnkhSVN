@@ -9,16 +9,25 @@ using System.IO;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.ItemConflictEdit)]
+    [Command(AnkhCommand.DocumentConflictEdit)]
     [Command(AnkhCommand.ItemConflictEditVisualStudio)]
     class ItemConflictEdit : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            if (e.Command == AnkhCommand.DocumentConflictEdit)
             {
-                if (item.IsConflicted)
+                SvnItem item = e.Selection.ActiveDocumentItem;
+
+                if (item != null && item.IsConflicted)
                     return;
             }
+            else
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (item.IsConflicted)
+                        return;
+                }
 
             e.Enabled = false;
         }
@@ -28,14 +37,22 @@ namespace Ankh.Commands
             // TODO: Choose which conflict to edit if we have more than one!
             SvnItem conflict = null;
 
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+            if (e.Command == AnkhCommand.DocumentConflictEdit)
             {
-                if (item.IsConflicted)
-                {
-                    conflict = item;
-                    break;
-                }
+                conflict = e.Selection.ActiveDocumentItem;
+
+                if (conflict == null || !conflict.IsConflicted)
+                    return;
             }
+            else
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (item.IsConflicted)
+                    {
+                        conflict = item;
+                        break;
+                    }
+                }
 
             if (conflict == null)
                 return;
