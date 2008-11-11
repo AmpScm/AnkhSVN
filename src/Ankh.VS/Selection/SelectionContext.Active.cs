@@ -155,6 +155,19 @@ namespace Ankh.VS.Selection
             }
         }
 
+        public SvnItem ActiveDocumentItem 
+        {
+            get
+            {
+                string p = ActiveDocumentFilename;
+
+                if (p != null)
+                    return _cache[p];
+                else
+                    return null;
+            }
+        }
+
         bool _shouldRefresh;
         IVsHierarchy _hierCached;
         uint _idCached;

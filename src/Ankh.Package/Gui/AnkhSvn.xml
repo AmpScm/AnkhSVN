@@ -93,6 +93,23 @@
         </Menu>
       </Group>
     </MenuRef>
+    <MenuRef id="guidSHLMainMenu:IDM_VS_CTXT_CODEWIN">
+      <Group id="Grp_CodeEditorScc" priority="0xFEFF">
+        <Menu id="Menu_EditorScc" priority="0x1000" name="SvnMenu" text="Subve&amp;rsion">
+          <Group id="Menu_EditorScc" priority="0x1000">
+            <Button id="Cmd_DocumentHistory" priority="0x1000"
+                  name="DocumentHistory" defaultInvisible="true"
+                  text="View &amp;History" iconFile="PendingChanges/ViewHistory.png" />
+            <Button id="Cmd_DocumentShowChanges" priority="0x1100"
+                  name="DocumentChanges" defaultInvisible="true"
+                  text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" />
+            <Button id="Cmd_DocumentAnnotate" priority="0x1200"
+                  name="DocumentAnnotate" defaultInvisible="true"
+                  text="&amp;Annotate" iconFile="PendingChanges/Annotate.png" />
+          </Group>
+        </Menu>
+      </Group>
+    </MenuRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
       <!-- View - The Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
@@ -664,7 +681,7 @@
         <Button id="Cmd_FileCacheFinishTasks" text="." priority="0" commandWellOnly="true" postExec="true" />
         <Button id="Cmd_SccFinishTasks" text="." priority="0" commandWellOnly="true" postExec="true" />
         <Button id="Cmd_TickRefreshPendingTasks" text="." priority="0" commandWellOnly="true" postExec="true"/>
-        <Button id="Cmd_TickRefreshSvnItems" text="." priority="0" commandWellOnly="true" postExec="true"/>        
+        <Button id="Cmd_TickRefreshSvnItems" text="." priority="0" commandWellOnly="true" postExec="true"/>
         <Button id="Cmd_ActivateSccProvider" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />

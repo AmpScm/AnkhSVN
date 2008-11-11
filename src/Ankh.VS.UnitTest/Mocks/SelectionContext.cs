@@ -142,6 +142,11 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
+            public Ankh.SvnItem ActiveDocumentItem
+            {
+                get { return null; }
+            }
+
             public object ActiveDocumentInstance
             {
                 get { return null; }
