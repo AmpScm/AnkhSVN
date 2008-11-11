@@ -102,6 +102,7 @@ namespace Ankh.Commands
                     break; // revRange null -> show selector
                 case AnkhCommand.ItemCompareBase:
                 case AnkhCommand.ItemShowChanges:
+                case AnkhCommand.DocumentShowChanges:
                     revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
                     break;
                 case AnkhCommand.ItemCompareCommitted:
