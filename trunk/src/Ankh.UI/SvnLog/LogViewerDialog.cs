@@ -15,7 +15,7 @@ namespace Ankh.UI
 {
     public partial class LogViewerDialog : VSContainerForm
     {
-        private string _logTarget;
+        private SvnOrigin _logTarget;
 
         public LogViewerDialog()
         {
@@ -23,7 +23,7 @@ namespace Ankh.UI
             logViewerControl.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(value_SelectionChanged); ;
         }
 
-        public LogViewerDialog(string target, IAnkhServiceProvider context)
+        public LogViewerDialog(SvnOrigin target, IAnkhServiceProvider context)
             : this()
         {
             LogTarget = target;
@@ -41,7 +41,7 @@ namespace Ankh.UI
         /// <summary>
         /// The target of the log.
         /// </summary>
-        public string LogTarget
+        public SvnOrigin LogTarget
         {
             [DebuggerStepThrough]
             get { return _logTarget; }
@@ -56,29 +56,12 @@ namespace Ankh.UI
         #region UI Events
         private void LogViewerDialog_Load(object sender, EventArgs e)
         {
-            Uri uri;
-
             logViewerControl.Site = Site;
 
-            if (LogTarget != null && File.Exists(LogTarget) || Directory.Exists(LogTarget))
-            {
-                logViewerControl.StartLog(Context, new SvnOrigin[] { new SvnOrigin(Context.GetService<IFileStatusCache>()[LogTarget]) }, null, null);
-            }
-            else
-            {
+            if (LogTarget == null)
+                throw new InvalidOperationException("Log target is null");
 
-                if (!Uri.TryCreate(LogTarget, UriKind.Absolute, out uri))
-                {
-                    MessageBox.Show("Invalid URL", "'" + LogTarget + "' is not a valid url.",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    return;
-                }
-
-                if (LogTarget != null)
-                    logViewerControl.StartLog(Context, new SvnOrigin[] { new SvnOrigin(Context, uri, null) }, null, null);
-            }
-                //logViewerControl.StartLocalLog(Context, new string[] { LogTarget });
+            logViewerControl.StartLog(Context, new SvnOrigin[] { LogTarget }, null, null);
         }
         #endregion
 
