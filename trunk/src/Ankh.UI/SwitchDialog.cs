@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.UI
 {
@@ -14,6 +16,7 @@ namespace Ankh.UI
         public SwitchDialog()
         {
             InitializeComponent();
+            versionSelector.Revision = SvnRevision.Head;
         }
 
         private void browseUrl_Click(object sender, EventArgs e)
@@ -29,6 +32,19 @@ namespace Ankh.UI
             }
         }
 
+        public SvnRevision Revision
+        {
+            get { return versionSelector.Revision; }
+            set { versionSelector.Revision = value; }
+        }
+
+        protected override void OnContextChanged(EventArgs e)
+        {
+            base.OnContextChanged(e);
+            if (Context != null)
+                versionSelector.Context = Context;
+        }
+
         /// <summary>
         /// Gets or sets the local path.
         /// </summary>
@@ -38,6 +54,37 @@ namespace Ankh.UI
             get { return pathBox.Text; }
             set { pathBox.Text = value; }
         }
+
+        Uri _reposRoot;
+        public Uri RepositoryRoot
+        {
+            get { return _reposRoot; }
+            set
+            {
+                _reposRoot = value;
+                UpdateRoot();
+            }
+        }
+
+        private void UpdateRoot()
+        {
+            versionSelector.Context = Context;
+            if (_reposRoot == null)
+                versionSelector.SvnOrigin = null;
+            else
+            {
+                Uri switchUri = SwitchToUri;
+
+                if (switchUri != null)
+                {
+                    if (!switchUri.AbsoluteUri.StartsWith(_reposRoot.AbsoluteUri))
+                        versionSelector.SvnOrigin = null;
+                    else
+                        versionSelector.SvnOrigin = new SvnOrigin(switchUri, _reposRoot);
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the switch to URI.
@@ -58,7 +105,11 @@ namespace Ankh.UI
                 if (value == null)
                     toUrlBox.Text = "";
                 else
+                {
                     toUrlBox.Text = value.AbsoluteUri;
+
+                    UpdateRoot();
+                }
             }
         }
 
@@ -67,11 +118,15 @@ namespace Ankh.UI
             bool invalid = SwitchToUri == null;
             e.Cancel = invalid;
             if (invalid)
-                errorProvider1.SetError(toUrlBox, @"Enter a valid url (like scheme://domain.tld/repos/svn/path), 
-where scheme is http://, file:///, svn://, svn+ssh://
+                errorProvider1.SetError(toUrlBox, @"Enter a valid url (like http://domain.tld/svn/repos/path)
 or use the browse button.");
             else
                 errorProvider1.SetError(toUrlBox, null);
+        }
+
+        private void toUrlBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateRoot();
         }
     }
 }
