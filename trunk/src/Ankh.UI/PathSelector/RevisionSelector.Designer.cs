@@ -29,7 +29,8 @@
         private void InitializeComponent()
         {
             this.browseButton = new System.Windows.Forms.Button();
-            this.revisionBox = new System.Windows.Forms.TextBox();
+            this.revisionBox = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.revisionBox)).BeginInit();
             this.SuspendLayout();
             // 
             // browseButton
@@ -49,6 +50,11 @@
             this.revisionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.revisionBox.Location = new System.Drawing.Point(3, 2);
+            this.revisionBox.Maximum = new decimal(new int[] {
+            1569325055,
+            23283064,
+            0,
+            0});
             this.revisionBox.Name = "revisionBox";
             this.revisionBox.Size = new System.Drawing.Size(215, 20);
             this.revisionBox.TabIndex = 1;
@@ -62,14 +68,14 @@
             this.Controls.Add(this.browseButton);
             this.Name = "RevisionSelector";
             this.Size = new System.Drawing.Size(252, 25);
+            ((System.ComponentModel.ISupportInitialize)(this.revisionBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.TextBox revisionBox;
+        private System.Windows.Forms.NumericUpDown revisionBox;
     }
 }
