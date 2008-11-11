@@ -24,7 +24,7 @@ namespace Ankh.UI.PathSelector
             {
                 _date = value;
                 datePicker.Value = _date.Date;
-                timePicker.Value = DateTime.MinValue + _date.TimeOfDay;
+                timePicker.Value = DateTime.Today + _date.TimeOfDay;
             }
         }
 
