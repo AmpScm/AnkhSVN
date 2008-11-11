@@ -167,7 +167,6 @@
       <DependentUpon>AnnotateToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Annotate\AnnotateViewForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Annotate\AnnotateViewForm.Designer.cs">
       <DependentUpon>AnnotateViewForm.cs</DependentUpon>
@@ -216,6 +215,18 @@
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangeEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs" />
+    <Compile Include="PathSelector\ChangeSetSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathSelector\ChangeSetSelector.Designer.cs">
+      <DependentUpon>ChangeSetSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathSelector\DateSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathSelector\DateSelector.Designer.cs">
+      <DependentUpon>DateSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathSelector\VersionResolverService.cs" />
     <Compile Include="PathSelector\VersionStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -243,25 +254,21 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="RecentMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RecentMessageDialog.Designer.cs">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.Designer.cs">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.Designer.cs">
       <DependentUpon>ProjectCommitDialog.cs</DependentUpon>
@@ -282,7 +289,6 @@
       <DependentUpon>LogDataSource.cs</DependentUpon>
     </Compile>
     <Compile Include="SvnLog\LogViewerDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogViewerDialog.Designer.cs">
       <DependentUpon>LogViewerDialog.cs</DependentUpon>
@@ -408,7 +414,6 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -424,13 +429,11 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeNode.cs" />
     <Compile Include="SccManagement\AddToSubversion.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddToSubversion.Designer.cs">
       <DependentUpon>AddToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.Designer.cs">
       <DependentUpon>SccEditEnlistment.cs</DependentUpon>
@@ -443,7 +446,6 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
@@ -458,7 +460,6 @@
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SwitchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -683,7 +684,6 @@
     <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
     <Compile Include="UITypeEditors\MergeExeTypeEditor.cs" />
     <Compile Include="LockDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogChangedPaths.cs">
       <SubType>UserControl</SubType>
@@ -820,6 +820,12 @@
     <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx" />
     <EmbeddedResource Include="MergeWizard\WizardFramework\WizardDialog.resx">
       <DependentUpon>WizardDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathSelector\ChangeSetSelector.resx">
+      <DependentUpon>ChangeSetSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathSelector\DateSelector.resx">
+      <DependentUpon>DateSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\VersionStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>

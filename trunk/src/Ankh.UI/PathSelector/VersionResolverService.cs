@@ -272,6 +272,28 @@ namespace Ankh.UI.PathSelector
                     return true;
                 }
             }
+
+            DateSelector _sel;
+
+            public override System.Windows.Forms.Control InstantiateUIIn(System.Windows.Forms.Panel parentPanel, EventArgs e)
+            {
+                if (_sel != null)
+                    throw new InvalidOperationException();
+
+                _sel = new DateSelector();
+                parentPanel.Controls.Add(_sel);
+                _sel.Dock = System.Windows.Forms.DockStyle.Fill;
+
+                return _sel;
+            }
+
+            public override System.Windows.Forms.Control CurrentControl
+            {
+                get
+                {
+                    return _sel;
+                }
+            }
         }
 
         sealed class ExplicitRevisionType : AnkhRevisionType
@@ -313,6 +335,28 @@ namespace Ankh.UI.PathSelector
                 get
                 {
                     return true;
+                }
+            }
+
+            ChangeSetSelector _sel;
+
+            public override System.Windows.Forms.Control InstantiateUIIn(System.Windows.Forms.Panel parentPanel, EventArgs e)
+            {
+                if (_sel != null)
+                    throw new InvalidOperationException();
+
+                _sel = new ChangeSetSelector();
+                parentPanel.Controls.Add(_sel);
+                _sel.Dock = System.Windows.Forms.DockStyle.Fill;
+
+                return _sel;
+            }
+
+            public override System.Windows.Forms.Control CurrentControl
+            {
+                get
+                {
+                    return _sel;
                 }
             }
         }
