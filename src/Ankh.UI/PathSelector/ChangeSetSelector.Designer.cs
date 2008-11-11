@@ -41,6 +41,7 @@
             this.browseButton.TabIndex = 0;
             this.browseButton.Text = "...";
             this.browseButton.UseVisualStyleBackColor = true;
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
             // 
             // textBox1
             // 
@@ -58,7 +59,6 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.browseButton);
             this.Name = "ChangeSetSelector";
-            this.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.Size = new System.Drawing.Size(252, 25);
             this.ResumeLayout(false);
             this.PerformLayout();
