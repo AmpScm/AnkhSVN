@@ -27,6 +27,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ItemAnnotate)]
     [Command(AnkhCommand.LogAnnotateRevision)]
     [Command(AnkhCommand.BlameShowBlame)]
+    [Command(AnkhCommand.DocumentAnnotate)]
     class ItemAnnotateCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -43,6 +44,10 @@ namespace Ankh.Commands
                         if (item.IsVersioned && item.IsFile)
                             return;
                     }
+                    break;
+                case AnkhCommand.DocumentAnnotate:
+                    if (e.Selection.ActiveDocumentItem == null || !e.Selection.ActiveDocumentItem.HasCopyableHistory)
+                        e.Enabled = false;
                     break;
                 case AnkhCommand.LogAnnotateRevision:
                     ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
@@ -79,6 +84,9 @@ namespace Ankh.Commands
                 case AnkhCommand.BlameShowBlame:
                     BlameBlame(e);
                     break;
+                case AnkhCommand.DocumentAnnotate:
+                    BlameDocument(e);
+                    break;
             }
         }
 
@@ -89,7 +97,7 @@ namespace Ankh.Commands
             SvnRevision revisionStart = SvnRevision.Zero; // Copy from original blame?
             SvnRevision revisionEnd = blameSection.Revision;
 
-            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd); 
+            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd);
         }
 
         void BlameRevision(CommandEventArgs e)
@@ -102,7 +110,7 @@ namespace Ankh.Commands
             ISvnLogChangedPathItem item = null;
             foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
-                if(!changedPaths.Contains(logItem.Path))
+                if (!changedPaths.Contains(logItem.Path))
                     changedPaths.Add(logItem.Path);
                 item = logItem;
                 break;
@@ -207,6 +215,60 @@ namespace Ankh.Commands
             }
 
             blameToolControl.AddLines(item, blameResult);
+        }
+
+        void BlameDocument(CommandEventArgs e)
+        {
+            IUIShell uiShell = e.GetService<IUIShell>();
+
+            SvnRevision revisionStart = SvnRevision.Zero;
+            SvnRevision revisionEnd = SvnRevision.Base;
+
+            SvnItem firstItem = null;
+            PathSelectorResult result = null;
+            PathSelectorInfo info = new PathSelectorInfo("Annotate",
+                new SvnItem[] { e.Selection.ActiveDocumentItem });
+
+            info.CheckedFilter += delegate(SvnItem item)
+            {
+                if (firstItem == null && item.IsFile)
+                    firstItem = item;
+
+                return (item == firstItem);
+            };
+            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
+
+            // is shift depressed?
+            if (!CommandBase.Shift)
+            {
+
+                info.RevisionStart = revisionStart;
+                info.RevisionEnd = revisionEnd;
+                info.EnableRecursive = false;
+                info.Depth = SvnDepth.Empty;
+                info.SingleSelection = true;
+
+                // show the selector dialog
+                result = uiShell.ShowPathSelector(info);
+                if (info == null)
+                    return;
+
+                revisionStart = result.RevisionStart;
+                revisionEnd = result.RevisionEnd;
+            }
+            else
+            {
+                result = info.DefaultResult;
+            }
+
+            if (!result.Succeeded)
+                return;
+
+            SvnItem blameItem = null;
+            foreach (SvnItem i in result.Selection)
+                blameItem = i;
+
+            DoBlame(e, new SvnOrigin(blameItem), result.RevisionStart, result.RevisionEnd);
         }
     }
 }
