@@ -106,7 +106,7 @@ namespace Ankh.UI.SvnLog
 
             LogSource.Targets = new SvnOrigin[]
             { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
-
+            LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
@@ -124,7 +124,7 @@ namespace Ankh.UI.SvnLog
 
             LogSource.Targets = new SvnOrigin[] 
             { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
-
+            LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
