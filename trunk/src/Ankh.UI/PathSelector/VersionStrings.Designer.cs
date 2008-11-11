@@ -88,7 +88,7 @@ namespace Ankh.UI.PathSelector {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Changeset.
+        ///   Looks up a localized string similar to Revision.
         /// </summary>
         internal static string ExplicitVersion {
             get {

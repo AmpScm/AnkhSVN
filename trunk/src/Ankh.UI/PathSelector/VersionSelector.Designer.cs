@@ -25,7 +25,7 @@ namespace Ankh.UI.PathSelector
             this.typeCombo.FormattingEnabled = true;
             this.typeCombo.Location = new System.Drawing.Point(41, 2);
             this.typeCombo.Name = "typeCombo";
-            this.typeCombo.Size = new System.Drawing.Size(121, 21);
+            this.typeCombo.Size = new System.Drawing.Size(111, 21);
             this.typeCombo.TabIndex = 1;
             this.typeCombo.SelectedValueChanged += new System.EventHandler(this.typeCombo_SelectedValueChanged);
             // 
@@ -43,9 +43,9 @@ namespace Ankh.UI.PathSelector
             this.versionTypePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionTypePanel.Location = new System.Drawing.Point(168, 0);
+            this.versionTypePanel.Location = new System.Drawing.Point(158, 0);
             this.versionTypePanel.Name = "versionTypePanel";
-            this.versionTypePanel.Size = new System.Drawing.Size(252, 25);
+            this.versionTypePanel.Size = new System.Drawing.Size(262, 25);
             this.versionTypePanel.TabIndex = 3;
             // 
             // VersionSelector

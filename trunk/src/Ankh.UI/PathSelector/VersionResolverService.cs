@@ -283,8 +283,16 @@ namespace Ankh.UI.PathSelector
                 _sel = new DateSelector();
                 parentPanel.Controls.Add(_sel);
                 _sel.Dock = System.Windows.Forms.DockStyle.Fill;
+                _sel.Changed += new EventHandler(OnSelChanged);
+                _sel.Value = _date;
 
                 return _sel;
+            }
+
+            void OnSelChanged(object sender, EventArgs e)
+            {
+                if(_sel != null)
+                    _date = _sel.Value;
             }
 
             public override System.Windows.Forms.Control CurrentControl
@@ -338,18 +346,33 @@ namespace Ankh.UI.PathSelector
                 }
             }
 
-            ChangeSetSelector _sel;
+            RevisionSelector _sel;
 
             public override System.Windows.Forms.Control InstantiateUIIn(System.Windows.Forms.Panel parentPanel, EventArgs e)
             {
                 if (_sel != null)
                     throw new InvalidOperationException();
 
-                _sel = new ChangeSetSelector();
+                _sel = new RevisionSelector();
+                _sel.Context = _context;
+                _sel.SvnOrigin = _origin;
                 parentPanel.Controls.Add(_sel);
                 _sel.Dock = System.Windows.Forms.DockStyle.Fill;
+                _sel.Changed += new EventHandler(OnVersionChanged);
+                _sel.Revision = _rev;
 
                 return _sel;
+            }
+
+            void OnVersionChanged(object sender, EventArgs e)
+            {
+                if (_sel != null)
+                {
+                    long? value = _sel.Revision;
+
+                    if (value.HasValue)
+                        _rev = value.Value;
+                }
             }
 
             public override System.Windows.Forms.Control CurrentControl

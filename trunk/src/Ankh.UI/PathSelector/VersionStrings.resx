@@ -127,7 +127,7 @@
     <value>Date</value>
   </data>
   <data name="ExplicitVersion" xml:space="preserve">
-    <value>Changeset</value>
+    <value>Revision</value>
   </data>
   <data name="HeadVersion" xml:space="preserve">
     <value>Latest Version</value>
