@@ -116,13 +116,13 @@
             // versionBrowse
             // 
             this.versionBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionBrowse.Enabled = false;
             this.versionBrowse.Location = new System.Drawing.Point(361, 115);
             this.versionBrowse.Name = "versionBrowse";
             this.versionBrowse.Size = new System.Drawing.Size(30, 23);
             this.versionBrowse.TabIndex = 9;
             this.versionBrowse.Text = "...";
             this.versionBrowse.UseVisualStyleBackColor = true;
+            this.versionBrowse.Click += new System.EventHandler(this.versionBrowse_Click);
             // 
             // specificVersionRadio
             // 
@@ -277,7 +277,6 @@
             this.logMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessage.Location = new System.Drawing.Point(18, 244);
             this.logMessage.Name = "logMessage";
-            this.logMessage.PasteSource = null;
             this.logMessage.Size = new System.Drawing.Size(397, 155);
             this.logMessage.TabIndex = 3;
             this.logMessage.Text = null;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.RepositoryExplorer;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI.SccManagement
 {
@@ -145,6 +146,23 @@ namespace Ankh.UI.SccManagement
         private void toUrlBox_TextAlignChanged(object sender, EventArgs e)
         {
             btnOk.Enabled = (NewDirectoryName != null);
+        }
+
+        private void versionBrowse_Click(object sender, EventArgs e)
+        {
+            using (LogViewerDialog lvd = new LogViewerDialog(new SvnOrigin(Context, SrcUri, null), Context))
+            {
+                if (lvd.ShowDialog(Context) != DialogResult.OK)
+                    return;
+
+                ISvnLogItem li = EnumTools.GetSingle(lvd.SelectedItems);
+
+                if (li != null)
+                {
+                    Revision = li.Revision;
+                    specificVersionRadio.Checked = true;
+                }
+            }
         }
     }
 }
