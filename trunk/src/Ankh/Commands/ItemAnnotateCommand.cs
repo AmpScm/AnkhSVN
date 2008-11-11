@@ -46,8 +46,8 @@ namespace Ankh.Commands
                     }
                     break;
                 case AnkhCommand.DocumentAnnotate:
-                    if (e.Selection.ActiveDocumentItem == null || !e.Selection.ActiveDocumentItem.HasCopyableHistory)
-                        e.Enabled = false;
+                    if (e.Selection.ActiveDocumentItem != null && e.Selection.ActiveDocumentItem.HasCopyableHistory)
+                        return;
                     break;
                 case AnkhCommand.LogAnnotateRevision:
                     ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
