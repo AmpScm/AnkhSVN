@@ -45,7 +45,7 @@
             this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.timePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.timePicker.Location = new System.Drawing.Point(177, 2);
+            this.timePicker.Location = new System.Drawing.Point(177, 3);
             this.timePicker.Name = "timePicker";
             this.timePicker.ShowUpDown = true;
             this.timePicker.Size = new System.Drawing.Size(73, 20);

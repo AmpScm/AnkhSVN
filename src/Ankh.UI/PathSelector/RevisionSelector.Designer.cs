@@ -35,7 +35,7 @@
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(224, 2);
+            this.browseButton.Location = new System.Drawing.Point(221, 0);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(28, 23);
             this.browseButton.TabIndex = 0;
@@ -53,13 +53,13 @@
             this.revisionBox.TabIndex = 1;
             this.revisionBox.TextChanged += new System.EventHandler(this.revisionBox_TextChanged);
             // 
-            // ChangeSetSelector
+            // RevisionSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.revisionBox);
             this.Controls.Add(this.browseButton);
-            this.Name = "ChangeSetSelector";
+            this.Name = "RevisionSelector";
             this.Size = new System.Drawing.Size(252, 25);
             this.ResumeLayout(false);
             this.PerformLayout();
