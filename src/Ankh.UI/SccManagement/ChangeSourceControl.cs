@@ -65,7 +65,7 @@ namespace Ankh.UI.SccManagement
                 (dirUri != null) ? dirUri.ToString() : "",
                 solutionControlled,
                 scc.IsSolutionManaged ? "Ok" : "Not Controlled",
-                info.ParentDirectory.FullPath);
+                info.Parent.FullPath);
 
             foreach (SvnProject project in mapper.GetAllProjects())
             {

@@ -20,6 +20,8 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            // TODO: Verify if all project files and the solution are open and saved
+
             using (ChangeSourceControl csc = new ChangeSourceControl())
             {
                 csc.Context = e.Context;
