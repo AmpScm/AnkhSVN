@@ -44,7 +44,20 @@ namespace Ankh.UI.MergeWizard
         #region Base Functionality
         internal SvnOrigin MergeSource
         {
-            get { return new SvnOrigin(WizardPage.Context, SvnUriTarget.FromString(mergeFromComboBox.Text), null); }
+            get
+            {
+                SvnOrigin mergeSource = null;
+                string mergeFrom = mergeFromComboBox.Text.Trim();
+                if (!string.IsNullOrEmpty(mergeFrom))
+                {
+                    Uri mergeFromUri;
+                    if (Uri.TryCreate(mergeFrom, UriKind.Absolute, out mergeFromUri))
+                    {
+                        mergeSource = new SvnOrigin(WizardPage.Context, mergeFromUri, null);
+                    }
+                }
+                return mergeSource;
+            }
         }
 
         MergeSourceBasePage _wizardPage;
@@ -68,8 +81,8 @@ namespace Ankh.UI.MergeWizard
 
             if (!DesignMode)
             {
-                mergeFromComboBox.TextChanged += new EventHandler(mergeFromComboBox_TextChanged);
                 mergeFromComboBox.Text = Resources.LoadingMergeSources;
+                mergeFromComboBox.TextChanged += new EventHandler(mergeFromComboBox_TextChanged);
 
                 ((WizardDialog)WizardPage.Form).EnablePageAndButtons(false);
 
@@ -195,7 +208,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                ((MergeWizard)WizardPage.Wizard).MergeSource = new SvnOrigin(WizardPage.Context, new Uri(mergeFromComboBox.Text), null);
+                ((MergeWizard)WizardPage.Wizard).MergeSource = MergeSource;
                 ((WizardDialog)WizardPage.Form).UpdateButtons();
             }
         }
