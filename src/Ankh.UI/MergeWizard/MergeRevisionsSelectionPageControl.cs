@@ -88,8 +88,6 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            PopulateUI();
-
             ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
 
