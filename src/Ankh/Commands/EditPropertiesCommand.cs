@@ -116,7 +116,7 @@ namespace Ankh.Commands
                         if (pfm != null)
                         {
                             ISvnProjectInfo info = pfm.GetProjectInfo(p);
-                            if (info != null)
+                            if (info != null && info.ProjectDirectory != null)
                             {
                                 firstVersioned = cache[info.ProjectDirectory];
                             }
