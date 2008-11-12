@@ -6,7 +6,7 @@ using Ankh.Scc;
 using System.ComponentModel;
 using Ankh.Scc.UI;
 
-namespace Ankh.UI.Blame
+namespace Ankh.UI.Annotate
 {
     class AnnotateSection : IAnnotateSection
     {

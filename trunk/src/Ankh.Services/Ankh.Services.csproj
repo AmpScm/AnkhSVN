@@ -79,6 +79,7 @@
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />
     <Compile Include="Scc\SvnOrigin.cs" />
+    <Compile Include="UI\IAnkhDynamicEditorFactory.cs" />
     <Compile Include="UI\RegistryLifoList.cs" />
     <Compile Include="Scc\IPendingChangeHandler.cs" />
     <Compile Include="UI\IAnkhToolWindowHost.cs" />
@@ -117,8 +118,8 @@
     <Compile Include="UI\PathSelectorInfo.cs" />
     <Compile Include="UI\PathSelectorResult.cs" />
     <Compile Include="UI\VSCommandHandler.cs" />
-    <Compile Include="UI\VSDocumentForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="UI\VSEditorControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="VS\ComStreamWrapper.cs" />
     <Compile Include="VS\IAnkhDialogOwner.cs" />
@@ -187,6 +188,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PendingChangeText.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\VSEditorControl.resx">
+      <DependentUpon>VSEditorControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

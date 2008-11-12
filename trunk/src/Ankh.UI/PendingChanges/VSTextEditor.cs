@@ -133,6 +133,18 @@ namespace Ankh.UI.PendingChanges
 
             Control topParent = TopLevelControl;
 
+            if (topParent == null)
+            {
+                topParent = this;
+                Control parent;
+                while (null != (parent = topParent.Parent))
+                {
+                    topParent = parent;
+                }
+            }
+
+
+
             VSContainerForm ownerForm = topParent as VSContainerForm;
             if (ownerForm != null && ownerForm.Modal)
             {
@@ -147,7 +159,13 @@ namespace Ankh.UI.PendingChanges
                 InitializeToolWindow(toolWindow);
                 return;
             }
-        }
+
+            VSEditorControl documentForm = topParent as VSEditorControl;
+            if (documentForm != null)
+            {
+                InitializeDocumentForm(documentForm);
+            }
+        }        
 
         void InitializeForm(VSContainerForm ownerForm)
         {
@@ -174,6 +192,14 @@ namespace Ankh.UI.PendingChanges
             _inToolWindow = true;
             Init(toolWindow.ToolWindowHost, false);
             toolWindow.ToolWindowHost.AddCommandTarget(CommandTarget);
+        }
+
+        bool _inDocumentForm;
+        void InitializeDocumentForm(VSEditorControl documentForm)
+        {
+            _inDocumentForm = true;
+            Init(documentForm.Context, false);
+            documentForm.AddCommandTarget(CommandTarget);
         }
 
         #region Methods
@@ -209,7 +235,7 @@ namespace Ankh.UI.PendingChanges
         {
             if (codeEditorNativeWindow != null)
             {
-                if (!_inToolWindow)
+                if (!_inToolWindow && !_inDocumentForm)
                     codeEditorNativeWindow.Size = ClientSize;
                 else
                 {

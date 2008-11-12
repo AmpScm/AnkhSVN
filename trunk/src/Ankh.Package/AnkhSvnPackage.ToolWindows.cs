@@ -22,7 +22,7 @@ using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.WorkingCopyExplorer;
 using Ankh.UI.DiffWindow;
 using Ankh.Scc.UI;
-using Ankh.UI.Blame;
+using Ankh.UI.Annotate;
 
 namespace Ankh.VSPackage
 {
@@ -36,7 +36,6 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(DiffToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindow(typeof(MergeToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
-    [ProvideToolWindow(typeof(BlameToolWindow), Style=VsDockStyle.MDI, Transient = true)]
     public partial class AnkhSvnPackage
     {
         public void ShowToolWindow(AnkhToolWindow window)
@@ -60,8 +59,6 @@ namespace Ankh.VSPackage
                     return typeof(DiffToolWindow);
                 case AnkhToolWindow.Merge:
                     return typeof(MergeToolWindow);
-                case AnkhToolWindow.Blame:
-                    return typeof(BlameToolWindow);
                 default:
                     throw new ArgumentOutOfRangeException("toolWindow");
             }
@@ -548,15 +545,6 @@ namespace Ankh.VSPackage
 
             ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
-        }
-    }
-
-    [Guid(AnkhId.BlameToolWindowId)]
-    class BlameToolWindow : AnkhToolWindowPane
-    {
-        public BlameToolWindow()
-        {
-            Control = new BlameToolWindowControl();
         }
     }
 

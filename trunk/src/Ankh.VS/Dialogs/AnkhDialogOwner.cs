@@ -25,7 +25,7 @@ namespace Ankh.VS.Dialogs
 
         IVsUIShell Shell
         {
-            get { return _shell ?? (_shell = GetService <IVsUIShell>(typeof(SVsUIShell))); }
+            get { return _shell ?? (_shell = GetService<IVsUIShell>(typeof(SVsUIShell))); }
         }
 
         IUIService UIService
@@ -37,7 +37,7 @@ namespace Ankh.VS.Dialogs
 
         public IWin32Window DialogOwner
         {
-            get 
+            get
             {
                 if (UIService != null)
                     return UIService.GetDialogOwnerWindow();
@@ -50,7 +50,7 @@ namespace Ankh.VS.Dialogs
 
         public IDisposable InstallFormRouting(Ankh.UI.VSContainerForm container, EventArgs eventArgs)
         {
-            return new VSCommandRouting(Context, container);            
+            return new VSCommandRouting(Context, container);
         }
 
         public void OnContainerCreated(Ankh.UI.VSContainerForm form)
@@ -97,19 +97,6 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
-
-        #region IAnkhDialogOwner Members
-
-
-        public void CreateDocumentForm(VSDocumentForm form)
-        {
-            VSDocumentFormPane pane = new VSDocumentFormPane(this, form);
-
-            pane.Show();
-            /*pane./
-            throw new NotImplementedException();*/
-        }
-
-        #endregion
+        
     }
 }

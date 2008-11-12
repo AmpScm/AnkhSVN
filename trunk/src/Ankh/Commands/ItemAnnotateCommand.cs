@@ -1,23 +1,13 @@
 using System;
-using System.Xml;
-using System.Xml.Xsl;
-using System.Xml.XPath;
-
-
-using System.IO;
-using System.Collections;
-using System.Diagnostics;
-using SharpSvn;
-using Ankh.Ids;
-using System.Collections.Generic;
-using Ankh.UI;
-using Ankh.Scc;
-using Ankh.UI.Blame;
-using Ankh.Selection;
-using Ankh.VS;
 using System.Collections.ObjectModel;
+using System.IO;
+using Ankh.Ids;
+using Ankh.Scc;
 using Ankh.Scc.UI;
-using Ankh.UI.SvnLog.Commands;
+using Ankh.UI;
+using Ankh.UI.Annotate;
+using Ankh.VS;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -199,22 +189,36 @@ namespace Ankh.Commands
                 ee.Client.GetBlame(target, ba, out blameResult);
             });
 
-            p.ShowToolWindow(AnkhToolWindow.Blame);
-            BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
-            blameToolControl.Init();
+            //AnnotateViewForm vf = new AnnotateViewForm();
+
+            //vf.Create(e.Context, "c:\\test.txt");
+            //vf.Context = e.Context;
+
+            AnnotateEditorControl btw = new AnnotateEditorControl();           
+
+            string path;
 
             SvnPathTarget pt = target as SvnPathTarget;
 
             if (pt != null)
             {
-                blameToolControl.LoadFile(pt.FullPath, tempFile);
+                path = pt.FullPath;
             }
             else
             {
-                blameToolControl.LoadFile(tempMgr.GetTempFile(Path.GetExtension(target.FileName)), tempFile);
+                path = tempMgr.GetTempFile(Path.GetExtension(target.FileName));
             }
 
-            blameToolControl.AddLines(item, blameResult);
+            btw.Create(e.Context, path);
+            btw.Init();
+
+            //p.ShowToolWindow(AnkhToolWindow.Blame);
+            //BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
+            //blameToolControl.Init();
+
+            btw.LoadFile(path, tempFile);
+
+            btw.AddLines(item, blameResult);
         }
 
         void BlameDocument(CommandEventArgs e)

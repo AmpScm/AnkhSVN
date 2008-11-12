@@ -5,19 +5,24 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Ids;
+using System.ComponentModel.Design;
+using Ankh.UI;
 
 namespace Ankh.VSPackage
 {
     [ProvideEditorFactoryAttribute(typeof(AnkhDiffEditorFactory), 302)]
-    [ProvideEditorFactoryAttribute(typeof(AnkhAnnotateEditorFactory), 303)]
+    [ProvideEditorFactoryAttribute(typeof(AnkhDynamicEditorFactory), 304)]
     [ProvideEditorLogicalView(typeof(AnkhDiffEditorFactory), AnkhId.DiffEditorViewId)]
-    [ProvideEditorLogicalView(typeof(AnkhAnnotateEditorFactory), AnkhId.AnnotateEditorViewId)]
     partial class AnkhSvnPackage
     {
         void RegisterEditors()
         {
-            RegisterEditorFactory(new AnkhAnnotateEditorFactory(this));
             RegisterEditorFactory(new AnkhDiffEditorFactory(this));
+
+            AnkhDynamicEditorFactory def = new AnkhDynamicEditorFactory(this);
+
+            RegisterEditorFactory(def);
+            _runtime.GetService<IServiceContainer>().AddService(typeof(IAnkhDynamicEditorFactory), def);
         }
     }
 }

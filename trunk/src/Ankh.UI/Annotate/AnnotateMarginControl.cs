@@ -10,18 +10,23 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
 using Ankh.Ids;
 
-namespace Ankh.UI.Blame
+namespace Ankh.UI.Annotate
 {
-    class BlameMarginControl :Control
+    sealed class AnnotateMarginControl : Control
     {
         List<AnnotateSection> _sections;
-        BlameToolWindowControl _control;
+        AnnotateEditorControl _control;
         int _firstLine;
         int _lastLine;
         IAnkhServiceProvider _context;
-        
 
-        internal void Init(IAnkhServiceProvider context, BlameToolWindowControl control, List<AnnotateSection> sections)
+        public AnnotateMarginControl()
+        {
+            _sections = new List<AnnotateSection>();
+        }
+
+
+        internal void Init(IAnkhServiceProvider context, AnnotateEditorControl control, List<AnnotateSection> sections)
         {
             _context = context;
             _control = control;
@@ -34,7 +39,7 @@ namespace Ankh.UI.Blame
         {
             get
             {
-                if (!_setLineHeight)
+                if (!_setLineHeight && _control != null)
                 {
                     _setLineHeight = true;
                     _lineHeight = _control.GetLineHeight();
@@ -95,7 +100,7 @@ namespace Ankh.UI.Blame
 
                 section.Hovered = false;
             }
-            if(changed)
+            if (changed)
                 Invalidate();
         }
 
@@ -122,6 +127,11 @@ namespace Ankh.UI.Blame
             }
         }
 
+        protected override void OnPaintBackground(PaintEventArgs pevent)
+        {
+            if (DesignMode)
+                base.OnPaintBackground(pevent);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -143,12 +153,12 @@ namespace Ankh.UI.Blame
             using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
             using (Brush selectedBg = new SolidBrush(SystemColors.Highlight))
             {
-                foreach (AnnotateSection section in _sections.ToArray())
+                foreach (AnnotateSection section in _sections)
                 {
                     if (section.EndLine < _firstLine)
                         continue;
                     if (section.StartLine > _lastLine)
-                        continue;
+                        break;
 
                     Rectangle rect = GetRectangle(section);
                     if (!e.ClipRectangle.IntersectsWith(rect))
@@ -170,6 +180,18 @@ namespace Ankh.UI.Blame
                     e.Graphics.DrawString(section.Author, f, color, new RectangleF(35, rect.Top + 2, 40, LineHeight), sfl);
                     e.Graphics.DrawString(section.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
                 }
+
+                Rectangle clip = e.ClipRectangle;
+                if (_sections.Count > 0)
+                {
+                    Rectangle rect = GetRectangle(_sections[_sections.Count - 1]);
+
+                    if (e.ClipRectangle.Top <= rect.Bottom)
+                        clip = new Rectangle(clip.Left, rect.Bottom+1, clip.Width, clip.Bottom);
+                }
+
+                using (SolidBrush sb = new SolidBrush(BackColor))
+                    e.Graphics.FillRectangle(sb, clip);
             }
         }
 
@@ -196,6 +218,6 @@ namespace Ankh.UI.Blame
 
 
 
-        
+
     }
 }
