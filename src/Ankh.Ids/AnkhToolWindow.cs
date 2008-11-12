@@ -12,6 +12,5 @@ namespace Ankh.Ids
         Log,
         Diff,
         Merge,
-        Blame
     }
 }

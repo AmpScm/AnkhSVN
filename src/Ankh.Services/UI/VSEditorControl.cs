@@ -7,17 +7,18 @@ using Ankh.VS;
 
 namespace Ankh.UI
 {
-    public class VSDocumentForm : Form
+    public class VSEditorControl : UserControl
     {
         IAnkhServiceProvider _context;
 
-        public VSDocumentForm()
+        public VSEditorControl()
         {
-            ShowInTaskbar = false;
+            /*ShowInTaskbar = false;
             MaximizeBox = false;
             MinimizeBox = false;
             ControlBox = false;
-        }
+            FormBorderStyle = FormBorderStyle.None;*/
+        }        
 
         /// <summary>
         /// Gets or sets the context.
@@ -29,7 +30,20 @@ namespace Ankh.UI
             protected set { _context = value; }
         }
 
-        /// <summary>
+        [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), Localizable(true)]
+        public override string Text
+        {
+            get
+            {
+                return base.Text;
+            }
+            set
+            {
+                base.Text = value;
+            }
+        }
+
+        /*/// <summary>
         /// Gets or sets a value indicating whether the form is displayed in the Windows taskbar.
         /// </summary>
         /// <value></value>
@@ -104,22 +118,59 @@ namespace Ankh.UI
             get { return base.ControlBox; }
             set { base.ControlBox = value; }
         }
-
-        IAnkhDialogOwner _dialogOwner;
-        [CLSCompliant(false)]
-        protected IAnkhDialogOwner DialogOwner
+         
+        [DefaultValue(FormBorderStyle.None)]
+        public new FormBorderStyle FormBorderStyle
         {
-            get { return _dialogOwner ?? (_dialogOwner = Context.GetService<IAnkhDialogOwner>()); }
+            get { return base.FormBorderStyle; }
+            set { base.FormBorderStyle = value; }
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
+         */
+
+        IAnkhDynamicEditorFactory _dialogOwner;
+        [CLSCompliant(false)]
+        protected IAnkhDynamicEditorFactory DynamicFactory
+        {
+            get { return _dialogOwner ?? (_dialogOwner = Context.GetService<IAnkhDynamicEditorFactory>()); }
         }
 
-        public void Create(IAnkhServiceProvider context)
+        public void Create(IAnkhServiceProvider context, string fullPath)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             _context = context;
 
-            DialogOwner.CreateDocumentForm(this);
+            DynamicFactory.CreateEditor(fullPath, this);
+            OnFrameCreated(EventArgs.Empty);
+        }        
+
+        protected virtual void OnFrameCreated(EventArgs e)
+        {
+        }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // VSDocumentForm
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 264);
+            this.Name = "VSDocumentForm";
+            this.ResumeLayout(false);
+        }
+
+        [CLSCompliant(false)]
+        public void AddCommandTarget(Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget commandTarget)
+        {
+            if (commandTarget == null)
+                throw new ArgumentNullException("commandTarget");
+
+            //throw new NotImplementedException();
         }
     }
 }

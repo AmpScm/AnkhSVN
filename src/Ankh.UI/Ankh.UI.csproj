@@ -160,17 +160,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Annotate\AnnotateSection.cs" />
-    <Compile Include="Annotate\AnnotateToolWindowControl.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Annotate\AnnotateEditorControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Annotate\AnnotateToolWindowControl.Designer.cs">
-      <DependentUpon>AnnotateToolWindowControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Annotate\AnnotateViewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Annotate\AnnotateViewForm.Designer.cs">
-      <DependentUpon>AnnotateViewForm.cs</DependentUpon>
+      <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>Form</SubType>
@@ -815,7 +809,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Annotate\AnnotateToolWindowControl.resx">
-      <DependentUpon>AnnotateToolWindowControl.cs</DependentUpon>
+      <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>

@@ -13,15 +13,15 @@ using Ankh.Scc;
 using Ankh.Scc.UI;
 using System.Collections.ObjectModel;
 
-namespace Ankh.UI.Blame
+namespace Ankh.UI.Annotate
 {
-    public partial class BlameToolWindowControl : AnkhToolWindowControl, ISelectionMapOwner<IAnnotateSection>
+    public partial class AnnotateEditorControl : VSEditorControl, ISelectionMapOwner<IAnnotateSection>
     {
         List<AnnotateSection> blameSections = new List<AnnotateSection>();
         SelectionItemMap _map;
         SvnOrigin _origin;
 
-        public BlameToolWindowControl()
+        public AnnotateEditorControl()
         {
             InitializeComponent();
             logMessageEditor1.ReadOnly = true;
@@ -29,7 +29,7 @@ namespace Ankh.UI.Blame
 
         public void Init()
         {
-            this.blameMarginControl1.Init(ToolWindowHost, this, blameSections);
+            this.blameMarginControl1.Init(Context, this, blameSections);
         }
 
         protected override void OnFrameCreated(EventArgs e)
@@ -37,7 +37,7 @@ namespace Ankh.UI.Blame
             base.OnFrameCreated(e);
 
             _map = SelectionItemMap.Create<IAnnotateSection>(this);
-            _map.Context = ToolWindowHost;
+            _map.Context = Context;
 
             if (SelectionChanged != null)
                 SelectionChanged(this, EventArgs.Empty);

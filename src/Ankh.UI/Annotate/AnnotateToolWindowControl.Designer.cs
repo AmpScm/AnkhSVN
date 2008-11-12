@@ -1,6 +1,6 @@
-﻿namespace Ankh.UI.Blame
+﻿namespace Ankh.UI.Annotate
 {
-    partial class BlameToolWindowControl
+    partial class AnnotateEditorControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.logMessageEditor1 = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
-            this.blameMarginControl1 = new Ankh.UI.Blame.BlameMarginControl();
+            this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -76,13 +76,14 @@
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 3;
             // 
-            // BlameToolWindowControl
+            // AnnotateEditorControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 300);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "BlameToolWindowControl";
+            this.Name = "AnnotateEditorControl";
+            this.Size = new System.Drawing.Size(300, 300);
+            this.Text = " (Annotated)";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -92,7 +93,7 @@
 
         #endregion
 
-        private BlameMarginControl blameMarginControl1;
+        private AnnotateMarginControl blameMarginControl1;
         private Ankh.UI.PendingChanges.VSTextEditor logMessageEditor1;
         private System.Windows.Forms.SplitContainer splitContainer1;
     }

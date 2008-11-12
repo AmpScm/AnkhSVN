@@ -92,10 +92,8 @@ namespace Ankh.Ids
         public const string SccExplorerViewContext = "FD4828F6-49A3-4E2F-BF36-8304884219CA";
         public const string LogViewContext = "0D2CA125-6CDF-407A-9C03-E8427E27F34D";
 
-        public const string AnnotateEditorId = "CCEAC54D-8788-4A3F-BBB8-1AE26467F9C1";
         public const string DiffEditorId = "7C6FACCE-0C14-4A3E-BC69-15F3966EE312";
         public const string DynamicEditorId = "923F6990-98C1-4DD5-983E-25088C02975D";
-        public const string AnnotateEditorViewId = "B7046419-D9B4-4BF1-997D-C130E5A51097";
         public const string DiffEditorViewId = "3D9F7A9D-F9D1-4DD6-A89F-C89312708923";
 
         /// <summary>
