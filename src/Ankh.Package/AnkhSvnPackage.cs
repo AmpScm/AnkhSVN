@@ -60,7 +60,7 @@ namespace Ankh.VSPackage
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]    
     sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
-        AnkhRuntime _runtime;
+        readonly AnkhRuntime _runtime;
 
         /// <summary>
         /// Default constructor of the package.
@@ -71,6 +71,7 @@ namespace Ankh.VSPackage
         /// </summary>
         public AnkhSvnPackage()
         {
+            _runtime = new AnkhRuntime(this);
         }
 
         /////////////////////////////////////////////////////////////////////////////
@@ -99,8 +100,7 @@ namespace Ankh.VSPackage
         {
             IServiceContainer container = GetService<IServiceContainer>();
             container.AddService(typeof(IAnkhPackage), this, true);
-
-            _runtime = new AnkhRuntime(this); // 
+            
             _runtime.AddModule(new AnkhModule(_runtime));
             _runtime.AddModule(new AnkhSccModule(_runtime));
             _runtime.AddModule(new AnkhVSModule(_runtime));
