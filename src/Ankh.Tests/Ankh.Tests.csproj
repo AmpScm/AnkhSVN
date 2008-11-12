@@ -161,9 +161,6 @@
     <Content Include="AnkhContextTest.cs">
       <SubType>Code</SubType>
     </Content>
-    <None Include="BlameResultTest.cs">
-      <SubType>Code</SubType>
-    </None>
     <Content Include="Commands\BlameCommandTest.cs">
       <SubType>Code</SubType>
     </Content>
@@ -179,12 +176,6 @@
     <Compile Include="ContextBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Content Include="LogResultTest.cs">
-      <SubType>Code</SubType>
-    </Content>
-    <Content Include="OutputPaneWriterTest.cs">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="ProjectItemsEventSinkTest.cs">
       <SubType>Code</SubType>
     </Content>
