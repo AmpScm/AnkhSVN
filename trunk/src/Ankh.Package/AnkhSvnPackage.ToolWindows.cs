@@ -551,6 +551,7 @@ namespace Ankh.VSPackage
         }
     }
 
+    [Guid(AnkhId.BlameToolWindowId)]
     class BlameToolWindow : AnkhToolWindowPane
     {
         public BlameToolWindow()

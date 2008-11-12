@@ -82,6 +82,7 @@ namespace Ankh.Ids
         public const string RepositoryExplorerToolWindowId = "748BECBE-04A1-4FFA-8E1E-46840F91A083";
         public const string PendingChangesToolWindowId = "896E815D-3862-4978-A1BC-CB6A3E70045C";
         public const string WorkingCopyExplorerToolWindowId = "A1929D7E-610A-48B0-8152-8E4AA202427F";
+        public const string BlameToolWindowId = "A543EA62-696C-4C7C-AB42-78BD7267DA92";
         public const string LogToolWindowId = "2FAC1EBF-6B37-4BE3-9A44-F9ED32D561CD";
         public const string DiffToolWindowId = "8B17630D-72A5-43AE-8105-DB31004D08AD";
         public const string MergeToolWindowId = "C3630016-F162-4AF5-B165-9F468A642E9A";
@@ -93,6 +94,7 @@ namespace Ankh.Ids
 
         public const string AnnotateEditorId = "CCEAC54D-8788-4A3F-BBB8-1AE26467F9C1";
         public const string DiffEditorId = "7C6FACCE-0C14-4A3E-BC69-15F3966EE312";
+        public const string DynamicEditorId = "923F6990-98C1-4DD5-983E-25088C02975D";
         public const string AnnotateEditorViewId = "B7046419-D9B4-4BF1-997D-C130E5A51097";
         public const string DiffEditorViewId = "3D9F7A9D-F9D1-4DD6-A89F-C89312708923";
 
