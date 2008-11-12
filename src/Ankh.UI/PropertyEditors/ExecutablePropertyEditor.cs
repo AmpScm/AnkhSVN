@@ -14,9 +14,9 @@ namespace Ankh.UI.PropertyEditors
     /// </summary>
     internal partial class ExecutablePropertyEditor : PropertyEditControl, IPropertyEditor
     {
-		
+
         public event EventHandler Changed;
-	
+
         public ExecutablePropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -26,11 +26,17 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
+        void OnChanged(EventArgs e)
+        {
+            if (Changed != null)
+                Changed(this, e);
+        }
+
         public void Reset() { }
 
         public bool Valid
         {
-			
+
             get { return true; }
         }
 
@@ -38,12 +44,12 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {
-                if ( !this.Valid )
+                if (!this.Valid)
                 {
                     throw new InvalidOperationException(
                         "Can not get a property item when valid is false");
                 }
-				
+
                 return new TextPropertyItem("File is executable");
             }
 
@@ -68,26 +74,26 @@ namespace Ankh.UI.PropertyEditors
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         private void CreateMyToolTip()
         {
             // Set up the ToolTip text for the Button and Textbox.
-            conflictToolTip.SetToolTip( this.executableTextBox, "File is executable");
+            conflictToolTip.SetToolTip(this.executableTextBox, "File is executable");
         }
     }
-	
 
-	
+
+
 }
 
