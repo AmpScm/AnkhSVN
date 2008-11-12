@@ -13,6 +13,7 @@
 		  <?endif?>
 		  <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2005.wxi ?>
 		  <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2008.wxi ?>
+      <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2010.wxi ?>
       </Component>
     </DirectoryRef>
   </Fragment>
