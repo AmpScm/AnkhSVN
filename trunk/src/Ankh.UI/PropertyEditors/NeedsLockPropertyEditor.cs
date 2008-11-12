@@ -16,7 +16,7 @@ namespace Ankh.UI.PropertyEditors
     {
 
         public event EventHandler Changed;
-	
+
         public NeedsLockPropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -27,17 +27,23 @@ namespace Ankh.UI.PropertyEditors
             Reset();
         }
 
-        public void Reset() 
+        void OnChanged(EventArgs e)
+        {
+            if (Changed != null)
+                Changed(this, e);
+        }
+
+        public void Reset()
         {
             if (this.needsLockTextBox != null && !this.needsLockTextBox.IsDisposed)
             {
                 this.needsLockTextBox.Text = FEEDBACK_TEXT;
             }
         }
-        
+
         public bool Valid
         {
-			
+
             get { return true; }
         }
 
@@ -45,12 +51,12 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {
-                if ( !this.Valid )
+                if (!this.Valid)
                 {
                     throw new InvalidOperationException(
                         "Can not get a property item when valid is false");
                 }
-				
+
                 return new TextPropertyItem(FEEDBACK_TEXT);
             }
 
@@ -73,22 +79,22 @@ namespace Ankh.UI.PropertyEditors
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         private void CreateMyToolTip()
         {
             // Set up the ToolTip text for the Button and Textbox.
-            needsLockToolTip.SetToolTip( this.needsLockTextBox, FEEDBACK_TEXT);
+            needsLockToolTip.SetToolTip(this.needsLockTextBox, FEEDBACK_TEXT);
         }
 
         private static readonly string FEEDBACK_TEXT = "File needs lock.";
