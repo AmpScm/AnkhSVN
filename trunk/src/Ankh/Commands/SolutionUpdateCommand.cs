@@ -124,6 +124,9 @@ namespace Ankh.Commands
                     {
                         string path = info.ProjectDirectory;
 
+                        if (string.IsNullOrEmpty(path))
+                            continue;
+
                         if (!paths.Contains(path))
                             paths.Add(path);
                     }

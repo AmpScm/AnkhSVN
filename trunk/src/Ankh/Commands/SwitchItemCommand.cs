@@ -49,7 +49,7 @@ namespace Ankh.Commands
                     {
                         ISvnProjectInfo pi = pfm.GetProjectInfo(item);
 
-                        if (pi == null)
+                        if (pi == null || pi.ProjectDirectory == null)
                         {
                             e.Enabled = false;
                             return;

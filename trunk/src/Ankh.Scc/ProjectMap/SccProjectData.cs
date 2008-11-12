@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Ankh.Selection;
 using System.Diagnostics;
 using SharpSvn;
+using System.IO;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -159,8 +160,21 @@ namespace Ankh.Scc.ProjectMap
                     {
                         string dir = name as string;
 
-                        if(dir != null)
+                        if (!string.IsNullOrEmpty(dir) && SvnItem.IsValidPath(dir))
                             dir = SvnTools.GetNormalizedFullPath(dir);
+                        else
+                        {
+                            // Ok, we have users reporting they get here via Analysis services
+
+                            // Wild guess: If we have a valid project file assume its folder 
+                            //              is the project directory.
+                            dir = ProjectFile;
+
+                            if (dir != null)
+                                dir = Path.GetDirectoryName(dir);
+                            else
+                                dir = ""; // Cache as invalid
+                        }
 
                         _projectDirectory = dir;
                     }

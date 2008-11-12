@@ -110,7 +110,7 @@ namespace Ankh.UI.MergeWizard.Commands
                         IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
                         ISvnProjectInfo info = pfm.GetProjectInfo(p);
-                        if (info != null)
+                        if (info != null && info.ProjectDirectory != null)
                         {
                             svnItems.Add(cache[info.ProjectDirectory]);
                         }
