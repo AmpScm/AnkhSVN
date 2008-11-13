@@ -184,9 +184,9 @@ namespace Ankh.Ids
 
         ItemIgnoreFolder,
 
+        LockMustLock,
         // Currently unused block; values can be reused as they were never really handled                
 
-        PcGroupPath,
         PcGroupProject,
         PcGroupChange,
         PcGroupChangeList,

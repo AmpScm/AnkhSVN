@@ -15,24 +15,23 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to lock the selected item.
     /// </summary>
-    [Command(AnkhCommand.Lock, HideWhenDisabled=true)]
+    [Command(AnkhCommand.Lock)]
+    [Command(AnkhCommand.LockMustLock)]
     class LockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            bool mustOnly = (e.Command == AnkhCommand.LockMustLock);
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsFile && item.IsVersioned && !item.IsLocked)
                 {
-                    return;
+                    if(!mustOnly || item.ReadOnlyMustLock)
+                        return;
                 }
-
             }
             e.Enabled = false;
         }
-
-        
-
 
         public override void OnExecute(CommandEventArgs e)
         {

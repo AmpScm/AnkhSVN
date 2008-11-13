@@ -140,6 +140,7 @@
       <ButtonRef id="Cmd_SolutionUpdateHead" priority="0x1400" />
       <Button id="Cmd_SolutionCommit" priority="0x1500" name="SolutionCommit" defaultInvisible="true"
               text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
+      <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <Button id="Cmd_SolutionHistory" priority="0x1800" name="SolutionHistory" defaultInvisible="true"
@@ -196,7 +197,9 @@
               iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectCommit" priority="0x1500" name="ProjectCommit"
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
-      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
+
+      <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
+      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />      
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <Button id="Cmd_ProjectHistory" priority="0x1800" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
@@ -246,7 +249,10 @@
       <!-- VS Predefined group for SCC commands on project items -->
       <ButtonRef id="Cmd_UpdateItem" priority="0x1500" />
       <ButtonRef id="Cmd_CommitItem" priority="0x1600" />
-      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
+      <Button id="Cmd_LockMustLock" name="LockMustLock" priority="0x1650" defaultInvisible="true"
+              text="Loc&amp;k..."
+              toolTip="Lock the selected item." iconFile="menu/Lock.png" />
+      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1700" />
       <Button id="Cmd_ItemShowChanges" name="Svn.Compare" priority="0x1800"
                 text="Show C&amp;hanges"
                 toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
