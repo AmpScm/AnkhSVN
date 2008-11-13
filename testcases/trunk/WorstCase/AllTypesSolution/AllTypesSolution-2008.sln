@@ -98,6 +98,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AtlTestPS", "AtlTest\AtlTes
 		{B3578AB5-5DA5-434C-AAC7-7120E3C781C8} = {B3578AB5-5DA5-434C-AAC7-7120E3C781C8}
 	EndProjectSection
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBClassLibrary", "VBClassLibrary\VBClassLibrary.vbproj", "{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -348,6 +350,20 @@ Global
 		{26E1BA07-AE5D-4FC8-9150-FCA5BDF193D5}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{26E1BA07-AE5D-4FC8-9150-FCA5BDF193D5}.Release|Win32.ActiveCfg = Release|Win32
 		{26E1BA07-AE5D-4FC8-9150-FCA5BDF193D5}.Release|x86.ActiveCfg = Release|Win32
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|.NET.ActiveCfg = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|Win32.ActiveCfg = Release|Any CPU
+		{6EA1F5CF-AFEA-45E3-BC9A-EF7120EE3569}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
