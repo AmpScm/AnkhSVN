@@ -84,7 +84,6 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logChangedPaths1.Context = context;
             logRevisionControl1.Start(context, LogMode.Log);
         }
 
@@ -111,7 +110,6 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logChangedPaths1.Context = context;
             logRevisionControl1.Start(context, LogMode.MergesEligible);
         }
 
@@ -130,7 +128,6 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logChangedPaths1.Context = context;
             logRevisionControl1.Start(context, LogMode.MergesMerged);
         }
 
