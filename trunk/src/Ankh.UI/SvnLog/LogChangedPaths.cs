@@ -154,7 +154,7 @@ namespace Ankh.UI
             Point mp = changedPaths.PointToClient(MousePosition);
             ListViewHitTestInfo info = changedPaths.HitTest(mp);
             PathListViewItem lvi = info.Item as PathListViewItem;
-            if (lvi != null)
+            if (lvi != null && Context != null)
             {
                 IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
                 cmdSvc.PostExecCommand(AnkhCommand.LogShowChanges);
