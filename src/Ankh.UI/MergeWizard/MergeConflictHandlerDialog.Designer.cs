@@ -153,7 +153,7 @@
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Abort";
+            this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // applyToAllCheckBox
@@ -176,7 +176,7 @@
             this.applyToGroupBox.Location = new System.Drawing.Point(12, 134);
             this.applyToGroupBox.Name = "applyToGroupBox";
             this.applyToGroupBox.Size = new System.Drawing.Size(467, 40);
-            this.applyToGroupBox.TabIndex = 4;
+            this.applyToGroupBox.TabIndex = 1;
             this.applyToGroupBox.TabStop = false;
             this.applyToGroupBox.Text = "Apply To:";
             // 
@@ -193,6 +193,7 @@
             // 
             // MergeConflictHandlerDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
