@@ -15,6 +15,7 @@ namespace Ankh.UI.VSSelectionControls
     /// <summary>
     /// Generic listview with <see cref="ISelectionContainer"/> support
     /// </summary>
+    /// <typeparam name="TListViewItem">The type of the list view item.</typeparam>
     public class ListViewWithSelection<TListViewItem> : SmartListView, ISelectionMapOwner<TListViewItem>
         where TListViewItem : ListViewItem
     {
@@ -237,16 +238,30 @@ namespace Ankh.UI.VSSelectionControls
         }
 
 
+        /// <summary>
+        /// Occurs when converting a ListViewItem in a selection item
+        /// </summary>
         public event EventHandler<RetrieveSelectionEventArgs> RetrieveSelection;
 
+        /// <summary>
+        /// Called to convert a ListViewItem in a selection item
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
             if (RetrieveSelection != null)
                 RetrieveSelection(this, e);
         }
 
+        /// <summary>
+        /// Occurs when converting a selection item in a ListViewItem
+        /// </summary>
         public event EventHandler<ResolveItemEventArgs> ResolveItem;
 
+        /// <summary>
+        /// Called to convert a selection item to a ListViewItem
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnResolveItem(ResolveItemEventArgs e)
         {
             if (ResolveItem != null)

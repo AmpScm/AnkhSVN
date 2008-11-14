@@ -28,32 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.syncView = new Ankh.UI.PendingChanges.Synchronize.SynchronizeListView();
             this.SuspendLayout();
             // 
-            // label1
+            // listView1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(168, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Placeholder for recent changes view";
+            this.syncView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.syncView.Location = new System.Drawing.Point(0, 0);
+            this.syncView.Name = "listView1";
+            this.syncView.Size = new System.Drawing.Size(768, 300);
+            this.syncView.TabIndex = 0;
+            this.syncView.UseCompatibleStateImageBehavior = false;
             // 
             // RecentChangesPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.syncView);
             this.Name = "RecentChangesPage";
             this.Text = "Recent Changes";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private Ankh.UI.PendingChanges.Synchronize.SynchronizeListView syncView;
+
     }
 }

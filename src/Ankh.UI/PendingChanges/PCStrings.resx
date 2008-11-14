@@ -129,6 +129,9 @@
   <data name="FullPathColumn" xml:space="preserve">
     <value>&amp;Full Path</value>
   </data>
+  <data name="LocalChangeColumn" xml:space="preserve">
+    <value>&amp;Local Change</value>
+  </data>
   <data name="LockedColumn" xml:space="preserve">
     <value>Loc&amp;ked</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="ProjectColumn" xml:space="preserve">
     <value>P&amp;roject</value>
+  </data>
+  <data name="RemoteChangeColumn" xml:space="preserve">
+    <value>&amp;Remote Change</value>
   </data>
   <data name="TypeColumn" xml:space="preserve">
     <value>&amp;Type</value>

@@ -208,7 +208,12 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        internal void RefreshList()
+        public override bool CanRefreshList
+        {
+            get { return true; }
+        }
+
+        public override void RefreshList()
         {
 			Context.GetService<IFileStatusCache>().ClearCache();
             Manager.FullRefresh(true);

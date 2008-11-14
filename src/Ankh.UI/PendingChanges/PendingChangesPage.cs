@@ -103,5 +103,15 @@ namespace Ankh.UI.PendingChanges
                 _container = null;
             }
         }
+
+        public virtual bool CanRefreshList
+        {
+            get { return false; }
+        }
+
+        public virtual void RefreshList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

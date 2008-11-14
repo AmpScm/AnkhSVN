@@ -239,6 +239,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PCStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\Synchronize\SynchronizeItem.cs" />
+    <Compile Include="PendingChanges\Synchronize\SynchronizeListItem.cs" />
+    <Compile Include="PendingChanges\Synchronize\SynchronizeListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PropertyEditors\NeedsLockPropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
