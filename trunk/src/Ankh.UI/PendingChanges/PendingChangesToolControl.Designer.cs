@@ -82,7 +82,6 @@
             // recentChangesButton
             // 
             this.recentChangesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.recentChangesButton.Enabled = false;
             this.recentChangesButton.Image = ((System.Drawing.Image)(resources.GetObject("recentChangesButton.Image")));
             this.recentChangesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.recentChangesButton.Name = "recentChangesButton";
