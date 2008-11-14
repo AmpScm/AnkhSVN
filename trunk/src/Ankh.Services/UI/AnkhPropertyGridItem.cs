@@ -35,7 +35,7 @@ namespace Ankh.Scc
         /// <returns>
         /// A <see cref="T:System.String"/> containing the name of the component instance this type descriptor is describing. The default is null.
         /// </returns>
-        public override string GetComponentName()
+        public override sealed string GetComponentName()
         {
             return ComponentName;
         }
@@ -46,7 +46,7 @@ namespace Ankh.Scc
         /// <returns>
         /// A <see cref="T:System.String"/> containing the fully qualified class name of the type this type descriptor is describing. The default is null.
         /// </returns>
-        public override string GetClassName()
+        public override sealed string GetClassName()
         {
             return ClassName;
         }
