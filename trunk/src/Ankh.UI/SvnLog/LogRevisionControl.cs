@@ -64,21 +64,24 @@ namespace Ankh.UI.SvnLog
         IAsyncResult _logRunner;
         public void Start(IAnkhServiceProvider context, LogMode mode)
         {
-            _mode = mode;
-            _context = context;
-            _cancel = false;
-            SvnLogArgs args = new SvnLogArgs();
-            args.Start = LogSource.Start;
-            args.End = LogSource.End;
+            lock (_instanceLock)
+            {
+                _mode = mode;
+                _context = context;
+                _cancel = false;
+                SvnLogArgs args = new SvnLogArgs();
+                args.Start = LogSource.Start;
+                args.End = LogSource.End;
 
-            // If we have EndRevision set, we want all items until End
-            if (args.End == null || args.End.RevisionType == SvnRevisionType.None)
-                args.Limit = 10;
+                // If we have EndRevision set, we want all items until End
+                if (args.End == null || args.End.RevisionType == SvnRevisionType.None)
+                    args.Limit = 10;
 
-            args.StrictNodeHistory = LogSource.StrictNodeHistory;
-            args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
+                args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
 
-            StartFetch(args);
+                StartFetch(args);
+            }
         }
 
         public void Stop()
@@ -87,6 +90,7 @@ namespace Ankh.UI.SvnLog
 
         void StartFetch(SvnLogArgs args)
         {
+            fetchCount += args.Limit;
             ShowBusyIndicator();
             _logRunner = _logAction.BeginInvoke(args, null, null);
         }
@@ -113,11 +117,7 @@ namespace Ankh.UI.SvnLog
         bool _cancel;
         void DoFetch(SvnLogArgs args)
         {
-            lock (_instanceLock)
-            {
-                _running = true;
-                fetchCount += args.Limit;
-            }
+            _running = true;
             try
             {
                 using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
@@ -163,8 +163,8 @@ namespace Ankh.UI.SvnLog
             }
             finally
             {
-                lock (_instanceLock)
-                    _running = false;
+                // Don't lock here, we can be called from within a lock
+                _running = false;
 
                 OnBatchDone();
                 HideBusyIndicator();
@@ -243,6 +243,9 @@ namespace Ankh.UI.SvnLog
                 return;
             }
 
+            if (_fetchAll)
+                FetchAll();
+
             if (BatchDone != null)
                 BatchDone(this, new BatchFinishedEventArgs(_logItemList.Count));
         }
@@ -313,41 +316,46 @@ namespace Ankh.UI.SvnLog
             }
         }
 
+        bool _fetchAll;
         internal void FetchAll()
         {
             lock (_instanceLock)
             {
                 if (_running)
                 {
-                    _logAction.EndInvoke(_logRunner);
+                    _fetchAll = true;
+                    return;
                 }
-            }
+                _fetchAll = false;
 
-            SvnLogArgs args = new SvnLogArgs();
-            if (_logItemList.Count > 0)
-            {
-                long startRev = _logItemList[_logItemList.Count - 1].Revision - 1;
-                args.Start = startRev < 0 ? SvnRevision.Zero : startRev;
-            }
-            else
-            {
-                lock (_logItems)
+
+                SvnLogArgs args = new SvnLogArgs();
+                if (_logItemList.Count > 0)
                 {
-                    if (_logItems.Count > 0)
+                    long startRev = _logItemList[_logItemList.Count - 1].Revision - 1;
+                    args.Start = startRev < 0 ? SvnRevision.Zero : startRev;
+                }
+                else
+                {
+                    lock (_logItems)
                     {
-                        LogListViewItem[] items = _logItems.ToArray();
-                        long revision = items[items.Length - 1].Revision - 1;
-                        // revision should not be < 0
-                        args.Start = revision < 0 ? SvnRevision.Zero : revision;
+                        if (_logItems.Count > 0)
+                        {
+                            LogListViewItem[] items = _logItems.ToArray();
+                            long revision = items[items.Length - 1].Revision - 1;
+                            // revision should not be < 0
+                            args.Start = revision < 0 ? SvnRevision.Zero : revision;
+                        }
                     }
                 }
-            }
-            args.End = LogSource.End;
-            args.StrictNodeHistory = LogSource.StrictNodeHistory;
-            args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
-            //args.RetrieveChangedPaths = false;
+                args.End = LogSource.End;
+                args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
+                //args.RetrieveChangedPaths = false;
 
-            StartFetch(args);
+
+                StartFetch(args);
+            }
         }
 
         #region ICurrentItemSource<ISvnLogItem> Members
