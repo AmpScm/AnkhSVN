@@ -33,7 +33,10 @@ namespace Ankh.UI.PendingChanges.Synchronize
         {
             IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
-            ImageIndex = mapper.GetIcon(_item.FullPath);
+            ImageIndex = GetIcon(mapper);
+
+            StateImageIndex = mapper.GetSpecialIcon(GetIcon(_status));
+
             SetValues(
                 _item.Status.ChangeList,
                 _item.Directory,
@@ -47,6 +50,48 @@ namespace Ankh.UI.PendingChanges.Synchronize
                 CombineChange(_status.RemoteContentStatus, _status.RemotePropertyStatus),
                 _item.Extension,
                 SafeWorkingCopy(_item));
+        }
+
+        private int GetIcon(IFileIconMapper mapper)
+        {
+            if (SvnItem.Exists)
+                return mapper.GetIcon(_item.FullPath);
+            else if (_status.NodeKind == SvnNodeKind.Directory)
+                return mapper.DirectoryIcon;
+            else if (_status.NodeKind == SvnNodeKind.None && _status.RemoteUpdateNodeKind == SvnNodeKind.Directory)
+                return mapper.DirectoryIcon;
+            else
+                return mapper.GetIconForExtension(_item.Extension);
+        }
+
+        private SpecialIcon GetIcon(SvnStatusEventArgs status)
+        {
+            // TODO: Handle more special cases
+            SvnStatus st = status.LocalContentStatus;
+
+            bool localModified = IsMod(status.LocalContentStatus) || IsMod(status.LocalPropertyStatus);
+            bool remoteModified = IsMod(status.RemoteContentStatus) || IsMod(status.RemotePropertyStatus);
+
+            if (localModified && remoteModified)
+                return SpecialIcon.Collision;
+            else if (localModified)
+                return SpecialIcon.Outgoing;
+            else if (remoteModified)
+                return SpecialIcon.Incoming;
+            else
+                return SpecialIcon.Blank;
+        }
+
+        private bool IsMod(SvnStatus svnStatus)
+        {
+            switch (svnStatus)
+            {
+                case SvnStatus.None:
+                case SvnStatus.Normal:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         static string SafeWorkingCopy(SvnItem item)

@@ -12,7 +12,10 @@ namespace Ankh.VS
         SortDown,
         Servers,        
         Db,
-        Server
+        Server,
+        Incoming,
+        Collision,
+        Outgoing        
     }
 
     public interface IFileIconMapper

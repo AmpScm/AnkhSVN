@@ -74,6 +74,8 @@ namespace Ankh.UI.PendingChanges
                     sa.RetrieveRemoteStatus = true;
                     foreach (string path in roots)
                     {
+                        // TODO: Find some way to get this information safely in the status cache
+                        // (Might not be possible because of delays in network check)
                         e.Client.Status(path, sa,
                             delegate(object s, SvnStatusEventArgs stat)
                             {
