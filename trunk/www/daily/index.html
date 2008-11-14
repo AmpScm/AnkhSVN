@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5549</title>
+<title>AnkhSVN-Daily Update - 2.0.5556</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5549</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5556</h1>
 
 
 <p>
@@ -12,19 +12,25 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1244/AnkhSvn-Daily-2.0.5549.268.msi">AnkhSVN 2.0.5549</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1252/AnkhSvn-Daily-2.0.5556.269.msi">AnkhSVN 2.0.5556</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5549">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5556">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-11-13</td></tr>
+<tr><td> </td><td class="r"><a id="5556" href="http://ankhsvn.net/rev/?r=5556">[r5556]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/LockCommand.cs, src/Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Show the Lock command in the top level context menu of the solution explorer if
+the file has a svn:needs-lock property</td></tr>
+<tr><td> </td><td class="r"><a id="5554" href="http://ankhsvn.net/rev/?r=5554">[r5554]</a></td><td class="a">baybora</td><td class="f">src/Ankh.UI/SvnLog/LogControl.cs, src/Ankh.UI/SvnLog/LogChangedPaths.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">LogChangedPaths: check if the Context is null before trying to get command service</td></tr>
+<tr><td> </td><td class="r"><a id="5553" href="http://ankhsvn.net/rev/?r=5553">[r5553]</a></td><td class="a">baybora</td><td class="f">src/Ankh.UI/SvnLog/LogControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">set context on LogChangedPaths on  "start log". Otherwise, double click on a changed path closes the wizard.</td></tr>
+<tr><td> </td><td class="r"><a id="5552" href="http://ankhsvn.net/rev/?r=5552">[r5552]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Upgraded to SharpSvn 1.5004.891 to fix SvnConflictEventArgs.IsBinary handling</td></tr>
 <tr class="d"><td colspan="4">2008-11-12</td></tr>
 <tr><td> </td><td class="r"><a id="5549" href="http://ankhsvn.net/rev/?r=5549">[r5549]</a></td><td class="a">baybora</td><td class="f">src/Ankh.UI/MergeWizard/MergeRevisionsSelectionPageControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">remove UI population call from MergeRevisionSelectionControl.OnLoad method, 
 since page change event triggers the same call. This is the reason MergeWizard locks Visual Studio (two calls to start log).</td></tr>
@@ -174,22 +180,6 @@ find custom diff, merge and patch tools. (The boxes are currently unfilled)</td>
 <tr><td> </td><td class="r"><a id="5408" href="http://ankhsvn.net/rev/?r=5408">[r5408]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/DiffHtmlModel.cs, src/Ankh/Commands/ItemUnifiedDiffCommand.cs, src/Ankh/Ankh.csproj, src/Ankh/Commands/LocalDiffCommandBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Move the CreatePatchCommand code to ItemUnifiedDiffCommand, clean up HTML based unified diff support.
 Also reintroduce the selection window for unified diff.</td></tr>
 <tr><td> </td><td class="r"><a id="5407" href="http://ankhsvn.net/rev/?r=5407">[r5407]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS/Ankh.VS.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Include the 2005 languageservice file as None item in the 2008 build and vice versa</td></tr>
-<tr class="d"><td colspan="4">2008-10-16</td></tr>
-<tr><td> </td><td class="r"><a id="5404" href="http://ankhsvn.net/rev/?r=5404">[r5404]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://ankhsvn.net/rev/?r=4001">r4001</a>, add another missing file</td></tr>
-<tr><td> </td><td class="r"><a id="5403" href="http://ankhsvn.net/rev/?r=5403">[r5403]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/EditPropertiesCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Force an update after properties have been changed, to make sure they are picked up.</td></tr>
-<tr><td> </td><td class="r"><a id="5402" href="http://ankhsvn.net/rev/?r=5402">[r5402]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS/LanguageServices/AnkhLanguageService.cs, src/Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, src/Ankh.VS/LanguageServices/UnifiedDiffLanguageService.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up on <a href="http://ankhsvn.net/rev/?r=5401">r5401</a>: Add some missing files</td></tr>
-<tr><td> </td><td class="r"><a id="5401" href="http://ankhsvn.net/rev/?r=5401">[r5401]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS.UnitTest/CommandRouting/CommandRoutingTest.cs, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Package/AnkhSvnPackage.Languages.cs, src/Ankh.Services/VS/IAnkhTempFileManager.cs, src/Ankh.UI/PendingChanges/LogMessageEditor.cs, src/Ankh.VS/LanguageServices/LogMessageLanguageService.cs, src/Ankh/Commands/ItemShowChanges.cs, src/Ankh.VS/Ankh.VS.csproj (and 9 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove support for DiffExternalLocalItem.
-Add Unified diff command, using a languageservice</td></tr>
-<tr><td> </td><td class="r"><a id="5400" href="http://ankhsvn.net/rev/?r=5400">[r5400]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Annotate, src/Ankh.UI/Annotate/AnnotateToolWindowControl.resx, src/Ankh.Package/AnkhEditorFactories.cs, src/Ankh.UI/Annotate/AnnotateSection.cs, src/Ankh.UI/Annotate/AnnotateToolWindowControl.Designer.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/Annotate/AnnotateToolWindowControl.cs, src/Ankh.UI/Blame (and 5 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed some warnings and renamed some blame classes.</td></tr>
-<tr><td> </td><td class="r"><a id="5399" href="http://ankhsvn.net/rev/?r=5399">[r5399]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/ItemShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Disable ShowChanges on directories.
-This fixes <a href="http://ankhsvn.net/issues/?id=526">issue #526</a></td></tr>
-<tr><td> </td><td class="r"><a id="5398" href="http://ankhsvn.net/rev/?r=5398">[r5398]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/LogCommand.cs, src/Ankh/Commands/CheckoutCommand.cs, src/Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, src/Ankh.Services/Scc/ISvnRepositoryItem.cs, src/Ankh.Services/Scc/UI/IAnkhDiffHandler.cs, src/Ankh/Commands/ItemShowChanges.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerItem.cs, src/Ankh/Commands/RepositoryExplorer/RefreshRepositoryItemCommand.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix <a href="http://ankhsvn.net/issues/?id=359">issue #359</a> by running the log against a repository target when we detect an added or replaced file with history.</td></tr>
-<tr><td> </td><td class="r"><a id="5397" href="http://ankhsvn.net/rev/?r=5397">[r5397]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SwitchDialog.resx, src/Ankh.UI/SwitchDialog.Designer.cs, src/Ankh.UI/SwitchDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add validation and an error provider when an invalid url is entered. This solves <a href="http://ankhsvn.net/issues/?id=518">issue #518</a></td></tr>
-<tr><td> </td><td class="r"><a id="5395" href="http://ankhsvn.net/rev/?r=5395">[r5395]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/LogCommand.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeNode.cs, src/Ankh.Services/Scc/UI/ILogControl.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/SvnLog/LogControl.cs, src/Ankh.Services/Scc/ISvnRepositoryItem.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerItem.cs, src/Ankh.UI/SvnLog/LogToolWindowControl.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable Diff support from the history window, when that history window has been invoked from a repository explorer.</td></tr>
-<tr class="d"><td colspan="4">2008-10-15</td></tr>
-<tr><td> </td><td class="r"><a id="5391" href="http://ankhsvn.net/rev/?r=5391">[r5391]</a></td><td class="a">sander</td><td class="f">src/Ankh/Services/AnkhDiff.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use Write instead of Export when diffing files. This avoids running export on a directory in
-this case, which takes long, and fails afterwards</td></tr>
-<tr><td> </td><td class="r"><a id="5390" href="http://ankhsvn.net/rev/?r=5390">[r5390]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/RepositoryOpen/AddUriDialog.resx, src/Ankh.UI/RepositoryOpen/AddUriDialog.Designer.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/RepositoryOpen/AddUriDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Delete AddUriDialog, it's unused since <a href="http://ankhsvn.net/rev/?r=5389">r5389</a></td></tr>
 
 </table>
 <!--/Recent changes-->
