@@ -145,7 +145,7 @@ namespace Ankh.UI.PathSelector
                 {
                     SvnItem parent = SvnItem.GetCommonParent(value);
 
-                    if (parent != null)
+                    if (parent != null && parent.IsVersioned)
                         revisionPickerEnd.SvnOrigin = revisionPickerStart.SvnOrigin = new SvnOrigin(parent);
                 }
             }
