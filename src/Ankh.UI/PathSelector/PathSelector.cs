@@ -151,15 +151,6 @@ namespace Ankh.UI.PathSelector
             }
         }
 
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public event Predicate<SvnItem> CheckedFilter
-        //{
-        //    add { pathSelectionTreeView.CheckedFilter += value; }
-        //    remove { pathSelectionTreeView.CheckedFilter -= value; }
-        //}
-
         /// <summary>
         /// The items checked in the treeview.
         /// </summary>
