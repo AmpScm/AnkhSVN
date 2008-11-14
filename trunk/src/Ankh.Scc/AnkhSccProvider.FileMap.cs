@@ -16,6 +16,7 @@ namespace Ankh.Scc
     /// 
     /// </summary>
     [GlobalService(typeof(IProjectFileMapper))]
+    [GlobalService(typeof(IAnkhProjectLayoutService))]
     partial class AnkhSccProvider : IProjectFileMapper, IAnkhProjectLayoutService
     {
         // ********************************************************
@@ -650,8 +651,52 @@ namespace Ankh.Scc
 
         private IEnumerable<SvnItem> GetSolutionProjectRoots()
         {
+            Dictionary<string, SvnItem> roots = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
 
-            throw new NotImplementedException();
+            string root = SolutionSettings.ProjectRoot;
+
+            if (root != null)
+            {
+                SvnItem rootItem = StatusCache[root];
+
+                if (rootItem != null)
+                {
+                    roots.Add(root, rootItem);
+
+                    yield return rootItem;
+                }
+            }
+
+            List<SccProjectData> projects = new List<SccProjectData>(_projectMap.Values);
+
+            foreach (SccProjectData pb in projects)
+            {
+                string dir = pb.ProjectDirectory;
+                if (dir == null)
+                    continue;
+
+                SvnItem pItem = StatusCache[dir];
+                if (pItem == null || !pItem.Exists)
+                    continue;
+
+                bool below = false;
+                foreach (string p in roots.Keys)
+                {
+                    if (pItem.IsBelowPath(p))
+                    {
+                        if (roots[p].IsBelowPath(pItem.WorkingCopy.FullPath))
+                        {
+                            below = true;
+                            break;
+                        }
+                    }
+                }
+                if (!below)
+                {
+                    yield return pItem;
+                    roots.Add(dir, pItem);
+                }
+            }
         }
 
         private IEnumerable<SvnItem> GetSingleProjectRoots(SvnProject project)
