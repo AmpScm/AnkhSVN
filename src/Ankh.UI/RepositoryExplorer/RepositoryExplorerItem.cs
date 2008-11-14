@@ -8,7 +8,7 @@ using SharpSvn;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-    sealed class RepositoryExplorerItem : CustomTypeDescriptor, ISvnRepositoryItem
+    sealed class RepositoryExplorerItem : AnkhPropertyGridItem, ISvnRepositoryItem
     {
         readonly IAnkhServiceProvider _context;
         readonly RepositoryTreeNode _tn;
@@ -42,48 +42,15 @@ namespace Ankh.UI.RepositoryExplorer
             _name = li.Text;
         }
 
-        #region Property View Conversion
-        TypeConverter _rawDescriptor;
-        TypeConverter Raw
+        protected override string ComponentName
         {
-            get { return _rawDescriptor ?? (_rawDescriptor = TypeDescriptor.GetConverter(this, true)); }
+            get { return Name; }
         }
 
-        public override PropertyDescriptorCollection GetProperties()
+        protected override string ClassName
         {
-            return Raw.GetProperties(this);
+            get { return "Repository Item"; }
         }
-
-        public override TypeConverter GetConverter()
-        {
-            return Raw;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
-        {
-            return Raw.GetProperties(null, null, attributes);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public override object GetPropertyOwner(PropertyDescriptor pd)
-        {
-            return this;
-        }
-
-        public override string GetComponentName()
-        {
-            return Name;
-        }
-
-        public override string GetClassName()
-        {
-            return "Repository Item";
-        }
-        #endregion
 
         [DisplayName("Url")]
         public Uri Uri
@@ -154,7 +121,6 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
         #endregion
-
 
         SharpSvn.SvnRevision ISvnRepositoryItem.Revision
         {

@@ -13,7 +13,7 @@ using System.IO;
 namespace Ankh.Scc
 {
     [DebuggerDisplay("File={FullPath}, Change={ChangeText}")]
-    public sealed class PendingChange : CustomTypeDescriptor
+    public sealed class PendingChange : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;        
@@ -97,14 +97,14 @@ namespace Ankh.Scc
             get { return _status.Text; }
         }
 
-        public override string GetComponentName()
+        protected override string ClassName
         {
-            return Name;
+            get { return "Pending Change"; }
         }
 
-        public override string GetClassName()
+        protected override string ComponentName
         {
-            return "Pending Change";
+            get { return Name; }
         }
 
         [DisplayName("Url"), Category("Subversion")]
@@ -135,37 +135,6 @@ namespace Ankh.Scc
         public long LastCommittedRevision
         {
             get { return Item.Status.LastChangeRevision; }
-        }
-
-        TypeConverter _rawDescriptor;
-        TypeConverter Raw
-        {
-            get { return _rawDescriptor ?? (_rawDescriptor = TypeDescriptor.GetConverter(this, true)); }
-        }
-
-        public override PropertyDescriptorCollection GetProperties()
-        {
-            return Raw.GetProperties(this);
-        }
-
-        public override TypeConverter GetConverter()
-        {
-            return Raw;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
-        {
-            return Raw.GetProperties(null, null, attributes);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public override object GetPropertyOwner(PropertyDescriptor pd)
-        {
-            return this;
         }
 
         /// <summary>
@@ -283,7 +252,7 @@ namespace Ankh.Scc
             else if (Item.Status != null && Item.Status.NodeKind == SvnNodeKind.Directory)
                 return context.IconMapper.DirectoryIcon;
             else
-                return context.IconMapper.GetIconForExtension(Path.GetExtension(Name));
+                return context.IconMapper.GetIconForExtension(Item.Extension);
         }
 
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)

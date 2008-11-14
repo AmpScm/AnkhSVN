@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Ankh.Scc
 {
     [DebuggerDisplay("File={FullPath}, Status={Status}")]
-    public class SvnItemData : CustomTypeDescriptor
+    public class SvnItemData : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
@@ -99,45 +99,14 @@ namespace Ankh.Scc
             }
         }
 
-        public override string GetComponentName()
+        protected override string ComponentName
         {
-            return Name;
+            get { return Name; }
         }
 
-        public override string GetClassName()
+        protected override string ClassName
         {
-            return "Path Status";
-        }
-
-        TypeConverter _rawDescriptor;
-        TypeConverter Raw
-        {
-            get { return _rawDescriptor ?? (_rawDescriptor = TypeDescriptor.GetConverter(this, true)); }
-        }
-
-        public override PropertyDescriptorCollection GetProperties()
-        {
-            return Raw.GetProperties(this);
-        }
-
-        public override TypeConverter GetConverter()
-        {
-            return Raw;
-        }
-
-        public override PropertyDescriptorCollection GetProperties(Attribute[] attributes)
-        {
-            return Raw.GetProperties(null, null, attributes);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public override object GetPropertyOwner(PropertyDescriptor pd)
-        {
-            return this;
+            get { return "Path Status"; }
         }
     }
 }
