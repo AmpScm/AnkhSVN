@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5556</title>
+<title>AnkhSVN-Daily Update - 2.0.5567</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5556</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5567</h1>
 
 
 <p>
@@ -12,19 +12,31 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1252/AnkhSvn-Daily-2.0.5556.269.msi">AnkhSVN 2.0.5556</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1258/AnkhSvn-Daily-2.0.5567.270.msi">AnkhSVN 2.0.5567</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5556">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5567">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-11-15</td></tr>
+<tr><td> </td><td class="r"><a id="5567" href="http://ankhsvn.net/rev/?r=5567">[r5567]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PCStrings.resx, src/Ankh.UI/PendingChanges/PCStrings.Designer.cs, src/Ankh.UI/PendingChanges/RecentChangesPage.Designer.cs, src/Ankh.UI/PendingChanges/RecentChangesPage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added header containing update information to the recent changes page</td></tr>
+<tr class="d"><td colspan="4">2008-11-14</td></tr>
+<tr><td> </td><td class="r"><a id="5566" href="http://ankhsvn.net/rev/?r=5566">[r5566]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeConflictHandlerDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Minor UI updates (Set default button, fix tab order)</td></tr>
+<tr><td> </td><td class="r"><a id="5565" href="http://ankhsvn.net/rev/?r=5565">[r5565]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/Synchronize/SynchronizeListItem.cs, src/Ankh.UI/PendingChanges/RecentChangesPage.cs, src/Ankh.Services/VS/IFileIconMapper.cs, src/Ankh.VS/SolutionExplorer/UpDnListView.png</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Apply some initial change icons to the recent changes views and fix item icons
+for not existing files.</td></tr>
+<tr><td> </td><td class="r"><a id="5564" href="http://ankhsvn.net/rev/?r=5564">[r5564]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/PathSelector/PathSelector.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove code that was commented out in <a href="http://ankhsvn.net/rev/?r=3878">r3878</a></td></tr>
+<tr><td> </td><td class="r"><a id="5561" href="http://ankhsvn.net/rev/?r=5561">[r5561]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Avoid dead lock when running "fetch all" when a log operation is running.
+Also make sure that the UI doesn't block on executing the fetch all command</td></tr>
+<tr><td> </td><td class="r"><a id="5559" href="http://ankhsvn.net/rev/?r=5559">[r5559]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PCStrings.resx, src/Ankh.UI/PendingChanges/PendingChangesPage.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PendingChanges/PCStrings.Designer.cs, src/Ankh.UI/PendingChanges/PendingChangesToolControl.Designer.cs, src/Ankh.UI/PendingChanges/Commands/RefreshPendingChanges.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh.UI/PendingChanges/Synchronize/SynchronizeListView.cs (and 6 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added raw implementation of a Synchronize view. This enables the third tab of
+the PC window as synchronize view for the current solution. Click refresh on
+the PC toolbar to (initially) refresh.</td></tr>
 <tr class="d"><td colspan="4">2008-11-13</td></tr>
 <tr><td> </td><td class="r"><a id="5556" href="http://ankhsvn.net/rev/?r=5556">[r5556]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/LockCommand.cs, src/Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Show the Lock command in the top level context menu of the solution explorer if
 the file has a svn:needs-lock property</td></tr>
@@ -176,10 +188,6 @@ only compatibility.</td></tr>
 <tr><td> </td><td class="r"><a id="5412" href="http://ankhsvn.net/rev/?r=5412">[r5412]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs, src/Ankh.VS/LanguageServices/AnkhLanguageService.cs, src/Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, src/Ankh.VS/LanguageServices/LogMessageLanguageService.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made Language service namespaces match their solution location</td></tr>
 <tr><td> </td><td class="r"><a id="5411" href="http://ankhsvn.net/rev/?r=5411">[r5411]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/AnkhSettingsControl.Designer.cs, src/Ankh.UI/AnkhSettingsControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added comboboxes instead of editboxes in the settings to make it easier to
 find custom diff, merge and patch tools. (The boxes are currently unfilled)</td></tr>
-<tr class="d"><td colspan="4">2008-10-17</td></tr>
-<tr><td> </td><td class="r"><a id="5408" href="http://ankhsvn.net/rev/?r=5408">[r5408]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/CreatePatchCommand.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/DiffHtmlModel.cs, src/Ankh/Commands/ItemUnifiedDiffCommand.cs, src/Ankh/Ankh.csproj, src/Ankh/Commands/LocalDiffCommandBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Move the CreatePatchCommand code to ItemUnifiedDiffCommand, clean up HTML based unified diff support.
-Also reintroduce the selection window for unified diff.</td></tr>
-<tr><td> </td><td class="r"><a id="5407" href="http://ankhsvn.net/rev/?r=5407">[r5407]</a></td><td class="a">sander</td><td class="f">src/Ankh.VS/Ankh.VS.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Include the 2005 languageservice file as None item in the 2008 build and vice versa</td></tr>
 
 </table>
 <!--/Recent changes-->
