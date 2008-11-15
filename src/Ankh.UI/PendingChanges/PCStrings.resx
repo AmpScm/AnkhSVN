@@ -150,6 +150,9 @@
   <data name="ProjectColumn" xml:space="preserve">
     <value>P&amp;roject</value>
   </data>
+  <data name="RefreshTimeX" xml:space="preserve">
+    <value>Refreshed: {0}</value>
+  </data>
   <data name="RemoteChangeColumn" xml:space="preserve">
     <value>&amp;Remote Change</value>
   </data>

@@ -160,6 +160,15 @@ namespace Ankh.UI.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refreshed: {0}.
+        /// </summary>
+        internal static string RefreshTimeX {
+            get {
+                return ResourceManager.GetString("RefreshTimeX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Remote Change.
         /// </summary>
         internal static string RemoteChangeColumn {
