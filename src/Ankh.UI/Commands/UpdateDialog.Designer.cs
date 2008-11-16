@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.projectRootLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.projectRootBox = new System.Windows.Forms.TextBox();
             this.urlBox = new System.Windows.Forms.TextBox();
@@ -39,15 +39,15 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // projectRootLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(69, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "&Project Root:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.projectRootLabel.AutoSize = true;
+            this.projectRootLabel.Location = new System.Drawing.Point(12, 9);
+            this.projectRootLabel.Name = "projectRootLabel";
+            this.projectRootLabel.Size = new System.Drawing.Size(69, 13);
+            this.projectRootLabel.TabIndex = 5;
+            this.projectRootLabel.Text = "&Project Root:";
+            this.projectRootLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // label4
             // 
@@ -147,7 +147,7 @@
             this.Controls.Add(this.urlBox);
             this.Controls.Add(this.projectRootBox);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.projectRootLabel);
             this.Name = "UpdateDialog";
             this.Text = "Update Solution";
             this.ResumeLayout(false);
@@ -157,7 +157,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label projectRootLabel;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox projectRootBox;
         private System.Windows.Forms.TextBox urlBox;

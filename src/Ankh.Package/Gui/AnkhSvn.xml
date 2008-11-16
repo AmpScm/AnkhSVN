@@ -149,6 +149,7 @@
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
         <Visibility context="Ankh_SccProviderGuid"/>
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
+          <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x08" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
           <Button id="Cmd_UnifiedDiff" priority="0x20" name="UnifiedDiff" text="&amp;Unified Diff" defaultInvisible="true" />
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x30" />
@@ -207,6 +208,9 @@
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
         <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
+          <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x08"
+                  text="Update to a specific &amp;Version"
+                  toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
                 text="&amp;Add..."
                 toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>

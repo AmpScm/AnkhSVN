@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI.Commands
 {
@@ -37,6 +38,24 @@ namespace Ankh.UI.Commands
             }
         }
 
+        public void SetMultiple(bool multiple)
+        {
+            projectRootLabel.Enabled = !multiple;
+            if (multiple)
+                projectRootBox.Text = "-";
+        }
+
+        public SvnOrigin SvnOrigin
+        {
+            get { return versionBox.SvnOrigin; }
+            set
+            {
+                versionBox.SvnOrigin = value;
+                if (value != null)
+                    urlBox.Text = value.Uri.ToString();
+            }
+        }
+
         public SvnRevision Revision
         {
             get { return versionBox.Revision; }
@@ -60,6 +79,6 @@ namespace Ankh.UI.Commands
             base.OnLoad(e);
             if (Context != null)
                 versionBox.Context = Context;
-        }
+        }        
     }
 }
