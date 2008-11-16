@@ -146,8 +146,7 @@
       <Button id="Cmd_SolutionHistory" priority="0x1800" name="SolutionHistory" defaultInvisible="true"
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
-      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
-        <Visibility context="Ankh_SccProviderGuid"/>
+      <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x08" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
@@ -178,8 +177,7 @@
           </Button>
         </Group>
       </Menu>
-      <Menu id="Menu_SolutionFileScc" name="SolutionFile" priority="0x3000" text="So&amp;lution File" defaultInvisible="true">
-        <Visibility context="Ankh_SccProviderGuid"/>
+      <Menu id="Menu_SolutionFileScc" name="SolutionFile" priority="0x3000" text="So&amp;lution File">
         <Group id="Menu_SolutionFileScc" priority="0x100">
           <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
           <ButtonRef id="Cmd_CommitItem" priority="0x200" />
@@ -206,10 +204,10 @@
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
-      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
+      <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
           <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x08"
-                  text="Update to a specific &amp;Version"
+                  text="Update to a Specific &amp;Version" defaultInvisible="true"
                   toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
                 text="&amp;Add..."
@@ -237,8 +235,7 @@
         </Group>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
-      <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File" defaultInvisible="true">
-        <Visibility context="Ankh_SccProviderGuid"/>
+      <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File">
         <Group id="Menu_ProjectFileScc" priority="0x100">
           <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
           <ButtonRef id="Cmd_CommitItem" priority="0x200" />
@@ -282,7 +279,7 @@
         </Group>
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
-      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion" defaultInvisible="true">
+      <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
@@ -315,7 +312,7 @@
                 toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
         </Group>
         <Group id="Grp_ItemIgnore" priority="0xE000">
-          <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore" defaultInvisible="true">
+          <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
             <Group id="Menu_ItemIgnore" priority="0x100">
               <Button id="Cmd_ItemIgnoreFile" priority="0x1000" name="SvnIgnoreFile"
                       defaultInvisible="true" textChanges="true" text="Ignore &amp;File (file.c)" />
@@ -492,8 +489,8 @@
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
                   fixMenuController="true" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
-              <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200"
-                  text="Update to a specific &amp;Version"
+              <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
+                  text="Update to a Specific &amp;Version"
                   toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
             </Group>
           </Menu>
