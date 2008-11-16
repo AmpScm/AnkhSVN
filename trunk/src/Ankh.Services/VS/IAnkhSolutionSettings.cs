@@ -41,6 +41,11 @@ namespace Ankh.VS
         /// <value>The project root URI.</value>
         Uri ProjectRootUri { get; }
 
+        /// <summary>
+        /// Gets the project root SVN item.
+        /// </summary>
+        /// <value>The project root SVN item.</value>
+        SvnItem ProjectRootSvnItem { get; }
 
         /// <summary>
         /// Gets all project extensions filter.
