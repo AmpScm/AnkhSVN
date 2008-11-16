@@ -81,37 +81,37 @@ namespace Ankh.Commands
 
                 Uri rootUrl = null;
                 foreach (SvnProject p in GetSelectedProjects(e))
-                {                    
-                    if(pfm == null)
+                {
+                    if (pfm == null)
                         pfm = e.GetService<IProjectFileMapper>();
 
                     ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
-                    if(pi == null || pi.ProjectDirectory == null)
-                        continue;                    
+                    if (pi == null || pi.ProjectDirectory == null)
+                        continue;
 
-                    if(fsc == null)
+                    if (fsc == null)
                         fsc = e.GetService<IFileStatusCache>();
 
                     SvnItem rootItem = fsc[pi.ProjectDirectory];
 
-                    if(!rootItem.IsVersioned)
+                    if (!rootItem.IsVersioned)
                         continue;
 
                     if (IsHeadCommand(e.Command))
                         return; // Ok, we can update
 
-                    if(rootUrl == null)
+                    if (rootUrl == null)
                         rootUrl = rootItem.WorkingCopy.RepositoryRoot;
-                    else if(rootUrl != rootItem.WorkingCopy.RepositoryRoot)
+                    else if (rootUrl != rootItem.WorkingCopy.RepositoryRoot)
                     {
                         // Multiple repositories selected; can't choose uniform version
-                        e.Enabled = false; 
+                        e.Enabled = false;
                         return;
                     }
                 }
 
-                if(rootUrl == null)
+                if (rootUrl == null)
                     e.Enabled = false;
             }
         }
@@ -130,6 +130,7 @@ namespace Ankh.Commands
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+            Uri reposRoot = null;
 
             if (IsHeadCommand(e.Command) || e.DontPrompt)
                 rev = SvnRevision.Head;
@@ -173,6 +174,7 @@ namespace Ankh.Commands
                     {
                         si = item;
                         origin = new SvnOrigin(item);
+                        reposRoot = item.WorkingCopy.RepositoryRoot;
                     }
                     else
                     {
@@ -187,7 +189,7 @@ namespace Ankh.Commands
                             i++;
                         }
 
-                        while (i > 0 && urlPath1[i-1] != '/')
+                        while (i > 0 && urlPath1[i - 1] != '/')
                             i--;
 
                         origin = new SvnOrigin(new Uri(origin.Uri, urlPath1.Substring(0, i)), origin.RepositoryRoot);
@@ -217,81 +219,56 @@ namespace Ankh.Commands
                 }
             }
 
-            List<string> paths = new List<string>();
+            IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
 
-            if (IsSolutionCommand(e.Command))
-            {
-
-                if (settings == null)
-                    return;
-                else if (string.IsNullOrEmpty(settings.ProjectRoot))
-                    return;
-
-                paths.Add(settings.ProjectRoot);
-            }
-            else
-            {
-                
-
-                if (mapper == null)
-                    return;
-
-                List<SvnProject> projects = new List<SvnProject>();
-
-                foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
-                {
-                    if (!projects.Contains(project))
-                        projects.Add(project);
-                }
-
-                if (projects.Count == 0)
-                    foreach (SvnProject project in e.Selection.GetOwnerProjects(false))
-                    {
-                        if (!projects.Contains(project))
-                            projects.Add(project);
-                    }
-
-                foreach (SvnProject project in projects)
-                {
-                    ISvnProjectInfo info = mapper.GetProjectInfo(project);
-
-                    if (info != null && !string.IsNullOrEmpty(info.ProjectDirectory))
-                    {
-                        string path = info.ProjectDirectory;
-
-                        if (string.IsNullOrEmpty(path))
-                            continue;
-
-                        if (!paths.Contains(path))
-                            paths.Add(path);
-                    }
-                }
-            }
-
-            if (rev == null)
-                rev = SvnRevision.Head;
+            Dictionary<string, SvnItem> itemsToUpdate = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, List<string>> groups = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
-            foreach (string path in paths)
+
+            foreach (SvnItem item in GetAllUpdateRoots(e))
             {
-                foreach (string file in documentTracker.GetDocumentsBelow(path))
+                // GetAllUpdateRoots can (and probably will) return duplicates!
+
+                if (itemsToUpdate.ContainsKey(item.FullPath) || !item.IsVersioned)
+                    continue;
+
+                SvnWorkingCopy wc = item.WorkingCopy;
+
+                if (!IsHeadCommand(e.Command) && reposRoot != null)
+                {
+                    // Specific revisions are only valid on a single repository!
+                    if (wc != null && wc.RepositoryRoot != reposRoot)
+                        continue;
+                }
+
+                List<string> inWc;
+
+                if(!groups.TryGetValue(wc.FullPath, out inWc))
+                {
+                    inWc = new List<string>();
+                    groups.Add(wc.FullPath, inWc);
+                }
+
+                inWc.Add(item.FullPath);
+                itemsToUpdate.Add(item.FullPath, item);
+
+                foreach (string file in documentTracker.GetDocumentsBelow(item.FullPath))
                 {
                     if (!lockPaths.Contains(file))
                         lockPaths.Add(file);
                 }
             }
 
-            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
+            documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before updating/merging!
 
             using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
             {
                 lck.MonitorChanges();
 
-                // TODO: Monitor conflicts!!
-
-                UpdateRunner ur = new UpdateRunner(paths, rev, updateExternals, allowUnversionedObstructions);
+                UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
 
                 e.GetService<IProgressRunner>().Run(
                     string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
@@ -307,22 +284,41 @@ namespace Ankh.Commands
             }
         }
 
+        private IEnumerable<SvnItem> GetAllUpdateRoots(CommandEventArgs e)
+        {
+            // Duplicate handling is handled above this method!
+            IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
+            if (IsSolutionCommand(e.Command))
+                foreach (SvnItem item in pls.GetUpdateRoots(null))
+                {
+                    yield return item;
+                }
+            else
+                foreach (SvnProject project in GetSelectedProjects(e))
+                {
+                    foreach (SvnItem item in pls.GetUpdateRoots(project))
+                    {
+                        yield return item;
+                    }
+                }
+        }
+
         class UpdateRunner
         {
             SvnRevision _rev;
-            List<string> _paths;
+            IEnumerable<List<string>> _groups;
             SvnUpdateResult _result;
             bool _updateExternals;
             bool _allowUnversionedObstructions;
 
-            public UpdateRunner(List<string> paths, SvnRevision rev, bool updateExternals, bool allowUnversionedObstructions)
+            public UpdateRunner(IEnumerable<List<string>> groups, SvnRevision rev, bool updateExternals, bool allowUnversionedObstructions)
             {
-                if (paths == null)
-                    throw new ArgumentNullException("paths");
+                if (groups == null)
+                    throw new ArgumentNullException("groups");
                 else if (rev == null)
                     throw new ArgumentNullException("rev");
 
-                _paths = paths;
+                _groups = groups;
                 _rev = rev;
                 _updateExternals = updateExternals;
                 _allowUnversionedObstructions = allowUnversionedObstructions;
@@ -344,53 +340,9 @@ namespace Ankh.Commands
                 ua.IgnoreExternals = !_updateExternals;
                 e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
 
-                while (_paths.Count > 0)
+                foreach(List<string> group in _groups)
                 {
-                    List<string> now = new List<string>();
-
-                    now.Add(_paths[0]);
-                    _paths.RemoveAt(0);
-
-                    if (_paths.Count > 0)
-                    {
-                        // Find all other paths with the same guid and root
-                        Guid reposGuid = Guid.Empty;
-                        Uri reposRoot = null;
-                        SvnInfoArgs ia = new SvnInfoArgs();
-                        ia.ThrowOnError = false;
-
-                        e.Client.Info(new SvnPathTarget(now[0]), ia,
-                            delegate(object s, SvnInfoEventArgs ee)
-                            {
-                                reposGuid = ee.RepositoryId;
-                                reposRoot = ee.RepositoryRoot;
-                            });
-
-
-                        if (ia.IsLastInvocationCanceled)
-                            return;
-
-
-                        for (int i = 0; i < _paths.Count; i++)
-                        {
-                            e.Client.Info(new SvnPathTarget(_paths[i]), ia,
-                            delegate(object s, SvnInfoEventArgs ee)
-                            {
-                                if (reposGuid == ee.RepositoryId &&
-                                    reposRoot == ee.RepositoryRoot)
-                                {
-                                    now.Add(_paths[i]);
-                                    _paths.RemoveAt(i);
-                                    i--;
-                                }
-                            });
-
-                            if (ia.IsLastInvocationCanceled)
-                                return;
-                        }
-                    }
-
-                    if (!e.Client.Update(now, ua, out _result) && ua.LastException != null)
+                    if (!e.Client.Update(group, ua, out _result) && ua.LastException != null)
                     {
                         e.Exception = ua.LastException;
                         return;
