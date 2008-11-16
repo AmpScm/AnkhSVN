@@ -64,6 +64,7 @@ namespace Ankh.Settings
             public string SolutionFilename;
             public string ProjectRoot;
             public Uri ProjectRootUri;
+            public SvnItem ProjectRootItem;
 
             public int SolutionCookie;
             public int RootCookie;
@@ -174,6 +175,7 @@ namespace Ankh.Settings
                 {
                     cache.ProjectRoot = parent.FullPath;
                     cache.ProjectRootUri = parent.Status.Uri;
+                    cache.ProjectRootItem = parent;
                 }
 
                 LoadSolutionProperties(cache, item);
@@ -465,10 +467,17 @@ namespace Ankh.Settings
             {
                 RefreshIfDirty();
 
-                if (_cache.ProjectRootUri != null)
-                    return _cache.ProjectRootUri;
-                else
-                    return null;
+                return _cache.ProjectRootUri;
+            }
+        }
+
+        public SvnItem ProjectRootSvnItem
+        {
+            get
+            {
+                RefreshIfDirty();
+
+                return _cache.ProjectRootItem;
             }
         }
 
