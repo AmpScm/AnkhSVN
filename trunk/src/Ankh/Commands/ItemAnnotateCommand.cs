@@ -122,7 +122,7 @@ namespace Ankh.Commands
             SvnItem firstItem = null;
             PathSelectorResult result = null;
             PathSelectorInfo info = new PathSelectorInfo("Annotate",
-                e.Selection.GetSelectedSvnItems(true));
+                e.Selection.GetSelectedSvnItems(false));
 
             info.CheckedFilter += delegate(SvnItem item)
             {
