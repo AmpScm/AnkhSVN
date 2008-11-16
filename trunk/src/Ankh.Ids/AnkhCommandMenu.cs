@@ -33,8 +33,8 @@ namespace Ankh.Ids
         SolutionExplorerSccForProject,
         SolutionExplorerSccForItem,
 
-        PendingChangesContextMenu,
-        PendingCommitsSortContextMenu,
+        PendingCommitsContextMenu,
+        PendingCommitsHeaderContextMenu,
         LogMessageEditorContextMenu,
 
         PendingChangesCommit,
