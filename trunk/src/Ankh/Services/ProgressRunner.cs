@@ -135,6 +135,9 @@ namespace Ankh
 
                     if (_exception == null && awa.Exception != null)
                         _exception = awa.Exception;
+
+                    if (_exception is SvnOperationCanceledException)
+                        _cancelled = true;
                 }
                 catch (SvnOperationCanceledException)
                 {
