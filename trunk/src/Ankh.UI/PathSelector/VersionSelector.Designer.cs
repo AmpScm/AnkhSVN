@@ -32,7 +32,8 @@ namespace Ankh.UI.PathSelector
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(1, 5);
+            this.typeLabel.Location = new System.Drawing.Point(0, 5);
+            this.typeLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.typeLabel.Name = "typeLabel";
             this.typeLabel.Size = new System.Drawing.Size(34, 13);
             this.typeLabel.TabIndex = 2;

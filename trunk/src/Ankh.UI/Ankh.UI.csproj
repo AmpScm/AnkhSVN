@@ -166,6 +166,12 @@
     <Compile Include="Annotate\AnnotateToolWindowControl.Designer.cs">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\UpdateDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Commands\UpdateDialog.Designer.cs">
+      <DependentUpon>UpdateDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -468,10 +474,10 @@
     <Compile Include="SvnLog\LogToolWindowControl.Designer.cs">
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SwitchDialog.cs">
+    <Compile Include="Commands\SwitchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SwitchDialog.Designer.cs">
+    <Compile Include="Commands\SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\UIUtils.cs" />
@@ -509,10 +515,10 @@
       <DependentUpon>AnkhSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhUIModule.cs" />
-    <Compile Include="CheckoutDialog.cs">
+    <Compile Include="Commands\CheckoutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CheckoutDialog.Designer.cs">
+    <Compile Include="Commands\CheckoutDialog.Designer.cs">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorDialog.cs">
@@ -521,10 +527,10 @@
     <Compile Include="ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExportDialog.cs">
+    <Compile Include="Commands\ExportDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ExportDialog.Designer.cs">
+    <Compile Include="Commands\ExportDialog.Designer.cs">
       <DependentUpon>ExportDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="WorkingCopyExplorer\FileSystemDetailsView.cs">
@@ -765,7 +771,7 @@
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CheckoutDialog.resx">
+    <EmbeddedResource Include="Commands\CheckoutDialog.resx">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -773,7 +779,7 @@
       <DependentUpon>ErrorDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExportDialog.resx">
+    <EmbeddedResource Include="Commands\ExportDialog.resx">
       <DependentUpon>ExportDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -815,6 +821,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Annotate\AnnotateToolWindowControl.resx">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commands\UpdateDialog.resx">
+      <DependentUpon>UpdateDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
@@ -968,7 +977,7 @@
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SwitchDialog.resx">
+    <EmbeddedResource Include="Commands\SwitchDialog.resx">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
