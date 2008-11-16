@@ -13,9 +13,9 @@ namespace Ankh.VS
         Servers,        
         Db,
         Server,
-        Incoming,
+        Outgoing,
         Collision,
-        Outgoing        
+        Incoming        
     }
 
     public interface IFileIconMapper
