@@ -11,9 +11,9 @@ namespace Ankh.Scc
     /// </summary>
     public class SvnOrigin : IEquatable<SvnOrigin>
     {
-        SvnTarget _target;
-        Uri _uri;
-        Uri _reposRoot;
+        readonly SvnTarget _target;
+        readonly Uri _uri;
+        readonly Uri _reposRoot;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnOrigin"/> class using a SvnItem
@@ -31,6 +31,17 @@ namespace Ankh.Scc
             _target = new SvnPathTarget(svnItem.FullPath);
             _uri = svnItem.Status.Uri;
             _reposRoot = svnItem.WorkingCopy.RepositoryRoot;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvnOrigin"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="reposRoot">The repos root.</param>
+        public SvnOrigin(Uri uri, Uri reposRoot)
+            : this((SvnUriTarget)uri, reposRoot)
+        {
+            _uri = uri; // Keep Uri unnormalized for UI purposes
         }
 
         /// <summary>
@@ -175,7 +186,7 @@ namespace Ankh.Scc
         /// </returns>
         public override int GetHashCode()
         {
-            return Uri.GetHashCode();
+            return _target.GetHashCode();
         }
 
         /// <summary>
