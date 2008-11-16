@@ -342,14 +342,21 @@ namespace Ankh.Commands
 
                 foreach(List<string> group in _groups)
                 {
-                    if (!e.Client.Update(group, ua, out _result) && ua.LastException != null)
+                    // Currently Subversion runs update per item passed and in
+                    // Subversion 1.6 passing each item separately is actually 
+                    // a tiny but faster than passing them all at once. 
+                    // (sleep_for_timestamp fails its fast route)
+                    foreach (string path in group)
                     {
-                        e.Exception = ua.LastException;
-                        return;
-                    }
+                        if (!e.Client.Update(path, ua, out _result) && ua.LastException != null)
+                        {
+                            e.Exception = ua.LastException;
+                            return;
+                        }
 
-                    if (ua.IsLastInvocationCanceled)
-                        return;
+                        if (ua.IsLastInvocationCanceled)
+                            return;
+                    }
                 }
             }
             #endregion
