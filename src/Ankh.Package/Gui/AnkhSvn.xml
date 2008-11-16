@@ -604,9 +604,9 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingChangesContextMenu">
+    <GroupRef id="Menu_PendingCommitsContextMenu">
       <!-- The Pending Changes Context menu -->
-      <Menu id="Menu_PendingChangesContextMenu" name="PendingChangesContext" priority="0" type="Context">
+      <Menu id="Menu_PendingCommitsContextMenu" name="PendingChangesContext" priority="0" type="Context">
         <Group id="Grp_PendingChangesContextMenu" priority="0x100">
           <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
         </Group>
@@ -639,8 +639,8 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingCommitsSortContextMenu">
-      <Menu id="Menu_PendingCommitsSortContextMenu" name="SortPendingCommits" priority="0" type="Context">
+    <GroupRef id="Menu_PendingCommitsHeaderContextMenu">
+      <Menu id="Menu_PendingCommitsHeaderContextMenu" name="SortPendingCommits" priority="0" type="Context">
         <GroupRef id="Grp_ListViewState" priority="0x100" />
         <Group id="Grp_PendingCommitsActions" priority="0x200">
           <ButtonRef id="Cmd_PendingChangesViewLogMessage" priority="0x100" />

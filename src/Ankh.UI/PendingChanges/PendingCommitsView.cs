@@ -219,9 +219,9 @@ namespace Ankh.UI.PendingChanges
             if (mcs != null)
             {
                 if (showSort)
-                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsSortContextMenu, p);
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsHeaderContextMenu, p);
                 else
-                    mcs.ShowContextMenu(AnkhCommandMenu.PendingChangesContextMenu, p);
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsContextMenu, p);
             }
         }
     }

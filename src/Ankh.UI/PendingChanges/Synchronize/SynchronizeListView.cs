@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.VSSelectionControls;
+using System.Drawing;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges.Synchronize
 {    
@@ -100,6 +103,45 @@ namespace Ankh.UI.PendingChanges.Synchronize
         protected override string GetCanonicalName(SynchronizeListItem item)
         {
             return item.SvnItem.FullPath;
+        }
+
+        public override void OnShowContextMenu(MouseEventArgs e)
+        {
+            base.OnShowContextMenu(e);
+
+            Point p = e.Location;
+            bool showSort = false;
+            if (p != new Point(-1, -1))
+            {
+                // Mouse context menu
+                Point clP = PointToClient(e.Location);
+                ListViewHitTestInfo hti = HitTest(clP);
+
+                showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
+                if (!showSort && hti.Item != null)
+                {
+                    Rectangle r = hti.Item.GetBounds(ItemBoundsPortion.Entire);
+
+                    if (!r.Contains(clP))
+                        showSort = true;
+                }
+            }
+            else
+            {
+                ListViewItem fi = FocusedItem;
+
+                if (fi != null)
+                    p = PointToScreen(fi.Position);
+            }
+
+            IAnkhCommandService mcs = Context.GetService<IAnkhCommandService>();
+            if (mcs != null)
+            {
+                if (showSort)
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsHeaderContextMenu, p);
+                else
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsContextMenu, p);
+            }
         }
     }
 }
