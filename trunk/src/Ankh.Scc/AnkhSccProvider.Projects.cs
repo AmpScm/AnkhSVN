@@ -439,6 +439,16 @@ namespace Ankh.Scc
             }
         }
 
+        internal void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
+        {
+            SccProjectData data;
+
+            if (_projectMap.TryGetValue(project, out data))
+            {
+                MarkDirty(data.ProjectFile, true);
+            }            
+        }
+
         bool _ensureIcons;
         bool _registeredSccCleanup;
         internal void OnSccCleanup(CommandEventArgs e)

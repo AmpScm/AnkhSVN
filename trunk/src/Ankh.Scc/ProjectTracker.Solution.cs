@@ -80,6 +80,13 @@ namespace Ankh.Scc
 
         public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
         {
+            IVsSccProject2 project = pRealHierarchy as IVsSccProject2;
+
+            if (project != null)
+            {
+                SccProvider.OnProjectBeforeUnload(project, pStubHierarchy);
+            }
+
             return VSConstants.S_OK;
         }
 
