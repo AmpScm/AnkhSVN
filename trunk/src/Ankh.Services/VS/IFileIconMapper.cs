@@ -7,15 +7,23 @@ namespace Ankh.VS
 {
     public enum SpecialIcon
     {
-        Blank=0,
+        Blank = 0,
         SortUp,
         SortDown,
-        Servers,        
+        Servers,
         Db,
         Server,
         Outgoing,
         Collision,
-        Incoming        
+        Incoming
+    }
+
+    public enum StateIcon
+    {
+        Blank = 0,
+        Outgoing,
+        Collision,
+        Incoming
     }
 
     public interface IFileIconMapper
@@ -23,14 +31,15 @@ namespace Ankh.VS
         int GetIcon(string path);
         ImageList ImageList { get; }
 
+        ImageList StateImageList { get; }
+
         int DirectoryIcon { get; }
         int FileIcon { get; }
 
         int GetIconForExtension(string ext);
 
-        int HeaderUpIcon { get; }
-        int HeaderDownIcon { get; }
-
         int GetSpecialIcon(SpecialIcon icon);
+
+        int GetStateIcon(StateIcon icon);
     }
 }

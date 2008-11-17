@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.UI.VSSelectionControls;
 using SharpSvn;
 using Ankh.VS;
+using Ankh.Scc;
 
 namespace Ankh.UI.PendingChanges.Synchronize
 {
@@ -11,6 +12,10 @@ namespace Ankh.UI.PendingChanges.Synchronize
     {
         SvnItem _item;
         SvnStatusEventArgs _status;
+        PendingChangeKind _localChange;
+        PendingChangeKind _remoteChange;
+        PendingChangeStatus _localStatus;
+        PendingChangeStatus _remoteStatus;
 
         public SynchronizeListItem(SynchronizeListView list, SvnItem item, SvnStatusEventArgs status)
             : base(list)
@@ -20,6 +25,12 @@ namespace Ankh.UI.PendingChanges.Synchronize
 
             _item = item;
             _status = status;
+
+            _localChange = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, item);
+            _remoteChange = PendingChange.CombineStatus(status.RemoteContentStatus, status.RemotePropertyStatus, false, null);
+
+            _localStatus = new PendingChangeStatus(_localChange);
+            _remoteStatus = new PendingChangeStatus(_remoteChange);
 
             UpdateText();
         }
@@ -35,19 +46,19 @@ namespace Ankh.UI.PendingChanges.Synchronize
 
             ImageIndex = GetIcon(mapper);
 
-            StateImageIndex = mapper.GetSpecialIcon(GetIcon(_status));
+            StateImageIndex = mapper.GetStateIcon(GetIcon(_status));
 
             SetValues(
                 _item.Status.ChangeList,
                 _item.Directory,
                 _item.FullPath,
-                CombineChange(_status.LocalContentStatus, _status.LocalPropertyStatus),
+                _localStatus.PendingCommitText,
                 (_status.RemoteLock != null) ? PCStrings.LockedValue : "", // Locked
                 SafeDate(_item.Modified),
                 _item.Name,
                 GetRelativePath(_item),
                 GetProject(_item),
-                CombineChange(_status.RemoteContentStatus, _status.RemotePropertyStatus),
+                _remoteStatus.PendingCommitText,
                 _item.Extension,
                 SafeWorkingCopy(_item));
         }
@@ -64,7 +75,7 @@ namespace Ankh.UI.PendingChanges.Synchronize
                 return mapper.GetIconForExtension(_item.Extension);
         }
 
-        private SpecialIcon GetIcon(SvnStatusEventArgs status)
+        private StateIcon GetIcon(SvnStatusEventArgs status)
         {
             // TODO: Handle more special cases
             SvnStatus st = status.LocalContentStatus;
@@ -73,13 +84,13 @@ namespace Ankh.UI.PendingChanges.Synchronize
             bool remoteModified = IsMod(status.RemoteContentStatus) || IsMod(status.RemotePropertyStatus);
 
             if (localModified && remoteModified)
-                return SpecialIcon.Collision;
+                return StateIcon.Collision;
             else if (localModified)
-                return SpecialIcon.Outgoing;
+                return StateIcon.Outgoing;
             else if (remoteModified)
-                return SpecialIcon.Incoming;
+                return StateIcon.Incoming;
             else
-                return SpecialIcon.Blank;
+                return StateIcon.Blank;
         }
 
         private bool IsMod(SvnStatus svnStatus)

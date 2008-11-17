@@ -29,6 +29,8 @@ namespace Ankh.VS.SolutionExplorer
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
+            EnsureSpecialImages();
+
             int icon = GetProjectIcon(path);
 
             if (icon == -1)
@@ -38,7 +40,7 @@ namespace Ankh.VS.SolutionExplorer
 
         }
 
-        private int GetOsIcon(string path)
+        int GetOsIcon(string path)
         {
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
             IntPtr sysImageList = NativeMethods.SHGetFileInfo(path, 0, ref fileinfo,
@@ -55,6 +57,8 @@ namespace Ankh.VS.SolutionExplorer
 
         int GetProjectIcon(string path)
         {
+            EnsureSpecialImages();
+
             IProjectFileMapper map = GetService<IProjectFileMapper>();
 
             if (map == null)
@@ -143,6 +147,8 @@ namespace Ankh.VS.SolutionExplorer
 
         int GetSpecialIcon(string name, FileAttributes attr)
         {
+            EnsureSpecialImages();
+
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
             IntPtr sysImageList = NativeMethods.SHGetFileInfo(name, (uint)(int)attr, ref fileinfo,
                 (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
@@ -165,25 +171,48 @@ namespace Ankh.VS.SolutionExplorer
         }
 
         int _lvUp;
-        public int HeaderUpIcon
-        {
-            get { return GetSpecialIcon(SpecialIcon.SortUp); }
-        }
-
-        public int HeaderDownIcon
-        {
-            get { return GetSpecialIcon(SpecialIcon.SortDown); }
-        }
-
         public int GetSpecialIcon(SpecialIcon icon)
         {
             if ((_lvUp == 0))
-                LoadUpDown();
+                EnsureSpecialImages();
 
             return _lvUp - (int)(SpecialIcon.SortUp) + (int)icon;
         }
 
-        void LoadUpDown()
+        public ImageList StateImageList
+        {
+            // For now we use the same image list for both; the first few icons are just reused
+            // Our api allows us to change this later on
+            get { return ImageList; }
+        }
+
+        public int GetStateIcon(StateIcon icon)
+        {
+            // For now we use the same image list for both; the first few icons are just reused
+            // Our api allows us to change this later on
+            SpecialIcon si;
+            switch(icon)
+            {
+                case StateIcon.Blank:
+                    si = SpecialIcon.Blank;
+                    break;
+                case StateIcon.Incoming:
+                    si = SpecialIcon.Incoming;
+                    break;
+                case StateIcon.Outgoing:
+                    si = SpecialIcon.Outgoing;
+                    break;
+                case StateIcon.Collision:
+                    si = SpecialIcon.Collision;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("icon", icon, "Icon out of range");
+            }
+
+            return GetSpecialIcon(si);
+        }
+
+        void EnsureSpecialImages()
         {
             if ((_lvUp != 0))
                 return;
