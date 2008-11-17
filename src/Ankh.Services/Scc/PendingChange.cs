@@ -258,58 +258,12 @@ namespace Ankh.Scc
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
             AnkhStatus status = item.Status;
+            _kind = CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, item);
 
-            switch (status.LocalContentStatus)
-            {
-                case SvnStatus.NotVersioned:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.New);
-                case SvnStatus.Modified:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Modified);
-                case SvnStatus.Replaced:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Replaced);
-                case SvnStatus.Added:
-                    if (item.Status.IsCopied)
-                        return new PendingChangeStatus(_kind = PendingChangeKind.Copied);
-                    else
-                        return new PendingChangeStatus(_kind = PendingChangeKind.Added);
-                case SvnStatus.Deleted:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Deleted);
-                case SvnStatus.Missing:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Missing);
-                case SvnStatus.Conflicted:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Conflicted);
-                case SvnStatus.Obstructed:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Obstructed);
-                case SvnStatus.Incomplete:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.Incomplete);
-
-                //case SvnStatus.Zero:
-                //case SvnStatus.Normal:
-                //case SvnStatus.None:
-                default:
-                    break; // Look further
-            }
-
-            switch (status.LocalPropertyStatus)
-            {
-                case SharpSvn.SvnStatus.Normal:
-                case SharpSvn.SvnStatus.None:
-                    break; // Look further
-                case SharpSvn.SvnStatus.Conflicted:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.PropertyConflicted);
-                default:
-                    return new PendingChangeStatus(_kind = PendingChangeKind.PropertyModified);
-            }
-
-            if (item.IsDocumentDirty)
-                return new PendingChangeStatus(_kind = PendingChangeKind.EditorDirty);
-            else if (item.IsLocked)
-                return new PendingChangeStatus(_kind = PendingChangeKind.LockedOnly);
+            if (_kind != PendingChangeKind.None)
+                return new PendingChangeStatus(_kind);
             else
-            {
-                _kind = PendingChangeKind.None;
                 return null;
-            }
         }
 
         static void RefreshValue<T>(ref bool changed, ref T field, T newValue)
@@ -454,6 +408,81 @@ namespace Ankh.Scc
         {
             return Item.IsBelowPath(path);
         }
+
+        /// <summary>
+        /// Combines the statuses to a single PendingChangeKind status for UI purposes
+        /// </summary>
+        /// <param name="contentStatus">The content status.</param>
+        /// <param name="propertyStatus">The property status.</param>
+        /// <param name="treeConflict">if set to <c>true</c> [tree conflict].</param>
+        /// <param name="item">The item or null if no on disk representation is availavke</param>
+        /// <returns></returns>
+        public static PendingChangeKind CombineStatus(SvnStatus contentStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
+        {
+            // item can be null!
+
+            if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted || treeConflict)
+                return PendingChangeKind.Conflicted;
+
+            switch (contentStatus)
+            {
+                case SvnStatus.NotVersioned:
+                    if (item != null && item.InSolution)
+                        return PendingChangeKind.New;
+                    else
+                        return PendingChangeKind.None;
+                case SvnStatus.Modified:
+                    return PendingChangeKind.Modified;
+                case SvnStatus.Replaced:
+                    return PendingChangeKind.Replaced;
+                case SvnStatus.Added:
+                    if (item != null && item.HasCopyableHistory)
+                        return PendingChangeKind.Copied;
+
+                    return PendingChangeKind.Added;
+                case SvnStatus.Deleted:
+                    return PendingChangeKind.Deleted;
+                case SvnStatus.Missing:
+                    return PendingChangeKind.Missing;
+                case SvnStatus.Obstructed:
+                    return PendingChangeKind.Obstructed;
+                case SvnStatus.Incomplete:
+                    return PendingChangeKind.Incomplete;
+
+                case SvnStatus.None:
+                case SvnStatus.Normal:
+                    // No usefull status / No change
+                    break;
+                case SvnStatus.Zero:
+                case SvnStatus.Conflicted:
+                default:
+                    throw new InvalidOperationException("Invalid content status");
+            }
+
+            switch (propertyStatus)
+            {
+                case SvnStatus.Modified:
+                    return PendingChangeKind.PropertyModified;
+                case SvnStatus.Normal:
+                case SvnStatus.None:
+                    // No usefull status / No change
+                    break;
+                case SvnStatus.Zero:
+                case SvnStatus.Conflicted:
+                default:
+                    throw new InvalidOperationException("Invalid property status");
+            }
+
+            if (item != null)
+            {
+                if (item.IsDocumentDirty)
+                    return PendingChangeKind.EditorDirty;
+                else if (item.IsLocked)
+                    return PendingChangeKind.LockedOnly;
+            }
+
+            return PendingChangeKind.None;
+        }
     }
 
     /// <summary>
@@ -494,6 +523,6 @@ namespace Ankh.Scc
                 return false;
             }
             return Dictionary.TryGetValue(key, out value);
-        }
+        }        
     }
 }

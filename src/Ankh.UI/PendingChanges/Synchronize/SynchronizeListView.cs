@@ -6,6 +6,7 @@ using Ankh.UI.VSSelectionControls;
 using System.Drawing;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges.Synchronize
 {    
@@ -25,7 +26,18 @@ namespace Ankh.UI.PendingChanges.Synchronize
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set { _context = value; SelectionPublishServiceProvider = value; }
+            set 
+            { 
+                _context = value; 
+                SelectionPublishServiceProvider = value;
+
+                if (value != null && SmallImageList == null)
+                {
+                    IFileIconMapper mapper = value.GetService<IFileIconMapper>();
+                    SmallImageList = mapper.ImageList;
+                    StateImageList = mapper.StateImageList;
+                }
+            }
         }
 
         protected override void OnResolveItem(ListViewWithSelection<SynchronizeListItem>.ResolveItemEventArgs e)

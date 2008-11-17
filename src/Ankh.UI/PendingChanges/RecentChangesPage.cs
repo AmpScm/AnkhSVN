@@ -30,11 +30,7 @@ namespace Ankh.UI.PendingChanges
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            syncView.Context = Context;
-
-            IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
-            syncView.SmallImageList = mapper.ImageList;
-            syncView.StateImageList = mapper.ImageList;
+            syncView.Context = Context;            
         }
 
         public override bool CanRefreshList
