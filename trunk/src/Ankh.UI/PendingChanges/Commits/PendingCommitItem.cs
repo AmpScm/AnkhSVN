@@ -6,7 +6,7 @@ using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
 
-namespace Ankh.UI.PendingChanges
+namespace Ankh.UI.PendingChanges.Commits
 {
     class PendingCommitItem : SmartListViewItem
     {
