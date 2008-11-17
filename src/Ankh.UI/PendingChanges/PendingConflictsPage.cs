@@ -22,5 +22,12 @@ namespace Ankh.UI.PendingChanges
                 return typeof(PendingConflictsPage);
             }
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            conflictView.Context = Context;
+            conflictEditSplitter.SplitterDistance += conflictEditSplitter.Panel2.Height - resolveBottomLabel.Bottom - 2;
+        }
     }
 }

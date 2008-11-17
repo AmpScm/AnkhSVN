@@ -237,6 +237,10 @@
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PendingChanges\Conflicts\ConflictItem.cs" />
+    <Compile Include="PendingChanges\Conflicts\ConflictListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PendingChanges\LogMessageEditor.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -565,14 +569,14 @@
     <Compile Include="PendingChanges\VSTextEditor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PendingChanges\PendingCommitItem.cs" />
+    <Compile Include="PendingChanges\Commits\PendingCommitItem.cs" />
     <Compile Include="PendingChanges\PendingCommitsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingCommitsPage.Designer.cs">
       <DependentUpon>PendingCommitsPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="PendingChanges\PendingCommitsView.cs">
+    <Compile Include="PendingChanges\Commits\PendingCommitsView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingConflictsPage.cs">

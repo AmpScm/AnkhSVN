@@ -38,7 +38,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lastRevLabel = new System.Windows.Forms.Label();
             this.lastRevBox = new System.Windows.Forms.TextBox();
-            this.pendingCommits = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
+            this.pendingCommits = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.projectColumn = new System.Windows.Forms.ColumnHeader();
             this.changeColumn = new System.Windows.Forms.ColumnHeader();
@@ -186,7 +186,7 @@
             this.pendingCommits.Size = new System.Drawing.Size(768, 214);
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
-            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
+            this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
             // 
             // PendingCommitsPage
             // 
@@ -218,7 +218,7 @@
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panel1;
-        private PendingCommitsView pendingCommits;
+        private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingCommits;
         private System.Windows.Forms.Label lastRevLabel;
         private System.Windows.Forms.TextBox lastRevBox;
     }

@@ -5,6 +5,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.Scc;
 using System.Windows.Forms;
+using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges.Commands
 {

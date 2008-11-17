@@ -13,7 +13,7 @@ using System.ComponentModel.Design;
 using Ankh.Commands;
 using Ankh.Ids;
 
-namespace Ankh.UI.PendingChanges
+namespace Ankh.UI.PendingChanges.Commits
 {
     public interface IPendingChangeSource
     {

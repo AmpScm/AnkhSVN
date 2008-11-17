@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.UI.PendingChanges.Commits;
+using Ankh.UI.PendingChanges.Synchronize;
 
 namespace Ankh.UI.PendingChanges.Commands
 {

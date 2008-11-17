@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pendingList = new Ankh.UI.PendingChanges.PendingCommitsView(this.components);
+            this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
@@ -192,7 +192,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private Ankh.UI.PendingChanges.PendingCommitsView pendingList;
+        private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingList;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
