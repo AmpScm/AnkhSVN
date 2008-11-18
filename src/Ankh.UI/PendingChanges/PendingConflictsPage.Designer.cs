@@ -112,7 +112,7 @@
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.topLayoutPanel.Size = new System.Drawing.Size(764, 21);
-            this.topLayoutPanel.TabIndex = 1;
+            this.topLayoutPanel.TabIndex = 0;
             // 
             // lastRevBox
             // 
@@ -122,7 +122,7 @@
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
             this.lastRevBox.Size = new System.Drawing.Size(74, 13);
-            this.lastRevBox.TabIndex = 6;
+            this.lastRevBox.TabIndex = 2;
             this.lastRevBox.Visible = false;
             // 
             // label1
@@ -132,7 +132,7 @@
             this.label1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 1;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Conflicts:";
             // 
             // lastRevLabel
@@ -143,7 +143,7 @@
             this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(66, 13);
-            this.lastRevLabel.TabIndex = 5;
+            this.lastRevLabel.TabIndex = 1;
             this.lastRevLabel.Text = "Last update:";
             this.lastRevLabel.Visible = false;
             // 
@@ -174,10 +174,9 @@
             // conflictEditSplitter.Panel2
             // 
             this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePannel);
-            this.conflictEditSplitter.Panel2.MouseEnter += new System.EventHandler(this.conflictEditSplitter_Panel2_MouseEnter);
             this.conflictEditSplitter.Panel2MinSize = 32;
             this.conflictEditSplitter.Size = new System.Drawing.Size(768, 274);
-            this.conflictEditSplitter.SplitterDistance = 220;
+            this.conflictEditSplitter.SplitterDistance = 224;
             this.conflictEditSplitter.SplitterWidth = 2;
             this.conflictEditSplitter.TabIndex = 0;
             // 
@@ -188,11 +187,12 @@
             this.conflictView.Location = new System.Drawing.Point(0, 0);
             this.conflictView.Margin = new System.Windows.Forms.Padding(0);
             this.conflictView.Name = "conflictView";
-            this.conflictView.Size = new System.Drawing.Size(768, 220);
-            this.conflictView.TabIndex = 1;
+            this.conflictView.Size = new System.Drawing.Size(768, 224);
+            this.conflictView.TabIndex = 0;
             // 
             // resolvePannel
             // 
+            this.resolvePannel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolvePannel.BackColor = System.Drawing.Color.SkyBlue;
             this.resolvePannel.Controls.Add(this.resolveButton0);
             this.resolvePannel.Controls.Add(this.resolveButton1);
@@ -206,123 +206,151 @@
             this.resolvePannel.Controls.Add(this.resolveBottomLabel);
             this.resolvePannel.Controls.Add(this.resolveLinkLabel);
             this.resolvePannel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resolvePannel.Enabled = false;
             this.resolvePannel.Location = new System.Drawing.Point(0, 0);
             this.resolvePannel.Name = "resolvePannel";
-            this.resolvePannel.Size = new System.Drawing.Size(768, 52);
+            this.resolvePannel.Size = new System.Drawing.Size(768, 48);
             this.resolvePannel.TabIndex = 0;
             // 
             // resolveButton0
             // 
             this.resolveButton0.AutoSize = true;
+            this.resolveButton0.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton0.Enabled = false;
             this.resolveButton0.Location = new System.Drawing.Point(3, 1);
             this.resolveButton0.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton0.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton0.Name = "resolveButton0";
             this.resolveButton0.Size = new System.Drawing.Size(75, 23);
             this.resolveButton0.TabIndex = 0;
+            this.resolveButton0.Text = " ";
             this.resolveButton0.UseVisualStyleBackColor = true;
             // 
             // resolveButton1
             // 
             this.resolveButton1.AutoSize = true;
+            this.resolveButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton1.Enabled = false;
             this.resolveButton1.Location = new System.Drawing.Point(84, 1);
             this.resolveButton1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton1.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton1.Name = "resolveButton1";
             this.resolveButton1.Size = new System.Drawing.Size(75, 23);
             this.resolveButton1.TabIndex = 1;
+            this.resolveButton1.Text = " ";
             this.resolveButton1.UseVisualStyleBackColor = true;
             // 
             // resolveButton2
             // 
             this.resolveButton2.AutoSize = true;
+            this.resolveButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton2.Enabled = false;
             this.resolveButton2.Location = new System.Drawing.Point(165, 1);
             this.resolveButton2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton2.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton2.Name = "resolveButton2";
             this.resolveButton2.Size = new System.Drawing.Size(75, 23);
             this.resolveButton2.TabIndex = 2;
+            this.resolveButton2.Text = " ";
             this.resolveButton2.UseVisualStyleBackColor = true;
             // 
             // resolveButton3
             // 
             this.resolveButton3.AutoSize = true;
+            this.resolveButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton3.Enabled = false;
             this.resolveButton3.Location = new System.Drawing.Point(246, 1);
             this.resolveButton3.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton3.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton3.Name = "resolveButton3";
             this.resolveButton3.Size = new System.Drawing.Size(75, 23);
             this.resolveButton3.TabIndex = 3;
+            this.resolveButton3.Text = " ";
             this.resolveButton3.UseVisualStyleBackColor = true;
             // 
             // resolveButton4
             // 
             this.resolveButton4.AutoSize = true;
+            this.resolveButton4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton4.Enabled = false;
             this.resolveButton4.Location = new System.Drawing.Point(327, 1);
             this.resolveButton4.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton4.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton4.Name = "resolveButton4";
             this.resolveButton4.Size = new System.Drawing.Size(75, 23);
             this.resolveButton4.TabIndex = 4;
+            this.resolveButton4.Text = " ";
             this.resolveButton4.UseVisualStyleBackColor = true;
             // 
             // resolveButton5
             // 
             this.resolveButton5.AutoSize = true;
+            this.resolveButton5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton5.Enabled = false;
             this.resolveButton5.Location = new System.Drawing.Point(408, 1);
             this.resolveButton5.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton5.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton5.Name = "resolveButton5";
             this.resolveButton5.Size = new System.Drawing.Size(75, 23);
             this.resolveButton5.TabIndex = 5;
+            this.resolveButton5.Text = " ";
             this.resolveButton5.UseVisualStyleBackColor = true;
             // 
             // resolveButton6
             // 
+            this.resolveButton6.AutoSize = true;
+            this.resolveButton6.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton6.Enabled = false;
-            this.resolveButton6.Location = new System.Drawing.Point(489, 3);
+            this.resolveButton6.Location = new System.Drawing.Point(489, 1);
+            this.resolveButton6.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton6.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton6.Name = "resolveButton6";
             this.resolveButton6.Size = new System.Drawing.Size(75, 23);
-            this.resolveButton6.TabIndex = 9;
+            this.resolveButton6.TabIndex = 6;
+            this.resolveButton6.Text = " ";
             this.resolveButton6.UseVisualStyleBackColor = true;
             // 
             // resolveButton7
             // 
+            this.resolveButton7.AutoSize = true;
+            this.resolveButton7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.resolveButton7.Enabled = false;
             this.resolvePannel.SetFlowBreak(this.resolveButton7, true);
-            this.resolveButton7.Location = new System.Drawing.Point(570, 3);
+            this.resolveButton7.Location = new System.Drawing.Point(570, 1);
+            this.resolveButton7.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.resolveButton7.MinimumSize = new System.Drawing.Size(75, 23);
             this.resolveButton7.Name = "resolveButton7";
             this.resolveButton7.Size = new System.Drawing.Size(75, 23);
-            this.resolveButton7.TabIndex = 10;
+            this.resolveButton7.TabIndex = 7;
+            this.resolveButton7.Text = " ";
             this.resolveButton7.UseVisualStyleBackColor = true;
             // 
             // resolveTopLabel
             // 
             this.resolveTopLabel.AutoSize = true;
             this.resolvePannel.SetFlowBreak(this.resolveTopLabel, true);
-            this.resolveTopLabel.Location = new System.Drawing.Point(3, 29);
+            this.resolveTopLabel.Location = new System.Drawing.Point(3, 25);
             this.resolveTopLabel.Name = "resolveTopLabel";
             this.resolveTopLabel.Size = new System.Drawing.Size(86, 13);
-            this.resolveTopLabel.TabIndex = 6;
+            this.resolveTopLabel.TabIndex = 8;
             this.resolveTopLabel.Text = "resolveTopLabel";
+            this.resolveTopLabel.UseMnemonic = false;
             // 
             // resolveBottomLabel
             // 
             this.resolveBottomLabel.AutoSize = true;
-            this.resolveBottomLabel.Location = new System.Drawing.Point(3, 42);
+            this.resolveBottomLabel.Location = new System.Drawing.Point(3, 38);
             this.resolveBottomLabel.Name = "resolveBottomLabel";
             this.resolveBottomLabel.Size = new System.Drawing.Size(35, 13);
-            this.resolveBottomLabel.TabIndex = 7;
+            this.resolveBottomLabel.TabIndex = 9;
             this.resolveBottomLabel.Text = "label3";
             // 
             // resolveLinkLabel
             // 
             this.resolveLinkLabel.AutoSize = true;
-            this.resolveLinkLabel.Location = new System.Drawing.Point(44, 42);
+            this.resolveLinkLabel.Location = new System.Drawing.Point(44, 38);
             this.resolveLinkLabel.Name = "resolveLinkLabel";
             this.resolveLinkLabel.Size = new System.Drawing.Size(0, 13);
-            this.resolveLinkLabel.TabIndex = 8;
+            this.resolveLinkLabel.TabIndex = 10;
             // 
             // PendingConflictsPage
             // 

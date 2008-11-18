@@ -83,10 +83,16 @@ namespace Ankh.UI.PendingChanges
                 BackColor = color;
 
             if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+            {
                 pendingChangesTabs.BackColor = color;
+                pendingChangesTabs.OverflowButton.BackColor = color;                
+            }
 
             if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+            {
                 pendingChangesTabs.ForeColor = color;
+                pendingChangesTabs.OverflowButton.ForeColor = color;
+            }
         }
 
         void ShowPanel(PendingChangesPage page, bool select)
