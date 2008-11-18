@@ -25,6 +25,7 @@ using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
 using Ankh.Ids;
+using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges
 {
