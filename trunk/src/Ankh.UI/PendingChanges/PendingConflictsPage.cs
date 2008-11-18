@@ -25,34 +25,37 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        bool _loaded;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             conflictView.Context = Context;
-            conflictEditSplitter.SplitterDistance += conflictEditSplitter.Panel2.Height - resolveBottomLabel.Bottom - 2;
-
             IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
             Color c;
-            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_PANEL_TITLEBAR, out c))
+            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
             {
                 resolvePannel.BackColor = c;
             }
 
-            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_PANEL_TITLEBAR_TEXT, out c))
+            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
             {
                 resolvePannel.ForeColor = c;
             }
+
+            ResizeToFit();
+            _loaded = true;
         }
 
-        private void conflictEditSplitter_Panel2_MouseEnter(object sender, EventArgs e)
+        protected override void OnSizeChanged(EventArgs e)
         {
-            IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
-            Color c;
-            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_PANEL_TITLEBAR, out c))
-            {
-                conflictEditSplitter.BackColor = c;// System.Drawing.SystemColors.ActiveCaption;
-                //flowLayoutPanel1.BackColor = conflictEditSplitter.BackColor;
-            }
+            base.OnSizeChanged(e);
+            if (_loaded)
+                ResizeToFit();
+        }
+
+        private void ResizeToFit()
+        {
+            conflictEditSplitter.SplitterDistance += conflictEditSplitter.Panel2.Height - resolveLinkLabel.Bottom - resolveLinkLabel.Margin.Bottom;
         }
     }
 }
