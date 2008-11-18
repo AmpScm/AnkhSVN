@@ -37,7 +37,7 @@
             this.updateTime = new System.Windows.Forms.Label();
             this.conflictEditSplitter = new System.Windows.Forms.SplitContainer();
             this.conflictView = new Ankh.UI.PendingChanges.Conflicts.ConflictListView();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.resolvePannel = new System.Windows.Forms.FlowLayoutPanel();
             this.resolveButton0 = new System.Windows.Forms.Button();
             this.resolveButton1 = new System.Windows.Forms.Button();
             this.resolveButton2 = new System.Windows.Forms.Button();
@@ -57,7 +57,7 @@
             this.conflictEditSplitter.Panel1.SuspendLayout();
             this.conflictEditSplitter.Panel2.SuspendLayout();
             this.conflictEditSplitter.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
+            this.resolvePannel.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -173,11 +173,11 @@
             // 
             // conflictEditSplitter.Panel2
             // 
-            this.conflictEditSplitter.Panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.conflictEditSplitter.Panel2.Controls.Add(this.flowLayoutPanel1);
+            this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePannel);
+            this.conflictEditSplitter.Panel2.MouseEnter += new System.EventHandler(this.conflictEditSplitter_Panel2_MouseEnter);
             this.conflictEditSplitter.Panel2MinSize = 32;
             this.conflictEditSplitter.Size = new System.Drawing.Size(768, 274);
-            this.conflictEditSplitter.SplitterDistance = 216;
+            this.conflictEditSplitter.SplitterDistance = 220;
             this.conflictEditSplitter.SplitterWidth = 2;
             this.conflictEditSplitter.TabIndex = 0;
             // 
@@ -188,28 +188,29 @@
             this.conflictView.Location = new System.Drawing.Point(0, 0);
             this.conflictView.Margin = new System.Windows.Forms.Padding(0);
             this.conflictView.Name = "conflictView";
-            this.conflictView.Size = new System.Drawing.Size(768, 216);
+            this.conflictView.Size = new System.Drawing.Size(768, 220);
             this.conflictView.TabIndex = 1;
             // 
-            // flowLayoutPanel1
+            // resolvePannel
             // 
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton0);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton1);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton2);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton3);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton4);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton5);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton6);
-            this.flowLayoutPanel1.Controls.Add(this.resolveButton7);
-            this.flowLayoutPanel1.Controls.Add(this.resolveTopLabel);
-            this.flowLayoutPanel1.Controls.Add(this.resolveBottomLabel);
-            this.flowLayoutPanel1.Controls.Add(this.resolveLinkLabel);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Enabled = false;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(768, 56);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.resolvePannel.BackColor = System.Drawing.Color.SkyBlue;
+            this.resolvePannel.Controls.Add(this.resolveButton0);
+            this.resolvePannel.Controls.Add(this.resolveButton1);
+            this.resolvePannel.Controls.Add(this.resolveButton2);
+            this.resolvePannel.Controls.Add(this.resolveButton3);
+            this.resolvePannel.Controls.Add(this.resolveButton4);
+            this.resolvePannel.Controls.Add(this.resolveButton5);
+            this.resolvePannel.Controls.Add(this.resolveButton6);
+            this.resolvePannel.Controls.Add(this.resolveButton7);
+            this.resolvePannel.Controls.Add(this.resolveTopLabel);
+            this.resolvePannel.Controls.Add(this.resolveBottomLabel);
+            this.resolvePannel.Controls.Add(this.resolveLinkLabel);
+            this.resolvePannel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.resolvePannel.Enabled = false;
+            this.resolvePannel.Location = new System.Drawing.Point(0, 0);
+            this.resolvePannel.Name = "resolvePannel";
+            this.resolvePannel.Size = new System.Drawing.Size(768, 52);
+            this.resolvePannel.TabIndex = 0;
             // 
             // resolveButton0
             // 
@@ -289,7 +290,7 @@
             // resolveButton7
             // 
             this.resolveButton7.Enabled = false;
-            this.flowLayoutPanel1.SetFlowBreak(this.resolveButton7, true);
+            this.resolvePannel.SetFlowBreak(this.resolveButton7, true);
             this.resolveButton7.Location = new System.Drawing.Point(570, 3);
             this.resolveButton7.Name = "resolveButton7";
             this.resolveButton7.Size = new System.Drawing.Size(75, 23);
@@ -299,7 +300,7 @@
             // resolveTopLabel
             // 
             this.resolveTopLabel.AutoSize = true;
-            this.flowLayoutPanel1.SetFlowBreak(this.resolveTopLabel, true);
+            this.resolvePannel.SetFlowBreak(this.resolveTopLabel, true);
             this.resolveTopLabel.Location = new System.Drawing.Point(3, 29);
             this.resolveTopLabel.Name = "resolveTopLabel";
             this.resolveTopLabel.Size = new System.Drawing.Size(86, 13);
@@ -339,8 +340,8 @@
             this.conflictEditSplitter.Panel1.ResumeLayout(false);
             this.conflictEditSplitter.Panel2.ResumeLayout(false);
             this.conflictEditSplitter.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
+            this.resolvePannel.ResumeLayout(false);
+            this.resolvePannel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -356,7 +357,7 @@
         private System.Windows.Forms.Label updateTime;
         private System.Windows.Forms.SplitContainer conflictEditSplitter;
         private Ankh.UI.PendingChanges.Conflicts.ConflictListView conflictView;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel resolvePannel;
         private System.Windows.Forms.Button resolveButton0;
         private System.Windows.Forms.Button resolveButton1;
         private System.Windows.Forms.Button resolveButton2;
