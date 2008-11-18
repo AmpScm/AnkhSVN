@@ -237,7 +237,11 @@ namespace Ankh.Scc
             ra.Depth = SvnDepth.Empty;
             ra.ThrowOnError = false;
 
-            _client.Revert(path, ra);
+            // Our callers should move away the file, but we can't be to sure here
+            using (MoveAway(path, true))
+            {
+                _client.Revert(path, ra);
+            }
         }
 
         /// <summary>
@@ -418,9 +422,9 @@ namespace Ankh.Scc
                     {
                         setReadOnly = (File.GetAttributes(toPath) & FileAttributes.ReadOnly) != (FileAttributes)0;
                     }
-                }
 
-                MaybeRevertReplaced(toPath);
+                    MaybeRevertReplaced(toPath);
+                }                
 
                 if (setReadOnly)
                     File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
