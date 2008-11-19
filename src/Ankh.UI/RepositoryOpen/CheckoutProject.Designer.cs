@@ -40,11 +40,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.dirIco = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.version = new System.Windows.Forms.Label();
-            this.browseVersionButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.version = new Ankh.UI.PathSelector.VersionSelector();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).BeginInit();
             this.locationIcon.SuspendLayout();
@@ -177,43 +175,12 @@
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.version);
-            this.groupBox3.Controls.Add(this.browseVersionButton);
-            this.groupBox3.Controls.Add(this.label1);
             this.groupBox3.Location = new System.Drawing.Point(12, 136);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(525, 43);
+            this.groupBox3.Size = new System.Drawing.Size(525, 48);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Version:";
-            // 
-            // version
-            // 
-            this.version.AutoSize = true;
-            this.version.Location = new System.Drawing.Point(90, 19);
-            this.version.Name = "version";
-            this.version.Size = new System.Drawing.Size(36, 13);
-            this.version.TabIndex = 1;
-            this.version.Text = "Latest";
-            // 
-            // browseVersionButton
-            // 
-            this.browseVersionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseVersionButton.Enabled = false;
-            this.browseVersionButton.Location = new System.Drawing.Point(495, 13);
-            this.browseVersionButton.Name = "browseVersionButton";
-            this.browseVersionButton.Size = new System.Drawing.Size(24, 25);
-            this.browseVersionButton.TabIndex = 2;
-            this.browseVersionButton.Text = "...";
-            this.browseVersionButton.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Version:";
             // 
             // cancelButton
             // 
@@ -236,6 +203,14 @@
             this.okButton.TabIndex = 3;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // version
+            // 
+            this.version.Location = new System.Drawing.Point(93, 13);
+            this.version.Name = "version";
+            this.version.Size = new System.Drawing.Size(427, 29);
+            this.version.SvnOrigin = null;
+            this.version.TabIndex = 1;
             // 
             // CheckoutProject
             // 
@@ -263,7 +238,6 @@
             this.locationIcon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dirIco)).EndInit();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -280,12 +254,10 @@
         private System.Windows.Forms.TextBox directory;
         private System.Windows.Forms.Button browseDirectoryButton;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button browseVersionButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label version;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.ComboBox checkOutFrom;
         private System.Windows.Forms.Label projectLabel;
+        private Ankh.UI.PathSelector.VersionSelector version;
     }
 }
