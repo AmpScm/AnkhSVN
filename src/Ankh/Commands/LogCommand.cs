@@ -111,7 +111,7 @@ namespace Ankh.Commands
                     i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
                     {
-                        if (item == null || item.Uri == null)
+                        if (item == null || item.Origin == null)
                             continue;
                         i++;
                         if (i > 1)
