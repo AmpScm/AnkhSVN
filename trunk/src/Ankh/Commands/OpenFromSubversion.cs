@@ -105,6 +105,7 @@ namespace Ankh.Commands
                 dlg.ProjectUri = selectedUri;
                 dlg.RepositoryRootUri = rootUri;
                 dlg.SelectedPath = newPath;
+                dlg.SvnOrigin = new SvnOrigin(selectedUri, rootUri);
                 dlg.HandleCreated += delegate
                 {
                     FindRoot(e.Context, selectedUri, dlg);
@@ -134,7 +135,7 @@ namespace Ankh.Commands
                 if (scc != null)
                     scc.RegisterAsPrimarySccProvider(); // Make us the current SCC provider!
 
-                CheckOutAndOpenSolution(e, dlg.ProjectTop, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
+                CheckOutAndOpenSolution(e, dlg.ProjectTop, null, dlg.ProjectTop, dlg.SelectedPath, dlg.ProjectUri);
 
                 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));
 
@@ -151,11 +152,11 @@ namespace Ankh.Commands
             }
         }
 
-        private void CheckOutAndOpenSolution(CommandEventArgs e, SvnUriTarget checkoutLocation, Uri projectTop, string localDir, Uri projectUri)
+        private void CheckOutAndOpenSolution(CommandEventArgs e, SvnUriTarget checkoutLocation, SvnRevision revision, Uri projectTop, string localDir, Uri projectUri)
         {
             IProgressRunner runner = e.GetService<IProgressRunner>();
 
-            runner.Run("Checking Out Solution", delegate(object sender, ProgressWorkerArgs ee) { PerformCheckout(ee, checkoutLocation, localDir); });
+            runner.Run("Checking Out Solution", delegate(object sender, ProgressWorkerArgs ee) { PerformCheckout(ee, checkoutLocation, revision, localDir); });
 
             Uri file = projectTop.MakeRelativeUri(projectUri);
 
@@ -197,9 +198,10 @@ namespace Ankh.Commands
             }
         }
 
-        private void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, string localDir)
+        private void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, SvnRevision revision, string localDir)
         {
             SvnCheckOutArgs a = new SvnCheckOutArgs();
+            a.Revision = revision;
 
             e.Client.CheckOut(projectTop, localDir, a);            
         }

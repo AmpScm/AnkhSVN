@@ -9,6 +9,8 @@ using System.Collections;
 using Ankh.VS;
 using System.IO;
 using SharpSvn;
+using Ankh.Scc;
+using Ankh.UI.SccManagement;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -18,6 +20,7 @@ namespace Ankh.UI.RepositoryOpen
         public CheckoutProject()
         {
             InitializeComponent();
+            version.Revision = SvnRevision.Head;
         }
 
         public IAnkhServiceProvider Context
@@ -35,6 +38,19 @@ namespace Ankh.UI.RepositoryOpen
 
         protected virtual void OnContextChanged(EventArgs e)
         {
+            version.Context = Context;
+        }
+
+        public SvnOrigin SvnOrigin
+        {
+            get { return version.SvnOrigin; }
+            set { version.SvnOrigin = value; }
+        }
+
+        public SvnRevision Revision
+        {
+            get { return version.Revision; }
+            set { version.Revision = value; }
         }
 
         public string SelectedPath
@@ -154,7 +170,24 @@ namespace Ankh.UI.RepositoryOpen
                     inner = new Uri(inner, "../");
                 }
 
+                checkOutFrom.Items.Add(inner);
+
                 // Ok, let's find some sensible default
+
+                // First use our generic guess algorithm as used by branching
+                RepositoryLayoutInfo li;
+                if (RepositoryUrlUtils.TryGuessLayout(Context, ProjectUri, out li))
+                {
+                    foreach (Uri uri in checkOutFrom.Items)
+                    {
+                        if (uri == li.WorkingRoot)
+                        {
+                            checkOutFrom.SelectedItem = uri;
+                            break;
+                        }
+                    }
+                }
+
                 if(checkOutFrom.SelectedIndex < 0)
                     foreach (Uri uri in checkOutFrom.Items)
                     {
@@ -207,6 +240,8 @@ namespace Ankh.UI.RepositoryOpen
 
                 if (checkOutFrom.SelectedIndex < 0 && checkOutFrom.Items.Count > 0)
                     checkOutFrom.SelectedIndex = 0;
+
+                version.Context = Context;
             }
         }            
     }
