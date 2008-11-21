@@ -296,6 +296,7 @@
     </Compile>
     <Compile Include="SvnLog\Commands\CompareWithWorkingCopy.cs" />
     <Compile Include="SvnLog\Commands\RevertChanges.cs" />
+    <Compile Include="SvnLog\Commands\ShowRevisionProperties.cs" />
     <Compile Include="SvnLog\LogDataSource.cs">
       <SubType>Component</SubType>
     </Compile>
