@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5595</title>
+<title>AnkhSVN-Daily Update - 2.0.5597</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5595</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5597</h1>
 
 
 <p>
@@ -12,13 +12,13 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1273/AnkhSvn-Daily-2.0.5595.277.msi">AnkhSVN 2.0.5595</a></h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1275/AnkhSvn-Daily-2.0.5597.278.msi">AnkhSVN 2.0.5597</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5595">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5597">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -141,26 +141,6 @@ selection from another control)</td></tr>
 <tr><td> </td><td class="r"><a id="5465" href="http://ankhsvn.net/rev/?r=5465">[r5465]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/LogControl.Designer.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/SvnLog/LogControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Threading refactoring in the log dialog. Move code to common locations
 and cleanup unnecessary threading overhead, as we always run in UI.</td></tr>
 <tr><td> </td><td class="r"><a id="5463" href="http://ankhsvn.net/rev/?r=5463">[r5463]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/BranchSolutionCommand.cs, src/Ankh.Scc/SvnSccContext.cs, src/Ankh.Services/Ankh.Services.csproj, src/Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated to Subversion 1.5.4 via SharpSvn 1.5004.861.</td></tr>
-<tr><td> </td><td class="r"><a id="5462" href="http://ankhsvn.net/rev/?r=5462">[r5462]</a></td><td class="a">sander</td><td class="f">src/Ankh.Scc/AnkhSccProvider.Projects.cs, src/Ankh.Scc/ProjectTracker.Solution.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure we mark the solution dirty when a project file is renamed (on disk)
-This fixes <a href="http://ankhsvn.net/issues/?id=531">issue #531</a></td></tr>
-<tr><td> </td><td class="r"><a id="5459" href="http://ankhsvn.net/rev/?r=5459">[r5459]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeSourceBasePage.cs, src/Ankh.UI/MergeWizard/MergeSourceBasePageControlImpl.cs, src/Ankh.UI/MergeWizard/MergeSummaryPageControl.cs, src/Ankh.UI/MergeWizard/MergeWizard.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix MergeWizard to use SvnOrigins where necesarry for the log infrastructure
-changes. This commit reverts the breakage of <a href="http://ankhsvn.net/rev/?r=5435">r5435</a>.</td></tr>
-<tr><td> </td><td class="r"><a id="5456" href="http://ankhsvn.net/rev/?r=5456">[r5456]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhDiff.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix automatically choosing the external diff tool on Show Changes and Diff. 
-This support was broken in <a href="http://ankhsvn.net/rev/?r=5453">r5453</a> when the configuration option of manually
-choosing external/internal was removed.</td></tr>
-<tr><td> </td><td class="r"><a id="5455" href="http://ankhsvn.net/rev/?r=5455">[r5455]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/ItemIgnore.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure IgnoreFilesInFolder really ignores all files in the folder</td></tr>
-<tr class="d"><td colspan="4">2008-10-22</td></tr>
-<tr><td> </td><td class="r"><a id="5453" href="http://ankhsvn.net/rev/?r=5453">[r5453]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/ResolveConflictCommand.cs, src/Ankh/Commands/ResolveConflictExternalCommand.cs, src/Ankh/Services/AnkhDiff.cs, src/Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove ChooseDiffMergeManual, because there's no way the user can set is, and it might be
-set to a value causing unwanted behavior (e.g. always internal diff when external diff 
-program is set)</td></tr>
-<tr><td> </td><td class="r"><a id="5452" href="http://ankhsvn.net/rev/?r=5452">[r5452]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/Commands/ShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Prefer external diff when running show changes from the log viewer</td></tr>
-<tr><td> </td><td class="r"><a id="5451" href="http://ankhsvn.net/rev/?r=5451">[r5451]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/Commands/CompareWithWorkingCopy.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Avoid a NullReferenceException when right-clicking when we're running log 
-against a URL (invoked from the repository explorer)</td></tr>
-<tr><td> </td><td class="r"><a id="5450" href="http://ankhsvn.net/rev/?r=5450">[r5450]</a></td><td class="a">sander</td><td class="f">src/Ankh.UI/SvnLog/Commands/ChangeLogMessage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix an exception when changing the log message on one repository with a 
-solution open that's in another repository</td></tr>
-<tr><td> </td><td class="r"><a id="5449" href="http://ankhsvn.net/rev/?r=5449">[r5449]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SvnSccContext.cs, src/Ankh.Scc/ProjectTracker.Rename.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When fixing directory renames, try to mark the directory as copied. We can
-only handle this case when the directory itself is passed as the first rename.
-But this is exactly the case specified in <a href="http://ankhsvn.net/issues/?id=525">issue #525</a>.</td></tr>
 
 </table>
 <!--/Recent changes-->
