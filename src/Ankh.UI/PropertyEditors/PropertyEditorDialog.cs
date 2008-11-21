@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Windows.Forms.Design;
 using SharpSvn;
+using Ankh.Scc;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -35,6 +36,12 @@ namespace Ankh.UI.PropertyEditors
         public PropertyEditorDialog(SvnItem svnItem) : this(svnItem.FullPath)
         {
             _currentNodeKind = svnItem.NodeKind;
+        }
+
+        public PropertyEditorDialog(SvnUriTarget target)
+            : this(target.ToString())
+        {
+            _currentNodeKind = SvnNodeKind.None;
         }
 
         public IAnkhServiceProvider Context

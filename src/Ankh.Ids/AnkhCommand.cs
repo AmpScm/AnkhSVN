@@ -245,5 +245,7 @@ namespace Ankh.Ids
 
         SolutionEditProperties,
         ProjectEditProperties,
+
+        LogShowRevisionProperties,
     }
 }
