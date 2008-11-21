@@ -444,6 +444,8 @@
                   text="&amp;Revert to this Revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
           <Button id="Cmd_LogRevertThisRevisions" name="LogRevertChangesFrom" priority="0xB300"
                   text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
+          <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
+                  text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="menu/Properties.png"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

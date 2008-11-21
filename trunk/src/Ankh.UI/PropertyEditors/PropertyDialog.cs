@@ -68,7 +68,10 @@ namespace Ankh.UI.PropertyEditors
         {
             SvnNodeKind allowed = propEditor.GetAllowedNodeKind();
             SvnNodeKind result =  allowed & _currentNodeKind;
-            bool doAdd = (result == _currentNodeKind);
+            bool doAdd = ((result == SvnNodeKind.None)
+                            && (allowed != SvnNodeKind.None)) ?
+                            false
+                            : result == _currentNodeKind;
             if (!doAdd)
             {
                 // Enable file properties on directories
@@ -84,7 +87,7 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <remarks>
-        /// Populates the field values.Uses the exsting <code>PropertItem</code> in edit mode.
+        /// Populates the field values.Uses the existing <code>PropertItem</code> in edit mode.
         /// </remarks>
         private void PopulateData()
         {
@@ -99,7 +102,10 @@ namespace Ankh.UI.PropertyEditors
             }
             else
             {
-                this.nameComboBox.SelectedIndex = 0;
+                if (this.nameComboBox.Items.Count > 0)
+                {
+                    this.nameComboBox.SelectedIndex = 0;
+                }
             }
         }
 
