@@ -34,9 +34,8 @@ namespace Ankh.Selection
         /// <summary>
         /// Gets the projects owning selected files
         /// </summary>
-        /// <param name="recursive">if set to <c>true</c> [recursive].</param>
         /// <returns></returns>
-        IEnumerable<SvnProject> GetOwnerProjects(bool recursive);
+        IEnumerable<SvnProject> GetOwnerProjects();
 
         /// <summary>
         /// Gets a list of currently selected projects

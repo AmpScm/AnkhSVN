@@ -50,14 +50,6 @@ namespace Ankh.Commands
                 foundOne = true;
                 yield return p;
             }
-
-            if (foundOne)
-                yield break;
-
-            foreach (SvnProject p in e.Selection.GetOwnerProjects(false))
-            {
-                yield return p;
-            }
         }
 
         public override void OnUpdate(CommandUpdateEventArgs e)
