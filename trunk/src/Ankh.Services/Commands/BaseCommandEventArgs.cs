@@ -11,6 +11,7 @@ namespace Ankh.Commands
     {
         readonly AnkhCommand _command;
         readonly AnkhContext _context;
+        CommandMapItem _mapItem;
 
         public BaseCommandEventArgs(AnkhCommand command, AnkhContext context)
         {
@@ -60,7 +61,7 @@ namespace Ankh.Commands
         /// </value>
         public bool IsInAutomation
         {
-            get 
+            get
             {
                 IAnkhRuntimeInfo runtimeInfo = Context.GetService<IAnkhRuntimeInfo>();
 
@@ -94,6 +95,11 @@ namespace Ankh.Commands
             where T : class
         {
             return Context.GetService<T>(serviceType);
+        }
+
+        internal void Prepare(CommandMapItem item)
+        {
+            _mapItem = item;
         }
     }
 }

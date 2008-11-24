@@ -5,12 +5,13 @@ using Ankh.Ids;
 
 namespace Ankh.Commands
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple=true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public sealed class CommandAttribute : Attribute
     {
         readonly AnkhCommand _command;
         readonly AnkhCommandContext _context;
         AnkhCommand _lastCommand;
+        CommandTarget _target;
 
         /// <summary>
         /// Defines the class or function as a handler of the specified <see cref="AnkhCommand"/>
@@ -42,13 +43,31 @@ namespace Ankh.Commands
             get { return _context; }
         }
 
+        /// <summary>
+        /// Gets or sets the last command.
+        /// </summary>
+        /// <value>The last command.</value>
         public AnkhCommand LastCommand
         {
             get { return _lastCommand; }
             set { _lastCommand = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the command target.
+        /// </summary>
+        /// <value>The command target.</value>
+        public CommandTarget CommandTarget
+        {
+            get { return _target; }
+            set { _target = value; }
+        }
+
         bool _showWhenDisabled;
+        /// <summary>
+        /// Gets or sets a value indicating whether [hide when disabled].
+        /// </summary>
+        /// <value><c>true</c> if [hide when disabled]; otherwise, <c>false</c>.</value>
         public bool HideWhenDisabled
         {
             get { return !_showWhenDisabled; }
@@ -99,7 +118,7 @@ namespace Ankh.Commands
         {
             if (LastCommand == AnkhCommand.None)
                 yield return Command;
-            else if(LastCommand < Command || ((int)LastCommand - (int)Command) > 256)
+            else if (LastCommand < Command || ((int)LastCommand - (int)Command) > 256)
                 throw new InvalidOperationException("Command range larger then 256 on range starting with" + Command.ToString());
             else
                 for (AnkhCommand c = Command; c <= LastCommand; c++)
