@@ -44,10 +44,8 @@ namespace Ankh.Commands
 
         IEnumerable<SvnProject> GetSelectedProjects(BaseCommandEventArgs e)
         {
-            bool foundOne = false;
             foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
             {
-                foundOne = true;
                 yield return p;
             }
         }

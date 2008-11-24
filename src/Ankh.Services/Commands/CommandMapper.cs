@@ -15,7 +15,7 @@ namespace Ankh.Commands
     {
         readonly Dictionary<AnkhCommand, CommandMapItem> _map;
         readonly AnkhCommandContext _commandContext;
-        
+
 
         public CommandMapper(IAnkhServiceProvider context)
             : base(context)
@@ -36,10 +36,12 @@ namespace Ankh.Commands
             if (_map.TryGetValue(command, out item))
             {
                 if (!item.AlwaysAvailable && !e.State.SccProviderActive)
-                    e.Enabled = false; 
+                    e.Enabled = false;
                 else
                     try
                     {
+                        e.Prepare(item);
+
                         item.OnUpdate(e);
                     }
                     catch (Exception ex)
@@ -55,7 +57,7 @@ namespace Ankh.Commands
                         throw;
                     }
 
-                if (item.HideWhenDisabled && !e.Enabled)
+                if (item.HiddenWhenDisabled && !e.Enabled)
                     e.Visible = false;
 
                 if (item.DynamicMenuEnd)
@@ -81,6 +83,8 @@ namespace Ankh.Commands
             {
                 try
                 {
+                    e.Prepare(item);
+
                     CommandUpdateEventArgs u = new CommandUpdateEventArgs(command, e.Context);
                     item.OnUpdate(u);
                     if (u.Enabled)
@@ -105,7 +109,7 @@ namespace Ankh.Commands
                 }
 
                 return item.IsHandled;
-            }            
+            }
 
             return false;
         }
@@ -226,13 +230,23 @@ namespace Ankh.Commands
 
                             Debug.Assert(item.ICommand == null || item.ICommand == instance, string.Format("No previous ICommand registered on the CommandMapItem for {0}", cmdAttr.Command));
 
-                            item.ICommand = instance; // hooks all events in compatibility mode
+                            item.ICommand = instance; // hooks all events via interface
                             item.AlwaysAvailable = cmdAttr.AlwaysAvailable;
-                            item.HideWhenDisabled = cmdAttr.HideWhenDisabled;
-                            item.ArgumentDefinition = cmdAttr.ArgumentDefinition;                            
+                            item.HiddenWhenDisabled = cmdAttr.HideWhenDisabled;
+                            item.CommandTarget = cmdAttr.CommandTarget;
+                            item.ArgumentDefinition = cmdAttr.ArgumentDefinition ?? CalculateDefinition(cmdAttr.CommandTarget);
                         }
                     }
                 }
+            }
+        }
+
+        static string CalculateDefinition(CommandTarget commandTarget)
+        {
+            switch (commandTarget)
+            {
+                default:
+                    return null;
             }
         }
 
@@ -271,8 +285,8 @@ namespace Ankh.Commands
             public string Name
             {
                 get { return "CommandMapper"; }
-                set { throw new InvalidOperationException();  }
-            }            
+                set { throw new InvalidOperationException(); }
+            }
         }
 
         [CLSCompliant(false)]
@@ -312,7 +326,7 @@ namespace Ankh.Commands
             {
                 updateArgs.UpdateFlags(ref cmdf);
             }
-                
+
             if (updateArgs.DynamicMenuEnd)
                 return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
@@ -324,7 +338,7 @@ namespace Ankh.Commands
             prgCmds[0].cmdf = (uint)cmdf;
 
             return 0; // S_OK
-        }        
+        }
 
         #region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
 
@@ -412,6 +426,6 @@ namespace Ankh.Commands
             s.Append(text);
             return s.ToString();
         }
-        #endregion        
+        #endregion
     }
 }
