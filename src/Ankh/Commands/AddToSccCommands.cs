@@ -72,7 +72,7 @@ namespace Ankh.Commands
             if (foundOne)
                 yield break;
 
-            foreach (SvnProject pr in iSelectionContext.GetOwnerProjects(false))
+            foreach (SvnProject pr in iSelectionContext.GetOwnerProjects())
             {
                 yield return pr;
             }
