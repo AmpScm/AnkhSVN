@@ -77,6 +77,7 @@
             this.pendingList.Name = "pendingList";
             this.pendingList.Size = new System.Drawing.Size(600, 185);
             this.pendingList.TabIndex = 0;
+            this.pendingList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pendingList_ItemChecked);
             // 
             // textBox1
             // 
@@ -159,6 +160,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.okButton.Enabled = false;
             this.okButton.Location = new System.Drawing.Point(456, 365);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
