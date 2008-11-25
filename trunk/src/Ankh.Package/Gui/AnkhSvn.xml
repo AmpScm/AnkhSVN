@@ -309,7 +309,7 @@
 
           <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
                 text="Refres&amp;h"
-                toolTip="Refresh this view." iconFile="menu/Refresh.png"/>
+                toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
         </Group>
         <Group id="Grp_ItemIgnore" priority="0xE000">
           <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
@@ -354,7 +354,7 @@
                 toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" />
           <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0x600"
                 text="Refres&amp;h"
-                toolTip="Refresh this item." iconFile="menu/Refresh.png"/>
+                toolTip="Refresh this item." iconFile="PendingChanges/Refresh.png"/>
           <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x700"
                 text="In &amp;Visual Studio"
                 toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
