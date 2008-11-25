@@ -175,5 +175,11 @@ namespace Ankh.UI.SccManagement
         {
             LoadChanges(new ItemLister(Context, iEnumerable));
         }
+
+        private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            okButton.Enabled = sender is ListView
+                && ((ListView) sender).CheckedItems.Count > 0;
+        }
     }
 }
