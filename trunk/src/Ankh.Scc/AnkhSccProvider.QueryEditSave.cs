@@ -226,7 +226,8 @@ namespace Ankh.Scc
                 {
                     string file = rgpszMkDocuments[i];
 
-                    if (!SvnItem.IsValidPath(file) || file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                    if (!SvnItem.IsValidPath(file) || 
+                        file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
                         continue; // Just allow temporary files; don't look them up in our tables
 
                     foreach (SvnItem item in GetAllDocumentItems(rgpszMkDocuments[i]))
@@ -296,7 +297,8 @@ namespace Ankh.Scc
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
             if (!string.IsNullOrEmpty(pszMkDocument) &&
-                StatusCache.IsValidPath(pszMkDocument) && !pszMkDocument.StartsWith(TempPathWithSeparator))
+                StatusCache.IsValidPath(pszMkDocument) && 
+                !pszMkDocument.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
             {
                 SvnItem item = StatusCache[pszMkDocument];
                 if (item != null)
@@ -332,7 +334,18 @@ namespace Ankh.Scc
 
             if (rgpszMkDocuments != null)
                 for (int i = 0; i < cFiles; i++)
-                    MarkDirty(rgpszMkDocuments[i], true);
+                {
+                    string file = rgpszMkDocuments[i];
+
+                    if (string.IsNullOrEmpty(file) || 
+                        !StatusCache.IsValidPath(file) || 
+                        file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    // Just handle all of them in a single request
+                    MarkDirty(rgpszMkDocuments, true);
+                    break;
+                }
 
             return VSConstants.S_OK;
         }
