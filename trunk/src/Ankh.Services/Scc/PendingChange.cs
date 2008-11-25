@@ -448,15 +448,19 @@ namespace Ankh.Scc
                     return PendingChangeKind.Obstructed;
                 case SvnStatus.Incomplete:
                     return PendingChangeKind.Incomplete;
-
                 case SvnStatus.None:
                 case SvnStatus.Normal:
+                case SvnStatus.Ignored:
                     // No usefull status / No change
                     break;
+                case SvnStatus.External:
+                    return PendingChangeKind.None; 
+
                 case SvnStatus.Zero:
                 case SvnStatus.Conflicted:
-                default:
-                    throw new InvalidOperationException("Invalid content status");
+                case SvnStatus.Merged:
+                default: // Give error on missed values
+                    throw new ArgumentOutOfRangeException("contentStatus", contentStatus, "Invalid content status");
             }
 
             switch (propertyStatus)
@@ -469,8 +473,8 @@ namespace Ankh.Scc
                     break;
                 case SvnStatus.Zero:
                 case SvnStatus.Conflicted:
-                default:
-                    throw new InvalidOperationException("Invalid property status");
+                default: // Give error on missed values
+                    throw new ArgumentOutOfRangeException("propertyStatus", propertyStatus, "Invalid content status");
             }
 
             if (item != null)

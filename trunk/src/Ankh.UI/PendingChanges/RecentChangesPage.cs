@@ -75,11 +75,8 @@ namespace Ankh.UI.PendingChanges
                         e.Client.Status(path, sa,
                             delegate(object s, SvnStatusEventArgs stat)
                             {
-                                if (stat.LocalContentStatus == SvnStatus.NotVersioned
-                                    && stat.RemoteContentStatus == SvnStatus.None)
-                                {
+                                if (IgnoreStatus(stat))
                                     return; // Not a synchronization item
-                                }
                                 else if (found.ContainsKey(stat.FullPath))
                                     return; // Already reported
 
@@ -91,6 +88,19 @@ namespace Ankh.UI.PendingChanges
                 }).Succeeded)
             {
                 RefreshFromList(resultList);
+            }
+        }
+
+        static bool IgnoreStatus(SvnStatusEventArgs stat)
+        {
+            switch(stat.LocalContentStatus)
+            {
+                case SvnStatus.NotVersioned:
+                case SvnStatus.Ignored:
+                case SvnStatus.External: // External root will be handled inside
+                    return (stat.RemoteContentStatus == SvnStatus.None);
+                default:
+                    return false;
             }
         }
 
