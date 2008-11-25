@@ -124,8 +124,8 @@ namespace Ankh.UI.PendingChanges.Synchronize
 
             string path = ss.ProjectRootWithSeparator;
 
-            if (item.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
-                return item.FullPath.Substring(path.Length);
+            if (!string.IsNullOrEmpty(path) && item.FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+                return item.FullPath.Substring(path.Length).Replace('\\', '/');
 
             return item.FullPath;
         }
