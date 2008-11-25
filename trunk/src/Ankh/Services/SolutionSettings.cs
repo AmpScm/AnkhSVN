@@ -14,6 +14,7 @@ using System.Security;
 using FileVersionInfo = System.Diagnostics.FileVersionInfo;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
+using Ankh.Ids;
 
 namespace Ankh.Settings
 {
@@ -210,7 +211,7 @@ namespace Ankh.Settings
                 {
                     switch (pv.Key)
                     {
-                        case "vs:project-root":
+                        case AnkhSccPropertyNames.ProjectRoot:
                             SetProjectRootViaProperty(cache, pv.StringValue);
                             break;
                         default:
@@ -439,7 +440,7 @@ namespace Ankh.Settings
                 SvnSetPropertyArgs ps = new SvnSetPropertyArgs();
                 ps.ThrowOnError = false;
 
-                client.SetProperty(SolutionFilename, "vs:project-root", solUri.MakeRelativeUri(resUri).ToString(), ps);
+                client.SetProperty(SolutionFilename, AnkhSccPropertyNames.ProjectRoot, solUri.MakeRelativeUri(resUri).ToString(), ps);
 
                 GetService<IFileStatusCache>().MarkDirty(SolutionFilename);
                 // The getter will reload the settings for us

@@ -215,7 +215,7 @@ namespace Ankh.Commands
                 using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
                 {
                     string value;
-                    if (client.TryGetProperty(selectedUri, "vs:project-root", out value))
+                    if (client.TryGetProperty(selectedUri, AnkhSccPropertyNames.ProjectRoot, out value))
                     {
                         if (dlg.IsHandleCreated)
                             dlg.Invoke((DoSomething)delegate
