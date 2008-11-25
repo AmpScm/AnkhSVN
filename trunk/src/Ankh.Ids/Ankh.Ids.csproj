@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30428</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -51,6 +51,7 @@
     <Compile Include="AnkhId.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AnkhSccPropertyNames.cs" />
     <Compile Include="AnkhToolBar.cs" />
     <Compile Include="AnkhToolWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
