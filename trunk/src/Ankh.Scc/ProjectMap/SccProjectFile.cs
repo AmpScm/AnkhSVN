@@ -9,7 +9,7 @@ namespace Ankh.Scc.ProjectMap
     /// <summary>
     /// A file contained one or more times in one or more Scc projects
     /// </summary>
-    [DebuggerDisplay("{Filename}, Projects={ProjectCount}, References={TotalReferenceCount}")]
+    [DebuggerDisplay("{FullPath}, Projects={ProjectCount}, References={TotalReferenceCount}")]
     sealed class SccProjectFile
     {
         readonly IAnkhServiceProvider _context;
