@@ -110,7 +110,8 @@ namespace Ankh.Scc
                     origDoc = SvnTools.GetNormalizedFullPath(origDoc);
 
                 if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
-                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)) // VS tries to add the file
+                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)
+                    && !origDoc.StartsWith(SccProvider.TempPathWithSeparator)) // VS tries to add the file
                 {
                     _fileOrigins[newDoc] = origDoc;
                 }

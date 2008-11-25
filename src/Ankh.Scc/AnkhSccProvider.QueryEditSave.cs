@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Ankh.Selection;
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
+using System.IO;
 
 namespace Ankh.Scc
 {
@@ -15,7 +16,7 @@ namespace Ankh.Scc
     /// 
     /// </summary>
     partial class AnkhSccProvider : IVsQueryEditQuerySave2
-	{
+    {
         readonly SortedList<string, int> _unreloadable = new SortedList<string, int>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
@@ -45,7 +46,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int DeclareReloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
-            if(!string.IsNullOrEmpty(pszMkDocument))
+            if (!string.IsNullOrEmpty(pszMkDocument))
                 lock (_unreloadable)
                 {
                     int n;
@@ -73,7 +74,7 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int DeclareUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
-            if(!string.IsNullOrEmpty(pszMkDocument))
+            if (!string.IsNullOrEmpty(pszMkDocument))
                 lock (_unreloadable)
                 {
                     int n;
@@ -171,6 +172,24 @@ namespace Ankh.Scc
             }
         }
 
+        string _tempPath;
+        internal string TempPathWithSeparator
+        {
+            get
+            {
+                if (_tempPath == null)
+                {
+                    string p = System.IO.Path.GetTempPath();
+
+                    if (p.Length > 0 && p[p.Length - 1] != Path.DirectorySeparatorChar)
+                        p += Path.DirectorySeparatorChar;
+
+                    _tempPath = p;
+                }
+                return _tempPath;
+            }
+        }
+
         /// <summary>
         /// Called by projects and editors before modifying a file
         /// The function allows the source control systems to take the necessary actions (checkout, flip attributes)
@@ -202,9 +221,14 @@ namespace Ankh.Scc
             HybridCollection<string> mustLockFiles = null;
             List<SvnItem> mustLockItems = null;
             if (rgpszMkDocuments != null)
-            {                
+            {
                 for (int i = 0; i < cFiles; i++)
                 {
+                    string file = rgpszMkDocuments[i];
+
+                    if (!SvnItem.IsValidPath(file) || file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                        continue; // Just allow temporary files; don't look them up in our tables
+
                     foreach (SvnItem item in GetAllDocumentItems(rgpszMkDocuments[i]))
                     {
                         if (!item.IsVersioned)
@@ -240,7 +264,7 @@ namespace Ankh.Scc
             if (mustLockItems != null)
             {
                 IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                
+
                 cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockItems, CommandPrompt.Always);
 
                 foreach (SvnItem i in mustLockItems)
@@ -271,7 +295,8 @@ namespace Ankh.Scc
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-            if (StatusCache.IsValidPath(pszMkDocument))
+            if (!string.IsNullOrEmpty(pszMkDocument) &&
+                StatusCache.IsValidPath(pszMkDocument) && !pszMkDocument.StartsWith(TempPathWithSeparator))
             {
                 SvnItem item = StatusCache[pszMkDocument];
                 if (item != null)
@@ -279,7 +304,7 @@ namespace Ankh.Scc
                     if (item.ReadOnlyMustLock)
                     {
                         IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                        cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[]{item});
+                        cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[] { item });
                         pdwQSResult = item.ReadOnlyMustLock ? (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel : (uint)tagVSQuerySaveResult.QSR_SaveOK;
                         return VSConstants.S_OK;
                     }
@@ -287,7 +312,7 @@ namespace Ankh.Scc
 
                 MarkDirty(pszMkDocument, true);
             }
-            
+
             return VSConstants.S_OK;
         }
 
