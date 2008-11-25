@@ -171,9 +171,7 @@ namespace Ankh
 
                 return;
             }
-            else if (
-                ((status.LocalContentStatus == SvnStatus.NotVersioned) || (status.LocalContentStatus == SvnStatus.Ignored)) 
-                && IsDirectory)
+            else if (MightBeNestedWorkingCopy(status) && IsDirectory)
             {
                 // A not versioned directory might be a working copy by itself!
 
@@ -336,6 +334,22 @@ namespace Ankh
                 SetState(SvnItemState.HasLockToken, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.HasLockToken);
+        }
+
+        static bool MightBeNestedWorkingCopy(AnkhStatus status)
+        {
+            switch(status.LocalContentStatus)
+            {
+                case SvnStatus.NotVersioned:
+                case SvnStatus.Ignored:
+                    return true;
+
+                // TODO: Handle obstructed and tree conflicts!
+                    // Obstructed can be directory on file location
+                    // Tree conflict can apply on non versioned item
+                default:
+                    return false;
+            }
         }
 
         void ScheduleUpdateNotify()
