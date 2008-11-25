@@ -342,9 +342,9 @@ namespace Ankh.Scc
                         file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
                         continue;
 
-                    // Just handle all of them in a single request
-                    MarkDirty(rgpszMkDocuments, true);
-                    break;
+                    // TODO: Maybe handle locking; but should be in OnQueryEdit anyway
+
+                    MarkDirty(file, true);
                 }
 
             return VSConstants.S_OK;
