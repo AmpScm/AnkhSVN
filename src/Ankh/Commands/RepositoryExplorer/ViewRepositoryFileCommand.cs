@@ -40,14 +40,7 @@ namespace Ankh.Commands
                 {
                     using (FileStream fs = File.Create(toFile))
                     {
-                        SvnUriTarget t;
-
-                        if (ri.Revision != null)
-                            t = new SvnUriTarget(ri.Uri, ri.Revision);
-                        else
-                            t = ri.Uri;
-
-                        ee.Client.Write(t, fs);
+                        ee.Client.Write(ri.Origin.Target, fs);
                     }
                 });
         }
