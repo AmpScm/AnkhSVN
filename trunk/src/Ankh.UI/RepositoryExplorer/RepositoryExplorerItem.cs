@@ -76,8 +76,6 @@ namespace Ankh.UI.RepositoryExplorer
             get { return _tn; }
         }
 
-        #region ISvnRepositoryItem Members
-
         SharpSvn.SvnNodeKind ISvnRepositoryItem.NodeKind
         {
             get
@@ -96,6 +94,7 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
+        [Browsable(false)]
         public SvnOrigin Origin
         {
             get
@@ -108,19 +107,6 @@ namespace Ankh.UI.RepositoryExplorer
                 throw new InvalidOperationException();
             }
         }
-
-        public Uri RepositoryRoot
-        {
-            get
-            {
-                SvnOrigin origin = Origin;
-
-                if (origin != null)
-                    return origin.RepositoryRoot;       
-                return null;
-            }
-        }
-        #endregion
 
         SharpSvn.SvnRevision ISvnRepositoryItem.Revision
         {
