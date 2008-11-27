@@ -31,47 +31,60 @@ namespace Ankh.PendingChanges
 
             if (ci != null)
                 ci.SetLastChange(null, null);
-                        
+
+            bool storeMessage = args.StoreMessageOnError;
             using (PendingCommitState state = new PendingCommitState(Context, changes))
-            {
-                state.KeepLocks = args.KeepLocks;
-                state.KeepChangeLists = args.KeepChangeLists;
-                state.LogMessage = args.LogMessage;
-
-                if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
-                    return false;
-
-                if (!PreCommit_VerifyLogMessage(state))
-                    return false;
-
-                if (!PreCommit_SaveDirty(state))
-                    return false;
-
-                if (!PreCommit_AddNewFiles(state))
-                    return false;
-
-                if (!PreCommit_DeleteMissingFiles(state))
-                    return false;
-
-                state.FlushState();
-
-                if (!PreCommit_AddNeededParents(state))
-                    return false;
-
-                if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
-                    return false;
-                // if(!PreCommit_....())
-                //  return;
-
-                bool ok = false;
-                using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
+                try
                 {
-                    dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
+                    state.KeepLocks = args.KeepLocks;
+                    state.KeepChangeLists = args.KeepChangeLists;
+                    state.LogMessage = args.LogMessage;
 
-                    if (Commit_CommitToRepository(state))
+                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
+                        return false;
+
+                    if (!PreCommit_VerifyLogMessage(state))
+                        return false;
+
+                    if (!PreCommit_SaveDirty(state))
+                        return false;
+
+                    if (!PreCommit_AddNewFiles(state))
+                        return false;
+
+                    if (!PreCommit_DeleteMissingFiles(state))
+                        return false;
+
+                    state.FlushState();
+
+                    if (!PreCommit_AddNeededParents(state))
+                        return false;
+
+                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
+                        return false;
+                    // if(!PreCommit_....())
+                    //  return;
+
+                    bool ok = false;
+                    using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
                     {
-                        ok = true;
+                        dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
 
+                        if (Commit_CommitToRepository(state))
+                        {
+                            storeMessage = true;
+                            ok = true;
+                        }
+
+                        dl.ReloadModified();
+                    }
+
+                    return ok;
+                }
+                finally
+                {
+                    if (storeMessage)
+                    {
                         if (!string.IsNullOrEmpty(state.LogMessage))
                         {
                             IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
@@ -81,15 +94,8 @@ namespace Ankh.PendingChanges
                                 config.GetRecentLogMessages().Add(state.LogMessage);
                             }
                         }
-
-                        //logMessageEditor.Text = ""; // Clear the existing logmessage when the commit succeeded                        
                     }
-
-                    dl.ReloadModified();
                 }
-
-                return ok;
-            }
         }
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
