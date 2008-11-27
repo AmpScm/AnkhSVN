@@ -33,6 +33,7 @@ namespace Ankh.Commands
                 if (dlg.ShowDialog(e.Context) == DialogResult.OK)
                 {
                     PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
+                    pca.StoreMessageOnError = true;
                     // TODO: Commit it!
                     List<PendingChange> toCommit = new List<PendingChange>(dlg.GetSelection());
                     dlg.FillArgs(pca);
