@@ -565,5 +565,10 @@ namespace Ankh.Scc.ProjectMap
             itemId = VSConstants.VSITEMID_NIL;
             return false;
         }
+
+        public override string ToString()
+        {
+            return UniqueProjectName;
+        }
     }
 }

@@ -4,12 +4,14 @@ using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.Scc.ProjectMap
 {
     /// <summary>
     /// Container of a coupling between a single project(1) and a file(ReferenceCount)
     /// </summary>
+    [DebuggerDisplay("{FileName}, Project={Project}")]
     sealed class SccProjectFileReference
     {
         readonly IAnkhServiceProvider _context;
