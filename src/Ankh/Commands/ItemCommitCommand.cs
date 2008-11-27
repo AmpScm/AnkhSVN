@@ -97,6 +97,7 @@ namespace Ankh.Commands
                     return;
 
                 PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
+                pca.StoreMessageOnError = true;
                 // TODO: Commit it!
                 List<PendingChange> toCommit = new List<PendingChange>(pcd.GetSelection());
                 pcd.FillArgs(pca);
