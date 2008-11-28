@@ -30,44 +30,44 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogMessageView));
-            this.logMessageEditor = new LogMessageEditor();
-            this.logMessageTextBox = new TextBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogMessageView));
+            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
+            this.logMessageTextBox = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
             // logMessageEditor
-			// 
+            // 
+            this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.logMessageEditor, "logMessageEditor");
-			this.logMessageEditor.BackColor = System.Drawing.SystemColors.Window;
-			this.logMessageEditor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.logMessageEditor.Name = "logMessageEditor";
-			this.logMessageEditor.ReadOnly = true;
+            this.logMessageEditor.ReadOnly = true;
+            this.logMessageEditor.Text = null;
             // 
             // logMessageTextBox
             // 
-            resources.ApplyResources(this.logMessageTextBox, "logMessageTextBox");
             this.logMessageTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.logMessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.logMessageTextBox, "logMessageTextBox");
             this.logMessageTextBox.Name = "logMessageTextBox";
             this.logMessageTextBox.ReadOnly = true;
-            this.logMessageTextBox.Visible = false;
-			// 
-			// label1
-			// 
-			resources.ApplyResources(this.label1, "label1");
-			this.label1.Name = "label1";
-			// 
-			// LogMessageView
-			// 
-			resources.ApplyResources(this, "$this");
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.logMessageEditor);
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
+            // 
+            // LogMessageView
+            // 
+            resources.ApplyResources(this, "$this");
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.logMessageEditor);
             this.Controls.Add(this.logMessageTextBox);
-			this.Controls.Add(this.label1);
-			this.Name = "LogMessageView";
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.Controls.Add(this.label1);
+            this.Name = "LogMessageView";
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
