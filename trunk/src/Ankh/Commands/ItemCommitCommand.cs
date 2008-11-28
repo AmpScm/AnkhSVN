@@ -35,7 +35,7 @@ namespace Ankh.Commands
                 }
                 else if (i.IsIgnored)
                     continue;
-                else if (i.InSolution)
+                else if (i.InSolution && i.IsVersionable)
                     return; // The file is 'to be added'
             }          
 

@@ -325,10 +325,11 @@ namespace Ankh.Commands
             {
                 SvnUpdateArgs ua = new SvnUpdateArgs();
                 ua.Revision = _rev;
-                ua.ThrowOnError = false;
                 ua.AllowObstructions = _allowUnversionedObstructions;
                 ua.IgnoreExternals = !_updateExternals;
                 e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
+                SvnUpdateResult result;
+                _result = null;
 
                 foreach(List<string> group in _groups)
                 {
@@ -338,14 +339,10 @@ namespace Ankh.Commands
                     // (sleep_for_timestamp fails its fast route)
                     foreach (string path in group)
                     {
-                        if (!e.Client.Update(path, ua, out _result) && ua.LastException != null)
-                        {
-                            e.Exception = ua.LastException;
-                            return;
-                        }
+                        e.Client.Update(path, ua, out result);
 
-                        if (ua.IsLastInvocationCanceled)
-                            return;
+                        if(_result == null)
+                            _result = result; // Return the primary update as version for output
                     }
                 }
             }
