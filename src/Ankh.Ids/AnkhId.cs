@@ -92,6 +92,7 @@ namespace Ankh.Ids
         public const string SccExplorerViewContext = "FD4828F6-49A3-4E2F-BF36-8304884219CA";
         public const string LogViewContext = "0D2CA125-6CDF-407A-9C03-E8427E27F34D";
 
+        public const string AnnotateContext = "61ADE608-F2F9-4983-AE28-623DE0DCA5C6";
         public const string DiffEditorId = "7C6FACCE-0C14-4A3E-BC69-15F3966EE312";
         public const string DynamicEditorId = "923F6990-98C1-4DD5-983E-25088C02975D";
         public const string DiffEditorViewId = "3D9F7A9D-F9D1-4DD6-A89F-C89312708923";
@@ -118,5 +119,6 @@ namespace Ankh.Ids
         public static readonly Guid DiffMergeContextGuid = new Guid(DiffMergeViewContext);
         public static readonly Guid SccExplorerContextGuid = new Guid(SccExplorerViewContext);
         public static readonly Guid LogContextGuid = new Guid(LogViewContext);
+        public static readonly Guid AnnotateContextGuid = new Guid(AnnotateContext);
     }
 }

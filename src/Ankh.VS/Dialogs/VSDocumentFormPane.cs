@@ -166,7 +166,7 @@ namespace Ankh.VS.Dialogs
     }
 
     [ComVisible(true), CLSCompliant(false)]
-    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget
+    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget, IAnkhEditorPane
     {
         readonly List<IOleCommandTarget> _targets = new List<IOleCommandTarget>();
         readonly VSEditorControl _form;
@@ -261,5 +261,14 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
+
+        public void AddCommandTarget(IOleCommandTarget target)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+
+            if (!_targets.Contains(target))
+                _targets.Add(target);
+        }
     }
 }

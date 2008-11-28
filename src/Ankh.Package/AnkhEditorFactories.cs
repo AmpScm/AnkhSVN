@@ -105,7 +105,7 @@ namespace Ankh.VSPackage
         {
             throw new NotImplementedException();
         }
-    }   
+    }
 
     [Guid(AnkhId.DynamicEditorId), ComVisible(true)]
     sealed class AnkhDynamicEditorFactory : AnkhEditorFactory, IAnkhDynamicEditorFactory
@@ -145,7 +145,20 @@ namespace Ankh.VSPackage
                 out hier, out id, out frame);
 
             if (_forms.Contains(form))
+            {
+                _forms.Pop();
                 throw new InvalidOperationException("Can't create dynamic editor (Already open?)");
+            }
+
+            object value;
+
+            VSDocumentFormPane pane = null;
+            if(ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out value)))
+            {
+                pane = value as VSDocumentFormPane;                                
+            }
+
+            ((IVSEditorControlInit)form).InitializedForm(hier, id, frame, pane);
 
             return frame;
         }

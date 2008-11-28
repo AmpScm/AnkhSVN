@@ -12,6 +12,8 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using System.Collections.ObjectModel;
+using Ankh.Ids;
+using Microsoft.VisualStudio;
 
 namespace Ankh.UI.Annotate
 {
@@ -43,6 +45,9 @@ namespace Ankh.UI.Annotate
                 SelectionChanged(this, EventArgs.Empty);
             // Set Notify that we have a selection, otherwise the first selection request fails.
             _map.NotifySelectionUpdated();
+
+            CommandContext = AnkhId.AnnotateContextGuid;
+            KeyboardContext = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2); // Editor
         }
 
         public void LoadFile(string projectFile, string exportedFile)

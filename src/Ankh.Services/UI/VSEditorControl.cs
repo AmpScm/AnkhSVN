@@ -4,12 +4,17 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using Ankh.VS;
+using Microsoft.VisualStudio.Shell.Interop;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.UI
 {
-    public class VSEditorControl : UserControl
+    public class VSEditorControl : UserControl, IVSEditorControlInit
     {
         IAnkhServiceProvider _context;
+        IAnkhEditorPane _pane;
+        IVsWindowFrame _frame;
 
         public VSEditorControl()
         {
@@ -18,7 +23,7 @@ namespace Ankh.UI
             MinimizeBox = false;
             ControlBox = false;
             FormBorderStyle = FormBorderStyle.None;*/
-        }        
+        }
 
         /// <summary>
         /// Gets or sets the context.
@@ -41,6 +46,38 @@ namespace Ankh.UI
             {
                 base.Text = value;
             }
+        }
+
+        private Guid GetGuid(__VSFPROPID __VSFPROPID)
+        {
+            if (_frame == null)
+                throw new InvalidOperationException();
+
+            Guid value;
+            Marshal.ThrowExceptionForHR((_frame.GetGuidProperty((int)__VSFPROPID, out value)));
+
+            return value;
+        }
+
+        private void SetGuid(__VSFPROPID __VSFPROPID, Guid value)
+        {
+            if (_frame == null)
+                throw new InvalidOperationException();
+
+            Marshal.ThrowExceptionForHR((_frame.SetGuidProperty((int)__VSFPROPID, ref value)));
+        }
+
+
+        public Guid KeyboardContext
+        {
+            get { return GetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings); }
+            set { SetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings, value); }
+        }
+
+        public Guid CommandContext
+        {
+            get { return GetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid); }
+            set { SetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid, value); }
         }
 
         /*/// <summary>
@@ -147,7 +184,7 @@ namespace Ankh.UI
 
             DynamicFactory.CreateEditor(fullPath, this);
             OnFrameCreated(EventArgs.Empty);
-        }        
+        }
 
         protected virtual void OnFrameCreated(EventArgs e)
         {
@@ -164,13 +201,47 @@ namespace Ankh.UI
             this.ResumeLayout(false);
         }
 
+        List<IOleCommandTarget> _targets;
+
         [CLSCompliant(false)]
-        public void AddCommandTarget(Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget commandTarget)
+        public void AddCommandTarget(IOleCommandTarget commandTarget)
         {
             if (commandTarget == null)
                 throw new ArgumentNullException("commandTarget");
+            else if (_pane == null)
+            {
+                if (_targets == null)
+                    _targets = new List<IOleCommandTarget>();
 
-            //throw new NotImplementedException();
+                _targets.Add(commandTarget);
+            }
+            else
+                _pane.AddCommandTarget(commandTarget);
         }
+
+
+        void IVSEditorControlInit.InitializedForm(Microsoft.VisualStudio.Shell.Interop.IVsUIHierarchy hier, uint id, IVsWindowFrame frame, IAnkhEditorPane pane)
+        {
+            _frame = frame;
+            _pane = pane;
+
+            if (_targets != null && pane != null)
+                foreach (IOleCommandTarget t in _targets)
+                    _pane.AddCommandTarget(t);
+        }
+
     }
+
+    [CLSCompliant(false)]
+    public interface IAnkhEditorPane
+    {
+        void AddCommandTarget(IOleCommandTarget target);
+    }
+
+    [CLSCompliant(false)]
+    public interface IVSEditorControlInit
+    {
+        void InitializedForm(IVsUIHierarchy hier, uint id, IVsWindowFrame frame, IAnkhEditorPane pane);
+    }
+
 }
