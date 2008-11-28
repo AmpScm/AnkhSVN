@@ -44,7 +44,7 @@ namespace Ankh.VSPackage
 
             VSEditorControl form = CreateForm();
 
-            VSDocumentInstance doc = new VSDocumentInstance(Context);
+            VSDocumentInstance doc = new VSDocumentInstance(Context, FactoryId);
             VSDocumentFormPane pane = new VSDocumentFormPane(Context, doc, form);
             ppunkDocView = Marshal.GetIUnknownForObject(pane);
             ppunkDocData = Marshal.GetIUnknownForObject(doc);
@@ -52,6 +52,8 @@ namespace Ankh.VSPackage
             pbstrEditorCaption = form.Text;
             return VSConstants.S_OK;
         }
+
+        protected abstract Guid FactoryId { get; }
 
         protected abstract VSEditorControl CreateForm();
 
@@ -85,6 +87,11 @@ namespace Ankh.VSPackage
             : base(package)
         {
 
+        }
+
+        protected override Guid FactoryId
+        {
+            get { return new Guid(AnkhId.DiffEditorId); }
         }
 
         public override int MapLogicalView(ref Guid rguidLogicalView, out string pbstrPhysicalView)
@@ -122,6 +129,11 @@ namespace Ankh.VSPackage
         }
 
         #region IAnkhDynamicEditorFactory Members
+
+        protected override Guid FactoryId
+        {
+            get { return new Guid(AnkhId.DynamicEditorId); }
+        }
 
         /// <summary>
         /// Creates the editor.

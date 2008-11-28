@@ -21,55 +21,59 @@ namespace Ankh.VS.Dialogs
     [ComVisible(true), CLSCompliant(false)]
     public sealed class VSDocumentInstance : AnkhService/*, IOleCommandTarget*/, IVsPersistDocData, IPersistFileFormat, IVsPersistDocData2, IVsPersistDocData3
     {
-        public VSDocumentInstance(IAnkhServiceProvider context)
+        readonly Guid _factoryId;
+        public VSDocumentInstance(IAnkhServiceProvider context, Guid factoryId)
             : base(context)
         {
+            _factoryId = factoryId;
         }
 
         #region IVsPersistDocData Members
 
         public int Close()
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int GetGuidEditorType(out Guid pClassID)
         {
-            throw new NotImplementedException();
+            pClassID = _factoryId;
+            return VSConstants.S_OK;
         }
 
         public int IsDocDataDirty(out int pfDirty)
         {
             //throw new NotImplementedException();
             pfDirty = 0;
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int IsDocDataReloadable(out int pfReloadable)
         {
-            throw new NotImplementedException();
+            pfReloadable = 0;
+            return VSConstants.S_OK;
         }
 
         public int LoadDocData(string pszMkDocument)
         {
             //throw new NotImplementedException();
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int OnRegisterDocData(uint docCookie, IVsHierarchy pHierNew, uint itemidNew)
         {
             //throw new NotImplementedException();
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int ReloadDocData(uint grfFlags)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int RenameDocData(uint grfAttribs, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int SaveDocData(VSSAVEFLAGS dwSave, out string pbstrMkDocumentNew, out int pfSaveCanceled)
@@ -79,7 +83,7 @@ namespace Ankh.VS.Dialogs
 
         public int SetUntitledDocPath(string pszDocDataPath)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         #endregion
