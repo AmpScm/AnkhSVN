@@ -41,6 +41,7 @@ namespace Ankh.UI
             // 
             // changedPaths
             // 
+            this.changedPaths.DataSource = null;
             resources.ApplyResources(this.changedPaths, "changedPaths");
             this.changedPaths.HideSelection = false;
             this.changedPaths.Name = "changedPaths";
@@ -51,11 +52,10 @@ namespace Ankh.UI
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.changedPaths);
+            this.Controls.Add(this.label1);
             this.Name = "LogChangedPaths";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
