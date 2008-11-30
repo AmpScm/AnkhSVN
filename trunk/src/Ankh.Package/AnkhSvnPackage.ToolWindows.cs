@@ -76,6 +76,22 @@ namespace Ankh.VSPackage
             // Bring the tool window to the front and give it focus
             Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(frame.Show());
         }
+
+        AmbientProperties _ambientProperties;
+        public AmbientProperties AmbientProperties
+        {
+            get
+            {
+                if (_ambientProperties == null)
+                {
+                    IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
+                    _ambientProperties = new AmbientProperties();
+                    _ambientProperties.Font = (Font)((Font)uis.Styles["DialogFont"]).Clone();
+                    object o = uis.Styles["VsToolWindowRenderer"];
+                }
+                return _ambientProperties;
+            }
+        }
     }
 
     class AnkhToolWindowHost : ISite, IAnkhToolWindowHost, IOleCommandTarget
@@ -177,13 +193,7 @@ namespace Ankh.VSPackage
         {
             if (serviceType == typeof(AmbientProperties))
             {
-                if (_ambientProperties == null)
-                {
-                    IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
-                    _ambientProperties = new AmbientProperties();
-                    _ambientProperties.Font = (System.Drawing.Font)uis.Styles["DialogFont"];
-                }
-                return _ambientProperties;
+                return GetService<AnkhSvnPackage>(typeof(IAnkhPackage)).AmbientProperties;
             }
 
             System.IServiceProvider paneSp = _pane;

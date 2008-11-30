@@ -42,6 +42,16 @@ namespace Ankh.UI.PendingChanges
 
         protected override void OnLoad(EventArgs e)
         {
+            ToolStripRenderer renderer = null;
+            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
+            if(ds != null)
+            {
+                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+            }
+
+            if (renderer != null)
+                pendingChangesTabs.Renderer = renderer;
+
             foreach (PendingChangesPage p in _pages)
             {
                 p.Context = Context;
