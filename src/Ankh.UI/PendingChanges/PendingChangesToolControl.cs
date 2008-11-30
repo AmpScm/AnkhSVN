@@ -68,6 +68,7 @@ namespace Ankh.UI.PendingChanges
             base.OnLoad(e);
 
             ShowPanel(_commitsPage, false);
+            UpdateColors(renderer != null);
         }
 
         protected override void OnFrameCreated(EventArgs e)
@@ -75,12 +76,11 @@ namespace Ankh.UI.PendingChanges
             base.OnFrameCreated(e);
 
             ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
-            //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
-            UpdateColors();
+            //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;            
             UpdateCaption();
         }
 
-        private void UpdateColors()
+        private void UpdateColors(bool hasRenderer)
         {
             if (Context == null)
                 return;
@@ -98,7 +98,7 @@ namespace Ankh.UI.PendingChanges
                 pendingChangesTabs.OverflowButton.BackColor = color;                
             }
 
-            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+            if (!hasRenderer && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
             {
                 pendingChangesTabs.ForeColor = color;
                 pendingChangesTabs.OverflowButton.ForeColor = color;
