@@ -188,7 +188,6 @@ namespace Ankh.VSPackage
         #endregion
 
         #region IServiceProvider Members
-        AmbientProperties _ambientProperties;
         public object GetService(Type serviceType)
         {
             if (serviceType == typeof(AmbientProperties))
