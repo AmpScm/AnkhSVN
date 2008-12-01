@@ -60,7 +60,7 @@ namespace Ankh.Commands
 
             SvnUpdateResult ur = null;
 
-            e.GetService<IProgressRunner>().Run("Updating",
+            e.GetService<IProgressRunner>().RunModal("Updating",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     List<string> files = new List<string>();

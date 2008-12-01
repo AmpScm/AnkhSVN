@@ -175,7 +175,7 @@ namespace Ankh.Commands
 
                 // TODO: Monitor conflicts!!
 
-                e.GetService<IProgressRunner>().Run(
+                e.GetService<IProgressRunner>().RunModal(
                     "Switching",
                     delegate(object sender, ProgressWorkerArgs a)
                     {

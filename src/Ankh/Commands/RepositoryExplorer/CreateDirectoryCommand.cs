@@ -50,7 +50,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 Uri uri = SvnTools.AppendPathSuffix(selected.Uri, directoryName);
 
                 ProgressRunnerResult prResult =
-                    e.GetService<IProgressRunner>().Run(
+                    e.GetService<IProgressRunner>().RunModal(
                     CommandStrings.CreatingDirectories,
                     delegate(object sender, ProgressWorkerArgs ee)
                     {

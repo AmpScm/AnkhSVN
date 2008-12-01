@@ -85,7 +85,7 @@ namespace Ankh.Commands
 
             try
             {
-                e.GetService<IProgressRunner>().Run("Locking",
+                e.GetService<IProgressRunner>().RunModal("Locking",
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
                         SvnLockArgs la = new SvnLockArgs();

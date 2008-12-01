@@ -156,7 +156,7 @@ namespace Ankh.Commands
         {
             IProgressRunner runner = e.GetService<IProgressRunner>();
 
-            runner.Run("Checking Out Solution", delegate(object sender, ProgressWorkerArgs ee) { PerformCheckout(ee, checkoutLocation, revision, localDir); });
+            runner.RunModal("Checking Out Solution", delegate(object sender, ProgressWorkerArgs ee) { PerformCheckout(ee, checkoutLocation, revision, localDir); });
 
             Uri file = projectTop.MakeRelativeUri(projectUri);
 

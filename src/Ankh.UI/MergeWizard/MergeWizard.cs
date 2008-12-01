@@ -222,7 +222,7 @@ namespace Ankh.UI.MergeWizard
             this.currentMergeConflictHandler = CreateMergeConflictHandler();
 
             // Perform merge using IProgressRunner
-            Context.GetService<IProgressRunner>().Run(Resources.MergingTitle,
+            Context.GetService<IProgressRunner>().RunModal(Resources.MergingTitle,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     _mergeActions = new List<SvnNotifyEventArgs>();

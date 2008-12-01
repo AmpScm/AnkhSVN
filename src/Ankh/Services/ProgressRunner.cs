@@ -8,6 +8,7 @@ using SharpSvn;
 
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Ids;
 
 namespace Ankh
 {
@@ -19,18 +20,38 @@ namespace Ankh
         {
         }
 
-        public ProgressRunnerResult Run(string caption, EventHandler<ProgressWorkerArgs> handler)
+        public ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action)
         {
-            if (string.IsNullOrEmpty(caption))
-                caption = "AnkhSVN";
+            if (action == null)
+                throw new ArgumentNullException("action");
+            else if (string.IsNullOrEmpty(caption))
+                caption = AnkhId.PlkProduct;
 
-            ProgressRunner pr = new ProgressRunner(this, handler);
+            ProgressRunner pr = new ProgressRunner(this, action);
 
             pr.Start(caption);
 
             return new ProgressRunnerResult(!pr.Cancelled);
         }
 
+        public void RunNonModal(string caption, EventHandler<ProgressWorkerArgs> action, EventHandler<ProgressWorkerDoneArgs> completer)
+        {
+            ProgressRunnerResult r = null;
+            // Temporary implementation
+            try
+            {
+                r = RunModal(caption, action);
+            }
+            catch (Exception e)
+            {
+                r = new ProgressRunnerResult(false, e);
+            }
+            finally
+            {
+                if (completer != null)
+                    completer(this, new ProgressWorkerDoneArgs(r));
+            }
+        }
 
         /// <summary>
         /// Used to run lengthy operations in a separate thread while 
@@ -39,7 +60,7 @@ namespace Ankh
         sealed class ProgressRunner
         {
             readonly IAnkhServiceProvider _context;
-            readonly EventHandler<ProgressWorkerArgs> _worker;
+            readonly EventHandler<ProgressWorkerArgs> _action;
             Form _invoker;
             bool _cancelled;
             bool _closed;
@@ -49,16 +70,16 @@ namespace Ankh
             /// Initializes a new instance of the <see cref="ProgressRunner"/> class.
             /// </summary>
             /// <param name="context">The context.</param>
-            /// <param name="worker">The worker.</param>
-            public ProgressRunner(IAnkhServiceProvider context, EventHandler<ProgressWorkerArgs> worker)
+            /// <param name="action">The action.</param>
+            public ProgressRunner(IAnkhServiceProvider context, EventHandler<ProgressWorkerArgs> action)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
-                else if (worker == null)
-                    throw new ArgumentNullException("worker");
+                else if (action == null)
+                    throw new ArgumentNullException("action");
 
                 _context = context;
-                _worker = worker;
+                _action = action;
             }
 
             /// <summary>
@@ -131,7 +152,7 @@ namespace Ankh
                 try
                 {
                     ProgressWorkerArgs awa = new ProgressWorkerArgs(_context, client, _sync);
-                    _worker(null, awa);
+                    _action(null, awa);
 
                     if (_exception == null && awa.Exception != null)
                         _exception = awa.Exception;

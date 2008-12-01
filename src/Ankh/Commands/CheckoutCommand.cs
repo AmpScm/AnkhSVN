@@ -44,7 +44,7 @@ namespace Ankh.Commands
                 if (ui.ShowDialog(dlg) != DialogResult.OK)
                     return;
 
-                e.GetService<IProgressRunner>().Run("Checking Out", 
+                e.GetService<IProgressRunner>().RunModal("Checking Out", 
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnCheckOutArgs args = new SvnCheckOutArgs();

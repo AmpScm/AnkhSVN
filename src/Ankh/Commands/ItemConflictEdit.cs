@@ -60,7 +60,7 @@ namespace Ankh.Commands
             SvnInfoEventArgs conflictInfo = null;
 
             bool ok = false;
-            ProgressRunnerResult r = e.GetService<IProgressRunner>().Run("Retrieving Conflict Information",
+            ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal("Retrieving Conflict Information",
                 delegate(object sender, ProgressWorkerArgs a)
                 {
                     ok = a.Client.GetInfo(conflict.FullPath, out conflictInfo);

@@ -52,7 +52,7 @@ namespace Ankh.Commands
                 if (dr != DialogResult.OK)
                     return;
 
-                e.GetService<IProgressRunner>().Run("Exporting",
+                e.GetService<IProgressRunner>().RunModal("Exporting",
                     delegate(object sender, ProgressWorkerArgs wa)
                     {
                         SvnExportArgs args = new SvnExportArgs();

@@ -48,20 +48,62 @@ namespace Ankh
     public class ProgressRunnerResult
     {
         readonly bool _succeeded;
+        readonly Exception _ex;
 
         public ProgressRunnerResult(bool succeeded)
         {
             _succeeded = succeeded;
         }
 
+        public ProgressRunnerResult(bool succeeded, Exception e)
+        {
+            _ex = e;
+        }
+
         public bool Succeeded
         {
             get { return _succeeded; }
+        }
+
+        public Exception Exception
+        {
+            get { return _ex; }
+        }
+    }
+
+    public class ProgressWorkerDoneArgs : EventArgs
+    {
+        readonly ProgressRunnerResult _result;
+        public ProgressWorkerDoneArgs(ProgressRunnerResult result)
+        {
+            if (result == null)
+                throw new ArgumentNullException("result");
+
+            _result = result;
+        }
+
+        public ProgressRunnerResult Result
+        {
+            get { return _result; }
         }
     }
 
     public interface IProgressRunner
     {
-        ProgressRunnerResult Run(string caption, EventHandler<ProgressWorkerArgs> handler);
+        /// <summary>
+        /// Runs the specified action.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action);
+
+        /// <summary>
+        /// Runs the specified action and when the action completes completer. (Currently implemented synchronously!)
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="completer">The completer.</param>
+        void RunNonModal(string caption, EventHandler<ProgressWorkerArgs> action, EventHandler<ProgressWorkerDoneArgs> completer);
     }
 }

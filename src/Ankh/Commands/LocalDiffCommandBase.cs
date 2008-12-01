@@ -145,7 +145,7 @@ namespace Ankh.Commands
             string tempFile = Path.GetFileNameWithoutExtension(item.Name) + "." + strRevision + Path.GetExtension(item.Name);
             tempFile = Path.Combine(tempDir, tempFile);
             // we need to get it from the repos
-            context.GetService<IProgressRunner>().Run("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
+            context.GetService<IProgressRunner>().RunModal("Retrieving file for diffing", delegate(object o, ProgressWorkerArgs ee)
             { 
                 SvnTarget target;
 

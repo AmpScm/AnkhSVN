@@ -118,7 +118,7 @@ namespace Ankh.UI.SvnLog.Commands
                     {
                         IProgressRunner progressRunner = e.GetService<IProgressRunner>();
 
-                        ProgressRunnerResult result = progressRunner.Run("Updating Revision Properties",
+                        ProgressRunnerResult result = progressRunner.RunModal("Updating Revision Properties",
                             delegate(object sender, ProgressWorkerArgs ee)
                             {
 

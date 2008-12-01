@@ -63,7 +63,7 @@ namespace Ankh.UI.PendingChanges
             List<string> roots = new List<string>(SvnItem.GetPaths(pls.GetUpdateRoots(null)));
             Dictionary<string, string> found = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            if (pr.Run("Retrieving remote status",
+            if (pr.RunModal("Retrieving remote status",
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnStatusArgs sa = new SvnStatusArgs();
