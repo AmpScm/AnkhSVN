@@ -1698,7 +1698,7 @@
     <value>90</value>
   </data>
   <data name="propertiesColumn.Text" xml:space="preserve">
-    <value>Properites</value>
+    <value>Properties</value>
   </data>
   <data name="propertiesColumn.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
