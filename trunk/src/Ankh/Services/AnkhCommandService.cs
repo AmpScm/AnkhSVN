@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Ankh
 {
@@ -30,12 +31,14 @@ namespace Ankh
         IOleCommandTarget _commandDispatcher;
         protected IOleCommandTarget CommandDispatcher
         {
+            [DebuggerStepThrough]
             get { return _commandDispatcher ?? (_commandDispatcher = GetService<IOleCommandTarget>(typeof(SUIHostCommandDispatcher))); }
         }
 
         AnkhContext _ankhContext;
         protected AnkhContext AnkhContext
         {
+            [DebuggerStepThrough]
             get { return _ankhContext ?? (_ankhContext = GetService<AnkhContext>()); }
         }
 

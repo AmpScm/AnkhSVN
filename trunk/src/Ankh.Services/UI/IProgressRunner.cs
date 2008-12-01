@@ -8,7 +8,7 @@ namespace Ankh
 {
     public class ProgressWorkerArgs : EventArgs
     {
-        readonly AnkhContext _context;
+        readonly IAnkhServiceProvider _context;
         readonly SvnClient _client;
         readonly ISynchronizeInvoke _sync;
         Exception _exception;
@@ -18,7 +18,7 @@ namespace Ankh
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            _context = context.GetService<AnkhContext>();
+            _context = context;
             _client = client;
             _sync = sync;
         }
@@ -28,7 +28,7 @@ namespace Ankh
             get { return _client; }
         }
 
-        public AnkhContext Context
+        public IAnkhServiceProvider Context
         {
             get { return _context; }
         }
