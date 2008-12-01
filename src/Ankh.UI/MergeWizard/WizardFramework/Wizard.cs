@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 /* 
  * Wizard.cs
@@ -28,53 +29,33 @@ namespace WizardFramework
     /// </summary>
     /// <para>The most common scenario is that
     /// you will subclass this to implement your own wizard.</para>
-    public abstract class Wizard : IWizard
+    public abstract class Wizard : Component,IWizard
     {
-        // Use C# destructor syntax for finalization code.
-        // This destructor will run only if the Dispose method
-        // does not get called.
-        // It gives your base class the opportunity to finalize.
-        // Do not provide destructors in types derived from this class.
-        ~Wizard()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            Dispose(false);
-        }
-
+        bool _disposed;
         #region IWizard Members
-        // Implement IDisposable.
-        // Do not make this method virtual.
-        // A derived class should not be able to override this method.
-        public void Dispose()
-        {
-            Dispose(true);
-
-            GC.SuppressFinalize(this);
-        }
 
         /// <summary>
         /// Handle disposing the UI stuff maintained in this wizard.
         /// </summary>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            // Check to see if Dispose has already been called.
-            if (!this.disposed)
+            try
             {
-                // If disposing equals true, dispose all managed
-                // and unmanaged resources.
-                if (disposing)
+                if (_disposed)
+                    return;
+
+                if(disposing)
                 {
                     foreach (IWizardPage page in pages_prop)
                     {
                         page.Dispose();
                     }
                 }
-
-                // Note disposing has been done.
-                disposed = true;
-
+            }
+            finally
+            {
+                _disposed = true;
+                base.Dispose(disposing);
             }
         }
 
@@ -133,7 +114,6 @@ namespace WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizard.GetPreviousPage" />
-        [Obsolete("Use IWizardPage.PreviousPage instead.  For internal use only.")]
         public virtual IWizardPage GetPreviousPage(IWizardPage page)
         {
             int index = pages_prop.IndexOf(page);
