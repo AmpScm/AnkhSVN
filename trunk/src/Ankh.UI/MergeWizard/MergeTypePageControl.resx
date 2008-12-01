@@ -333,6 +333,9 @@
   <data name="mergeTypeDescriptionLabel.Text" xml:space="preserve">
     <value>Use this method to catch-up a feature branch with the changes in trunk or another branch.  You can merge a specific set of revisions or all eligible revisions.</value>
   </data>
+  <data name="mergeTypeDescriptionLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
   <data name="&gt;&gt;mergeTypeDescriptionLabel.Name" xml:space="preserve">
     <value>mergeTypeDescriptionLabel</value>
   </data>
@@ -538,7 +541,7 @@
 </value>
   </data>
   <data name="mergeTypePictureBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 25</value>
+    <value>45, 14</value>
   </data>
   <data name="mergeTypePictureBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -670,6 +673,6 @@
     <value>MergeTypePageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3257.24911, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3257.26342, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
