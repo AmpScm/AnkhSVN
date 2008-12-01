@@ -59,13 +59,13 @@ namespace WizardFramework
         /// </summary>
         public enum MessageType
         {
-            NONE,
-            INFORMATION,
-            WARNING,
-            ERROR
+            None,
+            Information,
+            Warning,
+            Error
         }
 
-        private MessageType messagetype_prop = MessageType.NONE;
+        private MessageType messagetype_prop = MessageType.None;
         private string message_prop = null;
     }
 }

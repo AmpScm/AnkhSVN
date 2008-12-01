@@ -10,13 +10,13 @@ namespace Ankh.UI.MergeWizard
     internal class MergeUtils
     {
         public static readonly WizardMessage INVALID_FROM_REVISION = new WizardMessage(Resources.InvalidFromRevision,
-            WizardMessage.MessageType.ERROR);
+            WizardMessage.MessageType.Error);
         public static readonly WizardMessage INVALID_TO_REVISION = new WizardMessage(Resources.InvalidToRevision,
-            WizardMessage.MessageType.ERROR);
+            WizardMessage.MessageType.Error);
         public static readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
-            WizardMessage.MessageType.ERROR);
+            WizardMessage.MessageType.Error);
         public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(Resources.InvalidToUrl,
-            WizardMessage.MessageType.ERROR);
+            WizardMessage.MessageType.Error);
 
         private IAnkhServiceProvider _context;
         private Dictionary<SvnDepth, string> _mergeDepths;

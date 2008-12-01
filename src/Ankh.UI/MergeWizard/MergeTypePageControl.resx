@@ -313,61 +313,10 @@
     <value>3</value>
   </data>
   <data name="mergeTypeDescriptionGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionLabel.Name" xml:space="preserve">
-    <value>mergeTypeDescriptionLabel</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionLabel.Parent" xml:space="preserve">
-    <value>mergeTypeDescriptionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;mergeTypePictureBox.Name" xml:space="preserve">
-    <value>mergeTypePictureBox</value>
-  </data>
-  <data name="&gt;&gt;mergeTypePictureBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergeTypePictureBox.Parent" xml:space="preserve">
-    <value>mergeTypeDescriptionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergeTypePictureBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="mergeTypeDescriptionGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 135</value>
-  </data>
-  <data name="mergeTypeDescriptionGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="mergeTypeDescriptionGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>490, 245</value>
-  </data>
-  <data name="mergeTypeDescriptionGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="mergeTypeDescriptionGroupBox.Text" xml:space="preserve">
-    <value>Merge Description</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Name" xml:space="preserve">
-    <value>mergeTypeDescriptionGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="mergeTypeDescriptionLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
+    <value>Bottom, Left, Right</value>
   </data>
   <data name="mergeTypeDescriptionLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 170</value>
@@ -615,6 +564,36 @@
   <data name="&gt;&gt;mergeTypePictureBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="mergeTypeDescriptionGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 135</value>
+  </data>
+  <data name="mergeTypeDescriptionGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="mergeTypeDescriptionGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>490, 245</value>
+  </data>
+  <data name="mergeTypeDescriptionGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="mergeTypeDescriptionGroupBox.Text" xml:space="preserve">
+    <value>Merge Description</value>
+  </data>
+  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Name" xml:space="preserve">
+    <value>mergeTypeDescriptionGroupBox</value>
+  </data>
+  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;mergeTypeDescriptionGroupBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="showBestPracticesPageCheckbox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Left</value>
+  </data>
   <data name="showBestPracticesPageCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -644,6 +623,9 @@
   </data>
   <data name="&gt;&gt;showBestPracticesPageCheckbox.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="disclaimerLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Bottom, Right</value>
   </data>
   <data name="disclaimerLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -688,6 +670,6 @@
     <value>MergeTypePageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3106.18364, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3257.24911, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

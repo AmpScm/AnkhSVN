@@ -49,8 +49,6 @@ namespace WizardFramework
         {
             this.wizard_prop = wizard;
             this.wizard_prop.Container = this;
-
-            InitializeDialog();
         }
 
         #region WizardDialog Members
@@ -60,6 +58,14 @@ namespace WizardFramework
         private void ShowStartingPage()
         {
             ShowPage(this.wizard_prop.StartingPage);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if(!DesignMode)
+                InitializeDialog();
         }
 
         /// <summary>
@@ -95,14 +101,17 @@ namespace WizardFramework
             }
 
             // Only add pages if they are not already added
-            if (!PageContainer.Controls.Contains(page.Control))
+            UserControl pageControl = page.Control;
+            if (!PageContainer.Controls.Contains(pageControl))
             {
-                PageContainer.Controls.Add(page.Control);
+                pageControl.Size = PageContainer.Size;
+                pageControl.Dock = DockStyle.Fill;
+                PageContainer.Controls.Add(pageControl);
             }
 
             currPage_prop = page;
 
-            page.Control.Visible = true;
+            page.Visible = true;
             UpdateUI();
         }
 
@@ -151,8 +160,6 @@ namespace WizardFramework
                     // Assume we are going forward to revisit this wizard
                     else nestedWizards.Add(wizard_prop);
                 }
-
-                InitializeDialog();
             }
         }
 
@@ -292,20 +299,29 @@ namespace WizardFramework
 
             if (message != null && message.Message != null)
             {
+                Image newImg;
                 // Display the message panel
                 // Bora: statusIcon images are set be read from the MergeWizard resources.
                 // otherwise, runtime throws an exception and quits the Wizard.
-                if (message.Type == WizardMessage.MessageType.NONE)
-                    statusIcon.Image = null;
+                switch(message.Type)
+                {
+                    case WizardMessage.MessageType.Error:
+                        newImg = Ankh.UI.MergeWizard.Resources.ErrorIcon;
+                        break;
+                    case WizardMessage.MessageType.Information:
+                        newImg = Ankh.UI.MergeWizard.Resources.InfoIcon;
+                        break;
+                    case WizardMessage.MessageType.Warning:
+                        newImg = Ankh.UI.MergeWizard.Resources.WarningIcon;
+                        break;
+                    case WizardMessage.MessageType.None:
+                    default:
+                        newImg = null;
+                        break;
+                }
 
-                if (message.Type == WizardMessage.MessageType.ERROR && statusIcon.Image != Ankh.UI.MergeWizard.Resources.ErrorIcon)
-                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.ErrorIcon;
-
-                if (message.Type == WizardMessage.MessageType.INFORMATION && statusIcon.Image != Ankh.UI.MergeWizard.Resources.InfoIcon)
-                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.InfoIcon;
-
-                if (message.Type == WizardMessage.MessageType.WARNING && statusIcon.Image != Ankh.UI.MergeWizard.Resources.WarningIcon)
-                    statusIcon.Image = Ankh.UI.MergeWizard.Resources.WarningIcon;
+                if(statusIcon.Image != newImg)
+                    statusIcon.Image = newImg;
 
                 if (message.Message != null && statusMessage.Text != message.Message)
                     statusMessage.Text = message.Message;

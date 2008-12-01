@@ -128,9 +128,8 @@ namespace Ankh.UI.MergeWizard.Commands
                 DialogResult result;
 
                 IUIService uiService = e.GetService<IUIService>();
-                // TODO: Use
-                //result = uiService.ShowDialog(dialog);
-                result = dialog.ShowDialog(uiService.GetDialogOwnerWindow());
+
+                result = uiService.ShowDialog(dialog);
 
                 if (result == DialogResult.OK)
                 {
@@ -139,7 +138,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     mrd.MergeActions = ((MergeWizard)dialog.Wizard).MergeActions;
                     mrd.ResolvedMergeConflicts = ((MergeWizard)dialog.Wizard).ResolvedMergeConflicts;
 
-                    mrd.ShowDialog(uiService.GetDialogOwnerWindow());
+                    uiService.ShowDialog(mrd);
                 }
             }
         }

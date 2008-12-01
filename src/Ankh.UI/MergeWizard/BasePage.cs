@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace Ankh.UI.MergeWizard
 {
     
-    public abstract class BasePage : WizardPage
+    public class BasePage : WizardPage
     {
         protected BasePage(AnkhWizard wizard, BasePageControl control, string name)
             : base(name)

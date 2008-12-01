@@ -68,7 +68,7 @@ namespace Ankh.UI.MergeWizard
 
                     if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
                     {
-                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.ERROR);
+                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.Error);
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace Ankh.UI.MergeWizard
 
                     if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
                     {
-                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.ERROR);
+                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.Error);
                     }
                     else
                     {
