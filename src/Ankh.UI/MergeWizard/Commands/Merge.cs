@@ -125,11 +125,10 @@ namespace Ankh.UI.MergeWizard.Commands
 
             using (MergeWizardDialog dialog = new MergeWizardDialog(e.Context, new MergeUtils(e.Context), svnItems[0]))
             {
-                DialogResult result;
-
                 IUIService uiService = e.GetService<IUIService>();
 
-                result = uiService.ShowDialog(dialog);
+                DialogResult result = dialog.ShowDialog(e.Context);
+                //result = uiService.ShowDialog(dialog);
 
                 if (result == DialogResult.OK)
                 {

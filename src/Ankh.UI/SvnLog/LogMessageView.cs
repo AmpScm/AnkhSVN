@@ -22,12 +22,6 @@ namespace Ankh.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            if (ParentForm != null && !(ParentForm is VSContainerForm) && !(ParentForm is Ankh.Scc.UI.IAnkhToolWindowControl))
-            {
-                logMessageEditor.Visible = false;
-                logMessageTextBox.Visible = true;
-            }
         }
 
         public LogMessageView(IContainer container)
@@ -55,14 +49,14 @@ namespace Ankh.UI
         void LogFocusChanged(object sender, ISvnLogItem e)
         {
             if (ItemSource != null && ItemSource.FocusedItem != null)
-                logMessageTextBox.Text = logMessageEditor.Text = logItemSource.FocusedItem.LogMessage;
+                logMessageEditor.Text = logItemSource.FocusedItem.LogMessage;
             else
-                logMessageTextBox.Text = logMessageEditor.Text = "";
+                logMessageEditor.Text = "";
         }
 
         internal void Reset()
         {
-            logMessageTextBox.Text = logMessageEditor.Text = "";
+            logMessageEditor.Text = "";
         }
     }
 }

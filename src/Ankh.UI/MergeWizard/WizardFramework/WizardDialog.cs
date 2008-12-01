@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.UI;
 
 /* 
  * WizardDialog.cs
@@ -28,7 +29,7 @@ namespace WizardFramework
     /// <summary>
     /// A dialog to display a wizard to the end user.
     /// </summary>
-    public partial class WizardDialog : Form, IWizardContainer, IWizardPageChangeProvider
+    public partial class WizardDialog : VSContainerForm, IWizardContainer, IWizardPageChangeProvider
     {
         /// <summary>
         /// Default parameterless constructor required by VS.NET Designer.
