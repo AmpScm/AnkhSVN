@@ -146,7 +146,7 @@ namespace WizardFramework
         public abstract bool PerformFinish();
 
         /// <see cref="WizardFramework.IWizard.Container" />
-        public virtual IWizardContainer Container
+        public new virtual IWizardContainer Container
         {
             get
             {
@@ -183,8 +183,6 @@ namespace WizardFramework
         private IWizardContainer container_prop = null;
         private List<IWizardPage> pages_prop = new List<IWizardPage>();
         private string windowTitle_prop = null;
-
-        private bool disposed = false;
         #endregion
 
         #region Wizard Members

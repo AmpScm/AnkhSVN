@@ -183,13 +183,13 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 267</value>
+    <value>0, 425</value>
   </data>
   <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>349, 50</value>
+    <value>574, 50</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
@@ -214,7 +214,7 @@
     <value>0, 0</value>
   </data>
   <data name="horizontalDividerLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>349, 1</value>
+    <value>574, 1</value>
   </data>
   <data name="horizontalDividerLabel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -241,7 +241,7 @@
     <value>NoControl</value>
   </data>
   <data name="backButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>17, 16</value>
+    <value>242, 16</value>
   </data>
   <data name="backButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -274,7 +274,7 @@
     <value>NoControl</value>
   </data>
   <data name="nextButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>98, 16</value>
+    <value>323, 16</value>
   </data>
   <data name="nextButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -307,7 +307,7 @@
     <value>NoControl</value>
   </data>
   <data name="finishButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>179, 16</value>
+    <value>404, 16</value>
   </data>
   <data name="finishButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -334,7 +334,7 @@
     <value>Bottom, Right</value>
   </data>
   <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>260, 16</value>
+    <value>485, 16</value>
   </data>
   <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -360,12 +360,6 @@
   <data name="wizardPagePanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
   </data>
-  <data name="wizardPagePanel.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="wizardPagePanel.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
   <data name="wizardPagePanel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 67</value>
   </data>
@@ -373,7 +367,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="wizardPagePanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>349, 200</value>
+    <value>574, 358</value>
   </data>
   <data name="wizardPagePanel.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -389,6 +383,81 @@
   </data>
   <data name="&gt;&gt;wizardPagePanel.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="&gt;&gt;statusPanel.Name" xml:space="preserve">
+    <value>statusPanel</value>
+  </data>
+  <data name="&gt;&gt;statusPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;statusPanel.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;statusPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Name" xml:space="preserve">
+    <value>headerDescription</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerDescription.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Name" xml:space="preserve">
+    <value>headerTitle</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerTitle.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Name" xml:space="preserve">
+    <value>headerImage</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerImage.Parent" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerImage.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="headerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
+  </data>
+  <data name="headerPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="headerPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="headerPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>574, 66</value>
+  </data>
+  <data name="headerPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Name" xml:space="preserve">
+    <value>headerPanel</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;headerPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="statusPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -424,7 +493,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="statusPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>280, 45</value>
+    <value>505, 45</value>
   </data>
   <data name="statusPanel.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -444,6 +513,63 @@
   <data name="&gt;&gt;statusPanel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="statusIcon.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 3</value>
+  </data>
+  <data name="statusIcon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="statusIcon.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="statusIcon.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;statusIcon.Name" xml:space="preserve">
+    <value>statusIcon</value>
+  </data>
+  <data name="&gt;&gt;statusIcon.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;statusIcon.Parent" xml:space="preserve">
+    <value>statusPanel</value>
+  </data>
+  <data name="&gt;&gt;statusIcon.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="statusMessage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="statusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="statusMessage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>26, 3</value>
+  </data>
+  <data name="statusMessage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="statusMessage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>476, 38</value>
+  </data>
+  <data name="statusMessage.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="statusMessage.Text" xml:space="preserve">
+    <value>Wizard Page Status Message</value>
+  </data>
+  <data name="&gt;&gt;statusMessage.Name" xml:space="preserve">
+    <value>statusMessage</value>
+  </data>
+  <data name="&gt;&gt;statusMessage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;statusMessage.Parent" xml:space="preserve">
+    <value>statusPanel</value>
+  </data>
+  <data name="&gt;&gt;statusMessage.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="headerDescription.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
@@ -451,7 +577,7 @@
     <value>26, 24</value>
   </data>
   <data name="headerDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 38</value>
+    <value>475, 38</value>
   </data>
   <data name="headerDescription.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -511,7 +637,7 @@
     <value>Top, Right</value>
   </data>
   <data name="headerImage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>284, 1</value>
+    <value>509, 1</value>
   </data>
   <data name="headerImage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -534,104 +660,14 @@
   <data name="&gt;&gt;headerImage.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="headerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="headerPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="headerPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="headerPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>349, 66</value>
-  </data>
-  <data name="headerPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;headerPanel.Name" xml:space="preserve">
-    <value>headerPanel</value>
-  </data>
-  <data name="&gt;&gt;headerPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;headerPanel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;headerPanel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="statusIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 3</value>
-  </data>
-  <data name="statusIcon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="statusIcon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>16, 16</value>
-  </data>
-  <data name="statusIcon.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;statusIcon.Name" xml:space="preserve">
-    <value>statusIcon</value>
-  </data>
-  <data name="&gt;&gt;statusIcon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;statusIcon.Parent" xml:space="preserve">
-    <value>statusPanel</value>
-  </data>
-  <data name="&gt;&gt;statusIcon.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="statusMessage.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="statusMessage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="statusMessage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>26, 3</value>
-  </data>
-  <data name="statusMessage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="statusMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>251, 38</value>
-  </data>
-  <data name="statusMessage.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="statusMessage.Text" xml:space="preserve">
-    <value>Wizard Page Status Message</value>
-  </data>
-  <data name="&gt;&gt;statusMessage.Name" xml:space="preserve">
-    <value>statusMessage</value>
-  </data>
-  <data name="&gt;&gt;statusMessage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;statusMessage.Parent" xml:space="preserve">
-    <value>statusPanel</value>
-  </data>
-  <data name="&gt;&gt;statusMessage.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
   </data>
-  <data name="$this.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="$this.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>349, 317</value>
+    <value>574, 475</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>349, 332</value>

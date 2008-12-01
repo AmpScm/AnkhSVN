@@ -116,7 +116,6 @@ namespace WizardFramework
             // wizardPagePanel
             // 
             resources.ApplyResources(this.wizardPagePanel, "wizardPagePanel");
-            this.wizardPagePanel.BackColor = System.Drawing.SystemColors.Control;
             this.wizardPagePanel.MinimumSize = new System.Drawing.Size(349, 200);
             this.wizardPagePanel.Name = "wizardPagePanel";
             // 
@@ -175,10 +174,10 @@ namespace WizardFramework
             this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.wizardPagePanel);
             this.Controls.Add(this.controlPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WizardDialog";
+            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.controlPanel.ResumeLayout(false);
             this.headerPanel.ResumeLayout(false);
@@ -187,7 +186,6 @@ namespace WizardFramework
             ((System.ComponentModel.ISupportInitialize)(this.statusIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.headerImage)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

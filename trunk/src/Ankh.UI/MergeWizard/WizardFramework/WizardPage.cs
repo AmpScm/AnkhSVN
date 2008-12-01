@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 /* 
  * WizardPage.cs
@@ -26,8 +27,9 @@ namespace WizardFramework
     /// <summary>
     /// An abstract implementation of a wizard page.
     /// </summary>
-    public abstract class WizardPage : IWizardPage
+    public abstract class WizardPage : Component, IWizardPage
     {
+        bool _disposed;
         /// <summary>
         /// Constructor for a named wizard page.
         /// </summary>
@@ -47,20 +49,7 @@ namespace WizardFramework
             name_prop = name;
             image_prop = image;
         }
-
-        // Use C# destructor syntax for finalization code.
-        // This destructor will run only if the Dispose method
-        // does not get called.
-        // It gives your base class the opportunity to finalize.
-        // Do not provide destructors in types derived from this class.
-        ~WizardPage()
-        {
-            // Do not re-create Dispose clean-up code here.
-            // Calling Dispose(false) is optimal in terms of
-            // readability and maintainability.
-            Dispose(false);
-        }
-
+ 
         #region IWizardPage Members
 
         /// <see cref="WizardFramework.IWizardPage.CanFlipToNextPage" />
@@ -84,29 +73,19 @@ namespace WizardFramework
                     this.Container.UpdateButtons();
                 }
             }
-        }
-
-        // Implement IDisposable.
-        // Do not make this method virtual.
-        // A derived class should not be able to override this method.
-        public void Dispose()
-        {
-            Dispose(true);
-
-            GC.SuppressFinalize(this);
-        }
+        }  
 
         /// <summary>
         /// Handle disposing the UI stuff maintained in this wizard page.
         /// </summary>
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
-            // Check to see if Dispose has already been called.
-            if (!this.disposed)
+            try
             {
-                // If disposing equals true, dispose all managed
-                // and unmanaged resources.
-                if (disposing)
+                if(_disposed)
+                    return;
+
+                if(disposing)
                 {
                     if (Control != null && !Control.IsDisposed)
                     {
@@ -119,10 +98,12 @@ namespace WizardFramework
                         image_prop = null;
                     }
                 }
+            }
+            finally
+            {
+                _disposed = true;
 
-                // Note disposing has been done.
-                disposed = true;
-
+                base.Dispose(disposing);
             }
         }
 
@@ -237,14 +218,15 @@ namespace WizardFramework
         /// <see cref="WizardFramework.IWizardPage.Visible" />
         public bool Visible
         {
-            set { Control.Visible = value; }
+            set { Control.Visible = Control.Enabled = value; }
+            get { return Control.Visible; }
         }
 
         /// <summary>
         /// Returns the container for the wizard that this
         /// page belongs to.
         /// </summary>
-        protected virtual IWizardContainer Container
+        protected new virtual IWizardContainer Container
         {
             get
             {
@@ -279,8 +261,6 @@ namespace WizardFramework
                 return (Container != null && this == Container.CurrentPage);
             }
         }
-
-        private bool disposed = false;
 
         private string title_prop = null;
         private WizardMessage message_prop = null;

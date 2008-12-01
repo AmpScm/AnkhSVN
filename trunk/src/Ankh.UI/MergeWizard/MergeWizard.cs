@@ -203,7 +203,7 @@ namespace Ankh.UI.MergeWizard
             }
             catch (Exception e)
             {
-                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(e.InnerException.Message, WizardMessage.MessageType.ERROR);
+                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(e.InnerException.Message, WizardMessage.MessageType.Error);
 
                 status = false;
             }

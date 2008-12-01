@@ -95,11 +95,11 @@ namespace Ankh.UI.MergeWizard
         {
             if (e.TotalCount == 0)
             {
-                WizardPage.Message = new WizardMessage(Resources.NoLogItems, WizardMessage.MessageType.ERROR);
+                WizardPage.Message = new WizardMessage(Resources.NoLogItems, WizardMessage.MessageType.Error);
             }
             else
             {
-                WizardPage.Message = new WizardMessage("", WizardMessage.MessageType.NONE);
+                WizardPage.Message = new WizardMessage("", WizardMessage.MessageType.None);
             }
         }
     }
