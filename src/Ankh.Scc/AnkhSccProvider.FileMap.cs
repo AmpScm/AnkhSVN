@@ -659,10 +659,9 @@ namespace Ankh.Scc
             {
                 SvnItem rootItem = StatusCache[root];
 
-                if (rootItem != null)
+                if (rootItem != null && rootItem.IsVersioned)
                 {
                     roots.Add(root, rootItem);
-
                     yield return rootItem;
                 }
             }
@@ -679,12 +678,18 @@ namespace Ankh.Scc
                 if (pItem == null || !pItem.Exists)
                     continue;
 
+                SvnWorkingCopy wc = pItem.WorkingCopy;
+
+                if (wc == null)
+                    continue;
+
                 bool below = false;
                 foreach (string p in roots.Keys)
                 {
                     if (pItem.IsBelowPath(p))
                     {
-                        if (roots[p].IsBelowPath(pItem.WorkingCopy.FullPath))
+                        // Check if it is not a nested workingcopy
+                        if (wc != null && roots[p].IsBelowPath(wc.FullPath))
                         {
                             below = true;
                             break;
