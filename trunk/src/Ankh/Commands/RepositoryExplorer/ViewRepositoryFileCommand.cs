@@ -34,7 +34,7 @@ namespace Ankh.Commands
 
         protected static void SaveFile(CommandEventArgs e, ISvnRepositoryItem ri, string toFile)
         {
-            e.GetService<IProgressRunner>().Run(
+            e.GetService<IProgressRunner>().RunModal(
                 "Saving File",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {

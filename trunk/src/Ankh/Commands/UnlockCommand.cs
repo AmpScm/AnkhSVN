@@ -66,7 +66,7 @@ namespace Ankh.Commands
 
             try
             {
-                e.GetService<IProgressRunner>().Run("Unlocking",
+                e.GetService<IProgressRunner>().RunModal("Unlocking",
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
                         SvnUnlockArgs ua = new SvnUnlockArgs();

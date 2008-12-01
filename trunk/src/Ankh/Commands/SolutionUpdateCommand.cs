@@ -260,7 +260,7 @@ namespace Ankh.Commands
 
                 UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
 
-                e.GetService<IProgressRunner>().Run(
+                e.GetService<IProgressRunner>().RunModal(
                     string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
                     ur.Work);
 

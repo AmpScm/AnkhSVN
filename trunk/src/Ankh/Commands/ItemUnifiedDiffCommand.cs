@@ -43,7 +43,7 @@ namespace Ankh.Commands
 
             using (MemoryStream stream = new MemoryStream())
             {
-                e.Context.GetService<IProgressRunner>().Run("Diffing",
+                e.Context.GetService<IProgressRunner>().RunModal("Diffing",
                     delegate(object sender, ProgressWorkerArgs ee)
                     {
                         foreach (SvnItem item in result.Selection)

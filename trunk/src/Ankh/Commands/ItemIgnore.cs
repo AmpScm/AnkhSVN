@@ -172,7 +172,7 @@ namespace Ankh.Commands
         {
             try
             {
-                context.GetService<IProgressRunner>().Run(CommandStrings.IgnoreCaption,
+                context.GetService<IProgressRunner>().RunModal(CommandStrings.IgnoreCaption,
                     delegate(object sender, ProgressWorkerArgs e)
                     {
                         SvnGetPropertyArgs pa = new SvnGetPropertyArgs();

@@ -88,7 +88,7 @@ namespace Ankh.Commands
                     bool retry = false;
                     bool ok = false;
                     ProgressRunnerResult rr =
-                        e.GetService<IProgressRunner>().Run("Creating Branch/Tag",
+                        e.GetService<IProgressRunner>().RunModal("Creating Branch/Tag",
                         delegate(object sender, ProgressWorkerArgs ee)
                         {
                             SvnInfoArgs ia = new SvnInfoArgs();

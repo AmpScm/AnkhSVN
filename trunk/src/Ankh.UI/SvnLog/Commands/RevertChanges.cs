@@ -105,7 +105,7 @@ namespace Ankh.UI.SvnLog.Commands
             if(nodes.Count > 0)
                 tracker.SaveDocuments(nodes); // Saves all open documents below all specified origins
 
-            progressRunner.Run("Reverting",
+            progressRunner.RunModal("Reverting",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     using (DocumentLock dl = tracker.LockDocuments(e.Selection.GetSelectedFiles(true), DocumentLockType.NoReload))

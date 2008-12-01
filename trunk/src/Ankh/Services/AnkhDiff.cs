@@ -484,7 +484,7 @@ namespace Ankh.Services
             if(target.NodeKind != SvnNodeKind.File)
                 throw new InvalidOperationException("Can't create a tempfile from a directory");
 
-            GetService<IProgressRunner>().Run("Getting file",
+            GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
@@ -518,7 +518,7 @@ namespace Ankh.Services
                 file = Path.Combine(_lastDir, name);
             }
 
-            GetService<IProgressRunner>().Run("Getting file",
+            GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();

@@ -61,7 +61,7 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
-            e.GetService<IProgressRunner>().Run("Adding",
+            e.GetService<IProgressRunner>().RunModal("Adding",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     SvnAddArgs args = new SvnAddArgs();

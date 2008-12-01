@@ -182,7 +182,7 @@ namespace Ankh.Commands
             string tempFile = tempMgr.GetTempFile();
 
             Collection<SvnBlameEventArgs> blameResult = null;
-            e.GetService<IProgressRunner>().Run("Annotating", delegate(object sender, ProgressWorkerArgs ee)
+            e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
                 ee.Client.Export(target, tempFile, ea);
 
