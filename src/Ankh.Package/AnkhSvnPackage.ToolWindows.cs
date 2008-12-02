@@ -87,7 +87,6 @@ namespace Ankh.VSPackage
                     IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
                     _ambientProperties = new AmbientProperties();
                     _ambientProperties.Font = (Font)((Font)uis.Styles["DialogFont"]).Clone();
-                    object o = uis.Styles["VsToolWindowRenderer"];
                 }
                 return _ambientProperties;
             }
