@@ -8,7 +8,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.Annotate
 {
-    class AnnotateSection : IAnnotateSection
+    class AnnotateSection : AnkhPropertyGridItem, IAnnotateSection
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
@@ -58,6 +58,16 @@ namespace Ankh.UI.Annotate
         public SvnOrigin Origin
         {
             get { return _origin; }
+        }
+
+        protected override string ClassName
+        {
+            get { return "Annotate Section"; }
+        }
+
+        protected override string ComponentName
+        {
+            get { return Origin.Target.FileName; }
         }
     }
 }
