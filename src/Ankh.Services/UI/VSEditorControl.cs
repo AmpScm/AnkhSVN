@@ -32,7 +32,7 @@ namespace Ankh.UI
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            protected set { _context = value; }
+            set { _context = value; }
         }
 
         [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), Localizable(true)]
@@ -229,7 +229,6 @@ namespace Ankh.UI
                 foreach (IOleCommandTarget t in _targets)
                     _pane.AddCommandTarget(t);
         }
-
     }
 
     [CLSCompliant(false)]

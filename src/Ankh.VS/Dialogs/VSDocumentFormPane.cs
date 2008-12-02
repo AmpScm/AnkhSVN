@@ -11,9 +11,11 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using ShellPackage = Microsoft.VisualStudio.Shell.Package;
 
 using Ankh.UI;
 using Microsoft.VisualStudio;
+using System.Diagnostics;
 
 
 namespace Ankh.VS.Dialogs
@@ -169,13 +171,130 @@ namespace Ankh.VS.Dialogs
         #endregion
     }
 
+    sealed class VSDocumentHost : ISite, IAnkhEditorPane, IOleCommandTarget, IAnkhServiceProvider
+    {
+        readonly VSDocumentFormPane _pane;
+
+        public VSDocumentHost(VSDocumentFormPane pane)
+        {
+            _pane = pane;
+        }
+        #region ISite Members
+
+        public IComponent Component
+        {
+            get { return _pane.Window as IComponent; }
+        }
+
+        Container _container;
+        public IContainer Container
+        {
+            get { return _container ?? (_container = new Container()); }
+        }
+
+        public bool DesignMode
+        {
+            get { return false; }
+        }
+
+        public string Name
+        {
+            get { return ToString(); }
+            set {}
+        }
+
+        #endregion
+
+        #region IServiceProvider Members
+
+        IAnkhPackage _package;
+        public IAnkhPackage Package
+        {
+            get
+            {
+                if (_package != null)
+                    return _package;
+
+                if (_pane != null && _pane.Package != null)
+                    _package = (IAnkhPackage)_pane.Package;
+
+                return _package;
+            }
+        }
+
+        public object GetService(Type serviceType)
+        {
+            if (serviceType == typeof(AmbientProperties))
+            {
+                return GetService<IAnkhPackage>(typeof(IAnkhPackage)).AmbientProperties;
+            }
+
+            System.IServiceProvider paneSp = _pane;
+
+            object ob = paneSp.GetService(serviceType);
+
+            if (ob != null)
+                return ob;
+            else if (Package != null)
+                return Package.GetService(serviceType);
+            else
+                return null;
+        }
+
+        #region IAnkhServiceProvider Members
+
+        [DebuggerStepThrough]
+        public T GetService<T>()
+            where T : class
+        {
+            return (T)GetService(typeof(T));
+        }
+
+        [DebuggerStepThrough]
+        public T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return (T)GetService(serviceType);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region IAnkhEditorPane Members
+
+        public void AddCommandTarget(IOleCommandTarget target)
+        {
+            _pane.AddCommandTarget(target);
+        }
+
+        #endregion
+
+        #region IOleCommandTarget Members
+
+        public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            return _pane.Exec(ref pguidCmdGroup, nCmdexecopt, nCmdexecopt, pvaIn, pvaOut);
+        }
+
+        public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
+        {
+            return _pane.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+        }
+
+        #endregion
+    }
+
+
     [ComVisible(true), CLSCompliant(false)]
-    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget, IAnkhEditorPane
+    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget, IVsWindowPane
     {
         readonly List<IOleCommandTarget> _targets = new List<IOleCommandTarget>();
         readonly VSEditorControl _form;
         readonly VSDocumentInstance _instance;
         readonly IAnkhServiceProvider _context;
+        readonly VSDocumentHost _host;
+
         public VSDocumentFormPane(IAnkhServiceProvider context, VSDocumentInstance instance, VSEditorControl form)
             : base(context)
         {
@@ -189,6 +308,17 @@ namespace Ankh.VS.Dialogs
             _context = context;
             _instance = instance;
             _form = form;
+            _host = new VSDocumentHost(this);
+        }
+
+        public IAnkhEditorPane Host
+        {
+            get { return _host; }
+        }
+
+        public IAnkhPackage Package
+        {
+            get { return _context.GetService<IAnkhPackage>(); }
         }
 
         bool _created;
@@ -209,6 +339,27 @@ namespace Ankh.VS.Dialogs
                 return _form;
             }
         }
+
+        protected override void OnCreate()
+        {
+            //_host.Load();
+            _form.Site = _host;
+            _form.Context = _host;
+            base.OnCreate();
+        }
+
+        protected override object GetService(Type serviceType)
+        {
+            if (serviceType == typeof(IOleCommandTarget))
+                return _host;
+            else
+            {
+                object o = base.GetService(serviceType);
+
+                return o;
+            }
+        }
+       
 
         internal void Show()
         {
@@ -273,6 +424,30 @@ namespace Ankh.VS.Dialogs
 
             if (!_targets.Contains(target))
                 _targets.Add(target);
+        }
+
+        int IVsWindowPane.TranslateAccelerator(MSG[] lpmsg)
+        {
+            const int WM_KEYFIRST = 0x0100;
+            const int WM_IME_KEYLAST = 0x010F;
+
+            if (lpmsg[0].message < WM_KEYFIRST || lpmsg[0].message > WM_IME_KEYLAST)
+                return VSConstants.S_FALSE; // Only key translation below
+
+            IVsFilterKeys2 keys = _context.GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
+
+            Guid cmd;
+            uint id;
+            int translated;
+            int shortstart;
+            int n = keys.TranslateAcceleratorEx(lpmsg, (uint)(__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope | __VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState)
+                , 0, null, out cmd, out id, out translated, out shortstart);
+
+            if (n == VSConstants.S_OK)
+                return VSConstants.S_OK;
+            else
+//            return _context.GetService<IVsUIShell>().TranslateAcceleratorAsACmd(lpmsg);
+            return VSConstants.S_FALSE;
         }
     }
 }
