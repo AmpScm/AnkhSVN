@@ -287,7 +287,7 @@ namespace Ankh.VS.Dialogs
 
 
     [ComVisible(true), CLSCompliant(false)]
-    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget, IVsWindowPane
+    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget
     {
         readonly List<IOleCommandTarget> _targets = new List<IOleCommandTarget>();
         readonly VSEditorControl _form;
@@ -401,7 +401,7 @@ namespace Ankh.VS.Dialogs
             int hr = (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
             foreach (IOleCommandTarget target in _targets)
             {
-                target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+                hr = target.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
 
                 if (hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED && hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)
                     return hr;
@@ -424,30 +424,6 @@ namespace Ankh.VS.Dialogs
 
             if (!_targets.Contains(target))
                 _targets.Add(target);
-        }
-
-        int IVsWindowPane.TranslateAccelerator(MSG[] lpmsg)
-        {
-            const int WM_KEYFIRST = 0x0100;
-            const int WM_IME_KEYLAST = 0x010F;
-
-            if (lpmsg[0].message < WM_KEYFIRST || lpmsg[0].message > WM_IME_KEYLAST)
-                return VSConstants.S_FALSE; // Only key translation below
-
-            IVsFilterKeys2 keys = _context.GetService<IVsFilterKeys2>(typeof(SVsFilterKeys));
-
-            Guid cmd;
-            uint id;
-            int translated;
-            int shortstart;
-            int n = keys.TranslateAcceleratorEx(lpmsg, (uint)(__VSTRANSACCELEXFLAGS.VSTAEXF_UseTextEditorKBScope | __VSTRANSACCELEXFLAGS.VSTAEXF_AllowModalState)
-                , 0, null, out cmd, out id, out translated, out shortstart);
-
-            if (n == VSConstants.S_OK)
-                return VSConstants.S_OK;
-            else
-//            return _context.GetService<IVsUIShell>().TranslateAcceleratorAsACmd(lpmsg);
-            return VSConstants.S_FALSE;
         }
     }
 }
