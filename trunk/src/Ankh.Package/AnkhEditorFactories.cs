@@ -170,7 +170,7 @@ namespace Ankh.VSPackage
                 pane = value as VSDocumentFormPane;                                
             }
 
-            ((IVSEditorControlInit)form).InitializedForm(hier, id, frame, pane);
+            ((IVSEditorControlInit)form).InitializedForm(hier, id, frame, pane.Host);
 
             return frame;
         }
