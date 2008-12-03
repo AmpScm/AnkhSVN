@@ -100,14 +100,14 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
           The AnkhSVN project provides Daily builds of the current development tree. These versions
-          are not tested, but may contain bugfixes (and new bugs) that are not in released versions. If
-          you are testing these daily builds (Thanks!) and find issues in it, please report those issues
-          with the exact version.
+          are not tested before uploading, but may contain bugfixes (and new bugs) that are not in 
+          released versions. If you are testing our daily builds (Thanks!) and find issues in them,
+          please report those issues with the exact version (See the Visual Studio about box).
         </p>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h2>The latest daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
+        <h2>The latest daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a>.</h2>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
