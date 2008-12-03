@@ -105,10 +105,29 @@ namespace Ankh.Scc.UI
         bool RunDiff(AnkhDiffArgs args);
         bool RunMerge(AnkhMergeArgs args);
 
+        /// <summary>
+        /// Releases the diff.
+        /// </summary>
+        /// <param name="frameNumber">The frame number.</param>
         void ReleaseDiff(int frameNumber);
 
+        /// <summary>
+        /// Gets the temp file.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="revision">The revision.</param>
+        /// <param name="withProgress">if set to <c>true</c> [with progress].</param>
+        /// <returns></returns>
         string GetTempFile(SvnTarget target, SvnRevision revision, bool withProgress);
+        /// <summary>
+        /// Gets the temp file.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <param name="revision">The revision.</param>
+        /// <param name="withProgress">if set to <c>true</c> [with progress].</param>
+        /// <returns></returns>
         string GetTempFile(SvnItem target, SvnRevision revision, bool withProgress);
+        string[] GetTempFiles(SvnTarget target, SvnRevision first, SvnRevision last, bool withProgress);
         string GetTitle(SvnTarget target, SvnRevision revision);
         string GetTitle(SvnItem target, SvnRevision revision);
 

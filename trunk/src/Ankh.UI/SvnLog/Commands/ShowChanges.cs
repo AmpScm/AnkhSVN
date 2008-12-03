@@ -164,11 +164,13 @@ namespace Ankh.UI.SvnLog.Commands
 
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             AnkhDiffArgs da = new AnkhDiffArgs();
-            da.BaseFile = diff.GetTempFile(diffTarget, range.StartRevision, false);
+
+            string[] files = diff.GetTempFiles(diffTarget, range.StartRevision, range.EndRevision, true);
+
+            da.BaseFile = files[0];            
+            da.MineFile = files[1];
             da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);
-            da.MineFile = diff.GetTempFile(diffTarget, range.EndRevision, false);
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
-            da.Mode = DiffMode.PreferExternal;
             diff.RunDiff(da);
         }
     }

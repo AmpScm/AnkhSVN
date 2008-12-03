@@ -532,6 +532,31 @@ namespace Ankh.Services
                 File.SetAttributes(file, FileAttributes.ReadOnly); // A readonly file does not allow editting from many diff tools
 
             return file;
-        }        
+        }
+
+        public string[] GetTempFiles(SvnTarget target, SvnRevision from, SvnRevision to, bool withProgress)
+        {
+            if (target == null)
+                throw new ArgumentNullException("target");
+            else if (from == null)
+                throw new ArgumentNullException("from");
+            else if (to == null)
+                throw new ArgumentNullException("to");
+           
+            // TODO: Replace with SvnClient.FileVersions call when to = from+1
+
+            string f1 = GetTempFile(target, from, withProgress);
+            string f2 = GetTempFile(target, to, withProgress);
+
+            string[] files = new string[] { f1, f2 };
+
+            foreach (string f in files)
+            {
+                if (File.Exists(f))
+                    File.SetAttributes(f, FileAttributes.ReadOnly);
+            }
+
+            return files;
+        }
     }
 }
