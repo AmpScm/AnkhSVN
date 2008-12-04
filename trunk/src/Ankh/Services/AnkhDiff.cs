@@ -462,6 +462,30 @@ namespace Ankh.Services
             return revision.ToString();
         }
 
+        string GetName(string filename, SvnRevision rev)
+        {
+            if (string.IsNullOrEmpty(filename))
+                throw new ArgumentNullException("filename");
+            else if (rev == null)
+                throw new ArgumentNullException("rev");
+
+            return (Path.GetFileNameWithoutExtension(filename) + "." + PathSafeRevision(rev) + Path.GetExtension(filename)).Trim('.');
+        }
+
+        string GetTempPath(string filename, SvnRevision rev)
+        {
+            string name = GetName(filename, rev);
+            string file;
+            if (_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
+            {
+                _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
+
+                file = Path.Combine(_lastDir, name);
+            }
+
+            return file;
+        }
+
         string _lastDir;
         public string GetTempFile(SvnItem target, SharpSvn.SvnRevision revision, bool withProgress)
         {
@@ -470,16 +494,7 @@ namespace Ankh.Services
             else if (revision == null)
                 throw new ArgumentNullException("revision");
 
-            
-            string name = target.NameWithoutExtension + "." + PathSafeRevision(revision) + target.Extension;
-
-            string file;
-            if(_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
-            {
-                _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
-
-                file = Path.Combine(_lastDir, name);
-            }
+            string file = GetTempPath(target.Name, revision);
 
             if(target.NodeKind != SvnNodeKind.File)
                 throw new InvalidOperationException("Can't create a tempfile from a directory");
@@ -507,16 +522,7 @@ namespace Ankh.Services
             else if (revision == null)
                 throw new ArgumentNullException("revision");
 
-            string targetName = target.FileName;
-            string name = Path.GetFileNameWithoutExtension(targetName) + "." + PathSafeRevision(revision) + Path.GetExtension(targetName);
-
-            string file;
-            if (_lastDir == null || !Directory.Exists(_lastDir) || File.Exists(file = Path.Combine(_lastDir, name)))
-            {
-                _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
-
-                file = Path.Combine(_lastDir, name);
-            }
+            string file = GetTempPath(target.FileName, revision);
 
             GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
@@ -545,8 +551,37 @@ namespace Ankh.Services
            
             // TODO: Replace with SvnClient.FileVersions call when to = from+1
 
-            string f1 = GetTempFile(target, from, withProgress);
-            string f2 = GetTempFile(target, to, withProgress);
+            string f1;
+            string f2;
+
+            if (from.RevisionType == SvnRevisionType.Number && to.RevisionType == SvnRevisionType.Number && from.Revision + 1 == to.Revision)
+            {
+                f1 = GetTempPath(target.FileName, from);
+                f2 = GetTempPath(target.FileName, to);
+
+                Context.GetService<IProgressRunner>().RunModal("Getting revisions",
+                    delegate(object sender, ProgressWorkerArgs e)
+                    {
+                        SvnFileVersionsArgs ea = new SvnFileVersionsArgs();
+                        ea.Start = from;
+                        ea.End = to;
+
+                        int n = 0;
+                        e.Client.FileVersions(target, ea,
+                            delegate(object sender2, SvnFileVersionEventArgs e2)
+                            {
+                                if (n++ == 0)
+                                    e2.WriteTo(f1);
+                                else
+                                    e2.WriteTo(f2);
+                            });
+                    });
+            }
+            else
+            {
+                f1 = GetTempFile(target, from, withProgress);
+                f2 = GetTempFile(target, to, withProgress);
+            }
 
             string[] files = new string[] { f1, f2 };
 
