@@ -82,7 +82,7 @@ namespace Ankh.UI.PendingChanges
 
         private void UpdateColors(bool hasRenderer)
         {
-            if (Context == null)
+            if (Context == null || SystemInformation.HighContrast)
                 return;
 
             // We should use the VS colors instead of the ones provided by the OS
