@@ -53,18 +53,21 @@ namespace Ankh.UI.PendingChanges.Commits
                 item.Extension,
                 SafeWorkingCopy(item));
 
-            System.Drawing.Color clr = System.Drawing.Color.Black;
+            if (!SystemInformation.HighContrast)
+            {
+                System.Drawing.Color clr = System.Drawing.Color.Black;
 
-            if(item.IsConflicted)
-                clr = System.Drawing.Color.Red;
-            else if(item.IsDeleteScheduled)
-                clr = System.Drawing.Color.DarkRed;
-            else if(item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added || !item.IsVersioned)
-                clr = System.Drawing.Color.FromArgb(100,0,100);
-            else if(item.IsModified)
-                clr = System.Drawing.Color.DarkBlue;
+                if (item.IsConflicted)
+                    clr = System.Drawing.Color.Red;
+                else if (item.IsDeleteScheduled)
+                    clr = System.Drawing.Color.DarkRed;
+                else if (item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added || !item.IsVersioned)
+                    clr = System.Drawing.Color.FromArgb(100, 0, 100);
+                else if (item.IsModified)
+                    clr = System.Drawing.Color.DarkBlue;
 
-            ForeColor = clr;
+                ForeColor = clr;
+            }
         }
 
         private string SafeDate(DateTime dateTime)

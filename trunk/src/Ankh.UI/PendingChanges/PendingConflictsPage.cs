@@ -30,16 +30,20 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnLoad(e);
             conflictView.Context = Context;
-            IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
-            Color c;
-            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
-            {
-                resolvePannel.BackColor = c;
-            }
 
-            if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
+            if (!SystemInformation.HighContrast)
             {
-                resolvePannel.ForeColor = c;
+                IAnkhVSColor clr = Context.GetService<IAnkhVSColor>();
+                Color c;
+                if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE, out c))
+                {
+                    resolvePannel.BackColor = c;
+                }
+
+                if (clr != null && clr.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TITLEBAR_INACTIVE_TEXT, out c))
+                {
+                    resolvePannel.ForeColor = c;
+                }
             }
 
             ResizeToFit();
