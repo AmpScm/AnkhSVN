@@ -109,6 +109,9 @@ namespace Ankh.UI.SvnLog
 
         void UpdateColors()
         {
+            if (SystemInformation.HighContrast)
+                return;
+
             if (_args.ChangedPaths == null)
                 return;
 
