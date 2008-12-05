@@ -11,6 +11,7 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using SharpSvn;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -71,7 +72,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RepositoryTreeNode rootNode;
 
-            rootNode = new RepositoryTreeNode(null, null, false);
+            rootNode = new RepositoryTreeNode(null, true);
             rootNode.Text = RepositoryStrings.RootName;
 
             if (IconMapper != null)
@@ -143,7 +144,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             if (serverNode == null)
             {
-                serverNode = new RepositoryTreeNode(serverUri, null, false);
+                serverNode = new RepositoryTreeNode(serverUri, true);
                 serverNode.Text = serverUri.ToString();
 
                 if (IconMapper != null)
@@ -531,7 +532,7 @@ namespace Ankh.UI.RepositoryExplorer
             }
 
             // uri is always the repos root here
-            RepositoryTreeNode rtn = new RepositoryTreeNode(uri, uri, true);
+            RepositoryTreeNode rtn = new RepositoryTreeNode(new SvnOrigin(uri, uri));
             rtn.Text = uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
             if (IconMapper != null)
                 rtn.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Db);
@@ -566,8 +567,6 @@ namespace Ankh.UI.RepositoryExplorer
             if (s != null)
             {
                 s.AddItem(item);
-
-                s.Revision = item.Entry.Revision;
 
                 if (s.ExpandAfterLoad)
                 {
@@ -607,7 +606,7 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (parent != null)
                 {
-                    tn = new RepositoryTreeNode(uri, repositoryUri, true);
+                    tn = new RepositoryTreeNode(new SvnOrigin(uri, repositoryUri));
                     string name = uri.ToString();
                     int nS = name.LastIndexOf('/', name.Length - 2);
 
@@ -656,7 +655,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override void OnRetrieveSelection(TreeViewWithSelection<RepositoryTreeNode>.RetrieveSelectionEventArgs e)
         {
-            e.SelectionItem = new RepositoryExplorerItem(Context, (RepositoryTreeNode)e.SelectionItem);
+            e.SelectionItem = new RepositoryExplorerItem(Context, e.Item.Origin, e.Item);
             base.OnRetrieveSelection(e);
         }
 

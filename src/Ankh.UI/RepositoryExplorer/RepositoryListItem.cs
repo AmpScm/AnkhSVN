@@ -15,11 +15,16 @@ namespace Ankh.UI.RepositoryExplorer
         SvnListEventArgs _info;
         SvnOrigin _origin;
 
-        public RepositoryListItem(RepositoryListView view, SvnListEventArgs info, IFileIconMapper iconMapper)
+        public RepositoryListItem(RepositoryListView view, SvnListEventArgs info, SvnOrigin dirOrigin, IFileIconMapper iconMapper)
             : base(view)
         {
+            if (info == null)
+                throw new ArgumentNullException("info");
+            else if (dirOrigin == null)
+                throw new ArgumentNullException("dirOrigin");
+
             _info = info;
-            _origin = new SvnOrigin(new SvnUriTarget(info.EntryUri, info.Entry.Revision), info.RepositoryRoot);
+            _origin = new SvnOrigin(info.EntryUri, dirOrigin);
 
             string name = SvnTools.GetFileName(info.EntryUri);
 

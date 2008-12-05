@@ -116,13 +116,13 @@ namespace Ankh.UI.RepositoryExplorer
 
             RepositoryTreeNode tn = treeView.SelectedNode as RepositoryTreeNode;
 
-            if (tn != null)
+            if (tn != null && tn.Origin != null)
             {
                 foreach (RepositoryTreeNode sn in tn.Nodes)
                 {
                     if (sn.FolderItems.Contains(sn.RawUri))
                     {
-                        RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }
@@ -131,7 +131,7 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     if (ee.EntryUri != tn.RawUri)
                     {
-                        RepositoryListItem item = new RepositoryListItem(fileView, ee, IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, ee, tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }

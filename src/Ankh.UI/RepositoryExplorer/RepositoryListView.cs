@@ -149,7 +149,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
-            e.SelectionItem = new RepositoryExplorerItem(Context, e.Item);
+            e.SelectionItem = new RepositoryExplorerItem(Context, e.Item.Origin, e.Item);
             base.OnRetrieveSelection(e);
         }
     }
