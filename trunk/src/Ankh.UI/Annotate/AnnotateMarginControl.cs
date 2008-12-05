@@ -9,6 +9,7 @@ using Ankh.Selection;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.UI.PendingChanges;
 
 namespace Ankh.UI.Annotate
 {
@@ -195,11 +196,11 @@ namespace Ankh.UI.Annotate
             }
         }
 
-        internal void NotifyScroll(int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
+        internal void NotifyScroll(TextViewScrollEventArgs scrollInfo)
         {
-            int dy = (_firstLine - iFirstVisibleUnit) * LineHeight;
-            _firstLine = iFirstVisibleUnit;
-            _lastLine = iVisibleUnits + iFirstVisibleUnit;
+            int dy = (_firstLine - scrollInfo.FirstVisibleUnit) * LineHeight;
+            _firstLine = scrollInfo.FirstVisibleUnit;
+            _lastLine = scrollInfo.VisibleUnits + scrollInfo.FirstVisibleUnit;
 
             NativeMethods.ScrollWindowEx(Handle, 0, dy, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, NativeMethods.SW_INVALIDATE);
         }
