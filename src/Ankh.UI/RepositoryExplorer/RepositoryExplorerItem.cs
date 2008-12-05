@@ -214,7 +214,7 @@ namespace Ankh.UI.RepositoryExplorer
                 RepositoryExplorerControl rec = GetRepositoryExplorerControl();
                 if (rec != null)
                 {
-                    Uri uri = new Uri(this.Uri, "../"); // parent uri
+                    Uri uri = new Uri(this.Uri, "./"); // parent uri
                     rec.Reload(uri);
                 }
             }
