@@ -69,5 +69,14 @@ namespace Ankh.Scc
         /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
         /// <returns></returns>
         bool ReloadIfNotDirty(string file, bool clearUndo);
+
+        /// <summary>
+        /// Determines whether the document is open in a standard editor
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is document open in text editor] [the specified p]; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsDocumentOpenInTextEditor(string path);
     }
 }

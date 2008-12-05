@@ -29,11 +29,6 @@ namespace Ankh.UI.Annotate
             logMessageEditor1.ReadOnly = true;
         }
 
-        public void Init()
-        {
-            this.blameMarginControl1.Init(Context, this, blameSections);
-        }
-
         protected override void OnFrameCreated(EventArgs e)
         {
             base.OnFrameCreated(e);
@@ -48,6 +43,8 @@ namespace Ankh.UI.Annotate
 
             CommandContext = AnkhId.AnnotateContextGuid;
             KeyboardContext = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2); // Editor
+
+            blameMarginControl1.Init(Context, this, blameSections);
         }
 
         public void LoadFile(string projectFile, string exportedFile)
@@ -94,7 +91,10 @@ namespace Ankh.UI.Annotate
 
         private void logMessageEditor1_Scroll(object sender, TextViewScrollEventArgs e)
         {
-            blameMarginControl1.NotifyScroll(e.MinUnit, e.MaxUnit, e.VisibleUnits, e.FirstVisibleUnit);
+            if (e.Orientation == ScrollOrientation.HorizontalScroll)
+                return; // No need to update margin
+
+            blameMarginControl1.NotifyScroll(e);
         }
 
         AnnotateSection _selected;

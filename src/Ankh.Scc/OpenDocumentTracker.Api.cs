@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.Scc
 {
@@ -23,6 +24,25 @@ namespace Ankh.Scc
                 return false;
             else
                 return true;
+        }
+
+        public bool IsDocumentOpenInTextEditor(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            SccDocumentData data;
+
+            if (!_docMap.TryGetValue(path, out data))
+                return false;
+            else
+            {
+                object o = data.RawDocument;
+
+                bool isEditor = (o is IVsTextBuffer);
+
+                return isEditor;
+            }
         }
 
         public bool IsDocumentDirty(string path)

@@ -179,7 +179,7 @@ namespace Ankh.Commands
             SvnTarget target = item.Target;
 
             IAnkhTempFileManager tempMgr = e.GetService<IAnkhTempFileManager>();
-            string tempFile = tempMgr.GetTempFile();
+            string tempFile = tempMgr.GetTempFileNamed(target.FileName);
 
             Collection<SvnBlameEventArgs> blameResult = null;
             e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
@@ -189,35 +189,40 @@ namespace Ankh.Commands
                 ee.Client.GetBlame(target, ba, out blameResult);
             });
 
-            //AnnotateViewForm vf = new AnnotateViewForm();
-
-            //vf.Create(e.Context, "c:\\test.txt");
-            //vf.Context = e.Context;
-
             AnnotateEditorControl btw = new AnnotateEditorControl();           
 
-            string path;
-
+            string path = null;
             SvnPathTarget pt = target as SvnPathTarget;
 
             if (pt != null)
             {
                 path = pt.FullPath;
+
+                IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+                IAnkhOpenDocumentTracker odt = e.GetService<IAnkhOpenDocumentTracker>();
+
+                if (pfm != null && pfm.IsProjectFileOrSolution(pt.FullPath))
+                {
+                    // Don't use real names for projects or the solution
+                    // We don't want to crash VS here
+                    path = null;
+                }
+                else if (odt != null && odt.IsDocumentOpen(pt.FullPath))
+                {
+                    // We would replace the existing buffer here
+                    
+                    // odt.IsDocumentOpenInTextEditor() should be safe for us but testing revieled
+                    // External changes would be reflected in our buffer; not the original :(
+
+                    path = null;
+                }
             }
-            else
-            {
-                path = tempMgr.GetTempFileNamed(target.FileName);
-            }
+
+            if (string.IsNullOrEmpty(path))
+                path = tempFile;
 
             btw.Create(e.Context, path);
-            btw.Init();
-
-            //p.ShowToolWindow(AnkhToolWindow.Blame);
-            //BlameToolWindowControl blameToolControl = e.GetService<ISelectionContext>().ActiveFrameControl as BlameToolWindowControl;
-            //blameToolControl.Init();
-
             btw.LoadFile(path, tempFile);
-
             btw.AddLines(item, blameResult);
         }
 

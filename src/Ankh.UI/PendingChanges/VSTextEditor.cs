@@ -1060,13 +1060,16 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        public void OnChangeCaretLine(IVsTextView pView, int iNewLine, int iOldLine)
+        void IVsTextViewEvents.OnChangeCaretLine(IVsTextView pView, int iNewLine, int iOldLine)
         {
         }
 
 
+        /// <summary>
+        /// Occurs when the text view scrolled
+        /// </summary>
         public event EventHandler<TextViewScrollEventArgs> Scroll;
-        public void OnChangeScrollInfo(IVsTextView pView, int iBar, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
+        void IVsTextViewEvents.OnChangeScrollInfo(IVsTextView pView, int iBar, int iMinUnit, int iMaxUnits, int iVisibleUnits, int iFirstVisibleUnit)
         {
             if (Scroll != null)
             {
@@ -1077,15 +1080,15 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        public void OnKillFocus(IVsTextView pView)
+        void IVsTextViewEvents.OnKillFocus(IVsTextView pView)
         {
         }
 
-        public void OnSetBuffer(IVsTextView pView, IVsTextLines pBuffer)
+        void IVsTextViewEvents.OnSetBuffer(IVsTextView pView, IVsTextLines pBuffer)
         {
         }
 
-        public void OnSetFocus(IVsTextView pView)
+        void IVsTextViewEvents.OnSetFocus(IVsTextView pView)
         {
         }
 
