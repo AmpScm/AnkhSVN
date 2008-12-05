@@ -109,6 +109,8 @@ namespace Ankh.UI.SvnLog
 
         void UpdateColors()
         {
+            if (SystemInformation.HighContrast)
+                return;
             if (!_isInSelection)
                 ForeColor = Color.Gray;
             else
