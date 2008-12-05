@@ -33,7 +33,7 @@ namespace Ankh.Commands.RepositoryExplorer
             if (ri == null)
                 return;
 
-            string toFile = e.GetService<IAnkhTempFileManager>().GetTempFile(Path.GetExtension(ri.Name));
+            string toFile = e.GetService<IAnkhTempFileManager>().GetTempFileNamed(ri.Name);
 
             SaveFile(e, ri, toFile);
 

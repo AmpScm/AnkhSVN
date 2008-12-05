@@ -40,7 +40,11 @@ namespace Ankh.Commands
                 {
                     using (FileStream fs = File.Create(toFile))
                     {
-                        ee.Client.Write(ri.Origin.Target, fs);
+                        SvnWriteArgs args = new SvnWriteArgs();
+                        if(ri.Revision != null)
+                            args.Revision = ri.Revision;
+
+                        ee.Client.Write(ri.Origin.Target, fs, args);
                     }
                 });
         }

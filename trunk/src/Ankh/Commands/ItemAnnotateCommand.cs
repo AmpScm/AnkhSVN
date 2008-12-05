@@ -206,7 +206,7 @@ namespace Ankh.Commands
             }
             else
             {
-                path = tempMgr.GetTempFile(Path.GetExtension(target.FileName));
+                path = tempMgr.GetTempFileNamed(target.FileName);
             }
 
             btw.Create(e.Context, path);

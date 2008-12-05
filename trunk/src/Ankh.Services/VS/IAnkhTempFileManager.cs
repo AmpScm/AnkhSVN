@@ -24,5 +24,12 @@ namespace Ankh.VS
         /// <remarks>The file is created as a 0 byte unique file before this function returns
         /// and will be removed after AnkhSVN exits</remarks>
         string GetTempFile(string extension);
+
+        /// <summary>
+        /// Gets a temp file with the specified name
+        /// </summary>
+        /// <param name="filename">The filename.</param>
+        /// <returns></returns>
+        string GetTempFileNamed(string filename);
     }
 }
