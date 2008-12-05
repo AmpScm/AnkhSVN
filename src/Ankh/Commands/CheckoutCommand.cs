@@ -37,6 +37,7 @@ namespace Ankh.Commands
 
             using (CheckoutDialog dlg = new CheckoutDialog())
             {
+                dlg.Context = e.Context;
                 dlg.Uri = uri;
                 dlg.LocalPath = System.IO.Path.Combine(ss.NewProjectLocation, name);
                 

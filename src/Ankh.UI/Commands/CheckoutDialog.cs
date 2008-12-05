@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using SharpSvn;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI
 {
@@ -19,6 +20,7 @@ namespace Ankh.UI
             InitializeComponent();
 
             this.ControlsChanged(this, EventArgs.Empty);
+            revisionPicker.Revision = SvnRevision.Head;
         }
 
         /// <summary>
@@ -41,6 +43,13 @@ namespace Ankh.UI
                 else
                     urlTextBox.Text = value.AbsoluteUri;
             }
+        }
+
+        IAnkhServiceProvider _context;
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set { _context = value; this.revisionPicker.Context = value; }
         }
 
         /// <summary>
@@ -108,6 +117,24 @@ namespace Ankh.UI
                 {
                     this.localDirTextBox.Text = browser.SelectedPath;
                 }
+            }
+        }
+
+        private void urlTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (Uri != null)
+                revisionPicker.SvnOrigin = new Ankh.Scc.SvnOrigin(Uri, Uri);
+        }
+
+        private void urlBrowse_Click(object sender, EventArgs e)
+        {
+            using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
+            {
+                dlg.Context = Context;
+                dlg.SelectedUri = Uri;
+
+                if (dlg.ShowDialog(Context) == DialogResult.OK)
+                    Uri = dlg.SelectedUri;
             }
         }
     }
