@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
+using System.Diagnostics;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -16,28 +17,40 @@ namespace Ankh.UI.RepositoryExplorer
         }
     }
 
-    class RepositoryTreeNode : TreeNode
+    sealed class RepositoryTreeNode : TreeNode
     {
         readonly Uri _uri;
-        SvnOrigin _origin;
-        long _revision;
+        readonly SvnOrigin _origin;
 
         RepositoryTreeNode _dummy;
         ListItemCollection _items;
         bool _loaded;
         bool _expandAfterLoad;
-        
 
-        public RepositoryTreeNode(Uri uri, Uri repositoryUri, bool inRepository)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RepositoryTreeNode"/> class.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        public RepositoryTreeNode(SvnOrigin origin)
         {
-            _uri = uri;
+            if(origin == null)
+                throw new ArgumentNullException("origin");
 
-            if (inRepository)
-            {
-                _origin = new SvnOrigin(
-                    SvnTools.GetNormalizedUri(uri),
-                    repositoryUri);
-            }
+            _uri = origin.Uri;
+            _origin = origin;
+        }
+
+        /// <summary>
+        /// Initializes a dummy instance of the <see cref="RepositoryTreeNode"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="dummyNode">if set to <c>true</c> [dummy node].</param>
+        internal RepositoryTreeNode(Uri uri, bool dummyNode)
+        {
+            Debug.Assert(dummyNode, "Must specify dummyNode");
+
+            _uri = uri;
+            _origin = null;
         }
 
         public int IconIndex
@@ -58,7 +71,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         public Uri NormalizedUri
         {
-            get { return (_origin != null) ? _origin.Uri : null; }
+            get { return (_origin != null) ? ((SvnUriTarget) _origin.Target).Uri : null; }
         }
 
         public bool IsRepositoryPath
@@ -69,18 +82,6 @@ namespace Ankh.UI.RepositoryExplorer
         public Uri RepositoryRoot
         {
             get { return (_origin != null) ? _origin.RepositoryRoot : null; }
-        }
-
-        public long Revision
-        {
-            get { return _revision; }
-            internal set 
-            { 
-                _revision = value;
-
-                if (_origin != null)
-                    _origin = new SvnOrigin(new SvnUriTarget(_origin.Uri, value), _origin.RepositoryRoot);
-            }
         }
 
         public new void Expand()
@@ -100,7 +101,7 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        protected new RepositoryTreeView TreeView
+        new RepositoryTreeView TreeView
         {
             get { return (RepositoryTreeView)base.TreeView; }
         }
@@ -109,7 +110,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             if (Nodes.Count == 0 && _dummy == null)
             {
-                _dummy = new RepositoryTreeNode(RawUri, null, false);
+                _dummy = new RepositoryTreeNode(RawUri, true);
                 _dummy.Name = _dummy.Text = "<dummy>";
                 Nodes.Add(_dummy);
             }
@@ -155,6 +156,17 @@ namespace Ankh.UI.RepositoryExplorer
                 FolderItems.Remove(item.EntryUri);
 
             FolderItems.Add(item);
+        }
+
+        public SvnListEventArgs DirectoryItem
+        {
+            get
+            {
+                if (FolderItems.Count > 0)
+                    return FolderItems[0]; // First is folder itself
+
+                return null;
+            }
         }
     }
 }

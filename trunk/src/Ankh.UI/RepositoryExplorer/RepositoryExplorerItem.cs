@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Ankh.Scc;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -14,9 +15,9 @@ namespace Ankh.UI.RepositoryExplorer
         readonly RepositoryTreeNode _tn;
         readonly RepositoryListItem _li;        
         readonly string _name;
-        readonly Uri _uri;
+        readonly SvnOrigin _origin;
 
-        public RepositoryExplorerItem(IAnkhServiceProvider context, RepositoryTreeNode tn)
+        public RepositoryExplorerItem(IAnkhServiceProvider context, SvnOrigin origin, RepositoryTreeNode tn)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -24,12 +25,12 @@ namespace Ankh.UI.RepositoryExplorer
                 throw new ArgumentNullException("tn");
 
             _context = context;
+            _origin = origin;
             _tn = tn;
-            _uri = tn.RawUri;
             _name = tn.Text;
         }
 
-        public RepositoryExplorerItem(IAnkhServiceProvider context, RepositoryListItem li)
+        public RepositoryExplorerItem(IAnkhServiceProvider context, SvnOrigin origin, RepositoryListItem li)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -37,9 +38,8 @@ namespace Ankh.UI.RepositoryExplorer
                 throw new ArgumentNullException("li");
 
             _context = context;
-            _li = li;
-            _uri = li.RawUri;
-            _name = li.Text;
+            _origin = origin;
+            _li = li;            
         }
 
         protected override string ComponentName
@@ -52,16 +52,92 @@ namespace Ankh.UI.RepositoryExplorer
             get { return "Repository Item"; }
         }
 
+        SvnListEventArgs Info
+        {
+            get
+            {
+                if (_li != null)
+                    return _li.Info;
+                else if (_tn != null)
+                    return _tn.DirectoryItem;
+
+                throw new InvalidOperationException();
+            }
+        }
+
+
+        SvnDirEntry Entry
+        {
+            get
+            {
+                SvnListEventArgs info = Info;
+
+                if(info != null)
+                    return info.Entry;
+
+                return null;
+            }
+        }
+
         [DisplayName("Url")]
         public Uri Uri
         {
-            get { return _uri; }
+            get 
+            {
+                if (_origin == null)
+                    return null;
+                return _origin.Uri; 
+            }
         }
 
         [DisplayName("File Name")]
         public string Name
         {
-            get { return _name; }
+            get 
+            {
+                if (_origin == null)
+                    return null;
+                return _origin.Target.FileName; 
+            }
+        }
+
+        [Category("Subversion"), DisplayName("Last Author")]
+        public string LastAuthor
+        {
+            get
+            {
+                SvnDirEntry entry = Entry;
+                if (entry != null)
+                    return entry.Author;
+                else
+                    return null;
+            }
+        }  
+
+        [Category("Subversion"), DisplayName("Last Revision")]
+        public long LastRevision
+        {
+            get
+            {
+                SvnDirEntry entry = Entry;
+                if (entry != null)
+                    return entry.Revision;
+                else
+                    return -1;
+            }
+        }
+
+        [Category("Subversion"), DisplayName("Last Committed")]
+        public DateTime LastCommitted
+        {
+            get
+            {
+                SvnDirEntry entry = Entry;
+                if (entry != null)
+                    return entry.Time.ToLocalTime();
+                else
+                    return DateTime.MinValue;
+            }
         }
 
         [Browsable(false)]
@@ -97,15 +173,7 @@ namespace Ankh.UI.RepositoryExplorer
         [Browsable(false)]
         public SvnOrigin Origin
         {
-            get
-            {
-                if (TreeNode != null)
-                    return TreeNode.Origin;
-                if (ListViewItem != null)
-                    return ListViewItem.Origin;
-
-                throw new InvalidOperationException();
-            }
+            get { return _origin; }
         }
 
         SharpSvn.SvnRevision ISvnRepositoryItem.Revision
