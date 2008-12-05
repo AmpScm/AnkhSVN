@@ -39,9 +39,32 @@ namespace Ankh.Scc
         /// <param name="uri">The URI.</param>
         /// <param name="reposRoot">The repos root.</param>
         public SvnOrigin(Uri uri, Uri reposRoot)
-            : this((SvnUriTarget)uri, reposRoot)
+            : this(new SvnUriTarget(uri, SvnRevision.Head), reposRoot)
         {
             _uri = uri; // Keep Uri unnormalized for UI purposes
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvnOrigin"/> class.
+        /// </summary>
+        /// <param name="uri">The URI.</param>
+        /// <param name="origin">The original origin to calculate from</param>
+        public SvnOrigin(Uri uri, SvnOrigin origin)
+        {
+            if (uri == null)
+                throw new ArgumentNullException("uri");
+            else if (origin == null)
+                throw new ArgumentNullException("origin");
+
+            SvnUriTarget target = new SvnUriTarget(uri, origin.Target.Revision);
+            _target = target;
+            _uri = uri;
+            _reposRoot = origin.RepositoryRoot;
+
+#if DEBUG
+            Debug.Assert(!_reposRoot.MakeRelativeUri(_uri).IsAbsoluteUri);
+#endif
+
         }
 
         /// <summary>
@@ -74,7 +97,7 @@ namespace Ankh.Scc
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if(target == null)
+            else if (target == null)
                 throw new ArgumentNullException("target");
 
             SvnPathTarget pt = target as SvnPathTarget;
@@ -83,7 +106,7 @@ namespace Ankh.Scc
             {
                 SvnItem item = context.GetService<IFileStatusCache>()[pt.FullPath];
 
-                if(item == null || !item.IsVersioned)
+                if (item == null || !item.IsVersioned)
                     throw new InvalidOperationException("Can only create a SvnOrigin from versioned items");
 
                 _target = target;
