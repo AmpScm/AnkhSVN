@@ -105,8 +105,6 @@ namespace Ankh.UI.SvnLog
                 _change.CopyFromPath ?? "",
                 _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
             );
-
-            
         }
 
         void UpdateColors()
@@ -184,31 +182,58 @@ namespace Ankh.UI.SvnLog
             get { return _lvi.Action; ; }
         }
 
-        [Category("Subversion")]
-        [DisplayName("Copy from path")]
+        [Category("Origin")]
+        [DisplayName("Copied from path")]
         public string CopyFromPath
         {
             get { return _lvi.CopyFromPath; }
         }
 
-        [Category("Subversion")]
-        [DisplayName("Copy from revision")]
+        [Category("Origin")]
+        [DisplayName("Copied from revision")]
         public long CopyFromRevision
         {
             get { return _lvi.CopyFromRevision; }
         }
 
-        [Category("Subversion")]
+        [DisplayName("Name")]
+        public string Name
+        {
+            get { return _lvi.Origin.Target.FileName; }
+        }
+        
         [DisplayName("Path")]
         public string Path
         {
             get { return _lvi.Path; }
         }
-     
-        [Browsable(false)]
+
+        [Category("Subversion")]
+        [DisplayName("Url")]
+        public Uri Uri
+        {
+            get { return _lvi.Origin.Uri; }
+        }
+
+        [Category("Subversion")]
+        [DisplayName("Last Revision")]
         public long Revision
         {
             get { return _lvi.LogItem.Revision; }
+        }
+
+        [Category("Subversion")]
+        [DisplayName("Last Author")]
+        public string Author
+        {
+            get { return _lvi.LogItem.Author; }
+        }
+
+        [Category("Subversion")]
+        [DisplayName("Last Committed")]
+        public DateTime LastCommitted
+        {
+            get { return _lvi.LogItem.CommitDate.ToLocalTime(); }
         }
 
         /// <summary>
