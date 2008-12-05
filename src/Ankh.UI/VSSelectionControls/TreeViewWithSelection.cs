@@ -44,6 +44,16 @@ namespace Ankh.UI.VSSelectionControls
             NotifySelectionUpdated();
         }
 
+        /// <summary>
+        /// Raises the <see cref="E:System.Windows.Forms.Control.Enter"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
+        protected override void OnEnter(EventArgs e)
+        {
+            base.OnEnter(e);
+            EnsureSelection();
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -123,7 +133,12 @@ namespace Ankh.UI.VSSelectionControls
         /// <summary>
         /// Notifies to external listeners selection updated.
         /// </summary>
-        public void NotifySelectionUpdated()
+        public virtual void NotifySelectionUpdated()
+        {
+            EnsureSelection();
+        }
+
+        protected void EnsureSelection()
         {
             if (SelectionPublishServiceProvider != null)
             {
