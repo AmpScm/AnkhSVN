@@ -40,9 +40,7 @@ namespace Ankh.Scc.ProjectMap
             _context = context;
             _name = name;
 
-            IFileStatusCache fcc = GetService<IFileStatusCache>();
-
-            if (fcc != null && fcc.IsValidPath(name))
+            if (SvnItem.IsValidPath(name))
             {
                 _isFileDocument = true;
             }
@@ -174,17 +172,13 @@ namespace Ankh.Scc.ProjectMap
         {
             if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataReloaded))
             {
-                if (_initialUpdateCompleted)
+                if (_initialUpdateCompleted && _isFileDocument)
                 {
                     IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
 
                     if (statusCache != null)
                     {
-                        if (statusCache.IsValidPath(Name))
-                        {
-                            statusCache.MarkDirty(Name);
-                            UpdateGlyph();
-                        }
+                        statusCache.MarkDirty(Name);
                     }
                 }
                 else
