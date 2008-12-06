@@ -239,7 +239,7 @@ namespace Ankh.Scc
             {
                 if (dd.IsDirty && !dd.GetIsDirty(false))
                 {
-                    // We marked this document as dirty and it still says its dirty; 
+                    // We marked this document as dirty and it still says its not dirty; 
                     // so it probably was not dirty after all
                     dd.SetDirty(false);
                 }
