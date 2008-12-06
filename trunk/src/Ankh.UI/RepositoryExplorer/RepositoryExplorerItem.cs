@@ -196,11 +196,11 @@ namespace Ankh.UI.RepositoryExplorer
                 Uri uri = null;
                 if (refreshParent && this.TreeNode.Parent is RepositoryTreeNode)
                 {
-                    uri = ((RepositoryTreeNode)this.TreeNode.Parent).RawUri;
+                    uri = ((RepositoryTreeNode)this.TreeNode.Parent).NormalizedUri;
                 }
                 else
                 {
-                    uri = this.TreeNode.RawUri;
+                    uri = this.TreeNode.NormalizedUri;
                 }
                 if (uri != null
                     && this.TreeNode.TreeView is RepositoryTreeView)
@@ -214,7 +214,8 @@ namespace Ankh.UI.RepositoryExplorer
                 RepositoryExplorerControl rec = GetRepositoryExplorerControl();
                 if (rec != null)
                 {
-                    Uri uri = new Uri(this.Uri, "./"); // parent uri
+                    // This always reloads the parent and its children (not only when requested)
+                    Uri uri = new Uri(SvnTools.GetNormalizedUri(this.Uri), "./"); // parent uri
                     rec.Reload(uri);
                 }
             }
