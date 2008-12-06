@@ -700,26 +700,6 @@ namespace Ankh.Scc.StatusCache
         #region IFileStatusCache Members
 
 
-        /// <summary>
-        /// Determines whether the path value specifies a valid path
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is valid path] [the specified name]; otherwise, <c>false</c>.
-        /// </returns>
-        public bool IsValidPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            return SvnItem.IsValidPath(path);
-        }
-
-        #endregion
-
-        #region IFileStatusCache Members
-
-
         public SvnDirectory GetDirectory(string path)
         {
             if (string.IsNullOrEmpty(path))

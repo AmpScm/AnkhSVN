@@ -149,13 +149,22 @@ namespace Ankh.Scc
                 for (int i = 0; i < cFiles; i++)
                 {
                     rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
+                    rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                 }
                 return VSConstants.S_OK;
             }
 
             for (int i = 0; i < cFiles; i++)
             {
-                AnkhGlyph glyph = GetPathGlyph(rgpszFullPaths[i]);
+                string file = rgpszFullPaths[i];
+                if (!IsSafeSccPath(file))
+                {
+                    rgsiGlyphs[i] = VsStateIcon.STATEICON_BLANK;
+                    rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
+                    continue;
+                }
+
+                AnkhGlyph glyph = GetPathGlyph(file);
 
                 if (rgsiGlyphs != null)
                     rgsiGlyphs[i] = (VsStateIcon)glyph;

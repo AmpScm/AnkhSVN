@@ -43,15 +43,6 @@ namespace Ankh.Scc
         void ClearCache();
 
         /// <summary>
-        /// Determines whether the path value specifies a valid path
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified path is valid; otherwise, <c>false</c>.
-        /// </returns>
-        bool IsValidPath(string path);
-
-        /// <summary>
         /// Called from <see cref="SvnItem.Refresh()"/>
         /// </summary>
         /// <param name="item">The item.</param>

@@ -123,7 +123,8 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int OnAfterSaveUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
-            MarkDirty(pszMkDocument, true);
+            if (IsSafeSccPath(pszMkDocument))
+                MarkDirty(pszMkDocument, true);
 
             return VSConstants.S_OK;
         }
@@ -190,6 +191,18 @@ namespace Ankh.Scc
             }
         }
 
+        bool IsSafeSccPath(string file)
+        {
+            if (string.IsNullOrEmpty(file))
+                return false;
+            else if (!SvnItem.IsValidPath(file))
+                return false;
+            else if (file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            return true;
+        }
+
         /// <summary>
         /// Called by projects and editors before modifying a file
         /// The function allows the source control systems to take the necessary actions (checkout, flip attributes)
@@ -226,9 +239,8 @@ namespace Ankh.Scc
                 {
                     string file = rgpszMkDocuments[i];
 
-                    if (!SvnItem.IsValidPath(file) || 
-                        file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
-                        continue; // Just allow temporary files; don't look them up in our tables
+                    if (!IsSafeSccPath(file))
+                        continue; // Skip non scc paths
 
                     foreach (SvnItem item in GetAllDocumentItems(rgpszMkDocuments[i]))
                     {
@@ -296,9 +308,7 @@ namespace Ankh.Scc
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-            if (!string.IsNullOrEmpty(pszMkDocument) &&
-                StatusCache.IsValidPath(pszMkDocument) && 
-                !pszMkDocument.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+            if (!IsSafeSccPath(pszMkDocument))
             {
                 SvnItem item = StatusCache[pszMkDocument];
                 if (item != null)
@@ -337,9 +347,7 @@ namespace Ankh.Scc
                 {
                     string file = rgpszMkDocuments[i];
 
-                    if (string.IsNullOrEmpty(file) || 
-                        !StatusCache.IsValidPath(file) || 
-                        file.StartsWith(TempPathWithSeparator, StringComparison.OrdinalIgnoreCase))
+                    if (!IsSafeSccPath(file))
                         continue;
 
                     // TODO: Maybe handle locking; but should be in OnQueryEdit anyway
