@@ -149,7 +149,8 @@ namespace Ankh.Scc
                 for (int i = 0; i < cFiles; i++)
                 {
                     rgsiGlyphs[i] = VsStateIcon.STATEICON_NOSTATEICON;
-                    rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
+                    if(rgdwSccStatus != null)
+                        rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                 }
                 return VSConstants.S_OK;
             }
@@ -160,7 +161,8 @@ namespace Ankh.Scc
                 if (!IsSafeSccPath(file))
                 {
                     rgsiGlyphs[i] = VsStateIcon.STATEICON_BLANK;
-                    rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
+                    if (rgdwSccStatus != null)
+                        rgdwSccStatus[i] = (uint)SccStatus.SCC_STATUS_NOTCONTROLLED;
                     continue;
                 }
 
