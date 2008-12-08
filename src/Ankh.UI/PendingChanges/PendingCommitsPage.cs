@@ -216,7 +216,13 @@ namespace Ankh.UI.PendingChanges
 
         public override void RefreshList()
         {
-			Context.GetService<IFileStatusCache>().ClearCache();
+            Context.GetService<IFileStatusCache>().ClearCache();
+
+            IAnkhOpenDocumentTracker dt = Context.GetService<IAnkhOpenDocumentTracker>();
+
+            if(dt != null)
+                dt.RefreshDirtyState();
+			
             Manager.FullRefresh(true);
         }
 

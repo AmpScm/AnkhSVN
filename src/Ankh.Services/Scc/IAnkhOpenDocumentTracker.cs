@@ -96,5 +96,10 @@ namespace Ankh.Scc
         /// 	<c>true</c> if [is document open in text editor] [the specified p]; otherwise, <c>false</c>.
         /// </returns>
         bool IsDocumentOpenInTextEditor(string path);
+
+        /// <summary>
+        /// Refreshes all dirty flags
+        /// </summary>
+        void RefreshDirtyState();
     }
 }
