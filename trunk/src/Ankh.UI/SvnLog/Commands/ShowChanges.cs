@@ -148,7 +148,7 @@ namespace Ankh.UI.SvnLog.Commands
                     case SvnChangeAction.Replace:
                         if(item.CopyFromRevision < 0)
                             return;
-                        return;
+                        break;
                 }
 
                 ExecuteDiff(e, new SvnOrigin[] { item.Origin }, new SvnRevisionRange(item.Revision-1, item.Revision));
