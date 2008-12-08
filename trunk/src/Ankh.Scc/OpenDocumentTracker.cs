@@ -306,6 +306,13 @@ namespace Ankh.Scc
 
         public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
+            SccDocumentData data;
+
+            if (TryGetDocument(docCookie, out data))
+            {
+                data.CheckDirty();
+            }
+
             return VSConstants.S_OK;
         }
 
