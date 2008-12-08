@@ -467,7 +467,10 @@ namespace Ankh.VS.Selection
             if (pvar is uint) return (uint)pvar;
             if (pvar is short) return (uint)(short)pvar;
             if (pvar is ushort) return (uint)(ushort)pvar;
+            if (pvar is byte) return (uint)(byte)pvar;
+            if (pvar is sbyte) return (uint)(sbyte)pvar;
             if (pvar is long) return (uint)(long)pvar;
+            if (pvar is ulong) return (uint)(ulong)pvar;
             return VSConstants.VSITEMID_NIL;
         }
 
