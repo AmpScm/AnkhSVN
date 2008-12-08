@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.Selection;
-using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Ids;
-using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.VS;
-using Ankh.Commands;
-using Microsoft.VisualStudio;
 using System.Diagnostics;
-using Ankh.UI;
 using System.Windows.Forms;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+
 using SharpSvn;
+
+using Ankh.Commands;
+using Ankh.Ids;
+using Ankh.Selection;
+using Ankh.UI;
 
 namespace Ankh.Scc
 {
@@ -93,7 +92,7 @@ namespace Ankh.Scc
 
                 PostDirty();
             }
-        }        
+        }
 
         public void MarkDirty(IEnumerable<SvnProject> projects)
         {
@@ -184,8 +183,8 @@ namespace Ankh.Scc
 
                         continue;
                     }
-                     
-                    provider.RefreshProject(project.RawHandle);                    
+
+                    provider.RefreshProject(project.RawHandle);
                 }
             }
 
@@ -207,7 +206,7 @@ namespace Ankh.Scc
                     }
                 }
             }
-        }        
+        }
 
         #region IFileStatusMonitor Members
 
@@ -273,7 +272,7 @@ namespace Ankh.Scc
 
         #region IFileStatusMonitor Members
 
-        readonly HybridCollection<string> _externallyChanged = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<string, DocumentLock> _externallyChanged = new Dictionary<string, DocumentLock>(StringComparer.OrdinalIgnoreCase);
 
         public void ExternallyChanged(string path)
         {
@@ -284,31 +283,34 @@ namespace Ankh.Scc
 
             lock (_externallyChanged)
             {
-                if (!_externallyChanged.Contains(path))
-                    _externallyChanged.Add(path);
+                if (!_externallyChanged.ContainsKey(path)
+                    && !DocumentTracker.IsDocumentDirty(path))
+                {
+                    DocumentLock dl = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
+
+                    _externallyChanged.Add(path, dl);
+                }
             }
         }
 
         private void ReleaseExternalWrites()
         {
-            List<string> modified;
+            Dictionary<string, DocumentLock> modified;
             lock (_externallyChanged)
             {
-                if(_externallyChanged.Count == 0)
+                if (_externallyChanged.Count == 0)
                     return;
-                
-                modified = new List<string>(_externallyChanged);
+
+                modified = new Dictionary<string, DocumentLock>(_externallyChanged, StringComparer.OrdinalIgnoreCase);
                 _externallyChanged.Clear();
             }
 
             try
             {
-                foreach (string file in modified)
+                foreach (KeyValuePair<string, DocumentLock> file in modified)
                 {
-                    // TODO: Enable when we can suppress the 'Would you like to reload this document' dialog
-                    //DocumentTracker.ReloadIfNotDirty(file, false);
-
-                    SvnItem item = Cache[file];
+                    ScheduleSvnStatus(file.Key);
+                    SvnItem item = Cache[file.Key];
 
                     if (item.IsConflicted)
                     {
@@ -325,7 +327,7 @@ namespace Ankh.Scc
                                     SvnResolveArgs ra = new SvnResolveArgs();
                                     ra.ThrowOnError = false;
 
-                                    c.Resolve(file, SvnAccept.Merged, ra);
+                                    c.Resolve(file.Key, SvnAccept.Merged, ra);
                                 }
                                 goto case DialogResult.No;
                             case DialogResult.No:
@@ -342,6 +344,7 @@ namespace Ankh.Scc
                     else if (!item.IsDocumentDirty)
                     {
                         // Reload?
+                        file.Value.Reload(file.Key);
                     }
                 }
             }
@@ -351,6 +354,13 @@ namespace Ankh.Scc
 
                 if (handler != null)
                     handler.OnError(ex);
+            }
+            finally
+            {
+                foreach (DocumentLock dl in modified.Values)
+                {
+                    dl.Dispose();
+                }
             }
         }
 
@@ -366,11 +376,12 @@ namespace Ankh.Scc
             switch (msg)
             {
                 case WM_ACTIVATEAPP:
-                    ReleaseExternalWrites();
+                    if (wParam != IntPtr.Zero)
+                        ReleaseExternalWrites();
                     break;
             }
             return VSConstants.S_OK;
-        }        
+        }
 
         #endregion
     }

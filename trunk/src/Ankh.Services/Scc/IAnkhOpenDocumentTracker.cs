@@ -13,6 +13,18 @@ namespace Ankh.Scc
         public abstract void Reload(IEnumerable<string> paths);
 
         /// <summary>
+        /// Reloads the specified file instead of just unlocking it
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public void Reload(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            Reload(new string[] { path });
+        }
+
+        /// <summary>
         /// Releases the locks placed on the paths
         /// </summary>
         public abstract void Dispose();
@@ -54,6 +66,12 @@ namespace Ankh.Scc
         /// <returns></returns>
         DocumentLock LockDocuments(IEnumerable<string> paths, DocumentLockType lockType);
 
+        /// <summary>
+        /// Locks the specified documents for processing until the lock is disposed
+        /// </summary>
+        /// <param name="paths">The paths to lock. If a path ends with a '\' all files below that path will be locked</param>
+        /// <returns></returns>
+        DocumentLock LockDocument(string path, DocumentLockType lockType);
 
         /// <summary>
         /// Marks the specified path dirty
