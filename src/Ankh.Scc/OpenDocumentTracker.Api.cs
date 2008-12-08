@@ -200,6 +200,14 @@ namespace Ankh.Scc
             return files.ToArray();
         }
 
+        public DocumentLock LockDocument(string path, DocumentLockType lockType)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            return LockDocuments(new string[] { path }, lockType);
+        }
+
         public DocumentLock LockDocuments(IEnumerable<string> paths, DocumentLockType lockType)
         {
             if (paths == null)
