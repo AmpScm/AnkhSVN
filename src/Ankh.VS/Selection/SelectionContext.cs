@@ -46,6 +46,7 @@ namespace Ankh.VS.Selection
         CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
         IVsHierarchy _miscFiles;
+        bool _checkedMisc;
         bool _deteminedSolutionExplorer;
         bool _isSolutionExplorer;
         bool? _isSolutionSelected;
@@ -86,12 +87,12 @@ namespace Ankh.VS.Selection
 
         #region IVsSelectionEvents Members
 
-		public event EventHandler CmdUIContextChanged;
+        public event EventHandler CmdUIContextChanged;
 
         public int OnCmdUIContextChanged(uint dwCmdUICookie, int fActive)
         {
-			if (CmdUIContextChanged != null)
-				CmdUIContextChanged(this, EventArgs.Empty);
+            if (CmdUIContextChanged != null)
+                CmdUIContextChanged(this, EventArgs.Empty);
             /// Some global state change which might change UI cueues
             return VSConstants.S_OK;
         }
@@ -145,6 +146,7 @@ namespace Ankh.VS.Selection
             _isSolutionExplorer = false;
             _solutionFilename = null;
             _miscFiles = null;
+            _checkedMisc = false;
             _selectedItemsMap = null;
             _isSolutionSelected = null;
 
@@ -158,7 +160,15 @@ namespace Ankh.VS.Selection
 
         public IVsHierarchy MiscellaneousProject
         {
-            get { return _miscFiles ?? (_miscFiles = (VsShellUtilities.GetMiscellaneousProject(Context) as IVsHierarchy)); }
+            get
+            {
+                if (!_checkedMisc)
+                {
+                    _checkedMisc = true;
+                    _miscFiles = VsShellUtilities.GetMiscellaneousProject(Context, false) as IVsHierarchy;
+                }
+                return _miscFiles;
+            }
         }
 
         public IVsSolution Solution
