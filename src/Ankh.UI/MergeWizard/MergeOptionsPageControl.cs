@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Diagnostics;
+using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -19,7 +20,11 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
         }
 
-        
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+        }
 
         #region UI Events
         private void MergeOptionsPageControl_Load(object sender, EventArgs e)
@@ -121,5 +126,19 @@ namespace Ankh.UI.MergeWizard
             page.Depth = depth;
         }
         #endregion
+
+        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangeEventArgs e)
+        {
+            if (e.CurrentPage == WizardPage)
+            {
+                PopulateUI();
+            }
+        }
+
+        private void PopulateUI()
+        {
+            // clear the message, 
+            WizardPage.Message = null;
+        }
     }
 }

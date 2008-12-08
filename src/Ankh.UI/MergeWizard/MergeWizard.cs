@@ -336,8 +336,13 @@ namespace Ankh.UI.MergeWizard
                                 }
                             }
 
-                            ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target,
-                                    mergeRevisions.Count == 0 ? null : mergeRevisions, args);
+                            //no need to continue with the merge operation since there are no revisions to merge
+                            if (mergeRevisions.Count == 0)
+                            {
+                                throw new Exception(Resources.NoLogItems);
+                            }
+
+                            ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, mergeRevisions, args);
                         }
                     }
                     finally
