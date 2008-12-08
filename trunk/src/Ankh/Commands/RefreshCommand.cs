@@ -23,6 +23,10 @@ namespace Ankh.Commands
 
             monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
 
+            IAnkhOpenDocumentTracker dt = e.GetService<IAnkhOpenDocumentTracker>();
+
+            dt.RefreshDirtyState();
+
             IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
 
             pm.Refresh((string)null); // Perform a full incremental refresh on the PC window            

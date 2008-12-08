@@ -531,6 +531,14 @@ namespace Ankh.Scc
 
             return false;
         }
+
+        public void RefreshDirtyState()
+        {
+            foreach (SccDocumentData data in _docMap.Values)
+            {
+                data.CheckDirty();
+            }
+        }
     }
 }
 
