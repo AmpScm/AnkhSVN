@@ -45,7 +45,7 @@ namespace Ankh.Scc
             }
         }
 
-        public bool IsDocumentDirty(string path)
+        public bool IsDocumentDirty(string path, bool poll)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -54,6 +54,9 @@ namespace Ankh.Scc
 
             if (!_docMap.TryGetValue(path, out data))
                 return false;
+
+            if (poll)
+                data.CheckDirty();
 
             return data.IsDirty;
         }

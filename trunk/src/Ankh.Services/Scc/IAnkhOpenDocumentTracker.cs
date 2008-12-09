@@ -49,7 +49,7 @@ namespace Ankh.Scc
     public interface IAnkhOpenDocumentTracker
     {
         bool IsDocumentOpen(string path);
-        bool IsDocumentDirty(string path);
+        bool IsDocumentDirty(string path, bool poll);
 
         bool SaveDocument(string path);
         bool PromptSaveDocument(string path);

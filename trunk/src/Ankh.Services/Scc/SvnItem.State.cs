@@ -230,7 +230,7 @@ namespace Ankh
                 return;
             }
 
-            if (dt.IsDocumentDirty(FullPath))
+            if (dt.IsDocumentDirty(FullPath, true))
                 SetState(SvnItemState.DocumentDirty, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.DocumentDirty);
