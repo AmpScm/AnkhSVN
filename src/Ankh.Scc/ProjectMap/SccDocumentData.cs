@@ -469,7 +469,35 @@ namespace Ankh.Scc.ProjectMap
             IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
 
             if (pdd == null)
+            {
+                IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+
+                Guid gV = Guid.Empty;
+                IVsUIHierarchy hier;
+                uint[] openId = new uint[1];
+                IVsWindowFrame wf;
+                int open;
+                if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
+                    out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+                {
+                    if (wf != null)
+                    {
+                        object ok;
+                        if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                        {
+                            if (ok == null)
+                            {}
+                            else if (ok is bool) // Implemented by VS as bool
+                            {
+                                if ((bool)ok)
+                                    return true;
+                            }
+                        }
+                    }
+                }
+
                 return fallback && _isDirty;
+            }
 
             int dirty;
             return ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) ? (dirty != 0) : _isDirty;
