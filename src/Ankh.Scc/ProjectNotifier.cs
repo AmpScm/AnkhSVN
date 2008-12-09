@@ -286,8 +286,12 @@ namespace Ankh.Scc
                 if (!_externallyChanged.ContainsKey(path)
                     && !DocumentTracker.IsDocumentDirty(path))
                 {
+                    // Locking will trigger a file change!
+                    _externallyChanged.Add(path, null);
+
                     DocumentLock dl = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
 
+                    _externallyChanged.Remove(path);
                     _externallyChanged.Add(path, dl);
                 }
             }
