@@ -28,6 +28,7 @@ namespace Ankh.Scc.ProjectMap
         uint _cookie;
         bool _isDirty;
         bool _initialUpdateCompleted;
+        bool? _isPropertyDesigner;
         object _rawDocument;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
@@ -442,6 +443,27 @@ namespace Ankh.Scc.ProjectMap
             return ErrorHandler.Succeeded(pdd.IsDocDataReloadable(out reloadable)) && (reloadable != 0);
         }
 
+        public bool IsProjectPropertyPageHost
+        {
+            get
+            {
+                if (!_isPropertyDesigner.HasValue && ItemId == VSConstants.VSITEMID_ROOT)
+                {
+                    _isPropertyDesigner = false;
+
+                    IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
+                    Guid editorType;
+                    if (pdd != null && ErrorHandler.Succeeded(pdd.GetGuidEditorType(out editorType)))
+                    {
+                        if (editorType == new Guid("{b270807c-d8c6-49eb-8ebe-8e8d566637a1}"))
+                            _isPropertyDesigner = true;
+                    }
+                }
+
+                return _isPropertyDesigner.HasValue && _isPropertyDesigner.Value;
+            }
+        }
+
         /// <summary>
         /// Sets the read only state of a document
         /// </summary>
@@ -460,6 +482,7 @@ namespace Ankh.Scc.ProjectMap
         /// <summary>
         /// Determines whether this instance is dirty
         /// </summary>
+        /// <param name="fallback">if set to <c>true</c> return the cached value if the document says ist not dirty, false to trust the document.</param>
         /// <returns>
         /// 	<c>true</c> if this instance is dirty; otherwise, <c>false</c>.
         /// </returns>
