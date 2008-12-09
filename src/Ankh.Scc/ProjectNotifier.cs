@@ -284,7 +284,7 @@ namespace Ankh.Scc
             lock (_externallyChanged)
             {
                 if (!_externallyChanged.ContainsKey(path)
-                    && !DocumentTracker.IsDocumentDirty(path))
+                    && !DocumentTracker.IsDocumentDirty(path, true))
                 {
                     // Locking will trigger a file change!
                     _externallyChanged.Add(path, null);
