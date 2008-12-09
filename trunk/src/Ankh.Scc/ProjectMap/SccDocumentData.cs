@@ -470,27 +470,30 @@ namespace Ankh.Scc.ProjectMap
 
             if (pdd == null)
             {
-                IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
-
-                Guid gV = Guid.Empty;
-                IVsUIHierarchy hier;
-                uint[] openId = new uint[1];
-                IVsWindowFrame wf;
-                int open;
-                if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
-                    out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+                if (_isFileDocument)
                 {
-                    if (wf != null)
+                    IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+
+                    Guid gV = Guid.Empty;
+                    IVsUIHierarchy hier;
+                    uint[] openId = new uint[1];
+                    IVsWindowFrame wf;
+                    int open;
+                    if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
+                        out hier, openId, out wf, out open)) && (open != 0) && wf != null)
                     {
-                        object ok;
-                        if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                        if (wf != null)
                         {
-                            if (ok == null)
-                            {}
-                            else if (ok is bool) // Implemented by VS as bool
+                            object ok;
+                            if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
                             {
-                                if ((bool)ok)
-                                    return true;
+                                if (ok == null)
+                                { }
+                                else if (ok is bool) // Implemented by VS as bool
+                                {
+                                    if ((bool)ok)
+                                        return true;
+                                }
                             }
                         }
                     }
