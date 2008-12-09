@@ -10,6 +10,12 @@ namespace Ankh.Scc
     {
         public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
         {
+            ProjectMap.SccDocumentData dd;
+
+            if (TryGetDocument(docCookie, out dd))
+            {
+                dd.CheckDirty();
+            }
             return VSConstants.S_OK;
         }
 
