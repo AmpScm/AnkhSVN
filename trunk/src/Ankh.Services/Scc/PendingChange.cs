@@ -16,7 +16,7 @@ namespace Ankh.Scc
     public sealed class PendingChange : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;        
+        readonly SvnItem _item;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChange"/> class
@@ -234,7 +234,7 @@ namespace Ankh.Scc
 
             if (!string.IsNullOrEmpty(name))
                 return name;
-            else if(string.Equals(FullPath, context.SolutionSettings.SolutionFilename))
+            else if (string.Equals(FullPath, context.SolutionSettings.SolutionFilename))
                 return "<Solution>";
             else
                 return "<none>";
@@ -291,7 +291,7 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("item");
 
             bool create = false;
-            if (item.IsModified)
+            if (item.IsModified) // true for conflicts
                 create = true; // Must commit
             else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable)
                 create = true; // To be added
@@ -322,7 +322,7 @@ namespace Ankh.Scc
                 pc = new PendingChange(context, item);
                 return true;
             }
-            
+
             pc = null;
             return false;
         }
@@ -454,7 +454,7 @@ namespace Ankh.Scc
                     // No usefull status / No change
                     break;
                 case SvnStatus.External:
-                    return PendingChangeKind.None; 
+                    return PendingChangeKind.None;
 
                 case SvnStatus.Zero:
                 case SvnStatus.Conflicted:
@@ -527,6 +527,6 @@ namespace Ankh.Scc
                 return false;
             }
             return Dictionary.TryGetValue(key, out value);
-        }        
+        }
     }
 }
