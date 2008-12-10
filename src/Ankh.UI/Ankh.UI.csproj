@@ -890,6 +890,7 @@
     <EmbeddedResource Include="PathSelector\VersionStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>VersionStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PCStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -901,6 +902,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateBranchDialog.resx">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>

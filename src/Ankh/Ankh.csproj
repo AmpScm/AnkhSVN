@@ -12,7 +12,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -300,6 +300,7 @@
     <EmbeddedResource Include="Commands\CommandStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
