@@ -191,16 +191,16 @@ namespace Ankh.UI.RepositoryExplorer
 
         public void RefreshItem(bool refreshParent)
         {
-            if (this.TreeNode != null)
+            if (TreeNode != null)
             {
                 Uri uri = null;
-                if (refreshParent && this.TreeNode.Parent is RepositoryTreeNode)
+                if (refreshParent && null != TreeNode.Parent && null != TreeNode.Origin)
                 {
                     uri = ((RepositoryTreeNode)this.TreeNode.Parent).NormalizedUri;
                 }
                 else
                 {
-                    uri = this.TreeNode.NormalizedUri;
+                    uri = TreeNode.NormalizedUri;
                 }
                 if (uri != null
                     && this.TreeNode.TreeView is RepositoryTreeView)
@@ -209,7 +209,7 @@ namespace Ankh.UI.RepositoryExplorer
                     rtv.Reload(uri);
                 }
             }
-            else if (this.ListViewItem != null)
+            else if (ListViewItem != null)
             {
                 RepositoryExplorerControl rec = GetRepositoryExplorerControl();
                 if (rec != null)
