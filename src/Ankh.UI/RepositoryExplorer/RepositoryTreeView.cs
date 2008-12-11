@@ -661,42 +661,32 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void CleanupCacheFor(Uri uri, bool includeBase)
         {
-            if (uri != null)
-            {
-                Uri nUri = SvnTools.GetNormalizedUri(uri);
-                Uri serverUri = new Uri(nUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped));
-                string[] segments = uri.Segments;
-                string segment = string.Join("", segments, 0, segments.Length);
-                List<Uri> removeUris = new List<Uri>();
-                foreach (Uri cachedUri in _nodeMap.Keys)
-                {
-                    if (includeBase && cachedUri.Equals(nUri))
-                    {
-                        removeUris.Add(cachedUri);
-                    }
-                    else
-                    {
-                        Uri cachedUriServer = new Uri(cachedUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped));
-                        if (serverUri.Equals(cachedUriServer))
-                        {
-                            string[] cachedUriSegments = cachedUri.Segments;
-                            if (cachedUriSegments.Length >= segments.Length)
-                            {
-                                string cachedSegment = string.Join("", cachedUriSegments, 0, segments.Length);
-                                if (cachedSegment.Equals(segment))
-                                {
-                                    removeUris.Add(cachedUri);
-                                }
-                            }
-                        }
-                    }
-                }
+            if (uri == null)
+                throw new InvalidOperationException();
 
-                foreach (Uri removeUri in removeUris)
-                {
-                    _nodeMap.Remove(removeUri);
-                }
+            Uri nUri = SvnTools.GetNormalizedUri(uri);
+            string start = nUri.AbsoluteUri;
+
+            if (start[start.Length - 1] != '/')
+                start += '/';
+
+            List<Uri> removeUris = new List<Uri>();
+            foreach (Uri cachedUri in _nodeMap.Keys)
+            {
+                if (cachedUri.MakeRelativeUri(nUri).IsAbsoluteUri)
+                    continue;
+
+                if (cachedUri.AbsoluteUri.StartsWith(start))
+                    removeUris.Add(cachedUri);
+                else if(includeBase && cachedUri == nUri)
+                    removeUris.Add(cachedUri);     
             }
+
+            foreach (Uri removeUri in removeUris)
+            {
+                _nodeMap.Remove(removeUri);
+            }
+
         }
     }
 }
