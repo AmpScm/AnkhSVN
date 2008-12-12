@@ -16,17 +16,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.ComponentModel;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell.Interop;
+using IObjectWithSite = Microsoft.VisualStudio.OLE.Interop.IObjectWithSite;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh
 {
     /// <summary>
     /// Generic service baseclass
     /// </summary>
-    public abstract class AnkhService : IAnkhServiceProvider, IComponent, IAnkhServiceImplementation
+    public abstract class AnkhService : IAnkhServiceProvider, IComponent, IAnkhServiceImplementation, IOleServiceProvider
     {
         readonly IAnkhServiceProvider _context;
         /// <summary>
@@ -215,5 +218,73 @@ namespace Ankh
             if (Disposed != null)
                 Disposed(this, EventArgs.Empty);
         }
+
+        /// <summary>
+        /// Creates a native object instance of the specified class type using the ILocalRegistry database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classType">Type of the class.</param>
+        /// <returns></returns>
+        protected T CreateLocalInstance<T>(Type classType)
+            where T : class
+        {
+            if (classType == null)
+                throw new ArgumentNullException("classType");
+
+            ILocalRegistry registry = GetService<ILocalRegistry>(typeof(SLocalRegistry));
+
+            Guid gType = typeof(T).GUID;
+            IntPtr instance;
+            Marshal.ThrowExceptionForHR(registry.CreateInstance(classType.GUID, null, ref gType, 
+                (uint)Microsoft.VisualStudio.OLE.Interop.CLSCTX.CLSCTX_INPROC_SERVER, out instance));
+
+            try
+            {
+                return (T)Marshal.GetObjectForIUnknown(instance);
+            }
+            finally
+            {
+                if (instance != IntPtr.Zero)
+                    Marshal.Release(instance);
+            }
+        }
+
+        /// <summary>
+        /// Creates a native object instance of the specified class type using the ILocalRegistry database and sets the site
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="classType">Type of the class.</param>
+        /// <param name="site">The site or null when a site should not be set.</param>
+        /// <returns></returns>
+        protected T CreateLocalInstance<T>(Type classType, object site)
+            where T : class
+        {
+            T instance = CreateLocalInstance<T>(classType);
+
+            if (site != null)
+                SiteObject(instance, site);
+
+            return instance;
+        }
+
+        void SiteObject(object instance, object site)
+        {
+            if(instance == null)
+                throw new ArgumentNullException("instance");
+
+            IObjectWithSite sitedObject = instance as IObjectWithSite;
+            if (sitedObject != null)
+                sitedObject.SetSite(site);
+        }
+
+        #region IOleServiceProvider Members
+
+        [DebuggerStepThrough]
+        int IOleServiceProvider.QueryService(ref Guid guidService, ref Guid riid, out IntPtr ppvObject)
+        {
+            return GetService<IOleServiceProvider>().QueryService(ref guidService, ref riid, out ppvObject);
+        }
+
+        #endregion
     }
 }

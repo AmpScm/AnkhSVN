@@ -1,4 +1,4 @@
-// $Id$
+﻿// $Id$
 //
 // Copyright 2008 The AnkhSVN Project
 //
@@ -13,17 +13,6 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
-
-//***************************************************************************
-//
-//    Copyright (c) Microsoft Corporation. All rights reserved.
-//    This code is licensed under the Visual Studio SDK license terms.
-//    THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF
-//    ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY
-//    IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR
-//    PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
-//
-//***************************************************************************
 
 using System;
 using System.ComponentModel;
@@ -51,7 +40,7 @@ namespace Ankh.UI.PendingChanges
     public partial class VSTextEditor : Control
     {
         CodeEditorNativeWindow codeEditorNativeWindow;
-        IAnkhServiceProvider _context;        
+        IAnkhServiceProvider _context;
         BorderStyle _borderStyle;
         Guid? _forceLanguageService;
 
@@ -95,7 +84,7 @@ namespace Ankh.UI.PendingChanges
                     UpdateSize();
                 }
             }
-        }    
+        }
 
         bool _readOnly;
         [Localizable(false), DefaultValue(false)]
@@ -181,7 +170,7 @@ namespace Ankh.UI.PendingChanges
             {
                 InitializeDocumentForm(documentForm);
             }
-        }        
+        }
 
         void InitializeForm(VSContainerForm ownerForm)
         {
@@ -262,7 +251,7 @@ namespace Ankh.UI.PendingChanges
                             codeEditorNativeWindow.Size = ClientSize;
                         });
                 }
-                
+
             }
         }
 
@@ -314,7 +303,7 @@ namespace Ankh.UI.PendingChanges
                         throw new InvalidEnumArgumentException("value", (int)value, typeof(BorderStyle));
                     }
                     _borderStyle = value;
-                    if(!DesignMode)
+                    if (!DesignMode)
                         base.UpdateStyles();
                 }
             }
@@ -439,7 +428,7 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnSizeChanged(e);
 
-            if(!DesignMode)
+            if (!DesignMode)
                 UpdateSize();
         }
 
@@ -482,12 +471,11 @@ namespace Ankh.UI.PendingChanges
     /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
     /// </summary>
     /// <seealso cref="NativeWindow"/>
-    internal class CodeEditorNativeWindow : IOleCommandTarget, IDisposable, IVsTextViewEvents
+    internal class CodeEditorNativeWindow : AnkhService, IOleCommandTarget, IDisposable, IVsTextViewEvents
     {
         #region Fields
 
         readonly Control _container;
-        readonly IAnkhServiceProvider _context;
         readonly IOleServiceProvider _serviceProvider;
         IVsWindowPane _windowPane;
 
@@ -513,13 +501,11 @@ namespace Ankh.UI.PendingChanges
         #endregion
 
         public CodeEditorNativeWindow(IAnkhServiceProvider context, Control container)
+            : base(context)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            else if (container == null)
+            if (container == null)
                 throw new ArgumentNullException("container");
 
-            _context = context;
             _container = container;
             _serviceProvider = context.GetService<IOleServiceProvider>();
         }
@@ -565,7 +551,7 @@ namespace Ankh.UI.PendingChanges
                     if (_ro)
                         InternalSetReadOnly(false);
 
-                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));                    
+                    ErrorHandler.ThrowOnFailure(lines.ReloadLines(0, 0, endLine, endIndex, pText, value.Length, null));
                 }
                 finally
                 {
@@ -660,7 +646,7 @@ namespace Ankh.UI.PendingChanges
 
                     if (!ShowHorizontalScrollBar)
                     {
-                        IVsTextManager2 manager = _context.GetService<IVsTextManager2>(typeof(SVsTextManager));
+                        IVsTextManager2 manager = GetService<IVsTextManager2>(typeof(SVsTextManager));
 
                         if (manager != null)
                         {
@@ -701,11 +687,7 @@ namespace Ankh.UI.PendingChanges
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
         private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModel, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
-            ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
-
-            // create code window
-            Guid guidVsCodeWindow = typeof(VsCodeWindowClass).GUID;
-            codeWindow = CreateObject(localRegistry, guidVsCodeWindow, typeof(IVsCodeWindow).GUID) as IVsCodeWindow;
+            codeWindow = CreateLocalInstance<IVsCodeWindow>(typeof(VsCodeWindowClass), _serviceProvider);
 
             // initialize code window
             INITVIEW[] initView = new INITVIEW[1];
@@ -727,46 +709,27 @@ namespace Ankh.UI.PendingChanges
                 initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
 
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
-            int hr = codeWindowEx.Initialize((uint)_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR |
+            ErrorHandler.ThrowOnFailure(codeWindowEx.Initialize((uint)_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR |
                 (uint)_codewindowbehaviorflags.CWB_DISABLESPLITTER,
-                0, null, null, initViewFlags, initView);
-
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
+                0, null, null, initViewFlags, initView));
 
             // set buffer
-            Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
-            _textBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
-            
+            _textBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
+
             if (forceLanguageService.HasValue)
             {
                 Guid languageService = forceLanguageService.Value;
 
-                Marshal.ThrowExceptionForHR(_textBuffer.SetLanguageServiceID(ref languageService));
+                ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));
             }
 
-            hr = codeWindow.SetBuffer((IVsTextLines)_textBuffer);
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
+            ErrorHandler.ThrowOnFailure(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
 
             // create pane window
             _windowPane = (IVsWindowPane)codeWindow;
+            ErrorHandler.ThrowOnFailure(_windowPane.SetSite(_serviceProvider));
 
-            hr = _windowPane.SetSite(_serviceProvider);
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
-
-            hr = _windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd);
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
+            ErrorHandler.ThrowOnFailure(_windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd));
 
             //set the inheritKeyBinding guid so that navigation keys work. The VS 2008 SDK does this from the language service. 
             // The VS2005 sdk doesn't
@@ -778,46 +741,10 @@ namespace Ankh.UI.PendingChanges
                 if (frame != null)
                 {
                     Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
-                    Marshal.ThrowExceptionForHR(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
+                    ErrorHandler.ThrowOnFailure(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
                 }
             }
-        }
-
-        /// <summary>
-        /// Creates an object
-        /// </summary>
-        /// <param name="localRegistry">Establishes a locally-registered COM object relative to the local Visual Studio registry hive</param>
-        /// <param name="clsid">GUID if object to be created</param>
-        /// <param name="iid">GUID assotiated with specified System.Type</param>
-        /// <returns>An object</returns>
-        private object CreateObject(ILocalRegistry localRegistry, Guid clsid, Guid iid)
-        {
-            object objectInstance;
-            IntPtr unknown = IntPtr.Zero;
-
-            int hr = localRegistry.CreateInstance(clsid, null, ref iid, (uint)CLSCTX.CLSCTX_INPROC_SERVER, out unknown);
-
-            Marshal.ThrowExceptionForHR(hr);
-
-            try
-            {
-                objectInstance = Marshal.GetObjectForIUnknown(unknown);
-            }
-            finally
-            {
-                if (unknown != IntPtr.Zero)
-                {
-                    Marshal.Release(unknown);
-                }
-            }
-
-            // Try to site object instance
-            IObjectWithSite objectWithSite = objectInstance as IObjectWithSite;
-            if (objectWithSite != null)
-                objectWithSite.SetSite(_serviceProvider);
-
-            return objectInstance;
-        }
+        }        
 
         /// <summary>
         /// Sets focus to Editor's Window
@@ -839,12 +766,7 @@ namespace Ankh.UI.PendingChanges
             commandTarget = _codeWindow as IOleCommandTarget;
 
             IVsTextView textView;
-            int hr = _codeWindow.GetPrimaryView(out textView);
-
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
+            ErrorHandler.ThrowOnFailure(_codeWindow.GetPrimaryView(out textView));
 
             _textView = textView;
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
@@ -859,7 +781,7 @@ namespace Ankh.UI.PendingChanges
             {
                 _ro = value;
 
-                InternalSetReadOnly(value);                
+                InternalSetReadOnly(value);
             }
         }
 
@@ -875,45 +797,6 @@ namespace Ankh.UI.PendingChanges
 
                 _textBuffer.SetStateFlags(state);
             }
-        }
-
-
-        /// <summary>
-        ///  This method is used to get service of specified type
-        /// </summary>
-        /// <typeparam name="InterfaceType">A name of the interface which the caller wishes to receive for the service</typeparam>
-        /// <param name="serviceType">A name of the requested service</param>
-        /// <returns></returns>
-        private InterfaceType QueryService<InterfaceType>(Type serviceType)
-            where InterfaceType : class
-        {
-            Guid serviceGuid = serviceType.GUID;
-            Guid interfaceGuid = typeof(InterfaceType).GUID;
-
-            IntPtr unknown = IntPtr.Zero;
-
-            InterfaceType service = null;
-
-            int hr = _serviceProvider.QueryService(ref serviceGuid, ref interfaceGuid, out unknown);
-
-            if (!ErrorHandler.Succeeded(hr))
-            {
-                Marshal.ThrowExceptionForHR(hr);
-            }
-
-            try
-            {
-                service = (InterfaceType)Marshal.GetObjectForIUnknown(unknown);
-            }
-            finally
-            {
-                if (unknown != IntPtr.Zero)
-                {
-                    Marshal.Release(unknown);
-                }
-            }
-
-            return service;
         }
 
         #endregion
@@ -1022,41 +905,42 @@ namespace Ankh.UI.PendingChanges
 
         internal void ReplaceContents(string pathToReplaceWith)
         {
-            ILocalRegistry localRegistry = QueryService<ILocalRegistry>(typeof(SLocalRegistry));
-
-            Guid guidVsTextBuffer = typeof(VsTextBufferClass).GUID;
-
-            IVsTextBuffer tempBuffer = (IVsTextBuffer)CreateObject(localRegistry, guidVsTextBuffer, typeof(IVsTextBuffer).GUID);
-            ((IObjectWithSite)tempBuffer).SetSite(_serviceProvider);
-
-            IVsPersistDocData2 tempDocData = (IVsPersistDocData2)tempBuffer;
-            tempDocData.LoadDocData(pathToReplaceWith);
-
-            IVsTextStream tempStream = (IVsTextStream)tempBuffer;
-
-            int size;
-            ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
-
-            IntPtr buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
+            IVsTextBuffer tempBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
             try
             {
-                if(_ro)
-                    InternalSetReadOnly(false);
-                ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+                IVsPersistDocData2 tempDocData = (IVsPersistDocData2)tempBuffer;
+                tempDocData.LoadDocData(pathToReplaceWith);
 
-                IVsTextStream destStream = (IVsTextStream)_textBuffer;
-                int oldDestSize;
-                ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+                IVsTextStream tempStream = (IVsTextStream)tempBuffer;
 
-                destStream.ReplaceStream(0, oldDestSize, buffer, size);
+                int size;
+                ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
+
+                IntPtr buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
+                try
+                {
+                    if (_ro)
+                        InternalSetReadOnly(false);
+                    ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+
+                    IVsTextStream destStream = (IVsTextStream)_textBuffer;
+                    int oldDestSize;
+                    ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+
+                    destStream.ReplaceStream(0, oldDestSize, buffer, size);
+                }
+                finally
+                {
+                    Marshal.FreeCoTaskMem(buffer);
+                    Marshal.ReleaseComObject(tempBuffer);
+
+                    if (_ro)
+                        InternalSetReadOnly(true);
+                }
             }
             finally
             {
-                Marshal.FreeCoTaskMem(buffer);
                 Marshal.ReleaseComObject(tempBuffer);
-
-                if (_ro)
-                    InternalSetReadOnly(true);
             }
         }
 
@@ -1130,7 +1014,7 @@ namespace Ankh.UI.PendingChanges
                     }
                 }
             }
-        }
+        }        
     }
 
     public class TextViewScrollEventArgs : EventArgs
