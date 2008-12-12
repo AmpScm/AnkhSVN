@@ -28,6 +28,7 @@ using Ankh.VS;
 using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
+using Ankh.UI.RepositoryExplorer.Dialogs;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -60,6 +61,31 @@ namespace Ankh.UI.RepositoryExplorer
                         _rootNode.IconIndex = IconMapper.GetSpecialIcon(SpecialIcon.Servers);
                 }
             }
+        }
+
+        SvnRevision _revision = SvnRevision.Head;
+        [Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        public SvnRevision SvnRevision
+        {
+            get { return _revision; }
+            set { _revision = value ?? SvnRevision.Head; UpdateLabelEdit(); }
+        }
+
+        bool _allowRename;
+
+        [DefaultValue(false), Localizable(false)]
+        public bool AllowRenames
+        {
+            get { return _allowRename; }
+            set { _allowRename = value; UpdateLabelEdit(); }
+        }
+
+        private void UpdateLabelEdit()
+        {
+            if (AllowRenames && SvnRevision == SvnRevision.Head)
+                LabelEdit = true;
+            else
+                LabelEdit = false;
         }
 
         IFileIconMapper _iconMapper;
@@ -703,6 +729,91 @@ namespace Ankh.UI.RepositoryExplorer
                 _nodeMap.Remove(removeUri);
             }
 
+        }
+
+        RepositoryExplorerItem _editItem;
+        protected override void OnBeforeLabelEdit(NodeLabelEditEventArgs e)
+        {
+            base.OnBeforeLabelEdit(e);
+
+            _editItem = null;
+            RepositoryTreeNode item = e.Node as RepositoryTreeNode;
+            if (item == null || !AllowRenames || SvnRevision != SvnRevision.Head)
+                e.CancelEdit = true;
+            else
+            {
+                CancelEventArgs ce = new CancelEventArgs(e.CancelEdit);
+                OnItemEdit(_editItem = new RepositoryExplorerItem(Context, item.Origin, item), ce);
+
+                if (ce.Cancel)
+                    e.CancelEdit = true;
+            }
+        }
+
+        protected override void OnAfterLabelEdit(NodeLabelEditEventArgs e)
+        {
+            base.OnAfterLabelEdit(e);
+
+            try
+            {
+                RepositoryTreeNode item = e.Node as RepositoryTreeNode;
+                if (_editItem != null && _editItem.TreeNode == item)
+                {
+                    CancelEventArgs c = new CancelEventArgs();
+                    OnAfterEdit(_editItem, e.Label, c);
+
+                    if (c.Cancel)
+                        e.CancelEdit = true;
+                }
+            }
+            finally
+            {
+                _editItem = null;
+            }
+        }
+
+        internal void OnItemEdit(RepositoryExplorerItem repositoryExplorerItem, CancelEventArgs e)
+        {
+            if (!AllowRenames || SvnRevision != SvnRevision.Head)
+            {
+                e.Cancel = true;
+                return;
+            }
+            //e.Cancel = true;
+        }
+
+        internal void OnAfterEdit(RepositoryExplorerItem repositoryExplorerItem, string newName, CancelEventArgs e)
+        {
+            if (!AllowRenames || SvnRevision != SvnRevision.Head || string.IsNullOrEmpty(newName))
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            using (RenameDialog dlg = new RenameDialog())
+            {
+                dlg.Context = Context;
+                dlg.OldName = repositoryExplorerItem.Name;
+                dlg.NewName = newName;
+
+                if (DialogResult.OK != dlg.ShowDialog(Context))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                Uri itemUri = SvnTools.GetNormalizedUri(repositoryExplorerItem.Origin.Uri);
+                newName = dlg.NewName;
+                Context.GetService<IProgressRunner>().RunModal("Renaming",
+                    delegate(object sender, ProgressWorkerArgs we)
+                    {
+                        SvnMoveArgs ma = new SvnMoveArgs();
+                        ma.LogMessage = dlg.LogMessage;
+                        we.Client.RemoteMove(repositoryExplorerItem.Origin.Uri, new Uri(itemUri, newName), ma);
+                    });
+
+                repositoryExplorerItem.RefreshItem(true);
+            }
         }
     }
 }

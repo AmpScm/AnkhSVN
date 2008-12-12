@@ -108,7 +108,6 @@ namespace Ankh.UI.RepositoryExplorer
             ToolWindowHost.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 
-
         IFileIconMapper _iconMapper;
         IFileIconMapper IconMapper
         {

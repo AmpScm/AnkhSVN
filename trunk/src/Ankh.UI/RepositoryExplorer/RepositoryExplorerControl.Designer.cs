@@ -70,6 +70,7 @@ namespace Ankh.UI.RepositoryExplorer
             // 
             // treeView
             // 
+            this.treeView.AllowRenames = true;
             this.treeView.Context = null;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 25);
@@ -111,6 +112,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.fileView.HideSelection = false;
             this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
+            this.fileView.RepositoryTreeView = this.treeView;
             this.fileView.Size = new System.Drawing.Size(534, 425);
             this.fileView.TabIndex = 1;
             this.fileView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fileView_MouseDoubleClick);

@@ -275,6 +275,12 @@
     <Compile Include="RecentMessageDialog.Designer.cs">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
+      <DependentUpon>RenameDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -902,6 +908,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RepositoryExplorer\Dialogs\RenameDialog.resx">
+      <DependentUpon>RenameDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateBranchDialog.resx">

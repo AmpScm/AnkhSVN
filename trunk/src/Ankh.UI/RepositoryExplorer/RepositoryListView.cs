@@ -1,4 +1,4 @@
-// $Id$
+﻿// $Id$
 //
 // Copyright 2008 The AnkhSVN Project
 //
@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using Ankh.Commands;
 using Ankh.Ids;
+using System.ComponentModel;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -124,6 +125,61 @@ namespace Ankh.UI.RepositoryExplorer
                 _context = value;
                 if (value != null)
                     OnContextChanged(EventArgs.Empty);
+            }
+        }
+
+        RepositoryTreeView _tv;
+        [DefaultValue(false)]
+        public RepositoryTreeView RepositoryTreeView
+        {
+            get { return _tv; }
+            set { _tv = value; UpdateTreeView(); }
+        }
+
+        void UpdateTreeView()
+        {
+            if (RepositoryTreeView != null)
+                LabelEdit = RepositoryTreeView.LabelEdit;
+        }
+
+        RepositoryExplorerItem _editItem;
+        protected override void OnBeforeLabelEdit(LabelEditEventArgs e)
+        {
+            base.OnBeforeLabelEdit(e);
+
+            _editItem = null;
+            RepositoryListItem item = Items[e.Item] as RepositoryListItem;
+            if (RepositoryTreeView == null || item == null)
+                e.CancelEdit = true;
+            else
+            {
+                CancelEventArgs ce = new CancelEventArgs(e.CancelEdit);
+                RepositoryTreeView.OnItemEdit(_editItem = new RepositoryExplorerItem(Context, item.Origin, item), ce);
+
+                if (ce.Cancel)
+                    e.CancelEdit = true;
+            }
+        }
+
+        protected override void OnAfterLabelEdit(LabelEditEventArgs e)
+        {
+            base.OnAfterLabelEdit(e);
+
+            try
+            {
+                RepositoryListItem item = Items[e.Item] as RepositoryListItem;
+                if (RepositoryTreeView != null && _editItem != null && _editItem.ListViewItem == item)
+                {
+                    CancelEventArgs c = new CancelEventArgs();
+                    RepositoryTreeView.OnAfterEdit(_editItem, e.Label, c);
+
+                    if (c.Cancel)
+                        e.CancelEdit = true;
+                }
+            }
+            finally
+            {
+                _editItem = null;
             }
         }
 
