@@ -115,6 +115,25 @@ namespace Ankh.UI.RepositoryExplorer
                     return null;
                 return _origin.Target.FileName; 
             }
+            set
+            {
+                RepositoryTreeView tv = null;
+
+                if (TreeNode != null)
+                    tv = TreeNode.TreeView as RepositoryTreeView;
+                else if (ListViewItem != null && ListViewItem.ListView != null)
+                    tv = ListViewItem.ListView.RepositoryTreeView;
+
+                if (tv != null)
+                {
+                    CancelEventArgs c = new CancelEventArgs();
+
+                    tv.OnItemEdit(this, c);
+
+                    if (!c.Cancel)
+                        tv.OnAfterEdit(this, value, c);
+                }
+            }
         }
 
         [Category("Subversion"), DisplayName("Last Author")]
