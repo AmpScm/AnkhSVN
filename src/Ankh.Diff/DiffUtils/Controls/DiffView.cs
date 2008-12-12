@@ -1,4 +1,4 @@
-// $Id$
+﻿// $Id$
 //
 // Copyright 2008 The AnkhSVN Project
 //
@@ -1329,7 +1329,7 @@ namespace Ankh.Diff.DiffUtils.Controls
         {
             if (m_bShowWhitespace)
             {
-                strText = String.Format("{0}", strText.Replace(' ', ''));
+                strText = String.Format("{0}¶", strText.Replace(' ', '·'));
             }
 
             G.DrawString(strText, Font, B, x, y, m_StringFormat);
