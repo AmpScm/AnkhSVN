@@ -676,6 +676,7 @@ namespace Ankh.UI.VSSelectionControls
         }
         #endregion        
 
+        [Browsable(false)]
         public int HScrollPos
         {
             get
@@ -689,6 +690,8 @@ namespace Ankh.UI.VSSelectionControls
                 return -1;
             }
         }
+
+        [Browsable(false)]
         public int HScrollMax
         {
             get
@@ -703,6 +706,7 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        [Browsable(false)]
         public int VScrollPos
         {
             get
@@ -716,6 +720,8 @@ namespace Ankh.UI.VSSelectionControls
                 return -1;
             }
         }
+
+        [Browsable(false)]
         public int VScrollMax
         {
             get
