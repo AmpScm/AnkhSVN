@@ -42,7 +42,7 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SvnNodeAnnotate:
                     ISvnRepositoryItem ri = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
-                    if (ri != null && ri.Origin != null)
+                    if (ri != null && ri.Origin != null && ri.NodeKind != SvnNodeKind.Directory)
                         return;
                     break;
                 case AnkhCommand.ItemAnnotate:
