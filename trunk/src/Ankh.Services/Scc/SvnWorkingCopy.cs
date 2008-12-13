@@ -30,7 +30,7 @@ namespace Ankh.Scc
     /// <summary>
     /// 
     /// </summary>
-    [DebuggerDisplay("Path={FullPath}")]
+    [DebuggerDisplay("WorkingCopy={FullPath}")]
     public sealed class SvnWorkingCopy : IEquatable<SvnWorkingCopy>, ISvnWcReference
     {
         readonly SvnItem _rootItem;
