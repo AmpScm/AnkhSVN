@@ -51,7 +51,7 @@ namespace Ankh
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate, ISvnWcReference
+    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
     {
         readonly IFileStatusCache _context;
         readonly string _fullPath;
@@ -132,11 +132,11 @@ namespace Ankh
             _statusDirty = XBool.False;
 
             SvnItemState set = SvnItemState.None;
-            SvnItemState unset = SvnItemState.Modified | SvnItemState.Added | SvnItemState.HasCopyOrigin 
-                | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored 
-                | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned 
+            SvnItemState unset = SvnItemState.Modified | SvnItemState.Added | SvnItemState.HasCopyOrigin
+                | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored
+                | SvnItemState.Obstructed | SvnItemState.Replaced | SvnItemState.Versioned
                 | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted
-                | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested 
+                | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested
                 | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin
                 | SvnItemState.ContentConflicted;
 
@@ -165,7 +165,7 @@ namespace Ankh
         {
             Debug.Assert(status == NoSccStatus.NotExisting || status == NoSccStatus.NotVersioned);
             _ticked = false;
-            RefreshTo(status, nodeKind);            
+            RefreshTo(status, nodeKind);
         }
 
         void RefreshTo(AnkhStatus status)
@@ -353,15 +353,15 @@ namespace Ankh
 
         static bool MightBeNestedWorkingCopy(AnkhStatus status)
         {
-            switch(status.LocalContentStatus)
+            switch (status.LocalContentStatus)
             {
                 case SvnStatus.NotVersioned:
                 case SvnStatus.Ignored:
                     return true;
 
                 // TODO: Handle obstructed and tree conflicts!
-                    // Obstructed can be directory on file location
-                    // Tree conflict can apply on non versioned item
+                // Obstructed can be directory on file location
+                // Tree conflict can apply on non versioned item
                 default:
                     return false;
             }
@@ -566,7 +566,7 @@ namespace Ankh
                 if (!IsVersioned)
                     return false;
 
-                if (GetState(SvnItemState.Added|SvnItemState.Replaced) != 0)
+                if (GetState(SvnItemState.Added | SvnItemState.Replaced) != 0)
                     return GetState(SvnItemState.HasCopyOrigin) != 0;
                 else
                     return true;
@@ -828,7 +828,7 @@ namespace Ankh
                 {
                     j = i;
                 }
-                    
+
                 while (parent != null && !j.IsBelowPath(parent.FullPath))
                     parent = parent.Parent;
 
@@ -1029,7 +1029,7 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Determines whether the item is (below) the specified path
+        /// Determines whether the current instance is below the specified path
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>
@@ -1037,18 +1037,102 @@ namespace Ankh
         /// </returns>
         public bool IsBelowPath(string path)
         {
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            if(!FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
+            if (!FullPath.StartsWith(path, StringComparison.OrdinalIgnoreCase))
                 return false;
 
             int n = FullPath.Length - path.Length;
 
-            if(n > 0)
+            if (n > 0)
                 return (FullPath[path.Length] == '\\');
-            
+
             return (n == 0);
+        }
+
+        /// <summary>
+        /// Determines whether the current instance is below the specified path
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is below path] [the specified item]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsBelowPath(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            return IsBelowPath(item.FullPath);
+        }
+
+        /// <summary>
+        /// Implements the operator ==.
+        /// </summary>
+        /// <param name="one">The one.</param>
+        /// <param name="other">The other.</param>
+        /// <returns>The result of the operator.</returns>
+        [DebuggerStepThrough]
+        public static bool operator ==(SvnItem one, SvnItem other)
+        {
+            bool n1 = (object)one == null;
+            bool n2 = (object)other == null;
+
+            if (n1 || n2)
+                return n1 && n2;
+
+            return StringComparer.OrdinalIgnoreCase.Equals(one.FullPath, other.FullPath);
+        }
+
+        /// <summary>
+        /// Implements the operator !=.
+        /// </summary>
+        /// <param name="one">The one.</param>
+        /// <param name="other">The other.</param>
+        /// <returns>The result of the operator.</returns>
+        [DebuggerStepThrough]
+        public static bool operator !=(SvnItem one, SvnItem other)
+        {
+            return !(one == other);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// The <paramref name="obj"/> parameter is null.
+        /// </exception>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SvnItem);
+        }
+
+        /// <summary>
+        /// Equalses the specified obj.
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        public bool Equals(SvnItem obj)
+        {
+            if ((object)obj == null)
+                return false;
+
+            return StringComparer.OrdinalIgnoreCase.Equals(obj.FullPath, FullPath);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(FullPath);
         }
     }
 }
