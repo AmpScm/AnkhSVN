@@ -670,15 +670,13 @@ namespace Ankh.Scc
             Dictionary<string, SvnItem> roots = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
 
             string root = SolutionSettings.ProjectRoot;
-
             if (root != null)
             {
                 SvnItem rootItem = StatusCache[root];
 
                 if (rootItem != null && rootItem.IsVersioned)
                 {
-                    roots.Add(root, rootItem);
-                    yield return rootItem;
+                    roots.Add(rootItem.FullPath, rootItem);
                 }
             }
 
@@ -687,7 +685,7 @@ namespace Ankh.Scc
             foreach (SccProjectData pb in projects)
             {
                 string dir = pb.ProjectDirectory;
-                if (dir == null)
+                if (dir == null || roots.ContainsKey(dir))
                     continue;
 
                 SvnItem pItem = StatusCache[dir];
@@ -696,53 +694,61 @@ namespace Ankh.Scc
 
                 SvnWorkingCopy wc = pItem.WorkingCopy;
 
-                if (wc == null)
+                if (wc == null || roots.ContainsKey(wc.FullPath))
                     continue;
 
+                SvnItem wcItem = StatusCache[wc.FullPath];
+
                 bool below = false;
-                foreach (string p in roots.Keys)
+                foreach (SvnItem r in roots.Values)
                 {
-                    if (pItem.IsBelowPath(p))
+                    if (r.WorkingCopy != wc) // same working copy?
+                        continue;
+
+                    if (r == pItem || pItem.IsBelowPath(r))
                     {
-                        // Check if it is not a nested workingcopy
-                        if (wc != null && roots[p].IsBelowPath(wc.FullPath))
-                        {
-                            below = true;
-                            break;
-                        }
+                        below = true;
+                        break;
+                    }
+                    else if (r.IsBelowPath(r))
+                    {
+                        roots.Remove(r.FullPath);
+                        break;
                     }
                 }
-                if (!below)
+
+                if (!below && !roots.ContainsKey(pItem.FullPath))
                 {
-                    yield return pItem;
-                    roots.Add(dir, pItem);
+                    roots.Add(pItem.FullPath, pItem);
                 }
             }
+
+            return roots.Values;
         }
 
         private IEnumerable<SvnItem> GetSingleProjectRoots(SvnProject project)
         {
             SccProjectData pd;
-            if(project.RawHandle == null || !_projectMap.TryGetValue(project.RawHandle, out pd))
+            if (project.RawHandle == null || !_projectMap.TryGetValue(project.RawHandle, out pd))
                 yield break;
 
             SvnItem projectRootItem = null;
-            if(!string.IsNullOrEmpty(pd.ProjectDirectory))
+            if (!string.IsNullOrEmpty(pd.ProjectDirectory))
             {
                 projectRootItem = StatusCache[pd.ProjectDirectory];
 
-                if(projectRootItem.IsVersioned)
+                if (projectRootItem.IsVersioned)
                     yield return projectRootItem;
             }
 
             string file = pd.ProjectFile;
 
-            if(string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
+            if (string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
                 yield break;
 
             SvnItem projectFileItem = StatusCache[file];
 
-            if(projectFileItem.IsVersioned &&
+            if (projectFileItem.IsVersioned &&
                 (projectRootItem == null || !projectFileItem.IsBelowPath(projectRootItem.FullPath)))
             {
                 yield return projectFileItem;
@@ -809,6 +815,6 @@ namespace Ankh.Scc
             }
 
             #endregion
-        }        
+        }
     }
 }
