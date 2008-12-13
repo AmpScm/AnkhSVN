@@ -74,7 +74,7 @@ namespace Ankh.Ids
         /// <summary>
         /// Execute blame command from blame window
         /// </summary>
-        BlameShowBlame,
+        SvnNodeAnnotate,
         Checkout,
         CheckoutFolder,
         CheckoutSolution,
