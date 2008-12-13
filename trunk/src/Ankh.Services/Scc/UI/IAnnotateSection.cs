@@ -23,8 +23,7 @@ namespace Ankh.Scc.UI
     public interface IAnnotateSection : ISvnRepositoryItem
     {
         string Author { get; }
-        long Revision { get; }
+        new long Revision { get; }
         DateTime Time { get; }
-        SvnOrigin Origin { get; }
     }
 }
