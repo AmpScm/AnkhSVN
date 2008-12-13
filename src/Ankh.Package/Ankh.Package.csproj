@@ -206,6 +206,7 @@
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />
     <Content Include="Gui\PendingChanges\ConflictResolved.png" />
+    <Content Include="Gui\PendingChanges\Delete.png" />
     <Content Include="Gui\PendingChanges\EditConflict.png" />
     <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
     <Content Include="Gui\PendingChanges\FindInSolution.png" />
