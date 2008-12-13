@@ -138,4 +138,7 @@
   <data name="CreatingDirectories" xml:space="preserve">
     <value>Creating Directories</value>
   </data>
+  <data name="RenamingNodes" xml:space="preserve">
+    <value>Renaming</value>
+  </data>
 </root>

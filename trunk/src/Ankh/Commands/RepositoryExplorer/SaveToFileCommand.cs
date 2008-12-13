@@ -50,8 +50,15 @@ namespace Ankh.Commands.RepositoryExplorer
             string toFile;
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
+                string name = ri.Origin.Target.FileName;
+
                 sfd.Filter = "All Files (*.*)|*";
-                sfd.FileName = ri.Name;               
+                string ext = Path.GetExtension(name).Trim('.');                
+
+                if(!string.IsNullOrEmpty(ext))
+                    sfd.Filter = string.Format("{0} Files|*.{0}|{1}", ext, sfd.Filter);
+
+                sfd.FileName = name;
 
                 if (sfd.ShowDialog(ui.GetDialogOwnerWindow()) != DialogResult.OK)
                     return;

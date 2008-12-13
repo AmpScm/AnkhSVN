@@ -106,7 +106,7 @@ namespace Ankh.Ids
         ShowRepositoryExplorer,
         ShowWorkingCopyExplorer,
         SwitchItem,
-        ToggleAnkh,
+        RenameRepositoryItem,
         Unlock,
         UpdateItem,
         UpdateItemSpecific,

@@ -29,15 +29,13 @@ namespace Ankh.Commands.RepositoryExplorer
     [Command(AnkhCommand.CopyReposExplorerUrl)]
     class CopyReposExplorerUrl : CommandBase
     {
-        
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             int n = 0;
             foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
                 n++;
-                if (n > 1 || i.Uri == null)
+                if (n > 1 || i.Origin == null)
                 {
                     e.Enabled = false;
                     return;

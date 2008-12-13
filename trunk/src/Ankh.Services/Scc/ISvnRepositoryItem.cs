@@ -37,12 +37,6 @@ namespace Ankh.Scc
         SvnRevision Revision { get; }
 
         /// <summary>
-        /// Gets the name of the item (its filename)
-        /// </summary>
-        /// <value>The name.</value>
-        string Name { get; }
-
-        /// <summary>
         /// Refreshes the item.
         /// </summary>
         void RefreshItem(bool refreshParent);
