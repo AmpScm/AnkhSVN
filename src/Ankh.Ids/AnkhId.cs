@@ -31,8 +31,11 @@ namespace Ankh.Ids
         /// </summary>
         public const string PackageId = "604ad610-5cf9-4bd5-8acc-f49810e2efd4";
 
+        /// <summary>The package version as used in the PLK</summary>
         public const string PlkVersion = "2.0";
+        /// <summary>The product name as used in the PLK</summary>
         public const string PlkProduct = "AnkhSVN";
+        /// <summary>The company name as used in the PLK</summary>
         public const string PlkCompany = "AnkhSVN Core Team";
         //**********************************************************************************
 
@@ -42,11 +45,15 @@ namespace Ankh.Ids
         /// </summary>
         public const string TriggerPackageId = "2340124C-5DAE-4D72-84AA-4DEF3EFDFA1D";
 
+        /// <summary>The product version as used in the PLK for the trigger package</summary>
         public const string TriggerPlkVersion = PlkVersion;
+        /// <summary>The product name as used in the PLK for the trigger package</summary>
         public const string TriggerPlkProduct = "AnkhSVN Trigger";
+        /// <summary>The company name as used in the PLK</summary>
         public const string TriggerPlkCompany = PlkCompany;
         //**********************************************************************************
 
+        /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";
 
 
@@ -56,8 +63,11 @@ namespace Ankh.Ids
         /// <remarks>Must be changed when the PackageId changes</remarks>
         public const string CommandSet = "aa61c329-d559-468f-8f0f-4f03896f704d";
 
+        /// <summary>The SCC Provider guid (used as SCC active marker by VS)</summary>
         public const string SccProviderId = "8770915b-b235-42ec-bbc6-8e93286e59b5";
+        /// <summary>The GUID of the SCC Service</summary>
         public const string SccServiceId = "d8c473d2-9634-4513-91d5-e1a671fe2df4";
+        /// <summary>Language neutral SCC Provider title</summary>
         public const string SccProviderTitle = "AnkhSVN - Subversion Support for Visual Studio";
 
 

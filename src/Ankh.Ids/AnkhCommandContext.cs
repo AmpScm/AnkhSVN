@@ -20,6 +20,9 @@ using System.Text;
 
 namespace Ankh.Ids
 {
+    // Disable Missing XML comment warning for this file
+#pragma warning disable 1591 
+
     /// <summary>
     /// 
     /// </summary>
