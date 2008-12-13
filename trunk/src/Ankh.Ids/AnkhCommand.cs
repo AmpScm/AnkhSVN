@@ -21,6 +21,9 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Ids
 {
+    // Disable Missing XML comment warning for this file
+#pragma warning disable 1591 
+
     /// <summary>
     /// List of ankh commands
     /// </summary>
