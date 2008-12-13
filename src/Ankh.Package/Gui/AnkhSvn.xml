@@ -381,7 +381,9 @@
           <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
           <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x300"
                   text="View &amp;History"
-                  toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" />
+                  toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
+          <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x400"
+                  text="&amp;Rename" dynamicVisibility="true" allowParams="true" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

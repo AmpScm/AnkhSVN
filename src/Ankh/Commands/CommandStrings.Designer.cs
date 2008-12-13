@@ -115,6 +115,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Renaming.
+        /// </summary>
+        internal static string RenamingNodes {
+            get {
+                return ResourceManager.GetString("RenamingNodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Would you like to add {0} to the svn:ignore property on &apos;{1}&apos;?.
         /// </summary>
         internal static string WouldYouLikeToAddXToTheIgnorePropertyOnY {

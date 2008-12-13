@@ -43,13 +43,16 @@ namespace Ankh.Commands.RepositoryExplorer
 
             foreach (ISvnRepositoryItem i in e.Selection.GetSelection<ISvnRepositoryItem>())
             {
+                if (i.Origin == null)
+                    continue;
+
                 ri = i;
                 break;
             }
             if (ri == null)
                 return;
 
-            string toFile = e.GetService<IAnkhTempFileManager>().GetTempFileNamed(ri.Name);
+            string toFile = e.GetService<IAnkhTempFileManager>().GetTempFileNamed(ri.Origin.Target.FileName);
 
             SaveFile(e, ri, toFile);
 

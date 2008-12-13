@@ -28,6 +28,8 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer.Dialogs;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -771,9 +773,10 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        internal void OnItemEdit(RepositoryExplorerItem repositoryExplorerItem, CancelEventArgs e)
+        internal void OnItemEdit(RepositoryExplorerItem item, CancelEventArgs e)
         {
-            if (!AllowRenames || SvnRevision != SvnRevision.Head)
+            if (!AllowRenames || SvnRevision != SvnRevision.Head || item.Origin == null
+                || item.Origin.IsRepositoryRoot)
             {
                 e.Cancel = true;
                 return;
@@ -781,7 +784,7 @@ namespace Ankh.UI.RepositoryExplorer
             //e.Cancel = true;
         }
 
-        internal void OnAfterEdit(RepositoryExplorerItem repositoryExplorerItem, string newName, CancelEventArgs e)
+        internal void OnAfterEdit(RepositoryExplorerItem item, string newName, CancelEventArgs e)
         {
             if (!AllowRenames || SvnRevision != SvnRevision.Head || string.IsNullOrEmpty(newName))
             {
@@ -789,30 +792,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
             }
 
-            using (RenameDialog dlg = new RenameDialog())
-            {
-                dlg.Context = Context;
-                dlg.OldName = repositoryExplorerItem.Name;
-                dlg.NewName = newName;
-
-                if (DialogResult.OK != dlg.ShowDialog(Context))
-                {
-                    e.Cancel = true;
-                    return;
-                }
-
-                Uri itemUri = SvnTools.GetNormalizedUri(repositoryExplorerItem.Origin.Uri);
-                newName = dlg.NewName;
-                Context.GetService<IProgressRunner>().RunModal("Renaming",
-                    delegate(object sender, ProgressWorkerArgs we)
-                    {
-                        SvnMoveArgs ma = new SvnMoveArgs();
-                        ma.LogMessage = dlg.LogMessage;
-                        we.Client.RemoteMove(repositoryExplorerItem.Origin.Uri, new Uri(itemUri, newName), ma);
-                    });
-
-                repositoryExplorerItem.RefreshItem(true);
-            }
+            Context.GetService<IAnkhCommandService>().DirectlyExecCommand(AnkhCommand.RenameRepositoryItem, new string[] { newName });
         }
     }
 }

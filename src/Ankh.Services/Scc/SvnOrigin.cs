@@ -257,5 +257,19 @@ namespace Ankh.Scc
         {
             return !(o1 == o2);
         }
+
+        /// <summary>
+        /// Determines whether the origin specified the repositoryroot
+        /// </summary>
+        /// <returns>
+        /// 	<c>true</c> if [is repository root]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsRepositoryRoot
+        {
+            get
+            {
+                return SvnTools.GetNormalizedUri(RepositoryRoot) == SvnTools.GetNormalizedUri(Uri);
+            }
+        }
     }
 }

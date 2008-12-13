@@ -24,7 +24,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.Annotate
 {
-    class AnnotateSection : AnkhPropertyGridItem, IAnnotateSection
+    class AnnotateSection : AnkhPropertyGridItem, IAnnotateSection, ISvnRepositoryItem
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
@@ -85,5 +85,29 @@ namespace Ankh.UI.Annotate
         {
             get { return Origin.Target.FileName; }
         }
+
+        #region ISvnRepositoryItem Members
+
+        Uri ISvnRepositoryItem.Uri
+        {
+            get { return Origin.Uri; }
+        }
+
+        SvnNodeKind ISvnRepositoryItem.NodeKind
+        {
+            get { return SvnNodeKind.File; }
+        }
+
+        SvnRevision ISvnRepositoryItem.Revision
+        {
+            get { return Revision; }
+        }
+
+        public void RefreshItem(bool refreshParent)
+        {
+            // Ignore
+        }
+
+        #endregion
     }
 }

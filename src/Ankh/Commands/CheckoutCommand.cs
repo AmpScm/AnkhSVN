@@ -44,7 +44,7 @@ namespace Ankh.Commands
             if (selected == null) { return; }
             Uri uri = selected.Uri;
             SharpSvn.SvnRevision rev = selected.Revision;
-            string name = selected.Name;
+            string name = selected.Origin.Target.FileName;
 
             Ankh.VS.IAnkhSolutionSettings ss = e.GetService<Ankh.VS.IAnkhSolutionSettings>();
 
