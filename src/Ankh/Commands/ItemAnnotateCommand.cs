@@ -32,7 +32,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.ItemAnnotate)]
     [Command(AnkhCommand.LogAnnotateRevision)]
-    [Command(AnkhCommand.BlameShowBlame)]
+    [Command(AnkhCommand.SvnNodeAnnotate)]
     [Command(AnkhCommand.DocumentAnnotate)]
     class ItemAnnotateCommand : CommandBase
     {
@@ -40,9 +40,10 @@ namespace Ankh.Commands
         {
             switch (e.Command)
             {
-                case AnkhCommand.BlameShowBlame:
-                    if (null == EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>()))
-                        e.Enabled = false;
+                case AnkhCommand.SvnNodeAnnotate:
+                    ISvnRepositoryItem ri = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
+                    if (ri != null && ri.Origin != null)
+                        return;
                     break;
                 case AnkhCommand.ItemAnnotate:
                     foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
@@ -87,8 +88,8 @@ namespace Ankh.Commands
                 case AnkhCommand.LogAnnotateRevision:
                     BlameRevision(e);
                     break;
-                case AnkhCommand.BlameShowBlame:
-                    BlameBlame(e);
+                case AnkhCommand.SvnNodeAnnotate:
+                    SvnNodeBlame(e);
                     break;
                 case AnkhCommand.DocumentAnnotate:
                     BlameDocument(e);
@@ -96,12 +97,14 @@ namespace Ankh.Commands
             }
         }
 
-        void BlameBlame(CommandEventArgs e)
+        void SvnNodeBlame(CommandEventArgs e)
         {
-            IAnnotateSection blameSection = EnumTools.GetFirst(e.Selection.GetSelection<IAnnotateSection>());
+            ISvnRepositoryItem blameSection = EnumTools.GetFirst(e.Selection.GetSelection<ISvnRepositoryItem>());
 
-            SvnRevision revisionStart = SvnRevision.Zero; // Copy from original blame?
+            SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = blameSection.Revision;
+
+            // TODO: Confirm revisions?
 
             DoBlame(e, blameSection.Origin, revisionStart, revisionEnd);
         }

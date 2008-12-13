@@ -384,6 +384,7 @@
                   toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
           <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x400"
                   text="&amp;Rename" dynamicVisibility="true" allowParams="true" />
+          <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x500" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
@@ -466,7 +467,7 @@
         <Group id="Grp_BlameContextMenu" priority="0x100">
           <Button id="Cmd_BlameShowLog" priority="0x100" name="BlameShowLog" text="View history"
                   iconFile="PendingChanges/ViewHistory.png" />
-          <Button id="Cmd_BlameShowBlame" priority="0x200" name="AnnotateShowAnnotate" text="&amp;Annotate this version"
+          <Button id="Cmd_SvnNodeAnnotate" priority="0x200" name="SvnNodeAnnotate" text="&amp;Annotate"
                   iconFile="PendingChanges/Annotate.png"/>
         </Group>
       </Menu>

@@ -20,7 +20,7 @@ using System.Text;
 
 namespace Ankh.Scc.UI
 {
-    public interface IAnnotateSection
+    public interface IAnnotateSection : ISvnRepositoryItem
     {
         string Author { get; }
         long Revision { get; }
