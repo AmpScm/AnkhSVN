@@ -370,6 +370,7 @@
           <Button id="Cmd_CheckoutSolution" name="CheckoutSolution" priority="0xB00"
                 text="Checkout &amp;Solution..."
                 toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.png" defaultInvisible="true"/>
+          <ButtonRef id="Cmd_SvnNodeDelete" priority="0xC00" />
         </Group>
       </Menu>
     </GroupRef>
@@ -383,8 +384,10 @@
                   text="View &amp;History"
                   toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
           <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x400"
-                  text="&amp;Rename" dynamicVisibility="true" allowParams="true" />
-          <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x500" />
+                  text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
+          <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0x500" text="&amp;Delete..."
+                  iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
+          <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x600" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>

@@ -163,6 +163,7 @@
   <ItemGroup>
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
+    <Compile Include="Commands\RepositoryExplorer\DeleteRepositoryItemCommand.cs" />
     <Compile Include="Commands\RepositoryExplorer\RenameNode.cs" />
     <Compile Include="Services\AnkhSvnClientPool.cs" />
     <Compile Include="Services\SolutionSettings.Commit.cs">
