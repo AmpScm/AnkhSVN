@@ -14,7 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// $Id$
 using System.IO;
 using Ankh.UI;
 using Ankh.Ids;

@@ -14,13 +14,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// $Id$
 using System;
 using Ankh.UI;
-using Clipboard = System.Windows.Forms.Clipboard;
 using Ankh.Ids;
 using Ankh.WorkingCopyExplorer;
 using Ankh.Scc;
+using Clipboard = System.Windows.Forms.Clipboard;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
