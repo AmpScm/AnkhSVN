@@ -50,7 +50,7 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.deleteList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -105,13 +105,15 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             this.label3.TabIndex = 4;
             this.label3.Text = "&Deleting:";
             // 
-            // listBox1
+            // deleteList
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 27);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(471, 56);
-            this.listBox1.TabIndex = 5;
+            this.deleteList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteList.FormattingEnabled = true;
+            this.deleteList.Location = new System.Drawing.Point(12, 27);
+            this.deleteList.Name = "deleteList";
+            this.deleteList.Size = new System.Drawing.Size(483, 56);
+            this.deleteList.TabIndex = 5;
             // 
             // ConfirmDeleteDialog
             // 
@@ -120,7 +122,7 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(507, 398);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.deleteList);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.logMessage);
@@ -140,6 +142,6 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
         private Ankh.UI.PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox deleteList;
     }
 }

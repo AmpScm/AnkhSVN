@@ -36,7 +36,7 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
         Uri[] _uris;
         public void SetUris(IEnumerable<SvnOrigin> uris)
         {
-            listBox1.ClearSelected();
+            deleteList.ClearSelected();
 
             SortedDictionary<Uri,SvnOrigin> d = new SortedDictionary<Uri, SvnOrigin>();
             foreach (SvnOrigin o in uris)
@@ -52,7 +52,7 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             List<Uri> newUris = new List<Uri>();
             foreach (SvnOrigin o in d.Values)
             {
-                listBox1.Items.Add(o.Uri);
+                deleteList.Items.Add(o.Uri);
                 newUris.Add(SvnTools.GetNormalizedUri(o.Uri));                
             }
             _uris = newUris.ToArray();
