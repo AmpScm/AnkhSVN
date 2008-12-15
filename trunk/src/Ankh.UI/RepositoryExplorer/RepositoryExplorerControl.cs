@@ -27,6 +27,8 @@ using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
+using Microsoft.VisualStudio;
+using System.ComponentModel.Design;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -50,6 +52,13 @@ namespace Ankh.UI.RepositoryExplorer
 
             ToolWindowHost.CommandContext = AnkhId.SccExplorerContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
+
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
+        }
+
+        void OnDelete(object sender, CommandEventArgs e)
+        {
+            e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.SvnNodeDelete);
         }
 
         protected override void OnLoad(EventArgs e)
