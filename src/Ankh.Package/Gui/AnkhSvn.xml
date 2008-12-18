@@ -489,6 +489,9 @@
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="&amp;Commit &amp;Keeping Locks"
                   toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
+              <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x300"
+                      text="Create &amp;Patch"
+                      toolTip="Create patch from selected pending changes"  iconFile="menu/CreatePatch.png"/>
             </Group>
           </Menu>
           <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
@@ -502,9 +505,6 @@
                   toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
             </Group>
           </Menu>
-          <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x300"
-                  text="Create &amp;Patch"
-                  toolTip="Create patch from selected pending changes"  iconFile="menu/CreatePatch.png"/>
         </Group>
         <Group id="Grp_PendingChangesView" priority="0x200">
           <Menu id="Menu_PendingChangesView" priority="0x100" name="View" type="MenuControllerLatched">
