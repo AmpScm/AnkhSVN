@@ -243,6 +243,7 @@
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictItem.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictListView.cs">
       <SubType>Component</SubType>
