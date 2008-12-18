@@ -17,13 +17,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
+using System.IO;
 using SharpSvn;
 using Ankh.Scc;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using Ankh.VS;
-using Ankh.Commands;
-using System.Windows.Forms;
 using Ankh.UI;
 
 namespace Ankh.PendingChanges
@@ -37,7 +34,71 @@ namespace Ankh.PendingChanges
         public PendingChangeHandler(IAnkhServiceProvider context)
             : base(context)
         {
+        }
 
+        public bool CreatePatch(IEnumerable<PendingChange> changes, PendingChangeCreatePatchArgs args)
+        {
+            using (PendingCommitState state = new PendingCommitState(Context, changes))
+            {
+                if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
+                    return false;
+
+                if (!PreCommit_SaveDirty(state))
+                    return false;
+
+                if (args.AddUnversionedFiles)
+                {
+                    if (!PreCommit_AddNewFiles(state))
+                        return false;
+                }
+                state.FlushState();
+
+                if (!PreCommit_AddNeededParents(state))
+                    return false;
+
+                if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
+                    return false;
+            }
+
+            string relativeToPath = args.RelativeToPath;
+            string relativeToPathP = relativeToPath.EndsWith("\\") ? relativeToPath : (relativeToPath + "\\");
+            string fileName = args.FileName;
+            SvnRevisionRange revRange = new SvnRevisionRange(SvnRevision.Base, SvnRevision.Working);
+
+            SvnDiffArgs a = new SvnDiffArgs();
+            a.IgnoreAncestry = true;
+            a.NoDeleted = false;
+            a.Depth = SvnDepth.Empty;
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                GetService<IProgressRunner>().RunModal("Diffing",
+                    delegate(object sender, ProgressWorkerArgs e)
+                    {
+                        foreach (PendingChange pc in changes)
+                        {
+                            SvnItem item = pc.Item;
+                            SvnWorkingCopy wc;
+                            if (!string.IsNullOrEmpty(relativeToPath) 
+                                && item.FullPath.StartsWith(relativeToPathP, StringComparison.OrdinalIgnoreCase))
+                                a.RelativeToPath = relativeToPath;
+                            else if ((wc = item.WorkingCopy) != null)
+                                a.RelativeToPath = wc.FullPath;
+                            else
+                                a.RelativeToPath = null;
+
+                            e.Client.Diff(item.FullPath, revRange, a, stream);
+                        }
+
+                        stream.Flush();
+                        stream.Position = 0;
+                    });
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    File.WriteAllText(fileName, sr.ReadToEnd(), Encoding.UTF8);
+                }
+            }
+            return true;
         }
 
         public bool Commit(IEnumerable<PendingChange> changes, PendingChangeCommitArgs args)

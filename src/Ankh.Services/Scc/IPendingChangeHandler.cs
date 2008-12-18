@@ -23,6 +23,7 @@ namespace Ankh.Scc
     public interface IPendingChangeHandler
     {
         bool Commit(IEnumerable<PendingChange> changes, PendingChangeCommitArgs args);
+        bool CreatePatch(IEnumerable<PendingChange> changes, PendingChangeCreatePatchArgs args);
     }
 
     public class PendingChangeCommitArgs
@@ -62,6 +63,31 @@ namespace Ankh.Scc
         {
             get { return _storeMessageOnError; }
             set { _storeMessageOnError = value; }
+        }
+    }
+
+    public class PendingChangeCreatePatchArgs
+    {
+        string _fileName;
+        string _relativeToPath;
+        bool _addUnversionedFiles;
+
+        public string FileName
+        {
+            get { return _fileName; }
+            set { _fileName = value; }
+        }
+
+        public string RelativeToPath
+        {
+            get { return _relativeToPath; }
+            set { _relativeToPath = value; }
+        }
+
+        public bool AddUnversionedFiles
+        {
+            get { return _addUnversionedFiles; }
+            set { _addUnversionedFiles = value; }
         }
     }
 }

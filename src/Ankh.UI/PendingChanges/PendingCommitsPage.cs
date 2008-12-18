@@ -16,12 +16,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using System.ComponentModel.Design;
 using Ankh.Scc;
 using Ankh.Ids;
@@ -337,6 +333,36 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        public void DoCreatePatch(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
+            PendingChangeCreatePatchArgs a = new PendingChangeCreatePatchArgs();
+            a.FileName = fileName;
+
+            IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
+            a.RelativeToPath = ss.ProjectRoot;
+
+            a.AddUnversionedFiles = false; // TODO show a dialog???
+
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (pci.Checked)
+                {
+                    changes.Add(pci.PendingChange);
+                }
+            }
+
+            if (Context.GetService<IPendingChangeHandler>().CreatePatch(changes, a))
+            {
+            }
+        }
+
         internal bool CanCommit(bool keepingLocks)
         {
             if (_listItems.Count == 0)
@@ -352,6 +378,22 @@ namespace Ankh.UI.PendingChanges
             }
 
             return false;
-        }     
+        }
+
+        internal bool CanCreatePatch()
+        {
+            bool result = CanCommit(false);
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!(pci.PendingChange.Item.IsVersioned
+                    || pci.PendingChange.Item.IsAdded)
+                    )
+                {
+                    return false;
+                }
+            }
+
+            return result;
+        }
     }
 }
