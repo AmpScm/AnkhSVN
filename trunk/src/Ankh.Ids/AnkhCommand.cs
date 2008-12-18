@@ -266,5 +266,6 @@ namespace Ankh.Ids
         ProjectEditProperties,
 
         LogShowRevisionProperties,
+        PendingChangesCreatePatch,
     }
 }
