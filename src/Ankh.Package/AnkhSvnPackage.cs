@@ -64,7 +64,7 @@ namespace Ankh.VSPackage
     [Guid(AnkhId.PackageId)]
 
     // This attribute is needed to let the shell know that this package exposes some menus.
-    [ProvideMenuResource(1000, 1)] // The number must match the number in the .csproj file for the ctc task
+    [ProvideMenuResource("1000.ctmenu", 1)] // The number must match the number in the .csproj file for the ctc task
 
     [ProvideKeyBindingTable(AnkhId.LogViewContext, 501)]
     [ProvideKeyBindingTable(AnkhId.DiffMergeViewContext, 502)]
