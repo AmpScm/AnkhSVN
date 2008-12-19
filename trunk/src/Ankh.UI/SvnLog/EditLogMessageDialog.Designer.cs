@@ -44,9 +44,10 @@ namespace Ankh.UI.SvnLog
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
-            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
+            this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.SuspendLayout();
             // 
             // btnCancel
@@ -56,7 +57,7 @@ namespace Ankh.UI.SvnLog
             this.btnCancel.Location = new System.Drawing.Point(409, 258);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 1;
+            this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -67,7 +68,7 @@ namespace Ankh.UI.SvnLog
             this.btnOk.Location = new System.Drawing.Point(328, 258);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 2;
+            this.btnOk.TabIndex = 1;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
@@ -93,12 +94,7 @@ namespace Ankh.UI.SvnLog
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.logMessageEditor);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "EditLogMessageDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Log Message";
             this.ResumeLayout(false);
 
