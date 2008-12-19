@@ -162,6 +162,7 @@
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="Attributes\ProvideLanguageSettings.cs" />
+    <Compile Include="Attributes\ProvideMenuResourceEx.cs" />
     <Compile Include="Attributes\ProvideSolutionProperties.cs" />
     <Compile Include="Attributes\ProvideSourceControlProvider.cs" />
     <Compile Include="Attributes\ProvideTextMarker.cs" />
