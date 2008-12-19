@@ -20,11 +20,12 @@ using System.Text;
 using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System.ComponentModel.Design;
+using Ankh.Selection;
 
 namespace Ankh.VS.LanguageServices
 {
     [CLSCompliant(false)]
-    public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
+    public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider, IObjectWithAutomation
     {
         readonly IAnkhServiceProvider _context;
 
@@ -61,6 +62,15 @@ namespace Ankh.VS.LanguageServices
         public T GetService<T>(Type serviceType) where T : class
         {
             return Context.GetService<T>(serviceType);
+        }
+
+        #endregion
+
+        #region IObjectWithAutomation Members
+
+        public object AutomationObject
+        {
+            get { return Preferences; }
         }
 
         #endregion

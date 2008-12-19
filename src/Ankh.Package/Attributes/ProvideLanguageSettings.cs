@@ -25,11 +25,13 @@ namespace Ankh.VSPackage.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     class ProvideLanguageSettingsAttribute : RegistrationAttribute
     {
+        readonly Type _type;
         readonly string _key;
         readonly string _name;
         readonly int _n, _desc;
         public ProvideLanguageSettingsAttribute(Type type, string key, string name, int nameId, int descriptionId)
         {
+            _type = type;
             _key = key;
             _name = name;
             _n = nameId;
@@ -42,6 +44,20 @@ namespace Ankh.VSPackage.Attributes
         public Guid UINamePkg
         {
             get { return AnkhId.PackageGuid; }
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        public Type Type
+        {
+            get { return _type; }
         }
 
         string GetKey(string key)
@@ -58,7 +74,7 @@ namespace Ankh.VSPackage.Attributes
                 key.SetValue("Name", _name);
                 key.SetValue("Package", UINamePkg.ToString("B").ToUpperInvariant());
                 key.SetValue("ProfileSave", 1);
-                key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
+                //key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
             }            
         }
 

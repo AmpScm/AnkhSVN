@@ -22,6 +22,7 @@ using Ankh.UI.PendingChanges;
 using Ankh.Ids;
 using Ankh.VSPackage.Attributes;
 using Ankh.VS.LanguageServices;
+using Ankh.Selection;
 
 namespace Ankh.VSPackage
 {
@@ -42,13 +43,40 @@ namespace Ankh.VSPackage
         ShowHotURLs = true,
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
-    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 301, 301)]
+    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 301, 305)]
     [ProvideService(typeof(LogMessageLanguageService), ServiceName = AnkhId.LogMessageServiceName)]
     [ProvideLanguageService(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, 304)]
-    [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 304, 304)]
+    [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 304, 306)]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".patch")]
     [ProvideService(typeof(UnifiedDiffLanguageService), ServiceName=AnkhId.UnifiedDiffServiceName)]
     partial class AnkhSvnPackage
     {
+        protected override object GetAutomationObject(string name)
+        {
+            object obj = base.GetAutomationObject(name);
+            if (obj != null || name == null)
+                return obj;
+
+            // Look for setting objects that must be accessible by their automation name for setting persistence.
+
+            System.ComponentModel.AttributeCollection attributes = System.ComponentModel.TypeDescriptor.GetAttributes(this);
+            foreach (Attribute attr in attributes)
+            {
+                ProvideLanguageSettingsAttribute ps = attr as ProvideLanguageSettingsAttribute;
+
+                if (ps != null && name == ps.Name)
+                {
+                    IObjectWithAutomation automationParent = GetService<IObjectWithAutomation>(ps.Type);
+
+                    if (automationParent != null)
+                        obj = automationParent.AutomationObject;
+
+                    if (obj != null)
+                        return obj;
+                }
+            }
+
+            return null;
+        }
     }
 }

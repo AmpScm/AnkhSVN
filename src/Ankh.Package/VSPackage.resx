@@ -169,4 +169,10 @@
   <data name="304" xml:space="preserve">
     <value>AnkhSVN Patch Editor</value>
   </data>
+  <data name="305" xml:space="preserve">
+    <value>Settings for the Log Message Editor boxes shown by AnkhSVN</value>
+  </data>
+  <data name="306" xml:space="preserve">
+    <value>Settings for edditing .patch files</value>
+  </data>
 </root>
