@@ -122,7 +122,7 @@ namespace Ankh.Ids
         CommitPendingChanges,
         CommitPendingChangesKeepingLocks,
 
-        SolutionUpdateHead,
+        PendingChangesUpdateHead,
         SolutionUpdateSpecific,
         SolutionCommit,
         SolutionHistory,
@@ -205,9 +205,9 @@ namespace Ankh.Ids
 
         LockMustLock,
         SvnNodeDelete,
-        // Currently unused block; values can be reused as they were never really handled                
+        SolutionUpdateHead,
 
-        PcGroupChange,
+        // Currently unused block; values can be reused as they were never really handled                
         PcGroupChangeList,
         PcGroupFullPath,
         PcGroupLocked,
