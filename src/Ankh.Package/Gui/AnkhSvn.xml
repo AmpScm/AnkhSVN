@@ -137,7 +137,10 @@
       <!-- VS Predefined group for SCC commands on the solution -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
-      <ButtonRef id="Cmd_SolutionUpdateHead" priority="0x1400" />
+      <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
+                  text="U&amp;pdate to Latest Version"
+                  toolTip="Update your solution to the HEAD version"
+                  iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionCommit" priority="0x1500" name="SolutionCommit" defaultInvisible="true"
               text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
@@ -485,7 +488,7 @@
             <Group id="Menu_PendingChangesCommit" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
                   text="&amp;Commit Changes"
-                  toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png"/>
+                  toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png" defaultDisabled="true" />
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="&amp;Commit &amp;Keeping Locks"
                   toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
@@ -495,11 +498,11 @@
             </Group>
           </Menu>
           <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
-            <Group id="Menu_PendingChangesUpdate" priority="0x100">
-              <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
+            <Group id="Menu_PendingChangesUpdate" priority="0x100">              
+              <Button id="Cmd_PendingChangesUpdateHead" name="UpdatePendingChanges" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
-                  fixMenuController="true" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+                  fixMenuController="true" iconFile="PendingChanges/Update.png" defaultDisabled="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
                   text="Update to a Specific &amp;Version"
                   toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>

@@ -28,6 +28,7 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
+    [Command(AnkhCommand.PendingChangesUpdateHead, HideWhenDisabled=false)]
     [Command(AnkhCommand.SolutionUpdateHead)]
     [Command(AnkhCommand.SolutionUpdateSpecific)]
     [Command(AnkhCommand.ProjectUpdateHead)]
@@ -40,6 +41,7 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SolutionUpdateHead:
                 case AnkhCommand.SolutionUpdateSpecific:
+                case AnkhCommand.PendingChangesUpdateHead:
                     return true;
                 default:
                     return false;
@@ -52,6 +54,7 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SolutionUpdateHead:
                 case AnkhCommand.ProjectUpdateHead:
+                case AnkhCommand.PendingChangesUpdateHead:
                     return true;
                 default:
                     return false;
