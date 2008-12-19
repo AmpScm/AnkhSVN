@@ -560,6 +560,10 @@ namespace Ankh.UI.PendingChanges
                     if (_ro)
                         InternalSetReadOnly(true);
                 }
+
+                ErrorHandler.ThrowOnFailure(_textView.SetCaretPos(0, 0)); // Move cursor to 0,0
+                ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(0, 0)); // Scroll horizontally
+                ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(1, 0)); // Scroll vertically     
             }
         }
 
@@ -744,7 +748,7 @@ namespace Ankh.UI.PendingChanges
                     ErrorHandler.ThrowOnFailure(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Sets focus to Editor's Window
@@ -752,6 +756,8 @@ namespace Ankh.UI.PendingChanges
         public void Focus()
         {
             NativeMethods.SetFocus(editorHwnd);
+            if (_textView != null)
+                _textView.SendExplicitFocus();
         }
 
         /// <summary>
@@ -1014,7 +1020,7 @@ namespace Ankh.UI.PendingChanges
                     }
                 }
             }
-        }        
+        }
     }
 
     public class TextViewScrollEventArgs : EventArgs
