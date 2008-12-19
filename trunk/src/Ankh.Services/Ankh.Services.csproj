@@ -77,6 +77,7 @@
     <Compile Include="Scc\IAnkhProjectLayoutService.cs" />
     <Compile Include="Scc\IAnkhTextEditingTracker.cs" />
     <Compile Include="Scc\UI\IAnkhRevisionResolver.cs" />
+    <Compile Include="Selection\IObjectWithAutomation.cs" />
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />
     <Compile Include="Scc\SvnOrigin.cs" />

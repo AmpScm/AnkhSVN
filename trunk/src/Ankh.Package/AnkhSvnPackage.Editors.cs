@@ -27,7 +27,7 @@ using Ankh.UI;
 namespace Ankh.VSPackage
 {
     [ProvideEditorFactoryAttribute(typeof(AnkhDiffEditorFactory), 302)]
-    [ProvideEditorFactoryAttribute(typeof(AnkhDynamicEditorFactory), 304)]
+    [ProvideEditorFactoryAttribute(typeof(AnkhDynamicEditorFactory), 303)]
     [ProvideEditorLogicalView(typeof(AnkhDiffEditorFactory), AnkhId.DiffEditorViewId)]
     partial class AnkhSvnPackage
     {
