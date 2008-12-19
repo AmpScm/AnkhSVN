@@ -74,7 +74,7 @@ namespace Ankh.UI.MergeWizard
                 _wizard = value;
                 base.Wizard = value;
 
-                // HACK: Should not have intimage knowledge about mergewizard, refactor
+                // HACK: Should not have intimate knowledge about mergewizard, refactor
                 MergeWizard mergeWizard = value as MergeWizard;
                 if(mergeWizard != null)
                 {
