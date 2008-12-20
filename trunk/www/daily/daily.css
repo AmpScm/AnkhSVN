@@ -7,10 +7,12 @@
    text-align: center;
 }
 
-tr.d {
-  background-color: light-yellow;
+tr.d
+{
+	background-color: #FFFF99;
 }
 
-td.r: {
-  background-color: light-blue;
+td.r:
+{
+	background-color: #0066CC;
 }
