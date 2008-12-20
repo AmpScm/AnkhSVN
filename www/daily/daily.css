@@ -10,9 +10,17 @@
 tr.d
 {
 	background-color: #FFFF99;
+	vertical-align: top;
 }
 
-td.r:
+td.r, td.a:
 {
-	background-color: #0066CC;
+	background-color: #AAD5FF;
+	vertical-align: top;
+}
+
+td.f
+{
+	color: #008080;
+	vertical-align: top;
 }
