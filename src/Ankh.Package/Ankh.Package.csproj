@@ -132,6 +132,7 @@
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
+    <None Include="Gui\PendingChanges\RepositoryExplorer.pdn" />
     <None Include="Resources\AnkhLogo32x32.pdn" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +222,7 @@
     <Content Include="Gui\PendingChanges\PendingChanges.png" />
     <Content Include="Gui\PendingChanges\Refresh.png" />
     <Content Include="Gui\PendingChanges\RepoBrowser.png" />
+    <Content Include="Gui\PendingChanges\RepositoryExplorer.png" />
     <Content Include="Gui\PendingChanges\Revert.png" />
     <Content Include="Gui\PendingChanges\RevisionGraph.png" />
     <Content Include="Gui\PendingChanges\ShowAll.png" />

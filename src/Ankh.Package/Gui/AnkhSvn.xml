@@ -123,7 +123,7 @@
       </Button>
       <Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
             text="Repositor&amp;y Explorer"
-            toolTip="Show the Repository Explorer window." iconFile="menu/ReposExplorer.png">
+            toolTip="Subversion Repository Explorer" iconFile="PendingChanges/RepositoryExplorer.png">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="r"/>
       </Button>
       <Button id="Cmd_ShowWorkingCopyExplorer" name="WorkingCopyExplorer" priority="0x902"
@@ -132,7 +132,10 @@
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
     </GroupRef>
-
+    <GroupRef id="guidSHLMainMenu:IDG_VS_TOOLSB_NEWWINDOWS">
+      <!-- Views list in the standard menu bar -->
+      <ButtonRef id="Cmd_ShowRepositoryExplorer" priority="0x210" />
+    </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_SOLUTION_SCC">
       <!-- VS Predefined group for SCC commands on the solution -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
