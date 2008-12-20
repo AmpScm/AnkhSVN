@@ -1,3 +1,16 @@
+/* Collabnet specific */
 #main {
    text-align: left;
+}
+
+#main h1, #main h2 {
+   text-align: center;
+}
+
+tr.d {
+  background-color: light-yellow;
+}
+
+td.r: {
+  background-color: light-blue;
 }
