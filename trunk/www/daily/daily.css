@@ -10,10 +10,11 @@
 tr.d
 {
 	background-color: #FFFF99;
+	font-weight: bold;
 	vertical-align: top;
 }
 
-td.r, td.a:
+td.r, td.a
 {
 	vertical-align: top;
 }
