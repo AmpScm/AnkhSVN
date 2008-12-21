@@ -52,8 +52,8 @@ namespace Ankh.UI.PendingChanges.Commands
             string fileName = null;
             using (SaveFileDialog dlg = new SaveFileDialog())
             {
-                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
-                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
+                dlg.Filter = "Patch files( *.patch)|*.patch|Diff files (*.diff)|*.diff|" +
+                    "Text files (*.txt)|*.txt|All files (*.*)|*";
                 dlg.AddExtension = true;
 
                 if (dlg.ShowDialog(dialogOwner) == DialogResult.OK)

@@ -117,7 +117,7 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
       <!-- View - The Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
-                text="Show &amp;Pending Changes"
+                text="&amp;Pending Changes"
                 toolTip="Show the Pending Changes Window." iconFile="menu/PendingChanges.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="c" />
       </Button>
@@ -131,6 +131,9 @@
           toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
+    </GroupRef>
+    <GroupRef id="guidSHLMainMenu:IDG_VS_WNDO_OTRWNDWS1">
+      <ButtonRef id="Cmd_ShowPendingChanges" priority="0x800" />
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_TOOLSB_NEWWINDOWS">
       <!-- Views list in the standard menu bar -->
@@ -204,7 +207,7 @@
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
 
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
-      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />      
+      <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
       <Button id="Cmd_ProjectHistory" priority="0x1800" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
@@ -488,20 +491,28 @@
           <Button id="Cmd_PendingChangesSpacer" name="Spacer" text=" " iconAndText="true" priority="0x001"
               toolTip="AnkhSVN" />
           <Menu id="Menu_PendingChangesCommit" name="Commit" text="Co&amp;mmit" priority="0x100" type="MenuControllerLatched" iconAndText="true">
-            <Group id="Menu_PendingChangesCommit" priority="0x100">
+            <Group id="Grp_PendingChangesCommit1" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
                   text="&amp;Commit Changes"
                   toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png" defaultDisabled="true" />
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="&amp;Commit &amp;Keeping Locks"
-                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
-              <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x300"
-                      text="Create &amp;Patch"
+                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>              
+            </Group>
+            <Group id="Grp_PendingChangesCommit2" priority="0x200">
+              <Button id="Cmd_PendingChangesApplyWorkingCopy" name="ApplyWorkingCopy" priority="0x100"
+                      text="Apply to &amp;Working Copy"
+                      toolTip="Create patch from selected pending changes" />
+              <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x200"
+                      text="Create &amp;Patch..."
                       toolTip="Create patch from selected pending changes"  iconFile="menu/CreatePatch.png"/>
+            </Group>
+            <Group id="Grp_PendingChangesCommit3" priority="0x300">
+              <ButtonRef id="Cmd_SolutionBranch" priority="0x100" />
             </Group>
           </Menu>
           <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
-            <Group id="Menu_PendingChangesUpdate" priority="0x100">              
+            <Group id="Grp_PendingChangesUpdate1" priority="0x100">
               <Button id="Cmd_PendingChangesUpdateHead" name="UpdatePendingChanges" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
@@ -509,6 +520,15 @@
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
                   text="Update to a Specific &amp;Version"
                   toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
+            </Group>
+            <Group id="Grp_PendingChangesUpdate2" priority="0x200">
+              <Button id="Cmd_PendingChangesApplyPatch" name="ApplyPatch" priority="0x100"
+                      text="Apply &amp;Patch..."
+                      toolTip="Apply patch to Solution"  iconFile="menu/CreatePatch.png"/>
+            </Group>
+            <Group id="Grp_PendingChangesUpdate3" priority="0x300">
+              <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x100" />
+              <ButtonRef id="Cmd_SolutionMerge" priority="0x200" />
             </Group>
           </Menu>
         </Group>

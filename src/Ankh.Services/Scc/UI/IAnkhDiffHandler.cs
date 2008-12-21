@@ -33,85 +33,82 @@ namespace Ankh.Scc.UI
         PreferInternal=2
     }
 
-    public class AnkhDiffArgs 
+    public abstract class AnkhDiffToolArgs
     {
         DiffMode _diffMode;
-        string _baseFile;
-        string _baseTitle;
 
-        string _mineFile;
-        string _mineTitle;
-
+        /// <summary>
+        /// Gets or sets the mode.
+        /// </summary>
+        /// <value>The mode.</value>
         public DiffMode Mode
         {
             get { return _diffMode; }
             set { _diffMode = value; }
         }
 
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool Validate();
+    }
+
+    public class AnkhDiffArgs : AnkhDiffToolArgs
+    {        
+        string _baseFile;
+        string _baseTitle;
+
+        string _mineFile;
+        string _mineTitle;        
+
+        /// <summary>
+        /// Gets or sets the base file.
+        /// </summary>
+        /// <value>The base file.</value>
         public string BaseFile
         {
             get { return _baseFile; }
             set { _baseFile = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the mine file.
+        /// </summary>
+        /// <value>The mine file.</value>
         public string MineFile
         {
             get { return _mineFile; }
             set { _mineFile = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the base title.
+        /// </summary>
+        /// <value>The base title.</value>
         public string BaseTitle
         {
             get { return _baseTitle; }
             set { _baseTitle = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the mine title.
+        /// </summary>
+        /// <value>The mine title.</value>
         public string MineTitle
         {
             get { return _mineTitle; }
             set { _mineTitle = value; }
         }
 
-        public virtual bool Validate()
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Validate()
         {
             return !string.IsNullOrEmpty(BaseFile) && !string.IsNullOrEmpty(MineFile);
-        }
-    }
-
-    /// <summary>
-    /// A template in the dialog above.
-    /// </summary>
-    public class AnkhDiffArgumentDefinition
-    {
-        readonly string _key;
-        readonly string[] _aliases;
-        readonly string _description;
-
-        public AnkhDiffArgumentDefinition(string key, string description, params string[] aliases)
-        {
-            _key = key;
-            _description = description;
-            _aliases = aliases ?? new string[0];
-        }
-
-        public AnkhDiffArgumentDefinition(string key, string description)
-            : this(key, description, (string[])null)
-        {
-        }
-
-        public string Key
-        {
-            get { return _key; }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-        }
-
-        public string[] Aliases
-        {
-            get { return _aliases; }
         }
     }
 
@@ -122,12 +119,20 @@ namespace Ankh.Scc.UI
         string _mergedFile;
         string _mergedTitle;
 
+        /// <summary>
+        /// Gets or sets the theirs file.
+        /// </summary>
+        /// <value>The theirs file.</value>
         public string TheirsFile
         {
             get { return _theirsFile; }
             set { _theirsFile = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the theirs title.
+        /// </summary>
+        /// <value>The theirs title.</value>
         public string TheirsTitle
         {
             get { return _theirsTitle; }
@@ -151,6 +156,106 @@ namespace Ankh.Scc.UI
             return base.Validate() && !string.IsNullOrEmpty(TheirsFile) && !string.IsNullOrEmpty(MergedFile);
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class AnkhPatchArgs : AnkhDiffToolArgs
+    {
+        string _patchFile;
+        string _applyTo;
+
+        /// <summary>
+        /// Gets or sets the patch file.
+        /// </summary>
+        /// <value>The patch file.</value>
+        public string PatchFile
+        {
+            get { return _patchFile; }
+            set { _patchFile = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the apply to.
+        /// </summary>
+        /// <value>The apply to.</value>
+        public string ApplyTo
+        {
+            get { return _applyTo; }
+            set { _applyTo = value; }
+        }
+
+        /// <summary>
+        /// Validates this instance.
+        /// </summary>
+        /// <returns></returns>
+        public override bool Validate()
+        {
+            return !string.IsNullOrEmpty(PatchFile) && !string.IsNullOrEmpty(ApplyTo);
+        }
+    }
+
+        /// <summary>
+    /// A template in the dialog above.
+    /// </summary>
+    public class AnkhDiffArgumentDefinition
+    {
+        readonly string _key;
+        readonly string[] _aliases;
+        readonly string _description;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnkhDiffArgumentDefinition"/> class.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="aliases">The aliases.</param>
+        public AnkhDiffArgumentDefinition(string key, string description, params string[] aliases)
+        {
+            _key = key;
+            _description = description;
+            _aliases = aliases ?? new string[0];
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnkhDiffArgumentDefinition"/> class.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="description">The description.</param>
+        public AnkhDiffArgumentDefinition(string key, string description)
+            : this(key, description, (string[])null)
+        {
+        }
+
+        /// <summary>
+        /// Gets the key.
+        /// </summary>
+        /// <value>The key.</value>
+        public string Key
+        {
+            get { return _key; }
+        }
+
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        public string Description
+        {
+            get { return _description; }
+        }
+
+        /// <summary>
+        /// Gets the aliases.
+        /// </summary>
+        /// <value>The aliases.</value>
+        public string[] Aliases
+        {
+            get { return _aliases; }
+        }
+    }
+
+
 
     [DebuggerDisplay("{Name} ({Title})")]
     public abstract class AnkhDiffTool
@@ -251,8 +356,23 @@ namespace Ankh.Scc.UI
 
     public interface IAnkhDiffHandler
     {
+        /// <summary>
+        /// Runs the diff as specified by the args
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
         bool RunDiff(AnkhDiffArgs args);
+        /// <summary>
+        /// Runs the merge as specified by the args
+        /// </summary>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
         bool RunMerge(AnkhMergeArgs args);
+        /// <summary>
+        /// Runs the patch as specified by the args
+        /// </summary>
+        /// <param name="args">The args.</param>
+        bool RunPatch(AnkhPatchArgs args);
 
         /// <summary>
         /// Releases the diff.
@@ -307,6 +427,6 @@ namespace Ankh.Scc.UI
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns></returns>
-        SvnUriTarget GetCopyOrigin(SvnItem item);
+        SvnUriTarget GetCopyOrigin(SvnItem item);        
     }
 }
