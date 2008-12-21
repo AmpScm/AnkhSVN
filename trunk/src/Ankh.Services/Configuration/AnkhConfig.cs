@@ -27,8 +27,9 @@ namespace Ankh.Configuration
     /// </summary>
     public class AnkhConfig
     {
-        string _mergeExePathField;
-        string _diffExePathField;
+        string _mergeExePath;
+        string _diffExePath;
+        string _patchExePath;
         bool _interactiveMergeOnConflict;
 
         /// <summary>
@@ -38,8 +39,8 @@ namespace Ankh.Configuration
         [DefaultValue(null)]
         public string MergeExePath
         {
-            get { return _mergeExePathField; }
-            set { _mergeExePathField = value; }
+            get { return _mergeExePath; }
+            set { _mergeExePath = value; }
         }
 
         /// <summary>
@@ -49,8 +50,19 @@ namespace Ankh.Configuration
         [DefaultValue(null)]
         public string DiffExePath
         {
-            get { return _diffExePathField; }
-            set { _diffExePathField = value; }
+            get { return _diffExePath; }
+            set { _diffExePath = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the patch exe path.
+        /// </summary>
+        /// <value>The patch exe path.</value>
+        [DefaultValue(null)]
+        public string PatchExePath
+        {
+            get { return _patchExePath; }
+            set { _patchExePath = value; }
         }
 
         [DefaultValue(false)]
