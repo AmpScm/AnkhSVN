@@ -131,7 +131,7 @@ namespace Ankh.UI.OptionsPages
             if (!found)
             {
                 combo.SelectedItem = null;
-                combo.SelectedValue = value ?? "";
+                combo.Text = value ?? "";
             }
         }
 
