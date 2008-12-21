@@ -207,11 +207,12 @@ namespace Ankh.Ids
         SvnNodeDelete,
         SolutionUpdateHead,
 
+        PendingChangesApplyWorkingCopy,
+        PendingChangesCreatePatch,
+        PendingChangesApplyPatch,
+        SolutionApplyPatch,
+
         // Currently unused block; values can be reused as they were never really handled                
-        PcGroupChangeList,
-        PcGroupFullPath,
-        PcGroupLocked,
-        PcGroupModified,
         PcGroupName,
         PcGroupRepository,
         PcGroupType,
@@ -265,7 +266,6 @@ namespace Ankh.Ids
         SolutionEditProperties,
         ProjectEditProperties,
 
-        LogShowRevisionProperties,
-        PendingChangesCreatePatch,
+        LogShowRevisionProperties
     }
 }

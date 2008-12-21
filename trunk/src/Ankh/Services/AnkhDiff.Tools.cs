@@ -46,6 +46,10 @@ namespace Ankh.Services
             args.Add(new AnkhDiffArgumentDefinition("TheirName", "Title for Theirs (Merge)", "tname", "theirsname"));
             args.Add(new AnkhDiffArgumentDefinition("Merged", "Merged Version (Merge)"));
             args.Add(new AnkhDiffArgumentDefinition("MergedName", "Title for Merged (Merge)", "mname"));
+
+            args.Add(new AnkhDiffArgumentDefinition("PatchFile", "Patch file to apply"));
+            args.Add(new AnkhDiffArgumentDefinition("ApplyToDir", "Directory to apply patch to"));
+
             args.Add(new AnkhDiffArgumentDefinition("AppPath(XXX)", "AppPath for registered tool XXX"));
             args.Add(new AnkhDiffArgumentDefinition("ProgramFiles", "System Program Files folder"));
             args.Add(new AnkhDiffArgumentDefinition("CommonProgramFiles", "Common Program Files folder"));
@@ -142,7 +146,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
                 RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
-                "/diff:'$(PatchFile)' /patchpath:'$(ApplyOnPath)'", true));
+                "/diff:'$(PatchFile)' /patchpath:'$(ApplyToDir)'", true));
 
             LoadRegistryTools(DiffToolMode.Patch, tools);
 

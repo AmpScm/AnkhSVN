@@ -38,12 +38,18 @@ namespace Ankh.Services
         {
         }
 
+        IFileStatusCache _statusCache;
+        IFileStatusCache Cache
+        {
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
+        }
+
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetDiffPath(DiffMode mode)
+        protected string GetDiffPath(DiffMode mode)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
@@ -87,7 +93,7 @@ namespace Ankh.Services
             DiffToolMonitor monitor = null;
             if (!string.IsNullOrEmpty(mergedFile))
             {
-                monitor = new DiffToolMonitor(Context, mergedFile);
+                monitor = new DiffToolMonitor(Context, mergedFile, false);
 
                 p.EnableRaisingEvents = true;
                 monitor.Register(p);
@@ -113,7 +119,7 @@ namespace Ankh.Services
         /// </summary>
         /// <param name="context"></param>
         /// <returns>The exe path.</returns>
-        protected virtual string GetMergePath(DiffMode mode)
+        protected string GetMergePath(DiffMode mode)
         {
             IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
 
@@ -124,12 +130,6 @@ namespace Ankh.Services
                 default:
                     return cs.Instance.MergeExePath;
             }
-        }
-
-        IFileStatusCache _statusCache;
-        IFileStatusCache Cache
-        {
-            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         public bool RunMerge(AnkhMergeArgs args)
@@ -164,7 +164,73 @@ namespace Ankh.Services
             DiffToolMonitor monitor = null;
             if (!string.IsNullOrEmpty(mergedFile))
             {
-                monitor = new DiffToolMonitor(Context, mergedFile);
+                monitor = new DiffToolMonitor(Context, mergedFile, false);
+
+                p.EnableRaisingEvents = true;
+                monitor.Register(p);
+            }
+
+            bool started = false;
+            try
+            {
+                return started = p.Start();
+            }
+            finally
+            {
+                if (!started)
+                {
+                    if (monitor != null)
+                        monitor.Dispose();
+                }
+            }
+        }
+
+        protected string GetPatchPath(DiffMode mode)
+        {
+            IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
+
+            switch (mode)
+            {
+                case DiffMode.PreferInternal:
+                    return null;
+                default:
+                    return cs.Instance.PatchExePath;
+            }
+        }
+
+        public bool RunPatch(AnkhPatchArgs args)
+        {
+            if (args == null)
+                throw new ArgumentNullException("args");
+            else if (!args.Validate())
+                throw new ArgumentException("Arguments not filled correctly", "args");
+
+            string diffApp = GetPatchPath(args.Mode);
+
+            if (string.IsNullOrEmpty(diffApp))
+            {
+                new AnkhMessageBox(Context).Show("Please specify a merge tool in Tools->Options->SourceControl->Subversion", "AnkhSVN - No visual merge tool is available");
+
+                return false;
+            }
+
+            string program;
+            string arguments;
+            if (!Substitute(diffApp, args, DiffToolMode.Patch, out program, out arguments))
+            {
+                new AnkhMessageBox(Context).Show(string.Format("Can't find patch program '{0}'", program));
+                return false;
+            }
+
+            Process p = new Process();
+            p.StartInfo = new ProcessStartInfo(program, arguments);
+
+            string applyTo = args.ApplyTo;
+
+            DiffToolMonitor monitor = null;
+            if (applyTo != null)
+            {
+                monitor = new DiffToolMonitor(Context, applyTo, true);
 
                 p.EnableRaisingEvents = true;
                 monitor.Register(p);
@@ -210,29 +276,43 @@ namespace Ankh.Services
         sealed class DiffToolMonitor : AnkhService, IVsFileChangeEvents
         {
             uint _cookie;
-            readonly string _fileToMonitor;
+            readonly string _toMonitor;
+            readonly bool _monitorDir;
 
-            public DiffToolMonitor(IAnkhServiceProvider context, string monitor)
+            public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir)
                 : base(context)
-            {
+            {                
                 if (string.IsNullOrEmpty(monitor))
                     throw new ArgumentNullException("monitor");
                 else if (!SvnItem.IsValidPath(monitor))
                     throw new ArgumentOutOfRangeException("monitor");
 
-                _fileToMonitor = monitor;
+                _monitorDir = monitorDir;
+                _toMonitor = monitor;
 
                 IVsFileChangeEx fx = context.GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-
-                if (fx == null || !ErrorHandler.Succeeded(fx.AdviseFileChange(monitor,
-                        (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Time | _VSFILECHANGEFLAGS.VSFILECHG_Size
-                        | _VSFILECHANGEFLAGS.VSFILECHG_Add | _VSFILECHANGEFLAGS.VSFILECHG_Del
-                        | _VSFILECHANGEFLAGS.VSFILECHG_Attr),
-                        this,
-                        out _cookie)))
+                _cookie = 0;
+                if (fx == null)
+                {}
+                else if (!_monitorDir)
                 {
-                    _cookie = 0;
+                    if (!ErrorHandler.Succeeded(fx.AdviseFileChange(monitor,
+                            (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Time | _VSFILECHANGEFLAGS.VSFILECHG_Size
+                            | _VSFILECHANGEFLAGS.VSFILECHG_Add | _VSFILECHANGEFLAGS.VSFILECHG_Del
+                            | _VSFILECHANGEFLAGS.VSFILECHG_Attr),
+                            this,
+                            out _cookie)))
+                    {
+                        _cookie = 0;
+                    }
+                }
+                else
+                {
+                    if (!ErrorHandler.Succeeded(fx.AdviseDirChange(monitor, 1, this, out _cookie)))
+                    {
+                        _cookie = 0;
+                    }
                 }
             }
 
@@ -246,7 +326,12 @@ namespace Ankh.Services
                     IVsFileChangeEx fx = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
                     if (fx != null)
-                        fx.UnadviseFileChange(ck);
+                    {
+                        if (!_monitorDir)
+                            fx.UnadviseFileChange(ck);
+                        else
+                            fx.UnadviseDirChange(ck);
+                    }
                 }
             }
 
@@ -258,10 +343,22 @@ namespace Ankh.Services
             void OnExited(object sender, EventArgs e)
             {
                 Dispose();
+
+                if (_monitorDir)
+                {
+                    // TODO: Schedule status for all changed files
+                }
             }
 
             public int DirectoryChanged(string pszDirectory)
             {
+                IFileStatusCache fsc = GetService<IFileStatusCache>();
+
+                if (fsc != null)
+                {
+                    fsc.MarkDirtyRecursive(SvnTools.GetNormalizedFullPath(pszDirectory));
+                }
+
                 return VSConstants.S_OK;
             }
 
@@ -271,12 +368,12 @@ namespace Ankh.Services
                 {
                     foreach (string file in rgpszFile)
                     {
-                        if (string.Equals(file, _fileToMonitor, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(file, _toMonitor, StringComparison.OrdinalIgnoreCase))
                         {
                             IFileStatusMonitor m = GetService<IFileStatusMonitor>();
 
                             if (m != null)
-                                m.ExternallyChanged(_fileToMonitor);
+                                m.ExternallyChanged(_toMonitor);
 
                             break;
                         }
@@ -285,8 +382,6 @@ namespace Ankh.Services
 
                 return VSConstants.S_OK;
             }
-
-
         }
 
 
@@ -300,7 +395,7 @@ namespace Ankh.Services
             Patch
         }
 
-        private bool Substitute(string reference, AnkhDiffArgs args, DiffToolMode toolMode, out string program, out string arguments)
+        private bool Substitute(string reference, AnkhDiffToolArgs args, DiffToolMode toolMode, out string program, out string arguments)
         {
             if (string.IsNullOrEmpty(reference))
                 throw new ArgumentNullException("reference");
@@ -393,7 +488,7 @@ namespace Ankh.Services
             return true;
         }
 
-        private string SubstituteArguments(string arguments, AnkhDiffArgs diffArgs, DiffToolMode toolMode)
+        private string SubstituteArguments(string arguments, AnkhDiffToolArgs diffArgs, DiffToolMode toolMode)
         {
             return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9()_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))",
                 new Replacer(this, diffArgs, toolMode).Replace);
@@ -402,11 +497,13 @@ namespace Ankh.Services
         sealed class Replacer
         {
             readonly AnkhDiff _context;
+            readonly AnkhDiffToolArgs _toolArgs;
             readonly AnkhDiffArgs _diffArgs;
             readonly AnkhMergeArgs _mergeArgs;
+            readonly AnkhPatchArgs _patchArgs;
             readonly DiffToolMode _toolMode;
 
-            public Replacer(AnkhDiff context, AnkhDiffArgs args, DiffToolMode toolMode)
+            public Replacer(AnkhDiff context, AnkhDiffToolArgs args, DiffToolMode toolMode)
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
@@ -414,8 +511,10 @@ namespace Ankh.Services
                     throw new ArgumentNullException("args");
 
                 _context = context;
-                _diffArgs = args;
+                _toolArgs = args;
+                _diffArgs = args as AnkhDiffArgs;
                 _mergeArgs = args as AnkhMergeArgs;
+                _patchArgs = args as AnkhPatchArgs;
                 _toolMode = toolMode;
             }
 
@@ -427,6 +526,11 @@ namespace Ankh.Services
             AnkhMergeArgs MergeArgs
             {
                 get { return _mergeArgs; }
+            }
+
+            AnkhPatchArgs PatchArgs
+            {
+                get { return _patchArgs; }
             }
 
             public string Replace(Match match)
@@ -448,17 +552,62 @@ namespace Ankh.Services
                 switch (key)
                 {
                     case "BASE":
-                        return DiffArgs.BaseFile;
+                        if (DiffArgs != null)
+                            return DiffArgs.BaseFile;
+                        else
+                            return null;
                     case "BNAME":
                     case "BASENAME":
-                        return DiffArgs.BaseTitle ?? Path.GetFileName(DiffArgs.BaseFile);
-
+                        if (DiffArgs != null)
+                            return DiffArgs.BaseTitle ?? Path.GetFileName(DiffArgs.BaseFile);
+                        else
+                            return null;
                     case "MINE":
-                        return DiffArgs.MineFile;
+                        if (DiffArgs != null)
+                            return DiffArgs.MineFile;
+                        else
+                            return null;
                     case "YNAME":
                     case "MINENAME":
-                        return DiffArgs.MineTitle ?? Path.GetFileName(DiffArgs.MineFile);
+                        if (DiffArgs != null)
+                            return DiffArgs.MineTitle ?? Path.GetFileName(DiffArgs.MineFile);
+                        else
+                            return null;
 
+                    case "THEIRS":
+                        if (MergeArgs != null)
+                            return MergeArgs.TheirsFile;
+                        else
+                            return null;
+                    case "TNAME":
+                    case "THEIRNAME":
+                    case "THEIRSNAME":
+                        if (MergeArgs != null)
+                            return MergeArgs.TheirsTitle ?? Path.GetFileName(MergeArgs.TheirsFile);
+                        else
+                            return null;
+                    case "MERGED":
+                        if (MergeArgs != null)
+                            return MergeArgs.MergedFile;
+                        else
+                            return null;
+                    case "MERGEDNAME":
+                    case "MNAME":
+                        if (MergeArgs != null)
+                            return MergeArgs.MergedTitle ?? Path.GetFileName(MergeArgs.MergedFile);
+                        else
+                            return null;
+
+                    case "PATCHFILE":
+                        if (PatchArgs != null)
+                            return PatchArgs.PatchFile;
+                        else
+                            return null;
+                    case "APPLYTODIR":
+                        if (PatchArgs != null)
+                            return PatchArgs.ApplyTo;
+                        else
+                            return null;
                     case "APPPATH":
                         v = _context.GetAppPath(match.Groups["arg"].Value, _toolMode);
 
@@ -486,23 +635,6 @@ namespace Ankh.Services
                             return val as string;
                         return null;
                     default:
-                        if (MergeArgs != null)
-                            switch (key)
-                            {
-                                case "THEIRS":
-                                    return MergeArgs.TheirsFile;
-                                case "TNAME":
-                                case "THEIRNAME":
-                                case "THEIRSNAME":
-                                    return MergeArgs.TheirsTitle ?? Path.GetFileName(MergeArgs.TheirsFile);
-
-                                case "MERGED":
-                                    return MergeArgs.MergedFile;
-                                case "MERGEDNAME":
-                                case "MNAME":
-                                    return MergeArgs.MergedTitle ?? Path.GetFileName(MergeArgs.MergedFile); ;
-                            }
-
                         // Just replace with "" if unknown
                         v = Environment.GetEnvironmentVariable(key);
                         if (!string.IsNullOrEmpty(v))

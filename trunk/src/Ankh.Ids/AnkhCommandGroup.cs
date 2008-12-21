@@ -111,5 +111,13 @@ namespace Ankh.Ids
         BlameContextMenu,
 
         CodeEditorScc,
+
+        PendingChangesCommit1,
+        PendingChangesCommit2,
+        PendingChangesCommit3,
+
+        PendingChangesUpdate1,
+        PendingChangesUpdate2,
+        PendingChangesUpdate3
     }
 }
