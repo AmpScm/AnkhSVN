@@ -29,6 +29,9 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
 using Microsoft.VisualStudio;
 using System.ComponentModel.Design;
+using Ankh.Scc;
+using System.IO;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -54,6 +57,7 @@ namespace Ankh.UI.RepositoryExplorer
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
+            VSCommandHandler.Install(Context, this, AnkhCommand.RepositoryOpen, OnOpen, OnUpdateOpen);
         }
 
         void OnDelete(object sender, CommandEventArgs e)
@@ -198,24 +202,77 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void fileView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ListViewHitTestInfo ht = fileView.HitTest(e.X, e.Y);
+            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.RepositoryOpen);            
+        }
 
-            RepositoryListItem li = ht.Item as RepositoryListItem;
 
-            if (ht.Location == ListViewHitTestLocations.None || li == null)
+        void OnUpdateOpen(object sender, CommandUpdateEventArgs e)
+        {
+            RepositoryExplorerItem item = EnumTools.GetSingle(e.Selection.GetSelection<RepositoryExplorerItem>());
+
+            if (item == null || item.Uri == null)
+                e.Enabled = false;
+        }
+
+        void OnOpen(object sender, CommandEventArgs e)
+        {
+            RepositoryExplorerItem item = EnumTools.GetSingle(e.Selection.GetSelection<RepositoryExplorerItem>());
+
+            if (item.Info == null || item.Info.Entry.NodeKind == SvnNodeKind.Directory || item.Origin == null)
+            {
+                treeView.BrowseTo(item.Uri);
+                return;
+            }
+
+            IAnkhCommandService svc = e.GetService<IAnkhCommandService>();
+            IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+
+            if (svc == null || solutionSettings == null)
                 return;
 
-            if (li.Info.Entry.NodeKind == SvnNodeKind.Directory)
-            {
-                treeView.BrowseTo(li.RawUri);
-            }
-            else
-            {
-                IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+            // Ok, we can assume we have a file
+            SvnOrigin origin = item.Origin;
 
-                if (cmd != null)
-                    cmd.ExecCommand(AnkhCommand.ViewInVsNet, true);
+            string filename = origin.Target.FileName;
+            string ext = Path.GetExtension(filename);
+
+            if (string.IsNullOrEmpty(ext))
+            {
+                // No extension -> Open as text
+                svc.PostExecCommand(AnkhCommand.ViewInVsText);
+                return;
             }
+
+            foreach (string projectExt in solutionSettings.AllProjectExtensionsFilter.Split(';'))
+            {
+                if (projectExt.TrimStart('*').Trim().Equals(ext, StringComparison.OrdinalIgnoreCase))
+                {
+                    // We found a project or solution, use Open from Subversion to create a checkout
+
+                    svc.PostExecCommand(AnkhCommand.FileFileOpenFromSubversion, origin);
+                    return;
+                }
+            }
+
+            bool odd = false;
+            foreach (string block in solutionSettings.OpenFileFilter.Split('|'))
+            {
+                odd = !odd;
+                if (odd)
+                    continue;
+
+                foreach (string itemExt in block.Split(';'))
+                {
+                    if (itemExt.TrimStart('*').Trim().Equals(ext, StringComparison.OrdinalIgnoreCase))
+                    {
+                        svc.PostExecCommand(AnkhCommand.ViewInVsNet);
+                        return;
+                    }
+                }
+            }
+
+            // Ultimate fallback: Just ask the user what to do (don't trust the repository!)
+            svc.PostExecCommand(AnkhCommand.ViewInWindowsWith);
         }
     }
 }

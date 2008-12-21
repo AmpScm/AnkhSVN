@@ -68,7 +68,7 @@ namespace Ankh.UI.RepositoryExplorer
             get { return "Repository Item"; }
         }
 
-        SvnListEventArgs Info
+        internal SvnListEventArgs Info
         {
             get
             {

@@ -50,13 +50,18 @@ namespace Ankh.Commands
         {
             IUIService ui = e.GetService<IUIService>();
             Uri selectedUri = null;
-            Uri rootUri;
+            Uri rootUri = null;
 
             if (e.Argument is string && Uri.TryCreate((string)e.Argument, UriKind.Absolute, out selectedUri))
             { }
             else if (e.Argument is Uri)
                 selectedUri = (Uri)e.Argument;
-
+            else if (e.Argument is SvnOrigin)
+            {
+                SvnOrigin origin = (SvnOrigin)e.Argument;
+                selectedUri = origin.Uri;
+                rootUri = origin.RepositoryRoot;
+            }
 
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
@@ -92,7 +97,7 @@ namespace Ankh.Commands
                     rootUri = dlg.SelectedRepositoryRoot;
                 }
             }
-            else
+            else if (rootUri == null)
             {
                 using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
                 {

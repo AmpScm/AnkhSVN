@@ -25,14 +25,18 @@ using Microsoft.VisualStudio.Shell;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Forms;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// A command that opens a file from the server in VS.NET
     /// </summary>
-    [Command(AnkhCommand.ViewInVsNet)]
-    [Command(AnkhCommand.ViewInWindows)]
+    [Command(AnkhCommand.ViewInVsNet, AlwaysAvailable=true)]
+    [Command(AnkhCommand.ViewInWindows, AlwaysAvailable=true)]
+    [Command(AnkhCommand.ViewInVsText, AlwaysAvailable=true)]
+    [Command(AnkhCommand.ViewInWindowsWith, AlwaysAvailable=true)]
     class ViewInVSNetCommand : ViewRepositoryFileCommand
     {
         const int NOASSOCIATEDAPP = 1155;
@@ -58,11 +62,26 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (e.Command == AnkhCommand.ViewInVsNet)
                 VsShellUtilities.OpenDocument(e.Context, toFile);
+            else if (e.Command == AnkhCommand.ViewInVsText)
+            {
+                IVsUIHierarchy hier;
+                IVsWindowFrame frame;
+                uint id;
+                VsShellUtilities.OpenDocument(e.Context, toFile, VSConstants.LOGVIEWID_TextView, out hier, out id, out frame);
+            }
             else
             {
                 Process process = new Process();
-                process.StartInfo.FileName = toFile;
                 process.StartInfo.UseShellExecute = true;
+
+                if (e.Command == AnkhCommand.ViewInWindowsWith)
+                {
+                    // TODO: BH: I tested with adding quotes around {0} but got some error
+                    process.StartInfo.FileName = "rundll32.exe";
+                    process.StartInfo.Arguments = string.Format("Shell32,OpenAs_RunDLL {0}", toFile);
+                }
+                else
+                    process.StartInfo.FileName = toFile;
 
                 try
                 {
