@@ -212,13 +212,13 @@ namespace Ankh.Ids
         PendingChangesApplyPatch,
         SolutionApplyPatch,
 
-        // Currently unused block; values can be reused as they were never really handled                
-        PcGroupName,
-        PcGroupRepository,
-        PcGroupType,
-        PcGroupAscending,
-        PcGroupDescending,
+        RepositoryOpen,
+        ReposExplorerOpenWith,        
+        ReposExplorerShowPrevChanges,
+        ViewInVsText,
+        ViewInWindowsWith,
 
+        // Currently unused block; values can be reused as they were never really handled                
         PcColViewPath,
         PcColViewProject,
         PcColViewChange,

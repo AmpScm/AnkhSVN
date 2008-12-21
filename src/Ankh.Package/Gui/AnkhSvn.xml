@@ -159,7 +159,8 @@
         <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
           <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x08" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
-          <Button id="Cmd_UnifiedDiff" priority="0x20" name="UnifiedDiff" text="&amp;Unified Diff" defaultInvisible="true" />
+          <Button id="Cmd_UnifiedDiff" priority="0x20" name="UnifiedDiff"
+                  text="&amp;Unified Diff..." defaultInvisible="true" />
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x30" />
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
@@ -366,12 +367,9 @@
           <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0x600"
                 text="Refres&amp;h"
                 toolTip="Refresh this item." iconFile="PendingChanges/Refresh.png"/>
-          <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x700"
-                text="In &amp;Visual Studio"
-                toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
-          <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x800"
-              text="In Wi&amp;ndows"
-              toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+          <ButtonRef id="Cmd_RepositoryOpen" priority="0x680" />
+          <ButtonRef id="Cmd_ViewInVsNet" priority="0x700" />
+          <ButtonRef id="Cmd_ViewInWindows"  priority="0x800" />          
           <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x900"
                 text="Chec&amp;kout Folder..."
                 toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
@@ -388,18 +386,43 @@
     <GroupRef id="Menu_RepositoryExplorerContextMenu">
       <!-- The Repository Explorer Context Menu -->
       <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" priority="0" type="Context">
-        <Group id="Grp_RepositoryExplorerContext" priority="0x100">
-          <ButtonRef id="Cmd_ViewInVsNet" priority="0x100"/>
-          <ButtonRef id="Cmd_ViewInWindows" priority="0x200"/>
-          <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x300"
+        <Group id="Grp_RepositoryExplorerOpen" priority="0x100">
+          <!-- Cmd_RepositoryOpen is handled on the control itself and does 'the right thing' -->
+          <Button id="Cmd_RepositoryOpen" name="RepositoryOpen" priority="0x100"
+                  text="&amp;Open" iconFile="PendingChanges/Open.png" dynamicVisibility="true" iconAndText="true"/>
+          <ButtonRef id="Cmd_SaveToFile" priority="0x200" />
+          <Menu id="Menu_RepositoryExplorerOpenWith" priority ="0xF000" name="OpenWith" text="Open Wit&amp;h">
+            <Group id="Grp_OpenWith" priority="0x100">
+              <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x100"
+                text="Open In &amp;Visual Studio" menuText="&amp;Visual Studio"
+                toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
+              <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x200"
+                text="In Wi&amp;ndows" menuText="&amp;Standard Application"
+                toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+              <Button id="Cmd_ViewInVsText" name="ViewAsText" priority="0x300"
+                      text="As &amp;Text" />
+            </Group>
+            <Group id="Grp_OpenWith2" priority="0xF000">
+              <Button id="Cmd_ViewInWindowsWith" name="ViewInWindowsWith" priority="0xF000"
+                    text="Choose Program..." defaultInvisible="true" />
+            </Group>
+          </Menu>
+        </Group>
+        <Group id="Grp_RepositoryExplorerReview" priority="0x200">
+          <Button id="Cmd_ReposExplorerLog" name="ReposExplorerLog" priority ="0x100"
                   text="View &amp;History"
                   toolTip="View History." iconFile ="PendingChanges/ViewHistory.png" dynamicVisibility="true"/>
-          <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x400"
-                  text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
-          <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0x500" text="&amp;Delete..."
-                  iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
-          <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x600" />
+          <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x200" />
         </Group>
+        <Group id="Grp_RepositoryExplorerEdit" priority="0x300">
+          <ButtonRef id="CLSID_StandardCommandSet97:cmdidCopy" priority="0x100" />
+          <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
+          <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
+                  iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
+          <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x900"
+                  text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
+        </Group>
+        <Group id="Grp_RepositoryExplorerRefer" priority="0x400" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
@@ -499,7 +522,7 @@
                   toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png" defaultDisabled="true" />
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="&amp;Commit &amp;Keeping Locks"
-                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>              
+                  toolTip="Commit pending changes keeping locks after committing" iconFile="PendingChanges/Commit.png"/>
             </Group>
             <Group id="Grp_PendingChangesCommit2" priority="0x200">
               <Button id="Cmd_PendingChangesApplyWorkingCopy" name="ApplyWorkingCopy" priority="0x100"

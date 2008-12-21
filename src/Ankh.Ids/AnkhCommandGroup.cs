@@ -56,6 +56,7 @@ namespace Ankh.Ids
         SolutionExplorerSccForItem,
 
         RepositoryExplorerToolBar,
+        [Obsolete("Unused")]
         RepositoryExplorerContext,
         WorkingCopyExplorerToolBar,
         WorkingCopyExplorerContext,
@@ -118,6 +119,14 @@ namespace Ankh.Ids
 
         PendingChangesUpdate1,
         PendingChangesUpdate2,
-        PendingChangesUpdate3
+        PendingChangesUpdate3,
+
+        RepositoryExplorerOpen,
+        RepositoryExplorerReview,
+        RepositoryExplorerEdit,
+        RepositoryExplorerRefer,
+
+        OpenWith,
+        OpenWith2
     }
 }
