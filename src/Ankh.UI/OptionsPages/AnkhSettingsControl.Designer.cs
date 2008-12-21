@@ -14,7 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Ankh.UI
+namespace Ankh.UI.OptionsPages
 {
     partial class AnkhSettingsControl
     {
@@ -60,19 +60,22 @@ namespace Ankh.UI
             // 
             this.diffExeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.diffExeBox.DisplayMember = "DisplayName";
             this.diffExeBox.Location = new System.Drawing.Point(0, 15);
             this.diffExeBox.Name = "diffExeBox";
             this.diffExeBox.Size = new System.Drawing.Size(355, 21);
             this.diffExeBox.TabIndex = 1;
+            this.diffExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
+            this.diffExeBox.TextChanged += new System.EventHandler(this.diffExeBox_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(-3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(92, 13);
+            this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "External &Diff Path:";
+            this.label1.Text = "External &Diff Tool:";
             // 
             // diffBrowseBtn
             // 
@@ -83,25 +86,28 @@ namespace Ankh.UI
             this.diffBrowseBtn.TabIndex = 2;
             this.diffBrowseBtn.Text = "...";
             this.diffBrowseBtn.UseVisualStyleBackColor = true;
-            this.diffBrowseBtn.Click += new System.EventHandler(this.btnDiffExePath_Click);
+            this.diffBrowseBtn.Click += new System.EventHandler(this.diffBrowseBtn_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(-3, 43);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 13);
+            this.label2.Size = new System.Drawing.Size(105, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "External &Merge Path:";
+            this.label2.Text = "External &Merge Tool:";
             // 
             // mergeExeBox
             // 
             this.mergeExeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.mergeExeBox.DisplayMember = "DisplayName";
             this.mergeExeBox.Location = new System.Drawing.Point(0, 58);
             this.mergeExeBox.Name = "mergeExeBox";
             this.mergeExeBox.Size = new System.Drawing.Size(355, 21);
             this.mergeExeBox.TabIndex = 4;
+            this.mergeExeBox.ValueMember = "ToolTemplate";
+            this.mergeExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
             // 
             // mergeBrowseBtn
             // 
@@ -112,7 +118,7 @@ namespace Ankh.UI
             this.mergeBrowseBtn.TabIndex = 5;
             this.mergeBrowseBtn.Text = "...";
             this.mergeBrowseBtn.UseVisualStyleBackColor = true;
-            this.mergeBrowseBtn.Click += new System.EventHandler(this.btnMergePath_Click);
+            this.mergeBrowseBtn.Click += new System.EventHandler(this.mergeBrowseBtn_Click);
             // 
             // interactiveMergeOnConflict
             // 
@@ -133,24 +139,29 @@ namespace Ankh.UI
             this.patchBrowseBtn.TabIndex = 8;
             this.patchBrowseBtn.Text = "...";
             this.patchBrowseBtn.UseVisualStyleBackColor = true;
+            this.patchBrowseBtn.Click += new System.EventHandler(this.patchBrowseBtn_Click);
             // 
             // patchExeBox
             // 
             this.patchExeBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.patchExeBox.DisplayMember = "DisplayName";
             this.patchExeBox.Location = new System.Drawing.Point(0, 97);
             this.patchExeBox.Name = "patchExeBox";
             this.patchExeBox.Size = new System.Drawing.Size(355, 21);
             this.patchExeBox.TabIndex = 7;
+            this.patchExeBox.ValueMember = "ToolTemplate";
+            this.patchExeBox.SelectionChangeCommitted += new System.EventHandler(this.tool_selectionCommitted);
+            this.patchExeBox.SelectedIndexChanged += new System.EventHandler(this.tool_selectionCommitted);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(-3, 82);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(104, 13);
+            this.label3.Size = new System.Drawing.Size(103, 13);
             this.label3.TabIndex = 6;
-            this.label3.Text = "External &Patch Path:";
+            this.label3.Text = "External &Patch Tool:";
             // 
             // AnkhSettingsControl
             // 

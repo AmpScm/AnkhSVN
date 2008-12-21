@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.Scc.UI
 {
@@ -75,8 +76,43 @@ namespace Ankh.Scc.UI
         {
             return !string.IsNullOrEmpty(BaseFile) && !string.IsNullOrEmpty(MineFile);
         }
+    }
 
+    /// <summary>
+    /// A template in the dialog above.
+    /// </summary>
+    public class AnkhDiffArgumentDefinition
+    {
+        readonly string _key;
+        readonly string[] _aliases;
+        readonly string _description;
 
+        public AnkhDiffArgumentDefinition(string key, string description, params string[] aliases)
+        {
+            _key = key;
+            _description = description;
+            _aliases = aliases ?? new string[0];
+        }
+
+        public AnkhDiffArgumentDefinition(string key, string description)
+            : this(key, description, (string[])null)
+        {
+        }
+
+        public string Key
+        {
+            get { return _key; }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+        }
+
+        public string[] Aliases
+        {
+            get { return _aliases; }
+        }
     }
 
     public class AnkhMergeArgs : AnkhDiffArgs
@@ -116,6 +152,103 @@ namespace Ankh.Scc.UI
         }
     }
 
+    [DebuggerDisplay("{Name} ({Title})")]
+    public abstract class AnkhDiffTool
+    {
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public abstract string Name
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the title.
+        /// </summary>
+        /// <value>The title.</value>
+        public abstract string Title
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the display name.
+        /// </summary>
+        /// <value>The display name.</value>
+        public string DisplayName
+        {
+            get { return string.Format("{0}{1}", Title, IsAvailable ? "" : " (Not Found)"); }
+        }
+
+        /// <summary>
+        /// Gets the tool template.
+        /// </summary>
+        /// <value>The tool template.</value>
+        public string ToolTemplate
+        {
+            get { return string.Format("$(AppTemplate({0}))", Name); }
+        }
+
+        /// <summary>
+        /// Gets the tool name from template.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
+        public static string GetToolNameFromTemplate(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentNullException("value");
+
+            if (value.StartsWith("$(AppTemplate(", StringComparison.OrdinalIgnoreCase) &&
+                value.EndsWith("))"))
+                return value.Substring(14, value.Length - 16);
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is available.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is available; otherwise, <c>false</c>.
+        /// </value>
+        public abstract bool IsAvailable
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the program.
+        /// </summary>
+        /// <value>The program.</value>
+        public abstract string Program
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Gets the arguments.
+        /// </summary>
+        /// <value>The arguments.</value>
+        public abstract string Arguments
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override string ToString()
+        {
+            return Title ?? base.ToString();
+        }
+    }
+
     public interface IAnkhDiffHandler
     {
         bool RunDiff(AnkhDiffArgs args);
@@ -147,8 +280,33 @@ namespace Ankh.Scc.UI
         string GetTitle(SvnTarget target, SvnRevision revision);
         string GetTitle(SvnItem target, SvnRevision revision);
 
+        /// <summary>
+        /// Gets a list of diff tool templates.
+        /// </summary>
+        /// <returns></returns>
+        IList<AnkhDiffTool> DiffToolTemplates { get; }
+        /// <summary>
+        /// Gets a list of merge tool templates.
+        /// </summary>
+        /// <returns></returns>
+        IList<AnkhDiffTool> MergeToolTemplates { get; }
+        /// <summary>
+        /// Gets a list of patch tools.
+        /// </summary>
+        /// <returns></returns>
+        IList<AnkhDiffTool> PatchToolTemplates { get; }
+
+        /// <summary>
+        /// Gets the arguments.
+        /// </summary>
+        /// <value>The arguments.</value>
+        IList<AnkhDiffArgumentDefinition> ArgumentDefinitions { get; }
+
+        /// <summary>
+        /// Gets the copy origin.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
         SvnUriTarget GetCopyOrigin(SvnItem item);
-
-
     }
 }

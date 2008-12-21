@@ -560,10 +560,10 @@
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.Designer.cs">
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnkhSettingsControl.cs">
+    <Compile Include="OptionsPages\AnkhSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AnkhSettingsControl.Designer.cs">
+    <Compile Include="OptionsPages\AnkhSettingsControl.Designer.cs">
       <DependentUpon>AnkhSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhUIModule.cs" />
@@ -597,11 +597,8 @@
     <Compile Include="LockDialog.Designer.cs">
       <DependentUpon>LockDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UITypeEditors\MultiLineStringEditorWithTemplates.Designer.cs">
-      <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UITypeEditors\MultiLineStringTypeEditorDialog.Designer.cs">
-      <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
+    <Compile Include="OptionsPages\ToolArgumentDialog.Designer.cs">
+      <DependentUpon>ToolArgumentDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PathSelectionTreeView.Designer.cs">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
@@ -665,9 +662,6 @@
     </Compile>
     <Compile Include="VSSelectionControls\ListViewWithSelection.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PopUpListForm.Designer.cs">
-      <DependentUpon>PopUpListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProgressDialog.Designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
@@ -749,8 +743,6 @@
     <Compile Include="SvnLog\LogControl.Designer.cs">
       <DependentUpon>LogControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UITypeEditors\DiffExeTypeEditor.cs" />
-    <Compile Include="UITypeEditors\MergeExeTypeEditor.cs" />
     <Compile Include="LockDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -766,10 +758,7 @@
     <Compile Include="SvnLog\LogMessageView.Designer.cs">
       <DependentUpon>LogMessageView.cs</DependentUpon>
     </Compile>
-    <Compile Include="UITypeEditors\MultiLineStringEditorWithTemplates.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UITypeEditors\MultiLineStringTypeEditorDialog.cs">
+    <Compile Include="OptionsPages\ToolArgumentDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelectionTreeView.cs">
@@ -780,9 +769,6 @@
     </Compile>
     <Compile Include="PathTreeView.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="PopUpListForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
       <SubType>Form</SubType>
@@ -801,7 +787,6 @@
     <Compile Include="PathSelector\VersionSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UITypeEditors\TypeEditors.cs" />
     <Compile Include="VSSelectionControls\SelectionItemMap.cs" />
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
       <SubType>Component</SubType>
@@ -1048,7 +1033,7 @@
       <SubType>Designer</SubType>
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AnkhSettingsControl.resx">
+    <EmbeddedResource Include="OptionsPages\AnkhSettingsControl.resx">
       <DependentUpon>AnkhSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -1060,13 +1045,9 @@
       <DependentUpon>LogMessageView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UITypeEditors\MultiLineStringEditorWithTemplates.resx">
+    <EmbeddedResource Include="OptionsPages\ToolArgumentDialog.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>MultiLineStringEditorWithTemplates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UITypeEditors\MultiLineStringTypeEditorDialog.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MultiLineStringTypeEditorDialog.cs</DependentUpon>
+      <DependentUpon>ToolArgumentDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingCommitsPage.resx">
       <DependentUpon>PendingCommitsPage.cs</DependentUpon>
@@ -1087,10 +1068,6 @@
     <EmbeddedResource Include="PendingChanges\PendingIssuesPage.resx">
       <DependentUpon>PendingIssuesPage.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PopUpListForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PopUpListForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="PropertyEditors\EolStylePropertyEditor.resx">
       <DependentUpon>EolStylePropertyEditor.cs</DependentUpon>

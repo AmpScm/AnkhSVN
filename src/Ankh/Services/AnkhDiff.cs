@@ -71,9 +71,9 @@ namespace Ankh.Services
 
             string program;
             string arguments;
-            if (!Substitute(diffApp, args, out program, out arguments))
+            if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments))
             {
-				new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program));
+                new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program));
                 return false;
             }
 
@@ -106,7 +106,7 @@ namespace Ankh.Services
                         monitor.Dispose();
                 }
             }
-        }        
+        }
 
         /// <summary>
         /// Gets path to the diff executable while taking care of config file settings.
@@ -144,15 +144,15 @@ namespace Ankh.Services
             if (string.IsNullOrEmpty(diffApp))
             {
                 new AnkhMessageBox(Context).Show("Please specify a merge tool in Tools->Options->SourceControl->Subversion", "AnkhSVN - No visual merge tool is available");
-                    
+
                 return false;
             }
 
             string program;
             string arguments;
-            if (!Substitute(diffApp, args, out program, out arguments))
+            if (!Substitute(diffApp, args, DiffToolMode.Merge, out program, out arguments))
             {
-				new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program));
+                new AnkhMessageBox(Context).Show(string.Format("Can't find merge program '{0}'", program));
                 return false;
             }
 
@@ -245,7 +245,7 @@ namespace Ankh.Services
 
                     IVsFileChangeEx fx = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
-                    if(fx != null)
+                    if (fx != null)
                         fx.UnadviseFileChange(ck);
                 }
             }
@@ -258,7 +258,7 @@ namespace Ankh.Services
             void OnExited(object sender, EventArgs e)
             {
                 Dispose();
-            }            
+            }
 
             public int DirectoryChanged(string pszDirectory)
             {
@@ -267,11 +267,11 @@ namespace Ankh.Services
 
             public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
             {
-                if(rgpszFile != null)
+                if (rgpszFile != null)
                 {
-                    foreach(string file in rgpszFile)
+                    foreach (string file in rgpszFile)
                     {
-                        if(string.Equals(file, _fileToMonitor, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(file, _fileToMonitor, StringComparison.OrdinalIgnoreCase))
                         {
                             IFileStatusMonitor m = GetService<IFileStatusMonitor>();
 
@@ -291,7 +291,16 @@ namespace Ankh.Services
 
 
         #region Argument Substitution support
-        private bool Substitute(string reference, AnkhDiffArgs args, out string program, out string arguments)
+
+        enum DiffToolMode
+        {
+            None,
+            Diff,
+            Merge,
+            Patch
+        }
+
+        private bool Substitute(string reference, AnkhDiffArgs args, DiffToolMode toolMode, out string program, out string arguments)
         {
             if (string.IsNullOrEmpty(reference))
                 throw new ArgumentNullException("reference");
@@ -306,7 +315,23 @@ namespace Ankh.Services
             program = null;
             arguments = null;
 
-            if (reference.StartsWith("\""))
+            string app;
+            if (!string.IsNullOrEmpty(app = AnkhDiffTool.GetToolNameFromTemplate(reference)))
+            {
+                // We have a predefined template. Just use it
+                AnkhDiffTool tool = GetAppItem(app, toolMode);
+
+                if (tool == null)
+                    return false;
+                else if (!tool.IsAvailable)
+                    return false;
+
+                program = SubstituteArguments(tool.Program, args, toolMode);
+                arguments = SubstituteArguments(tool.Arguments, args, toolMode);
+
+                return !String.IsNullOrEmpty(program) && File.Exists(program);
+            }
+            else if (reference.StartsWith("\""))
             {
                 // Ok: The easy way:
                 int nEnd = reference.IndexOf('\"', 1);
@@ -317,7 +342,7 @@ namespace Ankh.Services
                 program = reference.Substring(1, nEnd - 1);
                 reference = reference.Substring(nEnd + 1).TrimStart();
 
-                program = SubstituteArguments(program, args);
+                program = SubstituteArguments(program, args, toolMode);
 
                 if (string.IsNullOrEmpty(program) || !File.Exists(program))
                     return false; // File not found
@@ -329,14 +354,14 @@ namespace Ankh.Services
 
                 char[] spacers = new char[] { ' ', '\t' };
                 int nFrom = 0;
-                int nTok;
+                int nTok = -1;
 
-                while ((nFrom < reference.Length) && 
+                while ((nFrom < reference.Length) &&
                     (0 <= (nTok = reference.IndexOfAny(spacers, nFrom))))
                 {
                     string f = reference.Substring(0, nTok);
 
-                    f = SubstituteArguments(f, args);
+                    f = SubstituteArguments(f, args, toolMode);
 
                     if (!string.IsNullOrEmpty(f) && File.Exists(f))
                     {
@@ -347,34 +372,51 @@ namespace Ankh.Services
                     else
                         nFrom = nTok + 1;
                 }
+
+                if (program == null && nTok < 0)
+                {
+                    string f = SubstituteArguments(reference, args, toolMode);
+
+                    if (!string.IsNullOrEmpty(f) && File.Exists(f))
+                    {
+                        program = f;
+                        reference = "";
+                    }
+                }
             }
 
             if (string.IsNullOrEmpty(program))
                 return false; // Couldn't detect program
 
-            arguments = SubstituteArguments(reference, args);
+            arguments = SubstituteArguments(reference, args, toolMode);
 
             return true;
         }
 
-        private string SubstituteArguments(string arguments, AnkhDiffArgs diffArgs)
+        private string SubstituteArguments(string arguments, AnkhDiffArgs diffArgs, DiffToolMode toolMode)
         {
-            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)\))",
-                new Replacer(diffArgs).Replace);
+            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9()_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))",
+                new Replacer(this, diffArgs, toolMode).Replace);
         }
 
         sealed class Replacer
         {
+            readonly AnkhDiff _context;
             readonly AnkhDiffArgs _diffArgs;
             readonly AnkhMergeArgs _mergeArgs;
+            readonly DiffToolMode _toolMode;
 
-            public Replacer(AnkhDiffArgs args)
+            public Replacer(AnkhDiff context, AnkhDiffArgs args, DiffToolMode toolMode)
             {
-                if (args == null)
+                if (context == null)
+                    throw new ArgumentNullException("context");
+                else if (args == null)
                     throw new ArgumentNullException("args");
 
+                _context = context;
                 _diffArgs = args;
                 _mergeArgs = args as AnkhMergeArgs;
+                _toolMode = toolMode;
             }
 
             AnkhDiffArgs DiffArgs
@@ -389,10 +431,14 @@ namespace Ankh.Services
 
             public string Replace(Match match)
             {
-                string key;
+                string key, v;
+                bool vsStyle = true;
 
                 if (match.Groups["pc"].Length > 1)
+                {
+                    vsStyle = false;
                     key = match.Groups["pc"].Value;
+                }
                 else if (match.Groups["vs"].Length > 1)
                     key = match.Groups["vs"].Value;
                 else
@@ -413,6 +459,32 @@ namespace Ankh.Services
                     case "MINENAME":
                         return DiffArgs.MineTitle ?? Path.GetFileName(DiffArgs.MineFile);
 
+                    case "APPPATH":
+                        v = _context.GetAppPath(match.Groups["arg"].Value, _toolMode);
+
+                        return _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                    case "APPTEMPLATE":
+                        v = _context.GetAppTemplate(match.Groups["arg"].Value, _toolMode);
+
+                        return _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+
+                    case "PROGRAMFILES":
+                        // Return the environment variable if using environment variable style
+                        return (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                    case "COMMONPROGRAMFILES":
+                        // Return the environment variable if using environment variable style
+                        return (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                    case "HOSTPROGRAMFILES":
+                        // Use the WOW64 program files directory if available, otherwise just program files
+                        return Environment.GetEnvironmentVariable("PROGRAMW6432") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                    case "VSHOME":
+                        IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
+                        if (sol == null)
+                            return null;
+                        object val;
+                        if (ErrorHandler.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out val)))
+                            return val as string;
+                        return null;
                     default:
                         if (MergeArgs != null)
                             switch (key)
@@ -432,7 +504,7 @@ namespace Ankh.Services
                             }
 
                         // Just replace with "" if unknown
-                        string v = Environment.GetEnvironmentVariable(key);
+                        v = Environment.GetEnvironmentVariable(key);
                         if (!string.IsNullOrEmpty(v))
                             return v;
 
@@ -512,7 +584,7 @@ namespace Ankh.Services
 
             string file = GetTempPath(target.Name, revision);
 
-            if(target.NodeKind != SvnNodeKind.File)
+            if (target.NodeKind != SvnNodeKind.File)
                 throw new InvalidOperationException("Can't create a tempfile from a directory");
 
             GetService<IProgressRunner>().RunModal("Getting file",
@@ -546,7 +618,7 @@ namespace Ankh.Services
                     SvnWriteArgs wa = new SvnWriteArgs();
                     wa.Revision = revision;
 
-                    using(Stream s = File.Create(file))
+                    using (Stream s = File.Create(file))
                         aa.Client.Write(target, s, wa);
                 });
 
@@ -564,7 +636,7 @@ namespace Ankh.Services
                 throw new ArgumentNullException("from");
             else if (to == null)
                 throw new ArgumentNullException("to");
-           
+
             // TODO: Replace with SvnClient.FileVersions call when to = from+1
 
             string f1;

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
+using Ankh.UI.OptionsPages;
 
 namespace Ankh.VSPackage
 {
@@ -55,7 +56,6 @@ namespace Ankh.VSPackage
         public override void LoadSettingsFromStorage()
         {
             base.LoadSettingsFromStorage();
-
 
             Control.LoadSettings();
         }
