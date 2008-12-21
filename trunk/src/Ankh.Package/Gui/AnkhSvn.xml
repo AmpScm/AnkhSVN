@@ -218,7 +218,7 @@
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
           <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x08"
-                  text="Update to a Specific &amp;Version" defaultInvisible="true"
+                  text="Update to a Specific &amp;Version..." defaultInvisible="true"
                   toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
           <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
                 text="&amp;Add..."
@@ -520,7 +520,7 @@
                   toolTip="Update your solution to the HEAD version"
                   fixMenuController="true" iconFile="PendingChanges/Update.png" defaultDisabled="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
-                  text="Update to a Specific &amp;Version"
+                  text="Update to a Specific &amp;Version..."
                   toolTip="Update your solution to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
             </Group>
             <Group id="Grp_PendingChangesUpdate2" priority="0x200">
@@ -582,7 +582,7 @@
               <Button id="Cmd_ItemComparePrevious" name="ComparePrevious" priority="0x400"
                   text="Compare to &amp;Previous Version" />
               <Button id="Cmd_ItemCompareSpecific" name="CompareSpecific" priority="0x500"
-                  text="Compare to a &amp;Specific Version" />
+                  text="Compare to a &amp;Specific Version..." />
             </Group>
           </Menu>
           <Menu id="Menu_ItemOpen" priority="0x300" name="Open" type="MenuControllerLatched">
@@ -608,7 +608,7 @@
               <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x100" fixMenuController="true"
                   text="&amp;Revert to BASE Version" iconFile="PendingChanges/Revert.png"/>
               <Button id="Cmd_ItemRevertSpecific" name="RevertSpecific" priority="0x100"
-                  text="&amp;Revert to a Specific Version" />
+                  text="&amp;Revert to a Specific Version..." />
             </Group>
           </Menu>
         </Group>
