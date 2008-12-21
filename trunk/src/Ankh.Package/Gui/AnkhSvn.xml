@@ -164,6 +164,8 @@
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
+          <Button id="Cmd_SolutionApplyPatch" name="ApplyPatch" priority="0x70"
+                      text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png"/>
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_SolutionEditProperties" priority="0x90" defaultDisabled="true"
                   text="Solution Prop&amp;erties..."
@@ -308,7 +310,7 @@
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
-              toolTip="Create a patch file of changes." iconFile="menu/CreatePatch.png"/>
+              toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
           <Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
                   text="Prop&amp;erties..."
                   toolTip="View/Edit Subversion Properties"
@@ -505,7 +507,7 @@
                       toolTip="Create patch from selected pending changes" />
               <Button id="Cmd_PendingChangesCreatePatch" name="CreatePatch" priority="0x200"
                       text="Create &amp;Patch..."
-                      toolTip="Create patch from selected pending changes"  iconFile="menu/CreatePatch.png"/>
+                      toolTip="Create patch from selected pending changes"  iconFile="PendingChanges/CreatePatch.png"/>
             </Group>
             <Group id="Grp_PendingChangesCommit3" priority="0x300">
               <ButtonRef id="Cmd_SolutionBranch" priority="0x100" />
@@ -524,7 +526,7 @@
             <Group id="Grp_PendingChangesUpdate2" priority="0x200">
               <Button id="Cmd_PendingChangesApplyPatch" name="ApplyPatch" priority="0x100"
                       text="Apply &amp;Patch..."
-                      toolTip="Apply patch to Solution"  iconFile="menu/CreatePatch.png"/>
+                      toolTip="Apply patch to Solution"  iconFile="PendingChanges/ApplyPatch.png"/>
             </Group>
             <Group id="Grp_PendingChangesUpdate3" priority="0x300">
               <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x100" />

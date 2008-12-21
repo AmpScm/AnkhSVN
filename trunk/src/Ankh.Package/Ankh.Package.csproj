@@ -178,7 +178,6 @@
     <Content Include="Gui\menu\Cleanup.png" />
     <Content Include="Gui\menu\Commit.png" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
-    <Content Include="Gui\menu\CreatePatch.png" />
     <Content Include="Gui\menu\Diff.png" />
     <Content Include="Gui\menu\Export.png" />
     <Content Include="Gui\menu\Lock.png" />
@@ -200,6 +199,7 @@
     <Content Include="Gui\menu\WorkExplorer.png" />
     <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
     <Content Include="Gui\PendingChanges\Annotate.png" />
+    <Content Include="Gui\PendingChanges\ApplyPatch.png" />
     <Content Include="Gui\PendingChanges\Branch.png" />
     <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
@@ -208,6 +208,7 @@
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />
     <Content Include="Gui\PendingChanges\ConflictResolved.png" />
+    <Content Include="Gui\PendingChanges\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\Delete.png" />
     <Content Include="Gui\PendingChanges\EditConflict.png" />
     <Content Include="Gui\PendingChanges\FilterOnSolution.png" />
