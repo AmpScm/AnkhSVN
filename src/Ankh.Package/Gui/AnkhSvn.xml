@@ -390,10 +390,7 @@
         <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
           <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
                 text="Ne&amp;w Directory..."
-                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />
-          <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x900"
-                text="Chec&amp;kout Folder..."
-                toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
+                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />          
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
               toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" defaultInvisible="true" />
