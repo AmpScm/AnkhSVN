@@ -704,7 +704,7 @@
         <xsl:text>'</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="@key"/>
+        <xsl:value-of select="@key1"/>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:value-of select="':'"/>

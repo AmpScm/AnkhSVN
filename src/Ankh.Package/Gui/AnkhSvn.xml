@@ -6,6 +6,7 @@
     <Import include="stdidcmd.h" />
     <Import include="vsshlids.h" />
     <Import include="msobtnid.h" />
+    <Import include="virtkeys.h" />
     <Import type="Ankh.Ids.AnkhId" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Ankh_" />
     <Import type="Ankh.Ids.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
     <Import type="Ankh.Ids.AnkhCommandGroup" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Grp_" />
@@ -348,37 +349,54 @@
       <!-- The Repository Explorer Toolbar -->
       <Menu id="Menu_RepositoryExplorerToolBar" name="RepositoryExplorer" priority="0" type="ToolWindowToolbar">
 
-        <Group id="Grp_RepositoryExplorerToolBar" priority="0x100">
-          <Button id="Cmd_Checkout" name="Checkout" priority="0x100"
-                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png"/>
-          <Button id="Cmd_RepositoryBrowse" name="SvnRepositoryBrowse" priority="0x200"
+        <Group id="Grp_RepositoryExplorerTbBrowse" priority="0x100">
+          <Button id="Cmd_RepositoryBrowse" name="SvnRepositoryBrowse" priority="0x100"
                 text="A&amp;dd Repository Url"
                   menuText="Open Url in &amp;Repository Explorer"
                 toolTip="Add a new URL to the Repository Explorer." iconFile="menu/AddUrl.png" allowParams="true"/>
-          <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x300"
+          <Button id="Cmd_RemoveRepositoryRoot" name="RemoveRepositoryRoot" priority="0x200"
                 text="&amp;Remove Repository URL"
                 toolTip="Remove a URL from the Repository Explorer." iconFile="menu/RemoveUrl.png"/>
+          <Button id="Cmd_ExplorerUp" name="ExplorerUp" priority="0xF000"
+                  text="&amp;Up" toolTip="Up" iconFile="PendingChanges/FolderUp.png">
+            <KeyBinding key1="VK_UP" mod1="alt" editor="Ankh_SccExplorerContextGuid"/>
+            <KeyBinding key1="VK_BACK" editor="Ankh_SccExplorerContextGuid"/>
+          </Button>
+        </Group>
+        <Group id="Grp_RepositoryExplorerTbEdit" priority="0x200">
+          <ButtonRef id="CLSID_StandardCommandSet97:cmdidCopy" priority="0x100" />
+          <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
           <Button id="Cmd_CopyReposExplorerUrl" name="CopyReposExplorerUrl" priority="0x400"
                 text="Copy &amp;Url"
-                toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />
-          <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
-                text="Ne&amp;w Directory..."
-                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" />
-          <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0x600"
+                toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />                                       
+
+          <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0xF000"
                 text="Refres&amp;h"
                 toolTip="Refresh this item." iconFile="PendingChanges/Refresh.png"/>
-          <ButtonRef id="Cmd_RepositoryOpen" priority="0x680" />
-          <ButtonRef id="Cmd_ViewInVsNet" priority="0x700" />
-          <ButtonRef id="Cmd_ViewInWindows"  priority="0x800" />          
+        </Group>
+        <Group id="Grp_RepositoryExplorerTbOpen" priority="0x300">
+          <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100" 
+                type="MenuControllerLatched" iconAndText="true">
+            <Group id="Menu_RepositoryExplorerTbOpen" priority="0x100">
+              <ButtonRef id="Cmd_ExplorerOpen" priority="0x680" />
+              <ButtonRef id="Cmd_ViewInVsNet" priority="0x700" />
+              <ButtonRef id="Cmd_ViewInWindows"  priority="0x800" />
+            </Group>
+            <GroupRef id="Grp_OpenWith2" priority="0xF000" />
+          </Menu>
+          <Button id="Cmd_Checkout" name="Checkout" priority="0x300"
+                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png" dynamicVisibility="true" />          
+        </Group>
+        <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
+          <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
+                text="Ne&amp;w Directory..."
+                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />
           <Button id="Cmd_CheckoutFolder" name="CheckoutFolder" priority="0x900"
                 text="Chec&amp;kout Folder..."
                 toolTip="Checkout this folder." iconFile="menu/CheckoutDirectory.png" defaultInvisible="true"/>
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
-              toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" />
-          <Button id="Cmd_CheckoutSolution" name="CheckoutSolution" priority="0xB00"
-                text="Checkout &amp;Solution..."
-                toolTip="Checkout this solution." iconFile="menu/CheckoutSolution.png" defaultInvisible="true"/>
+              toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" defaultInvisible="true" />
           <ButtonRef id="Cmd_SvnNodeDelete" priority="0xC00" />
         </Group>
       </Menu>
@@ -388,19 +406,19 @@
       <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" priority="0" type="Context">
         <Group id="Grp_RepositoryExplorerOpen" priority="0x100">
           <!-- Cmd_RepositoryOpen is handled on the control itself and does 'the right thing' -->
-          <Button id="Cmd_RepositoryOpen" name="RepositoryOpen" priority="0x100"
-                  text="&amp;Open" iconFile="PendingChanges/Open.png" dynamicVisibility="true" iconAndText="true"/>
+          <Button id="Cmd_ExplorerOpen" name="RepositoryOpen" priority="0x100"
+                  text="&amp;Open" iconFile="PendingChanges/Open.png" dynamicVisibility="true" iconAndText="true" fixMenuController="true"/>
           <ButtonRef id="Cmd_SaveToFile" priority="0x200" />
           <Menu id="Menu_RepositoryExplorerOpenWith" priority ="0xF000" name="OpenWith" text="Open Wit&amp;h">
             <Group id="Grp_OpenWith" priority="0x100">
               <Button id="Cmd_ViewInVsNet" name="ViewInVsNet" priority="0x100"
                 text="Open In &amp;Visual Studio" menuText="&amp;Visual Studio"
-                toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png"/>
+                toolTip="View this file in Visual Studio." iconFile="menu/ViewInVSNet.png" defaultInvisible="true"/>
               <Button id="Cmd_ViewInWindows" name="ViewInWindows" priority="0x200"
                 text="In Wi&amp;ndows" menuText="&amp;Standard Application"
-                toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png"/>
+                toolTip="Have Windows launch the associated application." iconFile="menu/ViewInWindows.png" defaultInvisible="true"/>
               <Button id="Cmd_ViewInVsText" name="ViewAsText" priority="0x300"
-                      text="As &amp;Text" />
+                      text="As &amp;Text" defaultInvisible="true"/>
             </Group>
             <Group id="Grp_OpenWith2" priority="0xF000">
               <Button id="Cmd_ViewInWindowsWith" name="ViewInWindowsWith" priority="0xF000"

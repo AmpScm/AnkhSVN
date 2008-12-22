@@ -23,25 +23,31 @@ using Ankh.Ids;
 using System.Windows.Forms.Design;
 using Ankh.Selection;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to checkout a Subversion repository.
     /// </summary>
-    [Command(AnkhCommand.Checkout)]
+    [Command(AnkhCommand.Checkout, AlwaysAvailable=true)]
     class CheckoutCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            Ankh.Scc.ISvnRepositoryItem selected = GetValidSelectedItem(e.Selection);
-            e.Enabled = selected != null;
+            ISvnRepositoryItem single = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
+
+            if (single == null || single.NodeKind == SvnNodeKind.File || single.Origin == null)
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            Ankh.Scc.ISvnRepositoryItem selected = GetValidSelectedItem(e.Selection);
-            if (selected == null) { return; }
+            ISvnRepositoryItem selected = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
+
+            if (selected == null)
+                return;
+
             Uri uri = selected.Uri;
             SharpSvn.SvnRevision rev = selected.Revision;
             string name = selected.Origin.Target.FileName;
@@ -70,26 +76,6 @@ namespace Ankh.Commands
                         a.Client.CheckOut(dlg.Uri, dlg.LocalPath, args);
                     });
             }
-        }
-
-        private Ankh.Scc.ISvnRepositoryItem GetValidSelectedItem(ISelectionContext context)
-        {
-            Ankh.Scc.ISvnRepositoryItem result = null;
-            int counter = 0;
-            foreach (Ankh.Scc.ISvnRepositoryItem i in context.GetSelection<Ankh.Scc.ISvnRepositoryItem>())
-            {
-                counter++;
-                if (counter > 1) 
-                {
-                    return null; 
-                } // multiple selection
-
-                if (i.Origin != null)
-                {
-                    result = i;
-                }
-            }
-            return result;
         }
     }
 }

@@ -41,6 +41,25 @@ namespace Ankh.Commands.RepositoryExplorer
     {
         const int NOASSOCIATEDAPP = 1155;
 
+        public override void OnUpdate(CommandUpdateEventArgs e)
+        {
+            base.OnUpdate(e);
+
+
+            if (e.Enabled && e.Command == AnkhCommand.ViewInVsNet)
+            {
+                ISvnRepositoryItem single = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
+                IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+
+                SvnOrigin origin = single.Origin; // Checked in parent
+
+                string ext = Path.GetExtension(origin.Target.FileName);
+
+                if (!string.IsNullOrEmpty(ext) && settings.OpenFileFilter.IndexOf("*" + ext, StringComparison.OrdinalIgnoreCase) < 0)
+                    e.Enabled = false;
+            }
+        }
+
         public override void OnExecute(CommandEventArgs e)
         {
             ISvnRepositoryItem ri = null;

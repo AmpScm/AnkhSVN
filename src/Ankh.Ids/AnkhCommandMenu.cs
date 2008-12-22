@@ -87,6 +87,7 @@ namespace Ankh.Ids
         BlameContextMenu,
 
         EditorScc,
-        RepositoryExplorerOpenWith
+        RepositoryExplorerOpenWith,
+        RepositoryExplorerTbOpen
     }
 }

@@ -57,7 +57,8 @@ namespace Ankh.UI.RepositoryExplorer
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
-            VSCommandHandler.Install(Context, this, AnkhCommand.RepositoryOpen, OnOpen, OnUpdateOpen);
+            VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
+            VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
         }
 
         void OnDelete(object sender, CommandEventArgs e)
@@ -202,7 +203,20 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void fileView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.RepositoryOpen);            
+            ListViewHitTestInfo ht = fileView.HitTest(e.X, e.Y);
+
+            RepositoryListItem li = ht.Item as RepositoryListItem;
+
+            if (ht.Location == ListViewHitTestLocations.None || li == null)
+                return;
+
+            if (!li.Selected)
+            {
+                fileView.SelectedIndices.Clear();
+                li.Selected = true;
+            }
+
+            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);            
         }
 
 
@@ -224,6 +238,11 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
             }
 
+            AutoOpenCommand(e, item.Origin);
+        }
+
+        private static void AutoOpenCommand(CommandEventArgs e, SvnOrigin origin)
+        {
             IAnkhCommandService svc = e.GetService<IAnkhCommandService>();
             IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
 
@@ -231,8 +250,6 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
 
             // Ok, we can assume we have a file
-            SvnOrigin origin = item.Origin;
-
             string filename = origin.Target.FileName;
             string ext = Path.GetExtension(filename);
 
@@ -273,6 +290,21 @@ namespace Ankh.UI.RepositoryExplorer
 
             // Ultimate fallback: Just ask the user what to do (don't trust the repository!)
             svc.PostExecCommand(AnkhCommand.ViewInWindowsWith);
+        }
+
+        void OnUpdateUp(object sender, CommandUpdateEventArgs e)
+        {
+            if(treeView.SelectedNode == null 
+                || treeView.Nodes.Count == 0
+                || treeView.SelectedNode == treeView.Nodes[0])
+            {
+                e.Enabled = false;
+            }
+        }
+
+        void OnUp(object sender, CommandEventArgs e)
+        {
+            treeView.SelectedNode = treeView.SelectedNode.Parent as RepositoryTreeNode;
         }
     }
 }
