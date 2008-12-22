@@ -77,6 +77,7 @@ namespace Ankh.Ids
         SvnNodeAnnotate,
         Checkout,
         CheckoutFolder,
+        [Obsolete()]
         CheckoutSolution,
         Cleanup,
         CommitItem,
@@ -212,14 +213,14 @@ namespace Ankh.Ids
         PendingChangesApplyPatch,
         SolutionApplyPatch,
 
-        RepositoryOpen,
+        ExplorerOpen,
+        ExplorerUp,
         ReposExplorerOpenWith,        
-        ReposExplorerShowPrevChanges,
+        ReposExplorerShowPrevChanges,        
         ViewInVsText,
         ViewInWindowsWith,
 
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewPath,
         PcColViewProject,
         PcColViewChange,
         PcColViewChangeList,

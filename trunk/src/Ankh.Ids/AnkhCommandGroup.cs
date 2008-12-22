@@ -55,8 +55,8 @@ namespace Ankh.Ids
         SolutionExplorerSccForProject,
         SolutionExplorerSccForItem,
 
-        RepositoryExplorerToolBar,
-        [Obsolete("Unused")]
+        RepositoryExplorerTbBrowse,
+        RepositoryExplorerTbEdit,
         RepositoryExplorerContext,
         WorkingCopyExplorerToolBar,
         WorkingCopyExplorerContext,
@@ -126,7 +126,10 @@ namespace Ankh.Ids
         RepositoryExplorerEdit,
         RepositoryExplorerRefer,
 
+        RepositoryExplorerTbOpen,
+        RepositoryExplorerTbAction,
+
         OpenWith,
-        OpenWith2
+        OpenWith2,
     }
 }

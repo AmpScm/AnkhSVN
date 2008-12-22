@@ -456,7 +456,7 @@
 	<xs:element name="Button">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:choice minOccurs="0">
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="gui:KeyBinding">
 						<xs:annotation>
 							<xs:documentation>

@@ -30,7 +30,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to save currnet file to disk from Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.SaveToFile)]
+    [Command(AnkhCommand.SaveToFile, AlwaysAvailable=true)]
     class SaveToFileCommand : ViewRepositoryFileCommand
     {
         public override void OnExecute(CommandEventArgs e)

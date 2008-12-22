@@ -30,21 +30,10 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool foundOne = false;
-            foreach (ISvnRepositoryItem it in e.Selection.GetSelection<ISvnRepositoryItem>())
-            {
-                if (it.NodeKind != SharpSvn.SvnNodeKind.File || foundOne)
-                {
-                    // Not a file or multiselect
-                    e.Enabled = false;
-                    return;
-                }
+            ISvnRepositoryItem single = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
 
-                foundOne = true;
-            }
-
-            if (!foundOne)
-                e.Enabled = false;
+            if(single == null || single.NodeKind == SvnNodeKind.Directory || single.Origin == null)
+                e.Enabled = false;            
         }
 
         protected static void SaveFile(CommandEventArgs e, ISvnRepositoryItem ri, string toFile)
