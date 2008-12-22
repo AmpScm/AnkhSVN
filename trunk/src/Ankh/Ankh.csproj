@@ -209,9 +209,6 @@
     <Compile Include="Commands\CheckoutCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\RepositoryExplorer\CheckoutFolderCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Commands\CleanupCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -226,9 +223,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\ExportCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\RepositoryExplorer\ExportFolderCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\LocalDiffCommandBase.cs">

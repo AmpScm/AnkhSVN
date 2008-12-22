@@ -24,7 +24,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to remove a URL from the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.RemoveRepositoryRoot)]
+    [Command(AnkhCommand.RemoveRepositoryRoot, AlwaysAvailable=true)]
     class RemoveRepositoryRootCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

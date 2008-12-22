@@ -76,8 +76,9 @@ namespace Ankh.Ids
         /// </summary>
         SvnNodeAnnotate,
         Checkout,
+        [Obsolete]
         CheckoutFolder,
-        [Obsolete()]
+        [Obsolete]
         CheckoutSolution,
         Cleanup,
         CommitItem,
@@ -87,6 +88,7 @@ namespace Ankh.Ids
         DocumentShowChanges,
         DiffLocalItem,
         Export,
+        [Obsolete]
         ExportFolder,
         Lock,
         Log,
