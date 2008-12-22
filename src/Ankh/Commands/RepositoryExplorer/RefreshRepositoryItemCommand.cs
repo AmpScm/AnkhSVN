@@ -24,7 +24,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to refresh the current item in the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.RefreshRepositoryItem)]
+    [Command(AnkhCommand.RefreshRepositoryItem, AlwaysAvailable=true)]
     class RefreshRepositoryItemCommand : CommandBase
     {
         

@@ -27,7 +27,7 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.NewDirectory)]
+    [Command(AnkhCommand.NewDirectory, AlwaysAvailable=true)]
     class CreateDirectoryCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
