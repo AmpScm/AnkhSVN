@@ -51,6 +51,12 @@ namespace Ankh.UI
             set { _context = value; }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        public virtual object DocumentInstance
+        {
+            get { return null; }
+        }
+
         [Browsable(true), DesignerSerializationVisibility(DesignerSerializationVisibility.Visible), Localizable(true)]
         public override string Text
         {
@@ -95,6 +101,14 @@ namespace Ankh.UI
             get { return GetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid); }
             set { SetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid, value); }
         }
+
+        protected void SetFindTarget(object findTarget)
+        {
+            if (findTarget == null)
+                throw new ArgumentNullException("findTarget");
+
+            _pane.SetFindTarget(findTarget);
+        }        
 
         /*/// <summary>
         /// Gets or sets a value indicating whether the form is displayed in the Windows taskbar.
@@ -251,6 +265,7 @@ namespace Ankh.UI
     public interface IAnkhEditorPane
     {
         void AddCommandTarget(IOleCommandTarget target);
+        void SetFindTarget(object findTarget);
     }
 
     [CLSCompliant(false)]

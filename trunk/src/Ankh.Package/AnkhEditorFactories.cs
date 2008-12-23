@@ -59,9 +59,11 @@ namespace Ankh.VSPackage
             }
 
             VSEditorControl form = CreateForm();
+            object doc;
+            object pane;
 
-            VSDocumentInstance doc = new VSDocumentInstance(Context, FactoryId);
-            VSDocumentFormPane pane = new VSDocumentFormPane(Context, doc, form);
+            GetService<IAnkhDocumentHostService>().ProvideEditor(form, FactoryId, out doc, out pane);
+
             ppunkDocView = Marshal.GetIUnknownForObject(pane);
             ppunkDocData = Marshal.GetIUnknownForObject(doc);
 
@@ -163,6 +165,8 @@ namespace Ankh.VSPackage
                 throw new ArgumentNullException("fullPath");
             else if (form == null)
                 throw new ArgumentNullException("form");
+            else if(form.Context == null)
+                throw new ArgumentException("Specified form doesn't have a context");
 
             _forms.Push(form);
 
@@ -178,15 +182,7 @@ namespace Ankh.VSPackage
                 throw new InvalidOperationException("Can't create dynamic editor (Already open?)");
             }
 
-            object value;
-
-            VSDocumentFormPane pane = null;
-            if(ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out value)))
-            {
-                pane = value as VSDocumentFormPane;                                
-            }
-
-            ((IVSEditorControlInit)form).InitializedForm(hier, id, frame, pane.Host);
+            GetService<IAnkhDocumentHostService>().InitializeEditor(form, hier, frame, id);
 
             return frame;
         }

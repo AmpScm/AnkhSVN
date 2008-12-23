@@ -17,176 +17,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell;
-
-using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using ShellPackage = Microsoft.VisualStudio.Shell.Package;
-
 using Ankh.UI;
-using Microsoft.VisualStudio;
-using System.Diagnostics;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 
 namespace Ankh.VS.Dialogs
 {
-    [ComVisible(true), CLSCompliant(false)]
-    public sealed class VSDocumentInstance : AnkhService/*, IOleCommandTarget*/, IVsPersistDocData, IPersistFileFormat, IVsPersistDocData2, IVsPersistDocData3
-    {
-        readonly Guid _factoryId;
-        public VSDocumentInstance(IAnkhServiceProvider context, Guid factoryId)
-            : base(context)
-        {
-            _factoryId = factoryId;
-        }
-
-        #region IVsPersistDocData Members
-
-        public int Close()
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int GetGuidEditorType(out Guid pClassID)
-        {
-            pClassID = _factoryId;
-            return VSConstants.S_OK;
-        }
-
-        public int IsDocDataDirty(out int pfDirty)
-        {
-            //throw new NotImplementedException();
-            pfDirty = 0;
-            return VSConstants.S_OK;
-        }
-
-        public int IsDocDataReloadable(out int pfReloadable)
-        {
-            pfReloadable = 0;
-            return VSConstants.S_OK;
-        }
-
-        public int LoadDocData(string pszMkDocument)
-        {
-            //throw new NotImplementedException();
-            return VSConstants.S_OK;
-        }
-
-        public int OnRegisterDocData(uint docCookie, IVsHierarchy pHierNew, uint itemidNew)
-        {
-            //throw new NotImplementedException();
-            return VSConstants.S_OK;
-        }
-
-        public int ReloadDocData(uint grfFlags)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int RenameDocData(uint grfAttribs, IVsHierarchy pHierNew, uint itemidNew, string pszMkDocumentNew)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int SaveDocData(VSSAVEFLAGS dwSave, out string pbstrMkDocumentNew, out int pfSaveCanceled)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int SetUntitledDocPath(string pszDocDataPath)
-        {
-            return VSConstants.S_OK;
-        }
-
-        #endregion
-
-        #region IPersistFileFormat Members
-
-        public int GetClassID(out Guid pClassID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetCurFile(out string ppszFilename, out uint pnFormatIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetFormatList(out string ppszFormatList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int InitNew(uint nFormatIndex)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int IsDirty(out int pfIsDirty)
-        {
-            pfIsDirty = 0;
-            return 0;
-        }
-
-        public int Load(string pszFilename, uint grfMode, int fReadOnly)
-        {
-            return 0;
-        }
-
-        public int Save(string pszFilename, int fRemember, uint nFormatIndex)
-        {
-            return 0;
-        }
-
-        public int SaveCompleted(string pszFilename)
-        {
-            return 0;
-        }
-
-        #endregion 
-    
-        #region IVsPersistDocData2 Members
-
-
-        public int IsDocDataReadOnly(out int pfReadOnly)
-        {
-            pfReadOnly = 0;
-            return 0;
-        }
-
-        public int SetDocDataDirty(int fDirty)
-        {
-            return 0;
-        }
-
-        public int SetDocDataReadOnly(int fReadOnly)
-        {
-            return 0;
-        }
-
-        #endregion
-
-        #region IVsPersistDocData3 Members
-
-        public int HandsOffDocDataStorage()
-        {
-            return 0;
-        }
-
-        public int HandsOnDocDataStorage()
-        {
-            return 0;
-        }
-
-        #endregion
-    }
-
     sealed class VSDocumentHost : ISite, IAnkhEditorPane, IOleCommandTarget, IAnkhServiceProvider
     {
         readonly VSDocumentFormPane _pane;
@@ -216,7 +58,7 @@ namespace Ankh.VS.Dialogs
         public string Name
         {
             get { return ToString(); }
-            set {}
+            set { }
         }
 
         #endregion
@@ -284,6 +126,11 @@ namespace Ankh.VS.Dialogs
             _pane.AddCommandTarget(target);
         }
 
+        public void SetFindTarget(object findTarget)
+        {
+            _pane.SetFindTarget(findTarget);
+        }
+
         #endregion
 
         #region IOleCommandTarget Members
@@ -302,8 +149,8 @@ namespace Ankh.VS.Dialogs
     }
 
 
-    [ComVisible(true), CLSCompliant(false)]
-    public sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget
+    [ComVisible(true)]
+    sealed class VSDocumentFormPane : WindowPane, IOleCommandTarget
     {
         readonly List<IOleCommandTarget> _targets = new List<IOleCommandTarget>();
         readonly VSEditorControl _form;
@@ -316,7 +163,7 @@ namespace Ankh.VS.Dialogs
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if(instance == null)
+            else if (instance == null)
                 throw new ArgumentNullException("instance");
             else if (form == null)
                 throw new ArgumentNullException("form");
@@ -375,7 +222,7 @@ namespace Ankh.VS.Dialogs
                 return o;
             }
         }
-       
+
 
         internal void Show()
         {
@@ -440,6 +287,15 @@ namespace Ankh.VS.Dialogs
 
             if (!_targets.Contains(target))
                 _targets.Add(target);
+        }
+
+        public void SetFindTarget(object findTarget)
+        {
+            IVsFindTarget ft = (findTarget as IVsFindTarget);
+            if (null == ft)
+                throw new ArgumentNullException("findTarget");
+
+            _instance.SetFindTarget(ft);
         }
     }
 }

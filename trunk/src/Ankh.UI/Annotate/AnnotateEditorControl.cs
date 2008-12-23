@@ -42,7 +42,7 @@ namespace Ankh.UI.Annotate
         public AnnotateEditorControl()
         {
             InitializeComponent();
-            logMessageEditor1.ReadOnly = true;
+            editor.ReadOnly = true;
         }
 
         protected override void OnFrameCreated(EventArgs e)
@@ -59,6 +59,7 @@ namespace Ankh.UI.Annotate
 
             CommandContext = AnkhId.AnnotateContextGuid;
             KeyboardContext = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2); // Editor
+            SetFindTarget(editor.FindTarget);
 
             blameMarginControl1.Init(Context, this, blameSections);
         }
@@ -66,14 +67,14 @@ namespace Ankh.UI.Annotate
         public void LoadFile(string projectFile, string exportedFile)
         {
             this.Text = Path.GetFileName(projectFile) + " (Annotated)";
-            logMessageEditor1.OpenFile(projectFile);
-            logMessageEditor1.ReplaceContents(exportedFile);
+            editor.OpenFile(projectFile);
+            editor.ReplaceContents(exportedFile);
 
         }
 
         internal int GetLineHeight()
         {
-            return logMessageEditor1.LineHeight;
+            return editor.LineHeight;
         }
 
 
@@ -93,7 +94,7 @@ namespace Ankh.UI.Annotate
                 }
                 else
                 {
-                    if(section.Revision == e.Revision)
+                    if (section.Revision == e.Revision)
                         section.EndLine = (int)e.LineNumber;
                     else
                     {
@@ -192,6 +193,6 @@ namespace Ankh.UI.Annotate
             return section.Author + section.StartLine + section.Revision;
         }
 
-        #endregion    
+        #endregion
     }
 }

@@ -39,7 +39,7 @@ namespace Ankh.UI.PendingChanges
     /// <seealso cref="UserControl"/>
     public partial class VSTextEditor : Control
     {
-        CodeEditorNativeWindow codeEditorNativeWindow;
+        CodeEditorNativeWindow _nativeWindow;
         IAnkhServiceProvider _context;
         BorderStyle _borderStyle;
         Guid? _forceLanguageService;
@@ -78,9 +78,9 @@ namespace Ankh.UI.PendingChanges
             set
             {
                 _showHorizontalScrollBar = value;
-                if (codeEditorNativeWindow != null)
+                if (_nativeWindow != null)
                 {
-                    codeEditorNativeWindow.ShowHorizontalScrollBar = value;
+                    _nativeWindow.ShowHorizontalScrollBar = value;
                     UpdateSize();
                 }
             }
@@ -94,8 +94,8 @@ namespace Ankh.UI.PendingChanges
             set
             {
                 _readOnly = value;
-                if (codeEditorNativeWindow != null)
-                    codeEditorNativeWindow.SetReadOnly(value);
+                if (_nativeWindow != null)
+                    _nativeWindow.SetReadOnly(value);
             }
         }
 
@@ -104,10 +104,10 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                if (DesignMode || codeEditorNativeWindow == null)
+                if (DesignMode || _nativeWindow == null)
                     return 0; // Designer scenario
 
-                return codeEditorNativeWindow.LineHeight;
+                return _nativeWindow.LineHeight;
             }
         }
 
@@ -115,18 +115,18 @@ namespace Ankh.UI.PendingChanges
 
         public void OpenFile(string path)
         {
-            if (codeEditorNativeWindow == null)
+            if (_nativeWindow == null)
                 throw new InvalidOperationException("Code editor not initialized");
 
-            codeEditorNativeWindow.LoadFile(path);
+            _nativeWindow.LoadFile(path);
         }
 
         public void ReplaceContents(string pathToReplaceWith)
         {
-            if (codeEditorNativeWindow == null)
+            if (_nativeWindow == null)
                 throw new InvalidOperationException("Code editor not initialized");
 
-            codeEditorNativeWindow.ReplaceContents(pathToReplaceWith);
+            _nativeWindow.ReplaceContents(pathToReplaceWith);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -221,13 +221,13 @@ namespace Ankh.UI.PendingChanges
 
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
-            codeEditorNativeWindow = new CodeEditorNativeWindow(_context, this);
-            codeEditorNativeWindow.Init(allowModal, ForceLanguageService);
-            codeEditorNativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
-            codeEditorNativeWindow.Size = ClientSize;
-            codeEditorNativeWindow.SetReadOnly(_readOnly);
+            _nativeWindow = new CodeEditorNativeWindow(_context, this);
+            _nativeWindow.Init(allowModal, ForceLanguageService);
+            _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
+            _nativeWindow.Size = ClientSize;
+            _nativeWindow.SetReadOnly(_readOnly);
 
-            codeEditorNativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
+            _nativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
         }
 
         void codeEditorNativeWindow_Scroll(object sender, TextViewScrollEventArgs e)
@@ -238,17 +238,17 @@ namespace Ankh.UI.PendingChanges
 
         void UpdateSize()
         {
-            if (codeEditorNativeWindow != null)
+            if (_nativeWindow != null)
             {
                 if (!_inToolWindow && !_inDocumentForm)
-                    codeEditorNativeWindow.Size = ClientSize;
+                    _nativeWindow.Size = ClientSize;
                 else
                 {
                     // Delay until sizing of toolwindow completed
                     BeginInvoke((AnkhAction)
                         delegate
                         {
-                            codeEditorNativeWindow.Size = ClientSize;
+                            _nativeWindow.Size = ClientSize;
                         });
                 }
 
@@ -258,7 +258,7 @@ namespace Ankh.UI.PendingChanges
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IOleCommandTarget CommandTarget
         {
-            get { return codeEditorNativeWindow; }
+            get { return _nativeWindow; }
         }
 
         protected override CreateParams CreateParams
@@ -316,7 +316,7 @@ namespace Ankh.UI.PendingChanges
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IVsWindowPane WindowPane
         {
-            get { return codeEditorNativeWindow.WindowPane; }
+            get { return _nativeWindow.WindowPane; }
         }
 
         protected override void Dispose(bool disposing)
@@ -325,9 +325,9 @@ namespace Ankh.UI.PendingChanges
             {
                 if (disposing)
                 {
-                    if (codeEditorNativeWindow != null)
+                    if (_nativeWindow != null)
                     {
-                        codeEditorNativeWindow.Dispose();
+                        _nativeWindow.Dispose();
                     }
                 }
             }
@@ -414,9 +414,9 @@ namespace Ankh.UI.PendingChanges
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            if (codeEditorNativeWindow != null)
+            if (_nativeWindow != null)
             {
-                codeEditorNativeWindow.Focus();
+                _nativeWindow.Focus();
             }
         }
 
@@ -444,16 +444,16 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                if (codeEditorNativeWindow != null)
-                    return _text = codeEditorNativeWindow.Text;
+                if (_nativeWindow != null)
+                    return _text = _nativeWindow.Text;
                 else
                     return _text;
             }
             set
             {
                 _text = value;
-                if (codeEditorNativeWindow != null)
-                    codeEditorNativeWindow.Text = value;
+                if (_nativeWindow != null)
+                    _nativeWindow.Text = value;
             }
         }
 
@@ -463,7 +463,19 @@ namespace Ankh.UI.PendingChanges
         /// <param name="text">The text.</param>
         public void PasteText(string text)
         {
-            codeEditorNativeWindow.PasteText(text);
+            _nativeWindow.PasteText(text);
+        }
+
+        [CLSCompliant(false)]
+        public IVsFindTarget FindTarget
+        {
+            get
+            {
+                if (_nativeWindow != null)
+                    return _nativeWindow.FindTarget;
+
+                return null;
+            }
         }
     }
 
@@ -629,6 +641,21 @@ namespace Ankh.UI.PendingChanges
                 return new Point();
             else
                 return new Point(x, y);
+        }
+
+        public IVsFindTarget FindTarget
+        {
+            get
+            {
+                IVsFindTarget ft = _textView as IVsFindTarget;
+
+                if (ft != null)
+                    return ft;
+
+                ft = _textBuffer as IVsFindTarget;
+
+                return ft;
+            }
         }
 
         #region Properties

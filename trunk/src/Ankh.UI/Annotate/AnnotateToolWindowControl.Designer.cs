@@ -45,7 +45,7 @@ namespace Ankh.UI.Annotate
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.logMessageEditor1 = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
+            this.editor = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
             this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -55,13 +55,13 @@ namespace Ankh.UI.Annotate
             // 
             // logMessageEditor1
             // 
-            this.logMessageEditor1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logMessageEditor1.Location = new System.Drawing.Point(0, 0);
-            this.logMessageEditor1.Name = "logMessageEditor1";
-            this.logMessageEditor1.Size = new System.Drawing.Size(184, 300);
-            this.logMessageEditor1.TabIndex = 2;
-            this.logMessageEditor1.Text = "logMessageEditor1";
-            this.logMessageEditor1.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
+            this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.Name = "logMessageEditor1";
+            this.editor.Size = new System.Drawing.Size(184, 300);
+            this.editor.TabIndex = 2;
+            this.editor.Text = "logMessageEditor1";
+            this.editor.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
             // 
             // blameMarginControl1
             // 
@@ -86,7 +86,7 @@ namespace Ankh.UI.Annotate
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.logMessageEditor1);
+            this.splitContainer1.Panel2.Controls.Add(this.editor);
             this.splitContainer1.Size = new System.Drawing.Size(300, 300);
             this.splitContainer1.SplitterDistance = 115;
             this.splitContainer1.SplitterWidth = 1;
@@ -110,7 +110,7 @@ namespace Ankh.UI.Annotate
         #endregion
 
         private AnnotateMarginControl blameMarginControl1;
-        private Ankh.UI.PendingChanges.VSTextEditor logMessageEditor1;
+        private Ankh.UI.PendingChanges.VSTextEditor editor;
         private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

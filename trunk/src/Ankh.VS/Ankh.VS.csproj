@@ -101,6 +101,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
+    <Compile Include="Dialogs\VSDocumentHostService.cs" />
+    <Compile Include="Dialogs\VSDocumentInstance.cs" />
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
     <Compile Include="Dialogs\VSDocumentFormPane.cs">
     </Compile>
