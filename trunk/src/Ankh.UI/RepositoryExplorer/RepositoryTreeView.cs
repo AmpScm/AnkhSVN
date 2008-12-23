@@ -794,5 +794,31 @@ namespace Ankh.UI.RepositoryExplorer
 
             Context.GetService<IAnkhCommandService>().DirectlyExecCommand(AnkhCommand.RenameRepositoryItem, new string[] { newName });
         }
+
+        internal void DoCreateDirectory()
+        {
+            Uri u = SelectedNode.RawUri;
+
+            using (Ankh.UI.SccManagement.CreateDirectoryDialog dialog = new Ankh.UI.SccManagement.CreateDirectoryDialog())
+            {
+                if (dialog.ShowDialog(Context) != DialogResult.OK)
+                    return;
+
+                Uri newDir = SvnTools.AppendPathSuffix(u, dialog.NewDirectoryName);
+
+                Context.GetService<IProgressRunner>().RunModal(
+                    "Creating Directory",
+                    delegate(object sender, ProgressWorkerArgs a)
+                    {
+                        SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
+                        args.CreateParents = true;
+                        
+                        args.LogMessage = dialog.LogMessage;
+                        a.Client.RemoteCreateDirectory(newDir, args);
+                    });
+
+                AddRoot(newDir);
+            }
+        }
     }
 }

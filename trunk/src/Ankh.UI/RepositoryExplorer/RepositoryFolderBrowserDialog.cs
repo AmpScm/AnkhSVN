@@ -22,6 +22,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.VS;
+using Ankh.Commands;
+using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -113,7 +115,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void newFolderButton_Click(object sender, EventArgs e)
         {
-
+            reposBrowser.DoCreateDirectory();
         }
 
         private void urlBox_TextChanged(object sender, EventArgs e)
