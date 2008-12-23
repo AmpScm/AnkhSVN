@@ -27,28 +27,27 @@ namespace Ankh.Commands.RepositoryExplorer
     /// <summary>
     /// Command to creates a new directory here in the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.NewDirectory, AlwaysAvailable=true)]
+    [Command(AnkhCommand.NewDirectory, AlwaysAvailable = true)]
     class CreateDirectoryCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool enabled = false;
-            
-            ISvnRepositoryItem item = GetValidSelectedItem(e.Selection);
-            if (item != null
-                && item.NodeKind == SvnNodeKind.Directory)
+            ISvnRepositoryItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
+
+            if (item == null
+                || item.Origin == null
+                || item.Origin.Target.Revision != SvnRevision.Head
+                || item.NodeKind == SvnNodeKind.File)
             {
-                enabled = true;
+                e.Enabled = false;
             }
-            e.Enabled = enabled;
         }
 
         public override void OnExecute(CommandEventArgs e)
         {
-            ISvnRepositoryItem selected = GetValidSelectedItem(e.Selection);
-            if (selected == null) { return; }
+            ISvnRepositoryItem selected = EnumTools.GetSingle(e.Selection.GetSelection<ISvnRepositoryItem>());
 
-            string directoryName = string.Empty;
+            string directoryName = "";
 
             using (CreateDirectoryDialog dlg = new CreateDirectoryDialog())
             {
@@ -84,28 +83,6 @@ namespace Ankh.Commands.RepositoryExplorer
             }
         }
 
-        /// <summary>
-        /// Get the selected ISvnRepositoryItem
-        /// </summary>
-        /// <param name="context">ISelectionContext</param>
-        /// <returns>ISvnRepositoryItem or null</returns>
-        private Ankh.Scc.ISvnRepositoryItem GetValidSelectedItem(ISelectionContext context)
-        {
-            Ankh.Scc.ISvnRepositoryItem result = null;
-            int counter = 0;
-            foreach (Ankh.Scc.ISvnRepositoryItem i in context.GetSelection<Ankh.Scc.ISvnRepositoryItem>())
-            {
-                counter++;
-                if (counter > 1) { return null; } // multiple selection
-                
-                // null for 'dummy' nodes
-                if (i.Origin != null && i.Origin.RepositoryRoot != null)
-                {
-                    result = i;
-                }
-            }
-            return result;
-        }
     }
 }
 
