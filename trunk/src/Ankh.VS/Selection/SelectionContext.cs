@@ -38,7 +38,7 @@ namespace Ankh.VS.Selection
     /// </summary>
     [GlobalService(typeof(ISelectionContext))]
     [GlobalService(typeof(ISccProjectWalker))]
-    partial class SelectionContext : AnkhService, IVsSelectionEvents, IDisposable, ISelectionContext, ISelectionContextEx, ISccProjectWalker
+    partial class SelectionContext : AnkhService, IVsSelectionEvents, ISelectionContext, ISelectionContextEx, ISccProjectWalker
     {
         IFileStatusCache _cache;
         SolutionExplorerWindow _solutionExplorer;
@@ -88,16 +88,23 @@ namespace Ankh.VS.Selection
                 Marshal.ThrowExceptionForHR(monitor.AdviseSelectionEvents(this, out _cookie));
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            if (!_disposed)
+            try
             {
-                _disposed = true;
-                IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
+                if (!_disposed)
+                {
+                    _disposed = true;
+                    IVsMonitorSelection monitor = (IVsMonitorSelection)Context.GetService(typeof(IVsMonitorSelection));
 
-                if (_cookie != 0)
-                    Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
-                ClearCache();
+                    if (_cookie != 0)
+                        Marshal.ThrowExceptionForHR(monitor.UnadviseSelectionEvents(_cookie));
+                    ClearCache();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
             }
         }
 
