@@ -260,20 +260,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
         }
 
         [TestMethod]
-        public void ExportFolderCommand()
-        {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
-            {
-                CommandTester.TestExecution(AnkhCommand.ExportFolder);
-            }
-        }
-
-        [TestMethod]
         public void LockCommand()
         {
             mocks = new MockRepository();
