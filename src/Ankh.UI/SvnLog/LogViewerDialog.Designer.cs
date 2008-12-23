@@ -69,6 +69,7 @@ namespace Ankh.UI
             // 
             resources.ApplyResources(this.logViewerControl, "logViewerControl");
             this.logViewerControl.ChangedPathsVisible = true;
+            this.logViewerControl.Context = null;
             this.logViewerControl.IncludeMerged = false;
             this.logViewerControl.LogMessageVisible = true;
             this.logViewerControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
@@ -84,11 +85,7 @@ namespace Ankh.UI
             this.Controls.Add(this.logViewerControl);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "LogViewerDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Load += new System.EventHandler(this.LogViewerDialog_Load);
             this.ResumeLayout(false);
 
