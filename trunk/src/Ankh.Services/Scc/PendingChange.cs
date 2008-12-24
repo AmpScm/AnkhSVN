@@ -144,7 +144,14 @@ namespace Ankh.Scc
         [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
         public DateTime LastCommittedDate
         {
-            get { return Item.Status.LastChangeTime.ToLocalTime(); }
+            get 
+            {
+                DateTime dt = Item.Status.LastChangeTime;
+                if (dt != DateTime.MinValue)
+                    return dt.ToLocalTime();
+                else
+                    return DateTime.MinValue;
+            }
         }
 
         [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]

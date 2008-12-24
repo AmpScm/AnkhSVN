@@ -118,7 +118,14 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
         public DateTime LastCommittedDate
         {
-            get { return SvnItem.Status.LastChangeTime.ToLocalTime(); }
+            get 
+            {
+                DateTime dt = SvnItem.Status.LastChangeTime;
+                if (dt != DateTime.MinValue)
+                    return dt.ToLocalTime();
+                else
+                    return DateTime.MinValue;
+            }
         }
 
         [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
