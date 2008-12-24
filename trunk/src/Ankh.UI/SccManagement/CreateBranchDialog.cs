@@ -124,20 +124,10 @@ namespace Ankh.UI.SccManagement
             get { return logMessage.Text; }
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             if(!_noTypeChange)
                 specificVersionRadio.Checked = true;
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
 
         }
 
@@ -159,7 +149,7 @@ namespace Ankh.UI.SccManagement
             }
         }
 
-        private void toUrlBox_TextAlignChanged(object sender, EventArgs e)
+        private void toUrlBox_TextChanged(object sender, EventArgs e)
         {
             btnOk.Enabled = (NewDirectoryName != null);
         }
