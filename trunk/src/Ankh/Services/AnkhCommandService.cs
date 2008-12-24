@@ -155,6 +155,30 @@ namespace Ankh
             public static extern int VariantInit(IntPtr v);
         }
 
+        /// <summary>
+        /// Posts the tick command.
+        /// </summary>
+        /// <param name="tick">if set to <c>true</c> [tick].</param>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
+        public bool PostTickCommand(ref bool tick, AnkhCommand command)
+        {
+            if (tick)
+                return false;
+
+            tick = true;
+            bool ok = false;
+            try
+            {
+                return ok = PostExecCommand(command);
+            }
+            finally
+            {
+                if (!ok)
+                    tick = false;
+            }
+        }
+
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
         {
             return PostExecCommand(command, null, CommandPrompt.DoDefault);

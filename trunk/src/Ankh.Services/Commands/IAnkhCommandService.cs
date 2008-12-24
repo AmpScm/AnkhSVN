@@ -141,7 +141,14 @@ namespace Ankh.Commands
         /// <param name="args">The args.</param>
         /// <returns></returns>
         CommandResult DirectlyExecCommand(AnkhCommand command, object args, CommandPrompt prompt);
-        
+
+        /// <summary>
+        /// Posts the tick command.
+        /// </summary>
+        /// <param name="tick">if set to <c>true</c> [tick].</param>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
+        bool PostTickCommand(ref bool tick, AnkhCommand command);
 
         // These methods can be called from the UI or a background thread
         /// <summary>

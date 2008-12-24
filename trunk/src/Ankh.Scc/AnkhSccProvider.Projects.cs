@@ -542,8 +542,8 @@ namespace Ankh.Scc
 
             IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
-            if (cmd != null && cmd.PostExecCommand(AnkhCommand.SccFinishTasks))
-                _registeredSccCleanup = true;
+            if (cmd != null)
+                cmd.PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);
         }
     }
 }
