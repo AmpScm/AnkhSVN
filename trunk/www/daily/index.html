@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5765</title>
+<title>AnkhSVN-Daily Update - 2.0.5773</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5765</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5773</h1>
 
 
 <p>
@@ -12,19 +12,27 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1348/AnkhSvn-Daily-2.0.5765.316.msi">AnkhSVN 2.0.5765</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1349/AnkhSvn-Daily-2.0.5773.317.msi">AnkhSVN 2.0.5773</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5765">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5773">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-12-24</td></tr>
+<tr><td> </td><td class="r"><a id="5773" href="http://ankhsvn.net/rev/?r=5773">[r5773]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/SccManagement/CreateBranchDialog.Designer.cs, src/Ankh.UI/SccManagement/CreateBranchDialog.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh/Commands/RepositoryExplorer/CopyToOrMove.cs, src/Ankh.UI/SccManagement/CopyToDialog.resx, src/Ankh/Ankh.csproj, src/Ankh.UI/SccManagement/CopyToDialog.Designer.cs (and 3 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement Copy To... and Move To... commands in the repository explorer.</td></tr>
+<tr class="d"><td colspan="4">2008-12-23</td></tr>
+<tr><td> </td><td class="r"><a id="5771" href="http://ankhsvn.net/rev/?r=5771">[r5771]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryFolderBrowserDialog.cs, src/Ankh.UI/SccManagement/AddToSubversion.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement Create Directory dialog in the repository browse dialog by
+refactoring the Create Directory command from the Add to Subversion command
+to the Repository TreeView.</td></tr>
+<tr><td> </td><td class="r"><a id="5768" href="http://ankhsvn.net/rev/?r=5768">[r5768]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/AnkhEditorFactories.cs, src/Ankh.UI/Annotate/AnnotateToolWindowControl.Designer.cs, src/Ankh.VS/Dialogs/VSDocumentInstance.cs, src/Ankh.UI/Annotate/AnnotateEditorControl.cs, src/Ankh.VS/Dialogs/VSDocumentFormPane.cs, src/Ankh.VS/Ankh.VS.csproj, src/Ankh.Services/UI/IAnkhDynamicEditorFactory.cs, src/Ankh.UI/PendingChanges/VSTextEditor.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix the 'Search' command in annotate Windows by rerouting the IVsFindTarget
+interface to the inner text view.</td></tr>
 <tr class="d"><td colspan="4">2008-12-22</td></tr>
 <tr><td> </td><td class="r"><a id="5764" href="http://ankhsvn.net/rev/?r=5764">[r5764]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/CheckoutFolderCommand.cs, src/Ankh/Commands/RepositoryExplorer/DeleteRepositoryItemCommand.cs, src/Ankh/Commands/RepositoryExplorer/RemoveRepositoryRootCommand.cs, src/Ankh/Commands/RepositoryExplorer/CopyReposExplorerUrl.cs, src/Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, src/TestUtils/TestUtils.csproj, src/Ankh/Ankh.csproj, src/Ankh/Commands/RepositoryExplorer/ExportFolderCommand.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove some old disabled command code and mark some others as AlwaysAvailable</td></tr>
 <tr><td> </td><td class="r"><a id="5762" href="http://ankhsvn.net/rev/?r=5762">[r5762]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/ViewInVSNetCommand.cs, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Ids/AnkhCommandMenu.cs, src/Ankh.Package/Gui/PendingChanges/MoveTo.png, src/Ankh.Package/Gui/PendingChanges/CopyTo.png, src/Ankh.Package/Gui/Gui-To-Ctc.xsl, src/Ankh.Package/Gui/PendingChanges/FolderUp.png, src/Ankh.Package/Gui/Gui.xsd (and 9 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=5761">r5761</a>, update the repository explorer toolbar to make
@@ -162,17 +170,6 @@ the fallback to the windows default (3.1 like) font on settings changes.</td></t
 message. Before this it only saved successful commits.</td></tr>
 <tr class="d"><td colspan="4">2008-11-26</td></tr>
 <tr class="d"><td colspan="4">2008-11-25</td></tr>
-<tr><td> </td><td class="r"><a id="5618" href="http://ankhsvn.net/rev/?r=5618">[r5618]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/menu/Blame.png, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Package/Gui/menu/ResolveConflict.png, src/Ankh.Package/Gui/menu/Update.png, src/Ankh.Package/Gui/menu/ToggleAnkh.png, src/Ankh.Package/Gui/menu/Default.png, src/Ankh.Package/Gui/menu/AddSolutionToRepository.png, src/Ankh.Package/Gui/menu/Lock.png (and 7 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Command Icon cleanup. Removed unused icons and updated a few others from MS
-provided templates.</td></tr>
-<tr><td> </td><td class="r"><a id="5617" href="http://ankhsvn.net/rev/?r=5617">[r5617]</a></td><td class="a">baybora</td><td class="f">src/Ankh.UI/SccManagement/ProjectCommitDialog.Designer.cs, src/Ankh.UI/SccManagement/ProjectCommitDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">enable ok button only if the checked item count is &gt; 0, in commit dialog. 
-(progress runner throws an exception if ok is pressed with no item is selected)</td></tr>
-<tr><td> </td><td class="r"><a id="5613" href="http://ankhsvn.net/rev/?r=5613">[r5613]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Ankh.UI.csproj, src/Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, src/Ankh.Scc/ProjectTracker.Add.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Don't forward SCC edit/save requests to the file status and project cache when
-the passed files refer to files in the temp directory.</td></tr>
-<tr><td> </td><td class="r"><a id="5611" href="http://ankhsvn.net/rev/?r=5611">[r5611]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/PendingChange.cs, src/Ankh.UI/PendingChanges/RecentChangesPage.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Handle SvnStatus.External and SvnStatus.Ignored properly in the recent changes view.</td></tr>
-<tr><td> </td><td class="r"><a id="5609" href="http://ankhsvn.net/rev/?r=5609">[r5609]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Ids/AnkhSccPropertyNames.cs, src/Ankh/Commands/OpenFromSubversion.cs, src/Ankh/Services/SolutionSettings.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extract common svn property names as global constants.</td></tr>
-<tr class="d"><td colspan="4">2008-11-24</td></tr>
-<tr><td> </td><td class="r"><a id="5606" href="http://ankhsvn.net/rev/?r=5606">[r5606]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Commands/CommandAttribute.cs, src/Ankh.Services/Commands/CommandMapper.cs, src/Ankh.Services/Commands/CommandTarget.cs, src/Ankh.Services/Commands/BaseCommandEventArgs.cs, src/Ankh.Services/Commands/CommandMapItem.cs, src/Ankh/Commands/SolutionUpdateCommand.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Prepare annotating command attributes with the target they apply to. Once
-completed this should reduce the parsing of the selected items in each command.</td></tr>
 
 </table>
 <!--/Recent changes-->
