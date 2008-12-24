@@ -312,7 +312,7 @@ namespace Ankh.UI
             if (Context != null)
                 return Context.GetService(serviceType);
 
-            return null;
+            return base.GetService(serviceType);
         }
 
         #endregion

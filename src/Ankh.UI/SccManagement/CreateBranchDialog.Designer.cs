@@ -207,7 +207,6 @@ namespace Ankh.UI.SccManagement
             this.fromFolderBox.Name = "fromFolderBox";
             this.fromFolderBox.Size = new System.Drawing.Size(293, 20);
             this.fromFolderBox.TabIndex = 1;
-            this.fromFolderBox.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // label1
             // 
@@ -253,7 +252,7 @@ namespace Ankh.UI.SccManagement
             this.toUrlBox.Name = "toUrlBox";
             this.toUrlBox.Size = new System.Drawing.Size(320, 20);
             this.toUrlBox.TabIndex = 1;
-            this.toUrlBox.TextAlignChanged += new System.EventHandler(this.toUrlBox_TextAlignChanged);
+            this.toUrlBox.TextChanged += new System.EventHandler(this.toUrlBox_TextChanged);
             // 
             // label4
             // 
@@ -272,7 +271,6 @@ namespace Ankh.UI.SccManagement
             this.label5.Size = new System.Drawing.Size(74, 13);
             this.label5.TabIndex = 2;
             this.label5.Text = "Log Message:";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // switchBox
             // 

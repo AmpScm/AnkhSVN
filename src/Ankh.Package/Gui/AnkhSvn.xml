@@ -388,6 +388,12 @@
                 text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png" dynamicVisibility="true" />          
         </Group>
         <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
+          <Button id="Cmd_ReposCopyTo" priority="0x100"
+                  name="SvnCopyTo" text="&amp;Copy To..."
+                  iconFile="PendingChanges/CopyTo.png" defaultInvisible="true" />
+          <Button id="Cmd_ReposMoveTo" priority="0x200"
+                  name="SvnCopyTo" text="&amp;Move To..."
+                  iconFile="PendingChanges/MoveTo.png" defaultInvisible="true" />
           <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
                 text="Ne&amp;w Directory..."
                 toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />          

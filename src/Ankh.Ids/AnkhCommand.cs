@@ -222,9 +222,10 @@ namespace Ankh.Ids
         ViewInVsText,
         ViewInWindowsWith,
 
+        ReposCopyTo,
+        ReposMoveTo,
+
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewProject,
-        PcColViewChange,
         PcColViewChangeList,
         PcColViewDate,
         PcColViewFullPath,
