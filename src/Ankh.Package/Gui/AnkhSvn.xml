@@ -167,7 +167,7 @@
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
           <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <Button id="Cmd_SolutionApplyPatch" name="ApplyPatch" priority="0x70"
-                      text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png"/>
+                      text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_SolutionEditProperties" priority="0x90" defaultDisabled="true"
                   text="Solution Prop&amp;erties..."
