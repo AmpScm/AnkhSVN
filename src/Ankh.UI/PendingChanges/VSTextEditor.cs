@@ -148,8 +148,6 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
-
-
             VSContainerForm ownerForm = topParent as VSContainerForm;
             if (ownerForm != null && ownerForm.Modal)
             {
@@ -316,7 +314,13 @@ namespace Ankh.UI.PendingChanges
         [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IVsWindowPane WindowPane
         {
-            get { return _nativeWindow.WindowPane; }
+            get
+            {
+                if (_nativeWindow != null)
+                    return _nativeWindow.WindowPane;
+                else
+                    return null;
+            }
         }
 
         protected override void Dispose(bool disposing)
@@ -466,7 +470,11 @@ namespace Ankh.UI.PendingChanges
             _nativeWindow.PasteText(text);
         }
 
-        [CLSCompliant(false)]
+        /// <summary>
+        /// Gets the find target.
+        /// </summary>
+        /// <value>The find target.</value>
+        [CLSCompliant(false), Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IVsFindTarget FindTarget
         {
             get
