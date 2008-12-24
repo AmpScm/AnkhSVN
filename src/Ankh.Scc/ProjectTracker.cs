@@ -204,13 +204,26 @@ namespace Ankh.Scc
 
         void RegisterForSccCleanup()
         {
-            if (_registeredSccCleanup)
+            if (_registeredSccCleanup )
                 return;
 
             IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
-            if (cmd != null && cmd.PostExecCommand(AnkhCommand.SccFinishTasks))
-                _registeredSccCleanup = true;
+            if (cmd == null)
+                return;
+
+            _registeredSccCleanup = true;
+
+            bool ok = false;
+            try
+            {
+                ok = cmd.PostExecCommand(AnkhCommand.SccFinishTasks);
+            }
+            finally
+            {
+                if(!ok)
+                    _registeredSccCleanup = false;
+            }
         }
     }
 }
