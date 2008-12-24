@@ -141,15 +141,16 @@ namespace Ankh.Scc
             }
         }
 
+        IAnkhCommandService _commandService;
+        IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
         void ScheduleRefreshPreLocked()
         {
             if (!_refreshScheduled)
-            {
-                IAnkhCommandService cmd = GetService<IAnkhCommandService>();
-
-                if (cmd != null && cmd.PostExecCommand(AnkhCommand.TickRefreshPendingTasks))
-                    _refreshScheduled = true;
-            }
+                CommandService.PostTickCommand(ref _refreshScheduled, AnkhCommand.TickRefreshPendingTasks);
         }
 
         public void FullRefresh(bool clearStateCache)

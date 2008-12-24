@@ -35,7 +35,7 @@ namespace Ankh.Scc
     sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor, IVsBroadcastMessageEvents
     {
         readonly object _lock = new object();
-        volatile bool _posted;
+        bool _posted;
         List<SvnProject> _dirtyProjects;
         List<SvnProject> _fullRefresh;
         uint _cookie;
@@ -89,21 +89,8 @@ namespace Ankh.Scc
 
         void PostDirty()
         {
-            if (!_posted && CommandService != null)
-            {
-                _posted = true;
-                bool ok = false;
-
-                try
-                {
-                    ok = CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty);
-                }
-                finally
-                {
-                    if(!ok)
-                        _posted = false;
-                }
-            }
+            if (!_posted)
+                CommandService.PostTickCommand(ref _posted, AnkhCommand.MarkProjectDirty);
         }
 
         public void MarkDirty(SvnProject project)

@@ -375,7 +375,7 @@ namespace Ankh
             IAnkhCommandService cs = _context.GetService<IAnkhCommandService>();
 
             if (cs != null)
-                _scheduled = cs.PostExecCommand(AnkhCommand.TickRefreshSvnItems);
+                cs.PostTickCommand(ref _scheduled, AnkhCommand.TickRefreshSvnItems);
         }
 
         void ISvnItemUpdate.RefreshTo(AnkhStatus status)
