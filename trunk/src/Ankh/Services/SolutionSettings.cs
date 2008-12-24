@@ -204,6 +204,7 @@ namespace Ankh.Settings
                     if (parent == null)
                         return;
 
+                    cache.ProjectRootItem = parent;
                     cache.RootCookie = parent.ChangeCookie;
 
                     LoadRootProperties(cache, parent);
