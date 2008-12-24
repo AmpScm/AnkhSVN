@@ -15,40 +15,47 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using Ankh.VS;
-using Ankh.Scc;
-using SharpSvn;
-using Ankh.Selection;
+using System.Collections.Generic;
+using System.Windows.Forms.Design;
 
-namespace Ankh.UI.SccManagement
+using Ankh.Selection;
+using Ankh.Scc;
+using Ankh.UI;
+using Ankh.VS;
+
+namespace Ankh.Scc.SccUI
 {
-    public partial class ChangeSourceControl : Form
+    public partial class ChangeSourceControl : VSContainerForm
     {
-        IAnkhServiceProvider _context;
         public ChangeSourceControl()
         {
             InitializeComponent();
-        }
-
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set { _context = value; }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
+            if (DesignMode)
+                return;
+
+            if (Context != null)
+            {
+                IUIService ds = Context.GetService<IUIService>();
+
+                if (ds != null)
+                {
+                    ToolStripRenderer renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+
+                    if (renderer != null)
+                        toolStrip1.Renderer = renderer;
+                }
+            }
+
             if (bindingGrid != null)
-                RefreshGrid(true);
+                RefreshGrid(true);            
         }
 
         private void RefreshGrid(bool refreshCombo)
@@ -61,89 +68,57 @@ namespace Ankh.UI.SccManagement
             IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
             IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
             IFileStatusCache cache = Context.GetService<IFileStatusCache>();
-            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            if (settings == null || mapper == null || cache == null || scc == null ||
+            if (settings == null || mapper == null || cache == null ||
                 string.IsNullOrEmpty(settings.SolutionFilename))
             {
                 return;
             }
 
-            SvnItem info = cache[settings.SolutionFilename];
-
-            Uri dirUri = info.Status.Uri;
-            if(dirUri != null)
-                dirUri = new Uri(dirUri, "./");
-
-            bool solutionControlled = scc.IsSolutionManaged;
-            int n = bindingGrid.Rows.Add(
-                "Solution: " + Path.GetFileNameWithoutExtension(settings.SolutionFilename),
-                (dirUri != null) ? dirUri.ToString() : "",
-                solutionControlled,
-                scc.IsSolutionManaged ? "Ok" : "Not Controlled",
-                info.Parent.FullPath);
-
+            // TODO: Optimize to one time init and then just refresh
+            bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
             foreach (SvnProject project in mapper.GetAllProjects())
             {
-                ISvnProjectInfo projectInfo = mapper.GetProjectInfo(project);
-
-                if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                if(project.IsSolution)
                     continue;
 
-                info = cache[projectInfo.ProjectDirectory];
+                ISvnProjectInfo projectInfo = mapper.GetProjectInfo(project);
+                
+                if(projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                    continue;
 
-                string uri = "";
+                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, project));
+            }
+            // /TODO
 
-                if (info.Status.Uri != null)
-                    uri = info.Status.Uri.ToString();
-
-                n = bindingGrid.Rows.Add(
-                    projectInfo.UniqueProjectName,
-                    uri,
-                    scc.IsProjectManaged(project),                    
-                    (scc.IsSolutionManaged || solutionControlled) ? "Ok" : "Not Controlled",
-                    projectInfo.ProjectDirectory);
-
-                bindingGrid.Rows[n].Tag = project;
+            foreach (ChangeSourceControlRow row in bindingGrid.Rows)
+            {
+                row.Refresh();
             }
 
             if (!refreshCombo)
                 return;
-            SvnInfoEventArgs slnInfo = GetInfo(settings.SolutionFilename);
 
-            if (slnInfo != null)
+            SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
+            SvnWorkingCopy wc = slnDirItem.WorkingCopy;
+
+            if (wc != null && slnDirItem.Status.Uri != null)
             {
-                this.solutionRootBox.Items.Clear();
-
-                Uri myUri = new Uri(slnInfo.Uri, "./");
-                UriMap value = new UriMap(myUri, "./");
-                solutionRootBox.Items.Add(value);
-
-                if (myUri == value.Uri)
-                    solutionRootBox.SelectedItem = value;
-
+                SvnItem dirItem = slnDirItem;
+                Uri cur = dirItem.Status.Uri;
                 Uri setUri = settings.ProjectRootUri;
 
-                string dir = Path.GetDirectoryName(settings.SolutionFilename);
-                string path = "";
-                while(myUri != slnInfo.RepositoryRoot)
+                while (dirItem != null && dirItem.IsBelowPath(wc.FullPath))
                 {
-                    path += "../";
-                    myUri = new Uri(myUri, "../");
-                    SvnInfoEventArgs dirInfo = GetInfo(Path.Combine(dir, "./" + path));
-
-                    if (dirInfo == null || dirInfo.Uri != myUri)
-                        break;
-
-                    value = new UriMap(myUri, path);
+                    UriMap value = new UriMap(cur, dirItem.FullPath);
                     solutionRootBox.Items.Add(value);
-                    if (myUri == setUri)
+
+                    if (setUri == value.Uri)
                         solutionRootBox.SelectedItem = value;
+                    dirItem = dirItem.Parent;
+                    cur = new Uri(cur, "../");
                 }
             }
-                
-
-            //bindingGrid.Rows.Add(Path.GetFileNameWithoutExtension(settings.SolutionFilename)
         }
 
         class UriMap
@@ -171,25 +146,6 @@ namespace Ankh.UI.SccManagement
                 get { return _uri; }
             }
 
-        }
-
-        private SvnInfoEventArgs GetInfo(string filename)
-        {
-            SvnInfoEventArgs solutionInfo = null;
-            using (SvnClient client = Context.GetService<ISvnClientPool>().GetNoUIClient())
-            {
-                SvnInfoArgs a = new SvnInfoArgs();
-                a.Depth = SvnDepth.Empty;
-                a.ThrowOnError = false;
-                client.Info(new SvnPathTarget(filename), a,
-                    delegate(object sender, SvnInfoEventArgs e)
-                    {
-                        e.Detach();
-                        solutionInfo = e;
-                    });
-            }
-
-            return solutionInfo;
         }
 
         private void refreshButton_Click(object sender, EventArgs e)
@@ -221,9 +177,8 @@ namespace Ankh.UI.SccManagement
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (DataGridViewRow row in bindingGrid.SelectedRows)
+            foreach (SvnProject project in SelectedProjects)
             {
-                SvnProject project = row.Tag as SvnProject;
                 scc.SetProjectManaged(project, true);
             }
 
@@ -236,14 +191,30 @@ namespace Ankh.UI.SccManagement
 
             IAnkhSccService scc = Context.GetService<IAnkhSccService>();
 
-            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
+            foreach (SvnProject project in SelectedProjects)
             {
-                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
-                SvnProject project = row.Tag as SvnProject;
                 scc.SetProjectManaged(project, false);
             }
 
             RefreshGrid(false);
+        }
+
+        IEnumerable<SvnProject> SelectedProjects
+        {
+            get
+            {
+                List<SvnProject> projects = new List<SvnProject>();
+                foreach (ChangeSourceControlRow row in bindingGrid.SelectedRows)
+                {
+                    SvnProject project = row.Project;
+
+                    if (projects.Contains(project))
+                        continue;
+
+                    projects.Add(project);
+                    yield return project;
+                }
+            }
         }
 
         private void bindingGrid_SelectionChanged(object sender, EventArgs e)
@@ -259,11 +230,11 @@ namespace Ankh.UI.SccManagement
             IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
             IAnkhSolutionSettings solset = Context.GetService<IAnkhSolutionSettings>();
 
-            foreach (DataGridViewCell cell in bindingGrid.SelectedCells)
+            bool isSolution = false;
+            foreach (SvnProject project in SelectedProjects)
             {
-                DataGridViewRow row = bindingGrid.Rows[cell.RowIndex];
-                SvnProject project = row.Tag as SvnProject;
-
+                if (project.IsSolution)
+                    isSolution = true;
                 if (scc.IsProjectManaged(project))
                     enableDisconnect = true;
                 else if(!enableConnect)
@@ -289,12 +260,22 @@ namespace Ankh.UI.SccManagement
                         enableConnect = true;
                 }
 
-                if (enableConnect && enableDisconnect)
+                if (enableConnect && enableDisconnect && isSolution)
                     break;
             }
 
             connectButton.Enabled = enableConnect;
             disconnectButton.Enabled = enableDisconnect;
+
+            bool contains = tabControl1.Controls.Contains(solutionTab);
+
+            if (isSolution && !contains)
+            {
+                tabControl1.Controls.Add(solutionTab);
+                tabControl1.SelectedTab = solutionTab;
+            }
+            else if (!isSolution && contains)
+                tabControl1.Controls.Remove(solutionTab);
         }
     }
 }

@@ -60,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -93,6 +94,14 @@
     <Compile Include="Commands\ProjectFileFilter.cs" />
     <Compile Include="ProjectMap\SccTranslateEnlistData.cs" />
     <Compile Include="ProjectMap\SccTranslateData.cs" />
+    <Compile Include="SccUI\ChangeSourceControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\ChangeSourceControl.Designer.cs">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SccUI\ChangeSourceControlRow.cs" />
+    <Compile Include="SccUI\Commands\ChangeSourceControlCommand.cs" />
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
@@ -160,6 +169,10 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\ChangeSourceControl.resx">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

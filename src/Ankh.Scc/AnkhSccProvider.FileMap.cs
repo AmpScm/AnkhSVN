@@ -814,6 +814,15 @@ namespace Ankh.Scc
                 get { return _data.UniqueProjectName; }
             }
 
+            /// <summary>
+            /// Gets the SCC base directory.
+            /// </summary>
+            /// <value>The SCC base directory.</value>
+            public string SccBaseDirectory
+            {
+                get { return ProjectDirectory; }
+            }
+
             #endregion
         }
     }
