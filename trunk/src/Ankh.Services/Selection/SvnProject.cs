@@ -31,7 +31,7 @@ namespace Ankh.Selection
     /// <para>FullPath = null in case of a solution only-project (E.g. website project)</para>
     /// <para>RawHandle = null when retrieved from the selectionprovider when the file is not in a project (E.g. solution folder)</para>
     /// </remarks>
-    public class SvnProject
+    public class SvnProject : IEquatable<SvnProject>
     {
         readonly string _fullPath;
         readonly IVsSccProject2 _rawHandle;
@@ -95,6 +95,52 @@ namespace Ankh.Selection
         public bool IsSolution
         {
             get { return _rawHandle == null && _fullPath == null; }
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <param name="obj">The <see cref="T:System.Object"/> to compare with the current <see cref="T:System.Object"/>.</param>
+        /// <returns>
+        /// true if the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>; otherwise, false.
+        /// </returns>
+        /// <exception cref="T:System.NullReferenceException">
+        /// The <paramref name="obj"/> parameter is null.
+        /// </exception>
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as SvnProject);
+        }
+
+        /// <summary>
+        /// Checks whether the specified object specifies the same object
+        /// </summary>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        public bool Equals(SvnProject obj)
+        {
+            if (obj == null)
+                return false;
+
+            if(RawHandle != null || obj.RawHandle != null)
+                return (RawHandle == obj.RawHandle);
+
+            return FullPath == obj.FullPath;
+        }
+
+        /// <summary>
+        /// Gets the hash code.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            if (RawHandle != null)
+                return RawHandle.GetHashCode();
+
+            if (this == Solution)
+                return 0;
+
+            return FullPath.GetHashCode();
         }
     }
 }

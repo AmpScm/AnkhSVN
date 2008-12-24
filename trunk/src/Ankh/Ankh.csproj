@@ -196,7 +196,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\AddToSccCommands.cs" />
-    <Compile Include="Commands\ChangeSourceControlCommand.cs" />
     <Compile Include="Commands\ItemResolveCommand.cs" />
     <Compile Include="Commands\OpenFromSubversion.cs" />
     <Compile Include="Commands\OpenInVisualStudio.cs" />

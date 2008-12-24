@@ -48,5 +48,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <value>The project directory.</value>
         string ProjectDirectory { get; }
+
+        /// <summary>
+        /// Gets the SCC base directory.
+        /// </summary>
+        /// <value>The SCC base directory.</value>
+        /// <remarks>The SCC base directory is the project directory or one of its parents</remarks>
+        string SccBaseDirectory { get; }
     }
 }
