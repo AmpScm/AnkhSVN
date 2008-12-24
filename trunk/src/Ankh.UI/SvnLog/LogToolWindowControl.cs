@@ -114,27 +114,6 @@ namespace Ankh.UI.SvnLog
             logControl.StartLog(context, _origins, start, end);
         }
 
-        [Obsolete("Pass SvnOrigins")]
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets)
-        {
-            StartLocalLog(context, targets, null, null);
-        }
-
-        [Obsolete("Pass SvnOrigins")]
-        public void StartLocalLog(IAnkhServiceProvider context, ICollection<SvnItem> targets, SvnRevision start, SvnRevision end)
-        {
-            if (targets == null)
-                throw new ArgumentNullException("targets");
-
-            List<SvnOrigin> t = new List<SvnOrigin>();
-            foreach (SvnItem item in targets)
-            {
-                t.Add(new SvnOrigin(item));
-            }
-
-            StartLog(context, t, start, end);
-        }
-
         public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)
         {
             if (target == null)
@@ -155,22 +134,6 @@ namespace Ankh.UI.SvnLog
             _origins = new SvnOrigin[] { origin };
             UpdateTitle();
             logControl.StartMergesMerged(context, origin, source);
-        }
-
-        [Obsolete("Please pass origin directly")]
-        public void StartRemoteLog(IAnkhServiceProvider context, ISvnRepositoryItem remoteTarget)
-        {
-            StartLog(context, remoteTarget.Origin, null, null);
-        }
-
-        public override ISite Site
-        {
-            get { return base.Site; }
-            set
-            {
-                base.Site = value;
-                logControl.Site = value;
-            }
         }
 
         public bool LogMessageVisible

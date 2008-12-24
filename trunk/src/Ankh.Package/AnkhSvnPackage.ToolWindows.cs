@@ -412,7 +412,7 @@ namespace Ankh.VSPackage
         protected override void OnCreate()
         {
             _host.Load();
-            Control.Site = _host;
+            //Control.Site = _host;
             Control.ToolWindowHost = _host;
             base.OnCreate();
         }

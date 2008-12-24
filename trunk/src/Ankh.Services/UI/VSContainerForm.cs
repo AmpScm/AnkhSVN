@@ -60,6 +60,9 @@ namespace Ankh.UI
         AnkhToolBar _toolbarId;
         VSContainerMode _mode;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VSContainerForm"/> class.
+        /// </summary>
         public VSContainerForm()
         {
             ShowInTaskbar = false;
@@ -68,7 +71,17 @@ namespace Ankh.UI
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VSContainerForm"/> class.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        protected VSContainerForm(IContainer container)
+            : this()
+        {
+            container.Add(this);
+        }
+
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
@@ -125,7 +138,7 @@ namespace Ankh.UI
         /// Gets the dialog owner service
         /// </summary>
         /// <value>The dialog owner.</value>
-        [Browsable(false), CLSCompliant(false)]
+        [Browsable(false), CLSCompliant(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected IAnkhDialogOwner DialogOwner
         {
             get 
@@ -239,7 +252,7 @@ namespace Ankh.UI
         {
             base.OnHandleCreated(e);
 
-            if (DialogOwner != null)
+            if (!DesignMode && DialogOwner != null)
                 DialogOwner.OnContainerCreated(this);
         }
 
