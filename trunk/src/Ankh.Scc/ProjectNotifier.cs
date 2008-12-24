@@ -89,8 +89,21 @@ namespace Ankh.Scc
 
         void PostDirty()
         {
-            if (!_posted && CommandService != null && CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty))
+            if (!_posted && CommandService != null)
+            {
                 _posted = true;
+                bool ok = false;
+
+                try
+                {
+                    ok = CommandService.PostExecCommand(AnkhCommand.MarkProjectDirty);
+                }
+                finally
+                {
+                    if(!ok)
+                        _posted = false;
+                }
+            }
         }
 
         public void MarkDirty(SvnProject project)
