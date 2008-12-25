@@ -517,6 +517,7 @@ namespace Ankh.UI.PendingChanges
 
         IVsTextBuffer _textBuffer;
         IVsTextView _textView;
+        Guid? _languageService;
 
         #endregion
 
@@ -690,11 +691,27 @@ namespace Ankh.UI.PendingChanges
                         if (manager != null)
                         {
                             FRAMEPREFERENCES2[] items = new FRAMEPREFERENCES2[1];
+                            LANGPREFERENCES2[] lp = null;
 
-                            if (ErrorHandler.Succeeded(manager.GetUserPreferences2(null, items, null, null)))
+                            if (_languageService.HasValue)
+                            {
+                                lp = new LANGPREFERENCES2[1];
+                                lp[0].guidLang = _languageService.Value;
+                            }
+                            else
+                            {
+                                Guid lid;
+                                if (ErrorHandler.Succeeded(_textBuffer.GetLanguageServiceID(out lid)))
+                                {
+                                    lp = new LANGPREFERENCES2[1];
+                                    lp[0].guidLang = lid;
+                                }
+                            }
+
+                            if (ErrorHandler.Succeeded(manager.GetUserPreferences2(null, items, lp, null)))
                             {
                                 // Only hide the horizontal scrollbar if one would have been visible 
-                                if (items[0].fHorzScrollbar != 0)
+                                if (items[0].fHorzScrollbar != 0 && (lp == null || lp[0].fWordWrap == 0))
                                     height += SystemInformation.HorizontalScrollBarHeight;
                             }
                         }
@@ -809,6 +826,7 @@ namespace Ankh.UI.PendingChanges
             IVsTextView textView;
             ErrorHandler.ThrowOnFailure(_codeWindow.GetPrimaryView(out textView));
 
+            _languageService = forceLanguageService;
             _textView = textView;
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
 
