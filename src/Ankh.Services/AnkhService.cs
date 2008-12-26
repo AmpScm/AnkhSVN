@@ -23,6 +23,8 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell.Interop;
 using IObjectWithSite = Microsoft.VisualStudio.OLE.Interop.IObjectWithSite;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IOleConnectionPoint = Microsoft.VisualStudio.OLE.Interop.IConnectionPoint;
+using IOleConnectionPointContainer = Microsoft.VisualStudio.OLE.Interop.IConnectionPointContainer;
 
 namespace Ankh
 {
@@ -235,7 +237,7 @@ namespace Ankh
 
             Guid gType = typeof(T).GUID;
             IntPtr instance;
-            Marshal.ThrowExceptionForHR(registry.CreateInstance(classType.GUID, null, ref gType, 
+            Marshal.ThrowExceptionForHR(registry.CreateInstance(classType.GUID, null, ref gType,
                 (uint)Microsoft.VisualStudio.OLE.Interop.CLSCTX.CLSCTX_INPROC_SERVER, out instance));
 
             try
@@ -269,12 +271,127 @@ namespace Ankh
 
         void SiteObject(object instance, object site)
         {
-            if(instance == null)
+            if (instance == null)
                 throw new ArgumentNullException("instance");
 
             IObjectWithSite sitedObject = instance as IObjectWithSite;
             if (sitedObject != null)
                 sitedObject.SetSite(site);
+        }
+
+        /// <summary>
+        /// Tries to hook the specified connection point.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="container">The container.</param>
+        /// <param name="sink">The sink.</param>
+        /// <param name="cookie">The cookie.</param>
+        /// <returns></returns>
+        [CLSCompliant(false)]
+        protected static bool TryHookConnectionPoint<T>(object container, T sink, out uint cookie)
+            where T : class
+        {
+            return TryHookConnectionPoint<T, T>(container, sink, out cookie);
+        }
+
+        /// <summary>
+        /// Tries to hook the specified connection point.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="container">The container.</param>
+        /// <param name="sink">The sink.</param>
+        /// <param name="cookie">The cookie.</param>
+        /// <returns></returns>
+        [CLSCompliant(false)]
+        protected static bool TryHookConnectionPoint<T, S>(object container, T sink, out uint cookie)
+            where T : class
+            where S : class
+        {
+            return TryHookConnectionPoint<T>(container, typeof(S), sink, out cookie);
+        }
+
+        /// <summary>
+        /// Tries to hook the specified connection point.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="container">The container.</param>
+        /// <param name="connectionType">Type of the connection.</param>
+        /// <param name="sink">The sink.</param>
+        /// <param name="cookie">The cookie.</param>
+        /// <returns></returns>
+        [CLSCompliant(false)]
+        protected static bool TryHookConnectionPoint<T>(object container, Type connectionType, T sink, out uint cookie)
+            where T : class
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            else if (connectionType == null)
+                throw new ArgumentNullException("connectionType");
+            else if (sink == null)
+                throw new ArgumentNullException("sink");
+
+            IOleConnectionPointContainer ct = container as IOleConnectionPointContainer;
+            if (ct == null)
+            {
+                cookie = 0;
+                return false;
+            }
+
+            Guid cpGuid = connectionType.GUID;
+            IOleConnectionPoint point;
+            ct.FindConnectionPoint(ref cpGuid, out point);
+
+            if (point == null)
+            {
+                cookie = 0;
+                return false;
+            }
+
+            point.Advise(sink, out cookie);
+            return true;
+        }
+
+        /// <summary>
+        /// Releases the hook.
+        /// </summary>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="container">The container.</param>
+        /// <param name="cookie">The cookie.</param>
+        [CLSCompliant(false)]
+        protected static void ReleaseHook<S>(object container, uint cookie)
+            where S : class
+        {
+            ReleaseHook(container, typeof(S), cookie);
+        }
+
+        /// <summary>
+        /// Releases the hook.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="connectionType">Type of the connection.</param>
+        /// <param name="cookie">The cookie.</param>
+        [CLSCompliant(false)]
+        protected static void ReleaseHook(object container, Type connectionType, uint cookie)
+        {
+            if (container == null)
+                throw new ArgumentNullException("container");
+            else if (connectionType == null)
+                throw new ArgumentNullException("connectionType");
+
+            if (cookie == 0)
+                return;
+
+            IOleConnectionPointContainer ct = container as IOleConnectionPointContainer;
+            if (ct == null)
+                return;
+
+            Guid cpGuid = connectionType.GUID;
+            IOleConnectionPoint point;
+            ct.FindConnectionPoint(ref cpGuid, out point);
+
+            if (point != null)
+                point.Unadvise(cookie);
         }
 
         #region IOleServiceProvider Members

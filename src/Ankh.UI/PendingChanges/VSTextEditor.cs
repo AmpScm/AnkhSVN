@@ -1054,24 +1054,13 @@ namespace Ankh.UI.PendingChanges
         uint _textEventsCookie;
         void HookEvents(bool hook)
         {
-            IConnectionPointContainer container = _textView as IConnectionPointContainer;
-            if (container != null)
+            if (hook && _textEventsCookie == 0)
+                TryHookConnectionPoint<IVsTextViewEvents>(_textView, this, out _textEventsCookie);
+            else if (!hook && _textEventsCookie != 0)
             {
-                IConnectionPoint point;
-                Guid textViewEventsId = typeof(IVsTextViewEvents).GUID;
-                container.FindConnectionPoint(ref textViewEventsId, out point);
-                if (point != null)
-                {
-                    if (hook)
-                    {
-                        point.Advise(this, out _textEventsCookie);
-                    }
-                    else
-                    {
-                        point.Unadvise(_textEventsCookie);
-                        _textEventsCookie = 0;
-                    }
-                }
+                uint ck = _textEventsCookie;
+                _textEventsCookie = 0;
+                ReleaseHook<IVsTextViewEvents>(_textView, ck);
             }
         }
     }

@@ -23,12 +23,14 @@ using Microsoft.VisualStudio;
 
 namespace Ankh.Scc
 {
+#if DEBUG
+    // Currently unused in production code
     [GlobalService(typeof(IAnkhTextEditingTracker))]
+#endif
     class TextEditingTracker : AnkhService, IAnkhTextEditingTracker, IVsTextManagerEvents2
     {
         IVsTextManager _manager;
         IVsTextManager2 _manager2;
-        IConnectionPoint _connectionPoint;
         uint _cookie;
 
         public TextEditingTracker(IAnkhServiceProvider context)
@@ -43,38 +45,29 @@ namespace Ankh.Scc
 
         IVsTextManager2 Manager2
         {
-            get { return _manager2 ?? (_manager2 = GetService<IVsTextManager2>(typeof(SVsTextManager))); }
+            get { return _manager2 ?? (_manager2 = Manager as IVsTextManager2); }
         }
 
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
-            IConnectionPointContainer ct = Manager2 as IConnectionPointContainer ?? Manager as IConnectionPointContainer;
-
-            if (ct != null)
-            {
-                Guid gv = typeof(IVsTextManagerEvents2).GUID;
-
-                ct.FindConnectionPoint(ref gv, out _connectionPoint);
-
-                if (_connectionPoint != null)
-                {
-                    _connectionPoint.Advise(this, out _cookie);
-                }                
-            }
+            TryHookConnectionPoint<IVsTextManagerEvents2>(Manager, this, out _cookie);
         }
 
         protected override void Dispose(bool disposing)
         {
             try
             {
-                if (_connectionPoint != null)
-                    _connectionPoint.Unadvise(_cookie);
+                if (_cookie != 0)
+                {
+                    uint ck = _cookie;
+                    _cookie = 0;
+                    ReleaseHook<IVsTextManagerEvents2>(Manager, _cookie);
+                }
             }
             finally
             {
-                _connectionPoint = null;
                 base.Dispose(disposing);
             }
         }
