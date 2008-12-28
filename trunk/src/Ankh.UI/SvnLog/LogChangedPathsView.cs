@@ -239,7 +239,7 @@ namespace Ankh.UI.SvnLog
         {
             get { return _lvi.LogItem.Revision; }
         }
-
+        
         [Category("Subversion")]
         [DisplayName("Last Author")]
         public string Author
@@ -270,6 +270,26 @@ namespace Ankh.UI.SvnLog
         protected override string ComponentName
         {
             get { return Origin.Target.FileName; }
+        }
+
+        SvnRevision ISvnRepositoryItem.Revision
+        {
+            get { return Revision; }
+        }
+
+        SvnNodeKind ISvnRepositoryItem.NodeKind
+        {
+            get { return SvnNodeKind.Unknown; }
+        }
+
+        SvnOrigin ISvnRepositoryItem.Origin
+        {
+            // We don't have a repository item when we are deleted!
+            get { return (Action != SvnChangeAction.Delete) ? Origin : null; }
+        }
+
+        void ISvnRepositoryItem.RefreshItem(bool refreshParent)
+        {
         }
     }
 }

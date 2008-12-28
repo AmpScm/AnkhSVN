@@ -76,8 +76,7 @@ namespace Ankh.Ids
         /// </summary>
         SvnNodeAnnotate,
         Checkout,
-        [Obsolete]
-        CheckoutFolder,
+        CopyToWorkingCopy,
         [Obsolete]
         CheckoutSolution,
         Cleanup,
