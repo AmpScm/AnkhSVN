@@ -23,8 +23,8 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowLogMessage)]
-    class ShowLogMessage: ICommandHandler
+    [Command(AnkhCommand.LogShowLogMessage, AlwaysAvailable = true)]
+    class ShowLogMessage : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -35,7 +35,7 @@ namespace Ankh.UI.SvnLog.Commands
                 e.Enabled = false;
                 return;
             }
-            
+
             e.Checked = lc.ShowLogMessage;
         }
 

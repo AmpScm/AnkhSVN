@@ -23,7 +23,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogFetchAll)]
+    [Command(AnkhCommand.LogFetchAll, AlwaysAvailable=true)]
     class FetchAll : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

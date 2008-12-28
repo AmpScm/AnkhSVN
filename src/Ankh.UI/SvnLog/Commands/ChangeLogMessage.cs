@@ -28,13 +28,13 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogChangeLogMessage, HideWhenDisabled = true)]
+    [Command(AnkhCommand.LogChangeLogMessage, AlwaysAvailable = true)]
     class ChangeLogMessage : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             int count = 0;
-			foreach (ISvnLogItem i in e.Selection.GetSelection<ISvnLogItem>())
+            foreach (ISvnLogItem i in e.Selection.GetSelection<ISvnLogItem>())
             {
                 count++;
 
@@ -49,7 +49,7 @@ namespace Ankh.UI.SvnLog.Commands
         {
             ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
             IAnkhSolutionSettings slnSettings = e.GetService<IAnkhSolutionSettings>();
-			List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
+            List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
             if (logItems.Count != 1)
                 return;
 
@@ -60,18 +60,18 @@ namespace Ankh.UI.SvnLog.Commands
 
                 if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                 {
-					if (dialog.LogMessage == logItems[0].LogMessage)
-						return; // No changes
+                    if (dialog.LogMessage == logItems[0].LogMessage)
+                        return; // No changes
 
                     using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
                     {
                         client.SetRevisionProperty(new SvnUriTarget(logItems[0].RepositoryRoot, logItems[0].Revision), SvnPropertyNames.SvnLog, dialog.LogMessage);
                     }
-                    
+
                     logWindow.Restart();
                     // TODO: Somehow repair scroll position/number of items loaded
                 }
             }
-        }   
+        }
     }
 }

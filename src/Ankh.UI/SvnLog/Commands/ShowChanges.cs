@@ -29,14 +29,14 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowChanges)]
+    [Command(AnkhCommand.LogShowChanges, AlwaysAvailable = true)]
     class ShowChanges : ICommandHandler
     {
         TempFileCollection _collection = new TempFileCollection();
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            
+
             if (logWindow == null || logWindow.Origins == null)
             {
                 e.Enabled = false;
@@ -63,7 +63,7 @@ namespace Ankh.UI.SvnLog.Commands
                 first = origin;
             }
 
-            if(first == null)
+            if (first == null)
             {
                 e.Enabled = false;
                 return;
@@ -141,35 +141,35 @@ namespace Ankh.UI.SvnLog.Commands
                 touched = true;
             }
 
-            if(touched)
+            if (touched)
             {
-                ExecuteDiff(e, log.Origins, new SvnRevisionRange(min-1, max));
+                ExecuteDiff(e, log.Origins, new SvnRevisionRange(min - 1, max));
                 return true;
             }
 
             return false;
         }
-        
+
         void PerformFileChanges(CommandEventArgs e)
         {
             ISvnLogChangedPathItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogChangedPathItem>());
 
-            if(item != null)
+            if (item != null)
             {
-                switch(item.Action)
+                switch (item.Action)
                 {
                     case SvnChangeAction.Delete:
                         return;
                     case SvnChangeAction.Add:
                     case SvnChangeAction.Replace:
-                        if(item.CopyFromRevision < 0)
+                        if (item.CopyFromRevision < 0)
                             return;
                         break;
                 }
 
-                ExecuteDiff(e, new SvnOrigin[] { item.Origin }, new SvnRevisionRange(item.Revision-1, item.Revision));
-            }            
-        }        
+                ExecuteDiff(e, new SvnOrigin[] { item.Origin }, new SvnRevisionRange(item.Revision - 1, item.Revision));
+            }
+        }
 
         void ExecuteDiff(CommandEventArgs e, ICollection<SvnOrigin> targets, SvnRevisionRange range)
         {
@@ -183,7 +183,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             string[] files = diff.GetTempFiles(diffTarget, range.StartRevision, range.EndRevision, true);
 
-            da.BaseFile = files[0];            
+            da.BaseFile = files[0];
             da.MineFile = files[1];
             da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);

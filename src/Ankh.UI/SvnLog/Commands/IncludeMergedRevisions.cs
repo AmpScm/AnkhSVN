@@ -23,7 +23,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogIncludeMergedRevisions)]
+    [Command(AnkhCommand.LogIncludeMergedRevisions, AlwaysAvailable=true)]
     class IncludeMergedRevisions : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)

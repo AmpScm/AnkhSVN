@@ -16,14 +16,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowChangedPaths)]
+    [Command(AnkhCommand.LogShowChangedPaths, AlwaysAvailable = true)]
     class ShowChangedPaths : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -36,7 +35,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
             }
 
-            e.Checked = lc.ShowChangedPaths;            
+            e.Checked = lc.ShowChangedPaths;
         }
 
         public void OnExecute(CommandEventArgs e)

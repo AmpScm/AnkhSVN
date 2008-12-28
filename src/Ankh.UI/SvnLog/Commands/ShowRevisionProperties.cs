@@ -28,7 +28,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogShowRevisionProperties, HideWhenDisabled = true)]
+    [Command(AnkhCommand.LogShowRevisionProperties, AlwaysAvailable = true)]
     class ShowRevisionProperties : ICommandHandler
     {
         #region ICommandHandler Members
@@ -53,7 +53,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return;
 
             ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
-         
+
             ISvnLogItem selectedLog = logItems[0];
             SvnUriTarget uriTarget = new SvnUriTarget(selectedLog.RepositoryRoot, selectedLog.Revision);
             IUIService ui = e.GetService<IUIService>();

@@ -17,11 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using SharpSvn;
 using Ankh.Commands;
 using Ankh.Ids;
-using Ankh.Scc.UI;
 using Ankh.Scc;
-using SharpSvn;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
