@@ -21,14 +21,14 @@ using SharpSvn;
 
 namespace Ankh.Scc
 {
-	public interface ISvnLogChangedPathItem
+	public interface ISvnLogChangedPathItem : ISvnRepositoryItem
 	{
 		SvnChangeAction Action { get; }
 		string CopyFromPath { get; }
 		long CopyFromRevision { get; }
 		string Path { get; }
-        long Revision { get; }
+        new long Revision { get; }
 
-        SvnOrigin Origin { get; }
+        new SvnOrigin Origin { get; }
 	}
 }

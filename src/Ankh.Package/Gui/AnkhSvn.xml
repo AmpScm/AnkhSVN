@@ -438,6 +438,8 @@
         <Group id="Grp_RepositoryExplorerEdit" priority="0x300">
           <ButtonRef id="CLSID_StandardCommandSet97:cmdidCopy" priority="0x100" />
           <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
+          <Button id="Cmd_CopyToWorkingCopy" name="SvnCopyToWorkingCopy" priority="0x700"
+                  text="Copy to &amp;Working Copy..." dynamicVisibility="true" />
           <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
                   iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
           <Button id="Cmd_RenameRepositoryItem" name="Rename" priority="0x900"
@@ -517,6 +519,7 @@
           <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
                   text="Annotate revision" iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
+          <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
       </Menu>
     </GroupRef>
