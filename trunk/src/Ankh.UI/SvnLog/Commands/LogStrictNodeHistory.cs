@@ -23,7 +23,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogStrictNodeHistory)]
+    [Command(AnkhCommand.LogStrictNodeHistory, AlwaysAvailable=true)]
     class LogStrictNodeHistory:ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
