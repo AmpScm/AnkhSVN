@@ -779,6 +779,7 @@ namespace Ankh.Services
                 f1 = GetTempPath(target.FileName, from);
                 f2 = GetTempPath(target.FileName, to);
 
+                int n = 0;
                 Context.GetService<IProgressRunner>().RunModal("Getting revisions",
                     delegate(object sender, ProgressWorkerArgs e)
                     {
@@ -786,7 +787,6 @@ namespace Ankh.Services
                         ea.Start = from;
                         ea.End = to;
 
-                        int n = 0;
                         e.Client.FileVersions(target, ea,
                             delegate(object sender2, SvnFileVersionEventArgs e2)
                             {
@@ -796,6 +796,14 @@ namespace Ankh.Services
                                     e2.WriteTo(f2);
                             });
                     });
+
+                if (n != 2)
+                {
+                    // Sloooooow workaround for SvnBridge / Codeplex
+
+                    f1 = GetTempFile(target, from, withProgress);
+                    f2 = GetTempFile(target, to, withProgress);
+                }
             }
             else
             {
