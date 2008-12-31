@@ -30,3 +30,4 @@ Patches:
 * Ste Robbins
 * Daniël Hoelbling
 * Luc Morin
+* Stefano Mioli

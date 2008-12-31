@@ -85,10 +85,19 @@ namespace Ankh.UI
         {
             string text = "";
 
-            if(logMessageList.SelectedItems.Count == 1)
+            if(logMessageList.SelectedItems.Count >= 1)
             {
-                ListViewItem item = logMessageList.SelectedItems[0];
-                text = item.Text;
+                StringBuilder msg = new StringBuilder();
+                bool next = false;
+                foreach (ListViewItem item in logMessageList.SelectedItems)
+                {
+                    if(next)
+                        msg.AppendLine();
+                    else
+                        next = true;
+                    msg.Append(item.Text);
+                }
+                text = msg.ToString();
             }
 
             previewBox.Text = _selectedText = text;
