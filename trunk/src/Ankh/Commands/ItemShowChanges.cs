@@ -180,19 +180,24 @@ namespace Ankh.Commands
             {
                 AnkhDiffArgs da = new AnkhDiffArgs();
 
-                if (item.Status.IsCopied && !item.IsReplaced && (!revRange.StartRevision.RequiresWorkingCopy || revRange.StartRevision == SvnRevision.Base))
+                if ((item.Status.IsCopied || item.IsReplaced) &&
+                    (!revRange.StartRevision.RequiresWorkingCopy || !revRange.EndRevision.RequiresWorkingCopy))
                 {
-                    // The file is copied, compare it with is origin
+                    // The file is copied, use its origins history instead of that of the new file
                     SvnUriTarget copiedFrom = diff.GetCopyOrigin(item);
 
-                    if (copiedFrom != null)
+                    // TODO: Maybe handle Previous/Committed as history
+
+                    if (copiedFrom != null && !revRange.StartRevision.RequiresWorkingCopy)
                     {
-                        if (revRange.StartRevision == SvnRevision.Base)
-                            revRange = new SvnRevisionRange(copiedFrom.Revision, revRange.EndRevision);
-
                         da.BaseFile = diff.GetTempFile(copiedFrom, revRange.StartRevision, true);
-
                         da.BaseTitle = diff.GetTitle(copiedFrom, revRange.StartRevision);
+                    }
+
+                    if (copiedFrom != null && !revRange.EndRevision.RequiresWorkingCopy)
+                    {
+                        da.MineFile = diff.GetTempFile(copiedFrom, revRange.EndRevision, true);
+                        da.MineTitle = diff.GetTitle(copiedFrom, revRange.EndRevision);
                     }
                 }
 
@@ -205,11 +210,13 @@ namespace Ankh.Commands
                     da.BaseTitle = diff.GetTitle(item, revRange.StartRevision);
                 }
 
-                da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
-                    diff.GetTempFile(item, revRange.EndRevision, true);
+                if (da.MineFile == null)
+                {
+                    da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
+                        diff.GetTempFile(item, revRange.EndRevision, true);
 
-
-                da.MineTitle = diff.GetTitle(item, revRange.EndRevision);
+                    da.MineTitle = diff.GetTitle(item, revRange.EndRevision);
+                }
 
                 diff.RunDiff(da);
             }

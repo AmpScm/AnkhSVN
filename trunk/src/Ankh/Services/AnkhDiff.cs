@@ -253,13 +253,17 @@ namespace Ankh.Services
 
         public SvnUriTarget GetCopyOrigin(SvnItem item)
         {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            // TODO: Maybe handle cases where the parent was copied instead of the child?
+
             SvnUriTarget copiedFrom = null;
             using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
             {
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.ThrowOnError = false;
                 ia.Depth = SvnDepth.Empty;
-
 
                 client.Info(item.FullPath, ia,
                     delegate(object sender, SvnInfoEventArgs ee)
