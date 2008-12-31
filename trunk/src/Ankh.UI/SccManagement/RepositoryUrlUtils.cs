@@ -27,6 +27,7 @@ namespace Ankh.UI.SccManagement
         public Uri WorkingRoot;
         public Uri WholeProjectRoot;
         public Uri BranchesRoot;
+        public Uri TagsRoot;
     }
 
     public static class RepositoryUrlUtils
@@ -53,7 +54,6 @@ namespace Ankh.UI.SccManagement
                 path = '/' + path;
             if (path[path.Length - 1] != '/')
                 path += '/';
-            
 
             if (string.IsNullOrEmpty(path) || path.Length == 1)
                 return false;
@@ -84,38 +84,29 @@ namespace Ankh.UI.SccManagement
                 return true;
             }
 
-            r = path;
-
-            while (r.Length > 0 && !r.EndsWith("/branches/", StringComparison.OrdinalIgnoreCase))
-            {
-                int n = r.LastIndexOf('/', r.Length - 1);
-
-                if (n >= 0)
-                {
-                    int lastCharIndex = r.Length - 1;
-                    // if '/' is the last character, strip and continue
-                    // otherwise include '/' to give "/branches/" check a chance
-                    r = r.Substring(0, (n == lastCharIndex) ? n : (n + 1));
-                }
-                else
-                    r = "";
-            }
-
-            if (!string.IsNullOrEmpty(r))
-            {
-                info = new RepositoryLayoutInfo();
-
-                string dir = (path.Length > r.Length) ? path.Substring(0, path.IndexOf('/', r.Length)) : path;
-
-                info.WorkingRoot = new Uri(uri, dir);
-                info.WholeProjectRoot = new Uri(uri, r.Substring(0, r.Length - 9));
-                info.BranchesRoot = new Uri(info.WholeProjectRoot, r.Substring(r.Length - 9, 9)); // 'branches/' but with repos casing
+            if (TryFindBranch(uri, path, "branches", true, out info))
                 return true;
-            }
+            else if (TryFindBranch(uri, path, "tags", false, out info))
+                return true;
+            else if (TryFindBranch(uri, path, "releases", false, out info))
+                return true;
 
-            r = path;
+            info = new RepositoryLayoutInfo();
+            info.WorkingRoot = uri;
+            info.WholeProjectRoot = new Uri(uri, "../");
+            info.BranchesRoot = new Uri(info.WorkingRoot, "branches/");
+            info.TagsRoot = new Uri(info.WorkingRoot, "tags/");
+            return true;
+        }
 
-            while (r.Length > 0 && !r.EndsWith("/tags/", StringComparison.OrdinalIgnoreCase))
+        private static bool TryFindBranch(Uri uri, string path, string name, bool branch, out RepositoryLayoutInfo info)
+        {
+            info = null;
+            string r = path;
+
+            name = '/' + name + '/';
+
+            while (r.Length > 0 && !r.EndsWith(name, StringComparison.OrdinalIgnoreCase))
             {
                 int n = r.LastIndexOf('/', r.Length - 1);
 
@@ -138,15 +129,18 @@ namespace Ankh.UI.SccManagement
 
                 info.WorkingRoot = new Uri(uri, dir);
                 info.WholeProjectRoot = new Uri(uri, r);
-                info.BranchesRoot = new Uri(info.WholeProjectRoot, r.Substring(r.Length - 5, 5)); // 'tags/' but with repos casing
+                info.BranchesRoot = new Uri(info.WorkingRoot, "branches/"); // Always set some branches suggestion?
+                
+                Uri itemRoot = new Uri(info.WholeProjectRoot, r.Substring(r.Length - name.Length + 1, name.Length-1)); // 'tags/' but with repos casing
+
+                if (branch)
+                    info.BranchesRoot = itemRoot;
+                else
+                    info.TagsRoot = itemRoot;
                 return true;
             }
 
-            info = new RepositoryLayoutInfo();
-            info.WorkingRoot = uri;
-            info.WholeProjectRoot = new Uri(uri, "../");
-            info.BranchesRoot = new Uri(info.WorkingRoot, "branches/");
-            return true;
+            return false;
         }
     }
 }
