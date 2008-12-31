@@ -67,7 +67,7 @@ namespace Ankh.Commands
                 {
                     if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
                     {
-                        if (!(item.IsModified || item.IsDocumentDirty))
+                        if (!(item.IsModified || item.IsDocumentDirty) || item.IsDeleteScheduled)
                             continue;
                     }
 
