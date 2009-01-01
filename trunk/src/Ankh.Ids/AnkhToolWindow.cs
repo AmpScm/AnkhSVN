@@ -25,6 +25,7 @@ namespace Ankh.Ids
 
     public enum AnkhToolWindow
     {
+        None=0,
         RepositoryExplorer,
         WorkingCopyExplorer,
         PendingChanges,
