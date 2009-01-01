@@ -30,7 +30,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN Team")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

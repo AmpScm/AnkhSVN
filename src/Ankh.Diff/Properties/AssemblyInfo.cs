@@ -19,6 +19,7 @@ using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Ankh.Ids;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -28,9 +29,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyDescription("AnkhSVN - Subversion support for Visual Studio")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AnkhSVN Team")]
-[assembly: AssemblyProduct("AnkhSVN - Subversion support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2003-2008")]
+[assembly: AssemblyCompany(AnkhId.AssemblyCompany)]
+[assembly: AssemblyProduct(AnkhId.AssemblyProduct)]
+[assembly: AssemblyCopyright(AnkhId.AssemblyCopyright)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
