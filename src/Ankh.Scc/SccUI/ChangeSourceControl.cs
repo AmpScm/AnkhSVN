@@ -24,6 +24,10 @@ using Ankh.Selection;
 using Ankh.Scc;
 using Ankh.UI;
 using Ankh.VS;
+using System.Diagnostics;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.Scc.SccUI
 {
@@ -52,54 +56,109 @@ namespace Ankh.Scc.SccUI
                     if (renderer != null)
                         toolStrip1.Renderer = renderer;
                 }
+
+                IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
+
+                if (settings.SolutionFilename != null)
+                    Text += " - " + Path.GetFileName(settings.SolutionFilename);
             }
 
             if (bindingGrid != null)
-                RefreshGrid(true);            
+                InitializeGrid();
         }
 
-        private void RefreshGrid(bool refreshCombo)
+        private void InitializeGrid()
         {
             bindingGrid.Rows.Clear();
 
             if (Context == null)
                 return;
 
-            IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
-            IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
-
-            if (settings == null || mapper == null || cache == null ||
-                string.IsNullOrEmpty(settings.SolutionFilename))
+            if (string.IsNullOrEmpty(SolutionSettings.SolutionFilename))
             {
                 return;
             }
 
             // TODO: Optimize to one time init and then just refresh
             bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
-            foreach (SvnProject project in mapper.GetAllProjects())
+            foreach (SvnProject project in ProjectMapper.GetAllProjects())
             {
-                if(project.IsSolution)
+                if (project.IsSolution)
                     continue;
 
-                ISvnProjectInfo projectInfo = mapper.GetProjectInfo(project);
-                
-                if(projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+
+                if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
                     continue;
 
                 bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, project));
             }
             // /TODO
 
+            RefreshGrid();
+        }
+
+        AnkhSccProvider _scc;
+        AnkhSccProvider Scc
+        {
+            get { return _scc ?? (_scc = Context.GetService<AnkhSccProvider>(typeof(IAnkhSccService))); }
+        }
+
+        void RefreshGrid()
+        {
             foreach (ChangeSourceControlRow row in bindingGrid.Rows)
             {
                 row.Refresh();
             }
 
-            if (!refreshCombo)
-                return;
+            bool enableConnect = false;
+            bool enableDisconnect = false;
 
-            SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
+            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
+
+            bool isSolution = false;
+            foreach (SvnProject project in SelectedProjects)
+            {
+                if (project.IsSolution)
+                    isSolution = true;
+
+                if (scc.IsProjectManaged(project))
+                    enableDisconnect = true;
+                else if (!enableConnect)
+                {
+                    SvnItem item = null;
+                    if (!project.IsSolution)
+                    {
+                        ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
+
+                        if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                            continue;
+
+                        item = StatusCache[projectInfo.SccBaseDirectory];
+                    }
+                    else
+                        item = SolutionSettings.ProjectRootSvnItem;
+
+                    if (item != null && item.Status.Uri != null)
+                        enableConnect = true;
+                }
+
+                if (enableConnect && enableDisconnect && isSolution)
+                    break;
+            }
+
+            EnableTab(solutionSettingsTab, isSolution);
+            EnableTab(sharedSettingsTab, !isSolution);
+            EnableTab(userSettingsTab, !isSolution);
+
+            UpdateSettingTabs();
+
+            connectButton.Enabled = enableConnect;
+            disconnectButton.Enabled = enableDisconnect;
+
+            UpdateSettingTabs();
+
+            /*SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
             SvnWorkingCopy wc = slnDirItem.WorkingCopy;
 
             if (wc != null && slnDirItem.Status.Uri != null)
@@ -111,14 +170,14 @@ namespace Ankh.Scc.SccUI
                 while (dirItem != null && dirItem.IsBelowPath(wc.FullPath))
                 {
                     UriMap value = new UriMap(cur, dirItem.FullPath);
-                    solutionRootBox.Items.Add(value);
+                    slnBindPath.Items.Add(value);
 
                     if (setUri == value.Uri)
-                        solutionRootBox.SelectedItem = value;
+                        slnBindPath.SelectedItem = value;
                     dirItem = dirItem.Parent;
                     cur = new Uri(cur, "../");
                 }
-            }
+            }*/
         }
 
         class UriMap
@@ -150,7 +209,7 @@ namespace Ankh.Scc.SccUI
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
-            RefreshGrid(true);
+            RefreshGrid();
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -158,8 +217,8 @@ namespace Ankh.Scc.SccUI
             if (Context == null)
                 return;
 
-            IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
-            UriMap map = solutionRootBox.SelectedItem as UriMap;
+            /*IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
+            UriMap map = slnBindPath.SelectedItem as UriMap;
 
             if (map == null)
                 return;
@@ -167,7 +226,7 @@ namespace Ankh.Scc.SccUI
             if (settings.ProjectRootUri != null && map.Uri != settings.ProjectRootUri)
             {
                 settings.ProjectRoot = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(settings.SolutionFilename), map.Value));
-            }
+            }*/
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -182,7 +241,7 @@ namespace Ankh.Scc.SccUI
                 scc.SetProjectManaged(project, true);
             }
 
-            RefreshGrid(false);
+            RefreshGrid();
         }
         private void disconnectButton_Click(object sender, EventArgs e)
         {
@@ -196,7 +255,25 @@ namespace Ankh.Scc.SccUI
                 scc.SetProjectManaged(project, false);
             }
 
-            RefreshGrid(false);
+            RefreshGrid();
+        }
+
+        IProjectFileMapper _projectMapper;
+        IProjectFileMapper ProjectMapper
+        {
+            get { return _projectMapper ?? (_projectMapper = Context.GetService<IProjectFileMapper>()); }
+        }
+
+        IFileStatusCache _fileCache;
+        IFileStatusCache StatusCache
+        {
+            get { return _fileCache ?? (_fileCache = Context.GetService<IFileStatusCache>()); }
+        }
+
+        IAnkhSolutionSettings _solutionSettings;
+        IAnkhSolutionSettings SolutionSettings
+        {
+            get { return _solutionSettings ?? (_solutionSettings = Context.GetService<IAnkhSolutionSettings>()); }
         }
 
         IEnumerable<SvnProject> SelectedProjects
@@ -219,63 +296,146 @@ namespace Ankh.Scc.SccUI
 
         private void bindingGrid_SelectionChanged(object sender, EventArgs e)
         {
-            if(DesignMode)
+            if (DesignMode)
                 return;
 
-            bool enableConnect = false;
-            bool enableDisconnect = false;
+            RefreshGrid();
+        }
 
-            IAnkhSccService scc = Context.GetService<IAnkhSccService>();
-            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
-            IProjectFileMapper mapper = Context.GetService<IProjectFileMapper>();
-            IAnkhSolutionSettings solset = Context.GetService<IAnkhSolutionSettings>();
+        private void EnableTab(TabPage tab, bool enable)
+        {
+            if (enable == settingsTabControl.Controls.Contains(tab))
+                return;
 
-            bool isSolution = false;
-            foreach (SvnProject project in SelectedProjects)
+            Control activeControl = ActiveControl;
+
+            if (enable)
+                settingsTabControl.Controls.Add(tab);
+            else
+                settingsTabControl.Controls.Remove(tab);
+
+            if (activeControl != ActiveControl)
+                ActiveControl = activeControl;
+        }
+
+        private void UpdateSettingTabs()
+        {
+            string projectBase = null;
+            string relativePath = null;
+            string projectLocation = null;
+            bool first = true;
+            Uri projectUri = null;
+
+            foreach (SvnProject p in SelectedProjects)
             {
-                if (project.IsSolution)
-                    isSolution = true;
-                if (scc.IsProjectManaged(project))
-                    enableDisconnect = true;
-                else if(!enableConnect)
+                ISvnProjectInfo info;
+                if (p.IsSolution ||
+                    null == (info = ProjectMapper.GetProjectInfo(p)) ||
+                    string.IsNullOrEmpty(info.ProjectDirectory))
                 {
-                    string dir;
-                    if (project != null)
-                    {
-                        ISvnProjectInfo projectInfo = mapper.GetProjectInfo(project);
-
-                        if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
-                            continue;
-
-                        dir = projectInfo.ProjectDirectory;
-                    }
-                    else if (string.IsNullOrEmpty(solset.SolutionFilename))
-                        continue;
-                    else
-                        dir = Path.GetDirectoryName(solset.SolutionFilename);
-
-                    SvnItem item = cache[dir];
-
-                    if (item.Status.Uri != null)
-                        enableConnect = true;
+                    projectBase = null;
+                    break;
                 }
 
-                if (enableConnect && enableDisconnect && isSolution)
-                    break;
+                string pBase = info.SccBaseDirectory;
+                string relPath = info.ProjectDirectory;
+                string pLoc = null;
+                Uri pUri;
+
+                if (relPath.StartsWith(info.SccBaseDirectory))
+                {
+                    int pdLen = info.ProjectDirectory.Length;
+                    int sccLen = info.SccBaseDirectory.Length;
+
+                    if (pdLen == sccLen)
+                        relPath = ".";
+                    else if (sccLen < pdLen && info.ProjectDirectory[sccLen] == Path.DirectorySeparatorChar)
+                        relPath = info.ProjectDirectory.Substring(sccLen + 1);
+                    else
+                        relPath = info.ProjectDirectory;
+                }
+
+                if (p.RawHandle != null)
+                {
+                    IVsProject2 ps = p.RawHandle as IVsProject2;
+
+                    if (ps != null)
+                    {
+                        string doc;
+                        if (ErrorHandler.Succeeded(ps.GetMkDocument(VSConstants.VSITEMID_ROOT, out doc)))
+                        {
+                            if (!string.IsNullOrEmpty(doc) && SvnItem.IsValidPath(doc))
+                                pLoc = PackageUtilities.MakeRelative(SolutionSettings.SolutionFilename, doc);
+                            else
+                                pLoc = doc;
+                        }
+                    }
+                }
+
+                pUri = info.SccBaseUri;
+
+                if (pUri == null && pBase != null)
+                {
+                    SvnItem pi = StatusCache[pBase];
+
+                    if (pi != null)
+                        pUri = pi.Status.Uri;
+                }
+
+                KeepOneIgnoreCase(ref projectBase, pBase, first);
+                KeepOneIgnoreCase(ref relativePath, relPath, first);
+                KeepOneIgnoreCase(ref projectLocation, pLoc, first);
+
+                KeepOne(ref projectUri, pUri, first);
+
+                first = false;
             }
 
-            connectButton.Enabled = enableConnect;
-            disconnectButton.Enabled = enableDisconnect;
-
-            bool contains = tabControl1.Controls.Contains(solutionTab);
-
-            if (isSolution && !contains)
+            if (projectBase == null)
             {
-                tabControl1.Controls.Add(solutionTab);
-                tabControl1.SelectedTab = solutionTab;
+                relativePath = null;
+                projectLocation = null;
             }
-            else if (!isSolution && contains)
-                tabControl1.Controls.Remove(solutionTab);
+
+            shProjectLocation.Text = projectLocation ?? "";
+            shBindPath.Text = projectBase ?? "";
+            shRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
+            shProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
+
+            usProjectLocation.Text = projectBase ?? "";
+            usBindPath.Text = relativePath ?? "";
+            usRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
+            usProjectUrl.Text = (projectUri != null) ? usProjectUrl.ToString() : "";
+
+            slnProjectLocation.Text = SolutionSettings.SolutionFilename;
+            slnBindPath.Text = SolutionSettings.ProjectRoot;
+
+            string slRelativePath = Path.GetDirectoryName(PackageUtilities.MakeRelative(SolutionSettings.ProjectRoot, SolutionSettings.SolutionFilename));
+
+            slnRelativePath.Text = string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
+
+            slnBindUrl.Text = (SolutionSettings.ProjectRootUri != null) ? SolutionSettings.ProjectRootUri.ToString() : "";
+        }
+
+        private void KeepOneIgnoreCase(ref string result, string newValue, bool first)
+        {
+            if (first)
+                result = newValue;
+            else if (result == null || string.Equals(result, newValue, StringComparison.OrdinalIgnoreCase))
+                return;
+            else
+                result = null;
+        }
+
+        void KeepOne<T>(ref T result, T value, bool first)
+            where T : class
+        {
+            if (first)
+                result = value;
+            else if (result == null || result.Equals(value))
+                return;
+            else
+                result = null;
         }
     }
 }

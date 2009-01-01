@@ -54,6 +54,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <value>The SCC base directory.</value>
         /// <remarks>The SCC base directory is the project directory or one of its parents</remarks>
-        string SccBaseDirectory { get; }
+        string SccBaseDirectory { get; set;  }
+
+        /// <summary>
+        /// Gets or sets the SCC base URI.
+        /// </summary>
+        /// <value>The SCC base URI.</value>
+        Uri SccBaseUri { get; set; }
     }
 }

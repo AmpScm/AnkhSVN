@@ -112,39 +112,110 @@ namespace Ankh.Scc.SccUI
                 SvnItem rootItem = SolutionSettings.ProjectRootSvnItem;
 
                 SetValues(
-                    "Solution: " + Path.GetFileNameWithoutExtension(SolutionSettings.SolutionFilename),
-                    SafeToString(rootItem.Status.Uri),
                     Scc.IsSolutionManaged,
-                    Scc.IsSolutionManaged ? "Ok" : "Not Controlled",
-                    rootItem.FullPath,
-                    EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, Path.GetDirectoryName(SolutionSettings.SolutionFilename)))
+                    "Solution: " + Path.GetFileNameWithoutExtension(SolutionSettings.SolutionFilename),
+                    SafeRepositoryRoot(rootItem),
+                    SafeRepositoryPath(rootItem),                    
+                    GetStatus(rootItem, null, SolutionSettings.SolutionFilename),
+                    EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, Path.GetDirectoryName(SolutionSettings.SolutionFilename))),                    
+                    rootItem.FullPath
                     );
             }
             else if(null != (projectInfo = ProjectMap.GetProjectInfo(_project)) && null != (projectInfo.ProjectDirectory))
             {
-                SvnItem dirItem = Cache[projectInfo.ProjectDirectory];
+                SvnItem dirItem = Cache[projectInfo.SccBaseDirectory];
 
                 SetValues(
-                    projectInfo.UniqueProjectName,
-                    SafeToString(dirItem.Status.Uri),
                     Scc.IsProjectManaged(_project),
-                    Scc.IsSolutionManaged ? "Ok" : "Not Controlled",
-                    projectInfo.SccBaseDirectory,
-                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory))
+                    projectInfo.UniqueProjectName,
+                    SafeRepositoryRoot(dirItem),
+                    SafeRepositoryPath(dirItem),                    
+                    GetStatus(dirItem, projectInfo, projectInfo.ProjectFile),
+                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),                    
+                    projectInfo.SccBaseDirectory
                     );                
             }
             else
             {
                 // Should have been filtered before; probably a buggy project that changed while the dialog was open
                 SetValues(
-                    "-?-",
-                    "-?-",
                     false,
+                    "-?-",
+                    "-?-",
+                    "-?-",
                     "-?-",
                     "-?-",
                     "-?-"
                     );
             }
+        }
+
+        private string GetStatus(SvnItem dirItem, ISvnProjectInfo projectInfo, string file)
+        {
+            if (dirItem == null || !dirItem.Exists || !dirItem.IsVersioned)
+                return "<not found>";
+
+            if (projectInfo == null)
+            {
+                if (Scc.IsSolutionManaged)
+                    return "Connected"; // Solution itself + Connected
+                else
+                    return "Not Connected";
+            }
+            
+            if (dirItem.IsBelowPath(SolutionSettings.ProjectRootSvnItem)
+                    && dirItem.WorkingCopy == SolutionSettings.ProjectRootSvnItem.WorkingCopy)
+            {
+                // In master working copy
+                if (Scc.IsSolutionManaged && Scc.IsProjectManaged(_project))
+                    return "Connected";
+                else
+                    return "Valid"; // In master working copy
+            }
+            else if (Scc.IsSolutionManaged && Scc.IsProjectManaged(_project))
+                return "Connected"; // Required information in solution
+            else
+                return "Detached"; // Separate working copy
+        }
+
+        string SafeRepositoryPath(SvnItem item)
+        {
+            if (item == null || item.Status.Uri == null)
+                return "";
+
+            SvnWorkingCopy wc = item.WorkingCopy;
+            if(wc != null)
+            {
+                Uri root = wc.RepositoryRoot;
+
+                if(root != null)
+                {
+                    Uri relative = root.MakeRelativeUri(item.Status.Uri);
+
+                    if(!relative.IsAbsoluteUri)
+                    {
+                        string v = relative.ToString();
+
+                        if(!string.IsNullOrEmpty(v) && !v.StartsWith("/") && !v.StartsWith("../") && v != ".")
+                            return "^/" + v;
+                    }
+                }
+            }
+
+            return item.Status.Uri.ToString();
+        }
+
+        string SafeRepositoryRoot(SvnItem item)
+        {
+            if (item == null || item.WorkingCopy == null)
+                return "";
+            
+            Uri root = item.WorkingCopy.RepositoryRoot;
+
+            if (root != null)
+                return root.ToString();
+
+            return "";
         }
 
         private string EmptyToDot(string value)
