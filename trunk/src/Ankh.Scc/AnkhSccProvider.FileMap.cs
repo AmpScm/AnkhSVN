@@ -669,14 +669,12 @@ namespace Ankh.Scc
         {
             Dictionary<string, SvnItem> roots = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
 
-            string root = SolutionSettings.ProjectRoot;
+            SvnItem root = SolutionSettings.ProjectRootSvnItem;
             if (root != null)
             {
-                SvnItem rootItem = StatusCache[root];
-
-                if (rootItem != null && rootItem.IsVersioned)
+                if (root.IsVersioned)
                 {
-                    roots.Add(rootItem.FullPath, rootItem);
+                    roots.Add(root.FullPath, root);
                 }
             }
 
@@ -684,6 +682,7 @@ namespace Ankh.Scc
 
             foreach (SccProjectData pb in projects)
             {
+                // TODO: Move to SccProjectRoot
                 string dir = pb.ProjectDirectory;
                 if (dir == null || roots.ContainsKey(dir))
                     continue;
@@ -710,7 +709,7 @@ namespace Ankh.Scc
                         below = true;
                         break;
                     }
-                    else if (r.IsBelowPath(r))
+                    else if (r.IsBelowPath(pItem))
                     {
                         roots.Remove(r.FullPath);
                         break;
