@@ -402,7 +402,7 @@ namespace Ankh.Scc.SccUI
             shRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
             shProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
 
-            usProjectLocation.Text = projectBase ?? "";
+            usProjectLocation.Text = projectLocation ?? "";
             usBindPath.Text = projectBase ?? "";
             usRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
             usProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
