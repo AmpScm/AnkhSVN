@@ -403,9 +403,9 @@ namespace Ankh.Scc.SccUI
             shProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
 
             usProjectLocation.Text = projectBase ?? "";
-            usBindPath.Text = relativePath ?? "";
+            usBindPath.Text = projectBase ?? "";
             usRelativePath.Text = string.IsNullOrEmpty(relativePath) ? "." : relativePath;
-            usProjectUrl.Text = (projectUri != null) ? usProjectUrl.ToString() : "";
+            usProjectUrl.Text = (projectUri != null) ? projectUri.ToString() : "";
 
             slnProjectLocation.Text = SolutionSettings.SolutionFilename;
             slnBindPath.Text = SolutionSettings.ProjectRoot;
