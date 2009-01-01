@@ -51,6 +51,10 @@ namespace Ankh.Ids
         public const string TriggerPlkProduct = "AnkhSVN Trigger";
         /// <summary>The company name as used in the PLK</summary>
         public const string TriggerPlkCompany = PlkCompany;
+
+        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2009";
+        public const string AssemblyProduct = "AnkhSVN - Subversion Support for Visual Studio";
+        public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
 
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
