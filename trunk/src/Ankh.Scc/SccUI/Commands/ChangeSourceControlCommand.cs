@@ -88,7 +88,9 @@ namespace Ankh.Scc.SccUI.Commands
             {
                 AnkhMessageBox mb = new AnkhMessageBox(context);
 
-                if(DialogResult.Yes != mb.Show("One or more projects are not loaded.\n\nIt is recommended that all projects are loaded before continuing.\n\nWould you like to continue?", "Change Source Control", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Exclamation))
+                if(DialogResult.Yes != mb.Show("The solution contains unloaded projects. Any changes you make will not affect "+
+                    "the unloaded projects.\n\nIt is strongly recommended that you reload all projects before continuing.\n\n" +
+                    "Would you like to continue?", "Source Control", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Exclamation))
                     return false;
             }
 

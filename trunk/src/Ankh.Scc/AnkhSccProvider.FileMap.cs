@@ -820,7 +820,18 @@ namespace Ankh.Scc
             /// <value>The SCC base directory.</value>
             public string SccBaseDirectory
             {
-                get { return ProjectDirectory; }
+                get { return _data.SccBaseDirectory; }
+                set { throw new InvalidOperationException(); }
+            }
+
+            /// <summary>
+            /// Gets or sets the SCC base URI.
+            /// </summary>
+            /// <value>The SCC base URI.</value>
+            public Uri SccBaseUri
+            {
+                get { return null; }
+                set { throw new InvalidOperationException(); }
             }
 
             #endregion

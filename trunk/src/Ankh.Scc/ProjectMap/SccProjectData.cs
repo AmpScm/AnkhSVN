@@ -25,6 +25,7 @@ using Ankh.Selection;
 using System.Diagnostics;
 using SharpSvn;
 using System.IO;
+using Ankh.VS;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -217,6 +218,55 @@ namespace Ankh.Scc.ProjectMap
                 }
                 return _projectFile;
             }
+        }
+
+        string _sccBaseDirectory;
+        /// <summary>
+        /// Gets or sets the SCC base directory.
+        /// </summary>
+        /// <value>The SCC base directory.</value>
+        public string SccBaseDirectory
+        {
+            get { return _sccBaseDirectory ?? (_sccBaseDirectory = GetSccBaseDirectory()); }
+            set { _sccBaseDirectory = value; }
+        }
+
+        string GetSccBaseDirectory()
+        {
+            string projectDir = ProjectDirectory;
+
+            if(projectDir == null)
+                return null;
+
+            // TODO: Insert project local settings check
+
+            IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
+            IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+
+            SvnItem rootItem = settings.ProjectRootSvnItem;
+
+            if (rootItem == null)
+                return null; // Fix the solution before we try any SCC, thanks!
+
+            SvnItem projectRootItem = cache[projectDir];
+
+            // Project is below standard workingcopy
+            if (projectRootItem.IsBelowPath(rootItem))
+            {
+                if (rootItem.WorkingCopy == projectRootItem.WorkingCopy)
+                {
+                    // Project is in the same working copy.. use the solution root
+                    // to automatically handle in-between directory levels
+                    return rootItem.FullPath;
+                }
+
+                // Project has its own workingcopy below the solution root
+                // -> Use the complete workingcopy (might be shared with multiple projects)
+                return projectRootItem.WorkingCopy.FullPath;
+            }
+             
+           // Project is below a root of its own.. use its workingcopy
+            return projectRootItem.WorkingCopy.FullPath;
         }
 
         string _uniqueName;
