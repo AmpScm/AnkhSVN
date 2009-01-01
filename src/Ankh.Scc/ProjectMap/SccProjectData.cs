@@ -243,30 +243,41 @@ namespace Ankh.Scc.ProjectMap
             IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
             IFileStatusCache cache = _context.GetService<IFileStatusCache>();
 
-            SvnItem rootItem = settings.ProjectRootSvnItem;
+            SvnItem solutionRoot = settings.ProjectRootSvnItem;
 
-            if (rootItem == null)
+            if (solutionRoot == null)
                 return null; // Fix the solution before we try any SCC, thanks!
 
-            SvnItem projectRootItem = cache[projectDir];
+            SvnItem projectDirItem = cache[projectDir];
 
-            // Project is below standard workingcopy
-            if (projectRootItem.IsBelowPath(rootItem))
+            if (projectDirItem != null)
             {
-                if (rootItem.WorkingCopy == projectRootItem.WorkingCopy)
+                // Project is below standard workingcopy
+                if (projectDirItem.IsBelowPath(solutionRoot))
                 {
-                    // Project is in the same working copy.. use the solution root
-                    // to automatically handle in-between directory levels
-                    return rootItem.FullPath;
+                    if (solutionRoot.WorkingCopy == projectDirItem.WorkingCopy)
+                    {
+                        // Project is in the same working copy.. use the solution root
+                        // to automatically handle in-between directory levels
+                        return solutionRoot.FullPath;
+                    }
+
+                    // Project has its own workingcopy below the solution root
+                    // -> Use the complete workingcopy (might be shared with multiple projects)
+                    return projectDirItem.WorkingCopy.FullPath;
                 }
 
-                // Project has its own workingcopy below the solution root
-                // -> Use the complete workingcopy (might be shared with multiple projects)
-                return projectRootItem.WorkingCopy.FullPath;
+                if (solutionRoot.WorkingCopy != projectDirItem.WorkingCopy)
+                {
+                    // Project is below a root of its own.. use its workingcopy
+                    return projectDirItem.WorkingCopy.FullPath;
+                }
+
+                // The user deliberately choose not to have the item in the solution root
+                // -> Default to the project directory                
             }
-             
-           // Project is below a root of its own.. use its workingcopy
-            return projectRootItem.WorkingCopy.FullPath;
+            
+            return ProjectDirectory;
         }
 
         string _uniqueName;
