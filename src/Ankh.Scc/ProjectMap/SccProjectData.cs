@@ -250,7 +250,7 @@ namespace Ankh.Scc.ProjectMap
 
             SvnItem projectDirItem = cache[projectDir];
 
-            if (projectDirItem != null)
+            if (projectDirItem != null && projectDirItem.WorkingCopy != null)
             {
                 // Project is below standard workingcopy
                 if (projectDirItem.IsBelowPath(solutionRoot))
