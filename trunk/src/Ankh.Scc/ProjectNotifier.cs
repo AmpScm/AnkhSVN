@@ -307,8 +307,6 @@ namespace Ankh.Scc
 
                     _externallyChanged[path] = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
                 }
-				else
-					_externallyChanged.Add(path, null);
             }
         }
 
