@@ -20,6 +20,31 @@ using System.Text;
 
 namespace Ankh.Scc
 {
+    public enum SccEnlistMode
+    {
+        /// <summary>
+        /// This project is not enlist capable and is not handled specially
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// This project does not use enlist support but is not in the
+        /// same tree as the solution; AnkhSVN stores extra information to track
+        /// the reference.
+        /// </summary>
+        SvnStateOnly,
+
+        /// <summary>
+        /// The project requires Scc enlistment
+        /// </summary>
+        SccEnlistCompulsory,
+
+        /// <summary>
+        /// The project allows Scc enlistment
+        /// </summary>
+        SccEnlistOptional
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -61,5 +86,11 @@ namespace Ankh.Scc
         /// </summary>
         /// <value>The SCC base URI.</value>
         Uri SccBaseUri { get; set; }
+
+        /// <summary>
+        /// Gets the enlist mode.
+        /// </summary>
+        /// <value>The enlist mode.</value>
+        SccEnlistMode SccEnlistMode { get; }
     }
 }

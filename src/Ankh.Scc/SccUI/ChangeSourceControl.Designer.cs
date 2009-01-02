@@ -81,8 +81,7 @@ namespace Ankh.Scc.SccUI
             this.label19 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.userProjectLocationBrowse = new System.Windows.Forms.Button();
-            this.userProjectBaseBrowse = new System.Windows.Forms.Button();
+            this.usProjectLocationBrowse = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.usProjectUrl = new System.Windows.Forms.TextBox();
@@ -90,7 +89,7 @@ namespace Ankh.Scc.SccUI
             this.usBindPath = new System.Windows.Forms.TextBox();
             this.usProjectLocation = new System.Windows.Forms.TextBox();
             this.solutionSettingsTab = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
+            this.slnBindBrowse = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
@@ -262,7 +261,6 @@ namespace Ankh.Scc.SccUI
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // label1
             // 
@@ -453,8 +451,7 @@ namespace Ankh.Scc.SccUI
             this.userSettingsTab.Controls.Add(this.label19);
             this.userSettingsTab.Controls.Add(this.label14);
             this.userSettingsTab.Controls.Add(this.label15);
-            this.userSettingsTab.Controls.Add(this.userProjectLocationBrowse);
-            this.userSettingsTab.Controls.Add(this.userProjectBaseBrowse);
+            this.userSettingsTab.Controls.Add(this.usProjectLocationBrowse);
             this.userSettingsTab.Controls.Add(this.label16);
             this.userSettingsTab.Controls.Add(this.label17);
             this.userSettingsTab.Controls.Add(this.usProjectUrl);
@@ -507,25 +504,15 @@ namespace Ankh.Scc.SccUI
             this.label15.TabIndex = 6;
             this.label15.Text = "SCC &Relative Path:";
             // 
-            // userProjectLocationBrowse
+            // usProjectLocationBrowse
             // 
-            this.userProjectLocationBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.userProjectLocationBrowse.Location = new System.Drawing.Point(682, 36);
-            this.userProjectLocationBrowse.Name = "userProjectLocationBrowse";
-            this.userProjectLocationBrowse.Size = new System.Drawing.Size(28, 23);
-            this.userProjectLocationBrowse.TabIndex = 5;
-            this.userProjectLocationBrowse.Text = "...";
-            this.userProjectLocationBrowse.UseVisualStyleBackColor = true;
-            // 
-            // userProjectBaseBrowse
-            // 
-            this.userProjectBaseBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.userProjectBaseBrowse.Location = new System.Drawing.Point(682, 10);
-            this.userProjectBaseBrowse.Name = "userProjectBaseBrowse";
-            this.userProjectBaseBrowse.Size = new System.Drawing.Size(28, 23);
-            this.userProjectBaseBrowse.TabIndex = 2;
-            this.userProjectBaseBrowse.Text = "...";
-            this.userProjectBaseBrowse.UseVisualStyleBackColor = true;
+            this.usProjectLocationBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.usProjectLocationBrowse.Location = new System.Drawing.Point(682, 10);
+            this.usProjectLocationBrowse.Name = "usProjectLocationBrowse";
+            this.usProjectLocationBrowse.Size = new System.Drawing.Size(28, 23);
+            this.usProjectLocationBrowse.TabIndex = 2;
+            this.usProjectLocationBrowse.Text = "...";
+            this.usProjectLocationBrowse.UseVisualStyleBackColor = true;
             // 
             // label16
             // 
@@ -587,7 +574,7 @@ namespace Ankh.Scc.SccUI
             // 
             // solutionSettingsTab
             // 
-            this.solutionSettingsTab.Controls.Add(this.button2);
+            this.solutionSettingsTab.Controls.Add(this.slnBindBrowse);
             this.solutionSettingsTab.Controls.Add(this.label22);
             this.solutionSettingsTab.Controls.Add(this.label23);
             this.solutionSettingsTab.Controls.Add(this.label24);
@@ -605,15 +592,16 @@ namespace Ankh.Scc.SccUI
             this.solutionSettingsTab.Text = "Solution Settings";
             this.solutionSettingsTab.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // slnBindBrowse
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(682, 36);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(28, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "...";
-            this.button2.UseVisualStyleBackColor = true;
+            this.slnBindBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.slnBindBrowse.Location = new System.Drawing.Point(682, 36);
+            this.slnBindBrowse.Name = "slnBindBrowse";
+            this.slnBindBrowse.Size = new System.Drawing.Size(28, 23);
+            this.slnBindBrowse.TabIndex = 4;
+            this.slnBindBrowse.Text = "...";
+            this.slnBindBrowse.UseVisualStyleBackColor = true;
+            this.slnBindBrowse.Click += new System.EventHandler(this.slnBindBrowse_Click);
             // 
             // label22
             // 
@@ -814,8 +802,7 @@ namespace Ankh.Scc.SccUI
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Button userProjectLocationBrowse;
-        private System.Windows.Forms.Button userProjectBaseBrowse;
+        private System.Windows.Forms.Button usProjectLocationBrowse;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox usProjectUrl;
@@ -841,7 +828,7 @@ namespace Ankh.Scc.SccUI
         private System.Windows.Forms.TextBox slnRelativePath;
         private System.Windows.Forms.TextBox slnBindUrl;
         private System.Windows.Forms.TextBox slnProjectLocation;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button slnBindBrowse;
         private System.Windows.Forms.DataGridViewCheckBoxColumn RegisteredColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProjectColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn RepositoryColumn;

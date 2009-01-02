@@ -26,31 +26,7 @@ namespace Ankh.Scc.ProjectMap
         public SccTranslateEnlistData(AnkhSccProvider provider, Guid projectId)
             : base(provider, projectId)
         {
-        }
-        enum SccEnlistMode
-        {
-            /// <summary>
-            /// This project does not use enlist support
-            /// </summary>
-            None = 0,
-
-            /// <summary>
-            /// This project does not use enlist support but is not in the
-            /// same tree as the solution; AnkhSVN stores extra information to track
-            /// the reference.
-            /// </summary>
-            SvnStateOnly,
-
-            /// <summary>
-            /// The project requires Scc enlistment
-            /// </summary>
-            SccEnlistCompulsory,
-
-            /// <summary>
-            /// The project allows Scc enlistment
-            /// </summary>
-            SccEnlistOptional
-        }
+        }        
 
         class SccEnlistData
         {
