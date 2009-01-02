@@ -25,7 +25,7 @@ using System.Collections.ObjectModel;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeConflictHandlerDialog : Form
+    public partial class MergeConflictHandlerDialog : VSDialogForm
     {
         SvnConflictEventArgs input;
         SvnAccept resolution = SvnAccept.Postpone;

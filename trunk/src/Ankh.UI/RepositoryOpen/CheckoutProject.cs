@@ -30,30 +30,17 @@ using Ankh.UI.SccManagement;
 
 namespace Ankh.UI.RepositoryOpen
 {
-    public partial class CheckoutProject : Form
+    public partial class CheckoutProject : VSDialogForm
     {
-        IAnkhServiceProvider _context;
         public CheckoutProject()
         {
             InitializeComponent();
             version.Revision = SvnRevision.Head;
         }
 
-        public IAnkhServiceProvider Context
+        protected override void OnContextChanged(EventArgs e)
         {
-            get { return _context; }
-            set
-            {
-                if (_context != value)
-                {
-                    _context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        protected virtual void OnContextChanged(EventArgs e)
-        {
+            base.OnContextChanged(e);
             version.Context = Context;
         }
 

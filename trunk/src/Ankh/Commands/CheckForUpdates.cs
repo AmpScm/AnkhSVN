@@ -249,12 +249,7 @@ namespace Ankh.Commands
                     return; // Don't throw a visible exception from a background check!
                 }
 
-                System.Windows.Forms.Design.IUIService ui = e.GetService<System.Windows.Forms.Design.IUIService>();
-
-                if (ui != null)
-                    ui.ShowDialog(uad);
-                else
-                    uad.ShowDialog();
+                uad.ShowDialog(e.Context);
 
                 if (uad.sameCheck.Checked)
                 {

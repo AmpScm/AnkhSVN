@@ -25,7 +25,7 @@ namespace Ankh.UI
     /// <summary>
     /// Summary description for ErrorDialog.
     /// </summary>
-    public partial class ErrorDialog : System.Windows.Forms.Form
+    public partial class ErrorDialog : VSDialogForm
     {
         public ErrorDialog()
         {

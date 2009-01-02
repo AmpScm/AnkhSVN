@@ -241,17 +241,7 @@ namespace Ankh.UI.MergeWizard
         {
             using (MergeConflictHandlerDialog dlg = new MergeConflictHandlerDialog(e))
             {
-                IUIService ui = Context.GetService<IUIService>();
-
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
-
-
-                if (dr == DialogResult.OK)
+                if (dlg.ShowDialog(Context) == DialogResult.OK)
                 {
                     e.Choice = dlg.ConflictResolution;
                     bool applyToAll = dlg.ApplyToAll;

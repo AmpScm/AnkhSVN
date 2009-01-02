@@ -26,7 +26,7 @@ namespace Ankh.UI
     /// <summary>
     /// A dialog for performing checkouts.
     /// </summary>
-    public partial class CheckoutDialog : System.Windows.Forms.Form
+    public partial class CheckoutDialog : VSDialogForm
     {
         public CheckoutDialog()
         {
@@ -61,13 +61,13 @@ namespace Ankh.UI
             }
         }
 
-        IAnkhServiceProvider _context;
-        public IAnkhServiceProvider Context
+        protected override void OnContextChanged(EventArgs e)
         {
-            get { return _context; }
-            set { _context = value; this.revisionPicker.Context = value; }
-        }
+            base.OnContextChanged(e);
 
+            revisionPicker.Context = Context; 
+        }
+        
         /// <summary>
         /// The local path to check out to.
         /// </summary>

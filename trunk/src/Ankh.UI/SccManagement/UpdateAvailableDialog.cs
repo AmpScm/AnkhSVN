@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.SccManagement
 {
-    public partial class UpdateAvailableDialog : Form
+    public partial class UpdateAvailableDialog : VSDialogForm
     {
         public UpdateAvailableDialog()
         {

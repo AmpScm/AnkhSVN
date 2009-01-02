@@ -21,7 +21,7 @@ using SharpSvn;
 
 namespace Ankh.UI.PropertyEditors
 {
-    public partial class PropertyDialog : Form
+    public partial class PropertyDialog : VSDialogForm
     {
         private IPropertyEditor currentEditor;
         private PropertyItem existingItem;

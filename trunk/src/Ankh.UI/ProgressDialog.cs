@@ -29,9 +29,8 @@ namespace Ankh.UI
     /// <summary>
     /// A dialog used for long-running operations.
     /// </summary>
-    public partial class ProgressDialog : System.Windows.Forms.Form
+    public partial class ProgressDialog : VSDialogForm
     {
-        IAnkhServiceProvider _context;
         public event EventHandler Cancel;
         string _title;
         string _caption;
@@ -48,16 +47,6 @@ namespace Ankh.UI
             InitializeComponent();
 
             _title = Text;
-        }
-
-        /// <summary>
-        /// Gets or sets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set { _context = value; }
         }
 
         public string Caption

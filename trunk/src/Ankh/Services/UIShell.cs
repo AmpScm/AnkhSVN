@@ -112,12 +112,7 @@ namespace Ankh
             {
                 IUIService ui = GetService<IUIService>();
 
-                DialogResult dr;
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
-
+                DialogResult dr = dlg.ShowDialog(Context);
 
                 if (dr != DialogResult.OK || string.IsNullOrEmpty(dlg.NewRoot))
                     return null;

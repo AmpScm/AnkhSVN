@@ -49,22 +49,13 @@ namespace Ankh.Commands
         {
             using (ExportDialog dlg = new ExportDialog(e.Context))
             {
-                IUIService ui = e.GetService<IUIService>();
-
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                 {
                     dlg.OriginUri = item.Status.Uri;
                     dlg.OriginPath = item.FullPath;
                 }
 
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
-
-                if (dr != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
                 e.GetService<IProgressRunner>().RunModal("Exporting",

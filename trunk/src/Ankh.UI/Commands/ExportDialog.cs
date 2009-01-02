@@ -29,7 +29,7 @@ namespace Ankh.UI
     /// <summary>
     /// A dialog for performing exports.
     /// </summary>
-    public partial class ExportDialog : System.Windows.Forms.Form
+    public partial class ExportDialog : VSDialogForm
     {
         readonly IAnkhServiceProvider _context;
         protected ExportDialog()
