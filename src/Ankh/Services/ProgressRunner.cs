@@ -133,16 +133,11 @@ namespace Ankh
                     };
                     _invoker = dialog;
 
-                    IUIService service = _context.GetService<IUIService>();
-
                     do
                     {
                         if (!_closed)
                         {
-                            if (service == null)
-                                dialog.ShowDialog(dialogOwner.DialogOwner);
-                            else
-                                service.ShowDialog(dialog);
+                            dialog.ShowDialog(_context);
                         }
 
                         // Show the dialog again if the thread join times out

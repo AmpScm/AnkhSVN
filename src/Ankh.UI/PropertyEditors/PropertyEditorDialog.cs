@@ -29,9 +29,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Dialog for editing svn properties. 
     /// </summary>
-    public partial class PropertyEditorDialog : System.Windows.Forms.Form
+    public partial class PropertyEditorDialog : VSDialogForm
     {
-        IAnkhServiceProvider _context;
         readonly List<PropertyItem> _propItems;
         IPropertyEditor _currentEditor;
         SvnNodeKind _currentNodeKind;
@@ -57,12 +56,6 @@ namespace Ankh.UI.PropertyEditors
             : this(target.ToString())
         {
             _currentNodeKind = SvnNodeKind.None;
-        }
-
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set { _context = value; }
         }
 
         /// <summary>
@@ -157,15 +150,7 @@ namespace Ankh.UI.PropertyEditors
 
             using (PropertyDialog pDialog = new PropertyDialog(item, _currentNodeKind))
             {
-
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(pDialog);
-                else
-                    dr = pDialog.ShowDialog(this);
-
-                if (dr != DialogResult.OK)
+                if (pDialog.ShowDialog(Context) != DialogResult.OK)
                     return;
 
                 PropertyItem editedItem = pDialog.GetPropertyItem();
@@ -212,16 +197,7 @@ namespace Ankh.UI.PropertyEditors
         {
             using (PropertyDialog propDialog = new PropertyDialog(_currentNodeKind))
             {
-                DialogResult dr;
-
-                IUIService ui = Context != null ? Context.GetService<IUIService>() : null;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(propDialog);
-                else
-                    dr = propDialog.ShowDialog(this);
-
-                if (dr != DialogResult.OK)
+                if (propDialog.ShowDialog(Context) != DialogResult.OK)
                     return;
 
                 PropertyItem item = propDialog.GetPropertyItem();

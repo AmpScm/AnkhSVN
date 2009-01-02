@@ -125,14 +125,7 @@ namespace Ankh.Commands
                     FindRoot(e.Context, selectedUri, dlg);
                 };
 
-                DialogResult dr;
-
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog(e.Context.DialogOwner);
-
-                if (dr != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
                 IVsSolution2 sol = e.GetService<IVsSolution2>(typeof(SVsSolution));

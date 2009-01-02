@@ -27,7 +27,7 @@ namespace Ankh.UI
     /// <summary>
     /// Summary description for AddRepositoryDialog.
     /// </summary>
-    public partial class AddRepositoryRootDialog : System.Windows.Forms.Form
+    public partial class AddRepositoryRootDialog : VSDialogForm
     {
         readonly IAnkhServiceProvider _context;
         public AddRepositoryRootDialog()

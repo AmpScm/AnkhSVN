@@ -22,7 +22,7 @@ using System.Diagnostics;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeResultsDialog : Form
+    public partial class MergeResultsDialog : VSDialogForm
     {
         public MergeResultsDialog()
         {

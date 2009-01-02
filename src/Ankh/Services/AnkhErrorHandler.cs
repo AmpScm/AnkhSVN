@@ -237,15 +237,7 @@ namespace Ankh
                 dlg.StackTrace = stackTrace;
                 dlg.InternalError = internalError;
 
-                IUIService ui = GetService<IUIService>();
-
-                DialogResult dr;
-                if (ui != null)
-                    dr = ui.ShowDialog(dlg);
-                else
-                    dr = dlg.ShowDialog();
-
-                if (dr == DialogResult.Retry)
+                if (dlg.ShowDialog(Context) == DialogResult.Retry)
                 {
                     string subject = ErrorReportSubject;
 

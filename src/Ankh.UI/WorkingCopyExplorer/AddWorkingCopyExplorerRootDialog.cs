@@ -20,7 +20,7 @@ using System.IO;
 
 namespace Ankh.UI
 {
-    public partial class AddWorkingCopyExplorerRootDialog : Form
+    public partial class AddWorkingCopyExplorerRootDialog : VSDialogForm
     {
 
 

@@ -34,10 +34,9 @@ namespace Ankh.UI.PathSelector
     /// <summary>
     /// Summary description for PathSelector.
     /// </summary>
-    public partial class PathSelector : System.Windows.Forms.Form
+    public partial class PathSelector : VSDialogForm
     {
         PathSelectorInfo _info;
-        IAnkhServiceProvider _context;
         PathSelectorOptions _options;
         
         protected PathSelector()
@@ -112,23 +111,12 @@ namespace Ankh.UI.PathSelector
             pathSelectionTreeView.CheckedFilter += _info.EvaluateChecked;
         }
 
-        public IAnkhServiceProvider Context
+        protected override void OnContextChanged(EventArgs e)
         {
-            get { return _context; }
-            set
-            {
-                if (value != _context)
-                {
-                    _context = value;
-                    revisionPickerStart.Context = value;
-                    revisionPickerEnd.Context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
+            base.OnContextChanged(e);
 
-        protected virtual void OnContextChanged(EventArgs eventArgs)
-        {
+            revisionPickerStart.Context = Context;
+            revisionPickerEnd.Context = Context;
             pathSelectionTreeView.Context = Context;
         }
 

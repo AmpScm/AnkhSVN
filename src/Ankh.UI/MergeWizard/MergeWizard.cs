@@ -203,7 +203,7 @@ namespace Ankh.UI.MergeWizard
                         dialog.MergeActions = MergeActions;
                         dialog.ResolvedMergeConflicts = ResolvedMergeConflicts;
 
-                        dialog.ShowDialog(this.Form);
+                        dialog.ShowDialog(Context);
                     }
 
                     status = false;

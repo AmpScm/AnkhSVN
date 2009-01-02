@@ -26,7 +26,7 @@ namespace Ankh.UI.OptionsPages
     /// <summary>
     /// A dialog for use in a type editor for a string. Presents a dialog for editing the string.
     /// </summary>
-    public partial class ToolArgumentDialog : Form
+    public partial class ToolArgumentDialog : VSDialogForm
     {
         public ToolArgumentDialog()
         {
@@ -63,14 +63,6 @@ namespace Ankh.UI.OptionsPages
 
                 macroView.Items.Add(li);
             }            
-        }
-
-       /// <summary>
-        /// Required by IStringEditorDialog.
-        /// </summary>
-        public Form Dialog
-        {
-            get { return this; }
         }
 
         private void macroView_DoubleClick(object sender, EventArgs e)
