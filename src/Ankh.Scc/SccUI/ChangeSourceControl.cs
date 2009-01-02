@@ -360,8 +360,10 @@ namespace Ankh.Scc.SccUI
             usProjectLocationBrowse.Visible = enlistMode > SccEnlistMode.None;
             usProjectLocationBrowse.Enabled = enlistMode > SccEnlistMode.SvnStateOnly;
 
-            sharedBasePathBrowse.Visible = (projectBase != null) && projectBase != SolutionSettings.ProjectRoot;
-            sharedProjectUrlBrowse.Enabled = enlistMode > SccEnlistMode.None && sharedBasePathBrowse.Visible;
+            sharedProjectUrlBrowse.Enabled = sharedBasePathBrowse.Visible 
+                = (enlistMode > SccEnlistMode.None) 
+                && (projectBase != null) 
+                && (enlistMode > SccEnlistMode.SvnStateOnly || projectBase != SolutionSettings.ProjectRoot);
 
             slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }
