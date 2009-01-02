@@ -16,17 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using System.Runtime.Remoting.Contexts;
-using Ankh.VS;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.ComponentModel.Design;
 using System.ComponentModel;
-using Ankh.Ids;
-using System.Windows.Forms.Design;
-using Microsoft.VisualStudio.OLE.Interop;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Ids;
+using Ankh.VS;
+
 
 namespace Ankh.UI
 {
@@ -53,10 +53,8 @@ namespace Ankh.UI
     /// .Net form which when shown modal let's the VS command routing continue
     /// </summary>
     /// <remarks>If the IAnkhDialogOwner service is not available this form behaves like any other form</remarks>
-    public class VSContainerForm : System.Windows.Forms.Form, IAnkhVSContainerForm, IAnkhServiceProvider, IAnkhCommandHookAccessor
+    public class VSContainerForm : VSDialogForm, IAnkhVSContainerForm, IAnkhCommandHookAccessor
     {
-        IAnkhServiceProvider _context;
-        IAnkhDialogOwner _dlgOwner;
         AnkhToolBar _toolbarId;
         VSContainerMode _mode;
 
@@ -65,11 +63,6 @@ namespace Ankh.UI
         /// </summary>
         public VSContainerForm()
         {
-            ShowInTaskbar = false;
-            MinimizeBox = false;
-            MaximizeBox = false;
-            ShowIcon = false;
-            StartPosition = FormStartPosition.CenterParent;
         }
 
         /// <summary>
@@ -81,30 +74,6 @@ namespace Ankh.UI
         {
             container.Add(this);
         }
-
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set 
-            {
-                if (_context != value)
-                {
-                    _context = value;
-                    _dlgOwner = null;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        [DefaultValue(false)]
-        public new bool ShowInTaskbar
-        {
-            get { return base.ShowInTaskbar; }
-            set { base.ShowInTaskbar = value; }
-        }
-        
-    
 
         /// <summary>
         /// Gets or sets the mode.
@@ -130,123 +99,20 @@ namespace Ankh.UI
             set { ContainerMode = value; }
         }
 
-        protected virtual void OnContextChanged(EventArgs e)
+        internal override DialogResult RunDialog(IWin32Window owner, IUIService uiService)
         {
-        }
-
-        /// <summary>
-        /// Gets the dialog owner service
-        /// </summary>
-        /// <value>The dialog owner.</value>
-        [Browsable(false), CLSCompliant(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        protected IAnkhDialogOwner DialogOwner
-        {
-            get 
-            { 
-                if(_dlgOwner == null && _context != null)
-                    _dlgOwner = _context.GetService<IAnkhDialogOwner>();
-
-                return _dlgOwner; 
-            }
-        }
-
-        /// <summary>
-        /// Obsolete: Use ShowDialog(Context)
-        /// </summary>
-        [Obsolete("Always use ShowDialog(Context) even when the context is already set")]
-        public new DialogResult ShowDialog()
-        {
-            if (Context != null)
-                return ShowDialog(Context);
-            else
-                return ShowDialog(new AnkhServiceContainer());
-        }
-
-        [Obsolete("Always use ShowDialog(Context) even when the context is already set")]
-        public new DialogResult ShowDialog(IWin32Window owner)
-        {
-            if (Context != null)
-                return ShowDialog(Context, owner);
-            else
-                return ShowDialog(new AnkhServiceContainer(), owner);
-        }
-
-        /// <summary>
-        /// Shows the form as a modal dialog box with the VS owner window
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public DialogResult ShowDialog(IAnkhServiceProvider context)
-        {
-            if(context == null && _context == null)
-                throw new ArgumentNullException("context");
-           
-            return ShowDialog(context, null);
-        }       
-
-        /// <summary>
-        /// Show the form as a modal dialog with the specified owner window
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="owner">The owner.</param>
-        public DialogResult ShowDialog(IAnkhServiceProvider context, IWin32Window owner)
-        {
-            bool setContext = false;
-
-            if(context == null)
+            if (DialogOwner != null)
             {
-                if(Context == null)
-                    throw new ArgumentNullException("context");
-            }
-            else if(Context == null)
-                setContext = true;
-            else if(context != Context)
-                throw new ArgumentOutOfRangeException("context", "context must match context or be null");
-            
-            if(setContext)
-                Context = context;
-
-            IUIService uiService = null;
-
-            if(Context != null)
-                uiService = Context.GetService<IUIService>();
-
-            try
-            {
-                if(owner == null && DialogOwner != null)
-                    owner = DialogOwner.DialogOwner;
-
-                OnBeforeShowDialog(EventArgs.Empty);
-
-                DialogResult rslt;
-
-                if (DialogOwner != null)
+                using (DialogOwner.InstallFormRouting((VSContainerForm)this, EventArgs.Empty))
                 {
-                    using (DialogOwner.InstallFormRouting(this, EventArgs.Empty))
-                    {
-                        if (uiService != null)
-                            rslt = uiService.ShowDialog(this);
-                        else
-                            rslt = base.ShowDialog(owner);
-                    }
+                    return base.RunDialog(owner, uiService);
                 }
-                else
-                {
-                    if (uiService != null)
-                        rslt = uiService.ShowDialog(this);
-                    else
-                        rslt = base.ShowDialog(owner);
-                }
-
-                OnAfterShowDialog(EventArgs.Empty);
-
-                return rslt;
             }
-            finally
+            else
             {
-                if (setContext)
-                    Context = null;
+                return base.RunDialog(owner, uiService);
             }
-        }
+        }        
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -254,15 +120,6 @@ namespace Ankh.UI
 
             if (!DesignMode && DialogOwner != null)
                 DialogOwner.OnContainerCreated(this);
-        }
-
-        protected virtual void OnBeforeShowDialog(EventArgs e)
-        {
-        }
-
-        protected virtual void OnAfterShowDialog(EventArgs e)
-        {
-
         }
 
         public AnkhToolBar ToolBar
@@ -277,7 +134,7 @@ namespace Ankh.UI
             if (commandTarget == null)
                 throw new ArgumentNullException("commandTarget");
 
-            if(DialogOwner == null)
+            if (DialogOwner == null)
                 throw new InvalidOperationException("DialogOwner not available");
 
             DialogOwner.AddCommandTarget(this, commandTarget);
@@ -294,41 +151,6 @@ namespace Ankh.UI
 
             DialogOwner.AddWindowPane(this, pane);
         }
-
-        #region IAnkhServiceProvider Members
-
-        [DebuggerStepThrough]
-        T IAnkhServiceProvider.GetService<T>()
-        {
-            if (Context != null)
-                return Context.GetService<T>();
-            
-            return null;
-        }
-
-        [DebuggerStepThrough]
-        T IAnkhServiceProvider.GetService<T>(Type serviceType)
-        {
-            if (Context != null)
-                return Context.GetService<T>(serviceType);
-
-            return null;
-        }
-
-        #endregion
-
-        #region IServiceProvider Members
-
-        [DebuggerStepThrough]
-        object System.IServiceProvider.GetService(Type serviceType)
-        {
-            if (Context != null)
-                return Context.GetService(serviceType);
-
-            return base.GetService(serviceType);
-        }
-
-        #endregion
 
         #region IAnkhVSContainerForm Members
 

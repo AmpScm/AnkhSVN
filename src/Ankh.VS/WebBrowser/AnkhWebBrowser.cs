@@ -33,17 +33,17 @@ namespace Ankh.VS.WebBrowser
 
         public void Navigate(Uri url)
         {
-            BrowserResults results;
-            Navigate(url, new BrowserArgs(), out results);
+            AnkhBrowserResults results;
+            Navigate(url, new AnkhBrowserArgs(), out results);
         }
 
-        public void Navigate(Uri url, BrowserArgs args)
+        public void Navigate(Uri url, AnkhBrowserArgs args)
         {
-            BrowserResults results;
+            AnkhBrowserResults results;
             Navigate(url, args, out results);
         }
 
-        public void Navigate(Uri url, BrowserArgs args, out BrowserResults results)
+        public void Navigate(Uri url, AnkhBrowserArgs args, out AnkhBrowserResults results)
         {
             IVsWebBrowsingService browserSvc = GetService<IVsWebBrowsingService>(typeof(SVsWebBrowsingService));
 
@@ -61,7 +61,7 @@ namespace Ankh.VS.WebBrowser
             results = new Results(browser, ppFrame);
         }
 
-        private class Results : BrowserResults
+        private class Results : AnkhBrowserResults
         {
             readonly IVsWebBrowser _browser;
             readonly IVsWindowFrame _frame;
