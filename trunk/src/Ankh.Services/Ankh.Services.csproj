@@ -81,6 +81,9 @@
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />
     <Compile Include="Scc\SvnOrigin.cs" />
+    <Compile Include="UI\VSDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\IAnkhDynamicEditorFactory.cs" />
     <Compile Include="UI\RegistryLifoList.cs" />
     <Compile Include="Scc\IPendingChangeHandler.cs" />

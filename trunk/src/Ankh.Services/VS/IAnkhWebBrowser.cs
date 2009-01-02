@@ -24,17 +24,18 @@ namespace Ankh.VS
     public interface IAnkhWebBrowser
     {
         void Navigate(Uri url);
-        void Navigate(Uri url, BrowserArgs args);
-        void Navigate(Uri url, BrowserArgs args, out BrowserResults results);
+        void Navigate(Uri url, AnkhBrowserArgs args);
+        void Navigate(Uri url, AnkhBrowserArgs args, out AnkhBrowserResults results);
     }
 
-    public class BrowserArgs
+    public class AnkhBrowserArgs
     {
         __VSCREATEWEBBROWSER _createFlags = __VSCREATEWEBBROWSER.VSCWB_AutoShow |
                         __VSCREATEWEBBROWSER.VSCWB_NoHistory |
                         __VSCREATEWEBBROWSER.VSCWB_StartCustom |
                         __VSCREATEWEBBROWSER.VSCWB_OptionDisableStatusBar;
         string _baseCaption;
+        bool _external;
 
         public string BaseCaption
         {
@@ -48,9 +49,19 @@ namespace Ankh.VS
             get { return _createFlags; }
             set { _createFlags = value; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to start the browser outside the main window
+        /// </summary>
+        /// <value><c>true</c> if external; otherwise, <c>false</c>.</value>
+        public bool External
+        {
+            get { return _external; }
+            set { _external = value; }
+        }
     }
 
-    public abstract class BrowserResults
+    public abstract class AnkhBrowserResults
     {
         [CLSCompliant(false)]
         public virtual IVsWebBrowser WebBrowser 

@@ -51,7 +51,7 @@ namespace Ankh
 
             // have it show the html
             Uri url = new Uri("file://" + htmlFile);
-            BrowserArgs args = new BrowserArgs();
+            AnkhBrowserArgs args = new AnkhBrowserArgs();
             args.BaseCaption = caption;
 
             //if(reuse)
