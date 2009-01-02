@@ -48,7 +48,8 @@ namespace Ankh.Commands
             {
                 SvnItem sel = e.Selection.ActiveDocumentItem;
 
-                if (sel == null || !sel.IsVersioned || !(sel.IsModified || sel.IsDocumentDirty))
+                if (sel == null || !sel.IsVersioned || !(sel.IsModified || sel.IsDocumentDirty) || 
+                    ((sel.IsAdded || sel.IsReplaced) && !sel.HasCopyableHistory))
                     e.Enabled = false;
 
                 return;
