@@ -116,7 +116,7 @@ namespace Ankh.UI.MergeWizard
                     {
                         dlg.SelectedUri = uri;
 
-                        if (dlg.ShowDialog() == DialogResult.OK)
+                        if (dlg.ShowDialog(wizard.Context) == DialogResult.OK)
                         {
                             result = dlg.SelectedUri;
                         }
