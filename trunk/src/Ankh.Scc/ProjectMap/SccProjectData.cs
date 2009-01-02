@@ -280,6 +280,42 @@ namespace Ankh.Scc.ProjectMap
             return ProjectDirectory;
         }
 
+        SccEnlistMode? _enlistMode;
+        public SccEnlistMode EnlistMode
+        {
+            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode())).Value; }
+        }
+
+        SccEnlistMode GetEnlistMode()
+        {
+            IVsSccProjectEnlistmentChoice enlistChoice = VsProject as IVsSccProjectEnlistmentChoice;
+
+            VSSCCENLISTMENTCHOICE[] choice = new VSSCCENLISTMENTCHOICE[1];
+            if (enlistChoice != null && ErrorHandler.Succeeded(enlistChoice.GetEnlistmentChoice(choice)))
+                switch (choice[0])
+                {
+                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_COMPULSORY:
+                        return SccEnlistMode.SccEnlistCompulsory;
+                    case VSSCCENLISTMENTCHOICE.VSSCC_EC_OPTIONAL:
+                        return SccEnlistMode.SccEnlistOptional;
+                    default:
+                        break;
+                }
+
+            string dir = SccBaseDirectory;
+
+            IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
+            SvnItem dirItem = _context.GetService<IFileStatusCache>()[dir];
+
+            if(dirItem.IsBelowPath(settings.ProjectRootSvnItem))
+            {
+                if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
+                    return SccEnlistMode.None; // All information available via working copy
+            }
+
+            return SccEnlistMode.SvnStateOnly;            
+        }
+
         string _uniqueName;
         public string UniqueProjectName
         {

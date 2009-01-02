@@ -6,6 +6,7 @@ using Ankh.Selection;
 using Ankh.VS;
 using System.IO;
 using Microsoft.VisualStudio.Shell;
+using SharpSvn;
 
 namespace Ankh.Scc.SccUI
 {
@@ -194,7 +195,7 @@ namespace Ankh.Scc.SccUI
 
                     if(!relative.IsAbsoluteUri)
                     {
-                        string v = relative.ToString();
+                        string v = SvnTools.UriPartToPath(relative.ToString()).Replace(Path.DirectorySeparatorChar, '/');
 
                         if(!string.IsNullOrEmpty(v) && !v.StartsWith("/") && !v.StartsWith("../") && v != ".")
                             return "^/" + v;

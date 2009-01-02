@@ -156,77 +156,12 @@ namespace Ankh.Scc.SccUI
             connectButton.Enabled = enableConnect;
             disconnectButton.Enabled = enableDisconnect;
 
-            UpdateSettingTabs();
-
-            /*SvnItem slnDirItem = cache[settings.SolutionFilename].Parent;
-            SvnWorkingCopy wc = slnDirItem.WorkingCopy;
-
-            if (wc != null && slnDirItem.Status.Uri != null)
-            {
-                SvnItem dirItem = slnDirItem;
-                Uri cur = dirItem.Status.Uri;
-                Uri setUri = settings.ProjectRootUri;
-
-                while (dirItem != null && dirItem.IsBelowPath(wc.FullPath))
-                {
-                    UriMap value = new UriMap(cur, dirItem.FullPath);
-                    slnBindPath.Items.Add(value);
-
-                    if (setUri == value.Uri)
-                        slnBindPath.SelectedItem = value;
-                    dirItem = dirItem.Parent;
-                    cur = new Uri(cur, "../");
-                }
-            }*/
-        }
-
-        class UriMap
-        {
-            Uri _uri;
-            string _value;
-            public UriMap(Uri uri, string value)
-            {
-                _uri = uri;
-                _value = value;
-            }
-
-            public override string ToString()
-            {
-                return _uri.ToString();
-            }
-
-            public string Value
-            {
-                get { return _value; }
-            }
-
-            public Uri Uri
-            {
-                get { return _uri; }
-            }
-
-        }
+            UpdateSettingTabs();            
+        }        
 
         private void refreshButton_Click(object sender, EventArgs e)
         {
             RefreshGrid();
-        }
-
-        private void okButton_Click(object sender, EventArgs e)
-        {
-            if (Context == null)
-                return;
-
-            /*IAnkhSolutionSettings settings = Context.GetService<IAnkhSolutionSettings>();
-            UriMap map = slnBindPath.SelectedItem as UriMap;
-
-            if (map == null)
-                return;
-
-            if (settings.ProjectRootUri != null && map.Uri != settings.ProjectRootUri)
-            {
-                settings.ProjectRoot = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(settings.SolutionFilename), map.Value));
-            }*/
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -325,6 +260,7 @@ namespace Ankh.Scc.SccUI
             string projectLocation = null;
             bool first = true;
             Uri projectUri = null;
+            SccEnlistMode enlistMode = (SccEnlistMode) (-1);
 
             foreach (SvnProject p in SelectedProjects)
             {
@@ -388,6 +324,11 @@ namespace Ankh.Scc.SccUI
 
                 KeepOne(ref projectUri, pUri, first);
 
+                if (first)
+                    enlistMode = info.SccEnlistMode;
+                else
+                    enlistMode = SccEnlistMode.None;
+
                 first = false;
             }
 
@@ -415,6 +356,14 @@ namespace Ankh.Scc.SccUI
             slnRelativePath.Text = string.IsNullOrEmpty(slRelativePath) ? "." : slRelativePath;
 
             slnBindUrl.Text = (SolutionSettings.ProjectRootUri != null) ? SolutionSettings.ProjectRootUri.ToString() : "";
+
+            usProjectLocationBrowse.Visible = enlistMode > SccEnlistMode.None;
+            usProjectLocationBrowse.Enabled = enlistMode > SccEnlistMode.SvnStateOnly;
+
+            sharedBasePathBrowse.Visible = (projectBase != null) && projectBase != SolutionSettings.ProjectRoot;
+            sharedProjectUrlBrowse.Enabled = enlistMode > SccEnlistMode.None && sharedBasePathBrowse.Visible;
+
+            slnBindBrowse.Enabled = (SolutionSettings.ProjectRootSvnItem != null) && SolutionSettings.ProjectRootSvnItem.WorkingCopy != null;
         }
 
         private void KeepOneIgnoreCase(ref string result, string newValue, bool first)
@@ -436,6 +385,15 @@ namespace Ankh.Scc.SccUI
                 return;
             else
                 result = null;
+        }
+
+        private void slnBindBrowse_Click(object sender, EventArgs e)
+        {
+            using (ChangeSolutionRoot sr = new ChangeSolutionRoot())
+            {
+                sr.ShowDialog(Context);
+                RefreshGrid();
+            }
         }
     }
 }

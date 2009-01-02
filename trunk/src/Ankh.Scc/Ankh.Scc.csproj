@@ -102,6 +102,12 @@
     </Compile>
     <Compile Include="SccUI\ChangeSourceControlRow.cs" />
     <Compile Include="SccUI\Commands\ChangeSourceControlCommand.cs" />
+    <Compile Include="SccUI\ChangeSolutionRoot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\ChangeSolutionRoot.Designer.cs">
+      <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
@@ -170,6 +176,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\ChangeSolutionRoot.resx">
+      <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SccUI\ChangeSourceControl.resx">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
