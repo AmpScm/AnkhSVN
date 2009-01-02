@@ -25,6 +25,7 @@ namespace Ankh.UI.PendingChanges.Commands
 {
     [Command(AnkhCommand.CommitPendingChanges)]
     [Command(AnkhCommand.CommitPendingChangesKeepingLocks)]
+    [Command(AnkhCommand.PendingChangesApplyWorkingCopy)]
     class CommitPendingChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -33,8 +34,17 @@ namespace Ankh.UI.PendingChanges.Commands
 
             if (page == null || !page.Visible)
                 e.Enabled = false;
-            else
-                e.Enabled = page.CanCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
+
+            switch (e.Command)
+            {
+                case AnkhCommand.CommitPendingChanges:
+                case AnkhCommand.CommitPendingChangesKeepingLocks:
+                    e.Enabled = page.CanCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
+                    break;
+                case AnkhCommand.PendingChangesApplyWorkingCopy:
+                    e.Enabled = page.CanApplyToWorkingCopy();
+                    break;
+            }
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -42,7 +52,16 @@ namespace Ankh.UI.PendingChanges.Commands
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
 
             if (page != null)
-                page.DoCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
+                switch (e.Command)
+                {
+                    case AnkhCommand.CommitPendingChanges:
+                    case AnkhCommand.CommitPendingChangesKeepingLocks:
+                        page.DoCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
+                        break;
+                    case AnkhCommand.PendingChangesApplyWorkingCopy:
+                        page.ApplyToWorkingCopy();
+                        break;
+                }
         }
     }
 }

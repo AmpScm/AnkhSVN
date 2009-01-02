@@ -36,6 +36,25 @@ namespace Ankh.PendingChanges
         {
         }
 
+        public bool ApplyChanges(IEnumerable<PendingChange> changes, PendingChangeApplyArgs args)
+        {
+            using (PendingCommitState state = new PendingCommitState(Context, changes))
+            {
+                if (!PreCommit_SaveDirty(state))
+                    return false;
+                
+                if (!PreCommit_AddNewFiles(state))
+                        return false;
+
+                state.FlushState();
+
+                if (!PreCommit_AddNeededParents(state))
+                    return false;
+
+                return true;
+            }
+        }
+
         public bool CreatePatch(IEnumerable<PendingChange> changes, PendingChangeCreatePatchArgs args)
         {
             using (PendingCommitState state = new PendingCommitState(Context, changes))
@@ -95,7 +114,14 @@ namespace Ankh.PendingChanges
                     });
                 using (StreamReader sr = new StreamReader(stream))
                 {
-                    File.WriteAllText(fileName, sr.ReadToEnd(), Encoding.UTF8);
+                    string line;
+
+                    // Parse to lines to resolve EOL issues
+                    using(StreamWriter sw = File.CreateText(fileName))
+                    {
+                        while(null != (line = sr.ReadLine()))
+                            sw.WriteLine(line);
+                    }
                 }
             }
             return true;
@@ -353,6 +379,6 @@ namespace Ankh.PendingChanges
             }
 
             return ok;
-        }        
+        }
     }
 }

@@ -345,8 +345,7 @@ namespace Ankh.UI.PendingChanges
 
             IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
             a.RelativeToPath = ss.ProjectRoot;
-
-            a.AddUnversionedFiles = false; // TODO show a dialog???
+            a.AddUnversionedFiles = true;
 
             List<PendingChange> changes = new List<PendingChange>();
 
@@ -382,18 +381,55 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanCreatePatch()
         {
-            bool result = CanCommit(false);
+            if(!CanCommit(false))
+                return false;
+
             foreach (PendingCommitItem pci in _listItems.Values)
             {
-                if (!(pci.PendingChange.Item.IsVersioned
-                    || pci.PendingChange.Item.IsAdded)
-                    )
-                {
-                    return false;
-                }
+                if (!pci.Checked)
+                    continue;
+                PendingChange pc = pci.PendingChange;
+
+                if(pc.Item.IsModified)
+                    return true;
+                else if(!pc.Item.IsVersioned && pc.Item.IsVersionable && pc.Item.InSolution)
+                    return true; // Will be added                
             }
 
-            return result;
+            return false;
+        }
+
+        internal bool CanApplyToWorkingCopy()
+        {
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                if (pci.PendingChange.CanApply)
+                    return true;                
+            }
+
+            return false;
+        }
+
+        internal void ApplyToWorkingCopy()
+        {
+            List<PendingChange> changes = new List<PendingChange>();
+
+            foreach (PendingCommitItem pci in _listItems.Values)
+            {
+                if (!pci.Checked)
+                    continue;
+
+                changes.Add(pci.PendingChange);
+            }
+
+            PendingChangeApplyArgs args = new PendingChangeApplyArgs();
+
+            if (Context.GetService<IPendingChangeHandler>().ApplyChanges(changes, args))
+            {
+            }
         }
     }
 }
