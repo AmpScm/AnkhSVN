@@ -129,7 +129,10 @@ namespace Ankh.UI
         {
             base.OnLoad(e);
 
-            if (!this.HelpButton && !_addedHelp)
+            if (DesignMode)
+                return;
+
+            if (!this.HelpButton && this.ControlBox && !_addedHelp)
             {
                 IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
 
