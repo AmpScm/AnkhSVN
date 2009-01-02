@@ -24,6 +24,8 @@ namespace Ankh.Scc
     {
         bool Commit(IEnumerable<PendingChange> changes, PendingChangeCommitArgs args);
         bool CreatePatch(IEnumerable<PendingChange> changes, PendingChangeCreatePatchArgs args);
+
+        bool ApplyChanges(IEnumerable<PendingChange> changes, PendingChangeApplyArgs args);
     }
 
     public class PendingChangeCommitArgs
@@ -89,5 +91,9 @@ namespace Ankh.Scc
             get { return _addUnversionedFiles; }
             set { _addUnversionedFiles = value; }
         }
+    }
+
+    public class PendingChangeApplyArgs
+    {
     }
 }
