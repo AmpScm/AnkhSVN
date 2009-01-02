@@ -41,7 +41,7 @@ namespace Ankh.UI.RepositoryOpen
         {
             InitializeComponent();
             dirView.ListViewItemSorter = new ItemSorter(this);
-        }    
+        }
 
         int _dirOffset;
         int _fileOffset;
@@ -53,19 +53,31 @@ namespace Ankh.UI.RepositoryOpen
 
             dirView.SmallImageList = mapper.ImageList;
             _dirOffset = mapper.DirectoryIcon;
-            _fileOffset = mapper.FileIcon;
+            _fileOffset = mapper.FileIcon;        
 
-            IAnkhVSColor color = Context.GetService<IAnkhVSColor>();
+            IUIService ds = GetService<IUIService>();
 
-            Color clr;
-            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out clr))
-                toolStrip1.BackColor = clr;
+            if (ds != null)
+            {
+                ToolStripRenderer renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
 
-            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out clr))
-                toolStrip1.ForeColor = clr;
+                if (renderer != null)
+                    toolStrip1.Renderer = renderer;
+                else
+                {
+                    IAnkhVSColor color = Context.GetService<IAnkhVSColor>();
 
-            if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_TEXT_ACTIVE, out clr))
-                urlLabel.ForeColor = clr;
+                    Color clr;
+                    if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out clr))
+                        toolStrip1.BackColor = clr;
+
+                    if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out clr))
+                        toolStrip1.ForeColor = clr;
+
+                    if (color != null && color.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_TEXT_ACTIVE, out clr))
+                        urlLabel.ForeColor = clr;
+                }
+            }
         }
 
         IAnkhSolutionSettings _solutionSettings;
@@ -140,7 +152,7 @@ namespace Ankh.UI.RepositoryOpen
 
             if (string.IsNullOrEmpty(fileTypeBox.Text) && fileTypeBox.Items.Count > 0)
                 fileTypeBox.SelectedItem = fileTypeBox.Items[0];
-        }        
+        }
 
         protected override void OnClosed(EventArgs e)
         {
@@ -334,7 +346,7 @@ namespace Ankh.UI.RepositoryOpen
                 SvnInfoArgs args = new SvnInfoArgs();
                 args.ThrowOnError = false;
                 args.Depth = SvnDepth.Empty;
-                
+
                 client.Info(combined, args,
                     delegate(object sender, SvnInfoEventArgs e)
                     {
@@ -427,7 +439,7 @@ namespace Ankh.UI.RepositoryOpen
                             path = path.TrimStart('/'); // Fixup for UNC paths
 
                         Uri dir = new Uri(uriRoot, path);
-                        nameUri = dir.MakeRelativeUri(nameUri); 
+                        nameUri = dir.MakeRelativeUri(nameUri);
 
                         SetDirectory(dir);
                         fileNameBox.Text = nameUri.ToString();
@@ -457,7 +469,7 @@ namespace Ankh.UI.RepositoryOpen
         {
             IUIShell uiShell = GetService<IUIShell>();
             Uri dirUri = uiShell.ShowAddRepositoryRootDialog();
-            
+
             AnkhAction action = delegate
             {
                 CheckResult(dirUri, true);
@@ -700,7 +712,7 @@ namespace Ankh.UI.RepositoryOpen
         {
             if (item.Tag == null)
                 fileNameBox.Text = "";
-            else if(fullUrl)
+            else if (fullUrl)
                 fileNameBox.Text = ((Uri)item.Tag).AbsoluteUri;
             else if (item.ImageIndex == _dirOffset)
                 fileNameBox.Text = item.Text + '/';

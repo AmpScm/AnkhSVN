@@ -38,9 +38,9 @@ namespace Ankh.UI.PathSelector
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.fromPanel = new System.Windows.Forms.Panel();
+            this.revisionPickerStart = new Ankh.UI.PathSelector.VersionSelector();
             this.toPanel = new System.Windows.Forms.Panel();
             this.revisionPickerEnd = new Ankh.UI.PathSelector.VersionSelector();
-            this.revisionPickerStart = new Ankh.UI.PathSelector.VersionSelector();
             this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
             this.suppressGroupBox.SuspendLayout();
             this.bottomPanel.SuspendLayout();
@@ -140,6 +140,16 @@ namespace Ankh.UI.PathSelector
             this.fromPanel.Size = new System.Drawing.Size(399, 42);
             this.fromPanel.TabIndex = 1;
             // 
+            // revisionPickerStart
+            // 
+            this.revisionPickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.revisionPickerStart.Location = new System.Drawing.Point(4, 13);
+            this.revisionPickerStart.Name = "revisionPickerStart";
+            this.revisionPickerStart.Size = new System.Drawing.Size(395, 29);
+            this.revisionPickerStart.SvnOrigin = null;
+            this.revisionPickerStart.TabIndex = 1;
+            // 
             // toPanel
             // 
             this.toPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
@@ -160,16 +170,6 @@ namespace Ankh.UI.PathSelector
             this.revisionPickerEnd.Size = new System.Drawing.Size(395, 29);
             this.revisionPickerEnd.SvnOrigin = null;
             this.revisionPickerEnd.TabIndex = 1;
-            // 
-            // revisionPickerStart
-            // 
-            this.revisionPickerStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionPickerStart.Location = new System.Drawing.Point(4, 13);
-            this.revisionPickerStart.Name = "revisionPickerStart";
-            this.revisionPickerStart.Size = new System.Drawing.Size(395, 29);
-            this.revisionPickerStart.SvnOrigin = null;
-            this.revisionPickerStart.TabIndex = 1;
             // 
             // pathSelectionTreeView
             // 
@@ -192,7 +192,6 @@ namespace Ankh.UI.PathSelector
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(420, 397);
-            this.ControlBox = false;
             this.Controls.Add(this.toPanel);
             this.Controls.Add(this.fromPanel);
             this.Controls.Add(this.bottomPanel);
@@ -200,8 +199,6 @@ namespace Ankh.UI.PathSelector
             this.Controls.Add(this.pathSelectionTreeView);
             this.MinimumSize = new System.Drawing.Size(100, 36);
             this.Name = "PathSelector";
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "PathSelector";
             this.suppressGroupBox.ResumeLayout(false);
             this.bottomPanel.ResumeLayout(false);
