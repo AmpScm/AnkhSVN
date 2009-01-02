@@ -35,41 +35,20 @@ using System.Windows.Forms.Design;
 
 namespace Ankh.UI.RepositoryOpen
 {
-    public partial class RepositoryOpenDialog : Form
+    public partial class RepositoryOpenDialog : VSDialogForm
     {
-        IAnkhServiceProvider _context;
         public RepositoryOpenDialog()
         {
             InitializeComponent();
             dirView.ListViewItemSorter = new ItemSorter(this);
-        }
-
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set
-			{
-                _context = value;
-
-                if (value != null)
-                    InitializeFromContext();
-            }
-        }
-
-        [DebuggerStepThrough]
-        protected T GetService<T>()
-            where T : class
-        {
-            if (Context != null)
-                return Context.GetService<T>();
-
-            return null;
-        }
+        }    
 
         int _dirOffset;
         int _fileOffset;
-        void InitializeFromContext()
+        protected override void OnContextChanged(EventArgs e)
         {
+            base.OnContextChanged(e);
+
             IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
             dirView.SmallImageList = mapper.ImageList;
@@ -476,7 +455,7 @@ namespace Ankh.UI.RepositoryOpen
 
         void ShowAddUriDialog()
         {
-            IUIShell uiShell = _context.GetService<IUIShell>();
+            IUIShell uiShell = GetService<IUIShell>();
             Uri dirUri = uiShell.ShowAddRepositoryRootDialog();
             
             AnkhAction action = delegate

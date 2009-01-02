@@ -83,14 +83,7 @@ namespace Ankh.Commands
                         }
                     }
 
-                    DialogResult dr;
-
-                    if (ui != null)
-                        dr = ui.ShowDialog(dlg);
-                    else
-                        dr = dlg.ShowDialog(e.Context.DialogOwner);
-
-                    if (dr != DialogResult.OK)
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                         return;
 
                     selectedUri = dlg.SelectedUri;
