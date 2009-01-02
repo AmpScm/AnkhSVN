@@ -80,7 +80,6 @@ namespace Ankh.UI.RepositoryOpen
                     int ico = mapper.GetIconForExtension(txt);
 
                     projectIcon.Image = CreateIcon(mapper.ImageList, ico);
-                    dirIco.Image = CreateIcon(mapper.ImageList, mapper.DirectoryIcon);
                 }
             }
         }
