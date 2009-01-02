@@ -51,6 +51,7 @@ namespace Ankh.UI.RepositoryOpen
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.urlLabel = new System.Windows.Forms.ToolStripLabel();
             this.urlBox = new System.Windows.Forms.ToolStripComboBox();
+            this.addButton = new System.Windows.Forms.ToolStripButton();
             this.refreshButton = new System.Windows.Forms.ToolStripButton();
             this.dirUpButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -62,7 +63,6 @@ namespace Ankh.UI.RepositoryOpen
             this.label3 = new System.Windows.Forms.Label();
             this.fileTypeBox = new System.Windows.Forms.ComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.addButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,10 +90,7 @@ namespace Ankh.UI.RepositoryOpen
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStrip1.AutoSize = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.urlLabel,
@@ -103,10 +100,10 @@ namespace Ankh.UI.RepositoryOpen
             this.dirUpButton,
             this.toolStripSeparator,
             this.versionButton});
-            this.toolStrip1.Location = new System.Drawing.Point(13, 12);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(548, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(573, 25);
             this.toolStrip1.TabIndex = 6;
             this.toolStrip1.Text = "Url:";
             // 
@@ -125,6 +122,17 @@ namespace Ankh.UI.RepositoryOpen
             this.urlBox.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.urlBox.Size = new System.Drawing.Size(380, 25);
             this.urlBox.SelectedIndexChanged += new System.EventHandler(this.urlBox_SelectedIndexChanged);
+            // 
+            // addButton
+            // 
+            this.addButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addButton.Image = ((System.Drawing.Image)(resources.GetObject("addButton.Image")));
+            this.addButton.ImageTransparentColor = System.Drawing.Color.White;
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(23, 22);
+            this.addButton.Text = "Add url";
+            this.addButton.ToolTipText = "Add repository url";
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // refreshButton
             // 
@@ -166,9 +174,9 @@ namespace Ankh.UI.RepositoryOpen
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panel1.Location = new System.Drawing.Point(13, 41);
+            this.panel1.Location = new System.Drawing.Point(12, 31);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(57, 266);
+            this.panel1.Size = new System.Drawing.Size(57, 276);
             this.panel1.TabIndex = 7;
             // 
             // dirView
@@ -176,10 +184,10 @@ namespace Ankh.UI.RepositoryOpen
             this.dirView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dirView.Location = new System.Drawing.Point(77, 41);
+            this.dirView.Location = new System.Drawing.Point(77, 31);
             this.dirView.MultiSelect = false;
             this.dirView.Name = "dirView";
-            this.dirView.Size = new System.Drawing.Size(484, 208);
+            this.dirView.Size = new System.Drawing.Size(484, 218);
             this.dirView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.dirView.TabIndex = 8;
             this.dirView.UseCompatibleStateImageBehavior = false;
@@ -243,17 +251,6 @@ namespace Ankh.UI.RepositoryOpen
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip.ToolTipTitle = "Open from Subversion";
             // 
-            // addButton
-            // 
-            this.addButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.addButton.Image = ((System.Drawing.Image)(resources.GetObject("addButton.Image")));
-            this.addButton.ImageTransparentColor = System.Drawing.Color.White;
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(23, 22);
-            this.addButton.Text = "Add url";
-            this.addButton.ToolTipText = "Add repository url";
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
-            // 
             // RepositoryOpenDialog
             // 
             this.AcceptButton = this.openButton;
@@ -270,12 +267,7 @@ namespace Ankh.UI.RepositoryOpen
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.openButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "RepositoryOpenDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Open from Subversion";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

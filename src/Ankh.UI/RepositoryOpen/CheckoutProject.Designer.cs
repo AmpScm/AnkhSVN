@@ -54,15 +54,13 @@ namespace Ankh.UI.RepositoryOpen
             this.directory = new System.Windows.Forms.TextBox();
             this.browseDirectoryButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.dirIco = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.version = new Ankh.UI.PathSelector.VersionSelector();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.version = new Ankh.UI.PathSelector.VersionSelector();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).BeginInit();
             this.locationIcon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dirIco)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -138,7 +136,6 @@ namespace Ankh.UI.RepositoryOpen
             this.locationIcon.Controls.Add(this.directory);
             this.locationIcon.Controls.Add(this.browseDirectoryButton);
             this.locationIcon.Controls.Add(this.label2);
-            this.locationIcon.Controls.Add(this.dirIco);
             this.locationIcon.Location = new System.Drawing.Point(12, 87);
             this.locationIcon.Name = "locationIcon";
             this.locationIcon.Size = new System.Drawing.Size(525, 43);
@@ -178,14 +175,6 @@ namespace Ankh.UI.RepositoryOpen
             this.label2.TabIndex = 0;
             this.label2.Text = "Directory:";
             // 
-            // dirIco
-            // 
-            this.dirIco.Location = new System.Drawing.Point(71, 19);
-            this.dirIco.Name = "dirIco";
-            this.dirIco.Size = new System.Drawing.Size(16, 16);
-            this.dirIco.TabIndex = 0;
-            this.dirIco.TabStop = false;
-            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -197,6 +186,14 @@ namespace Ankh.UI.RepositoryOpen
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Version:";
+            // 
+            // version
+            // 
+            this.version.Location = new System.Drawing.Point(93, 13);
+            this.version.Name = "version";
+            this.version.Size = new System.Drawing.Size(427, 29);
+            this.version.SvnOrigin = null;
+            this.version.TabIndex = 1;
             // 
             // cancelButton
             // 
@@ -220,14 +217,6 @@ namespace Ankh.UI.RepositoryOpen
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
-            // version
-            // 
-            this.version.Location = new System.Drawing.Point(93, 13);
-            this.version.Name = "version";
-            this.version.Size = new System.Drawing.Size(427, 29);
-            this.version.SvnOrigin = null;
-            this.version.TabIndex = 1;
-            // 
             // CheckoutProject
             // 
             this.AcceptButton = this.okButton;
@@ -240,19 +229,13 @@ namespace Ankh.UI.RepositoryOpen
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.locationIcon);
             this.Controls.Add(this.groupBox1);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "CheckoutProject";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Open Project from Subversion";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).EndInit();
             this.locationIcon.ResumeLayout(false);
             this.locationIcon.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dirIco)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -265,7 +248,6 @@ namespace Ankh.UI.RepositoryOpen
         private System.Windows.Forms.PictureBox projectIcon;
         private System.Windows.Forms.GroupBox locationIcon;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.PictureBox dirIco;
         private System.Windows.Forms.Label projectRootLabel;
         private System.Windows.Forms.TextBox directory;
         private System.Windows.Forms.Button browseDirectoryButton;
