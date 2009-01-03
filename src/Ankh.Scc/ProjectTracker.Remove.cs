@@ -51,8 +51,8 @@ namespace Ankh.Scc
             {
                 string s = rgpszMkDocuments[i];
 
-                if (!string.IsNullOrEmpty(s))
-                    StatusCache.MarkDirty(s);
+                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
+                    StatusCache.MarkDirty(SvnTools.GetNormalizedFullPath(s));
             }
 
             int iFile = 0;
@@ -69,7 +69,12 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    string file = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
+                    string file = rgpszMkDocuments[iFile];
+
+                    if (string.IsNullOrEmpty(file) || !SvnItem.IsValidPath(file))
+                        continue;
+
+                    file = SvnTools.GetNormalizedFullPath(file);
 
                     SccProvider.OnProjectFileRemoved(sccProject, file, rgFlags[iFile]);
                 }
@@ -85,20 +90,28 @@ namespace Ankh.Scc
             bool allOk = true;
 
             IVsSccProject2 sccProject = pProject as IVsSccProject2;
-            
+
             for (int i = 0; i < cDirectories; i++)
             {
                 bool ok = true;
 
+                string dir = rgpszMkDocuments[i];
+
+                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                    continue;
+
+                dir = SvnTools.GetNormalizedFullPath(dir);
+
+
                 if (SccProvider.TrackProjectChanges(sccProject))
-                    SccProvider.OnBeforeRemoveDirectory(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), out ok);
+                    SccProvider.OnBeforeRemoveDirectory(sccProject, dir, out ok);
 
                 if (rgResults != null)
                 {
-                    rgResults[i] = ok ?VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK : VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
+                    rgResults[i] = ok ? VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveOK : VSQUERYREMOVEDIRECTORYRESULTS.VSQUERYREMOVEDIRECTORYRESULTS_RemoveNotOK;
                 }
 
-                if(!ok)
+                if (!ok)
                     allOk = false;
             }
 
@@ -119,8 +132,8 @@ namespace Ankh.Scc
             {
                 string s = rgpszMkDocuments[i];
 
-                if (!string.IsNullOrEmpty(s))
-                    StatusCache.MarkDirty(s);
+                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
+                    StatusCache.MarkDirty(SvnTools.GetNormalizedFullPath(s));
             }
 
             for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
@@ -135,7 +148,12 @@ namespace Ankh.Scc
                     if (sccProject == null || !track)
                         continue; // Not handled by our provider
 
-                    string dir = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]);
+                    string dir = rgpszMkDocuments[iDirectory];
+
+                    if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                        continue;
+
+                    dir = SvnTools.GetNormalizedFullPath(dir);
 
                     SccProvider.OnProjectDirectoryRemoved(sccProject, rgpszMkDocuments[iDirectory], rgFlags[iDirectory]);
                 }
