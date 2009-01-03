@@ -324,7 +324,7 @@ namespace Ankh.Scc
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-            if (!IsSafeSccPath(pszMkDocument))
+            if (IsSafeSccPath(pszMkDocument))
             {
                 SvnItem item = StatusCache[pszMkDocument];
                 if (item != null)
