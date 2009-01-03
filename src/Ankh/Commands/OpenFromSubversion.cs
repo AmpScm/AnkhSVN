@@ -48,7 +48,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IUIService ui = e.GetService<IUIService>();
             Uri selectedUri = null;
             Uri rootUri = null;
 

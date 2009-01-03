@@ -186,10 +186,6 @@ namespace Ankh.UI
         {
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
-                IUIService ui = null;
-                if (_context != null)
-                    ui = _context.GetService<IUIService>();
-
                 SvnPathTarget pt = ExportSource as SvnPathTarget;
 
                 if (pt != null)

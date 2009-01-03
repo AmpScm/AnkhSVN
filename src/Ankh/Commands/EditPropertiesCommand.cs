@@ -154,7 +154,6 @@ namespace Ankh.Commands
             if (firstVersioned == null)
                 return; // exceptional case
 
-            IUIService ui = e.GetService<IUIService>();
             using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
             using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned))
             {
@@ -178,7 +177,7 @@ namespace Ankh.Commands
                     }
                     dialog.PropertyItems = propItems.ToArray();
                 }
-                if (ui.ShowDialog(dialog) == DialogResult.OK)
+                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                 {
                     if (properties.Count <= 1)
                     {

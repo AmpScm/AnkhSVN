@@ -54,16 +54,13 @@ namespace Ankh.Commands
 
             Ankh.VS.IAnkhSolutionSettings ss = e.GetService<Ankh.VS.IAnkhSolutionSettings>();
 
-            IUIService ui = e.GetService<IUIService>();
-
             using (CheckoutDialog dlg = new CheckoutDialog())
             {
                 dlg.Context = e.Context;
                 dlg.Uri = uri;
                 dlg.LocalPath = System.IO.Path.Combine(ss.NewProjectLocation, name);
                 
-
-                if (ui.ShowDialog(dlg) != DialogResult.OK)
+                if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
                 e.GetService<IProgressRunner>().RunModal("Checking Out", 

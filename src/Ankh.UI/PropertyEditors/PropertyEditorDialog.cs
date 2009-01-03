@@ -144,10 +144,6 @@ namespace Ankh.UI.PropertyEditors
             PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
             int index = this._propItems.IndexOf(item);
 
-            IUIService ui = null;
-            if (Context != null)
-                ui = Context.GetService<IUIService>();
-
             using (PropertyDialog pDialog = new PropertyDialog(item, _currentNodeKind))
             {
                 if (pDialog.ShowDialog(Context) != DialogResult.OK)
