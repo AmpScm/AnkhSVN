@@ -25,6 +25,7 @@ using Ankh.Selection;
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using System.IO;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -247,52 +248,56 @@ namespace Ankh.Scc
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
             prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
 
+            if (rgpszMkDocuments == null)
+                return VSConstants.E_POINTER;
+
             HybridCollection<string> mustLockFiles = null;
             List<SvnItem> mustLockItems = null;
-            if (rgpszMkDocuments != null)
+
+
+            for (int i = 0; i < cFiles; i++)
             {
-                for (int i = 0; i < cFiles; i++)
+                string file = rgpszMkDocuments[i];
+
+                if (!IsSafeSccPath(file))
+                    continue; // Skip non scc paths
+
+                file = SvnTools.GetNormalizedFullPath(file);
+
+                foreach (SvnItem item in GetAllDocumentItems(file))
                 {
-                    string file = rgpszMkDocuments[i];
+                    if (!item.IsVersioned)
+                        continue;
 
-                    if (!IsSafeSccPath(file))
-                        continue; // Skip non scc paths
-
-                    foreach (SvnItem item in GetAllDocumentItems(rgpszMkDocuments[i]))
+                    if (item.ReadOnlyMustLock)
                     {
-                        if (!item.IsVersioned)
-                            continue;
-
-                        if (item.ReadOnlyMustLock)
+                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
                         {
-                            if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
-                            {
-                                pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
-                                    | tagVSQueryEditResultFlags.QER_EditNotPossible
-                                    | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                                | tagVSQueryEditResultFlags.QER_EditNotPossible
+                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
 
-                                return VSConstants.S_OK;
-                            }
+                            return VSConstants.S_OK;
+                        }
 
-                            if (mustLockItems == null)
-                            {
-                                mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                                mustLockItems = new List<SvnItem>();
-                            }
+                        if (mustLockItems == null)
+                        {
+                            mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                            mustLockItems = new List<SvnItem>();
+                        }
 
-                            if (!mustLockFiles.Contains(item.FullPath))
-                            {
-                                mustLockFiles.Add(item.FullPath);
-                                mustLockItems.Add(item);
-                            }
+                        if (!mustLockFiles.Contains(item.FullPath))
+                        {
+                            mustLockFiles.Add(item.FullPath);
+                            mustLockItems.Add(item);
                         }
                     }
                 }
             }
             if (mustLockItems != null)
             {
-                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
 
                 cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockItems, CommandPrompt.Always);
 
@@ -365,6 +370,8 @@ namespace Ankh.Scc
 
                     if (!IsSafeSccPath(file))
                         continue;
+
+                    file = SvnTools.GetNormalizedFullPath(file);
 
                     // TODO: Maybe handle locking; but should be in OnQueryEdit anyway
 
