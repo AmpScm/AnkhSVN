@@ -66,6 +66,9 @@ namespace Ankh.Scc
             {
                 bool ok = true;
 
+                if (string.IsNullOrEmpty(rgpszMkDocuments[i]) || !SvnItem.IsValidPath(rgpszMkDocuments[i]))
+                    continue;
+
                 // TODO: Verify the new names do not give invalid Subversion state (Double casings, etc.)
                 if (track && !SvnCanAddPath(SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]), SvnNodeKind.File))
                     ok = false;
@@ -116,6 +119,9 @@ namespace Ankh.Scc
             for (int i = 0; i < cFiles; i++)
             {
                 bool ok = true;
+
+                if (string.IsNullOrEmpty(rgpszNewMkDocuments[i]) || !SvnItem.IsValidPath(rgpszNewMkDocuments[i]))
+                    continue;
 
                 // Save the origins of the to be added files as they are not available in the added event
 
@@ -192,7 +198,7 @@ namespace Ankh.Scc
             for (int i = 0; i < cFiles; i++)
             {
                 string s = rgpszMkDocuments[i];
-                if (!string.IsNullOrEmpty(s))
+                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
                 {
                     StatusCache.MarkDirty(s);
                 }
@@ -212,9 +218,14 @@ namespace Ankh.Scc
                         continue; // Not handled by our provider
 
                     string origin = null;
-                    string newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
+                    string newName = rgpszMkDocuments[iFile];
 
-                    if ((!_fileOrigins.TryGetValue(rgpszMkDocuments[iFile], out origin) || (origin == null)))
+                    if (string.IsNullOrEmpty(newName) || !SvnItem.IsValidPath(newName))
+                        continue;
+
+                    newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
+
+                    if ((!_fileOrigins.TryGetValue(newName, out origin) || (origin == null)))
                     {
                         // We haven't got the project file origin for free via OnQueryAddFilesEx
                         // So:
@@ -494,7 +505,14 @@ namespace Ankh.Scc
             {
                 bool ok = true;
 
-                if (track && !SvnCanAddPath(rgpszMkDocuments[i], SvnNodeKind.Directory))
+                string dir = rgpszMkDocuments[i];
+
+                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                    continue;
+
+                dir = SvnTools.GetNormalizedFullPath(dir);
+
+                if (track && !SvnCanAddPath(dir, SvnNodeKind.Directory))
                     ok = false;
 
                 if (rgResults != null)
@@ -533,16 +551,21 @@ namespace Ankh.Scc
 
             for (int i = 0; i < cDirectories; i++)
             {
-                string directory = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[i]);
+                string dir = rgpszMkDocuments[i];
 
-                StatusCache.MarkDirty(directory);
-
-                SvnItem item = StatusCache[directory];
-
-                if(!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(directory))
+                if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
                     continue;
 
-                DirectoryInfo dirInfo = new DirectoryInfo(directory);
+                dir = SvnTools.GetNormalizedFullPath(dir);
+
+                StatusCache.MarkDirty(dir);
+
+                SvnItem item = StatusCache[dir];
+
+                if(!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(dir))
+                    continue;
+
+                DirectoryInfo dirInfo = new DirectoryInfo(dir);
 
                 if (!dirInfo.Exists || (DateTime.Now - dirInfo.CreationTime) > new TimeSpan(0, 1, 0))
                     continue; // Directory is older than one minute.. Not just copied
@@ -550,18 +573,18 @@ namespace Ankh.Scc
                 using(SvnSccContext svn = new SvnSccContext(Context))
                 {
                     // Ok; we have a 'new' directory here.. Lets check if VS broke the subversion working copy
-                    SvnStatusEventArgs status = svn.SafeGetStatusViaParent(directory);
+                    SvnStatusEventArgs status = svn.SafeGetStatusViaParent(dir);
 
                     if (status == null)
                     {
-                        string pd = Path.GetDirectoryName(directory);
+                        string pd = Path.GetDirectoryName(dir);
                         if (pd == null || SvnTools.IsManagedPath(pd))
                             continue;
                     }
                     else if (status.LocalContentStatus != SvnStatus.NotVersioned && status.LocalContentStatus != SvnStatus.Ignored)
                         continue;
 
-                    svn.UnversionRecursive(directory);
+                    svn.UnversionRecursive(dir);
                 }
             }
 
@@ -578,8 +601,15 @@ namespace Ankh.Scc
                     if (!track)
                         continue;
 
+                    string dir = rgpszMkDocuments[iDirectory];
+
+                    if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
+                        continue;
+
+                    dir = SvnTools.GetNormalizedFullPath(dir);
+                         
                     if (sccProject != null)
-                        SccProvider.OnProjectDirectoryAdded(sccProject, SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iDirectory]), rgFlags[iDirectory]);
+                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, rgFlags[iDirectory]);
                 }
             }
 
