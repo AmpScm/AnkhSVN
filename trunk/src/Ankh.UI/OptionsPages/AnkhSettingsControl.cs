@@ -192,7 +192,7 @@ namespace Ankh.UI.OptionsPages
                 dlg.Value = line;
                 dlg.SetTemplates(Context.GetService<IAnkhDiffHandler>().ArgumentDefinitions);
 
-                if (DialogResult.OK == Context.GetService<IUIService>().ShowDialog(dlg))
+                if (DialogResult.OK == dlg.ShowDialog(_context))
                 {
                     string newValue = dlg.Value;
 

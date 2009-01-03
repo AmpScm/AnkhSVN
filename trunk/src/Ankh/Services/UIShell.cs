@@ -62,13 +62,11 @@ namespace Ankh
 
         public PathSelectorResult ShowPathSelector(PathSelectorInfo info)
         {
-            IUIService uiService = GetService<IUIService>();
-
             using (PathSelector selector = new PathSelector(info))
             {
                 selector.Context = Context;
 
-                bool succeeded = uiService.ShowDialog(selector) == DialogResult.OK;
+                bool succeeded = selector.ShowDialog(Context) == DialogResult.OK;
                 PathSelectorResult result = new PathSelectorResult(succeeded, selector.CheckedItems);
                 result.Depth = selector.Recursive ? SvnDepth.Infinity : SvnDepth.Empty;
                 result.RevisionStart = selector.RevisionStart;
@@ -84,8 +82,6 @@ namespace Ankh
             if (state == null)
                 throw new ArgumentNullException("state");
 
-            IUIService uiService = GetService<IUIService>();
-
             using (SccEditEnlistment editor = new SccEditEnlistment(state))
             {
                 return editor.ShowDialog(Context) == DialogResult.OK;
@@ -96,10 +92,7 @@ namespace Ankh
         {
             using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(Context))
             {
-                IUIService ui = GetService<IUIService>();
-
-
-                if (ui.ShowDialog(dlg) != DialogResult.OK || dlg.Uri == null)
+                if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.Uri == null)
                     return null;
 
                 return dlg.Uri;
@@ -110,8 +103,6 @@ namespace Ankh
         {
             using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
             {
-                IUIService ui = GetService<IUIService>();
-
                 DialogResult dr = dlg.ShowDialog(Context);
 
                 if (dr != DialogResult.OK || string.IsNullOrEmpty(dlg.NewRoot))

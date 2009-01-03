@@ -56,7 +56,6 @@ namespace Ankh.UI.SvnLog.Commands
 
             ISvnLogItem selectedLog = logItems[0];
             SvnUriTarget uriTarget = new SvnUriTarget(selectedLog.RepositoryRoot, selectedLog.Revision);
-            IUIService ui = e.GetService<IUIService>();
             using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
             using (PropertyEditorDialog dialog = new PropertyEditorDialog(uriTarget))
             {
@@ -81,7 +80,7 @@ namespace Ankh.UI.SvnLog.Commands
                     }
                     dialog.PropertyItems = propItems.ToArray();
                 }
-                if (ui.ShowDialog(dialog) == DialogResult.OK)
+                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                 {
                     PropertyItem[] finalItems = dialog.PropertyItems;
                     Collection<SvnPropertyValue> deletedProps = new Collection<SvnPropertyValue>();

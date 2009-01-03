@@ -70,7 +70,6 @@ namespace Ankh.Commands
 
             if (e.PromptUser || !(CommandBase.Shift || e.DontPrompt))
             {
-                IUIService uiService = e.GetService<IUIService>();
                 using (LockDialog dlg = new LockDialog(psi))
                 {
                     bool succeeded = (dlg.ShowDialog(e.Context)== DialogResult.OK);

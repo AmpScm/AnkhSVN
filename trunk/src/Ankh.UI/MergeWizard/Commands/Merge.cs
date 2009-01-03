@@ -141,19 +141,18 @@ namespace Ankh.UI.MergeWizard.Commands
 
             using (MergeWizardDialog dialog = new MergeWizardDialog(e.Context, new MergeUtils(e.Context), svnItems[0]))
             {
-                IUIService uiService = e.GetService<IUIService>();
-
                 DialogResult result = dialog.ShowDialog(e.Context);
                 //result = uiService.ShowDialog(dialog);
 
                 if (result == DialogResult.OK)
                 {
-                    MergeResultsDialog mrd = new MergeResultsDialog();
+                    using (MergeResultsDialog mrd = new MergeResultsDialog())
+                    {
+                        mrd.MergeActions = ((MergeWizard)dialog.Wizard).MergeActions;
+                        mrd.ResolvedMergeConflicts = ((MergeWizard)dialog.Wizard).ResolvedMergeConflicts;
 
-                    mrd.MergeActions = ((MergeWizard)dialog.Wizard).MergeActions;
-                    mrd.ResolvedMergeConflicts = ((MergeWizard)dialog.Wizard).ResolvedMergeConflicts;
-
-                    uiService.ShowDialog(mrd);
+                        mrd.ShowDialog(e.Context);
+                    }
                 }
             }
         }
