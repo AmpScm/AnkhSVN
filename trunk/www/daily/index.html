@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5825</title>
+<title>AnkhSVN-Daily Update - 2.0.5832</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5825</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5832</h1>
 
 
 <p>
@@ -12,19 +12,23 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1368/AnkhSvn-Daily-2.0.5825.330.msi">AnkhSVN 2.0.5825</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1369/AnkhSvn-Daily-2.0.5832.331.msi">AnkhSVN 2.0.5832</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5825">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5832">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-01-03</td></tr>
+<tr><td> </td><td class="r"><a id="5828" href="http://ankhsvn.net/rev/?r=5828">[r5828]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectTracker.Rename.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Just allow renaming invalid paths. We don't track invalid paths anyway.</td></tr>
+<tr><td> </td><td class="r"><a id="5827" href="http://ankhsvn.net/rev/?r=5827">[r5827]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/Commands/ShowRevisionProperties.cs, src/Ankh/Commands/EditPropertiesCommand.cs, src/Ankh/Commands/CheckoutCommand.cs, src/Ankh.UI/PropertyEditors/PropertyEditorDialog.cs, src/Ankh/Commands/OpenFromSubversion.cs, src/Ankh/Commands/LockCommand.cs, src/Ankh/Services/UIShell.cs, src/Ankh.UI/OptionsPages/AnkhSettingsControl.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix more dialogs to use the right ShowDialog(Context) call to enable automatic
+context help processing.</td></tr>
 <tr class="d"><td colspan="4">2009-01-02</td></tr>
 <tr><td> </td><td class="r"><a id="5820" href="http://ankhsvn.net/rev/?r=5820">[r5820]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PathSelector/PathSelector.Designer.cs, src/Ankh.Services/UI/VSDialogForm.cs, src/Ankh.UI/RepositoryOpen/RepositoryOpenDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable the control box ([x]) in the path selector dialog. (Disabling this
 breaks the help button)</td></tr>
@@ -184,10 +188,6 @@ Commits-&gt;Refresh.</td></tr>
 detects a filechange. Then when the focus returns to VS reload the document
 and release the lock.</td></tr>
 <tr class="d"><td colspan="4">2008-12-06</td></tr>
-<tr class="d"><td colspan="4">2008-12-05</td></tr>
-<tr><td> </td><td class="r"><a id="5666" href="http://ankhsvn.net/rev/?r=5666">[r5666]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/IAnkhOpenDocumentTracker.cs, src/Ankh.UI/Annotate/AnnotateEditorControl.cs, src/Ankh/Commands/ItemAnnotateCommand.cs, src/Ankh.Scc/OpenDocumentTracker.Api.cs, src/Ankh.UI/Annotate/AnnotateMarginControl.cs, src/Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Cleanup some annotation artifacts: Only update margin on vertical scroll; 
-don't use real filenames if the file is a project (or for now: open in an 
-editor). Cleanup initialization via document events.</td></tr>
 
 </table>
 <!--/Recent changes-->
