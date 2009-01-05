@@ -42,9 +42,9 @@ namespace Ankh.PendingChanges
             {
                 if (!PreCommit_SaveDirty(state))
                     return false;
-                
+
                 if (!PreCommit_AddNewFiles(state))
-                        return false;
+                    return false;
 
                 state.FlushState();
 
@@ -98,7 +98,7 @@ namespace Ankh.PendingChanges
                         {
                             SvnItem item = pc.Item;
                             SvnWorkingCopy wc;
-                            if (!string.IsNullOrEmpty(relativeToPath) 
+                            if (!string.IsNullOrEmpty(relativeToPath)
                                 && item.FullPath.StartsWith(relativeToPathP, StringComparison.OrdinalIgnoreCase))
                                 a.RelativeToPath = relativeToPath;
                             else if ((wc = item.WorkingCopy) != null)
@@ -117,9 +117,9 @@ namespace Ankh.PendingChanges
                     string line;
 
                     // Parse to lines to resolve EOL issues
-                    using(StreamWriter sw = File.CreateText(fileName))
+                    using (StreamWriter sw = File.CreateText(fileName))
                     {
-                        while(null != (line = sr.ReadLine()))
+                        while (null != (line = sr.ReadLine()))
                             sw.WriteLine(line);
                     }
                 }
@@ -212,7 +212,7 @@ namespace Ankh.PendingChanges
                 {
                     SvnWorkingCopy w = item.WorkingCopy;
 
-                    if(wc == null)
+                    if (wc == null)
                         wc = w;
                     else if (w != null && w != wc)
                     {
@@ -323,7 +323,8 @@ namespace Ankh.PendingChanges
             {
                 SvnItem item = state.Cache[path];
 
-                if (item.Status.LocalContentStatus == SvnStatus.Missing && item.Status.NodeKind == SvnNodeKind.File)
+                // Don't delete the file when it does exist with a different casing!
+                if (item.Status.LocalContentStatus == SvnStatus.Missing && item.Status.NodeKind == SvnNodeKind.File && !item.Exists)
                 {
                     SvnDeleteArgs da = new SvnDeleteArgs();
                     da.KeepLocal = true;
