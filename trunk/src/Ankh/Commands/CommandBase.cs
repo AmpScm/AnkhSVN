@@ -15,13 +15,6 @@
 //  limitations under the License.
 
 using System;
-
-using Ankh.UI;
-using System.Xml.Xsl;
-using System.Xml.XPath;
-using System.IO;
-using System.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
 using Ankh.Selection;
 using Ankh.Scc;
@@ -51,6 +44,11 @@ namespace Ankh.Commands
             }
         }
 
+        /// <summary>
+        /// Saves all dirty documents within the provided selection
+        /// </summary>
+        /// <param name="selection">The selection.</param>
+        /// <param name="context">The context.</param>
         protected static void SaveAllDirtyDocuments(ISelectionContext selection, IAnkhServiceProvider context)
         {
             if (selection == null)
@@ -61,42 +59,6 @@ namespace Ankh.Commands
             IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
             if (selection != null && tracker != null)
                 tracker.SaveDocuments(selection.GetSelectedFiles(true));
-        }
-
-        internal static XslCompiledTransform GetTransform(IAnkhServiceProvider context, string name)
-        {
-
-            // get the embedded resource and copy it to path
-            string resourceName = "Ankh.Commands." + name;
-            using (Stream s =
-                typeof(CommandBase).Assembly.GetManifestResourceStream(resourceName))
-            {
-                XPathDocument doc = new XPathDocument(s);
-
-                // TODO: Transforms should be cached as a dynamic assembly is created
-                // which stays in memory until the appdomain closes
-                XslCompiledTransform transform = new XslCompiledTransform();
-                transform.Load(doc);
-
-                return transform;
-            }
-        }
-
-        protected static void CreateTransformFile(string path, string name)
-        {
-            // get the embedded resource and copy it to path
-            string resourceName = "Ankh.Commands." + name;
-            Stream ins =
-                typeof(CommandBase).Assembly.GetManifestResourceStream(resourceName);
-            int len;
-            byte[] buffer = new byte[4096];
-            using (FileStream outs = new FileStream(path, FileMode.Create, FileAccess.Write))
-            {
-                while ((len = ins.Read(buffer, 0, 4096)) > 0)
-                {
-                    outs.Write(buffer, 0, len);
-                }
-            }
         }
     }
 }
