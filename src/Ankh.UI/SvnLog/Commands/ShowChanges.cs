@@ -183,6 +183,9 @@ namespace Ankh.UI.SvnLog.Commands
 
             string[] files = diff.GetTempFiles(diffTarget, range.StartRevision, range.EndRevision, true);
 
+            if (files == null)
+                return;
+
             da.BaseFile = files[0];
             da.MineFile = files[1];
             da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);

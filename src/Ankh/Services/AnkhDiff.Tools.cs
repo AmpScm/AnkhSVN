@@ -4,6 +4,7 @@ using System.Text;
 using Ankh.Scc.UI;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
+using SharpSvn;
 
 namespace Ankh.Services
 {
@@ -104,7 +105,7 @@ namespace Ankh.Services
             List<AnkhDiffTool> tools = new List<AnkhDiffTool>();
 
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
@@ -114,10 +115,10 @@ namespace Ankh.Services
                     "/title3:'%minename' '%base' '%theirs' '%mine' '%merged'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location") 
+                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true) 
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "/m /r='$(Merged)' '$(Base)' '$(Mine)' '$(Theirs)' " +
-                    "/t1='$(BaseName)' /t2='$(MineName)' /t3='$(TheirName)' /c='$(MergedName)'", true));
+                    "/t1='$(MergedName)' /t2='$(MineName)' /t3='$(TheirName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
                 "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
@@ -144,7 +145,7 @@ namespace Ankh.Services
             List<AnkhDiffTool> tools = new List<AnkhDiffTool>();
 
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/diff:'$(PatchFile)' /patchpath:'$(ApplyToDir)'", true));
 
@@ -155,12 +156,19 @@ namespace Ankh.Services
             return new ReadOnlyCollection<AnkhDiffTool>(tools);
         }
 
-        static string RegistrySearch(string key, string value)
+        static string RegistrySearch(string key, string value, bool normalizePath)
         {
             using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key))
             {
                 if (k != null)
-                    return k.GetValue(value) as string;
+                {
+                    string path = k.GetValue(value) as string;
+
+                    if(normalizePath && !string.IsNullOrEmpty(path)
+                        path = SvnTools.GetNormalizedFullPath(path);
+
+                    return path;
+                }
             }
 
             return null;

@@ -285,7 +285,7 @@ namespace Ankh.Services
 
             public DiffToolMonitor(IAnkhServiceProvider context, string monitor, bool monitorDir)
                 : base(context)
-            {                
+            {
                 if (string.IsNullOrEmpty(monitor))
                     throw new ArgumentNullException("monitor");
                 else if (!SvnItem.IsValidPath(monitor))
@@ -298,7 +298,7 @@ namespace Ankh.Services
 
                 _cookie = 0;
                 if (fx == null)
-                {}
+                { }
                 else if (!_monitorDir)
                 {
                     if (!ErrorHandler.Succeeded(fx.AdviseFileChange(monitor,
@@ -723,7 +723,7 @@ namespace Ankh.Services
             if (target.NodeKind != SvnNodeKind.File)
                 throw new InvalidOperationException("Can't create a tempfile from a directory");
 
-            GetService<IProgressRunner>().RunModal("Getting file",
+            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
@@ -732,6 +732,9 @@ namespace Ankh.Services
                     using (Stream s = File.Create(file))
                         aa.Client.Write(new SvnPathTarget(target.FullPath), s, wa);
                 });
+
+            if (!r.Succeeded)
+                return null; // User canceled
 
             if (File.Exists(file))
                 File.SetAttributes(file, FileAttributes.ReadOnly); // A readonly file does not allow editting from many diff tools
@@ -748,7 +751,7 @@ namespace Ankh.Services
 
             string file = GetTempPath(target.FileName, revision);
 
-            GetService<IProgressRunner>().RunModal("Getting file",
+            ProgressRunnerResult r = GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
@@ -757,6 +760,9 @@ namespace Ankh.Services
                     using (Stream s = File.Create(file))
                         aa.Client.Write(target, s, wa);
                 });
+
+            if (!r.Succeeded)
+                return null; // User canceled
 
             if (File.Exists(file))
                 File.SetAttributes(file, FileAttributes.ReadOnly); // A readonly file does not allow editting from many diff tools
@@ -784,7 +790,7 @@ namespace Ankh.Services
                 f2 = GetTempPath(target.FileName, to);
 
                 int n = 0;
-                Context.GetService<IProgressRunner>().RunModal("Getting revisions",
+                ProgressRunnerResult r = Context.GetService<IProgressRunner>().RunModal("Getting revisions",
                     delegate(object sender, ProgressWorkerArgs e)
                     {
                         SvnFileVersionsArgs ea = new SvnFileVersionsArgs();
@@ -801,19 +807,29 @@ namespace Ankh.Services
                             });
                     });
 
+                if (!r.Succeeded)
+                    return null;
+
                 if (n != 2)
                 {
                     // Sloooooow workaround for SvnBridge / Codeplex
 
                     f1 = GetTempFile(target, from, withProgress);
+                    if (f1 == null)
+                        return null; // Canceled
                     f2 = GetTempFile(target, to, withProgress);
                 }
             }
             else
             {
                 f1 = GetTempFile(target, from, withProgress);
+                if (f1 == null)
+                    return null; // Canceled
                 f2 = GetTempFile(target, to, withProgress);
             }
+
+            if (string.IsNullOrEmpty(f1) || string.IsNullOrEmpty(f2))
+                return null;
 
             string[] files = new string[] { f1, f2 };
 
