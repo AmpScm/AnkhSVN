@@ -188,8 +188,8 @@ namespace Ankh.Commands
         void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd)
         {
             IAnkhPackage p = e.GetService<IAnkhPackage>();
-            SvnExportArgs ea = new SvnExportArgs();
-            ea.Revision = revisionEnd;
+            SvnWriteArgs wa = new SvnWriteArgs();
+            wa.Revision = revisionEnd;
 
             SvnBlameArgs ba = new SvnBlameArgs();
             ba.Start = revisionStart;
@@ -201,12 +201,18 @@ namespace Ankh.Commands
             string tempFile = tempMgr.GetTempFileNamed(target.FileName);
 
             Collection<SvnBlameEventArgs> blameResult = null;
-            e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
+            ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
-                ee.Client.Export(target, tempFile, ea);
+                using (FileStream fs = File.Create(tempFile))
+                {
+                    ee.Client.Write(target, fs, wa);
+                }
 
                 ee.Client.GetBlame(target, ba, out blameResult);
             });
+
+            if (!r.Succeeded)
+                return;
 
             AnnotateEditorControl btw = new AnnotateEditorControl();           
 

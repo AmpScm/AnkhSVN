@@ -36,9 +36,9 @@ namespace Ankh.Commands
                 e.Enabled = false;            
         }
 
-        protected static void SaveFile(CommandEventArgs e, ISvnRepositoryItem ri, string toFile)
+        protected static bool SaveFile(CommandEventArgs e, ISvnRepositoryItem ri, string toFile)
         {
-            e.GetService<IProgressRunner>().RunModal(
+            ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal(
                 "Saving File",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
@@ -51,6 +51,8 @@ namespace Ankh.Commands
                         ee.Client.Write(ri.Origin.Target, fs, args);
                     }
                 });
+
+            return r.Succeeded;
         }
     }
 }
