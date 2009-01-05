@@ -77,8 +77,7 @@ namespace Ankh.Ids
         SvnNodeAnnotate,
         Checkout,
         CopyToWorkingCopy,
-        [Obsolete]
-        CheckoutSolution,
+        ItemResolveCasing,
         Cleanup,
         CommitItem,
         CopyReposExplorerUrl,

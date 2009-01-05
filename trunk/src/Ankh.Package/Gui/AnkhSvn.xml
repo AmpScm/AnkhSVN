@@ -277,6 +277,7 @@
         <Group id="Grp_ItemResolveCommand" priority="0x100">
           <Button id="Cmd_ItemResolveMerge" priority="0x10" text="Resolve &amp;Conflict" defaultInvisible="true" />
           <Button id="Cmd_ItemResolveMergeTool" priority="0x20" text="Resolve using &amp;Tool" defaultInvisible="true" />
+          <Button id="Cmd_ItemResolveCasing" priority="0x30" text="Revert Ca&amp;se update" defaultInvisible="true" />
         </Group>
         <Group id="Grp_ItemResolveFile" priority="0x200">
           <Button id="Cmd_ItemResolveWorking" priority="0x10" text="Using &amp;Working copy file" defaultInvisible="true" />
