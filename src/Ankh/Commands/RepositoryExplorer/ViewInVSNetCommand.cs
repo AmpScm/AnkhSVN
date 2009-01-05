@@ -77,7 +77,8 @@ namespace Ankh.Commands.RepositoryExplorer
 
             string toFile = e.GetService<IAnkhTempFileManager>().GetTempFileNamed(ri.Origin.Target.FileName);
 
-            SaveFile(e, ri, toFile);
+            if (!SaveFile(e, ri, toFile))
+                return;
 
             if (e.Command == AnkhCommand.ViewInVsNet)
                 VsShellUtilities.OpenDocument(e.Context, toFile);
