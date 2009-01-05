@@ -139,14 +139,18 @@ namespace Ankh.VS.Selection
                 }
 
                 string name;
-                if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
+                try
                 {
-                    if (IsValidPath(name))
+                    if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
                     {
-                        files = new string[] { name };
-                        return true;
+                        if (IsValidPath(name))
+                        {
+                            files = new string[] { name };
+                            return true;
+                        }
                     }
                 }
+                catch { } // Ok, this seems to error in some managed tree implementations like TFS :(
 
                 return ok;
             }
