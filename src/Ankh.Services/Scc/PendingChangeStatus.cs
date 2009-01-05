@@ -65,11 +65,13 @@ namespace Ankh.Scc
                 case PendingChangeKind.EditorDirty:
                     return PendingChangeText.StateEdited;
                 case PendingChangeKind.PropertyModified:
-                    return PendingChangeText.PropertyModified;
+                    return PendingChangeText.StatePropertyModified;
                 case PendingChangeKind.LockedOnly:
-                    return PendingChangeText.Locked;
+                    return PendingChangeText.StateLocked;
                 case PendingChangeKind.Incomplete:
-                    return PendingChangeText.Incomplete;
+                    return PendingChangeText.StateIncomplete;
+                case PendingChangeKind.WrongCasing:
+                    return PendingChangeText.StateWrongCasing;
                 default:
                     return State.ToString();
             }            

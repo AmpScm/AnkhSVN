@@ -73,7 +73,7 @@ namespace Ankh.UI.PendingChanges.Commits
             {
                 System.Drawing.Color clr = System.Drawing.Color.Black;
 
-                if (item.IsConflicted)
+                if (item.IsConflicted || PendingChange.Kind == PendingChangeKind.WrongCasing)
                     clr = System.Drawing.Color.Red;
                 else if (item.IsDeleteScheduled)
                     clr = System.Drawing.Color.DarkRed;

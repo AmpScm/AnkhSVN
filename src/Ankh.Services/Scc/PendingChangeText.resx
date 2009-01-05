@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Incomplete" xml:space="preserve">
-    <value>Incomplete</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>Locked</value>
-  </data>
-  <data name="PropertyModified" xml:space="preserve">
-    <value>Properties Modified</value>
-  </data>
   <data name="StateAdded" xml:space="preserve">
     <value>Added</value>
   </data>
@@ -138,6 +129,12 @@
   <data name="StateEdited" xml:space="preserve">
     <value>Edited</value>
   </data>
+  <data name="StateIncomplete" xml:space="preserve">
+    <value>Incomplete</value>
+  </data>
+  <data name="StateLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
   <data name="StateMissing" xml:space="preserve">
     <value>Missing</value>
   </data>
@@ -147,7 +144,13 @@
   <data name="StateNew" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="StatePropertyModified" xml:space="preserve">
+    <value>Properties Modified</value>
+  </data>
   <data name="StateReplaced" xml:space="preserve">
     <value>Replaced</value>
+  </data>
+  <data name="StateWrongCasing" xml:space="preserve">
+    <value>Invalid Casing</value>
   </data>
 </root>

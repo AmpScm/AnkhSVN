@@ -466,7 +466,12 @@ namespace Ankh.Scc
                 case SvnStatus.Deleted:
                     return PendingChangeKind.Deleted;
                 case SvnStatus.Missing:
-                    return PendingChangeKind.Missing;
+                    if (item == null || !item.Exists)
+                        return PendingChangeKind.Missing;
+                    else if (item != null && item.Status.NodeKind == SvnNodeKind.File && item.Exists && item.IsFile)
+                        return PendingChangeKind.WrongCasing;
+                    else
+                        return PendingChangeKind.Missing;
                 case SvnStatus.Obstructed:
                     return PendingChangeKind.Obstructed;
                 case SvnStatus.Incomplete:
@@ -518,7 +523,18 @@ namespace Ankh.Scc
         [Browsable(false)]
         public bool CanApply
         {
-            get { return (Kind == PendingChangeKind.New); }
+            get 
+            {
+                switch (Kind)
+                {
+                    case PendingChangeKind.New:
+                        return true;
+                    case PendingChangeKind.WrongCasing:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
     }
 

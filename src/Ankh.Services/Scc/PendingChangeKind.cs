@@ -20,6 +20,9 @@ using System.Text;
 
 namespace Ankh.Scc
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum PendingChangeKind
     {
         /// <summary>
@@ -84,5 +87,12 @@ namespace Ankh.Scc
         /// The item is in incomplete state
         /// </summary>
         Incomplete,
+
+
+        /// <summary>
+        /// The node has an invalid casing (FileName -> FILEname)
+        /// </summary>
+        WrongCasing
+
     }
 }
