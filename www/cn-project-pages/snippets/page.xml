@@ -25,7 +25,7 @@
       <title localize="false">About AnkhSVN</title>
       <filename>HtmlSnippet5.html</filename>
     </component>
-    <component visibility="1" type="Subproject" order="7">
+    <component visibility="3" type="Subproject" order="7">
       <title localize="false" />
     </component>
     <component visibility="1" type="Html" order="8">
