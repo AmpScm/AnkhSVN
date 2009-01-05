@@ -72,16 +72,16 @@ namespace Ankh.Services
             // Note: For TortoiseSVN use the host program files, as $(ProgramFiles) is invalid on X64 
             //       with TortoiseSVN integrated in explorer
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
-                "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));            
+                "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location") 
+                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)'", true));
 
@@ -98,7 +98,7 @@ namespace Ankh.Services
             SortTools(tools);
 
             return new ReadOnlyCollection<AnkhDiffTool>(tools);
-        }        
+        }
 
         IList<AnkhDiffTool> GetMergeToolTemplates()
         {
@@ -110,12 +110,12 @@ namespace Ankh.Services
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",            
+                "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /swap /a3 /3 /title1:'%basename' /title2:'%theirname' " +
                     "/title3:'%minename' '%base' '%theirs' '%mine' '%merged'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true) 
+                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "/m /r='$(Merged)' '$(Base)' '$(Mine)' '$(Theirs)' " +
                     "/t1='$(MergedName)' /t2='$(MineName)' /t3='$(TheirName)'", true));
@@ -132,7 +132,7 @@ namespace Ankh.Services
                 "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
                 "-dl '$(BaseName)' -dr '$(MineName)' " +
                     "'$(Base)' '$(Mine)' '$(Theirs)'", true));
-                       
+
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
             SortTools(tools);
@@ -164,7 +164,7 @@ namespace Ankh.Services
                 {
                     string path = k.GetValue(value) as string;
 
-                    if(normalizePath && !string.IsNullOrEmpty(path)
+                    if (normalizePath && !string.IsNullOrEmpty(path))
                         path = SvnTools.GetNormalizedFullPath(path);
 
                     return path;
