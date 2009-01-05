@@ -191,21 +191,26 @@ namespace Ankh.Commands
 
                     if (copiedFrom != null && !revRange.StartRevision.RequiresWorkingCopy)
                     {
-                        da.BaseFile = diff.GetTempFile(copiedFrom, revRange.StartRevision, true);
+                        if (null == (da.BaseFile = diff.GetTempFile(copiedFrom, revRange.StartRevision, true)))
+                            return; // Canceled
                         da.BaseTitle = diff.GetTitle(copiedFrom, revRange.StartRevision);
                     }
 
                     if (copiedFrom != null && !revRange.EndRevision.RequiresWorkingCopy)
                     {
-                        da.MineFile = diff.GetTempFile(copiedFrom, revRange.EndRevision, true);
+                        if (null == (da.MineFile = diff.GetTempFile(copiedFrom, revRange.EndRevision, true)))
+                            return; // Canceled
                         da.MineTitle = diff.GetTitle(copiedFrom, revRange.EndRevision);
                     }
                 }
 
                 if (da.BaseFile == null)
                 {
-                    da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
-                        diff.GetTempFile(item, revRange.StartRevision, true);
+                    if (null == (da.BaseFile = (revRange.StartRevision == SvnRevision.Working) ? item.FullPath :
+                        diff.GetTempFile(item, revRange.StartRevision, true)))
+                    {
+                        return; // Canceled
+                    }
 
                     SvnRevision startRev = revRange.StartRevision;
                     da.BaseTitle = diff.GetTitle(item, revRange.StartRevision);
@@ -213,8 +218,11 @@ namespace Ankh.Commands
 
                 if (da.MineFile == null)
                 {
-                    da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
-                        diff.GetTempFile(item, revRange.EndRevision, true);
+                    if (null == (da.MineFile = (revRange.EndRevision == SvnRevision.Working) ? item.FullPath :
+                        diff.GetTempFile(item, revRange.EndRevision, true)))
+                    {
+                        return; // Canceled
+                    }
 
                     da.MineTitle = diff.GetTitle(item, revRange.EndRevision);
                 }
