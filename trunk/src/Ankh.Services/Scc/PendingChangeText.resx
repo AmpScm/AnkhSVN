@@ -120,6 +120,9 @@
   <data name="StateAdded" xml:space="preserve">
     <value>Added</value>
   </data>
+  <data name="StateConflicted" xml:space="preserve">
+    <value>Conflicted</value>
+  </data>
   <data name="StateCopied" xml:space="preserve">
     <value>Copied</value>
   </data>
@@ -150,7 +153,10 @@
   <data name="StateReplaced" xml:space="preserve">
     <value>Replaced</value>
   </data>
+  <data name="StateTreeConflicted" xml:space="preserve">
+    <value>Tree Conflict</value>
+  </data>
   <data name="StateWrongCasing" xml:space="preserve">
-    <value>Invalid Casing</value>
+    <value>Casing Conflict</value>
   </data>
 </root>

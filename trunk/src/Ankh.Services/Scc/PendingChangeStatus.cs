@@ -72,6 +72,10 @@ namespace Ankh.Scc
                     return PendingChangeText.StateIncomplete;
                 case PendingChangeKind.WrongCasing:
                     return PendingChangeText.StateWrongCasing;
+                case PendingChangeKind.Conflicted:
+                    return PendingChangeText.StateConflicted;
+                case PendingChangeKind.TreeConflict:
+                    return PendingChangeText.StateTreeConflicted;
                 default:
                     return State.ToString();
             }            

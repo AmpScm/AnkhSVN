@@ -70,6 +70,10 @@ namespace Ankh.Scc
         /// </summary>
         PropertyConflicted,
         /// <summary>
+        /// The node is part of a tree conflict
+        /// </summary>
+        TreeConflict,
+        /// <summary>
         /// The item is obstructed by an item of the wrong kind
         /// </summary>
         Obstructed,
