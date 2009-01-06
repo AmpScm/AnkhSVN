@@ -770,17 +770,21 @@ namespace Ankh.Scc
         /// <summary>
         /// Called by SccTranslateData.set_StoredPath
         /// </summary>
-        internal bool Translate_SetStoredPath(SccTranslateData translateData, string value)
+        internal void Translate_SetStoredPath(SccTranslateData translateData, string oldValue, string newValue)
         {
             if (translateData == null)
                 throw new ArgumentNullException("translateData");
+            else if (string.IsNullOrEmpty(newValue))
+                throw new ArgumentNullException("newValue");
+
+            if (string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
+                return;
 
             SccTranslateData td;
 
-            if (!string.IsNullOrEmpty(translateData.StoredPathName))
+            if (!string.IsNullOrEmpty(oldValue))
             {
-                
-                if (_storedPaths.TryGetValue(translateData.StoredPathName, out td))
+                if (_storedPaths.TryGetValue(oldValue, out td))
                 {
                     Debug.Assert(translateData == td, "Same translation");
 
@@ -788,15 +792,38 @@ namespace Ankh.Scc
                 }
             }
 
-            if (!string.IsNullOrEmpty(value))
+            if (!string.IsNullOrEmpty(newValue))
             {
-                if (!_storedPaths.TryGetValue(value, out td))
-                    _storedPaths.Add(value, translateData);
-                else if (td != translateData)
-                    throw new InvalidOperationException("Can't store a path twice");
+                Debug.Assert(!_storedPaths.ContainsKey(newValue));
+
+                _storedPaths[newValue] = translateData;
+            }
+        }
+
+        internal SccTranslateData GetTranslateData(Guid projectId, SccEnlistMode createType, string solutionName)
+        {
+            if (createType > SccEnlistMode.None && string.IsNullOrEmpty(solutionName))
+                throw new ArgumentNullException("solutionName");
+
+            foreach (SccTranslateData td in _translations)
+            {
+                if (td.ProjectId == projectId)
+                    return td;
+            }
+            if (createType > SccEnlistMode.None)
+            {
+                SccTranslateData td;
+                if (createType <= SccEnlistMode.SvnStateOnly)
+                    td = new SccTranslateData(this, projectId, solutionName);
+                else
+                    td = new SccTranslateEnlistData(this, projectId, solutionName);
+
+                _translations.Add(td);
+
+                return td;
             }
 
-            return true;
+            return null;
         }
 
         /// <summary>

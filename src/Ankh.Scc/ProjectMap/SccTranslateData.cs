@@ -129,11 +129,12 @@ namespace Ankh.Scc.ProjectMap
         {
             get { return _slnProjectLocation; }
             set 
-            { 
+            {
+                string oldValue = _slnProjectLocation;
 
                 _slnProjectLocation = value ?? "";
 
-                _provider.Translate_SetStoredPath(this, _slnProjectLocation, value);
+                _provider.Translate_SetStoredPath(this, oldValue, value);
             }
         }
 
