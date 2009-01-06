@@ -70,6 +70,15 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Conflicted.
+        /// </summary>
+        internal static string StateConflicted {
+            get {
+                return ResourceManager.GetString("StateConflicted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copied.
         /// </summary>
         internal static string StateCopied {
@@ -160,7 +169,16 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Casing.
+        ///   Looks up a localized string similar to Tree Conflict.
+        /// </summary>
+        internal static string StateTreeConflicted {
+            get {
+                return ResourceManager.GetString("StateTreeConflicted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Casing Conflict.
         /// </summary>
         internal static string StateWrongCasing {
             get {
