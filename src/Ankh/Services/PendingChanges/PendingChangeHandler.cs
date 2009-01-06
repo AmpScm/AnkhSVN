@@ -329,53 +329,53 @@ namespace Ankh.PendingChanges
             {
                 SvnItem item = state.Cache[path];
 
-                if (item.Status.LocalContentStatus == SvnStatus.Missing && item.Status.NodeKind == SvnNodeKind.File)
-                {
-                    if (!item.Exists)
-                    {
-                        SvnDeleteArgs da = new SvnDeleteArgs();
-                        da.KeepLocal = true;
-                        da.ThrowOnError = false;
+                if (item.Status.LocalContentStatus != SvnStatus.Missing)
+                    continue;
 
-                        if (!state.Client.Delete(path, da))
+                if (item.IsCasingConflicted)
+                {
+                    string correctCasing = GetSvnCasing(item);
+                    string actualCasing = SvnTools.GetFullTruePath(item.FullPath);
+
+                    if (correctCasing == null || actualCasing == null || !string.Equals(correctCasing, actualCasing, StringComparison.OrdinalIgnoreCase))
+                        continue; // Nothing to fix here :(
+
+                    string correctFile = Path.GetFileName(correctCasing);
+                    string actualFile = Path.GetFileName(actualCasing);
+
+                    if (correctFile == actualFile)
+                        continue; // Casing issue is not in the file; can't fix :(
+
+                    IAnkhOpenDocumentTracker odt = GetService<IAnkhOpenDocumentTracker>();
+                    using (odt.LockDocument(correctCasing, DocumentLockType.NoReload))
+                    using (odt.LockDocument(actualCasing, DocumentLockType.NoReload))
+                    {
+                        try
                         {
-                            state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                            return false;
+                            File.Move(actualCasing, correctCasing);
+
+                            // Fix the name in the commit list
+                            state.CommitPaths[state.CommitPaths.IndexOf(path)] = actualCasing;
+                        }
+                        catch
+                        { }
+                        finally
+                        {
+                            item.MarkDirty();
+                            GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
                         }
                     }
-                    else
+                }
+                else if (!item.Exists)
+                {
+                    SvnDeleteArgs da = new SvnDeleteArgs();
+                    da.KeepLocal = true;
+                    da.ThrowOnError = false;
+
+                    if (!state.Client.Delete(path, da))
                     {
-                        string correctCasing = GetSvnCasing(item);
-                        string actualCasing = SvnTools.GetFullTruePath(item.FullPath);
-
-                        if (correctCasing == null || actualCasing == null || !string.Equals(correctCasing, actualCasing, StringComparison.OrdinalIgnoreCase))
-                            continue; // Nothing to fix here :(
-
-                        string correctFile = Path.GetFileName(correctCasing);
-                        string actualFile = Path.GetFileName(actualCasing);
-
-                        if (correctFile == actualFile)
-                            continue; // Casing issue is not in the file; can't fix :(
-
-                        IAnkhOpenDocumentTracker odt = GetService<IAnkhOpenDocumentTracker>();
-                        using (odt.LockDocument(correctCasing, DocumentLockType.NoReload))
-                        using (odt.LockDocument(actualCasing, DocumentLockType.NoReload))
-                        {
-                            try
-                            {
-                                File.Move(actualCasing, correctCasing);
-
-                                // Fix the name in the commit list
-                                state.CommitPaths[state.CommitPaths.IndexOf(path)] = actualCasing;
-                            }
-                            catch
-                            { }
-                            finally
-                            {
-                                item.MarkDirty();
-                                GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
-                            }
-                        }                        
+                        state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        return false;
                     }
                 }
             }

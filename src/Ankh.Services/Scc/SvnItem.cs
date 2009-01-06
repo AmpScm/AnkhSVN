@@ -712,6 +712,17 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is casing conflicted.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is casing conflicted; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsCasingConflicted
+        {
+            get { return IsVersioned && Status.LocalContentStatus == SvnStatus.Missing && Status.NodeKind == SvnNodeKind.File && IsFile && Exists; }
+        }
+
+        /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> is scheduled for delete
         /// </summary>
         public bool IsDeleteScheduled

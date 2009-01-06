@@ -468,9 +468,7 @@ namespace Ankh.Scc
                 case SvnStatus.Deleted:
                     return PendingChangeKind.Deleted;
                 case SvnStatus.Missing:
-                    if (item == null || !item.Exists)
-                        return PendingChangeKind.Missing;
-                    else if (item != null && item.Status.NodeKind == SvnNodeKind.File && item.Exists && item.IsFile)
+                    if (item != null && item.IsCasingConflicted)
                         return PendingChangeKind.WrongCasing;
                     else
                         return PendingChangeKind.Missing;

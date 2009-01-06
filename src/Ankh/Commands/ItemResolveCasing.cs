@@ -16,12 +16,10 @@ namespace Ankh.Commands
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.Status.LocalContentStatus == SharpSvn.SvnStatus.Missing &&
-                    (item.Status.NodeKind == SharpSvn.SvnNodeKind.File) && 
-                    item.Exists && item.IsFile)
+                if (item.IsCasingConflicted)
                 {
-                        // Ok, something we can fix!
-                        return;
+                    // Ok, something we can fix!
+                    return;
                 }
             }
 
@@ -34,12 +32,9 @@ namespace Ankh.Commands
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                if (item.Status.LocalContentStatus == SharpSvn.SvnStatus.Missing)
+                if (item.IsCasingConflicted)
                 {
-                    if (item.Status.NodeKind == SharpSvn.SvnNodeKind.File && item.Exists && item.IsFile)
-                    {
-                        toResolve.Add(item);
-                    }
+                    toResolve.Add(item);
                 }
             }
             try
@@ -69,16 +64,16 @@ namespace Ankh.Commands
                             // Try the actual rename
                             File.Move(actualPath, svnPath);
                         }
-                        catch{}
+                        catch { }
 
                         try
                         {
-                            // And try to fix the project system
+                            // And try to fix the project+document system
                             VsShellUtilities.RenameDocument(e.Context, actualPath, svnPath);
                         }
                         catch
                         { }
-                    }                        
+                    }
                 }
             }
             finally
@@ -88,7 +83,7 @@ namespace Ankh.Commands
         }
 
         static string GetSvnCasing(SvnItem item)
-        {            
+        {
             string name = null;
             // Find the correct casing
             using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
