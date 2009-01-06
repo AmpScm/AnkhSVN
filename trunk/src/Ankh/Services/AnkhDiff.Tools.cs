@@ -125,12 +125,11 @@ namespace Ankh.Services
                 "-m '$(Base)' --fname '$(BaseName)' '$(Theirs)' --fname '$(TheirName)' " +
                     "'$(Mine)' --fname '$(MineName)' -o '$(Merged)'", true));
 
-            // WinMerge
-            // BH: This one misses the %merged reference, so is probably broken
+            // WinMerge only has two way merge, so we diff theirs to mine to create merged
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
                 "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-dl '$(BaseName)' -dr '$(MineName)' " +
-                    "'$(Base)' '$(Mine)' '$(Theirs)'", true));
+                "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
+                    "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
