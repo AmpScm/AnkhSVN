@@ -66,7 +66,7 @@ namespace Ankh.Scc
         public void RegisterAsSccProvider()
         {
             _tryRegisteredBefore = true;
-            IVsRegisterScciProvider rscp = Context.GetService<IVsRegisterScciProvider>();
+            IVsRegisterScciProvider rscp = GetService<IVsRegisterScciProvider>();
             if (rscp != null)
             {
                 ErrorHandler.ThrowOnFailure(rscp.RegisterSourceControlProvider(AnkhId.SccProviderGuid));
@@ -84,12 +84,12 @@ namespace Ankh.Scc
         /// <value>The status cache.</value>
         public IFileStatusCache StatusCache
         {
-            get { return _statusCache ?? (_statusCache = Context.GetService<IFileStatusCache>()); }
+            get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
         public IAnkhOpenDocumentTracker DocumentTracker
         {
-            get { return _documentTracker ?? (_documentTracker = Context.GetService<IAnkhOpenDocumentTracker>()); }
+            get { return _documentTracker ?? (_documentTracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
 
         /// <summary>
