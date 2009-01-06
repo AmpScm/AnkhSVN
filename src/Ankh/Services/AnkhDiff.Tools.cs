@@ -111,20 +111,19 @@ namespace Ankh.Services
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
-                "/wait /swap /a3 /3 /title1:'%basename' /title2:'%theirname' " +
-                    "/title3:'%minename' '%base' '%theirs' '%mine' '%merged'", true));
+                "/wait /swap /a3 /3 /title1:'$(BaseName)' /title2:'$(TheirName)' " +
+                    "/title3:'$(MineName)' '$(Base)' '$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
                 RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
-                "/m /r='$(Merged)' '$(Base)' '$(Mine)' '$(Theirs)' " +
-                    "/t1='$(MergedName)' /t2='$(MineName)' /t3='$(TheirName)'", true));
+                "/m /r='$(Merged)' '$(Mine)' '$(Base)' '$(Theirs)' " +
+                    "/t1='$(MineName)' /t2='$(MergedName)' /t3='$(TheirName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
                 "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "-m '$(Base)' --fname '$(BaseName)' '$(Theirs)' --fname '$(TheirName)' " +
                     "'$(Mine)' --fname '$(MineName)' -o '$(Merged)'", true));
-
 
             // WinMerge
             // BH: This one misses the %merged reference, so is probably broken
