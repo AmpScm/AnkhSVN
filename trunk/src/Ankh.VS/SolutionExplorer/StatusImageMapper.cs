@@ -63,7 +63,7 @@ namespace Ankh.VS.SolutionExplorer
         {
             if (item == null)
                 return AnkhGlyph.None;
-            else if (item.IsConflicted || item.IsObstructed)
+            else if (item.IsConflicted || item.IsObstructed || item.IsTreeConflicted)
                 return AnkhGlyph.InConflict;
             else if (item.ReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
@@ -96,6 +96,10 @@ namespace Ankh.VS.SolutionExplorer
                     return item.Status.IsCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
                 case SvnStatus.Missing:
+                    if (item.Status.NodeKind == SvnNodeKind.File && item.Exists && item.IsFile)
+                        return AnkhGlyph.InConflict;
+                    else
+                        goto case SvnStatus.Deleted;
                 case SvnStatus.Deleted:
                     return AnkhGlyph.Deleted;
 
