@@ -23,8 +23,8 @@ namespace Ankh.Scc.ProjectMap
 {
     class SccTranslateEnlistData : SccTranslateData
     {
-        public SccTranslateEnlistData(AnkhSccProvider provider, Guid projectId)
-            : base(provider, projectId)
+        public SccTranslateEnlistData(AnkhSccProvider provider, Guid projectId, string slnProjectLocation)
+            : base(provider, projectId, slnProjectLocation)
         {
         }        
 

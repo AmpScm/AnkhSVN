@@ -48,6 +48,7 @@ namespace Ankh.Scc.ProjectMap
         readonly IVsProject _vsProject;
         readonly SccProjectType _projectType;
         readonly SccProjectFileCollection _files;
+        SccTranslateData _translateData;
         bool _isManaged;
         bool _isRegistered;
         bool _loaded;
@@ -55,6 +56,7 @@ namespace Ankh.Scc.ProjectMap
         bool _checkedProjectFile;
         AnkhSccProvider _scc;
         SvnProject _svnProjectInstance;
+        string _projectLocation;
         string _projectName;
         string _projectDirectory;
         Guid? _projectGuid;
@@ -201,6 +203,15 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        public string ProjectLocation
+        {
+            get
+            {
+                GC.KeepAlive(ProjectFile);
+                return _projectLocation;
+            }
+        }
+
         public string ProjectFile
         {
             get
@@ -212,6 +223,7 @@ namespace Ankh.Scc.ProjectMap
 
                     if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
+                        _projectLocation = name;
                         if(SvnItem.IsValidPath(name))
                             _projectFile = name;                        
                     }
@@ -283,10 +295,10 @@ namespace Ankh.Scc.ProjectMap
         SccEnlistMode? _enlistMode;
         public SccEnlistMode EnlistMode
         {
-            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode())).Value; }
+            get { return (_enlistMode ?? (_enlistMode = GetEnlistMode(true))).Value; }
         }
 
-        SccEnlistMode GetEnlistMode()
+        SccEnlistMode GetEnlistMode(bool smart)
         {
             IVsSccProjectEnlistmentChoice enlistChoice = VsProject as IVsSccProjectEnlistmentChoice;
 
@@ -302,15 +314,20 @@ namespace Ankh.Scc.ProjectMap
                         break;
                 }
 
-            string dir = SccBaseDirectory;
+            if (IsSolutionFolder)
+                return SccEnlistMode.None;
 
-            IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
-            SvnItem dirItem = _context.GetService<IFileStatusCache>()[dir];
-
-            if(dirItem.IsBelowPath(settings.ProjectRootSvnItem))
+            string dir;
+            if (smart && null != (dir = SccBaseDirectory))
             {
-                if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
-                    return SccEnlistMode.None; // All information available via working copy
+                IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
+                SvnItem dirItem = _context.GetService<IFileStatusCache>()[dir];
+
+                if (dirItem.IsBelowPath(settings.ProjectRootSvnItem))
+                {
+                    if (dirItem.WorkingCopy == settings.ProjectRootSvnItem.WorkingCopy)
+                        return SccEnlistMode.None; // All information available via working copy
+                }
             }
 
             return SccEnlistMode.SvnStateOnly;            
@@ -586,6 +603,23 @@ namespace Ankh.Scc.ProjectMap
         {
             get { return _scc ?? (_scc = _context.GetService<AnkhSccProvider>()); }
         }
+
+        public SccTranslateData SccTranslateData
+        {
+            get
+            {
+                if (_translateData == null)
+                {
+                    _translateData = Scc.GetTranslateData(ProjectGuid, SccEnlistMode.None, null);
+
+                    if (_translateData == null)
+                        _translateData = Scc.GetTranslateData(ProjectGuid, GetEnlistMode(false), ProjectLocation);
+                }
+
+                return _translateData;
+            }
+        }
+
 
         /// <summary>
         /// Checks whether the specified project is a solution folder
