@@ -111,8 +111,8 @@ namespace Ankh.Services
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
-                "/wait /swap /a3 /3 /title1:'$(BaseName)' /title2:'$(TheirName)' " +
-                    "/title3:'$(MineName)' '$(Base)' '$(Theirs)' '$(Mine)' '$(Merged)'", true));
+                "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
+                    "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
                 RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
