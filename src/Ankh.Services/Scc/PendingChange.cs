@@ -444,8 +444,10 @@ namespace Ankh.Scc
         {
             // item can be null!
 
-            if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted || treeConflict)
+            if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted)
                 return PendingChangeKind.Conflicted;
+            else if (treeConflict)
+                return PendingChangeKind.TreeConflict;
 
             switch (contentStatus)
             {

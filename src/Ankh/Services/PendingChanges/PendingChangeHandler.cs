@@ -46,6 +46,9 @@ namespace Ankh.PendingChanges
                 if (!PreCommit_AddNewFiles(state))
                     return false;
 
+                if (!PreCommit_HandleMissingFiles(state))
+                    return false;
+
                 state.FlushState();
 
                 if (!PreCommit_AddNeededParents(state))
@@ -68,6 +71,9 @@ namespace Ankh.PendingChanges
                 if (args.AddUnversionedFiles)
                 {
                     if (!PreCommit_AddNewFiles(state))
+                        return false;
+
+                    if (!PreCommit_HandleMissingFiles(state))
                         return false;
                 }
                 state.FlushState();
@@ -155,7 +161,7 @@ namespace Ankh.PendingChanges
                     if (!PreCommit_AddNewFiles(state))
                         return false;
 
-                    if (!PreCommit_DeleteMissingFiles(state))
+                    if (!PreCommit_HandleMissingFiles(state))
                         return false;
 
                     state.FlushState();
@@ -313,27 +319,63 @@ namespace Ankh.PendingChanges
         }
 
         /// <summary>
-        /// Fixes up missing files by deleting them
+        /// Fixes up missing files by fixing their casing or deleting them
         /// </summary>
         /// <param name="state">The state.</param>
         /// <returns></returns>
-        private bool PreCommit_DeleteMissingFiles(PendingCommitState state)
+        private bool PreCommit_HandleMissingFiles(PendingCommitState state)
         {
             foreach (string path in new List<string>(state.CommitPaths))
             {
                 SvnItem item = state.Cache[path];
 
-                // Don't delete the file when it does exist with a different casing!
-                if (item.Status.LocalContentStatus == SvnStatus.Missing && item.Status.NodeKind == SvnNodeKind.File && !item.Exists)
+                if (item.Status.LocalContentStatus == SvnStatus.Missing && item.Status.NodeKind == SvnNodeKind.File)
                 {
-                    SvnDeleteArgs da = new SvnDeleteArgs();
-                    da.KeepLocal = true;
-                    da.ThrowOnError = false;
-
-                    if (!state.Client.Delete(path, da))
+                    if (!item.Exists)
                     {
-                        state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                        return false;
+                        SvnDeleteArgs da = new SvnDeleteArgs();
+                        da.KeepLocal = true;
+                        da.ThrowOnError = false;
+
+                        if (!state.Client.Delete(path, da))
+                        {
+                            state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        string correctCasing = GetSvnCasing(item);
+                        string actualCasing = SvnTools.GetFullTruePath(item.FullPath);
+
+                        if (correctCasing == null || actualCasing == null || !string.Equals(correctCasing, actualCasing, StringComparison.OrdinalIgnoreCase))
+                            continue; // Nothing to fix here :(
+
+                        string correctFile = Path.GetFileName(correctCasing);
+                        string actualFile = Path.GetFileName(actualCasing);
+
+                        if (correctFile == actualFile)
+                            continue; // Casing issue is not in the file; can't fix :(
+
+                        IAnkhOpenDocumentTracker odt = GetService<IAnkhOpenDocumentTracker>();
+                        using (odt.LockDocument(correctCasing, DocumentLockType.NoReload))
+                        using (odt.LockDocument(actualCasing, DocumentLockType.NoReload))
+                        {
+                            try
+                            {
+                                File.Move(actualCasing, correctCasing);
+
+                                // Fix the name in the commit list
+                                state.CommitPaths[state.CommitPaths.IndexOf(path)] = actualCasing;
+                            }
+                            catch
+                            { }
+                            finally
+                            {
+                                item.MarkDirty();
+                                GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
+                            }
+                        }                        
                     }
                 }
             }
@@ -341,7 +383,28 @@ namespace Ankh.PendingChanges
             return true;
         }
 
-        delegate void DoAsync(PendingCommitState ps, DoAsync closer);
+        static string GetSvnCasing(SvnItem item)
+        {
+            string name = null;
+            // Find the correct casing
+            using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
+            {
+                SvnWorkingCopyEntriesArgs ea = new SvnWorkingCopyEntriesArgs();
+                ea.ThrowOnCancel = false;
+                ea.ThrowOnError = false;
+
+                wcc.ListEntries(item.Directory, ea,
+                    delegate(object sender, SvnWorkingCopyEntryEventArgs e)
+                    {
+                        if (string.Equals(e.FullPath, item.FullPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            name = e.FullPath;
+                        }
+                    });
+            }
+
+            return name;
+        }
 
         /// <summary>
         /// Finalizes the action by committing to the repository
