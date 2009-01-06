@@ -39,10 +39,10 @@ namespace Ankh.Scc
     [Guid("55272A00-42CB-11CE-8135-00AA004BB851")]
     interface IMyPropertyBag
     {
-        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
+        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         int Read(string pszPropName, out object pVar, IErrorLog pErrorLog, uint VARTYPE, object pUnkObj);
-        
-        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType=MethodCodeType.Runtime)]
+
+        [PreserveSig, MethodImpl(MethodImplOptions.InternalCall, MethodCodeType = MethodCodeType.Runtime)]
         int Write(string pszPropName, ref object pVar);
     }
 
@@ -363,7 +363,7 @@ namespace Ankh.Scc
             public override void LoadUserData(List<string> values)
             {
                 base.LoadUserData(values);
-            }            
+            }
         }
 
         void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
@@ -439,7 +439,7 @@ namespace Ankh.Scc
             if (ps != null)
             {
                 int hr = ps.LoadPackageUserOpts((IVsPersistSolutionOpts)GetService<Ankh.UI.IAnkhPackage>(), AnkhId.SubversionSccName + "Enlist");
-                
+
             }
 
 #if DEBUG_ENLISTMENT
@@ -549,7 +549,7 @@ namespace Ankh.Scc
 
         private void ReadEnlistUserData(Stream store)
         {
-            if (store.Length < 2*sizeof(int))
+            if (store.Length < 2 * sizeof(int))
                 return;
 
             using (BinaryReader br = new BinaryReader(store))
@@ -581,7 +581,7 @@ namespace Ankh.Scc
 
                         enlist.LoadUserData(values);
                         _enlistStore[projectId] = enlist;
-                    }                    
+                    }
                 }
             }
         }
@@ -599,13 +599,13 @@ namespace Ankh.Scc
                 foreach (IVsHierarchy hier in GetAllProjectsInSolutionRaw())
                 {
                     Guid g;
-                    if(!ErrorHandler.Succeeded(sol.GetGuidOfProject(hier, out g)))
+                    if (!ErrorHandler.Succeeded(sol.GetGuidOfProject(hier, out g)))
                         continue;
 
                     string projectId = g.ToString("B").ToUpperInvariant();
 
                     EnlistBase enlist;
-                    if(_enlistStore.TryGetValue(projectId, out enlist) && enlist.ShouldSerialize())
+                    if (_enlistStore.TryGetValue(projectId, out enlist) && enlist.ShouldSerialize())
                         list.Add(enlist);
                 }
 
@@ -633,13 +633,13 @@ namespace Ankh.Scc
                 return null;
 
             value = value.Trim();
-            
+
             if (string.IsNullOrEmpty(value))
                 return "";
 
-            if(value.Length >= 2 && value[0] == '\"' && value[value.Length-1] == '\"')
+            if (value.Length >= 2 && value[0] == '\"' && value[value.Length - 1] == '\"')
             {
-                value = value.Substring(1, value.Length-2).Replace("\"\"", "\"");
+                value = value.Substring(1, value.Length - 2).Replace("\"\"", "\"");
             }
 
             return value;
@@ -664,15 +664,15 @@ namespace Ankh.Scc
         static string RemoveEndSlash(string path, out char end)
         {
             end = '\0';
-            if(SvnItem.IsValidPath(path))
+            if (SvnItem.IsValidPath(path))
             {
                 string p = SvnTools.GetNormalizedFullPath(path);
 
-                if(p.Length == path.Length-1 && string.Equals(p, path.Substring(0, p.Length), StringComparison.OrdinalIgnoreCase))
+                if (p.Length == path.Length - 1 && string.Equals(p, path.Substring(0, p.Length), StringComparison.OrdinalIgnoreCase))
                 {
-                    char c = path[path.Length-1];
- 
-                    if(c == '\\' || c == '/')
+                    char c = path[path.Length - 1];
+
+                    if (c == '\\' || c == '/')
                     {
                         end = c;
                         return p;
@@ -685,7 +685,7 @@ namespace Ankh.Scc
 
         static string AddEndSlash(string path, char end)
         {
-            if(end != '\0')
+            if (end != '\0')
                 return path.TrimEnd(end) + end;
             else
                 return path;
@@ -710,7 +710,7 @@ namespace Ankh.Scc
             SccTranslateData td;
             if (_sccPaths.TryGetValue(lpszEnlistmentPath, out td) && !string.IsNullOrEmpty(td.StoredPathName))
             {
-                if(SvnItem.IsValidPath(td.StoredPathName))
+                if (SvnItem.IsValidPath(td.StoredPathName))
                     pbstrProjectPath = AddEndSlash(td.StoredPathName, end);
                 else
                     pbstrProjectPath = td.StoredPathName;
@@ -838,7 +838,7 @@ namespace Ankh.Scc
 
             if (!string.IsNullOrEmpty(translateData.SccPathName) &&
                 !string.Equals(translateData.SccPathName, translateData.EnlistPathName, StringComparison.OrdinalIgnoreCase))
-            {                
+            {
                 if (_sccPaths.TryGetValue(translateData.SccPathName, out td))
                 {
                     Debug.Assert(translateData == td, "Same translation");
