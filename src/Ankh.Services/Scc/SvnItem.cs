@@ -701,6 +701,17 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a value indicating whether this node is tree conflicted.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is tree conflicted; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsTreeConflicted
+        {
+            get { return false; } // TODO: Fill for 1.6
+        }
+
+        /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> is scheduled for delete
         /// </summary>
         public bool IsDeleteScheduled
