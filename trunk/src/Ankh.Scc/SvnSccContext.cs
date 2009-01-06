@@ -53,39 +53,39 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Gets the SVN-Status of a file
+        /// Gets the working copy entry information on the specified path from its parent
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The path.</param>
         /// <returns></returns>
-        /// <remarks>Returns the status of a file; eats all Svn exceptions</remarks>
-        public SvnStatusEventArgs SafeGetStatus(string path)
+        public SvnWorkingCopyEntryEventArgs SafeGetEntry(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            if (File.Exists(path))
-                path = SvnTools.GetTruePath(path); // Resolve casing issues
+            // We only have to look in the parent.
+            // If the path is the working copy root, the name doesn't matter!
 
-            SvnStatusArgs a = new SvnStatusArgs();
-            a.ThrowOnError = false;
-            a.RetrieveAllEntries = true;
-            a.Depth = SvnDepth.Empty;
-            a.RetrieveIgnoredEntries = true;
-
-            SvnStatusEventArgs status = null;
-
-            if (_client.Status(path, a,
-                delegate(object sender, SvnStatusEventArgs e)
-                {
-                    e.Detach();
-                    status = e;
-                }))
+            string dir = Path.GetDirectoryName(path);
+            
+            using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
             {
-                return status;
-            }
+                SvnWorkingCopyEntryEventArgs entry = null;
+                SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
+                wa.ThrowOnError = false;
+                wcc.ListEntries(dir, wa,
+                    delegate(object sender, SvnWorkingCopyEntryEventArgs e)
+                    {
+                        if (entry == null && string.Equals(path, e.FullPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            e.Detach();
+                            entry = e;
+                        }
+                    });
 
-            return null;
+                return entry;
+            }
         }
+
 
         /// <summary>
         /// Gets the status as noted in the parent directory
@@ -118,39 +118,6 @@ namespace Ankh.Scc
                     });
 
             return saa;
-        }
-
-        /// <summary>
-        /// Gets the SVN-Info of a path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        /// <remarks>Returns the info of a file; eats all Svn exceptions</remarks>
-        public SvnInfoEventArgs SafeGetInfo(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            if (File.Exists(path))
-                path = SvnTools.GetTruePath(path); // Resolve casing issues
-
-            SvnInfoArgs a = new SvnInfoArgs();
-            a.ThrowOnError = false;
-            a.Depth = SvnDepth.Empty;
-
-            SvnInfoEventArgs info = null;
-
-            if (_client.Info(path, a,
-                delegate(object sender, SvnInfoEventArgs e)
-                {
-                    e.Detach();
-                    info = e;
-                }))
-            {
-                return info;
-            }
-
-            return null;
         }
 
         /// <summary>
@@ -593,27 +560,20 @@ namespace Ankh.Scc
             return _client.Delete(path, da);
         }
 
-        /// <summary>
-        /// Gets a boolean indicating whether to calculate the specified status as unversioned
-        /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        public bool IsUnversioned(SvnStatusEventArgs status)
+        public bool IsUnversioned(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException("name");
+
+            SvnWorkingCopyEntryEventArgs status = SafeGetEntry(name);
+
             if (status == null)
                 return true;
 
-            switch (status.LocalContentStatus)
+            switch (status.Schedule)
             {
-                case SvnStatus.Ignored:
-                case SvnStatus.None:
-                case SvnStatus.Zero:
-                case SvnStatus.NotVersioned:
-                    return true;
-
-                case SvnStatus.Deleted:
-                // What to do with this?
-                // * If there is a file it is unmanaged; but probably was once managed?
+                case SvnSchedule.Delete:
+                    return true; // The item was already deleted
                 default:
                     return false;
             }
@@ -902,26 +862,26 @@ namespace Ankh.Scc
 
             // Item does exist; check casing
             string parentDir = Path.GetDirectoryName(path);
-            SvnStatusArgs sa = new SvnStatusArgs();
-            sa.ThrowOnError = false;
-            sa.RetrieveAllEntries = true;
+            SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
+            wa.ThrowOnError = false;
+            wa.ThrowOnCancel = false;
 
-            sa.Depth = nodeKind == SvnNodeKind.File ? SvnDepth.Files : SvnDepth.Children;
             bool ok = true;
 
-            _client.Status(parentDir, sa,
-                delegate(object sender, SvnStatusEventArgs e)
+            using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
+            {
+                wcc.ListEntries(parentDir, wa,
+                delegate(object sender, SvnWorkingCopyEntryEventArgs e)
                 {
-                    if (string.Equals(Path.GetDirectoryName(e.FullPath), parentDir, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(e.FullPath, file, StringComparison.OrdinalIgnoreCase))
                     {
-                        string fn = Path.GetFileName(e.FullPath);
-                        if (string.Equals(fn, file, StringComparison.OrdinalIgnoreCase))
+                        if (!string.Equals(e.Name, file, StringComparison.Ordinal))
                         {
-                            if (fn != file)
-                                ok = false; // Casing issue
+                            ok = false; // Casing issue
                         }
                     }
                 });
+            }
 
             return ok;
         }
@@ -1036,7 +996,7 @@ namespace Ankh.Scc
 
             dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
             dir.Delete();
-        }
+        }        
 
         static class NativeMethods
         {
@@ -1045,6 +1005,6 @@ namespace Ankh.Scc
 
 
 
-        }
+        }        
     }
 }

@@ -62,8 +62,9 @@ namespace Ankh.VS.SolutionExplorer
         public AnkhGlyph GetStatusImageForSvnItem(SvnItem item)
         {
             if (item == null)
-                return AnkhGlyph.None;
-            else if (item.IsConflicted || item.IsObstructed || item.IsTreeConflicted)
+                throw new ArgumentNullException("item");
+
+            if (item.IsConflicted || item.IsObstructed || item.IsTreeConflicted)
                 return AnkhGlyph.InConflict;
             else if (item.ReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
@@ -96,7 +97,7 @@ namespace Ankh.VS.SolutionExplorer
                     return item.Status.IsCopied ? AnkhGlyph.CopiedOrMoved : AnkhGlyph.Added;
 
                 case SvnStatus.Missing:
-                    if (item.Status.NodeKind == SvnNodeKind.File && item.Exists && item.IsFile)
+                    if (item.IsCasingConflicted)
                         return AnkhGlyph.InConflict;
                     else
                         goto case SvnStatus.Deleted;

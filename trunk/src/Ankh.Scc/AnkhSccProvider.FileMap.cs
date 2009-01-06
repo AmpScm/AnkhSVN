@@ -93,8 +93,6 @@ namespace Ankh.Scc
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                SvnStatusEventArgs status = svn.SafeGetStatus(filename);
-
                 if (File.Exists(filename))
                 {
                     // The file was only removed from the project. We should not touch it
@@ -110,7 +108,7 @@ namespace Ankh.Scc
                     return;
                 }
 
-                if (svn.IsUnversioned(status))
+                if (svn.IsUnversioned(filename))
                     return;
 
                 svn.SafeDeleteFile(filename);
@@ -214,9 +212,7 @@ namespace Ankh.Scc
                     return;
                 }
 
-                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
-
-                if (svn.IsUnversioned(status))
+                if (svn.IsUnversioned(oldName))
                     return;
             }
         }
@@ -235,9 +231,7 @@ namespace Ankh.Scc
                     return;
                 }
 
-                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
-
-                if (svn.IsUnversioned(status))
+                if (svn.IsUnversioned(oldName))
                     return;
             }
         }
@@ -265,9 +259,7 @@ namespace Ankh.Scc
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
-
-                if (!svn.IsUnversioned(status))
+                if (!svn.IsUnversioned(oldName))
                 {
                     if (!Directory.Exists(newName)) // Fails if the new name is a directory!
                         svn.SafeWcMoveFixup(oldName, newName);
@@ -286,9 +278,7 @@ namespace Ankh.Scc
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                SvnStatusEventArgs status = svn.SafeGetStatus(oldName);
-
-                if (!svn.IsUnversioned(status))
+                if (!svn.IsUnversioned(oldName))
                 {
                     svn.SafeWcMoveFixup(oldName, newName);
                 }
