@@ -223,6 +223,11 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
+            //if (IsProjectFileOrSolution(oldName))
+            //{
+            //    // TODO: Is enlisted -> Ask user!
+            //}
+
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 if (!svn.CouldAdd(newName, SvnNodeKind.File))
