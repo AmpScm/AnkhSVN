@@ -30,11 +30,6 @@ namespace Ankh.UI.PropertyEditors
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyEditorDialog));
-            this.propListView = new Ankh.UI.VSSelectionControls.SmartListView();
-            this.nameColumn = new System.Windows.Forms.ColumnHeader();
-            this.stateColumn = new System.Windows.Forms.ColumnHeader();
-            this.baseValueColumn = new System.Windows.Forms.ColumnHeader();
-            this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
@@ -43,37 +38,13 @@ namespace Ankh.UI.PropertyEditors
             this.propGroupBox = new System.Windows.Forms.GroupBox();
             this.svnItemLabel = new System.Windows.Forms.Label();
             this.revertButton = new System.Windows.Forms.Button();
+            this.propListView = new Ankh.UI.VSSelectionControls.SmartListView();
+            this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.stateColumn = new System.Windows.Forms.ColumnHeader();
+            this.baseValueColumn = new System.Windows.Forms.ColumnHeader();
+            this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.propGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // propListView
-            // 
-            resources.ApplyResources(this.propListView, "propListView");
-            this.propListView.AutoArrange = false;
-            this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.nameColumn,
-            this.stateColumn,
-            this.baseValueColumn,
-            this.valueColumn});
-            this.propListView.GridLines = true;
-            this.propListView.Name = "propListView";
-            this.propListView.SelectedIndexChanged += new System.EventHandler(this.propListView_SelectedIndexChanged);
-            // 
-            // nameColumn
-            // 
-            resources.ApplyResources(this.nameColumn, "nameColumn");
-            // 
-            // stateColumn
-            // 
-            resources.ApplyResources(this.stateColumn, "stateColumn");
-            // 
-            // baseValueColumn
-            // 
-            resources.ApplyResources(this.baseValueColumn, "baseValueColumn");
-            // 
-            // valueColumn
-            // 
-            resources.ApplyResources(this.valueColumn, "valueColumn");
             // 
             // editButton
             // 
@@ -123,6 +94,35 @@ namespace Ankh.UI.PropertyEditors
             resources.ApplyResources(this.revertButton, "revertButton");
             this.revertButton.Name = "revertButton";
             this.revertButton.Click += new System.EventHandler(this.revertButton_Click);
+            // 
+            // propListView
+            // 
+            resources.ApplyResources(this.propListView, "propListView");
+            this.propListView.AutoArrange = false;
+            this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.nameColumn,
+            this.stateColumn,
+            this.baseValueColumn,
+            this.valueColumn});
+            this.propListView.GridLines = true;
+            this.propListView.Name = "propListView";
+            this.propListView.SelectedIndexChanged += new System.EventHandler(this.propListView_SelectedIndexChanged);
+            // 
+            // nameColumn
+            // 
+            resources.ApplyResources(this.nameColumn, "nameColumn");
+            // 
+            // stateColumn
+            // 
+            resources.ApplyResources(this.stateColumn, "stateColumn");
+            // 
+            // baseValueColumn
+            // 
+            resources.ApplyResources(this.baseValueColumn, "baseValueColumn");
+            // 
+            // valueColumn
+            // 
+            resources.ApplyResources(this.valueColumn, "valueColumn");
             // 
             // PropertyEditorDialog
             // 
