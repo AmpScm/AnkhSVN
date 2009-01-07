@@ -27,10 +27,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Property editor for the predefined ignore property.
     /// </summary>
-    partial class IgnorePropertyEditor : PropertyEditControl, IPropertyEditor
+    partial class IgnorePropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
-
         public IgnorePropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -40,12 +38,12 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             this.ignoreTextBox.Text = this.originalValue;
         }
 
-        public bool Valid
+        public override bool Valid
         {
             get
             { 
@@ -61,7 +59,7 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -71,20 +69,23 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when Valid is false");
                 }
 				
-                return new TextPropertyItem(this.ignoreTextBox.Text);
+                return new SvnPropertyValue(SvnPropertyNames.SvnIgnore, ignoreTextBox.Text);
             }
             set
             {
-                TextPropertyItem item = (TextPropertyItem) value;
-                this.originalValue = item.Text;
-                this.ignoreTextBox.Text = this.originalValue;
+                if (value != null)
+                {
+                    ignoreTextBox.Text = originalValue = value.StringValue;
+                }
+                else
+                    ignoreTextBox.Text = originalValue = "";
             }
         }
 
         /// <summary>
         /// Directory property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.Directory;
         }
@@ -114,8 +115,8 @@ namespace Ankh.UI.PropertyEditors
             string newValue = this.ignoreTextBox.Text;
             // Enables/Disables save button
             this.dirty = !newValue.Equals(this.originalValue);
-            if (Changed != null)
-                Changed( this, EventArgs.Empty );
+
+            OnChanged(EventArgs.Empty);
         }
 
         private void CreateMyToolTip()

@@ -30,8 +30,10 @@ namespace Ankh.UI.PropertyEditors
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PropertyEditorDialog));
-            this.propListView = new System.Windows.Forms.ListView();
+            this.propListView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.stateColumn = new System.Windows.Forms.ColumnHeader();
+            this.baseValueColumn = new System.Windows.Forms.ColumnHeader();
             this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
@@ -40,6 +42,7 @@ namespace Ankh.UI.PropertyEditors
             this.addButton = new System.Windows.Forms.Button();
             this.propGroupBox = new System.Windows.Forms.GroupBox();
             this.svnItemLabel = new System.Windows.Forms.Label();
+            this.revertButton = new System.Windows.Forms.Button();
             this.propGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,17 +52,24 @@ namespace Ankh.UI.PropertyEditors
             this.propListView.AutoArrange = false;
             this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.nameColumn,
+            this.stateColumn,
+            this.baseValueColumn,
             this.valueColumn});
-            this.propListView.FullRowSelect = true;
             this.propListView.GridLines = true;
             this.propListView.Name = "propListView";
-            this.propListView.UseCompatibleStateImageBehavior = false;
-            this.propListView.View = System.Windows.Forms.View.Details;
             this.propListView.SelectedIndexChanged += new System.EventHandler(this.propListView_SelectedIndexChanged);
             // 
             // nameColumn
             // 
             resources.ApplyResources(this.nameColumn, "nameColumn");
+            // 
+            // stateColumn
+            // 
+            resources.ApplyResources(this.stateColumn, "stateColumn");
+            // 
+            // baseValueColumn
+            // 
+            resources.ApplyResources(this.baseValueColumn, "baseValueColumn");
             // 
             // valueColumn
             // 
@@ -99,10 +109,6 @@ namespace Ankh.UI.PropertyEditors
             // 
             resources.ApplyResources(this.propGroupBox, "propGroupBox");
             this.propGroupBox.Controls.Add(this.svnItemLabel);
-            this.propGroupBox.Controls.Add(this.propListView);
-            this.propGroupBox.Controls.Add(this.addButton);
-            this.propGroupBox.Controls.Add(this.deleteButton);
-            this.propGroupBox.Controls.Add(this.editButton);
             this.propGroupBox.Name = "propGroupBox";
             this.propGroupBox.TabStop = false;
             // 
@@ -112,31 +118,40 @@ namespace Ankh.UI.PropertyEditors
             this.svnItemLabel.AutoEllipsis = true;
             this.svnItemLabel.Name = "svnItemLabel";
             // 
+            // revertButton
+            // 
+            resources.ApplyResources(this.revertButton, "revertButton");
+            this.revertButton.Name = "revertButton";
+            this.revertButton.Click += new System.EventHandler(this.revertButton_Click);
+            // 
             // PropertyEditorDialog
             // 
-            this.AcceptButton = this.addButton;
+            this.AcceptButton = this.okButton;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.Controls.Add(this.propGroupBox);
+            this.Controls.Add(this.propListView);
             this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.addButton);
             this.Controls.Add(this.okButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.Controls.Add(this.revertButton);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.editButton);
             this.Name = "PropertyEditorDialog";
-            this.ShowInTaskbar = false;
             this.propGroupBox.ResumeLayout(false);
+            this.propGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
 		#endregion
 
         private System.Windows.Forms.ColumnHeader nameColumn;
-        private System.Windows.Forms.ColumnHeader valueColumn;
+        private System.Windows.Forms.ColumnHeader baseValueColumn;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button deleteButton;
-        private System.Windows.Forms.ListView propListView;
+        private Ankh.UI.VSSelectionControls.SmartListView propListView;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.Button addButton;
 
@@ -146,5 +161,8 @@ namespace Ankh.UI.PropertyEditors
         private System.ComponentModel.Container components = null;
         private System.Windows.Forms.GroupBox propGroupBox;
         private System.Windows.Forms.Label svnItemLabel;
+        private System.Windows.Forms.ColumnHeader stateColumn;
+        private System.Windows.Forms.ColumnHeader valueColumn;
+        private System.Windows.Forms.Button revertButton;
     }
 }

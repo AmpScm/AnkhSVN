@@ -27,9 +27,9 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Editor for externals properties.
     /// </summary>
-    public partial class ExternalsPropertyEditor : System.Windows.Forms.UserControl, IPropertyEditor
+    partial class ExternalsPropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
+        string originalValue;
 
         public ExternalsPropertyEditor()
         {
@@ -43,7 +43,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Resets the textbox.
         /// </summary>
-        public void Reset()
+        public override void Reset()
         {
             this.externalsTextBox.Text = "";
             this.dirty = false;
@@ -52,7 +52,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Indicates whether the property item is valid.
         /// </summary>
-        public bool Valid
+        public override bool Valid
         {
             get
             {
@@ -70,7 +70,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Sets and gets the property item.
         /// </summary>
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -80,13 +80,17 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when valid is false");
                 }
 
-                return new TextPropertyItem(this.externalsTextBox.Text);
+                return new SvnPropertyValue(SvnPropertyNames.SvnExternals, externalsTextBox.Text);
             }
 
             set
             {
-                TextPropertyItem item = (TextPropertyItem)value;
-                this.externalsTextBox.Text = item.Text;
+                if (value != null)
+                {
+                    externalsTextBox.Text = originalValue = value.StringValue;
+                }
+                else
+                    externalsTextBox.Text = originalValue = "";
                 this.dirty = false;
             }
         }
@@ -103,7 +107,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Directory property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.Directory;
         }
@@ -131,8 +135,8 @@ namespace Ankh.UI.PropertyEditors
         {
             // Enables save button
             this.dirty = true;
-            if (Changed != null)
-                Changed(this, EventArgs.Empty);
+
+            OnChanged(EventArgs.Empty);
         }
 
         private void CreateMyToolTip()

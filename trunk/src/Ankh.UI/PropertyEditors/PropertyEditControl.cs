@@ -20,10 +20,11 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.ComponentModel;
+using SharpSvn;
 
 namespace Ankh.UI.PropertyEditors
 {
-    class PropertyEditControl : UserControl
+    abstract class PropertyEditControl : UserControl
     {
         public PropertyEditControl()
         {
@@ -35,6 +36,37 @@ namespace Ankh.UI.PropertyEditors
         {
             get { return base.Size; }
             set { base.Size = value; }
+        }
+
+        public abstract SvnPropertyValue PropertyItem
+        {
+            get;
+            set;
+        }
+
+        string _propertyName;
+
+        public virtual string PropertyName
+        {
+            get { return _propertyName; }
+            set { _propertyName = value; }
+        }
+
+        public abstract bool Valid
+        {
+            get;
+        }
+
+        public abstract void Reset();
+
+        public abstract SvnNodeKind GetAllowedNodeKind();
+
+        public event EventHandler Changed;
+
+        protected virtual void OnChanged(EventArgs e)
+        {
+            if (Changed != null)
+                Changed(this, e);
         }
     }
 }

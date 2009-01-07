@@ -27,10 +27,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Property editor for plain properties
     /// </summary>
-    internal partial class PlainPropertyEditor : PropertyEditControl, IPropertyEditor
+    internal partial class PlainPropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
-        
         public PlainPropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -40,17 +38,17 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             this.valueTextBox.Text = "";
         }
 
-        public bool Valid
+        public override bool Valid
         {
             get{ return this.valueTextBox.Text.Trim() != "";}
         }
 
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {   
@@ -60,20 +58,25 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when Valid is false");
                 }
 
-                return new TextPropertyItem(this.valueTextBox.Text);
+                return new SvnPropertyValue(PropertyName, this.valueTextBox.Text);
             }
 
             set
             {
-                TextPropertyItem item = (TextPropertyItem)value;
-                this.valueTextBox.Text = item.Text;
+                if (value != null)
+                {
+                    PropertyName = value.Key;
+                    valueTextBox.Text = value.StringValue;
+                }
+                else
+                    valueTextBox.Text = "";
             }
         }
 
         /// <summary>
         /// Custom property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.Directory | SvnNodeKind.File;
         }
@@ -95,8 +98,7 @@ namespace Ankh.UI.PropertyEditors
 
         private void valueTextBox_TextChanged(object sender, System.EventArgs e)
         {
-            if (Changed != null)
-                Changed( this, EventArgs.Empty );
+            OnChanged(EventArgs.Empty);
         }
 
 

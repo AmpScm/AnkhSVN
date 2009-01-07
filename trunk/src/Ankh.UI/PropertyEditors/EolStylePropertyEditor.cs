@@ -27,9 +27,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Summary description for EolStylePropertyEditor.
     /// </summary>
-    internal partial class EolStylePropertyEditor : PropertyEditControl, IPropertyEditor
+    partial class EolStylePropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
         public string existingValue;
 
         public EolStylePropertyEditor()
@@ -50,11 +49,11 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
-        public void Reset()
+        public override void Reset()
         {
         }
 
-        public bool Valid
+        public override bool Valid
         {
             get 
             {
@@ -68,7 +67,7 @@ namespace Ankh.UI.PropertyEditors
 
         }
 
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -78,12 +77,12 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when Valid is false");
                 }
           
-                return new TextPropertyItem(_selectedValue);
+                return new SvnPropertyValue(SvnPropertyNames.SvnEolStyle, _selectedValue);
             }
             set
             {
-                TextPropertyItem item = (TextPropertyItem)value;
-                existingValue = item.Text;
+                // TODO: Make safe for null
+                existingValue = value.StringValue;
                 RadioButton rb = ToRadioButton(existingValue);
                 if (rb != null)
                 {
@@ -95,7 +94,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// File property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.File;
         }
@@ -146,10 +145,8 @@ namespace Ankh.UI.PropertyEditors
                 if (_dirty != value)
                 {
                     _dirty = value;
-                    if (Changed != null)
-                    {
-                        Changed(this, EventArgs.Empty);
-                    }
+
+                    OnChanged(EventArgs.Empty);
                 }
             }
         }
