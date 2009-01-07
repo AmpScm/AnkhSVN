@@ -105,7 +105,9 @@ namespace Ankh.UI.PropertyEditors
             this.baseValueColumn,
             this.valueColumn});
             this.propListView.GridLines = true;
+            this.propListView.HideSelection = false;
             this.propListView.Name = "propListView";
+            this.propListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.propListView_MouseDoubleClick);
             this.propListView.SelectedIndexChanged += new System.EventHandler(this.propListView_SelectedIndexChanged);
             // 
             // nameColumn
