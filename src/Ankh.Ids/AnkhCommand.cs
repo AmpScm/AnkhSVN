@@ -99,7 +99,7 @@ namespace Ankh.Ids
         DocumentAnnotate,
         DocumentHistory,
 
-        BlameShowLog,
+        AnnotateShowLog,
         RevertItem,
         SaveToFile,
         DocumentConflictEdit,

@@ -84,7 +84,7 @@ namespace Ankh.Ids
         SolutionFileScc,
         ProjectFileScc,
         
-        BlameContextMenu,
+        AnnotateContextMenu,
 
         EditorScc,
         RepositoryExplorerOpenWith,
