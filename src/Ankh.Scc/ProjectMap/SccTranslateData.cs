@@ -31,7 +31,6 @@ namespace Ankh.Scc.ProjectMap
         string _slnProjectLocation;
         SccProjectData _project;
         bool _disposed;
-        string _storedPath;
         string _sccPath;
 
         public SccTranslateData(AnkhSccProvider provider, Guid projectId, string slnProjectLocation)
@@ -117,9 +116,12 @@ namespace Ankh.Scc.ProjectMap
 
                 return null;
             }
+            private set
+            {
+                _sccBaseUri = value;
+            }
         }
 
-        string _sccRelativePath;
         public string SccRelativePath
         {
             get { return PackageUtilities.MakeRelative(SccBaseDirectory, SccPathName); }
@@ -157,16 +159,7 @@ namespace Ankh.Scc.ProjectMap
         /// <value>The name of the stored path.</value>
         public string StoredPathName
         {
-            get { return _storedPath; }
-            set
-            {
-                if (_storedPath == value)
-                    return;
-
-                string path = SvnTools.GetNormalizedFullPath(value);
-
-                
-            }
+            get { return SlnProjectLocation; }            
         }
 
         /// <summary>
