@@ -36,11 +36,7 @@ namespace Ankh.UI.PropertyEditors
 
             this.components = new System.ComponentModel.Container();
             CreateMyToolTip();
-            Reset();
-        }
 
-        public override void Reset()
-        {
             if (this.needsLockTextBox != null && !this.needsLockTextBox.IsDisposed)
             {
                 this.needsLockTextBox.Text = FEEDBACK_TEXT;

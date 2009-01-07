@@ -48,25 +48,7 @@ namespace Ankh.UI.PropertyEditors
                 _selectedValue = (string)rb.Tag;
             }
         }
-
-        public override void Reset()
-        {
-        }
-
-        public override bool Valid
-        {
-            get 
-            {
-                if (!_dirty)
-                {
-                    return false;
-                }
-                else 
-                    return true;
-            }
-
-        }
-
+  
         public override SvnPropertyValue PropertyItem
         {
             get

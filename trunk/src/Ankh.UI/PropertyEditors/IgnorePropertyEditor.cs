@@ -38,11 +38,6 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public override void Reset()
-        {
-            this.ignoreTextBox.Text = this.originalValue;
-        }
-
         public override bool Valid
         {
             get

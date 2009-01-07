@@ -38,11 +38,6 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public override void Reset()
-        {
-            this.valueTextBox.Text = "";
-        }
-
         public override bool Valid
         {
             // Every value is valid!

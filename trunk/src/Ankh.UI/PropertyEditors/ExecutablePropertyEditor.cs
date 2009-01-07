@@ -38,11 +38,8 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        public override void Reset() { }
-
         public override bool Valid
         {
-
             get { return true; }
         }
 

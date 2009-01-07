@@ -39,16 +39,6 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <summary>
-        /// Resets the checkboxes.
-        /// </summary>
-        public override void Reset()
-        {
-            for (int i = 0; i < checkedListBox1.Items.Count; i++ )
-                checkedListBox1.SetItemChecked(i, false);
-            this.dirty = false;
-        }
-
-        /// <summary>
         /// Indicates whether the selection is valid.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),Browsable(false)]

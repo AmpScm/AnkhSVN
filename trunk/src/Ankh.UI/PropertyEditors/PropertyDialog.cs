@@ -45,26 +45,13 @@ namespace Ankh.UI.PropertyEditors
 
         private void InitializeEditors()
         {
-            PropertyEditControl propEditor = new ExecutablePropertyEditor();
-            AddPropertyEditor(propEditor);
-
-            propEditor = new MimeTypePropertyEditor();
-            AddPropertyEditor(propEditor);
-
-            propEditor = new IgnorePropertyEditor();
-            AddPropertyEditor(propEditor);
-            
-            propEditor = new KeywordsPropertyEditor();
-            AddPropertyEditor(propEditor);
-            
-            propEditor = new EolStylePropertyEditor();
-            AddPropertyEditor(propEditor);
-
-            propEditor = new NeedsLockPropertyEditor();
-            AddPropertyEditor(propEditor);
-
-            propEditor = new ExternalsPropertyEditor();
-            AddPropertyEditor(propEditor);
+            AddPropertyEditor(new ExecutablePropertyEditor());
+            AddPropertyEditor(new MimeTypePropertyEditor());
+            AddPropertyEditor(new IgnorePropertyEditor());
+            AddPropertyEditor(new KeywordsPropertyEditor());
+            AddPropertyEditor(new EolStylePropertyEditor());
+            AddPropertyEditor(new NeedsLockPropertyEditor());
+            //AddPropertyEditor(new ExternalsPropertyEditor());
 
             this.nameComboBox.Items.Clear();
             foreach (PropertyEditControl editor in this.keyPropEditor.Values)
