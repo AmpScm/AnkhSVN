@@ -311,6 +311,16 @@ namespace Ankh.UI.PropertyEditors
                     valueColumn.Width = Math.Max(0, valueColumn.Width + rest / 2);
                 }
             }
+        }
+
+        private void propListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ListViewHitTestInfo hti = propListView.HitTest(e.Location);
+
+            if (hti.Location != ListViewHitTestLocations.None && hti.Item != null && hti.Item.Selected && editButton.Enabled)
+            {
+                editButton_Click(sender, e);
+            }
         }        
     }
 }

@@ -54,7 +54,7 @@ namespace Ankh.UI.PropertyEditors
 
         public virtual bool Valid
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <summary>

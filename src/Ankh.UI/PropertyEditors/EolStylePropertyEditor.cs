@@ -107,8 +107,7 @@ namespace Ankh.UI.PropertyEditors
             _selectedValue = newValue;
 
             // Enables save button
-            Dirty = !string.IsNullOrEmpty(newValue)
-                && !newValue.Equals(existingValue);
+            Dirty = (newValue != existingValue);
         }
 
         private void CreateMyToolTip()
