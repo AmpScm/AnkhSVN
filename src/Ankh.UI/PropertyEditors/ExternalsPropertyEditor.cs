@@ -21,6 +21,8 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using SharpSvn;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -37,7 +39,6 @@ namespace Ankh.UI.PropertyEditors
             InitializeComponent();
 
             this.components = new System.ComponentModel.Container();
-            CreateMyToolTip();
         }
 
         /// <summary>
@@ -47,15 +48,125 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {
-                return !string.IsNullOrEmpty(_externalsText);
+                return true;
             }
         }
 
-        string _externalsText;
+        SortedList<string, SvnExternalItem> _originals = new SortedList<string, SvnExternalItem>();
+        SortedList<string, SvnExternalItem> _externals = new SortedList<string, SvnExternalItem>();
+        string _originalText;
         public string ExternalsText
         {
-            get { return _externalsText; }
-            set { _externalsText = value; }
+            get
+            {
+                bool foundChanges = false;
+                SortedList<string, SvnExternalItem> nw = new SortedList<string, SvnExternalItem>();
+
+                foreach (DataGridViewRow r in externalGrid.Rows)
+                {
+                    SvnExternalItem ei = r.Tag as SvnExternalItem;
+                    if (ei == null)
+                        continue;
+
+                    nw[ei.Target] = ei;
+                }
+
+                foreach (SvnExternalItem i in _originals.Values)
+                {
+                    SvnExternalItem other;
+                    if (nw.TryGetValue(i.Target, out other))
+                    {
+                        if ((i.Url == other.Url) &&
+                            (i.Revision == other.Revision) &&
+                            (i.OperationalRevision == other.OperationalRevision))
+                        {
+                            continue;
+                        }
+                    }
+
+                    foundChanges = true;
+                }
+
+                if (!foundChanges)
+                    foreach (SvnExternalItem i in nw.Values)
+                    {
+                        SvnExternalItem other;
+                        if (_originals.TryGetValue(i.Target, out other))
+                        {
+                            if ((i.Url == other.Url) &&
+                                (i.Revision == other.Revision) &&
+                                (i.OperationalRevision == other.OperationalRevision))
+                            {
+                                continue;
+                            }
+                        }
+
+                        foundChanges = true;
+                    }
+
+                if (!foundChanges)
+                    return _originalText;
+
+                StringBuilder sb = new StringBuilder();
+                foreach (DataGridViewRow r in externalGrid.Rows)
+                {
+                    SvnExternalItem ei = r.Tag as SvnExternalItem;
+                    if (ei == null)
+                        continue;
+
+                    sb.Append(ei);
+                    sb.AppendLine();
+                }
+
+                return sb.ToString();
+            }
+            set
+            {
+                _originalText = value;
+                _externals.Clear();
+                if (value == null)
+                {
+                    return;
+                }
+                SvnExternalItem[] items;
+                if (SvnExternalItem.TryParse(value, out items))
+                {
+                    foreach (SvnExternalItem i in items)
+                    {
+                        _originals[i.Target] = i;
+                        _externals[i.Target] = i;
+                    }
+                }
+                Rebind(items);
+            }
+        }
+
+        private void Rebind(SvnExternalItem[] items)
+        {
+            externalGrid.Rows.Clear();
+
+            foreach (SvnExternalItem i in items)
+            {
+                int n =externalGrid.Rows.Add();
+                externalGrid.Rows[n].Tag = i;
+            }
+
+            foreach (DataGridViewRow r in externalGrid.Rows)
+            {
+                SvnExternalItem ii = r.Tag as SvnExternalItem;
+
+                if (ii != null)
+                    RowRefresh(r, ii);
+                
+            }
+        }
+
+        private void RowRefresh(DataGridViewRow r, SvnExternalItem ii)
+        {
+            r.SetValues(
+                ii.Url,
+                ii.Revision.ToString(),
+                ii.Target);
         }
 
         /// <summary>
@@ -115,15 +226,99 @@ namespace Ankh.UI.PropertyEditors
                 }
             }
             base.Dispose(disposing);
-        }
+        }       
 
-        private void CreateMyToolTip()
+        private void externalGrid_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
-            // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip(externalGrid,
-                "Example: subdir1/foo   http://url.for.external.source/foo. Could be used to make your own module.");
+            DataGridViewRow r = externalGrid.Rows[e.RowIndex];
+
+            string url = r.Cells[0].Value as string;
+            string target = r.Cells[2].Value as string;
+            string rev = r.Cells[1].Value as string;
+
+            if (r.IsNewRow && string.IsNullOrEmpty(url) && string.IsNullOrEmpty(target) && string.IsNullOrEmpty(rev))
+                return;
+
+            long v = 0;
+            if (string.IsNullOrEmpty(url))
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, "Url is not set", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else if (string.IsNullOrEmpty(target))
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, "Target is not set", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
+            else if (!string.IsNullOrEmpty(rev) && !long.TryParse(rev, out v))
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, "Revision is not valid", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            }
+
+            if (e.Cancel)
+                return;
+
+            SvnExternalItem ei;
+            if(!TryCreatItemFromRow(r, out ei))
+            {
+                e.Cancel = true;
+                MessageBox.Show(this, "External definition generates invalid definition", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            r.Tag = ei;
+        }        
+
+        private void externalGrid_RowValidated(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow r = externalGrid.Rows[e.RowIndex];
+
+            if (r.IsNewRow)
+                return;
+
+            // Validated in RowValidating!
+            
+            SvnExternalItem ei;
+            if (TryCreatItemFromRow(r, out ei))
+            {
+                r.Tag = ei;
+                RowRefresh(r, ei);
+            }
+            else
+            {
+                r.Tag = null;
+                r.Cells.Clear();
+            }
         }
 
+        private static bool TryCreatItemFromRow(DataGridViewRow r, out SvnExternalItem item)
+        {
+            if (r == null)
+                throw new ArgumentNullException("r");
+
+            string url = r.Cells[0].Value as string;
+            string target = r.Cells[2].Value as string;
+            string rev = r.Cells[1].Value as string;
+            SvnRevision rr = string.IsNullOrEmpty(rev) ? SvnRevision.None : long.Parse(rev);
+
+            SvnExternalItem ei = new SvnExternalItem(target, url, rr, rr);
+            SvnExternalItem p;
+
+            if (!SvnExternalItem.TryParse(ei.ToString(), out p)
+                || p.Target != ei.Target
+                || p.Url != ei.Url
+                || p.Revision != ei.Revision
+                || p.OperationalRevision != ei.OperationalRevision)
+            {
+                item = null;
+                return false;
+            }
+            item = ei;
+            return true;
+        }    
     }
 }
 
