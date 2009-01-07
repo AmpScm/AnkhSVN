@@ -160,8 +160,6 @@ namespace Ankh.Commands
                 dialog.Context = e.Context;
 
                 SortedList<string, PropertyEditItem> editItems = new SortedList<string, PropertyEditItem>();
-                SortedList<string, SvnPropertyValue> origValues = new SortedList<string, SvnPropertyValue>();
-
                 SvnPropertyListArgs args = new SvnPropertyListArgs();
                 if (!e.GetService<IProgressRunner>().RunModal("Retrieving Properties",
                     delegate(object Sender, ProgressWorkerArgs wa)
@@ -191,7 +189,6 @@ namespace Ankh.Commands
                                         editItems.Add(pv.Key, ei = new PropertyEditItem(dialog.ListView, pv.Key));
 
                                     ei.OriginalValue = ei.Value = pv;
-                                    origValues.Add(pv.Key, pv);
                                 }
                             });
 
@@ -231,21 +228,21 @@ namespace Ankh.Commands
                             // Currently we save all values
                             foreach (PropertyEditItem ei in items)
                             {
-                                origValues.Remove(ei.Name);
                                 if (!ei.ShouldPersist)
                                     continue;
 
-                                if(ei.Value == null)
-                                    wa.Client.DeleteProperty(firstVersioned.FullPath, ei.PropertyName);
-                                else if (ei.Value.StringValue != null)
-                                    wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.StringValue);
-                                else
-                                    wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.RawValue);                                
-                            }
-
-                            foreach (string name in origValues.Keys)
-                            {
-                                wa.Client.DeleteProperty(firstVersioned.FullPath, name);
+                                if (ei.Value == null)
+                                {
+                                    if (ei.OriginalValue != null)
+                                        wa.Client.DeleteProperty(firstVersioned.FullPath, ei.PropertyName);
+                                }
+                                else if (!ei.Value.ValueEquals(ei.OriginalValue))
+                                {
+                                    if (ei.Value.StringValue != null)
+                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.StringValue);
+                                    else
+                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.RawValue);
+                                }
                             }
                         });
 
