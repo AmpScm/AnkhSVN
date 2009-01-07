@@ -86,7 +86,8 @@ namespace Ankh.Services
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
-                "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
+                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand", true)
+                    ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "'$(Base)' --fname '$(BaseName)' '$(Mine)' --fname '$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
@@ -121,7 +122,8 @@ namespace Ankh.Services
                     "/t1='$(MineName)' /t2='$(MergedName)' /t3='$(TheirName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
-                "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
+                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand", true)
+                    ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "-m '$(Base)' --fname '$(BaseName)' '$(Theirs)' --fname '$(TheirName)' " +
                     "'$(Mine)' --fname '$(MineName)' -o '$(Merged)'", true));
 
