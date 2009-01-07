@@ -52,6 +52,7 @@ namespace Ankh.UI.PropertyEditors
             this.buttonCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.recursiveCheckBox = new System.Windows.Forms.CheckBox();
+            this.loadButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // nameLabel
@@ -77,7 +78,6 @@ namespace Ankh.UI.PropertyEditors
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Name = "okButton";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // buttonCancel
             // 
@@ -96,12 +96,20 @@ namespace Ankh.UI.PropertyEditors
             resources.ApplyResources(this.recursiveCheckBox, "recursiveCheckBox");
             this.recursiveCheckBox.Name = "recursiveCheckBox";
             // 
+            // loadButton
+            // 
+            resources.ApplyResources(this.loadButton, "loadButton");
+            this.loadButton.Name = "loadButton";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
             // PropertyDialog
             // 
             this.AcceptButton = this.okButton;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
+            this.Controls.Add(this.loadButton);
             this.Controls.Add(this.recursiveCheckBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonCancel);
@@ -124,5 +132,6 @@ namespace Ankh.UI.PropertyEditors
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox recursiveCheckBox;
+        private System.Windows.Forms.Button loadButton;
     }
 }

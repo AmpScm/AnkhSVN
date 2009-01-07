@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SharpSvn;
+using System.IO;
 
 namespace Ankh.UI.PropertyEditors
 {
@@ -190,11 +191,6 @@ namespace Ankh.UI.PropertyEditors
             this.UpdateButtons();
         }
 
-        private void okButton_Click(object sender, EventArgs e)
-        {
-            //do nothing
-        }
-
         /// <summary>
         /// Gets the new/edited <code>PropertyItem</code>
         /// </summary>
@@ -244,7 +240,31 @@ namespace Ankh.UI.PropertyEditors
             this.okButton.Enabled = !string.IsNullOrEmpty(this.nameComboBox.Text)
                 && this.currentEditor != null
                 && this.currentEditor.Valid;
+
+            loadButton.Enabled = (currentEditor is PlainPropertyEditor);
         }
 
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            PlainPropertyEditor ppe = currentEditor as PlainPropertyEditor;
+
+            if (ppe == null)
+                return;
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*";
+                dlg.CheckFileExists = true;
+
+                if (dlg.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                using(Stream s = dlg.OpenFile())
+                using (StreamReader sr = new StreamReader(s))
+                {
+                    ppe.CurrentText = sr.ReadToEnd();
+                }
+            }
+
+        }
     }
 }
