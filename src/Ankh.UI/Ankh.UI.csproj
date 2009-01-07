@@ -271,6 +271,11 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyEditItem.cs" />
+    <Compile Include="PropertyEditors\PropertyEditStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PropertyEditStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="RecentMessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -897,6 +902,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditors\NeedsLockPropertyEditor.resx">
       <DependentUpon>NeedsLockPropertyEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PropertyEditors\PropertyEditStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PropertyEditStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>

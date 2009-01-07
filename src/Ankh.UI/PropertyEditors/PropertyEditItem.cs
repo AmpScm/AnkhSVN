@@ -29,7 +29,7 @@ namespace Ankh.UI.PropertyEditors
         {
             SetValues(
                 PropertyName,
-                IsDeleted ? "Deleted" : (IsModified ? "Modified" : "Unchanged"),
+                UpdateDescription,
                 CreateValue(BaseValue),
                 CreateValue(Value));
         }
@@ -43,6 +43,21 @@ namespace Ankh.UI.PropertyEditors
         {
             get { return _baseValue; }
             set { _baseValue = value; }
+        }
+
+        /// <summary>
+        /// Gets the update description.
+        /// </summary>
+        /// <value>The update description.</value>
+        public string UpdateDescription
+        {
+            get
+            {
+                if ((Value == null) != (BaseValue == null))
+                    return (Value != null) ? PropertyEditStrings.StateNew : PropertyEditStrings.StateDeleted;
+                else
+                    return Value.ValueEquals(BaseValue) ? PropertyEditStrings.StateUnmodified : PropertyEditStrings.StateModified;
+            }
         }
 
         /// <summary>
