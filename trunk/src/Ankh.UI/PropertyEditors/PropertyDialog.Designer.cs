@@ -95,7 +95,6 @@ namespace Ankh.UI.PropertyEditors
             // 
             resources.ApplyResources(this.recursiveCheckBox, "recursiveCheckBox");
             this.recursiveCheckBox.Name = "recursiveCheckBox";
-            this.recursiveCheckBox.UseVisualStyleBackColor = true;
             // 
             // PropertyDialog
             // 
@@ -110,11 +109,7 @@ namespace Ankh.UI.PropertyEditors
             this.Controls.Add(this.editorPanel);
             this.Controls.Add(this.nameComboBox);
             this.Controls.Add(this.nameLabel);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "PropertyDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.ResumeLayout(false);
             this.PerformLayout();
 
