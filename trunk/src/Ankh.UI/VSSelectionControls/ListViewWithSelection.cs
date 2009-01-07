@@ -417,15 +417,26 @@ namespace Ankh.UI.VSSelectionControls
 
         public void SetSelection(TListViewItem[] items)
         {
-            foreach (TListViewItem l in SelectedItems)
+            if (!VirtualMode && items.Length > 1)
             {
-                if (0 > Array.IndexOf(items, l))
-                    l.Selected = false;
-            }
+                foreach (TListViewItem i in SelectedItems)
+                {
+                    if (0 > Array.IndexOf(items, i))
+                        i.Selected = false;
+                }
 
-            foreach (TListViewItem l in items)
+                foreach (TListViewItem i in items)
+                {
+                    i.Selected = true;
+                }
+            }
+            else
             {
-                l.Selected = true;
+                SelectedIndices.Clear();
+                foreach (TListViewItem i in items)
+                {
+                    i.Selected = true;
+                }
             }
         }
 
