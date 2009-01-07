@@ -56,104 +56,72 @@ namespace Ankh.UI.SvnLog.Commands
 
             ISvnLogItem selectedLog = logItems[0];
             SvnUriTarget uriTarget = new SvnUriTarget(selectedLog.RepositoryRoot, selectedLog.Revision);
-            using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
             using (PropertyEditorDialog dialog = new PropertyEditorDialog(uriTarget))
             {
                 dialog.Context = e.Context;
 
                 SvnRevisionPropertyListArgs args = new SvnRevisionPropertyListArgs();
                 args.ThrowOnError = false;
-                SvnPropertyCollection properties;
-                if (client.GetRevisionPropertyList(uriTarget, args, out properties))
+                SvnPropertyCollection properties = null;
+
+                if (e.GetService<IProgressRunner>().RunModal("Retrieving Revision Properties",
+                    delegate(object sender, ProgressWorkerArgs wa)
+                    {
+                        wa.Client.GetRevisionPropertyList(uriTarget, args, out properties);
+                    }).Succeeded && properties != null)
                 {
-                    List<PropertyItem> propItems = new List<PropertyItem>();
+                    List<PropertyEditItem> propItems = new List<PropertyEditItem>();
                     foreach (SvnPropertyValue prop in properties)
                     {
-                        PropertyItem pi;
-                        if (prop.StringValue == null)
-                            pi = new BinaryPropertyItem(prop.RawValue);
-                        else
-                            pi = new TextPropertyItem(prop.StringValue);
+                        PropertyEditItem pi = new PropertyEditItem(dialog.ListView, prop.Key);
+                        pi.OriginalValue = pi.Value = pi.BaseValue = prop;
 
-                        pi.Name = prop.Key;
                         propItems.Add(pi);
                     }
-                    dialog.PropertyItems = propItems.ToArray();
+                    dialog.PropertyValues = propItems.ToArray();
                 }
                 if (dialog.ShowDialog(e.Context) == DialogResult.OK)
                 {
-                    PropertyItem[] finalItems = dialog.PropertyItems;
-                    Collection<SvnPropertyValue> deletedProps = new Collection<SvnPropertyValue>();
+                    PropertyEditItem[] finalItems = dialog.PropertyValues;
 
-                    #region deleted props
-                    if (properties.Count > 0)
+                    bool hasChanges = false;
+
+                    foreach (PropertyEditItem ei in finalItems)
                     {
-                        foreach (SvnPropertyValue svnProp in properties)
+                        if (ei.ShouldPersist)
                         {
-                            bool deleted = true;
-                            foreach (PropertyItem item in finalItems)
-                            {
-                                if (svnProp.Key.Equals(item.Name))
-                                {
-                                    deleted = false;
-                                    break;
-                                }
-                            }
-                            if (deleted)
-                            {
-                                deletedProps.Add(svnProp);
-                            }
+                            hasChanges = true;
+                            break;
                         }
                     }
-                    #endregion
+                    if (!hasChanges)
+                        return;
 
-                    #region modified or new props
-                    Collection<TextPropertyItem> modifiedOrNewProps = new Collection<TextPropertyItem>();
-                    foreach (PropertyItem item in finalItems)
-                    {
-                        string key = item.Name;
-                        if (properties.Contains(key))
+
+                    IProgressRunner progressRunner = e.GetService<IProgressRunner>();
+
+                    ProgressRunnerResult result = progressRunner.RunModal("Updating Revision Properties",
+                        delegate(object sender, ProgressWorkerArgs ee)
                         {
-                            string oldValue = properties[key].StringValue;
-                            string newValue = ((TextPropertyItem)item).Text;
-                            if (oldValue != newValue)
+                            foreach (PropertyEditItem ei in finalItems)
                             {
-                                modifiedOrNewProps.Add((TextPropertyItem)item);
-                            }
-                        }
-                        else // new property
-                        {
-                            modifiedOrNewProps.Add((TextPropertyItem)item);
-                        }
-                    }
-                    #endregion
+                                if (!ei.ShouldPersist)
+                                    continue;
 
-                    if (deletedProps.Count > 0
-                        || modifiedOrNewProps.Count > 0)
+                                if (ei.IsDeleted)
+                                    ee.Client.DeleteRevisionProperty(uriTarget, ei.PropertyName);
+                                else if (ei.Value.StringValue != null)
+                                    ee.Client.SetRevisionProperty(uriTarget, ei.PropertyName, ei.Value.StringValue);
+                                else
+                                    ee.Client.SetRevisionProperty(uriTarget, ei.PropertyName, ei.Value.RawValue);
+                            }
+                        });
+
+                    if (result.Succeeded)
                     {
-                        IProgressRunner progressRunner = e.GetService<IProgressRunner>();
-
-                        ProgressRunnerResult result = progressRunner.RunModal("Updating Revision Properties",
-                            delegate(object sender, ProgressWorkerArgs ee)
-                            {
-
-                                foreach (SvnPropertyValue deletedProp in deletedProps)
-                                {
-                                    client.DeleteRevisionProperty(uriTarget, deletedProp.Key);
-                                }
-
-                                foreach (TextPropertyItem propItem in modifiedOrNewProps)
-                                {
-                                    string data = propItem.Text;
-                                    client.SetRevisionProperty(uriTarget, propItem.Name, data);
-                                }
-                            }
-                            );
-                        if (result.Succeeded)
-                        {
-                            logWindow.Restart();
-                        }
+                        logWindow.Restart();
                     }
+
                 } // if
             } // using
         }

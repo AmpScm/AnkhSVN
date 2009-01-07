@@ -28,10 +28,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Editor for the mime-type properties.
     /// </summary>
-    partial class MimeTypePropertyEditor : PropertyEditControl, IPropertyEditor
+    partial class MimeTypePropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
-
         public MimeTypePropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -44,7 +42,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Resets the textbox.
         /// </summary>
-        public void Reset()
+        public override void Reset()
         {
             this.mimeTextBox.Text = this.originalValue;
         }
@@ -52,7 +50,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Indicates whether the property is valid.
         /// </summary>
-        public bool Valid
+        public override bool Valid
         {
             get
             {
@@ -70,7 +68,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Sets and gets the property item.
         /// </summary>
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -79,21 +77,24 @@ namespace Ankh.UI.PropertyEditors
                     throw new InvalidOperationException(
                         "Can not get a property item when Valid is false");
                 }	
-                return new TextPropertyItem(this.mimeTextBox.Text);
+                return new SvnPropertyValue(SvnPropertyNames.SvnMimeType, mimeTextBox.Text);
             }
 
             set
             {
-                TextPropertyItem item = (TextPropertyItem)value;
-                this.originalValue = item.Text;
-                this.mimeTextBox.Text = this.originalValue;
+                if (value != null)
+                {
+                    mimeTextBox.Text = originalValue = value.StringValue;
+                }
+                else
+                    mimeTextBox.Text = originalValue = "";
             }
         }
 
         /// <summary>
         /// File property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.File;
         }
@@ -131,8 +132,8 @@ namespace Ankh.UI.PropertyEditors
             // Enables save button
             string newValue = this.mimeTextBox.Text;
             this.dirty = !newValue.Equals(this.originalValue);
-            if ( Changed != null  )
-                Changed(this, EventArgs.Empty);
+
+            OnChanged(EventArgs.Empty);
         }
 
         private void CreateMyToolTip()

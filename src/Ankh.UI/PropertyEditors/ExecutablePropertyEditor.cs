@@ -27,11 +27,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Property editor for executable properties.
     /// </summary>
-    internal partial class ExecutablePropertyEditor : PropertyEditControl, IPropertyEditor
+    partial class ExecutablePropertyEditor : PropertyEditControl
     {
-
-        public event EventHandler Changed;
-
         public ExecutablePropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -41,21 +38,15 @@ namespace Ankh.UI.PropertyEditors
             CreateMyToolTip();
         }
 
-        void OnChanged(EventArgs e)
-        {
-            if (Changed != null)
-                Changed(this, e);
-        }
+        public override void Reset() { }
 
-        public void Reset() { }
-
-        public bool Valid
+        public override bool Valid
         {
 
             get { return true; }
         }
 
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -65,18 +56,17 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when valid is false");
                 }
 
-                return new TextPropertyItem("File is executable");
+                return new SvnPropertyValue(SvnPropertyNames.SvnExecutable, SvnPropertyNames.SvnBooleanValue);
             }
-
             set
-            {
+            {                
             }
         }
 
         /// <summary>
         /// File property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.File;
         }

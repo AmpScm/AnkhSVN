@@ -31,8 +31,7 @@ namespace Ankh.UI.PropertyEditors
     /// </summary>
     public partial class PropertyEditorDialog : VSDialogForm
     {
-        readonly List<PropertyItem> _propItems;
-        IPropertyEditor _currentEditor;
+        readonly SortedList<string,PropertyEditItem> _propItems;
         SvnNodeKind _currentNodeKind;
 
         public PropertyEditorDialog(string svnItemPath)
@@ -42,7 +41,7 @@ namespace Ankh.UI.PropertyEditors
             //
             InitializeComponent();
 
-            _propItems = new List<PropertyItem>();
+            _propItems = new SortedList<string, PropertyEditItem>();
 
             this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
         }
@@ -59,20 +58,37 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <summary>
+        /// Gets the list view.
+        /// </summary>
+        /// <value>The list view.</value>
+        public Ankh.UI.VSSelectionControls.SmartListView ListView
+        {
+            get { return propListView; }
+        }
+
+        /// <summary>
         /// Sets and gets property items.
         /// </summary>
-        public PropertyItem[] PropertyItems
+        public PropertyEditItem[] PropertyValues
         {
             get
             {
-                return (PropertyItem[])
-                    _propItems.ToArray();
+                PropertyEditItem[] list = new PropertyEditItem[_propItems.Count];
+
+                _propItems.Values.CopyTo(list, 0);
+
+                return list;
             }
             set
             {
                 _propItems.Clear();
-                _propItems.AddRange(value);
-                this.PopulateListView();
+                if (value != null)
+                    foreach (PropertyEditItem pv in value)
+                    {
+                        _propItems[pv.PropertyName] = pv;
+                    }
+
+                PopulateListView();
             }
         }
 
@@ -97,76 +113,65 @@ namespace Ankh.UI.PropertyEditors
         private void PopulateListView()
         {
             this.propListView.Items.Clear();
-            ListVisitor visitor = new ListVisitor(this.propListView);
-            foreach (PropertyItem item in this._propItems)
-                item.AcceptVisitor(visitor);
+
+            List<PropertyEditItem> items = new List<PropertyEditItem>();
+
+            foreach (PropertyEditItem i in _propItems.Values)
+            {
+                if (i.Value != null || i.BaseValue != null)
+                {
+                    items.Add(i);
+                    i.Refresh();
+                }
+            }
+            propListView.Items.AddRange(items.ToArray());
         }
-        #region class ListVisitor
-        /// <summary>
-        /// Visitor that populates the list view.
-        /// </summary>
-        private class ListVisitor : IPropertyItemVisitor
-        {
-            public ListVisitor(ListView list)
-            {
-                this.list = list;
-            }
-
-            public void VisitTextPropertyItem(TextPropertyItem item)
-            {
-                // HACK: find out if all this .Replace is really what we want/need
-                AddItem(new string[]{ item.Name, 
-                                         item.Text.Replace("\t", "    ").Replace( "\r\n", "[NL]") }, item);
-            }
-
-            public void VisitBinaryPropertyItem(BinaryPropertyItem item)
-            {
-                this.AddItem(new string[] { item.Name, "<binary value>" }, item);
-
-            }
-
-            private void AddItem(string[] items, PropertyItem item)
-            {
-                ListViewItem listItem = new ListViewItem(items);
-                listItem.Tag = item;
-                this.list.Items.Add(listItem);
-            }
-
-            private ListView list;
-        }
-        #endregion
 
         /// <summary>
         /// Brings up the Property Dialog in edit mode.
         /// </summary>
         private void editButton_Click(object sender, System.EventArgs e)
         {
-            PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
-            int index = this._propItems.IndexOf(item);
+            PropertyEditItem item = (PropertyEditItem)this.propListView.SelectedItems[0];
 
-            using (PropertyDialog pDialog = new PropertyDialog(item, _currentNodeKind))
+            using (PropertyDialog pDialog = new PropertyDialog(item.Value, _currentNodeKind))
             {
                 if (pDialog.ShowDialog(Context) != DialogResult.OK)
                     return;
 
-                PropertyItem editedItem = pDialog.GetPropertyItem();
-                if (editedItem != null)
+                SvnPropertyValue value = pDialog.GetPropertyItem();
+                if (value != null)
                 {
-                    int otherIndex = -1; ;
-                    if (!item.Name.Equals(editedItem.Name)
-                        && ((otherIndex = TryFindItem(editedItem.Name)) > -1)
-                        && otherIndex != index)
+                    if (value.Key != item.PropertyName)
                     {
-                        // there is already a property with the same name
-                        // TODO
-                        // Delete selected item AND replace the existing item ???
+                        item.Value = null; // Deleted
+                        item.Refresh();
+
+                        PropertyEditItem pi;
+
+                        if (!_propItems.TryGetValue(value.Key, out pi))
+                            _propItems[value.Key] = pi = new PropertyEditItem(propListView, value.Key);
+
+                        pi.Value = value;
+
+                        PopulateListView(); // Add new item
                     }
                     else
                     {
-                        this._propItems[index] = editedItem;
-                        this.PopulateListView();
-                        this.UpdateButtons();
+                        item.Value = value;
+                        item.Refresh();
                     }
+                }
+                else
+                {
+                    item.Value = null;
+                    if(item.BaseValue == null)
+                    {
+                        _propItems.Remove(item.PropertyName);
+                        propListView.Items.Remove(item);
+                    }
+                    else
+                        item.Refresh();
                 }
             }
         }
@@ -178,9 +183,25 @@ namespace Ankh.UI.PropertyEditors
         /// <param name="e"></param>
         private void deleteButton_Click(object sender, System.EventArgs e)
         {
-            PropertyItem item = (PropertyItem)this.propListView.SelectedItems[0].Tag;
-            this._propItems.Remove(item);
-            this.PopulateListView();
+            PropertyEditItem item = (PropertyEditItem)this.propListView.SelectedItems[0];
+            item.Value = null;
+            item.Refresh();
+
+            if (item.BaseValue == null)
+                propListView.Items.Remove(item);
+
+            this.UpdateButtons();
+        }
+
+        private void revertButton_Click(object sender, EventArgs e)
+        {
+            PropertyEditItem item = (PropertyEditItem)this.propListView.SelectedItems[0];
+            item.Value = item.BaseValue;
+            item.Refresh();
+
+            if (item.BaseValue == null)
+                propListView.Items.Remove(item);
+
             this.UpdateButtons();
         }
 
@@ -196,40 +217,25 @@ namespace Ankh.UI.PropertyEditors
                 if (propDialog.ShowDialog(Context) != DialogResult.OK)
                     return;
 
-                PropertyItem item = propDialog.GetPropertyItem();
-                if (item != null)
+                SvnPropertyValue value = propDialog.GetPropertyItem();
+                if (value != null)
                 {
-                    int index = this.TryFindItem(item.Name);
-                    item.Recursive = propDialog.ApplyRecursively();
-                    if (index > -1)
-                    {
-                        // There is already a property with the same name.
-                        // Replace the existing item with the new one
-                        this._propItems[index] = item;
-                    }
-                    else
-                    {
-                        this._propItems.Add(item);
-                    }
-                    this.PopulateListView();
+                    PropertyEditItem pi;
+                    if (!_propItems.TryGetValue(value.Key, out pi))
+                        _propItems[value.Key] = pi = new PropertyEditItem(propListView, value.Key);
+                    
+                    pi.Value = value;
+                    pi.Refresh();
+
+                    if (!propListView.Items.Contains(pi))
+                        PopulateListView();
+                 
                     this.UpdateButtons();
                 }
             }
         }
 
-        private int TryFindItem(string key)
-        {
-            int i = 0;
-            foreach (PropertyItem item in this._propItems)
-            {
-                if (key.Equals(item.Name))
-                {
-                    return i;
-                }
-                i++;
-            }
-            return -1;
-        }
+       
         /// <summary>
         /// Checks whether a predefined property is selected.
         /// If selected sets the editor to the selected item.
@@ -243,37 +249,6 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <summary>
-        /// Validate the form if the type of editor is changed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void currentEditor_Changed(object sender, System.EventArgs e)
-        {
-            this.ValidateForm();
-        }
-
-        /// <summary>
-        /// Sets a new property editor.
-        /// </summary>
-        /// <param name="editor"></param>
-        private void SetNewEditor(IPropertyEditor editor)
-        {
-            if (this._currentEditor != null)
-            {
-                //Unsubscribe the current editor from the Changed event.
-                this._currentEditor.Changed -= new EventHandler(
-                    this.currentEditor_Changed);
-            }
-
-            //Sets the current editor to match the selected item.
-            this._currentEditor = editor;
-            this._currentEditor.Changed += new EventHandler(
-                this.currentEditor_Changed);
-
-            this.ValidateForm();
-        }
-
-        /// <summary>
         /// Validate the form.
         /// </summary>
         private void ValidateForm()
@@ -282,128 +257,62 @@ namespace Ankh.UI.PropertyEditors
 
         private void UpdateButtons()
         {
-            PropertyItem selection = null;
+            PropertyEditItem selection = null;
             if (this.propListView.SelectedItems.Count > 0)
             {
-                selection = (PropertyItem)this.propListView.SelectedItems[0].Tag;
+                selection = (PropertyEditItem)this.propListView.SelectedItems[0];
             }
-            this.deleteButton.Enabled = selection != null;
+
+            this.deleteButton.Enabled = selection != null && selection.Value != null;
             this.editButton.Enabled = selection != null;
+            this.revertButton.Enabled = selection != null && ((selection.Value != null) != (selection.BaseValue != null) || (selection.Value != null && !selection.Value.Equals(selection.BaseValue)));
         }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            if (DesignMode)
+                return;
+
+            ResizeGrid();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (!DesignMode)
+                ResizeGrid();
+        }
+
+        private void ResizeGrid()
+        {
+            if (propListView != null && baseValueColumn != null && valueColumn != null)
+            {
+                int otherWidth = 0;
+
+                foreach (ColumnHeader ch in propListView.Columns)
+                {
+                    if (ch == baseValueColumn || ch == valueColumn)
+                        continue;
+
+                    if (ch.DisplayIndex >= 0)
+                        otherWidth += ch.Width + 2;
+                }
+
+                int restWidth = propListView.Width - otherWidth - SystemInformation.VerticalScrollBarWidth - 4;
+
+                int rest = restWidth - baseValueColumn.Width - valueColumn.Width - 4;
+
+                if (restWidth > 0)
+                {
+                    baseValueColumn.Width += rest / 2;
+                    valueColumn.Width += rest / 2;
+                }
+            }
+        }        
     }
-
-    /// <summary>
-    /// Represents a property item.
-    /// </summary>
-    public abstract class PropertyItem
-    {
-        protected PropertyItem()
-        {
-            this.name = "";
-        }
-
-
-        /// <summary>
-        /// Accepts a visitor.
-        /// </summary>
-        /// <param name="visitor">A visitor</param>
-        public abstract void AcceptVisitor(IPropertyItemVisitor visitor);
-
-        /// <summary>
-        /// The name of the property.
-        /// </summary>
-        public string Name
-        {
-            get { return this.name; }
-            set { this.name = value; }
-        }
-
-        public bool Recursive
-        {
-            get { return this.recursive; }
-            set { this.recursive = value; }
-        }
-
-        private string name;
-        private bool recursive;
-    }
-    /// <summary>
-    /// Represents a text property.
-    /// </summary>
-    public class TextPropertyItem : PropertyItem
-    {
-        public TextPropertyItem(string text)
-        {
-            this.text = text;
-        }
-        /// <summary>
-        /// Accepts a visitor.
-        /// </summary>
-        /// <param name="visitor">A visitor.</param>
-        public override void AcceptVisitor(IPropertyItemVisitor visitor)
-        {
-            visitor.VisitTextPropertyItem(this);
-        }
-        /// <summary>
-        /// The text value of this property.
-        /// </summary>
-        public string Text
-        {
-            get { return this.text; }
-        }
-
-        private string text;
-    }
-
-    /// <summary>
-    /// Represents a binary property.
-    /// </summary>
-    public class BinaryPropertyItem : PropertyItem
-    {
-        public BinaryPropertyItem(ICollection<byte> data)
-        {
-            this.data = data;
-        }
-
-        /// <summary>
-        /// Accepts a visitor.
-        /// </summary>
-        /// <param name="visitor">A visitor.</param>
-        public override void AcceptVisitor(IPropertyItemVisitor visitor)
-        {
-            visitor.VisitBinaryPropertyItem(this);
-        }
-
-        /// <summary>
-        /// Binary data belonging to this property.
-        /// </summary>
-        public ICollection<byte> Data
-        {
-            get { return this.data; }
-        }
-
-        private ICollection<byte> data;
-    }
-
-    /// <summary>
-    /// Visitor for visiting property items.
-    /// </summary>
-    public interface IPropertyItemVisitor
-    {
-        /// <summary>
-        /// Visit a text property.
-        /// </summary>
-        /// <param name="item"></param>
-        void VisitTextPropertyItem(TextPropertyItem item);
-
-        /// <summary>
-        /// Visit a binary property.
-        /// </summary>
-        /// <param name="item"></param>
-        void VisitBinaryPropertyItem(BinaryPropertyItem item);
-    }
-
-
 }
 
 

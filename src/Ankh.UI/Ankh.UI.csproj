@@ -270,6 +270,7 @@
     <Compile Include="PropertyEditors\PropertyEditControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="PropertyEditors\PropertyEditItem.cs" />
     <Compile Include="RecentMessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -700,7 +701,6 @@
     <Compile Include="PropertyEditors\IgnorePropertyEditor.Designer.cs">
       <DependentUpon>IgnorePropertyEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="PropertyEditors\IPropertyEditor.cs" />
     <Compile Include="PropertyEditors\KeywordsPropertyEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -23,17 +23,17 @@ namespace Ankh.UI.PropertyEditors
 {
     public partial class PropertyDialog : VSDialogForm
     {
-        private IPropertyEditor currentEditor;
-        private PropertyItem existingItem;
+        private PropertyEditControl currentEditor;
+        private SvnPropertyValue existingItem;
         private SvnNodeKind _currentNodeKind;
-        private Dictionary<string, IPropertyEditor> keyPropEditor = new Dictionary<string, IPropertyEditor>();
+        private Dictionary<string, PropertyEditControl> keyPropEditor = new Dictionary<string, PropertyEditControl>();
 
         public PropertyDialog(SvnNodeKind currentNodeKind)
             : this(null, currentNodeKind)
         {
         }
 
-        public PropertyDialog(PropertyItem editItem, SvnNodeKind currentNodeKind)
+        public PropertyDialog(SvnPropertyValue editItem, SvnNodeKind currentNodeKind)
         {
             InitializeComponent();
             // Dialog is in Edit mode if the "existingItem" is not null.
@@ -44,7 +44,7 @@ namespace Ankh.UI.PropertyEditors
 
         private void InitializeEditors()
         {
-            IPropertyEditor propEditor = new ExecutablePropertyEditor();
+            PropertyEditControl propEditor = new ExecutablePropertyEditor();
             AddPropertyEditor(propEditor);
 
             propEditor = new MimeTypePropertyEditor();
@@ -66,7 +66,7 @@ namespace Ankh.UI.PropertyEditors
             AddPropertyEditor(propEditor);
 
             this.nameComboBox.Items.Clear();
-            foreach (IPropertyEditor editor in this.keyPropEditor.Values)
+            foreach (PropertyEditControl editor in this.keyPropEditor.Values)
             {
                 this.nameComboBox.Items.Add(editor);
             }
@@ -80,7 +80,7 @@ namespace Ankh.UI.PropertyEditors
         /// Adds the property editor if it allows the current SvnItem's node kind
         /// </summary>
         /// <param name="propEditor">IPropertyEditor</param>
-        private void AddPropertyEditor(IPropertyEditor propEditor)
+        private void AddPropertyEditor(PropertyEditControl propEditor)
         {
             SvnNodeKind allowed = propEditor.GetAllowedNodeKind();
             SvnNodeKind result =  allowed & _currentNodeKind;
@@ -109,11 +109,11 @@ namespace Ankh.UI.PropertyEditors
         {
             if (this.existingItem != null)
             {
-                this.nameComboBox.Text = this.existingItem.Name;
+                this.nameComboBox.Text = this.existingItem.Key;
                 this.currentEditor.PropertyItem = this.existingItem;
                 if (this.recursiveCheckBox.Enabled)
                 {
-                    this.recursiveCheckBox.Checked = this.existingItem.Recursive;
+                    this.recursiveCheckBox.Checked = false;// this.existingItem.Recursive;
                 }
             }
             else
@@ -127,7 +127,7 @@ namespace Ankh.UI.PropertyEditors
 
         private void nameComboBox_SelectedValueChanged(object sender, EventArgs e)
         {
-            IPropertyEditor selectedItem = (IPropertyEditor)this.nameComboBox.SelectedItem;
+            PropertyEditControl selectedItem = (PropertyEditControl)this.nameComboBox.SelectedItem;
 
             // is the selection a special svn: keyword?
             if (selectedItem != null)
@@ -145,7 +145,7 @@ namespace Ankh.UI.PropertyEditors
             string typedName = this.nameComboBox.Text;
             if (this.keyPropEditor.ContainsKey(typedName))
             {
-                IPropertyEditor propEditor = this.keyPropEditor[typedName];
+                PropertyEditControl propEditor = this.keyPropEditor[typedName];
                 this.nameComboBox.SelectedItem = propEditor;
             }
             else
@@ -156,9 +156,12 @@ namespace Ankh.UI.PropertyEditors
                     this.SetNewEditor(new PlainPropertyEditor());
                 }
             }
+
+            if (this.currentEditor != null)
+                this.currentEditor.PropertyName = this.nameComboBox.Text;
         }
 
-        private void SetNewEditor(IPropertyEditor editor)
+        private void SetNewEditor(PropertyEditControl editor)
         {
             if (this.currentEditor != null)
             {
@@ -195,9 +198,9 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Gets the new/edited <code>PropertyItem</code>
         /// </summary>
-        public PropertyItem GetPropertyItem()
+        public SvnPropertyValue GetPropertyItem()
         {
-            PropertyItem result = this.currentEditor == null ? null : this.currentEditor.PropertyItem;
+            SvnPropertyValue result = this.currentEditor == null ? null : this.currentEditor.PropertyItem;
             if (result != null)
             {
                 if (_currentNodeKind == SvnNodeKind.Directory
@@ -220,7 +223,8 @@ namespace Ankh.UI.PropertyEditors
                 }
                 else
                 {
-                    result.Name = propertyName;
+                    if (result.Key != propertyName)
+                        result = new SvnPropertyValue(propertyName, (byte[])result.RawValue);
                 }
             }
             return result;

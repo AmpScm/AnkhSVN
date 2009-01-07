@@ -28,10 +28,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Property editor for keywords.
     /// </summary>
-    partial class KeywordsPropertyEditor : PropertyEditControl, IPropertyEditor
+    partial class KeywordsPropertyEditor : PropertyEditControl
     {
-        public event EventHandler Changed;
-
         public KeywordsPropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -43,7 +41,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Resets the checkboxes.
         /// </summary>
-        public void Reset()
+        public override void Reset()
         {
             for (int i = 0; i < checkedListBox1.Items.Count; i++ )
                 checkedListBox1.SetItemChecked(i, false);
@@ -54,7 +52,7 @@ namespace Ankh.UI.PropertyEditors
         /// Indicates whether the selection is valid.
         /// </summary>
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),Browsable(false)]
-        public bool Valid
+        public override bool Valid
         {
             get
             {
@@ -71,18 +69,11 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// Sets and gets the property item.
         /// </summary>
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
                 string selectedText = "";
-
-                if (!this.Valid)
-                {
-                    throw new InvalidOperationException(
-                        "Can not get a property item when Valid is false");
-                }
-
                 StringBuilder sb = new StringBuilder();
 
                 for(int i = 0; i <checkedListBox1.Items.Count; i++)
@@ -97,36 +88,36 @@ namespace Ankh.UI.PropertyEditors
 
                 selectedText = sb.ToString();
 
-                return new TextPropertyItem(selectedText);
+                return new SvnPropertyValue(SvnPropertyNames.SvnKeywords, selectedText);
             }
 
             set
             {
-                TextPropertyItem item = (TextPropertyItem)value;
+                string text = "";
+
+                if (value != null)
+                    text = value.StringValue;
 
                 for (int i = 0; i < checkedListBox1.Items.Count; i++)
                     checkedListBox1.SetItemChecked(i, false);
 
-                string text = item.Text;
-                if (text != null)
+                for (int i = 0; i < text.Length; i++)
                 {
-                    for (int i = 0; i < text.Length; i++)
-                    {
-                        if (char.IsWhiteSpace(text, i) && text[i] != ' ')
-                            text = text.Replace(text[i], ' '); // Replace all possible whitespace to spaces
-                    }                    
+                    if (char.IsWhiteSpace(text, i) && text[i] != ' ')
+                        text = text.Replace(text[i], ' '); // Replace all possible whitespace to spaces
+                }
 
-                    foreach(string s in text.Split(' '))
+                foreach (string s in text.Split(' '))
+                {
+                    if (!string.IsNullOrEmpty(s))
                     {
-                        if(!string.IsNullOrEmpty(s))
-                        {
-                            int n = checkedListBox1.Items.IndexOf(s);
+                        int n = checkedListBox1.Items.IndexOf(s);
 
-                            if(n >= 0)
-                                checkedListBox1.SetItemChecked(n, true);
-                        }
+                        if (n >= 0)
+                            checkedListBox1.SetItemChecked(n, true);
                     }
                 }
+
                 this.dirty = false;
             }
         }
@@ -143,7 +134,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// File property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.File;
         }
@@ -172,8 +163,8 @@ namespace Ankh.UI.PropertyEditors
         private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             this.dirty = true;
-            if (Changed != null)
-                Changed(this, EventArgs.Empty);
+
+            OnChanged(EventArgs.Empty);
         }
 
         /// <summary>

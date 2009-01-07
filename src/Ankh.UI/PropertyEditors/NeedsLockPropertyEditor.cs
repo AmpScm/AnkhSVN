@@ -27,11 +27,8 @@ namespace Ankh.UI.PropertyEditors
     /// <summary>
     /// Property editor for executable properties.
     /// </summary>
-    internal partial class NeedsLockPropertyEditor : PropertyEditControl, IPropertyEditor
+    internal partial class NeedsLockPropertyEditor : PropertyEditControl
     {
-
-        public event EventHandler Changed;
-
         public NeedsLockPropertyEditor()
         {
             // This call is required by the Windows.Forms Form Designer.
@@ -42,13 +39,7 @@ namespace Ankh.UI.PropertyEditors
             Reset();
         }
 
-        void OnChanged(EventArgs e)
-        {
-            if (Changed != null)
-                Changed(this, e);
-        }
-
-        public void Reset()
+        public override void Reset()
         {
             if (this.needsLockTextBox != null && !this.needsLockTextBox.IsDisposed)
             {
@@ -56,13 +47,13 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
-        public bool Valid
+        public override bool Valid
         {
 
             get { return true; }
         }
 
-        public PropertyItem PropertyItem
+        public override SvnPropertyValue PropertyItem
         {
             get
             {
@@ -72,7 +63,7 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when valid is false");
                 }
 
-                return new TextPropertyItem(FEEDBACK_TEXT);
+                return new SvnPropertyValue(SvnPropertyNames.SvnNeedsLock, SvnPropertyNames.SvnBooleanValue);
             }
 
             set { }
@@ -81,7 +72,7 @@ namespace Ankh.UI.PropertyEditors
         /// <summary>
         /// File property
         /// </summary>
-        public SvnNodeKind GetAllowedNodeKind()
+        public override SvnNodeKind GetAllowedNodeKind()
         {
             return SvnNodeKind.File;
         }
