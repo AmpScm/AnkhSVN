@@ -41,30 +41,21 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <summary>
-        /// Resets the textbox.
-        /// </summary>
-        public override void Reset()
-        {
-            this.externalsTextBox.Text = "";
-            this.dirty = false;
-        }
-
-        /// <summary>
         /// Indicates whether the property item is valid.
         /// </summary>
         public override bool Valid
         {
             get
             {
-                if (!this.dirty)
-                {
-                    return false;
-                }
-                else
-                {
-                    return this.externalsTextBox.Text.Trim() != "";
-                }
+                return !string.IsNullOrEmpty(_externalsText);
             }
+        }
+
+        string _externalsText;
+        public string ExternalsText
+        {
+            get { return _externalsText; }
+            set { _externalsText = value; }
         }
 
         /// <summary>
@@ -80,18 +71,17 @@ namespace Ankh.UI.PropertyEditors
                         "Can not get a property item when valid is false");
                 }
 
-                return new SvnPropertyValue(SvnPropertyNames.SvnExternals, externalsTextBox.Text);
+                return new SvnPropertyValue(SvnPropertyNames.SvnExternals, ExternalsText);
             }
 
             set
             {
                 if (value != null)
                 {
-                    externalsTextBox.Text = originalValue = value.StringValue;
+                    ExternalsText = originalValue = value.StringValue;
                 }
                 else
-                    externalsTextBox.Text = originalValue = "";
-                this.dirty = false;
+                    ExternalsText = originalValue = "";
             }
         }
 
@@ -126,33 +116,13 @@ namespace Ankh.UI.PropertyEditors
             }
             base.Dispose(disposing);
         }
-        /// <summary>
-        /// Dispatches the Changed event.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void externalsTextBox_TextChanged(object sender, System.EventArgs e)
-        {
-            // Enables save button
-            this.dirty = true;
-
-            OnChanged(EventArgs.Empty);
-        }
 
         private void CreateMyToolTip()
         {
             // Set up the ToolTip text for the Button and Checkbox.
-            conflictToolTip.SetToolTip(this.externalsTextBox,
+            conflictToolTip.SetToolTip(externalGrid,
                 "Example: subdir1/foo   http://url.for.external.source/foo. Could be used to make your own module.");
         }
-
-
-        /// <summary>
-        /// Flag for enabling/disabling save button
-        /// </summary>
-        private bool dirty;
-
-
 
     }
 }

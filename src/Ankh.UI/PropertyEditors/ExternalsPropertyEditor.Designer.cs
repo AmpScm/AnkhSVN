@@ -31,51 +31,66 @@ namespace Ankh.UI.PropertyEditors
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.externalsGroupBox = new System.Windows.Forms.GroupBox();
-            this.externalsTextBox = new System.Windows.Forms.TextBox();
             this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.externalsGroupBox.SuspendLayout();
+            this.externalGrid = new System.Windows.Forms.DataGridView();
+            this.urlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // externalsGroupBox
+            // externalGrid
             // 
-            this.externalsGroupBox.Controls.Add(this.externalsTextBox);
-            this.externalsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.externalsGroupBox.Location = new System.Drawing.Point(0, 0);
-            this.externalsGroupBox.Name = "externalsGroupBox";
-            this.externalsGroupBox.Size = new System.Drawing.Size(348, 196);
-            this.externalsGroupBox.TabIndex = 4;
-            this.externalsGroupBox.TabStop = false;
-            this.externalsGroupBox.Text = "Write path and URL";
+            this.externalGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.externalGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.externalGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.urlColumn,
+            this.revisionColumn,
+            this.nameColumn});
+            this.externalGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.externalGrid.Location = new System.Drawing.Point(0, 0);
+            this.externalGrid.MultiSelect = false;
+            this.externalGrid.Name = "externalGrid";
+            this.externalGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.externalGrid.Size = new System.Drawing.Size(348, 196);
+            this.externalGrid.TabIndex = 0;
             // 
-            // externalsTextBox
+            // urlColumn
             // 
-            this.externalsTextBox.AcceptsReturn = true;
-            this.externalsTextBox.AcceptsTab = true;
-            this.externalsTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.externalsTextBox.Location = new System.Drawing.Point(3, 16);
-            this.externalsTextBox.Multiline = true;
-            this.externalsTextBox.Name = "externalsTextBox";
-            this.externalsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.externalsTextBox.Size = new System.Drawing.Size(342, 177);
-            this.externalsTextBox.TabIndex = 3;
-            this.externalsTextBox.TextChanged += new System.EventHandler(this.externalsTextBox_TextChanged);
+            this.urlColumn.HeaderText = "Url";
+            this.urlColumn.Name = "urlColumn";
+            this.urlColumn.Width = 45;
+            // 
+            // revisionColumn
+            // 
+            this.revisionColumn.FillWeight = 1F;
+            this.revisionColumn.HeaderText = "Revision";
+            this.revisionColumn.Name = "revisionColumn";
+            this.revisionColumn.Width = 73;
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.FillWeight = 30F;
+            this.nameColumn.HeaderText = "Name";
+            this.nameColumn.Name = "nameColumn";
+            this.nameColumn.Width = 60;
             // 
             // ExternalsPropertyEditor
             // 
-            this.Controls.Add(this.externalsGroupBox);
+            this.Controls.Add(this.externalGrid);
             this.Name = "ExternalsPropertyEditor";
-            this.Size = new System.Drawing.Size(348, 196);
-            this.externalsGroupBox.ResumeLayout(false);
-            this.externalsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).EndInit();
             this.ResumeLayout(false);
 
         }
         #endregion
 
-        private System.Windows.Forms.GroupBox externalsGroupBox;
         private System.Windows.Forms.ToolTip conflictToolTip;
         private System.ComponentModel.IContainer components;
-        private System.Windows.Forms.TextBox externalsTextBox;
+        private System.Windows.Forms.DataGridView externalGrid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn urlColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn revisionColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
     }
 }

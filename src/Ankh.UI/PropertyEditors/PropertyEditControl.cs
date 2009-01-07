@@ -57,10 +57,6 @@ namespace Ankh.UI.PropertyEditors
             get { return false; }
         }
 
-        public virtual void Reset()
-        {
-        }
-
         /// <summary>
         /// Gets the kind of the allowed node.
         /// </summary>

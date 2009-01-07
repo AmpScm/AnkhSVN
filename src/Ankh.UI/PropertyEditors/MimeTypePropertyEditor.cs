@@ -40,14 +40,6 @@ namespace Ankh.UI.PropertyEditors
         }
 
         /// <summary>
-        /// Resets the textbox.
-        /// </summary>
-        public override void Reset()
-        {
-            this.mimeTextBox.Text = this.originalValue;
-        }
-
-        /// <summary>
         /// Indicates whether the property is valid.
         /// </summary>
         public override bool Valid
