@@ -45,22 +45,16 @@ namespace Ankh.UI.PropertyEditors
 
         public override bool Valid
         {
-            get{ return this.valueTextBox.Text.Trim() != "";}
+            // Every value is valid!
+            get { return true; }
         }
 
         public override SvnPropertyValue PropertyItem
         {
             get
             {   
-                if( !this.Valid)
-                {
-                    throw new InvalidOperationException(
-                        "Can not get a property item when Valid is false");
-                }
-
                 return new SvnPropertyValue(PropertyName, this.valueTextBox.Text);
             }
-
             set
             {
                 if (value != null)
@@ -71,6 +65,12 @@ namespace Ankh.UI.PropertyEditors
                 else
                     valueTextBox.Text = "";
             }
+        }
+
+        public string CurrentText
+        {
+            get { return valueTextBox.Text ?? ""; }
+            set { valueTextBox.Text = value; }
         }
 
         /// <summary>

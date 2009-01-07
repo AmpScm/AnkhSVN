@@ -409,7 +409,7 @@
     <value>propListView</value>
   </data>
   <data name="&gt;&gt;propListView.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.0.3294.22505, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.0.3294.25307, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;propListView.Parent" xml:space="preserve">
     <value>$this</value>
@@ -428,9 +428,6 @@
   </data>
   <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>WindowsDefaultLocation</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SVN Properties</value>
@@ -463,6 +460,6 @@
     <value>PropertyEditorDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.0.3294.17466, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.0.3294.25260, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
