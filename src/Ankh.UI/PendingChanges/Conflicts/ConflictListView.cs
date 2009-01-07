@@ -41,12 +41,18 @@ namespace Ankh.UI.PendingChanges.Conflicts
             set
             {
                 _context = value;
+                SelectionPublishServiceProvider = value;
                 if (value != null)
                 {
                     IFileIconMapper mapper = value.GetService<IFileIconMapper>();
                     SmallImageList = mapper.ImageList;
                 }
             }
+        }
+
+        protected override string GetCanonicalName(ConflictListItem item)
+        {
+            return item.PendingChange.FullPath;
         }
     }
 }

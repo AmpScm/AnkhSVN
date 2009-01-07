@@ -32,7 +32,6 @@ namespace Ankh.UI.PendingChanges.Conflicts
                 throw new ArgumentNullException("change");
 
             _change = change;
-            _change = change;
             RefreshText(view.Context);
         }
 
