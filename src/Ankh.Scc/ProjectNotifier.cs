@@ -224,8 +224,6 @@ namespace Ankh.Scc
             }
         }
 
-        #region IFileStatusMonitor Members
-
         public void ScheduleSvnStatus(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -264,10 +262,6 @@ namespace Ankh.Scc
             ChangeManager.Refresh(paths);
         }
 
-        #endregion
-
-        #region IFileStatusMonitor Members
-
         public void ScheduleMonitor(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -283,10 +277,6 @@ namespace Ankh.Scc
 
             ((PendingChangeManager)ChangeManager).ScheduleMonitor(paths);
         }
-
-        #endregion
-
-        #region IFileStatusMonitor Members
 
         readonly Dictionary<string, DocumentLock> _externallyChanged = new Dictionary<string, DocumentLock>(StringComparer.OrdinalIgnoreCase);
 
@@ -384,8 +374,6 @@ namespace Ankh.Scc
                 }
             }
         }
-
-        #endregion
 
         #region IVsBroadcastMessageEvents Members
 
