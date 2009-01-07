@@ -73,7 +73,7 @@ namespace Ankh.UI.PropertyEditors
 
         public bool ShouldPersist
         {
-            get { return (OriginalValue != null) != (Value != null) || Value == null || !Value.Equals(OriginalValue); }
+            get { return (OriginalValue != null) != (Value != null) || Value == null || !Value.ValueEquals(OriginalValue); }
         }
 
         public static string CreateValue(SvnPropertyValue value)

@@ -307,8 +307,8 @@ namespace Ankh.UI.PropertyEditors
 
                 if (restWidth > 0)
                 {
-                    baseValueColumn.Width += rest / 2;
-                    valueColumn.Width += rest / 2;
+                    baseValueColumn.Width = Math.Max(0, baseValueColumn.Width + rest / 2);
+                    valueColumn.Width = Math.Max(0, valueColumn.Width + rest / 2);
                 }
             }
         }        
