@@ -312,6 +312,12 @@
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SccManagement\PendingChangeSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\PendingChangeSelector.Designer.cs">
+      <DependentUpon>PendingChangeSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -863,9 +869,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Annotate\AnnotateToolWindowControl.resx">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Commands\UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
@@ -879,16 +887,20 @@
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx" />
+    <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\WizardFramework\WizardDialog.resx">
       <DependentUpon>WizardDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\RevisionSelector.resx">
       <DependentUpon>RevisionSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\DateSelector.resx">
       <DependentUpon>DateSelector.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\VersionStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -902,10 +914,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditors\NeedsLockPropertyEditor.resx">
       <DependentUpon>NeedsLockPropertyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PropertyEditors\PropertyEditStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PropertyEditStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RecentMessageDialog.resx">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
@@ -929,6 +943,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CreateDirectoryDialog.resx">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\PendingChangeSelector.resx">
+      <DependentUpon>PendingChangeSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\ProjectCommitDialog.resx">

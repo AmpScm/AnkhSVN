@@ -164,6 +164,7 @@
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
     <Compile Include="Commands\ApplyPatch.cs" />
+    <Compile Include="Commands\ItemCreatePatch.cs" />
     <Compile Include="Commands\ItemResolveCasing.cs" />
     <Compile Include="Commands\RepositoryExplorer\CopyToOrMove.cs" />
     <Compile Include="Commands\RepositoryExplorer\CopyToWorkingCopy.cs" />

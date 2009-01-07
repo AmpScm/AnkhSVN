@@ -30,7 +30,6 @@ using System.Windows.Forms;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.UnifiedDiff)]
-    [Command(AnkhCommand.CreatePatch)]
     class ItemUnifiedDiffCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
