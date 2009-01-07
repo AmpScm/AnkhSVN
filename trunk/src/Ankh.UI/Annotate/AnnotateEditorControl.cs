@@ -143,15 +143,15 @@ namespace Ankh.UI.Annotate
             get
             {
                 if (_selected == null)
-                    return new IAnnotateSection[] { };
+                    return new AnnotateSection[0];
 
-                return new IAnnotateSection[] { _selected };
+                return new AnnotateSection[] { _selected };
             }
         }
 
         public System.Collections.IList AllItems
         {
-            get { return blameSections; }
+            get { return Selection; }
         }
 
         public IntPtr GetImageList()
