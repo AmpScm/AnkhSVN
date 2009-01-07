@@ -221,37 +221,40 @@ namespace Ankh.Commands
                     if (!hasChanges)
                         return;
 
-                    e.GetService<IProgressRunner>().RunModal("Applying property changes",
-                        delegate(object sender, ProgressWorkerArgs wa)
-                        {
-                            // HACK: We should check the original values against the new values
-                            // Currently we save all values
-                            foreach (PropertyEditItem ei in items)
+                    try
+                    {
+                        e.GetService<IProgressRunner>().RunModal("Applying property changes",
+                            delegate(object sender, ProgressWorkerArgs wa)
                             {
-                                if (!ei.ShouldPersist)
-                                    continue;
-
-                                if (ei.Value == null)
+                                foreach (PropertyEditItem ei in items)
                                 {
-                                    if (ei.OriginalValue != null)
-                                        wa.Client.DeleteProperty(firstVersioned.FullPath, ei.PropertyName);
-                                }
-                                else if (!ei.Value.ValueEquals(ei.OriginalValue))
-                                {
-                                    if (ei.Value.StringValue != null)
-                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.StringValue);
-                                    else
-                                        wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.RawValue);
-                                }
-                            }
-                        });
+                                    if (!ei.ShouldPersist)
+                                        continue;
 
-                } // if
-            } // using
+                                    if (ei.Value == null)
+                                    {
+                                        if (ei.OriginalValue != null)
+                                            wa.Client.DeleteProperty(firstVersioned.FullPath, ei.PropertyName);
+                                    }
+                                    else if (!ei.Value.ValueEquals(ei.OriginalValue))
+                                    {
+                                        if (ei.Value.StringValue != null)
+                                            wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.StringValue);
+                                        else
+                                            wa.Client.SetProperty(firstVersioned.FullPath, ei.PropertyName, ei.Value.RawValue);
+                                    }
+                                }
+                            });
 
-            // TODO: this can be removed when switching to Subversion 1.6
-            e.GetService<IFileStatusMonitor>().ScheduleMonitor(firstVersioned.FullPath);
-            e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
-        } // OnExecute
+                    } // if
+                    finally
+                    {
+                        // TODO: this can be removed when switching to Subversion 1.6
+                        e.GetService<IFileStatusMonitor>().ScheduleMonitor(firstVersioned.FullPath);
+                        e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(firstVersioned.FullPath);
+                    }
+                }
+            }
+        }
     }
 }

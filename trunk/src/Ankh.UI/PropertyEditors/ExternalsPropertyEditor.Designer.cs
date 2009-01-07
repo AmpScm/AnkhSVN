@@ -30,8 +30,6 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.conflictToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.externalGrid = new System.Windows.Forms.DataGridView();
             this.urlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,7 +39,10 @@ namespace Ankh.UI.PropertyEditors
             // 
             // externalGrid
             // 
+            this.externalGrid.AllowUserToResizeRows = false;
             this.externalGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.externalGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.externalGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.externalGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.externalGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.urlColumn,
@@ -52,9 +53,12 @@ namespace Ankh.UI.PropertyEditors
             this.externalGrid.MultiSelect = false;
             this.externalGrid.Name = "externalGrid";
             this.externalGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.externalGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.externalGrid.Size = new System.Drawing.Size(348, 196);
             this.externalGrid.TabIndex = 0;
+            this.externalGrid.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.externalGrid_RowValidating);
+            this.externalGrid.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.externalGrid_RowValidated);
             // 
             // urlColumn
             // 
@@ -86,7 +90,6 @@ namespace Ankh.UI.PropertyEditors
         }
         #endregion
 
-        private System.Windows.Forms.ToolTip conflictToolTip;
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.DataGridView externalGrid;
         private System.Windows.Forms.DataGridViewTextBoxColumn urlColumn;

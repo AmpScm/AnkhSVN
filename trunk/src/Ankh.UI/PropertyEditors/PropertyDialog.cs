@@ -51,7 +51,7 @@ namespace Ankh.UI.PropertyEditors
             AddPropertyEditor(new KeywordsPropertyEditor());
             AddPropertyEditor(new EolStylePropertyEditor());
             AddPropertyEditor(new NeedsLockPropertyEditor());
-            //AddPropertyEditor(new ExternalsPropertyEditor());
+            AddPropertyEditor(new ExternalsPropertyEditor());
 
             this.nameComboBox.Items.Clear();
             foreach (PropertyEditControl editor in this.keyPropEditor.Values)
@@ -60,7 +60,6 @@ namespace Ankh.UI.PropertyEditors
             }
 
             // Enable recursion if the current node is directory to allow applying a property recursively
-            this.recursiveCheckBox.Enabled = _currentNodeKind == SvnNodeKind.Directory;
             PopulateData();
         }
 
@@ -71,7 +70,7 @@ namespace Ankh.UI.PropertyEditors
         private void AddPropertyEditor(PropertyEditControl propEditor)
         {
             SvnNodeKind allowed = propEditor.GetAllowedNodeKind();
-            SvnNodeKind result =  allowed & _currentNodeKind;
+            SvnNodeKind result = allowed & _currentNodeKind;
             bool doAdd = ((result == SvnNodeKind.None)
                             && (allowed != SvnNodeKind.None)) ?
                             false
@@ -80,7 +79,7 @@ namespace Ankh.UI.PropertyEditors
             {
                 // Enable file properties on directories
                 // to support applying properties recursively
-                doAdd = (allowed | SvnNodeKind.File) == SvnNodeKind.File 
+                doAdd = (allowed | SvnNodeKind.File) == SvnNodeKind.File
                     && _currentNodeKind == SvnNodeKind.Directory;
             }
             if (doAdd)
@@ -99,10 +98,6 @@ namespace Ankh.UI.PropertyEditors
             {
                 this.nameComboBox.Text = this.existingItem.Key;
                 this.currentEditor.PropertyItem = this.existingItem;
-                if (this.recursiveCheckBox.Enabled)
-                {
-                    this.recursiveCheckBox.Checked = false;// this.existingItem.Recursive;
-                }
             }
             else
             {
@@ -121,7 +116,7 @@ namespace Ankh.UI.PropertyEditors
             if (selectedItem != null)
             {
                 SetNewEditor(selectedItem);
-            }   
+            }
         }
 
         /// <remarks>
@@ -219,7 +214,7 @@ namespace Ankh.UI.PropertyEditors
         /// <returns></returns>
         public bool ApplyRecursively()
         {
-            return this.recursiveCheckBox.Checked;
+            return false;
         }
 
         private void UpdateButtons()
@@ -245,7 +240,7 @@ namespace Ankh.UI.PropertyEditors
                 if (dlg.ShowDialog(this) != DialogResult.OK)
                     return;
 
-                using(Stream s = dlg.OpenFile())
+                using (Stream s = dlg.OpenFile())
                 using (StreamReader sr = new StreamReader(s))
                 {
                     ppe.CurrentText = sr.ReadToEnd();
