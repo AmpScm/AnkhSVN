@@ -299,13 +299,14 @@ namespace Ankh.Scc
 
             lock (_externallyChanged)
             {
-                if (!_externallyChanged.ContainsKey(path) &&
-                    DocumentTracker.IsDocumentOpenInTextEditor(path) && !DocumentTracker.IsDocumentDirty(path, true))
+                if (!_externallyChanged.ContainsKey(path))
                 {
-                    // Locking will trigger a file change!
                     _externallyChanged.Add(path, null);
-
-                    _externallyChanged[path] = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
+                    if (DocumentTracker.IsDocumentOpenInTextEditor(path) && !DocumentTracker.IsDocumentDirty(path, true))
+                    {
+                        // Locking will trigger a file change!
+                        _externallyChanged[path] = DocumentTracker.LockDocument(path, DocumentLockType.ReadOnly);
+                    }
                 }
             }
         }
@@ -362,8 +363,8 @@ namespace Ankh.Scc
                     {
                         // Reload?
 
-						if(file.Value != null)
-							file.Value.Reload(file.Key);
+                        if (file.Value != null)
+                            file.Value.Reload(file.Key);
                     }
                 }
             }
@@ -378,8 +379,8 @@ namespace Ankh.Scc
             {
                 foreach (DocumentLock dl in modified.Values)
                 {
-					if(dl != null)
-						dl.Dispose();
+                    if (dl != null)
+                        dl.Dispose();
                 }
             }
         }
