@@ -41,7 +41,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
     [Command(AnkhCommand.ReposExplorerLog)]
-    [Command(AnkhCommand.BlameShowLog)]    
+    [Command(AnkhCommand.AnnotateShowLog)]    
     sealed class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -134,7 +134,7 @@ namespace Ankh.Commands
                     if (i == 1)
                         return;
                     break;
-                case AnkhCommand.BlameShowLog:
+                case AnkhCommand.AnnotateShowLog:
                     i = 0;
                     foreach (IAnnotateSection section in e.Selection.GetSelection<IAnnotateSection>())
                     {
@@ -212,7 +212,7 @@ namespace Ankh.Commands
                     if (item != null)
                         PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
                     break;
-                case AnkhCommand.BlameShowLog:
+                case AnkhCommand.AnnotateShowLog:
                     IAnnotateSection section = null;
                     foreach (IAnnotateSection s in e.Selection.GetSelection<IAnnotateSection>())
                     {

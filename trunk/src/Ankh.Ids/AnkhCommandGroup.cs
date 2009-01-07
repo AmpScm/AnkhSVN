@@ -109,7 +109,7 @@ namespace Ankh.Ids
         ListViewShow,
 
         ItemIgnore,
-        BlameContextMenu,
+        AnnotateContextMenu,
 
         CodeEditorScc,
 

@@ -140,7 +140,7 @@ namespace Ankh.UI.Annotate
             if (_context != null)
             {
                 IAnkhCommandService cs = _context.GetService<IAnkhCommandService>();
-                cs.ShowContextMenu(AnkhCommandMenu.BlameContextMenu, p.X, p.Y);
+                cs.ShowContextMenu(AnkhCommandMenu.AnnotateContextMenu, p.X, p.Y);
             }
         }
 
