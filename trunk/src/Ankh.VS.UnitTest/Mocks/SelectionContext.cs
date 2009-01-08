@@ -169,6 +169,16 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContext Members
+
+
+            public System.Collections.Hashtable Cache
+            {
+                get { return new System.Collections.Hashtable(); }
+            }
+
+            #endregion
         }
     }
 }
