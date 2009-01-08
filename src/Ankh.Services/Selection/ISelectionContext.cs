@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
+using System.Collections;
 
 namespace Ankh.Selection
 {
@@ -124,6 +125,11 @@ namespace Ankh.Selection
         /// <value>The active dialog or frame control.</value>
         Control ActiveDialogOrFrameControl { get; }
 
+        /// <summary>
+        /// Gets the cache.
+        /// </summary>
+        /// <value>The cache.</value>
+        Hashtable Cache { get; }
 
         /// <summary>
         /// Gets the active control of the specified type

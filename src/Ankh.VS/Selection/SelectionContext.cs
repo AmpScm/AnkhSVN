@@ -61,6 +61,7 @@ namespace Ankh.VS.Selection
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
         CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
+        Hashtable _hashCache;
         IVsHierarchy _miscFiles;
         bool _checkedMisc;
         bool _deteminedSolutionExplorer;
@@ -172,6 +173,7 @@ namespace Ankh.VS.Selection
             _checkedMisc = false;
             _selectedItemsMap = null;
             _isSolutionSelected = null;
+            _hashCache.Clear();
 
             if (_disposer != null)
             {
@@ -578,6 +580,10 @@ namespace Ankh.VS.Selection
             }
         }
 
+        public Hashtable Cache
+        {
+            get { return _hashCache; }
+        }
 
         #region ISelectionContext Members
 
