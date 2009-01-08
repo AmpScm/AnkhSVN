@@ -30,7 +30,7 @@ namespace Ankh.Commands
     /// Command to revert current item to last updated revision.
     /// </summary>
     [Command(AnkhCommand.RevertItem)]
-    [Command(AnkhCommand.ItemRevertBase)]
+    [Command(AnkhCommand.ItemRevertBase, HideWhenDisabled=false)]
     class RevertItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -41,11 +41,7 @@ namespace Ankh.Commands
                     return;
             }
             e.Enabled = false;
-
-            if (e.Command != AnkhCommand.ItemRevertBase)
-                e.Visible = false; // Don't hide nested toolbar buttons
         }
-        
 
         public override void OnExecute(CommandEventArgs e)
         {

@@ -248,7 +248,7 @@
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\RemoveRepositoryRootCommand.cs" />
     <Compile Include="Commands\WorkingCopyExplorer\RemoveWorkingCopyExplorerRootCommand.cs" />
-    <Compile Include="Commands\RevertItemCommand.cs">
+    <Compile Include="Commands\ItemRevertCommand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
