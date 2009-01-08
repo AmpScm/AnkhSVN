@@ -626,7 +626,12 @@ namespace Ankh.UI.RepositoryOpen
                                     _walking[uri] = items;
                                 }
                                 else
-                                    dirView.Items.Add("<Nothing>");
+                                {
+                                    string message = 
+                                        string.Format("<{0}>",
+                                        la.LastException != null ? la.LastException.Message : "Nothing");
+                                    dirView.Items.Add(message);
+                                }
                             }
                         });
                     }
