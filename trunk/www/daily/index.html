@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5883</title>
+<title>AnkhSVN-Daily Update - 2.0.5890</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5883</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5890</h1>
 
 
 <p>
@@ -12,13 +12,13 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1413/AnkhSvn-Daily-2.0.5883.339.msi">AnkhSVN 2.0.5883</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1417/AnkhSvn-Daily-2.0.5890.340.msi">AnkhSVN 2.0.5890</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5883">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5890">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -26,6 +26,15 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2009-01-08</td></tr>
+<tr><td> </td><td class="r"><a id="5889" href="http://ankhsvn.net/rev/?r=5889">[r5889]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/Commands/CreateChangeListDialog.Designer.cs, src/Ankh.UI/Commands/CreateChangeListDialog.cs, src/Ankh.Ids/AnkhCommandMenu.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh/Commands/ItemMoveToChangeList.cs, src/Ankh/Ankh.csproj (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add Move to Changelist commands (actually submenu) on Solution explorer, pending
+commits, etc. This menu allows easy access to the currently in use changelist names.
+(First ten found walking all pending changes)</td></tr>
+<tr><td> </td><td class="r"><a id="5887" href="http://ankhsvn.net/rev/?r=5887">[r5887]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/Selection/SelectionContext.cs, src/Ankh.Services/Selection/ISelectionContext.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add a hashtable to the Selection context that allows selection
+users to cache values as long as the selection is valid.</td></tr>
+<tr><td> </td><td class="r"><a id="5886" href="http://ankhsvn.net/rev/?r=5886">[r5886]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PathTreeView.cs, src/Ankh.UI/LockDialog.Designer.cs, src/Ankh.UI/LockDialog.cs, src/Ankh.UI/PathSelector/PathSelectionTreeView.Designer.cs, src/Ankh.UI/PathSelector/PathSelectionTreeView.cs, src/Ankh.UI/SccManagement/PendingChangeSelector.resx, src/Ankh.UI/PathSelectionTreeView.Designer.cs, src/Ankh.UI/PathSelectionTreeView.cs (and 14 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved PathSelector and PendingChangeSelector to PathSelector folder,
+while updating namespaces.</td></tr>
+<tr><td> </td><td class="r"><a id="5885" href="http://ankhsvn.net/rev/?r=5885">[r5885]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Update to SharpSvn 1.5005.984 to get the OpenSSL security update from
+0.9.8j</td></tr>
 <tr class="d"><td colspan="4">2009-01-07</td></tr>
 <tr><td> </td><td class="r"><a id="5880" href="http://ankhsvn.net/rev/?r=5880">[r5880]</a></td><td class="a">baybora</td><td class="f">src/Ankh/Commands/ItemCreatePatch.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/SccManagement/PendingChangeSelector.resx, src/Ankh/Commands/ItemUnifiedDiffCommand.cs, src/Ankh.UI/SccManagement/PendingChangeSelector.Designer.cs, src/Ankh/Ankh.csproj, src/Ankh.UI/SccManagement/PendingChangeSelector.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2"><a href="http://ankhsvn.net/issues/?id=497">Issue 497</a> : Patch command should use dialog like project commit
 Patch command uses new Pending Change Selector dialog</td></tr>
