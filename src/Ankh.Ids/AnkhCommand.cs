@@ -268,6 +268,12 @@ namespace Ankh.Ids
         SolutionEditProperties,
         ProjectEditProperties,
 
-        LogShowRevisionProperties
+        LogShowRevisionProperties,
+
+        MoveToNewChangeList,
+        MoveToExistingChangeList0,
+        MoveToExistingChangeListMax = MoveToExistingChangeList0 + 20,
+        MoveToIgnoreChangeList,
+        RemoveFromChangeList
     }
 }
