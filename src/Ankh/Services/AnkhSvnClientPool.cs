@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using SharpSvn.UI;
 using System.Windows.Forms.Design;
+using Ankh.UI;
 
 namespace Ankh.Services
 {
@@ -47,15 +48,33 @@ namespace Ankh.Services
             GC.KeepAlive(_syncher.Handle); // Ensure the window is created
         }
 
+        IAnkhDialogOwner _dialogOwner;
+        IAnkhDialogOwner DialogOwner
+        {
+            get { return _dialogOwner ?? (_dialogOwner = GetService<IAnkhDialogOwner>()); }
+        }
+
+        IFileStatusCache _cache;
+        IFileStatusCache StatusCache
+        {
+            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
+        }
+
+        IFileStatusMonitor _monitor;
+        IFileStatusMonitor StatusMonitor
+        {
+            get { return _monitor ?? (_monitor = GetService<IFileStatusMonitor>()); }
+        }
+
         bool _ensuredNames;
         void EnsureNames()
         {
-            if(_ensuredNames)
+            if (_ensuredNames)
                 return;
             _ensuredNames = true;
 
             SvnClient.AddClientName("VisualStudio", GetService<IAnkhSolutionSettings>().VisualStudioVersion);
-            SvnClient.AddClientName("AnkhSVN", new System.Reflection.AssemblyName(typeof(AnkhSvnClientPool).Assembly.FullName).Version);            
+            SvnClient.AddClientName("AnkhSVN", GetService<IAnkhPackage>().UIVersion);
         }
 
         public SvnPoolClient GetClient()
@@ -89,9 +108,7 @@ namespace Ankh.Services
         {
             EnsureNames();
 
-            IAnkhDialogOwner owner = GetService<IAnkhDialogOwner>();
-
-            if (owner == null)
+            if (DialogOwner == null)
                 hookUI = false;
 
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI);
@@ -100,7 +117,7 @@ namespace Ankh.Services
             {
                 // Let SharpSvnUI handle login and SSL dialogs
                 SvnUIBindArgs bindArgs = new SvnUIBindArgs();
-                bindArgs.ParentWindow = new OwnerWrapper(owner);
+                bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
                 bindArgs.UIService = GetService<IUIService>();
                 bindArgs.Synchronizer = _syncher;
 
@@ -110,34 +127,26 @@ namespace Ankh.Services
             return client;
         }
 
-        internal void NotifyChanges(HybridCollection<string> changedPaths, IList<string> deleted)
+        internal void NotifyChanges(HybridCollection<string> changedPaths, IList<string> fullRefresh)
         {
-            if (deleted != null && deleted.Count > 0)
+            if (changedPaths != null && changedPaths.Count > 0)
+                StatusMonitor.ScheduleMonitor(changedPaths); // Adds the files to the to-commit list while they are not in a project
+
+            if (fullRefresh != null && fullRefresh.Count > 0)
             {
                 if (changedPaths == null)
                     changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-                IFileStatusCache cache = GetService<IFileStatusCache>();
-
-                if (cache != null)
+                foreach (SvnItem item in StatusCache.GetCachedBelow(fullRefresh))
                 {
-                    foreach (SvnItem item in cache.GetCachedBelow(deleted))
-                    {
-                        if (!changedPaths.Contains(item.FullPath))
-                            changedPaths.Add(item.FullPath);
-                    }
+                    if (!changedPaths.Contains(item.FullPath))
+                        changedPaths.Add(item.FullPath);
                 }
             }
 
             if (changedPaths != null && changedPaths.Count > 0)
             {
-                IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
-
-                if (monitor != null)
-                {
-                    monitor.ScheduleMonitor(changedPaths); // Adds the files to the to-commit list while they are not in a project
-                    monitor.ScheduleSvnStatus(changedPaths);
-                }
+                StatusMonitor.ScheduleSvnStatus(changedPaths);
             }
         }
 
@@ -161,10 +170,11 @@ namespace Ankh.Services
             return false;
         }
 
+
         class AnkhSvnPoolClient : SvnPoolClient
         {
             readonly HybridCollection<string> _touchedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-            readonly HybridCollection<string> _deleted = new HybridCollection<string>();
+            readonly HybridCollection<string> _fullRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
             public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled)
                 : base(pool)
@@ -181,31 +191,31 @@ namespace Ankh.Services
             {
                 base.OnNotify(e);
 
-                AddTouchedPath(e.FullPath, e.Action == SvnNotifyAction.CommitDeleted);
+                AddTouchedPath(e.FullPath, e.Action == SvnNotifyAction.CommitDeleted || e.Action == SvnNotifyAction.Revert);
             }
 
-            void AddTouchedPath(string path, bool deleted)
+            void AddTouchedPath(string path, bool fullRefresh)
             {
                 if (!string.IsNullOrEmpty(path) && !_touchedPaths.Contains(path))
                 {
                     _touchedPaths.Add(path);
                 }
 
-                if (deleted && !_deleted.Contains(path))
-                    _deleted.Add(path);
+                if (fullRefresh && !_fullRefresh.Contains(path))
+                    _fullRefresh.Add(path);
             }
 
             protected override void ReturnClient()
             {
-                HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);                
+                HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
                 List<string> deleted = null;
-                
-                if(_deleted.Count > 0)
-                    deleted = new List<string>(_deleted);
+
+                if (_fullRefresh.Count > 0)
+                    deleted = new List<string>(_fullRefresh);
 
                 paths.AddRange(_touchedPaths);
                 _touchedPaths.Clear();
-                _deleted.Clear();
+                _fullRefresh.Clear();
 
                 AnkhSvnClientPool pool = (AnkhSvnClientPool)SvnClientPool;
 
@@ -216,7 +226,7 @@ namespace Ankh.Services
                     InnerDispose();
                 }
             }
-        }        
+        }
     }
 
     sealed class OwnerWrapper : IWin32Window
