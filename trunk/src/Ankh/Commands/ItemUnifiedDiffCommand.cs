@@ -80,29 +80,12 @@ namespace Ankh.Commands
                     });
                 using (StreamReader sr = new StreamReader(stream))
                 {
-                    switch (e.Command)
-                    {
-                        case AnkhCommand.UnifiedDiff:
-                            File.WriteAllText(tempFile, sr.ReadToEnd(), Encoding.UTF8);
-                            VsShellUtilities.OpenDocument(e.Context, tempFile);
-                            break;
-                        case AnkhCommand.CreatePatch:
-                            using (SaveFileDialog dlg = new SaveFileDialog())
-                            {
-                                dlg.Filter = "Patch files(*.patch)|*.patch|Diff files(*.diff)|*.diff|" +
-                                    "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-                                dlg.AddExtension = true;
-
-                                if (dlg.ShowDialog(e.Context.DialogOwner) == DialogResult.OK)
-                                {
-                                    File.WriteAllText(dlg.FileName, sr.ReadToEnd(), Encoding.UTF8);
-                                }
-                            }
-                            break;
-                    }
+                    File.WriteAllText(tempFile, sr.ReadToEnd(), Encoding.UTF8);
+                    VsShellUtilities.OpenDocument(e.Context, tempFile);
                 }
             }
         }
+
         PathSelectorResult ShowDialog(CommandEventArgs e)
         {
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", e.Selection.GetSelectedSvnItems(true));

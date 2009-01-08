@@ -10,9 +10,9 @@ using Ankh.UI.SccManagement;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.CreatePatch)]
-    class ItemCreatePatch : ICommandHandler
+    class ItemCreatePatch : CommandBase
     {
-        public void OnUpdate(CommandUpdateEventArgs e)
+        public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (SvnItem i in e.Selection.GetSelectedSvnItems(true))
             {
@@ -29,7 +29,7 @@ namespace Ankh.Commands
             e.Enabled = false;
         }
 
-        public void OnExecute(CommandEventArgs e)
+        public override void OnExecute(CommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
             Dictionary<string, PendingChange> changes = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
@@ -72,6 +72,7 @@ namespace Ankh.Commands
             using (PendingChangeSelector pcs = new PendingChangeSelector())
             {
                 pcs.Context = e.Context;
+                pcs.Text = CommandStrings.CreatePatchTitle;
                 pcs.LoadItems(e.Selection.GetSelectedSvnItems(true));
 
                 DialogResult dr = pcs.ShowDialog(e.Context);
@@ -84,6 +85,7 @@ namespace Ankh.Commands
                 {
                     return;
                 }
+
                 PendingChangeCreatePatchArgs pca = new PendingChangeCreatePatchArgs();
                 pca.FileName = fileName;
                 IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
