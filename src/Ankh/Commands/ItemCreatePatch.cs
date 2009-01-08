@@ -6,6 +6,7 @@ using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI.SccManagement;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
 {

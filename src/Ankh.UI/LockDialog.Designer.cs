@@ -35,7 +35,7 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.stealLocksCheckBox = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
+            this.pathSelectionTreeView = new Ankh.UI.PathSelector.PathSelectionTreeView();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor();
             this.label2 = new System.Windows.Forms.Label();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -179,7 +179,7 @@ namespace Ankh.UI
         }
         #endregion
 
-        protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
+        internal Ankh.UI.PathSelector.PathSelectionTreeView pathSelectionTreeView;
 
         protected System.Windows.Forms.Label suppressLabel;
 

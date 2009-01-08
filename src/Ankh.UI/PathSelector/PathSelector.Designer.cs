@@ -41,7 +41,7 @@ namespace Ankh.UI.PathSelector
             this.revisionPickerStart = new Ankh.UI.PathSelector.VersionSelector();
             this.toPanel = new System.Windows.Forms.Panel();
             this.revisionPickerEnd = new Ankh.UI.PathSelector.VersionSelector();
-            this.pathSelectionTreeView = new Ankh.UI.PathSelectionTreeView();
+            this.pathSelectionTreeView = new Ankh.UI.PathSelector.PathSelectionTreeView();
             this.suppressGroupBox.SuspendLayout();
             this.bottomPanel.SuspendLayout();
             this.fromPanel.SuspendLayout();
@@ -211,7 +211,7 @@ namespace Ankh.UI.PathSelector
         }
         #endregion
 
-        protected Ankh.UI.PathSelectionTreeView pathSelectionTreeView;
+        internal PathSelectionTreeView pathSelectionTreeView;
         protected System.Windows.Forms.CheckBox recursiveCheckBox;
         [CLSCompliant(false)]
         protected System.Windows.Forms.Button okButton;

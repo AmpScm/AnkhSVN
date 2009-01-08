@@ -21,7 +21,7 @@ using System.ComponentModel;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
     /// <summary>
     /// A treeview that displays the system icons for paths.
@@ -29,7 +29,7 @@ namespace Ankh.UI
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.TreeViewDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [DesignTimeVisible(true)]
-    public class PathTreeView : TreeViewWithSelection<TreeNode>
+    class PathTreeView : TreeViewWithSelection<TreeNode>
     {
         IAnkhServiceProvider _context;
         public PathTreeView()

@@ -29,12 +29,12 @@ using Ankh.UI.VSSelectionControls;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace Ankh.UI
+namespace Ankh.UI.PathSelector
 {
     /// <summary>
     /// Represents a TreeView that can be used to choose from a set of paths.
     /// </summary>
-    public partial class PathSelectionTreeView : PathTreeView
+    partial class PathSelectionTreeView : PathTreeView
     {
         Predicate<SvnItem> _checkedFilter;
         ICollection<SvnItem> _items;

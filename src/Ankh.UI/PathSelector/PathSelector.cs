@@ -301,7 +301,7 @@ namespace Ankh.UI.PathSelector
             }
         }
 
-        protected PathSelectionTreeView TreeView
+        internal PathSelectionTreeView TreeView
         {
             get { return this.pathSelectionTreeView; }
         }

@@ -312,10 +312,10 @@
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SccManagement\PendingChangeSelector.cs">
+    <Compile Include="PathSelector\PendingChangeSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SccManagement\PendingChangeSelector.Designer.cs">
+    <Compile Include="PathSelector\PendingChangeSelector.Designer.cs">
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
@@ -618,7 +618,7 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.Designer.cs">
       <DependentUpon>ToolArgumentDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathSelectionTreeView.Designer.cs">
+    <Compile Include="PathSelector\PathSelectionTreeView.Designer.cs">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
     </Compile>
     <Compile Include="PathSelector\PathSelector.Designer.cs">
@@ -772,13 +772,13 @@
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathSelectionTreeView.cs">
+    <Compile Include="PathSelector\PathSelectionTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PathSelector\PathSelector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathTreeView.cs">
+    <Compile Include="PathSelector\PathTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
@@ -835,7 +835,7 @@
       <DependentUpon>LockDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathSelectionTreeView.resx">
+    <EmbeddedResource Include="PathSelector\PathSelectionTreeView.resx">
       <DependentUpon>PathSelectionTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -843,7 +843,7 @@
       <DependentUpon>PathSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathTreeView.resx">
+    <EmbeddedResource Include="PathSelector\PathTreeView.resx">
       <DependentUpon>PathTreeView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -945,7 +945,7 @@
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SccManagement\PendingChangeSelector.resx">
+    <EmbeddedResource Include="PathSelector\PendingChangeSelector.resx">
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
