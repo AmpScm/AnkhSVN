@@ -18,6 +18,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using Ankh.UI.PathSelector;
 
 namespace Ankh.UI
 {
@@ -113,7 +114,7 @@ namespace Ankh.UI
             set { this.stealLocksCheckBox.Checked = value; }
         }
 
-        protected PathSelectionTreeView TreeView
+        internal PathSelectionTreeView TreeView
         {
             get { return this.pathSelectionTreeView; }
         }

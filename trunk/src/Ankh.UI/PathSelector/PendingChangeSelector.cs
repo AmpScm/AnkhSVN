@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges.Commits;
 
-namespace Ankh.UI.SccManagement
+namespace Ankh.UI.PathSelector
 {
     public partial class PendingChangeSelector : VSContainerForm
     {

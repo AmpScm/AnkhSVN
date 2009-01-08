@@ -1,4 +1,4 @@
-﻿namespace Ankh.UI.SccManagement
+﻿namespace Ankh.UI.PathSelector
 {
     partial class PendingChangeSelector
     {
