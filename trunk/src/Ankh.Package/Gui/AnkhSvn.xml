@@ -199,6 +199,7 @@
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
         </Group>
+        <GroupRef id="Menu_MoveToChangeList" priority="0x4000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
@@ -257,6 +258,7 @@
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
         </Group>
+        <GroupRef id="Menu_MoveToChangeList" priority="0x4000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
@@ -324,6 +326,23 @@
           <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
                 text="Refres&amp;h"
                 toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
+        </Group>
+        <Group id="Menu_MoveToChangeList" priority="0xD000">
+          <Button id="Cmd_RemoveFromChangeList" name="SvnRemoveFromChangeList" priority="0x100"
+                      text="&amp;Remove from Change List" defaultInvisible="true"/>
+          <Menu id="Menu_MoveToChangeList" text="Move to &amp;Change List" name="SvnMoveToChangeList" priority="0x100">
+            <Group id="Cmd_MoveToNewChangeList" priority="0x100">
+              <Button id="Cmd_MoveToNewChangeList" name="MoveToChangeList" priority="0x100"
+                      text="&lt;&amp;Change List&gt;" defaultInvisible="true"/>              
+            </Group>
+            <Group id="Cmd_MoveToExistingChangeList0" priority="0x200">
+              <Button id="Cmd_MoveToExistingChangeList0" priority="0x100" text="." dynamicItemStart="true" defaultInvisible="true" />
+            </Group>
+            <Group id="Cmd_MoveToIgnoreChangeList" priority="0xF00">
+              <Button id="Cmd_MoveToIgnoreChangeList" name="IgnoreOnCommit" priority="0x100"
+                      text="&amp;ignore-on-commit" defaultInvisible="true"/>
+            </Group>
+          </Menu>
         </Group>
         <Group id="Grp_ItemIgnore" priority="0xE000">
           <Menu id="Menu_ItemIgnore" priority="0x100" name="ItemIgnore" text="&amp;Ignore">
@@ -774,6 +793,7 @@
         </Group>
       </Menu>
     </GroupRef>
+    <!-- Change list menu-->    
     <MenuRef id="Grp_NoUI">
       <Group id="Grp_NoUI" priority="0">
         <!-- This group contains our non-ui commands which are only used for triggering postcommands -->
@@ -786,7 +806,7 @@
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
       </Group>
-    </MenuRef>
+    </MenuRef>    
   </UI>
   <UsedCommands>
     <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->

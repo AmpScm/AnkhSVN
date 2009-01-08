@@ -61,7 +61,7 @@ namespace Ankh.VS.Selection
         CachedEnumerable<SvnProject> _selectedProjectsRecursive;
         CachedEnumerable<SvnProject> _ownerProjects;
         Dictionary<Type, IEnumerable> _selectedItemsMap;
-        Hashtable _hashCache;
+        readonly Hashtable _hashCache = new Hashtable();
         IVsHierarchy _miscFiles;
         bool _checkedMisc;
         bool _deteminedSolutionExplorer;

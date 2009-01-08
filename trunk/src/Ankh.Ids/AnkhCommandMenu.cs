@@ -88,6 +88,8 @@ namespace Ankh.Ids
 
         EditorScc,
         RepositoryExplorerOpenWith,
-        RepositoryExplorerTbOpen
+        RepositoryExplorerTbOpen,
+
+        MoveToChangeList,
     }
 }
