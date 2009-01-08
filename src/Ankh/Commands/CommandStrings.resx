@@ -141,4 +141,7 @@
   <data name="RenamingNodes" xml:space="preserve">
     <value>Renaming</value>
   </data>
+  <data name="CreatePatchTitle" xml:space="preserve">
+    <value>Create Patch</value>
+  </data>
 </root>
