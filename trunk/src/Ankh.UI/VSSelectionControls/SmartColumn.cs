@@ -33,7 +33,7 @@ namespace Ankh.UI.VSSelectionControls
         /// <returns>
         /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
         /// </returns>
-        public int Compare(ListViewItem x, ListViewItem y, bool reverseSort);
+        int Compare(ListViewItem x, ListViewItem y, bool reverseSort);
     }
 
     public class SmartColumn : ColumnHeader, IComparer<ListViewItem>, ISmartValueComparer
