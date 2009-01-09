@@ -39,7 +39,7 @@ namespace Ankh.UI.PendingChanges
     /// <seealso cref="UserControl"/>
     public partial class VSTextEditor : Control
     {
-        CodeEditorNativeWindow _nativeWindow;
+        CodeEditorWindow _nativeWindow;
         IAnkhServiceProvider _context;
         BorderStyle _borderStyle;
         Guid? _forceLanguageService;
@@ -219,7 +219,7 @@ namespace Ankh.UI.PendingChanges
 
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
-            _nativeWindow = new CodeEditorNativeWindow(_context, this);
+            _nativeWindow = new CodeEditorWindow(_context, this);
             _nativeWindow.Init(allowModal, ForceLanguageService);
             _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
             _nativeWindow.Size = ClientSize;
@@ -488,10 +488,9 @@ namespace Ankh.UI.PendingChanges
     }
 
     /// <summary>
-    /// This class inherits from NativeWindow class, that provides a low-level encapsulation of a window handle and a window procedure
+    /// This class is a low-level encapsulation of a text editor to provide some helper functions
     /// </summary>
-    /// <seealso cref="NativeWindow"/>
-    internal class CodeEditorNativeWindow : AnkhService, IOleCommandTarget, IDisposable, IVsTextViewEvents
+    internal class CodeEditorWindow : AnkhService, IOleCommandTarget, IDisposable, IVsTextViewEvents
     {
         #region Fields
 
@@ -521,7 +520,7 @@ namespace Ankh.UI.PendingChanges
 
         #endregion
 
-        public CodeEditorNativeWindow(IAnkhServiceProvider context, Control container)
+        public CodeEditorWindow(IAnkhServiceProvider context, Control container)
             : base(context)
         {
             if (container == null)
