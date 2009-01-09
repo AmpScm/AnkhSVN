@@ -38,17 +38,17 @@ namespace Utils
         /// <returns></returns>
         public static string GetMessage(Exception ex)
         {
-            string msg = "";
+            StringBuilder sb = new StringBuilder();
             while (ex != null)
             {
-                msg += ex.GetType().FullName + ": " + Environment.NewLine;
-                msg += ex.Message + Environment.NewLine;
-                msg += ex.StackTrace + Environment.NewLine;
+                sb.AppendLine(ex.GetType().FullName + ": ");
+                sb.AppendLine(ex.Message);
+                sb.AppendLine(ex.StackTrace);
 
                 ex = ex.InnerException;
             }
 
-            return msg;
+            return sb.ToString();
         }
 
         /// <summary>
@@ -84,76 +84,6 @@ namespace Utils
             p.StartInfo.UseShellExecute = true;
 
             p.Start();
-        }
-
-        /// <summary>
-        /// Sends the error to a web page.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="ex"></param>
-        /// <param name="assembly">The assembly where the error originated. This will 
-        /// be used to extract version information.</param>
-        public static void SendByWeb(string url, Exception ex, Assembly assembly,
-            StringDictionary additionalInfo)
-        {
-            try
-            {
-                string msg = GetMessage(ex);
-                string attributes = GetAttributes(additionalInfo);
-                string assemblyVersion = assembly == null ? "" : Uri.EscapeDataString(assembly.GetName().Version.ToString());
-                string command = string.Format("{0}?message={1}&version={2}&{3}",
-                    url, Uri.EscapeDataString(msg), assemblyVersion, attributes);
-
-                Process p = new Process();
-                p.StartInfo.FileName = command;
-                p.StartInfo.UseShellExecute = true;
-
-                p.Start();
-            }
-            catch (Exception newex)
-            {
-                MessageBox.Show(GetMessage(newex));
-            }
-        }
-
-        /// <summary>
-        /// Asks if the user wants to send an error report by mail.
-        /// </summary>
-        /// <param name="recipient"></param>
-        /// <param name="subject"></param>
-        /// <param name="ex"></param>
-        /// <param name="assembly">The assembly where the error originated. This will 
-        /// be used to extract version information.</param>
-        public static void QuerySendByMail(string recipient, string subject, Exception ex,
-            Assembly assembly, StringDictionary additionalInfo)
-        {
-            if (MessageBox.Show("An error has occurred. Do you wish to send an error report?",
-                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-            {
-                SendByMail(recipient, subject, ex, assembly, additionalInfo);
-            }
-
-        }
-
-        /// <summary>
-        /// Asks if the user wants to send an error report over the web.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="ex"></param>
-        /// <param name="assembly">The assembly where the error originated. This will 
-        /// be used to extract version information.</param>
-        public static void QuerySendByWeb(string url, Exception ex, Assembly assembly)
-        {
-            string message = GetMessage(ex);
-            if (MessageBox.Show("An error has occurred. Do you wish to send an error report?" +
-                Environment.NewLine +
-                "(This will open your default web browser)" + Environment.NewLine + Environment.NewLine +
-                message,
-                "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
-            {
-                SendByWeb(url, ex, assembly, new StringDictionary());
-            }
-
         }
 
         private static string GetAttributes(StringDictionary additionalInfo)
