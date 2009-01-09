@@ -177,13 +177,9 @@ namespace Ankh.Commands
                 }
                 SvnWriteArgs args = new SvnWriteArgs();
                 args.Revision = revision;
-                args.SvnError += delegate(object sender, SvnErrorEventArgs eea)
-                {
-                    if (eea.Exception is SvnClientUnrelatedResourcesException)
-                        eea.Cancel = true;
-                };
+                args.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES);
                 
-                using (FileStream stream = new FileStream(tempFile, FileMode.Create, FileAccess.Write))
+                using (FileStream stream = File.Create(tempFile))
                 {
                     ee.Client.Write(target, stream, args);
                 }
