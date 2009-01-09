@@ -43,11 +43,12 @@ namespace Ankh.VSPackage
         ShowHotURLs = true,
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
-    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 301, 305)]
+    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 305)]
     [ProvideService(typeof(LogMessageLanguageService), ServiceName = AnkhId.LogMessageServiceName)]
     [ProvideLanguageService(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, 304)]
-    [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 304, 306)]
+    [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 306)]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".patch")]
+    [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".diff")]
     [ProvideService(typeof(UnifiedDiffLanguageService), ServiceName=AnkhId.UnifiedDiffServiceName)]
     partial class AnkhSvnPackage
     {
