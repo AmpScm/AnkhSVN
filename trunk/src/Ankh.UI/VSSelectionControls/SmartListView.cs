@@ -37,7 +37,8 @@ namespace Ankh.UI.VSSelectionControls
         readonly Collection<SmartColumn> _groupColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _sortColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _allColumns = new Collection<SmartColumn>();
-        SmartColumn _finalSortColumn;
+        ISmartValueComparer _topSorter;
+        ISmartValueComparer _finalSorter;
 
         public SmartListView()
         {
@@ -169,10 +170,17 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
-        public SmartColumn FinalSortColumn
+        public ISmartValueComparer TopSortColumn
         {
-            get { return _finalSortColumn; }
-            set { _finalSortColumn = value; }
+            get { return _topSorter; }
+            set { _topSorter = value; }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+        public ISmartValueComparer FinalSortColumn
+        {
+            get { return _finalSorter; }
+            set { _finalSorter = value; }
         }
 
         #region SortIcons
@@ -621,6 +629,13 @@ namespace Ankh.UI.VSSelectionControls
 
             public int Compare(ListViewItem x, ListViewItem y)
             {
+                if (_view.TopSortColumn != null)
+                {
+                    int n = _view.TopSortColumn.Compare(x, y, false);
+                    if (n != 0)
+                        return n;
+                }
+
                 foreach (SmartColumn col in _view.SortColumns)
                 {
                     int n = col.Compare(x, y, true);
