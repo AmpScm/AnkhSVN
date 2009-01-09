@@ -28,13 +28,14 @@ namespace Ankh.VSPackage.Attributes
         readonly Type _type;
         readonly string _key;
         readonly string _name;
-        readonly int _n, _desc;
-        public ProvideLanguageSettingsAttribute(Type type, string key, string name, int nameId, int descriptionId)
+        readonly string _exportName;
+        readonly int _desc;
+        public ProvideLanguageSettingsAttribute(Type type, string key, string name, string exportName, int descriptionId)
         {
             _type = type;
             _key = key;
             _name = name;
-            _n = nameId;
+            _exportName = exportName;
             _desc = descriptionId;
         }
 
@@ -69,10 +70,11 @@ namespace Ankh.VSPackage.Attributes
         {
             using(Key key = context.CreateKey(GetKey(_key)))
             {
-                key.SetValue("", string.Format("#{0}", _n));
+                key.SetValue("", _exportName);
                 key.SetValue("Description", string.Format("#{0}", _desc));
                 key.SetValue("Name", _name);
                 key.SetValue("Package", UINamePkg.ToString("B").ToUpperInvariant());
+                key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
                 key.SetValue("ProfileSave", 1);
                 //key.SetValue("ResourcePackage", UINamePkg.ToString("B").ToUpperInvariant());
             }            
