@@ -24,6 +24,7 @@ using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Scc;
 using Ankh.Selection;
+using Ankh.Services;
 
 namespace Ankh.Commands
 {
@@ -140,8 +141,8 @@ namespace Ankh.Commands
             }
 
             Uri uri;
-
-            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+            SvnItem pathItem = e.GetService<IFileStatusCache>()[path];
+            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
             {
                 uri = cl.GetUriFromWorkingCopy(path);
             }
@@ -189,19 +190,82 @@ namespace Ankh.Commands
                 lck.MonitorChanges();
 
                 // TODO: Monitor conflicts!!
-
+                SvnSwitchArgs args = new SvnSwitchArgs();
+                args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
+                Uri newRepositoryRoot = null;
                 e.GetService<IProgressRunner>().RunModal(
                     "Switching",
                     delegate(object sender, ProgressWorkerArgs a)
                     {
-                        SvnSwitchArgs args = new SvnSwitchArgs();
+                        
                         if (revision != SvnRevision.None)
                             args.Revision = revision;
 
                         e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
-                        a.Client.Switch(path, target, args);
+                        if (!a.Client.Switch(path, target, args))
+                        {
+                            if (args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH)
+                            {
+                                // source/target repository is different, check if we can fix this by relocating
+                                using (SvnClient c = e.GetService<ISvnClientPool>().GetClient())
+                                {
+                                    SvnInfoEventArgs iea;
+                                    if (c.GetInfo(target, out iea))
+                                    {
+                                        if(pathItem.WorkingCopy.RepositoryId != iea.RepositoryId)
+                                        {
+                                            e.Context.GetService<IAnkhDialogOwner>()
+                                                .MessageBox.Show("Cannot switch to different repository because the repository UUIDs are different",
+                                                "Cannot switch", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        }
+                                        else if (pathItem.WorkingCopy.RepositoryRoot != iea.RepositoryRoot)
+                                        {
+                                            newRepositoryRoot = iea.RepositoryRoot;
+                                        }
+                                        else
+                                        {
+                                            // No UUIDs and RepositoryRoot equal. Throw/show error?
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     });
 
+                if (newRepositoryRoot != null && DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
+                   .MessageBox.Show(string.Format("The repository root specified is different from the one in your " +
+                   "working copy. Would you like to relocate from '{0}' to '{1}'?",
+                   pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot),
+                   "Relocate", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    // We can fix this by relocating
+                    e.GetService<IProgressRunner>().RunModal(
+                        "Relocating",
+                        delegate(object sender, ProgressWorkerArgs a)
+                        {
+                            a.Client.Relocate(path, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
+                        });
+
+                    if (DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
+                        .MessageBox.Show(string.Format("Would you like to try to switch '{0}' to '{1}' again?",
+                        path, target),
+                        "Switch", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                    {
+                        // Attempt to switch again
+                        args = new SvnSwitchArgs();
+                        e.GetService<IProgressRunner>().RunModal(
+                        "Switching",
+                        delegate(object sender, ProgressWorkerArgs a)
+                        {
+
+                            if (revision != SvnRevision.None)
+                                args.Revision = revision;
+
+                            e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
+                            a.Client.Switch(path, target, args);
+                        });
+                    }
+                }
 
                 // This fixes the PC 'Working on' combo 
                 string solution = e.GetService<IAnkhSolutionSettings>().SolutionFilename;
