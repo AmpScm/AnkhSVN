@@ -22,7 +22,21 @@ using System.ComponentModel;
 
 namespace Ankh.UI.VSSelectionControls
 {
-    public class SmartColumn : ColumnHeader, IComparer<ListViewItem>
+    public interface ISmartValueComparer : IComparer<ListViewItem>
+    {
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <param name="reverseSort">if set to <c>true</c> reverse the sorting order.</param>
+        /// <returns>
+        /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
+        /// </returns>
+        public int Compare(ListViewItem x, ListViewItem y, bool reverseSort);
+    }
+
+    public class SmartColumn : ColumnHeader, IComparer<ListViewItem>, ISmartValueComparer
     {
         IComparer<ListViewItem> _sorter;
         readonly SmartListView _view;
@@ -277,13 +291,15 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         /// <summary>
-        /// Compares the specified x.
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <param name="reverseSort">if set to <c>true</c> [reverse sort].</param>
-        /// <returns></returns>
-        public int Compare(ListViewItem x, ListViewItem y, bool reverseSort)
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <param name="reverseSort">if set to <c>true</c> reverse the sorting order.</param>
+        /// <returns>
+        /// Value Condition Less than zero<paramref name="x"/> is less than <paramref name="y"/>.Zero<paramref name="x"/> equals <paramref name="y"/>.Greater than zero<paramref name="x"/> is greater than <paramref name="y"/>.
+        /// </returns>
+       public int Compare(ListViewItem x, ListViewItem y, bool reverseSort)
         {
             int n = Compare(x, y);
 
