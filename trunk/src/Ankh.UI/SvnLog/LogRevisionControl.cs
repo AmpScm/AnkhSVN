@@ -153,7 +153,9 @@ namespace Ankh.UI.SvnLog
                     {
                         case LogMode.Log:
                             SvnLogArgs la = new SvnLogArgs();
-                            la.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
+                            la.AddExpectedError(
+                                SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
+                                SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             la.Start = args.Start;
                             la.End = args.End;
                             la.Limit = args.Limit;
@@ -164,13 +166,17 @@ namespace Ankh.UI.SvnLog
                             break;
                         case LogMode.MergesEligible:
                             SvnMergesEligibleArgs meArgs = new SvnMergesEligibleArgs();
-                            meArgs.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
+                            meArgs.AddExpectedError(
+                                SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
+                                SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             meArgs.RetrieveChangedPaths = true;
                             client.ListMergesEligible(LogSource.MergeTarget.Target, single.Target, meArgs, ReceiveItem);
                             break;
                         case LogMode.MergesMerged:
                             SvnMergesMergedArgs mmArgs = new SvnMergesMergedArgs();
-                            mmArgs.SvnError += new EventHandler<SvnErrorEventArgs>(args_SvnError);
+                            mmArgs.AddExpectedError(
+                                SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
+                                SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             mmArgs.RetrieveChangedPaths = true;
                             client.ListMergesMerged(LogSource.MergeTarget.Target, single.Target, mmArgs, ReceiveItem);
                             break;
@@ -185,16 +191,7 @@ namespace Ankh.UI.SvnLog
                 OnBatchDone();
                 HideBusyIndicator();
             }
-        }
-
-        void args_SvnError(object sender, SvnErrorEventArgs e)
-        {
-            // TODO: replace with specific SvnExceptions when available
-            if (e.Exception.SvnErrorCode == SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES)
-                e.Cancel = true; // File not there, prevent exception
-            else if (e.Exception.SvnErrorCode == SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE)
-                e.Cancel = true; // Probably requesting merge against 1.4 server
-        }
+        } 
 
         void ReceiveItem(object sender, SvnLogEventArgs e)
         {
