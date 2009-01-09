@@ -380,9 +380,15 @@ namespace Ankh.VSPackage
                     _created = true;
                     if (!_control.IsHandleCreated)
                     {
+                        Size sz = _control.Size;
+                        _control.ShowInTaskbar = false;
+                        _control.Location = new Point(-15000, -15000); // Far, far away
+                        _control.Size = new Size(0, 0); // And just 1 pixel
+
                         _control.Visible = true; // If .Visible = false no window is created!
                         _control.CreateControl();
-                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507
+                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507                        
+                        _control.Size = sz;
                     }
                 }
                 return _control;
