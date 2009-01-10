@@ -126,6 +126,9 @@
   <data name="PathXBlocked" xml:space="preserve">
     <value>The path '{0}' is currently blocked by subversion; do you have a file with a case-only-different name?</value>
   </data>
+  <data name="SvnPathXBlocked" xml:space="preserve">
+    <value>The path '{0}' is in a subversion administrative area. This file shouldn't be added to subversion.</value>
+  </data>
   <data name="ToolTipConflict" xml:space="preserve">
     <value>This file is marked as Conflicted.</value>
   </data>

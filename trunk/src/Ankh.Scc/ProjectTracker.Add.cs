@@ -166,10 +166,13 @@ namespace Ankh.Scc
         {
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
-                // TODO: Determine if we could add fullname
+                // Determine if we could add fullname
                 if (!svn.CouldAdd(fullpath, nodeKind))
                 {
-                    _batchErrors.Add(string.Format(Resources.PathXBlocked, fullpath));
+                    if (svn.BelowAdminDir(fullpath))
+                        _batchErrors.Add(string.Format(Resources.SvnPathXBlocked, fullpath));
+                    else
+                        _batchErrors.Add(string.Format(Resources.PathXBlocked, fullpath));
                     return false;
                 }
                 else
