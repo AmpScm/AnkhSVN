@@ -77,6 +77,27 @@ namespace Ankh.UI
             get { return _host; }
         }
 
+        /// <summary>
+        /// Returns an object that represents a service provided by the <see cref="T:System.ComponentModel.Component"/> or by its <see cref="T:System.ComponentModel.Container"/>.
+        /// </summary>
+        /// <param name="service">A service provided by the <see cref="T:System.ComponentModel.Component"/>.</param>
+        /// <returns>
+        /// An <see cref="T:System.Object"/> that represents a service provided by the <see cref="T:System.ComponentModel.Component"/>, or null if the <see cref="T:System.ComponentModel.Component"/> does not provide the specified service.
+        /// </returns>
+        protected override object GetService(Type service)
+        {
+            object r;
+            if (Context != null)
+            {
+                r = Context.GetService(service);
+
+                if (r != null)
+                    return r;
+            }
+    
+            return base.GetService(service);
+        }
+
         #region IAnkhToolWindowControl Members
 
         /// <summary>

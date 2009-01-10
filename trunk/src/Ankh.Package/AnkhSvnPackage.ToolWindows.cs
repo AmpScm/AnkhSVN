@@ -102,7 +102,9 @@ namespace Ankh.VSPackage
                 {
                     IUIService uis = GetService<System.Windows.Forms.Design.IUIService>();
                     _ambientProperties = new AmbientProperties();
-                    _ambientProperties.Font = (Font)((Font)uis.Styles["DialogFont"]).Clone();
+                    Font f = (Font)((Font)uis.Styles["DialogFont"]);
+
+                    _ambientProperties.Font = new Font(f.FontFamily, f.Size);
                 }
                 return _ambientProperties;
             }
