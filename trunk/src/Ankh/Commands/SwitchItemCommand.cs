@@ -139,23 +139,24 @@ namespace Ankh.Commands
                 }
                 path = theItem.FullPath;
             }
-
-            Uri uri;
+            
             SvnItem pathItem = e.GetService<IFileStatusCache>()[path];
-            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
-            {
-                uri = cl.GetUriFromWorkingCopy(path);
-            }
+            Uri uri = pathItem.Status.Uri;
+
+            if (uri == null)
+                return; // Should never happen on a real workingcopy
 
             SvnUriTarget target;
             SvnRevision revision = SvnRevision.None;
 
             if (e.Argument is string)
-                target = SvnUriTarget.FromString((string)e.Argument);
+            {
+                target = SvnUriTarget.FromString((string)e.Argument, true);
+                revision = (target.Revision != SvnRevision.None) ? target.Revision : SvnRevision.Head;
+            }
             else if (e.Argument is Uri)
                 target = (Uri)e.Argument;
             else
-            {
                 using (SwitchDialog dlg = new SwitchDialog())
                 {
                     dlg.Context = e.Context;
@@ -171,7 +172,6 @@ namespace Ankh.Commands
                     target = dlg.SwitchToUri;
                     revision = dlg.Revision;
                 }
-            }
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
             HybridCollection<string> lockPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -190,13 +190,14 @@ namespace Ankh.Commands
                 lck.MonitorChanges();
 
                 // TODO: Monitor conflicts!!
-                SvnSwitchArgs args = new SvnSwitchArgs();
-                args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
+                
                 Uri newRepositoryRoot = null;
                 e.GetService<IProgressRunner>().RunModal(
                     "Switching",
                     delegate(object sender, ProgressWorkerArgs a)
                     {
+                        SvnSwitchArgs args = new SvnSwitchArgs();
+                        args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
                         
                         if (revision != SvnRevision.None)
                             args.Revision = revision;
@@ -252,7 +253,7 @@ namespace Ankh.Commands
                         "Switch", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     {
                         // Attempt to switch again
-                        args = new SvnSwitchArgs();
+                        SvnSwitchArgs args = new SvnSwitchArgs();
                         e.GetService<IProgressRunner>().RunModal(
                         "Switching",
                         delegate(object sender, ProgressWorkerArgs a)
@@ -266,17 +267,6 @@ namespace Ankh.Commands
                         });
                     }
                 }
-
-                // This fixes the PC 'Working on' combo 
-                string solution = e.GetService<IAnkhSolutionSettings>().SolutionFilename;
-                IFileStatusCache cache = e.GetService<IFileStatusCache>();
-
-                if (!string.IsNullOrEmpty(solution))
-                    cache.MarkDirty(solution);
-                if (!string.IsNullOrEmpty(projectRoot))
-                    cache.MarkDirty(projectRoot);
-                // Working on fix
-
 
                 lck.ReloadModified();
             }
