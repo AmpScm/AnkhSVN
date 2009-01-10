@@ -32,7 +32,6 @@ namespace Ankh.UI.SvnLog.Commands
     [Command(AnkhCommand.LogShowChanges, AlwaysAvailable = true)]
     class ShowChanges : ICommandHandler
     {
-        TempFileCollection _collection = new TempFileCollection();
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;

@@ -223,9 +223,9 @@ namespace Ankh.Ids
         ReposCopyTo,
         ReposMoveTo,
 
+        RepositoryShowChanges,
+        RepositoryCompareWithWc,
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewChangeList,
-        PcColViewDate,
         PcColViewFullPath,
         PcColViewLocked,
         PcColViewModified,
