@@ -29,7 +29,7 @@ namespace Ankh.Scc
     /// Container of Svn/SharpSvn helper tools which should be refactored to a better location
     /// in a future version, but which functionality is required to get file tracking working
     /// </summary>
-    class SvnSccContext : AnkhService
+    sealed class SvnSccContext : AnkhService
     {
         readonly SvnClient _client;
         readonly IFileStatusCache _statusCache;
@@ -50,6 +50,11 @@ namespace Ankh.Scc
                 ((IDisposable)_client).Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        IFileStatusCache StatusCache
+        {
+            get { return _statusCache; }
         }
 
         /// <summary>
@@ -185,7 +190,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            SvnItem item = GetService<IFileStatusCache>()[path];
+            SvnItem item = StatusCache[path];
             item.MarkDirty();
 
             if (!item.IsFile || item.Status.LocalContentStatus != SvnStatus.Replaced)
@@ -846,7 +851,7 @@ namespace Ankh.Scc
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            SvnItem item = _statusCache[path];
+            SvnItem item = StatusCache[path];
             string file = Path.GetFileName(path);
 
             if (!item.Exists || (item.IsVersioned && item.Name == file ))
@@ -902,6 +907,14 @@ namespace Ankh.Scc
                 return true;
 
             return item.FullPath.IndexOf(_adminDir, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        public bool BelowAdminDir(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            return BelowAdminDir(StatusCache[path]);
         }
 
         /// <summary>
