@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5894</title>
+<title>AnkhSVN-Daily Update - 2.0.5907</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5894</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5907</h1>
 
 
 <p>
@@ -12,19 +12,30 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1418/AnkhSvn-Daily-2.0.5894.341.msi">AnkhSVN 2.0.5894</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1423/AnkhSvn-Daily-2.0.5907.342.msi">AnkhSVN 2.0.5907</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5894">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5907">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-01-10</td></tr>
+<tr><td> </td><td class="r"><a id="5906" href="http://ankhsvn.net/rev/?r=5906">[r5906]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/RepositoryExplorer/ShowRepositoryItemChanges.cs, src/Ankh/Ankh.csproj, src/Ankh/Services/AnkhDiff.cs, src/Ankh.UI/Annotate/AnnotateMarginControl.cs, src/Ankh.Ids/AnkhCommand.cs, src/Ankh.UI/SvnLog/Commands/ShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extend the annotation viewer by adding a tooltip with the change information
+and added some extra show changes commands to the context menu of the annotate
+viewer.</td></tr>
+<tr><td> </td><td class="r"><a id="5905" href="http://ankhsvn.net/rev/?r=5905">[r5905]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed some old code from the Switch implementation</td></tr>
+<tr class="d"><td colspan="4">2009-01-09</td></tr>
+<tr><td> </td><td class="r"><a id="5904" href="http://ankhsvn.net/rev/?r=5904">[r5904]</a></td><td class="a">sander</td><td class="f">src/Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement <a href="http://ankhsvn.net/issues/?id=544">issue #544</a> by detecting that the repository root has changed (in switch error condition),
+and offering switch if the roots are different but the repositories are the same according to 
+RepositoryId</td></tr>
+<tr><td> </td><td class="r"><a id="5902" href="http://ankhsvn.net/rev/?r=5902">[r5902]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh/Commands/LocalDiffCommandBase.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Upgrade SharpSvn reference to allow using SvnClientArgs.AddExpectedError()</td></tr>
+<tr><td> </td><td class="r"><a id="5897" href="http://ankhsvn.net/rev/?r=5897">[r5897]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/AnkhSvnPackage.Languages.cs, src/Ankh.Package/Attributes/ProvideLanguageSettings.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Handle the .diff extension with our unified diff language service</td></tr>
 <tr class="d"><td colspan="4">2009-01-08</td></tr>
 <tr><td> </td><td class="r"><a id="5894" href="http://ankhsvn.net/rev/?r=5894">[r5894]</a></td><td class="a">baybora</td><td class="f">src/Ankh.UI/RepositoryOpen/RepositoryOpenDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2"><a href="http://ankhsvn.net/issues/?id=432">Issue 432</a> - Provide feedback when URI is inaccessible in ReposExplorer:</td></tr>
 <tr><td> </td><td class="r"><a id="5893" href="http://ankhsvn.net/rev/?r=5893">[r5893]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhSvnClientPool.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">When reverting a directory, mark its children dirty, and stop scheduling
@@ -207,20 +218,6 @@ there. This automatically handles failures from the rename action that would
 otherwise crash VS.</td></tr>
 <tr><td> </td><td class="r"><a id="5709" href="http://ankhsvn.net/rev/?r=5709">[r5709]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Tests/Commands/BlameCommandTest.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh/Commands/ExportCommand.cs, src/Ankh.Tests/Commands/LogCommandTest.cs, src/Ankh.UI/PathTreeView.cs, src/Ankh.Tests/SvnItemTest.cs, src/Ankh/Commands/CleanupCommand.cs, src/Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.cs (and 41 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove duplicate $Id$ headers after yesterdays header update.</td></tr>
 <tr class="d"><td colspan="4">2008-12-12</td></tr>
-<tr><td> </td><td class="r"><a id="5706" href="http://ankhsvn.net/rev/?r=5706">[r5706]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/Dialogs/RenameDialog.resx, src/Ankh.UI/RepositoryExplorer/RepositoryListView.cs, src/Ankh.UI/RepositoryExplorer/Dialogs/RenameDialog.Designer.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/RepositoryExplorer/Dialogs/RenameDialog.cs, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/RepositoryExplorer/Dialogs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerItem.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added rename support to the repository explorer. (TreeView, ListView
-and Property grid name items allow initiating renaming now). Real work
-should move to a command that is accessible from the context menu</td></tr>
-<tr><td> </td><td class="r"><a id="5705" href="http://ankhsvn.net/rev/?r=5705">[r5705]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/Commands/ChangeLogMessage.cs, src/Ankh.UI/WorkingCopyExplorer/OldStore/Trees/NodeStatusKind.cs, src/Ankh.UI/PathSelector/DateSelector.cs, src/tools/header-mgt, src/Ankh/Commands/RepositoryExplorer/CopyReposExplorerUrl.cs, src/Ankh/Commands/RepositoryExplorer/CreateDirectoryCommand.cs, src/Ankh/Services/PendingChanges/PendingChangeHandler.cs, src/Ankh.VS.IntegrationTest/IntegrationTest-Library/DialogboxPurger.cs (and 55 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=5699">r5699</a>, apply the rest of the headers, add the script
-and some cleanup.</td></tr>
-<tr><td> </td><td class="r"><a id="5702" href="http://ankhsvn.net/rev/?r=5702">[r5702]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/AnkhService.cs, src/Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Cleanup text editor implementation by adding a generic CreateLocalInstance
-implementation on AnkhService. Also cleanup the Marshal.ThrowExceptionForHR vs
-ErrorHandler.ThrowOnFailure mess.</td></tr>
-<tr><td> </td><td class="r"><a id="5699" href="http://ankhsvn.net/rev/?r=5699">[r5699]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Annotate/AnnotateToolWindowControl.Designer.cs, src/Ankh.Diff/DiffUtils/Classes/MyersDiff.cs, src/Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.Designer.cs, src/Ankh/AnkhModule.cs, src/Ankh/Commands/LockCommand.cs, src/Ankh.UI/MergeWizard/MergeSourceManuallyRemovePageControl.cs, src/Ankh.UI/SccManagement/AddToSubversion.Designer.cs, src/Ankh.Scc/ProjectMap/SccTranslateData.cs (and 514 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Applied svn:eol-style and apache license header to most .cs files.<br>
-*/*
-  Apply header scription (Follow up will fix the rest)</td></tr>
-<tr class="d"><td colspan="4">2008-12-11</td></tr>
-<tr><td> </td><td class="r"><a id="5695" href="http://ankhsvn.net/rev/?r=5695">[r5695]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh.UI/RepositoryExplorer/RepositoryExplorerItem.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix issue that refreshing the repository root in the repos explorer breaks
-browing everything in the repository until the root is removed.</td></tr>
 
 </table>
 <!--/Recent changes-->
