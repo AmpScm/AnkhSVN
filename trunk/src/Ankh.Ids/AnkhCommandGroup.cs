@@ -131,5 +131,10 @@ namespace Ankh.Ids
 
         OpenWith,
         OpenWith2,
+
+        /// <summary>
+        /// Special parent group for VS Menu Designer support
+        /// </summary>
+        AnkhContextMenus,
     }
 }

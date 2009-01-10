@@ -424,9 +424,17 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_RepositoryExplorerContextMenu">
+    <GroupRef id="guidSHLMainMenu:IDG_VS_MENU_CONTEXTMENUS">
+      <Menu id="Grp_AnkhContextMenus" priority="0x0F0" name="AnkhSVNContextMenus" text="&amp;AnkhSVN Context Menus" type="Context" noCustomize="true" notInTBList="true">
+        <Group id="Grp_AnkhContextMenus" priority="0x100">
+          
+        </Group>        
+      </Menu>
+    </GroupRef>
+    <GroupRef id="Grp_AnkhContextMenus">
       <!-- The Repository Explorer Context Menu -->
-      <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" priority="0" type="Context">
+      <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" 
+            text="Repository Explorer" priority="0" type="Context" notInTBList="true">
         <Group id="Grp_RepositoryExplorerOpen" priority="0x100">
           <!-- Cmd_RepositoryOpen is handled on the control itself and does 'the right thing' -->
           <Button id="Cmd_ExplorerOpen" name="RepositoryOpen" priority="0x100"
@@ -485,9 +493,10 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_WorkingCopyExplorerContextMenu">
+    <GroupRef id="Grp_AnkhContextMenus">
       <!-- The Working Copy Explorer Context Menu -->
-      <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" priority="0" type="Context">
+      <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" text="Working Copy Explorer"
+            priority="0" type="Context" notInTBList="true">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
           <ButtonRef id="Cmd_Refresh" priority="0x500" />
         </Group>
@@ -514,8 +523,9 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_LogViewerContextMenu">
-      <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" type="Context" priority="0x100">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" text="Log Viewer List" type="Context" 
+            priority="0" notInTBList="true">
         <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
                   text="Compare with &amp;Working copy" iconFile="PendingChanges/Compare.png" dynamicVisibility="true"/>
@@ -533,8 +543,9 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_LogChangedPathsContextMenu">
-      <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" type="Context" priority="0x100">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_LogChangedPathsContextMenu" name="LogChangedPathsContext" text="Log Viewer Changed Paths"
+            type="Context" priority="0" notInTBList="true">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
                   text="Annotate revision" iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
@@ -544,8 +555,9 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_AnnotateContextMenu">
-      <Menu id="Menu_AnnotateContextMenu" name="AnnotateContextMenu" type="Context" priority="0x100">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_AnnotateContextMenu" name="AnnotateContextMenu" text="Annotate Context Menu"
+            type="Context" priority="0" notInTBList="true">
         <Group id="Grp_AnnotateContextMenu" priority="0x100">
           <Button id="Cmd_RepositoryCompareWithWc" priority="0x100" name="RepositoryCompareToWc"
                   text="Compare with &amp;Working copy"
@@ -719,9 +731,10 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingCommitsContextMenu">
+    <GroupRef id="Grp_AnkhContextMenus">
       <!-- The Pending Changes Context menu -->
-      <Menu id="Menu_PendingCommitsContextMenu" name="PendingChangesContext" priority="0" type="Context">
+      <Menu id="Menu_PendingCommitsContextMenu" name="PendingCommitsContext" text="&amp;Pending Commits" 
+            priority="0" type="Context" notInTBList="true">
         <Group id="Grp_PendingChangesContextMenu" priority="0x100">
           <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
         </Group>
@@ -729,8 +742,9 @@
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_ListViewHeader">
-      <Menu id="Menu_ListViewHeader" name="ListViewHeader" priority="0" type="Context">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_ListViewHeader" name="ListViewHeader" text="Listview Header" 
+            priority="0" type="Context" notInTBList="true">
         <Group id="Grp_ListViewState" priority="0x100">
           <Menu id="Menu_ListViewShow" priority="0x1000" name="ShowBy" text="&amp;View Columns">
             <Group id="Grp_ListViewShow" priority="0x1000">
@@ -754,8 +768,9 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_PendingCommitsHeaderContextMenu">
-      <Menu id="Menu_PendingCommitsHeaderContextMenu" name="SortPendingCommits" priority="0" type="Context">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_PendingCommitsHeaderContextMenu" name="SortPendingCommits" text="Pending Commits &amp;Header" 
+            priority="0" type="Context" notInTBList="true">
         <GroupRef id="Grp_ListViewState" priority="0x100" />
         <Group id="Grp_PendingCommitsActions" priority="0x200">
           <ButtonRef id="Cmd_PendingChangesViewLogMessage" priority="0x100" />
@@ -763,8 +778,9 @@
         </Group>
       </Menu>
     </GroupRef>
-    <GroupRef id="Menu_LogMessageEditorContextMenu">
-      <Menu id="Menu_LogMessageEditorContextMenu" name="LogMessageEditor" priority="0" type="Context">
+    <GroupRef id="Grp_AnkhContextMenus">
+      <Menu id="Menu_LogMessageEditorContextMenu" name="LogMessageEditor" text="Log Message Editor" 
+            priority="0" type="Context" notInTBList="true">
         <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
                   text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
