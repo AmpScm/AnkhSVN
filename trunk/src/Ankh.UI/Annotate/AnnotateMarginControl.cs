@@ -36,18 +36,68 @@ namespace Ankh.UI.Annotate
         int _firstLine;
         int _lastLine;
         IAnkhServiceProvider _context;
+        ToolTip _toolTip;
+
+        AnnotateSection _hoverSection;
+        AnnotateSection _tipSection;
 
         public AnnotateMarginControl()
         {
             _sections = new List<AnnotateSection>();
-        }
 
+            _toolTip = new ToolTip();
+            _toolTip.ShowAlways = true;
+        }
 
         internal void Init(IAnkhServiceProvider context, AnnotateEditorControl control, List<AnnotateSection> sections)
         {
             _context = context;
             _control = control;
             _sections = sections;
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+        }
+
+        protected override void OnMouseHover(EventArgs e)
+        {
+            base.OnMouseHover(e);
+
+            Point mp = PointToClient(MousePosition);
+
+            if (_tipSection != null)
+            {
+                if (GetRectangle(_tipSection).Contains(mp))
+                    return;
+                else
+                {
+                    _tipSection = null;
+                    _toolTip.Hide(this);
+
+                }
+            }
+
+            AnnotateSection section = _hoverSection;
+            if (section == null)
+                return;
+
+            Rectangle rect = GetRectangle(section);
+
+            if (rect.Contains(mp))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("Revision: {0}", section.Revision);
+                sb.AppendLine();
+                sb.AppendFormat("Author: {0}", section.Author);
+                sb.AppendLine();
+                sb.AppendFormat("Time: {0}", section.Time.ToLocalTime());
+
+                _toolTip.Show(sb.ToString(), this, mp);
+                _tipSection = section;
+                return;
+            }
         }
 
         bool _setLineHeight;
@@ -88,7 +138,6 @@ namespace Ankh.UI.Annotate
         {
             base.OnMouseMove(e);
 
-            bool changed = false;
             foreach (AnnotateSection section in _sections)
             {
                 Rectangle rect = GetRectangle(section);
@@ -96,12 +145,18 @@ namespace Ankh.UI.Annotate
                 if (section.Hovered != hovered)
                 {
                     section.Hovered = hovered;
-                    changed = true;
+
+                    Invalidate(rect);
+
+                    if (hovered)
+                        _hoverSection = section;
                 }
             }
-            if (changed)
+
+            if (_tipSection != null && _tipSection != _hoverSection)
             {
-                Invalidate();
+                _tipSection = null;
+                _toolTip.Hide(this);
             }
         }
 
@@ -113,12 +168,22 @@ namespace Ankh.UI.Annotate
             foreach (AnnotateSection section in _sections)
             {
                 if (section.Hovered == true)
+                {
                     changed = true;
 
-                section.Hovered = false;
+                    section.Hovered = false;
+                }
             }
             if (changed)
                 Invalidate();
+
+            _hoverSection = null;
+
+            if (_tipSection != null)
+            {
+                _tipSection = null;
+                _toolTip.Hide(this);
+            }
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
@@ -204,7 +269,7 @@ namespace Ankh.UI.Annotate
                     Rectangle rect = GetRectangle(_sections[_sections.Count - 1]);
 
                     if (e.ClipRectangle.Top <= rect.Bottom)
-                        clip = new Rectangle(clip.Left, rect.Bottom+1, clip.Width, clip.Bottom);
+                        clip = new Rectangle(clip.Left, rect.Bottom + 1, clip.Width, clip.Bottom);
                 }
 
                 using (SolidBrush sb = new SolidBrush(BackColor))

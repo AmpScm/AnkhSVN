@@ -750,18 +750,24 @@ namespace Ankh.Services
                 throw new ArgumentNullException("revision");
 
             string file = GetTempPath(target.FileName, revision);
+            bool unrelated = false;
 
             ProgressRunnerResult r = GetService<IProgressRunner>().RunModal("Getting file",
                 delegate(object sender, ProgressWorkerArgs aa)
                 {
                     SvnWriteArgs wa = new SvnWriteArgs();
                     wa.Revision = revision;
+                    wa.AddExpectedError(SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES);
 
                     using (Stream s = File.Create(file))
-                        aa.Client.Write(target, s, wa);
+                        if (!aa.Client.Write(target, s, wa))
+                        {
+                            if (wa.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES)
+                                unrelated = true;
+                        }
                 });
 
-            if (!r.Succeeded)
+            if (!r.Succeeded || unrelated)
                 return null; // User canceled
 
             if (File.Exists(file))
