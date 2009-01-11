@@ -468,7 +468,7 @@ namespace Ankh.UI.VSSelectionControls
 
         public void RefreshGroups()
         {
-            if (DesignMode || VirtualMode || View != View.Details)
+            if (DesignMode || VirtualMode || View != View.Details || !SupportsGrouping)
                 return;
 
             bool inGroups = _inRefreshGroupsAvailable;
@@ -536,7 +536,7 @@ namespace Ankh.UI.VSSelectionControls
         bool _inRefreshGroupsAvailable;
         public void RefreshGroupsAvailable()
         {
-            if (_inRefreshGroupsAvailable)
+            if (_inRefreshGroupsAvailable || !SupportsGrouping)
                 return;
 
             try
