@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5907</title>
+<title>AnkhSVN-Daily Update - 2.0.5911</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5907</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5911</h1>
 
 
 <p>
@@ -12,20 +12,25 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1423/AnkhSvn-Daily-2.0.5907.342.msi">AnkhSVN 2.0.5907</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1427/AnkhSvn-Daily-2.0.5911.343.msi">AnkhSVN 2.0.5911</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5907">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5911">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-01-11</td></tr>
 <tr class="d"><td colspan="4">2009-01-10</td></tr>
+<tr><td> </td><td class="r"><a id="5910" href="http://ankhsvn.net/rev/?r=5910">[r5910]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SvnSccContext.cs, src/Ankh.Scc/Resources.resx, src/Ankh.Scc/ProjectTracker.Add.cs, src/Ankh.Scc/Resources.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add a different error message for case differencing files than for
+administrative directory addition errors.</td></tr>
+<tr><td> </td><td class="r"><a id="5909" href="http://ankhsvn.net/rev/?r=5909">[r5909]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Ids/AnkhCommandGroup.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make it easier to edit our default context menus by adding them to the 'Context Menus' toolbar
+in the Visual Studio toolbar designer. (Like TFS does with its context menus).</td></tr>
 <tr><td> </td><td class="r"><a id="5906" href="http://ankhsvn.net/rev/?r=5906">[r5906]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/RepositoryExplorer/ShowRepositoryItemChanges.cs, src/Ankh/Ankh.csproj, src/Ankh/Services/AnkhDiff.cs, src/Ankh.UI/Annotate/AnnotateMarginControl.cs, src/Ankh.Ids/AnkhCommand.cs, src/Ankh.UI/SvnLog/Commands/ShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extend the annotation viewer by adding a tooltip with the change information
 and added some extra show changes commands to the context menu of the annotate
 viewer.</td></tr>
@@ -207,17 +212,6 @@ Patch command is available on pending changes toolbar</td></tr>
 <tr><td> </td><td class="r"><a id="5723" href="http://ankhsvn.net/rev/?r=5723">[r5723]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Handle delete key from repository explorer by routing it to the delete command</td></tr>
 <tr><td> </td><td class="r"><a id="5722" href="http://ankhsvn.net/rev/?r=5722">[r5722]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RepositoryExplorer/Dialogs/ConfirmDeleteDialog.Designer.cs, src/Ankh.UI/RepositoryExplorer/Dialogs/ConfirmDeleteDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure the deletelist resizes properly</td></tr>
 <tr class="d"><td colspan="4">2008-12-13</td></tr>
-<tr><td> </td><td class="r"><a id="5716" href="http://ankhsvn.net/rev/?r=5716">[r5716]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/DeleteRepositoryItemCommand.cs, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/RepositoryExplorer/Dialogs/ConfirmDeleteDialog.resx, src/Ankh/Ankh.csproj, src/Ankh.Package/Gui/PendingChanges/Delete.png, src/Ankh.UI/RepositoryExplorer/Dialogs/ConfirmDeleteDialog.Designer.cs, src/Ankh.UI/RepositoryExplorer/Dialogs/ConfirmDeleteDialog.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add delete command to the repository explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="5715" href="http://ankhsvn.net/rev/?r=5715">[r5715]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/ItemAnnotateCommand.cs, src/Ankh.Ids/AnkhCommand.cs, src/Ankh.Services/Scc/UI/IAnnotateSection.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable the annotate command from the annotate viewer (broken since <a href="http://ankhsvn.net/rev/?r=5437">r5437</a>?) and
-the repository explorer (new functionality).</td></tr>
-<tr><td> </td><td class="r"><a id="5714" href="http://ankhsvn.net/rev/?r=5714">[r5714]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/AnkhSccProvider.FileMap.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Refactor GetUpdateRoots() to always use the most optimal set of update roots
-if some projects are placed below each other. (Theoretically the result set
-can be updated in parallel)</td></tr>
-<tr><td> </td><td class="r"><a id="5711" href="http://ankhsvn.net/rev/?r=5711">[r5711]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/RepositoryExplorer/SaveToFileCommand.cs, src/Ankh/Commands/RepositoryExplorer/ViewInVSNetCommand.cs, src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.UI/Annotate/AnnotateSection.cs, src/Ankh/Commands/CheckoutCommand.cs, src/Ankh/Commands/CommandStrings.resx, src/Ankh.UI/RepositoryExplorer/RepositoryTreeView.cs, src/Ankh/Commands/CommandStrings.Designer.cs (and 6 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add Rename command to repository item context menu and move rename code
-there. This automatically handles failures from the rename action that would
-otherwise crash VS.</td></tr>
-<tr><td> </td><td class="r"><a id="5709" href="http://ankhsvn.net/rev/?r=5709">[r5709]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Tests/Commands/BlameCommandTest.cs, src/Ankh/Commands/LogCommand.cs, src/Ankh/Commands/ExportCommand.cs, src/Ankh.Tests/Commands/LogCommandTest.cs, src/Ankh.UI/PathTreeView.cs, src/Ankh.Tests/SvnItemTest.cs, src/Ankh/Commands/CleanupCommand.cs, src/Ankh.UI/RepositoryExplorer/AddRepositoryRootDialog.cs (and 41 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Remove duplicate $Id$ headers after yesterdays header update.</td></tr>
-<tr class="d"><td colspan="4">2008-12-12</td></tr>
 
 </table>
 <!--/Recent changes-->
