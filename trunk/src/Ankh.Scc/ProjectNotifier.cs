@@ -324,8 +324,8 @@ namespace Ankh.Scc
                     {
                         AnkhMessageBox mb = new AnkhMessageBox(Context);
 
-                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file), Resources.MergeCompleted,
-                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file.Key), 
+                            Resources.MergeCompleted, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                         switch (dr)
                         {
