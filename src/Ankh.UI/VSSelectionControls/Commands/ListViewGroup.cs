@@ -66,6 +66,14 @@ namespace Ankh.UI.VSSelectionControls.Commands
             e.Checked = list.GroupColumns.Contains(column);
         }
 
+        public override void OnExecute(CommandEventArgs e)
+        {
+            if (!SmartListView.SupportsGrouping)
+                return;
+
+            base.OnExecute(e);
+        }
+
         protected override void OnExecute(SmartListView list, CommandEventArgs e)
         {
             bool extend = ((Control.ModifierKeys & Keys.Shift) != 0);
