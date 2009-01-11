@@ -748,12 +748,12 @@
         <Group id="Grp_ListViewState" priority="0x100">
           <Menu id="Menu_ListViewShow" priority="0x1000" name="ShowBy" text="&amp;View Columns">
             <Group id="Grp_ListViewShow" priority="0x1000">
-              <Button id="Cmd_ListViewShow0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
+              <Button id="Cmd_ListViewShow0" dynamicItemStart="true" text="&lt;none&gt;" defaultInvisible="true" priority="0x1000"/>
             </Group>
           </Menu>
           <Menu id="Menu_ListViewSort" priority="0x2000" name="SortBy" text="&amp;Sort By">
             <Group id="Grp_ListViewSort" priority="0x1000">
-              <Button id="Cmd_ListViewSort0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
+              <Button id="Cmd_ListViewSort0" dynamicItemStart="true" text="&lt;none&gt;" defaultInvisible="true" priority="0x1000"/>
             </Group>
             <Group id="Grp_ListViewSortOrder" priority="0x2000">
               <Button id="Cmd_ListViewSortAscending" text="&amp;Ascending" priority="0x100" iconFile="PendingChanges/SortAscending.png"/>
@@ -762,7 +762,7 @@
           </Menu>
           <Menu id="Menu_ListViewGroup" priority="0x3000" name="GroupBy" text="&amp;Group By">
             <Group id="Grp_ListViewGroup" priority="0x1000">
-              <Button id="Cmd_ListViewGroup0" dynamicItemStart="true" text="." dynamicVisibility="true" priority="0x1000"/>
+              <Button id="Cmd_ListViewGroup0" dynamicItemStart="true" text="&lt;none&gt;" defaultInvisible="true" priority="0x1000"/>
             </Group>
           </Menu>
         </Group>
