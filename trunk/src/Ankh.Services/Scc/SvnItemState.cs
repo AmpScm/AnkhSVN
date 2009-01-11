@@ -40,122 +40,130 @@ namespace Ankh.Scc
         /// <summary>
         /// File is on disk
         /// </summary>
-        Exists                  = 0x000001,
+        Exists                  = 0x00000001,
 
         /// <summary>
         /// File is in the current open solution
         /// </summary>
-        InSolution              = 0x000002,
+        InSolution              = 0x00000002,
 
         /// <summary>
         /// File is versioned in a working copy
         /// </summary>
-        Versioned               = 0x000004,
+        Versioned               = 0x00000004,
 
         /// <summary>
         /// File is locked locally
         /// </summary>
-        HasLockToken            = 0x000008,
+        HasLockToken            = 0x00000008,
 
         /// <summary>
         /// File is of the wrong kind
         /// </summary>
-        Obstructed              = 0x000010,
+        Obstructed              = 0x00000010,
 
         /// <summary>
         /// Item is versioned or below a versioned directory
         /// </summary>
-        Versionable             = 0x000020,
+        Versionable             = 0x00000020,
 
         /// <summary>
         /// Gets a boolean indicating whether the item is a file
         /// </summary>
         /// <remarks>Contains the on disk status.. If obstructed this does not match</remarks>
-        IsDiskFile              = 0x000040,
+        IsDiskFile              = 0x00000040,
 
         /// <summary>
         /// Gets a boolean indicating whether the item is a directory
         /// </summary>
-        IsDiskFolder            = 0x000080,
+        IsDiskFolder            = 0x00000080,
 
         /// <summary>
-        /// 
+        /// The node is read only on disk
         /// </summary>
-        ReadOnly                = 0x000100,
+        ReadOnly                = 0x00000100,
 
         /// <summary>
         /// The file is marked as dirty by the editor that has the file open
         /// </summary>
-        DocumentDirty           = 0x000200,
+        DocumentDirty           = 0x00000200,
 
         /// <summary>
         /// Somehow modified in subversion
         /// </summary>
-        SvnDirty                = 0x000800,
+        SvnDirty                = 0x00000800,
 
         #endregion
 
         #region SvnStates (When Versioned is set)
 
         /// <summary>
-        /// The file is modified on disk
+        /// The node is modified on disk
         /// </summary>
-        Modified                = 0x001000,
+        Modified                = 0x00001000,
         /// <summary>
         /// The properties on disk are dirty
         /// </summary>
-        PropertyModified        = 0x002000,
+        PropertyModified        = 0x00002000,
         /// <summary>
-        /// The file is scheduled for addition
+        /// The node is scheduled for addition
         /// </summary>
-        Added                   = 0x004000,
+        Added                   = 0x00004000,
         /// <summary>
-        /// The file has a copy origin
+        /// The node has a copy origin
         /// </summary>
-        HasCopyOrigin           = 0x008000,
+        HasCopyOrigin           = 0x00008000,
         /// <summary>
-        /// The file is scheduled for deletion
+        /// The node is scheduled for deletion
         /// </summary>
-        Deleted                 = 0x010000,
+        Deleted                 = 0x00010000,
         /// <summary>
-        /// 
+        /// The node is replaced
         /// </summary>
-        Replaced                = 0x020000,
+        Replaced                = 0x00020000,
         /// <summary>
         /// The file must be locked before editting
         /// </summary>
-        MustLock                = 0x040000,
+        MustLock                = 0x00040000,
 
         /// <summary>
-        /// 
+        /// The node has properties
         /// </summary>
-        HasProperties           = 0x080000,
+        HasProperties           = 0x00080000,
 
         /// <summary>
         /// The content is marked as conflicted
         /// </summary>
-        ContentConflicted       = 0x100000,
+        ContentConflicted       = 0x00100000,
         /// <summary>
         /// The properties are marked as conflicted
         /// </summary>
-        PropertiesConflicted    = 0x200000,
+        PropertiesConflicted    = 0x00200000,
 
         /*/// <summary>
         /// The SvnItem is part of a tree conflict
         /// </summary>
-        InTreeConflict          = 0x400000,*/
-
+        InTreeConflict          = 0x00400000,*/
 
         /// <summary>
-        /// 
+        /// The item is marked as ignored in subversion
         /// </summary>
-        Ignored                   =  0x800000,
+        Ignored                 = 0x00800000,
         #endregion
 
-        IsNested                  = 0x1000000,
+        /// <summary>
+        /// The item is the root of a nested working copy
+        /// </summary>
+        IsNested                = 0x01000000,
 
-        IsTextFile                = 0x2000000,
+        /// <summary>
+        /// The item is a textfile
+        /// </summary>
+        IsTextFile              = 0x02000000,
 
-
+        /// <summary>
+        /// The item is (part of) the administrative area
+        /// </summary>
+        IsAdministrativeArea    = unchecked((int)0x80000000)
     }
 }

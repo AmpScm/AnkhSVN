@@ -120,6 +120,15 @@ namespace Ankh
                 Debug.Assert((~_validState & MaskNested) == 0, "UpdateNested() set all attributes it should");
             }
 
+            if (0 != (unavailable & MaskIsAdministrativeArea))
+            {
+                UpdateAdministrativeArea();
+
+                unavailable = flagsToGet &~_validState;
+
+                Debug.Assert((~_validState & MaskIsAdministrativeArea) == 0, "UpdateIsAdministrativeArea() set all attributes it should");
+            }
+
             if (unavailable != 0)
             {
                 Trace.WriteLine(string.Format("Don't know how to retrieve {0:X} state; clearing dirty flag", (int)unavailable));
@@ -430,6 +439,17 @@ namespace Ankh
                 SetState(SvnItemState.IsNested, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.IsNested);
+        }
+        #endregion
+
+        #region Administrative Area
+        const SvnItemState MaskIsAdministrativeArea = SvnItemState.IsAdministrativeArea;
+        void UpdateAdministrativeArea()
+        {
+            if(string.Equals(Name, SvnClient.AdministrativeDirectoryName, StringComparison.OrdinalIgnoreCase))
+                SetState(SvnItemState.IsAdministrativeArea, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.IsAdministrativeArea);
         }
         #endregion
 

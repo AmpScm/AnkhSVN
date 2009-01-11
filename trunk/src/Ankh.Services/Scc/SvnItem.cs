@@ -635,6 +635,17 @@ namespace Ankh
         }
 
         /// <summary>
+        /// Gets a value indicating whether the item is (inside) the administrative area.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is administrative area; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsAdministrativeArea
+        {
+            get { return GetState(SvnItemState.IsAdministrativeArea) != 0; }
+        }
+
+        /// <summary>
         /// Gets a boolean indicating whether the <see cref="SvnItem"/> specifies a readonly file
         /// </summary>
         public bool IsReadOnly
@@ -952,12 +963,14 @@ namespace Ankh
         {
             get
             {
-                if ((_workingCopy == null) && (IsVersionable || IsVersioned))
+                if (_workingCopy == null)
                 {
-                    if (IsDirectory)
-                        _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(_context, this);
-                    else
+                    if (IsAdministrativeArea || !Exists)
+                        return null;
+                    else if (!IsDirectory)
                         _workingCopy = Parent;
+                    else
+                        _workingCopy = SvnWorkingCopy.CalculateWorkingCopy(_context, this);
                 }
 
                 if (_workingCopy != null)
