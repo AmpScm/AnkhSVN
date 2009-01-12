@@ -21,23 +21,71 @@ using SharpSvn;
 using Ankh.Scc;
 using System.ComponentModel;
 using Ankh.Scc.UI;
+using System.Globalization;
 
 namespace Ankh.UI.Annotate
 {
-    class AnnotateSection : AnkhPropertyGridItem, IAnnotateSection, ISvnRepositoryItem
+    /// <summary>
+    /// 
+    /// </summary>
+    class AnnotateRegion
+    {
+        readonly AnnotateSource _source;
+        readonly int _startLine;
+        int _endLine;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AnnotateRegion"/> class.
+        /// </summary>
+        /// <param name="startLine">The start line.</param>
+        /// <param name="endLine">The end line.</param>
+        /// <param name="source">The source.</param>
+        public AnnotateRegion(int line, AnnotateSource source)
+        {
+            if(source == null)
+                throw new ArgumentNullException("source");
+
+            _source = source;
+            _startLine = _endLine = line;
+        }
+
+        /// <summary>
+        /// Gets the source.
+        /// </summary>
+        /// <value>The source.</value>
+        public AnnotateSource Source
+        {
+            get { return _source; }
+        }
+
+        public int StartLine
+        {
+            get { return _startLine; }
+        }
+
+        /// <summary>
+        /// Gets the end line.
+        /// </summary>
+        /// <value>The end line.</value>
+        public int EndLine
+        {
+            get { return _endLine; }
+            internal set { _endLine = value; }
+        }
+
+        #region Internal State
+        internal bool Hovered;
+        #endregion
+    }
+
+    class AnnotateSource : AnkhPropertyGridItem, IAnnotateSection, ISvnRepositoryItem
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
-        long _endLine;
 
-        // BH: TODO: We should copy the values to release the cached lines in the SvnBlameEventArgs
-
-        internal bool Hovered;
-
-        public AnnotateSection(SvnBlameEventArgs blameArgs, SvnOrigin origin)
+        public AnnotateSource(SvnBlameEventArgs blameArgs, SvnOrigin origin)
         {
             _args = blameArgs;
-            _endLine = _args.LineNumber;
             _origin = origin;
         }
 
@@ -59,17 +107,6 @@ namespace Ankh.UI.Annotate
             get { return _args.Time.ToLocalTime(); }
         }
 
-        internal int StartLine
-        {
-            get { return (int)_args.LineNumber; }
-        }
-
-        internal int EndLine
-        {
-            get { return (int)_endLine; }
-            set { _endLine = value; }
-        }
-
         [Browsable(false)]
         public SvnOrigin Origin
         {
@@ -78,7 +115,7 @@ namespace Ankh.UI.Annotate
 
         protected override string ClassName
         {
-            get { return "Annotate Section"; }
+            get { return string.Format(CultureInfo.InvariantCulture, "r{0}", Revision); }
         }
 
         protected override string ComponentName

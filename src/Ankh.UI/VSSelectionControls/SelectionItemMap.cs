@@ -42,6 +42,11 @@ namespace Ankh.UI.VSSelectionControls
         void SetSelection(T[] items);
         event EventHandler HandleDestroyed;
 
+        /// <summary>
+        /// Gets the canonical (path / uri) of the item. Used by packages to determine a selected file
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>A canonical name or null</returns>
         string GetCanonicalName(T item);
     }
 
