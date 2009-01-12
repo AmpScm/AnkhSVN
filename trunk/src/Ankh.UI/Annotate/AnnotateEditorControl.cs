@@ -35,7 +35,7 @@ namespace Ankh.UI.Annotate
 {
     public partial class AnnotateEditorControl : VSEditorControl, ISelectionMapOwner<IAnnotateSection>
     {
-        List<AnnotateSection> blameSections = new List<AnnotateSection>();
+        List<AnnotateRegion> blameSections = new List<AnnotateRegion>();
         SelectionItemMap _map;
         SvnOrigin _origin;
 
@@ -82,25 +82,27 @@ namespace Ankh.UI.Annotate
         {
             _origin = origin;
 
-            AnnotateSection section = null;
+            SortedList<long, AnnotateSource> _sources = new SortedList<long, AnnotateSource>();
+
+            AnnotateRegion section = null;
             blameSections.Clear();
 
             foreach (SvnBlameEventArgs e in blameResult)
             {
-                if (blameSections.Count == 0)
+                AnnotateSource src;
+                if (!_sources.TryGetValue(e.Revision, out src))
+                    _sources.Add(e.Revision, src = new AnnotateSource(e, origin));
+
+                int line = (int)e.LineNumber;
+
+                if(section == null || section.Source != src)
                 {
-                    section = new AnnotateSection(e, origin);
+                    section = new AnnotateRegion(line, src);
                     blameSections.Add(section);
                 }
                 else
                 {
-                    if (section.Revision == e.Revision)
-                        section.EndLine = (int)e.LineNumber;
-                    else
-                    {
-                        section = new AnnotateSection(e, origin);
-                        blameSections.Add(section);
-                    }
+                    section.EndLine = line;
                 }
             }
             blameMarginControl1.Invalidate();
@@ -114,8 +116,8 @@ namespace Ankh.UI.Annotate
             blameMarginControl1.NotifyScroll(e);
         }
 
-        AnnotateSection _selected;
-        internal AnnotateSection Selected
+        AnnotateSource _selected;
+        internal AnnotateSource Selected
         {
             get { return _selected; }
         }
@@ -126,7 +128,7 @@ namespace Ankh.UI.Annotate
             //Focus();
             //Select();
 
-            _selected = (AnnotateSection)section;
+            _selected = (AnnotateSource)section;
 
             if (SelectionChanged != null)
                 SelectionChanged(this, EventArgs.Empty);
@@ -138,33 +140,33 @@ namespace Ankh.UI.Annotate
 
         public event EventHandler SelectionChanged;
 
-        public System.Collections.IList Selection
+        System.Collections.IList ISelectionMapOwner<IAnnotateSection>.Selection
         {
             get
             {
                 if (_selected == null)
-                    return new AnnotateSection[0];
+                    return new AnnotateSource[0];
 
-                return new AnnotateSection[] { _selected };
+                return new AnnotateSource[] { _selected };
             }
         }
 
-        public System.Collections.IList AllItems
+        System.Collections.IList ISelectionMapOwner<IAnnotateSection>.AllItems
         {
-            get { return Selection; }
+            get { return ((ISelectionMapOwner<IAnnotateSection>)this).Selection; }
         }
 
-        public IntPtr GetImageList()
+        IntPtr ISelectionMapOwner<IAnnotateSection>.GetImageList()
         {
             return IntPtr.Zero;
         }
 
-        public int GetImageListIndex(IAnnotateSection item)
+        int ISelectionMapOwner<IAnnotateSection>.GetImageListIndex(IAnnotateSection item)
         {
             return 0;
         }
 
-        public string GetText(IAnnotateSection item)
+        string ISelectionMapOwner<IAnnotateSection>.GetText(IAnnotateSection item)
         {
             return item.Revision.ToString();
         }
@@ -179,7 +181,7 @@ namespace Ankh.UI.Annotate
             return (IAnnotateSection)item;
         }
 
-        public void SetSelection(IAnnotateSection[] items)
+        void ISelectionMapOwner<IAnnotateSection>.SetSelection(IAnnotateSection[] items)
         {
             if (items.Length > 0)
                 SetSelection(items[0]);
@@ -187,10 +189,14 @@ namespace Ankh.UI.Annotate
                 SetSelection((IAnnotateSection)null);
         }
 
-        public string GetCanonicalName(IAnnotateSection item)
+        /// <summary>
+        /// Gets the canonical (path / uri) of the item. Used by packages to determine a selected file
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>A canonical name or null</returns>
+        string ISelectionMapOwner<IAnnotateSection>.GetCanonicalName(IAnnotateSection item)
         {
-            AnnotateSection section = (AnnotateSection)item;
-            return section.Author + section.StartLine + section.Revision;
+            return null;
         }
 
         #endregion

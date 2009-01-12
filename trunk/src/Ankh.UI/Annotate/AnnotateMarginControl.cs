@@ -31,25 +31,25 @@ namespace Ankh.UI.Annotate
 {
     sealed class AnnotateMarginControl : Control
     {
-        List<AnnotateSection> _sections;
+        List<AnnotateRegion> _sections;
         AnnotateEditorControl _control;
         int _firstLine;
         int _lastLine;
         IAnkhServiceProvider _context;
         ToolTip _toolTip;
 
-        AnnotateSection _hoverSection;
-        AnnotateSection _tipSection;
+        AnnotateRegion _hoverSection;
+        AnnotateRegion _tipSection;
 
         public AnnotateMarginControl()
         {
-            _sections = new List<AnnotateSection>();
+            _sections = new List<AnnotateRegion>();
 
             _toolTip = new ToolTip();
             _toolTip.ShowAlways = true;
         }
 
-        internal void Init(IAnkhServiceProvider context, AnnotateEditorControl control, List<AnnotateSection> sections)
+        internal void Init(IAnkhServiceProvider context, AnnotateEditorControl control, List<AnnotateRegion> sections)
         {
             _context = context;
             _control = control;
@@ -79,7 +79,7 @@ namespace Ankh.UI.Annotate
                 }
             }
 
-            AnnotateSection section = _hoverSection;
+            AnnotateRegion section = _hoverSection;
             if (section == null)
                 return;
 
@@ -87,12 +87,13 @@ namespace Ankh.UI.Annotate
 
             if (rect.Contains(mp))
             {
+                AnnotateSource src = section.Source;
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat("Revision: {0}", section.Revision);
+                sb.AppendFormat("Revision: {0}", src.Revision);
                 sb.AppendLine();
-                sb.AppendFormat("Author: {0}", section.Author);
+                sb.AppendFormat("Author: {0}", src.Author);
                 sb.AppendLine();
-                sb.AppendFormat("Time: {0}", section.Time.ToLocalTime());
+                sb.AppendFormat("Time: {0}", src.Time.ToLocalTime());
 
                 _toolTip.Show(sb.ToString(), this, mp);
                 _tipSection = section;
@@ -115,7 +116,7 @@ namespace Ankh.UI.Annotate
             }
         }
 
-        Rectangle GetRectangle(AnnotateSection section)
+        Rectangle GetRectangle(AnnotateRegion section)
         {
             int top = (section.StartLine - _firstLine) * LineHeight;
             int height = (section.EndLine - section.StartLine + 1) * LineHeight;
@@ -123,9 +124,9 @@ namespace Ankh.UI.Annotate
             return new Rectangle(0, top, Width, height);
         }
 
-        AnnotateSection GetSection(Point location)
+        AnnotateRegion GetSection(Point location)
         {
-            foreach (AnnotateSection section in _sections)
+            foreach (AnnotateRegion section in _sections)
             {
                 Rectangle rect = GetRectangle(section);
                 if (rect.Contains(location))
@@ -138,7 +139,7 @@ namespace Ankh.UI.Annotate
         {
             base.OnMouseMove(e);
 
-            foreach (AnnotateSection section in _sections)
+            foreach (AnnotateRegion section in _sections)
             {
                 Rectangle rect = GetRectangle(section);
                 bool hovered = rect.Contains(e.Location);
@@ -165,7 +166,7 @@ namespace Ankh.UI.Annotate
             base.OnMouseLeave(e);
             bool changed = false;
 
-            foreach (AnnotateSection section in _sections)
+            foreach (AnnotateRegion section in _sections)
             {
                 if (section.Hovered == true)
                 {
@@ -188,8 +189,8 @@ namespace Ankh.UI.Annotate
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            AnnotateSection section = GetSection(e.Location);
-            _control.SetSelection(section);
+            AnnotateRegion section = GetSection(e.Location);
+            _control.SetSelection(section.Source);
             Invalidate();
 
             base.OnMouseClick(e);
@@ -235,7 +236,7 @@ namespace Ankh.UI.Annotate
             using (Brush blueBg = new LinearGradientBrush(new Point(0, 0), new Point(Width, 0), BackColor, Color.LightBlue))
             using (Brush selectedBg = new SolidBrush(SystemColors.Highlight))
             {
-                foreach (AnnotateSection section in _sections)
+                foreach (AnnotateRegion section in _sections)
                 {
                     if (section.EndLine < _firstLine)
                         continue;
@@ -246,7 +247,7 @@ namespace Ankh.UI.Annotate
                     if (!e.ClipRectangle.IntersectsWith(rect))
                         continue;
 
-                    if (_control.Selected == section)
+                    if (IsSelected(section))
                         e.Graphics.FillRectangle(selectedBg, rect);
                     else
                     {
@@ -257,10 +258,12 @@ namespace Ankh.UI.Annotate
                     }
                     e.Graphics.DrawRectangle(border, rect);
 
-                    Brush color = _control.Selected == section ? selectedTextColor : textColor;
-                    e.Graphics.DrawString(section.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, 30, LineHeight), sfr);
-                    e.Graphics.DrawString(section.Author, f, color, new RectangleF(35, rect.Top + 2, 40, LineHeight), sfl);
-                    e.Graphics.DrawString(section.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
+                    AnnotateSource src = section.Source;
+
+                    Brush color = IsSelected(section) ? selectedTextColor : textColor;
+                    e.Graphics.DrawString(src.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, 30, LineHeight), sfr);
+                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(35, rect.Top + 2, 40, LineHeight), sfl);
+                    e.Graphics.DrawString(src.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
                 }
 
                 Rectangle clip = e.ClipRectangle;
@@ -275,6 +278,24 @@ namespace Ankh.UI.Annotate
                 using (SolidBrush sb = new SolidBrush(BackColor))
                     e.Graphics.FillRectangle(sb, clip);
             }
+        }
+
+        bool IsSelected(AnnotateRegion region)
+        {
+            if (region == null)
+                throw new ArgumentNullException("region");
+            else if(_control == null)
+                return false;
+
+            AnnotateSource src = _control.Selected;
+
+            if (src == null)
+                return false;
+
+            if (region.Source == src)
+                return true;
+
+            return false;            
         }
 
         internal void NotifyScroll(TextViewScrollEventArgs scrollInfo)
