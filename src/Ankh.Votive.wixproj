@@ -36,7 +36,7 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
-    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
+    <SuppressIces>ICE03;ICE25;ICE61;ICE69;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -44,8 +44,7 @@
     </LinkerAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <Cultures>
-    </Cultures>
+    <Cultures>en-US</Cultures>
     <DefineConstants>SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
@@ -58,7 +57,7 @@
     </WixVariables>
     <SuppressAllWarnings>False</SuppressAllWarnings>
     <Pedantic>False</Pedantic>
-    <SuppressIces>ICE03;ICE25;ICE61;ICE82</SuppressIces>
+    <SuppressIces>ICE03;ICE25;ICE61;ICE69;ICE82</SuppressIces>
     <SuppressValidation>False</SuppressValidation>
     <CompilerAdditionalOptions>
     </CompilerAdditionalOptions>
@@ -74,7 +73,6 @@
     <Compile Include="Ankh.Services\Ankh.Services.wxs" />
     <Compile Include="Ankh.Trigger\Ankh.Trigger.wxs" />
     <Compile Include="Ankh.UI\Ankh.UI.wxs" />
-    <Compile Include="Ankh.Votive\Ankh-UI.wxs" />
     <Compile Include="Ankh.VS\Ankh.VS.wxs" />
     <Compile Include="Ankh\Ankh.wxs" />
     <Compile Include="Ankh.Votive\Ankh.Votive.wxs" />
@@ -153,6 +151,17 @@
       <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ankh.Votive\SetupHeader.bmp" />
+    <Content Include="Ankh.Votive\SetupHeader.pdn" />
+    <Content Include="Ankh.Votive\SetupPage.bmp" />
+    <Content Include="Ankh.Votive\SetupPage.pdn" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--

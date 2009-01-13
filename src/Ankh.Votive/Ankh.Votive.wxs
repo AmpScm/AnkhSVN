@@ -43,7 +43,7 @@
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLLOCATION" Name="AnkhSvn 2.0">
+        <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2.0">
           <Directory Id="APP_bin" Name="." FileSource="$(sys.SOURCEFILEDIR)..\">
             <Directory Id="DIR_SharpSvn" Name=".">
               <!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
@@ -86,9 +86,17 @@
       <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
     </InstallExecuteSequence>
 
-    <UIRef Id="AnkhUI"/>
+    <Property Id="ApplicationFolderName" Value="AnkhSVN 2.0" />
+    <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
-    <Feature Id="ProductFeature" Title="Ankh.Votive" Level="1">
+    <WixVariable Id="WixUIDialogBmp" Value="Ankh.Votive/SetupPage.bmp"/>
+    <WixVariable Id="WixUIBannerBmp" Value="Ankh.Votive/SetupHeader.bmp"/>
+    <WixVariable Id="WixUILicenseRtf" Value="LICENSE.rtf" />
+    
+    <WixVariable Id="WixUISupportPerUser" Value="0" />
+    <UIRef Id="WixUI_Advanced"/>
+
+    <Feature Id="ProductFeature" Title="AnkhSVN 2.0" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
       <ComponentGroupRef Id="Ankh.Package"/>
       <ComponentGroupRef Id="Ankh.Trigger"/>
       <ComponentRef Id="C_CONTRIBUTERS"/>
@@ -96,6 +104,21 @@
       <ComponentRef Id="C_NOTICE"/>
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
       <MergeRef Id="CRT"/>
-    </Feature>
+      <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005" 
+               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2005" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2005"/>
+        <ComponentGroupRef Id="TriggerReg2005"/>
+      </Feature>
+      <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008" 
+               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2008"/>
+        <ComponentGroupRef Id="TriggerReg2008"/>
+      </Feature>
+      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010" 
+               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
+        <ComponentGroupRef Id="PkgReg2010"/>
+        <ComponentGroupRef Id="TriggerReg2010"/>
+      </Feature>
+    </Feature>    
   </Product>
 </Wix>
