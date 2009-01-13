@@ -13,15 +13,15 @@
 		  <?endif?>		  
       </Component>
       <Component Id="CR_Trigger_2005" Guid="59AD639C-11B3-4097-8D5E-5EE489FDF04D">
-        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation\Trigger-VS2005" Value="#1" Type="integer" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2005" Value="1" Type="integer" KeyPath="yes" />
         <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2005.wxi ?>
       </Component>
       <Component Id="CR_Trigger_2008" Guid="0BDB7652-D0ED-409A-910A-FBBBF383A198">
-        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation\Trigger-VS2008" Value="#1" Type="integer" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2008" Value="1" Type="integer" KeyPath="yes" />
         <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2008.wxi ?>
       </Component>
       <Component Id="CR_Trigger_2010" Guid="6F4DFE75-A4FF-40E9-A189-15C743EE223D">
-        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\CurrentVersion\Installation\Trigger-VS2010" Value="#1" Type="integer" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2010" Value="1" Type="integer" KeyPath="yes" />
         <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2010.wxi ?>
       </Component>
     </DirectoryRef>
