@@ -34,6 +34,13 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (item.IsVersioned)
+                    return;
+            }
+
+            e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
