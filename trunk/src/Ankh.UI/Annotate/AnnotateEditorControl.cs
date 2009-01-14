@@ -49,6 +49,9 @@ namespace Ankh.UI.Annotate
         {
             base.OnFrameCreated(e);
 
+            if (DesignMode)
+                return;
+
             _map = SelectionItemMap.Create<IAnnotateSection>(this);
             _map.Context = Context;
 
@@ -106,6 +109,38 @@ namespace Ankh.UI.Annotate
                 }
             }
             blameMarginControl1.Invalidate();
+
+            RetrieveLogs(origin, _sources);
+        }
+
+        private void RetrieveLogs(SvnOrigin origin, SortedList<long, AnnotateSource> _sources)
+        {
+            if(_sources.Count == 0)
+                return;
+
+            EventHandler<SvnLogEventArgs> lr = 
+                delegate(object sender, SvnLogEventArgs e)
+                {
+                    AnnotateSource src;
+                    if(_sources.TryGetValue(e.Revision, out src))
+                        src.LogMessage = e.LogMessage ?? "";
+                };
+
+            AnkhAction aa = delegate()
+            {
+                using (SvnClient cl = Context.GetService<ISvnClientPool>().GetClient())
+                {
+                    SvnLogArgs la = new SvnLogArgs();
+                    la.OperationalRevision = origin.Target.Revision;
+                    la.Start = _sources.Keys[_sources.Count - 1];
+                    la.End = _sources.Keys[0];
+                    la.ThrowOnError = false;
+
+                    cl.Log(origin.Uri, la, lr);
+                }
+            };
+
+            aa.BeginInvoke(null, null); // Start retrieving logs
         }
 
         private void logMessageEditor1_Scroll(object sender, TextViewScrollEventArgs e)
