@@ -45,23 +45,33 @@ namespace Ankh.UI.Annotate
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.editor = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
-            this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.blameMarginControl1 = new Ankh.UI.Annotate.AnnotateMarginControl();
+            this.editor = new Ankh.UI.PendingChanges.VSTextEditor(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // logMessageEditor1
+            // splitContainer1
             // 
-            this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editor.Location = new System.Drawing.Point(0, 0);
-            this.editor.Name = "logMessageEditor1";
-            this.editor.Size = new System.Drawing.Size(184, 300);
-            this.editor.TabIndex = 2;
-            this.editor.Text = "logMessageEditor1";
-            this.editor.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.blameMarginControl1);
+            this.splitContainer1.Panel1MinSize = 100;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.editor);
+            this.splitContainer1.Size = new System.Drawing.Size(300, 300);
+            this.splitContainer1.SplitterDistance = 115;
+            this.splitContainer1.SplitterWidth = 2;
+            this.splitContainer1.TabIndex = 3;
             // 
             // blameMarginControl1
             // 
@@ -72,25 +82,15 @@ namespace Ankh.UI.Annotate
             this.blameMarginControl1.TabIndex = 1;
             this.blameMarginControl1.Text = "blameMarginControl1";
             // 
-            // splitContainer1
+            // editor
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.IsSplitterFixed = true;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.blameMarginControl1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.editor);
-            this.splitContainer1.Size = new System.Drawing.Size(300, 300);
-            this.splitContainer1.SplitterDistance = 115;
-            this.splitContainer1.SplitterWidth = 1;
-            this.splitContainer1.TabIndex = 3;
+            this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editor.Location = new System.Drawing.Point(0, 0);
+            this.editor.Name = "editor";
+            this.editor.Size = new System.Drawing.Size(183, 300);
+            this.editor.TabIndex = 2;
+            this.editor.Text = "logMessageEditor1";
+            this.editor.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
             // 
             // AnnotateEditorControl
             // 

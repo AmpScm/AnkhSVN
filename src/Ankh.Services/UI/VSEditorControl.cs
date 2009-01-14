@@ -89,13 +89,14 @@ namespace Ankh.UI
             Marshal.ThrowExceptionForHR((_frame.SetGuidProperty((int)__VSFPROPID, ref value)));
         }
 
-
+        [Browsable(false),DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Guid KeyboardContext
         {
             get { return GetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings); }
             set { SetGuid(__VSFPROPID.VSFPROPID_InheritKeyBindings, value); }
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Guid CommandContext
         {
             get { return GetGuid(__VSFPROPID.VSFPROPID_CmdUIGuid); }

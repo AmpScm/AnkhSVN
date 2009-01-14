@@ -82,6 +82,7 @@ namespace Ankh.UI.Annotate
     {
         readonly SvnBlameEventArgs _args;
         readonly SvnOrigin _origin;
+        string _logMessage;
 
         public AnnotateSource(SvnBlameEventArgs blameArgs, SvnOrigin origin)
         {
@@ -113,6 +114,21 @@ namespace Ankh.UI.Annotate
             get { return _origin; }
         }
 
+        [Browsable(false)]
+        public string LogMessage
+        {
+            get
+            {
+                lock (_args)
+                    return _logMessage;
+            }
+            internal set
+            {
+                lock (_args)
+                    _logMessage = value;
+            }
+        }
+
         protected override string ClassName
         {
             get { return string.Format(CultureInfo.InvariantCulture, "r{0}", Revision); }
@@ -121,7 +137,7 @@ namespace Ankh.UI.Annotate
         protected override string ComponentName
         {
             get { return Origin.Target.FileName; }
-        }
+        }        
 
         #region ISvnRepositoryItem Members
 
