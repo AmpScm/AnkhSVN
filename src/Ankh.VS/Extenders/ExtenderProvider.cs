@@ -143,7 +143,7 @@ namespace Ankh.VS.Extenders
             if (i == null)
                 return null;
             
-            return new SvnItemExtender(i, Context);
+            return new SvnItemExtender(i, Context, ExtenderSite, Cookie);
             
         }
 
