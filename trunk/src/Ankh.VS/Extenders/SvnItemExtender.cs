@@ -21,6 +21,7 @@ using System.ComponentModel;
 using SharpSvn;
 using Ankh.Selection;
 using Ankh.Scc;
+using System.Diagnostics;
 
 
 namespace Ankh.VS.Extenders
@@ -58,10 +59,15 @@ namespace Ankh.VS.Extenders
             _catId = catId;
         }
 
+        [DebuggerNonUserCode]
         ~SvnItemExtender()
         {
             // Extenders must notify the site when they are disposed
-            _site.NotifyDelete(_cookie);
+            try
+            {
+                _site.NotifyDelete(_cookie);
+            }
+            catch { }
         }
 
         [Browsable(false)]

@@ -118,19 +118,25 @@ namespace Ankh.VS.Extenders
                 switch (catId)
                 {
                     case CATID_CscFileBrowse:
+                    case CATID_CscFolderBrowse:
+                    case CATID_CscProjectBrowse:
                     case CATID_VbFileBrowse:
+                    case CATID_VbFolderBrowse:
+                    case CATID_VbProjectBrowse:
+                    case CATID_CcFileBrowse:
                         path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
+                        break;
+                    case CATID_CcProjectBrowse:
+                        path = type.InvokeMember("ProjectFile", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
                         break;
                     case CATID_SolutionBrowse:
                         path = GetService<IAnkhSolutionSettings>().SolutionFilename;
                         break;
                     default:
+                        // Currently untested project types
+                        path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
                         break;
                 }
-
-                // Temp code: Fall back to getting path property
-                if (path == null)
-                    path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
 
                 if (!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
                 {
