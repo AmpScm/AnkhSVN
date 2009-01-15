@@ -21,6 +21,7 @@ using System.Collections;
 using Ankh.Ids;
 using Ankh.Selection;
 using Ankh.Commands;
+using Ankh.Scc;
 
 
 namespace Ankh.VS.Extenders
@@ -100,55 +101,50 @@ namespace Ankh.VS.Extenders
             _cookies = null;
         }
 
-        public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
+        IFileStatusCache _cache;
+        IFileStatusCache FileStatusCache
         {
-            ISelectionContext selection = GetService<ISelectionContext>();
-
-            if (selection != null)
-            {
-                bool first = true;
-                foreach (SvnItem item in selection.GetSelectedSvnItems(false))
-                {
-                    if (!item.IsVersioned && !item.IsVersionable)
-                        return false;
-                    else if (first)
-                        first = false;
-                    else
-                        return true;
-                }
-
-                if (!first)
-                    return true;
-            }
-
-            return false;
+            get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
         }
 
+        SvnItem FindItem(object extendeeObject)
+        {
+            try
+            {
+                string path = extendeeObject.GetType().InvokeMember("FullPath", BindingFlags.GetProperty, null, extendeeObject, null) as string;
+                if (!string.IsNullOrEmpty(path) &&
+                    SvnItem.IsValidPath(path))
+                {
+                    SvnItem i = FileStatusCache[path];
+                    if (!i.IsVersioned && !i.IsVersionable)
+                        return null;
+                    else
+                        return i;
+                }
+            }
+            catch
+            {
+            }
+            return null;
+        }
+
+        public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
+        {
+            SvnItem i = FindItem(ExtendeeObject);
+            return i != null;
+        }
+
+        int count;
         [CLSCompliant(false)]
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, EnvDTE.IExtenderSite ExtenderSite, int Cookie)
         {
-            ISelectionContext selection = GetService<ISelectionContext>();
-
-            if (selection != null)
-            {
-                SvnItem selected = null;
-
-                foreach (SvnItem item in selection.GetSelectedSvnItems(false))
-                {
-                    if (!item.IsVersioned && !item.IsVersionable)
-                        return false;
-
-                    selected = item;
-                    break;
-                }
-
-                if (selected == null)
-                    return null;
-
-                return new SvnItemExtender(selected, Context);
-            }
-
-            return null;
+            count++;
+            SvnItem i = FindItem(ExtendeeObject);
+            if (i == null)
+                return null;
+            
+            return new SvnItemExtender(i, Context);
+            
         }
 
         private readonly static string[] CATIDS = new string[]{
