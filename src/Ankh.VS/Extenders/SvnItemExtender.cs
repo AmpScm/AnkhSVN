@@ -29,30 +29,38 @@ namespace Ankh.VS.Extenders
     /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
     [ComVisible(true)]
-    public class SvnItemExtender
+    public class SvnItemExtender : EnvDTE.IFilterProperties
     {
+        readonly AnkhExtenderProvider _provider;
         readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;
+        readonly object _extendeeObject;
         readonly EnvDTE.IExtenderSite _site;
         readonly int _cookie;
+        readonly string _catId;
+
         [CLSCompliant(false)]
-        public SvnItemExtender(SvnItem item, IAnkhServiceProvider context, EnvDTE.IExtenderSite extenderSite, int cookie)
+        public SvnItemExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
         {
-            if (item == null)
-                throw new ArgumentNullException("item");
-            else if (context == null)
-                throw new ArgumentNullException("context");
+            if (extendeeObject == null)
+                throw new ArgumentNullException("extendeeObject");
+            else if (provider == null)
+                throw new ArgumentNullException("provider");
             else if (extenderSite == null)
                 throw new ArgumentNullException("extenderSite");
-            
-            _item = item;
-            _context = context;
+            else if (catId == null)
+                throw new ArgumentNullException("catId");
+
+            _extendeeObject = extendeeObject;
+            _provider = provider;
+            _context = provider;
             _site = extenderSite;
             _cookie = cookie;
+            _catId = catId;
         }
 
         ~SvnItemExtender()
         {
+            // Extenders must notify the site when they are disposed
             _site.NotifyDelete(_cookie);
         }
 
@@ -61,10 +69,9 @@ namespace Ankh.VS.Extenders
         {
             get 
             {
-                return _item; 
+                return _provider.FindItem(_extendeeObject, _catId);
             }
         }
-
 
         [Category("Subversion"), Description("Url"), DisplayName("Url")]
         public Uri Url
@@ -282,6 +289,15 @@ namespace Ankh.VS.Extenders
 
             monitor.ScheduleSvnStatus(SvnItem.FullPath);
         }
+        #endregion
+
+        #region IFilterProperties Members
+
+        EnvDTE.vsFilterProperties EnvDTE.IFilterProperties.IsPropertyHidden(string PropertyName)
+        {
+            return EnvDTE.vsFilterProperties.vsFilterPropertiesNone;
+        }
+
         #endregion
     }
 

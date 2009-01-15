@@ -34,19 +34,19 @@ namespace Ankh.VS.Extenders
     {
         public const string ServiceName = AnkhId.ExtenderProviderName;
         #region CATIDs
-        const string CATID_CscFileBrowse = "8d58e6af-ed4e-48b0-8c7b-c74ef0735451";
-        const string CATID_CscFolderBrowse = "914fe278-054a-45db-bf9e-5f22484cc84c";
-        const string CATID_CscProjectBrowse = "4ef9f003-de95-4d60-96b0-212979f2a857";
-        const string CATID_VbFileBrowse = "ea5bd05d-3c72-40a5-95a0-28a2773311ca";
-        const string CATID_VbFolderBrowse = "932dc619-2eaa-4192-b7e6-3d15ad31df49";
-        const string CATID_VbProjectBrowse = "e0fdc879-c32a-4751-a3d3-0b3824bd575f";
-        const string CATID_VjFileBrowse = "e6fdf869-f3d1-11d4-8576-0002a516ece8";
-        const string CATID_VjFolderBrowse = "e6fdf86a-f3d1-11d4-8576-0002a516ece8";
-        const string CATID_VjProjectBrowse = "e6fdf86c-f3d1-11d4-8576-0002a516ece8";
-        const string CATID_SolutionBrowse = "a2392464-7c22-11d3-bdca-00c04f688e50";
-        const string CATID_CcFileBrowse = "ee8299c9-19b6-4f20-abea-e1fd9a33b683";
-        const string CATID_CcProjectBrowse = "ee8299cb-19b6-4f20-abea-e1fd9a33b683";
-        const string CATID_GenericProject = "610d4611-d0d5-11d2-8599-006097c68e81";
+        const string CATID_CscFileBrowse = "{8D58E6AF-ED4E-48B0-8C7B-C74EF0735451}";
+        const string CATID_CscFolderBrowse = "{914FE278-054A-45DB-BF9E-5F22484CC84C}";
+        const string CATID_CscProjectBrowse = "{4EF9F003-DE95-4D60-96B0-212979F2A857}";
+        const string CATID_VbFileBrowse = "{EA5BD05D-3C72-40A5-95A0-28A2773311CA}";
+        const string CATID_VbFolderBrowse = "{932DC619-2EAA-4192-B7E6-3D15AD31DF49}";
+        const string CATID_VbProjectBrowse = "{E0FDC879-C32A-4751-A3D3-0B3824BD575F}";
+        const string CATID_VjFileBrowse = "{E6FDF869-F3D1-11D4-8576-0002A516ECE8}";
+        const string CATID_VjFolderBrowse = "{E6FDF86A-F3D1-11D4-8576-0002A516ECE8}";
+        const string CATID_VjProjectBrowse = "{E6FDF86C-F3D1-11D4-8576-0002A516ECE8}";
+        const string CATID_SolutionBrowse = "{A2392464-7C22-11D3-BDCA-00C04F688E50}";
+        const string CATID_CcFileBrowse = "{EE8299C9-19B6-4F20-ABEA-E1FD9A33B683}";
+        const string CATID_CcProjectBrowse = "{EE8299CB-19B6-4F20-ABEA-E1FD9A33B683}";
+        const string CATID_GenericProject = "{610D4611-D0D5-11D2-8599-006097C68E81}";
         #endregion
 
         int[] _cookies;
@@ -107,13 +107,32 @@ namespace Ankh.VS.Extenders
             get { return _cache ?? (_cache = GetService<IFileStatusCache>()); }
         }
 
-        SvnItem FindItem(object extendeeObject)
+        internal SvnItem FindItem(object extendeeObject, string catId)
         {
+            if (extendeeObject == null)
+                return null;
             try
             {
-                string path = extendeeObject.GetType().InvokeMember("FullPath", BindingFlags.GetProperty, null, extendeeObject, null) as string;
-                if (!string.IsNullOrEmpty(path) &&
-                    SvnItem.IsValidPath(path))
+                string path = null;
+                Type type = extendeeObject.GetType();
+                switch (catId)
+                {
+                    case CATID_CscFileBrowse:
+                    case CATID_VbFileBrowse:
+                        path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
+                        break;
+                    case CATID_SolutionBrowse:
+                        path = GetService<IAnkhSolutionSettings>().SolutionFilename;
+                        break;
+                    default:
+                        break;
+                }
+
+                // Temp code: Fall back to getting path property
+                if (path == null)
+                    path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
+
+                if (!string.IsNullOrEmpty(path) && SvnItem.IsValidPath(path))
                 {
                     SvnItem i = FileStatusCache[path];
                     if (!i.IsVersioned && !i.IsVersionable)
@@ -130,21 +149,14 @@ namespace Ankh.VS.Extenders
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            SvnItem i = FindItem(ExtendeeObject);
+            SvnItem i = FindItem(ExtendeeObject, ExtenderCATID);
             return i != null;
         }
 
-        int count;
         [CLSCompliant(false)]
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, EnvDTE.IExtenderSite ExtenderSite, int Cookie)
         {
-            count++;
-            SvnItem i = FindItem(ExtendeeObject);
-            if (i == null)
-                return null;
-            
-            return new SvnItemExtender(i, Context, ExtenderSite, Cookie);
-            
+            return new SvnItemExtender(ExtendeeObject, this, ExtenderSite, Cookie, ExtenderCATID);
         }
 
         private readonly static string[] CATIDS = new string[]{
@@ -161,6 +173,6 @@ namespace Ankh.VS.Extenders
         CATID_CcFileBrowse,
         CATID_CcProjectBrowse,
         CATID_GenericProject
-        };        
+        };
     }
 }
