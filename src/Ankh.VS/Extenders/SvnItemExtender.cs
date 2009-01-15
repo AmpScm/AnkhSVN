@@ -30,7 +30,7 @@ namespace Ankh.VS.Extenders
     /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
     [ComVisible(true)]
-    public class SvnItemExtender : EnvDTE.IFilterProperties
+    public class SvnItemExtender : EnvDTE.IFilterProperties, IDisposable
     {
         readonly AnkhExtenderProvider _provider;
         readonly IAnkhServiceProvider _context;
@@ -59,12 +59,36 @@ namespace Ankh.VS.Extenders
             _catId = catId;
         }
 
-        [DebuggerNonUserCode]
+        public void Dispose()
+        {
+            try
+            {
+                Dispose(true);
+            }
+            finally
+            {
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        
         ~SvnItemExtender()
         {
+            Dispose(false);
+        }
+
+        bool _disposed;
+        [DebuggerNonUserCode]
+        void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
             // Extenders must notify the site when they are disposed
             try
             {
+                // TODO: Maybe ensure this code is always run in the main thread
                 _site.NotifyDelete(_cookie);
             }
             catch { }
