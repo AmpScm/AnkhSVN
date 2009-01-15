@@ -33,15 +33,27 @@ namespace Ankh.VS.Extenders
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
-        public SvnItemExtender(SvnItem item, IAnkhServiceProvider context)
+        readonly EnvDTE.IExtenderSite _site;
+        readonly int _cookie;
+        [CLSCompliant(false)]
+        public SvnItemExtender(SvnItem item, IAnkhServiceProvider context, EnvDTE.IExtenderSite extenderSite, int cookie)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
             else if (context == null)
                 throw new ArgumentNullException("context");
-
+            else if (extenderSite == null)
+                throw new ArgumentNullException("extenderSite");
+            
             _item = item;
             _context = context;
+            _site = extenderSite;
+            _cookie = cookie;
+        }
+
+        ~SvnItemExtender()
+        {
+            _site.NotifyDelete(_cookie);
         }
 
         [Browsable(false)]
