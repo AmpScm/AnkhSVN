@@ -31,7 +31,6 @@ namespace Ankh.VS.Extenders
     [ComVisible(true)]
     public class SvnItemExtender
     {
-        readonly ISelectionContext _selContext;
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
         public SvnItemExtender(SvnItem item, IAnkhServiceProvider context)
@@ -43,22 +42,17 @@ namespace Ankh.VS.Extenders
 
             _item = item;
             _context = context;
-            _selContext = context.GetService<ISelectionContext>();
         }
 
         [Browsable(false)]
-        internal SvnItem SvnItem
+        private SvnItem SvnItem
         {
             get 
             {
-                foreach (SvnItem item in _selContext.GetSelectedSvnItems(false))
-                {
-                    return item;
-                }
-
                 return _item; 
             }
         }
+
 
         [Category("Subversion"), Description("Url"), DisplayName("Url")]
         public Uri Url
@@ -118,7 +112,7 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
         public DateTime LastCommittedDate
         {
-            get 
+            get
             {
                 DateTime dt = SvnItem.Status.LastChangeTime;
                 if (dt != DateTime.MinValue)
@@ -155,7 +149,7 @@ namespace Ankh.VS.Extenders
         [Category("Properties"), DisplayName("Line ending style"), Description("svn:eol-style")]
         public LineEndingStyle LineEndingStyle
         {
-            get 
+            get
             {
                 if (SvnItem == null)
                     return LineEndingStyle.None;
@@ -175,9 +169,9 @@ namespace Ankh.VS.Extenders
                         catch { }
                     }
                 }
-                return  LineEndingStyle.None;
+                return LineEndingStyle.None;
             }
-            set 
+            set
             {
                 string strValue = null;
                 switch (value)
@@ -196,7 +190,7 @@ namespace Ankh.VS.Extenders
                     if (c == null)
                         return;
 
-                    if(string.IsNullOrEmpty(strValue))
+                    if (string.IsNullOrEmpty(strValue))
                         c.DeleteProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle);
                     else
                         c.SetProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle, strValue);
