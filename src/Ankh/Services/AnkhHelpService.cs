@@ -19,8 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.UI;
 using System.Globalization;
-using System.Diagnostics;
-using Ankh.VS;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Services
 {
@@ -40,11 +40,10 @@ namespace Ankh.Services
 
             try
             {
-                IAnkhWebBrowser wb = GetService<IAnkhWebBrowser>();
-                AnkhBrowserArgs ba = new AnkhBrowserArgs();
-                ba.External = true;
+                IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
 
-                wb.Navigate(ub.Uri, ba);
+                if (help != null)
+                    ErrorHandler.ThrowOnFailure(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
             }
             catch (Exception e)
             {
