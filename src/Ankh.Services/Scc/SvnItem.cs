@@ -279,7 +279,7 @@ namespace Ankh
                     // Should be handled above
                     throw new InvalidOperationException();
                 case SvnStatus.Incomplete:
-                    SetState(SvnItemState.None, managed | unset);
+                    SetState(managed, unset);
                     provideDiskInfo = false; // Can't trust subversion in this case
                     break;
                 default:
@@ -1068,7 +1068,7 @@ namespace Ankh
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>
-        /// 	<c>true</c> if [is below path] [the specified path]; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the <see cref="SvnItem"/> is below or equal to the specified path; otherwise, <c>false</c>.
         /// </returns>
         public bool IsBelowPath(string path)
         {
