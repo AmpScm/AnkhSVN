@@ -29,7 +29,7 @@ namespace Ankh.VS.Extenders
     /// <summary>
     /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
-    [ComVisible(true)]
+    [ComVisible(true)] // This class must be public or the extender won't accept it.
     public class SvnItemExtender : EnvDTE.IFilterProperties, IDisposable
     {
         readonly AnkhExtenderProvider _provider;
@@ -39,8 +39,7 @@ namespace Ankh.VS.Extenders
         readonly int _cookie;
         readonly string _catId;
 
-        [CLSCompliant(false)]
-        public SvnItemExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
+        internal SvnItemExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
         {
             if (extendeeObject == null)
                 throw new ArgumentNullException("extendeeObject");
