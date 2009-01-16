@@ -30,7 +30,7 @@ namespace Ankh.VS.Extenders
     /// This is the class factory for extender objects
     /// </summary>
     [GlobalService(typeof(AnkhExtenderProvider), true)]
-    public sealed class AnkhExtenderProvider : AnkhService, EnvDTE.IExtenderProvider, IDisposable
+    public sealed class AnkhExtenderProvider : AnkhService, EnvDTE.IExtenderProviderUnk, IDisposable
     {
         public const string ServiceName = AnkhId.ExtenderProviderName;
         #region CATIDs
@@ -47,13 +47,36 @@ namespace Ankh.VS.Extenders
         const string CATID_CcFileBrowse = "{EE8299C9-19B6-4F20-ABEA-E1FD9A33B683}";
         const string CATID_CcProjectBrowse = "{EE8299CB-19B6-4F20-ABEA-E1FD9A33B683}";
         const string CATID_GenericProject = "{610D4611-D0D5-11D2-8599-006097C68E81}";
-        #endregion
+
+        // From VSLangProj.dll
+        const string CATID_ExtProjectBrowse = "{610D4614-D0D5-11D2-8599-006097C68E81}";
+        const string CATID_ExtFileBrowse =    "{610D4615-D0D5-11D2-8599-006097C68E81}";
+    
+       #endregion
 
         int[] _cookies;
 
         public AnkhExtenderProvider(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        protected override void OnPreInitialize()
+        {
+            base.OnPreInitialize();
+            GetService<AnkhServiceEvents>().SccProviderActivated += new EventHandler(OnSccProviderActivated);
+            GetService<AnkhServiceEvents>().SccProviderDeactivated += new EventHandler(OnSccProviderDeactivated);
+        }
+
+        bool _enabled;
+        void OnSccProviderDeactivated(object sender, EventArgs e)
+        {
+            _enabled = false;
+        }
+
+        void OnSccProviderActivated(object sender, EventArgs e)
+        {
+            _enabled = true;
         }
 
         protected override void OnInitialize()
@@ -81,7 +104,7 @@ namespace Ankh.VS.Extenders
                 {
                     string cid = new Guid(catid).ToString("B");
 
-                    _cookies[n++] = extenders.RegisterExtenderProvider(cid, ServiceName, this, ServiceName);
+                    _cookies[n++] = extenders.RegisterExtenderProviderUnk(cid, ServiceName, this, ServiceName);
                 }
             }
         }
@@ -155,6 +178,9 @@ namespace Ankh.VS.Extenders
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
+            if (!_enabled)
+                return false;
+
             SvnItem i = FindItem(ExtendeeObject, ExtenderCATID);
             return i != null;
         }
@@ -162,7 +188,20 @@ namespace Ankh.VS.Extenders
         [CLSCompliant(false)]
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, EnvDTE.IExtenderSite ExtenderSite, int Cookie)
         {
-            return new SvnItemExtender(ExtendeeObject, this, ExtenderSite, Cookie, ExtenderCATID);
+            switch (ExtenderCATID)
+            {
+                case CATID_SolutionBrowse:
+                    return new SvnSolutionExtender(ExtendeeObject, this, ExtenderSite, Cookie, ExtenderCATID);
+                case CATID_CscProjectBrowse:
+                case CATID_VbProjectBrowse:
+                case CATID_VjProjectBrowse:
+                case CATID_CcProjectBrowse:
+                case CATID_GenericProject:
+                case CATID_ExtProjectBrowse:
+                    return new SvnProjectExtender(ExtendeeObject, this, ExtenderSite, Cookie, ExtenderCATID);
+                default:
+                    return new SvnItemExtender(ExtendeeObject, this, ExtenderSite, Cookie, ExtenderCATID);
+            }
         }
 
         private readonly static string[] CATIDS = new string[]{
@@ -178,7 +217,9 @@ namespace Ankh.VS.Extenders
         CATID_SolutionBrowse,
         CATID_CcFileBrowse,
         CATID_CcProjectBrowse,
-        CATID_GenericProject
+        CATID_GenericProject,
+        CATID_ExtProjectBrowse,
+        CATID_ExtFileBrowse
         };
     }
 }

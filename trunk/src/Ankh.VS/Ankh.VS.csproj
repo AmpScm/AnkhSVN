@@ -106,6 +106,8 @@
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
     <Compile Include="Dialogs\VSDocumentFormPane.cs">
     </Compile>
+    <Compile Include="Extenders\SvnProjectExtender.cs" />
+    <Compile Include="Extenders\SvnSolutionExtender.cs" />
     <Compile Include="LanguageServices\AnkhLanguageService.cs" />
     <Compile Include="$(AnkhLanguageServiceFile)">
       <DependentUpon>AnkhLanguageService.cs</DependentUpon>
