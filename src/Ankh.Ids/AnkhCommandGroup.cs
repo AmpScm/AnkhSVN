@@ -136,5 +136,6 @@ namespace Ankh.Ids
         /// Special parent group for VS Menu Designer support
         /// </summary>
         AnkhContextMenus,
+        MoveToChangeList
     }
 }
