@@ -154,6 +154,8 @@ namespace Ankh.UI
 
             if (_addedHelp && !e.Cancel)
             {
+                e.Cancel = true; // Don't go in context help mode
+
                 IAnkhDialogHelpService helpService = GetService<IAnkhDialogHelpService>();
 
                 helpService.RunHelp(this);
