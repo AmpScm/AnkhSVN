@@ -199,7 +199,7 @@
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
         </Group>
-        <GroupRef id="Menu_MoveToChangeList" priority="0x4000" />
+        <GroupRef id="Grp_MoveToChangeList" priority="0x4000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_SCC">
@@ -258,7 +258,7 @@
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
         </Group>
-        <GroupRef id="Menu_MoveToChangeList" priority="0x4000" />
+        <GroupRef id="Grp_MoveToChangeList" priority="0x4000" />
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
@@ -327,7 +327,7 @@
                 text="Refres&amp;h"
                 toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
         </Group>
-        <Group id="Menu_MoveToChangeList" priority="0xD000">
+        <Group id="Grp_MoveToChangeList" priority="0xD000">
           <Button id="Cmd_RemoveFromChangeList" name="SvnRemoveFromChangeList" priority="0x100"
                       text="&amp;Remove from Change List" defaultInvisible="true"/>
           <Menu id="Menu_MoveToChangeList" text="Move to &amp;Change List" name="SvnMoveToChangeList" priority="0x100">
