@@ -139,8 +139,10 @@ namespace Ankh.Commands
                 }
                 path = theItem.FullPath;
             }
+
+            IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
             
-            SvnItem pathItem = e.GetService<IFileStatusCache>()[path];
+            SvnItem pathItem = statusCache[path];
             Uri uri = pathItem.Status.Uri;
 
             if (uri == null)
@@ -189,8 +191,6 @@ namespace Ankh.Commands
             {
                 lck.MonitorChanges();
 
-                // TODO: Monitor conflicts!!
-                
                 Uri newRepositoryRoot = null;
                 e.GetService<IProgressRunner>().RunModal(
                     "Switching",
@@ -198,36 +198,35 @@ namespace Ankh.Commands
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
                         args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
-                        
+
                         if (revision != SvnRevision.None)
                             args.Revision = revision;
 
                         e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
                         if (!a.Client.Switch(path, target, args))
                         {
-                            if (args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH)
+                            if (args.LastException.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH)
+                                return;
+
+                            // source/target repository is different, check if we can fix this by relocating
+                            SvnInfoEventArgs iea;
+                            if (a.Client.GetInfo(target, out iea))
                             {
-                                // source/target repository is different, check if we can fix this by relocating
-                                using (SvnClient c = e.GetService<ISvnClientPool>().GetClient())
+                                if (pathItem.WorkingCopy.RepositoryId != iea.RepositoryId)
                                 {
-                                    SvnInfoEventArgs iea;
-                                    if (c.GetInfo(target, out iea))
-                                    {
-                                        if(pathItem.WorkingCopy.RepositoryId != iea.RepositoryId)
-                                        {
-                                            e.Context.GetService<IAnkhDialogOwner>()
-                                                .MessageBox.Show("Cannot switch to different repository because the repository UUIDs are different",
-                                                "Cannot switch", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-                                        else if (pathItem.WorkingCopy.RepositoryRoot != iea.RepositoryRoot)
-                                        {
-                                            newRepositoryRoot = iea.RepositoryRoot;
-                                        }
-                                        else
-                                        {
-                                            // No UUIDs and RepositoryRoot equal. Throw/show error?
-                                        }
-                                    }
+                                    e.Context.GetService<IAnkhDialogOwner>()
+                                        .MessageBox.Show("Cannot switch to different repository because the repository UUIDs are different",
+                                        "Cannot switch", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                                else if (pathItem.WorkingCopy.RepositoryRoot != iea.RepositoryRoot)
+                                {
+                                    newRepositoryRoot = iea.RepositoryRoot;
+                                }
+                                else if(pathItem.WorkingCopy.RepositoryId == Guid.Empty)
+                                {
+                                    // No UUIDs and RepositoryRoot equal. Throw/show error?
+
+                                    throw args.LastException;
                                 }
                             }
                         }
@@ -240,12 +239,21 @@ namespace Ankh.Commands
                    "Relocate", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
                     // We can fix this by relocating
-                    e.GetService<IProgressRunner>().RunModal(
-                        "Relocating",
-                        delegate(object sender, ProgressWorkerArgs a)
-                        {
-                            a.Client.Relocate(path, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
-                        });
+                    try
+                    {
+                        e.GetService<IProgressRunner>().RunModal(
+                            "Relocating",
+                            delegate(object sender, ProgressWorkerArgs a)
+                            {
+                                a.Client.Relocate(path, pathItem.WorkingCopy.RepositoryRoot, newRepositoryRoot);
+                            });
+                    }
+                    finally
+                    {
+                        statusCache.MarkDirtyRecursive(path);
+                        e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SvnItem.GetPaths(statusCache.GetCachedBelow(path)));
+                    }
+
 
                     if (DialogResult.Yes == e.Context.GetService<IAnkhDialogOwner>()
                         .MessageBox.Show(string.Format("Would you like to try to switch '{0}' to '{1}' again?",

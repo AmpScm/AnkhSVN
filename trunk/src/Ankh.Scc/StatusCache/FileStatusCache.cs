@@ -584,7 +584,7 @@ namespace Ankh.Scc.StatusCache
                 foreach (SvnItem v in _map.Values)
                 {
                     string name = v.FullPath;
-                    if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
+                    if (v.IsBelowPath(path))
                     {
                         v.MarkDirty();
                     }
@@ -603,8 +603,7 @@ namespace Ankh.Scc.StatusCache
 
                 foreach (SvnItem v in _map.Values)
                 {
-                    string name = v.FullPath;
-                    if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
+                    if(v.IsBelowPath(path))
                         items.Add(v);
                 }
 
@@ -625,11 +624,8 @@ namespace Ankh.Scc.StatusCache
                 {
                     foreach (SvnItem v in _map.Values)
                     {
-                        string name = v.FullPath;
-                        if (name.StartsWith(path, StringComparison.OrdinalIgnoreCase) && (name.Length == path.Length || name[path.Length] == Path.DirectorySeparatorChar))
-                        {
+                        if (v.IsBelowPath(path))
                             items[v.FullPath] = v;
-                        }
                     }
                 }
 
