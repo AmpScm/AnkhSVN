@@ -21,6 +21,7 @@ using WizardFramework;
 using System.Drawing;
 using System.Windows.Forms;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -54,10 +55,7 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!((MergeSourceBasePageControlImpl)PageControl).IsMergeURLValid)
-                    return false;
-
-                return base.IsPageComplete;
+                return true;
             }
         }
 
@@ -67,9 +65,39 @@ namespace Ankh.UI.MergeWizard
 
             // Set the MergeSource before the page changes
             ((MergeWizard)Wizard).MergeSource = MergeSource;
+
+            MergeSourceBasePageControlImpl control = (MergeSourceBasePageControlImpl)PageControl;
+
+
+            // Do not validate since this field isn't editable and its contents are
+            // retrieved directly from mergeinfo.
+            if (MergeType == MergeWizard.MergeType.ManuallyRemove)
+                return;
+
+
+            // Do not show an error while the resources are retrieved.
+            //if (mergeFromComboBox.Text == Resources.LoadingMergeSources)
+            //    return true;
+
+            if (string.IsNullOrEmpty(control.MergeSourceText))
+            {
+                Message = MergeUtils.NO_FROM_URL;
+                e.Cancel = true;
+                return;
+            }
+
+            Uri tmpUri;
+            if (!Uri.TryCreate(control.MergeSourceText, UriKind.Absolute, out tmpUri))
+            {
+                Message = MergeUtils.INVALID_FROM_URL;
+                e.Cancel = true;
+                return;
+            }
+            
+            Message = null;
         }
 
-        internal SvnOrigin MergeSource
+        SvnOrigin MergeSource
         {
             get { return ((MergeSourceBasePageControlImpl)PageControl).MergeSource; }
         }
@@ -77,6 +105,15 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns the merge type for the subclass' page.
         /// </summary>
-        public abstract MergeWizard.MergeType MergeType { get; }
+        internal abstract MergeWizard.MergeType MergeType { get; }
+
+        internal virtual IEnumerable<Uri> GetMergeSources(SvnItem target)
+        {
+            SvnMergeSourcesCollection sources = ((MergeWizard)Wizard).MergeUtils.GetSuggestedMergeSources(target);
+            if (sources == null)
+                yield break;
+            foreach (SvnMergeSource s in sources)
+                yield return s.Uri;
+        }
     }
 }

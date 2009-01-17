@@ -33,6 +33,8 @@ namespace Ankh.UI.MergeWizard
             WizardMessage.MessageType.Error);
         public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(Resources.InvalidToUrl,
             WizardMessage.MessageType.Error);
+        public static readonly WizardMessage NO_FROM_URL = new WizardMessage(Resources.NoFromUrl,
+            WizardMessage.MessageType.Error);
 
         private IAnkhServiceProvider _context;
         private Dictionary<SvnDepth, string> _mergeDepths;
@@ -72,56 +74,36 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns a list of strings for the suggested merge sources.
         /// </summary>
-        public List<string> GetSuggestedMergeSources(SvnItem target, MergeWizard.MergeType mergeType)
+        internal SvnMergeSourcesCollection GetSuggestedMergeSources(SvnItem target)
         {
-            List<string> sources = new List<string>();
-
-            if (mergeType != MergeWizard.MergeType.Reintegrate)
+            using (SvnClient client = GetClient())
             {
-                using (SvnClient client = GetClient())
-                {
-                    SvnItem parent = target.Parent;
+                SvnMergeSourcesCollection mergeSources = null;
+                SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
 
-                    if (mergeType == MergeWizard.MergeType.ManuallyRemove)
-                    {
-                        SvnGetAppliedMergeInfoArgs args = new SvnGetAppliedMergeInfoArgs();
-                        SvnAppliedMergeInfo mergeInfo;
+                args.ThrowOnError = false;
 
-                        args.ThrowOnError = false;
+                client.GetSuggestedMergeSources(target.Status.Uri, args, out mergeSources);
 
-                        if (client.GetAppliedMergeInfo(SvnTarget.FromUri(target.Status.Uri), args, out mergeInfo))
-                        {
-                            foreach (SvnMergeItem item in mergeInfo.AppliedMerges)
-                            {
-                                string uri = item.Uri.ToString();
-
-                                if (!sources.Contains(uri))
-                                    sources.Add(uri);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        SvnMergeSourcesCollection mergeSources;
-                        SvnGetSuggestedMergeSourcesArgs args = new SvnGetSuggestedMergeSourcesArgs();
-
-                        args.ThrowOnError = false;
-
-                        if (client.GetSuggestedMergeSources(SvnTarget.FromUri(target.Status.Uri), args, out mergeSources))
-                        {
-                            foreach (SvnMergeSource source in mergeSources)
-                            {
-                                string uri = source.Uri.ToString();
-
-                                if (!sources.Contains(uri))
-                                    sources.Add(uri);
-                            }
-                        }
-                    }
-                }
+                return mergeSources;
             }
+        }
+        
+    
+        internal SvnMergeItemCollection GetAppliedMerges(SvnItem target)
+        {
+            using (SvnClient client = GetClient())
+            {
+                SvnGetAppliedMergeInfoArgs args = new SvnGetAppliedMergeInfoArgs();
+                SvnAppliedMergeInfo mergeInfo;
 
-            return sources;
+                args.ThrowOnError = false;
+
+                if (!client.GetAppliedMergeInfo(target.Status.Uri, args, out mergeInfo))
+                    return null;
+
+                return  mergeInfo.AppliedMerges;
+            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
 
 /* 
  * WizardPageChangingEventArgs.cs
@@ -21,7 +22,7 @@ using System.Text;
  **/
 namespace WizardFramework
 {
-    public class WizardPageChangingEventArgs : EventArgs
+    public class WizardPageChangingEventArgs : CancelEventArgs
     {
         /// <summary>
         /// Constructor.
@@ -56,10 +57,6 @@ namespace WizardFramework
             get { return tarPage_prop; }
         }
 
-        /// <summary>
-        /// Public member used to signify if the page will change successfully.
-        /// </summary>
-        public bool DoIt = true;
         #endregion
     }
 }
