@@ -232,7 +232,7 @@
     <value>500, 405</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>MergeSourceBasePageControlImpl</value>
+    <value>MergeSourceBasePageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3082.27136, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>

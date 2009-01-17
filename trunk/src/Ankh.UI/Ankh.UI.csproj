@@ -395,11 +395,11 @@
     <Compile Include="MergeWizard\MergeSourceBasePage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceBasePageControlImpl.cs">
+    <Compile Include="MergeWizard\MergeSourceBasePageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceBasePageControlImpl.Designer.cs">
-      <DependentUpon>MergeSourceBasePageControlImpl.cs</DependentUpon>
+    <Compile Include="MergeWizard\MergeSourceBasePageControl.Designer.cs">
+      <DependentUpon>MergeSourceBasePageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRecordPage.cs">
       <SubType>Component</SubType>
@@ -981,8 +981,8 @@
       <DependentUpon>MergeRevisionsSelectionPageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\MergeSourceBasePageControlImpl.resx">
-      <DependentUpon>MergeSourceBasePageControlImpl.cs</DependentUpon>
+    <EmbeddedResource Include="MergeWizard\MergeSourceBasePageControl.resx">
+      <DependentUpon>MergeSourceBasePageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeSourceManuallyRecordPageControl.resx">

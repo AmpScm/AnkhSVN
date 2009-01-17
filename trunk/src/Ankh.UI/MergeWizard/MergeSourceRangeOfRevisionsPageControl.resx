@@ -241,6 +241,6 @@
     <value>MergeSourceRangeOfRevisionsPageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.MergeSourceBasePageControlImpl, Ankh.UI, Version=2.0.3304.42713, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.MergeSourceBasePageControl, Ankh.UI, Version=2.0.3304.42713, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

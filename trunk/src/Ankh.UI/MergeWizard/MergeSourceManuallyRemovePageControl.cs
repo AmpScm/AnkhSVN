@@ -25,7 +25,7 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceManuallyRemovePageControl : MergeSourceBasePageControlImpl
+    public partial class MergeSourceManuallyRemovePageControl : MergeSourceBasePageControl
     {
         public MergeSourceManuallyRemovePageControl()
         {

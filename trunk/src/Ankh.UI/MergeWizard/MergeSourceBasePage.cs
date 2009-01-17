@@ -66,7 +66,7 @@ namespace Ankh.UI.MergeWizard
             // Set the MergeSource before the page changes
             ((MergeWizard)Wizard).MergeSource = MergeSource;
 
-            MergeSourceBasePageControlImpl control = (MergeSourceBasePageControlImpl)PageControl;
+            MergeSourceBasePageControl control = (MergeSourceBasePageControl)PageControl;
 
 
             // Do not validate since this field isn't editable and its contents are
@@ -99,7 +99,7 @@ namespace Ankh.UI.MergeWizard
 
         SvnOrigin MergeSource
         {
-            get { return ((MergeSourceBasePageControlImpl)PageControl).MergeSource; }
+            get { return ((MergeSourceBasePageControl)PageControl).MergeSource; }
         }
 
         /// <summary>
