@@ -205,16 +205,17 @@ namespace Ankh.UI.PendingChanges
             }
             else
             {
-                // Relies on column index to get the current change list value
-                string currentChangeList = pci.GetValue(1);
-                string newChangeList = e.Change.ChangeList;
-                bool currentIgnore = PendingChange.IsIgnoreOnCommitChangeList(currentChangeList);
-                bool newIgnore = PendingChange.IsIgnoreOnCommitChangeList(newChangeList);
-                // if "ignore change list" is changed update the checked state
-                if (currentIgnore != newIgnore)
+                if (PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList)
+                    && pci.Checked)
                 {
-                    pci.Checked = !e.Change.IgnoreOnCommit;
+                    // Uncheck items that were moved to the ignore list
+                    if (!PendingChange.IsIgnoreOnCommitChangeList(pci.LastChangeList))
+                        pci.Checked = false; // Uncheck items that weren't on the ignore list before
+
+                    // Note: We don't check items that were previously ignored, as the user didn't
+                    // ask us to do that.
                 }
+
                 pci.RefreshText(Context);
             }
         }

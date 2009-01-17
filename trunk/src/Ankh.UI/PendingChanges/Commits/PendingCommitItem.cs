@@ -27,6 +27,7 @@ namespace Ankh.UI.PendingChanges.Commits
     class PendingCommitItem : SmartListViewItem
     {
         readonly PendingChange _change;
+        string _lastChangeList;
 
         public PendingCommitItem(PendingCommitsView view, PendingChange change)
             : base(view)
@@ -59,7 +60,7 @@ namespace Ankh.UI.PendingChanges.Commits
 
             SetValues(
                 pcs.PendingCommitText,
-                PendingChange.ChangeList,
+                _lastChangeList = PendingChange.ChangeList,
                 GetDirectory(item),
                 PendingChange.FullPath,
                 item.IsLocked ? PCStrings.LockedValue : "", // Locked
@@ -133,6 +134,17 @@ namespace Ankh.UI.PendingChanges.Commits
         public string FullPath
         {
             get { return _change.FullPath; }
+        }
+
+
+        /// <summary>
+        /// Gets change list at the time of the last refresh
+        /// </summary>
+        /// <value>The last change list.</value>
+        /// <remarks>Used for checking for changelist changes</remarks>
+        internal string LastChangeList
+        {
+            get { return _lastChangeList; }
         }
     }
 }
