@@ -340,4 +340,7 @@
   <data name="WarningIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>WizardFramework\images\message_warning.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="NoFromUrl" xml:space="preserve">
+    <value>Please enter a url where to merge from.</value>
+  </data>
 </root>

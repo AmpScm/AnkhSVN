@@ -20,6 +20,7 @@ using System.Text;
 using System.Reflection;
 using System.Resources;
 using WizardFramework;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -44,7 +45,7 @@ namespace Ankh.UI.MergeWizard
             ((MergeSourceManuallyRemovePageControl)PageControl).EnableSelectButton(false);
         }
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-        public override MergeWizard.MergeType MergeType
+        internal override MergeWizard.MergeType MergeType
         {
             get { return MergeWizard.MergeType.ManuallyRemove; }
         }
@@ -54,6 +55,16 @@ namespace Ankh.UI.MergeWizard
             base.OnPageChanging(e);
 
             ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
+        }
+
+        internal override IEnumerable<Uri> GetMergeSources(SvnItem target)
+        {
+            SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
+            if (items == null)
+                yield break;
+
+            foreach (SvnMergeItem i in items)
+                yield return i.Uri;
         }
     }
 }

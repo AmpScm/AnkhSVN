@@ -197,7 +197,7 @@ namespace WizardFramework
             {
                 return;
             }
-            if (!this.isMovingToPreviousPage)
+            if (!isMovingToPreviousPage)
             {
                 // remember my previous page.
                 page.PreviousPage = this.CurrentPage;
@@ -208,10 +208,11 @@ namespace WizardFramework
             }
             WizardPageChangingEventArgs pageChangingEventArgs = new WizardPageChangingEventArgs(currPage_prop, page);
 
-            FirePageChangingEvent(pageChangingEventArgs);
+            OnPageChanging(pageChangingEventArgs);
 
             // Evaluate if changing is an option
-            if (!pageChangingEventArgs.DoIt) return;
+            if (pageChangingEventArgs.Cancel)
+                return;
 
             UpdateForPage(page);
         }
@@ -359,7 +360,7 @@ namespace WizardFramework
         protected virtual void FirePageChangeEvent(WizardPageChangeEventArgs e)
         {
             if (PageChangeEvent == null) return;
-
+            
             PageChangeEvent(this, e);
         }
 
@@ -367,11 +368,10 @@ namespace WizardFramework
         /// Fires an event signifying a page is changing event.
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void FirePageChangingEvent(WizardPageChangingEventArgs e)
+        protected virtual void OnPageChanging(WizardPageChangingEventArgs e)
         {
-            if (PageChangingEvent == null) return;
-
-            PageChangingEvent(this, e);
+            if (PageChangingEvent != null)
+                PageChangingEvent(this, e);
         }
 
         /// <see cref="WizardFramework.IWizardPageChangeProvider.SelectedPage" />
@@ -407,8 +407,9 @@ namespace WizardFramework
         {
             IWizardPage page = currPage_prop.NextPage;
 
-            if (page == null) return; // Should never happen if the next button is enabled
-
+            if (page == null) 
+                return; // Should never happen if the next button is enabled
+            
             ShowPage(page); // Show the page
         }
 

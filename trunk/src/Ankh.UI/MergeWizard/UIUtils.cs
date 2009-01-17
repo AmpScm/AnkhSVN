@@ -71,29 +71,29 @@ namespace Ankh.UI.MergeWizard
                 comboBox.DropDownWidth = width;
             }
         }
-
         public static Uri DisplayBrowseDialogAndGetResult(WizardPage page, SvnItem target, string baseUri)
         {
-            Uri result = null;
+            Uri u;
+            if(Uri.TryCreate(baseUri, UriKind.Absolute, out u))
+                return u;
+            
+            page.Message = MergeUtils.INVALID_FROM_URL;
+
+            return null;
+        }
+        public static Uri DisplayBrowseDialogAndGetResult(WizardPage page, SvnItem target, Uri baseUri)
+        {
+            IAnkhServiceProvider context = ((MergeWizard)page.Wizard).Context;
 
             if (((MergeWizard)page.Wizard).MergeTarget.IsDirectory)
             {
                 using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
                 {
-                    Uri uri;
+                    dlg.SelectedUri = baseUri;
 
-                    if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
+                    if (dlg.ShowDialog(context) == DialogResult.OK)
                     {
-                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.Error);
-                    }
-                    else
-                    {
-                        dlg.SelectedUri = uri;
-
-                        if (dlg.ShowDialog(((MergeWizard)page.Wizard).Context) == DialogResult.OK)
-                        {
-                            result = dlg.SelectedUri;
-                        }
+                        return dlg.SelectedUri;
                     }
                 }
             }
@@ -101,30 +101,20 @@ namespace Ankh.UI.MergeWizard
             {
                 using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
                 {
-                    MergeWizard wizard = ((MergeWizard)page.Wizard);
-                    Uri uri;
                     string fileName = Path.GetFileName(target.FullPath);
 
-                    dlg.Context = wizard.Context;
+                    dlg.Context = context;
                     dlg.Filter = fileName + "|" + fileName + "|All Files (*.*)|*";
 
-                    if (!Uri.TryCreate(baseUri, UriKind.Absolute, out uri))
-                    {
-                        page.Message = new WizardMessage(Resources.InvalidFromRevision, WizardMessage.MessageType.Error);
-                    }
-                    else
-                    {
-                        dlg.SelectedUri = uri;
 
-                        if (dlg.ShowDialog(wizard.Context) == DialogResult.OK)
-                        {
-                            result = dlg.SelectedUri;
-                        }
-                    }
+                    dlg.SelectedUri = baseUri;
+
+                    if (dlg.ShowDialog(context) == DialogResult.OK)
+                        return dlg.SelectedUri;
                 }
             }
 
-            return result;
+            return null;
         }
     }
 }

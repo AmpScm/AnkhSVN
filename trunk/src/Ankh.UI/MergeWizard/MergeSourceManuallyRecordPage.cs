@@ -43,7 +43,7 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-        public override MergeWizard.MergeType MergeType
+        internal override MergeWizard.MergeType MergeType
         {
             get { return MergeWizard.MergeType.ManuallyRecord; }
         }

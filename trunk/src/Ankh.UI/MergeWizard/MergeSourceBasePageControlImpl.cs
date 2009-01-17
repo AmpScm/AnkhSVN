@@ -25,7 +25,6 @@ using System.Resources;
 
 using SharpSvn;
 using WizardFramework;
-using System.Threading;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.RepositoryOpen;
 using System.IO;
@@ -39,25 +38,36 @@ namespace Ankh.UI.MergeWizard
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
             WizardMessage.MessageType.Error);
-        
+
+        readonly MergeSources _retrieveMergeSources;
+        readonly BindingList<string> suggestedSources = new BindingList<string>();
+        readonly BindingSource bindingSource;
         /// <summary>
         /// Constructor.
         /// </summary>
         public MergeSourceBasePageControlImpl()
         {
             InitializeComponent();
+            _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
+            
+            bindingSource = new BindingSource(suggestedSources, "");
+            mergeFromComboBox.DataSource = bindingSource;
         }
 
         /// <summary>
         /// Enables/Disables the Select button.
         /// </summary>
-        public void EnableSelectButton(bool enabled)
+        internal void EnableSelectButton(bool enabled)
         {
             selectButton.Enabled = enabled;
             selectButton.Visible = enabled;
         }
 
-        #region Base Functionality
+        internal string MergeSourceText
+        {
+            get { return mergeFromComboBox.Text.Trim(); }
+        }
+
         internal SvnOrigin MergeSource
         {
             get
@@ -69,7 +79,14 @@ namespace Ankh.UI.MergeWizard
                     Uri mergeFromUri;
                     if (Uri.TryCreate(mergeFrom, UriKind.Absolute, out mergeFromUri))
                     {
-                        mergeSource = new SvnOrigin(WizardPage.Context, mergeFromUri, null);
+                        try
+                        {
+                            mergeSource = new SvnOrigin(WizardPage.Context, mergeFromUri, null);
+                        }
+                        catch
+                        {
+                            mergeSource = null;
+                        }
                     }
                 }
                 return mergeSource;
@@ -77,7 +94,6 @@ namespace Ankh.UI.MergeWizard
         }
 
         MergeSourceBasePage _wizardPage;
-
         /// <summary>
         /// Gets/Sets the wizard page associated with this UserControl.
         /// </summary>
@@ -91,156 +107,89 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
+        IAsyncResult _mergeRetrieveResult;
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            if (!DesignMode)
-            {
-                mergeFromComboBox.Text = Resources.LoadingMergeSources;
-                mergeFromComboBox.TextChanged += new EventHandler(mergeFromComboBox_TextChanged);
+            if (DesignMode)
+                return;
 
-                ((WizardDialog)WizardPage.Form).EnablePageAndButtons(false);
+            mergeFromComboBox.Text = MergeTarget.Status.Uri.ToString();
 
-                Cursor.Current = Cursors.WaitCursor;
-
-                Thread t = new Thread(new ThreadStart(RetrieveAndSetMergeSources));
-
-                t.Start();
-            }
-        }
-
-        /// <summary>
-        /// Returns whether or not the "Merge From" <code>TextBox</code>'s
-        /// text is a valid Uri.
-        /// </summary>
-        public bool IsMergeURLValid
-        {
-            get
-            {
-                // Do not validate since this field isn't editable and its contents are
-                // retrieved directly from mergeinfo.
-                if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
-                    return true;
-
-                Uri tmpUri;
-
-                // Do not show an error while the resources are retrieved.
-                if (mergeFromComboBox.Text == Resources.LoadingMergeSources)
-                    return true;
-
-                if (string.IsNullOrEmpty(mergeFromComboBox.Text) ||
-                    !Uri.TryCreate(mergeFromComboBox.Text, UriKind.Absolute, out tmpUri))
-                {
-                    WizardPage.Message = MergeUtils.INVALID_FROM_URL;
-
-                    return false;
-                }
-                else
-                {
-                    if (WizardPage.Message == MergeUtils.INVALID_FROM_URL)
-                    {
-                        WizardPage.Message = null;
-                    }
-
-                    return true;
-                }
-            }
+            _mergeRetrieveResult = _retrieveMergeSources.BeginInvoke(new AsyncCallback(MergesRetrieved), null);
+            
         }
 
         /// <summary>
         /// Sets the merge sources for the mergeFromComboBox.
         /// </summary>
-        private void SetMergeSources(List<string> mergeSources)
+        private void SetMergeSources(IEnumerable<Uri> mergeSources)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 SetMergeSourcesCallBack c = new SetMergeSourcesCallBack(SetMergeSources);
-
-                this.Invoke(c, new object[] { mergeSources });
+                Invoke(c, new object[] { mergeSources });
+                return;
             }
-            else
+            MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
+
+            bool containsAtLeastOne = false;
+
+            foreach (Uri u in mergeSources)
             {
-                MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
-
-                mergeFromComboBox.Text = "";
-
-                if (mergeSources.Count != 0)
-                {
-                    mergeFromComboBox.DataSource = mergeSources;
-
-                    mergeFromComboBox.SelectedItem = wizard.MergeTarget.Status.Uri.ToString();
-
-                    UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
-
-                    WizardPage.IsPageComplete = true;
-                }
-                else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
-                {
-                    WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
-
-                    WizardPage.IsPageComplete = false;
-
-                    mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-                }
-
-                ((WizardDialog)WizardPage.Form).EnablePageAndButtons(true);
-
-                Cursor.Current = Cursors.Default;
+                containsAtLeastOne = true;
+                suggestedSources.Add(u.ToString());
             }
+            
+            if(containsAtLeastOne)
+            {
+                UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
+            }
+            else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
+            {
+                WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
+                mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
+
+            ((WizardDialog)WizardPage.Form).EnablePageAndButtons(true);
         }
 
         /// <summary>
         /// Retrieves the merge sources and adds them to the <code>ComboBox</code>.
         /// </summary>
-        private void RetrieveAndSetMergeSources()
+        IEnumerable<Uri> RetrieveMergeSources()
         {
-            MergeWizard wizard = WizardPage.Wizard as MergeWizard;
-
-            if (WizardPage != null)
-            {
-                List<string> mergeSources = wizard.MergeUtils.GetSuggestedMergeSources(wizard.MergeTarget, WizardPage.MergeType);
-
-                if (mergeSources.Count == 0 && WizardPage.MergeType != MergeWizard.MergeType.ManuallyRemove)
-                {
-                    using (SvnClient client = wizard.MergeUtils.GetClient())
-                    {
-                        mergeSources.Add(wizard.MergeTarget.Status.Uri.ToString());
-                    }
-                }
-
-                SetMergeSources(mergeSources);
-            }
+            return WizardPage.GetMergeSources(MergeTarget);
         }
 
-        delegate void SetMergeSourcesCallBack(List<string> mergeSources);       
-        #endregion
-
-        #region UI Events
-        /// <summary>
-        /// Checks for text in the ComboBox to make sure something is there.
-        /// </summary>
-        private void mergeFromComboBox_TextChanged(object sender, EventArgs e)
+        SvnItem MergeTarget
         {
-            if (!DesignMode)
-            {
-                ((MergeWizard)WizardPage.Wizard).MergeSource = MergeSource;
-                ((WizardDialog)WizardPage.Form).UpdateButtons();
-            }
+            get { return ((MergeWizard)WizardPage.Wizard).MergeTarget; }
         }
+
+        void MergesRetrieved(IAsyncResult result)
+        {
+            IEnumerable<Uri> mergeSources = 
+                _retrieveMergeSources.EndInvoke(_mergeRetrieveResult);
+            SetMergeSources(mergeSources);
+        }
+
+        delegate void SetMergeSourcesCallBack(IEnumerable<Uri> mergeSources);
+        delegate IEnumerable<Uri> MergeSources();
 
         /// <summary>
         /// Displays the Repository Folder Dialog
         /// </summary>
-        private void selectButton_Click(object sender, EventArgs e)
+        void selectButton_Click(object sender, EventArgs e)
         {
-            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
-                ((MergeWizard)WizardPage.Wizard).MergeTarget,
-                mergeFromComboBox.Text);
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(
+                WizardPage,
+                MergeTarget,
+                MergeTarget.Status.Uri);
 
             if (uri != null)
                 mergeFromComboBox.Text = uri.ToString();
         }
-        #endregion
     }
 }

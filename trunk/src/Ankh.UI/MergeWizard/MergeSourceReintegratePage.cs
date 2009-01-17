@@ -43,7 +43,7 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
-        public override MergeWizard.MergeType MergeType
+        internal override MergeWizard.MergeType MergeType
         {
             get { return MergeWizard.MergeType.Reintegrate; }
         }
@@ -53,6 +53,11 @@ namespace Ankh.UI.MergeWizard
             base.OnPageChanging(e);
 
             ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+        }
+
+        internal override IEnumerable<Uri> GetMergeSources(SvnItem target)
+        {
+            yield break;
         }
     }
 }
