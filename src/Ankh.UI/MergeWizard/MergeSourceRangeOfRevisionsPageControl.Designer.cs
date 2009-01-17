@@ -62,16 +62,16 @@ namespace Ankh.UI.MergeWizard
             // selectRevisionsRadioButton
             // 
             resources.ApplyResources(this.selectRevisionsRadioButton, "selectRevisionsRadioButton");
+            this.selectRevisionsRadioButton.Checked = true;
             this.selectRevisionsRadioButton.Name = "selectRevisionsRadioButton";
+            this.selectRevisionsRadioButton.TabStop = true;
             this.selectRevisionsRadioButton.UseVisualStyleBackColor = true;
             this.selectRevisionsRadioButton.CheckedChanged += new System.EventHandler(this.selectRevisionsRadioButton_CheckedChanged);
             // 
             // allRevisionsRadioButton
             // 
             resources.ApplyResources(this.allRevisionsRadioButton, "allRevisionsRadioButton");
-            this.allRevisionsRadioButton.Checked = true;
             this.allRevisionsRadioButton.Name = "allRevisionsRadioButton";
-            this.allRevisionsRadioButton.TabStop = true;
             this.allRevisionsRadioButton.UseVisualStyleBackColor = true;
             this.allRevisionsRadioButton.CheckedChanged += new System.EventHandler(this.allRevisionsRadioButton_CheckedChanged);
             // 
@@ -81,6 +81,7 @@ namespace Ankh.UI.MergeWizard
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.revisionsGroupBox);
             this.Name = "MergeSourceRangeOfRevisionsPageControl";
+            this.Controls.SetChildIndex(this.mergeFromComboBox, 0);
             this.Controls.SetChildIndex(this.revisionsGroupBox, 0);
             this.revisionsGroupBox.ResumeLayout(false);
             this.revisionsGroupBox.PerformLayout();

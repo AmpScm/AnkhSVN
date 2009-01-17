@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
 
         void Control_Load(object sender, EventArgs e)
         {
-            NextPageRequired = false;
+            NextPageRequired = true;
         }
 
         /// <summary>
