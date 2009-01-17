@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeSourceBasePageControlImpl
+    partial class MergeSourceBasePageControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceBasePageControlImpl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceBasePageControl));
             this.mergeFromComboBox = new System.Windows.Forms.ComboBox();
             this.selectButton = new System.Windows.Forms.Button();
             this.mergeFromLabel = new System.Windows.Forms.Label();
@@ -68,14 +68,14 @@ namespace Ankh.UI.MergeWizard
             resources.ApplyResources(this.mergeFromLabel, "mergeFromLabel");
             this.mergeFromLabel.Name = "mergeFromLabel";
             // 
-            // MergeSourceBasePageControlImpl
+            // MergeSourceBasePageControl
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.mergeFromComboBox);
             this.Controls.Add(this.selectButton);
             this.Controls.Add(this.mergeFromLabel);
-            this.Name = "MergeSourceBasePageControlImpl";
+            this.Name = "MergeSourceBasePageControl";
             this.ResumeLayout(false);
             this.PerformLayout();
 

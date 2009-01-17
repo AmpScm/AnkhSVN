@@ -33,7 +33,7 @@ using Ankh.Scc;
 namespace Ankh.UI.MergeWizard
 {
     
-    public partial class MergeSourceBasePageControlImpl: BasePageControl
+    public partial class MergeSourceBasePageControl: BasePageControl
         
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
@@ -45,7 +45,7 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeSourceBasePageControlImpl()
+        public MergeSourceBasePageControl()
         {
             InitializeComponent();
             _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
