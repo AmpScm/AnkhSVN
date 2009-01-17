@@ -21,6 +21,9 @@ using Ankh.Scc.UI;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using SharpSvn;
+using System.IO;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio;
 
 namespace Ankh.Services
 {
@@ -93,7 +96,8 @@ namespace Ankh.Services
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
+                AppIdLocalServerSearch("Merge70.Application", "Compare.exe") 
+                    ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
@@ -127,7 +131,8 @@ namespace Ankh.Services
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
+                AppIdLocalServerSearch("Merge70.Application", "Compare.exe") 
+                    ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
 
@@ -188,6 +193,78 @@ namespace Ankh.Services
             }
 
             return null;
+        }
+
+        static string AppIdLocalServerSearch(string appId)
+        {
+            if (string.IsNullOrEmpty(appId))
+                throw new ArgumentNullException("appId");
+
+            Guid clsid;
+            if (!ErrorHandler.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
+                return null;
+
+            using(RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32"))
+            {
+                if(rk == null)
+                    return null;
+
+                string app = rk.GetValue("") as string;
+
+                if(!string.IsNullOrEmpty(app))
+                    return GetAppLocation(app);                
+            }
+
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\InprocServer32"))
+            {
+                if (rk == null)
+                    return null;
+
+                string app = rk.GetValue("") as string;
+
+                if (!string.IsNullOrEmpty(app))
+                    return GetAppLocation(app);
+            }
+
+            return null;
+        }
+
+        private static string GetAppLocation(string app)
+        {
+            if (string.IsNullOrEmpty(app))
+                throw new ArgumentNullException("app");
+
+            app = app.Trim();
+
+            if (app.Length == 0)
+                return null;
+
+            if (app[0] == '\"')
+            {
+                int n = app.IndexOf('\"', 1);
+
+                if (n > 0)
+                    app = app.Substring(1, n - 1).Trim();
+                else
+                    app = app.Substring(1).Trim();
+            }
+
+            if (app.Contains("%"))
+                app = Environment.ExpandEnvironmentVariables(app);
+
+            return app;
+        }
+
+        static string AppIdLocalServerSearch(string appId, string relativePath)
+        {
+            string r = AppIdLocalServerSearch(appId);
+
+            r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(r, ".."), relativePath));
+
+            if (File.Exists(r))
+                return r;
+            else
+                return null;
         }
 
         private static void SortTools(List<AnkhDiffTool> tools)
@@ -327,8 +404,13 @@ namespace Ankh.Services
             public override string Arguments
             {
                 get { return _arguments; }
-            }
+            }            
         }
 
+        static partial class NativeMethods
+        {
+            [DllImport("ole32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+            public static extern int CLSIDFromProgID([MarshalAs(UnmanagedType.LPWStr)] string lpszProgID, out Guid pclsid);
+        }
     }
 }
