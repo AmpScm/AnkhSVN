@@ -185,11 +185,14 @@ namespace Ankh.UI.PropertyEditors
         {
             PropertyEditItem item = (PropertyEditItem)this.propListView.SelectedItems[0];
             item.Value = null;
-            item.Refresh();
-
             if (item.BaseValue == null)
+            {
                 propListView.Items.Remove(item);
-
+            }
+            else
+            {
+                item.Refresh();
+            }
             this.UpdateButtons();
         }
 
@@ -197,10 +200,14 @@ namespace Ankh.UI.PropertyEditors
         {
             PropertyEditItem item = (PropertyEditItem)this.propListView.SelectedItems[0];
             item.Value = item.BaseValue;
-            item.Refresh();
-
             if (item.BaseValue == null)
+            {
                 propListView.Items.Remove(item);
+            }
+            else
+            {
+                item.Refresh();
+            }
 
             this.UpdateButtons();
         }

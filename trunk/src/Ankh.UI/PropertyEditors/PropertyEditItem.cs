@@ -69,10 +69,22 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {
-                if ((Value == null) != (BaseValue == null))
-                    return (Value != null) ? PropertyEditStrings.StateNew : PropertyEditStrings.StateDeleted;
+                string newDescription;
+                if (Value == null)
+                {
+                    newDescription = BaseValue == null ?
+                        PropertyEditStrings.StateUnmodified // invalid state, item should be deleted
+                        : PropertyEditStrings.StateDeleted;
+                }
                 else
-                    return Value.ValueEquals(BaseValue) ? PropertyEditStrings.StateUnmodified : PropertyEditStrings.StateModified;
+                {
+                    newDescription = BaseValue == null ?
+                        PropertyEditStrings.StateNew
+                        : Value.ValueEquals(BaseValue) ?
+                            PropertyEditStrings.StateUnmodified
+                            : PropertyEditStrings.StateModified;
+                }
+                return newDescription;
             }
         }
 
