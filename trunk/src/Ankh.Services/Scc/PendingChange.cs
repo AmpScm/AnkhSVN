@@ -169,6 +169,15 @@ namespace Ankh.Scc
             get { return !PendingChange.IsPending(Item); }
         }
 
+        /// <summary>
+        /// Gets a boolean indicating this change should belong to an "ignore" change list.
+        /// </summary>
+        [Browsable(false)]
+        public bool IgnoreOnCommit
+        {
+            get { return (IsIgnoreOnCommitChangeList(ChangeList)); }
+        }
+
         int _iconIndex;
         string _projects;
         string _relativePath;
@@ -324,6 +333,19 @@ namespace Ankh.Scc
                 create = true;
 
             return create;
+        }
+
+        /// <summary>
+        /// Dtermines if a change list name is one of the "Ignore On Commit" change lists
+        /// </summary>
+        public static bool IsIgnoreOnCommitChangeList(string name)
+        {
+            return !string.IsNullOrEmpty(name)
+                && ( false
+                     || string.Equals(name, "ignore-on-commit")
+                     // TODO other "ignore on commit" change lists 
+                   )
+                ;
         }
 
         /// <summary>

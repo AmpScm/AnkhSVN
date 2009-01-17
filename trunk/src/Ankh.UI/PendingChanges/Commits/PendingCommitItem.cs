@@ -36,7 +36,8 @@ namespace Ankh.UI.PendingChanges.Commits
 
             _change = change;        
 
-            Checked = true;
+            //initially check only if this change does not belong to an "ignore" change list
+            Checked = !change.IgnoreOnCommit;
 
             RefreshText(view.Context);
         }

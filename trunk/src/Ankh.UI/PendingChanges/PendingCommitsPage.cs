@@ -204,7 +204,19 @@ namespace Ankh.UI.PendingChanges
                 pendingCommits.Items.Add(pci);
             }
             else
+            {
+                // Relies on column index to get the current change list value
+                string currentChangeList = pci.GetValue(1);
+                string newChangeList = e.Change.ChangeList;
+                bool currentIgnore = PendingChange.IsIgnoreOnCommitChangeList(currentChangeList);
+                bool newIgnore = PendingChange.IsIgnoreOnCommitChangeList(newChangeList);
+                // if "ignore change list" is changed update the checked state
+                if (currentIgnore != newIgnore)
+                {
+                    pci.Checked = !e.Change.IgnoreOnCommit;
+                }
                 pci.RefreshText(Context);
+            }
         }
 
         void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
