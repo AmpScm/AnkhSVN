@@ -91,7 +91,7 @@ namespace Ankh.Services
             // Note: For TortoiseSVN use the host program files, as $(ProgramFiles) is invalid on X64 
             //       with TortoiseSVN integrated in explorer
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
@@ -101,17 +101,18 @@ namespace Ankh.Services
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
+                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
-                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand", true)
+                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")
                     ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "'$(Base)' --fname '$(BaseName)' '$(Mine)' --fname '$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
-                "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
+                RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
+                    ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
                 "-e -x -ub -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
@@ -126,7 +127,7 @@ namespace Ankh.Services
             List<AnkhDiffTool> tools = new List<AnkhDiffTool>();
 
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
@@ -137,20 +138,21 @@ namespace Ankh.Services
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
-                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location", true)
+                RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
                 "/m /r='$(Merged)' '$(Mine)' '$(Base)' '$(Theirs)' " +
                     "/t1='$(MineName)' /t2='$(MergedName)' /t3='$(TheirName)'", true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
-                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand", true)
+                RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")
                     ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "-m '$(Base)' --fname '$(BaseName)' '$(Theirs)' --fname '$(TheirName)' " +
                     "'$(Mine)' --fname '$(MineName)' -o '$(Merged)'", true));
 
             // WinMerge only has two way merge, so we diff theirs to mine to create merged
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
-                "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
+                RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
+                    ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
                 "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
                     "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
@@ -166,7 +168,7 @@ namespace Ankh.Services
             List<AnkhDiffTool> tools = new List<AnkhDiffTool>();
 
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
-                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath", true)
+                RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/diff:'$(PatchFile)' /patchpath:'$(ApplyToDir)'", true));
 
@@ -177,22 +179,20 @@ namespace Ankh.Services
             return new ReadOnlyCollection<AnkhDiffTool>(tools);
         }
 
-        static string RegistrySearch(string key, string value, bool normalizePath)
+        static string RegistrySearch(string key, string value)
         {
             using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key))
             {
-                if (k != null)
-                {
-                    string path = k.GetValue(value) as string;
+                if (k == null)
+                    return null;
 
-                    if (normalizePath && !string.IsNullOrEmpty(path))
-                        path = SvnTools.GetNormalizedFullPath(path);
+                string path = k.GetValue(value) as string;
 
-                    return path;
-                }
+                if (string.IsNullOrEmpty(path))
+                    return null;
+
+                return GetAppLocation(path);
             }
-
-            return null;
         }
 
         static string AppIdLocalServerSearch(string appId)
@@ -252,7 +252,7 @@ namespace Ankh.Services
             if (app.Contains("%"))
                 app = Environment.ExpandEnvironmentVariables(app);
 
-            return app;
+            return SvnTools.GetNormalizedFullPath(app);
         }
 
         static string AppIdLocalServerSearch(string appId, string relativePath)
