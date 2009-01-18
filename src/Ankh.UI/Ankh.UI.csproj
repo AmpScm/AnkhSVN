@@ -223,7 +223,7 @@
     <Compile Include="MergeWizard\WizardFramework\WizardPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MergeWizard\WizardFramework\WizardPageChangeEventArgs.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardPageChangedEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs">
       <SubType>Component</SubType>
