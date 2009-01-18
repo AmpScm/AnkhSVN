@@ -66,38 +66,25 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         bool _updatingSelection;
-        bool _maybeUnselect;
+
         /// <summary>
-        /// Raises the <see cref="E:System.Windows.Forms.ListView.SelectedIndexChanged"/> event.
+        /// Raises the <see cref="E:System.Windows.Forms.ListView.ItemSelectionChanged"/> event.
         /// </summary>
-        /// <param name="e">An <see cref="T:System.EventArgs"/> that contains the event data.</param>
-        protected override void OnSelectedIndexChanged(EventArgs e)
+        /// <param name="e">A <see cref="T:System.Windows.Forms.ListViewItemSelectionChangedEventArgs"/> that contains the event data.</param>
+        protected override void OnItemSelectionChanged(ListViewItemSelectionChangedEventArgs e)
         {
-            base.OnSelectedIndexChanged(e);
+            base.OnItemSelectionChanged(e);
 
             if (DesignMode)
                 return;
 
-            if (SelectedIndices.Count > 0)
-                MaybeNotifySelectionUpdated();
-            else
-                _maybeUnselect = true;
+            MaybeNotifySelectionUpdated();
         }
 
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
             EnsureSelection();
-        }
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-
-            if (!DesignMode && _maybeUnselect && SelectedIndices.Count == 0)
-            {
-                MaybeNotifySelectionUpdated();
-            }
         }
 
         bool _shouldUpdate;
@@ -200,8 +187,6 @@ namespace Ankh.UI.VSSelectionControls
             _updatingSelection = true;
             try
             {
-                _maybeUnselect = false;
-
                 if (SelectionPublishServiceProvider != null)
                 {
                     if (SelectionMap.Context != SelectionPublishServiceProvider)
