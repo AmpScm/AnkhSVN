@@ -766,7 +766,7 @@ namespace Ankh.UI.VSSelectionControls
                 if (ch == null)
                     throw new ArgumentException("Null column", "resizeColumns");
 
-                currentWidth += ch.Width + 2;
+                currentWidth += ch.Width + 1;
             }
 
             int otherWidth = 0;
@@ -777,10 +777,10 @@ namespace Ankh.UI.VSSelectionControls
                     continue;
 
                 if (ch.DisplayIndex >= 0)
-                    otherWidth += ch.Width + 2; // 2 = separator space
+                    otherWidth += ch.Width + 1; // 1 = separator space
             }
 
-            int restWidth = Width - otherWidth - SystemInformation.VerticalScrollBarWidth - 4;
+            int restWidth = Width - otherWidth - SystemInformation.VerticalScrollBarWidth - 2;
             int rest = restWidth - currentWidth;
 
             if (restWidth > 0)
