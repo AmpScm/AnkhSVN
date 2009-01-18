@@ -39,7 +39,7 @@ namespace Ankh.UI.OptionsPages
         private void Refreshlist()
         {
             credentialList.Items.Clear();
-            Dictionary<string, AuthenticationListItem> cache = new Dictionary<string, AuthenticationListItem>();
+            SortedList<string, AuthenticationListItem> cache = new SortedList<string, AuthenticationListItem>();
             using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
             {
                 foreach(SvnAuthenticationCacheType tp in Enum.GetValues(typeof(SvnAuthenticationCacheType)))
