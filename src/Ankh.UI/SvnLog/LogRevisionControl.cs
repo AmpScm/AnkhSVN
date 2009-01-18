@@ -224,14 +224,16 @@ namespace Ankh.UI.SvnLog
 
         void OnReceivedItem(SvnLoggingEventArgs e)
         {
+            e.Detach();
+
+            LogRevisionItem lri = new LogRevisionItem(logView, _context, e);
             bool post = false;
+
             lock (_logItems)
             {
-                e.Detach();
-
                 post = (_logItems.Count == 0);
 
-                _logItems.Enqueue(new LogRevisionItem(logView, _context, e));
+                _logItems.Enqueue(lri);
             }
 
             if (post)
@@ -243,16 +245,21 @@ namespace Ankh.UI.SvnLog
         {
             Debug.Assert(!InvokeRequired);
 
+            LogRevisionItem[] items;
             lock (_logItems)
             {
                 if (_logItems.Count > 0)
-                {
-                    LogRevisionItem[] items = _logItems.ToArray();
-                    logView.Items.AddRange(items);
-                    _lastRevision = items[items.Length - 1].Revision;
+                    items = _logItems.ToArray();
+                else
+                    items = null;
 
-                    _logItems.Clear();
-                }
+                _logItems.Clear();
+            }
+
+            if (items != null)
+            {
+                logView.Items.AddRange(items);
+                _lastRevision = items[items.Length - 1].Revision;                
             }
         }
 
@@ -268,7 +275,9 @@ namespace Ankh.UI.SvnLog
                 FetchAll();
 
             if (BatchDone != null)
-                BatchDone(this, new BatchFinishedEventArgs(11));
+                BatchDone(this, new BatchFinishedEventArgs(_logItems.Count));
+
+            ExtendList();
         }
 
         internal event EventHandler<BatchFinishedEventArgs> BatchDone;
@@ -297,6 +306,10 @@ namespace Ankh.UI.SvnLog
                 _busyOverlay.Hide();
         }
 
+        private void logView_Scrolled(object sender, EventArgs e)
+        {
+            ExtendList();
+        }
 
         bool _extending;
         void ExtendList()
@@ -439,7 +452,7 @@ namespace Ankh.UI.SvnLog
             Point p = MousePosition;
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
             cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
-        }
+        }        
     }
 
     public sealed class BatchFinishedEventArgs : EventArgs
