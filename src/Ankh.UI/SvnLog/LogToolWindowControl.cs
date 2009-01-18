@@ -94,15 +94,15 @@ namespace Ankh.UI.SvnLog
             Text = sb.ToString();
         }
 
-        public void StartLog(IAnkhServiceProvider context, SvnOrigin target, SvnRevision start, SvnRevision end)
+        public void StartLog(SvnOrigin target, SvnRevision start, SvnRevision end)
         {
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            StartLog(context, new SvnOrigin[] { target }, start, end);
+            StartLog(new SvnOrigin[] { target }, start, end);
         }
 
-        public void StartLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
+        public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             if (targets == null)
                 throw new ArgumentNullException("targets");
@@ -111,7 +111,7 @@ namespace Ankh.UI.SvnLog
 
             UpdateTitle();
 
-            logControl.StartLog(context, _origins, start, end);
+            logControl.StartLog(_origins, start, end);
         }
 
         public void StartMergesEligible(IAnkhServiceProvider context, SvnItem target, Uri source)

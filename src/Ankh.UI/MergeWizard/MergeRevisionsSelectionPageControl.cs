@@ -87,7 +87,7 @@ namespace Ankh.UI.MergeWizard
                     logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, MergeSource.Target);
                     break;
                 case LogMode.Log:
-                    logToolControl1.StartLog(WizardPage.Context, new SvnOrigin[] { new SvnOrigin(WizardPage.Context, MergeSource.Target, MergeTarget.RepositoryRoot)}, null, null);
+                    logToolControl1.StartLog(new SvnOrigin[] { new SvnOrigin(WizardPage.Context, MergeSource.Target, MergeTarget.RepositoryRoot) }, null, null);
                     break;
             }
         }
