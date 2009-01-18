@@ -78,7 +78,7 @@ namespace Ankh.UI.MergeWizard
                 MergeWizard mergeWizard = value as MergeWizard;
                 if(mergeWizard != null)
                 {
-                    mergeWizard.WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+                    mergeWizard.WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
                     mergeWizard.WizardDialog.PageChanging += new EventHandler<WizardPageChangingEventArgs>(WizardDialog_PageChangingEvent);
                 }
             }
@@ -89,7 +89,7 @@ namespace Ankh.UI.MergeWizard
             if (e.CurrentPage == this)
                 OnPageChanging(e);
         }
-        void WizardDialog_PageChangeEvent(object sender, WizardPageChangeEventArgs e)
+        void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
         {
             if (e.CurrentPage.PreviousPage == this)
                 OnPageChanged(e);
@@ -117,7 +117,7 @@ namespace Ankh.UI.MergeWizard
         {
         }
 
-        protected virtual void OnPageChanged(WizardPageChangeEventArgs e)
+        protected virtual void OnPageChanged(WizardPageChangedEventArgs e)
         {
         }
     }

@@ -92,7 +92,7 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangeEventArgs e)
+        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
         {
             if (e.CurrentPage == WizardPage)
             {
@@ -104,7 +104,7 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)

@@ -77,7 +77,7 @@ namespace Ankh.UI.MergeWizard
                 ((MergeWizard)Wizard).MergeRevisions = null;
         }
 
-        protected override void OnPageChanged(WizardPageChangeEventArgs e)
+        protected override void OnPageChanged(WizardPageChangedEventArgs e)
         {
             base.OnPageChanged(e);
         }
