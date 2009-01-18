@@ -26,10 +26,16 @@ namespace Ankh.UI.SvnLog
             UpdateColors();
         }
 
+        [Browsable(false)]
+        internal string RevisionText
+        {
+            get { return Revision.ToString(CultureInfo.CurrentCulture); }
+        }
+
         void RefreshText()
         {
             SetValues(
-                Revision.ToString(CultureInfo.CurrentCulture),
+                "", // First column must be "" to work around owner draw issues!
                 Author,
                 Date.ToString(CultureInfo.CurrentCulture),
                 "", // Issue

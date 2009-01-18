@@ -21,6 +21,7 @@ using System.Windows.Forms;
 
 using Ankh.UI.VSSelectionControls;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Ankh.UI.SvnLog
 {
@@ -80,7 +81,7 @@ namespace Ankh.UI.SvnLog
 
         protected override void OnRetrieveSelection(ListViewWithSelection<LogRevisionItem>.RetrieveSelectionEventArgs e)
         {
-            e.SelectionItem = new LogItem((LogRevisionItem)e.Item, LogSource.RepositoryRoot);
+            e.SelectionItem = new LogItem(e.Item, LogSource.RepositoryRoot);
             base.OnRetrieveSelection(e);
         }
 
@@ -95,6 +96,27 @@ namespace Ankh.UI.SvnLog
             get { return _items; }
         }
 
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            OnScrolled(e);
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+
+            if (m.Msg == 0x115) // WM_VSCROLL
+                OnScrolled(EventArgs.Empty);
+        }
+
+        public event EventHandler Scrolled;
+        private void OnScrolled(EventArgs e)
+        {
+            if (Scrolled != null)
+                Scrolled(this, e);
+        }
+
         protected override void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
         {
             lock (_items)
@@ -107,7 +129,7 @@ namespace Ankh.UI.SvnLog
 
             base.OnRetrieveVirtualItem(e);
         }
-       
+
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
@@ -119,28 +141,21 @@ namespace Ankh.UI.SvnLog
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
             e.DrawDefault = true;
-            base.OnDrawColumnHeader(e);            
+            base.OnDrawColumnHeader(e);
         }
 
         protected override void OnDrawItem(DrawListViewItemEventArgs e)
         {
-            if (e.State == 0)
-            {
-                base.OnDrawItem(e);
-                return;
-            }
-            e.DrawDefault = false;
-            
             bool isSelected = SelectedIndices.Contains(e.ItemIndex);
 
             if (!isSelected)
                 e.DrawBackground();
             else
-            {
-                e.Graphics.FillRectangle(System.Drawing.SystemBrushes.Highlight, e.Bounds);
+                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+
+            if ((e.State & ListViewItemStates.Focused) != 0)
                 ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
-            }
-            
+
             // Draw the item text for views other than the Details view.
             if (View != View.Details)
             {
@@ -154,9 +169,15 @@ namespace Ankh.UI.SvnLog
             // * Using e.DrawText(flags) gives us a margin of one " " on left and right. (Confirmed via reflector)
             // * We can't trust the selected flag in e.ItemState (???)
             bool isSelected = SelectedIndices.Contains(e.ItemIndex);
-            
 
             string text = (e.ItemIndex == -1) ? e.Item.Text : e.SubItem.Text;
+
+            if (e.ColumnIndex == 0)
+            {
+                // TODO: Update bounds for indent levels
+                text = ((LogRevisionItem)e.Item).RevisionText;
+            }
+
             System.Drawing.Font fnt = e.Item.Font;
             System.Drawing.Color clr = isSelected ? System.Drawing.SystemColors.HighlightText : e.Item.ForeColor;
 
@@ -165,7 +186,7 @@ namespace Ankh.UI.SvnLog
                 ((textAlign == HorizontalAlignment.Left) ? TextFormatFlags.GlyphOverhangPadding : ((textAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter : TextFormatFlags.Right));
             flags |= TextFormatFlags.WordEllipsis;
 
-            TextRenderer.DrawText(e.Graphics, text, fnt, e.Bounds, clr, flags);            
+            TextRenderer.DrawText(e.Graphics, text, fnt, e.Bounds, clr, flags);
         }
     }
 }
