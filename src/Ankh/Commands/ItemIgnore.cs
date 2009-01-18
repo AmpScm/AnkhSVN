@@ -84,7 +84,8 @@ namespace Ankh.Commands
                 switch (e.Command)
                 {
                     case AnkhCommand.ItemIgnoreFile:
-                        e.Text = string.Format(CommandStrings.IgnoreFile, foundOne.Name);
+                        e.Text = string.Format(foundOne.IsDirectory 
+                            ? CommandStrings.IgnoreFolder : CommandStrings.IgnoreFile, foundOne.Name);
                         break;
                     case AnkhCommand.ItemIgnoreFileType:
                         e.Text = string.Format(CommandStrings.IgnoreFileType, foundOne.Extension);
