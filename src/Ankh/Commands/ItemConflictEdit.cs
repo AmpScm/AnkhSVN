@@ -88,8 +88,8 @@ namespace Ankh.Commands
             AnkhMergeArgs da = new AnkhMergeArgs();
             string dir = conflict.Directory;
 
-            da.BaseFile = Path.Combine(dir, conflictInfo.ConflictOld);
-            da.TheirsFile = Path.Combine(dir, conflictInfo.ConflictNew);
+            da.BaseFile = Path.Combine(dir, conflictInfo.ConflictOld ?? conflictInfo.ConflictNew);
+            da.TheirsFile = Path.Combine(dir, conflictInfo.ConflictNew ?? conflictInfo.ConflictOld);
 
             if (!string.IsNullOrEmpty(conflictInfo.ConflictWork))
                 da.MineFile = Path.Combine(dir, conflictInfo.ConflictWork);
