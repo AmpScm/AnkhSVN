@@ -37,6 +37,7 @@ namespace Ankh.UI.VSSelectionControls
         readonly Collection<SmartColumn> _groupColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _sortColumns = new Collection<SmartColumn>();
         readonly Collection<SmartColumn> _allColumns = new Collection<SmartColumn>();
+        readonly SortedList<SmartGroup, ListViewGroup> _groups;
         ISmartValueComparer _topSorter;
         ISmartValueComparer _finalSorter;
 
@@ -45,6 +46,7 @@ namespace Ankh.UI.VSSelectionControls
             View = View.Details;
             FullRowSelect = true;
             this.ListViewItemSorter = new SmartListSorter(this);
+            _groups = new SortedList<SmartGroup, ListViewGroup>(new SmartGroupSorter(this));
             Sorting = SortOrder.Ascending;
             base.UseCompatibleStateImageBehavior = false;
         }
@@ -322,9 +324,45 @@ namespace Ankh.UI.VSSelectionControls
             get { return Math.Max((_headerHeight > 0) ? _headerHeight-1 : (_headerHeight = GetHeaderHeight())-1, 0); }
         }
 
+        int _itemHeight;
+        [Browsable(false)]
+        public int ItemHeight
+        {
+            get
+            {
+                if (_itemHeight == 0)
+                {
+                    if (Items.Count > 0)
+                    {
+                        Rectangle r = GetItemRect(TopItem.Index);
+                        _itemHeight = r.Height;
+                    }
+                }
+                return _itemHeight;
+            }
+        }
+
+        int _itemsPerPage;
+        [Browsable(false)]
+        public int ItemsVisible
+        {
+            get
+            {
+                if(View != View.Details)
+                    throw new NotImplementedException();
+                if (_itemsPerPage == 0 && ItemHeight > 0)
+                {
+                    _itemsPerPage = (Height + ItemHeight - 1) / ItemHeight;
+                }
+                return _itemsPerPage;
+            }
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
             _headerHeight = 0;
+            _itemHeight = 0;
+            _itemsPerPage = 0;
             base.OnSizeChanged(e);
         }
         
@@ -452,7 +490,12 @@ namespace Ankh.UI.VSSelectionControls
             if (itemGrp == null)
             {
                 string txt = string.IsNullOrEmpty(g) ? "<Rest>" : g;
-                itemGrp = Groups.Add(g, txt);
+                SmartGroup sg = new SmartGroup(this, g, txt);
+                _groups.Add(sg, sg);
+                Groups.Clear();
+                Groups.AddRange(new List<ListViewGroup>(_groups.Values).ToArray());                
+
+                itemGrp = sg;
             }
 
             itemGrp.Items.Add(item);
@@ -464,6 +507,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             Items.Clear();
             Groups.Clear();
+            _groups.Clear();
         }
 
         public void RefreshGroups()
@@ -484,6 +528,7 @@ namespace Ankh.UI.VSSelectionControls
                         grp.Items.Clear();
                     }
                     Groups.Clear();
+                    _groups.Clear();
                 }
                 else
                 {
@@ -575,39 +620,78 @@ namespace Ankh.UI.VSSelectionControls
         {
             if (!DesignMode)
             {
-                if (m.Msg == 123) // WM_CONTEXTMENU
+                switch(m.Msg)
                 {
-                    uint pos = unchecked((uint)m.LParam);
-
-                    Select();
-
-                    OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
-                        unchecked((short)(ushort)(pos & 0xFFFF)),
-                        unchecked((short)(ushort)(pos >> 16)), 0));
-
-                    return;
-                }
-                else if (m.Msg == 8270) // WM_REFLECTNOTIFY
-                {
-                    if (CheckBoxes && StrictCheckboxesClick)
+                    case 123: // WM_CONTEXTMENU
                     {
-                        NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+                        uint pos = unchecked((uint)m.LParam);
 
-                        if (hdr.code == -3) // Double click
+                        Select();
+
+                        OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
+                            unchecked((short)(ushort)(pos & 0xFFFF)),
+                            unchecked((short)(ushort)(pos >> 16)), 0));
+
+                        return;
+                    }
+                        
+                    case 8270: // WM_REFLECTNOTIFY
+                        if (CheckBoxes && StrictCheckboxesClick)
                         {
-                            Point mp = PointToClient(MousePosition);
-                            ListViewHitTestInfo hi = HitTest(mp);
+                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
 
-                            if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                            if (hdr.code == -3) // Double click
                             {
-                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
-                                return;
+                                Point mp = PointToClient(MousePosition);
+                                ListViewHitTestInfo hi = HitTest(mp);
+
+                                if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
+                                {
+                                    OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
+                                    return;
+                                }
                             }
                         }
-                    }
+                        break;
+                    case 0x114: // WM_HSCROLL
+                        WmHScroll(ref m);
+                        break;
+                    case 0x115: // WM_VSCROLL
+                        WmVScroll(ref m);
+                        break;
                 }
             }
-            base.WndProc(ref m);
+            base.WndProc(ref m);            
+        }
+
+        private void WmVScroll(ref Message m)
+        {
+            OnVScroll(new ScrollEventArgs((ScrollEventType)((int)m.WParam & 0xFFFF), -1));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public EventHandler VScroll;
+        protected virtual void OnVScroll(EventArgs e)
+        {
+            if (VScroll != null)
+                VScroll(this, e);
+        }
+
+        private void WmHScroll(ref Message m)
+        {
+            OnHScroll(new ScrollEventArgs((ScrollEventType)((int)m.WParam & 0xFFFF), -1));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public EventHandler HScroll;
+        protected virtual void OnHScroll(EventArgs e)
+        {
+            if (HScroll != null)
+                HScroll(this, e);
         }
 
         sealed class SmartListSorter : System.Collections.IComparer, IComparer<ListViewItem>
@@ -648,6 +732,34 @@ namespace Ankh.UI.VSSelectionControls
                     return _view.FinalSortColumn.Compare(x, y, false);
 
                 return 0;
+            }
+        }
+
+        sealed class SmartGroupSorter : IComparer<SmartGroup>, System.Collections.IComparer
+        {
+            SmartListView _view;
+
+            public SmartGroupSorter(SmartListView view)
+            {
+                if (view == null)
+                    throw new ArgumentNullException("view");
+
+                _view = view;
+            }
+
+            #region IComparer<SmartGroup> Members
+
+            public int Compare(SmartGroup x, SmartGroup y)
+            {
+                // TODO: Replace with better comparer
+                return StringComparer.OrdinalIgnoreCase.Compare(x.Header, y.Header);
+            }
+
+            #endregion
+
+            int System.Collections.IComparer.Compare(object x, object y)
+            {
+                return Compare((SmartGroup)x, (SmartGroup)y);
             }
         }
 

@@ -592,6 +592,7 @@
     <Compile Include="VSSelectionControls\Commands\ListViewShow.cs" />
     <Compile Include="VSSelectionControls\Commands\ListViewSort.cs" />
     <Compile Include="VSSelectionControls\Commands\ListViewSortOrder.cs" />
+    <Compile Include="VSSelectionControls\SmartGroup.cs" />
     <Compile Include="VSSelectionControls\SmartListView.cs">
       <SubType>Component</SubType>
     </Compile>
