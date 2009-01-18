@@ -202,9 +202,9 @@ namespace Ankh.UI.SvnLog
 
         public event EventHandler<BatchFinishedEventArgs> BatchFinished;
 
-        public event SelectionChangedEventHandler<ISvnLogItem> SelectionChanged;
+        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> SelectionChanged;
 
-        public event FocusChangedEventHandler<ISvnLogItem> FocusChanged;
+        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> FocusChanged;
 
         public ISvnLogItem FocusedItem
         {
@@ -231,13 +231,13 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        void OnFocusChanged(object sender, ISvnLogItem e)
+        void OnFocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
             if(FocusChanged != null)
                 FocusChanged(sender, e);
         }
 
-        void OnSelectionChanged(object sender, IList<ISvnLogItem> e)
+        void OnSelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
             if (SelectionChanged != null)
                 SelectionChanged(sender, e);

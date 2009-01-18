@@ -387,10 +387,9 @@ namespace Ankh.UI.SvnLog
         }
 
         #region ICurrentItemSource<ISvnLogItem> Members
+        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> SelectionChanged;
 
-        public event SelectionChangedEventHandler<ISvnLogItem> SelectionChanged;
-
-        public event FocusChangedEventHandler<ISvnLogItem> FocusChanged;
+        public event EventHandler<CurrentItemEventArgs<ISvnLogItem>> FocusChanged;
 
         public ISvnLogItem FocusedItem
         {
@@ -417,7 +416,7 @@ namespace Ankh.UI.SvnLog
         private void logRevisionControl1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (FocusChanged != null)
-                FocusChanged(this, FocusedItem);
+                FocusChanged(this, new CurrentItemEventArgs<ISvnLogItem>(this));
 
             ExtendList();
         }
@@ -429,7 +428,7 @@ namespace Ankh.UI.SvnLog
                 _selectedItems.Add(new LogItem((LogRevisionItem)logView.Items[i], LogSource.RepositoryRoot));
 
             if (SelectionChanged != null)
-                SelectionChanged(this, SelectedItems);
+                FocusChanged(this, new CurrentItemEventArgs<ISvnLogItem>(this));
         }
 
         private void logRevisionControl1_ShowContextMenu(object sender, MouseEventArgs e)
@@ -440,11 +439,6 @@ namespace Ankh.UI.SvnLog
             Point p = MousePosition;
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
             cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
-        }
-
-        private void logRevisionControl1_CacheVirtualItems(object sender, CacheVirtualItemsEventArgs e)
-        {
-            //Debug.WriteLine(string.Format("CacheVirtualItems start: {0}, end: {1}", e.StartIndex, e.EndIndex));
         }
     }
 

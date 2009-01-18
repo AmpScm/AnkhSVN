@@ -36,7 +36,6 @@ namespace Ankh.UI
         public LogViewerDialog()
         {
             InitializeComponent();
-            logViewerControl.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(value_SelectionChanged); ;
         }
 
         public LogViewerDialog(SvnOrigin target, IAnkhServiceProvider context)
@@ -69,21 +68,17 @@ namespace Ankh.UI
             get { return logViewerControl.SelectedItems; }
         }
 
-        #region UI Events
-        private void LogViewerDialog_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            logViewerControl.Site = Site;
+            base.OnLoad(e);
 
+            if (DesignMode)
+                return;
+        
             if (LogTarget == null)
                 throw new InvalidOperationException("Log target is null");
 
             logViewerControl.StartLog(Context, new SvnOrigin[] { LogTarget }, null, null);
-        }
-        #endregion
-
-
-        void value_SelectionChanged(object sender, IList<ISvnLogItem> e)
-        {
         }
     }
 }

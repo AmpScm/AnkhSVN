@@ -31,12 +31,12 @@ namespace Ankh.UI
         /// <summary>
         /// Occurs when the selection has been changed
         /// </summary>
-        event SelectionChangedEventHandler<TItem> SelectionChanged;
+        event EventHandler<CurrentItemEventArgs<TItem>> SelectionChanged;
 
         /// <summary>
         /// Occurs when the focus has been changed
         /// </summary>
-        event FocusChangedEventHandler<TItem> FocusChanged;
+        event EventHandler<CurrentItemEventArgs<TItem>> FocusChanged;
 
         /// <summary>
         /// Gets the focused item
@@ -61,19 +61,19 @@ namespace Ankh.UI
         ICurrentItemSource<TItem> ItemSource { get;set;}
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TItem"></typeparam>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void SelectionChangedEventHandler<TItem>(object sender, IList<TItem> e);
+    public class CurrentItemEventArgs<TItem> : EventArgs
+    {
+        readonly ICurrentItemSource<TItem> _source;
+        public CurrentItemEventArgs(ICurrentItemSource<TItem> source)
+        {
+            if (source == null)
+                throw new ArgumentNullException("source");
+            _source = source;
+        }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <typeparam name="TItem"></typeparam>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    public delegate void FocusChangedEventHandler<TItem>(object sender, TItem e);
+        public ICurrentItemSource<TItem> Source
+        {
+            get { return _source; }
+        }
+    }    
 }
