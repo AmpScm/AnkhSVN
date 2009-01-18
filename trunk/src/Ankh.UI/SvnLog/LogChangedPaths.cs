@@ -102,7 +102,7 @@ namespace Ankh.UI
 
             ISvnLogItem item = e.Source.FocusedItem;
 
-            if (e != null && item.ChangedPaths != null)
+            if (item != null && item.ChangedPaths != null)
             {
                 List<PathListViewItem> paths = new List<PathListViewItem>();
 
