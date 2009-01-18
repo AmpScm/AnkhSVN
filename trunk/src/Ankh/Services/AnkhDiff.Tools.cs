@@ -259,6 +259,9 @@ namespace Ankh.Services
         {
             string r = AppIdLocalServerSearch(appId);
 
+            if (string.IsNullOrEmpty(r))
+                return null;
+
             r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(r, ".."), relativePath));
 
             if (File.Exists(r))
