@@ -136,7 +136,7 @@ namespace Ankh.UI.MergeWizard
         {
             PopulateUI();
 
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         private void performDryRunCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -39,7 +39,7 @@ namespace Ankh.UI.MergeWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         #region UI Events

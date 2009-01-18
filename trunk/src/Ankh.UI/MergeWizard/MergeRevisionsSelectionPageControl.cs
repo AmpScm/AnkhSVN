@@ -104,7 +104,7 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)

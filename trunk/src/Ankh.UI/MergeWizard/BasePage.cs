@@ -78,8 +78,8 @@ namespace Ankh.UI.MergeWizard
                 MergeWizard mergeWizard = value as MergeWizard;
                 if(mergeWizard != null)
                 {
-                    mergeWizard.WizardDialog.PageChangeEvent += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
-                    mergeWizard.WizardDialog.PageChangingEvent += new EventHandler<WizardPageChangingEventArgs>(WizardDialog_PageChangingEvent);
+                    mergeWizard.WizardDialog.PageChanged += new EventHandler<WizardPageChangeEventArgs>(WizardDialog_PageChangeEvent);
+                    mergeWizard.WizardDialog.PageChanging += new EventHandler<WizardPageChangingEventArgs>(WizardDialog_PageChangingEvent);
                 }
             }
         }
