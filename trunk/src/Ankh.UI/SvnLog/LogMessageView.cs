@@ -52,17 +52,16 @@ namespace Ankh.UI
             set 
             { 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged -= new FocusChangedEventHandler<ISvnLogItem>(LogFocusChanged);
+                    logItemSource.FocusChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(LogFocusChanged);
 
                 logItemSource = value; 
                 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged += new FocusChangedEventHandler<ISvnLogItem>(LogFocusChanged);
-
+                    logItemSource.FocusChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(LogFocusChanged);
             }
         }
 
-        void LogFocusChanged(object sender, ISvnLogItem e)
+        void LogFocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
             if (ItemSource != null && ItemSource.FocusedItem != null)
                 logMessageEditor.Text = logItemSource.FocusedItem.LogMessage;

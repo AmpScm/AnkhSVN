@@ -52,19 +52,19 @@ namespace Ankh.UI
             set { _dataSource = value; }
         }
 
-		IAnkhServiceProvider _context;
-		[Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public IAnkhServiceProvider Context
-		{
-			get { return _context; }
-			set
-			{
-				_context = value;
-				changedPaths.SelectionPublishServiceProvider = value;
+        IAnkhServiceProvider _context;
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                _context = value;
+                changedPaths.SelectionPublishServiceProvider = value;
 
 
-			}
-		}
+            }
+        }
 
         #region ICurrentItemDestination<ISvnLogItem> Members
         ICurrentItemSource<ISvnLogItem> itemSource;
@@ -75,14 +75,14 @@ namespace Ankh.UI
             {
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged -= new SelectionChangedEventHandler<ISvnLogItem>(SelectionChanged);
-                    itemSource.FocusChanged -= new FocusChangedEventHandler<ISvnLogItem>(FocusChanged);
+                    itemSource.SelectionChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
+                    itemSource.FocusChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
                 }
                 itemSource = value;
                 if (itemSource != null)
                 {
-                    itemSource.SelectionChanged += new SelectionChangedEventHandler<ISvnLogItem>(SelectionChanged);
-                    itemSource.FocusChanged += new FocusChangedEventHandler<ISvnLogItem>(FocusChanged);
+                    itemSource.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(SelectionChanged);
+                    itemSource.FocusChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(FocusChanged);
                 }
 
             }
@@ -90,19 +90,19 @@ namespace Ankh.UI
 
         #endregion
 
-        
 
-        void SelectionChanged(object sender, IList<ISvnLogItem> e)
+
+        void SelectionChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
         }
 
-
-
-        void FocusChanged(object sender, ISvnLogItem e)
+        void FocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
             changedPaths.Items.Clear();
 
-            if (e != null && e.ChangedPaths != null)
+            ISvnLogItem item = e.Source.FocusedItem;
+
+            if (e != null && item.ChangedPaths != null)
             {
                 List<PathListViewItem> paths = new List<PathListViewItem>();
 
@@ -116,9 +116,9 @@ namespace Ankh.UI
                     origins.Add(origin.TrimEnd('/'));
                 }
 
-                foreach (SvnChangeItem i in e.ChangedPaths)
+                foreach (SvnChangeItem i in item.ChangedPaths)
                 {
-                    paths.Add(new PathListViewItem(changedPaths, e, i, e.RepositoryRoot, HasFocus(origins, i.Path)));
+                    paths.Add(new PathListViewItem(changedPaths, item, i, item.RepositoryRoot, HasFocus(origins, i.Path)));
                 }
 
                 changedPaths.Items.AddRange(paths.ToArray());
@@ -152,17 +152,17 @@ namespace Ankh.UI
             changedPaths.Items.Clear();
         }
 
-        
+
 
         private void changedPaths_ShowContextMenu(object sender, MouseEventArgs e)
         {
             Point p = MousePosition;
 
-			if(Context != null)
-			{
-				IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-				cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
-			}
+            if (Context != null)
+            {
+                IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+                cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
+            }
         }
 
         private void changedPaths_MouseDoubleClick(object sender, MouseEventArgs e)
