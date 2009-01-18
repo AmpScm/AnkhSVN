@@ -86,10 +86,8 @@ namespace Ankh.UI.SvnLog
             set { _mode = value; }
         }
 
-        public void StartLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
+        public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
             if (targets == null)
                 throw new ArgumentNullException("targets");
 

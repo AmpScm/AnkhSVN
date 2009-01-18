@@ -78,7 +78,7 @@ namespace Ankh.UI
             if (LogTarget == null)
                 throw new InvalidOperationException("Log target is null");
 
-            logViewerControl.StartLog(Context, new SvnOrigin[] { LogTarget }, null, null);
+            logViewerControl.StartLog(new SvnOrigin[] { LogTarget }, null, null);
         }
     }
 }

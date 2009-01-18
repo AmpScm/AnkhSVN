@@ -236,7 +236,7 @@ namespace Ankh.Commands
 
             LogToolWindowControl logToolControl = context.GetService<ISelectionContext>().ActiveFrameControl as LogToolWindowControl;
             if (logToolControl != null)
-                logToolControl.StartLog(context, targets, start, end);
+                logToolControl.StartLog(targets, start, end);
         }
     }
 }
