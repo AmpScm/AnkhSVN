@@ -23,9 +23,9 @@ using Ankh.UI.OptionsPages;
 
 namespace Ankh.VSPackage
 {
-    class AnkhSourceControlSettingsPage : DialogPage
+    class EnvironmentSettingsPage : DialogPage
     {
-        AnkhSettingsControl _control;
+        EnvironmentSettingsControl _control;
         protected override System.Windows.Forms.IWin32Window Window
         {
             get
@@ -34,7 +34,7 @@ namespace Ankh.VSPackage
             }
         }
 
-        AnkhSettingsControl Control
+        EnvironmentSettingsControl Control
         {
             get
             {
@@ -42,9 +42,9 @@ namespace Ankh.VSPackage
             }
         }
 
-        AnkhSettingsControl CreateControl()
+        EnvironmentSettingsControl CreateControl()
         {
-            AnkhSettingsControl control = new AnkhSettingsControl();
+            EnvironmentSettingsControl control = new EnvironmentSettingsControl();
             IAnkhServiceProvider sp = (IAnkhServiceProvider)GetService(typeof(IAnkhServiceProvider));
 
             if (sp != null)

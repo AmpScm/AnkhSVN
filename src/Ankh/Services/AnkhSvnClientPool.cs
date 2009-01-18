@@ -38,6 +38,7 @@ namespace Ankh.Services
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
         readonly Control _syncher;
         const int MaxPoolSize = 10;
+        int _returnCookie;
 
         public AnkhSvnClientPool(IAnkhServiceProvider context)
             : base(context)
@@ -111,7 +112,7 @@ namespace Ankh.Services
             if (DialogOwner == null)
                 hookUI = false;
 
-            AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI);
+            AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI, _returnCookie);
 
             if (hookUI)
             {
@@ -154,7 +155,7 @@ namespace Ankh.Services
         {
             AnkhSvnPoolClient pc = poolClient as AnkhSvnPoolClient;
 
-            if (pc != null)
+            if (pc != null && pc.ReturnCookie == _returnCookie)
             {
                 Stack<SvnPoolClient> stack = pc.UIEnabled ? _uiClients : _clients;
 
@@ -170,16 +171,37 @@ namespace Ankh.Services
             return false;
         }
 
+        /// <summary>
+        /// Flushes all clients to read settings again
+        /// </summary>
+        public void FlushAllClients()
+        {
+            _returnCookie++;
+
+            lock (_uiClients)
+            {
+                while (_uiClients.Count > 0)
+                    _uiClients.Pop().Dispose();
+            }
+
+            lock (_clients)
+            {
+                while (_clients.Count > 0)
+                    _clients.Pop().Dispose();
+            }
+        }
 
         class AnkhSvnPoolClient : SvnPoolClient
         {
             readonly HybridCollection<string> _touchedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly HybridCollection<string> _fullRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
-            public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled)
+            readonly int _returnCookie;
+            public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled, int returnCookie)
                 : base(pool)
             {
                 _uiEnabled = uiEnabled;
+                _returnCookie = returnCookie;
             }
 
             public bool UIEnabled
@@ -225,6 +247,11 @@ namespace Ankh.Services
                 {
                     InnerDispose();
                 }
+            }
+
+            public int ReturnCookie
+            {
+                get { return _returnCookie; }
             }
         }
     }

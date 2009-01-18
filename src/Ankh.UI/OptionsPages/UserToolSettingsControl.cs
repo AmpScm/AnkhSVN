@@ -30,22 +30,11 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.OptionsPages
 {
-    public partial class AnkhSettingsControl : UserControl
+    public partial class UserToolSettingsControl : AnkhOptionsPageControl
     {
-        IAnkhServiceProvider _context;
-        public AnkhSettingsControl()
+        public UserToolSettingsControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Gets or sets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set { _context = value; }
         }
 
         AnkhConfig _config;
@@ -62,8 +51,9 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        public void LoadSettings()
+        public override void LoadSettings()
         {
+            base.LoadSettings();
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
 
             cfgSvc.LoadConfig(); // Load most recent settings from registry
@@ -136,8 +126,10 @@ namespace Ankh.UI.OptionsPages
         }
 
 
-        public void SaveSettings()
+        public override void SaveSettings()
         {
+            base.LoadSettings();
+
             Config.DiffExePath = SaveBox(diffExeBox);
             Config.MergeExePath = SaveBox(mergeExeBox);
             Config.PatchExePath = SaveBox(patchExeBox);
@@ -192,7 +184,7 @@ namespace Ankh.UI.OptionsPages
                 dlg.Value = line;
                 dlg.SetTemplates(Context.GetService<IAnkhDiffHandler>().ArgumentDefinitions);
 
-                if (DialogResult.OK == dlg.ShowDialog(_context))
+                if (DialogResult.OK == dlg.ShowDialog(Context))
                 {
                     string newValue = dlg.Value;
 

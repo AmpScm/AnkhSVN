@@ -23,7 +23,9 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VSPackage
 {
-    [ProvideOptionPage(typeof(AnkhSourceControlSettingsPage), "Source Control", "Subversion", 106, 107, false)]
+    [ProvideOptionPage(typeof(UserToolsSettingsPage), "Source Control", "Subversion User Tools", 106, 108, false)]
+    [ProvideToolsOptionsPageVisibility("Source Control", "Subversion User Tools", AnkhId.SccProviderId)]
+    [ProvideOptionPage(typeof(EnvironmentSettingsPage), "Source Control", "Subversion", 106, 107, false)]
     [ProvideToolsOptionsPageVisibility("Source Control", "Subversion", AnkhId.SccProviderId)]
     partial class AnkhSvnPackage
     {
