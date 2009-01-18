@@ -86,7 +86,6 @@ namespace Ankh.UI
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
             this.Name = "LogViewerDialog";
-            this.Load += new System.EventHandler(this.LogViewerDialog_Load);
             this.ResumeLayout(false);
 
         }
