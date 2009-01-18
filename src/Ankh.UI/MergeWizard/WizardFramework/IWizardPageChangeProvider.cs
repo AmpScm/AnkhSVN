@@ -30,12 +30,12 @@ namespace WizardFramework
         /// <summary>
         /// Event for handling wizard page change events.
         /// </summary>
-        event EventHandler<WizardPageChangeEventArgs> PageChangeEvent;
+        event EventHandler<WizardPageChangeEventArgs> PageChanged;
 
         /// <summary>
         /// Event for when a page is changing.
         /// </summary>
-        event EventHandler<WizardPageChangingEventArgs> PageChangingEvent;
+        event EventHandler<WizardPageChangingEventArgs> PageChanging;
 
         /// <summary>
         /// Returns the currently selected page in the wizard or returns

@@ -130,8 +130,6 @@ namespace WizardFramework
             UpdateMessage();
             // Update the buttons
             UpdateButtons();
-
-            FirePageChangeEvent(new WizardPageChangeEventArgs(this, currPage_prop));
         }
 
         /// <summary>
@@ -215,6 +213,8 @@ namespace WizardFramework
                 return;
 
             UpdateForPage(page);
+
+            OnPageChanged(new WizardPageChangeEventArgs(this, currPage_prop));
         }
 
         /// <summary>
@@ -357,11 +357,10 @@ namespace WizardFramework
         /// Fires an event signifying a page change.
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void FirePageChangeEvent(WizardPageChangeEventArgs e)
+        protected virtual void OnPageChanged(WizardPageChangeEventArgs e)
         {
-            if (PageChangeEvent == null) return;
-            
-            PageChangeEvent(this, e);
+            if (PageChanged != null)
+                PageChanged(this, e);
         }
 
         /// <summary>
@@ -370,8 +369,8 @@ namespace WizardFramework
         /// <param name="e"></param>
         protected virtual void OnPageChanging(WizardPageChangingEventArgs e)
         {
-            if (PageChangingEvent != null)
-                PageChangingEvent(this, e);
+            if (PageChanging != null)
+                PageChanging(this, e);
         }
 
         /// <see cref="WizardFramework.IWizardPageChangeProvider.SelectedPage" />
@@ -381,8 +380,8 @@ namespace WizardFramework
         }
 
         private IWizardPage selectedPage_prop = null;
-        public event EventHandler<WizardPageChangeEventArgs> PageChangeEvent;
-        public event EventHandler<WizardPageChangingEventArgs> PageChangingEvent;
+        public event EventHandler<WizardPageChangeEventArgs> PageChanged;
+        public event EventHandler<WizardPageChangingEventArgs> PageChanging;
         #endregion
 
         #region WizardDialog UI Event Handling
