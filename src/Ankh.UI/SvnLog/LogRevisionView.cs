@@ -17,31 +17,24 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
-using SharpSvn;
-using SharpSvn.Implementation;
-
-
-using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
-using Ankh.VS;
-using System.Drawing;
+using System.Diagnostics;
 
 namespace Ankh.UI.SvnLog
 {
-    class LogRevisionView : ListViewWithSelection<LogListViewItem>
+    class LogRevisionView : ListViewWithSelection<LogRevisionItem>
     {
+        readonly List<LogRevisionItem> _items = new List<LogRevisionItem>();
         public LogRevisionView()
         {
-			Sorting = SortOrder.None;
+            Sorting = SortOrder.None;
+            OwnerDraw = true;
             Init();
         }
         public LogRevisionView(IContainer container)
-			: this()
+            : this()
         {
             container.Add(this);
         }
@@ -53,216 +46,126 @@ namespace Ankh.UI.SvnLog
             set { _dataSource = value; }
         }
 
+        SmartColumn _revisionColumn;
+        SmartColumn _messageColumn;
         void Init()
         {
-            SmartColumn revision = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
+            _revisionColumn = new SmartColumn(this, "&Revision", 64, HorizontalAlignment.Right);
             SmartColumn author = new SmartColumn(this, "&Author", 73);
             SmartColumn date = new SmartColumn(this, "&Date", 118);
             SmartColumn issue = new SmartColumn(this, "&Issue", 60);
-            SmartColumn message = new SmartColumn(this, "&Message", 300);
+            _messageColumn = new SmartColumn(this, "&Message", 300);
 
-            revision.Sortable = author.Sortable = date.Sortable = issue.Sortable = message.Sortable = false;
+            _revisionColumn.Sortable = author.Sortable = date.Sortable = issue.Sortable = _messageColumn.Sortable = false;
 
 
-            AllColumns.Add(revision);
+            AllColumns.Add(_revisionColumn);
             AllColumns.Add(author);
 
             AllColumns.Add(date);
             AllColumns.Add(issue);
-            AllColumns.Add(message);
+            AllColumns.Add(_messageColumn);
 
             // The listview can't align the first column right. We switch their display position
             // to work around this            
             Columns.AddRange(
                 new ColumnHeader[]
                 {
+                    _revisionColumn,
                     author,
-                    revision,
                     date,
-                    message
+                    _messageColumn
                 });
-
-            author.DisplayIndex = 1;
-            revision.DisplayIndex = 0;
         }
 
-		protected override void OnRetrieveSelection(ListViewWithSelection<LogListViewItem>.RetrieveSelectionEventArgs e)
-		{
-			e.SelectionItem = new LogItem((LogListViewItem)e.Item, LogSource.RepositoryRoot);
-			base.OnRetrieveSelection(e);
-		}
-
-		protected override void OnResolveItem(ListViewWithSelection<LogListViewItem>.ResolveItemEventArgs e)
-		{
-			e.Item = ((LogItem)e.SelectionItem).ListViewItem;
-			base.OnResolveItem(e);
-		}
-
-    }
-
-    class LogListViewItem : SmartListViewItem
-    {
-        readonly IAnkhServiceProvider _context;
-        readonly SvnLoggingEventArgs _args;
-        public LogListViewItem(LogRevisionView listView, IAnkhServiceProvider context, SvnLoggingEventArgs e)
-            : base(listView)
+        protected override void OnRetrieveSelection(ListViewWithSelection<LogRevisionItem>.RetrieveSelectionEventArgs e)
         {
-            _args = e;
-            _context = context;
-            RefreshText();
-            UpdateColors();
+            e.SelectionItem = new LogItem((LogRevisionItem)e.Item, LogSource.RepositoryRoot);
+            base.OnRetrieveSelection(e);
         }
 
-        void RefreshText()
+        protected override void OnResolveItem(ListViewWithSelection<LogRevisionItem>.ResolveItemEventArgs e)
         {
-            SetValues(
-                Revision.ToString(CultureInfo.CurrentCulture),
-                Author,
-                Date.ToString(CultureInfo.CurrentCulture),
-                "", // Issue
-                LogMessage);
+            e.Item = ((LogItem)e.SelectionItem).ListViewItem;
+            base.OnResolveItem(e);
         }
 
-        void UpdateColors()
+        public List<LogRevisionItem> VirtualItems
         {
-            if (SystemInformation.HighContrast)
-                return;
+            get { return _items; }
+        }
 
-            if (_args.ChangedPaths == null)
-                return;
-
-            foreach (SvnChangeItem ci in _args.ChangedPaths)
+        protected override void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
+        {
+            lock (_items)
             {
-                if (ci.CopyFromRevision >= 0)
-                    ForeColor = Color.DarkBlue;
+                if (e.ItemIndex >= 0 && e.ItemIndex < _items.Count)
+                    e.Item = _items[e.ItemIndex];
+                else
+                    e.Item = new ListViewItem();
+            }
+
+            base.OnRetrieveVirtualItem(e);
+        }
+       
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            if (!DesignMode && _messageColumn != null)
+                ResizeColumnsToFit(_messageColumn);
+        }
+
+        protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+            base.OnDrawColumnHeader(e);            
+        }
+
+        protected override void OnDrawItem(DrawListViewItemEventArgs e)
+        {
+            if (e.State == 0)
+            {
+                base.OnDrawItem(e);
+                return;
+            }
+            e.DrawDefault = false;
+            
+            bool isSelected = SelectedIndices.Contains(e.ItemIndex);
+
+            if (!isSelected)
+                e.DrawBackground();
+            else
+            {
+                e.Graphics.FillRectangle(System.Drawing.SystemBrushes.Highlight, e.Bounds);
+                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+            }
+            
+            // Draw the item text for views other than the Details view.
+            if (View != View.Details)
+            {
+                e.DrawText();
             }
         }
 
-		internal DateTime Date
-		{
-			get { return _args.Time.ToLocalTime(); }
-		}
-
-		internal string Author
-		{
-			get { return _args.Author; }
-		}
-
-        string _logMessage;
-		internal string LogMessage
-		{
-			get 
-            {
-                if (_logMessage == null && _args.LogMessage != null)
-                {
-                    // Don't show carriage return linefeed in the listview
-                    string[] lines = _args.LogMessage.Split('\r', '\n');
-                    foreach (string line in lines)
-                    {
-                        if (line.Trim().Length > 0)
-                        {
-                            _logMessage = line;
-                            break;
-                        }
-                    }
-                }
-                return _logMessage;
-            }
-		}
-
-		internal long Revision
-		{
-			get { return _args.Revision; }
-		}
-
-		internal SvnChangeItemCollection ChangedPaths
-		{
-			get { return _args.ChangedPaths; }
-		}
-
-        internal SvnLoggingEventArgs RawData
-		{
-			get { return _args; }
-		}
-    }
-
-    sealed class LogItem : AnkhPropertyGridItem, ISvnLogItem
-	{
-		readonly LogListViewItem _lvi;
-        public Uri _repositoryRoot;
-
-		public LogItem(LogListViewItem lvi, Uri repositoryRoot)
-		{
-			if (lvi == null)
-				throw new ArgumentNullException("lvi");
-
-			_lvi = lvi;
-            _repositoryRoot = repositoryRoot;
-		}
-
-		internal LogListViewItem ListViewItem
-		{
-			get { return _lvi; }
-		}
-
-        /// <summary>
-        /// Gets the repository root.
-        /// </summary>
-        /// <value>The repository root.</value>
-        [Browsable(false)]
-        public Uri RepositoryRoot
+        protected override void OnDrawSubItem(DrawListViewSubItemEventArgs e)
         {
-            get { return _repositoryRoot; }
-        }
+            // Okay, bugs in .Net 2.0 ahead:
+            // * Using e.DrawText(flags) gives us a margin of one " " on left and right. (Confirmed via reflector)
+            // * We can't trust the selected flag in e.ItemState (???)
+            bool isSelected = SelectedIndices.Contains(e.ItemIndex);
+            
 
-		[Category("Subversion")]
-		[DisplayName("Commit date")]
-		public DateTime CommitDate
-		{
-			get { return _lvi.Date.ToLocalTime(); }
-		}
+            string text = (e.ItemIndex == -1) ? e.Item.Text : e.SubItem.Text;
+            System.Drawing.Font fnt = e.Item.Font;
+            System.Drawing.Color clr = isSelected ? System.Drawing.SystemColors.HighlightText : e.Item.ForeColor;
 
-		[Category("Subversion")]
-		public string Author
-		{
-			get { return _lvi.Author; }
-		}
+            HorizontalAlignment textAlign = e.Header.TextAlign;
+            TextFormatFlags flags = TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix |
+                ((textAlign == HorizontalAlignment.Left) ? TextFormatFlags.GlyphOverhangPadding : ((textAlign == HorizontalAlignment.Center) ? TextFormatFlags.HorizontalCenter : TextFormatFlags.Right));
+            flags |= TextFormatFlags.WordEllipsis;
 
-		[Category("Subversion")]
-		[DisplayName("Log message")]
-		public string LogMessage
-		{
-			get { return _lvi.RawData.LogMessage; }
-		}
-
-		[Category("Subversion")]
-		public long Revision
-		{
-			get { return _lvi.Revision; }
-		}
-
-        [Browsable(false)]
-        public SvnChangeItemCollection ChangedPaths
-        {
-            get { return _lvi.RawData.ChangedPaths; }
-        }
-
-        /// <summary>
-        /// Gets the light/second name shown in the gridview header
-        /// </summary>
-        /// <value></value>
-        protected override string ClassName
-        {
-            get { return "Revision Information"; }
-        }
-
-        /// <summary>
-        /// Gets the bold/first name shown in the gridview header
-        /// </summary>
-        /// <value></value>
-        protected override string ComponentName
-        {
-            get { return string.Format("r{0}", Revision); }
+            TextRenderer.DrawText(e.Graphics, text, fnt, e.Bounds, clr, flags);            
         }
     }
 }
