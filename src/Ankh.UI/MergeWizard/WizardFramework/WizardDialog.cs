@@ -214,7 +214,7 @@ namespace WizardFramework
 
             UpdateForPage(page);
 
-            OnPageChanged(new WizardPageChangeEventArgs(this, currPage_prop));
+            OnPageChanged(new WizardPageChangedEventArgs(this, currPage_prop));
         }
 
         /// <summary>
@@ -357,7 +357,7 @@ namespace WizardFramework
         /// Fires an event signifying a page change.
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void OnPageChanged(WizardPageChangeEventArgs e)
+        protected virtual void OnPageChanged(WizardPageChangedEventArgs e)
         {
             if (PageChanged != null)
                 PageChanged(this, e);
@@ -380,7 +380,7 @@ namespace WizardFramework
         }
 
         private IWizardPage selectedPage_prop = null;
-        public event EventHandler<WizardPageChangeEventArgs> PageChanged;
+        public event EventHandler<WizardPageChangedEventArgs> PageChanged;
         public event EventHandler<WizardPageChangingEventArgs> PageChanging;
         #endregion
 

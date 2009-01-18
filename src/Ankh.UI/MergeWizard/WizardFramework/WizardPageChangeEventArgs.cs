@@ -21,25 +21,22 @@ using System.Text;
  **/
 namespace WizardFramework
 {
-    public class WizardPageChangeEventArgs : EventArgs
+    public sealed class WizardPageChangedEventArgs : EventArgs
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="provider">The page change provider.</param>
         /// <param name="currPage">The current page displayed in the wizard.</param>
-        internal WizardPageChangeEventArgs(IWizardPageChangeProvider provider, IWizardPage currPage)
+        internal WizardPageChangedEventArgs(IWizardPageChangeProvider provider, IWizardPage currPage)
         {
             currPage_prop = currPage;
             provider_prop = provider;
         }
 
-        #region WizardPageChangeEventArgs Properties
-        private IWizardPage currPage_prop;
-        private IWizardPageChangeProvider provider_prop;
-        #endregion
+        readonly IWizardPage currPage_prop;
+        readonly IWizardPageChangeProvider provider_prop;
 
-        #region WizardPageChangeEventArgs Property Implementations
         /// <summary>
         /// Returns the page currently being displayed.
         /// </summary>
@@ -55,6 +52,5 @@ namespace WizardFramework
         {
             get { return provider_prop; }
         }
-        #endregion
     }
 }

@@ -22,7 +22,7 @@ using System.ComponentModel;
  **/
 namespace WizardFramework
 {
-    public class WizardPageChangingEventArgs : CancelEventArgs
+    public sealed class WizardPageChangingEventArgs : CancelEventArgs
     {
         /// <summary>
         /// Constructor.
@@ -31,16 +31,13 @@ namespace WizardFramework
         /// <param name="targetPage">The target page attempting to be switched to.</param>
         internal WizardPageChangingEventArgs(IWizardPage currentPage, IWizardPage targetPage)
         {
-            this.currPage_prop = currentPage;
-            this.tarPage_prop = targetPage;
+            currPage_prop = currentPage;
+            tarPage_prop = targetPage;
         }
 
-        #region WizardPageChangeEventArgs Properties
-        private IWizardPage currPage_prop;
-        private IWizardPage tarPage_prop;
-        #endregion
+        readonly IWizardPage currPage_prop;
+        readonly IWizardPage tarPage_prop;
 
-        #region WizardPageChangeEventArgs Property Implementations
         /// <summary>
         /// Returns the page currently being displayed.
         /// </summary>
@@ -56,7 +53,5 @@ namespace WizardFramework
         {
             get { return tarPage_prop; }
         }
-
-        #endregion
     }
 }
