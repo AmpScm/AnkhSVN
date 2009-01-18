@@ -58,13 +58,8 @@ namespace Ankh.UI.SvnLog
             this.logView.Size = new System.Drawing.Size(552, 324);
             this.logView.Sorting = System.Windows.Forms.SortOrder.None;
             this.logView.TabIndex = 0;
-            this.logView.VirtualMode = true;
             this.logView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
-            this.logView.VirtualItemsSelectionRangeChanged += new System.Windows.Forms.ListViewVirtualItemsSelectionRangeChangedEventHandler(this.logRevisionControl1_VirtualItemsSelectionRangeChanged);
-            this.logView.SelectedIndexChanged += new System.EventHandler(this.logRevisionControl1_SelectedIndexChanged);
-            this.logView.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.logRevisionControl1_RetrieveVirtualItem);
             this.logView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.logRevisionControl1_ItemSelectionChanged);
-            this.logView.CacheVirtualItems += new System.Windows.Forms.CacheVirtualItemsEventHandler(this.logRevisionControl1_CacheVirtualItems);
             // 
             // LogRevisionControl
             // 

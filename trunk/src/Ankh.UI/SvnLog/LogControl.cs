@@ -100,7 +100,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.Log);
+            logRevisionControl1.Start(LogMode.Log);
         }
 
 
@@ -126,7 +126,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.MergesEligible);
+            logRevisionControl1.Start(LogMode.MergesEligible);
         }
 
         public void StartMergesMerged(IAnkhServiceProvider context, SvnOrigin target, SvnTarget source)
@@ -144,7 +144,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(context, LogMode.MergesMerged);
+            logRevisionControl1.Start(LogMode.MergesMerged);
         }
 
         internal void FetchAll()
@@ -157,7 +157,7 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
             logMessageView1.Reset();
-            logRevisionControl1.Start(Context.GetService<IAnkhServiceProvider>(), Mode);
+            logRevisionControl1.Start(Mode);
         }
 
         public bool IncludeMerged

@@ -40,9 +40,7 @@ namespace Ankh.UI.SvnLog
     {
         readonly Action<SvnLogArgs> _logAction;
         readonly object _instanceLock = new object();
-        readonly Queue<LogListViewItem> _logItems = new Queue<LogListViewItem>();
-        readonly List<LogListViewItem> _logItemList = new List<LogListViewItem>();
-        IAnkhServiceProvider _context;
+        readonly Queue<LogRevisionItem> _logItems = new Queue<LogRevisionItem>();
         LogMode _mode;
         BusyOverlay _busyOverlay;
 
@@ -50,7 +48,6 @@ namespace Ankh.UI.SvnLog
         {
             InitializeComponent();
             _logAction = new Action<SvnLogArgs>(DoFetch);
-
         }
         public LogRevisionControl(IContainer container)
             : this()
@@ -65,25 +62,29 @@ namespace Ankh.UI.SvnLog
             set { _dataSource = value; logView.LogSource = value; }
         }
 
-        IAnkhServiceProvider _qcontext;
+        IAnkhServiceProvider _context;
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
-            get { return _qcontext; }
+            get { return _context; }
             set
             {
-                _qcontext = value;
-                logView.SelectionPublishServiceProvider = value;
+                _context = value;
+                OnContextChanged(EventArgs.Empty);
             }
         }
 
+        private void OnContextChanged(EventArgs eventArgs)
+        {
+            logView.SelectionPublishServiceProvider = Context;
+        }
+
         IAsyncResult _logRunner;
-        public void Start(IAnkhServiceProvider context, LogMode mode)
+        public void Start(LogMode mode)
         {
             lock (_instanceLock)
             {
                 _mode = mode;
-                _context = context;
                 _cancel = false;
                 SvnLogArgs args = new SvnLogArgs();
                 args.Start = LogSource.Start;
@@ -123,9 +124,10 @@ namespace Ankh.UI.SvnLog
             }
 
             _logItems.Clear();
-            _logItemList.Clear();
+            logView.Items.Clear();
+            _lastRevision = -1;
             fetchCount = 0;
-            logView.VirtualListSize = 0;
+
         }
 
         int fetchCount = 0;
@@ -161,6 +163,7 @@ namespace Ankh.UI.SvnLog
                             la.Limit = args.Limit;
                             la.StrictNodeHistory = args.StrictNodeHistory;
                             la.RetrieveMergedRevisions = args.RetrieveMergedRevisions;
+                            la.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
 
                             client.Log(uris, la, ReceiveItem);
                             break;
@@ -170,6 +173,7 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             meArgs.RetrieveChangedPaths = true;
+                            meArgs.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
                             client.ListMergesEligible(LogSource.MergeTarget.Target, single.Target, meArgs, ReceiveItem);
                             break;
                         case LogMode.MergesMerged:
@@ -178,6 +182,7 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             mmArgs.RetrieveChangedPaths = true;
+                            mmArgs.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
                             client.ListMergesMerged(LogSource.MergeTarget.Target, single.Target, mmArgs, ReceiveItem);
                             break;
                     }
@@ -191,29 +196,29 @@ namespace Ankh.UI.SvnLog
                 OnBatchDone();
                 HideBusyIndicator();
             }
-        } 
+        }
 
-        void ReceiveItem(object sender, SvnLogEventArgs e)
+        void OnLogCancel(object sender, SvnCancelEventArgs e)
         {
             if (_cancel)
                 e.Cancel = true;
-            else
+        }
+
+        void ReceiveItem(object sender, SvnLogEventArgs e)
+        {
+            if (!_cancel)
                 OnReceivedItem(e);
         }
 
         void ReceiveItem(object sender, SvnMergesMergedEventArgs e)
         {
-            if (_cancel)
-                e.Cancel = true;
-            else
+            if (!_cancel)
                 OnReceivedItem(e);
         }
 
         void ReceiveItem(object sender, SvnMergesEligibleEventArgs e)
         {
-            if (_cancel)
-                e.Cancel = true;
-            else
+            if (!_cancel)
                 OnReceivedItem(e);
         }
 
@@ -226,13 +231,14 @@ namespace Ankh.UI.SvnLog
 
                 post = (_logItems.Count == 0);
 
-                _logItems.Enqueue(new LogListViewItem(logView, _context, e));
+                _logItems.Enqueue(new LogRevisionItem(logView, _context, e));
             }
 
             if (post)
                 BeginInvoke(new AnkhAction(OnShowItems));
         }
 
+        long _lastRevision;
         void OnShowItems()
         {
             Debug.Assert(!InvokeRequired);
@@ -240,12 +246,14 @@ namespace Ankh.UI.SvnLog
             lock (_logItems)
             {
                 if (_logItems.Count > 0)
-                    _logItemList.AddRange(_logItems);
+                {
+                    LogRevisionItem[] items = _logItems.ToArray();
+                    logView.Items.AddRange(items);
+                    _lastRevision = items[items.Length - 1].Revision;
 
-                _logItems.Clear();
+                    _logItems.Clear();
+                }
             }
-
-            logView.VirtualListSize = _logItemList.Count;
         }
 
         void OnBatchDone()
@@ -260,7 +268,7 @@ namespace Ankh.UI.SvnLog
                 FetchAll();
 
             if (BatchDone != null)
-                BatchDone(this, new BatchFinishedEventArgs(_logItemList.Count));
+                BatchDone(this, new BatchFinishedEventArgs(11));
         }
 
         internal event EventHandler<BatchFinishedEventArgs> BatchDone;
@@ -289,43 +297,52 @@ namespace Ankh.UI.SvnLog
                 _busyOverlay.Hide();
         }
 
-        private void logRevisionControl1_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            try
-            {
-                if (e.ItemIndex >= _logItemList.Count)
-                    return;
 
-                LogListViewItem li = _logItemList[e.ItemIndex];
-                e.Item = li;
-            }
-            finally
+        bool _extending;
+        void ExtendList()
+        {
+            if (logView.VScrollPos < logView.VScrollMax - 30)
+                return;
+
+            if (!_extending)
             {
-                if (e.ItemIndex > _logItemList.Count - 10)
-                    ExtendList();
+                try
+                {
+                    _extending = true;
+
+                    BeginInvoke(new AnkhAction(DoExtendList));
+                }
+                catch
+                {
+                    _extending = false;
+                }
             }
         }
 
-        void ExtendList()
+        void DoExtendList()
         {
-            lock (_instanceLock)
+            try
             {
-                if (!_running && _logItemList.Count == fetchCount)
+                lock (_instanceLock)
                 {
-                    if (logView.VScrollPos < logView.VScrollMax - 30)
-                        return;
+                    if (!_running && logView.Items.Count == fetchCount)
+                    {
+                        _running = true;
 
-                    _running = true;
+                        SvnLogArgs args = new SvnLogArgs();
+                        args.Start = _lastRevision - 1;
+                        args.End = LogSource.End;
+                        args.Limit = 20;
+                        args.StrictNodeHistory = LogSource.StrictNodeHistory;
+                        args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
 
-                    SvnLogArgs args = new SvnLogArgs();
-                    args.Start = _logItemList[_logItemList.Count - 1].Revision - 1;
-                    args.End = LogSource.End;
-                    args.Limit = 20;
-                    args.StrictNodeHistory = LogSource.StrictNodeHistory;
-                    args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
-
-                    StartFetch(args);
+                        StartFetch(args);
+                    }
                 }
+            }
+            finally
+            {
+                _extending = false;
             }
         }
 
@@ -343,9 +360,9 @@ namespace Ankh.UI.SvnLog
 
 
                 SvnLogArgs args = new SvnLogArgs();
-                if (_logItemList.Count > 0)
+                if (_lastRevision >= 0)
                 {
-                    long startRev = _logItemList[_logItemList.Count - 1].Revision - 1;
+                    long startRev = _lastRevision - 1;
                     args.Start = startRev < 0 ? SvnRevision.Zero : startRev;
                 }
                 else
@@ -354,7 +371,7 @@ namespace Ankh.UI.SvnLog
                     {
                         if (_logItems.Count > 0)
                         {
-                            LogListViewItem[] items = _logItems.ToArray();
+                            LogRevisionItem[] items = _logItems.ToArray();
                             long revision = items[items.Length - 1].Revision - 1;
                             // revision should not be < 0
                             args.Start = revision < 0 ? SvnRevision.Zero : revision;
@@ -364,8 +381,6 @@ namespace Ankh.UI.SvnLog
                 args.End = LogSource.End;
                 args.StrictNodeHistory = LogSource.StrictNodeHistory;
                 args.RetrieveMergedRevisions = LogSource.IncludeMergedRevisions;
-                //args.RetrieveChangedPaths = false;
-
 
                 StartFetch(args);
             }
@@ -384,7 +399,7 @@ namespace Ankh.UI.SvnLog
                 if (logView.FocusedItem == null)
                     return null;
 
-                return new LogItem((LogListViewItem)logView.FocusedItem, LogSource.RepositoryRoot);
+                return new LogItem((LogRevisionItem)logView.FocusedItem, LogSource.RepositoryRoot);
             }
         }
 
@@ -403,30 +418,15 @@ namespace Ankh.UI.SvnLog
         {
             if (FocusChanged != null)
                 FocusChanged(this, FocusedItem);
-        }
 
-        /* SR:  Weird stuff is going on with ListViews in virtual mode, modify with care
-         *      -   normal clicking -> SelectedIndexChange is 'right' about the number of selected indices
-         *      -   ctrl clicking ->  SelectedIndexChange is 'right' about the number of selected indices
-         *      -   shift clicking -> VirtualItemsSelectionRangeChanges is 'right' about the number of selected indices
-        */
-        private void logRevisionControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Debug.WriteLine("NormalChanged: " + logRevisionControl1.SelectedIndices.Count);
-            OnSelectionChanged();
-        }
-
-        private void logRevisionControl1_VirtualItemsSelectionRangeChanged(object sender, ListViewVirtualItemsSelectionRangeChangedEventArgs e)
-        {
-            //Debug.WriteLine("RangeChanged:  " + logRevisionControl1.SelectedIndices.Count);
-            OnSelectionChanged();
+            ExtendList();
         }
 
         void OnSelectionChanged()
         {
             _selectedItems.Clear();
             foreach (int i in logView.SelectedIndices)
-                _selectedItems.Add(new LogItem((LogListViewItem)logView.Items[i], LogSource.RepositoryRoot));
+                _selectedItems.Add(new LogItem((LogRevisionItem)logView.Items[i], LogSource.RepositoryRoot));
 
             if (SelectionChanged != null)
                 SelectionChanged(this, SelectedItems);
