@@ -124,7 +124,7 @@
     <value>Source Control</value>
   </data>
   <data name="107" xml:space="preserve">
-    <value>Subversion</value>
+    <value>Subversion Environment</value>
   </data>
   <data name="110" xml:space="preserve">
     <value>AnkhSVN</value>
@@ -174,5 +174,8 @@
   </data>
   <data name="306" xml:space="preserve">
     <value>Settings for edditing .patch files</value>
+  </data>
+  <data name="108" xml:space="preserve">
+    <value>Subversion User Tools</value>
   </data>
 </root>

@@ -295,29 +295,8 @@ namespace Ankh.UI.PropertyEditors
 
         private void ResizeGrid()
         {
-            if (propListView != null && baseValueColumn != null && valueColumn != null)
-            {
-                int otherWidth = 0;
-
-                foreach (ColumnHeader ch in propListView.Columns)
-                {
-                    if (ch == baseValueColumn || ch == valueColumn)
-                        continue;
-
-                    if (ch.DisplayIndex >= 0)
-                        otherWidth += ch.Width + 2;
-                }
-
-                int restWidth = propListView.Width - otherWidth - SystemInformation.VerticalScrollBarWidth - 4;
-
-                int rest = restWidth - baseValueColumn.Width - valueColumn.Width - 4;
-
-                if (restWidth > 0)
-                {
-                    baseValueColumn.Width = Math.Max(0, baseValueColumn.Width + rest / 2);
-                    valueColumn.Width = Math.Max(0, valueColumn.Width + rest / 2);
-                }
-            }
+            if (propListView != null)
+                propListView.ResizeColumnsToFit(baseValueColumn, valueColumn);            
         }
 
         private void propListView_MouseDoubleClick(object sender, MouseEventArgs e)

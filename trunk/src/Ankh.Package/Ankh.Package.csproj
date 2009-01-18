@@ -137,7 +137,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhEditorFactories.cs" />
-    <Compile Include="AnkhSourceControlSettingsPage.cs">
+    <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="OptionPages\UserToolsSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="AnkhSvnPackage.cs" />

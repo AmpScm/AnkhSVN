@@ -52,6 +52,11 @@ namespace Ankh
         /// <param name="poolClient">The pool client.</param>
         /// <returns>true if the pool accepts the client, otherwise false</returns>
         bool ReturnClient(SvnPoolClient poolClient);
+
+        /// <summary>
+        /// Flushes all clients to read settings again
+        /// </summary>
+        void FlushAllClients();
     }
 
     /// <summary>

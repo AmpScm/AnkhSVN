@@ -749,6 +749,47 @@ namespace Ankh.UI.VSSelectionControls
                     return si.nMax;
                 return -1;
             }
-        }       
+        }
+
+        /// <summary>
+        /// Resizes the specified columns to optimally fill the usable width
+        /// </summary>
+        /// <param name="resizeColumns">The resize columns.</param>
+        public void ResizeColumnsToFit(params ColumnHeader[] resizeColumns)        
+        {
+            if (DesignMode || resizeColumns == null)
+                return;
+
+            int currentWidth = 0;
+            foreach (ColumnHeader ch in resizeColumns)
+            {
+                if (ch == null)
+                    throw new ArgumentException("Null column", "resizeColumns");
+
+                currentWidth += ch.Width + 2;
+            }
+
+            int otherWidth = 0;
+
+            foreach (ColumnHeader ch in Columns)
+            {
+                if (Array.IndexOf(resizeColumns, ch) >= 0)
+                    continue;
+
+                if (ch.DisplayIndex >= 0)
+                    otherWidth += ch.Width + 2; // 2 = separator space
+            }
+
+            int restWidth = Width - otherWidth - SystemInformation.VerticalScrollBarWidth - 4;
+            int rest = restWidth - currentWidth;
+
+            if (restWidth > 0)
+            {
+                foreach (ColumnHeader ch in resizeColumns)
+                {
+                    ch.Width = Math.Max(0, ch.Width + rest / resizeColumns.Length);
+                }
+            }
+        }
     }
 }

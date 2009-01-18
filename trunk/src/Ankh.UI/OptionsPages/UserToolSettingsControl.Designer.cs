@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.OptionsPages
 {
-    partial class AnkhSettingsControl
+    partial class UserToolSettingsControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -188,11 +188,11 @@ namespace Ankh.UI.OptionsPages
         #endregion
 
         private System.Windows.Forms.ComboBox diffExeBox;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button diffBrowseBtn;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ComboBox mergeExeBox;
-		private System.Windows.Forms.Button mergeBrowseBtn;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button diffBrowseBtn;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox mergeExeBox;
+        private System.Windows.Forms.Button mergeBrowseBtn;
         private System.Windows.Forms.CheckBox interactiveMergeOnConflict;
         private System.Windows.Forms.Button patchBrowseBtn;
         private System.Windows.Forms.ComboBox patchExeBox;
