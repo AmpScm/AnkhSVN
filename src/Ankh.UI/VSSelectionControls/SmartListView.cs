@@ -153,7 +153,7 @@ namespace Ankh.UI.VSSelectionControls
             //    throw new NotImplementedException();
         }
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
         public Collection<SmartColumn> GroupColumns
         {
             get { return _groupColumns; }
@@ -321,7 +321,7 @@ namespace Ankh.UI.VSSelectionControls
         [Browsable(false)]
         public int HeaderHeight
         {
-            get { return Math.Max((_headerHeight > 0) ? _headerHeight-1 : (_headerHeight = GetHeaderHeight())-1, 0); }
+            get { return Math.Max((_headerHeight > 0) ? _headerHeight - 1 : (_headerHeight = GetHeaderHeight()) - 1, 0); }
         }
 
         int _itemHeight;
@@ -348,7 +348,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             get
             {
-                if(View != View.Details)
+                if (View != View.Details)
                     throw new NotImplementedException();
                 if (_itemsPerPage == 0 && ItemHeight > 0)
                 {
@@ -365,7 +365,7 @@ namespace Ankh.UI.VSSelectionControls
             _itemsPerPage = 0;
             base.OnSizeChanged(e);
         }
-        
+
         #endregion
 
         string _groupSeparator = ", ";
@@ -485,17 +485,15 @@ namespace Ankh.UI.VSSelectionControls
 
             item.Group = null;
 
-            ListViewGroup itemGrp = Groups[g];
+            SmartGroup itemGrp = (SmartGroup)Groups[g];
 
             if (itemGrp == null)
             {
                 string txt = string.IsNullOrEmpty(g) ? "<Rest>" : g;
-                SmartGroup sg = new SmartGroup(this, g, txt);
+                itemGrp = new SmartGroup(this, g, txt);
                 _groups.Add(sg, sg);
                 Groups.Clear();
-                Groups.AddRange(new List<ListViewGroup>(_groups.Values).ToArray());                
-
-                itemGrp = sg;
+                Groups.AddRange(new List<ListViewGroup>(_groups.Values).ToArray());
             }
 
             itemGrp.Items.Add(item);
@@ -548,7 +546,7 @@ namespace Ankh.UI.VSSelectionControls
             finally
             {
                 _inRefreshGroupsAvailable = inGroups;
-            }          
+            }
         }
 
         void FlushGroups()
@@ -558,7 +556,10 @@ namespace Ankh.UI.VSSelectionControls
                 ListViewGroup group = Groups[i];
 
                 if (group.Items.Count == 0)
+                {
+                    _groups.Remove((SmartGroup)group);
                     Groups.RemoveAt(i--);
+                }
             }
 
             bool shouldShow = (Groups.Count > 1);
@@ -569,11 +570,9 @@ namespace Ankh.UI.VSSelectionControls
 
                 if (shouldShow)
                 {
-                    // Recreate the groups (.Net bug?)
-                    ListViewGroup[] grps = new ListViewGroup[Groups.Count];
-                    Groups.CopyTo(grps, 0);
+                    // Recreate the groups
                     Groups.Clear();
-                    Groups.AddRange(grps);
+                    Groups.AddRange(new List<ListViewGroup>(_groups.Values).ToArray());
                 }
             }
         }
@@ -620,21 +619,21 @@ namespace Ankh.UI.VSSelectionControls
         {
             if (!DesignMode)
             {
-                switch(m.Msg)
+                switch (m.Msg)
                 {
                     case 123: // WM_CONTEXTMENU
-                    {
-                        uint pos = unchecked((uint)m.LParam);
+                        {
+                            uint pos = unchecked((uint)m.LParam);
 
-                        Select();
+                            Select();
 
-                        OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
-                            unchecked((short)(ushort)(pos & 0xFFFF)),
-                            unchecked((short)(ushort)(pos >> 16)), 0));
+                            OnShowContextMenu(new MouseEventArgs(Control.MouseButtons, 1,
+                                unchecked((short)(ushort)(pos & 0xFFFF)),
+                                unchecked((short)(ushort)(pos >> 16)), 0));
 
-                        return;
-                    }
-                        
+                            return;
+                        }
+
                     case 8270: // WM_REFLECTNOTIFY
                         if (CheckBoxes && StrictCheckboxesClick)
                         {
@@ -661,7 +660,7 @@ namespace Ankh.UI.VSSelectionControls
                         break;
                 }
             }
-            base.WndProc(ref m);            
+            base.WndProc(ref m);
         }
 
         private void WmVScroll(ref Message m)
@@ -801,7 +800,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             get { return OSLevel >= 510; }
         }
-        #endregion        
+        #endregion
 
         [Browsable(false)]
         public int HScrollPos
@@ -867,7 +866,7 @@ namespace Ankh.UI.VSSelectionControls
         /// Resizes the specified columns to optimally fill the usable width
         /// </summary>
         /// <param name="resizeColumns">The resize columns.</param>
-        public void ResizeColumnsToFit(params ColumnHeader[] resizeColumns)        
+        public void ResizeColumnsToFit(params ColumnHeader[] resizeColumns)
         {
             if (DesignMode || resizeColumns == null)
                 return;
