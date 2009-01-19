@@ -110,6 +110,7 @@ namespace Ankh.VSPackage
             Trace.WriteLine("AnkhSVN: Loading package");
 
             InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
+            RegisterAsOleComponent();
         }
 
         void InitializeRuntime()
