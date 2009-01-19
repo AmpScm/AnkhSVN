@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.5962</title>
+<title>AnkhSVN-Daily Update - 2.0.5974</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>AnkhSVN-Daily Update - 2.0.5962</h1>
+<h1>AnkhSVN-Daily Update - 2.0.5974</h1>
 
 
 <p>
@@ -12,20 +12,29 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1468/AnkhSvn-Daily-2.0.5962.356.msi">AnkhSVN 2.0.5962</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1469/AnkhSvn-Daily-2.0.5974.357.msi">AnkhSVN 2.0.5974</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5962">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=5974">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-01-19</td></tr>
 <tr class="d"><td colspan="4">2009-01-18</td></tr>
+<tr><td> </td><td class="r"><a id="5972" href="http://ankhsvn.net/rev/?r=5972">[r5972]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionItem.cs, src/Ankh.UI/SvnLog/LogRevisionControl.Designer.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/SvnLog/LogRevisionView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Re enable scrolling as a way to fetch extra logitems in the log viewer.
+Also reduce the time a lock is kept to the absolute minimum.</td></tr>
+<tr><td> </td><td class="r"><a id="5971" href="http://ankhsvn.net/rev/?r=5971">[r5971]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/VSSelectionControls/SmartGroup.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/VSSelectionControls/SmartListView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Update SmartListView to sort list view groups in a stable order. Also
+provide an estimated number of items that could be visible at one time.</td></tr>
+<tr><td> </td><td class="r"><a id="5967" href="http://ankhsvn.net/rev/?r=5967">[r5967]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeRevisionsSelectionPageControl.cs, src/Ankh.UI/SvnLog/LogMessageView.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/SvnLog/LogControl.cs, src/Ankh.UI/SvnLog/LogViewerDialog.cs, src/Ankh.Services/UI/ICurrentItemSource.cs, src/Ankh.UI/SvnLog/LogChangedPaths.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Clean up log control event routing. (Use an eventargs object in all events)</td></tr>
+<tr><td> </td><td class="r"><a id="5966" href="http://ankhsvn.net/rev/?r=5966">[r5966]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/SvnLog/LogRevisionItem.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/SvnLog/LogRevisionControl.Designer.cs, src/Ankh.UI/SvnLog/LogRevisionControl.cs, src/Ankh.UI/SvnLog/LogControl.cs, src/Ankh.UI/SvnLog/LogRevisionView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implemented owner draw on the log revision control, to allow right aligning the
+real first column, and indenting for merge info. Worked around serveral strange
+.Net design decisions that created extra spacings.</td></tr>
 <tr><td> </td><td class="r"><a id="5959" href="http://ankhsvn.net/rev/?r=5959">[r5959]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/OptionsPages/AnkhOptionsPageControl.cs, src/Ankh.UI/OptionsPages/UserToolSettingsControl.Designer.cs, src/Ankh/Services/AnkhSvnClientPool.cs, src/Ankh.UI/OptionsPages/UserToolSettingsControl.cs, src/Ankh.UI/OptionsPages/SvnAuthenticationCacheEditor.Designer.cs, src/Ankh.UI/OptionsPages/SvnAuthenticationCacheEditor.cs, src/Ankh.UI/OptionsPages/AnkhSettingsControl.Designer.cs, src/Ankh.UI/OptionsPages/OptionsResources.resx (and 20 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Split the option dialog in Tools-&gt;Options-&gt;Source Control in two pages 
 (User Tools and Environment). Add a new Edit credentials options on the
 new Environment page.</td></tr>
@@ -243,21 +252,6 @@ with knowledge about file extensions. (No Extension -&gt; Open as Text,
 Project/Solution -&gt; Open With Subversion (for checkout); Visual Studio known
 extension -&gt; Open With VS, otherwise show windows 'Open With' dialog.)</td></tr>
 <tr><td> </td><td class="r"><a id="5760" href="http://ankhsvn.net/rev/?r=5760">[r5760]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/OptionsPages/AnkhSettingsControl.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix filling the diff tool settings dialog for custom tools.</td></tr>
-<tr><td> </td><td class="r"><a id="5757" href="http://ankhsvn.net/rev/?r=5757">[r5757]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh.Package/Gui/menu/CreatePatch.png, src/Ankh.Package/Gui/PendingChanges/CreatePatch.png, src/Ankh.Package/Gui/PendingChanges/ApplyPatch.png, src/Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Created new CreatePatch and ApplyPatch icons, using the old patch icon
-and the CheckOut and Update icons.</td></tr>
-<tr><td> </td><td class="r"><a id="5756" href="http://ankhsvn.net/rev/?r=5756">[r5756]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/ApplyPatch.cs, src/Ankh.Services/Scc/UI/IAnkhDiffHandler.cs, src/Ankh.Ids/AnkhCommandGroup.cs, src/Ankh/Ankh.csproj, src/Ankh/Services/AnkhDiff.Tools.cs, src/Ankh/Services/AnkhDiff.cs, src/Ankh.UI/PendingChanges/Commands/CreatePatch.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implemented ApplyPatch command using an external diff tool. (Currently the
-only template is TortoiseMerge). Add more common commit and update like
-commands to the PC window below Commit and Update.</td></tr>
-<tr><td> </td><td class="r"><a id="5754" href="http://ankhsvn.net/rev/?r=5754">[r5754]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/UITypeEditors, src/Ankh.UI/OptionsPages, src/Ankh.UI/OptionsPages/ToolArgumentDialog.Designer.cs, src/Ankh.UI/OptionsPages/ToolArgumentDialog.cs, src/Ankh.Services/Scc/UI/IAnkhDiffHandler.cs, src/Ankh.UI/OptionsPages/AnkhSettingsControl.Designer.cs, src/Ankh.UI/OptionsPages/AnkhSettingsControl.cs, src/Ankh.UI/AnkhSettingsControl.resx (and 13 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make the GUI for selecting diff/merge/patch tool more user friendly by enabling
-top level combo box for selecting the tools. Fill the list with known tools and
-whether they can be found or not. Selecting a custom template now stores a template
-reference, but you can still manually edit all commands via the browse button and/or
-selecting 'Other...' in the list.<br>
-Also reimplemented the command editor window in the style of the VS project
-setting dialog and move all code to the Ankh.UI/OptionsDialog folder.</td></tr>
-<tr class="d"><td colspan="4">2008-12-20</td></tr>
-<tr><td> </td><td class="r"><a id="5752" href="http://ankhsvn.net/rev/?r=5752">[r5752]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated SharpSvn reference to version 1.5005.947. This brings us
-the fixes of Subversion 1.5.5.</td></tr>
 
 </table>
 <!--/Recent changes-->
