@@ -351,10 +351,55 @@ namespace Ankh.Commands
                 SetText(pCmdText, updateArgs.Text ?? updateArgs.Command.ToString());
             }
 
-            prgCmds[0].cmdf = (uint)cmdf;
+            if (IsInCustomize())
+                prgCmds[0].cmdf = (uint)(cmdf & ~OLECMDF.OLECMDF_INVISIBLE);
+            else
+                prgCmds[0].cmdf = (uint)cmdf;
 
             return 0; // S_OK
         }
+
+        IAnkhCommandService _commandService;
+        IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
+        int _nModal;
+        bool _isModal;
+        bool _customizeMode;
+        bool _maybeInCustomize;
+        public void SetModal(bool modal)
+        {
+            if (modal)
+                _nModal++;
+            else
+                _nModal--;
+
+            if ((_nModal != 0) == _isModal)
+                return; // Not switched
+
+            _isModal = (_nModal != 0);
+
+            if (_isModal)
+            {
+                // Check for customize mode
+                _customizeMode = false;
+                _maybeInCustomize = true;
+            }
+            else
+                _customizeMode = false;
+        }
+
+        bool IsInCustomize()
+        {
+            if (_customizeMode || !_maybeInCustomize)
+                return _customizeMode;
+
+            _maybeInCustomize = false;
+            return _customizeMode = false;// CommandService.InCustomizeMode;
+        }
+
 
         #region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
 

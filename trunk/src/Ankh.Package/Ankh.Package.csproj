@@ -132,6 +132,7 @@
     <None Include="Gui\Gui.xsx">
       <DependentUpon>Gui.xsd</DependentUpon>
     </None>
+    <None Include="Gui\menu\Properties.pdn" />
     <None Include="Gui\PendingChanges\RepositoryExplorer.pdn" />
     <None Include="Resources\AnkhLogo32x32.pdn" />
   </ItemGroup>
@@ -163,6 +164,9 @@
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="AnkhSvnPackage.SolutionProperties.cs">
+      <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSvnPackage.OleComponent.cs">
       <DependentUpon>AnkhSvnPackage.cs</DependentUpon>
     </Compile>
     <Compile Include="Attributes\ProvideLanguageSettings.cs" />
