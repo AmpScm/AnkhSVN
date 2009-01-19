@@ -150,8 +150,11 @@ namespace Ankh.UI.SvnLog
 
             if (!isSelected)
                 e.DrawBackground();
-            else
+            else if (Focused)
                 e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
+            else
+                e.Graphics.FillRectangle(SystemBrushes.Menu, e.Bounds);
+
 
             if ((e.State & ListViewItemStates.Focused) != 0)
                 ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
@@ -179,7 +182,12 @@ namespace Ankh.UI.SvnLog
             }
 
             System.Drawing.Font fnt = e.Item.Font;
-            System.Drawing.Color clr = isSelected ? System.Drawing.SystemColors.HighlightText : e.Item.ForeColor;
+            System.Drawing.Color clr;
+
+            if (isSelected)
+                clr = Focused ? System.Drawing.SystemColors.HighlightText : SystemColors.MenuText;
+            else
+                clr = e.Item.ForeColor;
 
             HorizontalAlignment textAlign = e.Header.TextAlign;
             TextFormatFlags flags = TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix |
