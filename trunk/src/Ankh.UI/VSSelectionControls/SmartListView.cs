@@ -485,18 +485,18 @@ namespace Ankh.UI.VSSelectionControls
 
             item.Group = null;
 
-            SmartGroup itemGrp = (SmartGroup)Groups[g];
+            SmartGroup group = (SmartGroup)Groups[g];
 
-            if (itemGrp == null)
+            if (group == null)
             {
                 string txt = string.IsNullOrEmpty(g) ? "<Rest>" : g;
-                itemGrp = new SmartGroup(this, g, txt);
-                _groups.Add(sg, sg);
+                group = new SmartGroup(this, g, txt);
+                _groups.Add(group, group);
                 Groups.Clear();
                 Groups.AddRange(new List<ListViewGroup>(_groups.Values).ToArray());
             }
 
-            itemGrp.Items.Add(item);
+            group.Items.Add(item);
 
             RefreshGroupsAvailable();
         }
