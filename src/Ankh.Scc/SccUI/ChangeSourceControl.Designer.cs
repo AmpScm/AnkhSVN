@@ -61,7 +61,6 @@ namespace Ankh.Scc.SccUI
             this.okButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.slnBindPath = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.settingsTabControl = new System.Windows.Forms.TabControl();
             this.sharedSettingsTab = new System.Windows.Forms.TabPage();
             this.label7 = new System.Windows.Forms.Label();
@@ -245,7 +244,7 @@ namespace Ankh.Scc.SccUI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(619, 415);
+            this.cancelButton.Location = new System.Drawing.Point(700, 415);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 3;
@@ -255,7 +254,7 @@ namespace Ankh.Scc.SccUI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(538, 415);
+            this.okButton.Location = new System.Drawing.Point(619, 415);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 2;
@@ -281,16 +280,6 @@ namespace Ankh.Scc.SccUI
             this.slnBindPath.ReadOnly = true;
             this.slnBindPath.Size = new System.Drawing.Size(569, 20);
             this.slnBindPath.TabIndex = 3;
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(700, 415);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "&Help";
             // 
             // settingsTabControl
             // 
@@ -754,7 +743,6 @@ namespace Ankh.Scc.SccUI
             this.ClientSize = new System.Drawing.Size(787, 450);
             this.Controls.Add(this.settingsTabControl);
             this.Controls.Add(this.okButton);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.bindingGrid);
@@ -785,7 +773,6 @@ namespace Ankh.Scc.SccUI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox slnBindPath;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabControl settingsTabControl;
         private System.Windows.Forms.TabPage sharedSettingsTab;
         private System.Windows.Forms.Label label6;
