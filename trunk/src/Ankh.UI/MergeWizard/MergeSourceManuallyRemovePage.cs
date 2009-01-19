@@ -57,14 +57,16 @@ namespace Ankh.UI.MergeWizard
             ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
         }
 
-        internal override IEnumerable<Uri> GetMergeSources(SvnItem target)
+        internal override ICollection<Uri> GetMergeSources(SvnItem target)
         {
             SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
-            if (items == null)
-                yield break;
+            
+            List<Uri> rslt = new List<Uri>(items.Count);
 
             foreach (SvnMergeItem i in items)
-                yield return i.Uri;
+                rslt.Add(i.Uri);
+
+            return rslt;
         }
     }
 }

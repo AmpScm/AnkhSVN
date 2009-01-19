@@ -55,9 +55,9 @@ namespace Ankh.UI.MergeWizard
             ((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
         }
 
-        internal override IEnumerable<Uri> GetMergeSources(SvnItem target)
+        internal override ICollection<Uri> GetMergeSources(SvnItem target)
         {
-            yield break;
+            return new List<Uri>();
         }
     }
 }

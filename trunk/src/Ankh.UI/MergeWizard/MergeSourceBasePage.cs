@@ -107,13 +107,15 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         internal abstract MergeWizard.MergeType MergeType { get; }
 
-        internal virtual IEnumerable<Uri> GetMergeSources(SvnItem target)
+        internal virtual ICollection<Uri> GetMergeSources(SvnItem target)
         {
             SvnMergeSourcesCollection sources = ((MergeWizard)Wizard).MergeUtils.GetSuggestedMergeSources(target);
-            if (sources == null)
-                yield break;
+
+            List<Uri> rslt = new List<Uri>(sources.Count);
             foreach (SvnMergeSource s in sources)
-                yield return s.Uri;
+                rslt.Add(s.Uri);
+
+            return rslt;
         }
     }
 }

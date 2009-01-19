@@ -124,12 +124,12 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Sets the merge sources for the mergeFromComboBox.
         /// </summary>
-        private void SetMergeSources(IEnumerable<Uri> mergeSources)
+        private void SetMergeSources(ICollection<Uri> mergeSources)
         {
             if (InvokeRequired)
             {
                 SetMergeSourcesCallBack c = new SetMergeSourcesCallBack(SetMergeSources);
-                Invoke(c, new object[] { mergeSources });
+                BeginInvoke(c, new object[] { mergeSources });
                 return;
             }
             MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
@@ -158,7 +158,7 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Retrieves the merge sources and adds them to the <code>ComboBox</code>.
         /// </summary>
-        IEnumerable<Uri> RetrieveMergeSources()
+        ICollection<Uri> RetrieveMergeSources()
         {
             return WizardPage.GetMergeSources(MergeTarget);
         }
@@ -170,13 +170,13 @@ namespace Ankh.UI.MergeWizard
 
         void MergesRetrieved(IAsyncResult result)
         {
-            IEnumerable<Uri> mergeSources = 
+            ICollection<Uri> mergeSources = 
                 _retrieveMergeSources.EndInvoke(_mergeRetrieveResult);
             SetMergeSources(mergeSources);
         }
 
-        delegate void SetMergeSourcesCallBack(IEnumerable<Uri> mergeSources);
-        delegate IEnumerable<Uri> MergeSources();
+        delegate void SetMergeSourcesCallBack(ICollection<Uri> mergeSources);
+        delegate ICollection<Uri> MergeSources();
 
         /// <summary>
         /// Displays the Repository Folder Dialog
