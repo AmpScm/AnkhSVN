@@ -31,6 +31,24 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
         }
 
+        IAnkhServiceProvider _context;
+        internal IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set 
+            {
+                if (_context != value)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs e)
+        {
+        }
+
         BasePage _page;
         internal BasePage WizardPage
         {
