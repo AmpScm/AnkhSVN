@@ -275,7 +275,7 @@ namespace Ankh.UI.SvnLog
                 FetchAll();
 
             if (BatchDone != null)
-                BatchDone(this, new BatchFinishedEventArgs(_logItems.Count));
+                BatchDone(this, new BatchFinishedEventArgs(logView.Items.Count, _logItems.Count));
 
             ExtendList();
         }
@@ -457,15 +457,22 @@ namespace Ankh.UI.SvnLog
 
     public sealed class BatchFinishedEventArgs : EventArgs
     {
+        readonly int _batchCount;
         readonly int _totalCount;
-        public BatchFinishedEventArgs(int totalCount)
+        public BatchFinishedEventArgs(int totalCount, int batchCount)
         {
             _totalCount = totalCount;
+            _batchCount = batchCount;
         }
 
         public int TotalCount
         {
             get { return _totalCount; }
+        }
+
+        public int BatchCount
+        {
+            get { return _batchCount; }
         }
     }
 
