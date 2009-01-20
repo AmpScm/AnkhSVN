@@ -837,6 +837,8 @@ namespace Ankh.UI.VSSelectionControls
         {
             get
             {
+                if (!IsHandleCreated)
+                    return -1;
                 NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
                 si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
                 si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_TRACKPOS | NativeMethods.ScrollInfoMask.SIF_POS);
@@ -852,6 +854,8 @@ namespace Ankh.UI.VSSelectionControls
         {
             get
             {
+                if (!IsHandleCreated)
+                    return -1;
                 NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
                 si.cbSize = (uint)System.Runtime.InteropServices.Marshal.SizeOf(si);
                 si.fMask = (int)(NativeMethods.ScrollInfoMask.SIF_RANGE);
