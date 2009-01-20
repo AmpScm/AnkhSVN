@@ -121,6 +121,14 @@ namespace Ankh.UI.PendingChanges
             _nativeWindow.LoadFile(path);
         }
 
+        internal void IgnoreFileChanges(bool ignore)
+        {
+            if (_nativeWindow == null)
+                throw new InvalidOperationException("Code editor not initialized");
+
+            _nativeWindow.IgnoreFileChanges(ignore);
+        }
+
         public void ReplaceContents(string pathToReplaceWith)
         {
             if (_nativeWindow == null)
@@ -1006,6 +1014,13 @@ namespace Ankh.UI.PendingChanges
         {
             IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
             ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+        }
+
+        internal void IgnoreFileChanges(bool ignore)
+        {
+            IVsDocDataFileChangeControl dfc = (IVsDocDataFileChangeControl)_textBuffer;
+
+            ErrorHandler.ThrowOnFailure(dfc.IgnoreFileChanges(ignore ? 1 : 0));
         }
 
         internal int LineHeight
