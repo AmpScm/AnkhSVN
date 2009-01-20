@@ -259,7 +259,7 @@ namespace Ankh.UI.SvnLog
             if (items != null)
             {
                 logView.Items.AddRange(items);
-                _lastRevision = items[items.Length - 1].Revision;                
+                _lastRevision = items[items.Length - 1].Revision;
             }
         }
 
@@ -431,17 +431,23 @@ namespace Ankh.UI.SvnLog
             if (FocusChanged != null)
                 FocusChanged(this, new CurrentItemEventArgs<ISvnLogItem>(this));
 
+            FireSelectionChanged();
+
             ExtendList();
         }
 
-        void OnSelectionChanged()
+        void FireSelectionChanged()
         {
             _selectedItems.Clear();
             foreach (int i in logView.SelectedIndices)
                 _selectedItems.Add(new LogItem((LogRevisionItem)logView.Items[i], LogSource.RepositoryRoot));
 
+            OnSelectionChanged(new CurrentItemEventArgs<ISvnLogItem>(this));
+        }
+        protected virtual void OnSelectionChanged(CurrentItemEventArgs<ISvnLogItem> e)
+        {
             if (SelectionChanged != null)
-                FocusChanged(this, new CurrentItemEventArgs<ISvnLogItem>(this));
+                SelectionChanged(this, e);
         }
 
         private void logRevisionControl1_ShowContextMenu(object sender, MouseEventArgs e)
@@ -452,7 +458,7 @@ namespace Ankh.UI.SvnLog
             Point p = MousePosition;
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
             cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
-        }        
+        }
     }
 
     public sealed class BatchFinishedEventArgs : EventArgs
