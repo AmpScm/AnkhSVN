@@ -237,7 +237,10 @@ namespace Ankh.UI.SvnLog
             }
 
             if (post)
-                BeginInvoke(new AnkhAction(OnShowItems));
+            {
+                if (IsHandleCreated)
+                    BeginInvoke(new AnkhAction(OnShowItems));
+            }
         }
 
         long _lastRevision;
