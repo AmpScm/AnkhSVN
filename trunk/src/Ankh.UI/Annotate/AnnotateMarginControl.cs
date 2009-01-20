@@ -65,14 +65,13 @@ namespace Ankh.UI.Annotate
                 return;
 
             DoMove(e);
-            
-            _in = true;
+
             if (_tipSection == null && _hoverSection != null)
                 ShowTip(_hoverSection);
         }
 
         void ShowTip(AnnotateRegion region)
-        {            
+        {
             Point mp = PointToClient(MousePosition);
             Rectangle rect = GetRectangle(region);
 
@@ -148,9 +147,9 @@ namespace Ankh.UI.Annotate
             {
                 bool xn = (x == null);
                 bool yn = (y == null);
-                if(xn)
+                if (xn)
                 {
-                    return yn ? 0 : - Compare(y,x);
+                    return yn ? 0 : -Compare(y, x);
                 }
                 else if (!yn)
                     return Comparer<AnnotateRegion>.Default.Compare(x, y);
@@ -180,7 +179,6 @@ namespace Ankh.UI.Annotate
             return null;
         }
 
-        bool _in;
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -189,38 +187,38 @@ namespace Ankh.UI.Annotate
                 return;
 
             DoMove(e);
-
-            if (_in && _tipSection == null && _hoverSection != null)
-                ShowTip(_hoverSection);
         }
 
         void DoMove(EventArgs e)
         {
             AnnotateRegion region = GetSection(PointToClient(MousePosition));
 
-            if(_hoverSection != null && _hoverSection != region)
+            if (_hoverSection != null && _hoverSection != region)
             {
                 _hoverSection.Hovered = false;
                 Invalidate(GetRectangle(_hoverSection));
-                _hoverSection = null;                
+                _hoverSection = null;
             }
 
-            if(region != _hoverSection)
+            if (region != _hoverSection)
             {
                 _hoverSection = region;
                 region.Hovered = true;
                 Invalidate(GetRectangle(region));
             }
-            
-            if (_tipSection != null && (!_in || _tipSection != region))
+
+            if (_tipSection != null && _tipSection != region)
             {
                 _tipSection = null;
                 _toolTip.Hide(this);
 
-                if (_in && region != null)
-                {
-                    ShowTip(region);
-                }
+                NativeMethods.TRACKMOUSEEVENT tme;
+                tme.cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.TRACKMOUSEEVENT));
+                tme.dwFlags = NativeMethods.TME_HOVER;
+                tme.hwndTrack = Handle;
+                tme.dwHoverTime = NativeMethods.HOVER_DEFAULT;
+
+                NativeMethods.TrackMouseEvent(ref tme);
             }
         }
 
@@ -231,7 +229,6 @@ namespace Ankh.UI.Annotate
             if (DesignMode)
                 return;
 
-            _in = false;
             DoMove(e);
 
             if (_hoverSection != null)
@@ -262,7 +259,7 @@ namespace Ankh.UI.Annotate
             else
                 _control.SetSelection(section.Source);
 
-            Invalidate();            
+            Invalidate();
 
             if (e.Button == MouseButtons.Right)
                 ShowContextMenu();
@@ -358,7 +355,7 @@ namespace Ankh.UI.Annotate
         {
             if (region == null)
                 throw new ArgumentNullException("region");
-            else if(_control == null)
+            else if (_control == null)
                 return false;
 
             AnnotateSource src = _control.Selected;
@@ -369,7 +366,7 @@ namespace Ankh.UI.Annotate
             if (region.Source == src)
                 return true;
 
-            return false;            
+            return false;
         }
 
         internal void NotifyScroll(TextViewScrollEventArgs scrollInfo)
@@ -391,6 +388,25 @@ namespace Ankh.UI.Annotate
 
             public const uint SW_SCROLLCHILDREN = 0x0001;  /* Scroll children within *lprcScroll. */
             public const uint SW_INVALIDATE = 0x0002;  /* Invalidate after scrolling */
+
+            [DllImport("user32.dll")]
+            public static extern bool TrackMouseEvent(ref TRACKMOUSEEVENT lpEventTrack);
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TRACKMOUSEEVENT
+            {
+                public UInt32 cbSize;
+                public UInt32 dwFlags;
+                public IntPtr hwndTrack;
+                public UInt32 dwHoverTime;
+            }
+
+            public const uint TME_HOVER = 0x00000001;
+            public const uint TME_LEAVE = 0x00000002;
+            public const uint TME_NONCLIENT = 0x00000010;
+            public const uint TME_QUERY = 0x40000000;
+            public const uint TME_CANCEL = 0x80000000;
+            public const uint HOVER_DEFAULT = 0xFFFFFFFF;
         }
     }
 }
