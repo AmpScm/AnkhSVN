@@ -67,12 +67,18 @@ namespace Ankh.UI.Annotate
             blameMarginControl1.Init(Context, this, blameSections);
         }
 
-        public void LoadFile(string projectFile, string exportedFile)
+        public void LoadFile(string annotateFile)
         {
-            this.Text = Path.GetFileName(projectFile) + " (Annotated)";
-            editor.OpenFile(projectFile);
-            editor.ReplaceContents(exportedFile);
+            // Does this anything?
+            this.Text = Path.GetFileName(annotateFile) + " (Annotated)";
 
+            editor.OpenFile(annotateFile);
+            editor.IgnoreFileChanges(true);
+        }
+
+        public void SetLanguageService(Guid language)
+        {
+            editor.ForceLanguageService = language;
         }
 
         internal int GetLineHeight()
@@ -98,7 +104,7 @@ namespace Ankh.UI.Annotate
 
                 int line = (int)e.LineNumber;
 
-                if(section == null || section.Source != src)
+                if (section == null || section.Source != src)
                 {
                     section = new AnnotateRegion(line, src);
                     blameSections.Add(section);
@@ -115,14 +121,14 @@ namespace Ankh.UI.Annotate
 
         private void RetrieveLogs(SvnOrigin origin, SortedList<long, AnnotateSource> _sources)
         {
-            if(_sources.Count == 0)
+            if (_sources.Count == 0)
                 return;
 
-            EventHandler<SvnLogEventArgs> lr = 
+            EventHandler<SvnLogEventArgs> lr =
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     AnnotateSource src;
-                    if(_sources.TryGetValue(e.Revision, out src))
+                    if (_sources.TryGetValue(e.Revision, out src))
                         src.LogMessage = e.LogMessage ?? "";
                 };
 

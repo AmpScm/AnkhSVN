@@ -66,7 +66,13 @@ namespace Ankh.UI.PendingChanges
         public virtual Guid? ForceLanguageService
         {
             get { return _forceLanguageService; }
-            set { _forceLanguageService = value; }
+            set 
+            { 
+                _forceLanguageService = value;
+
+                if (_nativeWindow != null && value.HasValue)
+                    _nativeWindow.SetLanguageService(value.Value);
+            }
         }
 
         bool _showHorizontalScrollBar;
@@ -783,7 +789,7 @@ namespace Ankh.UI.PendingChanges
             {
                 Guid languageService = forceLanguageService.Value;
 
-                ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));
+                SetLanguageService(languageService);
             }
 
             ErrorHandler.ThrowOnFailure(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
@@ -1076,6 +1082,14 @@ namespace Ankh.UI.PendingChanges
                 _textEventsCookie = 0;
                 ReleaseHook<IVsTextViewEvents>(_textView, ck);
             }
+        }
+
+        internal void SetLanguageService(Guid languageService)
+        {
+            if(_textBuffer == null)
+                throw new InvalidOperationException();
+                        
+            ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));            
         }
     }
 

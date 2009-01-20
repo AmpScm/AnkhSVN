@@ -214,41 +214,34 @@ namespace Ankh.Commands
             if (!r.Succeeded)
                 return;
 
-            AnnotateEditorControl btw = new AnnotateEditorControl();           
+            AnnotateEditorControl annEditor = new AnnotateEditorControl();           
+            IAnkhEditorResolver er = e.GetService<IAnkhEditorResolver>();            
 
-            string path = null;
-            SvnPathTarget pt = target as SvnPathTarget;
+            annEditor.Create(e.Context, tempFile);
+            annEditor.LoadFile(tempFile);
+            annEditor.AddLines(item, blameResult);
 
-            if (pt != null)
+            // Detect and set the language service
+            Guid language;
+            if (er.TryGetLanguageService(Path.GetExtension(target.FileName), out language))
             {
-                path = pt.FullPath;
+                // Extension is mapped -> user
+                annEditor.SetLanguageService(language);
+            }
+            else if (blameResult != null && blameResult.Count > 0 && blameResult[0].Line != null)
+            {
+                // Extension is not mapped -> Check if this is xml (like project files)
+                string line = blameResult[0].Line.Trim();
 
-                IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
-                IAnkhOpenDocumentTracker odt = e.GetService<IAnkhOpenDocumentTracker>();
-
-                if (pfm != null && pfm.IsProjectFileOrSolution(pt.FullPath))
+                if (line.StartsWith("<?xml")
+                    || (line.StartsWith("<") && line.Contains("xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"")))
                 {
-                    // Don't use real names for projects or the solution
-                    // We don't want to crash VS here
-                    path = null;
-                }
-                else if (odt != null && odt.IsDocumentOpen(pt.FullPath))
-                {
-                    // We would replace the existing buffer here
-                    
-                    // odt.IsDocumentOpenInTextEditor() should be safe for us but testing revieled
-                    // External changes would be reflected in our buffer; not the original :(
-
-                    path = null;
+                    if (er.TryGetLanguageService(".xml", out language))
+                    {
+                        annEditor.SetLanguageService(language);
+                    }
                 }
             }
-
-            if (string.IsNullOrEmpty(path))
-                path = tempFile;
-
-            btw.Create(e.Context, path);
-            btw.LoadFile(path, tempFile);
-            btw.AddLines(item, blameResult);
         }
 
         void BlameDocument(CommandEventArgs e)
