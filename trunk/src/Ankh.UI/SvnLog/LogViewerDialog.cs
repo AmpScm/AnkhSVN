@@ -45,6 +45,12 @@ namespace Ankh.UI
             Context = context;
         }
 
+        protected override void OnContextChanged(EventArgs e)
+        {
+            base.OnContextChanged(e);
+            logViewerControl.Context = Context;
+        }
+
         /// <summary>
         /// Gets an instance of the <code>LogControl</code>.
         /// </summary>

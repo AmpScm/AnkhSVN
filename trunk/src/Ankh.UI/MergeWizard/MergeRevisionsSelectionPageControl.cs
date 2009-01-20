@@ -33,6 +33,7 @@ namespace Ankh.UI.MergeWizard
         public MergeRevisionsSelectionPageControl()
         {
             InitializeComponent();
+
             logToolControl1.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(logToolControl1_SelectionChanged);
 
             logToolControl1.StrictNodeHistory = true;
@@ -44,6 +45,11 @@ namespace Ankh.UI.MergeWizard
             {
                 return logToolControl1.SelectedItems;
             }
+        }
+
+        protected override void OnContextChanged(EventArgs e)
+        {
+            logToolControl1.Context = Context;
         }
 
         public event EventHandler<EventArgs> SelectionChanged;

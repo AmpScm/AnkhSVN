@@ -36,6 +36,7 @@ namespace Ankh.UI.MergeWizard
 
             Wizard = wizard;
             _control = control;
+            _control.Context = wizard.Context;
         }
 
         protected BasePage(AnkhWizard wizard, BasePageControl control, string name, Image image)
@@ -48,6 +49,7 @@ namespace Ankh.UI.MergeWizard
 
             Wizard = wizard;
             _control = control;
+            _control.Context = wizard.Context;
         }
 
         /// <summary>
