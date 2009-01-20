@@ -75,7 +75,7 @@ namespace Ankh.UI.MergeWizard
         {
             Uri u;
             if(Uri.TryCreate(baseUri, UriKind.Absolute, out u))
-                return u;
+                return DisplayBrowseDialogAndGetResult(page, target, u);
             
             page.Message = MergeUtils.INVALID_FROM_URL;
 
