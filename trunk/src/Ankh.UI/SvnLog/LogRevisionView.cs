@@ -138,6 +138,14 @@ namespace Ankh.UI.SvnLog
                 ResizeColumnsToFit(_messageColumn);
         }
 
+        protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
+        {
+            base.OnColumnWidthChanged(e);
+
+            if (!DesignMode && OwnerDraw)
+                Invalidate();
+        }
+
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
         {
             e.DrawDefault = true;
