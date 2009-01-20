@@ -233,6 +233,13 @@ namespace Ankh.UI.Annotate
 
             _in = false;
             DoMove(e);
+
+            if (_hoverSection != null)
+            {
+                _hoverSection.Hovered = false;
+                Invalidate(GetRectangle(_hoverSection));
+                _hoverSection = null;
+            }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
