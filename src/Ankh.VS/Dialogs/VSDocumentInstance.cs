@@ -93,7 +93,9 @@ namespace Ankh.VS.Dialogs
 
         public int SaveDocData(VSSAVEFLAGS dwSave, out string pbstrMkDocumentNew, out int pfSaveCanceled)
         {
-            throw new NotImplementedException();
+            pbstrMkDocumentNew = null;
+            pfSaveCanceled = 0;
+            return VSConstants.S_OK;
         }
 
         public int SetUntitledDocPath(string pszDocDataPath)
@@ -107,22 +109,26 @@ namespace Ankh.VS.Dialogs
 
         public int GetClassID(out Guid pClassID)
         {
-            throw new NotImplementedException();
+            pClassID = Guid.Empty;
+            return VSConstants.E_UNEXPECTED;
         }
 
         public int GetCurFile(out string ppszFilename, out uint pnFormatIndex)
         {
-            throw new NotImplementedException();
+            ppszFilename = "";
+            pnFormatIndex = 0;
+            return VSConstants.E_UNEXPECTED;
         }
 
         public int GetFormatList(out string ppszFormatList)
         {
-            throw new NotImplementedException();
+            ppszFormatList = "";
+            return VSConstants.E_UNEXPECTED;
         }
 
         public int InitNew(uint nFormatIndex)
         {
-            throw new NotImplementedException();
+            return VSConstants.S_OK;
         }
 
         public int IsDirty(out int pfIsDirty)
