@@ -226,16 +226,16 @@ namespace Ankh.Diff
 
         #region Private Scrolling Methods
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.dll")]
         private extern static int GetScrollInfo(IntPtr hWnd, int nBar, ref ScrollInfo Info);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.dll")]
         private extern static int SetScrollInfo(IntPtr hWnd, int nBar, ref ScrollInfo Info, int bRedraw);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.dll")]
         private extern static int ScrollWindow(IntPtr hWnd, int dx, int dy, ref Rectangle rcScroll, ref Rectangle rcClip);
 
-        [DllImport("User32.Dll")]
+        [DllImport("user32.dll")]
         private extern static int ScrollWindow(IntPtr hWnd, int dx, int dy, IntPtr prcScroll, IntPtr prcClip);
 
         #endregion
@@ -255,7 +255,7 @@ namespace Ankh.Diff
 
         #region Private Sound Methods
 
-        [DllImport("WinMM.dll", CharSet = CharSet.Auto)]
+        [DllImport("winmm.dll", CharSet = CharSet.Auto)]
         private static extern bool PlaySound(string strSound, IntPtr hModule, uint uiSound);
 
         #endregion
