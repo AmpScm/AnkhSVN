@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Package;
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -13,8 +14,8 @@ namespace Ankh.VS.LanguageServices
             : base(context)
         {
             _factory = new EditorFactory();
+            _factory.SetSite(this);
         }
-        #region IAnkhEditorResolver Members
 
         public bool TryGetLanguageService(string extension, out Guid languageService)
         {
@@ -31,7 +32,5 @@ namespace Ankh.VS.LanguageServices
             languageService = Guid.Empty;
             return false;
         }
-
-        #endregion
     }
 }
