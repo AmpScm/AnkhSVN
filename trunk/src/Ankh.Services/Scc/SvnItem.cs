@@ -626,6 +626,41 @@ namespace Ankh
             }
         }
 
+        public bool IsPropertyModified
+        {
+            get { return GetState(SvnItemState.PropertyModified) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is diff available.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this instance is diff available; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLocalDiffAvailable
+        {
+            get
+            {
+                if (!IsModified)
+                    return IsDocumentDirty;
+
+                switch (Status.LocalContentStatus)
+                {
+                    case SvnStatus.Normal:
+                        // Probably property modified
+                        return IsDocumentDirty;
+                    case SvnStatus.Added:
+                    case SvnStatus.Replaced:
+                        return HasCopyableHistory;
+                    case SvnStatus.Deleted:
+                        // To be replaced
+                        return !Exists;
+                    default:
+                        return true;
+                }
+            }
+        }
+
         /// <summary>
         /// Whether the item is potentially versionable.
         /// </summary>

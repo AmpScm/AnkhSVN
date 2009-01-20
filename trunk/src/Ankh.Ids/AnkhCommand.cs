@@ -86,8 +86,7 @@ namespace Ankh.Ids
         DocumentShowChanges,
         DiffLocalItem,
         Export,
-        [Obsolete]
-        ExportFolder,
+        ItemShowPropertyChanges,
         Lock,
         Log,
         LogItem,
