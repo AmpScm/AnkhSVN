@@ -33,10 +33,11 @@ namespace Ankh.Commands
     /// <remarks>
     /// If project/solution (logical) node is selected, target for this command is the project/solution (physical) folder.
     /// </remarks>
-    [Command(AnkhCommand.ItemEditProperties, HideWhenDisabled = true)]
-    [Command(AnkhCommand.ProjectEditProperties, HideWhenDisabled = true)]
-    [Command(AnkhCommand.SolutionEditProperties, HideWhenDisabled = true)]
-    class EditPropertiesCommand : CommandBase
+    [Command(AnkhCommand.ItemEditProperties)]
+    [Command(AnkhCommand.ProjectEditProperties)]
+    [Command(AnkhCommand.SolutionEditProperties)]
+    [Command(AnkhCommand.ItemShowPropertyChanges)]
+    class ItemEditPropertiesCommand : CommandBase
     {
         /// <summary>
         /// Raises the <see cref="E:Update"/> event.
@@ -50,21 +51,26 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ItemEditProperties:
+                case AnkhCommand.ItemShowPropertyChanges:
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
                         if (i.IsVersioned)
                         {
                             count++;
 
-                            if (count > 1)
+                            if (e.Command == AnkhCommand.ItemShowPropertyChanges
+                                && !i.IsPropertyModified)
                             {
-                                if (e.Selection.IsSingleNodeSelection)
-                                    break;
-                                else
-                                {
-                                    e.Enabled = false;
-                                    return;
-                                }
+                                e.Enabled = false;
+                                return;
+                            }
+
+                            if (e.Selection.IsSingleNodeSelection)
+                                break;
+                            else if (count > 1)
+                            {
+                                e.Enabled = false;
+                                return;
                             }
                         }
                     }
@@ -116,6 +122,7 @@ namespace Ankh.Commands
             switch (e.Command)
             {
                 case AnkhCommand.ItemEditProperties:
+                case AnkhCommand.ItemShowPropertyChanges:
                     foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
                     {
                         if (i.IsVersioned)

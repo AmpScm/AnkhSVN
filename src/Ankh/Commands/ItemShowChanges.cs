@@ -48,8 +48,7 @@ namespace Ankh.Commands
             {
                 SvnItem sel = e.Selection.ActiveDocumentItem;
 
-                if (sel == null || !sel.IsVersioned || !(sel.IsModified || sel.IsDocumentDirty) || 
-                    ((sel.IsAdded || sel.IsReplaced) && !sel.HasCopyableHistory))
+                if (sel == null || !sel.IsLocalDiffAvailable)
                     e.Enabled = false;
 
                 return;
@@ -68,7 +67,7 @@ namespace Ankh.Commands
                 {
                     if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
                     {
-                        if (!(item.IsModified || item.IsDocumentDirty) || item.IsDeleteScheduled)
+                        if (!item.IsLocalDiffAvailable)
                             continue;
                     }
 

@@ -184,7 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommandStrings.resx</DependentUpon>
     </Compile>
-    <Compile Include="Commands\EditPropertiesCommand.cs" />
+    <Compile Include="Commands\ItemEditPropertiesCommand.cs" />
     <Compile Include="Commands\ItemConflictEdit.cs" />
     <Compile Include="Commands\ItemIgnore.cs" />
     <Compile Include="Commands\ItemUnifiedDiffCommand.cs" />

@@ -153,6 +153,7 @@
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
+      <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x1780" />
       <Button id="Cmd_SolutionHistory" priority="0x1800" name="SolutionHistory" defaultInvisible="true"
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
@@ -195,6 +196,7 @@
           <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
           <ButtonRef id="Cmd_CommitItem" priority="0x200" />
           <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
+          <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x380" />
           <ButtonRef id="Cmd_Log" priority="0x400" />
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
@@ -214,6 +216,7 @@
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />
       <ButtonRef id="Cmd_ItemConflictEdit" priority="0x1600" />
       <ButtonRef id="Cmd_ItemShowChanges" priority="0x1700" />
+      <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x1780" />
       <Button id="Cmd_ProjectHistory" priority="0x1800" name="ProjectHistory"
               text="View Project &amp;History" iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
@@ -254,6 +257,7 @@
           <ButtonRef id="Cmd_UpdateItem" priority="0x100" />
           <ButtonRef id="Cmd_CommitItem" priority="0x200" />
           <ButtonRef id="Cmd_ItemShowChanges" priority="0x300" />
+          <ButtonRef id="Cmd_ItemShowPropertyChanges" priority="0x380" />
           <ButtonRef id="Cmd_Log" priority="0x400" />
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x1700" />
           <ButtonRef id="Cmd_ItemEditProperties" priority="0x1900" />
@@ -272,6 +276,9 @@
       <Button id="Cmd_ItemShowChanges" name="Svn.Compare" priority="0x1800"
                 text="Show C&amp;hanges"
                 toolTip="Show differences compared to local text base." iconFile="PendingChanges/Compare.png" defaultInvisible="true"/>
+      <Button id="Cmd_ItemShowPropertyChanges" name="Svn.PropertyCompare" priority="0x1880"
+                text="Show &amp;Property Changes"
+                toolTip="Show property changes." iconFile="Menu/Properties.png" defaultInvisible="true"/>
       <Button id="Cmd_Log" name="ViewHistory" priority="0x1900"
                 text="View &amp;History"
                 toolTip="Show the Log Viewer for the selected item." iconFile="PendingChanges/ViewHistory.png" defaultInvisible="true"/>
