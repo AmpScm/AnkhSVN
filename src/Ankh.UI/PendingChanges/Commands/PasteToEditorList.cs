@@ -25,17 +25,17 @@ using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges.Commands
 {
-    [Command(AnkhCommand.PcLogEditorPasteFileList)]
-    [Command(AnkhCommand.PcLogEditorPasteRecentLog)]
+    [Command(AnkhCommand.PcLogEditorPasteFileList, HideWhenDisabled=false)]
+    [Command(AnkhCommand.PcLogEditorPasteRecentLog, HideWhenDisabled=false)]
     class PasteToEditorList : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             LogMessageEditor lme = e.Selection.GetActiveControl<LogMessageEditor>();
 
-            if (lme == null || lme.PasteSource == null)
-                e.Enabled = false;
-            else if(e.Command == AnkhCommand.PcLogEditorPasteFileList && !lme.PasteSource.HasPendingChanges)
+            if (lme == null || lme.ReadOnly || lme.PasteSource == null)
+                e.Enabled = e.Visible = false;
+            else if (e.Command == AnkhCommand.PcLogEditorPasteFileList && !lme.PasteSource.HasPendingChanges)
                 e.Enabled = false;
         }
 
