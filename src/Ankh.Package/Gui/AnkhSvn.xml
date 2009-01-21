@@ -340,7 +340,7 @@
           <Menu id="Menu_MoveToChangeList" text="Move to &amp;Change List" name="SvnMoveToChangeList" priority="0x100">
             <Group id="Cmd_MoveToNewChangeList" priority="0x100">
               <Button id="Cmd_MoveToNewChangeList" name="MoveToChangeList" priority="0x100"
-                      text="&lt;&amp;Change List&gt;" defaultInvisible="true"/>              
+                      text="&lt;&amp;Change List&gt;" defaultInvisible="true"/>
             </Group>
             <Group id="Cmd_MoveToExistingChangeList0" priority="0x200">
               <Button id="Cmd_MoveToExistingChangeList0" priority="0x100" text="." dynamicItemStart="true" defaultInvisible="true" />
@@ -395,14 +395,14 @@
           <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
           <Button id="Cmd_CopyReposExplorerUrl" name="CopyReposExplorerUrl" priority="0x400"
                 text="Copy &amp;Url"
-                toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />                                       
+                toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />
 
           <Button id="Cmd_RefreshRepositoryItem" name="RefreshRepositoryItem" priority="0xF000"
                 text="Refres&amp;h"
                 toolTip="Refresh this item." iconFile="PendingChanges/Refresh.png"/>
         </Group>
         <Group id="Grp_RepositoryExplorerTbOpen" priority="0x300">
-          <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100" 
+          <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100"
                 type="MenuControllerLatched" iconAndText="true">
             <Group id="Menu_RepositoryExplorerTbOpen" priority="0x100">
               <ButtonRef id="Cmd_ExplorerOpen" priority="0x680" />
@@ -412,7 +412,7 @@
             <GroupRef id="Grp_OpenWith2" priority="0xF000" />
           </Menu>
           <Button id="Cmd_Checkout" name="Checkout" priority="0x300"
-                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png" dynamicVisibility="true" />          
+                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png" dynamicVisibility="true" />
         </Group>
         <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
           <Button id="Cmd_ReposCopyTo" priority="0x100"
@@ -423,7 +423,7 @@
                   iconFile="PendingChanges/MoveTo.png" defaultInvisible="true" />
           <Button id="Cmd_NewDirectory" name="NewDirectory" priority="0x500"
                 text="Ne&amp;w Directory..."
-                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />          
+                toolTip="Create a new directory here." iconFile="menu/MakeDirectory.png" defaultInvisible="true" />
           <Button id="Cmd_SaveToFile" name="SaveToFile" priority="0xA00"
               text="Save to &amp;File"
               toolTip="Save the file to disk." iconFile="menu/SaveToFile.png" defaultInvisible="true" />
@@ -434,13 +434,13 @@
     <GroupRef id="guidSHLMainMenu:IDG_VS_MENU_CONTEXTMENUS">
       <Menu id="Grp_AnkhContextMenus" priority="0x0F0" name="AnkhSVNContextMenus" text="&amp;AnkhSVN Context Menus" type="Context" noCustomize="true" notInTBList="true">
         <Group id="Grp_AnkhContextMenus" priority="0x100">
-          
-        </Group>        
+
+        </Group>
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
       <!-- The Repository Explorer Context Menu -->
-      <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext" 
+      <Menu id="Menu_RepositoryExplorerContextMenu" name="RepositoryExplorerContext"
             text="Repository Explorer" priority="0" type="Context" notInTBList="true">
         <Group id="Grp_RepositoryExplorerOpen" priority="0x100">
           <!-- Cmd_RepositoryOpen is handled on the control itself and does 'the right thing' -->
@@ -528,10 +528,19 @@
           <Button id="Cmd_LogFetchAll" name="LogFetchAll" text="Fetch all" textOnly="true" priority="0x400"
                   toolTip="Retrieve all revisions."/>
         </Group>
+        <!--Group id="Grp_LogViewerSearch" priority="0xFFF0">
+          <ComboBox id="Cmd_LogViewerSearchCombo" type="DropDownCombo" width="100" priority="0x100"
+                fillCommand="Cmd_LogViewerSearchComboFill_IdOnly" 
+                caseSensitive="true"
+                toolTip="Search"
+                text="Search:"
+                iconAndText="true"
+                />
+        </Group-->
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
-      <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" text="Log Viewer List" type="Context" 
+      <Menu id="Menu_LogViewerContextMenu" name="LogViewContext" text="Log Viewer List" type="Context"
             priority="0" notInTBList="true">
         <Group id="Grp_LogViewerContextMenu" priority="0x1000">
           <Button id="Cmd_LogCompareWithWorkingCopy" name="Svn.LogCompareWithWorkingCopy" priority="0x100"
@@ -575,7 +584,7 @@
                   text="Show &amp;Changes"
                   iconFile="PendingChanges/Compare.png" dynamicVisibility="true" />
           <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate"
-                  iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>          
+                  iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
@@ -740,7 +749,7 @@
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
       <!-- The Pending Changes Context menu -->
-      <Menu id="Menu_PendingCommitsContextMenu" name="PendingCommitsContext" text="&amp;Pending Commits" 
+      <Menu id="Menu_PendingCommitsContextMenu" name="PendingCommitsContext" text="&amp;Pending Commits"
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_PendingChangesContextMenu" priority="0x100">
           <ButtonRef id="Cmd_ItemOpenVisualStudio" priority="0x100" />
@@ -750,7 +759,7 @@
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
-      <Menu id="Menu_ListViewHeader" name="ListViewHeader" text="Listview Header" 
+      <Menu id="Menu_ListViewHeader" name="ListViewHeader" text="Listview Header"
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_ListViewState" priority="0x100">
           <Menu id="Menu_ListViewShow" priority="0x1000" name="ShowBy" text="&amp;View Columns">
@@ -776,7 +785,7 @@
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
-      <Menu id="Menu_PendingCommitsHeaderContextMenu" name="SortPendingCommits" text="Pending Commits &amp;Header" 
+      <Menu id="Menu_PendingCommitsHeaderContextMenu" name="SortPendingCommits" text="Pending Commits &amp;Header"
             priority="0" type="Context" notInTBList="true">
         <GroupRef id="Grp_ListViewState" priority="0x100" />
         <Group id="Grp_PendingCommitsActions" priority="0x200">
@@ -786,13 +795,13 @@
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">
-      <Menu id="Menu_LogMessageEditorContextMenu" name="LogMessageEditor" text="Log Message Editor" 
+      <Menu id="Menu_LogMessageEditorContextMenu" name="LogMessageEditor" text="Log Message Editor"
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_PendingChangesLogMessageCommands" priority="0x100">
           <Button id="Cmd_PcLogEditorPasteFileList" name="PasteFiles" priority="0x100"
-                  text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png"/>
+                  text="Paste &amp;Filename List" iconFile="PendingChanges/GenerateMessage.png" dynamicVisibility="true"/>
           <Button id="Cmd_PcLogEditorPasteRecentLog" name="PasteRecent" priority="0x200"
-                  text="Paste &amp;Recent Message" />
+                  text="Paste &amp;Recent Message" dynamicVisibility="true" />
         </Group>
         <Group id="Grp_PendingChangesLogEditor" priority="0x300">
           <ButtonRef id="guidVSStd97:cmdidCut" priority="0x100"  />
@@ -823,7 +832,7 @@
         </Group>
       </Menu>
     </GroupRef>
-    <!-- Change list menu-->    
+    <!-- Change list menu-->
     <MenuRef id="Grp_NoUI">
       <Group id="Grp_NoUI" priority="0">
         <!-- This group contains our non-ui commands which are only used for triggering postcommands -->
@@ -836,8 +845,50 @@
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
       </Group>
-    </MenuRef>    
+    </MenuRef>
   </UI>
+  <KeyBindings>
+    <Editor id="Ankh_LogContextGuid">
+      <!-- Standard navigation keys for log editor control -->
+      <!--BindKey id="guidVSStd2K:ECMD_BACKSPACE" key1="VK_BACK" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_BACKSPACE" key1="VK_BACK"/>
+      <BindKey id="guidVSStd2K:ECMD_RETURN" key1="VK_RETURN" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_RETURN" key1="VK_RETURN"/-->
+      <BindKey id="guidVSStd2K:ECMD_TAB" key1="VK_TAB"/>
+      <BindKey id="guidVSStd2K:ECMD_LEFT" key1="VK_LEFT"/>
+      <BindKey id="guidVSStd2K:ECMD_LEFT_EXT" key1="VK_LEFT" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_LEFT_EXT_COL" key1="VK_LEFT" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_RIGHT" key1="VK_RIGHT"/>
+      <BindKey id="guidVSStd2K:ECMD_RIGHT_EXT" key1="VK_RIGHT" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_RIGHT_EXT_COL" key1="VK_RIGHT" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_UP" key1="VK_UP"/>
+      <BindKey id="guidVSStd2K:ECMD_UP_EXT" key1="VK_UP" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_UP_EXT_COL" key1="VK_UP" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_DOWN" key1="VK_DOWN"/>
+      <BindKey id="guidVSStd2K:ECMD_DOWN_EXT" key1="VK_DOWN" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_DOWN_EXT_COL" key1="VK_DOWN" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_HOME" key1="VK_HOME" mod1="ctrl"/>
+      <BindKey id="guidVSStd2K:ECMD_HOME_EXT" key1="VK_HOME" mod1="ctrl+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_END" key1="VK_END" mod1="ctrl"/>
+      <BindKey id="guidVSStd2K:ECMD_END_EXT" key1="VK_END" mod1="ctrl+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_BOL" key1="VK_HOME"/>
+      <BindKey id="guidVSStd2K:ECMD_BOL_EXT" key1="VK_HOME" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_BOL_EXT_COL" key1="VK_HOME" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_EOL" key1="VK_END"/>
+      <BindKey id="guidVSStd2K:ECMD_EOL_EXT" key1="VK_END" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_EOL_EXT_COL" key1="VK_END" mod1="alt+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_PAGEUP" key1="VK_PRIOR"/>
+      <BindKey id="guidVSStd2K:ECMD_PAGEUP_EXT" key1="VK_PRIOR" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_PAGEDN" key1="VK_NEXT"/>
+      <BindKey id="guidVSStd2K:ECMD_PAGEDN_EXT" key1="VK_NEXT" mod1="shift"/>
+      <BindKey id="guidVSStd2K:ECMD_TOPLINE" key1="VK_PRIOR" mod1="ctrl"/>
+      <BindKey id="guidVSStd2K:ECMD_TOPLINE_EXT" key1="VK_PRIOR" mod1="ctrl+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_BOTTOMLINE" key1="VK_NEXT" mod1="ctrl"/>
+      <BindKey id="guidVSStd2K:ECMD_BOTTOMLINE_EXT" key1="VK_NEXT" mod1="ctrl+shift"/>
+      <BindKey id="guidVSStd2K:ECMD_SCROLLUP" key1="VK_UP" mod1="ctrl"/>
+      <BindKey id="guidVSStd2K:ECMD_SCROLLDN" key1="VK_DOWN" mod1="ctrl"/>
+    </Editor>
+  </KeyBindings>
   <UsedCommands>
     <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->
   </UsedCommands>
