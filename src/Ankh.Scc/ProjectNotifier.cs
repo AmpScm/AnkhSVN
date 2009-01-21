@@ -324,7 +324,7 @@ namespace Ankh.Scc
                     {
                         AnkhMessageBox mb = new AnkhMessageBox(Context);
 
-                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file.Key), 
+                        DialogResult dr = mb.Show(string.Format(Resources.YourMergeToolSavedXWouldYouLikeItMarkedAsResolved, file.Key),
                             Resources.MergeCompleted, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                         switch (dr)
@@ -346,13 +346,12 @@ namespace Ankh.Scc
                                 break;
                             default:
                                 // Let VS handle the file
-                                break;
+                                return; // No reload
                         }
                     }
-                    else if (!item.IsDocumentDirty)
-                    {
-                        // Reload?
 
+                    if (!item.IsDocumentDirty)
+                    {
                         if (file.Value != null)
                             file.Value.Reload(file.Key);
                     }
