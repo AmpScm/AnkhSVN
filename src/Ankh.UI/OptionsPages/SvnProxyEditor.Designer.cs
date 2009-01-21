@@ -31,9 +31,9 @@
             this.proxyEnabled = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.proxyGroup = new System.Windows.Forms.GroupBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.exceptionsBox = new System.Windows.Forms.TextBox();
             this.passwordBox = new System.Windows.Forms.TextBox();
-            this.exceptionsBox = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.usernameBox = new System.Windows.Forms.TextBox();
@@ -74,9 +74,9 @@
             this.proxyGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.proxyGroup.Controls.Add(this.textBox5);
-            this.proxyGroup.Controls.Add(this.passwordBox);
             this.proxyGroup.Controls.Add(this.exceptionsBox);
+            this.proxyGroup.Controls.Add(this.passwordBox);
+            this.proxyGroup.Controls.Add(this.label6);
             this.proxyGroup.Controls.Add(this.label5);
             this.proxyGroup.Controls.Add(this.label4);
             this.proxyGroup.Controls.Add(this.usernameBox);
@@ -92,17 +92,18 @@
             this.proxyGroup.TabStop = false;
             this.proxyGroup.Text = "Proxy Settings";
             // 
-            // textBox5
+            // exceptionsBox
             // 
-            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.exceptionsBox.AcceptsReturn = true;
+            this.exceptionsBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox5.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
-            this.textBox5.Location = new System.Drawing.Point(78, 97);
-            this.textBox5.Multiline = true;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(197, 91);
-            this.textBox5.TabIndex = 9;
+            this.exceptionsBox.CharacterCasing = System.Windows.Forms.CharacterCasing.Lower;
+            this.exceptionsBox.Location = new System.Drawing.Point(78, 97);
+            this.exceptionsBox.Multiline = true;
+            this.exceptionsBox.Name = "exceptionsBox";
+            this.exceptionsBox.Size = new System.Drawing.Size(197, 91);
+            this.exceptionsBox.TabIndex = 9;
             // 
             // passwordBox
             // 
@@ -115,14 +116,14 @@
             this.passwordBox.TabIndex = 7;
             this.passwordBox.UseSystemPasswordChar = true;
             // 
-            // exceptionsBox
+            // label6
             // 
-            this.exceptionsBox.AutoSize = true;
-            this.exceptionsBox.Location = new System.Drawing.Point(6, 100);
-            this.exceptionsBox.Name = "exceptionsBox";
-            this.exceptionsBox.Size = new System.Drawing.Size(62, 13);
-            this.exceptionsBox.TabIndex = 8;
-            this.exceptionsBox.Text = "&Exceptions:";
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 100);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "&Exceptions:";
             // 
             // label5
             // 
@@ -237,9 +238,9 @@
         private System.Windows.Forms.CheckBox proxyEnabled;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox proxyGroup;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox exceptionsBox;
         private System.Windows.Forms.TextBox passwordBox;
-        private System.Windows.Forms.Label exceptionsBox;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox usernameBox;
