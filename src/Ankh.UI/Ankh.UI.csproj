@@ -248,6 +248,12 @@
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.Designer.cs">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="OptionsPages\SvnProxyEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OptionsPages\SvnProxyEditor.Designer.cs">
+      <DependentUpon>SvnProxyEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathSelector\RevisionSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -933,6 +939,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\SvnAuthenticationCacheEditor.resx">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsPages\SvnProxyEditor.resx">
+      <DependentUpon>SvnProxyEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\RevisionSelector.resx">
       <DependentUpon>RevisionSelector.cs</DependentUpon>

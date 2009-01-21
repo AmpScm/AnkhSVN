@@ -22,5 +22,18 @@ namespace Ankh.UI.OptionsPages
                 editor.ShowDialog(Context);
             }
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void proxyEdit_Click(object sender, EventArgs e)
+        {
+            using (SvnProxyEditor editor = new SvnProxyEditor())
+            {
+                editor.ShowDialog(Context);
+            }
+        }
     }
 }
