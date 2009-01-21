@@ -102,6 +102,7 @@ namespace Ankh.Commands
         {
             SvnItem theItem = null;
             string path;
+            bool allowObstructions = false;
 
             string projectRoot = e.GetService<IAnkhSolutionSettings>().ProjectRoot;
 
@@ -173,6 +174,7 @@ namespace Ankh.Commands
 
                     target = dlg.SwitchToUri;
                     revision = dlg.Revision;
+                    allowObstructions = dlg.AllowUnversionedObstructions;
                 }
 
             // Get a list of all documents below the specified paths that are open in editors inside VS
@@ -197,6 +199,7 @@ namespace Ankh.Commands
                     delegate(object sender, ProgressWorkerArgs a)
                     {
                         SvnSwitchArgs args = new SvnSwitchArgs();
+                        args.AllowObstructions = allowObstructions;
                         args.AddExpectedError(SvnErrorCode.SVN_ERR_WC_INVALID_SWITCH);
 
                         if (revision != SvnRevision.None)
@@ -260,15 +263,17 @@ namespace Ankh.Commands
                         path, target),
                         "Switch", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     {
-                        // Attempt to switch again
-                        SvnSwitchArgs args = new SvnSwitchArgs();
+                        // Try to switch again
                         e.GetService<IProgressRunner>().RunModal(
                         "Switching",
                         delegate(object sender, ProgressWorkerArgs a)
                         {
+                            SvnSwitchArgs args = new SvnSwitchArgs();
 
                             if (revision != SvnRevision.None)
                                 args.Revision = revision;
+
+                            args.AllowObstructions = allowObstructions;
 
                             e.GetService<IConflictHandler>().RegisterConflictHandler(args, a.Synchronizer);
                             a.Client.Switch(path, target, args);

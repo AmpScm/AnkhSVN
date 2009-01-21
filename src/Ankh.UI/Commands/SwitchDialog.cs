@@ -54,6 +54,12 @@ namespace Ankh.UI
             set { versionSelector.Revision = value; }
         }
 
+        public bool AllowUnversionedObstructions
+        {
+            get { return allowObstructions.Checked; }
+            set { allowObstructions.Checked = value; }
+        }
+
         protected override void OnContextChanged(EventArgs e)
         {
             base.OnContextChanged(e);
