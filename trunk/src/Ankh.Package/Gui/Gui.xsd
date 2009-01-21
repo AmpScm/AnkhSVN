@@ -74,6 +74,7 @@
           <xs:element ref="gui:Imports" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:Defines" minOccurs="0" />
           <xs:element ref="gui:UI" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:KeyBindings" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:UsedCommands" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:sequence>
@@ -1045,6 +1046,25 @@
       <xs:attribute name="id" type="gui:qId" use="required" />
     </xs:complexType>
   </xs:element>
+  <xs:element name="Editor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element minOccurs="0" ref="gui:BindKey" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="id" type="gui:qPrefix" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BindKey">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:KeyDef">
+          <xs:attribute name="id" type="gui:qId" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:simpleType name="modifier">
     <xs:restriction base="xs:string">
       <xs:enumeration value="shift" />
@@ -1061,40 +1081,44 @@
       <xs:pattern value=".|(0x[0-9A-Fa-f][0-9A-Fa-f])|(VK_[A-Z0-9_]+)" />
     </xs:restriction>
   </xs:simpleType>
+  <xs:complexType name="KeyDef">
+    <xs:attribute name="key1" type="gui:key" use="required">
+      <xs:annotation>
+        <xs:documentation>The key value of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="mod1" type="gui:modifier">
+      <xs:annotation>
+        <xs:documentation>The optional modifier(s) of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="key2" type="gui:key">
+      <xs:annotation>
+        <xs:documentation>The optional key value of the second part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="mod2" type="gui:modifier">
+      <xs:annotation>
+        <xs:documentation>The optional modifier(s) of the second part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
   <xs:element name="KeyBinding">
     <xs:complexType>
-      <xs:sequence>
-      </xs:sequence>
-      <xs:attribute name="editor" type="gui:qPrefix" use="required">
-        <xs:annotation>
-          <xs:documentation>
-            A command UI context GUID (CmdUIGUID) identifying the editor in which the key
-            combination is available. If the editor has a single view or tab, the GUID
-            should be the same as that of the editor. If the editor has multiple tabs or
-            views, use a value of either guidVSStd97 or GuidKeyDupe.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="key1" type="gui:key" use="required">
-        <xs:annotation>
-          <xs:documentation>The key value of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="mod1" type="gui:modifier">
-        <xs:annotation>
-          <xs:documentation>The optional modifier(s) of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="key2" type="gui:key">
-        <xs:annotation>
-          <xs:documentation>The optional key value of the second part of a dual key binding or chord.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-      <xs:attribute name="mod2" type="gui:modifier">
-        <xs:annotation>
-          <xs:documentation>The optional modifier(s) of the second part of a dual key binding or chord.</xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
+      <xs:complexContent>
+        <xs:extension base="gui:KeyDef">
+          <xs:attribute name="editor" type="gui:qPrefix" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                A command UI context GUID (CmdUIGUID) identifying the editor in which the key
+                combination is available. If the editor has a single view or tab, the GUID
+                should be the same as that of the editor. If the editor has multiple tabs or
+                views, use a value of either guidVSStd97 or GuidKeyDupe.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
     </xs:complexType>
   </xs:element>
   <xs:element name="Visibility">
@@ -1110,6 +1134,19 @@
           <xs:element ref="gui:Command">
             <xs:annotation>
               <xs:documentation>Defines a new group to be placed within this context</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KeyBindings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gui:Editor">
+            <xs:annotation>
+              <xs:documentation>Allows adding extra keybindings</xs:documentation>
             </xs:annotation>
           </xs:element>
         </xs:choice>

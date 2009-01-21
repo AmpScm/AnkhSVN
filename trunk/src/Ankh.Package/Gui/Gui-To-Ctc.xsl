@@ -279,6 +279,8 @@
     <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
     <xsl:text>&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
+    <xsl:text>&#9;// Out of context commands&#10;</xsl:text>
+    <xsl:apply-templates select="gui:KeyBindings/gui:Editor/gui:BindKey" />
     <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
 
     <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
@@ -735,6 +737,62 @@
       <xsl:if test="contains(@mod2, 'shift')">
         <xsl:value-of select="'S'"/>
       </xsl:if>      
+    </xsl:if>
+    <xsl:text>;&#10;</xsl:text>
+  </xsl:template>
+  <xsl:template match="gui:BindKey">
+    <xsl:text>&#9;</xsl:text>
+    <!-- Command Id -->
+    <xsl:value-of select="@id"/>
+    <xsl:text>, </xsl:text>
+    <!-- Editor Id -->
+    <xsl:value-of select="../@id"/>
+    <xsl:text>, </xsl:text>
+    <!-- Emulation (Defined as for future use; repeat editor) -->
+    <xsl:value-of select="../@id"/>
+    <xsl:text>, </xsl:text>
+    <xsl:choose>
+      <xsl:when test="string-length(@key1) = 1">
+        <xsl:text>'</xsl:text>
+        <xsl:value-of select="me:safeToUpper(@key1)"/>
+        <xsl:text>'</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@key1"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="':'"/>
+    <xsl:if test="contains(@mod1, 'ctrl')">
+      <xsl:value-of select="'C'"/>
+    </xsl:if>
+    <xsl:if test="contains(@mod1, 'alt')">
+      <xsl:value-of select="'A'"/>
+    </xsl:if>
+    <xsl:if test="contains(@mod1, 'shift')">
+      <xsl:value-of select="'S'"/>
+    </xsl:if>
+    <xsl:if test="@key2">
+      <xsl:text> : </xsl:text>
+      <xsl:choose>
+        <xsl:when test="string-length(@key2) = 1">
+          <xsl:text>'</xsl:text>
+          <xsl:value-of select="me:safeToUpper(@key2)"/>
+          <xsl:text>'</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@key2"/>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="':'"/>
+      <xsl:if test="contains(@mod2, 'ctrl')">
+        <xsl:value-of select="'C'"/>
+      </xsl:if>
+      <xsl:if test="contains(@mod2, 'alt')">
+        <xsl:value-of select="'A'"/>
+      </xsl:if>
+      <xsl:if test="contains(@mod2, 'shift')">
+        <xsl:value-of select="'S'"/>
+      </xsl:if>
     </xsl:if>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
