@@ -21,7 +21,7 @@ namespace Ankh.UI.OptionsPages
         {
             base.OnLoad(e);
 
-            using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global"))
+            using (RegistryKey rk = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global"))
             {
                 string host = rk.GetValue("http-proxy-host") as string ?? "";
                 string port = rk.GetValue("http-proxy-port") as string ?? "8080";
@@ -47,7 +47,7 @@ namespace Ankh.UI.OptionsPages
         {
             if (proxyEnabled.Checked)
             {
-                using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global", true))
+                using (RegistryKey rk = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global"))
                 {
                     rk.SetValue("http-proxy-host", hostBox.Text.Trim());
                     rk.SetValue("http-proxy-port", portBox.Text.Trim());
@@ -77,7 +77,7 @@ namespace Ankh.UI.OptionsPages
             if (!string.IsNullOrEmpty(exceptionText))
             {
                 bool next = false;
-                foreach (string x in exceptionText.Split(',', ';', ' ', '\r', '\n'))
+                foreach (string x in exceptionText.Split(',', ';', ' ', '\t', '\r', '\n'))
                 {
                     string item = x.Trim();
                     if (!string.IsNullOrEmpty(x))
