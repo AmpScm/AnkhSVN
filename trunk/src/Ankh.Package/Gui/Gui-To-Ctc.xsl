@@ -222,10 +222,6 @@
     <xsl:apply-templates select="gui:Defines/gui:Define" mode="defines" />
     <xsl:text>/* /Defines values */&#10;&#10;</xsl:text>
 
-    <xsl:text>/* Inline values */&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:*[@id and @value]" mode="defines" />
-    <xsl:text>/* /Inline values */&#10;&#10;</xsl:text>
-
     <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
