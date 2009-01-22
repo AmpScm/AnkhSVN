@@ -314,7 +314,6 @@ namespace Ankh.Commands
                 return -1;
 
             TextQueryType textQuery = TextQueryType.None;
-            string oldText = null;
 
             if (pCmdText != IntPtr.Zero)
             {
@@ -330,11 +329,9 @@ namespace Ankh.Commands
                         textQuery = TextQueryType.Status;
                         break;
                 }
-
-                oldText = GetText(pCmdText);
             }
 
-            CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)prgCmds[0].cmdID, context, textQuery, oldText);
+            CommandUpdateEventArgs updateArgs = new CommandUpdateEventArgs((AnkhCommand)prgCmds[0].cmdID, context, textQuery);
 
             OLECMDF cmdf = OLECMDF.OLECMDF_SUPPORTED;
 
@@ -346,9 +343,9 @@ namespace Ankh.Commands
             if (updateArgs.DynamicMenuEnd)
                 return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
-            if (textQuery != TextQueryType.None)
+            if (textQuery != TextQueryType.None && !string.IsNullOrEmpty(updateArgs.Text))
             {
-                SetText(pCmdText, updateArgs.Text ?? updateArgs.Command.ToString());
+                SetText(pCmdText, updateArgs.Text);
             }
 
             if (IsInCustomize())
@@ -403,6 +400,12 @@ namespace Ankh.Commands
 
         #region // Interop code from: VS2008SDK\VisualStudioIntegration\Common\Source\CSharp\Project\Misc\NativeMethods.cs
 
+        static readonly Type _OLECMDTEXT_type = typeof(OLECMDTEXT);
+        static readonly int _offset_cmdtextf = (int)Marshal.OffsetOf(_OLECMDTEXT_type, "cmdtextf");
+        static readonly int _offset_rgwz = (int)Marshal.OffsetOf(_OLECMDTEXT_type, "rgwz");
+        static readonly int _offset_cwBuf = (int)Marshal.OffsetOf(_OLECMDTEXT_type, "cwBuf");
+        static readonly int _offset_cwActual = (int)Marshal.OffsetOf(_OLECMDTEXT_type, "cwActual");
+
         /// <summary>
         /// Gets the flags of the OLECMDTEXT structure
         /// </summary>
@@ -410,12 +413,12 @@ namespace Ankh.Commands
         /// <returns>The value of the flags.</returns>
         static OLECMDTEXTF GetFlags(IntPtr pCmdTextInt)
         {
-            Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT pCmdText = (Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT)Marshal.PtrToStructure(pCmdTextInt, typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT));
+            OLECMDTEXTF cmdtextf = (OLECMDTEXTF)Marshal.ReadInt32(pCmdTextInt, _offset_cmdtextf);
 
-            if ((pCmdText.cmdtextf & (int)OLECMDTEXTF.OLECMDTEXTF_NAME) != 0)
+            if ((cmdtextf & OLECMDTEXTF.OLECMDTEXTF_NAME) != 0)
                 return OLECMDTEXTF.OLECMDTEXTF_NAME;
 
-            if ((pCmdText.cmdtextf & (int)OLECMDTEXTF.OLECMDTEXTF_STATUS) != 0)
+            if ((cmdtextf & OLECMDTEXTF.OLECMDTEXTF_STATUS) != 0)
                 return OLECMDTEXTF.OLECMDTEXTF_STATUS;
 
             return OLECMDTEXTF.OLECMDTEXTF_NONE;
@@ -435,27 +438,22 @@ namespace Ankh.Commands
         /// <param name="text">The text to set.</param>
         static void SetText(IntPtr pCmdTextInt, string text)
         {
-            Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT pCmdText = (Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT)Marshal.PtrToStructure(pCmdTextInt, typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT));
             char[] menuText = text.ToCharArray();
 
-            // Get the offset to the rgsz param.  This is where we will stuff our text
-            //
-            IntPtr offset = Marshal.OffsetOf(typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT), "rgwz");
-            IntPtr offsetToCwActual = Marshal.OffsetOf(typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT), "cwActual");
+            uint cwBuf = unchecked((uint)Marshal.ReadInt32(pCmdTextInt, _offset_cwBuf));
 
             // The max chars we copy is our string, or one less than the buffer size,
             // since we need a null at the end.
-            //
-            int maxChars = Math.Min((int)pCmdText.cwBuf - 1, menuText.Length);
+            int maxChars = Math.Min((int)cwBuf - 1, menuText.Length);
 
-            Marshal.Copy(menuText, 0, (IntPtr)((long)pCmdTextInt + (long)offset), maxChars);
+            Marshal.Copy(menuText, 0, (IntPtr)((long)pCmdTextInt + _offset_rgwz), maxChars);
 
             // append a null character
-            Marshal.WriteInt16((IntPtr)((long)pCmdTextInt + (long)offset + maxChars * 2), 0);
+            Marshal.WriteInt16(pCmdTextInt, _offset_rgwz + maxChars * sizeof(Char), 0);
 
             // write out the length
             // +1 for the null char
-            Marshal.WriteInt32((IntPtr)((long)pCmdTextInt + (long)offsetToCwActual), maxChars + 1);
+            Marshal.WriteInt32(pCmdTextInt, _offset_cwActual, maxChars + 1);
         }
 
         /// <devdoc>
@@ -468,10 +466,6 @@ namespace Ankh.Commands
         {
             Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT pCmdText = (Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT)Marshal.PtrToStructure(pCmdTextInt, typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT));
 
-            // Get the offset to the rgsz param.
-            //
-            IntPtr offset = Marshal.OffsetOf(typeof(Microsoft.VisualStudio.OLE.Interop.OLECMDTEXT), "rgwz");
-
             // Punt early if there is no text in the structure.
             //
             if (pCmdText.cwActual == 0)
@@ -481,7 +475,7 @@ namespace Ankh.Commands
 
             char[] text = new char[pCmdText.cwActual - 1];
 
-            Marshal.Copy((IntPtr)((long)pCmdTextInt + (long)offset), text, 0, text.Length);
+            Marshal.Copy((IntPtr)((long)pCmdTextInt + _offset_rgwz), text, 0, text.Length);
 
             StringBuilder s = new StringBuilder(text.Length);
             s.Append(text);
