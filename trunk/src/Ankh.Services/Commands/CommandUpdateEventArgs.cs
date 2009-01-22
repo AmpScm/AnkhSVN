@@ -32,7 +32,6 @@ namespace Ankh.Commands
     public class CommandUpdateEventArgs : BaseCommandEventArgs
     {
         readonly TextQueryType _queryType;
-        readonly string _originalText;
         bool _disabled;
         bool _invisible;
         bool _latched;
@@ -40,12 +39,10 @@ namespace Ankh.Commands
         bool _dynamicMenuEnd;
         string _text;
 
-        public CommandUpdateEventArgs(AnkhCommand command, AnkhContext context, TextQueryType textQuery, string oldText)
+        public CommandUpdateEventArgs(AnkhCommand command, AnkhContext context, TextQueryType textQuery)
             : this(command, context)
         {
             _queryType = textQuery;
-            if (textQuery != TextQueryType.None)
-                _originalText = oldText;
         }
 
         public CommandUpdateEventArgs(AnkhCommand command, AnkhContext context)
@@ -95,7 +92,7 @@ namespace Ankh.Commands
         /// </summary>
         public string Text
         {
-            get { return _text ?? _originalText; }
+            get { return _text; }
             set { _text = value; }
         }
 
@@ -115,14 +112,6 @@ namespace Ankh.Commands
         {
             get { return _dynamicMenuEnd; }
             set { _dynamicMenuEnd = value; }
-        }
-
-        /// <summary>
-        /// Gets the original text
-        /// </summary>
-        public string OriginalText
-        {
-            get { return _originalText; }
         }
 
         /// <summary>
