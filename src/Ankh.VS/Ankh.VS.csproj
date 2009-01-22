@@ -117,6 +117,7 @@
       <DependentUpon>AnkhLanguageService.cs</DependentUpon>
     </None>
     <Compile Include="LanguageServices\LogMessageLanguageService.cs" />
+    <Compile Include="LanguageServices\UnifiedDiffDropDownBar.cs" />
     <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
     <Compile Include="Selection\SelectionContext.Active.cs">
       <DependentUpon>SelectionContext.cs</DependentUpon>
