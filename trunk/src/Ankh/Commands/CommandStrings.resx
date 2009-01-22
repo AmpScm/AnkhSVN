@@ -144,4 +144,10 @@
   <data name="CreatePatchTitle" xml:space="preserve">
     <value>Create Patch</value>
   </data>
+  <data name="EditConflictTitle" xml:space="preserve">
+    <value>Edit Conflict</value>
+  </data>
+  <data name="TheConflictInXIsAlreadyResolved" xml:space="preserve">
+    <value>The conflict in '{0}' is already resolved.</value>
+  </data>
 </root>

@@ -21,6 +21,7 @@ using Ankh.Ids;
 using SharpSvn;
 using Ankh.Scc.UI;
 using System.IO;
+using Ankh.UI;
 
 namespace Ankh.Commands
 {
@@ -41,7 +42,7 @@ namespace Ankh.Commands
             else
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
                 {
-                    if (item.IsConflicted)
+                    if (item.IsConflicted && item.Status.LocalContentStatus == SvnStatus.Conflicted)
                         return;
                 }
 
@@ -72,6 +73,16 @@ namespace Ankh.Commands
 
             if (conflict == null)
                 return;
+
+            conflict.MarkDirty();
+            if (conflict.Status.LocalContentStatus != SvnStatus.Conflicted)
+            {
+                AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+
+                mb.Show(string.Format(CommandStrings.TheConflictInXIsAlreadyResolved, conflict.FullPath), CommandStrings.EditConflictTitle, 
+                    System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                return;
+            }            
 
             SvnInfoEventArgs conflictInfo = null;
 
