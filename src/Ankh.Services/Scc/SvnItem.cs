@@ -1000,7 +1000,7 @@ namespace Ankh
             {
                 if (_workingCopy == null)
                 {
-                    if (IsAdministrativeArea || !Exists)
+                    if (IsAdministrativeArea || (!Exists && !IsVersioned))
                         return null;
                     else if (!IsDirectory)
                         _workingCopy = Parent;
