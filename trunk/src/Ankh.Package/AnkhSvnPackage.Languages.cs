@@ -45,11 +45,14 @@ namespace Ankh.VSPackage
         SingleCodeWindowOnly = true)]
     [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 305)]
     [ProvideService(typeof(LogMessageLanguageService), ServiceName = AnkhId.LogMessageServiceName)]
-    [ProvideLanguageService(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, 304)]
+    [ProvideLanguageService(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, 304,
+        CodeSense = false,
+        ShowDropDownOptions = true,
+        RequestStockColors = true)]
     [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 306)]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".patch")]
     [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".diff")]
-    [ProvideService(typeof(UnifiedDiffLanguageService), ServiceName=AnkhId.UnifiedDiffServiceName)]
+    [ProvideService(typeof(UnifiedDiffLanguageService), ServiceName = AnkhId.UnifiedDiffServiceName)]
     partial class AnkhSvnPackage
     {
         protected override object GetAutomationObject(string name)

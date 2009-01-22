@@ -119,5 +119,10 @@ namespace Ankh.VS.LanguageServices
                 _offset = offset;
             }
         }
+
+        public override TypeAndMemberDropdownBars CreateDropDownHelper(Microsoft.VisualStudio.TextManager.Interop.IVsTextView forView)
+        {
+            return new UnifiedDiffDropDownBar(this);
+        }
     }
 }
