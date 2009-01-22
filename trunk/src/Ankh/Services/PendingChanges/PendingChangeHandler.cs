@@ -22,6 +22,7 @@ using System.IO;
 using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI;
+using Ankh.Services.PendingChanges;
 
 namespace Ankh.PendingChanges
 {
@@ -252,7 +253,7 @@ namespace Ankh.PendingChanges
 
             if (!tracker.SaveDocuments(state.CommitPaths))
             {
-                state.MessageBox.Show("Failed to save all selected documents", "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+                state.MessageBox.Show(PccStrings.FailedToSaveBeforeCommit, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
                 return false;
             }
 
