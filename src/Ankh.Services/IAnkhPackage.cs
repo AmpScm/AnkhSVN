@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Ids;
 using System.Windows.Forms;
+using Ankh.VS;
 
 namespace Ankh.UI
 {
@@ -41,6 +42,8 @@ namespace Ankh.UI
 
         void ShowToolWindow(AnkhToolWindow window);
         void ShowToolWindow(AnkhToolWindow window, int id, bool create);
+
+        void RegisterIdleProcessor(IAnkhIdleProcessor processor);
 
         AmbientProperties AmbientProperties { get; }
     }

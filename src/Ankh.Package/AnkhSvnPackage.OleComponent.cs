@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.VSPackage
 {
@@ -19,7 +21,7 @@ namespace Ankh.VSPackage
 
             OLECRINFO[] crInfo = new OLECRINFO[1];
             crInfo[0].cbSize = (uint)Marshal.SizeOf(typeof(OLECRINFO));
-            crInfo[0].grfcrf = (uint)0;
+            crInfo[0].grfcrf = (uint)(_OLECRF.olecrfNeedIdleTime | _OLECRF.olecrfNeedPeriodicIdleTime);
             crInfo[0].grfcadvf = (uint)_OLECADVF.olecadvfModal;
             crInfo[0].uIdleTimeInterval = 1000;
 
@@ -43,9 +45,26 @@ namespace Ankh.VSPackage
             return 1; // Please do
         }
 
+        static List<IAnkhIdleProcessor> _idleProcessors = new List<IAnkhIdleProcessor>();
+        void IAnkhPackage.RegisterIdleProcessor(IAnkhIdleProcessor processor)
+        {
+            if (processor == null)
+                throw new ArgumentNullException("processor");
+
+            _idleProcessors.Add(processor);
+        }
+
         int IOleComponent.FDoIdle(uint grfidlef)
         {
-            return 0; // Done with idle processing
+            bool periodic = 0 != (grfidlef & (uint)_OLEIDLEF.oleidlefPeriodic);
+            bool done = true;
+
+            foreach (IAnkhIdleProcessor pp in _idleProcessors)
+            {
+                done = pp.OnIdle(periodic) && done;
+            }
+
+            return done ? VSConstants.S_OK : VSConstants.S_FALSE;
         }
 
         int IOleComponent.FPreTranslateMessage(MSG[] pMsg)
