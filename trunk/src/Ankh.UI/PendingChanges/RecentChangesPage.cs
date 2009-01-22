@@ -115,6 +115,9 @@ namespace Ankh.UI.PendingChanges
                 case SvnStatus.Ignored:
                 case SvnStatus.External: // External root will be handled inside
                     return (stat.RemoteContentStatus == SvnStatus.None);
+                case SvnStatus.None:
+                    // Hide remote locked files
+                    return (stat.RemoteContentStatus == SvnStatus.None);
                 default:
                     return false;
             }
