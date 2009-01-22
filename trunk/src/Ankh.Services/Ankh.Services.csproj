@@ -159,6 +159,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="VS\IAnkhEditorResolver.cs" />
+    <Compile Include="VS\IAnkhIdleProcessor.cs" />
     <Compile Include="VS\IAnkhSolutionExplorerWindow.cs" />
     <Compile Include="Scc\IProjectNotifier.cs" />
     <Compile Include="VS\IAnkhSolutionSettings.cs" />
