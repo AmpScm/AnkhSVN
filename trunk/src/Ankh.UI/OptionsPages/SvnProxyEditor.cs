@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using SharpSvn.Implementation;
 
 namespace Ankh.UI.OptionsPages
 {
@@ -23,11 +24,11 @@ namespace Ankh.UI.OptionsPages
 
             using (RegistryKey rk = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global"))
             {
-                string host = rk.GetValue("http-proxy-host") as string ?? "";
-                string port = rk.GetValue("http-proxy-port") as string ?? "8080";
-                string username = rk.GetValue("http-proxy-username") as string ?? "";
-                string password = rk.GetValue("http-proxy-password") as string ?? "";
-                string exception = rk.GetValue("http-proxy-exceptions") as string ?? "";
+                string host = rk.GetValue(SvnConfigNames.HttpProxyHost) as string ?? "";
+                string port = rk.GetValue(SvnConfigNames.HttpProxyPort) as string ?? "8080";
+                string username = rk.GetValue(SvnConfigNames.HttpProxyUserName) as string ?? "";
+                string password = rk.GetValue(SvnConfigNames.HttpProxyPassword) as string ?? "";
+                string exception = rk.GetValue(SvnConfigNames.HttpProxyExceptions) as string ?? "";
 
                 hostBox.Text = host;
 
@@ -49,22 +50,22 @@ namespace Ankh.UI.OptionsPages
             {
                 using (RegistryKey rk = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global"))
                 {
-                    rk.SetValue("http-proxy-host", hostBox.Text.Trim());
-                    rk.SetValue("http-proxy-port", portBox.Text.Trim());
-                    rk.SetValue("http-proxy-username", usernameBox.Text.Trim());
-                    rk.SetValue("http-proxy-password", passwordBox.Text);
-                    rk.SetValue("http-proxy-exceptions", NormalizeExceptionText(exceptionsBox.Text, false));
+                    rk.SetValue(SvnConfigNames.HttpProxyHost, hostBox.Text.Trim());
+                    rk.SetValue(SvnConfigNames.HttpProxyPort, portBox.Text.Trim());
+                    rk.SetValue(SvnConfigNames.HttpProxyUserName, usernameBox.Text.Trim());
+                    rk.SetValue(SvnConfigNames.HttpProxyPassword, passwordBox.Text);
+                    rk.SetValue(SvnConfigNames.HttpProxyExceptions, NormalizeExceptionText(exceptionsBox.Text, false));
                 }
             }
             else if (_wasEnabled)
             {
                 using (RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Tigris.org\\Subversion\\Servers\\Global", true))
                 {
-                    rk.DeleteValue("http-proxy-host");
-                    rk.DeleteValue("http-proxy-port");
-                    rk.DeleteValue("http-proxy-username");
-                    rk.DeleteValue("http-proxy-password");
-                    rk.DeleteValue("http-proxy-exceptions");
+                    rk.DeleteValue(SvnConfigNames.HttpProxyHost);
+                    rk.DeleteValue(SvnConfigNames.HttpProxyPort);
+                    rk.DeleteValue(SvnConfigNames.HttpProxyUserName);
+                    rk.DeleteValue(SvnConfigNames.HttpProxyPassword);
+                    rk.DeleteValue(SvnConfigNames.HttpProxyExceptions);
                 }
             }
             Context.GetService<ISvnClientPool>().FlushAllClients();
