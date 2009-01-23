@@ -195,7 +195,10 @@ namespace Ankh.UI.RepositoryExplorer
 
 
                 if (serverNode.Text.ToString() == "file:///")
+                {
+                    serverNode.IconIndex = IconMapper.GetSpecialFolderIcon(Environment.SpecialFolder.MyComputer);
                     serverNode.Text = RepositoryStrings.LocalRepositories;
+                }
 
                 SortedAddNode(RootNode.Nodes, serverNode);
 

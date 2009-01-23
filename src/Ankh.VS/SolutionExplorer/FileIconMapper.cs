@@ -22,6 +22,7 @@ using Ankh.Scc;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.IO;
+using Microsoft.VisualStudio;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -29,7 +30,8 @@ namespace Ankh.VS.SolutionExplorer
     class FileIconMapper : AnkhService, IFileIconMapper
     {
         readonly ImageList _imageList;
-        readonly Dictionary<ProjectIconReference, int> _iconMap;        
+        readonly Dictionary<ProjectIconReference, int> _iconMap;
+        readonly SortedList<WindowsSpecialFolder, int> _folderMap;
 
         public FileIconMapper(IAnkhServiceProvider context)
             : base(context)
@@ -38,6 +40,7 @@ namespace Ankh.VS.SolutionExplorer
             _imageList.ImageSize = new System.Drawing.Size(16, 16);
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
+            _folderMap = new SortedList<WindowsSpecialFolder, int>();
         }
 
         public int GetIcon(string path)
@@ -110,7 +113,7 @@ namespace Ankh.VS.SolutionExplorer
                 {
                     _imageList.Images.Add(icon);
                 }
-                catch(InvalidOperationException) 
+                catch (InvalidOperationException)
                 {
                     // Unmanaged add icon operation failed (Reported on mailinglist)
                     return -1;
@@ -130,7 +133,7 @@ namespace Ankh.VS.SolutionExplorer
         int _dirIcon;
         public int DirectoryIcon
         {
-            get 
+            get
             {
                 if (_dirIcon > 0)
                     return _dirIcon - 1;
@@ -147,7 +150,7 @@ namespace Ankh.VS.SolutionExplorer
         int _fileIcon;
         public int FileIcon
         {
-            get 
+            get
             {
                 if (_fileIcon > 0)
                     return _fileIcon - 1;
@@ -189,10 +192,49 @@ namespace Ankh.VS.SolutionExplorer
         int _lvUp;
         public int GetSpecialIcon(SpecialIcon icon)
         {
-            if ((_lvUp == 0))
-                EnsureSpecialImages();
+            EnsureSpecialImages();
 
             return _lvUp - (int)(SpecialIcon.SortUp) + (int)icon;
+        }
+
+        public int GetSpecialFolderIcon(Environment.SpecialFolder folder)
+        {
+            return GetSpecialFolderIcon((WindowsSpecialFolder)(int)folder);
+        }
+
+        public int GetSpecialFolderIcon(WindowsSpecialFolder folder)
+        {
+            EnsureSpecialImages();
+
+            int index;
+
+            if (_folderMap.TryGetValue(folder, out index))
+                return index;
+
+            IntPtr pidl = IntPtr.Zero;
+            try
+            {
+                if (VSConstants.S_OK != NativeMethods.SHGetFolderLocation(IntPtr.Zero, folder, IntPtr.Zero, 0, out pidl))
+                    return -1;
+
+
+                NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
+                IntPtr sysImageList = NativeMethods.SHGetFileInfo(pidl, (uint)(int)FileAttributes.Directory, ref fileinfo,
+                                                            (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
+                                                            NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON | NativeMethods.SHGFI_PIDL);
+
+                if (sysImageList == IntPtr.Zero)
+                    return -1;
+
+                ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+
+                return _folderMap[folder] = ResolveReference(handle);
+            }
+            finally
+            {
+                if (pidl != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(pidl);
+            }
         }
 
         public ImageList StateImageList
@@ -207,7 +249,7 @@ namespace Ankh.VS.SolutionExplorer
             // For now we use the same image list for both; the first few icons are just reused
             // Our api allows us to change this later on
             SpecialIcon si;
-            switch(icon)
+            switch (icon)
             {
                 case StateIcon.Blank:
                     si = SpecialIcon.Blank;
@@ -256,14 +298,26 @@ namespace Ankh.VS.SolutionExplorer
                 public string szTypeName;
             }
 
-            public const uint SHGFI_SMALLICON = 0x1; 
-            public const uint SHGFI_SYSICONINDEX = 0x4000;
+            public const uint SHGFI_SMALLICON = 0x1;
             public const uint SHGFI_SHELLICONSIZE = 0x4;
+            public const uint SHGFI_PIDL = 0x000000008;
             public const uint SHGFI_USEFILEATTRIBUTES = 0x10;
+            public const uint SHGFI_SYSICONINDEX = 0x4000;
+
+
 
             [DllImport("shell32.dll", CharSet = CharSet.Auto)]
             public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
                 ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+            [DllImport("shell32.dll", CharSet = CharSet.Auto)]
+            public static extern IntPtr SHGetFileInfo(IntPtr pidl, uint dwFileAttributes,
+                ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+            [DllImport("shell32.dll")]
+            public static extern int SHGetFolderLocation(IntPtr hwndOwner,
+                [MarshalAs(UnmanagedType.I4)]WindowsSpecialFolder nFolder,
+                IntPtr hToken, uint dwReserved, out IntPtr ppidl);            
         }
     }
 }
