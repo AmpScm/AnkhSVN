@@ -412,7 +412,7 @@
             <GroupRef id="Grp_OpenWith2" priority="0xF000" />
           </Menu>
           <Button id="Cmd_Checkout" name="Checkout" priority="0x300"
-                text="Chec&amp;kout from Subversion..." iconFile="menu/CheckoutDirectory.png" dynamicVisibility="true" />
+                text="Chec&amp;kout from Subversion..." iconFile="PendingChanges/Checkout.png" dynamicVisibility="true" />
         </Group>
         <Group id="Grp_RepositoryExplorerTbAction" priority="0x800">
           <Button id="Cmd_ReposCopyTo" priority="0x100"
