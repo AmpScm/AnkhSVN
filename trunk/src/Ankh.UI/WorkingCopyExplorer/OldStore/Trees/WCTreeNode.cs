@@ -22,7 +22,7 @@ using SharpSvn;
 
 namespace Ankh
 {
-    public abstract class WCTreeNode
+    abstract class WCTreeNode
     {
         public WCTreeNode(WCTreeNode parent)
         {

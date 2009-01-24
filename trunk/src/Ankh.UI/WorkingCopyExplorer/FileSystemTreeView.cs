@@ -23,6 +23,7 @@ using Ankh.VS;
 using System.Runtime.Remoting.Contexts;
 using Ankh.Scc;
 using System.Collections.Generic;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -36,11 +37,11 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
 
-        public IFileSystemItem SelectedItem
+        public FileSystemItem SelectedItem
         {
             get
             {
-                return this.SelectedNode != null ? this.SelectedNode.Tag as IFileSystemItem : null;
+                return this.SelectedNode != null ? this.SelectedNode.Tag as FileSystemItem : null;
             }
             set
             {
@@ -60,7 +61,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        public void AddRoot(IFileSystemItem rootItem)
+        public void AddRoot(FileSystemItem rootItem)
         {
             this.AddNode(this.Nodes, rootItem);
 
@@ -85,19 +86,19 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        public IFileSystemItem[] GetSelectedItems()
+        public FileSystemItem[] GetSelectedItems()
         {
             if (this.SelectedItem != null)
             {
-                return new IFileSystemItem[] { this.SelectedItem };
+                return new FileSystemItem[] { this.SelectedItem };
             }
             else
             {
-                return new IFileSystemItem[] { };
+                return new FileSystemItem[] { };
             }
         }
 
-        internal void RemoveRoot(IFileSystemItem root)
+        internal void RemoveRoot(FileSystemItem root)
         {
             TreeNode nodeToRemove = null;
             foreach (TreeNode node in this.Nodes)
@@ -151,9 +152,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             // get rid of the dummy node or existing nodes
             treeNode.Nodes.Clear();
 
-            IFileSystemItem item = treeNode.Tag as IFileSystemItem;
+            FileSystemItem item = treeNode.Tag as FileSystemItem;
 
-            foreach (IFileSystemItem child in item.GetChildren())
+            foreach (FileSystemItem child in item.GetChildren())
             {
                 if (child.IsContainer)
                 {
@@ -205,7 +206,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void AddNode(TreeNodeCollection nodes, IFileSystemItem child)
+        private void AddNode(TreeNodeCollection nodes, FileSystemItem child)
         {
             FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem);
             nodes.Add(ftn);
@@ -219,16 +220,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             dummy.Tag = DummyTag;
         }
 
-        void child_ItemChanged(object sender, ItemChangedEventArgs e)
-        {
-            IFileSystemItem item = sender as IFileSystemItem;
-            if (e.ItemChangedType == ItemChangedType.ChildrenInvalidated && item != null)
-            {
-                this.HandleItemChanged(item);
-            }
-        }
-
-        private void HandleItemChanged(IFileSystemItem item)
+        private void HandleItemChanged(FileSystemItem item)
         {
             TreeNode node = this.SearchForNodeRecursivelyByTag(this.Nodes, item);
             if (node != null)
