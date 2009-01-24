@@ -169,39 +169,23 @@
   public string generateBitmap(XPathNodeIterator nodes, string bitmapFile, string sourceFile)
   {
     string baseDir = Path.GetDirectoryName(sourceFile);
-    int imgCount = 0;
-    
-    Dictionary<string, int> images = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-    
     StringBuilder sb = new StringBuilder();
-    foreach(XPathNavigator n in nodes)
-    {
-      string fp = Path.GetFullPath(Path.Combine(baseDir, n.Value));
-      
-      int nImg;
-      if (!images.TryGetValue(fp, out nImg))
-        images[fp] = nImg = imgCount++;
-        
-      sb.Append(", ");
-        
-      sb.Append(nImg+1);
-    }
-    
-    Bitmap bmp = new Bitmap(16 * imgCount, 16, PixelFormat.Format32bppArgb);  
+    int imgCount = nodes.Count;
+    Bitmap bmp = new Bitmap(16 * imgCount, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
     
     using(Graphics g = Graphics.FromImage(bmp))
-    {      
+    {
       int i = 0;
-      foreach(KeyValuePair<string, int> kv in images)
+      foreach(XPathNavigator n in nodes)
       {
-        using(Image img = Image.FromFile(kv.Key))
+        using(Image img = Image.FromFile(Path.GetFullPath(Path.Combine(baseDir, n.Value))))
         {
-          g.DrawImage(img, 16 * kv.Value, 0);
+          g.DrawImage(img, 16 * i++, 0);
         }
+        sb.Append(", ");
+        sb.Append(i);
       }
     }
-    System.Console.WriteLine("Generated strip with {0} images for {1} references", images.Count, nodes.Count);
-    
     bmp.Save(Path.Combine(baseDir, bitmapFile), ImageFormat.Bmp);
     return sb.ToString();
   }
@@ -225,8 +209,8 @@
     {
       if (!transparent)
       {
-        SolidBrush notWhite = new SolidBrush(Color.FromArgb(0xFF,0xFF,0xFE));
-        g.FillRectangle(notWhite, 0, 0, 16*imgCount, 16);
+        SolidBrush vsTransparent = new SolidBrush(Color.FromArgb(0xFF,0x00,0xFF));
+        g.FillRectangle(vsTransparent, 0, 0, 16*imgCount, 16);
       }
       
       while (keys.MoveNext() && images.MoveNext())
@@ -281,10 +265,6 @@
     <xsl:text>/* Includes */&#10;</xsl:text>
     <xsl:apply-templates select="gui:Imports/gui:Import" mode="include" />
     <xsl:text>/* /Includes */&#10;&#10;</xsl:text>
-
-    <xsl:text>/* Inline values */&#10;</xsl:text>
-    <xsl:apply-templates select="gui:Defines/gui:Define" mode="defines" />
-    <xsl:text>/* /Defines values */&#10;&#10;</xsl:text>
 
     <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
@@ -355,7 +335,9 @@
     <xsl:for-each select="gui:BitmapStrips/gui:Strip">
       <xsl:text>// Created Strip </xsl:text>
       <xsl:value-of select="@name"/>
-      <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
+      <xsl:if test="@bitmap">
+        <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
+      </xsl:if>
       <xsl:if test="@bitmap24">
         <xsl:value-of select="me:generateStrip(@bitmap24, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 0, $Src, $Configuration)"/>
       </xsl:if>
@@ -370,21 +352,6 @@
   </xsl:template>
   <xsl:template match="gui:Import[@type]" mode="include">
     <xsl:value-of select="me:InputType(@type, @from, @prefix, $Src, $Configuration)"/>
-  </xsl:template>
-  <xsl:template match="gui:*[@id and @value]" mode="defines">
-    <xsl:text>#define </xsl:text>
-    <xsl:value-of select="concat(@id, ' ', @value, '&#9;&#9; // from ', local-name())" />
-    <xsl:text>&#10;</xsl:text>
-  </xsl:template>
-  <xsl:template match="gui:Define[@id and @guid]" mode="defines">
-    <xsl:text>#define </xsl:text>
-    <xsl:value-of select="concat(@id, ' ', me:formatGuid(@guid))" />
-    <xsl:text>&#10;</xsl:text>
-  </xsl:template>
-  <xsl:template match="gui:Define[@id and @string]" mode="defines">
-    <xsl:text>#define </xsl:text>
-    <xsl:value-of select="concat(@id, ' ', me:CQuote(@string))" />
-    <xsl:text>&#10;</xsl:text>
   </xsl:template>
 
   <!-- ************************************************* -->

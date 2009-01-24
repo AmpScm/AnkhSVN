@@ -72,7 +72,6 @@
       <xs:sequence>
         <xs:sequence>
           <xs:element ref="gui:Imports" minOccurs="0" maxOccurs="1" />
-          <xs:element ref="gui:Defines" minOccurs="0" />
           <xs:element ref="gui:UI" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:KeyBindings" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:UsedCommands" minOccurs="0" maxOccurs="1" />
@@ -780,23 +779,6 @@
       <xs:pattern value="[_a-zA-Z][a-zA-Z0-9_]*(:[a-zA-Z][a-zA-Z0-9_]*)?" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:element name="Defines">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="gui:Define" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="Define">
-    <xs:complexType>
-      <xs:sequence>
-      </xs:sequence>
-      <xs:attribute name="id" type="gui:qId" />
-      <xs:attribute name="value" type="gui:intValue" />
-      <xs:attribute name="guid" type="gui:guidValue" />
-      <xs:attribute name="string" type="xs:string" />
-    </xs:complexType>
-  </xs:element>
   <xs:simpleType name="guidValue">
     <xs:restriction base="xs:string">
       <xs:minLength value="36" />
@@ -1172,7 +1154,7 @@
       <xs:sequence>
         <xs:element ref="gui:StripIcon" minOccurs="1" maxOccurs="unbounded" />
       </xs:sequence>
-      <xs:attribute name="bitmap" use="required" type="xs:string">
+      <xs:attribute name="bitmap" use="optional" type="xs:string">
         <xs:annotation>
           <xs:documentation>The 32 bit transparent image to create</xs:documentation>
         </xs:annotation>

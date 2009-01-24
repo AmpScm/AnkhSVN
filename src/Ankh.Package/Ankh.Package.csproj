@@ -114,9 +114,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Images_32bit.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <!-- Xml based ctc generation; also generates Gui\Ctc\AnkhSvn.bmp -->
     <XslSource Include="Gui\AnkhSvn.xml">
       <Transform>Gui\Gui-To-Ctc.xsl</Transform>
@@ -134,6 +131,7 @@
     </None>
     <None Include="Gui\menu\Properties.pdn" />
     <None Include="Gui\PendingChanges\RepositoryExplorer.pdn" />
+    <None Include="Gui\PendingChanges\WCExplorer.pdn" />
     <None Include="Resources\AnkhLogo32x32.pdn" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +246,7 @@
     <Content Include="Gui\PendingChanges\ViewHistory.png" />
     <Content Include="Gui\PendingChanges\ViewItems.png" />
     <Content Include="Gui\PendingChanges\Views.png" />
+    <Content Include="Gui\PendingChanges\WCExplorer.png" />
     <Content Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>

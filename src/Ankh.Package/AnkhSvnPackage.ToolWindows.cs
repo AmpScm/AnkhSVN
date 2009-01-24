@@ -353,12 +353,24 @@ namespace Ankh.VSPackage
         readonly AnkhToolWindowHost _host;
         AnkhToolWindowControl _control;
         IAnkhToolWindowControl _twControl;
+        AnkhToolWindow _toolWindow;
         uint _cookie;
 
         protected AnkhToolWindowPane()
             : base(null)
         {
             _host = new AnkhToolWindowHost(this);
+        }
+
+        public AnkhToolWindow AnkhToolWindow
+        {
+            get { return _toolWindow; }
+            protected set
+            {
+                _toolWindow = value;
+                BitmapResourceID = 401;
+                BitmapIndex = (int)_toolWindow;
+            }
         }
 
         protected AnkhToolWindowControl Control
@@ -513,8 +525,7 @@ namespace Ankh.VSPackage
         {
             this.Caption = "Working Copy Explorer";
 
-            this.BitmapResourceID = 401;
-            this.BitmapIndex = 0;
+            AnkhToolWindow = AnkhToolWindow.WorkingCopyExplorer;
 
             this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.WorkingCopyExplorerToolBar);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
@@ -534,8 +545,7 @@ namespace Ankh.VSPackage
         {
             this.Caption = "Repository Explorer";
 
-            this.BitmapResourceID = 401;
-            this.BitmapIndex = 1;
+            AnkhToolWindow = AnkhToolWindow.RepositoryExplorer;
 
             this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhCommandMenu.RepositoryExplorerToolBar);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
@@ -554,8 +564,7 @@ namespace Ankh.VSPackage
         {
             this.Caption = "Pending Changes";
 
-            this.BitmapResourceID = 401;
-            this.BitmapIndex = 2;
+            AnkhToolWindow = AnkhToolWindow.PendingChanges;
 
             this.ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.PendingChanges);
             this.ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
@@ -572,8 +581,7 @@ namespace Ankh.VSPackage
             Control = new LogToolWindowControl();
             Caption = "History Viewer";
 
-            BitmapResourceID = 401;
-            BitmapIndex = 5;
+            AnkhToolWindow = AnkhToolWindow.Log;
 
             ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
             ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
@@ -588,8 +596,7 @@ namespace Ankh.VSPackage
             Control = new DiffToolWindowControl();
             Caption = "Diff";
 
-            BitmapResourceID = 401;
-            BitmapIndex = 5;
+            AnkhToolWindow = AnkhToolWindow.Diff;
 
             //ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
             //ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
@@ -604,11 +611,7 @@ namespace Ankh.VSPackage
             Control = new MergeToolWindowControl();
             Caption = "Diff";
 
-            BitmapResourceID = 401;
-            BitmapIndex = 5;
-
-            //ToolBar = new CommandID(AnkhId.CommandSetGuid, (int)AnkhToolBar.LogViewer);
-            //ToolBarLocation = (int)VSTWT_LOCATION.VSTWT_TOP;
+            AnkhToolWindow = AnkhToolWindow.Merge;
         }
     }
 }

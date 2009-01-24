@@ -13,8 +13,6 @@
     <Import type="Ankh.Ids.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
     <Import type="Ankh.Ids.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
   </Imports>
-  <Defines>
-  </Defines>
   <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_BmpGuid">
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_OPEN">
       <Group id="Grp_FileFileOpen" priority="0x800">
@@ -129,7 +127,7 @@
       </Button>
       <Button id="Cmd_ShowWorkingCopyExplorer" name="WorkingCopyExplorer" priority="0x902"
           text="&amp;Working Copy Explorer"
-          toolTip="Show the Working Copy Explorer window." iconFile="menu/WorkExplorer.png" defaultInvisible="true">
+          toolTip="Show the Working Copy Explorer window." iconFile="PendingChanges/WCExplorer.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="w"/>
       </Button>
     </GroupRef>
@@ -391,8 +389,8 @@
           </Button>
         </Group>
         <Group id="Grp_RepositoryExplorerTbEdit" priority="0x200">
-          <ButtonRef id="CLSID_StandardCommandSet97:cmdidCopy" priority="0x100" />
-          <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
+          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
+          <ButtonRef id="guidVSStd97:cmdidPaste" priority="0x200" />
           <Button id="Cmd_CopyReposExplorerUrl" name="CopyReposExplorerUrl" priority="0x400"
                 text="Copy &amp;Url"
                 toolTip="Copy the Url of this item to the clipboard." iconFile="menu/CopyUrlToClipboard.png" />
@@ -471,8 +469,8 @@
           <ButtonRef id="Cmd_SvnNodeAnnotate" priority="0x200" />
         </Group>
         <Group id="Grp_RepositoryExplorerEdit" priority="0x300">
-          <ButtonRef id="CLSID_StandardCommandSet97:cmdidCopy" priority="0x100" />
-          <ButtonRef id="CLSID_StandardCommandSet97:cmdidPaste" priority="0x200" />
+          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
+          <ButtonRef id="guidVSStd97:cmdidPaste" priority="0x200" />
           <Button id="Cmd_CopyToWorkingCopy" name="SvnCopyToWorkingCopy" priority="0x700"
                   text="Copy to &amp;Working Copy..." dynamicVisibility="true" />
           <Button id="Cmd_SvnNodeDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
@@ -892,4 +890,14 @@
   <UsedCommands>
     <!--Command id="guidVSStd97:ECMD_SLNREFRESH" /-->
   </UsedCommands>
+  <BitmapStrips>
+    <Strip name="ToolWindows" bitmap24="..\obj\ToolWindows.bmp" type="Ankh.Ids.AnkhToolWindow" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll">
+      <StripIcon id="RepositoryExplorer" iconFile="PendingChanges/RepositoryExplorer.png" />
+      <StripIcon id="WorkingCopyExplorer" iconFile="PendingChanges/WCExplorer.png"/>
+      <StripIcon id="PendingChanges" iconFile="PendingChanges/PendingChanges.png"/>
+      <StripIcon id="Log" iconFile="PendingChanges/ViewHistory.png"/>
+      <StripIcon id="Diff" iconFile="PendingChanges/Compare.png"/>
+      <StripIcon id="Merge" iconFile="PendingChanges/EditConflict.png"/>
+    </Strip>
+  </BitmapStrips>
 </VsGui>
