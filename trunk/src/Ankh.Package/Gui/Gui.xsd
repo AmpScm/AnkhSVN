@@ -76,6 +76,7 @@
           <xs:element ref="gui:UI" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:KeyBindings" minOccurs="0" maxOccurs="1" />
           <xs:element ref="gui:UsedCommands" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:BitmapStrips" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
       </xs:sequence>
       <xs:attribute name="version" type="xs:string" />
@@ -1157,6 +1158,43 @@
     <xs:complexType>
       <xs:sequence/>
       <xs:attribute name="id" type="gui:qPrefix" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BitmapStrips">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="gui:Strip" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Strip">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="gui:StripIcon" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="bitmap" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The 32 bit transparent image to create</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="bitmap24" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The 24 bit opaque image to create</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>      
+      <xs:attribute name="type" use="required" type="xs:string"/>
+      <xs:attribute name="from" use="required" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StripIcon">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+      <xs:attribute name="iconFile" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The relative path to the full-transparent PNG to use as the icon</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
     </xs:complexType>
   </xs:element>
 </xs:schema>
