@@ -44,7 +44,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
             this.fileList.CurrentDirectoryChanged += new EventHandler(listView_CurrentDirectoryChanged);
-        }               
+        }
 
         /// <summary>
         /// Called when the frame is created
@@ -66,24 +66,24 @@ namespace Ankh.UI.WorkingCopyExplorer
             fileList.StateImageList = Context.GetService<IStatusImageMapper>().StatusImageList;
         }
 
-        public void AddRoot(IFileSystemItem root)
+        internal void AddRoot(FileSystemItem root)
         {
             this.folderTree.AddRoot(root);
         }
 
-        public void RemoveRoot(IFileSystemItem root)
+        internal void RemoveRoot(FileSystemItem root)
         {
             this.folderTree.RemoveRoot(root);
         }
 
-        public void RefreshItem(IFileSystemItem item)
+        internal void RefreshItem(FileSystemItem item)
         {
             throw new System.NotImplementedException();
         }
-       
+
         void treeView_SelectedItemChanged(object sender, EventArgs e)
         {
-            IFileSystemItem item = this.folderTree.SelectedItem;
+            FileSystemItem item = this.folderTree.SelectedItem;
             this.fileList.SetDirectory(item);
         }
 
@@ -98,7 +98,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 this.folderTree.SelectedItemChanged += new EventHandler(this.treeView_SelectedItemChanged);
             }
-        }       
+        }
 
         public bool IsWcRootSelected()
         {
@@ -118,12 +118,12 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public void BrowsePath(string path)
         {
-            if(string.IsNullOrEmpty(path))
+            if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             SvnItem item = StatusCache[path];
 
-            if(item == null)
+            if (item == null)
                 return;
 
             SvnWorkingCopy wc = item.WorkingCopy;
@@ -134,7 +134,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             else
                 root = item.FullPath;
 
-            
+
 
             FileSystemRootItem rt = CreateRoot(root);
 

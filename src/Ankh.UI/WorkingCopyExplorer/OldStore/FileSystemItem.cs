@@ -26,7 +26,7 @@ using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.WorkingCopyExplorer
 {
-    internal abstract class FileSystemItem : WCTreeNode, Ankh.UI.IFileSystemItem
+    internal abstract class FileSystemItem : WCTreeNode
     {
         readonly SvnItem _item;
         readonly WorkingCopyExplorerControl _ctrl;
@@ -83,7 +83,7 @@ namespace Ankh.WorkingCopyExplorer
 
 
 
-        public abstract IFileSystemItem[] GetChildren();
+        public abstract FileSystemItem[] GetChildren();
 
         public void Open(IAnkhServiceProvider context)
         {

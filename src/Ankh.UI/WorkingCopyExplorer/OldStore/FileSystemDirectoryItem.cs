@@ -40,17 +40,17 @@ namespace Ankh.WorkingCopyExplorer
             get { return true; }
         }
 
-        public override Ankh.UI.IFileSystemItem[] GetChildren()
+        public override FileSystemItem[] GetChildren()
         {
             try
             {
-                IFileSystemItem[] children = new IFileSystemItem[this.Children.Count];
+                FileSystemItem[] children = new FileSystemItem[this.Children.Count];
                 this.Children.CopyTo(children, 0);
                 return children;
             }
             catch
             {
-                return new IFileSystemItem[] { };
+                return new FileSystemItem[] { };
             }
         }
 
@@ -82,9 +82,9 @@ namespace Ankh.WorkingCopyExplorer
             }
         }
 
-        internal IFileSystemItem[] GetFileSystemItemsForDirectory(SvnItem directoryItem)
+        internal FileSystemItem[] GetFileSystemItemsForDirectory(SvnItem directoryItem)
         {
-            SortedList<string, IFileSystemItem> items = new SortedList<string, IFileSystemItem>(StringComparer.OrdinalIgnoreCase);
+            SortedList<string, FileSystemItem> items = new SortedList<string, FileSystemItem>(StringComparer.OrdinalIgnoreCase);
 
             SvnDirectory dir = Control.StatusCache.GetDirectory(directoryItem.FullPath);
 
@@ -111,7 +111,7 @@ namespace Ankh.WorkingCopyExplorer
                 }
             }
 
-            return new List<IFileSystemItem>(items.Values).ToArray();
+            return new List<FileSystemItem>(items.Values).ToArray();
         }
     }
 }

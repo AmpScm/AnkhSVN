@@ -22,7 +22,7 @@ namespace Ankh
     /// <summary>
     /// Describes the status of a tree node.
     /// </summary>
-    public struct NodeStatus
+    class NodeStatus
     {
         public readonly NodeStatusKind Kind;
         public readonly bool ReadOnly;

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.WorkingCopyExplorer;
+using Ankh.WorkingCopyExplorer;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -128,7 +129,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         private Panel explorerPanel;
         private FileSystemDetailsView fileList;
 
-        private IFileSystemItem[] selection = new IFileSystemItem[] { };
+        private FileSystemItem[] selection = new FileSystemItem[] { };
         private SplitContainer splitContainer;
         private ToolStrip foldersStrip;
         private ToolStripLabel foldersLabel;

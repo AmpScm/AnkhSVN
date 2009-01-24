@@ -21,7 +21,7 @@ using SharpSvn;
 
 namespace Ankh
 {
-    public enum NodeStatusKind
+    enum NodeStatusKind
     {
         None = SvnStatus.None,
         Normal = SvnStatus.Normal,

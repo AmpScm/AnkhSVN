@@ -34,9 +34,9 @@ namespace Ankh.WorkingCopyExplorer
             get { return false; }
         }
 
-        public override IFileSystemItem[] GetChildren()
+        public override FileSystemItem[] GetChildren()
         {
-            return new IFileSystemItem[] { };
+            return new FileSystemItem[] { };
         }
 
         public override void Refresh(bool rescan)
