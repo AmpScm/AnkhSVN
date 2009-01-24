@@ -117,7 +117,7 @@
       <!-- View - The Group containing the Solution Explorer,.. -->
       <Button id="Cmd_ShowPendingChanges" name="ShowPendingChanges" priority="0x301"
                 text="&amp;Pending Changes"
-                toolTip="Show the Pending Changes Window." iconFile="menu/PendingChanges.png" defaultInvisible="true">
+                toolTip="Show the Pending Changes Window." iconFile="PendingChanges/PendingChanges.png" defaultInvisible="true">
         <KeyBinding editor="guidVSStd97" mod1="ctrl" key1="k" key2="c" />
       </Button>
       <Button id="Cmd_ShowRepositoryExplorer" name="RepositoryExplorer" priority="0x901"
