@@ -4,180 +4,244 @@
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
                 xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
-  <xsl:param name="Src" select="'AnkhSvn.xml'" />
+  <xsl:param name="Src" select="'F:\ankhsvn\trunk\src\ankh.package\gui\AnkhSvn.xml'" />
   <xsl:param name="Configuration" select="'Debug'" />
-  <xsl:param name="BitmapFile" select="'obj/CtCBitmap.bmp'" />
+  <xsl:param name="BitmapFile" select="'../obj/CtCBitmap.bmp'" />
   <xsl:param name="BitmapId" select="555" />
   <msxsl:script implements-prefix="me" language="C#">
     <msxsl:assembly name="System.Drawing" />
+    <msxsl:using namespace="System.Collections.Generic" />
     <msxsl:using namespace="System.Drawing" />
     <msxsl:using namespace="System.Drawing.Imaging" />
     <msxsl:using namespace="System.Reflection" />
     <msxsl:using namespace="System.Runtime.InteropServices" />
     <msxsl:using namespace="System.IO" />
     <![CDATA[	
-	public string UpperFirst(string value)
-	{
-		if(string.IsNullOrEmpty(value))
-			return "";
-		else
-			return char.ToUpper(value[0]) + value.Substring(1);
-	}   
+  public string UpperFirst(string value)
+  {
+    if(string.IsNullOrEmpty(value))
+      return "";
+    else
+      return char.ToUpper(value[0]) + value.Substring(1);
+  }   
 
-	public string CQuote(string value)
-	{
-		value = value ?? "";
-		System.Text.StringBuilder sb = new System.Text.StringBuilder();
+  public string CQuote(string value)
+  {
+    value = value ?? "";
+    System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
-		sb.Append('\"');
+    sb.Append('\"');
 
-		for(int i = 0; i < value.Length; i++)
-		{
-			if("\"\\\'".IndexOf(value[i]) >= 0)
-			sb.Append('\\');
+    for(int i = 0; i < value.Length; i++)
+    {
+      if("\"\\\'".IndexOf(value[i]) >= 0)
+      sb.Append('\\');
 
-			sb.Append(value[i]);
-		}
+      sb.Append(value[i]);
+    }
 
-		sb.Append('\"');
+    sb.Append('\"');
 
-		return sb.ToString();
-	}
+    return sb.ToString();
+  }
 
-	// http://msdn2.microsoft.com/en-us/library/system.enum.getunderlyingtype.aspx
-	static object GetAsUnderlyingType(Enum enval)
-	{
-		Type entype = enval.GetType();
+  // http://msdn2.microsoft.com/en-us/library/system.enum.getunderlyingtype.aspx
+  static object GetAsUnderlyingType(Enum enval)
+  {
+    Type entype = enval.GetType();
 
-		Type undertype = Enum.GetUnderlyingType(entype);
+    Type undertype = Enum.GetUnderlyingType(entype);
 
-		return Convert.ChangeType( enval, undertype );
-	}
+    return Convert.ChangeType( enval, undertype );
+  }
+  
+  Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+  Type LoadType(string from, string type, string sourceFile, string configuration)
+  {
+    if(string.IsNullOrEmpty(sourceFile))
+      throw new ArgumentNullException("sourceFile");
+    
+    string srcPath = Path.GetDirectoryName(Path.GetFullPath(sourceFile));
+
+    from = System.IO.Path.Combine(srcPath, from);
+    
+    if(from.Contains("$(Configuration)"))
+    {
+      if(string.IsNullOrEmpty(configuration))
+        throw new InvalidOperationException("Configuration not set");
+        
+      string altFrom = from.Replace("$(Configuration)", configuration);
       
-	public string InputType(string type, string from, string prefix, string sourceFile, string configuration)
-	{
-		if(string.IsNullOrEmpty(sourceFile))
-		{
-			return " // Ignored loading inputtype; sourcefile is not set\n\n";
-		}
-		StringBuilder sb = new StringBuilder();
+      //if(System.IO.File.Exists(altFrom))
+        from = altFrom;
+    }
+    
+    from = Path.GetFullPath(from);
+    
+    if(!File.Exists(from))
+    {
+      throw new FileNotFoundException(string.Format("Import {0} missing", from));
+      //return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
+    }
+    
+    Assembly a;
+    
+    if (!_assemblies.TryGetValue(from, out a))
+    {
+      AssemblyName name = AssemblyName.GetAssemblyName(from);
+      a = Assembly.Load(System.IO.File.ReadAllBytes(from));
+      _assemblies[from] = a;
+    }
+    
+    return a.GetType(type);
+  }
+      
+  public string InputType(string type, string from, string prefix, string sourceFile, string configuration)
+  {
+    StringBuilder sb = new StringBuilder();
+  
+    Type tp = LoadType(from, type, sourceFile, configuration);
+    
+    GuidAttribute typeAttr = null;
+    object[] attrs = tp.GetCustomAttributes(typeof(GuidAttribute), true);
+    
+    if(attrs.Length > 0)
+      typeAttr = (GuidAttribute)attrs[0];
 
-		string srcPath = Path.GetDirectoryName(Path.GetFullPath(sourceFile));
+    sb.AppendFormat("\n // Imported from: {0}", from);
+    sb.AppendFormat("\n // Type: {0}\n", tp.AssemblyQualifiedName);
+    foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
+    {
+      object v = fif.GetValue(null);
+      
+      if(v == null)
+        continue;
+        
+      if(fif.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length > 0)
+        continue;
+      
+      GuidAttribute itemAttr = typeAttr;
+      attrs = fif.GetCustomAttributes(typeof(GuidAttribute), true);
+      
+      if(attrs.Length > 0)
+        typeAttr = (GuidAttribute)attrs[0];
+      
+      Type vType = v.GetType();
+      if(vType.IsEnum)
+      {
+        v = GetAsUnderlyingType((Enum)v);
+        
+        string val = "";
+        if(itemAttr != null)
+          val = formatGuid(itemAttr.Value.ToString()) + ":";
 
-		from = System.IO.Path.Combine(srcPath, from);
-		
-		if(from.Contains("$(Configuration)"))
-		{
-			if(string.IsNullOrEmpty(configuration))
-				throw new InvalidOperationException("Configuration not set");
-				
-			string altFrom = from.Replace("$(Configuration)", configuration);
-			
-			//if(System.IO.File.Exists(altFrom))
-				from = altFrom;
-		}
-		
-		from = Path.GetFullPath(from);
-		
-		if(!File.Exists(from))
-		{
-			throw new FileNotFoundException(string.Format("Import {0} missing", from));
-			//return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
-		}
+        sb.AppendFormat("#define {0}{1} {3}0x{2,-8:X}\n", prefix, fif.Name, v, val);
+        sb.AppendFormat("#define {0}{1}_IdOnly 0x{2,-8:X}\n", prefix, fif.Name, v);
+      }
+      else if(v is Guid)
+      {
+        Guid g = (Guid)v;
 
-		AssemblyName name = AssemblyName.GetAssemblyName(from);
-		Assembly a = Assembly.Load(System.IO.File.ReadAllBytes(from));
-		
-		Type tp = a.GetType(type);
-		
-		GuidAttribute typeAttr = null;
-		object[] attrs = tp.GetCustomAttributes(typeof(GuidAttribute), true);
-		
-		if(attrs.Length > 0)
-			typeAttr = (GuidAttribute)attrs[0];
+        sb.AppendFormat("#define {0}{1} {2}\n", prefix, fif.Name, formatGuid(g.ToString()));
+      }
+      else
+      {
+        sb.AppendFormat("#define {0}{1} {2}\n", prefix, fif.Name, CQuote(v.ToString()));
+      }
+    }
 
-		sb.AppendFormat("\n // Imported from: {0}", from);
-		sb.AppendFormat("\n // Type: {0}\n", tp.AssemblyQualifiedName);
-		foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
-		{
-			object v = fif.GetValue(null);
-			
-			if(v == null)
-				continue;
-				
-			if(fif.GetCustomAttributes(typeof(ObsoleteAttribute), false).Length > 0)
-				continue;
-			
-			GuidAttribute itemAttr = typeAttr;
-			attrs = fif.GetCustomAttributes(typeof(GuidAttribute), true);
-			
-			if(attrs.Length > 0)
-				typeAttr = (GuidAttribute)attrs[0];
-			
-			Type vType = v.GetType();
-			if(vType.IsEnum)
-			{
-				v = GetAsUnderlyingType((Enum)v);
-				
-				string val = "";
-				if(itemAttr != null)
-					val = formatGuid(itemAttr.Value.ToString()) + ":";
+    sb.AppendFormat("// /Loaded\n", tp.AssemblyQualifiedName);
 
-				sb.AppendFormat("#define {0}{1} {3}0x{2,-8:X}\n", prefix, fif.Name, v, val);
-				sb.AppendFormat("#define {0}{1}_IdOnly 0x{2,-8:X}\n", prefix, fif.Name, v);
-			}
-			else if(v is Guid)
-			{
-				Guid g = (Guid)v;
-
-				sb.AppendFormat("#define {0}{1} {2}\n", prefix, fif.Name, formatGuid(g.ToString()));
-			}
-			else
-			{
-				sb.AppendFormat("#define {0}{1} {2}\n", prefix, fif.Name, CQuote(v.ToString()));
-			}
-		}
-
-		sb.AppendFormat("// /Loaded\n", tp.AssemblyQualifiedName);
-
-		return sb.ToString();
-	}
-	
-	public string formatGuid(string v)
-	{
-		v = v.ToUpperInvariant();
-		return "{ 0x" + v.Substring(0,8) + ", 0x" + v.Substring(-1+10,4) + 
+    return sb.ToString();
+  }
+  
+  public string formatGuid(string v)
+  {
+    v = v.ToUpperInvariant();
+    return "{ 0x" + v.Substring(0,8) + ", 0x" + v.Substring(-1+10,4) + 
                   ", 0x" + v.Substring(-1+15,4) + ", { 0x" + v.Substring(-1+ 20,2) + 
                   ", 0x" + v.Substring(-1+22,2) + ", 0x" + v.Substring(-1+ 25,2) +
                   ", 0x" + v.Substring(-1+27,2) + ", 0x" + v.Substring(-1+ 29,2) +
                   ", 0x" + v.Substring(-1+31,2) + ", 0x" + v.Substring(-1+ 33,2) +
                   ", 0x" + v.Substring(-1+35,2) + " } }";
-	}
+  }
   
   public string generateBitmap(XPathNodeIterator nodes, string bitmapFile, string sourceFile)
   {
     string baseDir = Path.GetDirectoryName(sourceFile);
-    int imgCount = nodes.Count;
-    Bitmap bmp = new Bitmap(16 * imgCount, 16, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+    int imgCount = 0;
+    
+    Dictionary<string, int> images = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+    
+    StringBuilder sb = new StringBuilder();
+    foreach(XPathNavigator n in nodes)
+    {
+      string fp = Path.GetFullPath(Path.Combine(baseDir, n.Value));
+      
+      int nImg;
+      if (!images.TryGetValue(fp, out nImg))
+        images[fp] = nImg = imgCount++;
+        
+      sb.Append(", ");
+        
+      sb.Append(nImg+1);
+    }
+    
+    Bitmap bmp = new Bitmap(16 * imgCount, 16, PixelFormat.Format32bppArgb);  
     
     using(Graphics g = Graphics.FromImage(bmp))
-    {
-      //SolidBrush transparent = new SolidBrush(Color.FromArgb(0xff,0,0xff));
-      //g.FillRectangle(transparent, 0, 0, 16*imgCount, 16);
-      
+    {      
       int i = 0;
-      foreach(XPathNavigator n in nodes)
+      foreach(KeyValuePair<string, int> kv in images)
       {
-        string fp = Path.GetFullPath(Path.Combine(baseDir, n.Value));
-        using(Image img = Image.FromFile(fp))
+        using(Image img = Image.FromFile(kv.Key))
         {
-          g.DrawImage(img, 16 * i++, 0);
+          g.DrawImage(img, 16 * kv.Value, 0);
         }
       }
     }
-    System.Console.WriteLine("Should generate bitmap for {0} images", nodes.Count);
+    System.Console.WriteLine("Generated strip with {0} images for {1} references", images.Count, nodes.Count);
     
-    bmp.Save(bitmapFile, System.Drawing.Imaging.ImageFormat.Bmp);
+    bmp.Save(Path.Combine(baseDir, bitmapFile), ImageFormat.Bmp);
+    return sb.ToString();
+  }
+  
+  // @bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, true
+  public string generateStrip(string bitmap, string type, string assembly, XPathNodeIterator keys, XPathNodeIterator images, bool transparent, string sourceFile, string configuration)
+  {
+    string baseDir = Path.GetDirectoryName(sourceFile);
+    Type tp = LoadType(assembly, type, sourceFile, configuration);
+    
+    int imgCount = 0;
+    foreach(int i in Enum.GetValues(tp))
+    {
+      if(i+1 > imgCount)
+        imgCount = i+1;
+    }
+        
+    Bitmap bmp = new Bitmap(16 * imgCount, 16, transparent ? PixelFormat.Format32bppArgb : PixelFormat.Format24bppRgb);
+    
+    using(Graphics g = Graphics.FromImage(bmp))
+    {
+      if (!transparent)
+      {
+        SolidBrush notWhite = new SolidBrush(Color.FromArgb(0xFF,0xFF,0xFE));
+        g.FillRectangle(notWhite, 0, 0, 16*imgCount, 16);
+      }
+      
+      while (keys.MoveNext() && images.MoveNext())
+      {
+        string fp = Path.GetFullPath(Path.Combine(baseDir, images.Current.Value));
+        int pos = (int)tp.InvokeMember(keys.Current.Value, BindingFlags.GetField, null, null, null);
+        
+        using(Image img = Image.FromFile(fp))
+        {
+          g.DrawImage(img, 16*pos, 0);
+        }
+      }    
+    }
+  
+    bmp.Save(Path.Combine(baseDir, bitmap), ImageFormat.Bmp);
     return "";
   }
   
@@ -226,7 +290,7 @@
     <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
-    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>    
+    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
     <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
@@ -255,12 +319,8 @@
     <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
       <xsl:text>&#9;&#9;</xsl:text>
       <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapId"/>
-      <xsl:for-each select="//gui:UI//gui:Button[@iconFile]">
-        <xsl:value-of select="', '"/>
-        <xsl:value-of select="position()"/>
-      </xsl:for-each>
-      <xsl:text>;&#10;</xsl:text>
       <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src)"/>
+      <xsl:text>;&#10;</xsl:text>
     </xsl:if>
     <xsl:text>&#9;BITMAPS_END&#10;&#10;</xsl:text>
 
@@ -292,6 +352,15 @@
     <xsl:text>&#9;// Groups&#10;</xsl:text>
     <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
     <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
+    <xsl:for-each select="gui:BitmapStrips/gui:Strip">
+      <xsl:text>// Created Strip </xsl:text>
+      <xsl:value-of select="@name"/>
+      <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
+      <xsl:if test="@bitmap24">
+        <xsl:value-of select="me:generateStrip(@bitmap24, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 0, $Src, $Configuration)"/>
+      </xsl:if>
+      <xsl:text>&#10;</xsl:text>
+    </xsl:for-each>
     <xsl:text>/* END */&#10;</xsl:text>
   </xsl:template>
   <xsl:template match="gui:Import[@include]" mode="include">
@@ -736,7 +805,7 @@
       </xsl:if>
       <xsl:if test="contains(@mod2, 'shift')">
         <xsl:value-of select="'S'"/>
-      </xsl:if>      
+      </xsl:if>
     </xsl:if>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
