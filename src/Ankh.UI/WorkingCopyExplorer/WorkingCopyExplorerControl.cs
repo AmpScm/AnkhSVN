@@ -23,6 +23,7 @@ using System.ComponentModel.Design;
 using Ankh.Commands;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell;
+using System.Windows.Forms;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -38,7 +39,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.InitializeComponent();
 
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
-            this.fileList.CurrentDirectoryChanged += new EventHandler(listView_CurrentDirectoryChanged);
         }
 
         /// <summary>
@@ -53,12 +53,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
             folderTree.Context = Context;
-            fileList.Context = Context;
-
-            folderTree.SelectionPublishServiceProvider = Context;
-            fileList.SelectionPublishServiceProvider = Context;
-
-            fileList.StateImageList = Context.GetService<IStatusImageMapper>().StatusImageList;
+            fileList.Context = Context;            
 
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
@@ -83,20 +78,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             FileSystemNode item = this.folderTree.SelectedItem;
             this.fileList.SetDirectory(item);
-        }
-
-        void listView_CurrentDirectoryChanged(object sender, EventArgs e)
-        {
-            this.folderTree.SelectedItemChanged -= new EventHandler(this.treeView_SelectedItemChanged);
-            try
-            {
-                this.folderTree.SelectedItem = this.fileList.CurrentDirectory;
-            }
-            finally
-            {
-                this.folderTree.SelectedItemChanged += new EventHandler(this.treeView_SelectedItemChanged);
-            }
-        }
+        } 
 
         public bool IsWcRootSelected()
         {
@@ -157,11 +139,19 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         void OnUpdateUp(object sender, CommandUpdateEventArgs e)
         {
-            e.Enabled = false;
+            FileSystemTreeNode tn = folderTree.SelectedNode as FileSystemTreeNode;
+
+            if (tn == null || !(tn.Parent is FileSystemTreeNode))
+                e.Enabled = false;
         }
 
         void OnUp(object sender, CommandEventArgs e)
         {
+            FileSystemTreeNode t = folderTree.SelectedNode as FileSystemTreeNode;
+            if (t != null && t.Parent != null)
+            {
+                folderTree.SelectedNode = t.Parent;
+            }
         }
 
         void OnUpdateOpen(object sender, CommandUpdateEventArgs e)

@@ -28,9 +28,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.RemoveWorkingCopyExplorerRoot)]
     class RemoveWorkingCopyExplorerRootCommand : CommandBase
     {
-        
-
-        public override void OnUpdate(CommandUpdateEventArgs e)
+       public override void OnUpdate(CommandUpdateEventArgs e)
         {
             WorkingCopyExplorerControl ctrl = e.Selection.ActiveDialogOrFrameControl as WorkingCopyExplorerControl;
 

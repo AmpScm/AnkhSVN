@@ -32,8 +32,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 {
     class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>
     {
-        public event EventHandler CurrentDirectoryChanged;
-
         public FileSystemDetailsView()
         {
             View = View.Details;
@@ -75,7 +73,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (IsHandleCreated)
             {
                 TryInitialize();
-
             }
         }
 
@@ -96,6 +93,11 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             if (SmallImageList == null)
                 SmallImageList = IconMapper.ImageList;
+
+            if(StateImageList == null)
+                StateImageList = StatusMapper.StatusImageList;
+
+            SelectionPublishServiceProvider = Context;
         }
 
         public void SetDirectory(FileSystemNode directory)
@@ -158,28 +160,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void OpenItem(FileSystemNode item)
-        {
-            if (item.IsContainer)
-            {
-                this.SetDirectory(item);
-                this.OnCurrentDirectoryChanged();
-            }
-            else
-            {
-                item.Open(Context);
-            }
-        }
-
-        protected virtual void OnCurrentDirectoryChanged()
-        {
-            if (this.CurrentDirectoryChanged != null)
-            {
-                this.CurrentDirectoryChanged(this, EventArgs.Empty);
-            }
-        }
-
-
         private void AddChildren(FileSystemNode directory)
         {
             this.currentDirectory = directory;
@@ -206,6 +186,9 @@ namespace Ankh.UI.WorkingCopyExplorer
 
                     // we need to know when this item changes
                 }
+
+                if (Items.Count > 0 && _nameColumn.DisplayIndex >= 0)
+                    _nameColumn.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
             }
             finally
             {
@@ -213,12 +196,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
+        SmartColumn _nameColumn;
         private void InitializeColumns()
         {
             AllColumns.Clear();
             SortColumns.Clear();
             this.Columns.Clear();
-            SmartColumn name = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
+            _nameColumn = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
             SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 20);
             SmartColumn extension = new SmartColumn(this, "&Type", characterWidth * 7);
             SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15);
@@ -229,10 +213,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             SmartColumn lastRev = new SmartColumn(this, "Last Re&vision", characterWidth * 8);
             SmartColumn lastAuthor = new SmartColumn(this, "Last &Author", characterWidth * 8);
             SmartColumn isCopied = new SmartColumn(this, "C&opied", characterWidth * 6);
-            SmartColumn isConficted = new SmartColumn(this, "Co&nfliced", characterWidth * 6);
+            SmartColumn isConficted = new SmartColumn(this, "Co&nflicted", characterWidth * 6);
             SmartColumn fullPath = new SmartColumn(this, "Fu&ll Path", characterWidth * 60);
 
-            name.Sorter = new SortWrapper(
+            _nameColumn.Sorter = new SortWrapper(
                 delegate(FileSystemListViewItem x, FileSystemListViewItem y)
                 {
                     if (x.IsDirectory ^ y.IsDirectory)
@@ -253,7 +237,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                     return x.SvnItem.Status.LastChangeTime.CompareTo(y.SvnItem.Status.LastChangeTime);
                 });
 
-            AllColumns.Add(name);
+            AllColumns.Add(_nameColumn);
             AllColumns.Add(modified);
             AllColumns.Add(extension);
             AllColumns.Add(contStatus);
@@ -270,7 +254,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             Columns.AddRange(
                 new ColumnHeader[]
                 {
-                    name,
+                    _nameColumn,
                     modified,
                     extension,
                     contStatus,
@@ -279,8 +263,8 @@ namespace Ankh.UI.WorkingCopyExplorer
                     revision
                 });
 
-            SortColumns.Add(name);
-            FinalSortColumn = name;
+            SortColumns.Add(_nameColumn);
+            FinalSortColumn = _nameColumn;
             UpdateSortGlyphs();
         }
 
