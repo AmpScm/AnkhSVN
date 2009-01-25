@@ -15,18 +15,16 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
-using Ankh.WorkingCopyExplorer;
-using System.Windows.Forms.Design;
-using Ankh.VS;
-using System.IO;
-using Ankh.Scc;
-using Microsoft.VisualStudio.Shell;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.Shell.Interop;
+using Ankh.Ids;
+using Ankh.Scc;
+using Ankh.VS;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Commands.RepositoryExplorer
 {

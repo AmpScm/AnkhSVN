@@ -15,15 +15,12 @@
 //  limitations under the License.
 
 using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Windows.Forms;
-using Ankh.Ids;
-using Ankh.WorkingCopyExplorer;
-using Ankh.Scc;
-using System.Windows.Forms.Design;
 using System.IO;
-using SharpSvn;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+
+using Ankh.Ids;
+using Ankh.Scc;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
