@@ -17,7 +17,6 @@
 using System;
 using Ankh.UI;
 using Ankh.Ids;
-using Ankh.WorkingCopyExplorer;
 using Ankh.Scc;
 using Clipboard = System.Windows.Forms.Clipboard;
 

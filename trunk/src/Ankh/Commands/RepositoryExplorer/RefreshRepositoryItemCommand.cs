@@ -16,7 +16,6 @@
 
 using System;
 using Ankh.Ids;
-using Ankh.WorkingCopyExplorer;
 using Ankh.Scc;
 
 namespace Ankh.Commands.RepositoryExplorer
