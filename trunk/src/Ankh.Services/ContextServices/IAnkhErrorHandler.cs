@@ -23,6 +23,8 @@ namespace Ankh
     /// </summary>
     public interface IAnkhErrorHandler
     {
+        bool IsEnabled(Exception ex);
+
         void OnError(Exception ex);
     }
 }

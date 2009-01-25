@@ -33,14 +33,22 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-#if !DEBUG
     [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered=true)]
-#endif
     class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
         public AnkhErrorHandler(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        public bool IsEnabled(Exception ex)
+        {
+#if DEBUG
+            return false;
+#else
+            return true;
+#endif
+
         }
 
         /// <summary>

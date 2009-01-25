@@ -60,11 +60,11 @@ namespace Ankh.UI.PendingChanges
             {
                 DoRefresh();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
-                if (eh != null)
-                    eh.OnError(e);
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
                 else
                     throw;
             }

@@ -62,11 +62,11 @@ namespace Ankh.Commands
                     }
                     catch (Exception ex)
                     {
-                        IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
+                        IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
 
-                        if (handler != null)
+                        if (eh != null && eh.IsEnabled(ex))
                         {
-                            handler.OnError(ex);
+                            eh.OnError(ex);
                             return false;
                         }
 
@@ -112,11 +112,11 @@ namespace Ankh.Commands
                 }
                 catch (Exception ex)
                 {
-                    IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
+                    IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
 
-                    if (handler != null)
+                    if (eh != null && eh.IsEnabled(ex))
                     {
-                        handler.OnError(ex);
+                        eh.OnError(ex);
                         return true; // If we return false VS shows another error box!
                     }
 

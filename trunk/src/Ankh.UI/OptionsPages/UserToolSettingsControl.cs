@@ -142,11 +142,11 @@ namespace Ankh.UI.OptionsPages
             }
             catch (Exception ex)
             {
-                IAnkhErrorHandler handler = Context.GetService<IAnkhErrorHandler>();
+                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
 
-                if (handler != null)
+                if (eh != null && eh.IsEnabled(ex))
                 {
-                    handler.OnError(ex);
+                    eh.OnError(ex);
                     return;
                 }
 
