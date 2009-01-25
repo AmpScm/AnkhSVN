@@ -182,18 +182,18 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         protected virtual void OnContextChanged(EventArgs e)
         {
-            if (!DesignMode && Context != null)
-            {
-                _mapper = Context.GetService<IFileIconMapper>();
+            if (DesignMode || Context == null)
+                return;
 
-                if (IconMapper != null)
-                    ImageList = IconMapper.ImageList;
-            }
+            SelectionPublishServiceProvider = Context;            
+
+            if (IconMapper != null)
+                ImageList = IconMapper.ImageList;
         }
 
         protected IFileIconMapper IconMapper
         {
-            get { return _mapper; }
+            get { return _mapper ?? (_mapper = Context.GetService<IFileIconMapper>()); }
         }
 
         public int FolderIndex

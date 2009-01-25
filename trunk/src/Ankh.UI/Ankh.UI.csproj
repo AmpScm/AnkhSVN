@@ -273,7 +273,7 @@
       <DependentUpon>VersionStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\AnkhToolWindowControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictItem.cs" />
@@ -694,7 +694,7 @@
       <DependentUpon>PendingChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesToolControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\PendingChangesToolControl.Designer.cs">
       <DependentUpon>PendingChangesToolControl.cs</DependentUpon>
@@ -841,7 +841,7 @@
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemRootItem.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\WCTreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.Designer.cs">
       <DependentUpon>WorkingCopyExplorerControl.cs</DependentUpon>
