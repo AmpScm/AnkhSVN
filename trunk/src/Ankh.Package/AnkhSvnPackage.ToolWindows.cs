@@ -395,7 +395,6 @@ namespace Ankh.VSPackage
                     if (!_control.IsHandleCreated)
                     {
                         Size sz = _control.Size;
-                        _control.ShowInTaskbar = false;
                         _control.Location = new Point(-15000, -15000); // Far, far away
                         _control.Size = new Size(0, 0); // And just 1 pixel
 
