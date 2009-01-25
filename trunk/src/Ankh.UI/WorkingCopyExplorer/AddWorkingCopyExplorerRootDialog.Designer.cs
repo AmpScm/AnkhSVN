@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Ankh.UI
+namespace Ankh.UI.WorkingCopyExplorer
 {
     partial class AddWorkingCopyExplorerRootDialog
     {

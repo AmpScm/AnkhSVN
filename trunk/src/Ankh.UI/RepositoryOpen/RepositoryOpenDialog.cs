@@ -467,8 +467,14 @@ namespace Ankh.UI.RepositoryOpen
 
         void ShowAddUriDialog()
         {
-            IUIShell uiShell = GetService<IUIShell>();
-            Uri dirUri = uiShell.ShowAddRepositoryRootDialog();
+            Uri dirUri;
+            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(Context))
+            {
+                if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.Uri == null)
+                    return;
+
+                dirUri = dlg.Uri;
+            }
 
             AnkhAction action = delegate
             {
