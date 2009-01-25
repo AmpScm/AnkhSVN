@@ -36,6 +36,11 @@ namespace Ankh.Tests
     {
         public Exception Exception;
 
+        public bool IsEnabled(Exception ex)
+        {
+            return false;
+        }
+
         #region IErrorHandler Members
 
         public virtual void OnError(Exception ex)

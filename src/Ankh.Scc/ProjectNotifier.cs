@@ -359,10 +359,12 @@ namespace Ankh.Scc
             }
             catch (Exception ex)
             {
-                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
 
-                if (handler != null)
-                    handler.OnError(ex);
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
             }
             finally
             {

@@ -45,12 +45,12 @@ namespace Ankh.Services
                 if (help != null)
                     ErrorHandler.ThrowOnFailure(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                IAnkhErrorHandler r = GetService<IAnkhErrorHandler>();
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
 
-                if (r != null)
-                    r.OnError(e);
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
                 else
                     throw;
             }

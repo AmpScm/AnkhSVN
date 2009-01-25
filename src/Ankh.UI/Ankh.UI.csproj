@@ -839,7 +839,14 @@
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemRootItem.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\WCMyComputerNode.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\WCSolutionNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\WCTreeNode.cs" />
+    <Compile Include="WorkingCopyExplorer\WCStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WCStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1194,6 +1201,10 @@
     <EmbeddedResource Include="SvnLog\LogControl.resx">
       <DependentUpon>LogControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WorkingCopyExplorer\WCStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>WCStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorer\WorkingCopyExplorerControl.resx">
       <SubType>Designer</SubType>
