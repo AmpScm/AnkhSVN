@@ -266,7 +266,19 @@ namespace Ankh
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         void IAnkhServiceEvents.OnSolutionOpened(EventArgs e)
         {
-            OnSolutionOpened(e);
+            try
+            {
+                OnSolutionOpened(e);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
         }
 
         /// <summary>
@@ -275,7 +287,19 @@ namespace Ankh
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         void IAnkhServiceEvents.OnSolutionClosed(EventArgs e)
         {
-            OnSolutionClosed(e);
+            try
+            {
+                OnSolutionClosed(e);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
         }
 
         #endregion

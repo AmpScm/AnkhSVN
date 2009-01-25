@@ -57,6 +57,35 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
+
+            AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
+
+            // The Workingcopy explorer is a singleton toolwindow (Will never be destroyed unless VS closes)
+            environment.SolutionOpened += new EventHandler(environment_SolutionOpened);
+            environment.SolutionClosed += new EventHandler(environment_SolutionClosed);
+        }
+
+        void environment_SolutionClosed(object sender, EventArgs e)
+        {
+            RefreshRoots();
+        }
+
+        void environment_SolutionOpened(object sender, EventArgs e)
+        {
+            RefreshRoots();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (!DesignMode)
+                RefreshRoots();
+        }
+
+        private void RefreshRoots()
+        {
+            
         }
 
         internal void AddRoot(FileSystemNode root)

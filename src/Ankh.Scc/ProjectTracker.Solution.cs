@@ -32,6 +32,8 @@ namespace Ankh.Scc
         {
             SccProvider.OnSolutionOpened(true);
 
+            GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
+
             return VSConstants.S_OK;
         }
 
@@ -50,6 +52,8 @@ namespace Ankh.Scc
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             SccProvider.OnSolutionClosed();
+
+            GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);
 
             return VSConstants.S_OK;
         }
