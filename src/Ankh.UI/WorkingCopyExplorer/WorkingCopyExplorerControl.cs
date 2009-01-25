@@ -15,26 +15,21 @@
 //  limitations under the License.
 
 using System;
-using System.Text;
-using System.Windows.Forms;
-using System.Collections;
-using System.IO;
-using System.Drawing;
-using System.Diagnostics;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Ankh.UI.Services;
 using Ankh.Ids;
-using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
-using Ankh.UI.VSSelectionControls;
-using Ankh.WorkingCopyExplorer;
 using SharpSvn;
+using Ankh.UI.WorkingCopyExplorer.Nodes;
+using System.ComponentModel.Design;
+using Ankh.Commands;
+using Ankh.VS;
+using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
     public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
+        private FileSystemNode[] _selection = new FileSystemNode[] { };
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkingCopyExplorerControl"/> class.
         /// </summary>
@@ -64,26 +59,29 @@ namespace Ankh.UI.WorkingCopyExplorer
             fileList.SelectionPublishServiceProvider = Context;
 
             fileList.StateImageList = Context.GetService<IStatusImageMapper>().StatusImageList;
+
+            VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
+            VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
         }
 
-        internal void AddRoot(FileSystemItem root)
+        internal void AddRoot(FileSystemNode root)
         {
             this.folderTree.AddRoot(root);
         }
 
-        internal void RemoveRoot(FileSystemItem root)
+        internal void RemoveRoot(FileSystemNode root)
         {
             this.folderTree.RemoveRoot(root);
         }
 
-        internal void RefreshItem(FileSystemItem item)
+        internal void RefreshItem(FileSystemNode item)
         {
             throw new System.NotImplementedException();
         }
 
         void treeView_SelectedItemChanged(object sender, EventArgs e)
         {
-            FileSystemItem item = this.folderTree.SelectedItem;
+            FileSystemNode item = this.folderTree.SelectedItem;
             this.fileList.SetDirectory(item);
         }
 
@@ -156,5 +154,87 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (cmd != null)
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
         }
+
+        void OnUpdateUp(object sender, CommandUpdateEventArgs e)
+        {
+            e.Enabled = false;
+        }
+
+        void OnUp(object sender, CommandEventArgs e)
+        {
+        }
+
+        void OnUpdateOpen(object sender, CommandUpdateEventArgs e)
+        {
+            SvnItem item = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
+
+            if (item == null)
+                e.Enabled = false;
+        }
+
+        void OnOpen(object sender, CommandEventArgs e)
+        {
+            SvnItem item = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
+
+            if (item.IsDirectory)
+            {
+                BrowsePath(item.FullPath);
+                return;
+            }
+
+            AutoOpenCommand(e, item);
+        }
+
+        private static void AutoOpenCommand(CommandEventArgs e, SvnItem item)
+        {
+            IAnkhCommandService svc = e.GetService<IAnkhCommandService>();
+            IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
+
+            if (svc == null || solutionSettings == null)
+                return;
+
+            // Ok, we can assume we have a file
+            string filename = item.Name;
+            string ext = item.Extension;
+
+            if (string.IsNullOrEmpty(ext))
+            {
+                // No extension -> Open as text
+                svc.PostExecCommand(AnkhCommand.ItemOpenTextEditor);
+                return;
+            }
+
+            foreach (string projectExt in solutionSettings.AllProjectExtensionsFilter.Split(';'))
+            {
+                if (projectExt.TrimStart('*').Trim().Equals(ext, StringComparison.OrdinalIgnoreCase))
+                {
+                    // We found a project or solution, use Open from Subversion to create a checkout
+
+                    e.GetService<IAnkhSolutionSettings>().OpenProjectFile(item.FullPath);
+                    return;
+                }
+            }
+
+            bool odd = false;
+            foreach (string block in solutionSettings.OpenFileFilter.Split('|'))
+            {
+                odd = !odd;
+                if (odd)
+                    continue;
+
+                foreach (string itemExt in block.Split(';'))
+                {
+                    if (itemExt.TrimStart('*').Trim().Equals(ext, StringComparison.OrdinalIgnoreCase))
+                    {
+                        VsShellUtilities.OpenDocument(e.Context, item.FullPath);
+                        return;
+                    }
+                }
+            }
+
+            // Ultimate fallback: Just open the file as windows would
+            svc.PostExecCommand(AnkhCommand.ItemOpenWindows);
+        }
+
     }
 }

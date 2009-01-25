@@ -835,13 +835,11 @@
     <Compile Include="VSSelectionControls\TreeViewWithSelection.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemDirectoryItem.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemFileItem.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemItem.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\FileSystemRootItem.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\Trees\NodeStatus.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\Trees\NodeStatusKind.cs" />
-    <Compile Include="WorkingCopyExplorer\OldStore\Trees\WCTreeNode.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\FileSystemDirectoryItem.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\FileSystemFileItem.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\FileSystemNode.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\FileSystemRootItem.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\WCTreeNode.cs" />
     <Compile Include="WorkingCopyExplorer\WorkingCopyExplorerControl.cs">
       <SubType>Form</SubType>
     </Compile>

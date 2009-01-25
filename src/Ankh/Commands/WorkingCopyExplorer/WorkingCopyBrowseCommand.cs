@@ -18,6 +18,7 @@ using System;
 using Ankh.Ids;
 using Ankh.UI;
 using Ankh.UI.WorkingCopyExplorer;
+using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -29,7 +30,6 @@ namespace Ankh.Commands
     {
         public override void OnExecute(CommandEventArgs e)
         {
-            IUIShell shell = e.GetService<IUIShell>();
             string info;
 
             if (e.Argument is string)
@@ -38,7 +38,15 @@ namespace Ankh.Commands
                 info = (string)e.Argument;
             }
             else
-                info = shell.ShowAddWorkingCopyExplorerRootDialog();
+                using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
+                {
+                    DialogResult dr = dlg.ShowDialog(e.Context);
+
+                    if (dr != DialogResult.OK || string.IsNullOrEmpty(dlg.NewRoot))
+                        return;
+
+                    info = dlg.NewRoot;
+                }
 
             if (!string.IsNullOrEmpty(info))
             {

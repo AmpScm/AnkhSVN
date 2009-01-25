@@ -39,25 +39,6 @@ namespace Ankh
             : base(context)
         {
 
-        }        
-
-        public void DisplayHtml(string caption, string html, bool reuse)
-        {
-            IAnkhWebBrowser browser = Context.GetService<IAnkhWebBrowser>();
-
-            string htmlFile = Path.GetTempFileName();
-            using (StreamWriter w = new StreamWriter(htmlFile, false, System.Text.Encoding.UTF8))
-                w.Write(html);
-
-            // have it show the html
-            Uri url = new Uri("file://" + htmlFile);
-            AnkhBrowserArgs args = new AnkhBrowserArgs();
-            args.BaseCaption = caption;
-
-            //if(reuse)
-            // args.CreateFlags |= __VSCREATEWEBBROWSER.VSCWB_ReuseExisting;
-
-            browser.Navigate(url, args);
         }
 
         public PathSelectorResult ShowPathSelector(PathSelectorInfo info)
@@ -74,45 +55,6 @@ namespace Ankh
                 return result;
             }
         }
-
-        #region IUIShell Members
-
-        public bool EditEnlistmentState(Ankh.Scc.EnlistmentState state)
-        {
-            if (state == null)
-                throw new ArgumentNullException("state");
-
-            using (SccEditEnlistment editor = new SccEditEnlistment(state))
-            {
-                return editor.ShowDialog(Context) == DialogResult.OK;
-            }
-        }
-
-        public Uri ShowAddRepositoryRootDialog()
-        {
-            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(Context))
-            {
-                if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.Uri == null)
-                    return null;
-
-                return dlg.Uri;
-            }
-        }
-
-        public string ShowAddWorkingCopyExplorerRootDialog()
-        {
-            using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
-            {
-                DialogResult dr = dlg.ShowDialog(Context);
-
-                if (dr != DialogResult.OK || string.IsNullOrEmpty(dlg.NewRoot))
-                    return null;
-
-                return dlg.NewRoot;
-            }
-        }
-
-        #endregion
 
     }
 }

@@ -26,7 +26,7 @@ using Ankh.Scc;
 using System.IO;
 using Ankh.Commands;
 using Ankh.Ids;
-using Ankh.WorkingCopyExplorer;
+using Ankh.UI.WorkingCopyExplorer.Nodes;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -46,9 +46,9 @@ namespace Ankh.UI.WorkingCopyExplorer
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
+            set
             {
-                if(_context != value)
+                if (_context != value)
                 {
                     _context = value;
 
@@ -75,13 +75,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (IsHandleCreated)
             {
                 TryInitialize();
-                
+
             }
         }
 
         IFileIconMapper _mapper;
         IStatusImageMapper _statusMapper;
-        
+
         internal IFileIconMapper IconMapper
         {
             get { return _mapper ?? (_mapper = Context.GetService<IFileIconMapper>()); }
@@ -90,15 +90,15 @@ namespace Ankh.UI.WorkingCopyExplorer
         internal IStatusImageMapper StatusMapper
         {
             get { return _statusMapper ?? (_statusMapper = Context.GetService<IStatusImageMapper>()); }
-        }        
+        }
 
         protected virtual void OnContextChanged(EventArgs e)
         {
-            if(SmallImageList == null)
-                SmallImageList = IconMapper.ImageList;            
+            if (SmallImageList == null)
+                SmallImageList = IconMapper.ImageList;
         }
 
-        public void SetDirectory(FileSystemItem directory)
+        public void SetDirectory(FileSystemNode directory)
         {
             TryInitialize();
 
@@ -107,7 +107,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
 
 
-        public FileSystemItem CurrentDirectory
+        public FileSystemNode CurrentDirectory
         {
             get { return this.currentDirectory; }
         }
@@ -131,18 +131,20 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             base.OnDoubleClick(e);
 
-            ListViewHitTestInfo hti = this.HitTest(PointToClient(Control.MousePosition));
-            if (hti.Item == null || hti.Location == ListViewHitTestLocations.None)
-            {
+            ListViewHitTestInfo ht = HitTest(PointToClient(MousePosition));
+
+            FileSystemListViewItem li = ht.Item as FileSystemListViewItem;
+
+            if (ht.Location == ListViewHitTestLocations.None || li == null)
                 return;
+
+            if (!li.Selected)
+            {
+                SelectedIndices.Clear();
+                li.Selected = true;
             }
 
-            // Double clicks either opens a folder or the item
-            FileSystemItem fileSystemItem = hti.Item.Tag as FileSystemItem;
-            if (fileSystemItem != null)
-            {
-                OpenItem(fileSystemItem);
-            }
+            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -150,17 +152,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             base.OnKeyDown(e);
 
             // Enter means open if there's only one selected item
-            if (e.KeyCode == Keys.Enter && this.SelectedItems.Count == 1)
+            if (e.KeyCode == Keys.Enter && this.SelectedItems.Count > 0)
             {
-                FileSystemItem item = this.SelectedItems[0].Tag as FileSystemItem;
-                if (item != null)
-                {
-                    this.OpenItem(item);
-                }
+                Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
             }
         }
 
-        private void OpenItem(FileSystemItem item)
+        private void OpenItem(FileSystemNode item)
         {
             if (item.IsContainer)
             {
@@ -182,7 +180,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
 
-        private void AddChildren(FileSystemItem directory)
+        private void AddChildren(FileSystemNode directory)
         {
             this.currentDirectory = directory;
 
@@ -191,15 +189,15 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 this.Items.Clear();
 
-                foreach (FileSystemItem item in directory.GetChildren())
+                foreach (FileSystemNode item in directory.GetChildren())
                 {
                     SvnItem svnItem = item.SvnItem;
                     FileSystemInfo fif;
-                    if(svnItem.IsDirectory)
+                    if (svnItem.IsDirectory)
                         fif = new DirectoryInfo(svnItem.FullPath);
-                    else 
+                    else
                         fif = new FileInfo(svnItem.FullPath);
-                        
+
                     FileSystemListViewItem lvi = new FileSystemListViewItem(this, item.SvnItem, fif);
 
                     Items.Add(lvi);
@@ -326,7 +324,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             SvnItemData sid = e.SelectionItem as SvnItemData;
 
-            if(sid == null)
+            if (sid == null)
                 return;
 
             foreach (FileSystemListViewItem lvi in Items)
@@ -353,7 +351,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             return base.GetCanonicalName(item);
         }
 
-        private ListViewItem FindListViewItemWithTag(FileSystemItem fileSystemItem)
+        private ListViewItem FindListViewItemWithTag(FileSystemNode fileSystemItem)
         {
             foreach (ListViewItem lvi in this.Items)
             {
@@ -364,9 +362,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             return null;
         }
-        
+
         private int characterWidth;
-        private FileSystemItem currentDirectory;
+        private FileSystemNode currentDirectory;
         private const int NameColumnNumberOfCharacters = 50;
     }
 }

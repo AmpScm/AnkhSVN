@@ -116,5 +116,11 @@ namespace Ankh.VS
         /// <param name="forBrowse">if set to <c>true</c> [for browse].</param>
         /// <returns></returns>
         IEnumerable<Uri> GetRepositoryUris(bool forBrowse);
+
+        /// <summary>
+        /// Tries to open the specified project or solution file.
+        /// </summary>
+        /// <param name="projectFile">The project file.</param>
+        void OpenProjectFile(string projectFile);
     }
 }

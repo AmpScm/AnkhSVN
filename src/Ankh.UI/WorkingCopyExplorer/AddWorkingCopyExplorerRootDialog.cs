@@ -18,7 +18,7 @@ using System;
 using System.Windows.Forms;
 using System.IO;
 
-namespace Ankh.UI
+namespace Ankh.UI.WorkingCopyExplorer
 {
     public partial class AddWorkingCopyExplorerRootDialog : VSDialogForm
     {

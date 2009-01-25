@@ -1,6 +1,6 @@
 // $Id$
 //
-// Copyright 2004-2008 The AnkhSVN Project
+// Copyright 2006-2008 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -15,22 +15,25 @@
 //  limitations under the License.
 
 using System;
-using Ankh.UI;
-using System.Windows.Forms;
-using Ankh.Scc;
+using System.Text;
+using Ankh.UI.WorkingCopyExplorer;
 
-namespace Ankh
+namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
-    /// <summary>
-    /// Represents the UI of the addin.
-    /// </summary>
-    public interface IUIShell
+    class FileSystemRootItem : FileSystemDirectoryItem
     {
-        /// <summary>
-        /// Show a "path selector dialog".
-        /// </summary>
-        /// <param name="info"></param>
-        /// <returns></returns>
-        PathSelectorResult ShowPathSelector(PathSelectorInfo info);
+        public FileSystemRootItem(WorkingCopyExplorerControl control, SvnItem svnItem)
+            : base(control, svnItem)
+        {
+
+        }
+
+        public override string Text
+        {
+            get
+            {
+                return this.SvnItem.FullPath;
+            }
+        }
     }
 }

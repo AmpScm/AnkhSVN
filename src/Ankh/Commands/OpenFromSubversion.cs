@@ -174,34 +174,8 @@ namespace Ankh.Commands
         private void OpenProject(CommandEventArgs e, string projectFile)
         {
             IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
-            IVsSolution solution = e.GetService<IVsSolution>(typeof(SVsSolution));
 
-            if (!File.Exists(projectFile))
-                return;
-
-            string ext = Path.GetExtension(projectFile);
-            bool isSolution = false;
-            foreach (string x in ss.SolutionFilter.Split(';'))
-            {
-                if (string.Equals(ext, Path.GetExtension(x).Replace('*', '!').Replace('?', '!'), StringComparison.OrdinalIgnoreCase))
-                {
-                    isSolution = true;
-                    break;
-                }
-            }
-
-            if (isSolution)
-                ErrorHandler.ThrowOnFailure(solution.OpenSolutionFile(0, projectFile));
-            else
-            {
-                Guid gnull = Guid.Empty;
-                Guid gInterface = Guid.Empty;
-                IntPtr pProj = IntPtr.Zero;
-
-                ErrorHandler.ThrowOnFailure(solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj));
-
-                Debug.Assert(pProj == IntPtr.Zero); // no pProj as gInterface = Guid.Empty
-            }
+            ss.OpenProjectFile(projectFile);
         }
 
         private void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, SvnRevision revision, string localDir)

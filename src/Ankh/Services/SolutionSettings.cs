@@ -765,6 +765,39 @@ namespace Ankh.Settings
             // TODO: Find a way to fetch the real list
             get { return "*.sln;*.dsw"; }
         }
+
+        #region IAnkhSolutionSettings Members
+
+
+        public void OpenProjectFile(string projectFile)
+        {
+            string ext = Path.GetExtension(projectFile);
+            bool isSolution = false;
+            foreach (string x in SolutionFilter.Split(';'))
+            {
+                if (string.Equals(ext, Path.GetExtension(x).Replace('*', '!').Replace('?', '!'), StringComparison.OrdinalIgnoreCase))
+                {
+                    isSolution = true;
+                    break;
+                }
+            }
+
+            IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
+
+            if (isSolution)
+                ErrorHandler.ThrowOnFailure(solution.OpenSolutionFile(0, projectFile));
+            else
+            {
+                Guid gnull = Guid.Empty;
+                Guid gInterface = Guid.Empty;
+                IntPtr pProj = IntPtr.Zero;
+
+                ErrorHandler.ThrowOnFailure(solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj));
+            }
+
+        }
+
+        #endregion
     }
 }
 

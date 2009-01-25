@@ -18,6 +18,7 @@ using System;
 using Ankh.Ids;
 using Ankh.UI;
 using Ankh.UI.RepositoryExplorer;
+using System.Windows.Forms;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
@@ -40,7 +41,13 @@ namespace Ankh.Commands.RepositoryExplorer
             else if (e.Argument is Uri)
                 info = (Uri)e.Argument;
             else
-                info = shell.ShowAddRepositoryRootDialog();
+                using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(e.Context))
+                {
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK || dlg.Uri == null)
+                        return;
+
+                    info = dlg.Uri;
+                }
 
             if (info != null)
             {
