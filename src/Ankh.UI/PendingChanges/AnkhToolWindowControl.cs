@@ -24,19 +24,13 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public class AnkhToolWindowControl : Form, IAnkhToolWindowControl, IAnkhCommandHookAccessor
+    public class AnkhToolWindowControl : UserControl, IAnkhToolWindowControl, IAnkhCommandHookAccessor
     {
         IAnkhToolWindowHost _host;
         protected AnkhToolWindowControl()
         {
-            base.FormBorderStyle = FormBorderStyle.None;
-        }
-
-        [DefaultValue(FormBorderStyle.None), Localizable(false)]
-        public new FormBorderStyle FormBorderStyle
-        {
-            get { return base.FormBorderStyle; }
-            set { base.FormBorderStyle = value; }
+            // ShowInTaskBar = false;
+            //base.FormBorderStyle = FormBorderStyle.None;
         }
 
         public override string Text
