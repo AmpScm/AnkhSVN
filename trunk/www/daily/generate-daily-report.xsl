@@ -94,7 +94,7 @@
       </head>
       <body>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h1>AnkhSVN-Daily Update - <xsl:value-of select="$latestVersion"/></h1>
+        <h1>AnkhSVN-Daily Update</h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
