@@ -75,7 +75,7 @@ namespace Ankh.Scc.ProjectMap
             _sccProject = project;
             _hierarchy = (IVsHierarchy)project; // A project must be a hierarchy in VS
             _vsProject = (IVsProject)project; // A project must be a VS project
-            
+
             _projectType = GetProjectType(project);
             _files = new SccProjectFileCollection();
         }
@@ -112,7 +112,7 @@ namespace Ankh.Scc.ProjectMap
                     _projectName = "";
                     object name;
 
-                    if(ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
+                    if (ErrorHandler.Succeeded(_hierarchy.GetProperty(VSConstants.VSITEMID_ROOT, (int)__VSHPROPID.VSHPROPID_Name, out name)))
                     {
                         _projectName = name as string;
                     }
@@ -129,13 +129,13 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                if(!_projectGuid.HasValue)
+                if (!_projectGuid.HasValue)
                 {
                     IVsSolution solution = _context.GetService<IVsSolution>(typeof(SVsSolution));
 
                     Guid value;
                     if (ErrorHandler.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
-                        _projectGuid = value;                    
+                        _projectGuid = value;
                 }
 
                 return _projectGuid.HasValue ? _projectGuid.Value : Guid.Empty;
@@ -155,7 +155,7 @@ namespace Ankh.Scc.ProjectMap
 
                     Guid value;
                     if (ErrorHandler.Succeeded(solution.GetProjectTypeGuid(0, ProjectFile, out value)))
-                        _projectTypeGuid = value;            
+                        _projectTypeGuid = value;
                 }
 
                 return _projectTypeGuid.HasValue ? _projectTypeGuid.Value : Guid.Empty;
@@ -224,8 +224,8 @@ namespace Ankh.Scc.ProjectMap
                     if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
                         _projectLocation = name;
-                        if(SvnItem.IsValidPath(name))
-                            _projectFile = name;                        
+                        if (SvnItem.IsValidPath(name))
+                            _projectFile = name;
                     }
                 }
                 return _projectFile;
@@ -247,7 +247,7 @@ namespace Ankh.Scc.ProjectMap
         {
             string projectDir = ProjectDirectory;
 
-            if(projectDir == null)
+            if (projectDir == null)
                 return null;
 
             // TODO: Insert project local settings check
@@ -288,7 +288,7 @@ namespace Ankh.Scc.ProjectMap
                 // The user deliberately choose not to have the item in the solution root
                 // -> Default to the project directory                
             }
-            
+
             return ProjectDirectory;
         }
 
@@ -330,7 +330,7 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            return SccEnlistMode.SvnStateOnly;            
+            return SccEnlistMode.SvnStateOnly;
         }
 
         string _uniqueName;
@@ -437,7 +437,7 @@ namespace Ankh.Scc.ProjectMap
         internal void Dispose()
         {
             _disposed = true;
-            Hook(false);            
+            Hook(false);
         }
 
         public bool IsDisposed
@@ -458,7 +458,7 @@ namespace Ankh.Scc.ProjectMap
 
                 _checkedProjectFile = false;
                 _projectFile = null;
-                _svnProjectInstance = null;                
+                _svnProjectInstance = null;
                 _loaded = true;
 
                 ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
@@ -478,13 +478,13 @@ namespace Ankh.Scc.ProjectMap
                     // Make sure we see all files as possible pending changes
                     monitor.ScheduleGlyphUpdate(GetAllFiles());
                 }
-                Hook(true); 
+                Hook(true);
             }
             finally
             {
                 _inLoad = false;
             }
-        }        
+        }
 
         internal void Reload()
         {
@@ -508,9 +508,9 @@ namespace Ankh.Scc.ProjectMap
         }
 
         internal void AddPath(string path)
-        {            
+        {
             if (_loaded && IsWebSite)
-            {                
+            {
                 uint fid = VSConstants.VSITEMID_NIL;
 
                 if (TryGetProjectFileId(path, out fid))
@@ -550,9 +550,9 @@ namespace Ankh.Scc.ProjectMap
             {
                 ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
 
-                if(walker != null)
+                if (walker != null)
                     walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
-                
+
                 ClearIdCache();
 
                 SetDirty();
@@ -566,7 +566,7 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             if (ids != null && ids.TryGetValue(path, out id))
             {
-                if(_files.Contains(path))
+                if (_files.Contains(path))
                     _files[path].SetId(id);
             }
         }
@@ -643,8 +643,8 @@ namespace Ankh.Scc.ProjectMap
 
             return SccProjectType.Normal;
         }
-        #endregion                
-    
+        #endregion
+
         /// <summary>
         /// Determines whether the project contains the specified file
         /// </summary>
@@ -676,7 +676,7 @@ namespace Ankh.Scc.ProjectMap
 
                 _fetchedImgList = true;
                 object value;
-                if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT, 
+                if (ErrorHandler.Succeeded(ProjectHierarchy.GetProperty(VSConstants.VSITEMID_ROOT,
                     (int)__VSHPROPID.VSHPROPID_IconImgList, out value)))
                 {
                     _projectImgList = (IntPtr)(int)value; // Marshalled by VS as 32 bit integer
@@ -698,11 +698,11 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
 
-            if(ErrorHandler.Succeeded(
+            if (ErrorHandler.Succeeded(
                 VsProject.IsDocumentInProject(path, out found, prio, out id)))
             {
                 // Priority also returns information on whether the file can be added
-                if(found != 0 && prio[0] >= VSDOCUMENTPRIORITY.DP_Standard && id != 0)
+                if (found != 0 && prio[0] >= VSDOCUMENTPRIORITY.DP_Standard && id != 0)
                 {
                     itemId = id;
                     return true;

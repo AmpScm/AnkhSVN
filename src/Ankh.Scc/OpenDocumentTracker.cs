@@ -16,12 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using Ankh.Scc.ProjectMap;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
+
+using Ankh.Scc.ProjectMap;
+
 
 namespace Ankh.Scc
 {
@@ -30,7 +32,6 @@ namespace Ankh.Scc
     {
         readonly Dictionary<string, SccDocumentData> _docMap = new Dictionary<string, SccDocumentData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<uint, SccDocumentData> _cookieMap = new Dictionary<uint, SccDocumentData>();
-        IVsRunningDocumentTable _docTable;
         bool _hooked;
         uint _cookie;
 
@@ -43,11 +44,27 @@ namespace Ankh.Scc
         {
             Hook(true);
             LoadInitial();
-        } 
+        }
 
+        IVsRunningDocumentTable _docTable;
         protected IVsRunningDocumentTable RunningDocumentTable
         {
+            [DebuggerStepThrough]
             get { return _docTable ?? (_docTable = GetService<IVsRunningDocumentTable>(typeof(SVsRunningDocumentTable))); }
+        }
+
+        AnkhSccProvider _sccProvider;
+        protected AnkhSccProvider SccProvider
+        {
+            [DebuggerStepThrough]
+            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
+        }
+
+        ProjectTracker _projectTracker;
+        protected ProjectTracker ProjectTracker
+        {
+            [DebuggerStepThrough]
+            get { return _projectTracker ?? (_projectTracker = GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker))); }
         }
 
         void LoadInitial()
@@ -57,7 +74,7 @@ namespace Ankh.Scc
                 return;
 
             IEnumRunningDocuments docEnum;
-            if(!ErrorHandler.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
+            if (!ErrorHandler.Succeeded(rdt.GetRunningDocumentsEnum(out docEnum)))
                 return;
 
             uint[] cookies = new uint[256];
@@ -164,7 +181,7 @@ namespace Ankh.Scc
                     if (document != null)
                         data.RawDocument = document;
 
-                    data.Cookie = cookie;                    
+                    data.Cookie = cookie;
                     _cookieMap.Add(cookie, data);
                 }
             }
@@ -251,7 +268,7 @@ namespace Ankh.Scc
         public int OnAfterSaveAll()
         {
             // Copy the list to allow changes while we are busy
-            foreach(SccDocumentData dd in new List<SccDocumentData>(_docMap.Values))
+            foreach (SccDocumentData dd in new List<SccDocumentData>(_docMap.Values))
             {
                 if (dd.IsDirty && !dd.GetIsDirty(false))
                 {
@@ -315,7 +332,19 @@ namespace Ankh.Scc
             if (pHierNew != null)
                 data.Hierarchy = pHierNew;
             if (itemidNew != VSConstants.VSITEMID_NIL)
-                data.ItemId = itemidNew;            
+                data.ItemId = itemidNew;
+
+            if (!string.IsNullOrEmpty(pszMkDocumentNew) && !string.IsNullOrEmpty(pszMkDocumentOld)
+                && pszMkDocumentNew != pszMkDocumentOld)
+            {
+                if (SvnItem.IsValidPath(pszMkDocumentNew) && SvnItem.IsValidPath(pszMkDocumentOld))
+                {
+                    string oldFile = SvnTools.GetNormalizedFullPath(pszMkDocumentOld);
+                    string newFile = SvnTools.GetNormalizedFullPath(pszMkDocumentNew);
+                    ProjectTracker.OnDocumentSaveAs(oldFile, newFile);
+                    SccProvider.OnDocumentSaveAs(oldFile, newFile);
+                }
+            }
 
             return VSConstants.S_OK;
         }
@@ -339,7 +368,7 @@ namespace Ankh.Scc
 
         internal void DoDispose(SccDocumentData data)
         {
-            if(data == null)
+            if (data == null)
                 throw new ArgumentNullException("data");
 
             Debug.Assert(_docMap[data.Name] == data);

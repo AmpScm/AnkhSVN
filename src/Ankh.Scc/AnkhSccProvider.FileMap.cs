@@ -770,7 +770,9 @@ namespace Ankh.Scc
             SccProjectData projectData;
             if (_projectMap.TryGetValue(sccProject, out projectData))
             {
-                return projectData.IsWebSite; // We have to know its contents to provide SCC info
+                // We have to know its contents to provide SCC info
+                // TODO: BH: Maybe only enable while reloading?
+                return projectData.IsWebSite; 
             }
 
             return false;
