@@ -179,13 +179,13 @@
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DiffWindow\DiffToolWindowControl.Designer.cs">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="DiffWindow\MergeToolWindowControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
@@ -572,7 +572,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnLog\LogToolWindowControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SvnLog\LogToolWindowControl.Designer.cs">
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
@@ -764,7 +764,7 @@
       <DependentUpon>PlainPropertyEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerControl.Designer.cs">
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>

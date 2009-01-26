@@ -24,7 +24,7 @@ using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Services.PendingChanges;
 
-namespace Ankh.PendingChanges
+namespace Ankh.Services.PendingChanges
 {
     /// <summary>
     /// 
@@ -98,7 +98,7 @@ namespace Ankh.PendingChanges
 
             using (MemoryStream stream = new MemoryStream())
             {
-                GetService<IProgressRunner>().RunModal("Diffing",
+                GetService<IProgressRunner>().RunModal(PccStrings.DiffTitle,
                     delegate(object sender, ProgressWorkerArgs e)
                     {
                         foreach (PendingChange pc in changes)
@@ -223,7 +223,14 @@ namespace Ankh.PendingChanges
                         wc = w;
                     else if (w != null && w != wc)
                     {
-                        state.MessageBox.Show("You can only commit from one working copy at a time", "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Exclamation);
+                        StringBuilder sb = new StringBuilder();
+                        sb.AppendLine(PccStrings.CommitSingleWc);
+                        sb.AppendFormat(PccStrings.WorkingCopyX, wc.FullPath);
+                        sb.AppendLine();
+                        sb.AppendFormat(PccStrings.WorkingCopyX, w.FullPath);
+                        sb.AppendLine();
+
+                        state.MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                         return false;
                     }
@@ -301,7 +308,7 @@ namespace Ankh.PendingChanges
 
                     if (!state.Client.Add(pc.FullPath, a))
                     {
-                        if (state.MessageBox.Show(a.LastException.Message, "AnkhSvn", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
+                        if (state.MessageBox.Show(a.LastException.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
                             return false;
                     }
                 }
@@ -320,11 +327,11 @@ namespace Ankh.PendingChanges
             {
                 SvnItem item = state.Cache[path];
 
-                if (item.Status.LocalContentStatus == SvnStatus.Added)
+                if (item.IsAdded || item.IsReplaced)
                 {
                     SvnItem parent = item.Parent;
 
-                    while (parent != null && (parent.Status.LocalContentStatus == SvnStatus.Added))
+                    while (parent != null && (parent.IsAdded || parent.IsReplaced))
                     {
                         if (!state.CommitPaths.Contains(parent.FullPath))
                             state.CommitPaths.Add(parent.FullPath);
@@ -392,7 +399,7 @@ namespace Ankh.PendingChanges
 
                     if (!state.Client.Delete(path, da))
                     {
-                        state.MessageBox.Show(da.LastException.Message, "AnkhSvn", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        state.MessageBox.Show(da.LastException.Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                         return false;
                     }
                 }
@@ -439,7 +446,7 @@ namespace Ankh.PendingChanges
             if (depth == SvnDepth.Unknown)
                 return false;
 
-            ProgressRunnerResult r = state.GetService<IProgressRunner>().RunModal("Committing",
+            ProgressRunnerResult r = state.GetService<IProgressRunner>().RunModal(PccStrings.CommitTitle,
                 delegate(object sender, ProgressWorkerArgs e)
                 {
                     SvnCommitArgs ca = new SvnCommitArgs();
@@ -457,7 +464,7 @@ namespace Ankh.PendingChanges
                 ILastChangeInfo ci = GetService<ILastChangeInfo>();
 
                 if (ci != null)
-                    ci.SetLastChange("Committed:", rslt.Revision.ToString());
+                    ci.SetLastChange(PccStrings.CommittedPrefix, rslt.Revision.ToString());
             }
 
             return ok;
