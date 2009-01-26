@@ -61,6 +61,7 @@ namespace Ankh.VS
         MyVideo = 0x000e,
         DesktopDirectory = 0x0010,
         Drives = 0x0011,
+        MyComputer=Drives,
         Network = 0x0012,
         Nethood = 0x0013,
         Fonts = 0x0014,

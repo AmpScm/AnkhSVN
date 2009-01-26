@@ -18,19 +18,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.UI.WorkingCopyExplorer.Nodes;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
     class FileSystemTreeNode : TreeNode
     {
         readonly SvnItem _svnItem;
+        readonly WCTreeNode _wcNode;
 
-        public FileSystemTreeNode(SvnItem item)
+        public FileSystemTreeNode(SvnItem item, WCTreeNode wcNode)
         {
             if(item == null)
                 throw new ArgumentNullException("item");
 
             _svnItem = item;
+            _wcNode = wcNode;
             Text = item.Name;
         }
 
@@ -42,6 +45,16 @@ namespace Ankh.UI.WorkingCopyExplorer
         public SvnItem SvnItem
         {
             get { return _svnItem; }
+        }
+
+        public new FileSystemTreeView TreeView
+        {
+            get { return (FileSystemTreeView)base.TreeView; }
+        }
+
+        public WCTreeNode WCNode
+        {
+            get { return _wcNode; }
         }
     }
 }

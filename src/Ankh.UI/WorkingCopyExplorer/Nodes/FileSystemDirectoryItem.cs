@@ -110,5 +110,10 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
             return new List<FileSystemNode>(items.Values).ToArray();
         }
+
+        public override int ImageIndex
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

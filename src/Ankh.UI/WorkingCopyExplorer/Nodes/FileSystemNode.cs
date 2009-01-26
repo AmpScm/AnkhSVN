@@ -25,7 +25,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         readonly WorkingCopyExplorerControl _ctrl;
 
         public FileSystemNode(WorkingCopyExplorerControl control, FileSystemNode parent, SvnItem svnItem)
-            : base(parent)
+            : base(control.Context, parent)
         {
             if (control == null)
                 throw new ArgumentNullException("control");

@@ -23,13 +23,27 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
     abstract class WCTreeNode
     {
+        readonly IAnkhServiceProvider _context;
         readonly Collection<FileSystemNode> _children;
         WCTreeNode _parent;
 
-        public WCTreeNode(WCTreeNode parent)
+        public WCTreeNode(IAnkhServiceProvider context, WCTreeNode parent)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
             _parent = parent;
             _children = new Collection<FileSystemNode>();
+        }
+
+        /// <summary>
+        /// Gets the index of the image.
+        /// </summary>
+        /// <value>The index of the image.</value>
+        public abstract int ImageIndex
+        {
+            get;
         }
 
         /// <summary>
