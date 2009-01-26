@@ -239,6 +239,23 @@ namespace Ankh.PendingChanges
         /// <returns></returns>
         private bool PreCommit_VerifyLogMessage(PendingCommitState state)
         {
+            if (state.LogMessage == null)
+                return true; // Skip checks
+
+
+
+            // And after checking whether the message is valid: Normalize the message the way the CLI would
+            // * No whitespace at the end of lines
+            // * Always a newline at the end
+
+            StringBuilder sb = new StringBuilder();
+            foreach (string line in state.LogMessage.Replace("\r", "").Split('\n'))
+            {
+                sb.AppendLine(line.TrimEnd());
+            }
+
+            state.LogMessage = sb.ToString().TrimEnd() + Environment.NewLine;
+
             return true; // Logmessage always ok for now
         }
 
