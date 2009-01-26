@@ -43,5 +43,10 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
                 this.SvnItem.MarkDirty();
             }
         }
+
+        public override int ImageIndex
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

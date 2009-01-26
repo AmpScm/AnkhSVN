@@ -37,29 +37,49 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.HideSelection = false;
         }
 
-
         public FileSystemNode SelectedItem
         {
             get
             {
-                return this.SelectedNode != null ? this.SelectedNode.Tag as FileSystemNode : null;
+                FileSystemTreeNode selected = this.SelectedNode as FileSystemTreeNode;
+
+                if(selected != null)
+                    return selected.WCNode as FileSystemNode;
+                return
+                    null;
             }
             set
             {
-                // Assume for now that it can only change to a direct child of the current node
-                if (this.SelectedItem != null)
-                {
-                    this.SelectedNode.Expand();
-
-                    foreach (TreeNode childNode in this.SelectedNode.Nodes)
-                    {
-                        if (childNode.Tag.Equals(value))
-                        {
-                            this.SelectedNode = childNode;
-                        }
-                    }
-                }
+                SelectedNode = GetSelectedItem(value);
             }
+        }
+
+        private TreeNode GetSelectedItem(WCTreeNode value)
+        {
+            TreeNode parent = null;
+            if (value.Parent != null)
+            {
+                parent = GetSelectedItem(value.Parent);
+
+                if(parent != null)
+                    foreach (TreeNode tn in parent.Nodes)
+                    {
+                        FileSystemTreeNode ftn = tn as FileSystemTreeNode;
+
+                        if (ftn != null && ftn.WCNode == value)
+                            return ftn;
+                    }
+
+                return null;
+            }
+
+            foreach(FileSystemTreeNode ftn in Nodes)
+            {
+                if (ftn.WCNode == value)
+                    return ftn;
+            }
+
+            return null;
         }
 
         public void AddRoot(FileSystemNode rootItem)
@@ -209,7 +229,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void AddNode(TreeNodeCollection nodes, FileSystemNode child)
         {
-            FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem);
+            FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem, child);
             nodes.Add(ftn);
             if (ftn.Parent == null)
                 ftn.Text = child.SvnItem.FullPath;
