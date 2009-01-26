@@ -16,15 +16,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+using SharpSvn;
+
 using Ankh.Commands;
 using Ankh.Ids;
-using Microsoft.VisualStudio.OLE.Interop;
-using System.IO;
-using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -49,13 +48,13 @@ namespace Ankh.Scc
 
         public ProjectTracker(IAnkhServiceProvider context)
             : base(context)
-        {            
+        {
             _fileOrigins = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        protected override void  OnInitialize()
+        protected override void OnInitialize()
         {
- 	        base.OnInitialize();
+            base.OnInitialize();
 
             Hook(true);
             LoadInitial();
@@ -63,6 +62,7 @@ namespace Ankh.Scc
 
         AnkhSccProvider SccProvider
         {
+            [DebuggerStepThrough]
             get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
         }
 
@@ -70,7 +70,7 @@ namespace Ankh.Scc
         {
             IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
-            if(solution == null)
+            if (solution == null)
                 return;
 
             Guid none = Guid.Empty;
@@ -88,9 +88,9 @@ namespace Ankh.Scc
                 {
                     IVsSccProject2 p2 = hiers[i] as IVsSccProject2;
 
-                    if(p2 != null)
+                    if (p2 != null)
                         SccProvider.OnProjectOpened(p2, false);
-                }                
+                }
             }
 
             SccProvider.OnSolutionOpened(true);
@@ -113,7 +113,7 @@ namespace Ankh.Scc
                 if (solution != null)
                     solution.AdviseSolutionEvents(this, out _documentCookie);
             }
-            else 
+            else
             {
                 if (tracker != null)
                     tracker.UnadviseTrackProjectDocumentsEvents(_projectCookie);
@@ -135,7 +135,7 @@ namespace Ankh.Scc
         public int OnAfterSccStatusChanged(int cProjects, int cFiles, IVsProject[] rgpProjects, int[] rgFirstIndices, string[] rgpszMkDocuments, uint[] rgdwSccStatus)
         {
             return VSConstants.S_OK;
-        }               
+        }
 
         #endregion
 
@@ -204,7 +204,7 @@ namespace Ankh.Scc
 
         void RegisterForSccCleanup()
         {
-            if (_registeredSccCleanup )
+            if (_registeredSccCleanup)
                 return;
 
             IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
@@ -221,7 +221,7 @@ namespace Ankh.Scc
             }
             finally
             {
-                if(!ok)
+                if (!ok)
                     _registeredSccCleanup = false;
             }
         }

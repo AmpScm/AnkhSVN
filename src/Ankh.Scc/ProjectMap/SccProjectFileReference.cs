@@ -27,12 +27,12 @@ namespace Ankh.Scc.ProjectMap
     /// <summary>
     /// Container of a coupling between a single project(1) and a file(ReferenceCount)
     /// </summary>
-    [DebuggerDisplay("{FileName}, Project={Project}")]
+    [DebuggerDisplay("{Filename}, Project={Project}")]
     sealed class SccProjectFileReference
     {
         readonly IAnkhServiceProvider _context;
         readonly SccProjectFile _file;
-        readonly SccProjectData _project;        
+        readonly SccProjectData _project;
         int _refCount;
         uint _id;
         IList<string> _subFiles;
@@ -74,7 +74,7 @@ namespace Ankh.Scc.ProjectMap
 
         public int ReferenceCount
         {
-            get { return _refCount; }            
+            get { return _refCount; }
         }
 
         public void AddReference()
@@ -111,7 +111,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (_id != 0)
                     return _id;
-                
+
                 uint id;
                 if (_project.TryGetProjectFileId(Filename, out id))
                     return _id = id;

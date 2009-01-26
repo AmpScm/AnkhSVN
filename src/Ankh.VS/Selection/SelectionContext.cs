@@ -549,7 +549,7 @@ namespace Ankh.VS.Selection
             {
                 if (value != null)
                 {
-                    if ((bool)value)
+                    if ((bool)value && !IgnoreSideEffects(si.SccProject))
                         yield break;
                 }
             }
@@ -578,6 +578,21 @@ namespace Ankh.VS.Selection
 
                 childId = GetItemIdFromObject(value);
             }
+        }
+
+        IAnkhSccService _sccService;
+        IAnkhSccService SccService
+        {
+            [DebuggerStepThrough]
+            get { return _sccService ?? (_sccService = GetService<IAnkhSccService>()); }
+        }
+
+        private bool IgnoreSideEffects(IVsSccProject2 sccProject)
+        {
+            if(sccProject != null && SccService.IgnoreEnumerationSideEffects(sccProject))
+                return true;
+
+            return false;
         }
 
         public Hashtable Cache

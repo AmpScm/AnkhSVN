@@ -161,7 +161,16 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            // Do nothing
+            if (!data.IsWebSite)
+            {
+                // Do nothing
+            }
+            else
+            {
+                // Websites don't contain a real file mapping; reload to load new files
+                // and directories recursively
+                data.Reload();
+            }
         }
 
         /// <summary>
@@ -292,6 +301,13 @@ namespace Ankh.Scc
             }
 
             GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SolutionFilename);
+        }
+
+        internal void OnDocumentSaveAs(string oldName, string newName)
+        {
+            if (!IsActive)
+                return;
+
         }
 
         /// <summary>
@@ -747,6 +763,17 @@ namespace Ankh.Scc
             {
                 yield return projectFileItem;
             }
+        }
+
+        bool IAnkhSccService.IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject)
+        {
+            SccProjectData projectData;
+            if (_projectMap.TryGetValue(sccProject, out projectData))
+            {
+                return projectData.IsWebSite; // We have to know its contents to provide SCC info
+            }
+
+            return false;
         }
 
         /// <summary>
