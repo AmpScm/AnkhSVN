@@ -100,5 +100,12 @@ namespace Ankh.Scc
         /// <param name="store">The store.</param>
         /// <param name="writeData">if set to <c>true</c> [write data].</param>
         void SerializeEnlistData(Stream store, bool writeData);
+
+        /// <summary>
+        /// Gets a boolean indicating whether to ignores the enumeration side effects flag on this project
+        /// </summary>
+        /// <param name="sccProject">The SCC project.</param>
+        /// <returns></returns>
+        bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
     }
 }
