@@ -22,15 +22,16 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Selection;
 using System.IO;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.Scc
 {
     partial class ProjectTracker
     {
         ISelectionContext _selectionContext;
-
         ISelectionContext SelectionContext
         {
+            [DebuggerStepThrough]
             get { return _selectionContext ?? (_selectionContext = GetService<ISelectionContext>()); }
         }
 
@@ -55,12 +56,6 @@ namespace Ankh.Scc
             bool allOk = true;
 
             bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
-
-            if (_baseDocumentName == null && SelectionContext != null)
-            {
-                _baseDocumentFrame = ((ISelectionContextEx)SelectionContext).ActiveDocumentFrame;
-                _baseDocumentName = SelectionContext.ActiveDocumentFilename;
-            }
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -107,14 +102,11 @@ namespace Ankh.Scc
         {
             // For now, we allow adding all files as is
             // We might propose moving files to within a managed root
-            
+
             _collectHints = true; // Some projects call HandsOff(file) on which files they wish to import. Use that to get more information
             bool allOk = true;
 
             bool track = SccProvider.TrackProjectChanges(pProject as IVsSccProject2);
-
-            if (_baseDocumentName == null && SelectionContext != null)
-                _baseDocumentName = SelectionContext.ActiveDocumentFilename;
 
             for (int i = 0; i < cFiles; i++)
             {
@@ -355,22 +347,6 @@ namespace Ankh.Scc
                         }
 
                         // The clipboard seems to have some other format which might contain other info
-
-                        if (origin == null &&
-                            !string.IsNullOrEmpty(_baseDocumentName) &&
-                            !string.Equals(newName, _baseDocumentName, StringComparison.OrdinalIgnoreCase) &&
-                            string.Equals(SelectionContext.ActiveDocumentFilename, newName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            // The new file is the active document
-                            // AND in OnQueryAdd the active document name was different
-
-                            // Assume the user saved a document under a new name (File -> Save As)
-                            if (((ISelectionContextEx)SelectionContext).ActiveDocumentFrame == _baseDocumentFrame)
-                                origin = _baseDocumentName;
-                        }
-
-                        _baseDocumentName = null;
-                        _baseDocumentFrame = null;
                     }
 
                     if (sccProject != null)
@@ -427,14 +403,14 @@ namespace Ankh.Scc
                                     if (svn.TryGetRepositoryId(tl, out fromGuid) && (fromGuid == addGuid))
                                         now.Add(fl, tl); // We can copy this item at the same time
                                     // else 
-                                        // This copy comes from another repository, no history to save
+                                    // This copy comes from another repository, no history to save
 
                                     copies.RemoveAt(i--);
                                 }
                             }
 
                             // Now contains all the files we are receiving in a single directory
-                            if(now.Count > 0)
+                            if (now.Count > 0)
                                 svn.SafeWcCopyToDirFixup(now, dir);
                             else
                                 svn.SafeWcCopyFixup(fromFile, toFile);
@@ -565,7 +541,7 @@ namespace Ankh.Scc
 
                 SvnItem item = StatusCache[dir];
 
-                if(!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(dir))
+                if (!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(dir))
                     continue;
 
                 DirectoryInfo dirInfo = new DirectoryInfo(dir);
@@ -573,7 +549,7 @@ namespace Ankh.Scc
                 if (!dirInfo.Exists || (DateTime.Now - dirInfo.CreationTime) > new TimeSpan(0, 1, 0))
                     continue; // Directory is older than one minute.. Not just copied
 
-                using(SvnSccContext svn = new SvnSccContext(Context))
+                using (SvnSccContext svn = new SvnSccContext(Context))
                 {
                     // Ok; we have a 'new' directory here.. Lets check if VS broke the subversion working copy
                     SvnStatusEventArgs status = svn.SafeGetStatusViaParent(dir);
@@ -610,13 +586,19 @@ namespace Ankh.Scc
                         continue;
 
                     dir = SvnTools.GetNormalizedFullPath(dir);
-                         
+
                     if (sccProject != null)
                         SccProvider.OnProjectDirectoryAdded(sccProject, dir, rgFlags[iDirectory]);
                 }
             }
 
             return VSConstants.S_OK;
+        }
+
+        internal void OnDocumentSaveAs(string oldName, string newName)
+        {
+            _fileOrigins[newName] = oldName;
+            RegisterForSccCleanup();
         }
     }
 }
