@@ -25,8 +25,8 @@ using SharpSvn;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogRevertThisRevisions, AlwaysAvailable=true)]
-    [Command(AnkhCommand.LogRevertTo, AlwaysAvailable=true)]
+    [Command(AnkhCommand.LogRevertThisRevisions, AlwaysAvailable = true)]
+    [Command(AnkhCommand.LogRevertTo, AlwaysAvailable = true)]
     class RevertChanges : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
@@ -41,7 +41,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             SvnOrigin origin = EnumTools.GetSingle(logWindow.Origins);
 
-            if(origin == null || !(origin.Target is SvnPathTarget))
+            if (origin == null || !(origin.Target is SvnPathTarget))
             {
                 e.Enabled = false;
                 return;
@@ -56,7 +56,7 @@ namespace Ankh.UI.SvnLog.Commands
                     break;
             }
 
-            switch(e.Command)
+            switch (e.Command)
             {
                 case AnkhCommand.LogRevertTo:
                     if (count == 1)
@@ -105,44 +105,44 @@ namespace Ankh.UI.SvnLog.Commands
 
             HybridCollection<string> nodes = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach(SvnOrigin o in logWindow.Origins)
+            foreach (SvnOrigin o in logWindow.Origins)
             {
                 SvnPathTarget pt = o.Target as SvnPathTarget;
-                if(pt != null)
+                if (pt != null)
                     continue;
 
-                foreach(string file in tracker.GetDocumentsBelow(pt.FullPath))
+                foreach (string file in tracker.GetDocumentsBelow(pt.FullPath))
                 {
-                    if(!nodes.Contains(file))
+                    if (!nodes.Contains(file))
                         nodes.Add(file);
                 }
             }
 
-            if(nodes.Count > 0)
+            if (nodes.Count > 0)
                 tracker.SaveDocuments(nodes); // Saves all open documents below all specified origins
 
-            progressRunner.RunModal("Reverting",
+
+            using (DocumentLock dl = tracker.LockDocuments(e.Selection.GetSelectedFiles(true), DocumentLockType.NoReload))
+            {
+                dl.MonitorChanges();
+
+                SvnMergeArgs ma = new SvnMergeArgs();
+
+                progressRunner.RunModal("Reverting",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
-                    using (DocumentLock dl = tracker.LockDocuments(e.Selection.GetSelectedFiles(true), DocumentLockType.NoReload))
+                    foreach (SvnOrigin item in logWindow.Origins)
                     {
-                        dl.MonitorChanges();
+                        SvnPathTarget target = item.Target as SvnPathTarget;
 
-                        SvnMergeArgs ma = new SvnMergeArgs();
+                        if (target == null)
+                            continue;
 
-
-                        foreach (SvnOrigin item in logWindow.Origins)
-                        {
-                            SvnPathTarget target = item.Target as SvnPathTarget;
-
-                            if (target == null)
-                                continue;
-
-                            ee.Client.Merge(target.FullPath, target, revisions, ma);
-                        }
-                        dl.ReloadModified();
+                        ee.Client.Merge(target.FullPath, target, revisions, ma);
                     }
                 });
+                dl.ReloadModified();
+            }
         }
     }
 }
