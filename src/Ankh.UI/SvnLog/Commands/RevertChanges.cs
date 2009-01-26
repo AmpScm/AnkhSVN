@@ -108,7 +108,7 @@ namespace Ankh.UI.SvnLog.Commands
             foreach (SvnOrigin o in logWindow.Origins)
             {
                 SvnPathTarget pt = o.Target as SvnPathTarget;
-                if (pt != null)
+                if (pt == null)
                     continue;
 
                 foreach (string file in tracker.GetDocumentsBelow(pt.FullPath))
@@ -122,7 +122,7 @@ namespace Ankh.UI.SvnLog.Commands
                 tracker.SaveDocuments(nodes); // Saves all open documents below all specified origins
 
 
-            using (DocumentLock dl = tracker.LockDocuments(e.Selection.GetSelectedFiles(true), DocumentLockType.NoReload))
+            using (DocumentLock dl = tracker.LockDocuments(nodes, DocumentLockType.NoReload))
             {
                 dl.MonitorChanges();
 
