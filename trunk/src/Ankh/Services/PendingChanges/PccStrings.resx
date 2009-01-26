@@ -144,6 +144,9 @@
   <data name="InvalidCommitCombination" xml:space="preserve">
     <value>Subversion does not allow to commit this combination of files and directories at once.</value>
   </data>
+  <data name="PostCommitError" xml:space="preserve">
+    <value>Repository Post-Commit hook Result</value>
+  </data>
   <data name="ShouldNotCommitX" xml:space="preserve">
     <value>Not to commit: {0}</value>
   </data>
