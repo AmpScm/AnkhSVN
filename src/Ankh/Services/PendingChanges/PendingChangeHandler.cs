@@ -465,6 +465,9 @@ namespace Ankh.Services.PendingChanges
 
                 if (ci != null)
                     ci.SetLastChange(PccStrings.CommittedPrefix, rslt.Revision.ToString());
+
+                if (!string.IsNullOrEmpty(rslt.PostCommitError))
+                    state.MessageBox.Show(rslt.PostCommitError, PccStrings.PostCommitError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             return ok;

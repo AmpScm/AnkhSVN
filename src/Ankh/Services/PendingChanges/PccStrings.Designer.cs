@@ -142,6 +142,15 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Repository Post-Commit hook Result.
+        /// </summary>
+        internal static string PostCommitError {
+            get {
+                return ResourceManager.GetString("PostCommitError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not to commit: {0}.
         /// </summary>
         internal static string ShouldNotCommitX {
