@@ -117,7 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CommitSingleWc" xml:space="preserve">
+    <value>You can only commit from one working copy at a time</value>
+  </data>
+  <data name="CommittedPrefix" xml:space="preserve">
+    <value>Committed:</value>
+  </data>
+  <data name="CommitTitle" xml:space="preserve">
+    <value>Committing</value>
+  </data>
+  <data name="DiffTitle" xml:space="preserve">
+    <value>Diffing</value>
+  </data>
+  <data name="DirectoryDeleteAndNodeToKeep" xml:space="preserve">
+    <value>Directory deletes must be recursive and this would commit other files:</value>
+  </data>
+  <data name="DirectoryDeleteX" xml:space="preserve">
+    <value>Deleted directory: {0}</value>
+  </data>
+  <data name="DirectoryToCommit" xml:space="preserve">
+    <value>Directory to commit: {0}</value>
+  </data>
   <data name="FailedToSaveBeforeCommit" xml:space="preserve">
     <value>Failed to save open documents before committing</value>
+  </data>
+  <data name="InvalidCommitCombination" xml:space="preserve">
+    <value>Subversion does not allow to commit this combination of files and directories at once.</value>
+  </data>
+  <data name="ShouldNotCommitX" xml:space="preserve">
+    <value>Not to commit: {0}</value>
+  </data>
+  <data name="WorkingCopyX" xml:space="preserve">
+    <value>Working Copy: {0}</value>
   </data>
 </root>

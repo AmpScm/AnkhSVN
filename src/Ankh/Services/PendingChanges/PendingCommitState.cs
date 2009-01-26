@@ -26,7 +26,7 @@ using Ankh.Commands;
 using System.Windows.Forms;
 using Ankh.UI;
 
-namespace Ankh.PendingChanges
+namespace Ankh.Services.PendingChanges
 {
     class PendingCommitState : AnkhService, IDisposable
     {
@@ -136,6 +136,7 @@ namespace Ankh.PendingChanges
             SvnDepth depth = SvnDepth.Empty;
             bool requireInfinity = false;
             bool noDepthInfinity = false;
+            string dirToDelete = null;
 
             foreach (string path in CommitPaths)
             {
@@ -146,6 +147,7 @@ namespace Ankh.PendingChanges
                     if (item.IsDeleteScheduled)
                     {
                         // Infinity = OK
+                        dirToDelete = item.FullPath;
                         requireInfinity = true;
                     }
                     else
@@ -162,6 +164,9 @@ namespace Ankh.PendingChanges
                 // - Directory deletes require depth infinity
                 // - There is another directory commit
 
+                string nodeNotToCommit = null;
+                string nodeToCommit = null;
+
                 // Let's see if committing with depth infinity would go wrong
                 bool hasOther = false;
                 using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
@@ -171,6 +176,7 @@ namespace Ankh.PendingChanges
                     sa.ThrowOnError = false;
                     sa.ThrowOnCancel = false;
                     sa.RetrieveIgnoredEntries = false;
+                    sa.IgnoreExternals = true;
                     sa.Depth = SvnDepth.Infinity;
                     sa.Cancel += delegate(object sender, SvnCancelEventArgs ee) { if (cancel) ee.Cancel = true; };
 
@@ -184,14 +190,27 @@ namespace Ankh.PendingChanges
                         if (!cl.Status(path, sa,
                             delegate(object sender, SvnStatusEventArgs ee)
                             {
+                                switch (ee.LocalContentStatus)
+                                {
+                                    case SvnStatus.Zero:
+                                    case SvnStatus.None:
+                                    case SvnStatus.Normal:
+                                    case SvnStatus.Ignored:
+                                    case SvnStatus.NotVersioned:
+                                    case SvnStatus.External:
+                                        return;
+                                }
                                 if (!CommitPaths.Contains(ee.FullPath))
                                 {
+                                    nodeNotToCommit = ee.FullPath;
+                                    nodeToCommit = path;
                                     hasOther = true;
                                     cancel = true; // Cancel via the cancel hook
                                 }
                             }))
                         {
-                            hasOther = true;
+                            if (cancel)
+                                break;
                         }
 
                         if (hasOther)
@@ -208,7 +227,18 @@ namespace Ankh.PendingChanges
                 }
                 else
                 {
-                    MessageBox.Show("Subversion does not allow to commit this combination of files and directories at once. (Directory deletions and modifications collide)", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine(PccStrings.InvalidCommitCombination);
+                    sb.AppendLine();
+                    sb.AppendLine(PccStrings.DirectoryDeleteAndNodeToKeep);
+
+                    sb.AppendFormat(PccStrings.DirectoryDeleteX, dirToDelete ?? "<null>");
+                    sb.AppendLine();
+                    sb.AppendFormat(PccStrings.DirectoryToCommit, nodeToCommit ?? "<null>");
+                    sb.AppendLine();
+                    sb.AppendFormat(PccStrings.ShouldNotCommitX, nodeNotToCommit ?? "<null>");
+
+                    MessageBox.Show(sb.ToString(), "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return SvnDepth.Unknown;
                 }
 

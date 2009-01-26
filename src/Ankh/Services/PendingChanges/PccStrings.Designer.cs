@@ -61,11 +61,101 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only commit from one working copy at a time.
+        /// </summary>
+        internal static string CommitSingleWc {
+            get {
+                return ResourceManager.GetString("CommitSingleWc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Committed:.
+        /// </summary>
+        internal static string CommittedPrefix {
+            get {
+                return ResourceManager.GetString("CommittedPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Committing.
+        /// </summary>
+        internal static string CommitTitle {
+            get {
+                return ResourceManager.GetString("CommitTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Diffing.
+        /// </summary>
+        internal static string DiffTitle {
+            get {
+                return ResourceManager.GetString("DiffTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory deletes must be recursive and this would commit other files:.
+        /// </summary>
+        internal static string DirectoryDeleteAndNodeToKeep {
+            get {
+                return ResourceManager.GetString("DirectoryDeleteAndNodeToKeep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted directory: {0}.
+        /// </summary>
+        internal static string DirectoryDeleteX {
+            get {
+                return ResourceManager.GetString("DirectoryDeleteX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory to commit: {0}.
+        /// </summary>
+        internal static string DirectoryToCommit {
+            get {
+                return ResourceManager.GetString("DirectoryToCommit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to save open documents before committing.
         /// </summary>
         internal static string FailedToSaveBeforeCommit {
             get {
                 return ResourceManager.GetString("FailedToSaveBeforeCommit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subversion does not allow to commit this combination of files and directories at once..
+        /// </summary>
+        internal static string InvalidCommitCombination {
+            get {
+                return ResourceManager.GetString("InvalidCommitCombination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not to commit: {0}.
+        /// </summary>
+        internal static string ShouldNotCommitX {
+            get {
+                return ResourceManager.GetString("ShouldNotCommitX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Working Copy: {0}.
+        /// </summary>
+        internal static string WorkingCopyX {
+            get {
+                return ResourceManager.GetString("WorkingCopyX", resourceCulture);
             }
         }
     }
