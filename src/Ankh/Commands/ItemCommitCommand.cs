@@ -38,6 +38,7 @@ namespace Ankh.Commands
     class ItemCommitCommand : CommandBase
     {
         string storedLogMessage = null;
+        string storedIssueNumber = null;
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -101,12 +102,14 @@ namespace Ankh.Commands
             {
                 pcd.Context = e.Context;
                 pcd.LogMessageText = storedLogMessage;
+                pcd.IssueNumberText = storedIssueNumber;
 
                 pcd.LoadItems(e.Selection.GetSelectedSvnItems(true));
 
                 DialogResult dr = pcd.ShowDialog(e.Context);
 
                 storedLogMessage = pcd.LogMessageText;
+                storedIssueNumber = pcd.IssueNumberText;
 
                 if (dr != DialogResult.OK)
                     return;
@@ -123,6 +126,7 @@ namespace Ankh.Commands
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
             this.storedLogMessage = null;
+            this.storedIssueNumber = null;
         }
     }
 }

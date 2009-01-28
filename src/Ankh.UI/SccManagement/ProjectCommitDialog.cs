@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.UI.PendingChanges;
 using Ankh.UI.PendingChanges.Commits;
+using Ankh.VS;
 
 namespace Ankh.UI.SccManagement
 {
@@ -55,7 +56,22 @@ namespace Ankh.UI.SccManagement
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            if (DesignMode)
+                return;
+
             logMessage.Select();
+
+            IProjectCommitSettings pcs = Context.GetService<IProjectCommitSettings>();
+
+            if (pcs.ShowIssueBox)
+            {
+                _issueNummeric = pcs.NummericIssueIds;
+                issueLabel.Text = pcs.IssueLabel;
+
+                issueNumberBox.Enabled = issueNumberBox.Visible =
+                    issueLabel.Enabled = issueLabel.Visible = true;
+            }
         }
 
         private void Reload()
@@ -118,6 +134,9 @@ namespace Ankh.UI.SccManagement
         public void FillArgs(PendingChangeCommitArgs pca)
         {
             pca.LogMessage = logMessage.Text;
+            if(issueNumberBox.Visible)
+                pca.IssueText = issueNumberBox.Text;
+
             pca.KeepLocks = keepLocksBox.Checked;
             pca.KeepChangeLists = keepChangelistsBox.Checked;
         }
@@ -126,6 +145,12 @@ namespace Ankh.UI.SccManagement
         {
             get { return logMessage.Text; }
             set { logMessage.Text = value ?? ""; }
+        }
+
+        public string IssueNumberText
+        {
+            get { return issueNumberBox.Text; }
+            set { issueNumberBox.Text = value; }
         }
 
         class ItemLister : AnkhService, IEnumerable<PendingChange>
@@ -196,6 +221,37 @@ namespace Ankh.UI.SccManagement
         {
             okButton.Enabled = sender is ListView
                 && ((ListView) sender).CheckedItems.Count > 0;
+        }
+
+        bool _issueNummeric;
+        private void issueNumberBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (_issueNummeric)
+            {
+                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',')
+                    e.Handled = true;
+            }
+        }
+
+        private void issueNumberBox_TextChanged(object sender, EventArgs e)
+        {
+            if (_issueNummeric)
+            {
+                bool replace = false;
+                string txt = issueNumberBox.Text;
+
+                for (int i = 0; i < txt.Length; i++)
+                {
+                    if (!char.IsNumber(txt, i) && txt[i] != ',')
+                    {
+                        txt = txt.Remove(i, 1);
+                        replace = true;
+                    }
+                }
+
+                if (replace)
+                    issueNumberBox.Text = txt;
+            }
         }
     }
 }

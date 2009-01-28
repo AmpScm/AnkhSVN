@@ -23,6 +23,7 @@ using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Services.PendingChanges;
+using Ankh.VS;
 
 namespace Ankh.Services.PendingChanges
 {
@@ -149,6 +150,7 @@ namespace Ankh.Services.PendingChanges
                     state.KeepLocks = args.KeepLocks;
                     state.KeepChangeLists = args.KeepChangeLists;
                     state.LogMessage = args.LogMessage;
+                    state.IssueText = args.IssueText;
 
                     if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
                         return false;
@@ -249,8 +251,6 @@ namespace Ankh.Services.PendingChanges
             if (state.LogMessage == null)
                 return true; // Skip checks
 
-
-
             // And after checking whether the message is valid: Normalize the message the way the CLI would
             // * No whitespace at the end of lines
             // * Always a newline at the end
@@ -261,7 +261,14 @@ namespace Ankh.Services.PendingChanges
                 sb.AppendLine(line.TrimEnd());
             }
 
-            state.LogMessage = sb.ToString().TrimEnd() + Environment.NewLine;
+            string msg = sb.ToString();
+
+            // Use the project commit settings class to add an issue number (if available)
+            IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
+            msg = pcs.BuildLogMessage(msg, state.IssueText);                
+            
+            // And make sure the log message ends with a single newline
+            state.LogMessage = msg.TrimEnd() + Environment.NewLine;
 
             return true; // Logmessage always ok for now
         }

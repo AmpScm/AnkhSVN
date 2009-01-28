@@ -48,10 +48,10 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.issueLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.logMessageEditor = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.issueNumberBox = new System.Windows.Forms.TextBox();
             this.lastRevLabel = new System.Windows.Forms.Label();
             this.lastRevBox = new System.Windows.Forms.TextBox();
             this.pendingCommits = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
@@ -106,10 +106,10 @@ namespace Ankh.UI.PendingChanges
             this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.topLayoutPanel.Controls.Add(this.label2, 3, 0);
+            this.topLayoutPanel.Controls.Add(this.issueLabel, 3, 0);
             this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
             this.topLayoutPanel.Controls.Add(this.logMessageEditor, 0, 1);
-            this.topLayoutPanel.Controls.Add(this.textBox1, 4, 0);
+            this.topLayoutPanel.Controls.Add(this.issueNumberBox, 4, 0);
             this.topLayoutPanel.Controls.Add(this.lastRevLabel, 1, 0);
             this.topLayoutPanel.Controls.Add(this.lastRevBox, 2, 0);
             this.topLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -122,18 +122,18 @@ namespace Ankh.UI.PendingChanges
             this.topLayoutPanel.Size = new System.Drawing.Size(764, 79);
             this.topLayoutPanel.TabIndex = 0;
             // 
-            // label2
+            // issueLabel
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(581, 3);
-            this.label2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "&Issue:";
-            this.label2.Visible = false;
+            this.issueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.issueLabel.AutoSize = true;
+            this.issueLabel.Enabled = false;
+            this.issueLabel.Location = new System.Drawing.Point(581, 3);
+            this.issueLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.issueLabel.Name = "issueLabel";
+            this.issueLabel.Size = new System.Drawing.Size(35, 13);
+            this.issueLabel.TabIndex = 3;
+            this.issueLabel.Text = "&Issue:";
+            this.issueLabel.Visible = false;
             // 
             // label1
             // 
@@ -156,16 +156,18 @@ namespace Ankh.UI.PendingChanges
             this.logMessageEditor.TabIndex = 4;
             this.logMessageEditor.Text = null;
             // 
-            // textBox1
+            // issueNumberBox
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(619, 0);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(144, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.Visible = false;
+            this.issueNumberBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.issueNumberBox.Enabled = false;
+            this.issueNumberBox.Location = new System.Drawing.Point(619, 0);
+            this.issueNumberBox.Margin = new System.Windows.Forms.Padding(0);
+            this.issueNumberBox.Name = "issueNumberBox";
+            this.issueNumberBox.Size = new System.Drawing.Size(144, 20);
+            this.issueNumberBox.TabIndex = 0;
+            this.issueNumberBox.Visible = false;
+            this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
+            this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.issueNumberBox_KeyPress);
             // 
             // lastRevLabel
             // 
@@ -228,9 +230,9 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.ColumnHeader changeColumn;
         private System.Windows.Forms.ColumnHeader fullPathColumn;
         private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox issueNumberBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label issueLabel;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessageEditor;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panel1;

@@ -233,9 +233,35 @@ namespace Ankh.Settings
             }
         }
 
+        /// <summary>
+        /// Builds a log message from the specified message and issueId
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="issueId">The issue id.</param>
+        /// <returns></returns>
         public string BuildLogMessage(string message, string issueId)
         {
-            return message;
+            if (!ShowIssueBox)
+                return message;
+
+            StringBuilder sb = new StringBuilder();
+
+            if(!AppendIssueTrackerMessage)
+            {
+                sb.AppendLine(RawIssueTrackerMessage.Replace("%BUGID%", issueId));
+                if (!RawIssueTrackerMessage.EndsWith("\r\n"))
+                    sb.AppendLine();
+            }
+
+            sb.Append(message);
+
+            if (!message.EndsWith("\r\n"))
+                sb.AppendLine();
+
+            if (AppendIssueTrackerMessage)
+                sb.AppendLine(RawIssueTrackerMessage.Replace("%BUGID%", issueId));
+
+            return sb.ToString();
         }
     }
 }
