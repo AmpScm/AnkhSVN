@@ -83,9 +83,9 @@ namespace Ankh.UI.MergeWizard
 
                 args.ThrowOnError = false;
 
-                client.GetSuggestedMergeSources(target.Status.Uri, args, out mergeSources);
+                client.GetSuggestedMergeSources(target.FullPath, args, out mergeSources);
 
-                return mergeSources;
+                return mergeSources ?? new SvnMergeSourcesCollection();
             }
         }
         
@@ -102,7 +102,7 @@ namespace Ankh.UI.MergeWizard
                 if (!client.GetAppliedMergeInfo(target.Status.Uri, args, out mergeInfo))
                     return null;
 
-                return  mergeInfo.AppliedMerges;
+                return mergeInfo.AppliedMerges;
             }
         }
 
