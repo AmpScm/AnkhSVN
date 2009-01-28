@@ -84,6 +84,40 @@ namespace Ankh.UI.PendingChanges
             }
             else
                 PerformInitialUpdate(_manager);
+
+            AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
+            
+            ev.SolutionClosed += new EventHandler(OnSolutionRefresh);
+            ev.SolutionOpened += new EventHandler(OnSolutionRefresh);
+            OnSolutionRefresh(this, EventArgs.Empty);
+        }
+
+        void OnSolutionRefresh(object sender, EventArgs e)
+        {
+            bool showIssueBox = false;
+
+            if (Context != null)
+            {
+                IProjectCommitSettings pcs = Context.GetService<IProjectCommitSettings>();
+
+                if (pcs != null)
+                {
+                    showIssueBox = pcs.ShowIssueBox;
+
+                    if (showIssueBox)
+                    {
+                        issueLabel.Text = pcs.IssueLabel ?? PCStrings.IssueLabelText;
+                    }
+
+                    _issueNummeric = pcs.NummericIssueIds;
+                }
+            }
+
+            if (showIssueBox != issueNumberBox.Visible)
+            {
+                issueNumberBox.Enabled = issueNumberBox.Visible =
+                    issueLabel.Enabled = issueLabel.Visible = showIssueBox;
+            }
         }
 
         protected IPendingChangesManager Manager
@@ -275,7 +309,8 @@ namespace Ankh.UI.PendingChanges
 			IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null)
-                cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
+                cmd.ExecCommand(Control.ModifierKeys == Keys.Control 
+                    ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
         }
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
         {
@@ -335,12 +370,16 @@ namespace Ankh.UI.PendingChanges
                 }
             }
 
-            PendingChangeCommitArgs a = new PendingChangeCommitArgs();
+            IPendingChangeHandler pch = Context.GetService<IPendingChangeHandler>();
 
+            PendingChangeCommitArgs a = new PendingChangeCommitArgs();
             a.LogMessage = logMessageEditor.Text;
             a.KeepLocks = keepLocks;
 
-			if (Context.GetService<IPendingChangeHandler>().Commit(changes, a))
+            if (issueNumberBox.Visible)
+                a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used            
+
+			if (pch.Commit(changes, a))
             {
                 logMessageEditor.Text = "";
             }
@@ -442,6 +481,37 @@ namespace Ankh.UI.PendingChanges
 
             if (Context.GetService<IPendingChangeHandler>().ApplyChanges(changes, args))
             {
+            }
+        }
+
+        bool _issueNummeric;
+        private void issueNumberBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (_issueNummeric)
+            {
+                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',')
+                    e.Handled = true;
+            }            
+        }
+
+        private void issueNumberBox_TextChanged(object sender, EventArgs e)
+        {
+            if (_issueNummeric)
+            {
+                bool replace = false;
+                string txt = issueNumberBox.Text;
+
+                for (int i = 0; i < txt.Length; i++)
+                {
+                    if (!char.IsNumber(txt, i) && txt[i] != ',')
+                    {
+                        txt = txt.Remove(i, 1);
+                        replace = true;
+                    }
+                }
+
+                if (replace)
+                    issueNumberBox.Text = txt;
             }
         }
     }

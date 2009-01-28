@@ -31,6 +31,7 @@ namespace Ankh.Scc
     public class PendingChangeCommitArgs
     {
         string _logMessage;
+        string _issueText;
         bool _keepLocks;
         bool _keepChangeLists;
         bool _storeMessageOnError;
@@ -65,6 +66,12 @@ namespace Ankh.Scc
         {
             get { return _storeMessageOnError; }
             set { _storeMessageOnError = value; }
+        }
+
+        public string IssueText
+        {
+            get { return _issueText; }
+            set { _issueText = value; }
         }
     }
 

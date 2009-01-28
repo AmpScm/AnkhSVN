@@ -47,8 +47,8 @@ namespace Ankh.UI.SccManagement
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pendingList = new Ankh.UI.PendingChanges.Commits.PendingCommitsView(this.components);
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.issueNumberBox = new System.Windows.Forms.TextBox();
+            this.issueLabel = new System.Windows.Forms.Label();
             this.logMessage = new Ankh.UI.PendingChanges.LogMessageEditor(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.keepLocksBox = new System.Windows.Forms.CheckBox();
@@ -75,8 +75,8 @@ namespace Ankh.UI.SccManagement
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.textBox1);
-            this.splitContainer1.Panel2.Controls.Add(this.label2);
+            this.splitContainer1.Panel2.Controls.Add(this.issueNumberBox);
+            this.splitContainer1.Panel2.Controls.Add(this.issueLabel);
             this.splitContainer1.Panel2.Controls.Add(this.logMessage);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Size = new System.Drawing.Size(600, 336);
@@ -95,27 +95,29 @@ namespace Ankh.UI.SccManagement
             this.pendingList.TabIndex = 0;
             this.pendingList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pendingList_ItemChecked);
             // 
-            // textBox1
+            // issueNumberBox
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(500, 0);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.Visible = false;
+            this.issueNumberBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.issueNumberBox.Enabled = false;
+            this.issueNumberBox.Location = new System.Drawing.Point(500, 0);
+            this.issueNumberBox.Name = "issueNumberBox";
+            this.issueNumberBox.Size = new System.Drawing.Size(100, 20);
+            this.issueNumberBox.TabIndex = 3;
+            this.issueNumberBox.Visible = false;
+            this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
+            this.issueNumberBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.issueNumberBox_KeyDown);
             // 
-            // label2
+            // issueLabel
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Enabled = false;
-            this.label2.Location = new System.Drawing.Point(388, 3);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 17);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "&Bug/Issue:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.label2.Visible = false;
+            this.issueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.issueLabel.Enabled = false;
+            this.issueLabel.Location = new System.Drawing.Point(388, 3);
+            this.issueLabel.Name = "issueLabel";
+            this.issueLabel.Size = new System.Drawing.Size(106, 17);
+            this.issueLabel.TabIndex = 2;
+            this.issueLabel.Text = "&Bug/Issue:";
+            this.issueLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.issueLabel.Visible = false;
             // 
             // logMessage
             // 
@@ -213,8 +215,8 @@ namespace Ankh.UI.SccManagement
         private Ankh.UI.PendingChanges.Commits.PendingCommitsView pendingList;
         private Ankh.UI.PendingChanges.LogMessageEditor logMessage;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox issueNumberBox;
+        private System.Windows.Forms.Label issueLabel;
         private System.Windows.Forms.CheckBox keepLocksBox;
         private System.Windows.Forms.CheckBox keepChangelistsBox;
         private System.Windows.Forms.Button cancelButton;
