@@ -31,8 +31,8 @@ using System.Diagnostics;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable=true, ArgumentDefinition="u")]
-    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable=true, ArgumentDefinition="u")]
+    [Command(AnkhCommand.FileFileOpenFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
+    [Command(AnkhCommand.FileFileAddFromSubversion, AlwaysAvailable = true, ArgumentDefinition = "u")]
     [Command(AnkhCommand.FileSccOpenFromSubversion)]
     [Command(AnkhCommand.FileSccAddFromSubversion)]
     class OpenFromSubversion : CommandBase
@@ -41,7 +41,7 @@ namespace Ankh.Commands
         {
             if (e.Command == AnkhCommand.FileFileAddFromSubversion || e.Command == AnkhCommand.FileSccAddFromSubversion)
             {
-                if(!e.State.SolutionExists || e.State.SolutionBuilding || e.State.Debugging)
+                if (!e.State.SolutionExists || e.State.SolutionBuilding || e.State.Debugging)
                     e.Enabled = e.Visible = false;
             }
         }
@@ -53,21 +53,21 @@ namespace Ankh.Commands
 
             if (e.Argument is string && Uri.TryCreate((string)e.Argument, UriKind.Absolute, out selectedUri))
             { }
-            else if (e.Argument is Uri)
-                selectedUri = (Uri)e.Argument;
             else if (e.Argument is SvnOrigin)
             {
                 SvnOrigin origin = (SvnOrigin)e.Argument;
                 selectedUri = origin.Uri;
                 rootUri = origin.RepositoryRoot;
             }
+            else if (e.Argument is Uri)
+                selectedUri = (Uri)e.Argument;
 
             IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
 
             if (e.PromptUser || selectedUri == null)
             {
                 using (RepositoryOpenDialog dlg = new RepositoryOpenDialog())
-                {                    
+                {
                     dlg.Context = e.Context;
                     dlg.Filter = settings.OpenProjectFilterName + "|" + settings.AllProjectExtensionsFilter + "|All Files (*.*)|*";
 
@@ -91,9 +91,15 @@ namespace Ankh.Commands
             }
             else if (rootUri == null)
             {
-                using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
+                if (!e.GetService<IProgressRunner>().RunModal("Retrieving Repository Root",
+                    delegate(object sender, ProgressWorkerArgs a)
+                    {
+
+                        rootUri = a.Client.GetRepositoryRoot(selectedUri);
+
+                    }).Succeeded)
                 {
-                    rootUri = client.GetRepositoryRoot(selectedUri);
+                    return;
                 }
             }
 
@@ -183,7 +189,7 @@ namespace Ankh.Commands
             SvnCheckOutArgs a = new SvnCheckOutArgs();
             a.Revision = revision;
 
-            e.Client.CheckOut(projectTop, localDir, a);            
+            e.Client.CheckOut(projectTop, localDir, a);
         }
 
         delegate void DoSomething();
