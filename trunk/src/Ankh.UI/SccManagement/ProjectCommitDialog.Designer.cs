@@ -105,7 +105,7 @@ namespace Ankh.UI.SccManagement
             this.issueNumberBox.TabIndex = 3;
             this.issueNumberBox.Visible = false;
             this.issueNumberBox.TextChanged += new System.EventHandler(this.issueNumberBox_TextChanged);
-            this.issueNumberBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.issueNumberBox_KeyDown);
+            this.issueNumberBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.issueNumberBox_KeyPress);
             // 
             // issueLabel
             // 
