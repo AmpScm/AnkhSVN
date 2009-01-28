@@ -245,6 +245,36 @@ namespace Ankh.UI.RepositoryOpen
 
                 version.Context = Context;
             }
-        }            
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            string path = directory.Text;
+
+            if (!SvnItem.IsValidPath(path) || File.Exists(path))
+            {
+                MessageBox.Show(this, "Path is not valid", "Open Project from Subversion", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            directory.Text = path = SvnTools.GetNormalizedFullPath(path);
+
+            if (Directory.Exists(path))
+            {
+                DirectoryInfo di = new DirectoryInfo(path);
+                if (EnumTools.GetFirst(di.GetFileSystemInfos()) != null)
+                {
+                    if (MessageBox.Show(this, string.Format("{0} already contains files or directories.\nWould you like to continue?", path)
+                        , "Open Project from Subversion", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                }
+            }
+            else
+                Directory.CreateDirectory(path);
+
+            DialogResult = DialogResult.OK;
+        }
     }
 }
