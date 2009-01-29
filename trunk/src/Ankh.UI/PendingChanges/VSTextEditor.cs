@@ -92,6 +92,36 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        bool _enableSplitter;
+        [Localizable(false), DefaultValue(false)]
+        public bool EnableSplitter
+        {
+            get { return _enableSplitter; }
+            set 
+            { 
+                _enableSplitter = value; 
+                if(_nativeWindow != null)
+                {
+                    _nativeWindow.EnableSplitter = value;
+                }
+            }
+        }
+
+        bool _enableDropDownBar;
+        [Localizable(false), DefaultValue(false)]
+        public bool EnableDropDownBar
+        {
+            get { return _enableDropDownBar; }
+            set 
+            { 
+                _enableDropDownBar = value; 
+                if(_nativeWindow != null)
+                {
+                    _nativeWindow.EnableDropDownBar = value;
+                }
+            }
+        }
+
         bool _readOnly;
         [Localizable(false), DefaultValue(false)]
         public bool ReadOnly
@@ -234,8 +264,12 @@ namespace Ankh.UI.PendingChanges
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             _nativeWindow = new CodeEditorWindow(_context, this);
+
+            // Set init only values
+            _nativeWindow.EnableSplitter = EnableSplitter;
+            _nativeWindow.EnableDropDownBar = EnableDropDownBar;
             _nativeWindow.Init(allowModal, ForceLanguageService);
-            _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
+            _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;            
             _nativeWindow.Size = ClientSize;
             _nativeWindow.SetReadOnly(_readOnly);
 
@@ -743,6 +777,20 @@ namespace Ankh.UI.PendingChanges
             set { _showHorizontalScrollBar = value; }
         }
 
+        bool _enableSplitter;
+        public bool EnableSplitter
+        {
+            get { return _enableSplitter; }
+            set { _enableSplitter = value; }
+        }
+
+        bool _enableDropDownBar;
+        public bool EnableDropDownBar
+        {
+            get { return _enableDropDownBar; }
+            set { _enableDropDownBar = value; }
+        }
+
         #endregion
 
         #region Methods
@@ -777,10 +825,17 @@ namespace Ankh.UI.PendingChanges
             if (allowModel)
                 initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
 
+
+            _codewindowbehaviorflags cwFlags = _codewindowbehaviorflags.CWB_DEFAULT;
+            
+            if (!EnableSplitter)
+                cwFlags |= _codewindowbehaviorflags.CWB_DISABLESPLITTER;
+
+            if (!EnableDropDownBar)
+                cwFlags |= _codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR;
+
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
-            ErrorHandler.ThrowOnFailure(codeWindowEx.Initialize((uint)_codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR |
-                (uint)_codewindowbehaviorflags.CWB_DISABLESPLITTER,
-                0, null, null, initViewFlags, initView));
+            ErrorHandler.ThrowOnFailure(codeWindowEx.Initialize((uint)cwFlags, 0, null, null, initViewFlags, initView));
 
             // set buffer
             _textBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
