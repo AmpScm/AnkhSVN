@@ -73,6 +73,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.treeView.AllowRenames = true;
             this.treeView.Context = null;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.LabelEdit = true;
             this.treeView.Location = new System.Drawing.Point(0, 25);
             this.treeView.Name = "treeView";
             this.treeView.RetrieveLocks = true;
@@ -107,9 +108,9 @@ namespace Ankh.UI.RepositoryExplorer
             // fileView
             // 
             this.fileView.AllowColumnReorder = true;
-            this.fileView.Context = null;
             this.fileView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fileView.HideSelection = false;
+            this.fileView.LabelEdit = true;
             this.fileView.Location = new System.Drawing.Point(0, 0);
             this.fileView.Name = "fileView";
             this.fileView.RepositoryTreeView = this.treeView;
@@ -119,9 +120,9 @@ namespace Ankh.UI.RepositoryExplorer
             // 
             // RepositoryExplorerControl
             // 
-            this.ClientSize = new System.Drawing.Size(771, 425);
             this.Controls.Add(this.splitContainer);
             this.Name = "RepositoryExplorerControl";
+            this.Size = new System.Drawing.Size(771, 425);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
             this.splitContainer.Panel2.ResumeLayout(false);

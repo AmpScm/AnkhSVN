@@ -117,6 +117,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return null;
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
             get { return _context; }
