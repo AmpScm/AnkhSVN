@@ -86,6 +86,10 @@ namespace Ankh.UI.Annotate
             return editor.LineHeight;
         }
 
+        internal int GetTopLine()
+        {
+            return editor.EditorClientTop.Y;
+        }
 
         public void AddLines(SvnOrigin origin, Collection<SharpSvn.SvnBlameEventArgs> blameResult)
         {
