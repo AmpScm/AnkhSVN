@@ -313,13 +313,13 @@ namespace Ankh.UI.PathSelector
             int nStart = 0;
             if (Context != null)
             {
-                Ankh.VS.IAnkhSolutionSettings ss = Context.GetService<Ankh.VS.IAnkhSolutionSettings>();
+                IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
 
                 if (ss != null)
                 {
-                    string root = ss.ProjectRootWithSeparator ?? "";
+                    string root = ss.ProjectRootWithSeparator;
 
-                    if (fullPath.StartsWith(root))
+                    if (!string.IsNullOrEmpty(root) && fullPath.StartsWith(root))
                         nStart = root.Length - 1;
                 }
             }
