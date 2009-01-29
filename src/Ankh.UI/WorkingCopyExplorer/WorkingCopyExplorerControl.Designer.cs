@@ -26,6 +26,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         #region InitializeComponent
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.explorerPanel = new System.Windows.Forms.Panel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.folderTree = new Ankh.UI.WorkingCopyExplorer.FileSystemTreeView();
@@ -68,12 +69,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             // 
             // folderTree
             // 
-            this.folderTree.Context = null;
             this.folderTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.folderTree.HideSelection = false;
             this.folderTree.Location = new System.Drawing.Point(0, 25);
             this.folderTree.Name = "folderTree";
-            this.folderTree.SelectedItem = null;
             this.folderTree.Size = new System.Drawing.Size(300, 608);
             this.folderTree.TabIndex = 2;
             // 
@@ -109,9 +108,9 @@ namespace Ankh.UI.WorkingCopyExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(902, 633);
             this.Controls.Add(this.explorerPanel);
             this.Name = "WorkingCopyExplorerControl";
+            this.Size = new System.Drawing.Size(902, 633);
             this.explorerPanel.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel1.PerformLayout();
@@ -130,5 +129,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         private ToolStrip foldersStrip;
         private ToolStripLabel foldersLabel;
         private FileSystemTreeView folderTree;
+        private System.ComponentModel.IContainer components;
     }
 }

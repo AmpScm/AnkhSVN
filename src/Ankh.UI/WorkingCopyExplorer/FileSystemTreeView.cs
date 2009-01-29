@@ -25,6 +25,7 @@ using Ankh.Scc;
 using Ankh.UI.VSSelectionControls;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 using Ankh.VS;
+using System.ComponentModel;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -37,6 +38,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.HideSelection = false;
         }
 
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public FileSystemNode SelectedItem
         {
             get
@@ -50,7 +52,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             set
             {
-                SelectedNode = GetSelectedItem(value);
+                if (value == null)
+                    SelectedNode = null;
+                else
+                    SelectedNode = GetSelectedItem(value);
             }
         }
 
@@ -185,6 +190,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
         IAnkhServiceProvider _context;
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
             get { return _context; }
@@ -216,6 +222,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             get { return _mapper ?? (_mapper = Context.GetService<IFileIconMapper>()); }
         }
 
+        [Browsable(false)]
         public int FolderIndex
         {
             get
