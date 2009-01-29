@@ -109,7 +109,7 @@ namespace Ankh.UI.PendingChanges
 
         bool _enableDropDownBar;
         [Localizable(false), DefaultValue(false)]
-        public bool EnableDropDownBar
+        public bool EnableNavigationBar
         {
             get { return _enableDropDownBar; }
             set 
@@ -117,7 +117,7 @@ namespace Ankh.UI.PendingChanges
                 _enableDropDownBar = value; 
                 if(_nativeWindow != null)
                 {
-                    _nativeWindow.EnableDropDownBar = value;
+                    _nativeWindow.EnableNavigationBar = value;
                 }
             }
         }
@@ -171,6 +171,13 @@ namespace Ankh.UI.PendingChanges
                 throw new InvalidOperationException("Code editor not initialized");
 
             _nativeWindow.ReplaceContents(pathToReplaceWith);
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            base.OnHandleDestroyed(e);
+
+            _nativeWindow = null;
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -267,7 +274,7 @@ namespace Ankh.UI.PendingChanges
 
             // Set init only values
             _nativeWindow.EnableSplitter = EnableSplitter;
-            _nativeWindow.EnableDropDownBar = EnableDropDownBar;
+            _nativeWindow.EnableNavigationBar = EnableNavigationBar;
             _nativeWindow.Init(allowModal, ForceLanguageService);
             _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;            
             _nativeWindow.Size = ClientSize;
@@ -330,6 +337,17 @@ namespace Ankh.UI.PendingChanges
                         return createParams;
                 }
                 return createParams;
+            }
+        }
+
+        public Point EditorClientTop
+        {
+            get
+            {
+                if (_nativeWindow == null)
+                    return Point.Empty;
+
+                return PointToClient(_nativeWindow.EditorClientTop);
             }
         }
 
@@ -550,6 +568,7 @@ namespace Ankh.UI.PendingChanges
         /// Editor window handle
         /// </summary>
         private IntPtr editorHwnd;
+        private IntPtr viewHwnd;
 
         /// <summary>
         /// The IOleCommandTarget interface enables objects and their containers to dispatch commands to each other.
@@ -785,7 +804,7 @@ namespace Ankh.UI.PendingChanges
         }
 
         bool _enableDropDownBar;
-        public bool EnableDropDownBar
+        public bool EnableNavigationBar
         {
             get { return _enableDropDownBar; }
             set { _enableDropDownBar = value; }
@@ -831,7 +850,7 @@ namespace Ankh.UI.PendingChanges
             if (!EnableSplitter)
                 cwFlags |= _codewindowbehaviorflags.CWB_DISABLESPLITTER;
 
-            if (!EnableDropDownBar)
+            if (!EnableNavigationBar)
                 cwFlags |= _codewindowbehaviorflags.CWB_DISABLEDROPDOWNBAR;
 
             IVsCodeWindowEx codeWindowEx = codeWindow as IVsCodeWindowEx;
@@ -896,6 +915,10 @@ namespace Ankh.UI.PendingChanges
 
             _languageService = forceLanguageService;
             _textView = textView;
+            IntPtr h = textView.GetWindowHandle();
+
+            if (h != IntPtr.Zero)
+                viewHwnd = h;
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
 
             HookEvents(true);
@@ -999,36 +1022,7 @@ namespace Ankh.UI.PendingChanges
 
                 return false;
             }
-        }
-
-        static class NativeMethods
-        {
-            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-            internal static extern IntPtr SetFocus(IntPtr hWnd);
-
-            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-
-            [DllImport("user32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-            [return: MarshalAs(UnmanagedType.U1)]
-            internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-            //[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            //internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            internal static extern bool PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            internal static extern bool IsWindow(IntPtr hWnd);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            internal static extern bool IsChild(IntPtr hWndParent, IntPtr hWnd);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = false)]
-            internal static extern IntPtr GetDesktopWindow();
-        }
+        }        
 
         internal void ReplaceContents(string pathToReplaceWith)
         {
@@ -1082,6 +1076,21 @@ namespace Ankh.UI.PendingChanges
             IVsDocDataFileChangeControl dfc = (IVsDocDataFileChangeControl)_textBuffer;
 
             ErrorHandler.ThrowOnFailure(dfc.IgnoreFileChanges(ignore ? 1 : 0));
+        }
+
+        public Point EditorClientTop
+        {
+            get
+            {
+                RECT rect;
+                if (viewHwnd == IntPtr.Zero
+                    || !NativeMethods.GetWindowRect(viewHwnd, out rect))
+                {
+                    return Point.Empty;
+                }
+
+                return new Point(rect.left, rect.top);
+            }
         }
 
         internal int LineHeight
@@ -1144,8 +1153,28 @@ namespace Ankh.UI.PendingChanges
             if(_textBuffer == null)
                 throw new InvalidOperationException();
                         
-            ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));            
+            ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));
         }
+
+        #region Native Methods
+        static class NativeMethods
+        {
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+            internal static extern IntPtr SetFocus(IntPtr hWnd);
+
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+            [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        }
+        #endregion
     }
 
     public class TextViewScrollEventArgs : EventArgs

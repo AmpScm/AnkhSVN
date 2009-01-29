@@ -113,9 +113,15 @@ namespace Ankh.UI.Annotate
             }
         }
 
+        int? _topLine;
+        int TopLine
+        {
+            get { return _topLine ?? (_topLine = _control.GetTopLine()).Value; }
+        }
+
         Rectangle GetRectangle(AnnotateRegion section)
         {
-            int top = (section.StartLine - _firstLine) * LineHeight;
+            int top = (section.StartLine - _firstLine) * LineHeight + TopLine;
             int height = (section.EndLine - section.StartLine + 1) * LineHeight;
 
             return new Rectangle(0, top, Width, height);
@@ -309,9 +315,12 @@ namespace Ankh.UI.Annotate
             {
                 foreach (AnnotateRegion region in _regions)
                 {
-                    if (region.EndLine < _firstLine)
+                    // We try to draw a few regions above and below to fix up drawing
+                    // when the actual editor is smaller than our view. 
+                    // (E.g. navigation bar for C# editor)
+                    if (region.EndLine < _firstLine-4) 
                         continue;
-                    if (region.StartLine > _lastLine)
+                    if (region.StartLine > _lastLine+4)
                         break;
 
                     Rectangle rect = GetRectangle(region);
@@ -333,21 +342,28 @@ namespace Ankh.UI.Annotate
 
                     Brush color = IsSelected(region) ? selectedTextColor : textColor;
                     e.Graphics.DrawString(src.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, 30, LineHeight), sfr);
-                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(35, rect.Top + 2, 40, LineHeight), sfl);
+                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(35, rect.Top + 2, Width-62, LineHeight), sfl);
                     e.Graphics.DrawString(src.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
                 }
 
                 Rectangle clip = e.ClipRectangle;
-                if (_regions.Count > 0)
-                {
-                    Rectangle rect = GetRectangle(_regions[_regions.Count - 1]);
-
-                    if (e.ClipRectangle.Top <= rect.Bottom)
-                        clip = new Rectangle(clip.Left, rect.Bottom + 1, clip.Width, clip.Bottom);
-                }
-
                 using (SolidBrush sb = new SolidBrush(BackColor))
-                    e.Graphics.FillRectangle(sb, clip);
+                {
+                    if (_regions.Count > 0)
+                    {
+                        Rectangle rect = GetRectangle(_regions[0]);
+
+                        if (e.ClipRectangle.Top < rect.Top)
+                            e.Graphics.FillRectangle(sb, clip.X, clip.Y, clip.Width, rect.Top - clip.Y);
+                            
+                        rect = GetRectangle(_regions[_regions.Count - 1]);
+
+                        if (e.ClipRectangle.Bottom > rect.Bottom)
+                            e.Graphics.FillRectangle(sb, clip.X, rect.Bottom + 1, rect.Width, clip.Y+clip.Height - rect.Bottom - 1);
+                    }
+                    else
+                        e.Graphics.FillRectangle(sb, clip);
+                }
             }
         }
 
