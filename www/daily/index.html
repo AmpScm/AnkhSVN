@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.6073</title>
+<title>AnkhSVN-Daily Update - 2.0.6079</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -12,19 +12,24 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1497/AnkhSvn-Daily-2.0.6073.375.msi">AnkhSVN 2.0.6073</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1504/AnkhSvn-Daily-2.0.6079.376.msi">AnkhSVN 2.0.6079</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6073">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6079">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-01-29</td></tr>
+<tr><td> </td><td class="r"><a id="6079" href="http://ankhsvn.net/rev/?r=6079">[r6079]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Annotate/AnnotateEditorControl.Designer.cs, src/Ankh.UI/Annotate/AnnotateEditorControl.cs, src/Ankh.UI/Annotate/AnnotateMarginControl.cs, src/Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable the VS Navigation bar in our annotate windows, to allow navigation
+on function names in C# code files.</td></tr>
+<tr><td> </td><td class="r"><a id="6077" href="http://ankhsvn.net/rev/?r=6077">[r6077]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PathSelector/PathSelectionTreeView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix path selector empty / index out of range issue when no solution is loaded.</td></tr>
+<tr><td> </td><td class="r"><a id="6075" href="http://ankhsvn.net/rev/?r=6075">[r6075]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.Designer.cs, src/Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Resolve null reference on initially loading the Working Copy explorer.</td></tr>
 <tr class="d"><td colspan="4">2009-01-28</td></tr>
 <tr><td> </td><td class="r"><a id="6071" href="http://ankhsvn.net/rev/?r=6071">[r6071]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PendingChanges/PCStrings.resx, src/Ankh.UI/PendingChanges/PCStrings.Designer.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.Designer.cs, src/Ankh.UI/PendingChanges/PendingCommitsPage.cs, src/Ankh/Commands/ItemCommitCommand.cs, src/Ankh/Services/SolutionSettings.Commit.cs, src/Ankh/Services/PendingChanges/PendingChangeHandler.cs, src/Ankh.Services/Scc/IPendingChangeHandler.cs (and 3 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable the issue number box in the pending changes window and commit
 dialog. See
@@ -289,25 +294,6 @@ containing a few references</td></tr>
 Control dialog and added a temporary Solution Root settings dialog to fix the
 daily build usage.</td></tr>
 <tr class="d"><td colspan="4">2009-01-01</td></tr>
-<tr><td> </td><td class="r"><a id="5810" href="http://ankhsvn.net/rev/?r=5810">[r5810]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectMap/SccProjectData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix null reference exception when guessing a SccBaseDirectory for a
-project that is not below a working copy.</td></tr>
-<tr><td> </td><td class="r"><a id="5809" href="http://ankhsvn.net/rev/?r=5809">[r5809]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Ids/AnkhToolBar.cs, src/Ankh.Ids/AnkhToolWindow.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add None (0) values to id's that didn't have them, to reduce the number
-of exceptions when designing AnkhSVN windows.</td></tr>
-<tr><td> </td><td class="r"><a id="5807" href="http://ankhsvn.net/rev/?r=5807">[r5807]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SccUI/ChangeSourceControl.Designer.cs, src/Ankh.Scc/ProjectMap/SccProjectData.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Refine default Scc root behavior for users that deliberately use multiple
-workingcopies below a single working copy root. (Let them have a slow update
-if they really want one. They should move the solution root up to fix it).</td></tr>
-<tr><td> </td><td class="r"><a id="5806" href="http://ankhsvn.net/rev/?r=5806">[r5806]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/AnkhSccProvider.FileMap.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix issue in calculating update roots: Correctly find update roots
-when there are more roots in a single working copy.
-(Reproducable with the current WorstCase solution)</td></tr>
-<tr><td> </td><td class="r"><a id="5803" href="http://ankhsvn.net/rev/?r=5803">[r5803]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/SccUI/ChangeSourceControl.Designer.cs, src/Ankh.Scc/ProjectMap/SccProjectData.cs, src/Ankh.Scc/SccUI/ChangeSourceControl.cs, src/Ankh.Scc/SccUI/Commands/ChangeSourceControlCommand.cs, src/Ankh.Services/Scc/IProjectInfo.cs, src/Ankh.Scc/AnkhSccProvider.FileMap.cs, src/Ankh.Scc/SccUI/ChangeSourceControlRow.cs, src/Ankh.Scc/SccUI/ChangeSourceControl.resx</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Rebuild the Change Source Control dialog to contain all future enlist/binding
-information and implemented the default values for the enlist settings on
-IProjectInfo.</td></tr>
-<tr><td> </td><td class="r"><a id="5801" href="http://ankhsvn.net/rev/?r=5801">[r5801]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Properties/AssemblyInfo.cs, src/Ankh.UI/Properties/AssemblyInfo.cs, src/Ankh.Ids/Properties/AssemblyInfo.cs, src/Utils/Properties/AssemblyInfo.cs, src/Ankh/Properties/AssemblyInfo.cs, src/Ankh.Services/Properties/AssemblyInfo.cs, src/Ankh.Trigger/Properties/AssemblyInfo.cs, src/Ankh.Ids/AnkhId.cs (and 3 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated assembly copyright years to 2009.</td></tr>
-<tr class="d"><td colspan="4">2008-12-31</td></tr>
-<tr><td> </td><td class="r"><a id="5800" href="http://ankhsvn.net/rev/?r=5800">[r5800]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/RecentMessageDialog.cs, src/CONTRIBUTERS.txt, src/Ankh.UI/RecentMessageDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix the rest of <a href="http://ankhsvn.net/issues/?id=521">issue #521</a>: Multiple improvements for 'Paste Recent Log Messages' dialog.<br>
-This patch allows the end user to select more than one recent commit
-message from the 'Past Recent Log Messages' dialog.</td></tr>
-<tr><td> </td><td class="r"><a id="5799" href="http://ankhsvn.net/rev/?r=5799">[r5799]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/ItemShowChanges.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Disable Show Changes for schedule deleted files</td></tr>
 
 </table>
 <!--/Recent changes-->
