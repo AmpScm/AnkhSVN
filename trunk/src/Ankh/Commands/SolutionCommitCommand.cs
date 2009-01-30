@@ -29,6 +29,8 @@ namespace Ankh.Commands
     [Command(AnkhCommand.SolutionCommit)]
     class SolutionCommitCommand : CommandBase
     {
+        string logMessage;
+        string issueId;
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (PendingChange pc in GetChanges(e))
@@ -46,7 +48,15 @@ namespace Ankh.Commands
 
                 dlg.LoadChanges(GetChanges(e));
 
-                if (dlg.ShowDialog(e.Context) == DialogResult.OK)
+                dlg.LogMessageText = logMessage ?? "";
+                dlg.IssueNumberText = issueId ?? "";
+
+                DialogResult dr = dlg.ShowDialog(e.Context);
+
+                logMessage = dlg.LogMessageText;
+                issueId = dlg.IssueNumberText;
+
+                if (dr == DialogResult.OK)
                 {
                     PendingChangeCommitArgs pca = new PendingChangeCommitArgs();
                     pca.StoreMessageOnError = true;
@@ -54,7 +64,10 @@ namespace Ankh.Commands
                     List<PendingChange> toCommit = new List<PendingChange>(dlg.GetSelection());
                     dlg.FillArgs(pca);
 
-                    e.GetService<IPendingChangeHandler>().Commit(toCommit, pca);
+                    if (e.GetService<IPendingChangeHandler>().Commit(toCommit, pca))
+                    {
+                        logMessage = issueId = null;
+                    }
                 }
             }
         }
