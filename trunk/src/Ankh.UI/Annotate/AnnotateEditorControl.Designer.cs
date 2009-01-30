@@ -81,6 +81,7 @@ namespace Ankh.UI.Annotate
             this.blameMarginControl1.Size = new System.Drawing.Size(115, 300);
             this.blameMarginControl1.TabIndex = 1;
             this.blameMarginControl1.Text = "blameMarginControl1";
+            this.blameMarginControl1.TipOwner = this;
             // 
             // editor
             // 

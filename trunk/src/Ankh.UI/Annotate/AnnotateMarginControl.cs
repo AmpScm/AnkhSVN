@@ -27,6 +27,7 @@ using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.UI.PendingChanges;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Ankh.UI.Annotate
 {
@@ -135,6 +136,60 @@ namespace Ankh.UI.Annotate
                 Invalidate();
         }
 
+        Control _tipOwner;
+
+        [Localizable(false)]
+        public Control TipOwner
+        {
+            get { return _tipOwner ?? this; }
+            set
+            {
+                if (_tipOwner != null)
+                {
+                    _tipOwner.Leave -= new EventHandler(tipOwner_Leave);
+                    _tipOwner.MouseMove -= new MouseEventHandler(tipOwner_MouseMove);
+                    _tipOwner.MouseLeave -= new EventHandler(tipOwner_Leave);
+                    _tipOwner.LostFocus -= new EventHandler(tipOwner_Leave);
+
+                    _tipOwner = null;
+                }
+
+                if (value != null)
+                {
+                    _tipOwner = value;
+                    _tipOwner.Leave += new EventHandler(tipOwner_Leave);
+                    _tipOwner.MouseMove += new MouseEventHandler(tipOwner_MouseMove);
+                    _tipOwner.MouseLeave += new EventHandler(tipOwner_Leave);
+                    _tipOwner.LostFocus += new EventHandler(tipOwner_Leave);
+                }
+            }
+        }
+
+        void HideTip()
+        {
+            _tipSection = null;
+            _toolTip.Hide(this);
+        }
+
+        void tipOwner_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_tipSection != null && !Bounds.Contains(Parent.PointToClient(MousePosition)))
+                HideTip();
+        }
+
+        void tipOwner_Leave(object sender, EventArgs e)
+        {
+            if (_tipSection != null)
+                HideTip();
+        }
+
+        protected override void OnLeave(EventArgs e)
+        {
+            base.OnLeave(e);
+            if(_tipSection != null)
+                HideTip();
+        }
+
         class FindLocation : IComparer<AnnotateRegion>
         {
             readonly Point _location;
@@ -215,8 +270,7 @@ namespace Ankh.UI.Annotate
 
             if (_tipSection != null && _tipSection != region)
             {
-                _tipSection = null;
-                _toolTip.Hide(this);
+                HideTip();
 
                 NativeMethods.TRACKMOUSEEVENT tme;
                 tme.cbSize = (uint)Marshal.SizeOf(typeof(NativeMethods.TRACKMOUSEEVENT));
