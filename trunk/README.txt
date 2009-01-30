@@ -45,7 +45,7 @@ Contents:
  
     src/BUILD.txt         - How to build your own AnkhSVN version
     src/CHANGES.txt       - Summarized changes per release    
-    src/CONTRIBUTERS.txt  - List of committers and writers of patches
+    src/CONTRIBUTORS.txt  - List of committers and writers of patches
     src/COPYING.txt       - The sourcecode license of AnkhSVN
     src/LICENSE.rtf       - The runtime license of AnkhSVN
     

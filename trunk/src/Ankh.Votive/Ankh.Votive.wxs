@@ -52,8 +52,8 @@
             <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
               <!-- SharpSvn licenses will be placed here -->
             </Directory>
-            <Component Id="C_CONTRIBUTERS" Guid="6DB6E242-56A7-4BD5-9D09-60CE945C6AC6">
-              <File Id="CF_CONTRIBUTERS.txt" Name="CONTRIBUTERS.txt" />
+            <Component Id="C_CONTRIBUTORS" Guid="BD3AA74E-8B7D-4582-A2E0-CC5F0E2D08A7">
+              <File Id="CF_CONTRIBUTORS.txt" Name="CONTRIBUTORS.txt" />
             </Component>
             <Component Id="C_LICENSE" Guid="7A5DB32C-CB0D-4CA8-9661-A1FC5E1F8DBB">
               <File Id="CF_LICENSE.rtf" Name="LICENSE.rtf" />
@@ -99,7 +99,7 @@
     <Feature Id="ProductFeature" Title="AnkhSVN 2.0" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
       <ComponentGroupRef Id="Ankh.Package"/>
       <ComponentGroupRef Id="Ankh.Trigger"/>
-      <ComponentRef Id="C_CONTRIBUTERS"/>
+      <ComponentRef Id="C_CONTRIBUTORS"/>
       <ComponentRef Id="C_LICENSE"/>
       <ComponentRef Id="C_NOTICE"/>
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
