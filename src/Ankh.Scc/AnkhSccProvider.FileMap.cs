@@ -657,13 +657,7 @@ namespace Ankh.Scc
                 return string.Equals(SolutionFilename, path, StringComparison.OrdinalIgnoreCase);
             }
 
-            foreach (SccProjectData pd in file.GetOwnerProjects())
-            {
-                if (string.Equals(pd.ProjectFile, path, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-
-            return false;
+            return file.IsProjectFile;
         }
 
         #endregion

@@ -544,7 +544,15 @@ namespace Ankh.Scc.ProjectMap
             if (_files.Contains(path))
                 _files[path].AddReference();
             else
-                _files.Add(new SccProjectFileReference(_context, this, Scc.GetFile(path)));
+            {
+                SccProjectFileReference reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
+                _files.Add(reference);
+
+                if(string.Equals(path, ProjectFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    reference.IsProjectFile = true;
+                }
+            }
 
             if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
             {
