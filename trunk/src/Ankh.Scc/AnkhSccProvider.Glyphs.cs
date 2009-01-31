@@ -93,26 +93,38 @@ namespace Ankh.Scc
             SccProjectFileReference rf = file.FirstReference;
 
             if (rf != null)
+            {
                 foreach (string fn in rf.GetSubFiles())
                 {
-                    AnkhGlyph gl = GetPathGlyph(fn, false);
-
-                    switch (gl)
-                    {
-                        case AnkhGlyph.None:
-                        case AnkhGlyph.Normal:
-                        case AnkhGlyph.MustLock:
-                        case AnkhGlyph.Blank:
-                            continue;
-                        default:
-                            return AnkhGlyph.ChildChanged;
-                    }
+                    if (IsChildChanged(fn))
+                        return AnkhGlyph.ChildChanged;
                 }
+
+                // TODO: Make configurable and review missing/lock etc.
+                //if (ProjectGlyphRecursive && rf.IsProjectFile)
+                //{
+                //    foreach (string fn in rf.Project.GetAllFiles())
+                //    {
+                //        if (IsChildChanged(fn))
+                //            return AnkhGlyph.ChildChanged;
+                //    }
+                //}
+            }
 
             return AnkhGlyph.Normal;
         }
 
-        private bool ShouldIgnore(SvnItem item)
+        private bool IsChildChanged(string path)
+        {
+            SvnItem item = StatusCache[path];
+
+            if (item == null)
+                return false;
+
+            return PendingChange.IsPending(item);
+        } 
+        
+        bool ShouldIgnore(SvnItem item)
         {
             while (item != null)
             {

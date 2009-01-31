@@ -651,11 +651,12 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
+            if(string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
+                return true; // A solution file can be part of a project
+
             SccProjectFile file;
             if (!_fileMap.TryGetValue(path, out file))
-            {
-                return string.Equals(SolutionFilename, path, StringComparison.OrdinalIgnoreCase);
-            }
+                return false;
 
             return file.IsProjectFile;
         }
