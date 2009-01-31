@@ -66,17 +66,35 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                SccProjectFileReference rf = _firstReference;
+                SccProjectFileReference rf = FirstReference;
                 int i = 0;
 
                 while (rf != null)
                 {
                     i++;
 
-                    rf = rf._nextReference;                    
+                    rf = rf.NextReference;                    
                 }
 
                 return i;
+            }
+        }
+
+        public bool IsProjectFile
+        {
+            get
+            {
+                SccProjectFileReference rf = FirstReference;
+
+                while (rf != null)
+                {
+                    if (rf.IsProjectFile)
+                        return true;
+
+                    rf = rf.NextReference;
+                }
+
+                return false;
             }
         }
 
@@ -87,13 +105,13 @@ namespace Ankh.Scc.ProjectMap
         {
             get
             {
-                SccProjectFileReference rf = _firstReference;
+                SccProjectFileReference rf = FirstReference;
                 int i = 0;
 
                 while (rf != null)
                 {
                     i += rf.ReferenceCount;
-                    rf = rf._nextReference;                    
+                    rf = rf.NextReference;                    
                 }
 
                 return i;
@@ -108,13 +126,13 @@ namespace Ankh.Scc.ProjectMap
         {
             List<SccProjectData> pd = new List<SccProjectData>();
 
-            SccProjectFileReference rf = _firstReference;
+            SccProjectFileReference rf = FirstReference;
 
             while (rf != null)
             {
                 pd.Add(rf.Project);
 
-                rf = rf._nextReference;
+                rf = rf.NextReference;
             }
 
             return pd;
@@ -124,13 +142,13 @@ namespace Ankh.Scc.ProjectMap
         {
             List<SccProjectFileReference> refs = new List<SccProjectFileReference>();
 
-            SccProjectFileReference rf = _firstReference;
+            SccProjectFileReference rf = FirstReference;
 
             while (rf != null)
             {
                 refs.Add(rf);
 
-                rf = rf._nextReference;
+                rf = rf.NextReference;
             }
 
             return refs;
@@ -151,10 +169,10 @@ namespace Ankh.Scc.ProjectMap
             if (reference == null)
                 throw new ArgumentNullException("reference");
 
-            if (reference._nextReference != null || reference.ProjectFile != this)
+            if (reference.NextReference != null || reference.ProjectFile != this)
                 throw new InvalidOperationException(); 
 
-            reference._nextReference = _firstReference;
+            reference._nextReference = FirstReference;
             _firstReference = reference;
         }
 
@@ -167,9 +185,9 @@ namespace Ankh.Scc.ProjectMap
             if (reference == null)
                 throw new ArgumentNullException("reference");
 
-            if (reference == _firstReference)
+            if (reference == FirstReference)
             {
-                _firstReference = reference._nextReference;
+                _firstReference = reference.NextReference;
                 reference._nextReference = null;
 
                 if (_firstReference == null)
@@ -180,18 +198,18 @@ namespace Ankh.Scc.ProjectMap
                 return;
             }
 
-            SccProjectFileReference rf = _firstReference;
+            SccProjectFileReference rf = FirstReference;
 
             while (rf != null)
             {
-                if (rf._nextReference == reference)
+                if (rf.NextReference == reference)
                 {
-                    rf._nextReference = reference._nextReference;
+                    rf._nextReference = reference.NextReference;
                     reference._nextReference = null;
                     return;
                 }
 
-                rf = rf._nextReference;
+                rf = rf.NextReference;
             }
 
             throw new InvalidOperationException("Reference list invalid; scc project mapping corrupted; please reopen the solution");

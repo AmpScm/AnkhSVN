@@ -35,6 +35,7 @@ namespace Ankh.Scc.ProjectMap
         readonly SccProjectData _project;
         int _refCount;
         uint _id;
+        bool _isProjectFile;
         IList<string> _subFiles;
 
         internal SccProjectFileReference _nextReference; // Linked list managed by SccProjectFile
@@ -56,6 +57,17 @@ namespace Ankh.Scc.ProjectMap
         public SccProjectFile ProjectFile
         {
             get { return _file; }
+        }
+
+        public SccProjectFileReference NextReference
+        {
+            get { return _nextReference; }
+        }
+
+        public bool IsProjectFile
+        {
+            get { return _isProjectFile; }
+            internal set { _isProjectFile = value; }
         }
 
         /// <summary>
