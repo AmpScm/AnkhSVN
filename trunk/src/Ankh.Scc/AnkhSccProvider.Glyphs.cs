@@ -85,6 +85,7 @@ namespace Ankh.Scc
 
             // Let's try to do some simple inheritance trick on scc-special files with a normal icon 
             // as those are collapsed by default
+
             SccProjectFile file;
             if (!lookForChildren || !_fileMap.TryGetValue(item.FullPath, out file))
                 return glyph;
@@ -96,8 +97,16 @@ namespace Ankh.Scc
                 {
                     AnkhGlyph gl = GetPathGlyph(fn, false);
 
-                    if (gl != AnkhGlyph.Normal)
-                        return AnkhGlyph.ChildChanged;
+                    switch (gl)
+                    {
+                        case AnkhGlyph.None:
+                        case AnkhGlyph.Normal:
+                        case AnkhGlyph.MustLock:
+                        case AnkhGlyph.Blank:
+                            continue;
+                        default:
+                            return AnkhGlyph.ChildChanged;
+                    }
                 }
 
             return AnkhGlyph.Normal;
