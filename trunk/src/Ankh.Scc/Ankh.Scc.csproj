@@ -92,8 +92,10 @@
     <Compile Include="Commands\ActivateSccProvider.cs">
     </Compile>
     <Compile Include="Commands\ProjectFileFilter.cs" />
+    <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="ProjectMap\SccTranslateEnlistData.cs" />
     <Compile Include="ProjectMap\SccTranslateData.cs" />
+    <Compile Include="SccSettingStorage.cs" />
     <Compile Include="SccUI\ChangeSourceControl.cs">
       <SubType>Form</SubType>
     </Compile>
