@@ -102,7 +102,16 @@ namespace Ankh.UI.SvnLog
             _logItem = logItem;
             _change = change;
             _isInSelection = isInSelection;
-            _origin = new SvnOrigin(new SvnUriTarget(SvnTools.AppendPathSuffix(reposRoot, change.Path.TrimStart('/')), logItem.Revision), reposRoot);
+            Uri uri;
+
+            string path = change.Path.TrimStart('/');
+
+            if (string.IsNullOrEmpty(path))
+                uri = reposRoot;
+            else
+                uri = SvnTools.AppendPathSuffix(reposRoot, path);
+
+            _origin = new SvnOrigin(new SvnUriTarget(uri, logItem.Revision), reposRoot);
 
             RefreshText();
             UpdateColors();
