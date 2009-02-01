@@ -40,7 +40,7 @@ namespace Ankh.Scc.ProjectMap
     }
 
     [DebuggerDisplay("Project={ProjectName}, ProjectType={_projectType}")]
-    sealed partial class SccProjectData
+    sealed partial class SccProjectData : IDisposable
     {
         readonly IAnkhServiceProvider _context;
         readonly IVsSccProject2 _sccProject;
@@ -438,6 +438,11 @@ namespace Ankh.Scc.ProjectMap
         {
             _disposed = true;
             Hook(false);
+        }
+
+        void IDisposable.Dispose()
+        {
+            Dispose();
         }
 
         public bool IsDisposed
