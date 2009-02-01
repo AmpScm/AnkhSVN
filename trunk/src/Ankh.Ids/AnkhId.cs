@@ -59,7 +59,7 @@ namespace Ankh.Ids
 
         /// <summary>The Subversion SCC Provider name as used in the solution file</summary>
         public const string SubversionSccName = "SubversionScc";
-
+        public const string SccStructureName = "SccStructure";
 
         /// <summary>
         /// The guid used for registering the commands registered by the AnkhSvn package

@@ -46,5 +46,7 @@ namespace Ankh.UI
         void RegisterIdleProcessor(IAnkhIdleProcessor processor);
 
         AmbientProperties AmbientProperties { get; }
+
+        bool LoadUserProperties(string streamName);
     }
 }
