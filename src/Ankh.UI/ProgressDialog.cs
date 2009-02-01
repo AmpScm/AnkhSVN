@@ -150,7 +150,22 @@ namespace Ankh.UI
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
-            if (!DesignMode && actionColumn != null)
+
+            if(!DesignMode)
+                ResizeToFit();
+        }
+
+        protected override void  OnLoad(EventArgs e)
+        {
+ 	        base.OnLoad(e);
+
+            if (!DesignMode)
+                ResizeToFit();
+        }
+
+        void ResizeToFit()
+        {
+            if (actionList != null && pathColumn != null)
                 actionList.ResizeColumnsToFit(pathColumn);
         }
 
