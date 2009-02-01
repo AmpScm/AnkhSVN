@@ -165,7 +165,9 @@ namespace Ankh.Scc
 
         public void WriteSolutionProperties(IPropertyMap map)
         {
-            map.SetValue("_v", "1.0");
+            if (!HasSolutionData)
+                return;
+
             if (_categoryTypes.Count > 0)
                 map.SetValue("PrjCats", string.Join(",", ToArray(_categoryTypes.Values)));
             if (_categoryProps.Count > 0)
