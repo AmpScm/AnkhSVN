@@ -87,14 +87,7 @@ namespace Ankh.UI.PropertyEditors
             {
                 this.nameComboBox.Text = this._existingItem.Key;
                 this._currentEditor.PropertyItem = this._existingItem;
-            }
-            else
-            {
-                if (this.nameComboBox.Items.Count > 0)
-                {
-                    this.nameComboBox.SelectedIndex = 0;
-                }
-            }
+            }            
         }
 
         private void nameComboBox_SelectedValueChanged(object sender, EventArgs e)
