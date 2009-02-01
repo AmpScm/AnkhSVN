@@ -88,14 +88,22 @@
     <Compile Include="AnkhSccProvider.FileMap.cs">
       <DependentUpon>AnkhSccProvider.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnkhSccSettingStorage.Map.cs">
+      <DependentUpon>AnkhSccSettingStorage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccSettingStorage.Props.cs">
+      <DependentUpon>AnkhSccSettingStorage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Commands\PendingChangeTicker.cs" />
     <Compile Include="Commands\ActivateSccProvider.cs">
     </Compile>
     <Compile Include="Commands\ProjectFileFilter.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
+    <Compile Include="SettingsMap\SccCategorySettings.cs" />
+    <Compile Include="SettingsMap\SccProjectSettings.cs" />
     <Compile Include="ProjectMap\SccTranslateEnlistData.cs" />
     <Compile Include="ProjectMap\SccTranslateData.cs" />
-    <Compile Include="SccSettingStorage.cs" />
+    <Compile Include="AnkhSccSettingStorage.cs" />
     <Compile Include="SccUI\ChangeSourceControl.cs">
       <SubType>Form</SubType>
     </Compile>
