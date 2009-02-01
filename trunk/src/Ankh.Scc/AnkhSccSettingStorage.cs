@@ -388,7 +388,12 @@ namespace Ankh.Scc
 
         internal void OnProjectRenamed(string oldLocation, string newLocation)
         {
-
+            SccProjectSettings sps;
+            if (_actualToProject.TryGetValue(oldLocation, out sps))
+            {
+                sps.ActualProjectReference = newLocation;
+                sps.SolutionProjectReference = newLocation;
+            }
         }
 
         private void LoadPropNames(SortedList<string, string> list, string value)
