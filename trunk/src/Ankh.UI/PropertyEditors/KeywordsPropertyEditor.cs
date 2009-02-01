@@ -35,7 +35,11 @@ namespace Ankh.UI.PropertyEditors
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
 
-            this.components = new System.ComponentModel.Container();
+            keywordList.Items.Clear();
+            foreach (string word in SvnKeywords.PredefinedKeywords)
+            {
+                keywordList.Items.Add(word);
+            }
         }
 
         /// <summary>
@@ -66,13 +70,13 @@ namespace Ankh.UI.PropertyEditors
                 string selectedText = "";
                 StringBuilder sb = new StringBuilder();
 
-                for(int i = 0; i <checkedListBox1.Items.Count; i++)
+                for(int i = 0; i <keywordList.Items.Count; i++)
                 {
-                    if(checkedListBox1.GetItemChecked(i))
+                    if(keywordList.GetItemChecked(i))
                     {
                         if(sb.Length > 0)
                             sb.Append(" ");
-                        sb.Append(checkedListBox1.Items[i].ToString());
+                        sb.Append(keywordList.Items[i].ToString());
                     }
                 }
 
@@ -88,8 +92,8 @@ namespace Ankh.UI.PropertyEditors
                 if (value != null)
                     text = value.StringValue;
 
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    checkedListBox1.SetItemChecked(i, false);
+                for (int i = 0; i < keywordList.Items.Count; i++)
+                    keywordList.SetItemChecked(i, false);
 
                 for (int i = 0; i < text.Length; i++)
                 {
@@ -101,10 +105,10 @@ namespace Ankh.UI.PropertyEditors
                 {
                     if (!string.IsNullOrEmpty(s))
                     {
-                        int n = checkedListBox1.Items.IndexOf(s);
+                        int n = keywordList.Items.IndexOf(s);
 
                         if (n >= 0)
-                            checkedListBox1.SetItemChecked(n, true);
+                            keywordList.SetItemChecked(n, true);
                     }
                 }
 
@@ -136,10 +140,6 @@ namespace Ankh.UI.PropertyEditors
         {
             if (disposing)
             {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
             }
             base.Dispose(disposing);
         }
