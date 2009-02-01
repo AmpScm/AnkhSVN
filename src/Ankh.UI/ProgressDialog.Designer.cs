@@ -33,7 +33,7 @@ namespace Ankh.UI
         private void InitializeComponent()
         {
             this.cancelButton = new System.Windows.Forms.Button();
-            this.actionList = new System.Windows.Forms.ListView();
+            this.actionList = new Ankh.UI.VSSelectionControls.SmartListView();
             this.actionColumn = new System.Windows.Forms.ColumnHeader();
             this.pathColumn = new System.Windows.Forms.ColumnHeader();
             this.progressLabel = new System.Windows.Forms.Label();
@@ -108,7 +108,7 @@ namespace Ankh.UI
         #endregion
 
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.ListView actionList;
+        private Ankh.UI.VSSelectionControls.SmartListView actionList;
         private System.Windows.Forms.ColumnHeader actionColumn;
         private System.Windows.Forms.ColumnHeader pathColumn;
         private System.Windows.Forms.Label progressLabel;

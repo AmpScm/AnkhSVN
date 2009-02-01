@@ -147,6 +147,13 @@ namespace Ankh.UI
             return actionText;
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            if (!DesignMode && actionColumn != null)
+                actionList.ResizeColumnsToFit(pathColumn);
+        }
+
         string _splitRoot;
 
         string SplitRoot
