@@ -63,6 +63,7 @@ namespace Ankh.UI.PropertyEditors
             // 
             resources.ApplyResources(this.nameComboBox, "nameComboBox");
             this.nameComboBox.Name = "nameComboBox";
+            this.nameComboBox.Sorted = true;
             this.nameComboBox.SelectedValueChanged += new System.EventHandler(this.nameComboBox_SelectedValueChanged);
             this.nameComboBox.TextChanged += new System.EventHandler(this.nameComboBox_TextChanged);
             // 
