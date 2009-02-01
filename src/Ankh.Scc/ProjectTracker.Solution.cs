@@ -52,6 +52,7 @@ namespace Ankh.Scc
         public int OnAfterCloseSolution(object pUnkReserved)
         {
             SccProvider.OnSolutionClosed();
+            SccStore.OnSolutionClosed();
 
             GetService<IAnkhServiceEvents>().OnSolutionClosed(EventArgs.Empty);
 
@@ -188,6 +189,7 @@ namespace Ankh.Scc
 
             if (project != null)
             {
+                // SccProvider forwards this to the SccStore
                 SccProvider.OnProjectRenamed(project);
             }
 

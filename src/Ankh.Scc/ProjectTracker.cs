@@ -40,6 +40,7 @@ namespace Ankh.Scc
         uint _projectCookie;
         uint _documentCookie;
         AnkhSccProvider _sccProvider;
+        AnkhSccSettingStorage _sccStore;
         bool _collectHints;
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
@@ -62,6 +63,12 @@ namespace Ankh.Scc
         {
             [DebuggerStepThrough]
             get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>()); }
+        }
+
+        AnkhSccSettingStorage SccStore
+        {
+            [DebuggerStepThrough]
+            get { return _sccStore ?? (_sccStore = GetService<AnkhSccSettingStorage>(typeof(ISccSettingsStore))); }
         }
 
         private void LoadInitial()

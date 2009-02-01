@@ -372,12 +372,25 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return;
 
-            SccProjectData newData = new SccProjectData(Context, project);
-            if (newData.ProjectFile.Equals(data.ProjectFile, StringComparison.OrdinalIgnoreCase))
-                return; // Project rename, without renaming the project file (C++ project for instance)
+            string oldLocation = data.ProjectLocation;
 
-            // Mark the sln file edited, so it shows up in Pending Changes/Commit
-            DocumentTracker.SetDirty(_solutionFile, true);
+            try
+            {
+                using (SccProjectData newData = new SccProjectData(Context, project))
+                {
+                    SccStore.OnProjectRenamed(oldLocation, newData.ProjectLocation);
+
+                    if (string.Equals(newData.ProjectFile, data.ProjectFile, StringComparison.OrdinalIgnoreCase))
+                        return; // Project rename, without renaming the project file (C++ project for instance)
+
+                    // Mark the sln file edited, so it shows up in Pending Changes/Commit
+                    DocumentTracker.SetDirty(_solutionFile, true);
+                }                
+            }
+            finally
+            {
+                data.Reload(); // Reload project name, etc.
+            }
         }
 
         /// <summary>
