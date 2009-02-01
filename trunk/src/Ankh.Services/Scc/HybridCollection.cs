@@ -33,6 +33,13 @@ namespace Ankh
         {
         }
 
+        public HybridCollection(IEnumerable<T> items, IEqualityComparer<T> comparer)
+            : base(comparer)
+        {
+            if (items != null)
+                AddRange(items);
+        }
+
         public HybridCollection()
         {
         }
