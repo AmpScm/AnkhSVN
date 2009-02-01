@@ -46,6 +46,7 @@ namespace Ankh.Scc
         bool _active;
         IFileStatusCache _statusCache;
         IAnkhOpenDocumentTracker _documentTracker;
+        AnkhSccSettingStorage _sccSettings;
 
         public AnkhSccProvider(IAnkhServiceProvider context)
             : base(context)
@@ -82,15 +83,21 @@ namespace Ankh.Scc
         /// Gets the status cache.
         /// </summary>
         /// <value>The status cache.</value>
-        public IFileStatusCache StatusCache
+        IFileStatusCache StatusCache
         {
             get { return _statusCache ?? (_statusCache = GetService<IFileStatusCache>()); }
         }
 
-        public IAnkhOpenDocumentTracker DocumentTracker
+        IAnkhOpenDocumentTracker DocumentTracker
         {
             get { return _documentTracker ?? (_documentTracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
+        
+        AnkhSccSettingStorage SccStore
+        {
+            get { return _sccSettings ?? (_sccSettings = GetService<AnkhSccSettingStorage>(typeof(ISccSettingsStore))); }
+        }
+
 
         /// <summary>
         /// Determines if any item in the solution are under source control.
