@@ -231,11 +231,16 @@ namespace Ankh.Scc
 
         #region ISccStoreMap Members
 
-        public string CreateCategory()
+        public string CreateCategory(string name)
         {
             string id = ToString(Guid.NewGuid());
 
-            return (new SccCategorySettings(this, id)).CategoryId;
+            SccCategorySettings st = new SccCategorySettings(this, id);
+
+            if(name != null)
+                st.Name = name;
+
+            return st.CategoryId;
         }
 
         #endregion

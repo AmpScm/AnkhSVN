@@ -79,7 +79,8 @@ namespace Ankh.Scc
         /// <summary>
         /// Creates the category.
         /// </summary>
+        /// <param name="name">The name.</param>
         /// <returns></returns>
-        string CreateCategory();
+        string CreateCategory(string name);
     }
 }

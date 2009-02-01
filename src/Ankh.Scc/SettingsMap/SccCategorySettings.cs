@@ -9,6 +9,7 @@ namespace Ankh.Scc.SettingMap
         readonly SortedList<string, string> _props = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
         readonly AnkhSccSettingStorage _store;
         readonly string _id;
+        string _name;
 
         public SccCategorySettings(AnkhSccSettingStorage store, string id)
         {
@@ -28,9 +29,20 @@ namespace Ankh.Scc.SettingMap
             get { return _id; }
         }
 
+        public string Name
+        {
+            get { return _name; }
+            internal set { _name = value; }
+        }
+
         public IDictionary<string, string> Properties
         {
             get { return _props; }
+        }
+
+        public bool ShouldPersist
+        {
+            get { return true; }
         }
     }
 }
