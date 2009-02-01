@@ -38,6 +38,19 @@ namespace Ankh.Scc
         readonly Dictionary<string, string> _backupMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         bool _managedSolution;
         List<string> _delayedDelete;
+        List<FixUp> _delayedMove;
+
+        class FixUp
+        {
+            public readonly string From;
+            public readonly string To;
+
+            public FixUp(string from, string to)
+            {
+                From = from;
+                To = to;
+            }
+        }
         bool _isDirty;
 
         public bool IsSolutionManaged
@@ -196,7 +209,7 @@ namespace Ankh.Scc
                     {
                         // Ok there is no (other) Scc provider active and there is an Ankh.load
 
-                        if(!IsActive)
+                        if (!IsActive)
                             RegisterAsPrimarySccProvider(); // Make us active (Yes!)
 
                         SetProjectManaged(null, true);
@@ -207,7 +220,7 @@ namespace Ankh.Scc
                         return; // Explicit don't load Ankh, can be overridden from the .sln
                     else
                     {
-                        if(!IsActive)
+                        if (!IsActive)
                             RegisterAsPrimarySccProvider(); // Set us active; we know there is a .svn
 
                         // Ask the user whether we should be registered in the solution?
@@ -220,7 +233,7 @@ namespace Ankh.Scc
 
             if (!IsActive)
                 return;
-            
+
             IAnkhSolutionExplorerWindow window = GetService<IAnkhSolutionExplorerWindow>();
 
             if (window != null)
@@ -385,7 +398,7 @@ namespace Ankh.Scc
 
                     // Mark the sln file edited, so it shows up in Pending Changes/Commit
                     DocumentTracker.SetDirty(_solutionFile, true);
-                }                
+                }
             }
             finally
             {
@@ -475,7 +488,7 @@ namespace Ankh.Scc
             if (_projectMap.TryGetValue(project, out data))
             {
                 MarkDirty(data.ProjectFile, true);
-            }            
+            }
         }
 
         bool _ensureIcons;
@@ -519,6 +532,22 @@ namespace Ankh.Scc
                 }
             }
 
+            if (_delayedMove != null)
+            {
+                List<FixUp> files = _delayedMove;
+                _delayedMove = null;
+
+                using (SvnSccContext svn = new SvnSccContext(Context))
+                {
+                    foreach (FixUp fu in files)
+                    {
+                        if (!svn.IsUnversioned(fu.From) && svn.IsUnversioned(fu.To))
+                        {
+                            svn.SafeWcMoveFixup(fu.From, fu.To);
+                        }
+                    }
+                }
+            }
             if (_backupMap.Count > 0)
             {
                 using (SvnSccContext svn = new SvnSccContext(Context))

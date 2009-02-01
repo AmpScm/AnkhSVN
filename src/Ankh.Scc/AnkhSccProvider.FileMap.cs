@@ -263,7 +263,7 @@ namespace Ankh.Scc
             if (!_projectMap.TryGetValue(project, out data))
                 return; // Not managed by us
             else
-                data.CheckProjectRename(project, oldName, newName);
+                data.CheckProjectRename(project, oldName, newName); // Just to be sure (should be handled by other event)
 
             data.RemovePath(oldName);
             data.AddPath(newName);
@@ -294,11 +294,23 @@ namespace Ankh.Scc
             {
                 if (!svn.IsUnversioned(oldName))
                 {
-                    svn.SafeWcMoveFixup(oldName, newName);
-                }
+                    try
+                    {
+                        svn.SafeWcMoveFixup(oldName, newName);
+                    }
+                    catch (IOException e)
+                    {
+                        if (_delayedMove == null)
+                            _delayedMove = new List<FixUp>();
+                        _delayedMove.Add(new FixUp(oldName, newName));
 
-                MarkDirty(new string[] { oldName, newName }, true);
+                        RegisterForSccCleanup();
+                    }
+
+                    MarkDirty(new string[] { oldName, newName }, true);
+                }
             }
+            
 
             GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SolutionFilename);
         }
