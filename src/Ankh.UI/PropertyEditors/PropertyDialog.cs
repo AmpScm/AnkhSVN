@@ -27,7 +27,7 @@ namespace Ankh.UI.PropertyEditors
         private PropertyEditControl _currentEditor;
         private SvnPropertyValue _existingItem;
         private SvnNodeKind _currentNodeKind;
-        private Dictionary<string, PropertyEditControl> keyPropEditor = new Dictionary<string, PropertyEditControl>();
+        private SortedList<string, PropertyEditControl> keyPropEditor = new SortedList<string, PropertyEditControl>();
 
         public PropertyDialog(SvnNodeKind currentNodeKind)
             : this(null, currentNodeKind)
