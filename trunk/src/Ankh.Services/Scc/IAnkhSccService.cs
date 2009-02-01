@@ -41,6 +41,11 @@ namespace Ankh.Scc
         bool IsSolutionDirty { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance has solution property data.
+        /// </summary>
+        bool HasSolutionData { get; }
+
+        /// <summary>
         /// Called by the package when loading a managed solution
         /// </summary>
         /// <param name="asPrimarySccProvider">if set to <c>true</c> Ankh is marked as the primary SCC provider; otherwise it is running as second chair</param>
@@ -86,13 +91,13 @@ namespace Ankh.Scc
         /// Writes the enlistment state to the solution
         /// </summary>
         /// <param name="propertyBag">The property bag.</param>
-        void WriteEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag propertyBag);
+        void WriteSolutionProperties(IPropertyMap propertyBag);
 
         /// <summary>
         /// Loads the state of the enlistment.
         /// </summary>
         /// <param name="propertyBag">The property bag.</param>
-        void LoadEnlistments(Microsoft.VisualStudio.OLE.Interop.IPropertyBag propertyBag);
+        void ReadSolutionProperties(IPropertyMap propertyBag);
 
         /// <summary>
         /// Serializes the enlist data.
@@ -107,5 +112,21 @@ namespace Ankh.Scc
         /// <param name="sccProject">The SCC project.</param>
         /// <returns></returns>
         bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IPropertyMap : IDisposable
+    {
+        void SetValue(string key, string value);
+        void SetRawValue(string key, string value);
+
+        bool TryGetValue(string key, out string value);
+
+        void SetQuoted(string key, string value);
+        bool TryGetQuoted(string key, out string value);
+
+        void Flush();
     }
 }
