@@ -768,14 +768,13 @@ namespace Ankh.Settings
 
         #region IAnkhSolutionSettings Members
 
-
         public void OpenProjectFile(string projectFile)
         {
             string ext = Path.GetExtension(projectFile);
             bool isSolution = false;
             foreach (string x in SolutionFilter.Split(';'))
             {
-                if (string.Equals(ext, Path.GetExtension(x).Replace('*', '!').Replace('?', '!'), StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(ext, Path.GetExtension(x), StringComparison.OrdinalIgnoreCase))
                 {
                     isSolution = true;
                     break;
