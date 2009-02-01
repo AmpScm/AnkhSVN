@@ -30,6 +30,7 @@ using System.IO;
 namespace Ankh.VSPackage
 {
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
+    [ProvideSolutionProperties(AnkhId.SccStructureName)]
     partial class AnkhSvnPackage : IVsPersistSolutionProps
     {
         const string SubversionPropertyCategory = AnkhId.SubversionSccName;
@@ -46,6 +47,15 @@ namespace Ankh.VSPackage
             return VSConstants.S_OK;
         }
 
+        public bool LoadUserProperties(string streamName)
+        {
+            IVsSolutionPersistence ps = GetService<IVsSolutionPersistence>(typeof(SVsSolutionPersistence));
+            if (ps == null)
+                return false;
+
+            return ErrorHandler.Succeeded(ps.LoadPackageUserOpts((IVsPersistSolutionOpts)GetService<Ankh.UI.IAnkhPackage>(), streamName));
+        }
+
         // Global note: 
         // The same trick we do here for the solution (loading the package when encountering a solution property) 
         // can be done on several project types using IVsProjectStartupServices
@@ -60,27 +70,21 @@ namespace Ankh.VSPackage
                 // We will write solution properties only for the solution
 
                 IAnkhSccService scc = GetService<IAnkhSccService>();
+                ISccSettingsStore translate = GetService<ISccSettingsStore>();
 
-                if (scc == null)
+                VSQUERYSAVESLNPROPS result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+
+                if(scc != null && translate != null)
                 {
-                    // Nothing to save, nothing loaded
-                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                    if(scc.IsSolutionDirty || translate.IsSolutionDirty)
+                        result = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
+                    else if (!scc.HasSolutionData && !translate.HasSolutionData)
+                        result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
+                    else
+                        result = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
                 }
-                else if (scc.IsSolutionDirty)
-                {
-                    // Something changed -> Save
-                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
-                }
-                else if (!scc.IsSolutionManaged)
-                {
-                    // Nothing changed and unmanaged; not adding anything
-                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
-                }
-                else
-                {
-                    // Nothing changed
-                    pqsspSave[0] = VSQUERYSAVESLNPROPS.QSP_HasNoDirtyProps;
-                }
+
+                pqsspSave[0] = result;
             }
 
             return VSConstants.S_OK;
@@ -100,13 +104,16 @@ namespace Ankh.VSPackage
             // and should be available by the time projects are opened and the shell start calling IVsSccEnlistmentPathTranslation functions.
             if (pHierarchy == null) // Only save the property on the solution itself
             {
-                IAnkhSccService scc = GetService<IAnkhSccService>();
+                IAnkhSccService scc = GetService<IAnkhSccService>();                
 
-                if (scc != null && scc.IsSolutionManaged)
-                {
-                    // Calls WriteSolutionProps for us
-                    pPersistence.SavePackageSolutionProps(1, pHierarchy, this, SubversionPropertyCategory);
-                }
+                // SavePackageSolutionProps will call WriteSolutionProps with the specified key
+
+                if (scc != null && scc.HasSolutionData)
+                    pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, SubversionPropertyCategory);
+
+                ISccSettingsStore translate = GetService<ISccSettingsStore>();
+                if (translate != null && translate.HasSolutionData)
+                    pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, AnkhId.SccStructureName);
 
                 // Once we saved our props, the solution is not dirty anymore
                 scc.IsSolutionDirty = false;
@@ -115,25 +122,33 @@ namespace Ankh.VSPackage
             return VSConstants.S_OK;
         }
 
-        public int WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
+        int IVsPersistSolutionProps.WriteSolutionProps(IVsHierarchy pHierarchy, string pszKey, IPropertyBag pPropBag)
         {
-            if (pszKey == SubversionPropertyCategory)
+            if (pHierarchy != null)
+                return VSConstants.S_OK; // Not send by our code!
+            else if(pPropBag == null)
+                return VSConstants.E_POINTER;
+
+            // This method is called from the VS implementation after a request from SaveSolutionProps
+            
+            ISccSettingsStore translate = GetService<ISccSettingsStore>();
+            IAnkhSccService scc = GetService<IAnkhSccService>();
+
+            using (IPropertyMap map = translate.GetMap(pPropBag))
             {
-                // Ankh will only save two properties in the solution, to indicate that solution is controlled
-                object obj;
+                switch (pszKey)
+                {
+                    case SubversionPropertyCategory:
+                        map.SetRawValue(ManagedPropertyName, true.ToString());
+                        // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
+                        map.SetRawValue(ManagerPropertyName, "AnkhSVN - Subversion Support for Visual Studio");
 
-                IAnkhSccService scc = GetService<IAnkhSccService>();
-                if (scc == null || !scc.IsSolutionManaged)
-                    return VSConstants.S_OK;
-
-                obj = true.ToString();
-                pPropBag.Write(ManagedPropertyName, ref obj);
-
-                // BH: Don't localize this text! Changing it will change all solutions marked as managed by Ankh
-                obj = "AnkhSVN - Subversion Support for Visual Studio";
-                pPropBag.Write(ManagerPropertyName, ref obj);
-
-                scc.WriteEnlistments(pPropBag);
+                        scc.WriteSolutionProperties(map);
+                        break;
+                    case AnkhId.SccStructureName:
+                        translate.WriteSolutionProperties(map);
+                        break;
+                }
             }
 
             return VSConstants.S_OK;
@@ -141,40 +156,46 @@ namespace Ankh.VSPackage
 
         public int ReadSolutionProps(IVsHierarchy pHierarchy, string pszProjectName, string pszProjectMk, string pszKey, int fPreLoad, IPropertyBag pPropBag)
         {
-            // This function gets called by the shell when a solution with one of our property categories is opened in the IDE.
+            if (pHierarchy != null)
+                return VSConstants.S_OK;
 
-            if (pHierarchy == null && pszKey == SubversionPropertyCategory)
+            ISccSettingsStore translate = GetService<ISccSettingsStore>();
+            IAnkhSccService scc = GetService<IAnkhSccService>();
+
+            using (IPropertyMap map = translate.GetMap(pPropBag))
             {
-                IAnkhSccService scc = GetService<IAnkhSccService>();
-                if (scc != null && fPreLoad != 0)
+
+                bool preload = (fPreLoad != 0);
+
+                switch (pszKey)
                 {
-                    // We were called to read the key written by this source control provider
-                    // Make sure we were marked as primary Scc provider on this solution
+                    case SubversionPropertyCategory:
+                        if (preload)
+                        {
+                            string value;
+                            bool register;
 
-                    object pVar;
-                    pPropBag.Read(ManagedPropertyName, out pVar, null, 0, null);
+                            if (!map.TryGetValue(ManagedPropertyName, out value))
+                                register = false;
+                            else if (string.IsNullOrEmpty(value) || !bool.TryParse(value, out register))
+                                register = false;
 
-                    string val = pVar as string;
+                            if (register)
+                            {
+                                scc.RegisterAsPrimarySccProvider();
 
-                    bool result = false;
-                    if (val != null && bool.TryParse(val, out result) && result)
-                    {
-                        // (This is how automatic source control provider switching on solution opening should be implemented)
+                                scc.LoadingManagedSolution(true);
+                            }
 
-                        scc.RegisterAsPrimarySccProvider();
-                    }
-
-                    if (result)
-                    {
-                        // TODO: One day we might implement AnkhSvn as secondary solution here
-
-                        scc.LoadingManagedSolution(result);
-                    }
-
-                    scc.LoadEnlistments(pPropBag);
+                            scc.ReadSolutionProperties(map);
+                        }
+                        break;
+                    case AnkhId.SccStructureName:
+                        translate.ReadSolutionProperties(map);
+                        break;
                 }
             }
-
+             
             return VSConstants.S_OK;
         }
 
