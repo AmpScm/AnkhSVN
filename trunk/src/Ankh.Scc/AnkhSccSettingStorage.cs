@@ -163,17 +163,21 @@ namespace Ankh.Scc
             }
         }
 
+        const string KeyProjectProperties = "Defs.Properties";
+        const string KeyProjectCategories = "Defs.Categories";
+        const string KeyCategoryProperties = "Defs.CatProprts";
+
         public void WriteSolutionProperties(IPropertyMap map)
         {
             if (!HasSolutionData)
                 return;
 
             if (_categoryTypes.Count > 0)
-                map.SetValue("PrjCats", string.Join(",", ToArray(_categoryTypes.Values)));
+                map.SetValue(KeyProjectCategories, string.Join(",", ToArray(_categoryTypes.Values)));
             if (_categoryProps.Count > 0)
-                map.SetValue("PrjCatProps", string.Join(",", ToArray(_categoryProps.Values)));
+                map.SetValue(KeyCategoryProperties, string.Join(",", ToArray(_categoryProps.Values)));
             if (_projectProps.Count > 0)
-                map.SetValue("PrjProps", string.Join(",", ToArray(_projectProps.Values)));
+                map.SetValue(KeyProjectProperties, string.Join(",", ToArray(_projectProps.Values)));
 
             string dir;
             string file;
@@ -200,6 +204,82 @@ namespace Ankh.Scc
                 map.SetValue("Project:\"" + KeyEscape(name) + "\".Id", set.ProjectId);
             }
             map.Flush();
+            HybridCollection<string> catsToWrite = new HybridCollection<string>();
+            foreach (string project in GetAllProjects())
+            {
+                SccProjectSettings ps;
+                if (!_actualToProject.TryGetValue(project, out ps))
+                    continue;
+
+                if (!ps.ShouldPersist)
+                    continue;
+
+                string name;
+                if (SvnItem.IsValidPath(project))
+                    name = PackageUtilities.MakeRelative(file, project);
+                else
+                    name = project;
+
+                map.SetQuoted(string.Format("Project.{0}", ps.ProjectId), name);
+
+                foreach (KeyValuePair<string, string> kv in ps.Properties)
+                {
+                    string k;
+                    if (!_projectProps.TryGetValue(kv.Key, out k))
+                        continue;
+
+                    string key = string.Format("Project.{0}.{1}", ps.ProjectId, k);
+
+                    if (kv.Value != null)
+                        map.SetQuoted(key, kv.Value);
+                }
+
+                foreach (KeyValuePair<string, string> kv in ps.Categories)
+                {
+                    string k;
+                    if (!_categoryTypes.TryGetValue(kv.Key, out k))
+                        continue;
+
+                    string key = string.Format("Project.{0}:{1}", ps.ProjectId, k);
+
+                    if (kv.Value != null)
+                    {
+                        map.SetValue(key, kv.Value); // No need to quote a guid
+
+                        if (!catsToWrite.Contains(kv.Value))
+                            catsToWrite.Add(kv.Value);
+                    }
+                }
+            }
+            map.Flush();
+            foreach (string cat in catsToWrite)
+            {
+                SccCategorySettings ct;
+                if (!_categories.TryGetValue(cat, out ct))
+                    continue;
+
+                if (!ct.ShouldPersist)
+                    continue;
+
+                if (!string.IsNullOrEmpty(ct.Name))
+                {
+                    map.SetQuoted(string.Format("Category.{0}", ct.CategoryId), ct.Name);
+                }
+
+                foreach (KeyValuePair<string, string> kv in ct.Properties)
+                {
+                    string k;
+                    if (!_categoryProps.TryGetValue(kv.Key, out k))
+                        continue;
+
+                    string key = string.Format("Category.{0}.{1}", ct.CategoryId, k);
+
+                    if (kv.Value != null)
+                    {
+                        map.SetQuoted(key, kv.Value);
+                    }
+                }
+            }
         }
 
         public void ReadSolutionProperties(IPropertyMap map)
@@ -208,11 +288,11 @@ namespace Ankh.Scc
             string value;
 
             // Do this even when reloading
-            if (map.TryGetValue("PrjCats", out value))
+            if (map.TryGetValue(KeyProjectCategories, out value))
                 LoadPropNames(_categoryTypes, value);
-            if (map.TryGetValue("PrjCatProps", out value))
+            if (map.TryGetValue(KeyCategoryProperties, out value))
                 LoadPropNames(_categoryProps, value);
-            if (map.TryGetValue("PrjProps", out value))
+            if (map.TryGetValue(KeyProjectProperties, out value))
                 LoadPropNames(_projectProps, value);
 
             if (_solutionRead)
@@ -225,7 +305,9 @@ namespace Ankh.Scc
             if (!ErrorHandler.Succeeded(sol.GetSolutionInfo(out dir, out file, out userfile)))
                 return;
 
-            foreach (string project in GetAllProjects())
+            List<string> projects = new List<string>(GetAllProjects());
+
+            foreach (string project in projects)
             {
                 string name;
                 if (SvnItem.IsValidPath(project))
@@ -246,15 +328,61 @@ namespace Ankh.Scc
                 // Automatically hooks settings
                 SccProjectSettings prj = new SccProjectSettings(this, project, id);
 
-                LoadProjectData(prj);
+                LoadProjectData(prj, map);
+            }
+
+            foreach (SccCategorySettings cat in _categories.Values)
+            {
+                string key = string.Format("Category.{0}", cat.CategoryId);                
+
+                if (map.TryGetQuoted(key, out value))
+                    cat.Name = value;
+
+                foreach (string k in _categoryProps.Values)
+                {
+                    key = string.Format("Category.{0}.{1}", cat.CategoryId, k);
+
+                    if (!map.TryGetQuoted(key, out value))
+                        continue;
+
+                    cat.Properties[k] = value;
+                }
             }
         }
 
-        private void LoadProjectData(SccProjectSettings prj)
+        private void LoadProjectData(SccProjectSettings prj, IPropertyMap map)
         {
-            foreach (string prop in _projectProps.Values)
+            foreach (string i in _projectProps.Values)
             {
+                string key = string.Format("Project.{0}.{1}", prj.ProjectId, i);
 
+                string value;
+                if (!map.TryGetQuoted(key, out value))
+                    continue;
+
+                prj.Properties[key] = value;
+            }
+
+            foreach (string i in _categoryTypes.Values)
+            {
+                string key = string.Format("Project.{0}:{1}", prj.ProjectId, i);
+
+                string value;
+                if (!map.TryGetQuoted(key, out value))
+                    continue;
+
+                Guid gv;
+                if(!TryParseGuid(value, out gv))
+                    continue;
+
+                prj.Categories[key] = value;
+
+                if (!_categories.ContainsKey(value))
+                {
+                    SccCategorySettings st = new SccCategorySettings(this, value);
+
+                    // Automatically added to category list
+                }
             }
         }
 
@@ -272,10 +400,25 @@ namespace Ankh.Scc
 
             foreach (string ix in value.Split(','))
             {
-                string i = ix.Trim();
+                string name = ix.Trim();
 
-                if (!string.IsNullOrEmpty(i))
-                    list[i] = i;
+                if(string.IsNullOrEmpty(name))
+                    continue;
+
+                bool skip = false;
+                for (int i = 0; i < name.Length; i++)
+                {
+                    if (!char.IsLetterOrDigit(name, i) && 0 > "_-".IndexOf(name[i]))
+                    {
+                        skip = true;
+                        break; // Ignore unsafe names
+                    }
+                }
+
+                if (skip)
+                    continue;
+
+                list[name] = name;
             }
         }
 
