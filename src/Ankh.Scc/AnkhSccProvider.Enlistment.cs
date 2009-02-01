@@ -67,6 +67,17 @@ namespace Ankh.Scc
             _sccPaths.Clear();
         }
 
+        #region IAnkhSccService Members
+
+
+        public bool HasSolutionData
+        {
+            get { return false; }
+        }
+
+
+        #endregion
+
         protected IEnumerable<IVsHierarchy> GetAllProjectsInSolutionRaw()
         {
             IVsSolution solution = (IVsSolution)Context.GetService(typeof(SVsSolution));
@@ -96,7 +107,7 @@ namespace Ankh.Scc
         /// Writes the enlistment state to the solution
         /// </summary>
         /// <param name="pPropBag">The p prop bag.</param>
-        void IAnkhSccService.WriteEnlistments(IPropertyBag propertyBag)
+        public void WriteSolutionProperties(IPropertyMap propertyBag)
         {
             if (!IsActive || !IsSolutionManaged)
                 return;
@@ -366,7 +377,7 @@ namespace Ankh.Scc
             }
         }
 
-        void IAnkhSccService.LoadEnlistments(IPropertyBag propertyBag)
+        public void ReadSolutionProperties(IPropertyMap propertyBag)
         {
 #if DEBUG_ENLISTMENT
             IMyPropertyBag mpb = (IMyPropertyBag)propertyBag; // Stop HResult exception handling
