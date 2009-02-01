@@ -62,9 +62,9 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         /// <returns></returns>
         /// <remarks>This code assumes .File and .Directory are bitflags</remarks>
-        public virtual SvnNodeKind GetAllowedNodeKind()
+        public virtual bool AllowNodeKind(SvnNodeKind kind)
         {
-            return SvnNodeKind.File | SvnNodeKind.Directory;
+            return true;
         }
 
         public event EventHandler Changed;

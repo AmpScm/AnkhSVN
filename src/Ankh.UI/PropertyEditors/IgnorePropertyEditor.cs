@@ -77,12 +77,9 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
-        /// <summary>
-        /// Directory property
-        /// </summary>
-        public override SvnNodeKind GetAllowedNodeKind()
+        public override bool AllowNodeKind(SvnNodeKind kind)
         {
-            return SvnNodeKind.Directory;
+            return kind == SvnNodeKind.Directory;
         }
 
         public override string ToString()

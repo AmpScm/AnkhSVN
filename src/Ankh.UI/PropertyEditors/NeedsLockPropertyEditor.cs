@@ -65,12 +65,9 @@ namespace Ankh.UI.PropertyEditors
             set { }
         }
 
-        /// <summary>
-        /// File property
-        /// </summary>
-        public override SvnNodeKind GetAllowedNodeKind()
+        public override bool AllowNodeKind(SvnNodeKind kind)
         {
-            return SvnNodeKind.File;
+            return kind == SvnNodeKind.File;
         }
 
         public override string ToString()

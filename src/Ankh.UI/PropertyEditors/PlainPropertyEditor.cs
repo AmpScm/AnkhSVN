@@ -68,14 +68,6 @@ namespace Ankh.UI.PropertyEditors
             set { valueTextBox.Text = value; }
         }
 
-        /// <summary>
-        /// Custom property
-        /// </summary>
-        public override SvnNodeKind GetAllowedNodeKind()
-        {
-            return SvnNodeKind.Directory | SvnNodeKind.File;
-        }
-
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>

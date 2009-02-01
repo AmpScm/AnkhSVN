@@ -24,8 +24,8 @@ namespace Ankh.UI.PropertyEditors
 {
     public partial class PropertyDialog : VSDialogForm
     {
-        private PropertyEditControl currentEditor;
-        private SvnPropertyValue existingItem;
+        private PropertyEditControl _currentEditor;
+        private SvnPropertyValue _existingItem;
         private SvnNodeKind _currentNodeKind;
         private Dictionary<string, PropertyEditControl> keyPropEditor = new Dictionary<string, PropertyEditControl>();
 
@@ -38,7 +38,7 @@ namespace Ankh.UI.PropertyEditors
         {
             InitializeComponent();
             // Dialog is in Edit mode if the "existingItem" is not null.
-            this.existingItem = editItem;
+            this._existingItem = editItem;
             _currentNodeKind = currentNodeKind;
             InitializeEditors();
         }
@@ -69,24 +69,13 @@ namespace Ankh.UI.PropertyEditors
         /// <param name="propEditor">IPropertyEditor</param>
         private void AddPropertyEditor(PropertyEditControl propEditor)
         {
-            SvnNodeKind allowed = propEditor.GetAllowedNodeKind();
-            SvnNodeKind result = allowed & _currentNodeKind;
-            bool doAdd = ((result == SvnNodeKind.None)
-                            && (allowed != SvnNodeKind.None)) ?
-                            false
-                            : result == _currentNodeKind;
-            if (!doAdd)
-            {
-                // Enable file properties on directories
-                // to support applying properties recursively
-                doAdd = (allowed | SvnNodeKind.File) == SvnNodeKind.File
-                    && _currentNodeKind == SvnNodeKind.Directory;
-            }
-            if (doAdd)
-            {
-                string key = propEditor.ToString();
-                this.keyPropEditor.Add(key, propEditor);
-            }
+            if (!propEditor.AllowNodeKind(_currentNodeKind))
+                return;
+
+            // TODO: Perhaps allow applying file properties recursively on a folder
+
+            string key = propEditor.ToString();
+            this.keyPropEditor.Add(key, propEditor);
         }
 
         /// <remarks>
@@ -94,10 +83,10 @@ namespace Ankh.UI.PropertyEditors
         /// </remarks>
         private void PopulateData()
         {
-            if (this.existingItem != null)
+            if (this._existingItem != null)
             {
-                this.nameComboBox.Text = this.existingItem.Key;
-                this.currentEditor.PropertyItem = this.existingItem;
+                this.nameComboBox.Text = this._existingItem.Key;
+                this._currentEditor.PropertyItem = this._existingItem;
             }
             else
             {
@@ -133,23 +122,23 @@ namespace Ankh.UI.PropertyEditors
             }
             else
             {
-                if (this.currentEditor == null
-                     || !(this.currentEditor is PlainPropertyEditor))
+                if (this._currentEditor == null
+                     || !(this._currentEditor is PlainPropertyEditor))
                 {
                     this.SetNewEditor(new PlainPropertyEditor());
                 }
             }
 
-            if (this.currentEditor != null)
-                this.currentEditor.PropertyName = this.nameComboBox.Text;
+            if (this._currentEditor != null)
+                this._currentEditor.PropertyName = this.nameComboBox.Text;
         }
 
         private void SetNewEditor(PropertyEditControl editor)
         {
-            if (this.currentEditor != null)
+            if (this._currentEditor != null)
             {
                 //Unsubscribe the current editor from the Changed event.
-                this.currentEditor.Changed -= new EventHandler(
+                this._currentEditor.Changed -= new EventHandler(
                     this.currentEditor_Changed);
             }
 
@@ -159,9 +148,9 @@ namespace Ankh.UI.PropertyEditors
             ((Control)editor).Dock = DockStyle.Fill;
 
             //Sets the current editor to match the selected item.
-            this.currentEditor = editor;
+            this._currentEditor = editor;
             UpdateButtons(); // allow new peoperty editor to determine the initial button states
-            this.currentEditor.Changed += new EventHandler(
+            this._currentEditor.Changed += new EventHandler(
                 this.currentEditor_Changed);
         }
 
@@ -178,16 +167,11 @@ namespace Ankh.UI.PropertyEditors
         /// </summary>
         public SvnPropertyValue GetPropertyItem()
         {
-            SvnPropertyValue result = this.currentEditor == null ? null : this.currentEditor.PropertyItem;
+            SvnPropertyValue result = this._currentEditor == null ? null : this._currentEditor.PropertyItem;
             if (result != null)
             {
-                if (_currentNodeKind == SvnNodeKind.Directory
-                    && (this.currentEditor.GetAllowedNodeKind() | SvnNodeKind.File) == SvnNodeKind.File // only files
-                    && !ApplyRecursively()
-                    )
+                if (!_currentEditor.AllowNodeKind(_currentNodeKind))
                 {
-                    // Do not accept a file property on a directory
-                    // unless "Apply recursively" is checked.
                     MessageBox.Show(
                         "Can not set a file property on a directory. ",
                         "Invalid Directory Property", MessageBoxButtons.OK,
@@ -220,15 +204,15 @@ namespace Ankh.UI.PropertyEditors
         private void UpdateButtons()
         {
             this.okButton.Enabled = !string.IsNullOrEmpty(this.nameComboBox.Text)
-                && this.currentEditor != null
-                && this.currentEditor.Valid;
+                && this._currentEditor != null
+                && this._currentEditor.Valid;
 
-            loadButton.Enabled = (currentEditor is PlainPropertyEditor);
+            loadButton.Enabled = (_currentEditor is PlainPropertyEditor);
         }
 
         private void loadButton_Click(object sender, EventArgs e)
         {
-            PlainPropertyEditor ppe = currentEditor as PlainPropertyEditor;
+            PlainPropertyEditor ppe = _currentEditor as PlainPropertyEditor;
 
             if (ppe == null)
                 return;
