@@ -168,7 +168,7 @@ namespace Ankh.UI.SccManagement
             UpdateUrlPreview();
             errorProvider1.SetError(treeView1, null);
 
-            if (treeView1.SelectedNode != null && treeView1.SelectedNode.RawUri != null)
+            if (treeView1.SelectedNode != null && treeView1.SelectedNode.NormalizedUri != null)
             {
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.ThrowOnError=false;
