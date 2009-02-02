@@ -79,7 +79,7 @@ namespace Ankh.Services
             string arguments;
             if (!Substitute(diffApp, args, DiffToolMode.Diff, out program, out arguments))
             {
-                new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program));
+                new AnkhMessageBox(Context).Show(string.Format("Can't find diff program '{0}'", program ?? diffApp));
                 return false;
             }
 

@@ -115,6 +115,11 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
                 "-e -x -ub -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
+            tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
+                Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
+                    ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
+                    "'$(Base)' '$(Mine)'", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -148,6 +153,11 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\KDiff3\\KDiff3.exe",
                 "-m '$(Base)' --fname '$(BaseName)' '$(Theirs)' --fname '$(TheirName)' " +
                     "'$(Mine)' --fname '$(MineName)' -o '$(Merged)'", true));
+
+            tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
+                Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
+                    ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
+                    "'$(Base)' '$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
             // WinMerge only has two way merge, so we diff theirs to mine to create merged
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
