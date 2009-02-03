@@ -177,7 +177,11 @@ namespace Ankh.UI.PendingChanges
         {
             base.OnHandleDestroyed(e);
 
-            _nativeWindow = null;
+            if (_nativeWindow != null)
+            {
+                _nativeWindow.Dispose();
+                _nativeWindow = null;
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)
