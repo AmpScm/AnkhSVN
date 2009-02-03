@@ -48,6 +48,7 @@ namespace Ankh.UI.SccManagement
             this.locationBox = new System.Windows.Forms.GroupBox();
             this.repositoryUrl = new System.Windows.Forms.ComboBox();
             this.createFolderButton = new System.Windows.Forms.Button();
+            this.repositoryTree = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.localFolder = new System.Windows.Forms.ComboBox();
@@ -61,7 +62,6 @@ namespace Ankh.UI.SccManagement
             this.resultUriBox = new System.Windows.Forms.TextBox();
             this.addTrunk = new System.Windows.Forms.CheckBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.treeView1 = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
@@ -76,7 +76,7 @@ namespace Ankh.UI.SccManagement
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.locationBox.Controls.Add(this.repositoryUrl);
             this.locationBox.Controls.Add(this.createFolderButton);
-            this.locationBox.Controls.Add(this.treeView1);
+            this.locationBox.Controls.Add(this.repositoryTree);
             this.locationBox.Controls.Add(this.comboBox1);
             this.locationBox.Location = new System.Drawing.Point(12, 91);
             this.locationBox.Name = "locationBox";
@@ -108,6 +108,18 @@ namespace Ankh.UI.SccManagement
             this.createFolderButton.Text = "&Create Folder...";
             this.createFolderButton.UseVisualStyleBackColor = true;
             this.createFolderButton.Click += new System.EventHandler(this.createFolderButton_Click);
+            // 
+            // repositoryTree
+            // 
+            this.repositoryTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.repositoryTree.Context = null;
+            this.repositoryTree.Location = new System.Drawing.Point(6, 46);
+            this.repositoryTree.Name = "repositoryTree";
+            this.repositoryTree.Size = new System.Drawing.Size(325, 175);
+            this.repositoryTree.TabIndex = 2;
+            this.repositoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // comboBox1
             // 
@@ -237,18 +249,6 @@ namespace Ankh.UI.SccManagement
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // treeView1
-            // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Context = null;
-            this.treeView1.Location = new System.Drawing.Point(6, 46);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(325, 175);
-            this.treeView1.TabIndex = 2;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            // 
             // AddToSubversion
             // 
             this.AcceptButton = this.okButton;
@@ -286,7 +286,7 @@ namespace Ankh.UI.SccManagement
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox localFolder;
         private System.Windows.Forms.Button createFolderButton;
-        private Ankh.UI.RepositoryExplorer.RepositoryTreeView treeView1;
+        private Ankh.UI.RepositoryExplorer.RepositoryTreeView repositoryTree;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
