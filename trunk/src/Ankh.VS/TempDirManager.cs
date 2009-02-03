@@ -33,7 +33,14 @@ namespace Ankh.VS
 
         public string GetTempDir()
         {
-            string name = Path.Combine(Path.GetTempPath(), "AnkhSVN\\" + Guid.NewGuid().ToString("N"));
+            string name = "";
+            for (int i = 4; i < 32; i += 2)
+            {
+                name = Path.Combine(Path.GetTempPath(), "AnkhSVN\\" + Guid.NewGuid().ToString("N").Substring(0, i));
+
+                if (!Directory.Exists(name))
+                    break;
+            }
             Directory.CreateDirectory(name);
             _tempDirs.AddDirectory(name, false);
             return name;
