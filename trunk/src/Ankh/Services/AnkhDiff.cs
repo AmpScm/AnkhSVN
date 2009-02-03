@@ -430,72 +430,90 @@ namespace Ankh.Services
 
                 return !String.IsNullOrEmpty(program) && File.Exists(program);
             }
-            else if (reference.StartsWith("\""))
-            {
-                // Ok: The easy way:
-                int nEnd = reference.IndexOf('\"', 1);
+            else if (!TrySplitPath(reference, out program, out arguments))
+                return false;
 
-                if (nEnd < 0)
-                    return false; // Invalid string!
-
-                program = reference.Substring(1, nEnd - 1);
-                reference = reference.Substring(nEnd + 1).TrimStart();
-
-                program = SubstituteArguments(program, args, toolMode);
-
-                if (string.IsNullOrEmpty(program) || !File.Exists(program))
-                    return false; // File not found
-            }
-            else
-            {
-                // We use the algorithm as documented by CreateProcess() in MSDN
-                // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
-
-                char[] spacers = new char[] { ' ', '\t' };
-                int nFrom = 0;
-                int nTok = -1;
-
-                while ((nFrom < reference.Length) &&
-                    (0 <= (nTok = reference.IndexOfAny(spacers, nFrom))))
-                {
-                    string f = reference.Substring(0, nTok);
-
-                    f = SubstituteArguments(f, args, toolMode);
-
-                    if (!string.IsNullOrEmpty(f) && File.Exists(f))
-                    {
-                        program = f;
-                        reference = reference.Substring(nTok + 1).TrimStart();
-                        break;
-                    }
-                    else
-                        nFrom = nTok + 1;
-                }
-
-                if (program == null && nTok < 0)
-                {
-                    string f = SubstituteArguments(reference, args, toolMode);
-
-                    if (!string.IsNullOrEmpty(f) && File.Exists(f))
-                    {
-                        program = f;
-                        reference = "";
-                    }
-                }
-            }
-
-            if (string.IsNullOrEmpty(program))
-                return false; // Couldn't detect program
-
-            arguments = SubstituteArguments(reference, args, toolMode);
+            program = SubstituteArguments(program, args, toolMode);
+            arguments = SubstituteArguments(arguments, args, toolMode);
 
             return true;
         }
 
+        static readonly AnkhDiffArgs EmptyDiffArgs = new AnkhDiffArgs();
+        private bool TrySplitPath(string cmdline, out string program, out string arguments)
+        {
+            if(cmdline == null)
+                throw new ArgumentNullException("cmdline");
+
+            program = arguments = null;
+
+            cmdline = cmdline.TrimStart();
+
+            if (cmdline.StartsWith("\""))
+            {
+                // Ok: The easy way:
+                int nEnd = cmdline.IndexOf('\"', 1);
+
+                if (nEnd < 0)
+                    return false; // Invalid string!
+
+                program = cmdline.Substring(1, nEnd - 1);
+                arguments = cmdline.Substring(nEnd + 1).TrimStart();
+                return true;
+            }
+
+            // We use the algorithm as documented by CreateProcess() in MSDN
+            // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
+            char[] spacers = new char[] { ' ', '\t' };
+            int nFrom = 0;
+            int nTok = -1;
+
+            string file;
+            
+            while ((nFrom < cmdline.Length) &&
+                (0 <= (nTok = cmdline.IndexOfAny(spacers, nFrom))))
+            {
+                program = cmdline.Substring(0, nTok);
+
+                file = SubstituteArguments(program, EmptyDiffArgs, DiffToolMode.None);
+
+                if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                {
+                    arguments = cmdline.Substring(nTok + 1).TrimStart();
+                    return true;
+                }
+                else
+                    nFrom = nTok + 1;
+            }
+
+            if (nTok < 0 && nFrom <= cmdline.Length)
+            {
+                file = SubstituteArguments(cmdline, EmptyDiffArgs, DiffToolMode.None);
+
+                if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                {
+                    program = file;
+                    arguments = "";
+                    return true;
+                }
+            }
+
+
+            return false;
+        }
+
+        Regex _re;
+
         private string SubstituteArguments(string arguments, AnkhDiffToolArgs diffArgs, DiffToolMode toolMode)
         {
-            return Regex.Replace(arguments, @"(\%(?<pc>[a-zA-Z0-9()_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))",
-                new Replacer(this, diffArgs, toolMode).Replace);
+            if (diffArgs == null)
+                throw new ArgumentNullException("diffArgs");
+
+            if(_re == null)
+                _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9()_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
+                "|(\\$\\(\\?(?<if>[a-zA-Z0-9_-]*):'(?<ifbody>([^']|(''))*)'\\))");
+
+            return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace);
         }
 
         sealed class Replacer
@@ -539,7 +557,8 @@ namespace Ankh.Services
 
             public string Replace(Match match)
             {
-                string key, v;
+                string key;
+                string value;
                 bool vsStyle = true;
 
                 if (match.Groups["pc"].Length > 1)
@@ -549,103 +568,139 @@ namespace Ankh.Services
                 }
                 else if (match.Groups["vs"].Length > 1)
                     key = match.Groups["vs"].Value;
+                else if (match.Groups["if"].Length > 1)
+                {
+                    if (!TryGetValue(match.Groups["if"].Value, true, "", out value))
+                        return "";
+                    
+                    value = match.Groups["ifbody"].Value;
+
+                    return _context.SubstituteArguments(value, _diffArgs, _toolMode);
+                }
                 else
                     return match.Value; // Don't replace if not matched
 
+                string arg = match.Groups["arg"].Value ?? "";
+                TryGetValue(key, vsStyle, arg, out value);
+
+                return value ?? "";
+            }
+
+            bool TryGetValue(string key, bool vsStyle, string arg, out string value)
+            {
+                if (key == null)
+                    throw new ArgumentNullException("key");
+
                 key = key.ToUpperInvariant();
+                value = null;
+
+                string v;
                 switch (key)
                 {
                     case "BASE":
                         if (DiffArgs != null)
-                            return DiffArgs.BaseFile;
+                            value = DiffArgs.BaseFile;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "BNAME":
                     case "BASENAME":
                         if (DiffArgs != null)
-                            return DiffArgs.BaseTitle ?? Path.GetFileName(DiffArgs.BaseFile);
+                            value = DiffArgs.BaseTitle ?? Path.GetFileName(DiffArgs.BaseFile);
                         else
-                            return null;
+                            return false;
+                        break;
                     case "MINE":
                         if (DiffArgs != null)
-                            return DiffArgs.MineFile;
+                            value = DiffArgs.MineFile;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "YNAME":
                     case "MINENAME":
                         if (DiffArgs != null)
-                            return DiffArgs.MineTitle ?? Path.GetFileName(DiffArgs.MineFile);
+                            value = DiffArgs.MineTitle ?? Path.GetFileName(DiffArgs.MineFile);
                         else
-                            return null;
+                            return false;
+                        break;
 
                     case "THEIRS":
                         if (MergeArgs != null)
-                            return MergeArgs.TheirsFile;
+                            value = MergeArgs.TheirsFile;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "TNAME":
                     case "THEIRNAME":
                     case "THEIRSNAME":
                         if (MergeArgs != null)
-                            return MergeArgs.TheirsTitle ?? Path.GetFileName(MergeArgs.TheirsFile);
+                            value = MergeArgs.TheirsTitle ?? Path.GetFileName(MergeArgs.TheirsFile);
                         else
-                            return null;
+                            return false;
+                        break;
                     case "MERGED":
                         if (MergeArgs != null)
-                            return MergeArgs.MergedFile;
+                            value = MergeArgs.MergedFile;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "MERGEDNAME":
                     case "MNAME":
                         if (MergeArgs != null)
-                            return MergeArgs.MergedTitle ?? Path.GetFileName(MergeArgs.MergedFile);
+                            value = MergeArgs.MergedTitle ?? Path.GetFileName(MergeArgs.MergedFile);
                         else
-                            return null;
+                            return false;
+                        break;
 
                     case "PATCHFILE":
                         if (PatchArgs != null)
-                            return PatchArgs.PatchFile;
+                            value = PatchArgs.PatchFile;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "APPLYTODIR":
                         if (PatchArgs != null)
-                            return PatchArgs.ApplyTo;
+                            value = PatchArgs.ApplyTo;
                         else
-                            return null;
+                            return false;
+                        break;
                     case "APPPATH":
-                        v = _context.GetAppPath(match.Groups["arg"].Value, _toolMode);
-
-                        return _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                        v = _context.GetAppPath(arg, _toolMode);
+                        value = _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                        break;
                     case "APPTEMPLATE":
-                        v = _context.GetAppTemplate(match.Groups["arg"].Value, _toolMode);
-
-                        return _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
-
+                        v = _context.GetAppTemplate(arg, _toolMode);
+                        value = _context.SubstituteArguments(v ?? "", DiffArgs, _toolMode);
+                        break;
                     case "PROGRAMFILES":
                         // Return the environment variable if using environment variable style
-                        return (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                        value = (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                        break;
                     case "COMMONPROGRAMFILES":
                         // Return the environment variable if using environment variable style
-                        return (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                        value = (vsStyle ? null : Environment.GetEnvironmentVariable(key)) ?? Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
+                        break;
                     case "HOSTPROGRAMFILES":
                         // Use the WOW64 program files directory if available, otherwise just program files
-                        return Environment.GetEnvironmentVariable("PROGRAMW6432") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                        value = Environment.GetEnvironmentVariable("PROGRAMW6432") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+                        break;
                     case "VSHOME":
                         IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
                         if (sol == null)
-                            return null;
+                            return false;
                         object val;
                         if (ErrorHandler.Succeeded(sol.GetProperty((int)__VSSPROPID.VSSPROPID_InstallDirectory, out val)))
-                            return val as string;
-                        return null;
+                            value = val as string;
+                        return true;
                     default:
                         // Just replace with "" if unknown
                         v = Environment.GetEnvironmentVariable(key);
                         if (!string.IsNullOrEmpty(v))
-                            return v;
-
-                        return "";
+                            value = v;
+                        return (value != null);
                 }
+
+                return true;
             }
         }
 
