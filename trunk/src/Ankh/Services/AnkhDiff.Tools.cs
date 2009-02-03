@@ -123,7 +123,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "BeyondCompare", "Beyond Compare",
                 RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
                     ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
-                "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='($MineName)' /leftreadonly", true));
+                "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='$(MineName)' /leftreadonly", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
