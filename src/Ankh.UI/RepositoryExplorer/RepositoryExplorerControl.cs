@@ -118,7 +118,13 @@ namespace Ankh.UI.RepositoryExplorer
         private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
         {
             Point screen = (e.Location != new Point(-1, -1)) ? e.Location : treeView.PointToScreen(new Point(0, 0));
-            ToolWindowHost.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+
+            if (Context != null)
+            {
+                IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+
+                cs.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+            }
         }
 
         IFileIconMapper _iconMapper;
@@ -216,7 +222,7 @@ namespace Ankh.UI.RepositoryExplorer
                 li.Selected = true;
             }
 
-            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);            
+            Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
         }
 
 
@@ -294,7 +300,7 @@ namespace Ankh.UI.RepositoryExplorer
 
         void OnUpdateUp(object sender, CommandUpdateEventArgs e)
         {
-            if(treeView.SelectedNode == null 
+            if (treeView.SelectedNode == null
                 || treeView.Nodes.Count == 0
                 || treeView.SelectedNode == treeView.Nodes[0])
             {
