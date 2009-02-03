@@ -226,20 +226,6 @@ namespace Ankh.VSPackage
 
         #endregion
 
-        #region IAnkhUISite Members
-
-
-        public bool ShowContextMenu(AnkhCommandMenu menu, int x, int y)
-        {
-            IAnkhCommandService cs = GetService<IAnkhCommandService>();
-
-            cs.ShowContextMenu(menu, x, y);
-
-            return true;
-        }
-
-        #endregion
-
         #region IAnkhServiceProvider Members
 
         [DebuggerStepThrough]
@@ -354,7 +340,6 @@ namespace Ankh.VSPackage
         AnkhToolWindowControl _control;
         IAnkhToolWindowControl _twControl;
         AnkhToolWindow _toolWindow;
-        uint _cookie;
 
         protected AnkhToolWindowPane()
             : base(null)
@@ -439,13 +424,6 @@ namespace Ankh.VSPackage
         public override void OnToolWindowCreated()
         {
             base.OnToolWindowCreated();
-
-            IVsWindowFrame2 wf2 = Frame as IVsWindowFrame2;
-
-            if (wf2 != null)
-            {
-                wf2.Advise(this, out _cookie);
-            }
         }
 
         public override void OnToolBarAdded()
