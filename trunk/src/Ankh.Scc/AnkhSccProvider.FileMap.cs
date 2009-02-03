@@ -298,7 +298,7 @@ namespace Ankh.Scc
                     {
                         svn.SafeWcMoveFixup(oldName, newName);
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         if (_delayedMove == null)
                             _delayedMove = new List<FixUp>();
