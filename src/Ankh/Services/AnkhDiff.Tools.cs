@@ -96,7 +96,7 @@ namespace Ankh.Services
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                AppIdLocalServerSearch("Merge70.Application", "Compare.exe") 
+                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe") 
                     ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
@@ -121,7 +121,8 @@ namespace Ankh.Services
                     "'$(Base)' '$(Mine)'", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare", "Beyond Compare",
-                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
+                    ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='($MineName)' /leftreadonly", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
@@ -141,7 +142,7 @@ namespace Ankh.Services
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                AppIdLocalServerSearch("Merge70.Application", "Compare.exe") 
+                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe") 
                     ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
@@ -158,29 +159,30 @@ namespace Ankh.Services
                 "-m '$(Base)' --L1 '$(BaseName)' '$(Theirs)' --L2 '$(TheirName)' " +
                     "'$(Mine)' --L3 '$(MineName)' -o '$(Merged)'", true));
 
+            // WinMerge only has two way merge, so we diff theirs to mine to create merged
+            tools.Add(new DiffTool(this, "WinMerge", "WinMerge (2-Way)",
+                RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
+                    ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
+                "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
+                    "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
+
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
                 Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
                     ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
                     "'$(Theirs)' '$(Base)' '$(Mine)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare3W", "Beyond Compare (3-Way)",
-                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
+                    ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Mine)' '$(Theirs)' '$(Base)' '$(Merged)' " +
                 "/title1='$(MineName)' /title2='$(TheirsName)' " +
                 "/title3='$(BaseName)' /title4='$(MergedName)' ", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare2W", "Beyond Compare (2-Way)",
-                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
+                    ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Mine)' '$(Theirs)' /mergeoutput='$(Merged)' " +
-                "/title1='$(MineName)' /title2='$(TheirsName)' ", true));
-
-            // WinMerge only has two way merge, so we diff theirs to mine to create merged
-            tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
-                RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
-                    ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
-                    "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
-
+                "/title1='$(MineName)' /title2='$(TheirsName)' ", true));            
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
@@ -207,7 +209,7 @@ namespace Ankh.Services
 
         static string RegistrySearch(string key, string value)
         {
-            using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key))
+            using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key, false))
             {
                 if (k == null)
                     return null;
@@ -230,7 +232,7 @@ namespace Ankh.Services
             if (!ErrorHandler.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
                 return null;
 
-            using(RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32"))
+            using(RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32", false))
             {
                 if(rk == null)
                     return null;
@@ -241,7 +243,7 @@ namespace Ankh.Services
                     return GetAppLocation(app);                
             }
 
-            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\InprocServer32"))
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\InprocServer32", false))
             {
                 if (rk == null)
                     return null;
@@ -253,6 +255,26 @@ namespace Ankh.Services
             }
 
             return null;
+        }
+
+        string ShellOpenSearch(string className)
+        {
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey(className + "\\shell\\open\\command", false))
+            {
+                if(rk == null)
+                    return null;
+
+                string cmdLine = rk.GetValue("") as string;
+
+                if (string.IsNullOrEmpty(cmdLine))
+                    return null;
+
+                string program, args;
+                if (!TrySplitPath(cmdLine, out program, out args))
+                    return null;
+                else
+                    return program;
+            }
         }
 
         private static string GetAppLocation(string app)
@@ -281,14 +303,14 @@ namespace Ankh.Services
             return SvnTools.GetNormalizedFullPath(app);
         }
 
-        static string AppIdLocalServerSearch(string appId, string relativePath)
+        static string RelativePath(string origin, string relativePath)
         {
-            string r = AppIdLocalServerSearch(appId);
-
-            if (string.IsNullOrEmpty(r))
+            if (string.IsNullOrEmpty(origin))
                 return null;
+            else if(string.IsNullOrEmpty(relativePath))
+                return origin;
 
-            r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(r, ".."), relativePath));
+            string r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(origin, ".."), relativePath));
 
             if (File.Exists(r))
                 return r;
