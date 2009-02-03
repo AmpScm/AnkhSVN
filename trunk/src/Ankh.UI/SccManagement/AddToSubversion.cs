@@ -54,7 +54,7 @@ namespace Ankh.UI.SccManagement
 
             if (Context != null)
             {
-                treeView1.Context = Context;
+                repositoryTree.Context = Context;
                 Initialize();
             }
         }
@@ -110,10 +110,10 @@ namespace Ankh.UI.SccManagement
 
         private void createFolderButton_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode == null)
+            if (repositoryTree.SelectedNode == null)
                 return;
 
-            treeView1.DoCreateDirectory();            
+            repositoryTree.DoCreateDirectory();
         }
 
         string previousUrl;
@@ -127,7 +127,7 @@ namespace Ankh.UI.SccManagement
             else if (!string.IsNullOrEmpty(previousUrl) && Uri.TryCreate(previousUrl, UriKind.Absolute, out u))
             {
                 timer1.Enabled = false;
-                treeView1.BrowseTo(u);
+                repositoryTree.BrowseTo(u);
             }
         }
 
@@ -140,10 +140,10 @@ namespace Ankh.UI.SccManagement
         {
             get
             {
-                if (treeView1.SelectedNode == null)
+                if (repositoryTree.SelectedNode == null)
                     return null;
 
-                Uri u = treeView1.SelectedNode.RawUri;
+                Uri u = repositoryTree.SelectedNode.RawUri;
                 if (u == null)
                     return null;
 
@@ -166,22 +166,14 @@ namespace Ankh.UI.SccManagement
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             UpdateUrlPreview();
-            errorProvider1.SetError(treeView1, null);
+            errorProvider1.SetError(repositoryTree, null);
 
-            if (treeView1.SelectedNode != null && treeView1.SelectedNode.NormalizedUri != null)
+            createFolderButton.Enabled = repositoryTree.CanCreateDirectory;
+
+            if (repositoryTree.SelectedNode != null && repositoryTree.SelectedNode.NormalizedUri != null)
             {
-                SvnInfoArgs ia = new SvnInfoArgs();
-                ia.ThrowOnError=false;
-                Collection<SvnInfoEventArgs> info;
-                if (treeView1.SelectedNode.IsRepositoryPath || Client.GetInfo(treeView1.SelectedNode.NormalizedUri, ia, out info))
-                    createFolderButton.Enabled = true;
-                else 
-                    createFolderButton.Enabled = false;
-
-                repositoryUrl.Text = treeView1.SelectedNode.RawUri.AbsoluteUri;
+                repositoryUrl.Text = repositoryTree.SelectedNode.RawUri.AbsoluteUri;
             }
-            else
-                createFolderButton.Enabled = false;
         }
 
         private void addTrunk_CheckedChanged(object sender, EventArgs e)
@@ -197,7 +189,7 @@ namespace Ankh.UI.SccManagement
         private void repositoryUrl_SelectedIndexChanged(object sender, EventArgs e)
         {
             Uri u = (Uri)repositoryUrl.SelectedItem;
-            treeView1.AddRoot(u);
+            repositoryTree.AddRoot(u);
         }
 
         private void AddToSubversion_FormClosing(object sender, FormClosingEventArgs e)
@@ -208,14 +200,14 @@ namespace Ankh.UI.SccManagement
             if (localFolder.SelectedItem == null)
             {
                 e.Cancel = true;
-                
+
                 errorProvider1.SetError(localFolder, "Please select a working copy path");
             }
             if (RepositoryAddUrl == null)
             {
                 e.Cancel = true;
 
-                errorProvider1.SetError(treeView1, "Please select a location in the repository to add to");
+                errorProvider1.SetError(repositoryTree, "Please select a location in the repository to add to");
             }
         }
 

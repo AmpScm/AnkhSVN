@@ -724,8 +724,8 @@ namespace Ankh.UI.RepositoryExplorer
 
                 if (cachedUri.AbsoluteUri.StartsWith(start))
                     removeUris.Add(cachedUri);
-                else if(includeBase && cachedUri == nUri)
-                    removeUris.Add(cachedUri);     
+                else if (includeBase && cachedUri == nUri)
+                    removeUris.Add(cachedUri);
             }
 
             foreach (Uri removeUri in removeUris)
@@ -800,7 +800,12 @@ namespace Ankh.UI.RepositoryExplorer
 
         internal void DoCreateDirectory()
         {
-            Uri u = SelectedNode.RawUri;
+            RepositoryTreeNode tn = SelectedNode;
+
+            if (tn == null)
+                return;
+
+            Uri u = tn.RawUri;
 
             using (Ankh.UI.SccManagement.CreateDirectoryDialog dialog = new Ankh.UI.SccManagement.CreateDirectoryDialog())
             {
@@ -815,12 +820,22 @@ namespace Ankh.UI.RepositoryExplorer
                     {
                         SvnCreateDirectoryArgs args = new SvnCreateDirectoryArgs();
                         args.CreateParents = true;
-                        
+
                         args.LogMessage = dialog.LogMessage;
                         a.Client.RemoteCreateDirectory(newDir, args);
                     });
 
                 AddRoot(newDir);
+            }
+        }
+
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool CanCreateDirectory
+        {
+            get
+            {
+                RepositoryTreeNode tn = SelectedNode;
+                return (tn != null) && (tn.NormalizedUri != null) && tn.IsRepositoryPath;
             }
         }
     }
