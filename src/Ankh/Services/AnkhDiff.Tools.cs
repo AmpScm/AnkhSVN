@@ -120,6 +120,10 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
                     "'$(Base)' '$(Mine)'", true));
 
+            tools.Add(new DiffTool(this, "BeyondCompare", "Beyond Compare",
+                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='($MineName)' /leftreadonly", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -165,6 +169,7 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
                 "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
                     "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
+
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
