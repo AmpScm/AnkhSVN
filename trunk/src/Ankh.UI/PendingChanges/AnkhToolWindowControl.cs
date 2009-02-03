@@ -151,7 +151,27 @@ namespace Ankh.UI
 
         void IAnkhToolWindowControl.OnFrameShow(FrameEventArgs e)
         {
+            switch (e.Show)
+            {
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_DestroyMultInst:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_TabDeactivated:
+                    Visible = false;
+                    break;
+            }
             OnFrameShow(e);
+            switch (e.Show)
+            {
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_DestroyMultInst:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_TabDeactivated:
+                    break;
+                default:
+                    Visible = true;
+                    break;
+            }
         }
 
         /// <summary>

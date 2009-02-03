@@ -36,7 +36,5 @@ namespace Ankh.UI.Services
         string OriginalTitle { get; }
 
 		void AddCommandTarget(IOleCommandTarget target);
-
-        bool ShowContextMenu(AnkhCommandMenu menu, int x, int y);
     }
 }
