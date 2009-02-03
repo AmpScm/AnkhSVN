@@ -573,7 +573,7 @@ namespace Ankh.Services
                     if (!TryGetValue(match.Groups["if"].Value, true, "", out value))
                         return "";
                     
-                    value = match.Groups["ifbody"].Value;
+                    value = match.Groups["ifbody"].Value.Replace("''", "'");
 
                     return _context.SubstituteArguments(value, _diffArgs, _toolMode);
                 }
