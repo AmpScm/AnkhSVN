@@ -22,6 +22,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using System.ComponentModel.Design;
 using Ankh.Selection;
 using Ankh.UI;
+using System.Runtime.InteropServices;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -50,7 +51,17 @@ namespace Ankh.VS.LanguageServices
 
         bool IAnkhIdleProcessor.OnIdle(bool periodic)
         {
-            OnIdle(periodic);
+            try
+            {
+                OnIdle(periodic);
+            }
+            catch (COMException)
+            {
+                OnActiveViewChanged(null);
+            }
+            catch 
+            { }
+
             return true;
         }
 
