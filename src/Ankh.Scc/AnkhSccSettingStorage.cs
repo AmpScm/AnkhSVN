@@ -8,6 +8,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using System.Text;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -75,9 +76,25 @@ namespace Ankh.Scc
 
         #region IVsSccEnlistmentPathTranslation Members
 
+        string NormalizePathFormat(string path)
+        {
+            if (!SvnItem.IsValidPath(path))
+                return path; // Not an on-disk path -> Nothing to normalize
+
+            string np = SvnTools.GetFullTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
+
+            if(path[path.Length -1] == '\\' && np[np.Length-1] != '\\')
+                np += '\\';
+
+            return np;
+        }
+
+
         public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
             EnsureLoaded();
+
+            lpszEnlistmentPath = NormalizePathFormat(lpszEnlistmentPath);
 
             SccProjectSettings st;
             if (!_actualToProject.TryGetValue(lpszEnlistmentPath, out st))
@@ -93,6 +110,8 @@ namespace Ankh.Scc
         public int TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
         {
             EnsureLoaded();
+
+            lpszProjectPath = NormalizePathFormat(lpszProjectPath);
 
             SccProjectSettings st;
 
