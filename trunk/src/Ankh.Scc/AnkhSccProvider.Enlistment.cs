@@ -56,6 +56,17 @@ namespace Ankh.Scc
         readonly Dictionary<string, SccTranslateData> _storedPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<string, SccTranslateData> _sccPaths = new Dictionary<string, SccTranslateData>(StringComparer.OrdinalIgnoreCase);
 
+
+        int IVsSccEnlistmentPathTranslation.TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
+        {
+            return SccStore.TranslateEnlistmentPathToProjectPath(lpszEnlistmentPath, out pbstrProjectPath);
+        }
+
+        int IVsSccEnlistmentPathTranslation.TranslateProjectPathToEnlistmentPath(string lpszProjectPath, out string pbstrEnlistmentPath, out string pbstrEnlistmentPathUNC)
+        {
+            return SccStore.TranslateProjectPathToEnlistmentPath(lpszProjectPath, out pbstrEnlistmentPath, out pbstrEnlistmentPathUNC);
+        }
+
         void ClearEnlistState()
         {
             _enlistStore.Clear();
@@ -72,7 +83,7 @@ namespace Ankh.Scc
 
         public bool HasSolutionData
         {
-            get { return false; }
+            get { return IsSolutionManaged; }
         }
 
 
