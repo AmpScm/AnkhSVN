@@ -163,6 +163,17 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
                     "'$(Theirs)' '$(Base)' '$(Mine)' '$(Merged)'", true));
 
+            tools.Add(new DiffTool(this, "BeyondCompare3W", "Beyond Compare (3-Way)",
+                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                "'$(Mine)' '$(Theirs)' '$(Base)' '$(Merged)' " +
+                "/title1='$(MineName)' /title2='$(TheirsName)' " +
+                "/title3='$(BaseName)' /title4='$(MergedName)' ", true));
+
+            tools.Add(new DiffTool(this, "BeyondCompare2W", "Beyond Compare (2-Way)",
+                "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
+                "'$(Mine)' '$(Theirs)' /mergeoutput='$(Merged)' " +
+                "/title1='$(MineName)' /title2='$(TheirsName)' ", true));
+
             // WinMerge only has two way merge, so we diff theirs to mine to create merged
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
                 RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
