@@ -96,7 +96,7 @@ namespace Ankh.Services
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe") 
+                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
                     ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /2 /title1:'$(BaseName)' /title2:'$(MineName)' '$(Base)' '$(Mine)'", true));
 
@@ -125,6 +125,11 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Base)' '$(Mine)' /fv /title1='$(BaseName)' /title2='$(MineName)' /leftreadonly", true));
 
+            tools.Add(new DiffTool(this, "ECMerge", "Ellié Computing Merge",
+                RegistrySearch("SOFTWARE\\Ellié Computing\\Merge", "Path")
+                    ?? "$(ProgramFiles)\\Ellié Computing\\Merge\\guimerge.exe",
+                "'$(Base)' '$(Mine)' --mode=diff2 --title1='$(BaseName)' --title2='$(MineName)'", true));
+
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
             SortTools(tools);
@@ -142,7 +147,7 @@ namespace Ankh.Services
                 "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
-                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe") 
+                RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
                     ?? "$(ProgramFiles)\\Araxis\\Araxis Merge\\Compare.exe",
                 "/wait /a2 /3 /title1:'$(MineName)' /title2:'$(MergedName)' " +
                     "/title3:'$(MineName)' '$(Mine)' '$(Base)' '$(Theirs)' '$(Merged)'", true));
@@ -171,7 +176,7 @@ namespace Ankh.Services
                     ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
                     "'$(Theirs)' '$(Base)' '$(Mine)' '$(Merged)'", true));
 
-            tools.Add(new DiffTool(this, "BeyondCompare3W", "Beyond Compare (3-Way)",
+            tools.Add(new DiffTool(this, "BeyondCompare3W", "Beyond Compare Pro (3-Way)",
                 RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
                     ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Mine)' '$(Theirs)' '$(Base)' '$(Merged)' " +
@@ -182,7 +187,14 @@ namespace Ankh.Services
                 RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
                     ?? "$(ProgramFiles)\\Beyond Compare 3\\BComp.exe",
                 "'$(Mine)' '$(Theirs)' /mergeoutput='$(Merged)' " +
-                "/title1='$(MineName)' /title2='$(TheirsName)' ", true));            
+                "/title1='$(MineName)' /title2='$(TheirsName)' ", true));
+
+            tools.Add(new DiffTool(this, "ECMerge", "Ellié Computing Merge",
+                RegistrySearch("SOFTWARE\\Ellié Computing\\Merge", "Path")
+                    ?? "$(ProgramFiles)\\Ellié Computing\\Merge\\guimerge.exe",
+                "'$(Base)' '$(Mine)' '$(Theirs)' --to='$(Merged)' --mode=merge3 " +
+                "--title0='$(BaseName)' --title1='$(MineName)' --title2='$(TheirsName)' " +
+                "--to-title='$(MergedName)'", true));
 
             LoadRegistryTools(DiffToolMode.Merge, tools);
 
@@ -232,15 +244,15 @@ namespace Ankh.Services
             if (!ErrorHandler.Succeeded(NativeMethods.CLSIDFromProgID(appId, out clsid)))
                 return null;
 
-            using(RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32", false))
+            using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\LocalServer32", false))
             {
-                if(rk == null)
+                if (rk == null)
                     return null;
 
                 string app = rk.GetValue("") as string;
 
-                if(!string.IsNullOrEmpty(app))
-                    return GetAppLocation(app);                
+                if (!string.IsNullOrEmpty(app))
+                    return GetAppLocation(app);
             }
 
             using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsid.ToString("B") + "\\InprocServer32", false))
@@ -261,7 +273,7 @@ namespace Ankh.Services
         {
             using (RegistryKey rk = Registry.ClassesRoot.OpenSubKey(className + "\\shell\\open\\command", false))
             {
-                if(rk == null)
+                if (rk == null)
                     return null;
 
                 string cmdLine = rk.GetValue("") as string;
@@ -307,7 +319,7 @@ namespace Ankh.Services
         {
             if (string.IsNullOrEmpty(origin))
                 return null;
-            else if(string.IsNullOrEmpty(relativePath))
+            else if (string.IsNullOrEmpty(relativePath))
                 return origin;
 
             string r = SvnTools.GetNormalizedFullPath(Path.Combine(Path.Combine(origin, ".."), relativePath));
@@ -455,7 +467,7 @@ namespace Ankh.Services
             public override string Arguments
             {
                 get { return _arguments; }
-            }            
+            }
         }
 
         static partial class NativeMethods
