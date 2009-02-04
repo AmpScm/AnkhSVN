@@ -433,7 +433,7 @@ namespace Ankh.Scc
         /// </returns>
         public bool IsCleanupChange()
         {
-            switch (Change.State)
+            switch (Kind)
             {
                 case PendingChangeKind.LockedOnly:
                     return true;
