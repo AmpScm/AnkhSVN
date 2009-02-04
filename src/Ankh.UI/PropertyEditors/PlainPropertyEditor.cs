@@ -48,14 +48,14 @@ namespace Ankh.UI.PropertyEditors
         {
             get
             {   
-                return new SvnPropertyValue(PropertyName, this.valueTextBox.Text);
+                return new SvnPropertyValue(PropertyName, this.valueTextBox.Text.Replace("\r", ""));
             }
             set
             {
                 if (value != null)
                 {
                     PropertyName = value.Key;
-                    valueTextBox.Text = value.StringValue;
+                    valueTextBox.Text = value.StringValue.Replace("\r", "").Replace("\n", Environment.NewLine);
                 }
                 else
                     valueTextBox.Text = "";
@@ -65,7 +65,7 @@ namespace Ankh.UI.PropertyEditors
         public string CurrentText
         {
             get { return valueTextBox.Text ?? ""; }
-            set { valueTextBox.Text = value; }
+            set { valueTextBox.Text = (value ?? "").Replace("\r", "").Replace("\n", Environment.NewLine); }
         }
 
         /// <summary> 
