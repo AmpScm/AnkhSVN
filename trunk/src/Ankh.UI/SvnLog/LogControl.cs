@@ -60,23 +60,24 @@ namespace Ankh.UI.SvnLog
 
 
         public LogControl(IContainer container)
-            :this()
+            : this()
         {
             container.Add(this);
         }
 
-		IAnkhServiceProvider _context;
-		public IAnkhServiceProvider Context
-		{
-			get { return _context; }
-			set
-			{
-				_context = value;
+        IAnkhServiceProvider _context;
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                _context = value;
 
-				logRevisionControl1.Context = value;
+                logRevisionControl1.Context = value;
                 logChangedPaths1.Context = value;
-			}
-		}
+            }
+        }
 
         LogMode _mode;
         //[Obsolete]
@@ -118,8 +119,7 @@ namespace Ankh.UI.SvnLog
             else if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new SvnOrigin[]
-            { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -131,13 +131,12 @@ namespace Ankh.UI.SvnLog
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else  if (target == null)
+            else if (target == null)
                 throw new ArgumentNullException("target");
             else if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new SvnOrigin[] 
-            { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -158,44 +157,48 @@ namespace Ankh.UI.SvnLog
             logRevisionControl1.Start(Mode);
         }
 
-        public bool IncludeMerged
+        [DefaultValue(false)]
+        public bool IncludeMergedRevisions
         {
             get { return LogSource.IncludeMergedRevisions; }
             set { LogSource.IncludeMergedRevisions = value; }
         }
 
+        [DefaultValue(false)]
         public bool StrictNodeHistory
         {
             get { return LogSource.StrictNodeHistory; }
             set { LogSource.StrictNodeHistory = value; }
         }
 
-        bool _logMessageVisible = true;
-        public bool LogMessageVisible
+        bool _logMessageHidden;
+        [DefaultValue(true)]
+        public bool ShowLogMessage
         {
-            get { return _logMessageVisible; }
-            set 
+            get { return !_logMessageHidden; }
+            set
             {
-                _logMessageVisible = value;
+                _logMessageHidden = !value;
                 UpdateSplitPanels();
             }
         }
-        bool _changedPathsVisible = true;
-        public bool ChangedPathsVisible
+        bool _changedPathsHidden;
+        [DefaultValue(true)]
+        public bool ShowChangedPaths
         {
-            get { return _changedPathsVisible; }
-            set 
+            get { return !_changedPathsHidden; }
+            set
             {
-                _changedPathsVisible = value;
+                _changedPathsHidden = !value;
                 UpdateSplitPanels();
             }
         }
 
         void UpdateSplitPanels()
         {
-            splitContainer1.Panel2Collapsed = !_changedPathsVisible && !_logMessageVisible;
-            splitContainer2.Panel1Collapsed = !_changedPathsVisible;
-            splitContainer2.Panel2Collapsed = !_logMessageVisible;
+            splitContainer1.Panel2Collapsed = !ShowChangedPaths && !ShowLogMessage;
+            splitContainer2.Panel1Collapsed = !ShowChangedPaths;
+            splitContainer2.Panel2Collapsed = !ShowLogMessage;
         }
 
         public event EventHandler<BatchFinishedEventArgs> BatchFinished;
@@ -221,7 +224,7 @@ namespace Ankh.UI.SvnLog
         {
             [DebuggerStepThrough]
             get { return _itemSource; }
-            set 
+            set
             {
                 _itemSource = value;
                 value.FocusChanged += OnFocusChanged;
@@ -231,7 +234,7 @@ namespace Ankh.UI.SvnLog
 
         void OnFocusChanged(object sender, CurrentItemEventArgs<ISvnLogItem> e)
         {
-            if(FocusChanged != null)
+            if (FocusChanged != null)
                 FocusChanged(sender, e);
         }
 

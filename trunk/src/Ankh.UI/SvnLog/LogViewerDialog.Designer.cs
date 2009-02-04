@@ -68,13 +68,8 @@ namespace Ankh.UI
             // logViewerControl
             // 
             resources.ApplyResources(this.logViewerControl, "logViewerControl");
-            this.logViewerControl.ChangedPathsVisible = true;
-            this.logViewerControl.Context = null;
-            this.logViewerControl.IncludeMerged = false;
-            this.logViewerControl.LogMessageVisible = true;
             this.logViewerControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logViewerControl.Name = "logViewerControl";
-            this.logViewerControl.StrictNodeHistory = false;
             // 
             // LogViewerDialog
             // 

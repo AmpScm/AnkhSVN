@@ -139,25 +139,25 @@ namespace Ankh.UI.SvnLog
         public bool LogMessageVisible
         {
             [DebuggerStepThrough]
-            get { return logControl.LogMessageVisible; }
+            get { return logControl.ShowLogMessage; }
             [DebuggerStepThrough]
-            set { logControl.LogMessageVisible = value; }
+            set { logControl.ShowLogMessage = value; }
         }
 
         public bool ChangedPathsVisible
         {
             [DebuggerStepThrough]
-            get { return logControl.ChangedPathsVisible; }
+            get { return logControl.ShowChangedPaths; }
             [DebuggerStepThrough]
-            set { logControl.ChangedPathsVisible = value; }
+            set { logControl.ShowChangedPaths = value; }
         }
 
         public bool IncludeMerged
         {
             [DebuggerStepThrough]
-            get { return logControl.IncludeMerged; }
+            get { return logControl.IncludeMergedRevisions; }
             [DebuggerStepThrough]
-            set { logControl.IncludeMerged = value; }
+            set { logControl.IncludeMergedRevisions = value; }
         }
 
         [DebuggerStepThrough]
@@ -178,11 +178,11 @@ namespace Ankh.UI.SvnLog
         {
             get
             {
-                return logControl.ChangedPathsVisible;
+                return logControl.ShowChangedPaths;
             }
             set
             {
-                logControl.ChangedPathsVisible = value;
+                logControl.ShowChangedPaths = value;
             }
         }
 
@@ -190,22 +190,22 @@ namespace Ankh.UI.SvnLog
         {
             get
             {
-                return logControl.LogMessageVisible;
+                return logControl.ShowLogMessage;
             }
             set
             {
-                logControl.LogMessageVisible = value;
+                logControl.ShowLogMessage = value;
             }
         }
 
         public bool IncludeMergedRevisions
         {
-            get { return logControl.IncludeMerged; }
+            get { return logControl.IncludeMergedRevisions; }
             set
             {
-                if (value != logControl.IncludeMerged)
+                if (value != logControl.IncludeMergedRevisions)
                 {
-                    logControl.IncludeMerged = value;
+                    logControl.IncludeMergedRevisions = value;
                     logControl.Restart();
                 }
             }

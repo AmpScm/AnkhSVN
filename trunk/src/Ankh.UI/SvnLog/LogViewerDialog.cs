@@ -26,10 +26,11 @@ using Ankh.Scc;
 using System.Diagnostics;
 using Ankh.UI.SvnLog;
 using System.IO;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public partial class LogViewerDialog : VSContainerForm
+    public partial class LogViewerDialog : VSContainerForm, ILogControl
     {
         private SvnOrigin _logTarget;
 
@@ -38,11 +39,10 @@ namespace Ankh.UI
             InitializeComponent();
         }
 
-        public LogViewerDialog(SvnOrigin target, IAnkhServiceProvider context)
+        public LogViewerDialog(SvnOrigin target)
             : this()
         {
             LogTarget = target;
-            Context = context;
         }
 
         protected override void OnContextChanged(EventArgs e)
@@ -86,5 +86,48 @@ namespace Ankh.UI
 
             logViewerControl.StartLog(new SvnOrigin[] { LogTarget }, null, null);
         }
+
+        #region ILogControl Members
+
+        public bool ShowChangedPaths
+        {
+            get { return LogControl.ShowChangedPaths; }
+            set { LogControl.ShowChangedPaths = value; }
+        }
+
+        public bool ShowLogMessage
+        {
+            get { return LogControl.ShowLogMessage; }
+            set { LogControl.ShowLogMessage = value; }
+        }
+
+        public bool StrictNodeHistory
+        {
+            get { return LogControl.StrictNodeHistory; }
+            set { LogControl.StrictNodeHistory = value; }
+        }
+
+        public bool IncludeMergedRevisions
+        {
+            get { return LogControl.IncludeMergedRevisions; }
+            set { LogControl.IncludeMergedRevisions = value; }
+        }
+
+        public void FetchAll()
+        {
+            LogControl.FetchAll();
+        }
+
+        public void Restart()
+        {
+            LogControl.Restart();
+        }
+
+        public IList<SvnOrigin> Origins
+        {
+            get { return new SvnOrigin[] { LogTarget }; }
+        }
+
+        #endregion
     }
 }

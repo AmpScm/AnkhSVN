@@ -51,11 +51,11 @@ namespace Ankh.UI.MergeWizard
             // 
             // logToolControl1
             // 
-            this.logToolControl1.ChangedPathsVisible = true;
+            this.logToolControl1.ShowChangedPaths = true;
             this.logToolControl1.Context = null;
             resources.ApplyResources(this.logToolControl1, "logToolControl1");
-            this.logToolControl1.IncludeMerged = false;
-            this.logToolControl1.LogMessageVisible = true;
+            this.logToolControl1.IncludeMergedRevisions = false;
+            this.logToolControl1.ShowLogMessage = true;
             this.logToolControl1.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logToolControl1.Name = "logToolControl1";
             this.logToolControl1.StrictNodeHistory = false;

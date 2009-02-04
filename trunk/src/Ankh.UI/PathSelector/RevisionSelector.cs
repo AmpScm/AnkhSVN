@@ -63,7 +63,7 @@ namespace Ankh.UI.PathSelector
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            using (LogViewerDialog lvd = new LogViewerDialog(SvnOrigin, Context))
+            using (LogViewerDialog lvd = new LogViewerDialog(SvnOrigin))
             {
                 if (DialogResult.OK != lvd.ShowDialog(Context))
                     return;
