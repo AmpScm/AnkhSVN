@@ -50,25 +50,20 @@ namespace Ankh.UI.SvnLog
             // 
             // logControl
             // 
-            this.logControl.ChangedPathsVisible = true;
-            this.logControl.Context = null;
             this.logControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logControl.IncludeMerged = false;
             this.logControl.Location = new System.Drawing.Point(0, 0);
-            this.logControl.LogMessageVisible = true;
             this.logControl.Mode = Ankh.UI.SvnLog.LogMode.Log;
             this.logControl.Name = "logControl";
             this.logControl.Size = new System.Drawing.Size(482, 254);
-            this.logControl.StrictNodeHistory = false;
             this.logControl.TabIndex = 0;
             // 
             // LogToolWindowControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 254);
             this.Controls.Add(this.logControl);
             this.Name = "LogToolWindowControl";
+            this.Size = new System.Drawing.Size(482, 254);
             this.ResumeLayout(false);
 
         }

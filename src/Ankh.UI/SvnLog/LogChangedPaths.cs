@@ -61,8 +61,6 @@ namespace Ankh.UI
             {
                 _context = value;
                 changedPaths.SelectionPublishServiceProvider = value;
-
-
             }
         }
 

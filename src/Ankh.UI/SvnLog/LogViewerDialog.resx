@@ -196,7 +196,7 @@
     <value>logViewerControl</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Type" xml:space="preserve">
-    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3278.4176, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.SvnLog.LogControl, Ankh.UI, Version=2.0.3322.39328, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;logViewerControl.Parent" xml:space="preserve">
     <value>$this</value>
@@ -220,6 +220,6 @@
     <value>LogViewerDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.0.3278.4175, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.0.3322.35330, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>

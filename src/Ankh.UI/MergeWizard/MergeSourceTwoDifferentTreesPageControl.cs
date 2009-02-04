@@ -132,8 +132,7 @@ namespace Ankh.UI.MergeWizard
                 return;
             }
 
-            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(WizardPage.Context, new Uri(target), null),
-                    ((MergeWizard)WizardPage.Wizard).Context))
+            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(WizardPage.Context, new Uri(target), null)))
             {
                 dialog.LogControl.StrictNodeHistory = true;
 

@@ -156,7 +156,7 @@ namespace Ankh.UI.SccManagement
 
         private void versionBrowse_Click(object sender, EventArgs e)
         {
-            using (LogViewerDialog lvd = new LogViewerDialog(new SvnOrigin(Context, SrcUri, null), Context))
+            using (LogViewerDialog lvd = new LogViewerDialog(new SvnOrigin(Context, SrcUri, null)))
             {
                 if (lvd.ShowDialog(Context) != DialogResult.OK)
                     return;
