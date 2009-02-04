@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.6127</title>
+<title>AnkhSVN-Daily Update - 2.0.6129</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -12,13 +12,13 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1514/AnkhSvn-Daily-2.0.6127.382.msi">AnkhSVN 2.0.6127</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1518/AnkhSvn-Daily-2.0.6129.383.msi">AnkhSVN 2.0.6129</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6127">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6129">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -283,20 +283,6 @@ This also provides information on which property changed when AnkhSVN says
 properties modified.
 (For revision properties the base version is the unmodified version)</td></tr>
 <tr class="d"><td colspan="4">2009-01-06</td></tr>
-<tr><td> </td><td class="r"><a id="5859" href="http://ankhsvn.net/rev/?r=5859">[r5859]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Reordered Araxis merge parameters following their manual on
-http://www.araxis.com/merge/command_line.html</td></tr>
-<tr><td> </td><td class="r"><a id="5857" href="http://ankhsvn.net/rev/?r=5857">[r5857]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Services/AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix parameter ordering in DiffMerge merge template</td></tr>
-<tr><td> </td><td class="r"><a id="5852" href="http://ankhsvn.net/rev/?r=5852">[r5852]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/ItemResolveCasing.cs, src/Ankh.Services/Scc/PendingChange.cs, src/Ankh/Services/PendingChanges/PendingChangeHandler.cs, src/Ankh.Scc/AnkhSccProvider.FileMap.cs, src/Ankh.Scc/SvnSccContext.cs, src/Ankh.Services/Scc/SvnItem.cs, src/Ankh.VS/SolutionExplorer/StatusImageMapper.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Refactor IsCasingConflicted code to a single place in SvnItem.
-Also refactored some Scc internal code to read the workingcopy entries
-instead of calling SvnClient.Status when we only need to check if a node
-is versioned or not.</td></tr>
-<tr><td> </td><td class="r"><a id="5850" href="http://ankhsvn.net/rev/?r=5850">[r5850]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/SvnItem.cs, src/Ankh.VS/SolutionExplorer/StatusImageMapper.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Give case conflicted files a conflicted glyph instead of a deleted glyph.</td></tr>
-<tr><td> </td><td class="r"><a id="5846" href="http://ankhsvn.net/rev/?r=5846">[r5846]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Services/Scc/PendingChange.cs, src/Ankh.Services/Scc/PendingChangeText.resx, src/Ankh/Services/PendingChanges/PendingChangeHandler.cs, src/Ankh.Services/Scc/PendingChangeStatus.cs, src/Ankh.Services/Scc/PendingChangeKind.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Improve handling of missing files from pending change handler. When a file
-is actually deleted, svn delete it (old behavior). When its case changed resolve
-this by renaming back to the old casing (new).</td></tr>
-<tr class="d"><td colspan="4">2009-01-05</td></tr>
-<tr><td> </td><td class="r"><a id="5845" href="http://ankhsvn.net/rev/?r=5845">[r5845]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Package/Gui/AnkhSvn.xml, src/Ankh/Commands/ItemResolveCasing.cs, src/Ankh.Services/Scc/PendingChange.cs, src/Ankh.Services/Scc/PendingChangeText.resx, src/Ankh.Services/Scc/PendingChangeStatus.cs, src/Ankh.Services/Scc/PendingChangeText.Designer.cs, src/Ankh.Services/Scc/PendingChangeKind.cs, src/Ankh/Ankh.csproj (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add fix file casing command. This can fix casing issues on disk and
-in projects. Color casing issues red in the PC window (like conflicts)</td></tr>
 
 </table>
 <!--/Recent changes-->
