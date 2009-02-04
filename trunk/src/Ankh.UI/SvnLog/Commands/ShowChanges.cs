@@ -50,17 +50,7 @@ namespace Ankh.UI.SvnLog.Commands
 
         void UpdateForRevChanges(ILogControl logWindow, CommandUpdateEventArgs e)
         {
-            SvnOrigin first = null;
-            foreach (SvnOrigin origin in logWindow.Origins)
-            {
-                if (first != null)
-                {
-                    // We can't diff multiple items
-                    e.Enabled = false;
-                    return;
-                }
-                first = origin;
-            }
+            SvnOrigin first = EnumTools.GetSingle(logWindow.Origins);
 
             if (first == null)
             {
@@ -85,34 +75,24 @@ namespace Ankh.UI.SvnLog.Commands
 
         bool UpdateForChangedFiles(CommandUpdateEventArgs e)
         {
-            ISvnLogChangedPathItem change = null;
-            foreach (ISvnLogChangedPathItem c in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+            ISvnLogChangedPathItem change = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogChangedPathItem>());
+
+            if (change == null)
+                return false;
+
+            // Skip all the files we cannot diff
+            switch (change.Action)
             {
-                if (change != null)
-                {
+                case SvnChangeAction.Add:
+                    if (change.CopyFromRevision >= 0)
+                        break; // We can retrieve this file using CopyFromPath
                     e.Enabled = false;
                     break;
-                }
-                change = c;
+                case SvnChangeAction.Delete:
+                    e.Enabled = false;
+                    break;
             }
-            if (change != null)
-            {
-                // Skip all the files we cannot diff
-                switch (change.Action)
-                {
-                    case SvnChangeAction.Add:
-                        if (change.CopyFromRevision >= 0)
-                            break; // We can retrieve this file using CopyFromPath
-                        e.Enabled = false;
-                        break;
-                    case SvnChangeAction.Delete:
-                        e.Enabled = false;
-                        break;
-                }
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         public void OnExecute(CommandEventArgs e)
@@ -130,19 +110,19 @@ namespace Ankh.UI.SvnLog.Commands
             long min = long.MaxValue;
             long max = long.MinValue;
 
-            bool touched = false;
+            int n = 0;
 
             HybridCollection<string> changedPaths = new HybridCollection<string>();
-            foreach (Ankh.Scc.ISvnLogItem item in e.Selection.GetSelection<Ankh.Scc.ISvnLogItem>())
+            foreach (ISvnLogItem item in e.Selection.GetSelection<ISvnLogItem>())
             {
                 min = Math.Min(min, item.Revision);
                 max = Math.Max(max, item.Revision);
-                touched = true;
+                n++;
             }
 
-            if (touched)
+            if (n > 0)
             {
-                ExecuteDiff(e, log.Origins, new SvnRevisionRange(min - 1, max));
+                ExecuteDiff(e, log.Origins, new SvnRevisionRange(n == 1 ? min - 1 : min, max));
                 return true;
             }
 
