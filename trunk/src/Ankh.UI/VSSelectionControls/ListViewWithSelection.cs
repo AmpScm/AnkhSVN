@@ -436,6 +436,11 @@ namespace Ankh.UI.VSSelectionControls
         }
 
         #endregion
+
+        Control ISelectionMapOwner<TListViewItem>.Control
+        {
+            get { return this; }
+        }
     }
     [StructLayout(LayoutKind.Sequential)]
     struct NMHDR

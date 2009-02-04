@@ -173,6 +173,6 @@ namespace Ankh.Selection
         /// Gets a selection tracker that is valid for the current popup context
         /// </summary>
         /// <returns></returns>
-        IVsTrackSelectionEx GetModalTracker();
+        IVsTrackSelectionEx GetModalTracker(Control control);
     }
 }

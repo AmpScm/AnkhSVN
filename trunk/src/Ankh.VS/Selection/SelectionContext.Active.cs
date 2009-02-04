@@ -313,9 +313,9 @@ namespace Ankh.VS.Selection
             return null;
         }
 
-        IVsTrackSelectionEx ISelectionContextEx.GetModalTracker()
+        IVsTrackSelectionEx ISelectionContextEx.GetModalTracker(Control control)
         {
-            if (_topPopup != null)
+            if (_topPopup != null && (control == null || _topPopup.Contains(control)))
                 return new ModalSelection(this, _topPopup);
             else
                 return null;

@@ -23,6 +23,7 @@ using System.Diagnostics;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.Selection;
+using System.Windows.Forms;
 
 namespace Ankh.UI.VSSelectionControls
 {
@@ -41,6 +42,8 @@ namespace Ankh.UI.VSSelectionControls
         T GetItemFromSelectionObject(object item);
         void SetSelection(T[] items);
         event EventHandler HandleDestroyed;
+
+        Control Control { get; }
 
         /// <summary>
         /// Gets the canonical (path / uri) of the item. Used by packages to determine a selected file
@@ -84,6 +87,8 @@ namespace Ankh.UI.VSSelectionControls
             }
 
             internal abstract string GetCanonicalName(uint itemid);
+
+            internal abstract Control Control { get; }
         }
 
         sealed class MapData<T> : MapData
@@ -315,6 +320,11 @@ namespace Ankh.UI.VSSelectionControls
             public override IList AllItems
             {
                 get { return _owner.AllItems; }
+            }
+
+            internal override Control Control
+            {
+                get { return _owner.Control ?? (_owner as Control); }
             }
         }
 
@@ -629,7 +639,7 @@ namespace Ankh.UI.VSSelectionControls
                     {
                         ISelectionContextEx ex = Context.GetService<ISelectionContextEx>(typeof(ISelectionContext));
 
-                        _tracker = ex.GetModalTracker();
+                        _tracker = ex.GetModalTracker(_data.Control);
                     }
                 }
 

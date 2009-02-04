@@ -99,20 +99,17 @@ namespace Ankh.UI
             set { ContainerMode = value; }
         }
 
-        internal override DialogResult RunDialog(IWin32Window owner, IUIService uiService)
+        protected override IDisposable DialogRunContext(IAnkhServiceProvider context)
         {
-            if (DialogOwner != null)
-            {
-                using (DialogOwner.InstallFormRouting((VSContainerForm)this, EventArgs.Empty))
-                {
-                    return base.RunDialog(owner, uiService);
-                }
-            }
+            IAnkhDialogOwner owner = null;
+            if (context != null)
+                owner = context.GetService<IAnkhDialogOwner>();
+
+            if (owner != null)
+                return owner.InstallFormRouting(this, EventArgs.Empty);
             else
-            {
-                return base.RunDialog(owner, uiService);
-            }
-        }        
+                return base.DialogRunContext(context);
+        }
 
         protected override void OnHandleCreated(EventArgs e)
         {
