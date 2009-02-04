@@ -143,7 +143,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 get { return null; }
             }
 
-            public Microsoft.VisualStudio.Shell.Interop.IVsTrackSelectionEx GetModalTracker()
+            public Microsoft.VisualStudio.Shell.Interop.IVsTrackSelectionEx GetModalTracker(System.Windows.Forms.Control control)
             {
                 return null;
             }

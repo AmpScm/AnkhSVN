@@ -181,7 +181,7 @@ namespace Ankh.UI.Annotate
             _map.NotifySelectionUpdated();
         }
 
-        #region ISelectionMapOwner<IBlameSection> Members
+        #region ISelectionMapOwner<IAnnotateSection> Members
 
         public event EventHandler SelectionChanged;
 
@@ -245,5 +245,10 @@ namespace Ankh.UI.Annotate
         }
 
         #endregion
+
+        Control ISelectionMapOwner<IAnnotateSection>.Control
+        {
+            get { return this; }
+        }
     }
 }

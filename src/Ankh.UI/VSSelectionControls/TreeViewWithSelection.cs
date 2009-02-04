@@ -327,5 +327,10 @@ namespace Ankh.UI.VSSelectionControls
         {
             return null;
         }
+
+        Control ISelectionMapOwner<TNode>.Control
+        {
+            get { return this; }
+        }
     }
 }

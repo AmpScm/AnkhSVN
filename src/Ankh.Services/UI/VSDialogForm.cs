@@ -216,32 +216,34 @@ namespace Ankh.UI
 
             if (setContext)
                 Context = context;
-
-            IUIService uiService = null;
-
-            if (Context != null)
-                uiService = Context.GetService<IUIService>();
-
             try
             {
-                if (owner == null && uiService != null)
-                    owner = uiService.GetDialogOwnerWindow();
+                using (DialogRunContext(Context))
+                {
+                    OnBeforeShowDialog(EventArgs.Empty);
 
-                OnBeforeShowDialog(EventArgs.Empty);
+                    IUIService uiService = Context.GetService<IUIService>();
 
-                DialogResult rslt;
-
-                rslt = RunDialog(owner, uiService);
-
-                OnAfterShowDialog(EventArgs.Empty);
-
-                return rslt;
+                    try
+                    {
+                        return RunDialog(owner, uiService);
+                    }
+                    finally
+                    {
+                        OnAfterShowDialog(EventArgs.Empty);
+                    }
+                }
             }
             finally
             {
                 if (setContext)
                     Context = null;
             }
+        }
+
+        protected virtual IDisposable DialogRunContext(IAnkhServiceProvider context)
+        {
+            return null;
         }
 
         /// <summary>
