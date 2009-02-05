@@ -549,7 +549,7 @@ namespace Ankh.VS.Selection
             {
                 if (value != null)
                 {
-                    if ((bool)value && !IgnoreSideEffects(si.SccProject))
+                    if ((bool)value && (depth != ProjectWalkDepth.AllDescendantsInHierarchy || !IgnoreSideEffects(si.SccProject)))
                         yield break;
                 }
             }
