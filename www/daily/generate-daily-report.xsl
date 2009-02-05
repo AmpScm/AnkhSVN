@@ -179,7 +179,7 @@
         </td>
       </tr>
       <tr xmlns="http://www.w3.org/1999/xhtml">
-        <td colspan="2">&#160;</td>
+        <td colspan="2"> </td>
         <td class="l" colspan="2">
           <xsl:copy-of select="x:MakeMessage(msg)"/>
         </td>
@@ -198,7 +198,7 @@
       </xsl:when>
       <xsl:when test="$prefix != '/'">
         <xsl:if test="$prefix != '/trunk/'">
-          <strong class="f-pf">
+          <strong xmlns="http://www.w3.org/1999/xhtml" class="f-pf">
             <xsl:value-of select="substring-after(substring($prefix,1, string-length($prefix)-1), '/trunk/')"/>
             <xsl:text>: </xsl:text>
           </strong>
