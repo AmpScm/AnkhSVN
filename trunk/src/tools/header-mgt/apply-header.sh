@@ -6,13 +6,13 @@ then
   
   [ -z "$COPYLINE" ] && exit 0
   
-  EDITYEAR=`svn info "$1" | grep "Text Last Updated" | sed -E -e 's|.*([12][0-9][0-9][0-9]).*|\1|'`
+  EDITYEAR=`svn info "$1" | grep "Last Changed Date:" | sed -E -e 's|.*([12][0-9][0-9][0-9]).*|\1|'`
   FIRSTYEAR=`echo "$COPYLINE"| sed -E -e 's|.*[^-]([12][0-9][0-9][0-9]).*|\1|'`
   LASTYEAR=`echo "$COPYLINE"| sed -E -e 's|.*([12][0-9][0-9][0-9]-)?([12][0-9][0-9][0-9]).*|\2|'`
   
   [ -z "$LASTYEAR" ] && exit 1
   
-  [ "$LASTYEAR" = "$EADITYEAR" ] && exit 0
+  [ "$LASTYEAR" = "$EDITYEAR" ] && exit 0
     
    sed -E -e "s|// Copyright ([12][0-9][0-9][0-9]-)?[12][0-9][0-9][0-9]|// Copyright $FIRSTYEAR-$EDITYEAR|" "$1" > "$1.hdr" \
    	&& mv "$1.hdr" "$1"
