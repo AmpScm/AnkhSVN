@@ -38,7 +38,7 @@ namespace Ankh.Commands
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             bool mustOnly = (e.Command == AnkhCommand.LockMustLock);
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(e.Command != AnkhCommand.LockMustLock))
             {
                 if (item.IsFile && item.IsVersioned && !item.IsLocked)
                 {
