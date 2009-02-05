@@ -1,5 +1,5 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>AnkhSVN-Daily Update - 2.0.6130</title>
+<title>AnkhSVN-Daily Update - 2.0.6136</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -12,19 +12,27 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1519/AnkhSvn-Daily-2.0.6130.384.msi">AnkhSVN 2.0.6130</a>.</h2>
+<h2>The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1522/AnkhSvn-Daily-2.0.6136.385.msi">AnkhSVN 2.0.6136</a>.</h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6130">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6136">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-04</td></tr>
+<tr><td> </td><td class="r"><a id="6136" href="http://ankhsvn.net/rev/?r=6136">[r6136]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PlainPropertyEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Change the default line ending style of our property editor to '\n' to match
+TortoiseSVN behavior. (SharpSvn already made sure we did this for svn:* properties).<br>
+We now allow reading '\r\n', '\n' but will write '\n'</td></tr>
+<tr><td> </td><td class="r"><a id="6134" href="http://ankhsvn.net/rev/?r=6134">[r6134]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/MergeWizard/MergeRevisionsSelectionPageControl.cs, src/Ankh.UI/SccManagement/CreateBranchDialog.cs, src/Ankh.UI/SvnLog/LogViewerDialog.resx, src/Ankh.UI/SvnLog/LogControl.cs, src/Ankh.UI/SvnLog/LogViewerDialog.Designer.cs, src/Ankh.UI/SvnLog/LogViewerDialog.cs, src/Ankh.UI/PathSelector/RevisionSelector.cs, src/Ankh.UI/SvnLog/LogToolWindowControl.Designer.cs (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Implement ILogControl on the LogViewerDialog to enable advanced logging
+commands (like show changes) in the log dialog.</td></tr>
+<tr><td> </td><td class="r"><a id="6133" href="http://ankhsvn.net/rev/?r=6133">[r6133]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/Annotate/AnnotateEditorControl.cs, src/Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, src/Ankh.Services/Selection/ISelectionContext.cs, src/Ankh.UI/VSSelectionControls/TreeViewWithSelection.cs, src/Ankh.Services/UI/VSDialogForm.cs, src/Ankh.VS.UnitTest/Mocks/SelectionContext.cs, src/Ankh.Services/UI/VSContainerForm.cs, src/Ankh.UI/VSSelectionControls/SelectionItemMap.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix selection routing in second level dialog popups. This enables the show
+changes commands in the log viewer popups from switch/update, etc.</td></tr>
 <tr class="d"><td colspan="4">2009-02-03</td></tr>
 <tr><td> </td><td class="r"><a id="6127" href="http://ankhsvn.net/rev/?r=6127">[r6127]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.VS/LanguageServices/AnkhLanguageService.cs, src/Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure the VS TextEditors are disposed instead of garbage collected, to
 clean up our language service properly. (This caused an exception in the
@@ -267,22 +275,6 @@ Patch command uses new Pending Change Selector dialog</td></tr>
 to Annotate</td></tr>
 <tr><td> </td><td class="r"><a id="5878" href="http://ankhsvn.net/rev/?r=5878">[r5878]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditorDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyEditControl.cs, src/Ankh.UI/PropertyEditors/PropertyEditorDialog.cs, src/Ankh.UI/PropertyEditors/EolStylePropertyEditor.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable doubleclicking on properties in the property editor and
 some extra code cleanup.</td></tr>
-<tr><td> </td><td class="r"><a id="5877" href="http://ankhsvn.net/rev/?r=5877">[r5877]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/EditPropertiesCommand.cs, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.resx, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.resx, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use a datagrid for editting svn:externals properties. This automatically
-validates the svn:externals format via SharpSvn.</td></tr>
-<tr><td> </td><td class="r"><a id="5876" href="http://ankhsvn.net/rev/?r=5876">[r5876]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditControl.cs, src/Ankh.UI/PropertyEditors/EolStylePropertyEditor.cs, src/Ankh.UI/PropertyEditors/ExecutablePropertyEditor.cs, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.resx, src/Ankh.UI/PropertyEditors/IgnorePropertyEditor.cs, src/Ankh.UI/PropertyEditors/PlainPropertyEditor.cs, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.Designer.cs, src/Ankh.UI/PropertyEditors/ExternalsPropertyEditor.cs (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed unused reset support and prepared for a far a datagrid base
-svn:externals editor. (Requires SharpSvn upgrade).</td></tr>
-<tr><td> </td><td class="r"><a id="5875" href="http://ankhsvn.net/rev/?r=5875">[r5875]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditorDialog.resx, src/Ankh.UI/PropertyEditors/PlainPropertyEditor.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.resx, src/Ankh.UI/PropertyEditors/PropertyDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add load button to load custom property contents from a text file from
-the property editor.</td></tr>
-<tr><td> </td><td class="r"><a id="5871" href="http://ankhsvn.net/rev/?r=5871">[r5871]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditItem.cs, src/Ankh.UI/Ankh.UI.csproj, src/Ankh.UI/PropertyEditors/PropertyEditControl.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.resx, src/Ankh.UI/PropertyEditors/PropertyEditStrings.resx, src/Ankh.UI/PropertyEditors/PropertyDialog.Designer.cs, src/Ankh.UI/PropertyEditors/PropertyEditStrings.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added 'New' status for properties in the property editor and
-some designer support updates.</td></tr>
-<tr><td> </td><td class="r"><a id="5867" href="http://ankhsvn.net/rev/?r=5867">[r5867]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh/Commands/EditPropertiesCommand.cs, src/Ankh.UI/PropertyEditors/PropertyEditItem.cs, src/Ankh.UI/PropertyEditors/PropertyEditorDialog.cs, src/Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed unmodified-&gt;Delete issue in new property editor dialog.</td></tr>
-<tr><td> </td><td class="r"><a id="5863" href="http://ankhsvn.net/rev/?r=5863">[r5863]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.Scc/ProjectNotifier.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=5824">r5824</a>, fix Edit Conflict behavior of suggesting file is resolved
-on files that are not open in an editor.</td></tr>
-<tr><td> </td><td class="r"><a id="5861" href="http://ankhsvn.net/rev/?r=5861">[r5861]</a></td><td class="a">rhuijben</td><td class="f">src/Ankh.UI/PropertyEditors/PropertyEditorDialog.resx, src/Ankh.UI/PropertyEditors/PropertyEditControl.cs, src/Ankh.UI/PropertyEditors/ExecutablePropertyEditor.cs, src/Ankh.UI/PropertyEditors/IgnorePropertyEditor.cs, src/Ankh.UI/PropertyEditors/PropertyDialog.cs, src/Ankh.UI/PropertyEditors/IPropertyEditor.cs, src/Ankh.UI/PropertyEditors/MimeTypePropertyEditor.cs, src/Ankh.UI/SvnLog/Commands/ShowRevisionProperties.cs (and 11 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Redesigned svn property editor UI to show old and new values of properties.
-This also provides information on which property changed when AnkhSVN says
-properties modified.
-(For revision properties the base version is the unmodified version)</td></tr>
-<tr class="d"><td colspan="4">2009-01-06</td></tr>
 
 </table>
 <!--/Recent changes-->
