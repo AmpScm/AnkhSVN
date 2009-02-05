@@ -123,6 +123,9 @@
   <data name="CreateBranchTagFromRevisionX" xml:space="preserve">
     <value>Create &amp;branch/tag from revision {0}</value>
   </data>
+  <data name="RetrievingRevisionProperties" xml:space="preserve">
+    <value>Retrieving Revision Properties</value>
+  </data>
   <data name="RevertChangesFromRevisionX" xml:space="preserve">
     <value>&amp;Revert changes from revision {0}</value>
   </data>
@@ -131,5 +134,8 @@
   </data>
   <data name="SwitchToRevisionX" xml:space="preserve">
     <value>&amp;Switch to revision {0}</value>
+  </data>
+  <data name="UpdatingRevisionProperties" xml:space="preserve">
+    <value>Updating Revision Properties</value>
   </data>
 </root>

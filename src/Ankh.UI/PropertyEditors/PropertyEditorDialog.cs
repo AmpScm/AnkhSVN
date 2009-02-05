@@ -33,8 +33,9 @@ namespace Ankh.UI.PropertyEditors
     {
         readonly SortedList<string,PropertyEditItem> _propItems;
         SvnNodeKind _currentNodeKind;
+        bool _revisionProps;
 
-        public PropertyEditorDialog(string svnItemPath)
+        public PropertyEditorDialog(string pathText)
         {
             //
             // Required for Windows Form Designer support
@@ -43,7 +44,7 @@ namespace Ankh.UI.PropertyEditors
 
             _propItems = new SortedList<string, PropertyEditItem>();
 
-            this.svnItemLabel.Text = svnItemPath == null ? "" : svnItemPath;
+            this.svnItemLabel.Text = pathText ?? "";
         }
 
         public PropertyEditorDialog(SvnItem svnItem) : this(svnItem.FullPath)
@@ -51,10 +52,18 @@ namespace Ankh.UI.PropertyEditors
             _currentNodeKind = svnItem.NodeKind;
         }
 
-        public PropertyEditorDialog(SvnUriTarget target)
-            : this(target.ToString())
+        public PropertyEditorDialog(SvnUriTarget target, bool revisionProps)
+            : this(target.Uri, target.Revision, revisionProps)
         {
             _currentNodeKind = SvnNodeKind.None;
+            _revisionProps = revisionProps;
+        }
+
+        public PropertyEditorDialog(Uri target, SvnRevision revision, bool revisionProps)
+            : this(revisionProps ? string.Format(PropertyEditStrings.RevisionXPropertiesFromY, revision, target) : target.ToString())
+        {
+            _currentNodeKind = SvnNodeKind.None;
+            _revisionProps = revisionProps;
         }
 
         /// <summary>

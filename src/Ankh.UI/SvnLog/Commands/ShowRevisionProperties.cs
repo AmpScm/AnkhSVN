@@ -31,44 +31,38 @@ namespace Ankh.UI.SvnLog.Commands
     [Command(AnkhCommand.LogShowRevisionProperties, AlwaysAvailable = true)]
     class ShowRevisionProperties : ICommandHandler
     {
-        #region ICommandHandler Members
-
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            int count = 0;
-            foreach (ISvnLogItem i in e.Selection.GetSelection<ISvnLogItem>())
-            {
-                count++;
-
-                if (count > 1)
-                    break;
-            }
-            e.Enabled = count == 1;
+            if (null == EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>()))
+                e.Enabled = false;
         }
 
         public void OnExecute(CommandEventArgs e)
         {
-            List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
-            if (logItems.Count != 1)
+            ISvnLogItem selectedLog = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
+
+            if (selectedLog == null)
                 return;
 
             ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
 
-            ISvnLogItem selectedLog = logItems[0];
-            SvnUriTarget uriTarget = new SvnUriTarget(selectedLog.RepositoryRoot, selectedLog.Revision);
-            using (PropertyEditorDialog dialog = new PropertyEditorDialog(uriTarget))
-            {
-                dialog.Context = e.Context;
 
+            using (PropertyEditorDialog dialog = new PropertyEditorDialog(selectedLog.RepositoryRoot, selectedLog.Revision, true))
+            {
                 SvnRevisionPropertyListArgs args = new SvnRevisionPropertyListArgs();
                 args.ThrowOnError = false;
                 SvnPropertyCollection properties = null;
 
-                if (e.GetService<IProgressRunner>().RunModal("Retrieving Revision Properties",
+                if (!e.GetService<IProgressRunner>().RunModal(LogStrings.RetrievingRevisionProperties,
                     delegate(object sender, ProgressWorkerArgs wa)
                     {
-                        wa.Client.GetRevisionPropertyList(uriTarget, args, out properties);
-                    }).Succeeded && properties != null)
+                        if (!wa.Client.GetRevisionPropertyList(selectedLog.RepositoryRoot, selectedLog.Revision, args, out properties))
+                            properties = null;
+                    }).Succeeded)
+                {
+                    return;
+                }
+                else if(properties != null)
                 {
                     List<PropertyEditItem> propItems = new List<PropertyEditItem>();
                     foreach (SvnPropertyValue prop in properties)
@@ -80,52 +74,50 @@ namespace Ankh.UI.SvnLog.Commands
                     }
                     dialog.PropertyValues = propItems.ToArray();
                 }
-                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
+
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                    return;
+
+                PropertyEditItem[] finalItems = dialog.PropertyValues;
+
+                bool hasChanges = false;
+
+                foreach (PropertyEditItem ei in finalItems)
                 {
-                    PropertyEditItem[] finalItems = dialog.PropertyValues;
-
-                    bool hasChanges = false;
-
-                    foreach (PropertyEditItem ei in finalItems)
+                    if (ei.ShouldPersist)
                     {
-                        if (ei.ShouldPersist)
+                        hasChanges = true;
+                        break;
+                    }
+                }
+                if (!hasChanges)
+                    return;
+
+                IProgressRunner progressRunner = e.GetService<IProgressRunner>();
+
+                ProgressRunnerResult result = progressRunner.RunModal(LogStrings.UpdatingRevisionProperties,
+                    delegate(object sender, ProgressWorkerArgs ee)
+                    {
+                        foreach (PropertyEditItem ei in finalItems)
                         {
-                            hasChanges = true;
-                            break;
+                            if (!ei.ShouldPersist)
+                                continue;
+
+                            if (ei.IsDeleted)
+                                ee.Client.DeleteRevisionProperty(selectedLog.RepositoryRoot, selectedLog.Revision, ei.PropertyName);
+                            else if (ei.Value.StringValue != null)
+                                ee.Client.SetRevisionProperty(selectedLog.RepositoryRoot, selectedLog.Revision, ei.PropertyName, ei.Value.StringValue);
+                            else
+                                ee.Client.SetRevisionProperty(selectedLog.RepositoryRoot, selectedLog.Revision, ei.PropertyName, ei.Value.RawValue);
                         }
-                    }
-                    if (!hasChanges)
-                        return;
+                    });
 
+                if (result.Succeeded)
+                {
+                    logWindow.Restart();
+                }
 
-                    IProgressRunner progressRunner = e.GetService<IProgressRunner>();
-
-                    ProgressRunnerResult result = progressRunner.RunModal("Updating Revision Properties",
-                        delegate(object sender, ProgressWorkerArgs ee)
-                        {
-                            foreach (PropertyEditItem ei in finalItems)
-                            {
-                                if (!ei.ShouldPersist)
-                                    continue;
-
-                                if (ei.IsDeleted)
-                                    ee.Client.DeleteRevisionProperty(uriTarget, ei.PropertyName);
-                                else if (ei.Value.StringValue != null)
-                                    ee.Client.SetRevisionProperty(uriTarget, ei.PropertyName, ei.Value.StringValue);
-                                else
-                                    ee.Client.SetRevisionProperty(uriTarget, ei.PropertyName, ei.Value.RawValue);
-                            }
-                        });
-
-                    if (result.Succeeded)
-                    {
-                        logWindow.Restart();
-                    }
-
-                } // if
             } // using
         }
-
-        #endregion
     }
 }
