@@ -549,8 +549,17 @@ namespace Ankh.VS.Selection
             {
                 if (value != null)
                 {
-                    if ((bool)value && (depth != ProjectWalkDepth.AllDescendantsInHierarchy || !IgnoreSideEffects(si.SccProject)))
+                    bool hasSideEffects = (bool)value;
+
+                    // Unless we are walking SCC projects, don't go deeper
+                    // because we don't want side effects!
+
+                    if (hasSideEffects
+                        && (depth != ProjectWalkDepth.AllDescendantsInHierarchy
+                        || !IgnoreSideEffects(si.SccProject)))
+                    {
                         yield break;
+                    }
                 }
             }
 
