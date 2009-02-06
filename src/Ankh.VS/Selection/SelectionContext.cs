@@ -542,27 +542,10 @@ namespace Ankh.VS.Selection
             // Note: VS2005 and earlier have all projects on the top level; from VS2008+ projects are nested
             // We can ignore that as we would include the projects anyway
 
+            if (!RecurseInto(si, depth))
+                yield break;
+
             object value;
-
-            if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
-                (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
-            {
-                if (value != null)
-                {
-                    bool hasSideEffects = (bool)value;
-
-                    // Unless we are walking SCC projects, don't go deeper
-                    // because we don't want side effects!
-
-                    if (hasSideEffects
-                        && (depth != ProjectWalkDepth.AllDescendantsInHierarchy
-                        || !IgnoreSideEffects(si.SccProject)))
-                    {
-                        yield break;
-                    }
-                }
-            }
-
             if (!ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
                 (int)__VSHPROPID.VSHPROPID_FirstChild, out value)))
             {
@@ -589,6 +572,47 @@ namespace Ankh.VS.Selection
             }
         }
 
+        private bool RecurseInto(SelectionItem si, ProjectWalkDepth depth)
+        {
+            object value;
+
+            if (ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+                (int)__VSHPROPID.VSHPROPID_HasEnumerationSideEffects, out value)))
+            {
+                if (value != null)
+                {
+                    bool hasSideEffects = (bool)value;
+
+                    // Unless we are walking SCC projects, don't go deeper
+                    // because we don't want side effects!
+
+                    if (hasSideEffects)
+                    {
+                        if (depth == ProjectWalkDepth.AllDescendantsInHierarchy && IgnoreSideEffects(si.SccProject))
+                            return true;
+
+                        return false;
+                    }
+                }
+            }
+
+            if (si.SccProject == null && ErrorHandler.Succeeded(si.Hierarchy.GetProperty(si.Id,
+                (int)__VSHPROPID2.VSHPROPID_ChildrenEnumerated, out value)))
+            {
+                if (value != null)
+                {
+                    bool childrenEnumerated = (bool)value;
+
+                    if (!childrenEnumerated)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         IAnkhSccService _sccService;
         IAnkhSccService SccService
         {
@@ -598,7 +622,7 @@ namespace Ankh.VS.Selection
 
         private bool IgnoreSideEffects(IVsSccProject2 sccProject)
         {
-            if(sccProject != null && SccService.IgnoreEnumerationSideEffects(sccProject))
+            if (sccProject != null && SccService.IgnoreEnumerationSideEffects(sccProject))
                 return true;
 
             return false;
