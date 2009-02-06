@@ -44,40 +44,53 @@ namespace Ankh.UI.RepositoryOpen
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.projectBox = new System.Windows.Forms.GroupBox();
+            this.appendBranch = new System.Windows.Forms.CheckBox();
             this.version = new Ankh.UI.PathSelector.VersionSelector();
             this.checkOutFrom = new System.Windows.Forms.ComboBox();
             this.projectRootLabel = new System.Windows.Forms.Label();
             this.projectLabel = new System.Windows.Forms.Label();
             this.projectUrl = new System.Windows.Forms.TextBox();
             this.projectIcon = new System.Windows.Forms.PictureBox();
-            this.locationIcon = new System.Windows.Forms.GroupBox();
+            this.locationBox = new System.Windows.Forms.GroupBox();
             this.directory = new System.Windows.Forms.TextBox();
             this.browseDirectoryButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.projectBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).BeginInit();
-            this.locationIcon.SuspendLayout();
+            this.locationBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // projectBox
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.projectBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.version);
-            this.groupBox1.Controls.Add(this.checkOutFrom);
-            this.groupBox1.Controls.Add(this.projectRootLabel);
-            this.groupBox1.Controls.Add(this.projectLabel);
-            this.groupBox1.Controls.Add(this.projectUrl);
-            this.groupBox1.Controls.Add(this.projectIcon);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(525, 102);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "&Project:";
+            this.projectBox.Controls.Add(this.appendBranch);
+            this.projectBox.Controls.Add(this.version);
+            this.projectBox.Controls.Add(this.checkOutFrom);
+            this.projectBox.Controls.Add(this.projectRootLabel);
+            this.projectBox.Controls.Add(this.projectLabel);
+            this.projectBox.Controls.Add(this.projectUrl);
+            this.projectBox.Controls.Add(this.projectIcon);
+            this.projectBox.Location = new System.Drawing.Point(12, 12);
+            this.projectBox.Name = "projectBox";
+            this.projectBox.Size = new System.Drawing.Size(525, 125);
+            this.projectBox.TabIndex = 0;
+            this.projectBox.TabStop = false;
+            this.projectBox.Text = "&Project:";
+            // 
+            // appendBranch
+            // 
+            this.appendBranch.AutoSize = true;
+            this.appendBranch.Location = new System.Drawing.Point(71, 98);
+            this.appendBranch.Name = "appendBranch";
+            this.appendBranch.Size = new System.Drawing.Size(269, 17);
+            this.appendBranch.TabIndex = 3;
+            this.appendBranch.Text = "Append Branch or Tag Name to the Local Directory";
+            this.appendBranch.UseVisualStyleBackColor = true;
+            this.appendBranch.CheckedChanged += new System.EventHandler(this.appendBranch_CheckedChanged);
             // 
             // version
             // 
@@ -136,19 +149,19 @@ namespace Ankh.UI.RepositoryOpen
             this.projectIcon.TabIndex = 0;
             this.projectIcon.TabStop = false;
             // 
-            // locationIcon
+            // locationBox
             // 
-            this.locationIcon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.locationBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.locationIcon.Controls.Add(this.directory);
-            this.locationIcon.Controls.Add(this.browseDirectoryButton);
-            this.locationIcon.Controls.Add(this.label2);
-            this.locationIcon.Location = new System.Drawing.Point(12, 120);
-            this.locationIcon.Name = "locationIcon";
-            this.locationIcon.Size = new System.Drawing.Size(525, 50);
-            this.locationIcon.TabIndex = 1;
-            this.locationIcon.TabStop = false;
-            this.locationIcon.Text = "&Local Directory:";
+            this.locationBox.Controls.Add(this.directory);
+            this.locationBox.Controls.Add(this.browseDirectoryButton);
+            this.locationBox.Controls.Add(this.label2);
+            this.locationBox.Location = new System.Drawing.Point(12, 143);
+            this.locationBox.Name = "locationBox";
+            this.locationBox.Size = new System.Drawing.Size(525, 50);
+            this.locationBox.TabIndex = 1;
+            this.locationBox.TabStop = false;
+            this.locationBox.Text = "&Local Directory:";
             // 
             // directory
             // 
@@ -174,7 +187,7 @@ namespace Ankh.UI.RepositoryOpen
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 19);
+            this.label2.Location = new System.Drawing.Point(6, 22);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 0;
@@ -184,7 +197,7 @@ namespace Ankh.UI.RepositoryOpen
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(462, 184);
+            this.cancelButton.Location = new System.Drawing.Point(462, 201);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 4;
@@ -194,7 +207,7 @@ namespace Ankh.UI.RepositoryOpen
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.okButton.Location = new System.Drawing.Point(381, 184);
+            this.okButton.Location = new System.Drawing.Point(381, 201);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 3;
@@ -208,28 +221,28 @@ namespace Ankh.UI.RepositoryOpen
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(549, 219);
+            this.ClientSize = new System.Drawing.Size(549, 236);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.locationIcon);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.locationBox);
+            this.Controls.Add(this.projectBox);
             this.Name = "CheckoutProject";
             this.Text = "Open Project from Subversion";
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.projectBox.ResumeLayout(false);
+            this.projectBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.projectIcon)).EndInit();
-            this.locationIcon.ResumeLayout(false);
-            this.locationIcon.PerformLayout();
+            this.locationBox.ResumeLayout(false);
+            this.locationBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox projectBox;
         private System.Windows.Forms.TextBox projectUrl;
         private System.Windows.Forms.PictureBox projectIcon;
-        private System.Windows.Forms.GroupBox locationIcon;
+        private System.Windows.Forms.GroupBox locationBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label projectRootLabel;
         private System.Windows.Forms.TextBox directory;
@@ -239,5 +252,6 @@ namespace Ankh.UI.RepositoryOpen
         private System.Windows.Forms.ComboBox checkOutFrom;
         private System.Windows.Forms.Label projectLabel;
         private Ankh.UI.PathSelector.VersionSelector version;
+        private System.Windows.Forms.CheckBox appendBranch;
     }
 }
