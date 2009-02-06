@@ -31,3 +31,4 @@ Patches:
 * Daniël Hoelbling
 * Luc Morin
 * Stefano Mioli
+* Samuel Ford
