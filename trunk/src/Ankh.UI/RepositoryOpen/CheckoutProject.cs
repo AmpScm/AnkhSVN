@@ -27,11 +27,14 @@ using System.IO;
 using SharpSvn;
 using Ankh.Scc;
 using Ankh.UI.SccManagement;
+using System.Text.RegularExpressions;
 
 namespace Ankh.UI.RepositoryOpen
 {
     public partial class CheckoutProject : VSDialogForm
     {
+        Regex r = new Regex(@"\(\d+\)$");
+
         public CheckoutProject()
         {
             InitializeComponent();
@@ -247,6 +250,32 @@ namespace Ankh.UI.RepositoryOpen
             }
         }
 
+        public string GuessBranchOrTagName()
+        {
+            RepositoryLayoutInfo li;
+            if (RepositoryUrlUtils.TryGuessLayout(Context, ProjectUri, out li))
+            {
+                // TODO: Use RepositoryUrlUtils here
+            }
+
+            string[] parts = ProjectUri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped).Split('/');
+            for (int i = parts.Length - 1; i >= 0; i--)
+            {
+                if ((parts[i].Equals("branches", StringComparison.OrdinalIgnoreCase) || 
+                     parts[i].Equals("tags", StringComparison.OrdinalIgnoreCase) ||
+                     parts[i].Equals("releases", StringComparison.OrdinalIgnoreCase)) && i < parts.Length - 1)
+                {
+                    return "-" + parts[i + 1];
+                }
+                else if (parts[i].Equals("trunk", StringComparison.OrdinalIgnoreCase))
+                {
+                    return "-trunk";
+                }
+            }
+
+            return "";
+        }
+
         private void okButton_Click(object sender, EventArgs e)
         {
             string path = directory.Text;
@@ -275,6 +304,61 @@ namespace Ankh.UI.RepositoryOpen
                 Directory.CreateDirectory(path);
 
             DialogResult = DialogResult.OK;
+        }
+
+        private void appendBranch_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateLocalDirectoryWithBranchOrTag();
+        }
+
+        private void UpdateLocalDirectoryWithBranchOrTag()
+        {
+            string suffix = GuessBranchOrTagName();
+            if (suffix != "")
+            {
+                string path = StripDisambiguator(directory.Text);
+
+                if (appendBranch.Checked)
+                {
+                    // add it, if it's not there already
+                    if (!path.Contains(suffix))
+                    {
+                        path += suffix;
+                    }
+                }
+                else
+                {
+                    // remove it, if it's there
+                    if (path.EndsWith(suffix))
+                    {
+                        path = path.Substring(0, path.Length - suffix.Length);
+                    }
+                }
+
+                directory.Text = AddDisambiguator(path);
+            }
+        }
+
+        private string StripDisambiguator(string p)
+        {
+            return r.Replace(p, "");
+        }
+
+        private string AddDisambiguator(string path)
+        {
+            string newPath;
+            int n = 0;
+            
+            do
+            {
+                newPath = path;
+                if (n > 0)
+                    newPath += string.Format("({0})", n);
+                n++;
+            }
+            while (File.Exists(newPath) || Directory.Exists(newPath));
+            
+            return newPath;
         }
     }
 }
