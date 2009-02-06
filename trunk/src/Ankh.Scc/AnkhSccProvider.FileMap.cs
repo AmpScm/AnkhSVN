@@ -68,7 +68,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkDirty(filename, true);
+            MarkDirty(filename);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
-            MarkDirty(filename, true);
+            MarkDirty(filename);
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
@@ -370,32 +370,31 @@ namespace Ankh.Scc
         }
 
 
-        void MarkDirty(string path, bool rescan)
+        void MarkDirty(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
-            if (rescan)
+            if(monitor != null)
                 monitor.ScheduleSvnStatus(path);
-            else
-                monitor.ScheduleGlyphUpdate(path);
         }
 
-        void MarkDirty(IEnumerable<string> paths, bool rescan)
+        void MarkDirty(IEnumerable<string> paths, bool addToMonitorList)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
-            if (rescan)
-                monitor.ScheduleSvnStatus(paths);
-            else
-                monitor.ScheduleGlyphUpdate(paths);
+            if (monitor != null)
+            {
+                if (addToMonitorList)
+                    monitor.ScheduleMonitor(paths);
 
-            monitor.ScheduleMonitor(paths);
+                monitor.ScheduleSvnStatus(paths);
+            }
         }
 
 

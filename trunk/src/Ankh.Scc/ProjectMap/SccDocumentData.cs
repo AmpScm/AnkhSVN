@@ -191,11 +191,11 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (_initialUpdateCompleted && _isFileDocument)
                 {
-                    IFileStatusCache statusCache = _context.GetService<IFileStatusCache>();
+                    IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
 
-                    if (statusCache != null)
+                    if (monitor != null)
                     {
-                        statusCache.MarkDirty(Name);
+                        monitor.ScheduleSvnStatus(Name);
                     }
                 }
                 else

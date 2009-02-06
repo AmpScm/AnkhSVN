@@ -487,7 +487,7 @@ namespace Ankh.Scc
 
             if (_projectMap.TryGetValue(project, out data))
             {
-                MarkDirty(data.ProjectFile, true);
+                MarkDirty(data.ProjectFile);
             }
         }
 
@@ -526,7 +526,7 @@ namespace Ankh.Scc
                         if (!File.Exists(file))
                         {
                             svn.SafeDeleteFile(file);
-                            MarkDirty(file, true);
+                            MarkDirty(file);
                         }
                     }
                 }
