@@ -141,7 +141,7 @@ namespace Ankh.Scc
         public int OnAfterSaveUnreloadableFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo)
         {
             if (IsSafeSccPath(pszMkDocument))
-                MarkDirty(pszMkDocument, true);
+                MarkDirty(pszMkDocument);
 
             return VSConstants.S_OK;
         }
@@ -343,7 +343,7 @@ namespace Ankh.Scc
                     }
                 }
 
-                MarkDirty(pszMkDocument, true);
+                MarkDirty(pszMkDocument);
             }
 
             return VSConstants.S_OK;
@@ -375,7 +375,7 @@ namespace Ankh.Scc
 
                     // TODO: Maybe handle locking; but should be in OnQueryEdit anyway
 
-                    MarkDirty(file, true);
+                    MarkDirty(file);
                 }
 
             return VSConstants.S_OK;

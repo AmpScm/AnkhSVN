@@ -40,6 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BEAF04B7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{E7D88D59-A87F-4939-AB58-315F8C41E20B}"
 	ProjectSection(SolutionItems) = preProject
+		..\www\daily\daily.css = ..\www\daily\daily.css
 		..\www\daily\generate-daily-report.xsl = ..\www\daily\generate-daily-report.xsl
 		..\www\daily\index.html = ..\www\daily\index.html
 	EndProjectSection
