@@ -473,9 +473,6 @@ namespace Ankh.Scc
 
             if (_projectMap.TryGetValue(project, out data))
             {
-                if (!removed && !string.IsNullOrEmpty(data.ProjectFile))
-                    StatusCache.MarkDirty(data.ProjectFile); // In this case we are probably reloading or something
-
                 data.OnClose();
                 _projectMap.Remove(project);
             }
@@ -483,12 +480,7 @@ namespace Ankh.Scc
 
         internal void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
         {
-            SccProjectData data;
-
-            if (_projectMap.TryGetValue(project, out data))
-            {
-                MarkDirty(data.ProjectFile);
-            }
+            // Nothing to do, wait until the real event
         }
 
         bool _ensureIcons;
