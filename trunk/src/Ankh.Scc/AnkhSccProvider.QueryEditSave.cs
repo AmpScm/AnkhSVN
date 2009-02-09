@@ -152,7 +152,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="document">The document.</param>
         /// <returns></returns>
-        IEnumerable<SvnItem> GetAllDocumentItems(string document)
+        internal IEnumerable<SvnItem> GetAllDocumentItems(string document)
         {
             if (string.IsNullOrEmpty(document))
                 throw new ArgumentNullException("document");

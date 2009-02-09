@@ -27,8 +27,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 
 using Ankh.Commands;
-
-
+using SharpSvn;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -36,7 +35,7 @@ namespace Ankh.Scc.ProjectMap
     /// 
     /// </summary>
     [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
-    sealed class SccDocumentData
+    sealed class SccDocumentData : IVsFileChangeEvents, IDisposable
     {
         readonly IAnkhServiceProvider _context;
         readonly string _name;
@@ -46,6 +45,7 @@ namespace Ankh.Scc.ProjectMap
         bool _initialUpdateCompleted;
         bool? _isPropertyDesigner;
         object _rawDocument;
+        uint[] _fileChangeCookies;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
         {
@@ -60,6 +60,8 @@ namespace Ankh.Scc.ProjectMap
             if (SvnItem.IsValidPath(name))
             {
                 _isFileDocument = true;
+
+                HookFileChanges(true);
             }
         }
 
@@ -226,7 +228,7 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            if (!_delayedDirty)
+            if (dirty && !_delayedDirty)
             {
                 IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
 
@@ -361,12 +363,14 @@ namespace Ankh.Scc.ProjectMap
                 monitor.ScheduleGlyphUpdate(Name);
         }
 
-        internal void Dispose()
+        public void Dispose()
         {
             OpenDocumentTracker tracker = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
 
             if (tracker != null)
                 tracker.DoDispose(this);
+
+            HookFileChanges(false);
         }
 
         internal void CopyState(SccDocumentData data)
@@ -663,5 +667,62 @@ namespace Ankh.Scc.ProjectMap
             [DllImport("user32.dll")]
             public static extern int GetClassName(IntPtr hWnd, StringBuilder sb, int nMaxCount);
         }
+
+        #region IVsFileChangeEvents Members
+        private void HookFileChanges(bool reHook)
+        {
+            IVsFileChangeEx fileChange = null;
+            if (_fileChangeCookies != null)
+            {
+                fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+                uint[] list = _fileChangeCookies;
+                _fileChangeCookies = null;
+
+                foreach (uint u in list)
+                    if(u != 0)
+                        fileChange.UnadviseFileChange(u);
+            }
+
+            if (reHook && _isFileDocument)
+            {
+                if (fileChange == null)
+                    fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
+
+                List<SvnItem> items = new List<SvnItem>(GetService<AnkhSccProvider>(typeof(ITheAnkhSvnSccProvider)).GetAllDocumentItems(_name));
+                
+                uint[] cookies = new uint[items.Count];
+                _fileChangeCookies = cookies;
+
+                for(int i = 0; i < items.Count; i++)
+                {
+                    uint ck;
+                    if(ErrorHandler.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
+                        cookies[i] = ck;
+                }
+            }
+        }
+
+        public int DirectoryChanged(string pszDirectory)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
+        {
+            if (rgpszFile != null)
+            {
+                string[] nFiles = new string[cChanges];
+
+                for (int i = 0; i < cChanges; i++)
+                    nFiles[i] = SvnTools.GetNormalizedFullPath(rgpszFile[i]);
+
+                IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
+
+                monitor.ScheduleSvnStatus(nFiles);
+            }
+
+            return VSConstants.S_OK;
+        }
+        #endregion
     }
 }
