@@ -362,8 +362,7 @@ namespace Ankh.UI.RepositoryExplorer
                         client.GetList(uri, la, out items);
                     }
 
-                    if (IsHandleCreated)
-                        BeginInvoke((DoSomething)delegate()
+                    DoSomething addItems = (DoSomething)delegate()
                         {
                             if (items != null && items.Count > 0)
                             {
@@ -387,7 +386,12 @@ namespace Ankh.UI.RepositoryExplorer
 
                             if (_running.Count == 0)
                                 OnRetrievingChanged(EventArgs.Empty);
-                        });
+                        };
+
+                    if (IsHandleCreated)
+                        BeginInvoke(addItems);
+                    else
+                        addItems();
 
                     ok = true;
                 }

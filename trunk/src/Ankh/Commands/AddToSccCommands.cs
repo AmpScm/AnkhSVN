@@ -29,6 +29,7 @@ using SharpSvn;
 using Ankh.VS;
 using Ankh.UI.SccManagement;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Ankh.Commands
 {
@@ -96,173 +97,345 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IAnkhSccService scc = e.GetService<IAnkhSccService>();
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
             IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
-            if (scc == null || cache == null || e.Selection.SolutionFilename == null)
+            
+            if (cache == null || e.Selection.SolutionFilename == null)
                 return;
+
+            SvnItem item = cache[e.Selection.SolutionFilename];
+
+            if (!HandleUnmanagedOrUnversionedSolution(e, item))
+                return;
+
+            if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
+                return;
+
+            SetProjectsManaged(e);
+        }
+
+        bool HandleUnmanagedOrUnversionedSolution(CommandEventArgs e, SvnItem solutionItem)
+        {
+            IAnkhSccService scc = e.GetService<IAnkhSccService>();
+            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
             bool shouldActivate = false;
             if (!scc.IsActive)
             {
                 if (e.State.OtherSccProviderActive)
-                    return; // Can't switch in this case.. Nothing to do
+                    return false; // Can't switch in this case.. Nothing to do
 
+                // Ankh is not the active provider, we should register as active
                 shouldActivate = true;
             }
 
+            if (scc.IsSolutionManaged && solutionItem.IsVersioned)
+                return true; // Projects should still be checked
+
+            bool confirmed = false;
+            
+
+            if (solutionItem.IsVersioned)
+            { /* File is in subversion; just enable */ }
+            else if (solutionItem.IsVersionable)
+            {
+                if (!AddVersionableSolution(e, solutionItem, ref confirmed))
+                    return false;
+            }
+            else
+            {
+                CheckoutWorkingCopyForSolution(e, ref confirmed);
+            }
+
+            if (!confirmed && !e.DontPrompt && !e.IsInAutomation &&
+                DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
+                Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
+            {
+                return false;
+            }
+
+            SetSolutionManaged(shouldActivate, solutionItem, scc);
+
+            return true;
+        }
+
+        static SvnItem GetVersionedParent(SvnItem child)
+        {
+            if(!child.IsVersionable)
+                return null;
+
+            if (!child.IsVersioned)
+                return GetVersionedParent(child.Parent);
+            return child;
+        }
+
+        bool AddVersionableSolution(CommandEventArgs e, SvnItem solutionItem, ref bool confirmed)
+        {
+            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+            SvnItem parentDir = GetVersionedParent(solutionItem);
+
+            DialogResult rslt;
+            // File is not versioned but is inside a versioned directory
+            if (!e.DontPrompt && !e.IsInAutomation)
+            {
+                rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
+                    Path.GetFileName(e.Selection.SolutionFilename),
+                    parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
+
+                if(rslt == DialogResult.Cancel)
+                    return false;
+                else if (rslt == DialogResult.No)
+                {
+                    // Checkout new working copy
+                    CheckoutWorkingCopyForSolution(e, ref confirmed);
+                    return true;
+                }
+                else if (rslt == DialogResult.Yes)
+                {
+                    // default case: Add to existing workingcopy
+                }
+
+            }
+            else
+                confirmed = true;
+
+            using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+            {
+                SvnAddArgs aa = new SvnAddArgs();
+                aa.AddParents = true;
+                cl.Add(e.Selection.SolutionFilename, aa);
+            }
+            return true;
+        }
+        void SetSolutionManaged(bool shouldActivate, SvnItem item, IAnkhSccService scc)
+        {
+            if (shouldActivate)
+                scc.RegisterAsPrimarySccProvider();
+
+            scc.SetProjectManaged(null, true);
+            item.MarkDirty(); // This clears the solution settings cache to retrieve its properties
+        }
+        void CheckoutWorkingCopyForSolution(CommandEventArgs e, ref bool confirmed)
+        {
+            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
+            using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
+            {
+                dialog.PathToAdd = e.Selection.SolutionFilename;
+                if (dialog.ShowDialog(e.Context) == DialogResult.OK)
+                {
+                    confirmed = true;
+                    Collection<SvnInfoEventArgs> info;
+                    SvnInfoArgs ia = new SvnInfoArgs();
+                    ia.ThrowOnError = false;
+                    if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+                    {
+                        // Target uri doesn't exist in the repository, let's create
+                        if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
+                            return; // Create failed; bail out
+                    }
+
+                    // Create working copy
+                    SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                    coArg.AllowObstructions = true;
+                    cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+
+                    // Add solutionfile so we can set properties (set managed)
+                    SvnAddArgs aa = new SvnAddArgs();
+                    aa.AddParents = true;
+                    cl.Add(e.Selection.SolutionFilename, aa);
+
+                    IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                    IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
+                    IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+
+                    settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+
+                    if (monitor != null && mapper != null)
+                    {
+                        // Make sure all visible glyphs are updated to reflect a new working copy
+                        monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
+                    }
+
+                    e.Result = true;
+                }
+                else
+                {
+                    return; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
+                }
+            }
+        }
+
+        bool RemoteCreateDirectory(CommandEventArgs e, string title, Uri uri, SvnClient cl)
+        {
+            using (CreateDirectoryDialog createDialog = new CreateDirectoryDialog())
+            {
+                createDialog.Text = title; // Override dialog title with text from other dialog
+
+                createDialog.NewDirectoryName = uri.ToString();
+                createDialog.NewDirectoryReadonly = true;
+                if (createDialog.ShowDialog(e.Context) == DialogResult.OK)
+                {
+                    // Create uri (including optional /trunk if required)
+                    SvnCreateDirectoryArgs cdArg = new SvnCreateDirectoryArgs();
+                    cdArg.CreateParents = true;
+                    cdArg.LogMessage = createDialog.LogMessage;
+
+                    cl.RemoteCreateDirectory(uri, cdArg);
+                    return true;
+                }
+                else
+                    return false; // bail out, we cannot continue without directory in the repository
+            }
+        }
+
+        void SetProjectsManaged(CommandEventArgs e)
+        {
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
+            IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
+            IAnkhSccService scc = e.GetService<IAnkhSccService>();
+            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
             AnkhMessageBox mb = new AnkhMessageBox(e.Context);
 
-            if (!scc.IsSolutionManaged || !cache[e.Selection.SolutionFilename].IsVersioned)
+            if (mapper == null)
+                return;
+
+            List<SvnProject> succeededProjects = new List<SvnProject>();
+            SvnItem slnItem = cache[e.Selection.SolutionFilename];
+            Uri solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
+
+            foreach (SvnProject project in GetSelection(e.Selection))
             {
-                bool confirmed = false;
-                SvnItem item = cache[e.Selection.SolutionFilename];
+                ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
+                SvnItem projectFile = cache[projInfo.ProjectFile];
 
-                IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
+                if (projectFile.WorkingCopy == slnItem.WorkingCopy)
+                    continue; // This is a 'normal' project, part of the solution and in the same working copy
 
-                if (item.IsVersioned)
-                { /* File is in subversion; just enable */ }
-                else if (item.IsVersionable)
+                if (projectFile.IsVersioned)
+                    continue; // We don't have to add this one
+                else if (projectFile.Parent.IsVersioned)
+                    continue; // Project file is inside a WC, we can't check out a new one here, just add
+                else if (projectFile.IsVersionable)
                 {
-                    if (e.IsInAutomation)
-                        confirmed = true;
-                    else if (DialogResult.Yes != mb.Show(string.Format(CommandResources.AddSolutionXToSubversion,
-                        Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
-                    {
+                    SvnItem parentDir = GetVersionedParent(projectFile);
+                    Debug.Assert(parentDir != null);
+
+                    DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
+                        Path.GetFileName(projInfo.ProjectName),
+                        parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
+
+                    if (rslt == DialogResult.Cancel)
                         return;
-                    }
-                    else
-                        confirmed = true;
-
-                    using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                    else if (rslt == DialogResult.No)
                     {
-                        SvnAddArgs aa = new SvnAddArgs();
-                        aa.AddParents = true;
-                        cl.Add(e.Selection.SolutionFilename, aa);
-
-                        //settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);
+                        // No means we have to checkout a new working copy
+                        if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
+                        {
+                            succeededProjects.Add(project);
+                            continue;
+                        }
+                    }
+                    else if (rslt == DialogResult.Yes)
+                    {
+                        // Yes means we have to add the file to the current WC
+                        succeededProjects.Add(project);
+                        using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
+                        {
+                            SvnAddArgs aa = new SvnAddArgs();
+                            aa.AddParents = true;
+                            cl.Add(projectFile.FullPath, aa);
+                        }
                     }
                 }
                 else
                 {
-                    using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
-                    using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
+                    // We have to checkout (and create repository location)
+                    if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
                     {
-                        dialog.PathToAdd = e.Selection.SolutionFilename;
-                        if (dialog.ShowDialog(e.Context) == DialogResult.OK)
-                        {
-                            confirmed = true;
-                            Collection<SvnInfoEventArgs> info;
-                            SvnInfoArgs ia = new SvnInfoArgs();
-                            ia.ThrowOnError = false;
-                            if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
-                            {
-                                using (CreateDirectoryDialog createDialog = new CreateDirectoryDialog())
-                                {
-                                    createDialog.Text = dialog.Text; // Override dialog title with text from other dialog
-
-                                    createDialog.NewDirectoryName = dialog.RepositoryAddUrl.ToString();
-                                    createDialog.NewDirectoryReadonly = true;
-                                    if (createDialog.ShowDialog(e.Context) == DialogResult.OK)
-                                    {
-                                        // Create uri (including optional /trunk if required)
-                                        SvnCreateDirectoryArgs cdArg = new SvnCreateDirectoryArgs();
-                                        cdArg.CreateParents = true;
-                                        cdArg.LogMessage = createDialog.LogMessage;
-
-                                        cl.RemoteCreateDirectory(dialog.RepositoryAddUrl, cdArg);
-                                    }
-                                    else
-                                        return; // bail out, we cannot continue without directory in the repository
-                                }
-                            }
-
-                            // Create working copy
-                            SvnCheckOutArgs coArg = new SvnCheckOutArgs();
-                            coArg.AllowObstructions = true;
-                            cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
-
-                            // Add solutionfile so we can set properties (set managed)
-                            SvnAddArgs aa = new SvnAddArgs();
-                            aa.AddParents = true;
-                            cl.Add(e.Selection.SolutionFilename, aa);
-
-                            settings.ProjectRoot = Path.GetFullPath(dialog.WorkingCopyDir);                            
-
-                            if (monitor != null && mapper != null)
-                            {
-                                // Make sure all visible glyphs are updated to reflect a new working copy
-                                monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
-                            }
-
-                            e.Result = true;
-                        }
-                        else
-                        {
-                            return; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh or anything else
-                        }
+                        succeededProjects.Add(project);
+                        continue;
                     }
                 }
-
-                if (!confirmed && !e.IsInAutomation &&
-                    DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
-                    Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
-                {
-                    return;
-                }
-
-                if (shouldActivate)
-                    scc.RegisterAsPrimarySccProvider();
-
-                scc.SetProjectManaged(null, true);
-                item.MarkDirty(); // This clears the solution settings cache to retrieve its properties
             }
 
-            if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
+            if (!AskSetManagedSelectionProjects(e, mapper, scc, succeededProjects))
                 return;
 
-            if (mapper != null)
+            foreach (SvnProject project in succeededProjects)
             {
-                if (!e.DontPrompt && !e.IsInAutomation)
+                if (!scc.IsProjectManaged(project))
                 {
-                    StringBuilder sb = new StringBuilder();
-                    bool foundOne = false;
-                    foreach (SvnProject project in GetSelection(e.Selection))
-                    {
-                        ISvnProjectInfo info;
-                        if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
-                        {
-                            if (sb.Length > 0)
-                                sb.Append("', '");
+                    scc.SetProjectManaged(project, true);
 
-                            sb.Append(info.ProjectName);
-                        }
-
-                        foundOne = true;
-                    }
-                    string txt = sb.ToString();
-                    int li = txt.LastIndexOf("', '");
-                    if (li > 0)
-                        txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
-
-                    if (foundOne && DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
-                        txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
-                    {
-                        return;
-                    }
-                }
-
-                foreach (SvnProject project in GetSelection(e.Selection))
-                {
-                    if (!scc.IsProjectManaged(project))
-                    {
-                        scc.SetProjectManaged(project, true);
-
-                        monitor.ScheduleSvnStatus(mapper.GetAllFilesOf(project)); // Update for 'New' status
-                    }
+                    monitor.ScheduleSvnStatus(mapper.GetAllFilesOf(project)); // Update for 'New' status
                 }
             }
+        }
+
+        bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IList<SvnProject> succeededProjects)
+        {
+            if (e.DontPrompt || e.IsInAutomation)
+                return true;
+
+            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+            StringBuilder sb = new StringBuilder();
+            bool foundOne = false;
+            foreach (SvnProject project in succeededProjects)
+            {
+                ISvnProjectInfo info;
+                if (!scc.IsProjectManaged(project) && null != (info = mapper.GetProjectInfo(project)))
+                {
+                    if (sb.Length > 0)
+                        sb.Append("', '");
+
+                    sb.Append(info.ProjectName);
+                }
+
+                foundOne = true;
+            }
+            string txt = sb.ToString();
+            int li = txt.LastIndexOf("', '");
+            if (li > 0)
+                txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
+
+            if (!foundOne)
+                return false; // No need to add when there are no projects
+
+            return DialogResult.Yes == mb.Show(string.Format(CommandResources.MarkXAsManaged,
+                txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo);
+        }
+
+        bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot)
+        {
+            using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
+            // TODO: Use dialog specific for projects
+            using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
+            {
+                dialog.Context = e.Context;
+                dialog.PathToAdd = projectInfo.ProjectDirectory;
+                dialog.RepositoryAddUrl = solutionReposRoot;
+                if (dialog.ShowDialog(e.Context) != DialogResult.OK)
+                    return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
+
+
+                Collection<SvnInfoEventArgs> info;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.ThrowOnError = false;
+                if (!cl.GetInfo(dialog.RepositoryAddUrl, ia, out info))
+                {
+                    // Target uri doesn't exist in the repository, let's create
+                    if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
+                        return false; // Create failed; bail out
+                }
+
+                // Create working copy
+                SvnCheckOutArgs coArg = new SvnCheckOutArgs();
+                coArg.AllowObstructions = true;
+                cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
+
+                e.Result = true;
+            }
+            return true;
         }
     }
 }

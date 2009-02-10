@@ -120,6 +120,10 @@
   <data name="AddSolutionXToSubversion" xml:space="preserve">
     <value>Would you like to add '{0}' to Subversion and mark it as managed?</value>
   </data>
+  <data name="AddXToExistingWcY" xml:space="preserve">
+    <value>Would you like to add'{0}' to existing working copy '{1}'? 
+Click Yes to add to the current working copy, and no to create a new working copy.</value>
+  </data>
   <data name="FileAnd" xml:space="preserve">
     <value> and </value>
   </data>

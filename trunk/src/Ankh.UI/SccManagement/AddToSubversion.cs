@@ -153,6 +153,10 @@ namespace Ankh.UI.SccManagement
                     u = new Uri(u, "trunk/");
                 return u;
             }
+            set
+            {
+                repositoryTree.BrowseItem(value);
+            }
         }
 
         void UpdateUrlPreview()
