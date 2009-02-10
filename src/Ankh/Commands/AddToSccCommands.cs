@@ -78,7 +78,7 @@ namespace Ankh.Commands
                 ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
                 if (pi != null && pi.ProjectDirectory != null)
-                    if (!cache[pi.ProjectDirectory].IsVersioned)
+                    if (!cache[pi.ProjectDirectory].IsVersionable)
                         return;
             }
 
