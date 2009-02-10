@@ -283,6 +283,15 @@ namespace Ankh.Commands
             }
         }
 
+        /// <summary>
+        /// Creates the directory specified by <see cref="uri"/>
+        /// Returns false if the user cancelled creating the directory, true otherwise
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="title">The title of the Create dialog</param>
+        /// <param name="uri">The directory to be created</param>
+        /// <param name="cl"></param>
+        /// <returns></returns>
         bool RemoteCreateDirectory(CommandEventArgs e, string title, Uri uri, SvnClient cl)
         {
             using (CreateDirectoryDialog createDialog = new CreateDirectoryDialog())
@@ -317,7 +326,7 @@ namespace Ankh.Commands
             if (mapper == null)
                 return;
 
-            List<SvnProject> succeededProjects = new List<SvnProject>();
+            List<SvnProject> projectsToBeManaged = new List<SvnProject>();
             SvnItem slnItem = cache[e.Selection.SolutionFilename];
             Uri solutionReposRoot = slnItem.WorkingCopy.RepositoryRoot;
 
@@ -327,7 +336,11 @@ namespace Ankh.Commands
                 SvnItem projectFile = cache[projInfo.ProjectFile];
 
                 if (projectFile.WorkingCopy == slnItem.WorkingCopy)
-                    continue; // This is a 'normal' project, part of the solution and in the same working copy
+                {
+                    // This is a 'normal' project, part of the solution and in the same working copy
+                    projectsToBeManaged.Add(project);
+                    continue; 
+                }
 
                 if (projectFile.IsVersioned)
                     continue; // We don't have to add this one
@@ -349,16 +362,17 @@ namespace Ankh.Commands
                         // No means we have to checkout a new working copy
                         if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
                         {
-                            succeededProjects.Add(project);
+                            projectsToBeManaged.Add(project);
                             continue;
                         }
                     }
                     else if (rslt == DialogResult.Yes)
                     {
                         // Yes means we have to add the file to the current WC
-                        succeededProjects.Add(project);
+                        projectsToBeManaged.Add(project);
 
                         AddPathToSubversion(e, projectFile.FullPath);
+                        continue;
                     }
                 }
                 else
@@ -366,16 +380,16 @@ namespace Ankh.Commands
                     // We have to checkout (and create repository location)
                     if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
                     {
-                        succeededProjects.Add(project);
+                        projectsToBeManaged.Add(project);
                         continue;
                     }
                 }
             }
 
-            if (!AskSetManagedSelectionProjects(e, mapper, scc, succeededProjects))
+            if (!AskSetManagedSelectionProjects(e, mapper, scc, projectsToBeManaged))
                 return;
 
-            foreach (SvnProject project in succeededProjects)
+            foreach (SvnProject project in projectsToBeManaged)
             {
                 if (!scc.IsProjectManaged(project))
                 {
@@ -386,6 +400,14 @@ namespace Ankh.Commands
             }
         }
 
+        /// <summary>
+        /// Returns true if <see cref="succeededProjects"/> should be set managed, false otherwise
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="mapper"></param>
+        /// <param name="scc"></param>
+        /// <param name="succeededProjects"></param>
+        /// <returns></returns>
         bool AskSetManagedSelectionProjects(CommandEventArgs e, IProjectFileMapper mapper, IAnkhSccService scc, IList<SvnProject> succeededProjects)
         {
             if (e.DontPrompt || e.IsInAutomation)
@@ -419,6 +441,14 @@ namespace Ankh.Commands
                 txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo);
         }
 
+        /// <summary>
+        /// Returns false if the AddToSubversionDialog has been cancelled, true otherwise
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="projectInfo"></param>
+        /// <param name="projectItem"></param>
+        /// <param name="solutionReposRoot"></param>
+        /// <returns></returns>
         bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot)
         {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
