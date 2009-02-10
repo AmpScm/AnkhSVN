@@ -452,8 +452,7 @@ namespace Ankh.Commands
         bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot)
         {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
-            // TODO: Use dialog specific for projects
-            using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
+            using (Ankh.UI.SccManagement.AddProjectToSubversion dialog = new Ankh.UI.SccManagement.AddProjectToSubversion())
             {
                 dialog.Context = e.Context;
                 dialog.PathToAdd = projectInfo.ProjectDirectory;

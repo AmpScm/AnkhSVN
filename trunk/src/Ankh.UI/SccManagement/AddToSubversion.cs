@@ -80,6 +80,9 @@ namespace Ankh.UI.SccManagement
         {
             base.OnLoad(e);
 
+            if (DesignMode)
+                return;
+
             string directory = File.Exists(PathToAdd) ? Path.GetDirectoryName(PathToAdd) : PathToAdd;
             string root = Path.GetPathRoot(directory);
 
