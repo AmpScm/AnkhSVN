@@ -30,6 +30,8 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (null == EnumTools.GetFirst(e.Selection.GetSelectedFiles(true)))
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
