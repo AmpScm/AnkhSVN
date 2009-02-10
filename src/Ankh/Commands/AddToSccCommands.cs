@@ -52,14 +52,14 @@ namespace Ankh.Commands
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
-            IFileStatusCache fcc = e.GetService<IFileStatusCache>();
-            if (scc == null || fcc == null)
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();            
+            if (scc == null || cache == null)
             {
                 e.Enabled = false;
                 return;
             }
 
-            if (!scc.IsSolutionManaged || !fcc[e.Selection.SolutionFilename].IsVersioned)
+            if (!scc.IsSolutionManaged || !cache[e.Selection.SolutionFilename].IsVersioned)
                 return; // Nothing is added unless the solution is added
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
@@ -68,10 +68,18 @@ namespace Ankh.Commands
                 return;
             }
 
+            IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
+
             foreach (SvnProject p in GetSelection(e.Selection))
             {
                 if (!scc.IsProjectManaged(p))
                     return; // Something to enable
+
+                ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+
+                if (pi != null && pi.ProjectDirectory != null)
+                    if (!cache[pi.ProjectDirectory].IsVersioned)
+                        return;
             }
 
             e.Enabled = false;
@@ -98,7 +106,6 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
-            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
             
             if (cache == null || e.Selection.SolutionFilename == null)
                 return;
@@ -150,7 +157,7 @@ namespace Ankh.Commands
 
             if (!confirmed && !e.DontPrompt && !e.IsInAutomation &&
                 DialogResult.Yes != mb.Show(string.Format(CommandResources.MarkXAsManaged,
-                Path.GetFileName(e.Selection.SolutionFilename)), AnkhId.PlkProduct, MessageBoxButtons.YesNo))
+                Path.GetFileName(e.Selection.SolutionFilename)), "", MessageBoxButtons.YesNo))
             {
                 return false;
             }
