@@ -178,11 +178,18 @@ namespace Ankh.Commands
             // File is not versioned but is inside a versioned directory
             if (!e.DontPrompt && !e.IsInAutomation)
             {
+                if (!solutionItem.Parent.IsVersioned)
+                {
+                    Add(e, e.Selection.SolutionFilename);
+
+                    return true;
+                }
+
                 rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
                     Path.GetFileName(e.Selection.SolutionFilename),
                     parentDir.FullPath), AnkhId.PlkProduct, MessageBoxButtons.YesNoCancel);
 
-                if(rslt == DialogResult.Cancel)
+                if (rslt == DialogResult.Cancel)
                     return false;
                 else if (rslt == DialogResult.No)
                 {
@@ -193,19 +200,30 @@ namespace Ankh.Commands
                 else if (rslt == DialogResult.Yes)
                 {
                     // default case: Add to existing workingcopy
-                }
+                    Add(e, e.Selection.SolutionFilename);
 
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
+            {
                 confirmed = true;
+                return true;
+            }
+        }
 
+        void Add(CommandEventArgs e, string path)
+        {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
             {
                 SvnAddArgs aa = new SvnAddArgs();
                 aa.AddParents = true;
-                cl.Add(e.Selection.SolutionFilename, aa);
+                cl.Add(path, aa);
             }
-            return true;
         }
         void SetSolutionManaged(bool shouldActivate, SvnItem item, IAnkhSccService scc)
         {
@@ -215,6 +233,7 @@ namespace Ankh.Commands
             scc.SetProjectManaged(null, true);
             item.MarkDirty(); // This clears the solution settings cache to retrieve its properties
         }
+
         void CheckoutWorkingCopyForSolution(CommandEventArgs e, ref bool confirmed)
         {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
