@@ -326,6 +326,12 @@
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
       <DependentUpon>RenameDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SccManagement\AddProjectToSubversion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccManagement\AddProjectToSubversion.Designer.cs">
+      <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccManagement\CopyToDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -985,6 +991,9 @@
     <EmbeddedResource Include="RepositoryExplorer\Dialogs\RenameDialog.resx">
       <DependentUpon>RenameDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccManagement\AddProjectToSubversion.resx">
+      <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CopyToDialog.resx">
       <DependentUpon>CopyToDialog.cs</DependentUpon>

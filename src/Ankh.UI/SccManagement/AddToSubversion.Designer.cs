@@ -284,9 +284,7 @@ namespace Ankh.UI.SccManagement
         private System.Windows.Forms.GroupBox locationBox;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ComboBox localFolder;
         private System.Windows.Forms.Button createFolderButton;
-        private Ankh.UI.RepositoryExplorer.RepositoryTreeView repositoryTree;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label label1;
@@ -297,6 +295,8 @@ namespace Ankh.UI.SccManagement
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox resultUriBox;
         private System.Windows.Forms.CheckBox addTrunk;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        protected internal System.Windows.Forms.ComboBox localFolder;
+        internal Ankh.UI.RepositoryExplorer.RepositoryTreeView repositoryTree;
+        protected internal System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
