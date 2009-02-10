@@ -144,7 +144,8 @@ namespace Ankh.Commands
             }
             else
             {
-                CheckoutWorkingCopyForSolution(e, ref confirmed);
+                if (!CheckoutWorkingCopyForSolution(e, ref confirmed))
+                    return false;
             }
 
             if (!confirmed && !e.DontPrompt && !e.IsInAutomation &&
@@ -194,8 +195,7 @@ namespace Ankh.Commands
                 else if (rslt == DialogResult.No)
                 {
                     // Checkout new working copy
-                    CheckoutWorkingCopyForSolution(e, ref confirmed);
-                    return true;
+                    return CheckoutWorkingCopyForSolution(e, ref confirmed);
                 }
                 else if (rslt == DialogResult.Yes)
                 {
@@ -235,7 +235,7 @@ namespace Ankh.Commands
             item.MarkDirty(); // This clears the solution settings cache to retrieve its properties
         }
 
-        void CheckoutWorkingCopyForSolution(CommandEventArgs e, ref bool confirmed)
+        bool CheckoutWorkingCopyForSolution(CommandEventArgs e, ref bool confirmed)
         {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
             using (Ankh.UI.SccManagement.AddToSubversion dialog = new Ankh.UI.SccManagement.AddToSubversion())
@@ -251,7 +251,7 @@ namespace Ankh.Commands
                     {
                         // Target uri doesn't exist in the repository, let's create
                         if (!RemoteCreateDirectory(e, dialog.Text, dialog.RepositoryAddUrl, cl))
-                            return; // Create failed; bail out
+                            return false; // Create failed; bail out
                     }
 
                     // Create working copy
@@ -275,10 +275,11 @@ namespace Ankh.Commands
                     }
 
                     e.Result = true;
+                    return true;
                 }
                 else
                 {
-                    return; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
+                    return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
                 }
             }
         }
