@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.VS;
+using System.Diagnostics;
 
 namespace Ankh.UI.SccManagement
 {
@@ -16,18 +17,12 @@ namespace Ankh.UI.SccManagement
             InitializeComponent();
         }
 
-        private void AddProjectToSubversion_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void ValidateAdd(object sender, CancelEventArgs e)
         {
-            if (DialogResult == DialogResult.Cancel)
-                return; // Always allow cancel
+            base.ValidateAdd(sender, e);
+            Debug.Assert(RepositoryAddUrl != null);
 
             IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
-
-            if (RepositoryAddUrl == null)
-            {
-                // Error on this is handled in base
-                return;
-            }
 
             // Error if the RepositoryAddUrl is below the url of the projectroot
             if (ss.ProjectRootUri.IsBaseOf(RepositoryAddUrl))

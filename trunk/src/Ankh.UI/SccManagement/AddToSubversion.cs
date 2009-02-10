@@ -25,6 +25,7 @@ using System.IO;
 using SharpSvn;
 using Ankh.VS;
 using System.Collections.ObjectModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.SccManagement
 {
@@ -199,28 +200,50 @@ namespace Ankh.UI.SccManagement
             repositoryTree.AddRoot(u);
         }
 
-        private void AddToSubversion_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (DialogResult == DialogResult.Cancel)
-                return; // Always allow cancel
-
-            if (localFolder.SelectedItem == null)
-            {
-                e.Cancel = true;
-
-                errorProvider1.SetError(localFolder, "Please select a working copy path");
-            }
-            if (RepositoryAddUrl == null)
-            {
-                e.Cancel = true;
-
-                errorProvider1.SetError(repositoryTree, "Please select a location in the repository to add to");
-            }
-        }
-
         private void localFolder_SelectedIndexChanged(object sender, EventArgs e)
         {
             errorProvider1.SetError(localFolder, null);
+        }
+
+        protected virtual void ValidateAdd(object sender, CancelEventArgs e)
+        {
+            ISvnClientPool clientPool = Context.GetService<ISvnClientPool>();
+            if (localFolder.SelectedItem == null)
+            {
+                errorProvider1.SetError(localFolder, "Please select a working copy path");
+                e.Cancel = true;
+                return;
+            }
+
+            if (RepositoryAddUrl == null)
+            {
+                errorProvider1.SetError(repositoryTree, "Please select a location in the repository to add to");
+                e.Cancel = true;
+                return;
+            }
+
+            using (SvnClient sc = clientPool.GetClient())
+            {
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.ThrowOnError = false;
+                Collection<SvnInfoEventArgs> info;
+                bool result = sc.GetInfo(repositoryTree.SelectedNode.RawUri, ia, out info);
+                if (!result)
+                {
+                    errorProvider1.SetError(repositoryTree, "Please select a valid location in the repository to add to");
+                    e.Cancel = true;
+                    return;
+                }
+            }
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            CancelEventArgs cea = new CancelEventArgs();
+            ValidateAdd(this, cea);
+
+            if (cea.Cancel)
+                DialogResult = DialogResult.None;
         }
     }
 }
