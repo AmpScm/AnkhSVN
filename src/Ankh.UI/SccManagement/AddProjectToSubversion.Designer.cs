@@ -36,7 +36,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 485);
             this.Name = "AddProjectToSubversion";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddProjectToSubversion_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

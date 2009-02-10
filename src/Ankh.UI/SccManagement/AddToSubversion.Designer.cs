@@ -175,6 +175,7 @@ namespace Ankh.UI.SccManagement
             this.okButton.TabIndex = 6;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // label1
             // 
@@ -266,7 +267,6 @@ namespace Ankh.UI.SccManagement
             this.Controls.Add(this.locationBox);
             this.Name = "AddToSubversion";
             this.Text = "Add to Subversion";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddToSubversion_FormClosing);
             this.locationBox.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.projectBox.ResumeLayout(false);
