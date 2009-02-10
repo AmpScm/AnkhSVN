@@ -180,7 +180,7 @@ namespace Ankh.Commands
             {
                 if (!solutionItem.Parent.IsVersioned)
                 {
-                    Add(e, e.Selection.SolutionFilename);
+                    AddPathToSubversion(e, e.Selection.SolutionFilename);
 
                     return true;
                 }
@@ -200,7 +200,7 @@ namespace Ankh.Commands
                 else if (rslt == DialogResult.Yes)
                 {
                     // default case: Add to existing workingcopy
-                    Add(e, e.Selection.SolutionFilename);
+                    AddPathToSubversion(e, e.Selection.SolutionFilename);
 
                     return true;
                 }
@@ -216,7 +216,7 @@ namespace Ankh.Commands
             }
         }
 
-        void Add(CommandEventArgs e, string path)
+        void AddPathToSubversion(CommandEventArgs e, string path)
         {
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
             {
@@ -225,6 +225,7 @@ namespace Ankh.Commands
                 cl.Add(path, aa);
             }
         }
+
         void SetSolutionManaged(bool shouldActivate, SvnItem item, IAnkhSccService scc)
         {
             if (shouldActivate)
@@ -259,9 +260,7 @@ namespace Ankh.Commands
                     cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
 
                     // Add solutionfile so we can set properties (set managed)
-                    SvnAddArgs aa = new SvnAddArgs();
-                    aa.AddParents = true;
-                    cl.Add(e.Selection.SolutionFilename, aa);
+                    AddPathToSubversion(e, e.Selection.SolutionFilename);
 
                     IAnkhSolutionSettings settings = e.GetService<IAnkhSolutionSettings>();
                     IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
@@ -358,12 +357,8 @@ namespace Ankh.Commands
                     {
                         // Yes means we have to add the file to the current WC
                         succeededProjects.Add(project);
-                        using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
-                        {
-                            SvnAddArgs aa = new SvnAddArgs();
-                            aa.AddParents = true;
-                            cl.Add(projectFile.FullPath, aa);
-                        }
+
+                        AddPathToSubversion(e, projectFile.FullPath);
                     }
                 }
                 else
