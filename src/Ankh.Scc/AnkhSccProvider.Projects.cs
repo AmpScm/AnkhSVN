@@ -309,8 +309,8 @@ namespace Ankh.Scc
             }
             else
             {
-                _solutionDirectory = SvnTools.GetTruePath(dir) ?? "";
-                _solutionFile = SvnTools.GetTruePath(path) ?? "";
+                _solutionDirectory = SvnTools.GetTruePath(dir) ?? SvnTools.GetNormalizedFullPath(dir);
+                _solutionFile = SvnTools.GetTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
             }
         }
 
