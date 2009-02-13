@@ -241,7 +241,12 @@ namespace Ankh.Settings
         /// <returns></returns>
         public string BuildLogMessage(string message, string issueId)
         {
-            if (!ShowIssueBox)
+            if (!ShowIssueBox || string.IsNullOrEmpty(issueId))
+                return message;
+
+            issueId = issueId.Trim();
+
+            if (string.IsNullOrEmpty(issueId))
                 return message;
 
             StringBuilder sb = new StringBuilder();
