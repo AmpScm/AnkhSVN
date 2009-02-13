@@ -509,11 +509,16 @@ namespace Ankh.Services
             if (diffArgs == null)
                 throw new ArgumentNullException("diffArgs");
 
-            if(_re == null)
-                _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9()_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
-                "|(\\$\\(\\?(?<if>[a-zA-Z0-9_-]*):'(?<ifbody>([^']|(''))*)'\\))");
+            if (_re == null)
+            {
+                const string ifBody = "\\?(?<tick>['\"])(?<ifbody>([^'\"]|('')|(\"\"))*\\k<tick>)";
+                const string elseBody = "(:(?<tick2>['\"])(?<elsebody>([^'\"]|('')|(\"\"))*\\k<tick2>))?";
 
-            return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace);
+                _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
+                "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))");
+            }
+
+            return _re.Replace(arguments, new Replacer(this, diffArgs, toolMode).Replace).TrimEnd();
         }
 
         sealed class Replacer
@@ -570,10 +575,15 @@ namespace Ankh.Services
                     key = match.Groups["vs"].Value;
                 else if (match.Groups["if"].Length > 1)
                 {
-                    if (!TryGetValue(match.Groups["if"].Value, true, "", out value))
-                        return "";
+                    string kk = match.Groups["if"].Value;
+
+                    bool isTrue = false;
+                    if (TryGetValue(kk, true, "", out value))
+                        isTrue = !string.IsNullOrEmpty(value);
+
+                    value = match.Groups[isTrue ? "ifbody" : "elsebody"].Value ?? "";
                     
-                    value = match.Groups["ifbody"].Value.Replace("''", "'");
+                    value = value.Replace("''", "'").Replace("\"\"", "\"");
 
                     return _context.SubstituteArguments(value, _diffArgs, _toolMode);
                 }
@@ -684,6 +694,13 @@ namespace Ankh.Services
                         // Use the WOW64 program files directory if available, otherwise just program files
                         value = Environment.GetEnvironmentVariable("PROGRAMW6432") ?? Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
                         break;
+                    case "READONLY":
+                        if (DiffArgs != null && DiffArgs.ReadOnly)
+                            value = "1";
+                        else
+                            value = "";
+
+                        return false;
                     case "VSHOME":
                         IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
                         if (sol == null)

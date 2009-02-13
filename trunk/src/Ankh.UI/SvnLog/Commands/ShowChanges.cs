@@ -169,6 +169,7 @@ namespace Ankh.UI.SvnLog.Commands
             da.MineFile = files[1];
             da.BaseTitle = diff.GetTitle(diffTarget, range.StartRevision);
             da.MineTitle = diff.GetTitle(diffTarget, range.EndRevision);
+            da.ReadOnly = true;
             diff.RunDiff(da);
         }
     }
