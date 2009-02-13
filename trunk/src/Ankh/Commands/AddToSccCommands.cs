@@ -281,7 +281,6 @@ namespace Ankh.Commands
                         monitor.ScheduleSvnStatus(mapper.GetAllFilesOfAllProjects());
                     }
 
-                    e.Result = true;
                     return true;
                 }
                 else
@@ -350,6 +349,9 @@ namespace Ankh.Commands
                     continue; 
                 }
 
+                bool markAsManaged = false;
+                bool writeReference = false;
+                
                 if (projectFile.IsVersioned)
                     continue; // We don't have to add this one
                 else if (projectFile.Parent.IsVersioned)
@@ -368,9 +370,13 @@ namespace Ankh.Commands
                     else if (rslt == DialogResult.No)
                     {
                         // No means we have to checkout a new working copy
-                        if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
+                        if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot, out markAsManaged, out writeReference))
                         {
-                            projectsToBeManaged.Add(project);
+                            if (markAsManaged)
+                                scc.SetProjectManaged(project, true);
+                            if (writeReference)
+                                scc.EnsureCheckOutReference(project);
+
                             continue;
                         }
                     }
@@ -386,9 +392,13 @@ namespace Ankh.Commands
                 else
                 {
                     // We have to checkout (and create repository location)
-                    if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot))
+                    if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot, out markAsManaged, out writeReference))
                     {
-                        projectsToBeManaged.Add(project);
+                        if (markAsManaged)
+                            scc.SetProjectManaged(project, true);
+                        if (writeReference)
+                            scc.EnsureCheckOutReference(project);
+
                         continue;
                     }
                 }
@@ -437,13 +447,14 @@ namespace Ankh.Commands
 
                 foundOne = true;
             }
+
+            if (!foundOne)
+                return false; // No need to add when there are no projects
+
             string txt = sb.ToString();
             int li = txt.LastIndexOf("', '");
             if (li > 0)
                 txt = txt.Substring(0, li + 1) + CommandResources.FileAnd + txt.Substring(li + 3);
-
-            if (!foundOne)
-                return false; // No need to add when there are no projects
 
             return DialogResult.Yes == mb.Show(string.Format(CommandResources.MarkXAsManaged,
                 txt), AnkhId.PlkProduct, MessageBoxButtons.YesNo);
@@ -457,8 +468,10 @@ namespace Ankh.Commands
         /// <param name="projectItem"></param>
         /// <param name="solutionReposRoot"></param>
         /// <returns></returns>
-        bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot)
+        bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
+            shouldMarkAsManaged = false;
+            storeReference = false;
             using (SvnClient cl = e.GetService<ISvnClientPool>().GetClient())
             using (Ankh.UI.SccManagement.AddProjectToSubversion dialog = new Ankh.UI.SccManagement.AddProjectToSubversion())
             {
@@ -484,7 +497,8 @@ namespace Ankh.Commands
                 coArg.AllowObstructions = true;
                 cl.CheckOut(dialog.RepositoryAddUrl, dialog.WorkingCopyDir, coArg);
 
-                e.Result = true;
+                shouldMarkAsManaged = dialog.MarkAsManaged;
+                storeReference = dialog.WriteCheckOutInformation;
             }
             return true;
         }

@@ -112,6 +112,12 @@ namespace Ankh.Scc
         /// <param name="sccProject">The SCC project.</param>
         /// <returns></returns>
         bool IgnoreEnumerationSideEffects(Microsoft.VisualStudio.Shell.Interop.IVsSccProject2 sccProject);
+
+        /// <summary>
+        /// Ensures the check out reference for the specified project
+        /// </summary>
+        /// <param name="project">The project.</param>
+        void EnsureCheckOutReference(SvnProject project);
     }
 
     /// <summary>

@@ -62,11 +62,13 @@ namespace Ankh.UI.SccManagement
             this.resultUriBox = new System.Windows.Forms.TextBox();
             this.addTrunk = new System.Windows.Forms.CheckBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.bodyPanel = new System.Windows.Forms.Panel();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.bodyPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // locationBox
@@ -80,7 +82,7 @@ namespace Ankh.UI.SccManagement
             this.locationBox.Controls.Add(this.comboBox1);
             this.locationBox.Location = new System.Drawing.Point(12, 91);
             this.locationBox.Name = "locationBox";
-            this.locationBox.Size = new System.Drawing.Size(436, 227);
+            this.locationBox.Size = new System.Drawing.Size(434, 211);
             this.locationBox.TabIndex = 2;
             this.locationBox.TabStop = false;
             this.locationBox.Text = "&Repository Url:";
@@ -92,7 +94,7 @@ namespace Ankh.UI.SccManagement
             this.repositoryUrl.FormattingEnabled = true;
             this.repositoryUrl.Location = new System.Drawing.Point(6, 19);
             this.repositoryUrl.Name = "repositoryUrl";
-            this.repositoryUrl.Size = new System.Drawing.Size(424, 21);
+            this.repositoryUrl.Size = new System.Drawing.Size(422, 21);
             this.repositoryUrl.TabIndex = 1;
             this.repositoryUrl.SelectedIndexChanged += new System.EventHandler(this.repositoryUrl_SelectedIndexChanged);
             this.repositoryUrl.TextUpdate += new System.EventHandler(this.repositoryUrl_TextUpdate);
@@ -101,7 +103,7 @@ namespace Ankh.UI.SccManagement
             // 
             this.createFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.createFolderButton.Enabled = false;
-            this.createFolderButton.Location = new System.Drawing.Point(337, 46);
+            this.createFolderButton.Location = new System.Drawing.Point(335, 46);
             this.createFolderButton.Name = "createFolderButton";
             this.createFolderButton.Size = new System.Drawing.Size(93, 23);
             this.createFolderButton.TabIndex = 3;
@@ -117,7 +119,7 @@ namespace Ankh.UI.SccManagement
             this.repositoryTree.Context = null;
             this.repositoryTree.Location = new System.Drawing.Point(6, 46);
             this.repositoryTree.Name = "repositoryTree";
-            this.repositoryTree.Size = new System.Drawing.Size(325, 175);
+            this.repositoryTree.Size = new System.Drawing.Size(323, 205);
             this.repositoryTree.TabIndex = 2;
             this.repositoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -134,9 +136,9 @@ namespace Ankh.UI.SccManagement
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.localFolder);
-            this.groupBox1.Location = new System.Drawing.Point(12, 324);
+            this.groupBox1.Location = new System.Drawing.Point(12, 308);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(436, 46);
+            this.groupBox1.Size = new System.Drawing.Size(434, 46);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Local &Folder:";
@@ -149,7 +151,7 @@ namespace Ankh.UI.SccManagement
             this.localFolder.FormattingEnabled = true;
             this.localFolder.Location = new System.Drawing.Point(6, 19);
             this.localFolder.Name = "localFolder";
-            this.localFolder.Size = new System.Drawing.Size(410, 21);
+            this.localFolder.Size = new System.Drawing.Size(408, 21);
             this.localFolder.TabIndex = 0;
             this.localFolder.SelectedIndexChanged += new System.EventHandler(this.localFolder_SelectedIndexChanged);
             // 
@@ -158,7 +160,7 @@ namespace Ankh.UI.SccManagement
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.CausesValidation = false;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(373, 450);
+            this.cancelButton.Location = new System.Drawing.Point(372, 450);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 7;
@@ -169,7 +171,7 @@ namespace Ankh.UI.SccManagement
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(292, 450);
+            this.okButton.Location = new System.Drawing.Point(291, 450);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 6;
@@ -193,7 +195,7 @@ namespace Ankh.UI.SccManagement
             this.projectBox.Controls.Add(this.projectNameBox);
             this.projectBox.Location = new System.Drawing.Point(12, 40);
             this.projectBox.Name = "projectBox";
-            this.projectBox.Size = new System.Drawing.Size(436, 45);
+            this.projectBox.Size = new System.Drawing.Size(434, 45);
             this.projectBox.TabIndex = 1;
             this.projectBox.TabStop = false;
             this.projectBox.Text = "Project &Name:";
@@ -204,7 +206,7 @@ namespace Ankh.UI.SccManagement
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.projectNameBox.Location = new System.Drawing.Point(6, 17);
             this.projectNameBox.Name = "projectNameBox";
-            this.projectNameBox.Size = new System.Drawing.Size(424, 20);
+            this.projectNameBox.Size = new System.Drawing.Size(422, 20);
             this.projectNameBox.TabIndex = 0;
             this.projectNameBox.TextChanged += new System.EventHandler(this.projectNameBox_TextChanged);
             // 
@@ -218,9 +220,9 @@ namespace Ankh.UI.SccManagement
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.resultUriBox);
-            this.groupBox2.Location = new System.Drawing.Point(12, 399);
+            this.groupBox2.Location = new System.Drawing.Point(12, 383);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(436, 45);
+            this.groupBox2.Size = new System.Drawing.Size(434, 48);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project will be create&d in:";
@@ -238,7 +240,7 @@ namespace Ankh.UI.SccManagement
             // 
             this.addTrunk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addTrunk.AutoSize = true;
-            this.addTrunk.Location = new System.Drawing.Point(12, 376);
+            this.addTrunk.Location = new System.Drawing.Point(12, 360);
             this.addTrunk.Name = "addTrunk";
             this.addTrunk.Size = new System.Drawing.Size(155, 17);
             this.addTrunk.TabIndex = 4;
@@ -250,6 +252,22 @@ namespace Ankh.UI.SccManagement
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // bodyPanel
+            // 
+            this.bodyPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.bodyPanel.Controls.Add(this.addTrunk);
+            this.bodyPanel.Controls.Add(this.groupBox2);
+            this.bodyPanel.Controls.Add(this.projectBox);
+            this.bodyPanel.Controls.Add(this.label1);
+            this.bodyPanel.Controls.Add(this.groupBox1);
+            this.bodyPanel.Controls.Add(this.locationBox);
+            this.bodyPanel.Location = new System.Drawing.Point(0, 0);
+            this.bodyPanel.Name = "bodyPanel";
+            this.bodyPanel.Size = new System.Drawing.Size(459, 440);
+            this.bodyPanel.TabIndex = 8;
+            // 
             // AddToSubversion
             // 
             this.AcceptButton = this.okButton;
@@ -257,14 +275,9 @@ namespace Ankh.UI.SccManagement
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(460, 485);
-            this.Controls.Add(this.addTrunk);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.projectBox);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.locationBox);
+            this.Controls.Add(this.bodyPanel);
             this.Name = "AddToSubversion";
             this.Text = "Add to Subversion";
             this.locationBox.ResumeLayout(false);
@@ -274,8 +287,9 @@ namespace Ankh.UI.SccManagement
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.bodyPanel.ResumeLayout(false);
+            this.bodyPanel.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -298,5 +312,6 @@ namespace Ankh.UI.SccManagement
         protected internal System.Windows.Forms.ComboBox localFolder;
         internal Ankh.UI.RepositoryExplorer.RepositoryTreeView repositoryTree;
         protected internal System.Windows.Forms.ErrorProvider errorProvider1;
+        protected System.Windows.Forms.Panel bodyPanel;
     }
 }
