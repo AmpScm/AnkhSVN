@@ -253,18 +253,18 @@ namespace Ankh.Settings
 
             if(!AppendIssueTrackerMessage)
             {
-                sb.AppendLine(RawIssueTrackerMessage.Replace("%BUGID%", issueId));
-                if (!RawIssueTrackerMessage.EndsWith("\r\n"))
+                sb.Append(RawIssueTrackerMessage.Replace("%BUGID%", issueId));
+                if (!RawIssueTrackerMessage.EndsWith("\n"))
                     sb.AppendLine();
             }
 
             sb.Append(message);
 
-            if (!message.EndsWith("\r\n"))
+            if (!message.EndsWith("\n"))
                 sb.AppendLine();
 
             if (AppendIssueTrackerMessage)
-                sb.AppendLine(RawIssueTrackerMessage.Replace("%BUGID%", issueId));
+                sb.AppendLine(RawIssueTrackerMessage.Replace("%BUGID%", issueId).TrimEnd());
 
             return sb.ToString();
         }
