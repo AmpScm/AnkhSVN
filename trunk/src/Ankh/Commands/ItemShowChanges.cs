@@ -226,6 +226,9 @@ namespace Ankh.Commands
                     da.MineTitle = diff.GetTitle(item, revRange.EndRevision);
                 }
 
+                if (!String.Equals(da.MineFile, item.FullPath, StringComparison.OrdinalIgnoreCase))
+                    da.ReadOnly = true;
+
                 diff.RunDiff(da);
             }
         }
