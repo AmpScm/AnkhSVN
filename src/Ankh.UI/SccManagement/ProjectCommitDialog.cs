@@ -134,8 +134,7 @@ namespace Ankh.UI.SccManagement
         public void FillArgs(PendingChangeCommitArgs pca)
         {
             pca.LogMessage = logMessage.Text;
-            if(issueNumberBox.Visible)
-                pca.IssueText = issueNumberBox.Text;
+            pca.IssueText = issueNumberBox.Text;
 
             pca.KeepLocks = keepLocksBox.Checked;
             pca.KeepChangeLists = keepChangelistsBox.Checked;
