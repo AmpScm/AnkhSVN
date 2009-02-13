@@ -311,7 +311,7 @@ namespace Ankh.Settings
                     break;
                 case SvnPropertyNames.BugTrackMessage:
                     if (cache.BugTrackMessage == null)
-                        cache.BugTrackMessage = pv.StringValue;
+                        cache.BugTrackMessage = pv.StringValue.Replace("\r","");
                     break;
                 case SvnPropertyNames.BugTrackNumber:
                     if (!cache.BugTrackNumber.HasValue && TryParseBool(pv, out boolValue))
