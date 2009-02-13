@@ -27,13 +27,13 @@ namespace Ankh.UI.OptionsPages
         {
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.macroView = new System.Windows.Forms.ListView();
-            this.nameColumn = new System.Windows.Forms.ColumnHeader();
-            this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox = new System.Windows.Forms.RichTextBox();
+            this.macroView = new Ankh.UI.VSSelectionControls.SmartListView();
+            this.nameColumn = new System.Windows.Forms.ColumnHeader();
+            this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -55,35 +55,6 @@ namespace Ankh.UI.OptionsPages
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 5;
             this.okButton.Text = "OK";
-            // 
-            // macroView
-            // 
-            this.macroView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.macroView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.nameColumn,
-            this.valueColumn});
-            this.macroView.FullRowSelect = true;
-            this.macroView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.macroView.Location = new System.Drawing.Point(12, 65);
-            this.macroView.MultiSelect = false;
-            this.macroView.Name = "macroView";
-            this.macroView.Size = new System.Drawing.Size(430, 137);
-            this.macroView.TabIndex = 3;
-            this.macroView.UseCompatibleStateImageBehavior = false;
-            this.macroView.View = System.Windows.Forms.View.Details;
-            this.macroView.DoubleClick += new System.EventHandler(this.macroView_DoubleClick);
-            // 
-            // nameColumn
-            // 
-            this.nameColumn.Text = "Name";
-            this.nameColumn.Width = 150;
-            // 
-            // valueColumn
-            // 
-            this.valueColumn.Text = "Value";
-            this.valueColumn.Width = 220;
             // 
             // label1
             // 
@@ -127,6 +98,33 @@ namespace Ankh.UI.OptionsPages
             this.textBox.TabIndex = 1;
             this.textBox.Text = "";
             // 
+            // macroView
+            // 
+            this.macroView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.macroView.AutoSizeLastColumn = true;
+            this.macroView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.nameColumn,
+            this.valueColumn});
+            this.macroView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.macroView.Location = new System.Drawing.Point(12, 65);
+            this.macroView.MultiSelect = false;
+            this.macroView.Name = "macroView";
+            this.macroView.Size = new System.Drawing.Size(430, 137);
+            this.macroView.TabIndex = 3;
+            this.macroView.DoubleClick += new System.EventHandler(this.macroView_DoubleClick);
+            // 
+            // nameColumn
+            // 
+            this.nameColumn.Text = "Name";
+            this.nameColumn.Width = 150;
+            // 
+            // valueColumn
+            // 
+            this.valueColumn.Text = "Value";
+            this.valueColumn.Width = 220;
+            // 
             // ToolArgumentDialog
             // 
             this.AcceptButton = this.okButton;
@@ -141,12 +139,7 @@ namespace Ankh.UI.OptionsPages
             this.Controls.Add(this.macroView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "ToolArgumentDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Command Editor";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -155,7 +148,7 @@ namespace Ankh.UI.OptionsPages
 
         private Button cancelButton;
         private Button okButton;
-        private ListView macroView;
+        private Ankh.UI.VSSelectionControls.SmartListView macroView;
         private ColumnHeader nameColumn;
         private ColumnHeader valueColumn;
         private Label label1;

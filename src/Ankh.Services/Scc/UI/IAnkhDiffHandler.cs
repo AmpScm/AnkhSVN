@@ -28,9 +28,9 @@ namespace Ankh.Scc.UI
     [Flags]
     public enum DiffMode
     {
-        Default=0,
-        PreferExternal=1,
-        PreferInternal=2
+        Default = 0,
+        PreferExternal = 1,
+        PreferInternal = 2
     }
 
     public abstract class AnkhDiffToolArgs
@@ -55,12 +55,13 @@ namespace Ankh.Scc.UI
     }
 
     public class AnkhDiffArgs : AnkhDiffToolArgs
-    {        
+    {
         string _baseFile;
         string _baseTitle;
 
         string _mineFile;
-        string _mineTitle;        
+        string _mineTitle;
+        bool _readOnly;
 
         /// <summary>
         /// Gets or sets the base file.
@@ -103,6 +104,16 @@ namespace Ankh.Scc.UI
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the diff/merge should be presented as read only.
+        /// </summary>
+        /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set { _readOnly = value; }
+        }
+
+        /// <summary>
         /// Validates this instance.
         /// </summary>
         /// <returns></returns>
@@ -138,7 +149,7 @@ namespace Ankh.Scc.UI
             get { return _theirsTitle; }
             set { _theirsTitle = value; }
         }
-        
+
         public string MergedFile
         {
             get { return _mergedFile; }
@@ -195,7 +206,7 @@ namespace Ankh.Scc.UI
         }
     }
 
-        /// <summary>
+    /// <summary>
     /// A template in the dialog above.
     /// </summary>
     public class AnkhDiffArgumentDefinition
@@ -427,6 +438,6 @@ namespace Ankh.Scc.UI
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns></returns>
-        SvnUriTarget GetCopyOrigin(SvnItem item);        
+        SvnUriTarget GetCopyOrigin(SvnItem item);
     }
 }

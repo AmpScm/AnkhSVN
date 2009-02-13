@@ -40,6 +40,7 @@ namespace Ankh.UI.VSSelectionControls
         readonly SortedList<SmartGroup, ListViewGroup> _groups;
         ISmartValueComparer _topSorter;
         ISmartValueComparer _finalSorter;
+        bool _autoSizeRightColumn;
 
         public SmartListView()
         {
@@ -358,12 +359,22 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        [DefaultValue(false), Description("Automatically resizes the last column to fit")]
+        public bool AutoSizeLastColumn
+        {
+            get { return _autoSizeRightColumn; }
+            set { _autoSizeRightColumn = value; }
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
             _headerHeight = 0;
             _itemHeight = 0;
             _itemsPerPage = 0;
             base.OnSizeChanged(e);
+
+            if (_autoSizeRightColumn && !DesignMode && Columns.Count > 0)
+                ResizeColumnsToFit(Columns[Columns.Count - 1]);
         }
 
         #endregion

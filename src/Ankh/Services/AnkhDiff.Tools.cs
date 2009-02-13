@@ -66,11 +66,13 @@ namespace Ankh.Services
             args.Add(new AnkhDiffArgumentDefinition("TheirName", "Title for Theirs (Merge)", "tname", "theirsname"));
             args.Add(new AnkhDiffArgumentDefinition("Merged", "Merged Version (Merge)"));
             args.Add(new AnkhDiffArgumentDefinition("MergedName", "Title for Merged (Merge)", "mname"));
+            args.Add(new AnkhDiffArgumentDefinition("ReadOnly", "Result should be readonly (Diff, Merge)"));
 
             args.Add(new AnkhDiffArgumentDefinition("PatchFile", "Patch file to apply"));
             args.Add(new AnkhDiffArgumentDefinition("ApplyToDir", "Directory to apply patch to"));
 
             args.Add(new AnkhDiffArgumentDefinition("AppPath(XXX)", "AppPath for registered tool XXX"));
+            args.Add(new AnkhDiffArgumentDefinition("Var?'YYY':'ZZZ'", "If variable Var is defined then evaluate as 'YYY', else evaluate as 'ZZZ'"));
             args.Add(new AnkhDiffArgumentDefinition("ProgramFiles", "System Program Files folder"));
             args.Add(new AnkhDiffArgumentDefinition("CommonProgramFiles", "Common Program Files folder"));
             args.Add(new AnkhDiffArgumentDefinition("HostProgramFiles", "Host architecture Program Files folder"));
@@ -103,7 +105,9 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "DiffMerge", "SourceGear DiffMerge",
                 RegistrySearch("SOFTWARE\\SourceGear\\SourceGear DiffMerge", "Location")
                     ?? "$(ProgramFiles)\\SourceGear\\DiffMerge\\DiffMerge.exe",
-                "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)'", true));
+                "'$(Base)' '$(Mine)' /t1='$(BaseName)' /t2='$(MineName)' "
+                + "$(ReadOnly?'/ro2')"
+                , true));
 
             tools.Add(new DiffTool(this, "KDiff3", "KDiff3",
                 RegistrySearch("SOFTWARE\\KDiff3\\diff-ext", "diffcommand")
