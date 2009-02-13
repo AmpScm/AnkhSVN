@@ -33,5 +33,19 @@ namespace Ankh.UI.SccManagement
                 return;
             }
         }
+
+        [DefaultValue(true)]
+        public bool MarkAsManaged
+        {
+            get { return markAsManaged.Checked; }
+            set { markAsManaged.Checked = value; }
+        }
+
+        [DefaultValue(true)]
+        public bool WriteCheckOutInformation
+        {
+            get { return writeUrlInSolution.Checked; }
+            set { writeUrlInSolution.Checked = value; }
+        }
     }
 }

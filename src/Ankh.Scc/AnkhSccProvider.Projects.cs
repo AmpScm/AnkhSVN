@@ -107,6 +107,11 @@ namespace Ankh.Scc
                 SetProjectManagedRaw(project.RawHandle, managed);
         }
 
+        public void EnsureCheckOutReference(SvnProject project)
+        {
+            // NOOP for today
+        }
+
         public void SetProjectManagedRaw(object project, bool managed)
         {
             if (!IsActive)
