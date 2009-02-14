@@ -63,9 +63,15 @@ namespace Ankh.Scc
         /// </returns>
         public int OnEndQueryBatch(out int pfActionOK)
         {
-            ShowQueryErrorDialog();
-            pfActionOK = _inBatch && _batchOk ? 1 : 0;
-            _inBatch = _batchOk = false;
+            if (_inBatch)
+            {
+                ShowQueryErrorDialog();
+                pfActionOK = _batchOk ? 1 : 0;
+                _inBatch = _batchOk = false;
+            }
+            else
+                pfActionOK = 1; // What batch?
+
             RegisterForSccCleanup();
             return VSConstants.S_OK;
         }
