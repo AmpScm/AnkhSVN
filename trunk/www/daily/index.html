@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6183</title>
+          AnkhSVN-Daily Update - 2.0.6184</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1539/AnkhSvn-Daily-2.0.6183.400.msi">AnkhSVN 2.0.6183</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1540/AnkhSvn-Daily-2.0.6184.401.msi">AnkhSVN 2.0.6184</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6183">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6184">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -424,32 +424,6 @@ use the repository browser to select an url.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges: </strong>PendingCommitsPage.cs, Commits/PendingCommitItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=5947">r5947</a>, cache the last changelist in the commit item to
 remove the dependency on column ordering. Also stop automatically setting
 files to checked when they are removed from an ignore change list.</td></tr>
-<tr><td> </td><td class="r"><a id="5947" href="http://ankhsvn.net/rev/?r=5947">
-            [r5947]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Services/Scc/PendingChange.cs, Ankh.UI/PendingChanges/PendingCommitsPage.cs, Ankh.UI/PendingChanges/Commits/PendingCommitItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2"><a href="http://ankhsvn.net/issues/?id=517">Issue 517</a> : Read 'ignore-on-commit' as don't check by default.</td></tr>
-<tr><td> </td><td class="r"><a id="5946" href="http://ankhsvn.net/rev/?r=5946">
-            [r5946]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/PropertyEditors: </strong>PropertyEditItem.cs, PropertyEditorDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">fixed delete/revert on new properties. Symptom: property editor is shut down.</td></tr>
-<tr class="d"><td colspan="4">2009-01-16</td></tr>
-<tr><td> </td><td class="r"><a id="5944" href="http://ankhsvn.net/rev/?r=5944">
-            [r5944]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS: </strong>Extenders/ExtenderProvider.cs, Extenders/SvnProjectExtender.cs, Ankh.VS.csproj, Extenders/SvnSolutionExtender.cs, Extenders/SvnItemExtender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Switch to the IUnknown based extender provider api (We still used the
-IDispatch version). Also prepare extra per solution/project properties.</td></tr>
-<tr><td> </td><td class="r"><a id="5943" href="http://ankhsvn.net/rev/?r=5943">
-            [r5943]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Flush the status cache on all probably touched items when relocating from the
-switch command to update stale Uris in the user interface</td></tr>
-<tr><td> </td><td class="r"><a id="5942" href="http://ankhsvn.net/rev/?r=5942">
-            [r5942]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Services/UI/VSDialogForm.cs, Ankh/Services/AnkhHelpService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Show dialog help in the help viewer instead of a Visual Studio web browser
-page. (This makes it possible to switch between help and the actual dialog)</td></tr>
-<tr><td> </td><td class="r"><a id="5941" href="http://ankhsvn.net/rev/?r=5941">
-            [r5941]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Package/Gui/AnkhSvn.xml, Ankh.Ids/AnkhCommandGroup.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove duplicate 'add to changelist' command from solution/subversion file
-submenu.</td></tr>
-<tr><td> </td><td class="r"><a id="5940" href="http://ankhsvn.net/rev/?r=5940">
-            [r5940]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services/Scc: </strong>SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Handle incomplete nodes as versioned to allow updating</td></tr>
 
 </table>
 <!--/Recent changes-->
