@@ -28,6 +28,7 @@ using System.Drawing;
 using System.ComponentModel.Design;
 using Ankh.Commands;
 using Ankh.Ids;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits
 {
@@ -238,6 +239,20 @@ namespace Ankh.UI.PendingChanges.Commits
                     mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsHeaderContextMenu, p);
                 else
                     mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsContextMenu, p);
+            }
+        }
+
+        protected override void OnItemChecked(ItemCheckedEventArgs e)
+        {
+            base.OnItemChecked(e);
+
+            IAnkhServiceProvider sps = SelectionPublishServiceProvider;
+            if (sps != null)
+            {
+                IVsUIShell sh = sps.GetService<IVsUIShell>(typeof(SVsUIShell));
+
+                if (sh != null)
+                    sh.UpdateCommandUI(0); // Make sure the toolbar is updated on check actions
             }
         }
     }
