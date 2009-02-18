@@ -242,18 +242,22 @@ namespace Ankh.UI.PendingChanges.Commits
             }
         }
 
+        IVsUIShell _shell;
         protected override void OnItemChecked(ItemCheckedEventArgs e)
         {
             base.OnItemChecked(e);
 
-            IAnkhServiceProvider sps = SelectionPublishServiceProvider;
-            if (sps != null)
+            if (_shell == null)
             {
-                IVsUIShell sh = sps.GetService<IVsUIShell>(typeof(SVsUIShell));
 
-                if (sh != null)
-                    sh.UpdateCommandUI(0); // Make sure the toolbar is updated on check actions
+                IAnkhServiceProvider sps = SelectionPublishServiceProvider;
+                if (sps != null)
+                {
+                    _shell = sps.GetService<IVsUIShell>(typeof(SVsUIShell));
+                }
             }
+            if (_shell != null)
+                _shell.UpdateCommandUI(0); // Make sure the toolbar is updated on check actions
         }
     }
 }
