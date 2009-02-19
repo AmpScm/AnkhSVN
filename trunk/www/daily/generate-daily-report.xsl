@@ -200,8 +200,9 @@
         <xsl:if test="$prefix != '/trunk/'">
           <strong xmlns="http://www.w3.org/1999/xhtml" class="f-pf">
             <xsl:value-of select="substring-after(substring($prefix,1, string-length($prefix)-1), '/trunk/')"/>
-            <xsl:text>: </xsl:text>
+            <xsl:text>:</xsl:text>
           </strong>
+          <xsl:text> </xsl:text>
         </xsl:if>
         <xsl:for-each select="path[position() &lt; 15]">
           <xsl:if test=".!=../path[1]">
