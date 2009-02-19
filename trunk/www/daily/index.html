@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6186</title>
+          AnkhSVN-Daily Update - 2.0.6189</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1543/AnkhSvn-Daily-2.0.6186.403.msi">AnkhSVN 2.0.6186</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1545/AnkhSvn-Daily-2.0.6189.404.msi">AnkhSVN 2.0.6189</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6186">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6189">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -296,58 +296,6 @@ commandmapper and only replace the provided string if we really have a value.</t
             [r6023]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges/Commands: </strong>PasteToEditorList.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Hide paste file list and paste recent log messages when the editor
 is not hooked to a provider of these settings or is read only</td></tr>
-<tr><td> </td><td class="r"><a id="6022" href="http://ankhsvn.net/rev/?r=6022">
-            [r6022]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package/Gui: </strong>AnkhSvn.xml, Gui-To-Ctc.xsl, Gui.xsd</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Finally enable the standard text editor navigation keys in the log viewer
-logmessage-editor.</td></tr>
-<tr><td> </td><td class="r"><a id="6019" href="http://ankhsvn.net/rev/?r=6019">
-            [r6019]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.UI/Commands/SwitchDialog.Designer.cs, Ankh.UI/Commands/SwitchDialog.cs, Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow switching with unversioned obstructions</td></tr>
-<tr><td> </td><td class="r"><a id="6018" href="http://ankhsvn.net/rev/?r=6018">
-            [r6018]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI: </strong>OptionsPages/SvnProxyEditor.resx, Ankh.UI.csproj, OptionsPages/SvnProxyEditor.Designer.cs, OptionsPages/SvnProxyEditor.cs, OptionsPages/EnvironmentSettingsControl.Designer.cs, OptionsPages/EnvironmentSettingsControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Added Subversion proxy settings editor.</td></tr>
-<tr class="d"><td colspan="4">2009-01-20</td></tr>
-<tr><td> </td><td class="r"><a id="6002" href="http://ankhsvn.net/rev/?r=6002">
-            [r6002]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Diff/Common/Classes/Windows.cs, Ankh.UI/Annotate/AnnotateMarginControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Schedule annotate tooltips via hovering over the annotate margin instead of
-just change to a new tooltip on mousemove.</td></tr>
-<tr><td> </td><td class="r"><a id="5995" href="http://ankhsvn.net/rev/?r=5995">
-            [r5995]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.UI/Annotate/AnnotateEditorControl.cs, Ankh/Commands/ItemAnnotateCommand.cs, Ankh.UI/Annotate/AnnotateMarginControl.cs, Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't fake the real document path from the annotate editor (with side effects).
-Just use a file with the right name in the tempfolder and set the language
-service.</td></tr>
-<tr><td> </td><td class="r"><a id="5994" href="http://ankhsvn.net/rev/?r=5994">
-            [r5994]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.VS/LanguageServices/AnkhEditorResolver.cs, Ankh.VS/Ankh.VS.csproj, Ankh.Services/VS/IAnkhEditorResolver.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add AnkhEditor resolver service that allows us to translate a file extension
-in a language service guid.</td></tr>
-<tr><td> </td><td class="r"><a id="5990" href="http://ankhsvn.net/rev/?r=5990">
-            [r5990]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/SolutionExplorer: </strong>StatusGlyphs.bmp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Switch to a light blue shade for the unmodified glyphs to make AnkhSVN
-accessible for users who can't see a difference between red and green.</td></tr>
-<tr><td> </td><td class="r"><a id="5989" href="http://ankhsvn.net/rev/?r=5989">
-            [r5989]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog: </strong>LogRevisionControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix SelectionChanged event not firing. This causes the next button in the 
-merge wizard to remain disabled.</td></tr>
-<tr><td> </td><td class="r"><a id="5988" href="http://ankhsvn.net/rev/?r=5988">
-            [r5988]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard: </strong>UIUtils.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix that DisplayBrowseDialogAndGetResult doesn't show a dialog in one of its
-overloads</td></tr>
-<tr><td> </td><td class="r"><a id="5987" href="http://ankhsvn.net/rev/?r=5987">
-            [r5987]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog: </strong>LogRevisionControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure we get the correct total number of items. This fixes that the merge
-wizard errors about no items, if the last batch had no extra items.</td></tr>
-<tr><td> </td><td class="r"><a id="5986" href="http://ankhsvn.net/rev/?r=5986">
-            [r5986]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI: </strong>MergeWizard/MergeRevisionsSelectionPageControl.cs, MergeWizard/BasePage.cs, MergeWizard/BasePageControl.cs, SvnLog/LogViewerDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve problems with log viewer controls that didn't have a service provider
-available. This caused problems in +- all cases of the merge wizard</td></tr>
-<tr><td> </td><td class="r"><a id="5984" href="http://ankhsvn.net/rev/?r=5984">
-            [r5984]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh/Commands/ItemEditPropertiesCommand.cs, Ankh.Package/Gui/AnkhSvn.xml, Ankh/Commands/EditPropertiesCommand.cs, Ankh/Commands/ItemShowChanges.cs, Ankh/Ankh.csproj, Ankh.Ids/AnkhCommand.cs, Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create a 'Show Property Changes' command for items where the properties changed
-and disable the 'Show Changes' command if only properties on a node where changed.</td></tr>
-<tr class="d"><td colspan="4">2009-01-19</td></tr>
-<tr><td> </td><td class="r"><a id="5982" href="http://ankhsvn.net/rev/?r=5982">
-            [r5982]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src: </strong>Ankh.Services/Commands/CommandMapper.cs, Ankh.Package/AnkhSvnPackage.cs, Ankh.Package/AnkhSvnPackage.OleComponent.cs, Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Notify the commandmapper when Visual Studio is in a modal state.</td></tr>
 
 </table>
 <!--/Recent changes-->
