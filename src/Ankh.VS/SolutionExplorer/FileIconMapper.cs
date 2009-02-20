@@ -104,7 +104,15 @@ namespace Ankh.VS.SolutionExplorer
                 if (iconHandle == IntPtr.Zero)
                     return -1;
 
-                Icon icon = Icon.FromHandle(iconHandle);
+                Icon icon;
+                try
+                {
+                    icon = Icon.FromHandle(iconHandle);
+                }
+                catch (ArgumentException)
+                {   // Win32 handle that was passed to Icon is not valid or is the wrong type. 
+                    return -1;
+                }
 
                 if (icon == null)
                     return -1;
