@@ -255,22 +255,7 @@ namespace Ankh.UI.RepositoryOpen
             RepositoryLayoutInfo li;
             if (RepositoryUrlUtils.TryGuessLayout(Context, ProjectUri, out li))
             {
-                // TODO: Use RepositoryUrlUtils here
-            }
-
-            string[] parts = ProjectUri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped).Split('/');
-            for (int i = parts.Length - 1; i >= 0; i--)
-            {
-                if ((parts[i].Equals("branches", StringComparison.OrdinalIgnoreCase) || 
-                     parts[i].Equals("tags", StringComparison.OrdinalIgnoreCase) ||
-                     parts[i].Equals("releases", StringComparison.OrdinalIgnoreCase)) && i < parts.Length - 1)
-                {
-                    return "-" + parts[i + 1];
-                }
-                else if (parts[i].Equals("trunk", StringComparison.OrdinalIgnoreCase))
-                {
-                    return "-trunk";
-                }
+                return li.SelectedBranchName;
             }
 
             return "";
@@ -316,6 +301,7 @@ namespace Ankh.UI.RepositoryOpen
             string suffix = GuessBranchOrTagName();
             if (suffix != "")
             {
+                suffix = "-" + suffix;
                 string path = StripDisambiguator(directory.Text);
 
                 if (appendBranch.Checked)
