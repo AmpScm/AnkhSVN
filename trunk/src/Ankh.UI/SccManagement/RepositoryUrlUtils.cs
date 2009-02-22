@@ -24,10 +24,39 @@ namespace Ankh.UI.SccManagement
     // TODO: BH - Refactor to a more logical location
     public class RepositoryLayoutInfo
     {
+        /// <summary>
+        /// The URI of working copy.
+        /// </summary>
         public Uri WorkingRoot;
+
+        /// <summary>
+        /// The normalized root URI before trunk, branches or tag.
+        /// </summary>
         public Uri WholeProjectRoot;
+
+        /// <summary>
+        /// The root URI where branches are located.
+        /// </summary>
         public Uri BranchesRoot;
+
+        /// <summary>
+        /// The root URI where tags are located.
+        /// </summary>
         public Uri TagsRoot;
+
+        /// <summary>
+        /// The portion of the URI relative to the selected branch and 
+        /// the working copy.
+        /// </summary>
+        public Uri SelectedBranch;
+
+        /// <summary>
+        /// Return the first path fragment of the select branch URI.
+        /// </summary>
+        public string SelectedBranchName
+        {
+            get { return SelectedBranch != null ? SelectedBranch.ToString().Split('/')[0] : ""; }
+        }
     }
 
     public static class RepositoryUrlUtils
@@ -81,21 +110,23 @@ namespace Ankh.UI.SccManagement
                 info.WorkingRoot = new Uri(uri, r);
                 info.WholeProjectRoot = new Uri(uri, r.Substring(0, r.Length - 6));
                 info.BranchesRoot = new Uri(info.WholeProjectRoot, "branches/");
+                info.SelectedBranch = info.WholeProjectRoot.MakeRelativeUri(info.WorkingRoot);
                 return true;
             }
 
             if (TryFindBranch(uri, path, "branches", true, out info))
                 return true;
             else if (TryFindBranch(uri, path, "tags", false, out info))
-                return true;
+                return true;    
             else if (TryFindBranch(uri, path, "releases", false, out info))
                 return true;
 
             info = new RepositoryLayoutInfo();
-            info.WorkingRoot = uri;
-            info.WholeProjectRoot = new Uri(uri, "../");
-            info.BranchesRoot = new Uri(info.WorkingRoot, "branches/");
-            info.TagsRoot = new Uri(info.WorkingRoot, "tags/");
+            info.WorkingRoot = new Uri(uri, ".");
+            info.WholeProjectRoot = new Uri(info.WorkingRoot, "../");
+            info.BranchesRoot = new Uri(info.WholeProjectRoot, "branches/");
+            info.TagsRoot = new Uri(info.WholeProjectRoot, "tags/");
+            info.SelectedBranch = info.WholeProjectRoot.MakeRelativeUri(info.WorkingRoot);
             return true;
         }
 
@@ -104,7 +135,7 @@ namespace Ankh.UI.SccManagement
             info = null;
             string r = path;
 
-            name = '/' + name + '/';
+            name = '/' + name.Trim('/') + '/';
 
             while (r.Length > 0 && !r.EndsWith(name, StringComparison.OrdinalIgnoreCase))
             {
@@ -125,12 +156,13 @@ namespace Ankh.UI.SccManagement
             {
                 info = new RepositoryLayoutInfo();
 
-                string dir = (path.Length > r.Length) ? path.Substring(0, path.IndexOf('/', r.Length)) : path;
+                string dir = (path.Length > r.Length) ? path.Substring(0, path.IndexOf('/', r.Length) + 1) : path;
 
                 info.WorkingRoot = new Uri(uri, dir);
-                info.WholeProjectRoot = new Uri(uri, r);
-                info.BranchesRoot = new Uri(info.WorkingRoot, "branches/"); // Always set some branches suggestion?
-                
+                info.WholeProjectRoot = new Uri(new Uri(uri, r), "../");
+                info.BranchesRoot = new Uri(info.WholeProjectRoot, "branches/"); // Always set some branches suggestion?
+                info.SelectedBranch = info.BranchesRoot.MakeRelativeUri(info.WorkingRoot);
+
                 Uri itemRoot = new Uri(info.WholeProjectRoot, r.Substring(r.Length - name.Length + 1, name.Length-1)); // 'tags/' but with repos casing
 
                 if (branch)
