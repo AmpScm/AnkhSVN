@@ -315,7 +315,13 @@ namespace Ankh.Services.PendingChanges
 
                     if (!state.Client.Add(pc.FullPath, a))
                     {
-                        if (state.MessageBox.Show(a.LastException.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
+                        if (a.LastException != null && a.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
+                        {
+                            state.MessageBox.Show(a.LastException.Message + Environment.NewLine + Environment.NewLine
+                                + PccStrings.YouCanDownloadAnkh, "", MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                            return false;
+                        }
+                        else if (state.MessageBox.Show(a.LastException.Message, "", MessageBoxButtons.OKCancel, System.Windows.Forms.MessageBoxIcon.Error) == DialogResult.Cancel)
                             return false;
                     }
                 }
