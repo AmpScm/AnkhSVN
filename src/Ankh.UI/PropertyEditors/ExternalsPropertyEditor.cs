@@ -76,7 +76,7 @@ namespace Ankh.UI.PropertyEditors
                     SvnExternalItem other;
                     if (nw.TryGetValue(i.Target, out other))
                     {
-                        if ((i.Url == other.Url) &&
+                        if ((i.Reference == other.Reference) &&
                             (i.Revision == other.Revision) &&
                             (i.OperationalRevision == other.OperationalRevision))
                         {
@@ -93,7 +93,7 @@ namespace Ankh.UI.PropertyEditors
                         SvnExternalItem other;
                         if (_originals.TryGetValue(i.Target, out other))
                         {
-                            if ((i.Url == other.Url) &&
+                            if ((i.Reference == other.Reference) &&
                                 (i.Revision == other.Revision) &&
                                 (i.OperationalRevision == other.OperationalRevision))
                             {
@@ -164,7 +164,7 @@ namespace Ankh.UI.PropertyEditors
         private void RowRefresh(DataGridViewRow r, SvnExternalItem ii)
         {
             r.SetValues(
-                ii.Url,
+                ii.Reference,
                 ii.Revision.ToString(),
                 ii.Target);
         }
@@ -306,7 +306,7 @@ namespace Ankh.UI.PropertyEditors
 
             if (!SvnExternalItem.TryParse(ei.ToString(), out p)
                 || p.Target != ei.Target
-                || p.Url != ei.Url
+                || p.Reference != ei.Reference
                 || p.Revision != ei.Revision
                 || p.OperationalRevision != ei.OperationalRevision)
             {
