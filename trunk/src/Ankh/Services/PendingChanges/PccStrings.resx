@@ -153,4 +153,7 @@
   <data name="WorkingCopyX" xml:space="preserve">
     <value>Working Copy: {0}</value>
   </data>
+  <data name="YouCanDownloadAnkh" xml:space="preserve">
+    <value>You can download the latest AnkhSVN release on http://ankhsvn.net/downloads</value>
+  </data>
 </root>

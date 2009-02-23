@@ -167,5 +167,14 @@ namespace Ankh.Services.PendingChanges {
                 return ResourceManager.GetString("WorkingCopyX", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can download the latest AnkhSVN release on http://ankhsvn.net/downloads.
+        /// </summary>
+        internal static string YouCanDownloadAnkh {
+            get {
+                return ResourceManager.GetString("YouCanDownloadAnkh", resourceCulture);
+            }
+        }
     }
 }
