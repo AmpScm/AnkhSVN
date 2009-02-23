@@ -310,9 +310,9 @@ namespace Ankh.Scc
                     MarkDirty(new string[] { oldName, newName }, true);
                 }
             }
-            
 
-            GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(SolutionFilename);
+
+            Monitor.ScheduleGlyphUpdate(SolutionFilename);
         }
 
         internal void OnDocumentSaveAs(string oldName, string newName)
@@ -369,16 +369,18 @@ namespace Ankh.Scc
             GC.KeepAlive(oldName);
         }
 
+        IFileStatusMonitor _monitor;
+        IFileStatusMonitor Monitor
+        {
+            get { return _monitor ?? (_monitor = GetService<IFileStatusMonitor>()); }
+        }
 
         void MarkDirty(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
-
-            if(monitor != null)
-                monitor.ScheduleSvnStatus(path);
+            Monitor.ScheduleSvnStatus(path);
         }
 
         void MarkDirty(IEnumerable<string> paths, bool addToMonitorList)
@@ -386,15 +388,10 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
+            if (addToMonitorList)
+                Monitor.ScheduleMonitor(paths);
 
-            if (monitor != null)
-            {
-                if (addToMonitorList)
-                    monitor.ScheduleMonitor(paths);
-
-                monitor.ScheduleSvnStatus(paths);
-            }
+            Monitor.ScheduleSvnStatus(paths);
         }
 
 
@@ -662,7 +659,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            if(string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(path, SolutionFilename, StringComparison.OrdinalIgnoreCase))
                 return true; // A solution file can be part of a project
 
             SccProjectFile file;
@@ -778,7 +775,7 @@ namespace Ankh.Scc
             {
                 // We have to know its contents to provide SCC info
                 // TODO: BH: Maybe only enable while reloading?
-                return projectData.IsWebSite; 
+                return projectData.IsWebSite;
             }
 
             return false;

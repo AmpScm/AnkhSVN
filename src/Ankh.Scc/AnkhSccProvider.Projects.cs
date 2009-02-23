@@ -485,7 +485,9 @@ namespace Ankh.Scc
 
         internal void OnProjectBeforeUnload(IVsSccProject2 project, IVsHierarchy pStubHierarchy)
         {
-            // Nothing to do, wait until the real event
+            SccProjectData data;
+            if (_projectMap.TryGetValue(project, out data))
+                Monitor.ScheduleMonitor(data.GetAllFiles()); // Keep track of changes in files of unloaded project
         }
 
         bool _ensureIcons;
