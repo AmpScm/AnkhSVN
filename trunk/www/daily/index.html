@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6204</title>
+          AnkhSVN-Daily Update - 2.0.6209</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,37 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1573/AnkhSvn-Daily-2.0.6204.409.msi">AnkhSVN 2.0.6204</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1574/AnkhSvn-Daily-2.0.6209.410.msi">AnkhSVN 2.0.6209</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6204">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6209">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-24</td></tr>
+<tr><td> </td><td class="r"><a id="6209" href="http://ankhsvn.net/rev/?r=6209">
+            [r6209]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/Commands:</strong> CheckoutDialog.Designer.cs, SwitchDialog.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the check out and switch dialog look more like each other.</td></tr>
+<tr><td> </td><td class="r"><a id="6208" href="http://ankhsvn.net/rev/?r=6208">
+            [r6208]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Try to detect if a document is actually reloaded and if not make the owner
+project reload it. (This should fix the F# issues noted on list)</td></tr>
+<tr><td> </td><td class="r"><a id="6207" href="http://ankhsvn.net/rev/?r=6207">
+            [r6207]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog:</strong> LogRevisionControl.Designer.cs, LogRevisionControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the log viewer initiates growing the list of available items on
+keyboard keys. (Pressing End would jump you to the end of the list without
+starting retrieval. Only at the next selection change new items would be
+retrieved)</td></tr>
+<tr><td> </td><td class="r"><a id="6206" href="http://ankhsvn.net/rev/?r=6206">
+            [r6206]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Commands/CheckoutDialog.Designer.cs, Ankh.UI/Commands/CheckoutDialog.cs, Ankh/Commands/CheckoutCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow checking out a directory without externals.</td></tr>
 <tr class="d"><td colspan="4">2009-02-23</td></tr>
 <tr><td> </td><td class="r"><a id="6204" href="http://ankhsvn.net/rev/?r=6204">
             [r6204]
