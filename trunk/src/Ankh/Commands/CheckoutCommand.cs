@@ -15,15 +15,12 @@
 //  limitations under the License.
 
 using System;
-using Ankh.UI;
 using System.Windows.Forms;
-
 using SharpSvn;
+
 using Ankh.Ids;
-using System.Windows.Forms.Design;
-using Ankh.Selection;
-using System.Collections.ObjectModel;
 using Ankh.Scc;
+using Ankh.UI.Commands;
 
 namespace Ankh.Commands
 {
