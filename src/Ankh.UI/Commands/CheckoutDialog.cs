@@ -95,6 +95,15 @@ namespace Ankh.UI
         }
 
         /// <summary>
+        /// Gets a value indicating whether [ignore externals].
+        /// </summary>
+        /// <value><c>true</c> if [ignore externals]; otherwise, <c>false</c>.</value>
+        public bool IgnoreExternals
+        {
+            get { return omitExternalsCheckBox.Checked; }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         protected override void Dispose(bool disposing)
