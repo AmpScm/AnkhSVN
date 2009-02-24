@@ -402,7 +402,8 @@ namespace Ankh.Scc
                         return; // Project rename, without renaming the project file (C++ project for instance)
 
                     // Mark the sln file edited, so it shows up in Pending Changes/Commit
-                    DocumentTracker.SetDirty(_solutionFile, true);
+                    if (!string.IsNullOrEmpty(SolutionFilename))
+                        DocumentTracker.SetDirty(SolutionFilename, true);
                 }
             }
             finally
@@ -433,6 +434,12 @@ namespace Ankh.Scc
 
                 // Solution folders are projects without Scc state                
                 data.SccProject.SccGlyphChanged(0, null, null, null);
+            }
+
+            if (added)
+            {
+                if (!string.IsNullOrEmpty(SolutionFilename))
+                    DocumentTracker.SetDirty(SolutionFilename, true);
             }
 
             _syncMap = true;
@@ -480,6 +487,12 @@ namespace Ankh.Scc
             {
                 data.OnClose();
                 _projectMap.Remove(project);
+            }
+
+            if (removed)
+            {
+                if (!string.IsNullOrEmpty(SolutionFilename))
+                    DocumentTracker.SetDirty(SolutionFilename, true);
             }
         }
 
