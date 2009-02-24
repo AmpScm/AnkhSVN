@@ -340,9 +340,13 @@ namespace Ankh.Commands
             foreach (SvnProject project in GetSelection(e.Selection))
             {
                 ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
-                SvnItem projectFile = cache[projInfo.ProjectFile];
 
-                if (projectFile.WorkingCopy == slnItem.WorkingCopy)
+                if (projInfo.ProjectDirectory == null)
+                    continue; /* Some projects don't have a directory */
+
+                SvnItem projectDir = cache[projInfo.ProjectDirectory];
+
+                if (projectDir.WorkingCopy == slnItem.WorkingCopy)
                 {
                     // This is a 'normal' project, part of the solution and in the same working copy
                     projectsToBeManaged.Add(project);
@@ -352,13 +356,11 @@ namespace Ankh.Commands
                 bool markAsManaged = false;
                 bool writeReference = false;
                 
-                if (projectFile.IsVersioned)
+                if (projectDir.IsVersioned)
                     continue; // We don't have to add this one
-                else if (projectFile.Parent.IsVersioned)
-                    continue; // Project file is inside a WC, we can't check out a new one here, just add
-                else if (projectFile.IsVersionable)
+                else if (projectDir.IsVersionable)
                 {
-                    SvnItem parentDir = GetVersionedParent(projectFile);
+                    SvnItem parentDir = GetVersionedParent(projectDir);
                     Debug.Assert(parentDir != null);
 
                     DialogResult rslt = mb.Show(string.Format(CommandResources.AddXToExistingWcY,
@@ -370,7 +372,7 @@ namespace Ankh.Commands
                     else if (rslt == DialogResult.No)
                     {
                         // No means we have to checkout a new working copy
-                        if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot, out markAsManaged, out writeReference))
+                        if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
                         {
                             if (markAsManaged)
                                 scc.SetProjectManaged(project, true);
@@ -385,14 +387,14 @@ namespace Ankh.Commands
                         // Yes means we have to add the file to the current WC
                         projectsToBeManaged.Add(project);
 
-                        AddPathToSubversion(e, projectFile.FullPath);
+                        AddPathToSubversion(e, projInfo.ProjectFile ?? projInfo.ProjectDirectory);
                         continue;
                     }
                 }
                 else
                 {
                     // We have to checkout (and create repository location)
-                    if (CheckoutWorkingCopyForProject(e, projInfo, projectFile, solutionReposRoot, out markAsManaged, out writeReference))
+                    if (CheckoutWorkingCopyForProject(e, projInfo, solutionReposRoot, out markAsManaged, out writeReference))
                     {
                         if (markAsManaged)
                             scc.SetProjectManaged(project, true);
@@ -468,7 +470,7 @@ namespace Ankh.Commands
         /// <param name="projectItem"></param>
         /// <param name="solutionReposRoot"></param>
         /// <returns></returns>
-        bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, SvnItem projectItem, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
+        bool CheckoutWorkingCopyForProject(CommandEventArgs e, ISvnProjectInfo projectInfo, Uri solutionReposRoot, out bool shouldMarkAsManaged, out bool storeReference)
         {
             shouldMarkAsManaged = false;
             storeReference = false;
