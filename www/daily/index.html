@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6198</title>
+          AnkhSVN-Daily Update - 2.0.6204</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,29 +14,40 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1559/AnkhSvn-Daily-2.0.6198.408.msi">AnkhSVN 2.0.6198</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1573/AnkhSvn-Daily-2.0.6204.409.msi">AnkhSVN 2.0.6204</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6198">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6204">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-23</td></tr>
+<tr><td> </td><td class="r"><a id="6204" href="http://ankhsvn.net/rev/?r=6204">
+            [r6204]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PropertyEditors/ExternalsPropertyEditor.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade to SharpSvn 1.5005.1123 in preparation for 1.6 compatibility</td></tr>
+<tr><td> </td><td class="r"><a id="6201" href="http://ankhsvn.net/rev/?r=6201">
+            [r6201]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services/PendingChanges:</strong> PendingChangeHandler.cs, PccStrings.resx, PccStrings.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the commit behavior on 'Your Subversion Client is too old' a bit
+friendlier and provide a link to <a href="http://ankhsvn.net/downloads">http://ankhsvn.net/downloads</a></td></tr>
+<tr><td> </td><td class="r"><a id="6200" href="http://ankhsvn.net/rev/?r=6200">
+            [r6200]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, AnkhSccProvider.FileMap.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When unloading a project, copy the list of files in the project to the
+extra files list to monitor for pending changes.</td></tr>
 <tr class="d"><td colspan="4">2009-02-22</td></tr>
 <tr><td> </td><td class="r"><a id="6198" href="http://ankhsvn.net/rev/?r=6198">
             [r6198]
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Tests:</strong> Ankh.Tests.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Switch Ankh.Tests to target x86, to avoid problems loading SharpSvn on 64-bit operation systems</td></tr>
 <tr><td> </td><td class="r"><a id="6197" href="http://ankhsvn.net/rev/?r=6197">
             [r6197]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/SccManagement/RepositoryUrlUtils.cs, Ankh.UI/RepositoryOpen/CheckoutProject.cs, Ankh.Tests/RepositoryUrlUtilsFixture.cs, Ankh.Tests/Ankh.Tests.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">rework the guess branch/tag name to rely completely on the
-RepositoryUrlUtils class
-added a unit test fixture to verify behavior on several test urls<br>
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/SccManagement/RepositoryUrlUtils.cs, Ankh.UI/RepositoryOpen/CheckoutProject.cs, Ankh.Tests/RepositoryUrlUtilsFixture.cs, Ankh.Tests/Ankh.Tests.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rework the guess branch/tag name to rely completely on the RepositoryUrlUtils
+class and added a unit test fixture to verify behavior on several test urls.<br>
 Patch by: Samuel Ford</td></tr>
 <tr class="d"><td colspan="4">2009-02-14</td></tr>
 <tr><td> </td><td class="r"><a id="6182" href="http://ankhsvn.net/rev/?r=6182">
@@ -63,7 +74,7 @@ this conditional value from the tools to specify an extra argument</td></tr>
 mark the solution managed</td></tr>
 <tr><td> </td><td class="r"><a id="6170" href="http://ankhsvn.net/rev/?r=6170">
             [r6170]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SccManagement:</strong> AddProjectToSubversion.Designer.cs, AddProjectToSubversion.cs, AddToSubversion.Designer.cs, AddToSubversion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create a virtual validation funciton and use this from the click event to
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SccManagement:</strong> AddProjectToSubversion.Designer.cs, AddProjectToSubversion.cs, AddToSubversion.Designer.cs, AddToSubversion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create a virtual validation function and use this from the click event to
 validate the dialog, this should allow easier scripting of the dialog for
 testing.</td></tr>
 <tr><td> </td><td class="r"><a id="6167" href="http://ankhsvn.net/rev/?r=6167">
@@ -211,43 +222,6 @@ file (AnkhSVN specific) and on the project root (compatible with TortoiseSVN).</
             [r6066]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog/Commands:</strong> RevertChanges.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert changes from log viewer: Calculate the right set of documents
 to save, lock, reload.</td></tr>
-<tr><td> </td><td class="r"><a id="6062" href="http://ankhsvn.net/rev/?r=6062">
-            [r6062]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh/Services/PendingChanges/PccStrings.resx, Ankh/Services/PendingChanges/PccStrings.Designer.cs, Ankh/Services/PendingChanges/PendingCommitState.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the reporting of invalid commit combinations more explicit. It
-will now report two working copy errors with paths. And impossible commit
-combinations with the to delete directory and the directory to commit
-and a file/directory not to commit.</td></tr>
-<tr><td> </td><td class="r"><a id="6061" href="http://ankhsvn.net/rev/?r=6061">
-            [r6061]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services/PendingChanges:</strong> PendingChangeHandler.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove unneeded whitespace at the end of lines in log messsages when 
-committing and ensure the log message always ends with a single newline
-to stay compatible with the CLI.</td></tr>
-<tr><td> </td><td class="r"><a id="6058" href="http://ankhsvn.net/rev/?r=6058">
-            [r6058]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/FileSystemFileItem.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCMyComputerNode.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, Ankh.UI/WorkingCopyExplorer/WCStrings.resx, Ankh.UI/WorkingCopyExplorer/Nodes/FileSystemDirectoryItem.cs, Ankh.UI/WorkingCopyExplorer/Nodes/FileSystemNode.cs, Ankh.UI/WorkingCopyExplorer/WCStrings.Designer.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCSolutionNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCTreeNode.cs, Ankh.Services/VS/IFileIconMapper.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Commit work-in-progress on the WC Explorer to fix build.</td></tr>
-<tr><td> </td><td class="r"><a id="6057" href="http://ankhsvn.net/rev/?r=6057">
-            [r6057]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> OpenDocumentTracker.cs, ProjectMap/SccProjectData.cs, AnkhSccProvider.FileMap.cs, ProjectTracker.cs, ProjectTracker.Add.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Forward Save As new-name document events to the Project tracker and Scc 
-Provider to fix the save as handling in a better way than checking for the current
-document changing.</td></tr>
-<tr><td> </td><td class="r"><a id="6056" href="http://ankhsvn.net/rev/?r=6056">
-            [r6056]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Selection/SelectionContext.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/ProjectMap/SccProjectFileReference.cs, Ankh.Scc/ProjectTracker.cs, Ankh.Services/Scc/IAnkhSccService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Ignore the VSHPROPID_HasEnumerationSideEffects flag on web site projects
-as we miss files if we don't enumerate this project type.</td></tr>
-<tr class="d"><td colspan="4">2009-01-25</td></tr>
-<tr><td> </td><td class="r"><a id="6055" href="http://ankhsvn.net/rev/?r=6055">
-            [r6055]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectTracker.Solution.cs, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh.Services/AnkhServiceEvents.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Forward Solution Opened and Closed event to the AnkhServiceEvents service to
-allow hooking in the right order. And hook from the WC Explorer to update the
-available roots.</td></tr>
-<tr><td> </td><td class="r"><a id="6054" href="http://ankhsvn.net/rev/?r=6054">
-            [r6054]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh.UI/OptionsPages/UserToolSettingsControl.cs, Ankh.Services/Commands/CommandMapper.cs, Ankh/Services/AnkhErrorHandler.cs, Ankh.Services/ContextServices/IAnkhErrorHandler.cs, Ankh.Scc/ProjectNotifier.cs, Ankh/Services/AnkhHelpService.cs, Ankh.UI/PendingChanges/RecentChangesPage.cs, Ankh.Tests/ContextBase.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make IAnkhErrorHandler always registered, but make it provide a filter on
-when exceptions should be rethrown.</td></tr>
-<tr><td> </td><td class="r"><a id="6053" href="http://ankhsvn.net/rev/?r=6053">
-            [r6053]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, Ankh/Commands/WorkingCopyExplorer/RemoveWorkingCopyExplorerRootCommand.cs, Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Handle the Up (Alt+Left, Backspace) command in the Working Copy Explorer.
-Also move context initialization to the controls itself.</td></tr>
 
 </table>
 <!--/Recent changes-->
