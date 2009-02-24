@@ -139,7 +139,7 @@ namespace Ankh.UI
             this.toUrlBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.toUrlBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
             this.toUrlBox.FormattingEnabled = true;
-            this.toUrlBox.Location = new System.Drawing.Point(52, 19);
+            this.toUrlBox.Location = new System.Drawing.Point(52, 20);
             this.toUrlBox.Name = "toUrlBox";
             this.toUrlBox.Size = new System.Drawing.Size(423, 21);
             this.toUrlBox.TabIndex = 1;
