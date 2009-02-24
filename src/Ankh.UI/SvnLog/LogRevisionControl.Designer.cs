@@ -63,6 +63,7 @@ namespace Ankh.UI.SvnLog
             this.logView.Scrolled += new System.EventHandler(this.logView_Scrolled);
             this.logView.ShowContextMenu += new System.Windows.Forms.MouseEventHandler(this.logRevisionControl1_ShowContextMenu);
             this.logView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.logRevisionControl1_ItemSelectionChanged);
+            this.logView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.logView_KeyUp);
             // 
             // LogRevisionControl
             // 

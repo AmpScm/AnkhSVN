@@ -314,6 +314,11 @@ namespace Ankh.UI.SvnLog
             ExtendList();
         }
 
+        private void logView_KeyUp(object sender, KeyEventArgs e)
+        {
+            ExtendList();
+        }
+
         bool _extending;
         void ExtendList()
         {
@@ -461,7 +466,7 @@ namespace Ankh.UI.SvnLog
             Point p = MousePosition;
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
             cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
-        }
+        }        
     }
 
     public sealed class BatchFinishedEventArgs : EventArgs
