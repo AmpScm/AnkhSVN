@@ -68,7 +68,8 @@ namespace Ankh.Commands
                     {
                         SvnCheckOutArgs args = new SvnCheckOutArgs();
                         args.Revision = dlg.Revision;
-                        args.Depth = dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Children;
+                        args.Depth = dlg.Recursive ? SvnDepth.Infinity : SvnDepth.Files;
+                        args.IgnoreExternals = dlg.IgnoreExternals;
 
                         a.Client.CheckOut(dlg.Uri, dlg.LocalPath, args);
                     });
