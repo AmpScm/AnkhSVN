@@ -419,7 +419,10 @@ namespace Ankh.Scc.ProjectMap
                         IgnoreFileChanges(true);
 
                     if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(flags)))
-                        return _disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty);
+                    {
+                        if (_disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty))
+                            return true;
+                    }
                 }
                 catch
                 { }
@@ -434,7 +437,10 @@ namespace Ankh.Scc.ProjectMap
                     bool assumeOk = (_rawDocument is IVsSolution);                    
 
                     if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
-                        return assumeOk || _disposed || (reloadCookie != _reloadTick);
+                    {
+                        if(assumeOk || _disposed || reloadCookie != _reloadTick)
+                            return true;
+                    }
                 }
                 catch
                 { }
@@ -691,7 +697,7 @@ namespace Ankh.Scc.ProjectMap
                 _fileChangeCookies = null;
 
                 foreach (uint u in list)
-                    if(u != 0)
+                    if (u != 0)
                         fileChange.UnadviseFileChange(u);
             }
 
@@ -701,14 +707,14 @@ namespace Ankh.Scc.ProjectMap
                     fileChange = GetService<IVsFileChangeEx>(typeof(SVsFileChangeEx));
 
                 List<SvnItem> items = new List<SvnItem>(GetService<AnkhSccProvider>(typeof(ITheAnkhSvnSccProvider)).GetAllDocumentItems(_name));
-                
+
                 uint[] cookies = new uint[items.Count];
                 _fileChangeCookies = cookies;
 
-                for(int i = 0; i < items.Count; i++)
+                for (int i = 0; i < items.Count; i++)
                 {
                     uint ck;
-                    if(ErrorHandler.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
+                    if (ErrorHandler.Succeeded(fileChange.AdviseFileChange(items[i].FullPath, (uint)(_VSFILECHANGEFLAGS.VSFILECHG_Size | _VSFILECHANGEFLAGS.VSFILECHG_Time), this, out ck)))
                         cookies[i] = ck;
                 }
             }
