@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
     partial class CheckoutDialog
     {
@@ -30,21 +30,24 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.urlGroupBox = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.urlBrowse = new System.Windows.Forms.Button();
             this.urlTextBox = new System.Windows.Forms.TextBox();
             this.localDirGroupBox = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.localDirTextBox = new System.Windows.Forms.TextBox();
             this.nonRecursiveCheckBox = new System.Windows.Forms.CheckBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.omitExternalsCheckBox = new System.Windows.Forms.CheckBox();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.urlGroupBox.SuspendLayout();
             this.localDirGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // urlGroupBox
@@ -63,9 +66,19 @@ namespace Ankh.UI
             this.urlGroupBox.Text = "Check Out";
             this.urlGroupBox.TextChanged += new System.EventHandler(this.ControlsChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "&Url:";
+            // 
             // urlBrowse
             // 
             this.urlBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlBrowse.CausesValidation = false;
             this.urlBrowse.Location = new System.Drawing.Point(480, 17);
             this.urlBrowse.Name = "urlBrowse";
             this.urlBrowse.Size = new System.Drawing.Size(28, 23);
@@ -84,6 +97,7 @@ namespace Ankh.UI
             this.urlTextBox.Size = new System.Drawing.Size(422, 20);
             this.urlTextBox.TabIndex = 1;
             this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
+            this.urlTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.urlTextBox_Validating);
             // 
             // localDirGroupBox
             // 
@@ -99,9 +113,19 @@ namespace Ankh.UI
             this.localDirGroupBox.TabStop = false;
             this.localDirGroupBox.Text = "To:";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 22);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "&Path:";
+            // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.CausesValidation = false;
             this.button1.Location = new System.Drawing.Point(480, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(28, 23);
@@ -120,6 +144,7 @@ namespace Ankh.UI
             this.localDirTextBox.Size = new System.Drawing.Size(422, 20);
             this.localDirTextBox.TabIndex = 1;
             this.localDirTextBox.TextChanged += new System.EventHandler(this.ControlsChanged);
+            this.localDirTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.localDirTextBox_Validating);
             // 
             // nonRecursiveCheckBox
             // 
@@ -143,6 +168,7 @@ namespace Ankh.UI
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.CausesValidation = false;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(450, 183);
             this.cancelButton.Name = "cancelButton";
@@ -159,6 +185,10 @@ namespace Ankh.UI
             this.omitExternalsCheckBox.TabIndex = 3;
             this.omitExternalsCheckBox.Text = "Omit E&xternals";
             // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
+            // 
             // revisionPicker
             // 
             this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -168,24 +198,6 @@ namespace Ankh.UI
             this.revisionPicker.Size = new System.Drawing.Size(453, 29);
             this.revisionPicker.SvnOrigin = null;
             this.revisionPicker.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "&Url:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 22);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "&Path:";
             // 
             // CheckoutDialog
             // 
@@ -206,6 +218,7 @@ namespace Ankh.UI
             this.urlGroupBox.PerformLayout();
             this.localDirGroupBox.ResumeLayout(false);
             this.localDirGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -219,14 +232,12 @@ namespace Ankh.UI
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.CheckBox nonRecursiveCheckBox;
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.Container components = null;
         private System.Windows.Forms.Button urlBrowse;
         private System.Windows.Forms.CheckBox omitExternalsCheckBox;
         private Ankh.UI.PathSelector.VersionSelector revisionPicker;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

@@ -166,6 +166,11 @@
     <Compile Include="Annotate\AnnotateEditorControl.Designer.cs">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\CommandStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommandStrings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Commands\CreateChangeListDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -913,6 +918,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Annotate\AnnotateEditorControl.resx">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commands\CommandStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Commands\CreateChangeListDialog.resx">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>

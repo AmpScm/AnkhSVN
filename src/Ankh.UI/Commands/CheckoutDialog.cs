@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using SharpSvn;
 using Ankh.UI.RepositoryExplorer;
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
     /// <summary>
     /// A dialog for performing checkouts.
@@ -161,6 +161,26 @@ namespace Ankh.UI
                 if (dlg.ShowDialog(Context) == DialogResult.OK)
                     Uri = dlg.SelectedUri;
             }
+        }
+
+        private void localDirTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            bool invalid = string.IsNullOrEmpty(LocalPath);
+            e.Cancel = invalid;
+            if (invalid)
+                errorProvider.SetError(localDirTextBox, CommandStrings.EnterValidPath);
+            else
+                errorProvider.SetError(localDirTextBox, null);
+        }
+
+        private void urlTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            bool invalid = Uri == null;
+            e.Cancel = invalid;
+            if (invalid)
+                errorProvider.SetError(urlTextBox, CommandStrings.EnterValidUrl);
+            else
+                errorProvider.SetError(urlTextBox, null);
         }
     }
 }

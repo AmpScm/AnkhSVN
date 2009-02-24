@@ -25,9 +25,9 @@ using Ankh.UI.RepositoryExplorer;
 using Ankh.Scc;
 using SharpSvn;
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
-    public partial class SwitchDialog : VSContainerForm
+    public partial class SwitchDialog : VSDialogForm
     {
         public SwitchDialog()
         {
@@ -140,10 +140,9 @@ namespace Ankh.UI
             bool invalid = SwitchToUri == null;
             e.Cancel = invalid;
             if (invalid)
-                errorProvider1.SetError(toUrlBox, @"Enter a valid url (like http://domain.tld/svn/repos/path)
-or use the browse button.");
+                errorProvider.SetError(toUrlBox, CommandStrings.EnterValidUrl);
             else
-                errorProvider1.SetError(toUrlBox, null);
+                errorProvider.SetError(toUrlBox, null);
         }
 
         private void toUrlBox_TextChanged(object sender, EventArgs e)

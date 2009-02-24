@@ -14,7 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
     partial class SwitchDialog
     {
@@ -49,17 +49,17 @@ namespace Ankh.UI
             this.pathLabel = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
             this.toBox = new System.Windows.Forms.GroupBox();
-            this.versionSelector = new Ankh.UI.PathSelector.VersionSelector();
             this.browseUrl = new System.Windows.Forms.Button();
             this.toUrlBox = new System.Windows.Forms.ComboBox();
             this.urlLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.allowObstructions = new System.Windows.Forms.CheckBox();
+            this.versionSelector = new Ankh.UI.PathSelector.VersionSelector();
             this.switchBox.SuspendLayout();
             this.toBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // switchBox
@@ -111,19 +111,10 @@ namespace Ankh.UI
             this.toBox.TabStop = false;
             this.toBox.Text = "&To:";
             // 
-            // versionSelector
-            // 
-            this.versionSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionSelector.Location = new System.Drawing.Point(52, 46);
-            this.versionSelector.Name = "versionSelector";
-            this.versionSelector.Size = new System.Drawing.Size(457, 26);
-            this.versionSelector.SvnOrigin = null;
-            this.versionSelector.TabIndex = 3;
-            // 
             // browseUrl
             // 
             this.browseUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.browseUrl.CausesValidation = false;
             this.browseUrl.Location = new System.Drawing.Point(481, 19);
             this.browseUrl.Name = "browseUrl";
             this.browseUrl.Size = new System.Drawing.Size(28, 23);
@@ -178,9 +169,9 @@ namespace Ankh.UI
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // allowObstructions
             // 
@@ -191,6 +182,16 @@ namespace Ankh.UI
             this.allowObstructions.TabIndex = 1;
             this.allowObstructions.Text = "Allow Unversioned O&bstructions";
             this.allowObstructions.UseVisualStyleBackColor = true;
+            // 
+            // versionSelector
+            // 
+            this.versionSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.versionSelector.Location = new System.Drawing.Point(52, 46);
+            this.versionSelector.Name = "versionSelector";
+            this.versionSelector.Size = new System.Drawing.Size(457, 26);
+            this.versionSelector.SvnOrigin = null;
+            this.versionSelector.TabIndex = 3;
             // 
             // SwitchDialog
             // 
@@ -210,7 +211,7 @@ namespace Ankh.UI
             this.switchBox.PerformLayout();
             this.toBox.ResumeLayout(false);
             this.toBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,7 +228,7 @@ namespace Ankh.UI
         private System.Windows.Forms.ComboBox toUrlBox;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
         private Ankh.UI.PathSelector.VersionSelector versionSelector;
         private System.Windows.Forms.CheckBox allowObstructions;
     }
