@@ -46,6 +46,8 @@ namespace Ankh.Scc.ProjectMap
         bool? _isPropertyDesigner;
         object _rawDocument;
         uint[] _fileChangeCookies;
+        bool _disposed;
+        int _reloadTick;
 
         internal SccDocumentData(IAnkhServiceProvider context, string name)
         {
@@ -191,6 +193,7 @@ namespace Ankh.Scc.ProjectMap
         {
             if (0 != (attributes & __VSRDTATTRIB.RDTA_DocDataReloaded))
             {
+                _reloadTick++;
                 if (_initialUpdateCompleted && _isFileDocument)
                 {
                     IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
@@ -365,6 +368,7 @@ namespace Ankh.Scc.ProjectMap
 
         public void Dispose()
         {
+            _disposed = true;
             OpenDocumentTracker tracker = (OpenDocumentTracker)_context.GetService<IAnkhOpenDocumentTracker>();
 
             if (tracker != null)
@@ -389,9 +393,15 @@ namespace Ankh.Scc.ProjectMap
         /// </summary>
         /// <param name="clearUndo">if set to <c>true</c> [clear undo].</param>
         /// <param name="ignoreNextChange">if set to <c>true</c> [ignore next change].</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if the document is reloaded, otherwise false</returns>
         public bool Reload(bool clearUndo, bool ignoreNextChange)
         {
+            if (_disposed)
+                return false;
+
+            int reloadCookie = _reloadTick;
+            bool wasDirty = IsDirty;
+
             IVsPersistDocData vsPersistDocData = RawDocument as IVsPersistDocData;
             if (vsPersistDocData != null)
             {
@@ -409,7 +419,7 @@ namespace Ankh.Scc.ProjectMap
                         IgnoreFileChanges(true);
 
                     if (ErrorHandler.Succeeded(vsPersistDocData.ReloadDocData(flags)))
-                        return true;
+                        return _disposed || (reloadCookie != _reloadTick) || (wasDirty != IsDirty);
                 }
                 catch
                 { }
@@ -421,8 +431,10 @@ namespace Ankh.Scc.ProjectMap
                 // This route works for some project types and at least the solution
                 try
                 {
+                    bool assumeOk = (_rawDocument is IVsSolution);                    
+
                     if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
-                        return true;
+                        return assumeOk || _disposed || (reloadCookie != _reloadTick);
                 }
                 catch
                 { }
