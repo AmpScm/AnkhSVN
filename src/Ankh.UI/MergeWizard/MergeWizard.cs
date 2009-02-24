@@ -307,7 +307,7 @@ namespace Ankh.UI.MergeWizard
                         else
                         {
                             SvnMergeArgs args = new SvnMergeArgs();
-                            List<SvnRevisionRange> mergeRevisions = new List<SvnRevisionRange>();
+                            List<SvnRevisionRange> mergeRevisions = null;
 
                             // Set the proper depth
                             args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
@@ -327,6 +327,7 @@ namespace Ankh.UI.MergeWizard
                             // TODO: Enhance to be range-aware
                             if (MergeRevisions != null)
                             {
+                                mergeRevisions = new List<SvnRevisionRange>();
                                 foreach (long rev in MergeRevisions)
                                 {
                                     mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
@@ -337,28 +338,21 @@ namespace Ankh.UI.MergeWizard
                                 // This should only occur when you choose 'All eligible revisions'
                                 if (mergeType == MergeType.RangeOfRevisions)
                                 {
-                                    SvnMergesEligibleArgs lArgs = new SvnMergesEligibleArgs();
-                                    Collection<SvnMergesEligibleEventArgs> availableMerges;
-
-                                    ee.Client.GetMergesEligible(MergeTarget.FullPath,
-                                        MergeSource.Target, lArgs, out availableMerges);
-
-                                    foreach (SvnMergesEligibleEventArgs entries in availableMerges)
-                                    {
-                                        long rev = entries.Revision;
-
-                                        mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
-                                    }
+                                    // Don't calculate eligible, just use 0:HEAD further on
+                                    // TODO: clean this up
                                 }
                             }
 
                             //no need to continue with the merge operation since there are no revisions to merge
-                            if (mergeRevisions.Count == 0)
+                            if (mergeRevisions != null && mergeRevisions.Count == 0)
                             {
                                 throw new Exception(Resources.NoLogItems);
                             }
 
-                            ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, mergeRevisions, args);
+                            if (mergeRevisions == null)
+                                ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, new SvnRevisionRange(SvnRevision.Zero, SvnRevision.Head), args);
+                            else
+                                ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, mergeRevisions, args);
                         }
                     }
                     finally
