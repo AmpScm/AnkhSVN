@@ -49,12 +49,12 @@ namespace Ankh.UI
             this.pathLabel = new System.Windows.Forms.Label();
             this.pathBox = new System.Windows.Forms.TextBox();
             this.toBox = new System.Windows.Forms.GroupBox();
+            this.versionSelector = new Ankh.UI.PathSelector.VersionSelector();
             this.browseUrl = new System.Windows.Forms.Button();
             this.toUrlBox = new System.Windows.Forms.ComboBox();
             this.urlLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.versionSelector = new Ankh.UI.PathSelector.VersionSelector();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.allowObstructions = new System.Windows.Forms.CheckBox();
             this.switchBox.SuspendLayout();
@@ -111,12 +111,22 @@ namespace Ankh.UI
             this.toBox.TabStop = false;
             this.toBox.Text = "&To:";
             // 
+            // versionSelector
+            // 
+            this.versionSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.versionSelector.Location = new System.Drawing.Point(52, 46);
+            this.versionSelector.Name = "versionSelector";
+            this.versionSelector.Size = new System.Drawing.Size(457, 26);
+            this.versionSelector.SvnOrigin = null;
+            this.versionSelector.TabIndex = 3;
+            // 
             // browseUrl
             // 
             this.browseUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseUrl.Location = new System.Drawing.Point(469, 19);
+            this.browseUrl.Location = new System.Drawing.Point(481, 19);
             this.browseUrl.Name = "browseUrl";
-            this.browseUrl.Size = new System.Drawing.Size(40, 23);
+            this.browseUrl.Size = new System.Drawing.Size(28, 23);
             this.browseUrl.TabIndex = 2;
             this.browseUrl.Text = "...";
             this.browseUrl.UseVisualStyleBackColor = true;
@@ -131,7 +141,7 @@ namespace Ankh.UI
             this.toUrlBox.FormattingEnabled = true;
             this.toUrlBox.Location = new System.Drawing.Point(52, 19);
             this.toUrlBox.Name = "toUrlBox";
-            this.toUrlBox.Size = new System.Drawing.Size(411, 21);
+            this.toUrlBox.Size = new System.Drawing.Size(423, 21);
             this.toUrlBox.TabIndex = 1;
             this.toUrlBox.Validating += new System.ComponentModel.CancelEventHandler(this.toUrlBox_Validating);
             this.toUrlBox.TextChanged += new System.EventHandler(this.toUrlBox_TextChanged);
@@ -167,16 +177,6 @@ namespace Ankh.UI
             this.okButton.TabIndex = 2;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
-            // 
-            // versionSelector
-            // 
-            this.versionSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionSelector.Location = new System.Drawing.Point(52, 46);
-            this.versionSelector.Name = "versionSelector";
-            this.versionSelector.Size = new System.Drawing.Size(457, 26);
-            this.versionSelector.SvnOrigin = null;
-            this.versionSelector.TabIndex = 3;
             // 
             // errorProvider1
             // 
