@@ -30,8 +30,6 @@ namespace Ankh.UI
         /// </summary>
         private void InitializeComponent()
         {
-            this.revisionGroupBox = new System.Windows.Forms.GroupBox();
-            this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
             this.urlGroupBox = new System.Windows.Forms.GroupBox();
             this.urlBrowse = new System.Windows.Forms.Button();
             this.urlTextBox = new System.Windows.Forms.TextBox();
@@ -42,107 +40,91 @@ namespace Ankh.UI
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.omitExternalsCheckBox = new System.Windows.Forms.CheckBox();
-            this.revisionGroupBox.SuspendLayout();
+            this.revisionPicker = new Ankh.UI.PathSelector.VersionSelector();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.urlGroupBox.SuspendLayout();
             this.localDirGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // revisionGroupBox
-            // 
-            this.revisionGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionGroupBox.Controls.Add(this.revisionPicker);
-            this.revisionGroupBox.Location = new System.Drawing.Point(10, 122);
-            this.revisionGroupBox.Name = "revisionGroupBox";
-            this.revisionGroupBox.Size = new System.Drawing.Size(483, 58);
-            this.revisionGroupBox.TabIndex = 2;
-            this.revisionGroupBox.TabStop = false;
-            this.revisionGroupBox.Text = "&Revision:";
-            // 
-            // revisionPicker
-            // 
-            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionPicker.Location = new System.Drawing.Point(7, 19);
-            this.revisionPicker.Name = "revisionPicker";
-            this.revisionPicker.Size = new System.Drawing.Size(470, 33);
-            this.revisionPicker.SvnOrigin = null;
-            this.revisionPicker.TabIndex = 0;
-            this.revisionPicker.Changed += new System.EventHandler(this.ControlsChanged);
             // 
             // urlGroupBox
             // 
             this.urlGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlGroupBox.Controls.Add(this.label1);
+            this.urlGroupBox.Controls.Add(this.revisionPicker);
             this.urlGroupBox.Controls.Add(this.urlBrowse);
             this.urlGroupBox.Controls.Add(this.urlTextBox);
             this.urlGroupBox.Location = new System.Drawing.Point(11, 12);
             this.urlGroupBox.Name = "urlGroupBox";
-            this.urlGroupBox.Size = new System.Drawing.Size(483, 49);
+            this.urlGroupBox.Size = new System.Drawing.Size(515, 80);
             this.urlGroupBox.TabIndex = 0;
             this.urlGroupBox.TabStop = false;
-            this.urlGroupBox.Text = "&Url:";
+            this.urlGroupBox.Text = "Check Out";
             this.urlGroupBox.TextChanged += new System.EventHandler(this.ControlsChanged);
             // 
             // urlBrowse
             // 
-            this.urlBrowse.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.urlBrowse.Location = new System.Drawing.Point(448, 17);
+            this.urlBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlBrowse.Location = new System.Drawing.Point(480, 17);
             this.urlBrowse.Name = "urlBrowse";
             this.urlBrowse.Size = new System.Drawing.Size(28, 23);
             this.urlBrowse.TabIndex = 2;
-            this.urlBrowse.Text = "&...";
+            this.urlBrowse.Text = "...";
             this.urlBrowse.Click += new System.EventHandler(this.urlBrowse_Click);
             // 
             // urlTextBox
             // 
-            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.urlTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.urlTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.urlTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
-            this.urlTextBox.Location = new System.Drawing.Point(6, 19);
+            this.urlTextBox.Location = new System.Drawing.Point(52, 19);
             this.urlTextBox.Name = "urlTextBox";
-            this.urlTextBox.Size = new System.Drawing.Size(436, 20);
-            this.urlTextBox.TabIndex = 0;
+            this.urlTextBox.Size = new System.Drawing.Size(422, 20);
+            this.urlTextBox.TabIndex = 1;
             this.urlTextBox.TextChanged += new System.EventHandler(this.urlTextBox_TextChanged);
             // 
             // localDirGroupBox
             // 
             this.localDirGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.localDirGroupBox.Controls.Add(this.label2);
             this.localDirGroupBox.Controls.Add(this.button1);
             this.localDirGroupBox.Controls.Add(this.localDirTextBox);
-            this.localDirGroupBox.Location = new System.Drawing.Point(11, 67);
+            this.localDirGroupBox.Location = new System.Drawing.Point(11, 104);
             this.localDirGroupBox.Name = "localDirGroupBox";
-            this.localDirGroupBox.Size = new System.Drawing.Size(482, 49);
+            this.localDirGroupBox.Size = new System.Drawing.Size(514, 49);
             this.localDirGroupBox.TabIndex = 1;
             this.localDirGroupBox.TabStop = false;
-            this.localDirGroupBox.Text = "&Folder:";
+            this.localDirGroupBox.Text = "To:";
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Location = new System.Drawing.Point(448, 14);
+            this.button1.Location = new System.Drawing.Point(480, 17);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(28, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "&...";
+            this.button1.TabIndex = 2;
+            this.button1.Text = "...";
             this.button1.Click += new System.EventHandler(this.BrowseClicked);
             // 
             // localDirTextBox
             // 
-            this.localDirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.localDirTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.localDirTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.localDirTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
-            this.localDirTextBox.Location = new System.Drawing.Point(6, 16);
+            this.localDirTextBox.Location = new System.Drawing.Point(52, 19);
             this.localDirTextBox.Name = "localDirTextBox";
-            this.localDirTextBox.Size = new System.Drawing.Size(436, 20);
-            this.localDirTextBox.TabIndex = 0;
+            this.localDirTextBox.Size = new System.Drawing.Size(422, 20);
+            this.localDirTextBox.TabIndex = 1;
             this.localDirTextBox.TextChanged += new System.EventHandler(this.ControlsChanged);
             // 
             // nonRecursiveCheckBox
             // 
             this.nonRecursiveCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.nonRecursiveCheckBox.Location = new System.Drawing.Point(13, 211);
+            this.nonRecursiveCheckBox.Location = new System.Drawing.Point(13, 182);
             this.nonRecursiveCheckBox.Name = "nonRecursiveCheckBox";
             this.nonRecursiveCheckBox.Size = new System.Drawing.Size(104, 24);
             this.nonRecursiveCheckBox.TabIndex = 4;
@@ -152,7 +134,7 @@ namespace Ankh.UI
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.okButton.Location = new System.Drawing.Point(330, 212);
+            this.okButton.Location = new System.Drawing.Point(362, 183);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 5;
@@ -162,7 +144,7 @@ namespace Ankh.UI
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(418, 212);
+            this.cancelButton.Location = new System.Drawing.Point(450, 183);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 6;
@@ -171,11 +153,39 @@ namespace Ankh.UI
             // omitExternalsCheckBox
             // 
             this.omitExternalsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.omitExternalsCheckBox.Location = new System.Drawing.Point(13, 189);
+            this.omitExternalsCheckBox.Location = new System.Drawing.Point(13, 160);
             this.omitExternalsCheckBox.Name = "omitExternalsCheckBox";
             this.omitExternalsCheckBox.Size = new System.Drawing.Size(104, 24);
             this.omitExternalsCheckBox.TabIndex = 3;
             this.omitExternalsCheckBox.Text = "Omit E&xternals";
+            // 
+            // revisionPicker
+            // 
+            this.revisionPicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.revisionPicker.Location = new System.Drawing.Point(55, 45);
+            this.revisionPicker.Name = "revisionPicker";
+            this.revisionPicker.Size = new System.Drawing.Size(453, 29);
+            this.revisionPicker.SvnOrigin = null;
+            this.revisionPicker.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "&Url:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 22);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "&Path:";
             // 
             // CheckoutDialog
             // 
@@ -183,9 +193,8 @@ namespace Ankh.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(507, 247);
+            this.ClientSize = new System.Drawing.Size(539, 218);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.revisionGroupBox);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.omitExternalsCheckBox);
             this.Controls.Add(this.nonRecursiveCheckBox);
@@ -193,7 +202,6 @@ namespace Ankh.UI
             this.Controls.Add(this.urlGroupBox);
             this.Name = "CheckoutDialog";
             this.Text = "Checkout from Subversion";
-            this.revisionGroupBox.ResumeLayout(false);
             this.urlGroupBox.ResumeLayout(false);
             this.urlGroupBox.PerformLayout();
             this.localDirGroupBox.ResumeLayout(false);
@@ -203,8 +211,6 @@ namespace Ankh.UI
         }
         #endregion
 
-        private System.Windows.Forms.GroupBox revisionGroupBox;
-        private Ankh.UI.PathSelector.VersionSelector revisionPicker;
         private System.Windows.Forms.GroupBox urlGroupBox;
         private System.Windows.Forms.TextBox urlTextBox;
         private System.Windows.Forms.GroupBox localDirGroupBox;
@@ -219,5 +225,8 @@ namespace Ankh.UI
         private System.ComponentModel.Container components = null;
         private System.Windows.Forms.Button urlBrowse;
         private System.Windows.Forms.CheckBox omitExternalsCheckBox;
+        private Ankh.UI.PathSelector.VersionSelector revisionPicker;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
