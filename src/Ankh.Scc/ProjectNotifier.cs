@@ -87,10 +87,22 @@ namespace Ankh.Scc
             get { return _tracker ?? (_tracker = GetService<IAnkhOpenDocumentTracker>()); }
         }
 
-        void PostDirty()
+        ISelectionContextEx _selection;
+        ISelectionContextEx Selection
+        {
+            [DebuggerStepThrough]
+            get { return _selection ?? (_selection = GetService<ISelectionContextEx>(typeof(ISelectionContext))); }
+        }
+
+        void PostDirty(bool checkDelay)
         {
             if (!_posted)
+            {
+                if (checkDelay)
+                    Selection.MaybeInstallDelayHandler();
+
                 CommandService.PostTickCommand(ref _posted, AnkhCommand.MarkProjectDirty);
+            }
         }
 
         /// <summary>
@@ -110,7 +122,7 @@ namespace Ankh.Scc
                 if (!_dirtyProjects.Contains(project))
                     _dirtyProjects.Add(project);
 
-                PostDirty();
+                PostDirty(false);
             }
         }
 
@@ -134,7 +146,7 @@ namespace Ankh.Scc
                         _dirtyProjects.Add(project);
                 }
 
-                PostDirty();
+                PostDirty(false);
             }
         }
 
@@ -144,7 +156,7 @@ namespace Ankh.Scc
         /// Schedules a dirty check for the specified document
         /// </summary>
         /// <param name="path">The path.</param>
-        public void ScheduleDirtyCheck(string path, bool post)
+        public void ScheduleDirtyCheck(string path, bool checkDelay)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -157,8 +169,7 @@ namespace Ankh.Scc
                 if (!_dirtyCheck.Contains(path))
                     _dirtyCheck.Add(path);
 
-                if(post)
-                    PostDirty();
+                PostDirty(checkDelay);
             }
         }
 
@@ -166,7 +177,7 @@ namespace Ankh.Scc
         /// Schedules a dirty check for the specified documents.
         /// </summary>
         /// <param name="paths">The paths.</param>
-        public void ScheduleDirtyCheck(IEnumerable<string> paths, bool post)
+        public void ScheduleDirtyCheck(IEnumerable<string> paths, bool checkDelay)
         {
             if (paths == null)
                 throw new ArgumentNullException("path");
@@ -178,8 +189,7 @@ namespace Ankh.Scc
 
                 _dirtyCheck.AddRange(paths);
 
-                if(post)
-                    PostDirty();
+                PostDirty(checkDelay);
             }
         }
 
@@ -196,7 +206,7 @@ namespace Ankh.Scc
                 if (!_fullRefresh.Contains(project))
                     _fullRefresh.Add(project);
 
-                PostDirty();
+                PostDirty(false);
             }
         }
 
@@ -216,7 +226,7 @@ namespace Ankh.Scc
                         _fullRefresh.Add(project);
                 }
 
-                PostDirty();
+                PostDirty(false);
             }
         }
 

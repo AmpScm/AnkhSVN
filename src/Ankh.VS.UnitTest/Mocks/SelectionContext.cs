@@ -179,6 +179,15 @@ namespace AnkhSvn_UnitTestProject.Mocks
             }
 
             #endregion
+
+            #region ISelectionContextEx Members
+
+            public void MaybeInstallDelayHandler()
+            {
+                
+            }
+
+            #endregion
         }
     }
 }
