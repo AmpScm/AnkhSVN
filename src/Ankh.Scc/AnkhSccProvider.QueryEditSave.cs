@@ -264,6 +264,8 @@ namespace Ankh.Scc
 
                 file = SvnTools.GetNormalizedFullPath(file);
 
+                Monitor.ScheduleDirtyCheck(file, false);
+
                 foreach (SvnItem item in GetAllDocumentItems(file))
                 {
                     if (!item.IsVersioned)

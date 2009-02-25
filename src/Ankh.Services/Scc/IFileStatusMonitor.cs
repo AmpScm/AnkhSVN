@@ -61,6 +61,18 @@ namespace Ankh.Scc
         void ScheduleMonitor(IEnumerable<string> paths);
 
         /// <summary>
+        /// Schedules a dirty check for the specified document
+        /// </summary>
+        /// <param name="path">The path.</param>
+        void ScheduleDirtyCheck(string path, bool post);
+
+        /// <summary>
+        /// Schedules a dirty check for the specified documents.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        void ScheduleDirtyCheck(IEnumerable<string> paths, bool post);
+
+        /// <summary>
         /// Called when a file is changed outside VS (E.g. via a diff tool)
         /// </summary>
         /// <param name="path"></param>
