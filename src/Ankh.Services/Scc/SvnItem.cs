@@ -654,7 +654,7 @@ namespace Ankh
                         return HasCopyableHistory;
                     case SvnStatus.Deleted:
                         // To be replaced
-                        return !Exists;
+                        return Exists;
                     default:
                         return true;
                 }
