@@ -19,15 +19,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.TextManager.Interop;
 
-using Ankh.Commands;
 using SharpSvn;
+using Ankh.Selection;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -220,7 +217,6 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        bool _delayedDirty;
         internal void SetDirty(bool dirty)
         {
             if (dirty == _isDirty)
@@ -231,41 +227,8 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            if (dirty && !_delayedDirty)
-            {
-                IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
-
-                Guid gV = Guid.Empty;
-                IVsUIHierarchy hier;
-                uint[] openId = new uint[1];
-                IVsWindowFrame wf;
-                int open;
-                if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
-                    out hier, openId, out wf, out open)) && (open != 0) && wf != null)
-                {
-                    IntPtr handle;
-                    object vw = VsShellUtilities.GetTextView(wf);
-                    if (vw != null)
-                    {
-                        IVsTextViewEx tv = vw as IVsTextViewEx;
-
-                        if (tv != null)
-                        {
-                            if ((tv.IsCompletorWindowActive() == 0)
-                                || (tv.IsExpansionUIActive() == 0)) // Intellisense / Snippet is active!
-                            {
-                                _delayedDirty = true;
-                                InstallDelayHandler(tv);
-                            }
-                        }
-                    }
-                    else if (IsEditBoxActive(out handle))
-                    {
-                        _delayedDirty = true;
-                        InstallDelayHandler(handle);
-                    }
-                }
-            }
+            // Make sure the dirty notification doesn't steal focus
+            GetService<ISelectionContextEx>(typeof(ISelectionContext)).MaybeInstallDelayHandler();
 
             IFileStatusCache fcc = GetService<IFileStatusCache>();
 
@@ -278,68 +241,6 @@ namespace Ankh.Scc.ProjectMap
             }
 
             UpdateGlyph();
-        }
-
-        private void InstallDelayHandler(IVsTextViewEx tv)
-        {
-            GetService<IAnkhCommandService>().DelayPostCommands(
-                delegate
-                {
-                    if (tv.IsCompletorWindowActive() == 0 || tv.IsExpansionUIActive() == 0)
-                        return true; // Keep the delay
-                    else
-                        return _delayedDirty = false; // Delay completed
-                });
-        }
-
-        private bool IsEditBoxActive(out IntPtr handle)
-        {
-            handle = IntPtr.Zero;
-
-            IntPtr focus = NativeMethods.GetFocus();
-            handle = focus;
-            if (focus != IntPtr.Zero)
-            {
-                StringBuilder sb = new StringBuilder(32);
-                NativeMethods.GetClassName(focus, sb, 32);
-
-                string cls = sb.ToString();
-
-                if (cls.StartsWith("WindowsForms"))
-                {
-                    Control c = Control.FromHandle(focus);
-
-                    if (c is TextBox)
-                    {
-                        if (c is DataGridViewTextBoxEditingControl)
-                            return true; // At least true in the String Resource
-                        return true; // Just to be sure
-                    }
-                }
-                else
-                    switch (cls)
-                    {
-                        //case "Edit":
-                        //	return true;
-                        // Filter what?
-                        default:
-                            break;
-                    }
-            }
-            handle = IntPtr.Zero;
-            return false;
-        }
-
-        private void InstallDelayHandler(IntPtr handle)
-        {
-            GetService<IAnkhCommandService>().DelayPostCommands(
-                delegate
-                {
-                    if (NativeMethods.GetFocus() == handle)
-                        return true; // Keep the delay
-                    else
-                        return _delayedDirty = false; // Delay completed
-                });
         }
 
         internal void CheckDirty()
@@ -434,11 +335,11 @@ namespace Ankh.Scc.ProjectMap
                 // This route works for some project types and at least the solution
                 try
                 {
-                    bool assumeOk = (_rawDocument is IVsSolution);                    
+                    bool assumeOk = (_rawDocument is IVsSolution);
 
                     if (ErrorHandler.Succeeded(vsPersistHierarchyItem2.ReloadItem(VSConstants.VSITEMID_ROOT, 0)))
                     {
-                        if(assumeOk || _disposed || reloadCookie != _reloadTick)
+                        if (assumeOk || _disposed || reloadCookie != _reloadTick)
                             return true;
                     }
                 }
@@ -675,15 +576,6 @@ namespace Ankh.Scc.ProjectMap
             }
 
             return false;
-        }
-
-        static class NativeMethods
-        {
-            [DllImport("user32.dll")]
-            public static extern IntPtr GetFocus();
-
-            [DllImport("user32.dll")]
-            public static extern int GetClassName(IntPtr hWnd, StringBuilder sb, int nMaxCount);
         }
 
         #region IVsFileChangeEvents Members

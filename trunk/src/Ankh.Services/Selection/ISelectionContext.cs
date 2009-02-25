@@ -174,5 +174,10 @@ namespace Ankh.Selection
         /// </summary>
         /// <returns></returns>
         IVsTrackSelectionEx GetModalTracker(Control control);
+
+        /// <summary>
+        /// Maybes the install delay handler.
+        /// </summary>
+        void MaybeInstallDelayHandler();
     }
 }

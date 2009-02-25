@@ -122,6 +122,7 @@
     <Compile Include="Selection\SelectionContext.Active.cs">
       <DependentUpon>SelectionContext.cs</DependentUpon>
     </Compile>
+    <Compile Include="Selection\SelectionContext.Delay.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
