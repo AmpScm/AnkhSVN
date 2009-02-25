@@ -24,7 +24,7 @@ namespace Ankh.VS.SolutionExplorer
     /// <summary>
     /// Wraps a HWND to a Win32 treeview
     /// </summary>
-    public class Win32TreeView : NativeWindow
+    class Win32TreeView : NativeWindow
     {
         readonly IntPtr _hwnd;
         IntPtr _statusImageList;
