@@ -93,6 +93,10 @@ namespace Ankh.Scc
                 CommandService.PostTickCommand(ref _posted, AnkhCommand.MarkProjectDirty);
         }
 
+        /// <summary>
+        /// Schedules a glyph refresh of a project
+        /// </summary>
+        /// <param name="project"></param>
         public void MarkDirty(SvnProject project)
         {
             if (project == null)
@@ -110,6 +114,10 @@ namespace Ankh.Scc
             }
         }
 
+        /// <summary>
+        /// Schedules a glyph refresh of all specified projects
+        /// </summary>
+        /// <param name="projects"></param>
         public void MarkDirty(IEnumerable<SvnProject> projects)
         {
             if (projects == null)
@@ -127,6 +135,50 @@ namespace Ankh.Scc
                 }
 
                 PostDirty();
+            }
+        }
+
+        HybridCollection<string> _dirtyCheck = null;
+
+        /// <summary>
+        /// Schedules a dirty check for the specified document
+        /// </summary>
+        /// <param name="path">The path.</param>
+        public void ScheduleDirtyCheck(string path, bool post)
+        {
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                if (_dirtyCheck == null)
+                    _dirtyCheck = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+                if (!_dirtyCheck.Contains(path))
+                    _dirtyCheck.Add(path);
+
+                PostDirty();
+            }
+        }
+
+        /// <summary>
+        /// Schedules a dirty check for the specified documents.
+        /// </summary>
+        /// <param name="paths">The paths.</param>
+        public void ScheduleDirtyCheck(IEnumerable<string> paths, bool post)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                if (_dirtyCheck == null)
+                    _dirtyCheck = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+                _dirtyCheck.AddRange(paths);
+
+                if(post)
+                    PostDirty();
             }
         }
 
@@ -171,6 +223,7 @@ namespace Ankh.Scc
         {
             List<SvnProject> dirtyProjects;
             List<SvnProject> fullRefresh;
+            HybridCollection<string> dirtyCheck;
 
             AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();
 
@@ -183,9 +236,17 @@ namespace Ankh.Scc
 
                 dirtyProjects = _dirtyProjects;
                 fullRefresh = _fullRefresh;
+                dirtyCheck = _dirtyCheck;
                 _dirtyProjects = null;
                 _fullRefresh = null;
+                _dirtyCheck = null;
             }
+
+            if (dirtyCheck != null)
+                foreach (string file in dirtyCheck)
+                {
+                    DocumentTracker.SetDirty(file, false);
+                }
 
             if (fullRefresh != null)
             {
