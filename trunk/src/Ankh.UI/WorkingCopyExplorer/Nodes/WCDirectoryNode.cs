@@ -120,12 +120,11 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         public override IEnumerable<WCTreeNode> GetChildren()
         {
             IFileStatusCache cache = Context.GetService<IFileStatusCache>();
-            string[] directories;
-            string[] files;
+            FileSystemInfo[] fileSystemInfos;
             try
             {
-                directories = Directory.GetDirectories(SvnItem.FullPath);
-                files = Directory.GetFiles(SvnItem.FullPath);
+                DirectoryInfo root = new DirectoryInfo(SvnItem.FullPath);
+                fileSystemInfos = root.GetFileSystemInfos();
             }
             catch (UnauthorizedAccessException)
             {
@@ -136,10 +135,18 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
                 yield break;
             }
 
-            foreach (string s in directories)
-                yield return new WCDirectoryNode(Context, this, cache[s]);
-            foreach (string s in files)
-                yield return new WCFileNode(Context, this, cache[s]);
+            foreach (FileSystemInfo fsi in fileSystemInfos)
+            {
+                if((fsi.Attributes & FileAttributes.Hidden ) > 0 ||
+                    (fsi.Attributes & FileAttributes.System) > 0 ||
+                    (fsi.Attributes & FileAttributes.Offline) > 0)
+                    continue;
+
+                if((fsi.Attributes & FileAttributes.Directory) > 0)
+                    yield return new WCDirectoryNode(Context, this, cache[fsi.FullName]);
+                else
+                    yield return new WCFileNode(Context, this, cache[fsi.FullName]);
+            }
         }
     }
 }
