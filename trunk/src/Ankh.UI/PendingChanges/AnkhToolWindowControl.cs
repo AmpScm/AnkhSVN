@@ -59,7 +59,18 @@ namespace Ankh.UI
         public IAnkhToolWindowHost ToolWindowHost
         {
             get { return _host; }
-			set { _host = value; }
+			set 
+            {
+                if (_host != value)
+                {
+                    _host = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs e)
+        {
         }
 
         /// <summary>

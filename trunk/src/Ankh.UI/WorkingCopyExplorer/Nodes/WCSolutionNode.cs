@@ -30,6 +30,16 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _imageIndex = context.GetService<IFileIconMapper>().GetIconForExtension(".sln");
         }
 
+        public override string Title
+        {
+            get {return  "QQ"; }
+        }
+
+        public override IEnumerable<WCTreeNode> GetChildren()
+        {
+            yield break;
+        }
+
         public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
         {
 //            throw new NotImplementedException();

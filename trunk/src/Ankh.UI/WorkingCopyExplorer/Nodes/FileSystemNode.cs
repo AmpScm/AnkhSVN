@@ -36,6 +36,11 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _ctrl = control;
         }
 
+        public override string Title
+        {
+            get { return SvnItem.Name; }
+        }
+        
         protected IAnkhServiceProvider Context
         {
             get { return _ctrl.Context; }
@@ -76,7 +81,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
 
 
-        public abstract FileSystemNode[] GetChildren();
+        
 
         public void Open(IAnkhServiceProvider context)
         {

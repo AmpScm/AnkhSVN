@@ -38,7 +38,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             _svnItem = item;
             _info = info;
 
-            ImageIndex = (info is DirectoryInfo) ? View.IconMapper.DirectoryIcon : View.IconMapper.GetIcon(item.FullPath);
+            ImageIndex = View.IconMapper.GetIcon(item.FullPath);
 
             RefreshValues();
         }
@@ -63,8 +63,10 @@ namespace Ankh.UI.WorkingCopyExplorer
         private void RefreshValues()
         {
             bool exists = FSInfo.Exists;
+            string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
+
             SetValues(
-                SvnItem.Name,
+                name,
                 Modified.ToString("g"),
                 SvnItem.Extension,
                 SvnItem.Status.LocalContentStatus.ToString(),

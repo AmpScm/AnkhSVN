@@ -41,6 +41,12 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
         }
 
+        protected override void OnContextChanged(EventArgs e)
+        {
+            folderTree.Context = Context;
+            fileList.Context = Context;            
+
+        }
         /// <summary>
         /// Called when the frame is created
         /// </summary>
@@ -85,7 +91,12 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void RefreshRoots()
         {
-            
+           // IFileStatusCache statusCache = Context.GetService<IFileStatusCache>();
+
+           // string s = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
+           // SvnItem root = statusCache[s];
+
+            folderTree.AddRoot(new WCMyComputerNode(Context));
         }
 
         internal void AddRoot(FileSystemNode root)
@@ -105,7 +116,10 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         void treeView_SelectedItemChanged(object sender, EventArgs e)
         {
-            FileSystemNode item = this.folderTree.SelectedItem;
+            WCTreeNode item = this.folderTree.SelectedItem;
+            if (item == null)
+                return;
+
             this.fileList.SetDirectory(item);
         } 
 
@@ -197,7 +211,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             if (item.IsDirectory)
             {
-                BrowsePath(item.FullPath);
+                folderTree.SelectSubNode(item);
                 return;
             }
 

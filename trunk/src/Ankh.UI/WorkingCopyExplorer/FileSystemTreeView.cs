@@ -26,6 +26,8 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 using Ankh.VS;
 using System.ComponentModel;
+using Ankh.Commands;
+using Ankh.Ids;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -39,14 +41,14 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public FileSystemNode SelectedItem
+        public WCTreeNode SelectedItem
         {
             get
             {
                 FileSystemTreeNode selected = this.SelectedNode as FileSystemTreeNode;
 
                 if(selected != null)
-                    return selected.WCNode as FileSystemNode;
+                    return selected.WCNode as WCTreeNode;
                 return
                     null;
             }
@@ -87,7 +89,28 @@ namespace Ankh.UI.WorkingCopyExplorer
             return null;
         }
 
-        public void AddRoot(FileSystemNode rootItem)
+        public void SelectSubNode(SvnItem item)
+        {
+            SelectedNode.Expand();
+
+            foreach (FileSystemTreeNode tn in SelectedNode.Nodes)
+            {
+                if (tn.SvnItem == item)
+                {
+                    SelectedNode = tn;
+                    break;
+
+                }
+            }
+        }
+
+        IStatusImageMapper _statusMapper;
+        internal IStatusImageMapper StatusMapper
+        {
+            get { return _statusMapper ?? (_statusMapper = Context.GetService<IStatusImageMapper>()); }
+        }
+
+        public void AddRoot(WCTreeNode rootItem)
         {
             this.AddNode(this.Nodes, rootItem);
 
@@ -112,15 +135,15 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        public FileSystemNode[] GetSelectedItems()
+        public WCTreeNode[] GetSelectedItems()
         {
             if (this.SelectedItem != null)
             {
-                return new FileSystemNode[] { this.SelectedItem };
+                return new WCTreeNode[] { this.SelectedItem };
             }
             else
             {
-                return new FileSystemNode[] { };
+                return new WCTreeNode[] { };
             }
         }
 
@@ -142,12 +165,20 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 this.SelectedNode = this.GetNodeAt(e.X, e.Y);
+
+
+                
+
+                IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
+
+                Point p = PointToClient(e.Location);
+
+                sc.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, PointToScreen(e.Location));
             }
 
             base.OnMouseDown(e);
@@ -178,13 +209,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             // get rid of the dummy node or existing nodes
             treeNode.Nodes.Clear();
 
-            FileSystemNode item = treeNode.Tag as FileSystemNode;
+            WCTreeNode item = treeNode.Tag as WCTreeNode;
 
-            foreach (FileSystemNode child in item.GetChildren())
+            foreach (WCTreeNode child in item.GetChildren())
             {
                 if (child.IsContainer)
                 {
-                    this.AddNode(treeNode.Nodes, child);
+                    AddNode(treeNode.Nodes, child);
                 }
             }
         }
@@ -211,10 +242,17 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (DesignMode || Context == null)
                 return;
 
-            SelectionPublishServiceProvider = Context;            
-
             if (IconMapper != null)
                 ImageList = IconMapper.ImageList;
+
+            if (StateImageList == null)
+                StateImageList = StatusMapper.StatusImageList;
+            
+            SelectionPublishServiceProvider = Context;
+
+            //FileSystemTreeNode ftn = new FileSystemTreeNode(root, );
+            //foreach (string s in  GetLogicalDrives())
+            //    ftn.Nodes.Add(new FileSystemTreeNode(s));
         }
 
         protected IFileIconMapper IconMapper
@@ -234,18 +272,37 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void AddNode(TreeNodeCollection nodes, FileSystemNode child)
+        private void AddNode(TreeNodeCollection nodes, WCTreeNode child)
         {
-            FileSystemTreeNode ftn = new FileSystemTreeNode(child.SvnItem, child);
+            FileSystemNode fsNode = child as FileSystemNode;
+            if (fsNode == null)
+            {
+                FileSystemTreeNode normalTreeNode = new FileSystemTreeNode(child);
+                normalTreeNode.Tag = child;
+                normalTreeNode.SelectedImageIndex = normalTreeNode.ImageIndex = child.ImageIndex;
+                nodes.Add(normalTreeNode);
+                normalTreeNode.Refresh();
+
+                FileSystemTreeNode d = new FileSystemTreeNode("DUMMY");
+                normalTreeNode.Nodes.Add(d);
+                d.Tag = DummyTag;
+                return;
+            }
+
+            FileSystemTreeNode ftn = new FileSystemTreeNode(child,fsNode.SvnItem);
             nodes.Add(ftn);
             if (ftn.Parent == null)
-                ftn.Text = child.SvnItem.FullPath;
+                ftn.Text = fsNode.SvnItem.FullPath;
             ftn.Tag = child;
             ftn.SelectedImageIndex = ftn.ImageIndex = this.FolderIndex;
+            ftn.Refresh();
 
-            FileSystemTreeNode dummy = new FileSystemTreeNode("DUMMY");
-            ftn.Nodes.Add(dummy);
-            dummy.Tag = DummyTag;
+            if (fsNode.IsContainer)
+            {
+                FileSystemTreeNode dummy = new FileSystemTreeNode("DUMMY");
+                ftn.Nodes.Add(dummy);
+                dummy.Tag = DummyTag;
+            }
         }
 
         private void HandleItemChanged(FileSystemNode item)

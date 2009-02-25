@@ -19,32 +19,34 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
+using System.IO;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
     class FileSystemTreeNode : TreeNode
     {
-        readonly SvnItem _svnItem;
         readonly WCTreeNode _wcNode;
-
-        public FileSystemTreeNode(SvnItem item, WCTreeNode wcNode)
+        readonly SvnItem _item;
+        public FileSystemTreeNode(WCTreeNode wcNode, SvnItem item)
         {
-            if(item == null)
-                throw new ArgumentNullException("item");
+            if (wcNode == null)
+                throw new ArgumentNullException("wcNode");
 
-            _svnItem = item;
             _wcNode = wcNode;
-            Text = item.Name;
+            Text = wcNode.Title;
+            _item = item;
+
+            
+        }
+
+        public FileSystemTreeNode(WCTreeNode wcNode)
+            :this(wcNode, null)
+        {
         }
 
         public FileSystemTreeNode(string text)
             : base(text)
         {
-        }
-
-        public SvnItem SvnItem
-        {
-            get { return _svnItem; }
         }
 
         public new FileSystemTreeView TreeView
@@ -55,6 +57,41 @@ namespace Ankh.UI.WorkingCopyExplorer
         public WCTreeNode WCNode
         {
             get { return _wcNode; }
+        }
+
+        public SvnItem SvnItem
+        {
+            get
+            {
+                WCFileSystemNode dirNode = _wcNode as WCFileSystemNode;
+                if (_item == null && dirNode != null)
+                    return dirNode.SvnItem;
+                return _item; 
+            }
+        }
+
+        public void Refresh()
+        {
+            if(SvnItem == null)
+                return;
+
+            if (SvnItem.IsDirectory)
+            {
+                try
+                {
+                    Directory.GetDirectories(SvnItem.FullPath);
+                }
+                catch(UnauthorizedAccessException)
+                {
+                    return;
+                }
+                catch(IOException)
+                {
+                    return;
+                }
+            }
+
+            StateImageIndex = (int)TreeView.StatusMapper.GetStatusImageForSvnItem(SvnItem);
         }
     }
 }

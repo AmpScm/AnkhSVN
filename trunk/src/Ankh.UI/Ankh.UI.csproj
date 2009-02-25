@@ -856,6 +856,7 @@
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemFileItem.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\FileSystemRootItem.cs" />
+    <Compile Include="WorkingCopyExplorer\Nodes\WCDirectoryNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\WCMyComputerNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\WCSolutionNode.cs" />
     <Compile Include="WorkingCopyExplorer\Nodes\WCTreeNode.cs" />
