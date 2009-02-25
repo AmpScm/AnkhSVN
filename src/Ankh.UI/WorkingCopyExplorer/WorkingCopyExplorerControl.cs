@@ -29,8 +29,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 {
     public partial class WorkingCopyExplorerControl : AnkhToolWindowControl
     {
-        private FileSystemNode[] _selection = new FileSystemNode[] { };
-
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkingCopyExplorerControl"/> class.
         /// </summary>
@@ -91,11 +89,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void RefreshRoots()
         {
-           // IFileStatusCache statusCache = Context.GetService<IFileStatusCache>();
-
-           // string s = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer);
-           // SvnItem root = statusCache[s];
-
             folderTree.AddRoot(new WCMyComputerNode(Context));
         }
 
@@ -104,14 +97,14 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.AddRoot(root);
         }
 
-        internal void RemoveRoot(FileSystemNode root)
+        internal void RemoveRoot(WCTreeNode root)
         {
             this.folderTree.RemoveRoot(root);
         }
 
-        internal void RefreshItem(FileSystemNode item)
+        internal void RefreshItem(WCTreeNode item)
         {
-            throw new System.NotImplementedException();
+            item.Refresh();
         }
 
         void treeView_SelectedItemChanged(object sender, EventArgs e)

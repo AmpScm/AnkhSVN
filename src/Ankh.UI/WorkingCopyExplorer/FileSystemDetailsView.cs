@@ -362,7 +362,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             return base.GetCanonicalName(item);
         }
 
-        private ListViewItem FindListViewItemWithTag(FileSystemNode fileSystemItem)
+        private ListViewItem FindListViewItemWithTag(WCTreeNode fileSystemItem)
         {
             foreach (ListViewItem lvi in this.Items)
             {

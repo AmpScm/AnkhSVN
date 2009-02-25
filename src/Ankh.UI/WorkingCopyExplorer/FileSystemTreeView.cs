@@ -151,7 +151,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        internal void RemoveRoot(FileSystemNode root)
+        internal void RemoveRoot(WCTreeNode root)
         {
             TreeNode nodeToRemove = null;
             foreach (TreeNode node in this.Nodes)
@@ -253,10 +253,6 @@ namespace Ankh.UI.WorkingCopyExplorer
                 StateImageList = StatusMapper.StatusImageList;
             
             SelectionPublishServiceProvider = Context;
-
-            //FileSystemTreeNode ftn = new FileSystemTreeNode(root, );
-            //foreach (string s in  GetLogicalDrives())
-            //    ftn.Nodes.Add(new FileSystemTreeNode(s));
         }
 
         protected IFileIconMapper IconMapper
@@ -278,39 +274,19 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private TreeNode AddNode(TreeNodeCollection nodes, WCTreeNode child)
         {
-            FileSystemNode fsNode = child as FileSystemNode;
-            if (fsNode == null)
-            {
-                FileSystemTreeNode normalTreeNode = new FileSystemTreeNode(child);
-                normalTreeNode.Tag = child;
-                normalTreeNode.SelectedImageIndex = normalTreeNode.ImageIndex = child.ImageIndex;
-                nodes.Add(normalTreeNode);
-                normalTreeNode.Refresh();
+            FileSystemTreeNode normalTreeNode = new FileSystemTreeNode(child);
+            normalTreeNode.Tag = child;
+            normalTreeNode.SelectedImageIndex = normalTreeNode.ImageIndex = child.ImageIndex;
+            nodes.Add(normalTreeNode);
+            normalTreeNode.Refresh();
 
-                FileSystemTreeNode d = new FileSystemTreeNode("DUMMY");
-                normalTreeNode.Nodes.Add(d);
-                d.Tag = DummyTag;
-                return normalTreeNode;
-            }
-
-            FileSystemTreeNode ftn = new FileSystemTreeNode(child,fsNode.SvnItem);
-            nodes.Add(ftn);
-            if (ftn.Parent == null)
-                ftn.Text = fsNode.SvnItem.FullPath;
-            ftn.Tag = child;
-            ftn.SelectedImageIndex = ftn.ImageIndex = this.FolderIndex;
-            ftn.Refresh();
-
-            if (fsNode.IsContainer)
-            {
-                FileSystemTreeNode dummy = new FileSystemTreeNode("DUMMY");
-                ftn.Nodes.Add(dummy);
-                dummy.Tag = DummyTag;
-            }
-            return ftn;
+            FileSystemTreeNode d = new FileSystemTreeNode("DUMMY");
+            normalTreeNode.Nodes.Add(d);
+            d.Tag = DummyTag;
+            return normalTreeNode;
         }
 
-        private void HandleItemChanged(FileSystemNode item)
+        private void HandleItemChanged(WCTreeNode item)
         {
             TreeNode node = this.SearchForNodeRecursivelyByTag(this.Nodes, item);
             if (node != null)
