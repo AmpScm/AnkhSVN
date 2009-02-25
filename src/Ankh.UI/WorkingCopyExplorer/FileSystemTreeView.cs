@@ -91,6 +91,9 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public void SelectSubNode(SvnItem item)
         {
+            if (item == null)
+                return;
+
             SelectedNode.Expand();
 
             foreach (FileSystemTreeNode tn in SelectedNode.Nodes)
@@ -98,10 +101,12 @@ namespace Ankh.UI.WorkingCopyExplorer
                 if (tn.SvnItem == item)
                 {
                     SelectedNode = tn;
-                    break;
-
+                    return;
                 }
             }
+
+            SelectSubNode(item.Parent);
+            SelectSubNode(item);
         }
 
         IStatusImageMapper _statusMapper;
@@ -112,13 +117,9 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public void AddRoot(WCTreeNode rootItem)
         {
-            this.AddNode(this.Nodes, rootItem);
+            TreeNode tn = this.AddNode(this.Nodes, rootItem);
 
-            // select this node if it's the first one added
-            if (this.Nodes.Count == 1)
-            {
-                this.SelectedNode = this.Nodes[0];
-            }
+            this.SelectedNode = tn;
         }
 
         public System.Drawing.Point GetSelectionPoint()
@@ -272,7 +273,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void AddNode(TreeNodeCollection nodes, WCTreeNode child)
+        private TreeNode AddNode(TreeNodeCollection nodes, WCTreeNode child)
         {
             FileSystemNode fsNode = child as FileSystemNode;
             if (fsNode == null)
@@ -286,7 +287,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 FileSystemTreeNode d = new FileSystemTreeNode("DUMMY");
                 normalTreeNode.Nodes.Add(d);
                 d.Tag = DummyTag;
-                return;
+                return normalTreeNode;
             }
 
             FileSystemTreeNode ftn = new FileSystemTreeNode(child,fsNode.SvnItem);
@@ -303,6 +304,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 ftn.Nodes.Add(dummy);
                 dummy.Tag = DummyTag;
             }
+            return ftn;
         }
 
         private void HandleItemChanged(FileSystemNode item)
