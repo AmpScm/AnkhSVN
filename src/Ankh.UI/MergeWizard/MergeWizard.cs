@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
 
         MergeUtils _mergeUtils = null;
         SvnItem _mergeTarget = null;
-        long[] _mergeRevisions = null;
+        IEnumerable<SvnRevisionRange> _mergeRevisions = null;
         bool _performDryRun = false;
         List<SvnNotifyEventArgs> _mergeActions;
         Dictionary<string, List<SvnConflictType>> _resolvedMergeConflicts;
@@ -307,7 +307,6 @@ namespace Ankh.UI.MergeWizard
                         else
                         {
                             SvnMergeArgs args = new SvnMergeArgs();
-                            List<SvnRevisionRange> mergeRevisions = null;
 
                             // Set the proper depth
                             args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
@@ -324,35 +323,32 @@ namespace Ankh.UI.MergeWizard
                             // Set whether or not this is a dry run
                             args.DryRun = PerformDryRun;
 
-                            // TODO: Enhance to be range-aware
-                            if (MergeRevisions != null)
-                            {
-                                mergeRevisions = new List<SvnRevisionRange>();
-                                foreach (long rev in MergeRevisions)
-                                {
-                                    mergeRevisions.Add(new SvnRevisionRange(rev - 1, rev));
-                                }
-                            }
-                            else
-                            {
-                                // This should only occur when you choose 'All eligible revisions'
-                                if (mergeType == MergeType.RangeOfRevisions)
-                                {
-                                    // Don't calculate eligible, just use 0:HEAD further on
-                                    // TODO: clean this up
-                                }
-                            }
+                            
 
                             //no need to continue with the merge operation since there are no revisions to merge
-                            if (mergeRevisions != null && mergeRevisions.Count == 0)
+                            if (MergeRevisions != null && EnumTools.GetFirst(MergeRevisions) == null)
                             {
                                 throw new Exception(Resources.NoLogItems);
                             }
 
-                            if (mergeRevisions == null)
-                                ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, new SvnRevisionRange(SvnRevision.Zero, SvnRevision.Head), args);
+                            if (MergeRevisions == null)
+                            {
+                                // Merge all eligible
+                                ee.Client.Merge(
+                                    MergeTarget.FullPath,
+                                    MergeSource.Target, 
+                                    new SvnRevisionRange(SvnRevision.Zero, SvnRevision.Head),
+                                    args);
+                            }
                             else
-                                ee.Client.Merge(MergeTarget.FullPath, MergeSource.Target, mergeRevisions, args);
+                            {
+                                // Cherrypicking
+                                ee.Client.Merge(
+                                    MergeTarget.FullPath, 
+                                    MergeSource.Target,
+                                    new List<SvnRevisionRange>(MergeRevisions), 
+                                    args);
+                            }
                         }
                     }
                     finally
@@ -438,7 +434,7 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Integer array for the revision(s) being merged.
         /// </summary>
-        internal long[] MergeRevisions
+        internal IEnumerable<SvnRevisionRange> MergeRevisions
         {
             get { return _mergeRevisions; }
             set { _mergeRevisions = value; }
@@ -447,27 +443,29 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns the revisions from <code>MergeRevisions</code> as a string.
         /// </summary>
-        internal string MergeRevisionsAsString
+        static internal string MergeRevisionsAsString(IEnumerable<SvnRevisionRange> mergeRevisions)
         {
-            get
+            IEnumerable<SvnRevisionRange> revs = mergeRevisions;
+            StringBuilder sb = new StringBuilder();
+            bool first = true;
+            foreach (SvnRevisionRange r in revs)
             {
-                long[] revs = MergeRevisions;
-                StringBuilder sb = new StringBuilder();
+                if (!first)
+                    sb.Append(", ");
 
-
-                for (int i = 0; i < revs.Length; i++)
+                if (r.StartRevision.Revision + 1 == r.EndRevision.Revision)
                 {
-                    if (i != revs.Length - 1)
-                        sb.Append(revs[i].ToString() + ", ");
-                    else
-                        sb.Append(revs[i].ToString());
+                    sb.Append(r.EndRevision);
+                }
+                else
+                {
+                    sb.AppendFormat("{0}-{1}", r.StartRevision.Revision + 1, r.EndRevision);
                 }
 
-                // TODO: Make the string range-aware.  So instead of '1, 3, 4, 5, 8',
-                // return '1, 3-5, 8'.
-
-                return sb.ToString();
+                first = false;
             }
+
+            return sb.ToString();
         }
 
         LogMode _logMode = LogMode.Log;
