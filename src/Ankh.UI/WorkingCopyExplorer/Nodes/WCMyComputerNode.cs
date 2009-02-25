@@ -48,7 +48,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
                 yield return new WCDirectoryNode(Context, this, cache[s]);
         }
 
-        public override void Refresh(bool rescan)
+        protected override void RefreshCore(bool rescan)
         {
         }
 
