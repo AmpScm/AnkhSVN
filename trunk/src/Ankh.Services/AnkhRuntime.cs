@@ -22,6 +22,7 @@ using Ankh.Commands;
 using System.Diagnostics;
 using System.Reflection;
 using Ankh.UI;
+using System.Threading;
 
 namespace Ankh
 {
@@ -41,11 +42,11 @@ namespace Ankh
 
             _container = parentContainer;
 
-            _commandMapper = (CommandMapper)_container.GetService(typeof(CommandMapper));
+            _commandMapper = GetService<CommandMapper>();
             if (_commandMapper == null)
                 _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
 
-            _context = (AnkhContext)_container.GetService(typeof(AnkhContext));
+            _context = GetService<AnkhContext>();
             if (_context == null)
                 _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
 
@@ -55,23 +56,10 @@ namespace Ankh
         }
 
         public AnkhRuntime(IServiceProvider parentProvider)
+            : this((parentProvider as IServiceContainer) ?? new AnkhServiceContainer(parentProvider))
         {
             if (parentProvider == null)
-                throw new ArgumentNullException("parentProvider");
-
-            _container = new AnkhServiceContainer(parentProvider);
-
-            _commandMapper = (CommandMapper)_container.GetService(typeof(CommandMapper));
-            if (_commandMapper == null)
-                _container.AddService(typeof(CommandMapper), _commandMapper = new CommandMapper(this));
-
-            _context = (AnkhContext)_container.GetService(typeof(AnkhContext));
-            if (_context == null)
-                _container.AddService(typeof(AnkhContext), _context = AnkhContext.Create(this));
-
-            InitializeServices();
-
-            _events = GetService<AnkhServiceEvents>();
+                throw new ArgumentNullException("parentProvider");            
         }
 
         void InitializeServices()
@@ -90,6 +78,9 @@ namespace Ankh
                 _container.AddService(typeof(AnkhServiceEvents), se);
                 _container.AddService(typeof(IAnkhServiceEvents), se);
             }
+
+            if(GetService<SynchronizationContext>() == null)
+                _container.AddService(typeof(SynchronizationContext), new System.Windows.Forms.WindowsFormsSynchronizationContext());
 
 #if DEBUG
             PreloadServicesViaEnsure = true;
