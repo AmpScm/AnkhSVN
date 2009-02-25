@@ -157,7 +157,8 @@ namespace Ankh.Scc
                 if (!_dirtyCheck.Contains(path))
                     _dirtyCheck.Add(path);
 
-                PostDirty();
+                if(post)
+                    PostDirty();
             }
         }
 
