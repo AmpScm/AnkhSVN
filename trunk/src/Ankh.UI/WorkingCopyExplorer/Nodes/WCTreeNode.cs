@@ -24,7 +24,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
     abstract class WCTreeNode
     {
         readonly IAnkhServiceProvider _context;
-        readonly Collection<FileSystemNode> _children;
         WCTreeNode _parent;
 
         public WCTreeNode(IAnkhServiceProvider context, WCTreeNode parent)
@@ -34,7 +33,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
             _context = context;
             _parent = parent;
-            _children = new Collection<FileSystemNode>();
         }
 
         public virtual bool IsContainer
@@ -66,15 +64,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         }
 
         /// <summary>
-        /// Child nodes of this node
-        /// </summary>
-        public Collection<FileSystemNode> Children
-        {
-            [System.Diagnostics.DebuggerStepThrough]
-            get { return _children; }
-        }
-
-        /// <summary>
         /// The parent node of this node.
         /// </summary>
         public WCTreeNode Parent
@@ -97,26 +86,5 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         }
 
         public abstract void Refresh(bool rescan);
-
-        protected void GetChildResources(Collection<SvnItem> list, bool getChildItems,
-            Predicate<SvnItem> filter)
-        {
-            if (getChildItems)
-            {
-                foreach (WCTreeNode node in Children)
-                    node.GetResources(list, getChildItems, filter);
-            }
-        }
-
-        protected void FilterResources(IList<SvnItem> inList, IList outList, Predicate<SvnItem> filter)
-        {
-            foreach (SvnItem item in inList)
-            {
-                if (filter == null || filter(item))
-                {
-                    outList.Add(item);
-                }
-            }
-        }
     }
 }
