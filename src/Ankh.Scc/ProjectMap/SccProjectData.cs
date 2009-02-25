@@ -61,6 +61,7 @@ namespace Ankh.Scc.ProjectMap
         string _projectDirectory;
         Guid? _projectGuid;
         Guid? _projectTypeGuid;
+        bool _unloading;
 
         public SccProjectData(IAnkhServiceProvider context, IVsSccProject2 project)
         {
@@ -729,6 +730,12 @@ namespace Ankh.Scc.ProjectMap
         public override string ToString()
         {
             return UniqueProjectName;
+        }
+
+        public bool Unloading
+        {
+            get { return _unloading; }
+            set { _unloading = value; }
         }
     }
 }
