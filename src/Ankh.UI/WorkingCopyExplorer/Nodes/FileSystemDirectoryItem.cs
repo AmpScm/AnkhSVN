@@ -37,18 +37,20 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             get { return true; }
         }
 
-        public override FileSystemNode[] GetChildren()
+        public override IEnumerable<WCTreeNode> GetChildren()
         {
-            try
-            {
-                FileSystemNode[] children = new FileSystemNode[this.Children.Count];
-                this.Children.CopyTo(children, 0);
-                return children;
-            }
-            catch
-            {
-                return new FileSystemNode[] { };
-            }
+            foreach (FileSystemNode n in Children)
+                yield return n;
+            //try
+            //{
+            //    FileSystemNode[] children = new FileSystemNode[this.Children.Count];
+            //    this.Children.CopyTo(children, 0);
+            //    return children;
+            //}
+            //catch
+            //{
+            //    return new FileSystemNode[] { };
+            //}
         }
 
 

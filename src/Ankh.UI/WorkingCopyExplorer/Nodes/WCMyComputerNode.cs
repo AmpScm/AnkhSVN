@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.VS;
+using Ankh.Scc;
 
 namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
@@ -30,8 +31,21 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _imageIndex = context.GetService<IFileIconMapper>().GetSpecialFolderIcon(WindowsSpecialFolder.MyComputer);
         }
 
+        public override string Title
+        {
+            get { return "My Computer"; }
+        }
+
         public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
         {
+        }
+
+        public override IEnumerable<WCTreeNode> GetChildren()
+        {
+            IFileStatusCache cache = Context.GetService<IFileStatusCache>();
+
+            foreach (string s in Environment.GetLogicalDrives())
+                yield return new WCDirectoryNode(Context, this, cache[s]);
         }
 
         public override void Refresh(bool rescan)

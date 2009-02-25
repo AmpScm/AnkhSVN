@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.Collections.Generic;
 
 namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
@@ -26,14 +27,16 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
         }
 
+        
+
         public override bool IsContainer
         {
             get { return false; }
         }
 
-        public override FileSystemNode[] GetChildren()
+        public override IEnumerable<WCTreeNode> GetChildren()
         {
-            return new FileSystemNode[] { };
+            yield break;
         }
 
         public override void Refresh(bool rescan)

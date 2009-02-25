@@ -100,7 +100,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             SelectionPublishServiceProvider = Context;
         }
 
-        public void SetDirectory(FileSystemNode directory)
+        public void SetDirectory(WCTreeNode directory)
         {
             TryInitialize();
 
@@ -109,7 +109,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
 
 
-        public FileSystemNode CurrentDirectory
+        public WCTreeNode CurrentDirectory
         {
             get { return this.currentDirectory; }
         }
@@ -160,7 +160,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void AddChildren(FileSystemNode directory)
+        private void AddChildren(WCTreeNode directory)
         {
             this.currentDirectory = directory;
 
@@ -169,20 +169,47 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 this.Items.Clear();
 
-                foreach (FileSystemNode item in directory.GetChildren())
+                foreach (WCTreeNode item in directory.GetChildren())
                 {
-                    SvnItem svnItem = item.SvnItem;
-                    FileSystemInfo fif;
-                    if (svnItem.IsDirectory)
-                        fif = new DirectoryInfo(svnItem.FullPath);
+                    WCFileSystemNode fsNode = item as WCFileSystemNode;
+
+                    //SvnItem svnItem = item.SvnItem;
+                    if (fsNode != null)
+                    {
+                        FileSystemInfo fi = fsNode.FileInfo;
+                        if (fsNode.SvnItem.IsDirectory)
+                        {
+                            DirectoryInfo di = (DirectoryInfo)fi;
+                            try
+                            {
+                                di.GetDirectories();
+                            }
+                            catch (IOException)
+                            {
+                                // We cannot browse this directory
+                                continue;
+                            }
+                            catch (UnauthorizedAccessException)
+                            {
+                                // We cannot browse this directory
+                                continue;
+                            }
+                        }
+                        FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem, fi);
+
+                        Items.Add(lvi);
+
+                        lvi.Tag = item;
+                    }
                     else
-                        fif = new FileInfo(svnItem.FullPath);
+                        continue; // TODO: Implement this case
+                    //    fif = new FileInfo(svnItem.FullPath);
 
-                    FileSystemListViewItem lvi = new FileSystemListViewItem(this, item.SvnItem, fif);
+                    //FileSystemListViewItem lvi = new FileSystemListViewItem(this, item.SvnItem, fif);
 
-                    Items.Add(lvi);
+                    //Items.Add(lvi);
 
-                    lvi.Tag = item;
+                    //lvi.Tag = item;
 
                     // we need to know when this item changes
                 }
@@ -348,7 +375,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
         private int characterWidth;
-        private FileSystemNode currentDirectory;
+        private WCTreeNode currentDirectory;
         private const int NameColumnNumberOfCharacters = 50;
     }
 }

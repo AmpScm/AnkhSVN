@@ -37,6 +37,25 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _children = new Collection<FileSystemNode>();
         }
 
+        public virtual bool IsContainer
+        {
+            get { return true; }
+        }
+
+        protected IAnkhServiceProvider Context
+        {
+            get { return _context; }
+        }
+
+
+
+        public abstract string Title
+        {
+            get;
+        }
+
+        public abstract IEnumerable<WCTreeNode> GetChildren();
+
         /// <summary>
         /// Gets the index of the image.
         /// </summary>
