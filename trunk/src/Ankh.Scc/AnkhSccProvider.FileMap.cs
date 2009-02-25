@@ -134,6 +134,13 @@ namespace Ankh.Scc
                     svn.DeleteDirectory(oldBackup);
                 }
             }
+            else
+            {
+                SvnItem dir = StatusCache[fullPath];
+
+                if (!dir.IsVersioned)
+                    return; // Nothing to do for us
+            }
 
             using (SvnSccContext svn = new SvnSccContext(this))
             {
