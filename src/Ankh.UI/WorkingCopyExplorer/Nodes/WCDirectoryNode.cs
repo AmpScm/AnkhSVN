@@ -20,6 +20,12 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _item = item;
         }
 
+        IFileStatusCache _statusCache;
+        protected IFileStatusCache StatusCache
+        {
+            get { return _statusCache ?? (_statusCache = Context.GetService<IFileStatusCache>()); }
+        }
+
         public abstract FileSystemInfo FileInfo
         {
             get;
@@ -65,8 +71,16 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
         }
 
-        public override void Refresh(bool rescan)
+        protected override void RefreshCore(bool rescan)
         {
+            if(SvnItem == null)
+                return;
+             
+            if(rescan)
+                StatusCache.MarkDirtyRecursive(SvnItem.FullPath);
+
+            if (TreeNode != null)
+                TreeNode.Refresh();
         }
 
         public override IEnumerable<WCTreeNode> GetChildren()
@@ -99,7 +113,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
         }
 
-        public override void Refresh(bool rescan)
+        protected override void RefreshCore(bool rescan)
         {
         }
 
