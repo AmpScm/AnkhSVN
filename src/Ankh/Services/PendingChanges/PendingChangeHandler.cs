@@ -24,6 +24,7 @@ using Ankh.Scc;
 using Ankh.UI;
 using Ankh.Services.PendingChanges;
 using Ankh.VS;
+using Ankh.UI.SccManagement;
 
 namespace Ankh.Services.PendingChanges
 {
@@ -135,6 +136,57 @@ namespace Ankh.Services.PendingChanges
             return true;
         }
 
+        public IEnumerable<PendingCommitState> GetCommitRoots(IEnumerable<PendingChange> changes)
+        {
+            List<SvnWorkingCopy> wcs = new List<SvnWorkingCopy>();
+            List<List<PendingChange>> pcs = new List<List<PendingChange>>();
+
+            foreach (PendingChange pc in changes)
+            {
+                SvnItem item = pc.Item;
+                SvnWorkingCopy wc = item.WorkingCopy;
+
+                if (wc != null)
+                {
+                    int n = wcs.IndexOf(wc);
+
+                    List<PendingChange> wcChanges;
+                    if (n < 0)
+                    {
+                        wcs.Add(wc);
+                        pcs.Add(wcChanges = new List<PendingChange>());
+                    }
+                    else
+                        wcChanges = pcs[n];
+
+                    wcChanges.Add(pc);
+                }
+            }
+
+            if (wcs.Count == 0)
+            {
+                yield return new PendingCommitState(Context, changes);
+                yield break;
+            }
+
+            using (MultiWorkingCopyCommit dlg = new MultiWorkingCopyCommit())
+            {
+                dlg.SetInfo(wcs, pcs);
+
+                if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.ChangeGroups.Count == 0)
+                {
+                    yield return null;
+                    yield break;
+                }
+
+                foreach (List<PendingChange> chg in dlg.ChangeGroups)
+                {
+                    yield return new PendingCommitState(Context, chg);
+                }
+            }
+        }
+
+
         public bool Commit(IEnumerable<PendingChange> changes, PendingChangeCommitArgs args)
         {
             // Ok, to make a commit happen we have to take 'a few' steps
@@ -144,70 +196,80 @@ namespace Ankh.Services.PendingChanges
                 ci.SetLastChange(null, null);
 
             bool storeMessage = args.StoreMessageOnError;
-            using (PendingCommitState state = new PendingCommitState(Context, changes))
-                try
-                {
-                    state.KeepLocks = args.KeepLocks;
-                    state.KeepChangeLists = args.KeepChangeLists;
-                    state.LogMessage = args.LogMessage;
-                    state.IssueText = args.IssueText;
 
-                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
-                        return false;
+            foreach (PendingCommitState state in GetCommitRoots(changes))
+            {
+                if (state == null)
+                    return false;
 
-                    if (!PreCommit_VerifyLogMessage(state))
-                        return false;
-
-                    if (!PreCommit_SaveDirty(state))
-                        return false;
-
-                    if (!PreCommit_AddNewFiles(state))
-                        return false;
-
-                    if (!PreCommit_HandleMissingFiles(state))
-                        return false;
-
-                    state.FlushState();
-
-                    if (!PreCommit_AddNeededParents(state))
-                        return false;
-
-                    if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
-                        return false;
-                    // if(!PreCommit_....())
-                    //  return;
-
-                    bool ok = false;
-                    using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
+                using (state)
+                    try
                     {
-                        dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
+                        state.KeepLocks = args.KeepLocks;
+                        state.KeepChangeLists = args.KeepChangeLists;
+                        state.LogMessage = args.LogMessage;
+                        state.IssueText = args.IssueText;
 
-                        if (Commit_CommitToRepository(state))
+                        if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
+                            return false;
+
+                        if (!PreCommit_VerifyLogMessage(state))
+                            return false;
+
+                        if (!PreCommit_SaveDirty(state))
+                            return false;
+
+                        if (!PreCommit_AddNewFiles(state))
+                            return false;
+
+                        if (!PreCommit_HandleMissingFiles(state))
+                            return false;
+
+                        state.FlushState();
+
+                        if (!PreCommit_AddNeededParents(state))
+                            return false;
+
+                        if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'again'
+                            return false;
+                        // if(!PreCommit_....())
+                        //  return;
+
+                        bool ok = false;
+                        using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
                         {
-                            storeMessage = true;
-                            ok = true;
+                            dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
+
+                            if (Commit_CommitToRepository(state))
+                            {
+                                storeMessage = true;
+                                ok = true;
+                            }
+
+                            dl.ReloadModified();
                         }
 
-                        dl.ReloadModified();
+                        if (!ok)
+                            return false;
                     }
-
-                    return ok;
-                }
-                finally
-                {
-                    if (storeMessage)
+                    finally
                     {
-                        if (!string.IsNullOrEmpty(state.LogMessage))
+                        if (storeMessage)
                         {
-                            IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
-
-                            if (config != null)
+                            if (!string.IsNullOrEmpty(state.LogMessage))
                             {
-                                config.GetRecentLogMessages().Add(state.LogMessage);
+                                IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
+
+                                if (config != null)
+                                {
+                                    config.GetRecentLogMessages().Add(state.LogMessage);
+                                }
                             }
                         }
                     }
-                }
+            }
+
+            return true;
         }
 
         private bool PreCommit_VerifySingleRoot(PendingCommitState state)
@@ -217,7 +279,7 @@ namespace Ankh.Services.PendingChanges
             {
                 SvnItem item = pc.Item;
 
-                if (item.IsVersioned)
+                if (item.IsVersioned || item.IsVersionable)
                 {
                     SvnWorkingCopy w = item.WorkingCopy;
 
@@ -265,8 +327,8 @@ namespace Ankh.Services.PendingChanges
 
             // Use the project commit settings class to add an issue number (if available)
             IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
-            msg = pcs.BuildLogMessage(msg, state.IssueText);                
-            
+            msg = pcs.BuildLogMessage(msg, state.IssueText);
+
             // And make sure the log message ends with a single newline
             state.LogMessage = msg.TrimEnd() + Environment.NewLine;
 
