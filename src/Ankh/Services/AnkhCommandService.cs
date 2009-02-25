@@ -28,7 +28,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 
-namespace Ankh
+namespace Ankh.Services
 {
     [GlobalService(typeof(IAnkhCommandService))]
     class AnkhCommandService : AnkhService, IAnkhCommandService
