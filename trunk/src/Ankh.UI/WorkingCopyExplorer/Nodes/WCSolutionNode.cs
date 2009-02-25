@@ -45,7 +45,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 //            throw new NotImplementedException();
         }
 
-        public override void Refresh(bool rescan)
+        protected override void RefreshCore(bool rescan)
         {
 //            throw new NotImplementedException();
         }

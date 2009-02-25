@@ -36,7 +36,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             Text = wcNode.Title;
             _item = item;
 
-            
+            wcNode.TreeNode = this;
         }
 
         public FileSystemTreeNode(WCTreeNode wcNode)

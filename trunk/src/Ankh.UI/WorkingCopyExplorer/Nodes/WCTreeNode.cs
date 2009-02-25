@@ -35,6 +35,16 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             _parent = parent;
         }
 
+        FileSystemTreeNode _treeNode;
+        public FileSystemTreeNode TreeNode
+        {
+            get
+            {
+                return _treeNode;
+            }
+            internal set { _treeNode = value; }
+        }
+
         public virtual bool IsContainer
         {
             get { return true; }
@@ -82,9 +92,14 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
         public void Refresh()
         {
-            this.Refresh(true);
+            RefreshCore(true);
         }
 
-        public abstract void Refresh(bool rescan);
+        public void Refresh(bool rescan)
+        {
+            RefreshCore(rescan);
+        }
+
+        protected abstract void RefreshCore(bool rescan);
     }
 }
