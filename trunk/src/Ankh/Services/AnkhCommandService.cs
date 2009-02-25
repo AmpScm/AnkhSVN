@@ -33,6 +33,7 @@ namespace Ankh
     [GlobalService(typeof(IAnkhCommandService))]
     class AnkhCommandService : AnkhService, IAnkhCommandService
     {
+        readonly List<int> _delayedCommands = new List<int>();
         public AnkhCommandService(IAnkhServiceProvider context)
             : base(context)
         {
@@ -179,6 +180,18 @@ namespace Ankh
             }
         }
 
+        public void SafePostTickCommand(ref bool tick, AnkhCommand command)
+        {
+            if(tick)
+                return;
+
+            tick = true;
+            lock(_delayTasks)
+            {
+                _delayedCommands.Add((int)command);
+            }
+        }
+
         public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
         {
             return PostExecCommand(command, null, CommandPrompt.DoDefault);
@@ -216,22 +229,33 @@ namespace Ankh
             if (command == null)
                 throw new ArgumentNullException("command");
 
-            if(_delayed)
+            lock(_delayTasks)
             {
-                lock(_delayTasks)
+                if(_delayed)
                 {
                     _delayTasks.Add(
                         delegate
                         {
                             PerformPost(command, prompt, args);
                         });
-                }
 
-                return true;
-            }
-            else
-            {
-                return PerformPost(command, prompt, args);
+                    return true;
+                }
+                else if(PerformPost(command, prompt, args))
+                {
+                    for(int i = 0; i < _delayedCommands.Count; i++)
+                    {
+                        if(!PerformPost(new CommandID(AnkhId.CommandSetGuid, _delayedCommands[i]), CommandPrompt.DoDefault, null))
+                        {
+                            _delayedCommands.RemoveRange(0, i);
+                            return true;
+                        }
+                    }
+                    _delayedCommands.Clear();
+                    return true;
+                }
+                else
+                    return false;
             }
         }
 

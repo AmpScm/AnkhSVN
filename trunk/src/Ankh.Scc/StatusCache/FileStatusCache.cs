@@ -474,8 +474,8 @@ namespace Ankh.Scc.StatusCache
                 if (!_cleanup.Contains(directory))
                     _cleanup.Add(directory);
 
-                if (!_postedCleanup && CommandService != null && CommandService.PostExecCommand(AnkhCommand.FileCacheFinishTasks))
-                    _postedCleanup = true;
+                if (!_postedCleanup)
+                    CommandService.SafePostTickCommand(ref _postedCleanup, AnkhCommand.FileCacheFinishTasks);
             }
         }
 

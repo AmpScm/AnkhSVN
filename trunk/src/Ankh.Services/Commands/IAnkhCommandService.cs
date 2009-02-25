@@ -150,6 +150,14 @@ namespace Ankh.Commands
         /// <returns></returns>
         bool PostTickCommand(ref bool tick, AnkhCommand command);
 
+        /// <summary>
+        /// Safely posts a tick command
+        /// </summary>
+        /// <param name="tick">if set to <c>true</c> [tick].</param>
+        /// <param name="command">The command.</param>
+        /// <returns></returns>
+        void SafePostTickCommand(ref bool tick, AnkhCommand command);
+
         // These methods can be called from the UI or a background thread
         /// <summary>
         /// Posts the command to the command queue
