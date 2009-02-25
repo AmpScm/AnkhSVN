@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6213</title>
+          AnkhSVN-Daily Update - 2.0.6220</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,21 +14,34 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1576/AnkhSvn-Daily-2.0.6213.411.msi">AnkhSVN 2.0.6213</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1581/AnkhSvn-Daily-2.0.6220.412.msi">AnkhSVN 2.0.6220</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6213">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6220">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-25</td></tr>
+<tr><td> </td><td class="r"><a id="6218" href="http://ankhsvn.net/rev/?r=6218">
+            [r6218]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Schedule a file dirty check when OnQueryEdit is called on a file. This
+should make the detection of editted project files more stable.</td></tr>
 <tr class="d"><td colspan="4">2009-02-24</td></tr>
+<tr><td> </td><td class="r"><a id="6217" href="http://ankhsvn.net/rev/?r=6217">
+            [r6217]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Set the solution to the Edited state when a project is added or removed.</td></tr>
+<tr><td> </td><td class="r"><a id="6216" href="http://ankhsvn.net/rev/?r=6216">
+            [r6216]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Partially fix the merge problem caused by specifying each eligible revision
+as a seperate revision range. This revision only fixes the problem for
+"All Eligble Revisions" merges.</td></tr>
 <tr><td> </td><td class="r"><a id="6212" href="http://ankhsvn.net/rev/?r=6212">
             [r6212]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Commands/CheckoutDialog.Designer.cs, Ankh.UI/Commands/CommandStrings.resx, Ankh.UI/Commands/CheckoutDialog.cs, Ankh.UI/Ankh.UI.csproj, Ankh.UI/Commands/CommandStrings.Designer.cs, Ankh/Commands/CheckoutCommand.cs, Ankh.UI/Commands/SwitchDialog.resx, Ankh.UI/Commands/SwitchDialog.Designer.cs, Ankh.UI/Commands/CheckoutDialog.resx, Ankh.UI/Commands/SwitchDialog.cs, Ankh/Commands/SwitchItemCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">CheckOut and Switch dialogs: Fix namespaces, use resource file and use an errorProvider</td></tr>
@@ -237,11 +250,6 @@ file (AnkhSVN specific) and on the project root (compatible with TortoiseSVN).</
 <tr><td> </td><td class="r"><a id="6070" href="http://ankhsvn.net/rev/?r=6070">
             [r6070]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/OpenFromSubversion.cs, Ankh.UI/RepositoryOpen/CheckoutProject.Designer.cs, Ankh.UI/RepositoryOpen/CheckoutProject.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow typing a directory name in the Checkout Project dialog</td></tr>
-<tr class="d"><td colspan="4">2009-01-26</td></tr>
-<tr><td> </td><td class="r"><a id="6066" href="http://ankhsvn.net/rev/?r=6066">
-            [r6066]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog/Commands:</strong> RevertChanges.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert changes from log viewer: Calculate the right set of documents
-to save, lock, reload.</td></tr>
 
 </table>
 <!--/Recent changes-->
