@@ -382,6 +382,7 @@ namespace Ankh.Scc.ProjectMap
             return ErrorHandler.Succeeded(pdd.IsDocDataReloadable(out reloadable)) && (reloadable != 0);
         }
 
+        static readonly Guid ProjectPropertyPageHostGuid = new Guid("{b270807c-d8c6-49eb-8ebe-8e8d566637a1}");
         public bool IsProjectPropertyPageHost
         {
             get
@@ -394,7 +395,7 @@ namespace Ankh.Scc.ProjectMap
                     Guid editorType;
                     if (pdd != null && ErrorHandler.Succeeded(pdd.GetGuidEditorType(out editorType)))
                     {
-                        if (editorType == new Guid("{b270807c-d8c6-49eb-8ebe-8e8d566637a1}"))
+                        if (editorType == ProjectPropertyPageHostGuid)
                             _isPropertyDesigner = true;
                     }
                 }
@@ -428,44 +429,42 @@ namespace Ankh.Scc.ProjectMap
         /// <remarks>Gets the live data; or if that fails the cached data</remarks>
         internal bool GetIsDirty(bool fallback)
         {
+            if (!_isFileDocument)
+                return false; // Not interested
+
             IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
 
-            if (pdd == null)
-            {
-                if (_isFileDocument)
-                {
-                    IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+            int dirty;
+            if (pdd != null && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) && (dirty != 0))
+                return true;
 
-                    Guid gV = Guid.Empty;
-                    IVsUIHierarchy hier;
-                    uint[] openId = new uint[1];
-                    IVsWindowFrame wf;
-                    int open;
-                    if (ErrorHandler.Succeeded(so.IsDocumentOpen(null, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
-                        out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+
+            Guid gV = Guid.Empty;
+            IVsUIHierarchy hier;
+            uint[] openId = new uint[1];
+            IVsWindowFrame wf;
+            int open;
+            if (ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
+                out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+            {
+                if (wf != null)
+                {
+                    object ok;
+                    if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
                     {
-                        if (wf != null)
+                        if (ok == null)
+                        { }
+                        else if (ok is bool) // Implemented by VS as bool
                         {
-                            object ok;
-                            if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
-                            {
-                                if (ok == null)
-                                { }
-                                else if (ok is bool) // Implemented by VS as bool
-                                {
-                                    if ((bool)ok)
-                                        return true;
-                                }
-                            }
+                            if ((bool)ok)
+                                return true;
                         }
                     }
                 }
-
-                return fallback && _isDirty;
             }
 
-            int dirty;
-            return ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) ? (dirty != 0) : _isDirty;
+            return fallback && _isDirty;
         }
 
         /// <summary>
