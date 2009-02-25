@@ -79,7 +79,7 @@ namespace Ankh.UI.MergeWizard
                     if (mergeWizard.MergeRevisions == null)
                         revisionsTextBox.Text = Resources.All;
                     else
-                        revisionsTextBox.Text = mergeWizard.MergeRevisionsAsString;
+                        revisionsTextBox.Text = MergeWizard.MergeRevisionsAsString(mergeWizard.MergeRevisions);
 
                 // Populate Binary Conflicts
                 if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)

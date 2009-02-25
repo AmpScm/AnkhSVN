@@ -132,6 +132,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("lvi");
 
             _lvi = lvi;
+            _index = lvi.Index;
             _repositoryRoot = repositoryRoot;
         }
 
@@ -148,6 +149,16 @@ namespace Ankh.UI.SvnLog
         public Uri RepositoryRoot
         {
             get { return _repositoryRoot; }
+        }
+
+        readonly int _index;
+        [Browsable(false)]
+        public int Index
+        {
+            get 
+            {
+                return _index; 
+            }
         }
 
         [Category("Subversion")]

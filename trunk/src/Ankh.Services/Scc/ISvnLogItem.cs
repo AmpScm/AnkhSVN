@@ -28,6 +28,7 @@ namespace Ankh.Scc
 		string Author { get; }
 		string LogMessage { get; }
 		long Revision { get; }
+        int Index { get; }
         SvnChangeItemCollection ChangedPaths { get; }
 
         Uri RepositoryRoot { get; }

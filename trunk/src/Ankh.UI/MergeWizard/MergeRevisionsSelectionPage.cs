@@ -21,6 +21,7 @@ using System.Text;
 using System.Windows.Forms;
 using WizardFramework;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -50,20 +51,46 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns an array of revisions, in numerical order, to be merged.
         /// </summary>
-        public long[] MergeRevisions
+        public IEnumerable<SvnRevisionRange> MergeRevisions
         {
             get
             {
-                List<long> revs = new List<long>();
-
-                foreach (ISvnLogItem item in ((MergeRevisionsSelectionPageControl)PageControl).SelectedRevisions)
+                ISvnLogItem start = null;
+                ISvnLogItem end = null;
+                int previousIndex = -1;
+                List<ISvnLogItem> logitems = new List<ISvnLogItem>(((MergeRevisionsSelectionPageControl)PageControl).SelectedRevisions);
+                logitems.Sort(delegate(ISvnLogItem a, ISvnLogItem b) { return a.Index.CompareTo(b.Index); });
+                
+                foreach (ISvnLogItem item in logitems)
                 {
-                    revs.Add(item.Revision);
+                    if (start == null)
+                    {
+                        start = item;
+                        end = item;
+                    }
+                    else if (previousIndex + 1 == item.Index)
+                    {
+                        // range is still contiguous, move end ptr
+                        end = item;
+                    }
+                    else
+                    {
+                        // The start of a new range because it's no longer contiguous
+                        // return the previous range and start a new one
+                        yield return new SvnRevisionRange(start.Revision - 1, end.Revision);
+
+                        start = item;
+                        end = item;
+                    }
+
+                    previousIndex = item.Index;
                 }
 
-                revs.Sort();
-
-                return revs.ToArray();
+                // The loop doesn't handle the last range
+                if (start != null && end != null)
+                {
+                    yield return new SvnRevisionRange(start.Revision - 1, end.Revision);
+                }
             }
         }
 
