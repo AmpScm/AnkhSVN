@@ -105,7 +105,10 @@ namespace Ankh.UI.WorkingCopyExplorer
                 }
             }
 
+            // Walk up recursively
             SelectSubNode(item.Parent);
+
+            // Walk back down (step down is taken by setting SelectedNode one deeper above)
             SelectSubNode(item);
         }
 
