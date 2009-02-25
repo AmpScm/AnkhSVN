@@ -99,7 +99,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             folderTree.AddRoot(new WCMyComputerNode(Context));
         }
 
-        internal void AddRoot(FileSystemNode root)
+        internal void AddRoot(WCTreeNode root)
         {
             this.folderTree.AddRoot(root);
         }
@@ -159,17 +159,17 @@ namespace Ankh.UI.WorkingCopyExplorer
 
 
 
-            FileSystemRootItem rt = CreateRoot(root);
-
-            AddRoot(rt);
+            AddRoot(CreateRoot(root));
+            
+            folderTree.SelectSubNode(item);
         }
 
-        private FileSystemRootItem CreateRoot(string directory)
+        private WCTreeNode CreateRoot(string directory)
         {
-            StatusCache.UpdateStatus(directory, SvnDepth.Infinity);
+            StatusCache.MarkDirtyRecursive(directory);
             SvnItem item = StatusCache[directory];
-            FileSystemRootItem root = new FileSystemRootItem(this, item);
-            return root;
+
+            return new WCDirectoryNode(Context, null, item);
         }
 
         internal void OpenItem(IAnkhServiceProvider context, string p)
