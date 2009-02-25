@@ -364,6 +364,7 @@ namespace Ankh.Scc
             _managedSolution = false;
             _isDirty = false;
             _solutionLoaded = false;
+            _reloading = null;
             ClearEnlistState();
 
             IPendingChangesManager mgr = GetService<IPendingChangesManager>();
@@ -436,7 +437,9 @@ namespace Ankh.Scc
                 data.SccProject.SccGlyphChanged(0, null, null, null);
             }
 
-            if (added)
+            bool isReload = (_reloading == data.ProjectLocation);
+            _reloading = null;
+            if (added && !isReload)
             {
                 if (!string.IsNullOrEmpty(SolutionFilename))
                     DocumentTracker.SetDirty(SolutionFilename, true);
@@ -474,6 +477,8 @@ namespace Ankh.Scc
             return false;
         }
 
+        string _reloading;
+
         /// <summary>
         /// Called by ProjectDocumentTracker when a scc-capable project is closed
         /// </summary>
@@ -482,14 +487,18 @@ namespace Ankh.Scc
         internal void OnProjectClosed(IVsSccProject2 project, bool removed)
         {
             SccProjectData data;
+            _reloading = null;
 
             if (_projectMap.TryGetValue(project, out data))
             {
                 data.OnClose();
                 _projectMap.Remove(project);
+
+                if(data.Unloading)
+                    _reloading = data.ProjectLocation;
             }
 
-            if (removed)
+            if (removed && _reloading == null)
             {
                 if (!string.IsNullOrEmpty(SolutionFilename))
                     DocumentTracker.SetDirty(SolutionFilename, true);
@@ -500,7 +509,10 @@ namespace Ankh.Scc
         {
             SccProjectData data;
             if (_projectMap.TryGetValue(project, out data))
+            {
+                data.Unloading = true;
                 Monitor.ScheduleMonitor(data.GetAllFiles()); // Keep track of changes in files of unloaded project
+            }
         }
 
         bool _ensureIcons;
