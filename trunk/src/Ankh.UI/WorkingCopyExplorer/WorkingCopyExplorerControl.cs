@@ -84,12 +84,21 @@ namespace Ankh.UI.WorkingCopyExplorer
             base.OnLoad(e);
 
             if (!DesignMode)
-                RefreshRoots();
+                EnsureMyComputer();
+        }
+
+        bool hasMyComputer;
+        private void EnsureMyComputer()
+        {
+            if (hasMyComputer)
+                return;
+
+            folderTree.AddRoot(new WCMyComputerNode(Context));
+            hasMyComputer = true;
         }
 
         private void RefreshRoots()
         {
-            folderTree.AddRoot(new WCMyComputerNode(Context));
         }
 
         internal void AddRoot(WCTreeNode root)
