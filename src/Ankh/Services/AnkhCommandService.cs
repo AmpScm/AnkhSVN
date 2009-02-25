@@ -289,8 +289,14 @@ namespace Ankh.Services
             return false;
         }
 
-        readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();
-        readonly WindowsFormsSynchronizationContext _syncContext = new WindowsFormsSynchronizationContext();
+        SynchronizationContext _syncContext;
+        SynchronizationContext SyncContext
+        {
+            [DebuggerStepThrough]
+            get { return _syncContext ?? (_syncContext = GetService<SynchronizationContext>()); }
+        }
+
+        readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();        
         public void DelayPostCommands(DelayDelegateCheck check)
         {
             if (check == null)
@@ -300,7 +306,7 @@ namespace Ankh.Services
             if (!_delayed)
             {
                 _delayed = true;
-                _syncContext.Post(TryRelease, null);
+                SyncContext.Post(TryRelease, null);
             }
         }
 
@@ -318,7 +324,7 @@ namespace Ankh.Services
             PostTask pt = delegate()
             {
                 Thread.Sleep(50);
-                _syncContext.Post(TryRelease, null);
+                SyncContext.Post(TryRelease, null);
             };
 
             pt.BeginInvoke(null, null);
