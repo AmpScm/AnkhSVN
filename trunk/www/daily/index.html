@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6223</title>
+          AnkhSVN-Daily Update - 2.0.6248</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,21 +14,69 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1582/AnkhSvn-Daily-2.0.6223.413.msi">AnkhSVN 2.0.6223</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1586/AnkhSvn-Daily-2.0.6248.414.msi">AnkhSVN 2.0.6248</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6223">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6248">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-26</td></tr>
+<tr><td> </td><td class="r"><a id="6246" href="http://ankhsvn.net/rev/?r=6246">
+            [r6246]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When doubleclicking in the Working Copy Explorer, let VS handle files and
+projects in the current solution.</td></tr>
 <tr class="d"><td colspan="4">2009-02-25</td></tr>
+<tr><td> </td><td class="r"><a id="6243" href="http://ankhsvn.net/rev/?r=6243">
+            [r6243]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer/Nodes:</strong> WCDirectoryNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Filter system, hidden and offline files and directories in the working copy
+explorer.</td></tr>
+<tr><td> </td><td class="r"><a id="6242" href="http://ankhsvn.net/rev/?r=6242">
+            [r6242]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer/Nodes:</strong> WCDirectoryNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Commit file that should've been in <a href="http://ankhsvn.net/rev/?r=6241">r6241</a>, preparing for refreshing</td></tr>
+<tr><td> </td><td class="r"><a id="6241" href="http://ankhsvn.net/rev/?r=6241">
+            [r6241]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeNode.cs, Nodes/WCMyComputerNode.cs, Nodes/WCSolutionNode.cs, Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Prepare refreshing nodes</td></tr>
+<tr><td> </td><td class="r"><a id="6239" href="http://ankhsvn.net/rev/?r=6239">
+            [r6239]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix possible double (or more) My Computer rootnode</td></tr>
+<tr><td> </td><td class="r"><a id="6238" href="http://ankhsvn.net/rev/?r=6238">
+            [r6238]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> WorkingCopyExplorer/Nodes/FileSystemFileItem.cs, Ankh.UI.csproj, WorkingCopyExplorer/WorkingCopyExplorerControl.cs, WorkingCopyExplorer/Nodes/FileSystemRootItem.cs, WorkingCopyExplorer/FileSystemTreeView.cs, WorkingCopyExplorer/Nodes/FileSystemDirectoryItem.cs, WorkingCopyExplorer/Nodes/FileSystemNode.cs, WorkingCopyExplorer/FileSystemDetailsView.cs, WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Clean up a lot of old code and commented code</td></tr>
+<tr><td> </td><td class="r"><a id="6237" href="http://ankhsvn.net/rev/?r=6237">
+            [r6237]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add comment</td></tr>
+<tr><td> </td><td class="r"><a id="6236" href="http://ankhsvn.net/rev/?r=6236">
+            [r6236]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs, FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make "Open folder in WorkingCopyExplorer" work</td></tr>
+<tr><td> </td><td class="r"><a id="6235" href="http://ankhsvn.net/rev/?r=6235">
+            [r6235]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> PendingChanges/AnkhToolWindowControl.cs, WorkingCopyExplorer/FileSystemListViewItem.cs, WorkingCopyExplorer/FileSystemTreeNode.cs, WorkingCopyExplorer/Nodes/FileSystemFileItem.cs, Ankh.UI.csproj, WorkingCopyExplorer/Nodes/WCDirectoryNode.cs, WorkingCopyExplorer/Nodes/WCMyComputerNode.cs, WorkingCopyExplorer/WorkingCopyExplorerControl.cs, WorkingCopyExplorer/FileSystemTreeView.cs, WorkingCopyExplorer/Nodes/FileSystemDirectoryItem.cs, WorkingCopyExplorer/Nodes/FileSystemNode.cs, WorkingCopyExplorer/Nodes/WCSolutionNode.cs, WorkingCopyExplorer/FileSystemDetailsView.cs, WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Working copy explorer working in progress. This fixes:
+- the doubleclick action on the details view (just descends into the directory now)
+- Status icons in the treeview (stretched)
+- Adds a default "My Computer" root
+- Publishes selection on the treeview
+- Enables the treeview context menu</td></tr>
+<tr><td> </td><td class="r"><a id="6234" href="http://ankhsvn.net/rev/?r=6234">
+            [r6234]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/SccManagement/MultiWorkingCopyCommit.resx, Ankh.UI/SccManagement/MultiWorkingCopyCommit.Designer.cs, Ankh.UI/SccManagement/MultiWorkingCopyCommit.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable committing to multiple working copies/repositories in a single commit
+by showing the user a list of working copies touched by the selected pending
+changes.</td></tr>
+<tr><td> </td><td class="r"><a id="6229" href="http://ankhsvn.net/rev/?r=6229">
+            [r6229]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Selection/SelectionContext.Delay.cs, Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh.Services/Selection/ISelectionContext.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS.UnitTest/Mocks/SelectionContext.cs, Ankh.Scc/ProjectMap/SccDocumentData.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move the focus steal detection code from the SccDocumentData class into the selection
+manager</td></tr>
+<tr><td> </td><td class="r"><a id="6225" href="http://ankhsvn.net/rev/?r=6225">
+            [r6225]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Properties/AssemblyInfo.cs, Ankh.UI/SvnLog/LogRevisionItem.cs, Ankh.VS.UnitTest/MergeWizard.cs, Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, Ankh.UI/MergeWizard/MergeSummaryPageControl.cs, Ankh.Services/Scc/ISvnLogItem.cs, Ankh.UI/MergeWizard/MergeWizard.cs, Ankh.UI/MergeWizard/MergeRevisionsSelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure we use fewer and bigger revision ranges when cherry picking merges.
+This should cause less conflicts while merging.</td></tr>
 <tr><td> </td><td class="r"><a id="6221" href="http://ankhsvn.net/rev/?r=6221">
             [r6221]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/AnkhCommandService.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Commands/IAnkhCommandService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't post status cache cleanups request as normal post commands but post them
@@ -241,19 +289,6 @@ on function names in C# code files.</td></tr>
 <tr><td> </td><td class="r"><a id="6075" href="http://ankhsvn.net/rev/?r=6075">
             [r6075]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.Designer.cs, FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve null reference on initially loading the Working Copy explorer.</td></tr>
-<tr class="d"><td colspan="4">2009-01-28</td></tr>
-<tr><td> </td><td class="r"><a id="6071" href="http://ankhsvn.net/rev/?r=6071">
-            [r6071]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/PCStrings.resx, Ankh.UI/PendingChanges/PCStrings.Designer.cs, Ankh.UI/PendingChanges/PendingCommitsPage.Designer.cs, Ankh.UI/PendingChanges/PendingCommitsPage.cs, Ankh/Commands/ItemCommitCommand.cs, Ankh/Services/SolutionSettings.Commit.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.Services/Scc/IPendingChangeHandler.cs, Ankh/Services/PendingChanges/PendingCommitState.cs, Ankh.UI/SccManagement/ProjectCommitDialog.Designer.cs, Ankh.UI/SccManagement/ProjectCommitDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable the issue number box in the pending changes window and commit
-dialog. See
-<a href="http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-bugtracker.html">http://tortoisesvn.net/docs/release/TortoiseSVN_en/tsvn-dug-bugtracker.html</a>
-for details on the bugtraq:message, bugtraq:append, bugtraq:label and
-bugtraq:number fields that are handled now.<br>
-Note that AnkhSVN reads these properties only in two places: On the solution
-file (AnkhSVN specific) and on the project root (compatible with TortoiseSVN).</td></tr>
-<tr><td> </td><td class="r"><a id="6070" href="http://ankhsvn.net/rev/?r=6070">
-            [r6070]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/OpenFromSubversion.cs, Ankh.UI/RepositoryOpen/CheckoutProject.Designer.cs, Ankh.UI/RepositoryOpen/CheckoutProject.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow typing a directory name in the Checkout Project dialog</td></tr>
 
 </table>
 <!--/Recent changes-->
