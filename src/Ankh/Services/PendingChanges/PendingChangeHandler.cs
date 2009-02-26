@@ -163,7 +163,7 @@ namespace Ankh.Services.PendingChanges
                 }
             }
 
-            if (wcs.Count == 0)
+            if (wcs.Count <= 1)
             {
                 yield return new PendingCommitState(Context, changes);
                 yield break;
