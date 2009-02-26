@@ -61,15 +61,6 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        internal static string a {
-            get {
-                return ResourceManager.GetString("a", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create Patch.
         /// </summary>
         internal static string CreatePatchTitle {
