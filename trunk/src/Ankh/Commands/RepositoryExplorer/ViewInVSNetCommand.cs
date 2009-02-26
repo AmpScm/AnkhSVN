@@ -74,6 +74,7 @@ namespace Ankh.Commands.RepositoryExplorer
                 return;
 
             string toFile = e.GetService<IAnkhTempFileManager>().GetTempFileNamed(ri.Origin.Target.FileName);
+            string ext = Path.GetExtension(toFile);
 
             if (!SaveFile(e, ri, toFile))
                 return;
@@ -92,9 +93,14 @@ namespace Ankh.Commands.RepositoryExplorer
                 Process process = new Process();
                 process.StartInfo.UseShellExecute = true;
 
-                if (e.Command == AnkhCommand.ViewInWindowsWith)
+                if (e.Command == AnkhCommand.ViewInWindowsWith 
+                    && !string.Equals(ext, ".zip", StringComparison.OrdinalIgnoreCase))
                 {
                     // TODO: BH: I tested with adding quotes around {0} but got some error
+
+                    // BH: Don't call this on .zip files in vista, as it will break the builtin
+                    // zip file support in the Windows Explorer (as that isn't available in the list)
+
                     process.StartInfo.FileName = "rundll32.exe";
                     process.StartInfo.Arguments = string.Format("Shell32,OpenAs_RunDLL {0}", toFile);
                 }
