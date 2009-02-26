@@ -105,6 +105,8 @@ namespace Ankh.VS.Selection
 
                         return false;
                     }
+                    else if (c is DataGridView)
+                        return true;
                 }
                 else
                     switch (cls)
@@ -136,11 +138,16 @@ namespace Ankh.VS.Selection
 
                     if (!cont)
                     {
-                        _delayedDirty = false;
-                        return false;
+                        dd = ShouldInstallDelayHandler();
+
+                        if (dd == null)
+                        {
+                            _delayedDirty = false;
+                            return false;
+                        }
                     }
-                    else
-                        return true;
+                    
+                    return true;
                 });
         }
       
