@@ -42,7 +42,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         protected override void OnContextChanged(EventArgs e)
         {
             folderTree.Context = Context;
-            fileList.Context = Context;            
+            fileList.Context = Context;
 
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             ToolWindowHost.KeyboardContext = AnkhId.SccExplorerContextGuid;
 
             folderTree.Context = Context;
-            fileList.Context = Context;            
+            fileList.Context = Context;
 
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
@@ -123,7 +123,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 return;
 
             this.fileList.SetDirectory(item);
-        } 
+        }
 
         public bool IsWcRootSelected()
         {
@@ -162,7 +162,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
 
             AddRoot(CreateRoot(root));
-            
+
             folderTree.SelectSubNode(item);
         }
 
@@ -222,13 +222,31 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private static void AutoOpenCommand(CommandEventArgs e, SvnItem item)
         {
+            IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
             IAnkhCommandService svc = e.GetService<IAnkhCommandService>();
             IAnkhSolutionSettings solutionSettings = e.GetService<IAnkhSolutionSettings>();
 
-            if (svc == null || solutionSettings == null)
+            if (pfm == null || svc == null || solutionSettings == null)
                 return;
 
-            // Ok, we can assume we have a file
+            // We can assume we have a file
+
+            if (pfm.IsProjectFileOrSolution(item.FullPath))
+            {
+                // Ok, the user selected the current solution file or an open project
+                // Let's jump to it in the solution explorer
+
+                svc.ExecCommand(AnkhCommand.ItemOpenSolutionExplorer);
+                return;
+            }
+
+            if (item.InSolution)
+            {
+                // The file is part of the solution, we can assume VS knows how to open it
+                svc.ExecCommand(AnkhCommand.ViewInVsNet);
+                return;
+            }
+
             string filename = item.Name;
             string ext = item.Extension;
 
@@ -243,7 +261,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 if (projectExt.TrimStart('*').Trim().Equals(ext, StringComparison.OrdinalIgnoreCase))
                 {
-                    // We found a project or solution, use Open from Subversion to create a checkout
+                    // We found a project or solution: Ask VS to open it
 
                     e.GetService<IAnkhSolutionSettings>().OpenProjectFile(item.FullPath);
                     return;
@@ -270,6 +288,5 @@ namespace Ankh.UI.WorkingCopyExplorer
             // Ultimate fallback: Just open the file as windows would
             svc.PostExecCommand(AnkhCommand.ItemOpenWindows);
         }
-
     }
 }
