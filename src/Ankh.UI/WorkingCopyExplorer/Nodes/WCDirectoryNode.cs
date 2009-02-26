@@ -137,9 +137,8 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
 
             foreach (FileSystemInfo fsi in fileSystemInfos)
             {
-                if((fsi.Attributes & FileAttributes.Hidden ) > 0 ||
-                    (fsi.Attributes & FileAttributes.System) > 0 ||
-                    (fsi.Attributes & FileAttributes.Offline) > 0)
+                if((fsi.Attributes & FileAttributes.Hidden | FileAttributes.System 
+                    | FileAttributes.Offline) != 0)
                     continue;
 
                 if((fsi.Attributes & FileAttributes.Directory) > 0)
