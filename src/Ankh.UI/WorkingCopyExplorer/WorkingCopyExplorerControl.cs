@@ -243,7 +243,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (item.InSolution)
             {
                 // The file is part of the solution, we can assume VS knows how to open it
-                svc.ExecCommand(AnkhCommand.ViewInVsNet);
+                svc.ExecCommand(AnkhCommand.ItemOpenVisualStudio);
                 return;
             }
 
