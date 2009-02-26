@@ -209,6 +209,8 @@ namespace Ankh.Commands
 
                 using (UpdateDialog ud = new UpdateDialog())
                 {
+                    ud.Text = CommandStrings.UpdateProject;
+
                     if (si != null)
                         ud.ItemToUpdate = si;
                     else

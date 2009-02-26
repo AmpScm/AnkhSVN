@@ -150,4 +150,7 @@
   <data name="TheConflictInXIsAlreadyResolved" xml:space="preserve">
     <value>The conflict in '{0}' is already resolved.</value>
   </data>
+  <data name="UpdateProject" xml:space="preserve">
+    <value>Update Project</value>
+  </data>
 </root>
