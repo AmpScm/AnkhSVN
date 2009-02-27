@@ -62,6 +62,7 @@
             this.writeUrlInSolution.TabIndex = 1;
             this.writeUrlInSolution.Text = "Add &CheckOut information to Solution File";
             this.writeUrlInSolution.UseVisualStyleBackColor = true;
+            this.writeUrlInSolution.Visible = false;
             // 
             // AddProjectToSubversion
             // 
