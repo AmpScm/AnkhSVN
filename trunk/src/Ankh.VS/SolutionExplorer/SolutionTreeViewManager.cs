@@ -62,7 +62,16 @@ namespace Ankh.VS.SolutionExplorer
             if (_treeViewControl != null && _treeViewControl.IsValid)
                 return;
 
-            EnvDTE.Window window = VsShellUtilities.GetWindowObject(solutionExplorerWindow.SolutionExplorerFrame);
+            EnvDTE.Window window;
+            try
+            {
+                window = VsShellUtilities.GetWindowObject(solutionExplorerWindow.SolutionExplorerFrame);
+            }
+            catch (COMException)
+            {
+                // for VS2010 - WPF Shell compatibility (we cannot find the solutionexplorer frame there)
+                return;
+            }
 
             string expCaption = window.Caption;
 
