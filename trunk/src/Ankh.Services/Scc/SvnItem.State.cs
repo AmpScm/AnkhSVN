@@ -293,7 +293,8 @@ namespace Ankh
         const SvnItemState MaskMustLock = SvnItemState.MustLock;
         void UpdateMustLock()
         {
-            SvnItemState value = SvnItemState.IsDiskFile | SvnItemState.ReadOnly | SvnItemState.Versioned;
+            SvnItemState fastValue = SvnItemState.IsDiskFile | SvnItemState.ReadOnly;
+            SvnItemState slowValue = SvnItemState.Versioned;
             SvnItemState v;
 
             bool mustLock;
@@ -304,7 +305,9 @@ namespace Ankh
                 mustLock = false;
             else if (TryGetState(SvnItemState.ReadOnly, out v) && (v == 0))
                 mustLock = false;
-            else if (GetState(value) != value)
+            else if (GetState(fastValue) != fastValue)
+                mustLock = false;
+            else if (GetState(slowValue) != slowValue)
                 mustLock = false;
             else
             {
