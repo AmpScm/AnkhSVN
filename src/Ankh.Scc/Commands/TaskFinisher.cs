@@ -26,7 +26,7 @@ namespace Ankh.Scc.Commands
     /// Handles the finishtasks special command; this command is posted to the back of the command queueue
     /// if the SCC implementation needs to perform some post processing of VSs scc actions
     /// </summary>
-    [Command(AnkhCommand.SccFinishTasks)]
+    [Command(AnkhCommand.SccFinishTasks, AlwaysAvailable=true)]
     sealed class TaskFinisher : ICommandHandler
     {
         ProjectTracker _tracker;

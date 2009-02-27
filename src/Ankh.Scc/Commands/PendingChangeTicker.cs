@@ -22,7 +22,7 @@ using Ankh.Ids;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.TickRefreshPendingTasks)]
+    [Command(AnkhCommand.TickRefreshPendingTasks, AlwaysAvailable=true)]
     sealed class PendingChangeTicker : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
