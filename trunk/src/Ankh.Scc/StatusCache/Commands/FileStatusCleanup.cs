@@ -23,8 +23,8 @@ using Ankh.Ids;
 
 namespace Ankh.Scc.StatusCache.Commands
 {
-    [Command(AnkhCommand.FileCacheFinishTasks)]
-    [Command(AnkhCommand.TickRefreshSvnItems)]
+    [Command(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable=true)]
+    [Command(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable=true)]
     public class FileStatusCleanup : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
