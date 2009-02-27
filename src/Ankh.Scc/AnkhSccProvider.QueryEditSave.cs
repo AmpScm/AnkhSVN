@@ -268,10 +268,7 @@ namespace Ankh.Scc
 
                 foreach (SvnItem item in GetAllDocumentItems(file))
                 {
-                    if (!item.IsVersioned)
-                        continue;
-
-                    if (item.ReadOnlyMustLock)
+                    if (item.ReadOnlyMustLock && !item.IsDirectory)
                     {
                         if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
                         {
