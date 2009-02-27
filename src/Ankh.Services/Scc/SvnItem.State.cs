@@ -168,6 +168,9 @@ namespace Ankh
             _validState &= ~dirty;
         }
 
+        // Mask of states not to broadcast for
+        const SvnItemState NoBroadcastFor = ~(SvnItemState.DocumentDirty | SvnItemState.InSolution);
+
         void SetState(SvnItemState set, SvnItemState unset)
         {
             // NOTE: This method is /not/ thread safe, but its callers have race conditions anyway
@@ -178,23 +181,21 @@ namespace Ankh
             if (st != _currentState)
             {
                 // Calculate whether we have a change or just new information
-                bool changed = (st & _onceValid) != (_currentState & _onceValid);
+                bool changed = (st & _onceValid & NoBroadcastFor) != (_currentState & _onceValid & NoBroadcastFor);
 
-                if (changed)
+                if (changed && !_enqueued)
                 {
-                    if (!_enqueued)
+                    _enqueued = true;
+
+                    // Schedule a stat changed broadcast
+                    lock (_stateChanged)
                     {
-                        _enqueued = true;
+                        _stateChanged.Enqueue(this);
 
-                        // Schedule a stat changed broadcast
-                        lock (_stateChanged)
-                        {
-                            _stateChanged.Enqueue(this);
-
-                            ScheduleUpdateNotify();
-                        }
+                        ScheduleUpdateNotify();
                     }
                 }
+
                 _currentState = st;
 
             }

@@ -161,6 +161,11 @@ namespace Ankh.Scc
             if (path == null)
                 throw new ArgumentNullException("path");
 
+            SvnItem item = Cache[path];
+
+            if (!item.IsVersioned || item.IsModified)
+                return; // Not needed
+
             lock (_lock)
             {
                 if (_dirtyCheck == null)
@@ -440,6 +445,8 @@ namespace Ankh.Scc
             }
             finally
             {
+                _posted = false; // Just kill this flag every now and then
+
                 foreach (DocumentLock dl in modified.Values)
                 {
                     if (dl != null)
