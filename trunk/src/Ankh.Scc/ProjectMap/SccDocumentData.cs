@@ -227,20 +227,18 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return;
 
-            // Make sure the dirty notification doesn't steal focus
-            GetService<ISelectionContextEx>(typeof(ISelectionContext)).MaybeInstallDelayHandler();
+            SvnItem item = GetService<IFileStatusCache>()[Name];
 
-            IFileStatusCache fcc = GetService<IFileStatusCache>();
+            if (item == null)
+                return;
 
-            if (fcc != null)
-            {
-                ISvnItemStateUpdate sisu = fcc[Name];
+            ISvnItemStateUpdate sisu = item;
+            sisu.SetDocumentDirty(dirty);
 
-                if (sisu != null)
-                    sisu.SetDocumentDirty(dirty);
-            }
+            if(item.IsModified)
+                return; // No need to update glyph!
 
-            UpdateGlyph();
+            UpdateGlyph(true);
         }
 
         internal void CheckDirty()
@@ -257,10 +255,13 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
-        void UpdateGlyph()
+        void UpdateGlyph(bool checkFocus)
         {
             if (!_isFileDocument)
                 return;
+
+            GetService<ISelectionContextEx>(typeof(ISelectionContext)).MaybeInstallDelayHandler();
+
             IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
 
             if (monitor != null)

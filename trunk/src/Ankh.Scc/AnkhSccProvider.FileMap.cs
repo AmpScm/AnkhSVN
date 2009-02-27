@@ -89,10 +89,10 @@ namespace Ankh.Scc
             if (!IsActive)
                 return; // Let the other SCC package manage it
 
+            MarkDirty(filename);
+
             if (!StatusCache[filename].IsVersioned)
                 return; // Don't bother
-
-            MarkDirty(filename);
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
