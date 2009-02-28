@@ -176,16 +176,23 @@ namespace Ankh.VS.Extenders
             get { return SvnItem.Status.LastChangeRevision; }
         }
 
-        [Category("Subversion"), Description("Text Status"), DisplayName("Status Content")]
-        public string TextStatus
+        PendingChangeStatus _chg;
+        [DisplayName("Change"), Category("Subversion")]
+        public string Change
         {
-            get { return SvnItem.Status.LocalContentStatus.ToString(); }
-        }
+            get
+            {
+                AnkhStatus status = SvnItem.Status;
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, SvnItem);
 
-        [Category("Subversion"), Description("Property status"), DisplayName("Status Properties")]
-        public string PropertyStatus
-        {
-            get { return SvnItem.Status.LocalPropertyStatus.ToString(); }
+                if (kind == PendingChangeKind.None)
+                    return "";
+
+                if (_chg == null || _chg.State != kind)
+                    _chg = new PendingChangeStatus(kind);
+
+                return _chg.Text;
+            }
         }
 
         [Category("Subversion"), Description("Locked")]
