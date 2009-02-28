@@ -215,6 +215,16 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
+        protected override void OnBeforeSelect(TreeViewCancelEventArgs e)
+        {
+            base.OnBeforeSelect(e);
+
+            if (e.Node.Nodes.Count > 0 && e.Node.Nodes[0].Tag == DummyTag)
+            {
+                this.FillNode(e.Node);
+            }
+        }
+
         private void FillNode(TreeNode treeNode)
         {
             // get rid of the dummy node or existing nodes
