@@ -623,6 +623,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="VSSelectionControls\SmartListViewItem.cs" />
+    <Compile Include="VSSelectionControls\SmartTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
       <SubType>Form</SubType>
     </Compile>

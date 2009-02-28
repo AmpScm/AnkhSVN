@@ -24,7 +24,7 @@ using System.Drawing;
 
 namespace Ankh.UI.VSSelectionControls
 {
-    public class TreeViewWithSelection<TNode> : TreeView, ISelectionMapOwner<TNode>
+    public class TreeViewWithSelection<TNode> : SmartTreeView, ISelectionMapOwner<TNode>
         where TNode : TreeNode
     {
         EventHandler _selectionChanged;
@@ -69,32 +69,7 @@ namespace Ankh.UI.VSSelectionControls
             base.OnEnter(e);
             EnsureSelection();
         }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                ExtendSelection(e.Location, true);
-            }
-
-            base.OnMouseDown(e);
-        }
-
-        protected virtual void ExtendSelection(Point p, bool rightClick)
-        {
-            TreeViewHitTestInfo hi = HitTest(p);
-            
-            bool onItem = hi.Node != null && hi.Location != TreeViewHitTestLocations.None;
-
-            if (rightClick)
-            {
-                if (hi.Node != SelectedNode)
-                {
-                    SelectedNode = hi.Node;                    
-                }
-            }
-        }
-
+  
         int _inWndProc;
         bool _shouldUpdate;
         protected override void WndProc(ref Message m)
