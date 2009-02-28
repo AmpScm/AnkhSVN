@@ -68,5 +68,14 @@ namespace Ankh.UI.WorkingCopyExplorer {
                 return ResourceManager.GetString("MyComputer", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solution &apos;{0}&apos;.
+        /// </summary>
+        internal static string SolutionX {
+            get {
+                return ResourceManager.GetString("SolutionX", resourceCulture);
+            }
+        }
     }
 }
