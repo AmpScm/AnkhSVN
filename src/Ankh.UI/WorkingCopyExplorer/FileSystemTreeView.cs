@@ -383,5 +383,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
         private static readonly object DummyTag = new object();
+
+        internal void ClearRoots()
+        {
+            Nodes.Clear();
+        }
     }
 }

@@ -18,26 +18,44 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.VS;
+using System.IO;
 
 namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
-    class WCSolutionNode : WCTreeNode
+    class WCSolutionNode : WCFileSystemNode
     {
         readonly int _imageIndex;
-        public WCSolutionNode(IAnkhServiceProvider context)
-            : base(context, null)
+        public WCSolutionNode(IAnkhServiceProvider context, SvnItem item)
+            : base(context, null, item)
         {
             _imageIndex = context.GetService<IFileIconMapper>().GetIconForExtension(".sln");
         }
 
         public override string Title
         {
-            get {return  "QQ"; }
+            get {return  Context.GetService<IAnkhSolutionSettings>().SolutionFilename; }
         }
 
         public override IEnumerable<WCTreeNode> GetChildren()
         {
-            yield break;
+            IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
+            foreach (SvnItem item in pls.GetUpdateRoots(null))
+            {
+                yield return new WCDirectoryNode(Context, this, item);
+            }
+        }
+
+        public override System.IO.FileSystemInfo FileInfo
+        {
+            get { return new DirectoryInfo(SvnItem.FullPath); }
+        }
+
+        public override bool IsContainer
+        {
+            get
+            {
+                return true;
+            }
         }
 
         public override void GetResources(System.Collections.ObjectModel.Collection<SvnItem> list, bool getChildItems, Predicate<SvnItem> filter)
