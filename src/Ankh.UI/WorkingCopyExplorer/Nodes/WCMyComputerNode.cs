@@ -49,12 +49,14 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             {
                 switch (NativeMethods.GetDriveType(s))
                 {
-                    case NativeMethods.DriveType.Removable: // We should really filter floppy drives 
+                    case NativeMethods.DriveType.Removable:
+                        if (s != "A:\\") // We should really filter floppy/disconnected drives 
+                            goto case NativeMethods.DriveType.Fixed;
+                        break;
                     case NativeMethods.DriveType.Fixed:
                     case NativeMethods.DriveType.Remote:
                     case NativeMethods.DriveType.RAMDisk:
-                        if (s != "A:\\")
-                            yield return new WCDirectoryNode(Context, this, cache[s]);
+                        yield return new WCDirectoryNode(Context, this, cache[s]);
                         break;
                     default:
                         break;
