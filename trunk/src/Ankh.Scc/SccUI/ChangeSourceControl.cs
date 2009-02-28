@@ -149,7 +149,7 @@ namespace Ankh.Scc.SccUI
 
             EnableTab(solutionSettingsTab, isSolution);
             EnableTab(sharedSettingsTab, !isSolution);
-            EnableTab(userSettingsTab, !isSolution);
+            EnableTab(userSettingsTab, false);
 
             UpdateSettingTabs();
 

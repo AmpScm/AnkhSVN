@@ -327,6 +327,7 @@ namespace Ankh.Scc.SccUI
             this.label7.TabIndex = 11;
             this.label7.Text = "You can use the settings on the \'User Settings\' tab to only apply the settings to" +
                 " the current working copy.";
+            this.label7.Visible = false;
             // 
             // label6
             // 
