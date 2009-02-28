@@ -1,9 +1,10 @@
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><p><a title="AnkhSVN 2.0 Download" href="http://ankhsvn.net/downloads/2.0/">Download AnkhSVN 2.0.6XXX</a>.</p>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />                              <p><a title="AnkhSVN 2.0 Download" href="http://ankhsvn.net/downloads/2.0/">Download AnkhSVN 2.0.6XXX</a>.</p>
 
 <p>New features:</p>
 <ul>
 <li>Built on Subversion 1.5.6</li>
-<li>Patch creation and applying (apply requires TortoiseSvn to be installed)</li>
+<li>Patch creation and applying (apply requires TortoiseSvn to be installed) (<a href="http://ankhsvn.net/issues/?id=497">issue 497</a>, <a href="http://ankhsvn.net/issues/?id=498">issue 498</a>)</li>
+<li>Branching</li>
 <li>Standard support and detection for diff/merge tools:
   <ul>
     <li>Araxis Merge</li>
@@ -16,14 +17,44 @@
     <li>WinMerge</li>
   </ul>
 </li>
-<li></li>
-</ul>
-</li>
+<li>Relocate when switching detects it a relocate should happen (<a href="http://ankhsvn.net/issues/?id=544>issue 544</a>)</li>
+<li>Integrated Annotate viewer</li>
+<li>Diffing files is a lot faster</li>
+<li>Overall performance improvemens</li>
+<li>Track history when using "Save As"</li>
+<li>Multiple working copy support. This means you can now use AnkhSVN to add solution without a common root to Subversion</li>
+<li>File -> Open -> Subversion Project can now open Projects (previously just Solutions)</li>
+<li>Unified diff back</li>
+<li>Experimental support of Visual Studio 2010</li>
+<li>Subversion sub menu in the context menu on the editor</li>
+<li>Recent Changes tab, this is like the Synchronize View in Eclipse</li>
+<li>Submenus on projects and solutions that allow operations on the project/solution file. (The operations outside the submenu target the project/solution recursively)</li>
+<li>Show/edit revision properties (<a href="http://ankhsvn.net/issues/?id=472">issue 472</a>)</li>
+<li>Commit Dialog should remember keep log message history. (<a href="http://ankhsvn.net/issues/?id=542">issue 542</a>)</li>
+<li>Resolve case conflict option</li>
+<li>Move to changelist options & ignore-on-commit default changelist</li>
+<li>Enabled showing property changes</li>
+<li>Partial bugtraq support; users can now enter bugid with commit</li>
 </ul>
 <p>Most important bugfixes: </p>
 <ul>
-<li></li>
+<li>Unmodified check changed from green to blue, to help users with color blindness</li>
+<li>Reduced chance of conflicts when merging</li>
+<li>Resolved error when editing conflicts without a merge tool set</li>
+<li>"Revert changes" fixed (resulted in a NO-OP)</li>
+<li>Fixed: problems where the focus is stolen (when creating new folders, or editing files)</li>
+<li>Fixed: ArgumentNullException in Log Viewer (<a href="http://ankhsvn.net/issues/?id=456">issue 456</a>)</li>
+<li>Fixed: NullReferenceException in Property Editor (<a href="http://ankhsvn.net/issues/?id=528">issue 528</a>)</li>
+<li>Fixed: Directory rename in Website doesn't add/move files (<a href="http://ankhsvn.net/issues/?id=525">issue 525</a>)</li>
+<li>Fixed: Project rename doesn't update solution file status (<a href="http://ankhsvn.net/issues/?id=531">issue 531</a>)</li>
+<li>Fixed: Double click on Repository Explorer doesn't execute default action (<a href="http://ankhsvn.net/issues/?id=520">issue 520</a>)</li>
+<li>Fixed: Merge Project Window Suddenly Close After Click Next (<a href="http://ankhsvn.net/issues/?id=537">issue 537</a>)</li>
+<li>Fixed: Miscellaneous Files folder always shown (<a href="http://ankhsvn.net/issues/?id=545">issue 545</a>)</li>
+<li>Fixed: Provide feedback when URI is inaccessible in ReposExplorer (<a href="http://ankhsvn.net/issues/?id=432">issue 432</a>)</li>
+<li>Fixed: Visual studio crashes with ASP.NET MVC projects (<a href="http://ankhsvn.net/issues/?id=553">issue 553</a>)</li>
+<li>Fixed: Problems with the F# project type</li>
 </ul>
 
 
+              
               
