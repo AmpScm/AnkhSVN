@@ -162,7 +162,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             get { return _cache ?? (_cache = Context.GetService<IFileStatusCache>()); }
         }
 
-        public void BrowsePath(string path)
+        public void AddRoot(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
@@ -185,6 +185,11 @@ namespace Ankh.UI.WorkingCopyExplorer
             AddRoot(CreateRoot(root));
 
             folderTree.SelectSubNode(item);
+        }
+
+        public void BrowsePath(string path)
+        {
+            folderTree.BrowsePath(path);
         }
 
         private WCTreeNode CreateRoot(string directory)

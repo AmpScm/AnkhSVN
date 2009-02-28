@@ -36,10 +36,19 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             get {return  Context.GetService<IAnkhSolutionSettings>().SolutionFilename; }
         }
 
+        IEnumerable<SvnItem> UpdateRoots
+        {
+            get
+            {
+                IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
+                foreach (SvnItem item in pls.GetUpdateRoots(null))
+                    yield return item;
+            }
+        }
+
         public override IEnumerable<WCTreeNode> GetChildren()
         {
-            IAnkhProjectLayoutService pls = Context.GetService<IAnkhProjectLayoutService>();
-            foreach (SvnItem item in pls.GetUpdateRoots(null))
+            foreach(SvnItem item in UpdateRoots)
             {
                 yield return new WCDirectoryNode(Context, this, item);
             }
@@ -71,6 +80,18 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         public override int ImageIndex
         {
             get { return _imageIndex; }
+        }
+
+        internal override bool ContainsDescendant(string path)
+        {
+            SvnItem needle = StatusCache[path];
+
+            foreach (SvnItem item in UpdateRoots)
+            {
+                if (needle.IsBelowPath(item))
+                    return true;
+            }
+            return false;
         }
     }
 }

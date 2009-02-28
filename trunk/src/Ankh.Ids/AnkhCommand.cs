@@ -249,8 +249,7 @@ namespace Ankh.Ids
 
 
         UnifiedDiff,
-        [Obsolete("Unused command", true)]
-        RevertSolutionToRevision,
+        WorkingCopyAdd,
 
         SwitchProject,
         ProjectBranch,

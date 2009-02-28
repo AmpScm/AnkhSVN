@@ -93,5 +93,16 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             StateImageIndex = (int)TreeView.StatusMapper.GetStatusImageForSvnItem(SvnItem);
         }
+
+        internal void SelectSubNode(string path)
+        {
+            Expand();
+
+            foreach (FileSystemTreeNode tn in Nodes)
+            {
+                if (tn.WCNode.ContainsDescendant(path))
+                    tn.SelectSubNode(path);
+            }
+        }
     }
 }

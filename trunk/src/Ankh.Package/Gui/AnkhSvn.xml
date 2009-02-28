@@ -486,7 +486,7 @@
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="Menu_WorkingCopyExplorerToolBar" name="WorkingCopyExplorer" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_WorkingCopyExplorerToolBar" priority="0x100">
-          <Button id="Cmd_WorkingCopyBrowse" name="Svn.WorkingCopyBrowse" priority="0x100"
+          <Button id="Cmd_WorkingCopyAdd" name="Svn.WorkingCopyAdd" priority="0x100"
               text="A&amp;dd New Root..."
               toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
           <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
@@ -842,6 +842,7 @@
         <Button id="Cmd_ActivateSccProvider" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
+        <Button id="Cmd_WorkingCopyBrowse" text="." priority="0" commandWellOnly="true" allowParams="true" />
       </Group>
     </MenuRef>
   </UI>
