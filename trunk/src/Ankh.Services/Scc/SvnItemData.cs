@@ -20,6 +20,7 @@ using System.Text;
 using System.ComponentModel;
 using Ankh.Selection;
 using System.Diagnostics;
+using SharpSvn;
 
 namespace Ankh.Scc
 {
@@ -61,6 +62,32 @@ namespace Ankh.Scc
         public string ChangeList
         {
             get { return _item.Status.ChangeList; }
+            set
+            {
+                string cl = string.IsNullOrEmpty(value) ? null : value.Trim();
+
+                if (_item.IsVersioned && _item.Status != null && _item.IsFile)
+                {
+                    if (value != _item.Status.ChangeList)
+                    {
+                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                        {
+                            if (cl != null)
+                            {
+                                SvnAddToChangeListArgs ca = new SvnAddToChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.AddToChangeList(_item.FullPath, cl);
+                            }
+                            else
+                            {
+                                SvnRemoveFromChangeListArgs ca = new SvnRemoveFromChangeListArgs();
+                                ca.ThrowOnError = false;
+                                client.RemoveFromChangeList(_item.FullPath, ca);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         [DisplayName("Project"), Category("Visual Studio")]
@@ -97,21 +124,22 @@ namespace Ankh.Scc
             }
         }
 
-        [DisplayName("Status Content"), Category("Subversion")]
-        public string Status
+        PendingChangeStatus _chg;
+        [DisplayName("Change"), Category("Subversion")]
+        public string Change
         {
             get 
             {
-                return _item.Status.LocalContentStatus.ToString(); 
-            }
-        }
+                AnkhStatus status = _item.Status;
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, SvnItem);
 
-        [DisplayName("Status Properties"), Category("Subversion")]
-        public string PropertyStatus
-        {
-            get
-            {
-                return _item.Status.LocalPropertyStatus.ToString();
+                if (kind == PendingChangeKind.None)
+                    return "";
+
+                if (_chg == null || _chg.State != kind)
+                    _chg = new PendingChangeStatus(kind);
+
+                return _chg.Text;
             }
         }
 
