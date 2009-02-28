@@ -94,6 +94,13 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (item == null)
                 return;
 
+            FileSystemTreeNode fstn = SelectedNode as FileSystemTreeNode;
+            if(fstn != null)
+            {
+                if(fstn.SvnItem == item)
+                    return;
+            }
+
             SelectedNode.Expand();
 
             foreach (FileSystemTreeNode tn in SelectedNode.Nodes)
