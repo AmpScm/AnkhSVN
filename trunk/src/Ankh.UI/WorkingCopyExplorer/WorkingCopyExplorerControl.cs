@@ -44,7 +44,22 @@ namespace Ankh.UI.WorkingCopyExplorer
             folderTree.Context = Context;
             fileList.Context = Context;
 
+            Context.GetService<AnkhServiceEvents>().SolutionClosed += new EventHandler(WorkingCopyExplorerControl_SolutionClosed);
+            Context.GetService<AnkhServiceEvents>().SolutionOpened += new EventHandler(WorkingCopyExplorerControl_SolutionOpened);
         }
+
+        void WorkingCopyExplorerControl_SolutionOpened(object sender, EventArgs e)
+        {
+            AddRoots(false);
+            AddRoots(true);
+        }
+
+        void WorkingCopyExplorerControl_SolutionClosed(object sender, EventArgs e)
+        {
+            AddRoots(false);
+            AddRoots(true);
+        }
+
         /// <summary>
         /// Called when the frame is created
         /// </summary>
@@ -93,8 +108,11 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (add && !_rootsPresent)
             {
                 IAnkhSolutionSettings slnSettings = Context.GetService<IAnkhSolutionSettings>();
-                SvnItem slnItem = FileStatusCache[slnSettings.SolutionFilename];
-                folderTree.AddRoot(new WCSolutionNode(Context, slnItem));
+                if (!string.IsNullOrEmpty(slnSettings.SolutionFilename))
+                {
+                    SvnItem slnItem = FileStatusCache[slnSettings.SolutionFilename];
+                    folderTree.AddRoot(new WCSolutionNode(Context, slnItem));
+                }
                 folderTree.AddRoot(new WCMyComputerNode(Context));
 
                 _rootsPresent = true;
@@ -120,6 +138,8 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void RefreshRoots()
         {
+            AddRoots(false);
+            AddRoots(true);
         }
 
         internal void AddRoot(WCTreeNode root)

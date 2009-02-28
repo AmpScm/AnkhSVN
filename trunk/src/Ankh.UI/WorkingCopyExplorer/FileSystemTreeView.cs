@@ -384,6 +384,15 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
         private static readonly object DummyTag = new object();
 
+        internal void ClearSolutionRoot()
+        {
+            foreach (FileSystemTreeNode tn in Nodes)
+            {
+                if (tn.WCNode is WCSolutionNode)
+                    tn.Remove();
+            }
+        }
+
         internal void ClearRoots()
         {
             Nodes.Clear();
