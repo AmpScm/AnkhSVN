@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.VS;
 using Ankh.Scc;
+using System.Runtime.InteropServices;
 
 namespace Ankh.UI.WorkingCopyExplorer.Nodes
 {
@@ -45,7 +46,19 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             IFileStatusCache cache = Context.GetService<IFileStatusCache>();
 
             foreach (string s in Environment.GetLogicalDrives())
-                yield return new WCDirectoryNode(Context, this, cache[s]);
+            {
+                switch (NativeMethods.GetDriveType(s))
+                {
+                    case NativeMethods.DriveType.Removable: // We should filter floppies.
+                    case NativeMethods.DriveType.Fixed:
+                    case NativeMethods.DriveType.Remote:
+                    case NativeMethods.DriveType.RAMDisk:
+                        yield return new WCDirectoryNode(Context, this, cache[s]);
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         protected override void RefreshCore(bool rescan)
@@ -55,6 +68,30 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         public override int ImageIndex
         {
             get { return _imageIndex; }
+        }
+
+        static class NativeMethods
+        {
+            public enum DriveType : uint
+            {
+                /// <summary>The drive type cannot be determined.</summary>
+                Unknown = 0,    //DRIVE_UNKNOWN
+                /// <summary>The root path is invalid, for example, no volume is mounted at the path.</summary>
+                Error = 1,        //DRIVE_NO_ROOT_DIR
+                /// <summary>The drive is a type that has removable media, for example, a floppy drive or removable hard disk.</summary>
+                Removable = 2,    //DRIVE_REMOVABLE
+                /// <summary>The drive is a type that cannot be removed, for example, a fixed hard drive.</summary>
+                Fixed = 3,        //DRIVE_FIXED
+                /// <summary>The drive is a remote (network) drive.</summary>
+                Remote = 4,        //DRIVE_REMOTE
+                /// <summary>The drive is a CD-ROM drive.</summary>
+                CDROM = 5,        //DRIVE_CDROM
+                /// <summary>The drive is a RAM disk.</summary>
+                RAMDisk = 6        //DRIVE_RAMDISK
+            }
+
+            [DllImport("kernel32.dll")]
+            public static extern DriveType GetDriveType([MarshalAs(UnmanagedType.LPStr)] string lpRootPathName);
         }
     }
 }
