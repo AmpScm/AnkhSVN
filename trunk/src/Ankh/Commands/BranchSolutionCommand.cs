@@ -42,7 +42,7 @@ namespace Ankh.Commands
 
         public SvnItem GetRoot(BaseCommandEventArgs e)
         {
-            SvnItem item;
+            SvnItem item = null;
             switch (e.Command)
             {
                 case AnkhCommand.SolutionBranch:
