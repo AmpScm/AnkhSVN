@@ -120,4 +120,7 @@
   <data name="MyComputer" xml:space="preserve">
     <value>My Computer</value>
   </data>
+  <data name="SolutionX" xml:space="preserve">
+    <value>Solution '{0}'</value>
+  </data>
 </root>

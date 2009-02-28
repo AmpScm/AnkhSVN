@@ -28,12 +28,27 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         public WCSolutionNode(IAnkhServiceProvider context, SvnItem item)
             : base(context, null, item)
         {
-            _imageIndex = context.GetService<IFileIconMapper>().GetIconForExtension(".sln");
+            string file = Context.GetService<IAnkhSolutionSettings>().SolutionFilename;
+
+            IFileIconMapper iconMapper = context.GetService<IFileIconMapper>();
+
+            if (string.IsNullOrEmpty(file))
+                _imageIndex = iconMapper.GetIconForExtension(".sln");
+            else
+                _imageIndex = iconMapper.GetIcon(file);
         }
 
         public override string Title
         {
-            get {return  Context.GetService<IAnkhSolutionSettings>().SolutionFilename; }
+            get 
+            { 
+                string file = Context.GetService<IAnkhSolutionSettings>().SolutionFilename;
+
+                if (file != null)
+                    file = Path.GetFileNameWithoutExtension(file);
+
+                return string.Format(WCStrings.SolutionX, file); 
+            }
         }
 
         IEnumerable<SvnItem> UpdateRoots
