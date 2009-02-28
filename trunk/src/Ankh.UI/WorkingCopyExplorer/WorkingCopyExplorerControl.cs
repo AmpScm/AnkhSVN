@@ -79,22 +79,43 @@ namespace Ankh.UI.WorkingCopyExplorer
             RefreshRoots();
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
 
-            if (!DesignMode)
-                EnsureMyComputer();
+        protected override void  OnLoad(EventArgs e)
+        {
+ 	        base.OnLoad(e);
+
+            AddRoots(true);
         }
 
-        bool hasMyComputer;
-        private void EnsureMyComputer()
+        bool _rootsPresent;
+        void AddRoots(bool add)
         {
-            if (hasMyComputer)
-                return;
+            if (add && !_rootsPresent)
+            {
+                IAnkhSolutionSettings slnSettings = Context.GetService<IAnkhSolutionSettings>();
+                SvnItem slnItem = FileStatusCache[slnSettings.SolutionFilename];
+                folderTree.AddRoot(new WCSolutionNode(Context, slnItem));
+                folderTree.AddRoot(new WCMyComputerNode(Context));
 
-            folderTree.AddRoot(new WCMyComputerNode(Context));
-            hasMyComputer = true;
+                _rootsPresent = true;
+            }
+            else if(_rootsPresent)
+            {
+                folderTree.ClearRoots();
+                _rootsPresent = false;
+            }
+        }
+
+        IFileStatusCache FileStatusCache
+        {
+            get { return Context.GetService<IFileStatusCache>(); }
+        }
+
+        protected override void OnFrameClose(EventArgs e)
+        {
+            base.OnFrameClose(e);
+
+            AddRoots(false);
         }
 
         private void RefreshRoots()
