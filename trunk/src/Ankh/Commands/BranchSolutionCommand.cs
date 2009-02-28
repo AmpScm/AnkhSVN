@@ -66,6 +66,7 @@ namespace Ankh.Commands
                         break;
 
                     item = e.GetService<IFileStatusCache>()[info.ProjectDirectory];
+                    break;
             }
 
             return item;
