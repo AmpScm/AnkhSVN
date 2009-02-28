@@ -388,5 +388,35 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             Nodes.Clear();
         }
+
+        IEnumerable<FileSystemTreeNode> NodesInSearchOrder
+        {
+            get
+            {
+                foreach (FileSystemTreeNode tn in Nodes)
+                    if (tn.WCNode is WCSolutionNode)
+                        yield return tn;
+
+                foreach (FileSystemTreeNode tn in Nodes)
+                    if (tn.WCNode is WCDirectoryNode)
+                        yield return tn;
+
+                foreach (FileSystemTreeNode tn in Nodes)
+                    if (tn.WCNode is WCMyComputerNode)
+                        yield return tn;
+            }
+        }
+
+        internal void BrowsePath(string path)
+        {
+            foreach (FileSystemTreeNode tn in NodesInSearchOrder)
+            {
+                if (tn.WCNode.ContainsDescendant(path))
+                {
+                    tn.SelectSubNode(path);
+                    return;
+                }
+            }
+        }
     }
 }

@@ -87,6 +87,12 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
             yield break;
         }
+
+        internal override bool ContainsDescendant(string path)
+        {
+            return false;
+        }
+        
     }
     class WCDirectoryNode : WCFileSystemNode
     {
@@ -146,6 +152,11 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
                 else
                     yield return new WCFileNode(Context, this, cache[fsi.FullName]);
             }
+        }
+
+        internal override bool ContainsDescendant(string path)
+        {
+            return StatusCache[path].IsBelowPath(SvnItem);
         }
     }
 }

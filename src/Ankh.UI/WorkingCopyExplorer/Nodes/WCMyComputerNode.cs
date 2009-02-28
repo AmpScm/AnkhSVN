@@ -73,6 +73,11 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             get { return _imageIndex; }
         }
 
+        internal override bool ContainsDescendant(string path)
+        {
+            return true;
+        }
+
         static class NativeMethods
         {
             public enum DriveType : uint

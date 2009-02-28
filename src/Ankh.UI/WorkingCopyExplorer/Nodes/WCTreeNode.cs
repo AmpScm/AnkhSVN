@@ -101,5 +101,7 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         }
 
         protected abstract void RefreshCore(bool rescan);
+
+        internal abstract bool ContainsDescendant(string path);
     }
 }

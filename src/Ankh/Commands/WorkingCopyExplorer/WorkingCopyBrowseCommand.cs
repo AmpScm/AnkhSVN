@@ -26,6 +26,7 @@ namespace Ankh.Commands
     /// Command to add a new root to the Working Copy Explorer.
     /// </summary>
     [Command(AnkhCommand.WorkingCopyBrowse, ArgumentDefinition="d")]
+    [Command(AnkhCommand.WorkingCopyAdd, ArgumentDefinition = "d")]
     class AddWorkingCopyExplorerRootCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
@@ -37,7 +38,8 @@ namespace Ankh.Commands
                 // Allow opening from
                 info = (string)e.Argument;
             }
-            else
+            else if (e.Command == AnkhCommand.WorkingCopyAdd)
+            {
                 using (AddWorkingCopyExplorerRootDialog dlg = new AddWorkingCopyExplorerRootDialog())
                 {
                     DialogResult dr = dlg.ShowDialog(e.Context);
@@ -47,6 +49,9 @@ namespace Ankh.Commands
 
                     info = dlg.NewRoot;
                 }
+            }
+            else
+                throw new InvalidOperationException("WorkingCopyBrowse was called without a path");
 
             if (!string.IsNullOrEmpty(info))
             {
@@ -61,7 +66,17 @@ namespace Ankh.Commands
                 ctrl = e.Selection.ActiveDialogOrFrameControl as WorkingCopyExplorerControl;
 
                 if (ctrl != null)
-                    ctrl.BrowsePath(info);
+                {
+                    switch (e.Command)
+                    {
+                        case AnkhCommand.WorkingCopyAdd:
+                            ctrl.AddRoot(info);
+                            break;
+                        case AnkhCommand.WorkingCopyBrowse:
+                            ctrl.BrowsePath(info);
+                            break;
+                    }
+                }
             }
         }
     }
