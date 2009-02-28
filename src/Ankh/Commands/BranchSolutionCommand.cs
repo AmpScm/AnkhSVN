@@ -24,6 +24,7 @@ using SharpSvn;
 using Ankh.UI.SccManagement;
 using System.Windows.Forms;
 using Ankh.UI;
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -33,6 +34,15 @@ namespace Ankh.Commands
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            SvnItem item = GetRoot(e);
+
+            if(item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalContentStatus == SvnStatus.Added || item.Status.Uri == null)
+                e.Enabled = false;
+        }
+
+        public SvnItem GetRoot(BaseCommandEventArgs e)
+        {
+            SvnItem item;
             switch (e.Command)
             {
                 case AnkhCommand.SolutionBranch:
@@ -41,49 +51,39 @@ namespace Ankh.Commands
                     string root = ss.ProjectRoot;
 
                     if (string.IsNullOrEmpty(root))
-                    {
-                        e.Enabled = false;
-                        return;
-                    }
+                        return null;
 
-                    SvnItem item = e.GetService<IFileStatusCache>()[root];
+                    item = e.GetService<IFileStatusCache>()[root];
+                    break;
+                case AnkhCommand.ProjectBranch:
+                    SvnProject p = EnumTools.GetSingle(e.Selection.GetSelectedProjects(false));
+                    if(p == null)
+                        break;
 
-                    if (item == null || !item.IsVersioned || item.IsDeleteScheduled || item.Status.LocalContentStatus == SvnStatus.Added || item.Status.Uri == null)
-                    {
-                        e.Enabled = false;
-                        return;
-                    }
-                    return;
+                    ISvnProjectInfo info = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
+
+                    if (info.ProjectDirectory == null)
+                        break;
+
+                    item = e.GetService<IFileStatusCache>()[info.ProjectDirectory];
             }
-            e.Enabled = false;
+
+            return item;
         }
 
         public override void OnExecute(CommandEventArgs e)
-        {
-            string path;
-
-            switch (e.Command)
-            {
-                case AnkhCommand.SolutionBranch:
-                    IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
-
-                    path = ss.ProjectRoot;
-                    break;
-                default:
-                    return;
-            }
-
-            if (string.IsNullOrEmpty(path))
-                return;
-
+        {         
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
-            SvnItem root;
+            SvnItem root = GetRoot(e);
 
-            if (cache == null || null == (root = cache[path]) || root.Status.Uri == null)
+            if (root == null)
                 return;
 
             using (CreateBranchDialog dlg = new CreateBranchDialog())
             {
+                if (e.Command == AnkhCommand.ProjectBranch)
+                    dlg.Text = CommandStrings.BranchProject;
+
                 dlg.SrcFolder = root.FullPath;
                 dlg.SrcUri = root.Status.Uri;
                 dlg.EditSource = false;

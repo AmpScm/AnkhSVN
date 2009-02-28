@@ -61,6 +61,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Branch Project.
+        /// </summary>
+        internal static string BranchProject {
+            get {
+                return ResourceManager.GetString("BranchProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Patch.
         /// </summary>
         internal static string CreatePatchTitle {

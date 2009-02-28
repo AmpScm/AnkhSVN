@@ -150,4 +150,7 @@
   <data name="UpdateProject" xml:space="preserve">
     <value>Update Project</value>
   </data>
+  <data name="BranchProject" xml:space="preserve">
+    <value>Branch Project</value>
+  </data>
 </root>
