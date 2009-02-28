@@ -9,6 +9,10 @@
       <title localize="false">Ankh-2.0.4757</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
+    <component visibility="2" type="Html" order="3">
+      <title localize="false">Ankh-2.0.6XXX</title>
+      <filename>HtmlSnippet3.html</filename>
+    </component>
   </component_list>
 </page>
 
