@@ -156,8 +156,6 @@
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SccSlnUpdate" priority="0x1000">
           <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x100" />
-          <ButtonRef id="Cmd_Lock" priority="0x3000" />
-          <ButtonRef id="Cmd_Unlock" priority="0x3100" />
         </Group>
         <GroupRef id="Grp_SccLock" priority="0x2000"/>
         <Group id="Grp_SccSlnChanges" priority="0x3000">
