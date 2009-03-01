@@ -104,7 +104,7 @@
                   text="Show &amp;Changes" iconFile="PendingChanges/Compare.png" />
             <Button id="Cmd_DocumentAnnotate" priority="0x1200"
                   name="DocumentAnnotate" defaultInvisible="true"
-                  text="&amp;Annotate" iconFile="PendingChanges/Annotate.png" />
+                  text="&amp;Annotate..." iconFile="PendingChanges/Annotate.png" />
             <Button id="Cmd_DocumentConflictEdit" name="DocumentConflictEdit" priority="0x3000" defaultInvisible="true"
                   text="&amp;Edit Conflicts" iconFile="PendingChanges/EditConflict.png" />
           </Group>
