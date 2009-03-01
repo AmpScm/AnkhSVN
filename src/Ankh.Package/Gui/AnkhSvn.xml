@@ -158,7 +158,10 @@
           <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x100" />
         </Group>
         <GroupRef id="Grp_SccLock" priority="0x2000"/>
-        <Group id="Grp_SccSlnChanges" priority="0x3000">
+        <Group id="Grp_SccSlnAction" priority="0x3000">
+          
+        </Group>
+        <Group id="Grp_SccSlnChanges" priority="0x4000">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
           <Button id="Cmd_UnifiedDiff" priority="0x200" name="UnifiedDiff"
                   text="&amp;Unified Diff..." defaultInvisible="true" />          
@@ -167,7 +170,7 @@
                   toolTip="View/Edit Solution Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
         </Group>
-        <Group id="Grp_SccSlnAdvanced" priority="0x4000">
+        <Group id="Grp_SccSlnAdvanced" priority="0x5000">
           
         </Group>
         <Group id="Grp_SccSlnBranch" priority="0x9000">
@@ -223,7 +226,10 @@
                   toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
         </Group>
         <GroupRef id="Grp_SccLock" priority="0x2000" />
-        <Group id="Grp_SccProjectChanges" priority="0x3000">
+        <Group id="Grp_SccProjectAction" priority="0x3000">
+          
+        </Group>
+        <Group id="Grp_SccProjectChanges" priority="0x4000">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
           <ButtonRef id="Cmd_UnifiedDiff" priority="0x200" />
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x300" />
@@ -232,7 +238,7 @@
                   toolTip="View/Edit Project Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
         </Group>
-        <Group id="Grp_SccProjectAdvanced" priority="0x4000">                              
+        <Group id="Grp_SccProjectAdvanced" priority="0x5000">                              
         </Group>
         <Group id="Grp_SccProjectBranch" priority="0x9000">
           <Button id="Cmd_ProjectBranch" priority="0x100" name="BranchSolution"
@@ -317,7 +323,10 @@
               text="U&amp;nlock..."
               toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>          
         </Group>
-        <Group id="Grp_SccItemChanges" priority="0x3000">
+        <Group id="Grp_SccItemAction" priority="0x3000">
+          
+        </Group>
+        <Group id="Grp_SccItemChanges" priority="0x4000">
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
           <ButtonRef id="Cmd_UnifiedDiff" priority="0x200" />
           <ButtonRef id="Cmd_ItemAnnotate" priority="0x300" />
@@ -326,7 +335,7 @@
                   toolTip="View/Edit Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
         </Group>
-        <Group id="Grp_SccItemAdvanced" priority="0x4000">
+        <Group id="Grp_SccItemAdvanced" priority="0x5000">
         </Group>
         <Group id="Grp_SccItemBranch" priority="0x9000">          
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x300" defaultInvisible="true"
@@ -522,6 +531,28 @@
               text="E&amp;xport a Repository or Local Folder..."
               toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" />
         </Group>
+        <Group id="Grp_WceUpdate" priority="0x2000">
+          <Button id="Cmd_UpdateItemLatestRecursive" name="UpdateItemLatest" priority="0x100"
+                text="&amp;Update to Latest Version (Recursive)"
+                toolTip="&amp;Update to Latest Version (Recursive)" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+        </Group>
+        <Group id="Grp_WceAction" priority="0x3000">
+          <ButtonRef id="Cmd_RevertItem" priority="0x100" />
+        </Group>
+        <Group id="Grp_WceChanges" priority="0x4000">
+          <ButtonRef id="Cmd_Log" priority="0x100" />
+          <MenuRef id="Menu_ItemCompare" priority="0x200" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x300" />
+        </Group>
+        <Group id="Grp_WceAdvanced" priority="0x5000">
+          
+        </Group>
+        <Group id="Grp_WceOpen" priority="0x8000">
+          <MenuRef id="Menu_ItemOpen" priority="0x100" />
+        </Group>
+        <Group id="Grp_WceBranch" priority="0x9000">
+          
+        </Group>        
       </Menu>
     </GroupRef>
     <GroupRef id="Grp_AnkhContextMenus">

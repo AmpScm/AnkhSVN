@@ -224,8 +224,9 @@ namespace Ankh.Ids
 
         RepositoryShowChanges,
         RepositoryCompareWithWc,
+        UpdateItemLatestRecursive,
+
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewFullPath,
         PcColViewLocked,
         PcColViewModified,
         PcColViewName,

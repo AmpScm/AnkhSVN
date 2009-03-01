@@ -142,26 +142,43 @@ namespace Ankh.Ids
         SccCleanupRefresh,
 
         SccItemUpdate,
+        SccItemAction,
         SccItemChanges,
         //SccItemAdvanced,
         SccItemBranch,
         SccItemPatch,
 
         SccProjectUpdate,
+        SccProjectAction,
         SccProjectChanges,        
         //SccProjectAdvanced,
         SccProjectBranch,
         SccProjectPatch,
 
         SccSlnUpdate,
+        SccSlnAction,
         SccSlnChanges,        
         //SccSlnAdvanced,
         SccSlnBranch,
         SccSlnPatch,
 
         SccPrjFileUpdate,
+        SccPrjFileAction,
         SccPrjFileChanges,
         SccPrjFileAdvanced,
         SccPrjFileBranch,
+
+        SccSlnFileUpdate,
+        SccSlnFileAction,
+        SccSlnFileChanges,
+        SccSlnFileAdvanced,
+        SccSlnFileBranch,
+
+        WceUpdate,
+        WceAction,
+        WceChanges,
+        WceAdvanced,
+        WceOpen,
+        WceBranch,
     }
 }
