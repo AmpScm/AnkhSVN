@@ -156,25 +156,34 @@
               text="View Solution &amp;History" iconFile="PendingChanges/ViewHistory.png" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1900" />
       <Menu id="Menu_SolutionExplorerSccForSolution" priority="0x1f00" name="Subversion" text="&amp;Subversion">
-        <Group id="Grp_SolutionExplorerSccForSolution" priority="0x100">
-          <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x08" />
-          <ButtonRef id="Cmd_DiffLocalItem" priority="0x10" />
-          <Button id="Cmd_UnifiedDiff" priority="0x20" name="UnifiedDiff"
-                  text="&amp;Unified Diff..." defaultInvisible="true" />
-          <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x30" />
-          <ButtonRef id="Cmd_Lock" priority="0x40" />
-          <ButtonRef id="Cmd_Unlock" priority="0x50" />
-          <Button id="Cmd_SolutionApplyPatch" name="ApplyPatch" priority="0x70"
-                      text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
-          <Button id="Cmd_SolutionEditProperties" priority="0x90" defaultDisabled="true"
+        <Group id="Grp_SccSlnUpdate" priority="0x1000">
+          <ButtonRef id="Cmd_SolutionUpdateSpecific" priority="0x100" />
+          <ButtonRef id="Cmd_Lock" priority="0x3000" />
+          <ButtonRef id="Cmd_Unlock" priority="0x3100" />
+        </Group>
+        <GroupRef id="Grp_SccAdd" priority="0x2000"/>
+        <Group id="Grp_SccSlnChanges" priority="0x3000">
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
+          <Button id="Cmd_UnifiedDiff" priority="0x200" name="UnifiedDiff"
+                  text="&amp;Unified Diff..." defaultInvisible="true" />          
+          <Button id="Cmd_SolutionEditProperties" priority="0x300" defaultDisabled="true"
                   text="Solution Prop&amp;erties..."
                   toolTip="View/Edit Solution Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
-          <Button id="Cmd_SolutionBranch" priority="0xE0" name="BranchSolution"
-                  text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
-          <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
+        </Group>
+        <Group id="Grp_SccSlnAdvanced" priority="0x4000">
+          
+        </Group>
+        <Group id="Grp_SccSlnBranch" priority="0x9000">
+          <Button id="Cmd_SolutionBranch" priority="0x100" name="BranchSolution"
+                  text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />          
+          <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x300" />
+          <Button id="Cmd_SolutionMerge" priority="0x400" name="MergeSolution"
               text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+
+          <ButtonRef id="Cmd_CreatePatch" priority="0x8000" />
+          <Button id="Cmd_SolutionApplyPatch" name="ApplyPatch" priority="0x8100"
+                      text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png" defaultInvisible="true"/>
         </Group>
         <GroupRef id="Grp_SccCleanupRefresh" priority="0xC000"/>
         <Group id="Grp_SccExplore" priority="0xF000">
@@ -240,13 +249,13 @@
         </Group>
         <Group id="Grp_SccProjectBranch" priority="0x9000">
           <Button id="Cmd_ProjectBranch" priority="0x100" name="BranchSolution"
-                  text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
-          <ButtonRef id="Cmd_CreatePatch" priority="0x200" />
+                  text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />          
           <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x300" defaultInvisible="true"
                 text="&amp;Switch Project..." allowParams="true"
                 toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_ProjectMerge" priority="0x400" name="MergeProject"
               text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+          <ButtonRef id="Cmd_CreatePatch" priority="0x8000" />
         </Group>
         <GroupRef id="Grp_SccCleanupRefresh" priority="0xC000"/>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
@@ -326,15 +335,15 @@
         </Group>
         <Group id="Grp_SccItemAdvanced" priority="0x4000">
         </Group>
-        <Group id="Grp_SccItemBranch" priority="0x9000">
-          <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x200" defaultInvisible="true"
-                text="Create &amp;Patch..."
-                toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
+        <Group id="Grp_SccItemBranch" priority="0x9000">          
           <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x300" defaultInvisible="true"
                 text="&amp;Switch..." allowParams="true"
                 toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_ItemMerge" priority="0x400" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
+          <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x8000" defaultInvisible="true"
+                text="Create &amp;Patch..."
+                toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
         </Group>
         <Group id="Grp_SccCleanupRefresh" priority="0xC000">
           <Button id="Cmd_Cleanup" name="Cleanup" priority="0x100" defaultInvisible="true"

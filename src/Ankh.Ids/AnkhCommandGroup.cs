@@ -51,7 +51,7 @@ namespace Ankh.Ids
 
         NoUI,
 
-        SolutionExplorerSccForSolution,
+        SccSlnAdvanced,
         SccProjectAdvanced,
         SccItemAdvanced,
 
@@ -153,7 +153,7 @@ namespace Ankh.Ids
 
         SccSlnUpdate,
         SccSlnChanges,        
-        SccSlnAdvanced,
+        //SccSlnAdvanced,
         SccSlnBranch,
 
         SccPrjFileUpdate,
