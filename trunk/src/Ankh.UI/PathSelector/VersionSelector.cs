@@ -39,17 +39,7 @@ namespace Ankh.UI.PathSelector
         public VersionSelector()
         {
             // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();
-
-            /*            this.revisionTypeBox.Items.AddRange( new object[]{
-                                                                             RevisionChoice.Head,
-                                                                             RevisionChoice.Committed,
-                                                                             RevisionChoice.Base,
-                                                                             RevisionChoice.Previous,
-                                                                             RevisionChoice.Working } );
-                        this.revisionTypeBox.SelectedItem = RevisionChoice.Head;
-                        this.dateRevisionChoice = new DateRevisionChoice( this.datePicker );
-                        this.revisionTypeBox.Items.Add( this.dateRevisionChoice ); */
+            InitializeComponent();       
         }
 
         /// <summary>

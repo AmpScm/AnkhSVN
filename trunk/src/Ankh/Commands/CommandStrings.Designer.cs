@@ -97,6 +97,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exporting.
+        /// </summary>
+        internal static string Exporting {
+            get {
+                return ResourceManager.GetString("Exporting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignore in Subversion.
         /// </summary>
         internal static string IgnoreCaption {

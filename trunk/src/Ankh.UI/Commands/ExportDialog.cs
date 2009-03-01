@@ -24,7 +24,7 @@ using System.IO;
 using Ankh.UI.RepositoryExplorer;
 using System.Windows.Forms.Design;
 
-namespace Ankh.UI
+namespace Ankh.UI.Commands
 {
     /// <summary>
     /// A dialog for performing exports.
@@ -38,8 +38,6 @@ namespace Ankh.UI
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            this.ControlsChanged(this, EventArgs.Empty);
         }
 
         
@@ -50,37 +48,12 @@ namespace Ankh.UI
                 throw new ArgumentNullException("context");
 
             _context = context;
-        }
-
-
-        /// <summary>
-        /// The URL of the repository.
-        /// </summary>
-        public string Source
-        {
-            get
-            {
-                if (this.radioButtonFromURL.Checked)
-                    return this.urlTextBox.Text;
-                else
-                    return this.exportFromDirTextBox.Text;
-            }
-        }
-
-        public Uri OriginUri
-        {
-            set
-            {
-                if (value != null && value.IsAbsoluteUri)
-                    urlTextBox.Text = value.AbsoluteUri;
-                else
-                    urlTextBox.Text = "";
-            }
-        }
+        }    
 
         public string OriginPath
         {
-            set { exportFromDirTextBox.Text = value; }
+            set { originBox.Text = value; }
+            get  { return originBox.Text; }
         }
             
         /// <summary>
@@ -88,8 +61,32 @@ namespace Ankh.UI
         /// </summary>
         public string LocalPath
         {
-            get { return this.localDirTextBox.Text; }
-            set { this.localDirTextBox.Text = value; }
+            get { return this.toBox.Text; }
+            set { this.toBox.Text = value; }
+        }
+
+        IFileStatusCache _fc;
+        IFileStatusCache FileCache
+        {
+            get { return _fc ?? (_fc = Context.GetService<IFileStatusCache>()); }
+        }
+
+        SvnOrigin _baseOrigin;
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (FileCache != null && !string.IsNullOrEmpty(OriginPath))
+            {
+                SvnItem item = FileCache[OriginPath];
+
+                if (item.IsVersioned)
+                    _baseOrigin = new SvnOrigin(item);
+
+                revisionPicker.Context = Context;
+                revisionPicker.Revision = SvnRevision.Working;
+                revisionPicker.SvnOrigin = _baseOrigin;                
+            }
         }
 
         /// <summary>
@@ -123,7 +120,8 @@ namespace Ankh.UI
             }
             base.Dispose(disposing);
         }
-
+        
+        string _lastOrigin;
         /// <summary>
         /// Validate the input here.
         /// </summary>
@@ -132,50 +130,35 @@ namespace Ankh.UI
         private void ControlsChanged(object sender, System.EventArgs e)
         {
             bool enable = false;
-            if (_context != null)
+            if (Context != null && FileCache != null)
             {
-                IFileStatusCache cache = _context.GetService<IFileStatusCache>();
-
-
-                if (cache != null)
+                if (this.revisionPicker.Valid && ExportSource != null && !string.IsNullOrEmpty(toBox.Text))
                 {
-                    if (this.revisionPicker.Valid && ExportSource != null && !string.IsNullOrEmpty(localDirTextBox.Text))
+                    string origin = string.IsNullOrEmpty(originBox.Text) ? originBox.Text : null;
+
+                    if (origin != null)
                     {
-                        if (!this.radioButtonFromDir.Checked)
+                        if (origin == _lastOrigin)
                             enable = true;
                         else
-                            try
+                        {
+                            SvnItem i = FileCache[origin];
+
+                            if (i != null && i.Exists && i.IsVersioned)
                             {
-                                enable = cache[exportFromDirTextBox.Text].IsVersioned;
+                                revisionPicker.SvnOrigin = new SvnOrigin(i);
+                                _lastOrigin = origin;
+                                enable = true;
                             }
-                            catch
-                            { }
+                            else
+                                enable = false;
+                        }
                     }
                 }
             }
-
+            
             this.okButton.Enabled = enable;
-        }
-
-        /// <summary>
-        ///   User clicked radio button to export from a dir
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void radioButtonFromDir_CheckedChanged(object sender, System.EventArgs e)
-        {
-            exportFromDirTextBox.Enabled = wcBrowseBtn.Enabled = radioButtonFromDir.Checked;
-
-        }
-        /// <summary>
-        ///   User clicked radio button to export from a URL
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void radioButtonFromURL_CheckedChanged(object sender, System.EventArgs e)
-        {
-            urlTextBox.Enabled = urlBrowseBtn.Enabled = radioButtonFromURL.Checked;
-        }
+        }      
 
         /// <summary>
         /// Let the user browse for a directory to export from
@@ -196,7 +179,7 @@ namespace Ankh.UI
                 if (browser.ShowDialog(this) != DialogResult.OK)
                     return;
                 
-                this.exportFromDirTextBox.Text = browser.SelectedPath;
+                this.originBox.Text = browser.SelectedPath;
             }
         }
 
@@ -209,30 +192,13 @@ namespace Ankh.UI
         {
 			using (FolderBrowserDialog browser = new FolderBrowserDialog())
             {
-                if (!string.IsNullOrEmpty(localDirTextBox.Text))
-                    browser.SelectedPath = localDirTextBox.Text;
+                if (!string.IsNullOrEmpty(toBox.Text))
+                    browser.SelectedPath = toBox.Text;
 
                 if (browser.ShowDialog(this) != DialogResult.OK)
                     return;
                 
-                this.localDirTextBox.Text = browser.SelectedPath;
-            }
-        }
-
-        private void urlBrowseBtn_Click(object sender, EventArgs e)
-        {
-            using (RepositoryFolderBrowserDialog dlg = new RepositoryFolderBrowserDialog())
-            {
-                SvnUriTarget ut = ExportSource as SvnUriTarget;
-
-                if (ut != null)
-                    dlg.SelectedUri = ut.Uri;
-
-                if (dlg.ShowDialog(_context) != DialogResult.OK)
-                    return;
-
-                if (dlg.SelectedUri != null)
-                    urlTextBox.Text = dlg.SelectedUri.AbsoluteUri;
+                this.toBox.Text = browser.SelectedPath;
             }
         }
 
@@ -240,28 +206,18 @@ namespace Ankh.UI
         {
             get
             {
-                if (radioButtonFromURL.Checked)
-                {
-                    Uri r;
+                string origin = string.IsNullOrEmpty(originBox.Text) ? originBox.Text : null;
 
-                    string txt = urlTextBox.Text;
-                    if (!string.IsNullOrEmpty(txt) && Uri.TryCreate(txt, UriKind.Absolute, out r))
-                        return new SvnUriTarget(r);
-                }
-                else if (radioButtonFromDir.Checked)
+                if (origin != null)
                 {
-                    string txt = this.localDirTextBox.Text;
-                    if (!string.IsNullOrEmpty(txt))
-                        try
-                        {
-                            txt = SvnTools.GetTruePath(SvnTools.GetNormalizedFullPath(Path.GetFullPath(txt)));
+                    SvnItem i = FileCache[origin];
 
-                            return new SvnPathTarget(txt);
-                        }
-                        catch
-                        {
-                            return null;
-                        }
+                    if (i != null && i.Exists && i.IsVersioned)
+                    {
+                        revisionPicker.SvnOrigin = new SvnOrigin(i);
+                        _lastOrigin = origin;
+                        return i.FullPath;
+                    }
                 }
                 
                 return null;
