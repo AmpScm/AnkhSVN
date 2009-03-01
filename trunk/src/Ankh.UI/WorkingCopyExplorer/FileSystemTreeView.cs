@@ -204,7 +204,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        private void FillNode(TreeNode treeNode)
+        internal void FillNode(TreeNode treeNode)
         {
             // get rid of the dummy node or existing nodes
             treeNode.Nodes.Clear();

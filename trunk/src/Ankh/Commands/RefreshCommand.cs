@@ -19,6 +19,7 @@ using Ankh.UI;
 using Ankh.Ids;
 using Ankh.Scc;
 using Microsoft.VisualStudio;
+using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.Commands
 {
@@ -46,7 +47,11 @@ namespace Ankh.Commands
 
             IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
 
-            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window            
+            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window    
+
+            WorkingCopyExplorerControl wce = e.Selection.ActiveFrameControl as WorkingCopyExplorerControl;
+            if(wce != null)
+                wce.RefreshSelection();
         }
     }
 }

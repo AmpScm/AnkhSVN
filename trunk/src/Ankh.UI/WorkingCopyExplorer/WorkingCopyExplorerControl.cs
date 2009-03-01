@@ -329,5 +329,18 @@ namespace Ankh.UI.WorkingCopyExplorer
             // Ultimate fallback: Just open the file as windows would
             svc.PostExecCommand(AnkhCommand.ItemOpenWindows);
         }
+
+        public void RefreshSelection()
+        {
+            FileSystemTreeNode tn = (FileSystemTreeNode)folderTree.SelectedNode;
+            tn.WCNode.Refresh(true);
+            folderTree.FillNode(tn);
+
+            WCTreeNode item = this.folderTree.SelectedItem;
+            if (item == null)
+                return;
+
+            this.fileList.SetDirectory(item);
+        }
     }
 }
