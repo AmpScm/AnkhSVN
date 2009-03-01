@@ -138,5 +138,25 @@ namespace Ankh.Ids
         AnkhContextMenus,
         MoveToChangeList,
         SlnExpCleanupRefresh,
+
+        SccFileUpdate,
+        SccFileChanges,
+        SccFileAdvanced,
+        SccFileBranch,
+
+        SccProjectUpdate,
+        SccProjectChanges,        
+        SccProjectAdvanced,
+        SccProjectBranch,
+
+        SccSlnUpdate,
+        SccSlnChanges,        
+        SccSlnAdvanced,
+        SccSlnBranch,
+
+        SccPrjFileUpdate,
+        SccPrjFileChanges,
+        SccPrjFileAdvanced,
+        SccPrjFileBranch,
     }
 }
