@@ -526,10 +526,7 @@
               toolTip="Add a new root to the Working Copy Explorer." iconFile="menu/AddFolder.png" allowParams="true" />
           <Button id="Cmd_RemoveWorkingCopyExplorerRoot" name="RemoveWorkingCopyExplorerRoot" priority="0x200"
               text="&amp;Remove Root"
-              toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>
-          <Button id="Cmd_Export" name="Export" priority="0x300"
-              text="E&amp;xport a Repository or Local Folder..."
-              toolTip="Export a Subversion repository or local folder." iconFile="menu/Export.png" />
+              toolTip="Remove this root from the Working Copy Explorer." iconFile="menu/RemoveFolder.png"/>          
         </Group>
         <Group id="Grp_WceUpdate" priority="0x2000">
           <Button id="Cmd_UpdateItemLatestRecursive" name="UpdateItemLatest" priority="0x100"
@@ -537,7 +534,7 @@
                 toolTip="&amp;Update to Latest Version (Recursive)" iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
         </Group>
         <Group id="Grp_WceAction" priority="0x3000">
-          <ButtonRef id="Cmd_RevertItem" priority="0x100" />
+          <MenuRef id="Menu_ItemRevert" priority="0x100" />
         </Group>
         <Group id="Grp_WceChanges" priority="0x4000">
           <ButtonRef id="Cmd_Log" priority="0x100" />
@@ -549,6 +546,9 @@
         </Group>
         <Group id="Grp_WceOpen" priority="0x8000">
           <MenuRef id="Menu_ItemOpen" priority="0x100" />
+          <Button id="Cmd_Export" name="Export" priority="0x300"
+              text="E&amp;xport..."
+              toolTip="Export to Folder" iconFile="menu/Export.png" />
         </Group>
         <Group id="Grp_WceBranch" priority="0x9000">
           
@@ -560,7 +560,9 @@
       <Menu id="Menu_WorkingCopyExplorerContextMenu" name="WorkingCopyExplorerContext" text="Working Copy Explorer"
             priority="0" type="Context" notInTBList="true">
         <Group id="Grp_WorkingCopyExplorerContext" priority="0x100">
-          <ButtonRef id="Cmd_Refresh" priority="0x500" />
+          <!--<ButtonRef id="Cmd_Refresh" priority="0x500" />-->
+          <ButtonRef id="Cmd_ExplorerOpen" priority="0x100" />
+          <ButtonRef id="Cmd_Export" priority="0x300" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
