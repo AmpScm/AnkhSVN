@@ -160,6 +160,33 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updating Project.
+        /// </summary>
+        internal static string UpdatingProject {
+            get {
+                return ResourceManager.GetString("UpdatingProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating Solution.
+        /// </summary>
+        internal static string UpdatingSolution {
+            get {
+                return ResourceManager.GetString("UpdatingSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating.
+        /// </summary>
+        internal static string UpdatingTitle {
+            get {
+                return ResourceManager.GetString("UpdatingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Would you like to add {0} to the svn:ignore property on &apos;{1}&apos;?.
         /// </summary>
         internal static string WouldYouLikeToAddXToTheIgnorePropertyOnY {

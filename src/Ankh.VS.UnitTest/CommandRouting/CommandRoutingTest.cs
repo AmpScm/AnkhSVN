@@ -454,7 +454,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.UpdateItem);
+                CommandTester.TestExecution(AnkhCommand.UpdateItemSpecific);
             }
         }
 

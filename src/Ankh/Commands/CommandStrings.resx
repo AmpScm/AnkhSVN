@@ -153,4 +153,13 @@
   <data name="BranchProject" xml:space="preserve">
     <value>Branch Project</value>
   </data>
+  <data name="UpdatingProject" xml:space="preserve">
+    <value>Updating Project</value>
+  </data>
+  <data name="UpdatingSolution" xml:space="preserve">
+    <value>Updating Solution</value>
+  </data>
+  <data name="UpdatingTitle" xml:space="preserve">
+    <value>Updating</value>
+  </data>
 </root>
