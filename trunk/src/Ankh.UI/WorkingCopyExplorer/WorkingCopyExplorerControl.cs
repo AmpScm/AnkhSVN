@@ -147,11 +147,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.AddRoot(root);
         }
 
-        internal void RemoveRoot(WCTreeNode root)
-        {
-            this.folderTree.RemoveRoot(root);
-        }
-
         internal void RefreshItem(WCTreeNode item)
         {
             item.Refresh();
