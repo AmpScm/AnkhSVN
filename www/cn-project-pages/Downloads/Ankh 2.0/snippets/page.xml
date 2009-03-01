@@ -2,7 +2,7 @@
 <page visibility="1">
   <component_list>
     <component visibility="2" type="Html" order="1">
-      <title localize="false">Ankh-2.0.6XXX</title>
+      <title localize="false">Ankh-2.0.6298</title>
       <filename>HtmlSnippet3.html</filename>
     </component>
     <component visibility="1" type="Html" order="2">
