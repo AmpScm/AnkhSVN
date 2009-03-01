@@ -35,6 +35,7 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.UpdateItemSpecific)]
     [Command(AnkhCommand.UpdateItemLatest)]
+    [Command(AnkhCommand.UpdateItemLatestRecursive)]
     class UpdateItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -50,7 +51,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             SvnRevision updateTo;
-            SvnDepth depth = SvnDepth.Files;
+            SvnDepth depth = SvnDepth.Empty;
             List<string> files = new List<string>();
             if (e.Command == AnkhCommand.UpdateItemSpecific)
             {
@@ -90,6 +91,7 @@ namespace Ankh.Commands
             else
             {
                 updateTo = SvnRevision.Head;
+                depth = e.Command == AnkhCommand.UpdateItemLatestRecursive ? SvnDepth.Infinity : SvnDepth.Empty;
 
                 foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
                 {
