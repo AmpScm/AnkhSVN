@@ -300,27 +300,30 @@
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
-        <Group id="Grp_SolutionExplorerSccForItem" priority="0x100">
-          <ButtonRef id="Cmd_AddItem" priority="0x10" />
-          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
-          <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
-          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
+        <Group id="Grp_SccFileUpdate" priority="0x1000">
+          <ButtonRef id="Cmd_AddItem" priority="0x100" />
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
           <Button id="Cmd_Unlock" name="Unlock" priority="0x50" defaultInvisible="true"
               text="U&amp;nlock..."
-              toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
-          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x70" defaultInvisible="true"
-                text="&amp;Switch..." allowParams="true"
-                toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
-          <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
-              text="Create &amp;Patch..."
-              toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
+              toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>          
+        </Group>
+        <Group id="Grp_SccFileChanges" priority="0x2000">
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
+          <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
           <Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
                   text="Prop&amp;erties..."
                   toolTip="View/Edit Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
+        </Group>
+        <Group id="Grp_SccFileAdvanced" priority="0x3000">
+        </Group>
+        <Group id="Grp_SccFileBranch" priority="0x9000">
+          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x70" defaultInvisible="true"
+                text="&amp;Switch..." allowParams="true"
+                toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
         </Group>
