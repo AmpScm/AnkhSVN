@@ -101,8 +101,14 @@ namespace Ankh.UI.WorkingCopyExplorer
             foreach (FileSystemTreeNode tn in Nodes)
             {
                 if (tn.WCNode.ContainsDescendant(path))
+                {
                     tn.SelectSubNode(path);
+                    return;
+                }
             }
+
+            // No subnode to expand; we reached the target, lets select it
+            TreeView.SelectedNode = this;
         }
     }
 }
