@@ -176,7 +176,7 @@
           <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
               text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>
         </Group>
-        <GroupRef id="Grp_SlnExpCleanupRefresh" priority="0xC000"/>
+        <GroupRef id="Grp_SccCleanupRefresh" priority="0xC000"/>
         <Group id="Grp_SccExplore" priority="0xF000">
           <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
                       text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
@@ -219,34 +219,36 @@
       <MenuRef id="Menu_ItemResolve" priority="0x1900" />
       <ButtonRef id="Cmd_RevertItem" priority="0x1A00" />
       <Menu id="Menu_SolutionExplorerSccForProject" priority="0x1B00" name="Subversion" text="&amp;Subversion">
-        <Group id="Grp_SolutionExplorerSccForProject" priority="0x100">
-          <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x08"
+        <Group id="Grp_SccProjectUpdate" priority="0x1000">
+          <Button id="Cmd_ProjectUpdateSpecific" name="UpdateSpecific" priority="0x1000"
                   text="Update to a Specific &amp;Version..." defaultInvisible="true"
                   toolTip="Update your project to a specific version" iconFile="PendingChanges/UpdateSpecific.png"/>
-          <Button id="Cmd_AddItem" name="AddItem" priority="0x10"
-                text="&amp;Add..."
-                toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
-          <ButtonRef  id="Cmd_UnifiedDiff" priority="0x30" />
-          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
-          <ButtonRef id="Cmd_Lock" priority="0x45" />
-          <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x50" defaultInvisible="true"
-                text="&amp;Switch Project..." allowParams="true"
-                toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
-
-          <ButtonRef id="Cmd_Unlock" priority="0x60" />
-          <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
-          <Button id="Cmd_ProjectEditProperties" priority="0x90" defaultDisabled="true"
+          <ButtonRef id="Cmd_Lock" priority="0x3000" />
+          <ButtonRef id="Cmd_Unlock" priority="0x3100" />          
+        </Group>
+        <GroupRef id="Grp_SccAdd" priority="0x2000" />
+        <Group id="Grp_SccProjectChanges" priority="0x3000">
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
+          <ButtonRef id="Cmd_UnifiedDiff" priority="0x200" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x300" />
+          <Button id="Cmd_ProjectEditProperties" priority="0x700" defaultDisabled="true"
                   text="Project Prop&amp;erties..."
                   toolTip="View/Edit Project Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
-
-          <Button id="Cmd_ProjectBranch" priority="0xE0" name="BranchSolution"
+        </Group>
+        <Group id="Grp_SccProjectAdvanced" priority="0x4000">                              
+        </Group>
+        <Group id="Grp_SccProjectBranch" priority="0x9000">
+          <Button id="Cmd_ProjectBranch" priority="0x100" name="BranchSolution"
                   text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
-          <Button id="Cmd_ProjectMerge" priority="0xF0" name="MergeProject"
+          <ButtonRef id="Cmd_CreatePatch" priority="0x200" />
+          <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x300" defaultInvisible="true"
+                text="&amp;Switch Project..." allowParams="true"
+                toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
+          <Button id="Cmd_ProjectMerge" priority="0x400" name="MergeProject"
               text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
         </Group>
-        <GroupRef id="Grp_SlnExpCleanupRefresh" priority="0xC000"/>
+        <GroupRef id="Grp_SccCleanupRefresh" priority="0xC000"/>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
       <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File">
@@ -300,8 +302,7 @@
       </Menu>
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
-        <Group id="Grp_SccFileUpdate" priority="0x1000">
-          <ButtonRef id="Cmd_AddItem" priority="0x100" />
+        <Group id="Grp_SccItemUpdate" priority="0x1000">          
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
@@ -309,25 +310,33 @@
               text="U&amp;nlock..."
               toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>          
         </Group>
-        <Group id="Grp_SccFileChanges" priority="0x2000">
-          <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
-          <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
-          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
-          <Button id="Cmd_ItemEditProperties" priority="0x90" defaultDisabled="true"
-                  text="Prop&amp;erties..."
+        <Group id="Grp_SccAdd" priority="0x2000">
+          <Button id="Cmd_AddItem" name="AddItem" priority="0x100"
+                  text="&amp;Add..." toolTip="Add selected items to the working copy." 
+                  iconFile="menu/Add.png" defaultInvisible="true"/>
+        </Group>
+        <Group id="Grp_SccItemChanges" priority="0x3000">
+          <ButtonRef id="Cmd_DiffLocalItem" priority="0x100" />
+          <ButtonRef id="Cmd_UnifiedDiff" priority="0x200" />
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x300" />
+          <Button id="Cmd_ItemEditProperties" priority="0x700" defaultDisabled="true"
+                  text="Subversion Prop&amp;erties..."
                   toolTip="View/Edit Subversion Properties"
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
         </Group>
-        <Group id="Grp_SccFileAdvanced" priority="0x3000">
+        <Group id="Grp_SccItemAdvanced" priority="0x4000">
         </Group>
-        <Group id="Grp_SccFileBranch" priority="0x9000">
-          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x70" defaultInvisible="true"
+        <Group id="Grp_SccItemBranch" priority="0x9000">
+          <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x200" defaultInvisible="true"
+                text="Create &amp;Patch..."
+                toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
+          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x300" defaultInvisible="true"
                 text="&amp;Switch..." allowParams="true"
                 toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
-          <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
+          <Button id="Cmd_ItemMerge" priority="0x400" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
         </Group>
-        <Group id="Grp_SlnExpCleanupRefresh" priority="0xC000">
+        <Group id="Grp_SccCleanupRefresh" priority="0xC000">
           <Button id="Cmd_Cleanup" name="Cleanup" priority="0x100" defaultInvisible="true"
               text="Cl&amp;eanup"
               toolTip="Cleanup the working copy." iconFile="PendingChanges/Cleanup.png"/>
