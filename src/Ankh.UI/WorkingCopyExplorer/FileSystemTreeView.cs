@@ -158,32 +158,11 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        internal void RemoveRoot(WCTreeNode root)
-        {
-            TreeNode nodeToRemove = null;
-            foreach (TreeNode node in this.Nodes)
-            {
-                if (node.Tag == root)
-                {
-                    nodeToRemove = node;
-                    break;
-                }
-            }
-
-            if (nodeToRemove != null)
-            {
-                nodeToRemove.Remove();
-            }
-        }
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 this.SelectedNode = this.GetNodeAt(e.X, e.Y);
-
-
-                
 
                 IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
 
