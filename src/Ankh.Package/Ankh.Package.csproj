@@ -178,7 +178,6 @@
     <Content Include="Gui\menu\Add.png" />
     <Content Include="Gui\menu\AddFolder.png" />
     <Content Include="Gui\menu\AddUrl.png" />
-    <Content Include="Gui\menu\Cleanup.png" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
     <Content Include="Gui\menu\Lock.png" />
@@ -202,6 +201,7 @@
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
     <Content Include="Gui\PendingChanges\ChangeSourceControl.png" />
     <Content Include="Gui\PendingChanges\CheckOut.png" />
+    <Content Include="Gui\PendingChanges\CleanUp.png" />
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />
     <Content Include="Gui\PendingChanges\ConflictResolved.png" />

@@ -164,7 +164,6 @@
           <ButtonRef id="Cmd_SolutionSwitchDialog" priority="0x30" />
           <ButtonRef id="Cmd_Lock" priority="0x40" />
           <ButtonRef id="Cmd_Unlock" priority="0x50" />
-          <ButtonRef id="Cmd_Cleanup" priority="0x60" />
           <Button id="Cmd_SolutionApplyPatch" name="ApplyPatch" priority="0x70"
                       text="Apply &amp;Patch..." iconFile="PendingChanges/ApplyPatch.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
@@ -176,8 +175,8 @@
                   text="&amp;Branch Solution..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_SolutionMerge" priority="0xF0" name="MergeSolution"
               text="&amp;Merge Solution..." iconFile="menu/Merge.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
+        <GroupRef id="Grp_SlnExpCleanupRefresh" priority="0xC000"/>
         <Group id="Grp_SccExplore" priority="0xF000">
           <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
                       text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
@@ -229,13 +228,13 @@
                 toolTip="Add selected items to the working copy." iconFile="menu/Add.png" defaultInvisible="true"/>
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef  id="Cmd_UnifiedDiff" priority="0x30" />
-          <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x40" defaultInvisible="true"
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
+          <ButtonRef id="Cmd_Lock" priority="0x45" />
+          <Button id="Cmd_SwitchProject" name="SwitchProject" priority="0x50" defaultInvisible="true"
                 text="&amp;Switch Project..." allowParams="true"
                 toolTip="Switch this project to a different Url." iconFile="PendingChanges/Switch.png"/>
-          <ButtonRef id="Cmd_Lock" priority="0x45" />
-          <ButtonRef id="Cmd_Unlock" priority="0x50" />
-          <ButtonRef id="Cmd_Cleanup" priority="0x60" />
-          <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
+
+          <ButtonRef id="Cmd_Unlock" priority="0x60" />
           <ButtonRef id="Cmd_CreatePatch" priority="0x80" />
           <Button id="Cmd_ProjectEditProperties" priority="0x90" defaultDisabled="true"
                   text="Project Prop&amp;erties..."
@@ -246,8 +245,8 @@
                   text="&amp;Branch Project..." iconFile="PendingChanges/Branch.png" defaultInvisible="true" />
           <Button id="Cmd_ProjectMerge" priority="0xF0" name="MergeProject"
               text="&amp;Merge Project..." iconFile="menu/Merge.png" defaultInvisible="true"/>
-          <ButtonRef id="Cmd_Refresh" priority="0x100" />
         </Group>
+        <GroupRef id="Grp_SlnExpCleanupRefresh" priority="0xC000"/>
         <GroupRef id="Grp_SccExplore" priority="0xF000" />
       </Menu>
       <Menu id="Menu_ProjectFileScc" name="ProjectFile" priority="0x3000" text="Pro&amp;ject File">
@@ -305,19 +304,16 @@
           <ButtonRef id="Cmd_AddItem" priority="0x10" />
           <ButtonRef id="Cmd_DiffLocalItem" priority="0x20" />
           <ButtonRef id="Cmd_UnifiedDiff" priority="0x30" />
-          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x40" defaultInvisible="true"
-                text="&amp;Switch..." allowParams="true"
-                toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
+          <ButtonRef id="Cmd_ItemAnnotate" priority="0x40" />
           <Button id="Cmd_Lock" name="Lock" priority="0x45" defaultInvisible="true"
               text="Loc&amp;k..."
               toolTip="Lock the selected item." iconFile="menu/Lock.png" />
           <Button id="Cmd_Unlock" name="Unlock" priority="0x50" defaultInvisible="true"
               text="U&amp;nlock..."
               toolTip="Unlock the selected items." iconFile="menu/Unlock.png"/>
-          <Button id="Cmd_Cleanup" name="Cleanup" priority="0x60" defaultInvisible="true"
-              text="Cl&amp;eanup"
-              toolTip="Cleanup the working copy." iconFile="menu/Cleanup.png"/>
-          <ButtonRef id="Cmd_ItemAnnotate" priority="0x70" />
+          <Button id="Cmd_SwitchItem" name="SwitchItem" priority="0x70" defaultInvisible="true"
+                text="&amp;Switch..." allowParams="true"
+                toolTip="Switch this item to a different Url." iconFile="PendingChanges/Switch.png"/>
           <Button id="Cmd_CreatePatch" name="CreatePatch" priority="0x80" defaultInvisible="true"
               text="Create &amp;Patch..."
               toolTip="Create a patch file of changes." iconFile="PendingChanges/CreatePatch.png"/>
@@ -327,8 +323,12 @@
                   iconFile="menu/Properties.png" defaultInvisible="true"/>
           <Button id="Cmd_ItemMerge" priority="0xE0" name="Merge"
               text="&amp;Merge..." iconFile="menu/Merge.png" defaultInvisible="true"/>
-
-          <Button id="Cmd_Refresh" name="Refresh" priority="0xF0" defaultInvisible="true"
+        </Group>
+        <Group id="Grp_SlnExpCleanupRefresh" priority="0xC000">
+          <Button id="Cmd_Cleanup" name="Cleanup" priority="0x100" defaultInvisible="true"
+              text="Cl&amp;eanup"
+              toolTip="Cleanup the working copy." iconFile="PendingChanges/Cleanup.png"/>
+          <Button id="Cmd_Refresh" name="Refresh" priority="0x120" defaultInvisible="true"
                 text="Refres&amp;h"
                 toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
         </Group>
