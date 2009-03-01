@@ -33,7 +33,8 @@ namespace Ankh.Commands
     /// <summary>
     /// A command that updates an item.
     /// </summary>
-    [Command(AnkhCommand.UpdateItem)]
+    [Command(AnkhCommand.UpdateItemSpecific)]
+    [Command(AnkhCommand.UpdateItemLatest)]
     class UpdateItem : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -48,47 +49,67 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IUIShell uiShell = e.GetService<IUIShell>();
-
-            PathSelectorResult result = null;
-            PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
-                e.Selection.GetSelectedSvnItems(true));
-
-            info.CheckedFilter += delegate(SvnItem item) { return item.IsVersioned; };
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
-            info.EnableRecursive = true;
-            info.RevisionStart = SvnRevision.Head;
-
-            if (!CommandBase.Shift)
+            SvnRevision updateTo;
+            SvnDepth depth = SvnDepth.Files;
+            List<string> files = new List<string>();
+            if (e.Command == AnkhCommand.UpdateItemSpecific)
             {
-                result = uiShell.ShowPathSelector(info);
+                IUIShell uiShell = e.GetService<IUIShell>();
+
+                PathSelectorResult result = null;
+                PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
+                    e.Selection.GetSelectedSvnItems(true));
+
+                info.CheckedFilter += delegate(SvnItem item) { return item.IsVersioned; };
+                info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned; };
+                info.EnableRecursive = true;
+                info.RevisionStart = SvnRevision.Head;
+
+                if (!CommandBase.Shift)
+                {
+                    result = uiShell.ShowPathSelector(info);
+                }
+                else
+                {
+                    result = info.DefaultResult;
+                }
+
+                if (!result.Succeeded)
+                    return;
+
+                updateTo = result.RevisionStart;
+
+                foreach (SvnItem item in result.Selection)
+                {
+                    if (item.IsVersioned)
+                        files.Add(item.FullPath);
+                }
+
+                depth = result.Depth;
             }
             else
             {
-                result = info.DefaultResult;
+                updateTo = SvnRevision.Head;
+
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                {
+                    if (item.IsVersioned)
+                        files.Add(item.FullPath);
+                }
             }
 
-            if (!result.Succeeded)
-                return;
 
-            SaveAllDirtyDocuments(e.Selection, e.Context);
+            IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();            
+            tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
             SvnUpdateResult ur = null;
 
-            e.GetService<IProgressRunner>().RunModal("Updating",
+            e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle,
                 delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    List<string> files = new List<string>();
-
-
-                    foreach (SvnItem item in result.Selection)
-                    {
-                        if (item.IsVersioned)
-                            files.Add(item.FullPath);
-                    }
+                {                    
                     SvnUpdateArgs ua = new SvnUpdateArgs();
-                    ua.Depth = result.Depth;
-                    ua.Revision = result.RevisionStart;
+                    ua.Depth = depth;
+                    ua.Revision = updateTo;
                     e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
                     ee.Client.Update(files, ua, out ur);
                 });

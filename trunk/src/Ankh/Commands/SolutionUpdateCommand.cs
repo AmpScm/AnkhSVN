@@ -282,7 +282,7 @@ namespace Ankh.Commands
                 UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
 
                 e.GetService<IProgressRunner>().RunModal(
-                    string.Format("Updating {0}", IsSolutionCommand(e.Command) ? "Solution" : "Project"),
+                    string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution : CommandStrings.UpdatingProject),
                     ur.Work);
 
                 if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))

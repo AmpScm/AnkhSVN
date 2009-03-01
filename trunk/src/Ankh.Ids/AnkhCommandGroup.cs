@@ -136,25 +136,28 @@ namespace Ankh.Ids
         /// Special parent group for VS Menu Designer support
         /// </summary>
         AnkhContextMenus,
-        MoveToChangeList,
+        SccLock,
+        SccAddIgnore,
 
         SccCleanupRefresh,
-        SccAdd,
 
         SccItemUpdate,
         SccItemChanges,
         //SccItemAdvanced,
         SccItemBranch,
+        SccItemPatch,
 
         SccProjectUpdate,
         SccProjectChanges,        
         //SccProjectAdvanced,
         SccProjectBranch,
+        SccProjectPatch,
 
         SccSlnUpdate,
         SccSlnChanges,        
         //SccSlnAdvanced,
         SccSlnBranch,
+        SccSlnPatch,
 
         SccPrjFileUpdate,
         SccPrjFileChanges,

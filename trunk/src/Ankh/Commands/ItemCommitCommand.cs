@@ -59,45 +59,7 @@ namespace Ankh.Commands
         }
 
         public override void OnExecute(CommandEventArgs e)
-        {
-            IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
-            Dictionary<string, PendingChange> changes = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (PendingChange pc in pcm.GetAll())
-            {
-                if (!changes.ContainsKey(pc.FullPath))
-                    changes.Add(pc.FullPath, pc);
-            }
-
-            Dictionary<string, SvnItem> selectedChanges = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
-            {
-                if(changes.ContainsKey(item.FullPath) &&
-                    !selectedChanges.ContainsKey(item.FullPath))
-                {
-                    selectedChanges.Add(item.FullPath, item);
-                }
-            }
-
-            Collection<SvnItem> resources = new Collection<SvnItem>();
-
-            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
-            List<SvnItem> selectedItems = new List<SvnItem>(selectedChanges.Values);
-            
-            // TODO: Give the whole list to a refreshable dialog!
-            foreach (SvnItem item in selectedItems)
-            {
-                PendingChange pc = changes[item.FullPath];
-
-                if (pc.IsCleanupChange())
-                    continue;
-
-                resources.Add(item);
-            }
-            if (resources.Count == 0)
-                return;
-
+        {            
             using (ProjectCommitDialog pcd = new ProjectCommitDialog())
             {
                 pcd.Context = e.Context;
