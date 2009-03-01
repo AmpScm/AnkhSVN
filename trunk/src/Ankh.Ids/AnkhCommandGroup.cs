@@ -52,8 +52,8 @@ namespace Ankh.Ids
         NoUI,
 
         SolutionExplorerSccForSolution,
-        SolutionExplorerSccForProject,
-        SolutionExplorerSccForItem,
+        SccProjectAdvanced,
+        SccItemAdvanced,
 
         RepositoryExplorerTbBrowse,
         RepositoryExplorerTbEdit,
@@ -137,16 +137,18 @@ namespace Ankh.Ids
         /// </summary>
         AnkhContextMenus,
         MoveToChangeList,
-        SlnExpCleanupRefresh,
 
-        SccFileUpdate,
-        SccFileChanges,
-        SccFileAdvanced,
-        SccFileBranch,
+        SccCleanupRefresh,
+        SccAdd,
+
+        SccItemUpdate,
+        SccItemChanges,
+        //SccItemAdvanced,
+        SccItemBranch,
 
         SccProjectUpdate,
         SccProjectChanges,        
-        SccProjectAdvanced,
+        //SccProjectAdvanced,
         SccProjectBranch,
 
         SccSlnUpdate,
