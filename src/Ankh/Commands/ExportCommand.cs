@@ -15,50 +15,37 @@
 //  limitations under the License.
 
 using System;
-using Ankh.UI;
 using System.Windows.Forms;
 using SharpSvn;
+
 using Ankh.Ids;
-using System.Windows.Forms.Design;
+using Ankh.UI.Commands;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to export a Subversion repository or local folder.
     /// </summary>
-    [Command(AnkhCommand.Export,HideWhenDisabled=false)]
+    [Command(AnkhCommand.Export, HideWhenDisabled = false)]
     class ExportCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool foundOne = false;
-            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-            {
-                if(foundOne || !item.IsVersioned)
-                {
-                    e.Enabled = false;
-                    break;
-                }
-                foundOne = true;
-            }
+            SvnItem i = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false));
 
-            if(!foundOne)
+            if (i == null)
                 e.Enabled = false;
         }
         public override void OnExecute(CommandEventArgs e)
         {
             using (ExportDialog dlg = new ExportDialog(e.Context))
             {
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
-                {
-                    dlg.OriginUri = item.Status.Uri;
-                    dlg.OriginPath = item.FullPath;
-                }
+                dlg.OriginPath = EnumTools.GetSingle(e.Selection.GetSelectedSvnItems(false)).FullPath;
 
                 if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
-                e.GetService<IProgressRunner>().RunModal("Exporting",
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.Exporting,
                     delegate(object sender, ProgressWorkerArgs wa)
                     {
                         SvnExportArgs args = new SvnExportArgs();

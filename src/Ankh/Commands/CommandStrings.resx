@@ -153,6 +153,9 @@
   <data name="BranchProject" xml:space="preserve">
     <value>Branch Project</value>
   </data>
+  <data name="Exporting" xml:space="preserve">
+    <value>Exporting</value>
+  </data>
   <data name="UpdatingProject" xml:space="preserve">
     <value>Updating Project</value>
   </data>
