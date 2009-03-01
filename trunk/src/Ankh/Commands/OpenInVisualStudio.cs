@@ -56,6 +56,10 @@ namespace Ankh.Commands
                             }
                             first = false;
                             break;
+                        case AnkhCommand.ItemOpenSolutionExplorer:
+                            if (!item.InSolution)
+                                continue;
+                            goto default;
                         default:
                             if (!first)
                             {
