@@ -46,13 +46,13 @@ namespace Ankh.Scc
             get { return _item; }
         }
 
-        [DisplayName("Full Path"), Category("Subversion")]
+        [DisplayName("Full Path"), Category("Misc")]
         public string FullPath
         {
             get { return _item.FullPath; }
         }
 
-        [DisplayName("File Name"), Category("Subversion")]
+        [DisplayName("File Name"), Category("Misc")]
         public string Name
         {
             get { return _item.Name; }
