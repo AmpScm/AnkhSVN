@@ -30,8 +30,8 @@
     <Property Id="ARPCONTACT">AnkhSVN - users@ankhsvn.open.collab.net</Property>
     <Property Id="ARPURLINFOABOUT">http://www.ankhsvn.net/</Property>
     <Property Id="ARPHELPLINK">http://www.ankhsvn.net/help/</Property>
-    <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/updates/?currentVersion=$(var.ankhVersion)</Property>
-
+    <Property Id="ARPURLUPDATEINFO">http://www.ankhsvn.net/changes/?v=$(var.ankhVersion)</Property>
+    <Property Id="ARPPRODUCTICON">ICON_AnkhSvn</Property>
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
 
@@ -39,6 +39,7 @@
     <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
     <CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
     <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
+    <Icon Id="ICON_AnkhSvn" SourceFile="$(sys.SOURCEFILEDIR)..\Ankh.Package\Resources\Package.ico"/>
 
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
     <Directory Id="TARGETDIR" Name="SourceDir">
