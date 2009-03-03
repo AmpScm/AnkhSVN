@@ -106,7 +106,7 @@ namespace Ankh.Scc.SccUI
 
             if (settings.ProjectRootUri != null && map.Uri != settings.ProjectRootUri)
             {
-                string dir = Path.GetDirectoryName(settings.SolutionFilename);
+                string dir = SvnTools.GetNormalizedDirectoryName(settings.SolutionFilename);
                 settings.ProjectRoot = SvnTools.GetNormalizedFullPath(Path.Combine(dir, map.Value));
             }
         }

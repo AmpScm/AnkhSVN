@@ -70,7 +70,7 @@ namespace Ankh.Scc
             // We only have to look in the parent.
             // If the path is the working copy root, the name doesn't matter!
 
-            string dir = Path.GetDirectoryName(path);
+            string dir = SvnTools.GetNormalizedDirectoryName(path);
             
             using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
             {
@@ -102,7 +102,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            string dir = Path.GetDirectoryName(path);
+            string dir = SvnTools.GetNormalizedDirectoryName(path);
 
             if (dir == null)
                 return null;
@@ -139,7 +139,7 @@ namespace Ankh.Scc
             path = SvnTools.GetNormalizedFullPath(path);
 
             if (File.Exists(path))
-                path = Path.GetDirectoryName(path);
+                path = SvnTools.GetNormalizedDirectoryName(path);
 
             if (Directory.Exists(path))
                 path = SvnTools.GetTruePath(path); // Resolve casing issues
@@ -175,7 +175,7 @@ namespace Ankh.Scc
                         return false;
                 }
 
-                path = Path.GetDirectoryName(path);
+                path = SvnTools.GetNormalizedDirectoryName(path);
             }
 
             return false;
@@ -312,7 +312,7 @@ namespace Ankh.Scc
             {
                 using (MoveAway(toPath, true))
                 {
-                    string toDir = Path.GetDirectoryName(toPath);
+                    string toDir = SvnTools.GetNormalizedDirectoryName(toPath);
 
                     EnsureAdded(toDir);
 
@@ -382,7 +382,7 @@ namespace Ankh.Scc
                 using (TempFile(fromPath, toPath))
                 using (MoveAway(toPath, true))
                 {
-                    string toDir = Path.GetDirectoryName(toPath);
+                    string toDir = SvnTools.GetNormalizedDirectoryName(toPath);
 
                     if (!SvnTools.IsManagedPath(toDir))
                     {
@@ -866,7 +866,7 @@ namespace Ankh.Scc
                 return true; // Not in a versioned directory -> Fast out
 
             // Item does exist; check casing
-            string parentDir = Path.GetDirectoryName(path);
+            string parentDir = SvnTools.GetNormalizedDirectoryName(path);
             SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
             wa.ThrowOnError = false;
             wa.ThrowOnCancel = false;

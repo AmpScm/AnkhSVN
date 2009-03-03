@@ -369,7 +369,7 @@ namespace Ankh.Scc
                     {
                         string toFile = copies.Keys[0];
                         string fromFile = copies.Values[0];
-                        string dir = Path.GetDirectoryName(copies.Keys[0]);
+                        string dir = SvnTools.GetNormalizedDirectoryName(copies.Keys[0]);
 
                         copies.RemoveAt(0);
                         Guid addGuid;
@@ -396,7 +396,7 @@ namespace Ankh.Scc
                                 string fl = copies.Keys[i];
                                 string tl = copies.Values[i];
 
-                                if (string.Equals(Path.GetDirectoryName(fl), dir, StringComparison.OrdinalIgnoreCase) &&
+                                if (string.Equals(SvnTools.GetNormalizedDirectoryName(fl), dir, StringComparison.OrdinalIgnoreCase) &&
                                     string.Equals(Path.GetFileName(fl), Path.GetFileName(tl), StringComparison.OrdinalIgnoreCase))
                                 {
                                     Guid fromGuid;
@@ -556,7 +556,7 @@ namespace Ankh.Scc
 
                     if (status == null)
                     {
-                        string pd = Path.GetDirectoryName(dir);
+                        string pd = SvnTools.GetNormalizedDirectoryName(dir);
                         if (pd == null || SvnTools.IsManagedPath(pd))
                             continue;
                     }
