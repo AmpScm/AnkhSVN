@@ -976,7 +976,7 @@ namespace Ankh
         {
             get
             {
-                string parentDir = SvnTools.GetNormalizedDirectoryName(FullPath);
+                string parentDir = Directory;
 
                 if (string.IsNullOrEmpty(parentDir))
                     return null;
