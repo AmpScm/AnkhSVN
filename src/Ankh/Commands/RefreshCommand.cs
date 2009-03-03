@@ -37,6 +37,16 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            // Refresh all global states on the selected files
+            // * File Status Cache
+            // * Glyph cache (in VS Projects)
+            // * Pending changes
+            // * Editor dirty state
+
+            // Don't handle individual windows here, they can just override the refresh handler
+
+            // See WorkingCopyExplorerControl.OnFrameCreated() for some examples on how to do that
+
             IFileStatusMonitor monitor = e.GetService<IFileStatusMonitor>();
 
             monitor.ScheduleSvnStatus(e.Selection.GetSelectedFiles(true));
@@ -47,11 +57,7 @@ namespace Ankh.Commands
 
             IPendingChangesManager pm = e.GetService<IPendingChangesManager>();
 
-            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window    
-
-            WorkingCopyExplorerControl wce = e.Selection.ActiveFrameControl as WorkingCopyExplorerControl;
-            if(wce != null)
-                wce.RefreshSelection();
+            pm.Refresh((string)null); // Perform a full incremental refresh on the PC window            
         }
     }
 }

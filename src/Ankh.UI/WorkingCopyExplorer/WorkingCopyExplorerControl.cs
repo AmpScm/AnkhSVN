@@ -76,6 +76,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
+            VSCommandHandler.Install(Context, this, AnkhCommand.Refresh, OnRefresh, OnUpdateRefresh);
 
             AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
 
@@ -221,6 +222,17 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             if (cmd != null)
                 cmd.ExecCommand(AnkhCommand.ItemOpenVisualStudio, true);
+        }
+
+        void OnUpdateRefresh(object sender, CommandUpdateEventArgs e)
+        {
+        }
+
+        void OnRefresh(object sender, CommandEventArgs e)
+        {
+            e.GetService<IAnkhCommandService>().DirectlyExecCommand(AnkhCommand.Refresh);
+
+            RefreshSelection();
         }
 
         void OnUpdateUp(object sender, CommandUpdateEventArgs e)
