@@ -189,7 +189,7 @@ namespace Ankh.Scc.StatusCache
                     ScheduleForCleanup(dir);
             }
 
-            string parentDir = Path.GetDirectoryName(item.FullPath);
+            string parentDir = SvnTools.GetNormalizedDirectoryName(item.FullPath);
 
             if (string.IsNullOrEmpty(parentDir) || parentDir == item.FullPath)
                 return; // Skip root directory
@@ -227,7 +227,7 @@ namespace Ankh.Scc.StatusCache
             if (!deleted)
                 return;
 
-            string parentDir = Path.GetDirectoryName(item.FullPath);
+            string parentDir = SvnTools.GetNormalizedDirectoryName(item.FullPath);
 
             if (string.IsNullOrEmpty(parentDir) || parentDir == item.FullPath)
                 return; // Skip root directory
@@ -277,7 +277,7 @@ namespace Ankh.Scc.StatusCache
                 case SvnNodeKind.File:
                     if (depth != SvnDepth.Empty)
                     {
-                        walkPath = Path.GetDirectoryName(path);
+                        walkPath = SvnTools.GetNormalizedDirectoryName(path);
                         walkingDirectory = true;
                     }
                     break;

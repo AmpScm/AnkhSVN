@@ -191,7 +191,7 @@ namespace Ankh.Scc.ProjectMap
                             dir = ProjectFile;
 
                             if (dir != null)
-                                dir = Path.GetDirectoryName(dir);
+                                dir = SvnTools.GetNormalizedDirectoryName(dir);
                             else
                                 dir = ""; // Cache as invalid
                         }

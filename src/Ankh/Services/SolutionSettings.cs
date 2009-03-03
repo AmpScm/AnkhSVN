@@ -436,7 +436,7 @@ namespace Ankh.Settings
             if (SolutionFilename == null)
                 return;
 
-            string sd = SvnTools.PathToRelativeUri(Path.GetDirectoryName(SolutionFilename).TrimEnd('\\') + '\\').ToString();
+            string sd = SvnTools.PathToRelativeUri(SvnTools.GetNormalizedDirectoryName(SolutionFilename).TrimEnd('\\') + '\\').ToString();
             string v = SvnTools.PathToRelativeUri(SvnTools.GetNormalizedFullPath(value)).ToString();
 
             if (!v.EndsWith("/"))

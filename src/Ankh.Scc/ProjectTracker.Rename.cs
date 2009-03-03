@@ -202,8 +202,8 @@ namespace Ankh.Scc
                 if (!Directory.Exists(newName))
                 {
                     // Try to fix the parent of the new item
-                     oldDir = Path.GetDirectoryName(oldName);
-                     newDir = Path.GetDirectoryName(newName);
+                     oldDir = SvnTools.GetNormalizedDirectoryName(oldName);
+                     newDir = SvnTools.GetNormalizedDirectoryName(newName);
                 }
                 else
                 {
@@ -216,7 +216,7 @@ namespace Ankh.Scc
                 if (Directory.Exists(oldDir))
                     continue; // Nothing to fix up
 
-                string parent = Path.GetDirectoryName(oldDir);
+                string parent = SvnTools.GetNormalizedDirectoryName(oldDir);
                 if (!Directory.Exists(parent))
                 {
                     continue; // We can't fix up more than one level at this time
@@ -241,7 +241,7 @@ namespace Ankh.Scc
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {    
                     SvnStatusEventArgs sa = svn.SafeGetStatusViaParent(newDir);
-                    string newParent = Path.GetDirectoryName(newDir);
+                    string newParent = SvnTools.GetNormalizedDirectoryName(newDir);
 
                     if (sa != null && sa.LocalContentStatus != SvnStatus.NotVersioned && sa.LocalContentStatus != SvnStatus.Ignored)
                         continue; // Not an unexpected WC root
