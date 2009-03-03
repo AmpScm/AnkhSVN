@@ -15,11 +15,8 @@
 //  limitations under the License.
 
 using System;
-using Ankh.UI;
 using Ankh.Ids;
 using Ankh.Scc;
-using Microsoft.VisualStudio;
-using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.Commands
 {
