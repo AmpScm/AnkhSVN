@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6323</title>
+          AnkhSVN-Daily Update - 2.0.6328</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,31 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1622/AnkhSvn-Daily-2.0.6323.426.msi">AnkhSVN 2.0.6323</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1642/AnkhSvn-Daily-2.0.6328.427.msi">AnkhSVN 2.0.6328</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6323">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6328">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-03-03</td></tr>
+<tr><td> </td><td class="r"><a id="6327" href="http://ankhsvn.net/rev/?r=6327">
+            [r6327]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/SccUI/ChangeSolutionRoot.cs, Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Scc/SvnSccContext.cs, Ankh.Scc/ProjectTracker.Rename.cs, Ankh.Services/Scc/SvnItem.cs, Ankh/Services/SolutionSettings.cs, Ankh.Scc/ProjectTracker.Add.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Replace all calls to System.IO.Path.GetDirectoryName() in our SCC layer to the
+new SvnTools.GetNormalizedDirectoryName() that is long path safe.
+(Updated SharpSvn reference of 1.5 and 1.6 builds to a version that
+ includes this function)</td></tr>
+<tr><td> </td><td class="r"><a id="6325" href="http://ankhsvn.net/rev/?r=6325">
+            [r6325]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh/Commands/RefreshCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the Working Copy explorer handle the refresh command locally, to
+make sure our global command handlers don't have to know about WCE details.</td></tr>
 <tr class="d"><td colspan="4">2009-03-02</td></tr>
 <tr><td> </td><td class="r"><a id="6322" href="http://ankhsvn.net/rev/?r=6322">
             [r6322]
@@ -329,17 +340,6 @@ commands (like show changes) in the log dialog.</td></tr>
             [r6133]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Annotate/AnnotateEditorControl.cs, Ankh.UI/VSSelectionControls/ListViewWithSelection.cs, Ankh.Services/Selection/ISelectionContext.cs, Ankh.UI/VSSelectionControls/TreeViewWithSelection.cs, Ankh.Services/UI/VSDialogForm.cs, Ankh.VS.UnitTest/Mocks/SelectionContext.cs, Ankh.Services/UI/VSContainerForm.cs, Ankh.UI/VSSelectionControls/SelectionItemMap.cs, Ankh.VS/Selection/SelectionContext.Active.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix selection routing in second level dialog popups. This enables the show
 changes commands in the log viewer popups from switch/update, etc.</td></tr>
-<tr class="d"><td colspan="4">2009-02-03</td></tr>
-<tr><td> </td><td class="r"><a id="6127" href="http://ankhsvn.net/rev/?r=6127">
-            [r6127]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/LanguageServices/AnkhLanguageService.cs, Ankh.UI/PendingChanges/VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the VS TextEditors are disposed instead of garbage collected, to
-clean up our language service properly. (This caused an exception in the
-log message language service during OnIdle processing; resulting in 100 CPU).</td></tr>
-<tr class="d"><td colspan="4">2009-02-02</td></tr>
-<tr><td> </td><td class="r"><a id="6113" href="http://ankhsvn.net/rev/?r=6113">
-            [r6113]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.Tools.cs, AnkhDiff.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add diff and merge templates for Perforce Visual Merge
-(Free download at <a href="http://www.perforce.com/perforce/products/merge.html">http://www.perforce.com/perforce/products/merge.html</a>)</td></tr>
 
 </table>
 <!--/Recent changes-->
