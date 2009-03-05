@@ -85,16 +85,21 @@ namespace Ankh
         public new void Dispose()
         {
             ReturnClient();
+
+            // No GC.SuppressFinalize() as SvnClient() really needs to have a finalize if we don't dispose
         }
 
         void IDisposable.Dispose()
         {
             ReturnClient();
+
+            // No GC.SuppressFinalize() as SvnClient() really needs to have a finalize if we don't dispose
         }
 
         protected ISvnClientPool SvnClientPool
         {
             get { return _pool; }
+            set { _pool = value; }
         }
 
         /// <summary>
@@ -102,6 +107,9 @@ namespace Ankh
         /// </summary>
         protected virtual void ReturnClient()
         {
+            // In our common implementation this code is not used
+            // Update AnkhSvnClientPool.AnkhSvnPoolClient
+
             if (_nReturns++ > 32 || IsCommandRunning || !_pool.ReturnClient(this))
             {
                 // Recycle the SvnClient if at least one of the following is true

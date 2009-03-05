@@ -173,7 +173,7 @@
     <Compile Include="Commands\RepositoryExplorer\RenameNode.cs" />
     <Compile Include="Commands\RepositoryExplorer\ShowRepositoryItemChanges.cs" />
     <Compile Include="Services\AnkhHelpService.cs" />
-    <Compile Include="Services\AnkhSvnClientPool.cs" />
+    <Compile Include="Services\AnkhClientPool.cs" />
     <Compile Include="Services\PendingChanges\PccStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
