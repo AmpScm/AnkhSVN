@@ -39,14 +39,14 @@ namespace Ankh.Scc
     {
         readonly SortedList<string, int> _unreloadable = new SortedList<string, int>(StringComparer.OrdinalIgnoreCase);
 
-        int _saveBatchingState;
+        bool _isInQuerySaveBatch;
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
         /// </summary>
         /// <returns></returns>
         public int BeginQuerySaveBatch()
         {
-            _saveBatchingState++;
+            _isInQuerySaveBatch = true;
             return VSConstants.S_OK;
         }
 
@@ -57,23 +57,17 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int EndQuerySaveBatch()
         {
-            _saveBatchingState--;
+            _isInQuerySaveBatch = false;
 
-            // _batchingState shouldn't go negative
-            Debug.Assert(_saveBatchingState >= 0);
-
-            if (_saveBatchingState == 0)
-            {
-                // Reset the cancel flag
-                _querySaveBatchCancel = false;
-            }
+            // Reset the cancel flag
+            _querySaveBatchCancel = false;
 
             return VSConstants.S_OK;
         }
 
         bool IsInSaveBatch
         {
-            get { return _saveBatchingState > 0; }
+            get { return _isInQuerySaveBatch; }
         }
 
         /// <summary>
