@@ -494,8 +494,6 @@ namespace Ankh.Scc
 
         void QuerySaveSingleFile(bool silent, string pszMkDocument, SvnItem item, out tagVSQuerySaveResult pdwQSResult)
         {
-            // If rgf is FileInfo, pFileInfo contains valid file attributes
-
             if (!item.IsReadOnly)
             {
                 pdwQSResult = tagVSQuerySaveResult.QSR_SaveOK;
