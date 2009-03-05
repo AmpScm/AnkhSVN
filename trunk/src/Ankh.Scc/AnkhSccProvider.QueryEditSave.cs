@@ -26,6 +26,9 @@ using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using System.IO;
 using SharpSvn;
+using System.Diagnostics;
+using Ankh.Scc.SccUI;
+using System.Windows.Forms;
 
 namespace Ankh.Scc
 {
@@ -35,12 +38,15 @@ namespace Ankh.Scc
     partial class AnkhSccProvider : IVsQueryEditQuerySave2
     {
         readonly SortedList<string, int> _unreloadable = new SortedList<string, int>(StringComparer.OrdinalIgnoreCase);
+
+        int _saveBatchingState;
         /// <summary>
         /// Creates a batch of a sequence of documents before attempting to save them to disk.
         /// </summary>
         /// <returns></returns>
         public int BeginQuerySaveBatch()
         {
+            _saveBatchingState++;
             return VSConstants.S_OK;
         }
 
@@ -51,7 +57,23 @@ namespace Ankh.Scc
         /// <returns></returns>
         public int EndQuerySaveBatch()
         {
+            _saveBatchingState--;
+
+            // _batchingState shouldn't go negative
+            Debug.Assert(_saveBatchingState >= 0);
+
+            if (_saveBatchingState == 0)
+            {
+                // Reset the cancel flag
+                _querySaveBatchCancel = false;
+            }
+
             return VSConstants.S_OK;
+        }
+
+        bool IsInSaveBatch
+        {
+            get { return _saveBatchingState > 0; }
         }
 
         /// <summary>
@@ -320,33 +342,82 @@ namespace Ankh.Scc
         /// <summary>
         /// Notifies the environment that a file is about to be saved.
         /// </summary>
-        /// <param name="pszMkDocument">The PSZ mk document.</param>
-        /// <param name="rgf">The RGF.</param>
-        /// <param name="pFileInfo">The p file info.</param>
-        /// <param name="pdwQSResult">The PDW QS result.</param>
+        /// <param name="pszMkDocument">The document that wants to be saved</param>
+        /// <param name="rgf">Valid file attributes?</param>
+        /// <param name="pFileInfo">File attributes</param>
+        /// <param name="pdwQSResult">Result</param>
         /// <returns></returns>
         public int QuerySaveFile(string pszMkDocument, uint rgf, VSQEQS_FILE_ATTRIBUTE_DATA[] pFileInfo, out uint pdwQSResult)
         {
-            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-            if (IsSafeSccPath(pszMkDocument))
+            if (_querySaveBatchCancel)
             {
-                SvnItem item = StatusCache[pszMkDocument];
-                if (item != null)
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+                return VSConstants.S_OK;
+            }
+
+            // TODO: Handle batch mode
+            if (!IsSafeSccPath(pszMkDocument))
+            {
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+                return VSConstants.S_OK;
+            }
+
+            SvnItem item = StatusCache[pszMkDocument];
+            if (item == null)
+            {
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+                return VSConstants.S_OK;
+            }
+
+            if (rgf == (uint)tagVSQEQSFlags.VSQEQS_FileInfo)
+                Debug.Assert(pFileInfo.Length == 1);
+
+            if (item.ReadOnlyMustLock)
+            {
+                // This readonly case can be fixed by Subversion
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[] { item });
+                
+                if(item.ReadOnlyMustLock)
                 {
-                    if (item.ReadOnlyMustLock)
+                    // User cancelled
+                    pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+
+                    if (IsInSaveBatch)
                     {
-                        IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                        cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[] { item });
-                        pdwQSResult = item.ReadOnlyMustLock ? (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel : (uint)tagVSQuerySaveResult.QSR_SaveOK;
-                        return VSConstants.S_OK;
+                        // Cancel all next questions in this batch
+                        _querySaveBatchCancel = true;
                     }
                 }
-
-                MarkDirty(pszMkDocument);
+                else
+                {
+                    pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+                }
+                
+                return VSConstants.S_OK;
             }
+
+            bool validFileInfo = rgf == (uint)tagVSQEQSFlags.VSQEQS_FileInfo;
+
+            VSQEQS_FILE_ATTRIBUTE_DATA? fileAttrData = null;
+            if (validFileInfo && pFileInfo != null && pFileInfo.Length > 0)
+                fileAttrData = pFileInfo[0];
+
+            tagVSQuerySaveResult rslt;
+            QuerySaveSingleFile(
+                false /* Single file is never in silent mode */, 
+                pszMkDocument,
+                item,
+                validFileInfo,
+                fileAttrData,
+                out rslt);
+
+            pdwQSResult = (uint)rslt;
 
             return VSConstants.S_OK;
         }
+
+        bool _querySaveBatchCancel;
 
         /// <summary>
         /// Notifies the environment that multiple files are about to be saved.
@@ -361,23 +432,160 @@ namespace Ankh.Scc
         public int QuerySaveFiles(uint rgfQuerySave, int cFiles, string[] rgpszMkDocuments, uint[] rgrgf, VSQEQS_FILE_ATTRIBUTE_DATA[] rgFileInfo, out uint pdwQSResult)
         {
             pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            bool silent = rgfQuerySave == (uint)tagVSQuerySaveFlags.QSF_SilentMode;
 
-            if (rgpszMkDocuments != null)
-                for (int i = 0; i < cFiles; i++)
+            List<SvnItem> toBeSvnLocked = new List<SvnItem>();
+
+            if (rgpszMkDocuments == null)
+                return VSConstants.S_OK;
+
+            for (int i = 0; i < cFiles; i++)
+            {
+                string file = rgpszMkDocuments[i];
+
+                if (!IsSafeSccPath(file))
+                    continue;
+
+                file = SvnTools.GetNormalizedFullPath(file);
+                MarkDirty(file);
+
+                SvnItem item = StatusCache[file];
+                if (item.ReadOnlyMustLock)
                 {
-                    string file = rgpszMkDocuments[i];
-
-                    if (!IsSafeSccPath(file))
-                        continue;
-
-                    file = SvnTools.GetNormalizedFullPath(file);
-
-                    // TODO: Maybe handle locking; but should be in OnQueryEdit anyway
-
-                    MarkDirty(file);
+                    toBeSvnLocked.Add(item);
+                    continue;
                 }
 
+                bool validFileInfo = rgrgf != null && rgrgf.Length > i && rgrgf[i] == (uint)tagVSQEQSFlags.VSQEQS_FileInfo;
+
+                VSQEQS_FILE_ATTRIBUTE_DATA? fileAttrData = null;
+                if (validFileInfo && rgFileInfo != null && rgFileInfo.Length > i)
+                    fileAttrData = rgFileInfo[i];
+
+                // Handle readonly files without svn:needs-lock
+                tagVSQuerySaveResult rslt;
+                QuerySaveSingleFile(
+                    silent,
+                    file,
+                    item,
+                    validFileInfo,
+                    fileAttrData,
+                    out rslt);
+
+                // TODO: check rslt, set pdwQSResult accordingly
+            }
+
+            if (toBeSvnLocked.Count > 0)
+            {
+                if (silent)
+                {
+                    // We need to show UI, but aren't allowed because of silent mode
+                    pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
+                    return VSConstants.S_OK;
+                }
+
+                // File(s) need to be locked
+                IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
+                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, toBeSvnLocked.ToArray());
+
+                foreach (SvnItem item in toBeSvnLocked)
+                {
+                    if (item.ReadOnlyMustLock)
+                    {
+                        // Use cancel here, because the user must have either cancelled the lock dialog
+                        // or didn't lock all files
+                        pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+
+                        if (IsInSaveBatch)
+                        {
+                            // Cancel all next UI for this batch
+                            _querySaveBatchCancel = true;
+                        }
+
+                        return VSConstants.S_OK;
+                    }
+                }
+
+                // All items locked
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            }
+
             return VSConstants.S_OK;
+        }
+
+        void QuerySaveSingleFile(bool silent, string pszMkDocument, SvnItem item, bool validFileInfo, VSQEQS_FILE_ATTRIBUTE_DATA? pFileInfo, out tagVSQuerySaveResult pdwQSResult)
+        {
+            // If rgf is FileInfo, pFileInfo contains valid file attributes
+            FileAttributes attrs;
+            if (validFileInfo)
+            {
+                Debug.Assert(pFileInfo.HasValue);
+                attrs = (FileAttributes)pFileInfo.Value.dwFileAttributes;
+            }
+            else
+            {
+                attrs = File.GetAttributes(item.FullPath);
+            }
+
+            MarkDirty(pszMkDocument);
+
+            if ((attrs & FileAttributes.ReadOnly) > 0)
+            {
+                // We're just read-only, not svn:needs-lock
+                Debug.Assert(!item.ReadOnlyMustLock);
+
+                if (silent)
+                {
+                    // we have to show a dialog (save as/overwrite/cancel), but we're not allowed
+                    pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
+                    return;
+                }
+
+                // We're allowed to show UI
+                Debug.Assert(!silent);
+
+                // We can also be dealing with a non svn:needs-lock read-only file
+                // Now we have to ask the user wether to overwrite, or to save as
+                using (SccQuerySaveReadonlyDialog dlg = new SccQuerySaveReadonlyDialog())
+                {
+                    dlg.File = item.Name;
+
+                    DialogResult result = dlg.ShowDialog(Context);
+                    switch (result)
+                    {
+                        case DialogResult.Yes:
+                            // Force the caller to show a save-as dialog for this file
+                            pdwQSResult = tagVSQuerySaveResult.QSR_ForceSaveAs;
+                            return;
+
+                        case DialogResult.No:
+                            // User wants to overwrite existing file
+                            File.SetAttributes(item.FullPath, attrs & ~FileAttributes.ReadOnly);
+
+                            // it's no longer read-only, so save is OK
+                            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+                            return;
+
+                        case DialogResult.Cancel:
+                            // User cancelled
+                            pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_UserCanceled;
+
+                            if (IsInSaveBatch)
+                            {
+                                // Cancel all coming QuerySaveFile(s) calls until batching is done
+                                _querySaveBatchCancel = true;
+                            }
+
+                            return;
+
+                        default:
+                            throw new InvalidOperationException("Dialog returned unexpected DialogResult");
+                    } // switch(dialogResult)
+                } // using dialog
+            } // if readonly
+
+            // File wasn't read-only so save is ok
+            pdwQSResult = tagVSQuerySaveResult.QSR_SaveOK;
         }
 
 #if VS2008_PLUS
