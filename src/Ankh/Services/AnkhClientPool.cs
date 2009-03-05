@@ -32,7 +32,7 @@ using Ankh.UI;
 namespace Ankh.Services
 {
     [GlobalService(typeof(ISvnClientPool))]
-    sealed class AnkhSvnClientPool : AnkhService, ISvnClientPool
+    sealed class AnkhClientPool : AnkhService, ISvnClientPool
     {
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
@@ -40,7 +40,7 @@ namespace Ankh.Services
         const int MaxPoolSize = 10;
         int _returnCookie;
 
-        public AnkhSvnClientPool(IAnkhServiceProvider context)
+        public AnkhClientPool(IAnkhServiceProvider context)
             : base(context)
         {
             _syncher = new Control();
@@ -197,7 +197,7 @@ namespace Ankh.Services
             readonly HybridCollection<string> _fullRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
             readonly int _returnCookie;
-            public AnkhSvnPoolClient(AnkhSvnClientPool pool, bool uiEnabled, int returnCookie)
+            public AnkhSvnPoolClient(AnkhClientPool pool, bool uiEnabled, int returnCookie)
                 : base(pool)
             {
                 _uiEnabled = uiEnabled;
@@ -239,14 +239,18 @@ namespace Ankh.Services
                 _touchedPaths.Clear();
                 _fullRefresh.Clear();
 
-                AnkhSvnClientPool pool = (AnkhSvnClientPool)SvnClientPool;
+                AnkhClientPool pool = (AnkhClientPool)SvnClientPool;
+                SvnClientPool = null;
+
+                if (pool == null)
+                    return;
 
                 pool.NotifyChanges(paths, deleted);
 
-                if (base.IsCommandRunning || base.IsDisposed || !pool.ReturnClient(this))
-                {
-                    InnerDispose();
-                }
+                if (base.IsCommandRunning || base.IsDisposed)
+                    return; // No return on these errors.. Leave it to the GC to clean it up eventually
+                else if (!pool.ReturnClient(this))
+                    InnerDispose(); // The pool wants to get rid of us
             }
 
             public int ReturnCookie
