@@ -260,6 +260,8 @@ namespace Ankh.Services
                 }
                 else if (!pool.ReturnClient(this))
                     InnerDispose(); // The pool wants to get rid of us
+                else
+                    SvnClientPool = pool; // Reinstated
             }
 
             public int ReturnCookie
