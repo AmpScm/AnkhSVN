@@ -164,12 +164,15 @@ namespace Ankh.UI
         {
             switch (e.Show)
             {
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
+                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:                
                 case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_DestroyMultInst:
                 case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_TabDeactivated:
                     Visible = false;
                     break;
+                // Why not Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
+                //   This state is not reverted in non animated mode in VS2008 (and maybe other versions)
+                //
+                //   See http://ankhsvn.open.collab.net/ds/viewMessage.do?dsForumId=582&dsMessageId=303686
             }
             OnFrameShow(e);
             switch (e.Show)
