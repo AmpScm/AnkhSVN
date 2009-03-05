@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6329</title>
+          AnkhSVN-Daily Update - 2.0.6339</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,37 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1648/AnkhSvn-Daily-2.0.6329.428.msi">AnkhSVN 2.0.6329</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1653/AnkhSvn-Daily-2.0.6339.429.msi">AnkhSVN 2.0.6339</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6329">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6339">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-03-05</td></tr>
+<tr><td> </td><td class="r"><a id="6336" href="http://ankhsvn.net/rev/?r=6336">
+            [r6336]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.QueryEditSave.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove now unrelated comment. referred to an if .. else.. block removed in <a href="http://ankhsvn.net/rev/?r=6335">r6335</a></td></tr>
+<tr><td> </td><td class="r"><a id="6335" href="http://ankhsvn.net/rev/?r=6335">
+            [r6335]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.Glyphs.cs, Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh/Commands/LockCommand.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/SvnItem.cs, Ankh.VS/SolutionExplorer/StatusImageMapper.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Minor cleanups of OnQuerySave*(): Use our cache for attributes; make time window
+between getting and setting attributes as short as possible. Rename property.</td></tr>
+<tr><td> </td><td class="r"><a id="6333" href="http://ankhsvn.net/rev/?r=6333">
+            [r6333]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.QueryEditSave.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Assume non-nested QuerySave batches; this helps auto-fix our QS batch state
+if an editor implements the API wrong.</td></tr>
+<tr><td> </td><td class="r"><a id="6332" href="http://ankhsvn.net/rev/?r=6332">
+            [r6332]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> SccUI/SccQuerySaveReadonlyDialog.resx, AnkhSccProvider.QueryEditSave.cs, SccUI/SccQuerySaveReadonlyDialog.Designer.cs, SccUI/SccQuerySaveReadonlyDialog.cs, SccUI/SccManagementResources.resx, Ankh.Scc.csproj, SccUI/SccManagementResources.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement the QuerySaveFile(s) part of the EditQuerySave interface (hopefully)
+correctly. The means we also have to handle read-only files that cannot be made
+writeable by svn unlocking them.</td></tr>
 <tr class="d"><td colspan="4">2009-03-03</td></tr>
 <tr><td> </td><td class="r"><a id="6327" href="http://ankhsvn.net/rev/?r=6327">
             [r6327]
