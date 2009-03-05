@@ -47,6 +47,7 @@ namespace Ankh.Scc
         public int BeginQuerySaveBatch()
         {
             _isInQuerySaveBatch = true;
+            _querySaveBatchCancel = false; // Just to be sure
             return VSConstants.S_OK;
         }
 
@@ -284,7 +285,7 @@ namespace Ankh.Scc
 
                 foreach (SvnItem item in GetAllDocumentItems(file))
                 {
-                    if (item.ReadOnlyMustLock && !item.IsDirectory)
+                    if (item.IsReadOnlyMustLock && !item.IsDirectory)
                     {
                         if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
                         {
@@ -318,7 +319,7 @@ namespace Ankh.Scc
 
                 foreach (SvnItem i in mustLockItems)
                 {
-                    if (i.ReadOnlyMustLock)
+                    if (i.IsReadOnlyMustLock)
                     {
                         // User has probably canceled the lock operation, or it failed.
                         pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
@@ -366,13 +367,13 @@ namespace Ankh.Scc
             if (rgf == (uint)tagVSQEQSFlags.VSQEQS_FileInfo)
                 Debug.Assert(pFileInfo.Length == 1);
 
-            if (item.ReadOnlyMustLock)
+            if (item.IsReadOnlyMustLock)
             {
                 // This readonly case can be fixed by Subversion
                 IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
                 cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, new SvnItem[] { item });
                 
-                if(item.ReadOnlyMustLock)
+                if(item.IsReadOnlyMustLock)
                 {
                     // User cancelled
                     pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
@@ -391,19 +392,11 @@ namespace Ankh.Scc
                 return VSConstants.S_OK;
             }
 
-            bool validFileInfo = rgf == (uint)tagVSQEQSFlags.VSQEQS_FileInfo;
-
-            VSQEQS_FILE_ATTRIBUTE_DATA? fileAttrData = null;
-            if (validFileInfo && pFileInfo != null && pFileInfo.Length > 0)
-                fileAttrData = pFileInfo[0];
-
             tagVSQuerySaveResult rslt;
             QuerySaveSingleFile(
                 false /* Single file is never in silent mode */, 
                 pszMkDocument,
                 item,
-                validFileInfo,
-                fileAttrData,
                 out rslt);
 
             pdwQSResult = (uint)rslt;
@@ -444,17 +437,11 @@ namespace Ankh.Scc
                 MarkDirty(file);
 
                 SvnItem item = StatusCache[file];
-                if (item.ReadOnlyMustLock)
+                if (item.IsReadOnlyMustLock)
                 {
                     toBeSvnLocked.Add(item);
                     continue;
                 }
-
-                bool validFileInfo = rgrgf != null && rgrgf.Length > i && rgrgf[i] == (uint)tagVSQEQSFlags.VSQEQS_FileInfo;
-
-                VSQEQS_FILE_ATTRIBUTE_DATA? fileAttrData = null;
-                if (validFileInfo && rgFileInfo != null && rgFileInfo.Length > i)
-                    fileAttrData = rgFileInfo[i];
 
                 // Handle readonly files without svn:needs-lock
                 tagVSQuerySaveResult rslt;
@@ -462,8 +449,6 @@ namespace Ankh.Scc
                     silent,
                     file,
                     item,
-                    validFileInfo,
-                    fileAttrData,
                     out rslt);
 
                 // TODO: check rslt, set pdwQSResult accordingly
@@ -484,7 +469,7 @@ namespace Ankh.Scc
 
                 foreach (SvnItem item in toBeSvnLocked)
                 {
-                    if (item.ReadOnlyMustLock)
+                    if (item.IsReadOnlyMustLock)
                     {
                         // Use cancel here, because the user must have either cancelled the lock dialog
                         // or didn't lock all files
@@ -507,79 +492,80 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
-        void QuerySaveSingleFile(bool silent, string pszMkDocument, SvnItem item, bool validFileInfo, VSQEQS_FILE_ATTRIBUTE_DATA? pFileInfo, out tagVSQuerySaveResult pdwQSResult)
+        void QuerySaveSingleFile(bool silent, string pszMkDocument, SvnItem item, out tagVSQuerySaveResult pdwQSResult)
         {
             // If rgf is FileInfo, pFileInfo contains valid file attributes
-            FileAttributes attrs;
-            if (validFileInfo)
+
+            if (!item.IsReadOnly)
             {
-                Debug.Assert(pFileInfo.HasValue);
-                attrs = (FileAttributes)pFileInfo.Value.dwFileAttributes;
-            }
-            else
-            {
-                attrs = File.GetAttributes(item.FullPath);
+                pdwQSResult = tagVSQuerySaveResult.QSR_SaveOK;
+
+                MarkDirty(pszMkDocument); // File will be saved after this action
+                return;
             }
 
-            MarkDirty(pszMkDocument);
+            // We're just read-only, not svn:needs-lock
+            Debug.Assert(!item.IsReadOnlyMustLock);
 
-            if ((attrs & FileAttributes.ReadOnly) > 0)
+            if (silent)
             {
-                // We're just read-only, not svn:needs-lock
-                Debug.Assert(!item.ReadOnlyMustLock);
+                // we have to show a dialog (save as/overwrite/cancel), but we're not allowed
+                pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
+                return;
+            }
 
-                if (silent)
-                {
-                    // we have to show a dialog (save as/overwrite/cancel), but we're not allowed
-                    pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_NoisyPromptRequired;
-                    return;
-                }
+            // We're allowed to show UI
+            Debug.Assert(!silent);
 
-                // We're allowed to show UI
-                Debug.Assert(!silent);
-
-                // We can also be dealing with a non svn:needs-lock read-only file
-                // Now we have to ask the user wether to overwrite, or to save as
-                using (SccQuerySaveReadonlyDialog dlg = new SccQuerySaveReadonlyDialog())
-                {
-                    dlg.File = item.Name;
-
-                    DialogResult result = dlg.ShowDialog(Context);
-                    switch (result)
-                    {
-                        case DialogResult.Yes:
-                            // Force the caller to show a save-as dialog for this file
-                            pdwQSResult = tagVSQuerySaveResult.QSR_ForceSaveAs;
-                            return;
-
-                        case DialogResult.No:
-                            // User wants to overwrite existing file
-                            File.SetAttributes(item.FullPath, attrs & ~FileAttributes.ReadOnly);
-
-                            // it's no longer read-only, so save is OK
-                            pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
-                            return;
-
-                        case DialogResult.Cancel:
-                            // User cancelled
-                            pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_UserCanceled;
-
-                            if (IsInSaveBatch)
-                            {
-                                // Cancel all coming QuerySaveFile(s) calls until batching is done
-                                _querySaveBatchCancel = true;
-                            }
-
-                            return;
-
-                        default:
-                            throw new InvalidOperationException("Dialog returned unexpected DialogResult");
-                    } // switch(dialogResult)
-                } // using dialog
-            } // if readonly
-
-            // File wasn't read-only so save is ok
             pdwQSResult = tagVSQuerySaveResult.QSR_SaveOK;
+
+            // We can also be dealing with a non svn:needs-lock read-only file
+            // Now we have to ask the user wether to overwrite, or to save as
+            using (SccQuerySaveReadonlyDialog dlg = new SccQuerySaveReadonlyDialog())
+            {
+                dlg.File = item.Name;
+
+                DialogResult result = dlg.ShowDialog(Context);
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        // Force the caller to show a save-as dialog for this file
+                        pdwQSResult = tagVSQuerySaveResult.QSR_ForceSaveAs;
+                        return;
+
+                    case DialogResult.No:
+                        // User wants to overwrite existing file
+                        try
+                        {
+                            FileAttributes attrs = File.GetAttributes(item.FullPath);
+                            File.SetAttributes(item.FullPath, attrs & ~FileAttributes.ReadOnly);
+                        }
+                        catch (IOException) // Includes PathTooLongException
+                        { }
+                        catch (SystemException) // Includes UnauthorizedAccessException
+                        { }
+
+                        // it's no longer read-only, so save is OK
+                        break;
+
+                    case DialogResult.Cancel:
+                        // User cancelled
+                        pdwQSResult = tagVSQuerySaveResult.QSR_NoSave_UserCanceled;
+
+                        if (IsInSaveBatch)
+                        {
+                            // Cancel all coming QuerySaveFile(s) calls until batching is done
+                            _querySaveBatchCancel = true;
+                        }
+                        break;
+
+                    default:
+                        throw new InvalidOperationException("Dialog returned unexpected DialogResult");
+                } // switch(dialogResult)
+            } // using dialog
+
+            
+            MarkDirty(pszMkDocument); // File will be saved after this action, mark it dirty to scan later
         }
 
 #if VS2008_PLUS

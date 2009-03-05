@@ -66,7 +66,7 @@ namespace Ankh.VS.SolutionExplorer
 
             if (item.IsConflicted || item.IsObstructed || item.IsTreeConflicted)
                 return AnkhGlyph.InConflict;
-            else if (item.ReadOnlyMustLock)
+            else if (item.IsReadOnlyMustLock)
                 return AnkhGlyph.MustLock;
             else if (!item.IsVersioned)
             {

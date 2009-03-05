@@ -700,7 +700,7 @@ namespace Ankh
         /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editting
         /// </summary>
         /// <remarks>Assumes a mustlock file is readonly to speed up testing</remarks>
-        public bool ReadOnlyMustLock
+        public bool IsReadOnlyMustLock
         {
             get { return GetState(SvnItemState.MustLock) != 0; }
         }
