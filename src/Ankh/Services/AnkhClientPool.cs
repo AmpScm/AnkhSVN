@@ -28,6 +28,7 @@ using System.ComponentModel;
 using SharpSvn.UI;
 using System.Windows.Forms.Design;
 using Ankh.UI;
+using System.Diagnostics;
 
 namespace Ankh.Services
 {
@@ -243,12 +244,20 @@ namespace Ankh.Services
                 SvnClientPool = null;
 
                 if (pool == null)
+                {
+                    Debug.Assert(false, "Returning pool client a second time");
                     return;
+                }
 
                 pool.NotifyChanges(paths, deleted);
 
                 if (base.IsCommandRunning || base.IsDisposed)
+                {
+                    Debug.Assert(!IsCommandRunning, "Returning pool client while it is running");
+                    Debug.Assert(!IsDisposed, "Returning pool client while it is disposed");
+
                     return; // No return on these errors.. Leave it to the GC to clean it up eventually
+                }
                 else if (!pool.ReturnClient(this))
                     InnerDispose(); // The pool wants to get rid of us
             }
