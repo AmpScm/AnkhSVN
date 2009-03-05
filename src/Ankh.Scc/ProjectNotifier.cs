@@ -468,6 +468,11 @@ namespace Ankh.Scc
                     if (wParam != IntPtr.Zero)
                         ReleaseExternalWrites();
                     break;
+                case VSConstants.VSM_ENTERMODAL:
+                case VSConstants.VSM_EXITMODAL:
+                case VSConstants.VSM_TOOLBARMETRICSCHANGE:
+                    break;
+
             }
             return VSConstants.S_OK;
         }

@@ -42,7 +42,7 @@ namespace Ankh.Commands
             {
                 if (item.IsFile && item.IsVersioned && !item.IsLocked)
                 {
-                    if(!mustOnly || item.ReadOnlyMustLock)
+                    if(!mustOnly || item.IsReadOnlyMustLock)
                         return;
                 }
             }
