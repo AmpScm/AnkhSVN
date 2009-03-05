@@ -31,25 +31,5 @@ namespace Ankh.Scc.SccUI
 
             lblFile.Text = string.Format(SccManagementResources.ReadonlyFileXCannotBeSaved, Path.GetFileName(File));
         }
-
-        private void btnSaveAs_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Yes;
-        }
-
-        private void btnOverwrite_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.No;
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
-        private void btnHelp_Click(object sender, EventArgs e)
-        {
-            
-        }
     }
 }
