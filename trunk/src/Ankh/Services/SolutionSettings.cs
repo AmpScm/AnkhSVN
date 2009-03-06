@@ -368,7 +368,7 @@ namespace Ankh.Settings
             if (string.Equals(val, "false", StringComparison.OrdinalIgnoreCase)
                 || string.Equals(val, "no", StringComparison.OrdinalIgnoreCase))
             {
-                boolValue = true;
+                boolValue = false;
                 return true;
             }
 
