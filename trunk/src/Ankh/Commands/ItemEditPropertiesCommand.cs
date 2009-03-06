@@ -81,7 +81,7 @@ namespace Ankh.Commands
                     foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo info = pfm.GetProjectInfo(project);
-                        if (info == null)
+                        if (info == null || string.IsNullOrEmpty(info.ProjectDirectory))
                         {
                             e.Enabled = false;
                             return;

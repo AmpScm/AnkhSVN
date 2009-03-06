@@ -65,7 +65,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     foreach (SvnProject project in e.Selection.GetSelectedProjects(false))
                     {
                         ISvnProjectInfo projInfo = pfm.GetProjectInfo(project);
-                        if (projInfo == null)
+                        if (projInfo == null || string.IsNullOrEmpty(projInfo.ProjectDirectory))
                         {
                             e.Enabled = false;
                             return;
