@@ -98,15 +98,21 @@ namespace Ankh.VS.Selection
                 {
                     Control c = Control.FromHandle(focus);
 
-                    if (c is TextBox)
+                    while (c != null)
                     {
-                        if (c is DataGridViewTextBoxEditingControl)
-                            return true; // At least true in the String Resource
+                        if (c is TextBox)
+                        {
+                            if (c is DataGridViewTextBoxEditingControl)
+                                return true; // At least true in the String Resource
 
-                        return false;
+                        }
+                        else if (c is DataGridView)
+                            return true;
+
+                        c = c.Parent;
                     }
-                    else if (c is DataGridView)
-                        return true;
+
+                    return false;
                 }
                 else
                     switch (cls)
