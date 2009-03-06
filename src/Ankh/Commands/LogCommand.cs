@@ -58,7 +58,7 @@ namespace Ankh.Commands
                     ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
                     if (pi == null || string.IsNullOrEmpty(pi.ProjectDirectory))
-                        return; // No project location
+                        break; // No project location
 
                     if (e.GetService<IFileStatusCache>()[pi.ProjectDirectory].HasCopyableHistory)
                         return; // Ok, we have history!                                           
