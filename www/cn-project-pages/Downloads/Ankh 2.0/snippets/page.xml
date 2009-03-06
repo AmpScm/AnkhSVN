@@ -13,6 +13,10 @@
       <title localize="false">Ankh-2.0.4757</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
+    <component visibility="2" type="Html" order="4">
+      <title localize="false">AnkhSVN 2.0.6347</title>
+      <filename>HtmlSnippet4.html</filename>
+    </component>
   </component_list>
 </page>
 
