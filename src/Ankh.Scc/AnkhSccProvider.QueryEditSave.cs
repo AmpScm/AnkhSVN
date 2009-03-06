@@ -426,6 +426,10 @@ namespace Ankh.Scc
             if (rgpszMkDocuments == null)
                 return VSConstants.S_OK;
 
+            tagVSQuerySaveResult result = tagVSQuerySaveResult.QSR_SaveOK;
+            bool hit = false;
+            bool shouldReturnOK = false;
+
             for (int i = 0; i < cFiles; i++)
             {
                 string file = rgpszMkDocuments[i];
@@ -451,8 +455,23 @@ namespace Ankh.Scc
                     item,
                     out rslt);
 
-                // TODO: check rslt, set pdwQSResult accordingly
+                if(!hit)
+                    result = rslt;
+                hit = true;
+
+
+                if (result != rslt)
+                {
+                    // result is different from the first; just return SaveOK in this case
+                    shouldReturnOK = true;
+                }
             }
+
+            if (shouldReturnOK)
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_SaveOK;
+            else
+                pdwQSResult = (uint)result;
+
 
             if (toBeSvnLocked.Count > 0)
             {
