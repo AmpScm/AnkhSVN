@@ -900,6 +900,7 @@
         <Button id="Cmd_TickRefreshSvnItems" text="." priority="0" commandWellOnly="true" postExec="true"/>
         <Button id="Cmd_ActivateSccProvider" text="." priority="0" commandWellOnly="true" />
         <Button id="Cmd_ActivateVsExtender" text="." priority="0" commandWellOnly="true" />
+        <Button id="Cmd_SccLock" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_WorkingCopyBrowse" text="." priority="0" commandWellOnly="true" allowParams="true" />
       </Group>
