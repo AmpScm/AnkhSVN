@@ -33,10 +33,14 @@ namespace Ankh.Commands
     /// </summary>
     [Command(AnkhCommand.Lock)]
     [Command(AnkhCommand.LockMustLock)]
+    [Command(AnkhCommand.SccLock)]
     class LockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
+            if (e.Command == AnkhCommand.SccLock)
+                return; // Always enabled
+
             bool mustOnly = (e.Command == AnkhCommand.LockMustLock);
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(e.Command != AnkhCommand.LockMustLock))
             {
@@ -52,6 +56,9 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IEnumerable<SvnItem> items = e.Argument as IEnumerable<SvnItem>;
+
+            if (e.Command == AnkhCommand.SccLock && items == null)
+                return;
 
             PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items != null ? items : e.Selection.GetSelectedSvnItems(true));
             psi.VisibleFilter += delegate(SvnItem item)

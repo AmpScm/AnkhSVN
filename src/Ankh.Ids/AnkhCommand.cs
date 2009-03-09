@@ -44,6 +44,7 @@ namespace Ankh.Ids
         TickRefreshSvnItems,
         ActivateSccProvider,
         ActivateVsExtender,
+        SccLock,
 
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we

@@ -283,31 +283,30 @@ namespace Ankh.Scc
 
                 Monitor.ScheduleDirtyCheck(file, true);
 
-                foreach (SvnItem item in GetAllDocumentItems(file))
+                SvnItem item = StatusCache[file];
+
+                if (item.IsReadOnlyMustLock && !item.IsDirectory)
                 {
-                    if (item.IsReadOnlyMustLock && !item.IsDirectory)
+                    if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
                     {
-                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
-                        {
-                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
-                                | tagVSQueryEditResultFlags.QER_EditNotPossible
-                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                            | tagVSQueryEditResultFlags.QER_EditNotPossible
+                            | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
 
-                            return VSConstants.S_OK;
-                        }
+                        return VSConstants.S_OK;
+                    }
 
-                        if (mustLockItems == null)
-                        {
-                            mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                            mustLockItems = new List<SvnItem>();
-                        }
+                    if (mustLockItems == null)
+                    {
+                        mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                        mustLockItems = new List<SvnItem>();
+                    }
 
-                        if (!mustLockFiles.Contains(item.FullPath))
-                        {
-                            mustLockFiles.Add(item.FullPath);
-                            mustLockItems.Add(item);
-                        }
+                    if (!mustLockFiles.Contains(item.FullPath))
+                    {
+                        mustLockFiles.Add(item.FullPath);
+                        mustLockItems.Add(item);
                     }
                 }
             }
@@ -315,9 +314,25 @@ namespace Ankh.Scc
             {
                 IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
 
-                cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, mustLockItems, CommandPrompt.Always);
+                List<SvnItem> mustBeLocked = new List<SvnItem>(mustLockItems);
 
-                foreach (SvnItem i in mustLockItems)
+                // Look at all subfiles of the must be locked document and add these to the dialog
+                // to make it easier to lock them too
+                foreach (string lockFile in new List<string>(mustLockFiles))
+                {
+                    foreach (SvnItem item in GetAllDocumentItems(lockFile))
+                    {
+                        if (!mustLockFiles.Contains(item.FullPath))
+                        {
+                            mustLockFiles.Add(item.FullPath);
+                            mustLockItems.Add(item);
+                        }
+                    }
+                }
+
+                cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
+                // Only check the original list; the rest of the items in mustLockItems is optional
+                foreach (SvnItem i in mustBeLocked)
                 {
                     if (i.IsReadOnlyMustLock)
                     {
