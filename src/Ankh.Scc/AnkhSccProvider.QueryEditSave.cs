@@ -390,6 +390,12 @@ namespace Ankh.Scc
             if (rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
+            if (_querySaveBatchCancel)
+            {
+                pdwQSResult = (uint)tagVSQuerySaveResult.QSR_NoSave_Cancel;
+                return VSConstants.S_OK;
+            }
+
             try
             {
                 bool saveAs = false;
