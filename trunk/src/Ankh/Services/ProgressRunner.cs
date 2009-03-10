@@ -25,6 +25,9 @@ using SharpSvn;
 using Ankh.UI;
 using Ankh.VS;
 using Ankh.Ids;
+using System.Text;
+using System.IO;
+using Ankh.VS.OutputPane;
 
 namespace Ankh
 {
@@ -38,13 +41,18 @@ namespace Ankh
 
         public ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action)
         {
+            return RunModal(caption, action, false);
+        }
+
+        public ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action, bool log)
+        {
             if (action == null)
                 throw new ArgumentNullException("action");
             else if (string.IsNullOrEmpty(caption))
                 caption = AnkhId.PlkProduct;
 
             ProgressRunner pr = new ProgressRunner(this, action);
-
+            pr.LogOutput = log;
             pr.Start(caption);
 
             return new ProgressRunnerResult(!pr.Cancelled);
@@ -81,6 +89,7 @@ namespace Ankh
             bool _cancelled;
             bool _closed;
             Exception _exception;
+            bool _logOutput;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ProgressRunner"/> class.
@@ -96,6 +105,12 @@ namespace Ankh
 
                 _context = context;
                 _action = action;
+            }
+
+            public bool LogOutput
+            {
+                get { return _logOutput; }
+                set { _logOutput = value; }
             }
 
             /// <summary>
@@ -122,32 +137,36 @@ namespace Ankh
                 using (SvnClient client = pool.GetClient())
                 using (dialog.Bind(client))
                 {
-                    _sync = dialog;
-                    dialog.Caption = caption;
-                    dialog.Context = _context;
-                    thread.Name = "AnkhSVN Worker";
-
-                    dialog.HandleCreated += delegate
+                    IDisposable reporter = LogOutput ? BindOutputPane(client) : null;
+                    using (reporter)
                     {
-                        thread.Start(client);
-                    };
-                    _invoker = dialog;
+                        _sync = dialog;
+                        dialog.Caption = caption;
+                        dialog.Context = _context;
+                        thread.Name = "AnkhSVN Worker";
 
-                    do
-                    {
-                        if (!_closed)
+                        dialog.HandleCreated += delegate
                         {
-                            dialog.ShowDialog(_context);
+                            thread.Start(client);
+                        };
+                        _invoker = dialog;
+
+                        do
+                        {
+                            if (!_closed)
+                            {
+                                dialog.ShowDialog(_context);
+                            }
+
+                            // Show the dialog again if the thread join times out
+                            // Do this to handle the acase where the service wants to
+                            // pop up a dialog before canceling.
+
+                            // BH: Experienced this 2008-09-29 when our repository server
+                            //     accepted http connections but didn't handle them in time
                         }
-
-                        // Show the dialog again if the thread join times out
-                        // Do this to handle the acase where the service wants to
-                        // pop up a dialog before canceling.
-
-                        // BH: Experienced this 2008-09-29 when our repository server
-                        //     accepted http connections but didn't handle them in time
+                        while (!thread.Join(2500));
                     }
-                    while (!thread.Join(2500)); 
                 }
                 if (_cancelled)
                 {
@@ -155,6 +174,11 @@ namespace Ankh
                 }
                 else if (_exception != null)
                     throw new ProgressRunnerException(this._exception);
+            }
+
+            private IDisposable BindOutputPane(SvnClient client)
+            {
+                return new OutputPaneReporter(client, _context);
             }
 
             private void Run(object arg)
@@ -216,6 +240,33 @@ namespace Ankh
                 if (si.Visible)
                 {
                     si.Close();
+                }
+            }
+        }
+
+        sealed class OutputPaneReporter : IDisposable
+        {
+            readonly IOutputPaneManager _mgr;
+            readonly SvnClientReporter _reporter;
+            readonly StringBuilder _sb;
+
+            public OutputPaneReporter(SvnClient client, IAnkhServiceProvider context)
+            {
+                _mgr = context.GetService<IOutputPaneManager>();
+                _sb = new StringBuilder();
+                _reporter = new SvnClientReporter(client, _sb);
+            }
+
+            public void Dispose()
+            {
+                try
+                {
+                    _mgr.WriteToPane(_sb.ToString());
+                    _mgr.WriteToPane("\r\n");
+                }
+                finally
+                {
+                    _reporter.Dispose();
                 }
             }
         }
