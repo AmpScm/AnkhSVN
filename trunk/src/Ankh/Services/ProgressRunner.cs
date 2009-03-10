@@ -135,38 +135,40 @@ namespace Ankh
 
                 using (ProgressDialog dialog = new ProgressDialog())
                 using (SvnClient client = pool.GetClient())
+                using (LogOutput ? BindOutputPane(client) : null)
                 using (dialog.Bind(client))
                 {
-                    IDisposable reporter = LogOutput ? BindOutputPane(client) : null;
-                    using (reporter)
+                    _sync = dialog;
+                    dialog.Caption = caption;
+                    dialog.Context = _context;
+                    thread.Name = "AnkhSVN Worker";
+                    bool threadStarted = false;
+
+                    dialog.HandleCreated += delegate
                     {
-                        _sync = dialog;
-                        dialog.Caption = caption;
-                        dialog.Context = _context;
-                        thread.Name = "AnkhSVN Worker";
-
-                        dialog.HandleCreated += delegate
+                        if (!threadStarted)
                         {
+                            threadStarted = true;
                             thread.Start(client);
-                        };
-                        _invoker = dialog;
-
-                        do
-                        {
-                            if (!_closed)
-                            {
-                                dialog.ShowDialog(_context);
-                            }
-
-                            // Show the dialog again if the thread join times out
-                            // Do this to handle the acase where the service wants to
-                            // pop up a dialog before canceling.
-
-                            // BH: Experienced this 2008-09-29 when our repository server
-                            //     accepted http connections but didn't handle them in time
                         }
-                        while (!thread.Join(2500));
+                    };
+                    _invoker = dialog;
+
+                    do
+                    {
+                        if (!_closed)
+                        {
+                            dialog.ShowDialog(_context);
+                        }
+
+                        // Show the dialog again if the thread join times out
+                        // Do this to handle the acase where the service wants to
+                        // pop up a dialog before canceling.
+
+                        // BH: Experienced this 2008-09-29 when our repository server
+                        //     accepted http connections but didn't handle them in time
                     }
+                    while (!thread.Join(2500));
                 }
                 if (_cancelled)
                 {
