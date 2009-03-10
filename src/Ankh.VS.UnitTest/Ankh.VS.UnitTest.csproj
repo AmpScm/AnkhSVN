@@ -49,7 +49,12 @@
     <Reference Include="Microsoft.VisualStudio.Shell.9.0" />
     <!---->
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="Microsoft.VSSDK.UnitTestLibrary" />
+    <Reference Include="Moq, Version=3.0.204.1, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.6.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
@@ -72,7 +77,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\AnkhServiceProvider.cs" />
     <Compile Include="CommandRouting\CommandRoutingTest.cs" />
+    <Compile Include="CommandRouting\CommandTests.cs" />
     <Compile Include="Helpers\CommandExecutor.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ServiceProviderHelper.cs" />
@@ -81,6 +88,7 @@
     <Compile Include="Mocks\DteMock.cs" />
     <Compile Include="Mocks\OutputPaneMock.cs" />
     <Compile Include="Mocks\SelectionContext.cs" />
+    <Compile Include="Mocks\VsShellMock.cs" />
     <Compile Include="Mocks\VSUIShellMock.cs" />
     <Compile Include="PackageTest.cs" />
     <!---->
@@ -93,6 +101,14 @@
     <None Include="Ankh.VS.UnitTest.snk" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ankh.Diff\Ankh.Diff.csproj">
+      <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
+      <Name>Ankh.Diff</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
+      <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
+      <Name>Ankh.Scc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
       <Name>Ankh.Services</Name>
@@ -109,10 +125,17 @@
       <Project>{FA90174C-5763-46E8-9C95-328CA8451072}</Project>
       <Name>Ankh.Package</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.VS\Ankh.VS.csproj">
+      <Project>{906E3F01-CD79-4F80-BCA7-1105224328C4}</Project>
+      <Name>Ankh.VS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh\Ankh.csproj">
       <Project>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</Project>
       <Name>Ankh</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stubs\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

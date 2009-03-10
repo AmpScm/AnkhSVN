@@ -47,6 +47,8 @@ namespace Ankh.Commands
             {
                 case AnkhCommand.SolutionBranch:
                     IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+                    if (ss == null)
+                        return null;
 
                     string root = ss.ProjectRoot;
 
@@ -62,7 +64,7 @@ namespace Ankh.Commands
 
                     ISvnProjectInfo info = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
-                    if (info.ProjectDirectory == null)
+                    if (info == null || info.ProjectDirectory == null)
                         break;
 
                     item = e.GetService<IFileStatusCache>()[info.ProjectDirectory];

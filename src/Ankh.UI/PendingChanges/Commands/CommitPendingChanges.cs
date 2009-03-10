@@ -33,7 +33,10 @@ namespace Ankh.UI.PendingChanges.Commands
             PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
 
             if (page == null || !page.Visible)
+            {
                 e.Enabled = false;
+                return;
+            }
 
             switch (e.Command)
             {
