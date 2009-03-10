@@ -261,8 +261,8 @@ namespace Ankh
             {
                 try
                 {
+                    _sb.AppendLine();
                     _mgr.WriteToPane(_sb.ToString());
-                    _mgr.WriteToPane("\r\n");
                 }
                 finally
                 {
