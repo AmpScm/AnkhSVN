@@ -735,6 +735,20 @@ namespace Ankh.Settings
             catch (SecurityException)
             { /* Ignore no read only access; stupid sysadmins */ }
 
+            IAnkhConfigurationService configSvc = Context.GetService<IAnkhConfigurationService>();
+            if (configSvc != null)
+            {
+                foreach (string u in configSvc.GetRecentReposUrls())
+                {
+                    Uri uri;
+                    if (u != null && Uri.TryCreate(u, UriKind.Absolute, out uri))
+                    {
+                        if (!uris.Contains(uri))
+                            uris.Add(uri);
+                    }
+                }
+            }
+
             return uris;
         }
 
