@@ -114,7 +114,7 @@ namespace Ankh.Commands
                     ua.Revision = updateTo;
                     e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
                     ee.Client.Update(files, ua, out ur);
-                });
+                }, true);
         }
     }
 }

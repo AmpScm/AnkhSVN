@@ -283,7 +283,7 @@ namespace Ankh.Commands
 
                 e.GetService<IProgressRunner>().RunModal(
                     string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution : CommandStrings.UpdatingProject),
-                    ur.Work);
+                    ur.Work, true);
 
                 if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))
                 {

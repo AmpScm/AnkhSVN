@@ -169,6 +169,7 @@
     <Compile Include="VS\IAnkhVSColor.cs" />
     <Compile Include="VS\IAnkhWebBrowser.cs" />
     <Compile Include="VS\IFileIconMapper.cs" />
+    <Compile Include="VS\IOutputPaneManager.cs" />
     <Compile Include="VS\IProjectCommitSettings.cs" />
   </ItemGroup>
   <ItemGroup>

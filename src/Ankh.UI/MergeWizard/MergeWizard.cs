@@ -365,7 +365,7 @@ namespace Ankh.UI.MergeWizard
                         // Detach the cancel handler
                         ee.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.OnCancel);
                     }
-                });
+                }, true);
 
             if (this.currentMergeConflictHandler != null)
             {

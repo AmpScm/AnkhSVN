@@ -115,6 +115,15 @@ namespace Ankh
         ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action);
 
         /// <summary>
+        /// Runs the specified action.
+        /// </summary>
+        /// <param name="caption">The caption.</param>
+        /// <param name="action">The action.</param>
+        /// <param name="logOutput">Indicates wether or not to log the output</param>
+        /// <returns></returns>
+        ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action, bool logOutput);
+
+        /// <summary>
         /// Runs the specified action and when the action completes completer. (Currently implemented synchronously!)
         /// </summary>
         /// <param name="caption">The caption.</param>
