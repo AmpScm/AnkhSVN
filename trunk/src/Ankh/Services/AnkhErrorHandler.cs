@@ -27,6 +27,8 @@ using SharpSvn;
 using Ankh.UI;
 using Ankh.VS;
 using Ankh.Xml;
+using Ankh.Commands;
+using System.Text;
 
 namespace Ankh
 {
@@ -36,9 +38,11 @@ namespace Ankh
     [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered=true)]
     class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
+        readonly HandlerDelegator Handler;
         public AnkhErrorHandler(IAnkhServiceProvider context)
             : base(context)
         {
+            Handler = new HandlerDelegator(this);
         }
 
         public bool IsEnabled(Exception ex)
@@ -48,7 +52,6 @@ namespace Ankh
 #else
             return true;
 #endif
-
         }
 
         /// <summary>
@@ -57,22 +60,20 @@ namespace Ankh
         /// <param name="ex"></param>
         public void OnError(Exception ex)
         {
-            try
-            {
-                // BH: Uses reflection to find the best match based on the exception??
+            if(ex == null)
+                return;
 
-                Type t = typeof(AnkhErrorHandler);
-                MethodInfo method = t.GetMethod("DoHandle", BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { ex.GetType() }, null);
+            Handler.Invoke(ex, null);
+        }
 
-                if (method != null)
-                    method.Invoke(this, new object[] { ex });
-                else
-                    DoHandle(ex);
-            }
-            catch (Exception x)
-            {
-                Debug.WriteLine(x);
-            }
+        public void OnError(Exception ex, BaseCommandEventArgs commandArgs)
+        {
+            if (ex == null)
+                return;
+            else if (commandArgs == null)
+                OnError(ex);
+            else
+                Handler.Invoke(ex, new ExceptionInfo(commandArgs));
         }
 
         /// <summary>
@@ -94,98 +95,151 @@ namespace Ankh
             writer.WriteLine(exceptionMessage);
         }
 
-        private void DoHandle(ProgressRunnerException ex)
+        sealed class ExceptionInfo 
         {
-            // we're only interested in the inner exception - we know where the 
-            // outer one comes from
-            OnError(ex.InnerException);
-        }
-
-        private void DoHandle(SvnRepositoryHookException e)
-        {
-            string message;
-            if (e.InnerException != null)
-                message = string.Format("{1}{0}{0}{2}{0}", Environment.NewLine, e.Message, e.InnerException.Message);
-            else
-                message = e.Message;
-
-            MessageBox.Show(message, "Repository hook failed", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-
-        private void DoHandle(SvnWorkingCopyLockException ex)
-        {
-            MessageBox.Show("Your working copy appear to be locked. " + NL +
-                "Run Cleanup to amend the situation.",
-                "Working copy locked", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-        private void DoHandle(SvnAuthorizationException ex)
-        {
-            MessageBox.Show(
-                "You failed to authorize against the remote repository. ",
-                "Authorization failed", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-        private void DoHandle(SvnAuthenticationException ex)
-        {
-            MessageBox.Show(
-                "You failed to authenticate against the remote repository. ",
-                "Authentication failed", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-        private void DoHandle(SvnFileSystemOutOfDateException ex)
-        {
-            MessageBox.Show(
-                "One or more of your local resources are out of date. " +
-                "You need to run Update before you can proceed with the operation",
-                "Resource(s) out of date", MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-        private void DoHandle(SvnInvalidNodeKindException ex)
-        {
-            MessageBox.Show(
-                "One or more of the resources selected are not valid targets for this operation" +
-                Environment.NewLine +
-                "(Are you trying to commit a child of a newly added, but not committed resource?)",
-                "Illegal target for this operation",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Warning);
-        }
-
-        private void DoHandle(SvnException ex)
-        {
-            if (ex.SubversionErrorCode == LockedFileErrorCode)
+            readonly BaseCommandEventArgs _commandArgs;
+            public ExceptionInfo(BaseCommandEventArgs e)
             {
-                MessageBox.Show(
-                    ex.Message + NL + NL +
-                    "Avoid versioning files that can be locked by VS.NET. " +
-                    "These include *.ncb, *.projdata etc." + NL +
-                    "See the AnkhSVN FAQ for more details.",
-                    "File exclusively locked",
+                _commandArgs = e;
+            }
+
+            public BaseCommandEventArgs CommandArgs
+            {
+                get { return _commandArgs; }
+            }
+        }
+
+        sealed class HandlerDelegator : AnkhService
+        {
+            AnkhErrorHandler _handler;
+            public HandlerDelegator(AnkhErrorHandler context)
+                : base(context)
+            {
+                _handler = context;
+            }
+
+            protected IWin32Window Owner
+            {
+                get { return GetService<IUIService>().GetDialogOwnerWindow(); }
+            }
+
+            public void Invoke(Exception ex, ExceptionInfo info)
+            {
+                try
+                {
+                    // BH: Uses reflection to find the best match based on the exception??
+
+                    Type t = typeof(HandlerDelegator);
+                    MethodInfo method = t.GetMethod("DoHandle", BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { ex.GetType(), typeof(ExceptionInfo) }, null);
+
+                    if (method != null)
+                        method.Invoke(this, new object[] { ex, info });
+                    else
+                        DoHandle(ex, info);
+                }
+                catch (Exception x)
+                {
+                    Debug.WriteLine(x);
+                }
+            }
+
+
+            private void DoHandle(ProgressRunnerException ex, ExceptionInfo info)
+            {
+                // we're only interested in the inner exception - we know where the 
+                // outer one comes from
+                Invoke(ex.InnerException, info);
+            }
+
+            private void DoHandle(SvnRepositoryHookException e, ExceptionInfo info)
+            {
+                string message;
+                if (e.InnerException != null)
+                    message = GetNestedMessages(e).Replace("\r","").Replace("\n", Environment.NewLine);
+                else
+                    message = e.Message;
+
+                MessageBox.Show(Owner, message, "Repository hook failed", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
+
+            private void DoHandle(SvnWorkingCopyLockException ex, ExceptionInfo info)
+            {
+                MessageBox.Show(Owner,
+                    "Your working copy appear to be locked. " + NL +
+                    "Run Cleanup to amend the situation.",
+                    "Working copy locked", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
+            private void DoHandle(SvnAuthorizationException ex, ExceptionInfo info)
+            {
+                MessageBox.Show(Owner,
+                    "You failed to authorize against the remote repository. ",
+                    "Authorization failed", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
+            private void DoHandle(SvnAuthenticationException ex, ExceptionInfo info)
+            {
+                MessageBox.Show(Owner,
+                    "You failed to authenticate against the remote repository. ",
+                    "Authentication failed", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
+            private void DoHandle(SvnFileSystemOutOfDateException ex, ExceptionInfo info)
+            {
+                MessageBox.Show(Owner,
+                    "One or more of your local resources are out of date. " +
+                    "You need to run Update before you can proceed with the operation",
+                    "Resource(s) out of date", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+
+            private void DoHandle(SvnInvalidNodeKindException ex, ExceptionInfo info)
+            {
+                MessageBox.Show(Owner,
+                    "One or more of the resources selected are not valid targets for this operation" +
+                    Environment.NewLine +
+                    "(Are you trying to commit a child of a newly added, but not committed resource?)",
+                    "Illegal target for this operation",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBoxIcon.Warning);
             }
-            else
+
+            
+
+            private void DoHandle(SvnException ex, ExceptionInfo info)
             {
-                ShowErrorDialog(ex, false, false);
+                const int LockedFileErrorCode = 720032; // This is a wrapped OS error
+
+                if (ex.SubversionErrorCode == LockedFileErrorCode)
+                {
+                    MessageBox.Show(Owner,
+                        ex.Message + NL + NL +
+                        "Avoid versioning files that can be locked by VS.NET. " +
+                        "These include *.ncb, *.projdata etc." + NL +
+                        "See the AnkhSVN FAQ for more details.",
+                        "File exclusively locked",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+                else
+                {
+                    _handler.ShowErrorDialog(ex, false, false, info);
+                }
+            }
+
+            private void DoHandle(Exception ex, ExceptionInfo info)
+            {
+                _handler.DoLogException(ex, info);
+                _handler.ShowErrorDialog(ex, true, true, info);
             }
         }
 
-
-
-        private void DoHandle(Exception ex)
-        {
-            DoLogException(ex);
-            ShowErrorDialog(ex, true, true);
-        }  
-
-        private void DoLogException(Exception ex)
+        private void DoLogException(Exception ex, ExceptionInfo info)
         {
             ErrorItems errorItems = this.LoadErrorItems();
 
@@ -224,7 +278,7 @@ namespace Ankh
             get { return Path.Combine(Path.GetTempPath(), "AnkhErrors.txt");/* this.context.ConfigLoader.ConfigDir, ErrorLogFile );*/ }
         }
 
-        private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError)
+        private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError, ExceptionInfo info)
         {
             string stackTrace = GetNestedStackTraces(ex);
             string message = GetNestedMessages(ex);
@@ -235,6 +289,9 @@ namespace Ankh
             IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
             if (ss != null)
                 additionalInfo.Add("VS-Version", ss.VisualStudioVersion.ToString());
+
+            if (info == null && info.CommandArgs != null)
+                additionalInfo.Add("Command", info.CommandArgs.Command.ToString());
 
             additionalInfo.Add("OS-Version", Environment.OSVersion.Version.ToString());
 
@@ -280,14 +337,18 @@ namespace Ankh
 
         private static string GetNestedMessages(Exception ex)
         {
-            if (ex == null)
-                return "";
-            else
-                return ex.Message.Trim() + NL + GetNestedMessages(ex.InnerException);
+            StringBuilder sb = new StringBuilder();
+
+            while (ex != null)
+            {
+                sb.AppendLine(ex.Message.Trim());
+                ex = ex.InnerException;
+            }
+
+            return sb.ToString();
         }
 
-        private static readonly string NL = Environment.NewLine;
-        private const int LockedFileErrorCode = 720032;
+        private static readonly string NL = Environment.NewLine;        
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
         private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
         private const string ErrorReportSubject = "Exception";

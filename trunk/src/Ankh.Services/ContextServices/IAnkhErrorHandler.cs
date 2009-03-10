@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using Ankh.Commands;
 
 namespace Ankh
 {
@@ -26,5 +27,7 @@ namespace Ankh
         bool IsEnabled(Exception ex);
 
         void OnError(Exception ex);
+
+        void OnError(Exception ex, BaseCommandEventArgs commandInfo);
     }
 }

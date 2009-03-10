@@ -66,7 +66,7 @@ namespace Ankh.Commands
 
                         if (eh != null && eh.IsEnabled(ex))
                         {
-                            eh.OnError(ex);
+                            eh.OnError(ex, e);
                             return false;
                         }
 
@@ -116,7 +116,7 @@ namespace Ankh.Commands
 
                     if (eh != null && eh.IsEnabled(ex))
                     {
-                        eh.OnError(ex);
+                        eh.OnError(ex, e);
                         return true; // If we return false VS shows another error box!
                     }
 
