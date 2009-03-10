@@ -35,7 +35,7 @@ namespace Ankh.Scc.Commands
                 {
                     ISvnProjectInfo pi = e.GetService<IProjectFileMapper>().GetProjectInfo(p);
 
-                    if (p == null || string.IsNullOrEmpty(pi.ProjectFile))
+                    if (p == null || pi == null || string.IsNullOrEmpty(pi.ProjectFile))
                     {
                         break; // No project file
                     }

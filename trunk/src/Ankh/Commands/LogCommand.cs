@@ -68,7 +68,7 @@ namespace Ankh.Commands
                 case AnkhCommand.SolutionHistory:
                     IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
 
-                    if (string.IsNullOrEmpty(ss.ProjectRoot))
+                    if (ss == null || string.IsNullOrEmpty(ss.ProjectRoot))
                         break;
 
                     if (e.GetService<IFileStatusCache>()[ss.ProjectRoot].HasCopyableHistory)
