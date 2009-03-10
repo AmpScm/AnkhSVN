@@ -185,16 +185,16 @@
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(ForceSVN)' == '1.6.x' ">
-    <DependencyDownload Include="SSvn-1.5999.1136.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/1623/</Url>
+    <DependencyDownload Include="SSvn-1.5999.1157.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/1685/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
   </ItemGroup>
   <ItemGroup Condition=" '$(ForceSVN)' != '1.6.x' ">
-    <DependencyDownload Include="SSvn-1.5006.1136.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/1626/</Url>
+    <DependencyDownload Include="SSvn-1.5006.1154.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/1682/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>
