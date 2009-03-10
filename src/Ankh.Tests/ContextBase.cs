@@ -68,6 +68,16 @@ namespace Ankh.Tests
         }
 
         #endregion
+
+        #region IAnkhErrorHandler Members
+
+
+        public void OnError(Exception ex, Ankh.Commands.BaseCommandEventArgs commandInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 
     /// <summary>
