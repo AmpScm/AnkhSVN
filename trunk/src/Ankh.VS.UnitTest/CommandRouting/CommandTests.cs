@@ -119,7 +119,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
                 CommandUpdateEventArgs e = new CommandUpdateEventArgs(command, context);
 
                 cm.PerformUpdate(command, e);
-                Console.WriteLine("Passed: " + command.ToString());
             }
 
             foreach (AnkhCommandMenu m in Enum.GetValues(typeof(AnkhCommandMenu)))
@@ -127,7 +126,6 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
                 CommandUpdateEventArgs e = new CommandUpdateEventArgs((AnkhCommand)m, context);
 
                 cm.PerformUpdate((AnkhCommand)m, e);
-                Console.WriteLine("Passed: " + m.ToString());
             }
         }
     }
