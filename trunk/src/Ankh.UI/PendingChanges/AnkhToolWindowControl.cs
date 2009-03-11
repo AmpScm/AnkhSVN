@@ -21,6 +21,8 @@ using System.Windows.Forms;
 using Ankh.UI.Services;
 using System.ComponentModel;
 using Ankh.Scc.UI;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.UI
 {
@@ -35,9 +37,9 @@ namespace Ankh.UI
 
         public override string Text
         {
-            get 
-            { 
-                if(_host != null)
+            get
+            {
+                if (_host != null)
                     return _host.Title;
                 else
                     return base.Text;
@@ -59,7 +61,7 @@ namespace Ankh.UI
         public IAnkhToolWindowHost ToolWindowHost
         {
             get { return _host; }
-			set 
+            set
             {
                 if (_host != value)
                 {
@@ -99,7 +101,7 @@ namespace Ankh.UI
                 if (r != null)
                     return r;
             }
-    
+
             return base.GetService(service);
         }
 
@@ -115,7 +117,6 @@ namespace Ankh.UI
 
         void IAnkhToolWindowControl.OnFrameCreated(EventArgs e)
         {
-            OnFrameCreated(e);
         }
 
         /// <summary>
@@ -137,7 +138,6 @@ namespace Ankh.UI
         /// <param name="e"></param>
         protected virtual void OnFrameDockableChanged(FrameEventArgs e)
         {
-            this.Refresh();
         }
 
         void IAnkhToolWindowControl.OnFrameDockableChanged(FrameEventArgs e)
@@ -147,7 +147,11 @@ namespace Ankh.UI
 
         void IAnkhToolWindowControl.OnFrameMove(FrameEventArgs e)
         {
-            Refresh();
+            OnFrameMove(e);
+        }
+
+        protected virtual void OnFrameMove(FrameEventArgs e)
+        {
         }
 
         /// <summary>
@@ -163,32 +167,10 @@ namespace Ankh.UI
 
         void IAnkhToolWindowControl.OnFrameShow(FrameEventArgs e)
         {
-            switch (e.Show)
-            {
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:                
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_DestroyMultInst:
-                    Visible = false;
-                    break;
-                // Why not Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
-                //   This state is not reverted in non animated mode in VS2008 (and maybe other versions)
-                //
-                //   See http://ankhsvn.open.collab.net/ds/viewMessage.do?dsForumId=582&dsMessageId=303686
-
-                // The same problem exists for Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_TabDeactivated:
-                //  It doesn't revert the TabDeactivated when undocking the window
-            }
             OnFrameShow(e);
-            switch (e.Show)
-            {
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinClosed:
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_WinHidden:
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_DestroyMultInst:
-                case Microsoft.VisualStudio.Shell.Interop.__FRAMESHOW.FRAMESHOW_TabDeactivated:
-                    break;
-                default:
-                    Visible = true;
-                    break;
-            }
+
+            if (ToolWindowVisibileChanged != null)
+                ToolWindowVisibileChanged(this, e);
         }
 
         /// <summary>
@@ -220,5 +202,27 @@ namespace Ankh.UI
         }
 
         #endregion
+
+        public event EventHandler ToolWindowVisibileChanged;
+
+        public bool ToolWindowVisible
+        {
+            get
+            {
+                if (!IsHandleCreated || ToolWindowHost == null)
+                    return false;
+
+                IVsWindowFrame frame = ToolWindowHost.Frame;
+                if (frame != null)
+                {
+                    int onScreen;
+
+                    if (ErrorHandler.Succeeded(frame.IsOnScreen(out onScreen)) && onScreen != 0)
+                        return true;
+                }
+                
+                return false;
+            }
+        }
     }
 }
