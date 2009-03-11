@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
 using Ankh.UI.Properties;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -69,7 +70,13 @@ namespace Ankh.UI.RepositoryExplorer
                 }
 
                 if (_top != null)
-                    _top.VisibleChanged -= new EventHandler(OnTopVisibleChanged);
+                {
+                    IAnkhToolWindowControl tw = _top as IAnkhToolWindowControl;
+                    if (tw != null)
+                        tw.ToolWindowVisibileChanged -= new EventHandler(OnTopVisibleChanged);
+                    else
+                        _top.VisibleChanged -= new EventHandler(OnToolWindowVisibleChanged);
+                }
 
                 _parent = value;
                 _top = null;
@@ -99,7 +106,13 @@ namespace Ankh.UI.RepositoryExplorer
                 }
 
                 if (_top != null)
-                    _top.VisibleChanged += new EventHandler(OnTopVisibleChanged);
+                {
+                    IAnkhToolWindowControl tw = _top as IAnkhToolWindowControl;
+                    if (tw != null)
+                        tw.ToolWindowVisibileChanged += new EventHandler(OnToolWindowVisibleChanged);
+                    else
+                        _top.VisibleChanged += new EventHandler(OnTopVisibleChanged);
+                }
             }
         }
 
@@ -112,6 +125,19 @@ namespace Ankh.UI.RepositoryExplorer
                     _pb.Dispose();
                     _pb = null;
                 }
+            }
+        }
+
+        void OnToolWindowVisibleChanged(object sender, EventArgs e)
+        {
+            IAnkhToolWindowControl tw = _top as IAnkhToolWindowControl;
+            if (tw == null)
+                return;
+
+            if (_pb != null && !tw.ToolWindowVisible)
+            {
+                _pb.Dispose();
+                _pb = null;
             }
         }
 

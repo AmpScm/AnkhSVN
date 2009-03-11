@@ -23,10 +23,10 @@ using Ankh.UI;
 
 namespace Ankh.Scc.UI
 {
-	[CLSCompliant(false)]
-    public interface IAnkhToolWindowControl 
+    [CLSCompliant(false)]
+    public interface IAnkhToolWindowControl
     {
-		IAnkhToolWindowHost ToolWindowHost { get; set; }
+        IAnkhToolWindowHost ToolWindowHost { get; set; }
 
         /// <summary>
         /// Called when the frame is created
@@ -72,6 +72,13 @@ namespace Ankh.Scc.UI
         /// Occurs when the frame size changed
         /// </summary>
         event EventHandler<FrameEventArgs> FrameSize;
+
+        /// <summary>
+        /// Occurs when the tool window visibility changes
+        /// </summary>
+        event EventHandler ToolWindowVisibileChanged;
+
+        bool ToolWindowVisible { get; }
     }
 
     /// <summary>
