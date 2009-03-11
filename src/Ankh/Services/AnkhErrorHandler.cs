@@ -35,7 +35,7 @@ namespace Ankh
     /// <summary>
     /// Encapsulates error handling functionality.
     /// </summary>
-    [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered=true)]
+    [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered = true)]
     class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
         readonly HandlerDelegator Handler;
@@ -60,7 +60,7 @@ namespace Ankh
         /// <param name="ex"></param>
         public void OnError(Exception ex)
         {
-            if(ex == null)
+            if (ex == null)
                 return;
 
             Handler.Invoke(ex, null);
@@ -95,7 +95,7 @@ namespace Ankh
             writer.WriteLine(exceptionMessage);
         }
 
-        sealed class ExceptionInfo 
+        sealed class ExceptionInfo
         {
             readonly BaseCommandEventArgs _commandArgs;
             public ExceptionInfo(BaseCommandEventArgs e)
@@ -155,7 +155,7 @@ namespace Ankh
             {
                 string message;
                 if (e.InnerException != null)
-                    message = GetNestedMessages(e).Replace("\r","").Replace("\n", Environment.NewLine);
+                    message = GetNestedMessages(e).Replace("\r", "").Replace("\n", Environment.NewLine);
                 else
                     message = e.Message;
 
@@ -209,7 +209,7 @@ namespace Ankh
                     MessageBoxIcon.Warning);
             }
 
-            
+
 
             private void DoHandle(SvnException ex, ExceptionInfo info)
             {
@@ -290,7 +290,7 @@ namespace Ankh
             if (ss != null)
                 additionalInfo.Add("VS-Version", ss.VisualStudioVersion.ToString());
 
-            if (info == null && info.CommandArgs != null)
+            if (info != null && info.CommandArgs != null)
                 additionalInfo.Add("Command", info.CommandArgs.Command.ToString());
 
             additionalInfo.Add("OS-Version", Environment.OSVersion.Version.ToString());
@@ -348,7 +348,7 @@ namespace Ankh
             return sb.ToString();
         }
 
-        private static readonly string NL = Environment.NewLine;        
+        private static readonly string NL = Environment.NewLine;
         private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
         private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
         private const string ErrorReportSubject = "Exception";
