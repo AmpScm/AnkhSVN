@@ -143,7 +143,7 @@ namespace Ankh.VS.Selection
                 {
                     if (ErrorHandler.Succeeded(hierarchy.GetCanonicalName(id, out name)))
                     {
-                        if (IsValidPath(name))
+                        if (IsValidPath(name, true))
                         {
                             files = new string[] { name };
                             return true;
@@ -177,6 +177,21 @@ namespace Ankh.VS.Selection
                 return false;
 
             return SvnItem.IsValidPath(path);
+        }
+
+        /// <summary>
+        /// Determines whether the path is not null and a valid path
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>
+        /// 	<c>true</c> if the path contains a valid path; otherwise (including null and empty) <c>false</c>.
+        /// </returns>
+        static bool IsValidPath(string path, bool extraChecks)
+        {
+            if (string.IsNullOrEmpty(path))
+                return false;
+
+            return SvnItem.IsValidPath(path, extraChecks);
         }
 
         internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)

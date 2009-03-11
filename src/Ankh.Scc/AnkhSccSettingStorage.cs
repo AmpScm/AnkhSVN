@@ -94,7 +94,7 @@ namespace Ankh.Scc
 
         string NormalizePathFormat(string path)
         {
-            if (!SvnItem.IsValidPath(path))
+            if (!SvnItem.IsValidPath(path, true))
                 return path; // Not an on-disk path -> Nothing to normalize
 
             string np = SvnTools.GetFullTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
