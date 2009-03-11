@@ -140,27 +140,33 @@ namespace Ankh.Scc.ProjectMap
             if (id == 0 || id == VSConstants.VSITEMID_NIL)
                 return false;
 
-            IntPtr imageList = _project.ProjectImageList;
-            object value;
-
-            if (imageList != IntPtr.Zero)
+            try
             {
-                if (ErrorHandler.Succeeded(
-                    Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
+
+                IntPtr imageList = _project.ProjectImageList;
+                object value;
+
+                if (imageList != IntPtr.Zero)
                 {
-                    icon = new ProjectIconReference(imageList, (int)value);
+                    if (ErrorHandler.Succeeded(
+                        Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
+                    {
+                        icon = new ProjectIconReference(imageList, (int)value);
+                        return true;
+                    }
+                }
+
+                // Only do this if we know there is no imagelist behind the icons
+                // (This will create a cached icon handle if called on a managed project, which we only need once)
+                if (ErrorHandler.Succeeded(
+                    Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
+                {
+                    icon = new ProjectIconReference((IntPtr)(int)value); // Marshalled by VS as 32 bit integer
                     return true;
                 }
             }
-
-            // Only do this if we know there is no imagelist behind the icons
-            // (This will create a cached icon handle if called on a managed project, which we only need once)
-            if (ErrorHandler.Succeeded(
-                Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
-            {
-                icon = new ProjectIconReference((IntPtr)(int)value); // Marshalled by VS as 32 bit integer
-                return true;
-            }
+            catch
+            { /* Eat all project exceptions */ }
 
             return false;
         }
