@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6376</title>
+          AnkhSVN-Daily Update - 2.0.6386</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1690/AnkhSvn-Daily-2.0.6376.439.msi">AnkhSVN 2.0.6376</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1699/AnkhSvn-Daily-2.0.6386.440.msi">AnkhSVN 2.0.6386</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6376">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6386">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -29,6 +29,29 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2009-03-11</td></tr>
+<tr><td> </td><td class="r"><a id="6386" href="http://ankhsvn.net/rev/?r=6386">
+            [r6386]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference to SharpSvn 1.5006.1162 to return
+memory earlier.</td></tr>
+<tr><td> </td><td class="r"><a id="6385" href="http://ankhsvn.net/rev/?r=6385">
+            [r6385]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectTracker.Solution.cs, Ankh.Scc/Commands/MarkProjectDirty.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Services/Scc/IProjectNotifier.cs, Ankh.Scc/ProjectTracker.cs, Ankh.Scc/AnkhSccProvider.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs, Ankh.Scc/ProjectTracker.Add.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Early break out of detection of whether added files are copies when
+loading the solution file. (This should speed up the loading of Websites)</td></tr>
+<tr><td> </td><td class="r"><a id="6384" href="http://ankhsvn.net/rev/?r=6384">
+            [r6384]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> ProjectTracker.cs, PendingChangeManager.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Delay the initial update of the pending changes state until after the solution loaded event.
+(The Security dialog enabled posted command routing before the solution was fully loaded)</td></tr>
+<tr><td> </td><td class="r"><a id="6380" href="http://ankhsvn.net/rev/?r=6380">
+            [r6380]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/ProgressRunner.cs, Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Optionally flash the Visual Studio title bar and tray button when the window
+ProgressRunner completes, and the VS window is visible</td></tr>
+<tr><td> </td><td class="r"><a id="6379" href="http://ankhsvn.net/rev/?r=6379">
+            [r6379]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Switch the 1.6 build to the latest SharpSvn release, 1.5999.1160</td></tr>
+<tr><td> </td><td class="r"><a id="6378" href="http://ankhsvn.net/rev/?r=6378">
+            [r6378]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> AnkhToolWindowControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the <a href="http://ankhsvn.net/issues/?id=576">issue #576</a> that causes the Pending Changes window to go completely gray
+when it is undocked.</td></tr>
 <tr><td> </td><td class="r"><a id="6376" href="http://ankhsvn.net/rev/?r=6376">
             [r6376]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/AnkhErrorHandler.cs, Utils/ErrorMessage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Provide the CommandId of the currently handled command in error mails.</td></tr>
