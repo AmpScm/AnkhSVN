@@ -158,7 +158,7 @@ namespace Ankh.Scc.ProjectMap
 
                 // Only do this if we know there is no imagelist behind the icons
                 // (This will create a cached icon handle if called on a managed project, which we only need once)
-                if (ErrorHandler.Succeeded(
+                if (imageList == IntPtr.Zero && ErrorHandler.Succeeded(
                     Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
                 {
                     icon = new ProjectIconReference((IntPtr)(int)value); // Marshalled by VS as 32 bit integer
