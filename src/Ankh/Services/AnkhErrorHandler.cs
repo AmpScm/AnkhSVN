@@ -118,7 +118,7 @@ namespace Ankh
                 _handler = context;
             }
 
-            protected IWin32Window Owner
+            IWin32Window Owner
             {
                 get { return GetService<IUIService>().GetDialogOwnerWindow(); }
             }
