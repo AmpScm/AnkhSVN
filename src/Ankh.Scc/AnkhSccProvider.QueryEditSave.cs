@@ -457,7 +457,7 @@ namespace Ankh.Scc
                 {
                     // File(s) need to be locked
                     IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                    cmdSvc.DirectlyExecCommand(AnkhCommand.Lock, toBeSvnLocked.ToArray());
+                    cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, toBeSvnLocked.ToArray());
 
                     bool notWritable = false;
                     foreach (SvnItem item in toBeSvnLocked)
