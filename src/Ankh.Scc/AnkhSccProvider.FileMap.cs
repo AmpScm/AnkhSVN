@@ -67,8 +67,6 @@ namespace Ankh.Scc
 
             if (!IsActive)
                 return; // Let the other SCC package manage it
-
-            MarkDirty(filename);
         }
 
         /// <summary>

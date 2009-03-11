@@ -42,6 +42,7 @@ namespace Ankh.Scc
         AnkhSccProvider _sccProvider;
         AnkhSccSettingStorage _sccStore;
         bool _collectHints;
+        bool _solutionLoaded;
         readonly List<string> _fileHints = new List<string>();
         readonly SortedList<string, string> _fileOrigins;
 
@@ -105,6 +106,7 @@ namespace Ankh.Scc
                 }
             }
 
+            _solutionLoaded = true;
             SccProvider.OnSolutionOpened(true);
         }
 

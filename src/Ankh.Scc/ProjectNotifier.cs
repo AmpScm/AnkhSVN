@@ -30,14 +30,12 @@ using Ankh.UI;
 
 namespace Ankh.Scc
 {
-    [GlobalService(typeof(IProjectNotifier))]
     [GlobalService(typeof(IFileStatusMonitor))]
-    sealed class ProjectNotifier : AnkhService, IProjectNotifier, IFileStatusMonitor, IVsBroadcastMessageEvents
+    sealed class ProjectNotifier : AnkhService, IFileStatusMonitor, IVsBroadcastMessageEvents
     {
         readonly object _lock = new object();
         bool _posted;
         List<SvnProject> _dirtyProjects;
-        List<SvnProject> _fullRefresh;
         uint _cookie;
 
         public ProjectNotifier(IAnkhServiceProvider context)
@@ -106,31 +104,10 @@ namespace Ankh.Scc
         }
 
         /// <summary>
-        /// Schedules a glyph refresh of a project
-        /// </summary>
-        /// <param name="project"></param>
-        public void MarkDirty(SvnProject project)
-        {
-            if (project == null)
-                throw new ArgumentNullException("project");
-
-            lock (_lock)
-            {
-                if (_dirtyProjects == null)
-                    _dirtyProjects = new List<SvnProject>();
-
-                if (!_dirtyProjects.Contains(project))
-                    _dirtyProjects.Add(project);
-
-                PostDirty(false);
-            }
-        }
-
-        /// <summary>
         /// Schedules a glyph refresh of all specified projects
         /// </summary>
         /// <param name="projects"></param>
-        public void MarkDirty(IEnumerable<SvnProject> projects)
+        public void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects)
         {
             if (projects == null)
                 throw new ArgumentNullException("projects");
@@ -198,43 +175,6 @@ namespace Ankh.Scc
             }
         }
 
-        public void MarkFullRefresh(SvnProject project)
-        {
-            if (project == null)
-                throw new ArgumentNullException("project");
-
-            lock (_lock)
-            {
-                if (_fullRefresh == null)
-                    _fullRefresh = new List<SvnProject>();
-
-                if (!_fullRefresh.Contains(project))
-                    _fullRefresh.Add(project);
-
-                PostDirty(false);
-            }
-        }
-
-        public void MarkFullRefresh(IEnumerable<SvnProject> projects)
-        {
-            if (projects == null)
-                throw new ArgumentNullException("projects");
-
-            lock (_lock)
-            {
-                if (_fullRefresh == null)
-                    _fullRefresh = new List<SvnProject>();
-
-                foreach (SvnProject project in projects)
-                {
-                    if (!_fullRefresh.Contains(project))
-                        _fullRefresh.Add(project);
-                }
-
-                PostDirty(false);
-            }
-        }
-
         internal void HandleEvent(AnkhCommand command)
         {
             List<SvnProject> dirtyProjects;
@@ -251,10 +191,8 @@ namespace Ankh.Scc
                     return;
 
                 dirtyProjects = _dirtyProjects;
-                fullRefresh = _fullRefresh;
                 dirtyCheck = _dirtyCheck;
                 _dirtyProjects = null;
-                _fullRefresh = null;
                 _dirtyCheck = null;
             }
 
@@ -263,23 +201,6 @@ namespace Ankh.Scc
                 {
                     DocumentTracker.SetDirty(file, false);
                 }
-
-            if (fullRefresh != null)
-            {
-                foreach (SvnProject project in fullRefresh)
-                {
-                    // Will handle glyphs and all
-                    if (project.RawHandle == null)
-                    {
-                        if (project.IsSolution)
-                            provider.UpdateSolutionGlyph();
-
-                        continue;
-                    }
-
-                    provider.RefreshProject(project.RawHandle);
-                }
-            }
 
             if (dirtyProjects != null)
             {
@@ -293,10 +214,7 @@ namespace Ankh.Scc
                         continue; // All IVsSccProjects have a RawHandle
                     }
 
-                    if (fullRefresh == null || !fullRefresh.Contains(project))
-                    {
-                        project.RawHandle.SccGlyphChanged(0, null, null, null);
-                    }
+                    project.RawHandle.SccGlyphChanged(0, null, null, null);
                 }
             }
         }
@@ -326,7 +244,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            MarkDirty(Mapper.GetAllProjectsContaining(path));
+            ScheduleGlyphOnlyUpdate(Mapper.GetAllProjectsContaining(path));
             ChangeManager.Refresh(path);
         }
 
@@ -335,7 +253,7 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            MarkDirty(Mapper.GetAllProjectsContaining(paths));
+            ScheduleGlyphOnlyUpdate(Mapper.GetAllProjectsContaining(paths));
             ChangeManager.Refresh(paths);
         }
 

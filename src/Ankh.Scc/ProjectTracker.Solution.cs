@@ -30,6 +30,7 @@ namespace Ankh.Scc
 
         public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
         {
+            _solutionLoaded = true;
             SccProvider.OnSolutionOpened(true);
 
             GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
@@ -39,6 +40,7 @@ namespace Ankh.Scc
 
         public int OnBeforeCloseSolution(object pUnkReserved)
         {
+            _solutionLoaded = false;
             SccProvider.OnStartedSolutionClose();
 
             IAnkhTaskManager conflicts = GetService<IAnkhTaskManager>();
