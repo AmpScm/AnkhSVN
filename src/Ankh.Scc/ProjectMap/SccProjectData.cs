@@ -225,7 +225,7 @@ namespace Ankh.Scc.ProjectMap
                     if (ErrorHandler.Succeeded(_vsProject.GetMkDocument(VSConstants.VSITEMID_ROOT, out name)))
                     {
                         _projectLocation = name;
-                        if (SvnItem.IsValidPath(name))
+                        if (SvnItem.IsValidPath(name, true))
                             _projectFile = name;
                     }
                 }
