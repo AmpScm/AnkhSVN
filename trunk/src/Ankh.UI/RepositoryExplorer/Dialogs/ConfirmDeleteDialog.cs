@@ -33,12 +33,26 @@ namespace Ankh.UI.RepositoryExplorer.Dialogs
             InitializeComponent();
         }
 
+        sealed class UriComparer : IComparer<Uri>
+        {
+            #region IComparer<Uri> Members
+
+            public int Compare(Uri x, Uri y)
+            {
+                return StringComparer.OrdinalIgnoreCase.Compare(x.ToString(), y.ToString());
+            }
+
+            #endregion
+
+            public static readonly UriComparer Default = new UriComparer();
+        }
+
         Uri[] _uris;
         public void SetUris(IEnumerable<SvnOrigin> uris)
         {
             deleteList.ClearSelected();
 
-            SortedDictionary<Uri,SvnOrigin> d = new SortedDictionary<Uri, SvnOrigin>();
+            SortedDictionary<Uri,SvnOrigin> d = new SortedDictionary<Uri, SvnOrigin>(UriComparer.Default);
             foreach (SvnOrigin o in uris)
             {
                 SvnUriTarget ut = o.Target as SvnUriTarget;
