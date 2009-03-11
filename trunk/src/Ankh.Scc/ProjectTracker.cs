@@ -78,6 +78,13 @@ namespace Ankh.Scc
             if (solution == null)
                 return;
 
+            string dir, file, user;
+            if (!ErrorHandler.Succeeded(solution.GetSolutionInfo(out dir, out file, out user))
+                || string.IsNullOrEmpty(file))
+            {
+                return; // No solution loaded, nothing to load
+            }
+
             Guid none = Guid.Empty;
             IEnumHierarchies hierEnum;
             if (!ErrorHandler.Succeeded(solution.GetProjectEnum((uint)__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION, ref none, out hierEnum)))

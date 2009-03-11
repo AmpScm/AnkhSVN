@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
@@ -29,6 +30,7 @@ namespace Ankh.Scc
     partial class PendingChangeManager : AnkhService, IPendingChangesManager
     {
         bool _isActive;
+        bool _solutionOpen;
         public PendingChangeManager(IAnkhServiceProvider context)
             : base(context)
         {
@@ -40,6 +42,24 @@ namespace Ankh.Scc
             base.OnInitialize();
 
             IsActive = true;
+
+            AnkhServiceEvents events = GetService<AnkhServiceEvents>();
+
+            events.SolutionOpened += new EventHandler(OnSolutionOpened);
+            events.SolutionClosed += new EventHandler(OnSolutionClosed);
+
+            _solutionOpen = !string.IsNullOrEmpty(GetService<ISelectionContext>().SolutionFilename);
+        }
+
+        void OnSolutionOpened(object sender, EventArgs e)
+        {
+            _solutionOpen = true;
+            ScheduleRefresh();
+        }
+
+        void OnSolutionClosed(object sender, EventArgs e)
+        {
+            _solutionOpen = false;
         }
 
         #region IPendingChangesManager Members
@@ -149,6 +169,9 @@ namespace Ankh.Scc
 
         void ScheduleRefreshPreLocked()
         {
+            if (!_solutionOpen)
+                return;
+
             if (!_refreshScheduled)
                 CommandService.PostTickCommand(ref _refreshScheduled, AnkhCommand.TickRefreshPendingTasks);
         }
