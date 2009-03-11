@@ -64,19 +64,21 @@ namespace Utils
         {
             string attributes = GetAttributes(additionalInfo);
 
-            string msg = GetMessage(ex) + Environment.NewLine + Environment.NewLine +
-                attributes;
+            StringBuilder msg = new StringBuilder();
 
-            string versionString = assembly == null ? "" : assembly.GetName().Version.ToString();
-
-            msg += Environment.NewLine + Environment.NewLine + "Version: " +
-                versionString;
-
-            msg = Uri.EscapeDataString(msg);
+            msg.AppendLine("[ Please send this as plain text to allow automatic pre-processing ]");
+            msg.AppendLine();
+            msg.AppendLine(GetMessage(ex));
+            msg.AppendLine();
+            msg.AppendLine(GetAttributes(additionalInfo));
+            msg.AppendLine();
+            msg.AppendLine("[ Please send this as plain text to allow automatic pre-processing ]");
+            msg.AppendLine();
 
             string command = string.Format("mailto:{0}?subject={1}&body={2}",
-                recipient, Uri.EscapeDataString(subject),
-                msg);
+                recipient, 
+                Uri.EscapeDataString(subject),
+                Uri.EscapeDataString(msg.ToString()));
 
             Debug.WriteLine(command);
             Process p = new Process();
