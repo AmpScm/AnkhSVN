@@ -31,6 +31,7 @@ namespace Ankh.Configuration
         string _diffExePath;
         string _patchExePath;
         bool _interactiveMergeOnConflict;
+        bool _flashWindow;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -70,6 +71,13 @@ namespace Ankh.Configuration
         {
             get { return _interactiveMergeOnConflict; }
             set { _interactiveMergeOnConflict = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool FlashWindowWhenOperationCompletes
+        {
+            get { return _flashWindow; }
+            set { _flashWindow = value; }
         }
     }
 }
