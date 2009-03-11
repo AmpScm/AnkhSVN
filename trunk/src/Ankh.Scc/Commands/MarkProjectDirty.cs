@@ -37,7 +37,7 @@ namespace Ankh.Scc.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ProjectNotifier pn = e.Context.GetService<IProjectNotifier>() as ProjectNotifier;
+            ProjectNotifier pn = e.GetService<ProjectNotifier>(typeof(IFileStatusMonitor));
 
             Debug.Assert(pn != null, "ProjectNotifier must be available!", "ProjectNotifier service not available");
             if (pn != null)

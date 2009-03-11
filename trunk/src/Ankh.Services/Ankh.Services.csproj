@@ -162,7 +162,6 @@
     <Compile Include="VS\IAnkhEditorResolver.cs" />
     <Compile Include="VS\IAnkhIdleProcessor.cs" />
     <Compile Include="VS\IAnkhSolutionExplorerWindow.cs" />
-    <Compile Include="Scc\IProjectNotifier.cs" />
     <Compile Include="VS\IAnkhSolutionSettings.cs" />
     <Compile Include="VS\IAnkhTempDirManager.cs" />
     <Compile Include="VS\IAnkhTempFileManager.cs" />

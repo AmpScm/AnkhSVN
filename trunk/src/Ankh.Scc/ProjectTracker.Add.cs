@@ -190,15 +190,6 @@ namespace Ankh.Scc
             List<string> selectedFiles = null;
             SortedList<string, string> copies = null;
 
-            for (int i = 0; i < cFiles; i++)
-            {
-                string s = rgpszMkDocuments[i];
-                if (!string.IsNullOrEmpty(s) && SvnItem.IsValidPath(s))
-                {
-                    StatusCache.MarkDirty(s);
-                }
-            }
-
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
@@ -220,143 +211,16 @@ namespace Ankh.Scc
 
                     newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
-                    if ((!_fileOrigins.TryGetValue(newName, out origin) || (origin == null)))
-                    {
-                        // We haven't got the project file origin for free via OnQueryAddFilesEx
-                        // So:
-                        //  1 - The file is really new or
-                        //  2 - The file is drag&dropped into the project from the solution explorer or
-                        //  3 - The file is copy pasted into the project from an other project or
-                        //  4 - The file is added via add existing item or
-                        //  5 - The file is added via drag&drop from another application (OLE drop)
-                        //
-                        // The only way to determine is walking through these options
+                    if(_solutionLoaded)
+                        TryFindOrigin(newName, ref selectedFiles, out origin);
 
-                        FileInfo newInfo = new FileInfo(newName);
+                    SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
 
-                        // 2 -  If the file is drag&dropped in the solution explorer
-                        //      the current selection is still the original selection
-                        if (selectedFiles == null)
-                        {
-                            if (SelectionContext != null)
-                            {
-                                // BH: resx files are not correctly included if we don't retrieve this list recursive
-                                selectedFiles = new List<string>(SelectionContext.GetSelectedFiles(true));
-                            }
-                            else
-                                selectedFiles = new List<string>();
-                        }
-
-
-                        // **************** Check the current selection *************
-                        // Checks for drag&drop actions. The selection contains the original list of files
-                        foreach (string file in selectedFiles)
-                        {
-                            if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
-                            {
-                                FileInfo orgInfo = new FileInfo(file);
-
-                                if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                                {
-                                    // BH: Don't verify filedates, etc; as they shouldn't be copied
-                                    // We can be reasonably be sure its the same file. Same name and same length
-
-                                    if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                    {
-                                        // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                        _fileOrigins[newName] = origin = file;
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-
-                        // **************** Check external hints ********************
-                        // Checks for HandsOff events send by the project system
-                        if (origin == null)
-                        {
-                            foreach (string file in _fileHints)
-                            {
-                                if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    FileInfo orgInfo = new FileInfo(file);
-
-                                    if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                                    {
-                                        // BH: Don't verify filedates, etc; as they shouldn't be copied
-
-                                        if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                        {
-                                            // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                            _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
-
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // **************** Check the clipboard *********************
-                        // 3 - Copy & Paste in the solution explorer:
-                        //     The original paths are still on the clipboard
-                        if (origin == null && System.Windows.Forms.Clipboard.ContainsText())
-                        {
-                            // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
-
-                            // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
-
-                            string text = System.Windows.Forms.Clipboard.GetText();
-
-                            if (!string.IsNullOrEmpty(text))
-                            {
-                                foreach (string part in text.Split('\n'))
-                                {
-                                    string s = part.Trim();
-                                    Uri uri;
-
-                                    if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
-                                        break;
-
-                                    if (uri.IsFile)
-                                    {
-                                        string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
-
-                                        if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            FileInfo orgInfo = new FileInfo(file);
-
-                                            if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
-                                            {
-                                                // BH: Don't verify filedates, etc; as they shouldn't be copied
-
-                                                if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
-                                                {
-                                                    // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
-                                                    _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
-
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-
-                        // The clipboard seems to have some other format which might contain other info
-                    }
-
-                    if (sccProject != null)
-                        SccProvider.OnProjectFileAdded(sccProject, newName,
-                            origin, rgFlags[iFile]);
-
-                    if (!string.IsNullOrEmpty(origin) && SccProvider.IsActive)
+                    if (!string.IsNullOrEmpty(origin))
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+
                         copies[newName] = origin;
                     }
                 }
@@ -421,6 +285,138 @@ namespace Ankh.Scc
                 }
 
             return VSConstants.S_OK;
+        }
+
+        private void TryFindOrigin(string newName, ref List<string> selectedFiles, out string origin)
+        {
+            if ((!_fileOrigins.TryGetValue(newName, out origin) || (origin == null)))
+            {
+                // We haven't got the project file origin for free via OnQueryAddFilesEx
+                // So:
+                //  1 - The file is really new or
+                //  2 - The file is drag&dropped into the project from the solution explorer or
+                //  3 - The file is copy pasted into the project from an other project or
+                //  4 - The file is added via add existing item or
+                //  5 - The file is added via drag&drop from another application (OLE drop)
+                //
+                // The only way to determine is walking through these options
+
+                FileInfo newInfo = new FileInfo(newName);
+
+                // 2 -  If the file is drag&dropped in the solution explorer
+                //      the current selection is still the original selection
+                if (selectedFiles == null)
+                {
+                    if (SelectionContext != null)
+                    {
+                        // BH: resx files are not correctly included if we don't retrieve this list recursive
+                        selectedFiles = new List<string>(SelectionContext.GetSelectedFiles(true));
+                    }
+                    else
+                        selectedFiles = new List<string>();
+                }
+
+
+                // **************** Check the current selection *************
+                // Checks for drag&drop actions. The selection contains the original list of files
+                foreach (string file in selectedFiles)
+                {
+                    if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        FileInfo orgInfo = new FileInfo(file);
+
+                        if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
+                        {
+                            // BH: Don't verify filedates, etc; as they shouldn't be copied
+                            // We can be reasonably be sure its the same file. Same name and same length
+
+                            if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
+                            {
+                                // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
+                                _fileOrigins[newName] = origin = file;
+
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // **************** Check external hints ********************
+                // Checks for HandsOff events send by the project system
+                if (origin == null)
+                {
+                    foreach (string file in _fileHints)
+                    {
+                        if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            FileInfo orgInfo = new FileInfo(file);
+
+                            if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
+                            {
+                                // BH: Don't verify filedates, etc; as they shouldn't be copied
+
+                                if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
+                                {
+                                    // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
+                                    _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // **************** Check the clipboard *********************
+                // 3 - Copy & Paste in the solution explorer:
+                //     The original paths are still on the clipboard
+                if (origin == null && System.Windows.Forms.Clipboard.ContainsText())
+                {
+                    // TODO: BH: Look into using IVsUIHierWinClipboardHelper to parse the clipboard data!
+
+                    // In some cases (Websites) the solution explorer just dumps a bunch of file:// Url's on the clipboard
+
+                    string text = System.Windows.Forms.Clipboard.GetText();
+
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        foreach (string part in text.Split('\n'))
+                        {
+                            string s = part.Trim();
+                            Uri uri;
+
+                            if (!Uri.TryCreate(s, UriKind.Absolute, out uri))
+                                break;
+
+                            if (uri.IsFile)
+                            {
+                                string file = SvnTools.GetNormalizedFullPath(uri.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped));
+
+                                if (Path.GetFileName(file) == newInfo.Name && !string.Equals(file, newInfo.FullName, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    FileInfo orgInfo = new FileInfo(file);
+
+                                    if (orgInfo.Exists && newInfo.Exists && orgInfo.Length == newInfo.Length)
+                                    {
+                                        // BH: Don't verify filedates, etc; as they shouldn't be copied
+
+                                        if (FileContentsEquals(orgInfo.FullName, newInfo.FullName))
+                                        {
+                                            // TODO: Determine if we should verify the contents (BH: We probably should to be 100% sure; but perf impact)
+                                            _fileOrigins[newName] = origin = SvnTools.GetNormalizedFullPath(file);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                // The clipboard seems to have some other format which might contain other info
+            }
         }
 
         /// <summary>

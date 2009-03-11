@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using Ankh.Selection;
 
 namespace Ankh.Scc
 {
@@ -48,6 +49,12 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         void ScheduleGlyphUpdate(IEnumerable<string> path);
+
+        /// <summary>
+        /// Schedules a glyph only update for the specified project
+        /// </summary>
+        /// <param name="projects">The projects.</param>
+        void ScheduleGlyphOnlyUpdate(IEnumerable<SvnProject> projects);
 
         /// <summary>
         /// Adds the specified path to the paths to monitor for pending changes

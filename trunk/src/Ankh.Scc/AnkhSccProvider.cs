@@ -139,14 +139,14 @@ namespace Ankh.Scc
                 _active = true;
 
                 // Delayed flush all glyphs of all projects when a user enables us.
-                IProjectNotifier pn = GetService<IProjectNotifier>();
+                IFileStatusMonitor pn = GetService<IFileStatusMonitor>();
 
                 if (pn != null)
                 {
                     List<SvnProject> allProjects = new List<SvnProject>(GetAllProjects());
                     allProjects.Add(SvnProject.Solution);
 
-                    pn.MarkDirty(allProjects);
+                    pn.ScheduleGlyphOnlyUpdate(allProjects);
                 }
             }
 
