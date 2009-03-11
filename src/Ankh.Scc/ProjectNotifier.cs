@@ -178,7 +178,6 @@ namespace Ankh.Scc
         internal void HandleEvent(AnkhCommand command)
         {
             List<SvnProject> dirtyProjects;
-            List<SvnProject> fullRefresh;
             HybridCollection<string> dirtyCheck;
 
             AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();
