@@ -94,8 +94,8 @@ namespace Utils
             StringBuilder builder = new StringBuilder();
             foreach (DictionaryEntry de in additionalInfo)
             {
-                builder.AppendFormat("{0}={1}&", Uri.EscapeDataString((string)de.Key),
-                    Uri.EscapeDataString((string)de.Value));
+                builder.AppendFormat("{0}={1}", (string)de.Key, Uri.EscapeDataString((string)de.Value));
+                builder.AppendLine();
             }
 
             return builder.ToString();
