@@ -1088,7 +1088,7 @@ namespace Ankh
             int lc = path.LastIndexOf(':');
             if (lc > 1)
                 return false;
-            else if (lc == 1 && path.IndexOf(Path.DirectorySeparatorChar) == 2)
+            else if (lc == 1 && path.IndexOf('\\') == 2)
                 return true;
             else if (lc < 0 && path.StartsWith(@"\\", StringComparison.Ordinal))
                 return true;
@@ -1098,6 +1098,30 @@ namespace Ankh
             return false;
         }
 
+        public static bool IsValidPath(string path, bool extraChecks)
+        {
+            if (!IsValidPath(path))
+                return false;
+
+            if (extraChecks)
+                foreach (char c in path)
+                    switch (c)
+                    {
+                        case '<':
+                        case '>':
+                        case '|':
+                        case '\"':
+                        case '*':
+                        case '?':
+                            return false;
+                        default:
+                            if (c < 32)
+                                return false;
+                            break;
+                    }
+
+            return true;
+        }
         /// <summary>
         /// Determines whether the current instance is below the specified path
         /// </summary>
