@@ -77,18 +77,16 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             if (SvnItem.IsDirectory)
             {
-                try
+                bool canRead;
+
+                foreach (Ankh.Scc.SccFileSystemNode node in Ankh.Scc.SccFileSystemNode.GetDirectoryNodes(SvnItem.FullPath, out canRead))
                 {
-                    Directory.GetDirectories(SvnItem.FullPath);
+                    canRead = true;
+                    break;
                 }
-                catch(UnauthorizedAccessException)
-                {
+
+                if (!canRead)
                     return;
-                }
-                catch(IOException)
-                {
-                    return;
-                }
             }
 
             StateImageIndex = (int)TreeView.StatusMapper.GetStatusImageForSvnItem(SvnItem);
