@@ -178,21 +178,16 @@ namespace Ankh.UI.WorkingCopyExplorer
                     {
                         if (fsNode.SvnItem.IsDirectory)
                         {
-                            DirectoryInfo di = new DirectoryInfo(fsNode.SvnItem.FullPath);
-                            try
+                            bool canRead;
+
+                            foreach (Ankh.Scc.SccFileSystemNode node in Ankh.Scc.SccFileSystemNode.GetDirectoryNodes(fsNode.SvnItem.FullPath, out canRead))
                             {
-                                di.GetDirectories();
+                                canRead = true;
+                                break;
                             }
-                            catch (IOException)
-                            {
-                                // We cannot browse this directory
+
+                            if (!canRead)
                                 continue;
-                            }
-                            catch (UnauthorizedAccessException)
-                            {
-                                // We cannot browse this directory
-                                continue;
-                            }
                         }
                         FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem);
 
