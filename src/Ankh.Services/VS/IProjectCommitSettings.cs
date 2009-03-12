@@ -89,6 +89,13 @@ namespace Ankh.VS
         /// <param name="issueId">The issue id.</param>
         /// <returns></returns>
         string BuildLogMessage(string message, string issueId);
+
+        /// <summary>
+        /// Gets the log summary.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        string GetLogSummary(string message);
     }
 
     public class IssueMarker

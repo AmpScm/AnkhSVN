@@ -99,11 +99,13 @@ namespace Ankh.Settings
             public int? LogMessageMinSize;
             public int? LockMessageMinSize;
             public int? LogWidth;
+            public string LogSummary;
 
             public ReadOnlyCollection<string> LogRegexes;
             public Regex AllInOneRe;
-            public Regex PrepareRe;
-            public Regex SplitRe;
+            public Regex LogPrepareRe;
+            public Regex LogSplitRe;
+            public Regex LogSummaryRe;
 
             public bool BrokenRegex;
         }
@@ -345,6 +347,10 @@ namespace Ankh.Settings
                     {
                         cache.LogWidth = intValue;
                     }
+                    break;
+                case SvnPropertyNames.TortoiseSvnLogSummary:
+                    if (cache.LogSummary == null)
+                        cache.LogSummary = pv.StringValue;
                     break;
             }
         }
