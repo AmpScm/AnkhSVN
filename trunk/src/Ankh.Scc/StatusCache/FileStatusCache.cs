@@ -411,7 +411,16 @@ namespace Ankh.Scc.StatusCache
         {
             // Note: There is a lock(_lock) around this in our caller
 
-            DirectoryInfo dir = new DirectoryInfo(walkPath);
+            DirectoryInfo dir;
+
+            try
+            {
+                dir = new DirectoryInfo(walkPath);
+            }
+            catch (PathTooLongException e)
+            {
+                throw new PathTooLongException(string.Format("Path to long on '{0}' ({1} characters)", walkPath, walkPath.Length), e);
+            }
 
             if (!dir.Exists)
                 return;
