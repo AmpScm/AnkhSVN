@@ -4,18 +4,49 @@ using System.Text;
 using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using SharpSvn;
+using System.IO;
 
 namespace Ankh.Scc
 {
-    sealed class SccFilesystemNode
+    /// <summary>
+    /// Long path capable <see cref="FileSystemInfo"/> variant
+    /// </summary>
+    public sealed class SccFileSystemNode
     {
         readonly NativeMethods.WIN32_FIND_DATA _findData;
-        SccFilesystemNode(NativeMethods.WIN32_FIND_DATA findData)
+        string _basePath;
+        string _fullPath;
+        SccFileSystemNode(string basePath, NativeMethods.WIN32_FIND_DATA findData)
         {
-            if (findData == null)
-                throw new ArgumentNullException("findData");
-
+            _basePath = basePath;
             _findData = findData;
+        }
+
+        /// <summary>
+        /// Gets the attributes.
+        /// </summary>
+        /// <value>The attributes.</value>
+        public FileAttributes Attributes
+        {
+            get { return (FileAttributes)_findData.dwFileAttributes; }
+        }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name
+        {
+            get { return _findData.cFileName; }
+        }
+
+        /// <summary>
+        /// Gets the full path.
+        /// </summary>
+        /// <value>The full path.</value>
+        public string FullPath
+        {
+            get { return _fullPath ?? (_fullPath = _basePath + Name); }
         }
 
         /// <summary>
@@ -23,7 +54,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public static IEnumerable<SccFilesystemNode> GetDirectoryNodes(string path)
+        public static IEnumerable<SccFileSystemNode> GetDirectoryNodes(string path)
         {
             bool canRead;
             return GetDirectoryNodes(path, out canRead);
@@ -35,17 +66,17 @@ namespace Ankh.Scc
         /// <param name="path">The path.</param>
         /// <param name="canRead">if set to <c>true</c> [can read].</param>
         /// <returns></returns>
-        public static IEnumerable<SccFilesystemNode> GetDirectoryNodes(string path, out bool canRead)
+        public static IEnumerable<SccFileSystemNode> GetDirectoryNodes(string path, out bool canRead)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
             string fullPath = path;
 
-            if (!fullPath.EndsWith("\\"))
-                fullPath += "\\*";
-            else
-                fullPath += "*";
+            if (!path.EndsWith("\\"))
+                path += "\\";
+            
+            fullPath = path + "*";
 
             if (fullPath.Length > 240)
             {
@@ -55,39 +86,42 @@ namespace Ankh.Scc
                     fullPath = "\\\\?\\" + fullPath;
             }
 
-            NativeMethods.WIN32_FIND_DATA firstResult;
-            SafeFindHandle sh = NativeMethods.FindFirstFileW(fullPath, out firstResult);
+            NativeMethods.WIN32_FIND_DATA data;
+            SafeFindHandle sh = NativeMethods.FindFirstFileW(fullPath, out data);
 
             if (sh.IsInvalid)
             {
                 canRead = false;
-                return new SccFilesystemNode[0];
+                return new SccFileSystemNode[0];
             }
             else
             {
                 canRead = true;
-                return DoGetDirectoryNodes(firstResult, sh);
+                return DoGetDirectoryNodes(new SccFileSystemNode(path, data), sh);
             }
         }
 
-        static IEnumerable<SccFilesystemNode> DoGetDirectoryNodes(NativeMethods.WIN32_FIND_DATA result, SafeFindHandle findHandle)
+        static IEnumerable<SccFileSystemNode> DoGetDirectoryNodes(SccFileSystemNode result, SafeFindHandle findHandle)
         {
+            string basePath = result._basePath;
             using (findHandle)
             {
                 if (!IsDotPath(result))
-                    yield return new SccFilesystemNode(result);
+                    yield return result;
 
-                while (NativeMethods.FindNextFileW(findHandle, out result))
+                NativeMethods.WIN32_FIND_DATA data;
+                while (NativeMethods.FindNextFileW(findHandle, out data))
                 {
+                    result = new SccFileSystemNode(basePath, data);
                     if (!IsDotPath(result))
-                        yield return new SccFilesystemNode(result);
+                        yield return result;
                 }
             }
         }
 
-        private static bool IsDotPath(NativeMethods.WIN32_FIND_DATA result)
+        private static bool IsDotPath(SccFileSystemNode result)
         {
-            string p = result.cFileName;
+            string p = result.Name;
 
             if (p.Length == 1 && p[0] == '.')
                 return true;
@@ -127,7 +161,7 @@ namespace Ankh.Scc
             public static extern bool FindNextFileW(SafeFindHandle hFindFile, out WIN32_FIND_DATA lpFindFileData);
 
             [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-            public class WIN32_FIND_DATA
+            public struct WIN32_FIND_DATA
             {
                 public uint dwFileAttributes;
                 public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
