@@ -117,6 +117,7 @@ namespace Ankh.UI
 
         void IAnkhToolWindowControl.OnFrameCreated(EventArgs e)
         {
+            OnFrameCreated(e);
         }
 
         /// <summary>
