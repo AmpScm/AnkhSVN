@@ -408,10 +408,46 @@ namespace Ankh.VS.Dialogs
                 }
             }
 
-            if (!ErrorHandler.Succeeded(hr) &&
-                (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97 || pguidCmdGroup == VSConstants.VSStd2K))
+            if (!ErrorHandler.Succeeded(hr))
             {
-                return VSConstants.S_OK;
+                bool skipProcessing =false;
+                if (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97)
+                {
+                    VSConstants.VSStd97CmdID id = (VSConstants.VSStd97CmdID)nCmdID;
+                    switch (id)
+                    {
+                        case VSConstants.VSStd97CmdID.SearchCombo:
+                        case VSConstants.VSStd97CmdID.SearchGetList:
+                        case VSConstants.VSStd97CmdID.SearchSetCombo:
+                        case VSConstants.VSStd97CmdID.SolutionCfg:
+                        case VSConstants.VSStd97CmdID.SolutionCfgGetList:
+                            break;
+                        default:
+                            skipProcessing = (nCmdID <= (uint)VSConstants.VSStd97CmdID.StandardMax);
+                            break;
+                    }
+                }
+                else if (pguidCmdGroup == VSConstants.VSStd2K)
+                {
+                    VSConstants.VSStd2KCmdID id = (VSConstants.VSStd2KCmdID)nCmdID;
+
+                    switch (id)
+                    {                        
+                        case VSConstants.VSStd2KCmdID.STYLE:
+                        case VSConstants.VSStd2KCmdID.STYLEGETLIST:
+                        case VSConstants.VSStd2KCmdID.FONTSTYLE:
+                        case VSConstants.VSStd2KCmdID.FONTSTYLEGETLIST:
+                        case VSConstants.VSStd2KCmdID.SolutionPlatform:
+                        case VSConstants.VSStd2KCmdID.SolutionPlatformGetList:
+                            break;
+                        default:
+                            skipProcessing = true;
+                            break;
+                    }
+                }
+
+                if(skipProcessing)
+                    return VSConstants.S_OK;
             }
             
             return hr;
@@ -429,19 +465,6 @@ namespace Ankh.VS.Dialogs
                     if (((hr != (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) && (hr != (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)))
                         break;
                 }
-            }
-
-            if (((hr == (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED) || (hr == (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP)) &&
-                (pguidCmdGroup == VSConstants.GUID_VSStandardCommandSet97 || pguidCmdGroup == VSConstants.VSStd2K))
-            {
-                // Ok, none of the other handlers handled the command
-                // By default we disable all standard keyboard commands to remove strange context switches
-                // Eg. building from the commit box
-
-                // We let all other commands pass unmodified!
-
-                prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_SUPPORTED;
-                return VSConstants.S_OK;
             }
             
             return hr;
