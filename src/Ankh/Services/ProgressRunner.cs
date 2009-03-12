@@ -330,7 +330,8 @@ namespace Ankh
         }
 
         [DllImport("user32.dll")]
-        public static extern int FlashWindowEx(ref FLASHWINFO pfwi);
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool FlashWindowEx(ref FLASHWINFO pfwi);
     }
 
     /// <summary>
