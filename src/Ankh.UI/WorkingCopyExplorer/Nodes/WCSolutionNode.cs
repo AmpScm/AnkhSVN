@@ -69,11 +69,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             }
         }
 
-        public override System.IO.FileSystemInfo FileInfo
-        {
-            get { return new DirectoryInfo(SvnItem.FullPath); }
-        }
-
         public override bool IsContainer
         {
             get

@@ -176,10 +176,9 @@ namespace Ankh.UI.WorkingCopyExplorer
                     //SvnItem svnItem = item.SvnItem;
                     if (fsNode != null)
                     {
-                        FileSystemInfo fi = fsNode.FileInfo;
                         if (fsNode.SvnItem.IsDirectory)
                         {
-                            DirectoryInfo di = (DirectoryInfo)fi;
+                            DirectoryInfo di = new DirectoryInfo(fsNode.SvnItem.FullPath);
                             try
                             {
                                 di.GetDirectories();
@@ -195,7 +194,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                                 continue;
                             }
                         }
-                        FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem, fi);
+                        FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem);
 
                         Items.Add(lvi);
 

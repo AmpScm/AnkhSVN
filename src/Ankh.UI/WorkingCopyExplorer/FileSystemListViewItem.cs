@@ -27,16 +27,14 @@ namespace Ankh.UI.WorkingCopyExplorer
     class FileSystemListViewItem : SmartListViewItem
     {
         readonly SvnItem _svnItem;
-        readonly FileSystemInfo _info;
 
-        public FileSystemListViewItem(SmartListView view, SvnItem item, FileSystemInfo info)
+        public FileSystemListViewItem(SmartListView view, SvnItem item)
             : base(view)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
             
             _svnItem = item;
-            _info = info;
 
             ImageIndex = View.IconMapper.GetIcon(item.FullPath);
 
@@ -53,16 +51,10 @@ namespace Ankh.UI.WorkingCopyExplorer
             [DebuggerStepThrough]
             get { return _svnItem; }
         }
-
-        public FileSystemInfo FSInfo
-        {
-            [DebuggerStepThrough]
-            get { return _info; }
-        }
-
+    
         private void RefreshValues()
         {
-            bool exists = FSInfo.Exists;
+            bool exists = SvnItem.Exists;
             string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
 
             SetValues(
@@ -86,12 +78,12 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         internal bool IsDirectory
         {
-            get { return FSInfo is DirectoryInfo; }
+            get { return SvnItem.IsDirectory; }
         }
 
         internal DateTime Modified
         {
-            get { return FSInfo.LastWriteTime; }
+            get { return SvnItem.Modified; }
 
         }
     }

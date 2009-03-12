@@ -25,19 +25,13 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         {
             get { return _statusCache ?? (_statusCache = Context.GetService<IFileStatusCache>()); }
         }
-
-        public abstract FileSystemInfo FileInfo
-        {
-            get;
-        }
-
+ 
         public override string Title
         {
             get { return string.IsNullOrEmpty(_item.Name) ? _item.FullPath : _item.Name; }
         }
-
-        
     }
+
     class WCFileNode : WCFileSystemNode
     {
         public WCFileNode(IAnkhServiceProvider context, WCTreeNode parent, SvnItem item)
@@ -51,11 +45,6 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
             {
                 return false;
             }
-        }
-
-        public override FileSystemInfo FileInfo
-        {
-            get { return new FileInfo(SvnItem.FullPath); }
         }
 
         public override int ImageIndex
@@ -94,16 +83,12 @@ namespace Ankh.UI.WorkingCopyExplorer.Nodes
         }
         
     }
+
     class WCDirectoryNode : WCFileSystemNode
     {
         public WCDirectoryNode(IAnkhServiceProvider context, WCTreeNode parent, SvnItem item)
             : base(context, parent, item)
         {
-        }
-
-        public override FileSystemInfo FileInfo
-        {
-            get { return new DirectoryInfo(SvnItem.FullPath); }
         }
 
         public override int ImageIndex
