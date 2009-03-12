@@ -163,17 +163,17 @@ namespace Ankh.Settings
             if (_cache.BrokenRegex)
                 return new IssueMarker[0];
 
-            if (sc.AllInOneRe == null && sc.PrepareRe == null && items != null)
+            if (sc.AllInOneRe == null && sc.LogPrepareRe == null && items != null)
                 try
                 {
                     switch (items.Count)
                     {
                         case 1:
-                            sc.AllInOneRe = new Regex(items[0], RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                            sc.AllInOneRe = new Regex(items[0], RegexOptions.CultureInvariant | RegexOptions.Multiline);
                             break;
                         case 2:
-                            sc.PrepareRe = new Regex(items[0], RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                            sc.SplitRe = new Regex(items[1], RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                            sc.LogPrepareRe = new Regex(items[0], RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                            sc.LogSplitRe = new Regex(items[1], RegexOptions.CultureInvariant | RegexOptions.Multiline);
                             break;
                         default:
                             sc.BrokenRegex = true;
@@ -187,7 +187,7 @@ namespace Ankh.Settings
 
             if (sc.AllInOneRe != null)
                 return PerformAllInOne(sc, logmessage);
-            else if (sc.PrepareRe != null && sc.SplitRe != null)
+            else if (sc.LogPrepareRe != null && sc.LogSplitRe != null)
                 return PerformSplit(sc, logmessage);
 
             sc.BrokenRegex = true;
@@ -201,16 +201,21 @@ namespace Ankh.Settings
                 if (!m.Success)
                     continue;
 
-                foreach (Capture c in m.Captures)
+                bool first = true;
+                foreach (Group g in m.Groups)
                 {
-                    yield return new IssueMarker(c.Index, c.Length, c.Value);
+                    if (first)
+                        first = false;
+                    else
+                        foreach (Capture c in g.Captures)
+                            yield return new IssueMarker(c.Index, c.Length, c.Value);
                 }
             }
         }
 
         private IEnumerable<IssueMarker> PerformSplit(SettingsCache cache, string logmessage)
         {
-            foreach (Match m in cache.PrepareRe.Matches(logmessage))
+            foreach (Match m in cache.LogPrepareRe.Matches(logmessage))
             {
                 if (!m.Success)
                     continue;
@@ -219,7 +224,7 @@ namespace Ankh.Settings
                 {
                     string text = logmessage.Substring(c.Index, c.Length);
 
-                    foreach (Match sm in cache.SplitRe.Matches(c.Value))
+                    foreach (Match sm in cache.LogSplitRe.Matches(c.Value))
                     {
                         if (!sm.Success)
                             continue;
@@ -231,6 +236,43 @@ namespace Ankh.Settings
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the log summary.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <returns></returns>
+        public string GetLogSummary(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return "";
+
+            RefreshIfDirty();
+
+            SettingsCache sc = _cache;
+
+            if (sc.LogSummary == null)
+                return message;
+            else if (_cache.LogSummaryRe == null)
+            {
+                try
+                {
+                    _cache.LogSummaryRe = new Regex(_cache.LogSummary, RegexOptions.Multiline | RegexOptions.CultureInvariant);
+                }
+                catch (ArgumentException)
+                {
+                    sc.LogSummary = null;
+                    return message;
+                }
+            }
+
+            Match m = _cache.LogSummaryRe.Match(message);
+
+            if (m.Success && m.Groups.Count > 0 && m.Groups[1].Length > 0)
+                return m.Groups[1].Value;
+
+            return message;
         }
 
         /// <summary>
