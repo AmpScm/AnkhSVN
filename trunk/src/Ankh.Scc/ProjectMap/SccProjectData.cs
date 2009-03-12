@@ -180,7 +180,7 @@ namespace Ankh.Scc.ProjectMap
                     {
                         string dir = name as string;
 
-                        if (!string.IsNullOrEmpty(dir) && SvnItem.IsValidPath(dir))
+                        if (!string.IsNullOrEmpty(dir) && SvnItem.IsValidPath(dir, true))
                             dir = SvnTools.GetNormalizedFullPath(dir);
                         else
                         {
