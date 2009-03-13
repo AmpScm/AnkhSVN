@@ -40,8 +40,8 @@ namespace Ankh.Commands
     [Command(AnkhCommand.DocumentHistory)]
     [Command(AnkhCommand.ProjectHistory)]
     [Command(AnkhCommand.SolutionHistory)]
-    [Command(AnkhCommand.ReposExplorerLog)]
-    [Command(AnkhCommand.AnnotateShowLog)]    
+    [Command(AnkhCommand.ReposExplorerLog, AlwaysAvailable = true)]
+    [Command(AnkhCommand.AnnotateShowLog, AlwaysAvailable = true)]
     sealed class LogCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -226,8 +226,8 @@ namespace Ankh.Commands
 
                     break;
             }
-        }        
-        
+        }
+
         static void PerformLog(IAnkhServiceProvider context, ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
         {
             IAnkhPackage package = context.GetService<IAnkhPackage>();
