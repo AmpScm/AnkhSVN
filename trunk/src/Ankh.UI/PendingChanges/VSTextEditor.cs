@@ -260,8 +260,6 @@ namespace Ankh.UI.PendingChanges
             documentForm.AddCommandTarget(CommandTarget);
         }
 
-        #region Methods
-
         /// <summary>
         /// Creation and initialization of <see cref="CodeEditorNativeWindow"/> class.
         /// </summary>
@@ -505,9 +503,7 @@ namespace Ankh.UI.PendingChanges
             if (!DesignMode)
                 UpdateSize();
         }
-
-        #endregion
-
+        
         string _text;
 
         [EditorBrowsable(EditorBrowsableState.Always)]
