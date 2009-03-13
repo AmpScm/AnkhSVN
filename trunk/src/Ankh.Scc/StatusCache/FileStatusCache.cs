@@ -62,11 +62,6 @@ namespace Ankh.Scc.StatusCache
             get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
         }
 
-        void Ankh.Scc.IFileStatusCache.UpdateStatus(string directory, SvnDepth depth)
-        {
-            RefreshPath(SvnTools.GetNormalizedFullPath(directory), SvnNodeKind.Unknown, depth);
-        }
-
         void Ankh.Scc.IFileStatusCache.RefreshItem(SvnItem item, SvnNodeKind nodeKind)
         {
             if (item == null)
@@ -267,18 +262,18 @@ namespace Ankh.Scc.StatusCache
                 case SvnNodeKind.Directory:
                     walkingDirectory = true;
                     break;
-                default:
-                    if (File.Exists(path))
-                    {
-                        pathKind = SvnNodeKind.File;
-                        goto case SvnNodeKind.File;
-                    }
-                    break;
                 case SvnNodeKind.File:
                     if (depth != SvnDepth.Empty)
                     {
                         walkPath = SvnTools.GetNormalizedDirectoryName(path);
                         walkingDirectory = true;
+                    }
+                    break;
+                default:
+                    if (File.Exists(path)) // ### Not long path safe
+                    {
+                        pathKind = SvnNodeKind.File;
+                        goto case SvnNodeKind.File;
                     }
                     break;
             }
@@ -411,41 +406,21 @@ namespace Ankh.Scc.StatusCache
         {
             // Note: There is a lock(_lock) around this in our caller
 
-            DirectoryInfo dir;
+            bool canRead;
+            string adminName = SvnClient.AdministrativeDirectoryName;
+            foreach (SccFileSystemNode node in SccFileSystemNode.GetDirectoryNodes(walkPath, out canRead))
+            {
+                if (depth < SvnDepth.Files)
+                    break;
 
-            try
-            {
-                dir = new DirectoryInfo(walkPath);
-            }
-            catch (PathTooLongException e)
-            {
-                throw new PathTooLongException(string.Format("Path to long on '{0}' ({1} characters)", walkPath, walkPath.Length), e);
-            }
+                if (string.Equals(node.Name, adminName, StringComparison.OrdinalIgnoreCase) || node.IsHiddenOrSystem)
+                    continue;
 
-            if (!dir.Exists)
-                return;
-
-            SvnItem item;
-            if (!_map.TryGetValue(walkPath, out item))
-            {
-                StoreItem(CreateItem(walkPath, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
-                // Mark it as existing if we are sure 
-            }
-            else
-            {
-                ISvnItemUpdate updateItem = item;
-                if (updateItem.ShouldRefresh())
-                    updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.Directory);
-            }
-
-            if (depth >= SvnDepth.Files)
-            {
-                foreach (FileInfo file in dir.GetFiles())
+                SvnItem item;
+                if (node.IsFile)
                 {
-                    string path = SvnTools.GetNormalizedFullPath(file.FullName);
-
-                    if (!_map.TryGetValue(path, out item))
-                        StoreItem(CreateItem(path, NoSccStatus.NotVersioned, SvnNodeKind.File));
+                    if (!_map.TryGetValue(node.FullPath, out item))
+                        StoreItem(CreateItem(node.FullPath, NoSccStatus.NotVersioned, SvnNodeKind.File));
                     else
                     {
                         ISvnItemUpdate updateItem = item;
@@ -453,24 +428,31 @@ namespace Ankh.Scc.StatusCache
                             updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.File);
                     }
                 }
-            }
-
-            if (depth >= SvnDepth.Children)
-            {
-                string adminName = SvnClient.AdministrativeDirectoryName;
-                foreach (DirectoryInfo sd in dir.GetDirectories())
+                else
                 {
-                    if (!string.Equals(sd.Name, adminName) && 0 == (sd.Attributes & (FileAttributes.Hidden | FileAttributes.System)))
-                    {
-                        string path = SvnTools.GetNormalizedFullPath(sd.FullName);
-                        if (!_map.ContainsKey(path))
-                        {
-                            StoreItem(CreateItem(path, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
-                        }
-                    }
+                    if (!_map.TryGetValue(node.FullPath, out item))
+                        StoreItem(CreateItem(node.FullPath, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
+                    // Don't clear state of a possible working copy
                 }
             }
 
+            if (canRead) // The directory exists
+            {
+                SvnItem item;
+
+                if (!_map.TryGetValue(walkPath, out item))
+                {
+                    StoreItem(CreateItem(walkPath, NoSccStatus.NotVersioned, SvnNodeKind.Directory));
+                    // Mark it as existing if we are sure 
+                }
+                else
+                {
+                    ISvnItemUpdate updateItem = item;
+                    if (updateItem.ShouldRefresh())
+                        updateItem.RefreshTo(NoSccStatus.NotVersioned, SvnNodeKind.Directory);
+                }
+            }
+       
             // Note: There is a lock(_lock) around this in our caller
         }
 
