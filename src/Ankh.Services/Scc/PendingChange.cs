@@ -591,13 +591,20 @@ namespace Ankh.Scc
         /// <returns></returns>
         public bool TryGetValue(string key, out PendingChange value)
         {
-            if (Dictionary == null)
+            if (Dictionary != null)
+                return Dictionary.TryGetValue(key, out value);
+
+            foreach (PendingChange p in this)
             {
-                // List is empty
-                value = null;
-                return false;
+                if (String.Equals(p.FullPath, key, StringComparison.OrdinalIgnoreCase))
+                {
+                    value = p;
+                    return true;
+                }
             }
-            return Dictionary.TryGetValue(key, out value);
+
+            value = null;
+            return false;
         }
     }
 }

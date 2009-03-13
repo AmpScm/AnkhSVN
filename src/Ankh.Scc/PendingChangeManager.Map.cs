@@ -71,7 +71,7 @@ namespace Ankh.Scc
             OnRefreshStarted(pceMe);
 
             bool wasClean = (_pendingChanges.Count == 0);
-            Dictionary<PendingChange, PendingChange> mapped = new Dictionary<PendingChange, PendingChange>();
+            Dictionary<string, PendingChange> mapped = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
 
             IFileStatusCache cache = Cache;
 
@@ -83,34 +83,11 @@ namespace Ankh.Scc
 
                 if (item == null)
                     continue;
+                
+                PendingChange pc = UpdatePendingChange(wasClean, item);
 
-                PendingChange pc;
-                if (_pendingChanges.TryGetValue(file, out pc))
-                {
-                    if (pc.Refresh(RefreshContext, item) && !wasClean)
-                    {
-                        if (pc.IsClean)
-                        {
-                            _pendingChanges.Remove(file);
-                            _extraFiles.Remove(file);
-
-                            // No need to check wasClean or external files; not possible in this case
-                            OnRemoved(new PendingChangeEventArgs(this, pc));
-                        }
-                        else if (!wasClean)
-                            OnChanged(new PendingChangeEventArgs(this, pc));
-                    }
-                }
-                else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
-                {
-                    _pendingChanges.Add(pc);
-                    if (!wasClean)
-                        OnAdded(new PendingChangeEventArgs(this, pc));
-                }
-                else
-                    continue;
-
-                mapped.Add(pc, pc);
+                if(pc != null)
+                    mapped[pc.FullPath] = pc;
             }
 
             foreach (string file in new List<string>(_extraFiles))
@@ -123,45 +100,17 @@ namespace Ankh.Scc
                     continue;
                 }
 
-                PendingChange pc;
-                if (_pendingChanges.TryGetValue(file, out pc))
-                {
-                    if (pc.Refresh(RefreshContext, item) && !wasClean)
-                    {
-                        Debug.Assert(pc.IsClean == !PendingChange.IsPending(item));
+                PendingChange pc = UpdatePendingChange(wasClean, item);
 
-                        if (pc.IsClean)
-                        {
-                            _pendingChanges.Remove(file);
-                            _extraFiles.Remove(file);
-
-                            // No need to check wasClean
-                            OnRemoved(new PendingChangeEventArgs(this, pc));
-
-                            continue;
-                        }
-                        else if (!wasClean)
-                            OnChanged(new PendingChangeEventArgs(this, pc));
-                    }
-                }
-                else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
-                {
-                    _pendingChanges.Add(pc);
-                    if (!wasClean)
-                        OnAdded(new PendingChangeEventArgs(this, pc));
-                }
-                else
-                    continue;
-
-                // All collisions where just removed in the loop above
-                mapped.Add(pc, pc);
+                if(pc != null)
+                    mapped[pc.FullPath] = pc;
             }
 
             for (int i = 0; i < _pendingChanges.Count; i++)
             {
                 PendingChange pc = _pendingChanges[i];
 
-                if (mapped.ContainsKey(pc))
+                if (mapped.ContainsKey(pc.FullPath))
                     continue;
 
                 _pendingChanges.RemoveAt(i--);
@@ -177,9 +126,44 @@ namespace Ankh.Scc
             OnRefreshCompleted(pceMe);
         }
 
+        private PendingChange UpdatePendingChange(bool wasClean, SvnItem item)
+        {
+            PendingChange pc;
+            string file = item.FullPath;
+            if (_pendingChanges.TryGetValue(file, out pc))
+            {
+                if (pc.Refresh(RefreshContext, item) && !wasClean)
+                {
+                    if (pc.IsClean)
+                    {
+                        _pendingChanges.Remove(file);
+                        _extraFiles.Remove(file);
+
+                        // No need to check wasClean
+                        OnRemoved(new PendingChangeEventArgs(this, pc));
+                    }
+                    else if (!wasClean)
+                        OnChanged(new PendingChangeEventArgs(this, pc));
+                }
+            }
+            else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
+            {
+                Debug.Assert(_pendingChanges.Contains(pc), "Insane race condition tirggered");
+
+                if (!_pendingChanges.Contains(pc))
+                    _pendingChanges.Add(pc);
+
+                if (!wasClean)
+                    OnAdded(new PendingChangeEventArgs(this, pc));
+            }
+            
+            return pc;
+        }
+
         private void ItemRefresh(string file)
         {
             SvnItem item = Cache[file];
+            file = item.FullPath; // Use existing normalization
 
             bool inProject = item.InSolution;
             bool inExtra = _extraFiles.Contains(file);
@@ -200,8 +184,6 @@ namespace Ankh.Scc
 
             if (item == null)
                 return;
-
-            file = item.FullPath; // Use existing normalization
 
             if (_pendingChanges.TryGetValue(file, out pc))
             {
