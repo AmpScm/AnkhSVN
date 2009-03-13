@@ -270,11 +270,16 @@ namespace Ankh.Scc.StatusCache
                     }
                     break;
                 default:
-                    if (File.Exists(path)) // ### Not long path safe
+                    try
                     {
-                        pathKind = SvnNodeKind.File;
-                        goto case SvnNodeKind.File;
+                        if (File.Exists(path)) // ### Not long path safe
+                        {
+                            pathKind = SvnNodeKind.File;
+                            goto case SvnNodeKind.File;
+                        }
                     }
+                    catch (PathTooLongException)
+                    { /* Fall through */ }
                     break;
             }
 
