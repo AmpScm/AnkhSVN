@@ -75,7 +75,7 @@ namespace Ankh.UI.PendingChanges.Synchronize
                 GetRelativePath(_item),
                 GetProject(_item),
                 _remoteStatus.PendingCommitText,
-                _item.Extension,
+                Context.GetService<IFileIconMapper>().GetFileType(_item),
                 SafeWorkingCopy(_item));
         }
 

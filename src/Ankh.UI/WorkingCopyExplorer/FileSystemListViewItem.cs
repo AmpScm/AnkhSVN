@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using Ankh.UI.VSSelectionControls;
 using System.IO;
 using System.Diagnostics;
+using Ankh.VS;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -60,7 +61,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             SetValues(
                 name,
                 Modified.ToString("g"),
-                SvnItem.Extension,
+                View.Context.GetService<IFileIconMapper>().GetFileType(SvnItem),
                 SvnItem.Status.LocalContentStatus.ToString(),
                 SvnItem.Status.LocalPropertyStatus.ToString(),
                 SvnItem.Status.IsLockedLocal ? Ankh.UI.PendingChanges.PCStrings.LockedValue : "",

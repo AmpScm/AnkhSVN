@@ -124,6 +124,11 @@
       <DependentUpon>SelectionContext.cs</DependentUpon>
     </Compile>
     <Compile Include="Selection\SelectionContext.Delay.cs" />
+    <Compile Include="SolutionExplorer\SolutionExplorerStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolutionExplorerStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
@@ -141,6 +146,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.VS.wxs" />
+    <EmbeddedResource Include="SolutionExplorer\SolutionExplorerStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SolutionExplorerStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SolutionExplorer\UpDnListView.png" />
     <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
   </ItemGroup>
