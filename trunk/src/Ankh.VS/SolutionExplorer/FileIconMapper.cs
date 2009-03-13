@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
+using SharpSvn;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -32,6 +33,7 @@ namespace Ankh.VS.SolutionExplorer
         readonly ImageList _imageList;
         readonly Dictionary<ProjectIconReference, int> _iconMap;
         readonly SortedList<WindowsSpecialFolder, int> _folderMap;
+        readonly Dictionary<string, string> _fileTypeMap;
 
         public FileIconMapper(IAnkhServiceProvider context)
             : base(context)
@@ -41,6 +43,7 @@ namespace Ankh.VS.SolutionExplorer
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
             _folderMap = new SortedList<WindowsSpecialFolder, int>();
+            _fileTypeMap = new Dictionary<string, string>();
         }
 
         public int GetIcon(string path)
@@ -59,17 +62,59 @@ namespace Ankh.VS.SolutionExplorer
 
         }
 
+        public string GetFileType(SvnItem item)
+        {
+            if (item == null)
+                throw new ArgumentNullException("item");
+
+            string extension = Path.GetExtension(item.FullPath);
+
+            if (item.IsDirectory && !item.FullPath.EndsWith("\\"))
+            {
+                return SolutionExplorerStrings.ExplorerDirectoryName;
+            }
+
+            string rslt;
+            lock (_fileTypeMap)
+            {
+                if (_fileTypeMap.TryGetValue(extension, out rslt))
+                    return rslt;
+            }
+
+            rslt = GetTypeName(item.FullPath);
+
+            lock(_fileTypeMap)
+            {
+                if (extension.Length > 0)
+                    _fileTypeMap[extension] = rslt;
+            }
+
+            return rslt;
+        }
+
+        string GetTypeName(string path)
+        {
+            NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
+            IntPtr rslt = NativeMethods.SHGetFileInfoW(path, 0, ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_TYPENAME);
+
+            if (rslt == IntPtr.Zero)
+                return null;
+
+            return fileinfo.szTypeName;
+        }
+
         int GetOsIcon(string path)
         {
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
-            IntPtr sysImageList = NativeMethods.SHGetFileInfo(path, 0, ref fileinfo,
+            IntPtr sysImageList = NativeMethods.SHGetFileInfoW(path, 0, ref fileinfo,
                 (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
                 NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON);
 
             if (sysImageList == IntPtr.Zero)
                 return -1;
 
-            ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+            ProjectIconReference handle = new ProjectIconReference(sysImageList, fileinfo.iIcon);
 
             return ResolveReference(handle);
         }
@@ -177,14 +222,14 @@ namespace Ankh.VS.SolutionExplorer
             EnsureSpecialImages();
 
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
-            IntPtr sysImageList = NativeMethods.SHGetFileInfo(name, (uint)(int)attr, ref fileinfo,
+            IntPtr sysImageList = NativeMethods.SHGetFileInfoW(name, (uint)(int)attr, ref fileinfo,
                 (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
                 NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON | NativeMethods.SHGFI_USEFILEATTRIBUTES);
 
             if (sysImageList == IntPtr.Zero)
                 return -1;
 
-            ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+            ProjectIconReference handle = new ProjectIconReference(sysImageList, fileinfo.iIcon);
 
             return ResolveReference(handle);
         }
@@ -227,14 +272,14 @@ namespace Ankh.VS.SolutionExplorer
 
 
                 NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
-                IntPtr sysImageList = NativeMethods.SHGetFileInfo(pidl, (uint)(int)FileAttributes.Directory, ref fileinfo,
+                IntPtr sysImageList = NativeMethods.SHGetFileInfoW(pidl, (uint)(int)FileAttributes.Directory, ref fileinfo,
                                                             (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_SHELLICONSIZE |
                                                             NativeMethods.SHGFI_SYSICONINDEX | NativeMethods.SHGFI_SMALLICON | NativeMethods.SHGFI_PIDL);
 
                 if (sysImageList == IntPtr.Zero)
                     return -1;
 
-                ProjectIconReference handle = new ProjectIconReference(sysImageList, (int)fileinfo.iIcon);
+                ProjectIconReference handle = new ProjectIconReference(sysImageList, fileinfo.iIcon);
 
                 return _folderMap[folder] = ResolveReference(handle);
             }
@@ -294,11 +339,11 @@ namespace Ankh.VS.SolutionExplorer
 
         static class NativeMethods
         {
-            [StructLayout(LayoutKind.Sequential)]
+            [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
             public struct SHFILEINFO
             {
                 public IntPtr hIcon;
-                public IntPtr iIcon;
+                public int iIcon;
                 public uint dwAttributes;
                 [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
                 public string szDisplayName;
@@ -310,16 +355,17 @@ namespace Ankh.VS.SolutionExplorer
             public const uint SHGFI_SHELLICONSIZE = 0x4;
             public const uint SHGFI_PIDL = 0x000000008;
             public const uint SHGFI_USEFILEATTRIBUTES = 0x10;
+            public const uint SHGFI_TYPENAME = 0x000000400;
             public const uint SHGFI_SYSICONINDEX = 0x4000;
 
 
 
-            [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-            public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
+            [DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+            public static extern IntPtr SHGetFileInfoW(string pszPath, uint dwFileAttributes,
                 ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
-            [DllImport("shell32.dll", CharSet = CharSet.Auto)]
-            public static extern IntPtr SHGetFileInfo(IntPtr pidl, uint dwFileAttributes,
+            [DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+            public static extern IntPtr SHGetFileInfoW(IntPtr pidl, uint dwFileAttributes,
                 ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
             [DllImport("shell32.dll")]
@@ -327,5 +373,7 @@ namespace Ankh.VS.SolutionExplorer
                 [MarshalAs(UnmanagedType.I4)]WindowsSpecialFolder nFolder,
                 IntPtr hToken, uint dwReserved, out IntPtr ppidl);            
         }
+
+
     }
 }

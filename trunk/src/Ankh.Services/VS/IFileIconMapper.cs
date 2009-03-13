@@ -107,6 +107,8 @@ namespace Ankh.VS
     public interface IFileIconMapper
     {
         int GetIcon(string path);
+        string GetFileType(SvnItem path);
+
         ImageList ImageList { get; }
 
         ImageList StateImageList { get; }

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges.Conflicts
 {
@@ -64,7 +65,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
-                item.Extension,
+                context.GetService<IFileIconMapper>().GetFileType(item),
                 SafeWorkingCopy(item));
         }
 
