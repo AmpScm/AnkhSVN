@@ -50,6 +50,37 @@ namespace Ankh.Scc
         }
 
         /// <summary>
+        /// Gets a value indicating whether this node represents a directory.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this node is a directory; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsDirectory
+        {
+            get { return (Attributes & FileAttributes.Directory) != 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this node represents a file.
+        /// </summary>
+        /// <value><c>true</c> if this node is a file; otherwise, <c>false</c>.</value>
+        public bool IsFile
+        {
+            get { return (Attributes & FileAttributes.Directory) == 0; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this node is hidden or system.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if this node is hidden or system; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsHiddenOrSystem
+        {
+            get { return (Attributes & (FileAttributes.Hidden | FileAttributes.System)) != 0; }
+        }
+
+        /// <summary>
         /// Gets the directory nodes below the specified path
         /// </summary>
         /// <param name="path">The path.</param>

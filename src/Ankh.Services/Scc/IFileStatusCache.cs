@@ -34,13 +34,6 @@ namespace Ankh.Scc
         SvnItem this[string path] { get; }
 
         /// <summary>
-        /// Updates the status.
-        /// </summary>
-        /// <param name="directory">The directory.</param>
-        /// <param name="depth">The depth.</param>
-        void UpdateStatus(string directory, SvnDepth depth);
-
-        /// <summary>
         /// Marks the specified path dirty
         /// </summary>
         /// <param name="path">A file of directory</param>
