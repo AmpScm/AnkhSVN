@@ -314,8 +314,15 @@ namespace Ankh.Scc
             }
             else
             {
-                _solutionDirectory = SvnTools.GetTruePath(dir) ?? SvnTools.GetNormalizedFullPath(dir);
-                _solutionFile = SvnTools.GetTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
+                if (SvnItem.IsValidPath(dir))
+                    _solutionDirectory = SvnTools.GetTruePath(dir) ?? SvnTools.GetNormalizedFullPath(dir);
+                else
+                    _solutionDirectory = "";
+
+                if (SvnItem.IsValidPath(path))
+                    _solutionFile = SvnTools.GetTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
+                else
+                    _solutionFile = "";
             }
         }
 
