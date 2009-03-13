@@ -148,7 +148,7 @@ namespace Ankh.Scc
             }
             else if (PendingChange.CreateIfPending(RefreshContext, item, out pc))
             {
-                Debug.Assert(_pendingChanges.Contains(pc), "Insane race condition tirggered");
+                Debug.Assert(!_pendingChanges.Contains(pc), "Insane race condition triggered");
 
                 if (!_pendingChanges.Contains(pc))
                     _pendingChanges.Add(pc);
