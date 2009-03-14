@@ -307,14 +307,31 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             base.OnShowContextMenu(e);
 
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : PointToScreen(new Point(0, 0));
+            bool isHeaderContext = false;
+            Point screen;
+            if (e.X == -1 && e.Y == -1)
+            {
+                // Handle keyboard context menu
+                if (SelectedItems.Count > 0)
+                {
+                    screen = PointToScreen(SelectedItems[SelectedItems.Count - 1].Position);
+                }
+                else
+                {
+                    isHeaderContext = true;
+                    screen = PointToScreen(new Point(0, 0));
+                }
+            }
+            else
+            {
+                screen = e.Location;
+                isHeaderContext = PointToClient(e.Location).Y < HeaderHeight;
+            }
 
             IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
 
-            Point p = PointToClient(e.Location);
-
             AnkhCommandMenu menu;
-            if (p.Y < HeaderHeight)
+            if (isHeaderContext)
             {
                 Select(); // Must be the active control for the menu to work
                 menu = AnkhCommandMenu.ListViewHeader;
