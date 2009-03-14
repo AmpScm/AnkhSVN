@@ -108,6 +108,7 @@ namespace Ankh.VS
     {
         int GetIcon(string path);
         string GetFileType(SvnItem path);
+        string GetFileType(string extension);
 
         ImageList ImageList { get; }
 

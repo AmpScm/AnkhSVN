@@ -93,6 +93,7 @@
     <Compile Include="PackageTest.cs" />
     <!---->
     <Compile Include="MenuItemTests\MenuItemCallback.cs" />
+    <Compile Include="Services\FileIconMapperTest.cs" />
     <!---->
     <!---->
     <!---->
