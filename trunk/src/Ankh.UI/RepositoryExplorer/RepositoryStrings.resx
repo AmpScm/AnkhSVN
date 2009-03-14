@@ -123,6 +123,9 @@
   <data name="DateColumn" xml:space="preserve">
     <value>&amp;Modified</value>
   </data>
+  <data name="ExplorerDirectoryName" xml:space="preserve">
+    <value>File Folder</value>
+  </data>
   <data name="ExtensionColumn" xml:space="preserve">
     <value>&amp;Type</value>
   </data>

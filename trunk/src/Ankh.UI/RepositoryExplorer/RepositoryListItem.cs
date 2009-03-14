@@ -60,7 +60,7 @@ namespace Ankh.UI.RepositoryExplorer
 
             SetValues(
                 name,
-                extension,
+                IsFolder ? RepositoryStrings.ExplorerDirectoryName : view.Context.GetService<IFileIconMapper>().GetFileType(extension),
                 info.Entry.Revision.ToString(),
                 info.Entry.Author,
                 IsFolder ? "" : info.Entry.FileSize.ToString(),
