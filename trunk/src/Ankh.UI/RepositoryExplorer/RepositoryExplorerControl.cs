@@ -117,14 +117,24 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void OnTreeViewShowContextMenu(object sender, MouseEventArgs e)
         {
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : treeView.PointToScreen(new Point(0, 0));
+            if (Context == null)
+                return;
 
-            if (Context != null)
+            Point screen;
+            if(e.X == -1 && e.Y == -1)
             {
-                IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-
-                cs.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
+                screen = treeView.GetSelectionPoint();
+                if (screen.IsEmpty)
+                    return;
             }
+            else
+            {
+                screen = e.Location;
+            }
+
+            IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+
+            cs.ShowContextMenu(AnkhCommandMenu.RepositoryExplorerContextMenu, screen.X, screen.Y);
         }
 
         IFileIconMapper _iconMapper;

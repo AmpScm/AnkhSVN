@@ -188,14 +188,30 @@ namespace Ankh.UI.RepositoryExplorer
         {
             base.OnShowContextMenu(e);
 
-            Point screen = (e.Location != new Point(-1, -1)) ? e.Location : PointToScreen(new Point(0, 0));
+            bool isHeaderContextMenu = false;
+            Point screen;
+            if (e.X == -1 && e.Y == -1)
+            {
+                if (SelectedItems.Count > 0)
+                {
+                    screen = PointToScreen(SelectedItems[SelectedItems.Count - 1].Position);
+                }
+                else
+                {
+                    screen = PointToScreen(new Point(0, 0));
+                    isHeaderContextMenu = true;
+                }
+            }
+            else
+            {
+                screen = e.Location;
+                isHeaderContextMenu = PointToClient(e.Location).Y < HeaderHeight;
+            }
 
             IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
 
-            Point p = PointToClient(e.Location);
-
             AnkhCommandMenu menu;
-            if (p.Y < HeaderHeight)
+            if (isHeaderContextMenu)
             {
                 Select(); // Must be the active control for the menu to work
                 menu = AnkhCommandMenu.ListViewHeader;
