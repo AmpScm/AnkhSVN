@@ -90,16 +90,7 @@ namespace Ankh.UI.SvnLog
             {
                 if (_logMessage == null && _args.LogMessage != null)
                 {
-                    // Don't show carriage return linefeed in the listview
-                    string[] lines = _args.LogMessage.Split('\r', '\n');
-                    foreach (string line in lines)
-                    {
-                        if (line.Trim().Length > 0)
-                        {
-                            _logMessage = line;
-                            break;
-                        }
-                    }
+                    _logMessage = _args.LogMessage.Trim().Replace("\r", "").Replace("\n", "\x23CE");
                 }
                 return _logMessage;
             }
