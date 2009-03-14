@@ -132,20 +132,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.SelectedNode = tn;
         }
 
-        public System.Drawing.Point GetSelectionPoint()
-        {
-            if (this.SelectedNode != null)
-            {
-                int offset = this.SelectedNode.Bounds.Height / 3;
-                return this.PointToScreen(new Point(this.SelectedNode.Bounds.X + offset,
-                    this.SelectedNode.Bounds.Y + offset));
-            }
-            else
-            {
-                return Point.Empty;
-            }
-        }
-
         public WCTreeNode[] GetSelectedItems()
         {
             if (this.SelectedItem != null)
