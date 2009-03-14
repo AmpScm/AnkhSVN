@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6417</title>
+          AnkhSVN-Daily Update - 2.0.6423</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1710/AnkhSvn-Daily-2.0.6417.445.msi">AnkhSVN 2.0.6417</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1713/AnkhSvn-Daily-2.0.6423.446.msi">AnkhSVN 2.0.6423</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6417">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6423">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -29,6 +29,13 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2009-03-13</td></tr>
+<tr><td> </td><td class="r"><a id="6423" href="http://ankhsvn.net/rev/?r=6423">
+            [r6423]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> LogCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark log commands in repository and annotate viewer as available when AnkhSVN
+is not the active SCC provider.</td></tr>
+<tr><td> </td><td class="r"><a id="6419" href="http://ankhsvn.net/rev/?r=6419">
+            [r6419]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/SolutionExplorer/FileIconMapper.cs, Ankh.UI/WorkingCopyExplorer/FileSystemListViewItem.cs, Ankh.VS/SolutionExplorer/SolutionExplorerStrings.resx, Ankh.UI/PendingChanges/Synchronize/SynchronizeListItem.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS/SolutionExplorer/SolutionExplorerStrings.Designer.cs, Ankh.UI/PendingChanges/Conflicts/ConflictItem.cs, Ankh.Services/VS/IFileIconMapper.cs, Ankh.UI/PendingChanges/Commits/PendingCommitItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the real file 'type' from SHGetFileInfo, instead of just showing the extension.</td></tr>
 <tr><td> </td><td class="r"><a id="6410" href="http://ankhsvn.net/rev/?r=6410">
             [r6410]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/IFileStatusCache.cs, Ankh.Services/Scc/SccFilesystemNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rewrite our non-subversion directory stat to use the SccFileSystemNode class
@@ -400,14 +407,6 @@ about any batch.</td></tr>
             [r6180]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/SccManagement/AddProjectToSubversion.Designer.cs, Ankh.UI/SccManagement/AddProjectToSubversion.cs, Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh/Commands/AddToSccCommands.cs, Ankh.UI/SccManagement/AddToSubversion.Designer.cs, Ankh.Services/Scc/IAnkhSccService.cs, Ankh.UI/SccManagement/AddProjectToSubversion.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add checkboxes for Marking as Managed and writing a project reference in the
 solution file to the Add Project to Subversion variant of the AddToScc dialog.</td></tr>
-<tr><td> </td><td class="r"><a id="6177" href="http://ankhsvn.net/rev/?r=6177">
-            [r6177]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/SolutionSettings.Commit.cs, Ankh.UI/SccManagement/ProjectCommitDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolved <a href="http://ankhsvn.net/issues/?id=565">issue #565</a>; the issue number was not filled in correctly because the
-Visible check of the issue box returned false for a closed dialog.</td></tr>
-<tr><td> </td><td class="r"><a id="6176" href="http://ankhsvn.net/rev/?r=6176">
-            [r6176]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/OptionsPages/ToolArgumentDialog.Designer.cs, Ankh.Services/Scc/UI/IAnkhDiffHandler.cs, Ankh.UI/VSSelectionControls/SmartListView.cs, Ankh/Services/AnkhDiff.Tools.cs, Ankh/Services/AnkhDiff.cs, Ankh.UI/SvnLog/Commands/ShowChanges.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a readonly value to the AnkhDiffArgs class and enable using
-this conditional value from the tools to specify an extra argument</td></tr>
 
 </table>
 <!--/Recent changes-->
