@@ -24,6 +24,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -67,7 +68,7 @@ namespace Ankh.VS.SolutionExplorer
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            string extension = Path.GetExtension(item.FullPath);
+            string extension = Path.GetExtension(item.FullPath).TrimStart('.');
 
             if (item.IsDirectory && !item.FullPath.EndsWith("\\"))
             {
@@ -96,6 +97,8 @@ namespace Ankh.VS.SolutionExplorer
         {
             if (string.IsNullOrEmpty(extension))
                 return "";
+
+            extension = extension.TrimStart('.');
 
             lock (_fileTypeMap)
             {
@@ -128,10 +131,9 @@ namespace Ankh.VS.SolutionExplorer
 
         string GetTypeNameForExtension(string extension)
         {
-            if (string.IsNullOrEmpty(extension))
-                return "";
+            Debug.Assert(!string.IsNullOrEmpty(extension));
 
-            string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy." + extension.TrimStart('.'));
+            string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy." + extension);
 
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
             IntPtr rslt = NativeMethods.SHGetFileInfoW(dummyPath, (uint)(FileAttributes.Normal), ref fileinfo,
