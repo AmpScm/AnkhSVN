@@ -154,13 +154,27 @@ namespace Ankh.UI
 
         private void changedPaths_ShowContextMenu(object sender, MouseEventArgs e)
         {
-            Point p = MousePosition;
+            if (Context == null)
+                return;
 
-            if (Context != null)
+            Point screen;
+
+            if (e.X == -1 && e.Y == -1)
             {
-                IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-                cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, p.X, p.Y);
+                if (changedPaths.SelectedItems.Count > 0)
+                {
+                    screen = changedPaths.PointToScreen(changedPaths.SelectedItems[changedPaths.SelectedItems.Count - 1].Position);
+                }
+                else
+                    return;
             }
+            else
+            {
+                screen = e.Location;
+            }
+
+            IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
+            cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, screen);
         }
 
         private void changedPaths_MouseDoubleClick(object sender, MouseEventArgs e)

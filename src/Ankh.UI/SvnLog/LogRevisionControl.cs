@@ -463,9 +463,24 @@ namespace Ankh.UI.SvnLog
             if (Context == null)
                 return;
 
-            Point p = MousePosition;
+            Point screen;
+
+            if (e.X == -1 && e.Y == -1)
+            {
+                if (logView.SelectedItems.Count > 0)
+                {
+                    screen = logView.PointToScreen(logView.SelectedItems[logView.SelectedItems.Count - 1].Position);
+                }
+                else
+                    return;
+            }
+            else
+            {
+                screen = e.Location;
+            }
+
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-            cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, p.X, p.Y);
+            cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, screen);
         }        
     }
 
