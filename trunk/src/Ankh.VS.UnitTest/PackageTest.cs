@@ -38,6 +38,9 @@ using Ankh;
 using Ankh.Scc;
 using NUnit.Framework;
 using Moq;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace UnitTestProject
 {
@@ -57,7 +60,7 @@ namespace UnitTestProject
             Assert.IsNotNull(package as IVsPackage, "The object does not implement IVsPackage");
         }
 
-        [Test, Explicit("Init problems")]
+        [Test]
         public void SetSite()
         {
             // Create the package
@@ -66,7 +69,24 @@ namespace UnitTestProject
             
             var statusCache = new Mock<IFileStatusCache>();
             var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
+            
+            var vsShell = new Mock<SVsShell>().As<IVsShell>();
+            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
+            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSConstants.S_OK);
 
+            var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
+
+            var monitorSelection = new Mock<IVsMonitorSelection>();
+
+            var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
+
+            var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
+
+            using (ServiceProviderHelper.AddService(typeof(SVsOutputWindow), outputWindow.Object))
+            using (ServiceProviderHelper.AddService(typeof(SOleComponentManager), olMgr.Object))
+            using (ServiceProviderHelper.AddService(typeof(IVsMonitorSelection), monitorSelection.Object))
+            using (ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object))
+            using (ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object))
             using (ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object))
             using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache.Object))
             using (ServiceProviderHelper.SetSite(package))
