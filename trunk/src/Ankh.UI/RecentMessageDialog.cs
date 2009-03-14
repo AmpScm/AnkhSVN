@@ -73,7 +73,7 @@ namespace Ankh.UI
 
                     ListViewItem item = new ListViewItem();
 
-                    item.Text = i;
+                    item.Text = i.Trim().Replace("\r", "").Replace("\n", "\x23CE");
                     item.Tag = i;
                     logMessageList.Items.Add(i);
                 }                
