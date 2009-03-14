@@ -68,6 +68,14 @@ namespace Ankh.UI.SvnLog.Commands
                         client.SetRevisionProperty(logItems[0].RepositoryRoot, logItems[0].Revision, SvnPropertyNames.SvnLog, dialog.LogMessage);
                     }
 
+                    IAnkhConfigurationService config = e.GetService<IAnkhConfigurationService>();
+
+                    if (config != null)
+                    {
+                        if(dialog.LogMessage != null && dialog.LogMessage.Trim().Length > 0)
+                            config.GetRecentLogMessages().Add(dialog.LogMessage);
+                    }
+
                     logWindow.Restart();
                     // TODO: Somehow repair scroll position/number of items loaded
                 }
