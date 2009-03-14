@@ -30,56 +30,82 @@ using Ankh.Ids;
 using AnkhSvn_UnitTestProject.Mocks;
 using Rhino.Mocks;
 using AnkhSvn_UnitTestProject.Helpers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Ankh.VSPackage;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 using Ankh;
 using System.ComponentModel.Design;
 using Ankh.Scc;
+using NUnit.Framework;
+using Microsoft.VisualStudio.Shell.Interop;
+using Moq;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Ankh.UI;
+using System.Windows.Forms.Design;
+using System.Windows.Forms;
+using Microsoft.VisualStudio;
 
 namespace UnitTestProject.MenuItemTests
 {
-    [TestClass()]
+    [TestFixture]
     public class MenuItemTest
     {
+        AnkhSvnPackage package;
+
+        [SetUp]
+        public void SetUp()
+        {
+            // Create the package
+            package = new AnkhSvnPackage();
+
+            var statusCache = new Mock<IFileStatusCache>();
+            var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
+
+            var vsShell = new Mock<SVsShell>().As<IVsShell>();
+            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
+            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSConstants.S_OK);
+
+            var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
+
+            var monitorSelection = new Mock<IVsMonitorSelection>();
+
+            var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
+
+            var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
+
+            ServiceProviderHelper.AddService(typeof(IAnkhPackage), package);
+            ServiceProviderHelper.AddService(typeof(SVsOutputWindow), outputWindow.Object);
+            ServiceProviderHelper.AddService(typeof(SOleComponentManager), olMgr.Object);
+            ServiceProviderHelper.AddService(typeof(IVsMonitorSelection), monitorSelection.Object);
+            ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object);
+            ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object);
+            ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object);
+            ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache.Object);
+
+            var uiService = new Mock<IUIService>();
+            uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
+
+            ServiceProviderHelper.AddService(typeof(IUIService), uiService.Object);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ServiceProviderHelper.DisposeServices();
+        }
         /// <summary>
         /// Verify that a new menu command object gets added to the OleMenuCommandService. 
         /// This action takes place In the Initialize method of the Package object
         /// </summary>
-        [TestMethod]
+        [Test]
         public void InitializeMenuCommand()
         {
-            MockRepository mocks = new MockRepository();
-            AnkhSvnPackage package = new AnkhSvnPackage();
-
-            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(DTE), DteMock.GetDteInstance(mocks)))
-            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache))
             using (ServiceProviderHelper.SetSite(package))
             {
                 //Verify that the menu command can be found
                 OleMenuCommandService mcs = ReflectionHelper.InvokeMethod<Package, OleMenuCommandService>(package, "GetService", typeof(IMenuCommandService));
                 Assert.IsNotNull(mcs.FindCommand(new CommandID(AnkhId.CommandSetGuid, (int)Ankh.Ids.AnkhCommand.Refresh)));
-            }
-        }
-
-        [TestMethod]
-        public void TestRefreshCommand()
-        {
-            MockRepository mocks = new MockRepository();
-            // Create the package
-            AnkhSvnPackage package = new AnkhSvnPackage();
-
-            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
-
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache))
-            using (ServiceProviderHelper.SetSite(package))
-            {
-                CommandExecutor.ExecuteCommand(package, AnkhCommand.Refresh);
             }
         }
     }

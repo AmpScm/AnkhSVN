@@ -24,7 +24,7 @@ namespace AnkhSvn_UnitTestProject.Mocks
 {
     static class SelectionContextMock
     {
-        public static ISelectionContext EmptyContext(MockRepository mocks)
+        public static ISelectionContext EmptyContext()
         {
             return new EmptySelectionContext();
         }
