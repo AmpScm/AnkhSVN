@@ -92,11 +92,50 @@ namespace Ankh.VS.SolutionExplorer
             return rslt;
         }
 
+        public string GetFileType(string extension)
+        {
+            if (string.IsNullOrEmpty(extension))
+                return "";
+
+            lock (_fileTypeMap)
+            {
+                string rslt;
+                if (_fileTypeMap.TryGetValue(extension, out rslt))
+                    return rslt;
+            }
+
+            string typeName = GetTypeNameForExtension(extension);
+
+            lock(_fileTypeMap)
+            {
+                _fileTypeMap[extension] = typeName;
+            }
+
+            return typeName;
+        }
+
         string GetTypeName(string path)
         {
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
             IntPtr rslt = NativeMethods.SHGetFileInfoW(path, 0, ref fileinfo,
                 (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_TYPENAME);
+
+            if (rslt == IntPtr.Zero)
+                return null;
+
+            return fileinfo.szTypeName;
+        }
+
+        string GetTypeNameForExtension(string extension)
+        {
+            if (string.IsNullOrEmpty(extension))
+                return "";
+
+            string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy." + extension.TrimStart('.'));
+
+            NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
+            IntPtr rslt = NativeMethods.SHGetFileInfoW(dummyPath, (uint)(FileAttributes.Normal), ref fileinfo,
+                (uint)Marshal.SizeOf(fileinfo), NativeMethods.SHGFI_TYPENAME | NativeMethods.SHGFI_USEFILEATTRIBUTES);
 
             if (rslt == IntPtr.Zero)
                 return null;
