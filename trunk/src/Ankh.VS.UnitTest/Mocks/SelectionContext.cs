@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Selection;
-using Rhino.Mocks;
 
 namespace AnkhSvn_UnitTestProject.Mocks
 {
