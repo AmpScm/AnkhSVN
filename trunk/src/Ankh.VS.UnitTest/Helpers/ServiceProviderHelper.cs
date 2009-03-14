@@ -18,6 +18,7 @@ using System;
 using Microsoft.VsSDK.UnitTestLibrary;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Collections.Generic;
 
 namespace AnkhSvn_UnitTestProject.Helpers
 {
@@ -30,32 +31,47 @@ namespace AnkhSvn_UnitTestProject.Helpers
         }
 
         Type type;
-
+        readonly object _instance;
         private ServiceProviderHelper(Type t, object instance)
         {
             type = t;
-            serviceProvider.AddService(t, instance, true);
-        }
-
-        private ServiceProviderHelper()
-        {
+            _instance = instance;
+            serviceProvider.AddService(t, instance, false);
         }
 
         public void Dispose()
         {
+            IDisposable i = _instance as IDisposable;
+            if (i != null)
+                i.Dispose();
+
             if (type != null && serviceProvider.GetService(type) != null)
                 serviceProvider.RemoveService(type);
         }
 
         public static IDisposable AddService(Type t, object instance)
         {
+            _types.Add(t);
             return new ServiceProviderHelper(t, instance);
         }
+
+        static readonly List<Type> _types = new List<Type>();
 
         public static IDisposable SetSite(IVsPackage package)
         {
             Assert.AreEqual(0, package.SetSite(serviceProvider), "SetSite did not return S_OK");
-            return new ServiceProviderHelper();
+            return null;// new ServiceProviderHelper();
+        }
+
+        internal static void DisposeServices()
+        {
+            foreach (Type t in _types)
+            {
+                if (serviceProvider.GetService(t) != null)
+                    serviceProvider.RemoveService(t);
+            }
+
+            _types.Clear();
         }
     }
 }

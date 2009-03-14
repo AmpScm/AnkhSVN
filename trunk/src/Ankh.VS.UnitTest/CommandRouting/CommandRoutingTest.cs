@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 using Ankh.VSPackage;
 using AnkhSvn_UnitTestProject.Helpers;
@@ -30,459 +29,393 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.UI.Services;
 using Ankh.UI;
 using Ankh.Scc;
+using NUnit.Framework;
+using Moq;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio;
+using System.Windows.Forms.Design;
+using System.Windows.Forms;
+using System.IO;
+using NUnit.Framework.SyntaxHelpers;
+using Microsoft.VsSDK.UnitTestLibrary;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {
-    static class CommandTester
-    {
-        public static void TestExecution(AnkhCommand commandEnum)
-        {
-            AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
-            runtime.AddModule(new AnkhModule(runtime));
-            runtime.Start();
-
-            bool executed = runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context));
-            if (!executed)
-                Assert.Inconclusive("Command disabled");
-            Assert.IsTrue(executed);
-        }
-    }
-    [TestClass]
+    
+    [TestFixture]
     public class CommandRoutingTest
     {
-        MockRepository mocks;
+        static class CommandTester
+        {
+            public static bool TestExecution(AnkhCommand commandEnum)
+            {
+                AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
+                runtime.AddModule(new AnkhModule(runtime));
+                runtime.Start();
 
-        [TestInitialize]
+                return runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context));
+            }
+
+            public static bool TestExecution(AnkhCommand commandEnum, object argument)
+            {
+                AnkhRuntime runtime = new AnkhRuntime(ServiceProviderHelper.serviceProvider);
+                runtime.AddModule(new AnkhModule(runtime));
+                runtime.Start();
+
+                return runtime.CommandMapper.Execute(commandEnum, new CommandEventArgs(commandEnum, runtime.Context, argument, false, false));
+            }
+        }
+
+        [SetUp]
         public void Initialize()
         {
-            mocks = new MockRepository();
+            // Create the package
+            IVsPackage package = new AnkhSvnPackage() as IVsPackage;
+            Assert.IsNotNull(package, "The object does not implement IVsPackage");
 
-            IFileStatusCache statusCache = mocks.DynamicMock<IFileStatusCache>();
-            ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache);
+            var statusCache = new Mock<IFileStatusCache>();
+            var regEditors = new Mock<SVsRegisterEditors>().As<IVsRegisterEditors>();
+
+            var vsShell = new Mock<SVsShell>().As<IVsShell>();
+            object r = @"SOFTWARE\Microsoft\VisualStudio\8.0";
+            vsShell.Setup(x => x.GetProperty((int)__VSSPROPID.VSSPROPID_VirtualRegistryRoot, out r)).Returns(VSConstants.S_OK);
+
+            var vsTextMgr = new Mock<SVsTextManager>().As<IVsTextManager>();
+
+            var monitorSelection = new Mock<IVsMonitorSelection>();
+
+            var olMgr = new Mock<SOleComponentManager>().As<IOleComponentManager>();
+
+            var outputWindow = new Mock<SVsOutputWindow>().As<IVsOutputWindow>();
+
+            ServiceProviderHelper.AddService(typeof(IAnkhPackage), package);
+            ServiceProviderHelper.AddService(typeof(SVsOutputWindow), outputWindow.Object);
+            ServiceProviderHelper.AddService(typeof(SOleComponentManager), olMgr.Object);
+            ServiceProviderHelper.AddService(typeof(IVsMonitorSelection), monitorSelection.Object);
+            ServiceProviderHelper.AddService(typeof(SVsTextManager), vsTextMgr.Object);
+            ServiceProviderHelper.AddService(typeof(SVsShell), vsShell.Object);
+            ServiceProviderHelper.AddService(typeof(SVsRegisterEditors), regEditors.Object);
+            ServiceProviderHelper.AddService(typeof(IFileStatusCache), statusCache.Object);
+
+            var uiService = new Mock<IUIService>();
+            uiService.Setup(x => x.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
+
+            ServiceProviderHelper.AddService(typeof(IUIService), uiService.Object);
         }
 
-        [TestCleanup]
+        [TearDown]
         public void Cleanup()
         {
-            ServiceProviderHelper.serviceProvider.RemoveService(typeof(IFileStatusCache));
-
-            mocks = null;
+            ServiceProviderHelper.DisposeServices();
         }
 
-        [TestMethod]
+        [Test]
         public void AddItem()
         {
-            mocks = new MockRepository();
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                // TODO: set-up fake selection
-                CommandTester.TestExecution(AnkhCommand.AddItem);
+                Assert.IsFalse(CommandTester.TestExecution(AnkhCommand.AddItem), "Add disabled with empty selection");
             }
         }
 
-        [TestMethod]
+        [Test]
         public void AddRepositoryRoot()
         {
-            mocks = new MockRepository();
-
-            IUIShell uiShell = mocks.DynamicMock<IUIShell>();
-
-            //RepositoryRootInfo reposInfo = new RepositoryRootInfo("http://fakeurl/path", 100);
-
-            using (mocks.Record())
-            {
-                //Expect.Call(uiShell.ShowAddRepositoryRootDialog()).Return(reposInfo).Repeat.Any();
-            }
-
-            using (mocks.Playback())
-            {
-                CommandTester.TestExecution(AnkhCommand.RepositoryBrowse);
-            }
+            Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.RepositoryBrowse), "Add repository root always enabled");
         }
 
-        /*[TestMethod]
-        public void AddSolutionToRepositoryCommand()
-        {
-            mocks = new MockRepository();
-            
-            IContext context = AnkhContextMock.GetInstance(mocks);
-            using (mocks.Record())
-            {
-                // TODO: Selection context
-            }
 
-            using (mocks.Playback())
-            using (ServiceProviderHelper.AddService(typeof(IContext), context))
-            {
-                CommandTester.TestExecution(AnkhCommand.AddSolutionToRepository);
-            }
-        }*/
-
-        [TestMethod]
+        [Test, ExpectedException(typeof(InvalidOperationException))]
         public void AddWorkingCopyExplorerRootCommand()
         {
-            mocks = new MockRepository();
+            CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
+        }
 
-            IUIShell uiShell = mocks.DynamicMock<IUIShell>();
-
-            using (mocks.Record())
+        [Test, Explicit("Broken")]
+        public void AddWorkingCopyExplorerRootCommandWithPath()
+        {
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                //Expect.Call(uiShell.ShowAddWorkingCopyExplorerRootDialog()).Return("C:\\something").Repeat.Any();
-            }
-
-
-            using (mocks.Playback())
-            {
-                CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse);
+                Assert.IsTrue(CommandTester.TestExecution(AnkhCommand.WorkingCopyBrowse, Path.GetTempPath()));
             }
         }
 
-        [TestMethod]
+
+        [Test]
         public void BlameCommand()
         {
-            mocks = new MockRepository();
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-
-                CommandTester.TestExecution(AnkhCommand.ItemAnnotate);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ItemAnnotate), Is.False, 
+                    "Blame with empty selection doesn't execute");
             }
         }
 
-        [TestMethod, Ignore] // Command shows dialog directly
+        [Test]
         public void CheckoutCommand()
         {
-            mocks = new MockRepository();
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                // TODO: set-up fake selection
-                CommandTester.TestExecution(AnkhCommand.Checkout);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Checkout), Is.False,
+                    "Checkout doesn't execute with empty selection");
             }
         }
 
-        public void CheckoutFolderCommand()
-        {
-        }
-
-        public void CheckoutSolutionCommand()
-        {
-        }
-
-        [TestMethod]
+        [Test]
         public void CleanupCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.Cleanup);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Cleanup), Is.False,
+                    "Cleanup doesn't run without selection");
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CommitItemCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.CommitItem);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.CommitItem), Is.False,
+                    "Commit doesn't run without selection");
             }
         }
 
-        [TestMethod]
+        [Test]
         public void CopyReposExplorerUrl()
         {
-            mocks = new MockRepository();
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
+            using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.CopyReposExplorerUrl);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.CopyReposExplorerUrl), Is.False);
             }
         }
 
-        [TestMethod, Ignore] // shows MessageBox
+        [Test]
         public void CreatePatch()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.CreatePatch);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.CreatePatch), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void DiffLocalItem()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-
-            Assert.Inconclusive("Diff not verified");
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.DiffLocalItem);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.DiffLocalItem), Is.False);
             }
         }
 
-        [TestMethod, Ignore] // Shows dialog
+        [Test]
         public void ExportCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            IUIShell uiShell = AnkhUIShellMock.GetInstance(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.Export);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Export), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void LockCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.Lock);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Lock), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void LogCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.Log);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Log), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void MakeDirectoryCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.NewDirectory);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.NewDirectory), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void Refresh()
         {
-            mocks = new MockRepository();
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                // TODO: set-up fake selection
-                CommandTester.TestExecution(AnkhCommand.Refresh);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Refresh), Is.True,
+                    "Refresh works with empty selection");
             }
         }
 
-        [TestMethod]
+        [Test, Explicit]
         public void RemoveReposRoot()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.RemoveRepositoryRoot);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveRepositoryRoot), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test, Explicit]
         public void RemoveWorkingCopyRoot()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.RemoveWorkingCopyExplorerRoot), Is.False);
             }
         }       
 
-        [TestMethod]
+        [Test]
         public void RevertItemCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.RevertItem);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.RevertItem), Is.False,
+                    "Cannot revert empty selection");
             }
         }
 
-        [TestMethod]
+        [Test]
         public void SaveToFileCommand()
         {
-            mocks = new MockRepository();
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
 
-            using (mocks.Playback())
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.SaveToFile);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.SaveToFile), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test, Explicit]
         public void ShowCommitDialog()
         {
+            var state = new Mock<IAnkhCommandStates>();
+            state.SetupGet(x => x.SccProviderActive).Returns(true);
 
-            mocks = new MockRepository();
-            IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
-            using (mocks.Record())
-            {
-                package.ShowToolWindow(AnkhToolWindow.PendingChanges);
-                LastCall.Repeat.Once();
-            }
+            var uiShell = new Mock<SVsUIShell>().As<IVsUIShell>();
 
-            using (mocks.Playback())
+            using (ServiceProviderHelper.AddService(typeof(SVsUIShell), uiShell.Object))
+            using (ServiceProviderHelper.AddService(typeof(IAnkhCommandStates), state.Object))
             {
-                CommandTester.TestExecution(AnkhCommand.ShowPendingChanges);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ShowPendingChanges), Is.True);
             }
         }
 
-        [TestMethod]
+        [Test, Explicit]
         public void ShowReposExplorer()
         {
-            mocks = new MockRepository();
-            IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
-            using (mocks.Record())
-            {
-                package.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
-                LastCall.Repeat.Once();
-            }
+            //IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
+            //using (mocks.Record())
+            //{
+            //    package.ShowToolWindow(AnkhToolWindow.RepositoryExplorer);
+            //    LastCall.Repeat.Once();
+            //}
 
 
-            using (mocks.Playback())
-            {
-                CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer);
-            }
+            //using (mocks.Playback())
+
+            CommandTester.TestExecution(AnkhCommand.ShowRepositoryExplorer);
+
         }
 
-        [TestMethod]
+        [Test, Explicit]
         public void ShowWorkingCopyExplorer()
         {
-            mocks = new MockRepository();
-            IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
-            using (mocks.Record())
-            {
-                package.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer);
-                LastCall.Repeat.Once();
-            }
+            //IAnkhPackage package = mocks.CreateMock<IAnkhPackage>();
+            //using (mocks.Record())
+            //{
+            //    package.ShowToolWindow(AnkhToolWindow.WorkingCopyExplorer);
+            //    LastCall.Repeat.Once();
+            //}
 
-            using (mocks.Playback())
-            {
+            //using (mocks.Playback())
+            //{
                 CommandTester.TestExecution(AnkhCommand.ShowWorkingCopyExplorer);
-            }
+            //}
         }
 
-        [TestMethod]
+        [Test]
         public void SwitchItemCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.SwitchItem);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.SwitchItem), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void UnlockCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.Unlock);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.Unlock), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void UpdateItemCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.UpdateItemSpecific);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.UpdateItemSpecific), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ViewInVSNetCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.ViewInVsNet);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ViewInVsNet), Is.False);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void ViewInWindowsCommand()
         {
-            mocks = new MockRepository();
-
-            ISelectionContext selC = SelectionContextMock.EmptyContext(mocks);
-
-            using (mocks.Playback())
+            ISelectionContext selC = SelectionContextMock.EmptyContext();
             using (ServiceProviderHelper.AddService(typeof(ISelectionContext), selC))
             {
-                CommandTester.TestExecution(AnkhCommand.ViewInWindows);
+                Assert.That(CommandTester.TestExecution(AnkhCommand.ViewInWindows), Is.False);
             }
         }
     }
