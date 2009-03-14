@@ -158,20 +158,26 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        public override void OnShowContextMenu(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            base.OnShowContextMenu(e);
+
+            Point screen;
+            if (e.X == -1 && e.Y == -1)
             {
-                this.SelectedNode = this.GetNodeAt(e.X, e.Y);
-
-                IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
-
-                Point p = PointToClient(e.Location);
-
-                sc.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, PointToScreen(e.Location));
+                screen = GetSelectionPoint();
+                if(screen.IsEmpty)
+                    return;
+            }
+            else
+            {
+                SelectedNode = this.GetNodeAt(e.X, e.Y);
+                screen = PointToScreen(e.Location);
             }
 
-            base.OnMouseDown(e);
+            IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
+
+            sc.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, screen);
         }
 
         protected override void OnAfterSelect(TreeViewEventArgs e)
