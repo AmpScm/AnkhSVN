@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Rhino.Mocks;
 using Ankh.VSPackage;
 using AnkhSvn_UnitTestProject.Helpers;
 using Ankh.Commands;

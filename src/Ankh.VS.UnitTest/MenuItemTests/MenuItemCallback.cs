@@ -28,7 +28,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 using System;
 using Ankh.Ids;
 using AnkhSvn_UnitTestProject.Mocks;
-using Rhino.Mocks;
 using AnkhSvn_UnitTestProject.Helpers;
 using Ankh.VSPackage;
 using Microsoft.VisualStudio.Shell;
