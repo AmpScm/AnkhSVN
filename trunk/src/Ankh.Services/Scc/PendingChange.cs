@@ -184,6 +184,7 @@ namespace Ankh.Scc
         PendingChangeStatus _status;
         PendingChangeKind _kind;
         string _changeList;
+        string _fileType;
 
         [Browsable(false)]
         public int IconIndex
@@ -210,6 +211,12 @@ namespace Ankh.Scc
         }
 
         [Browsable(false)]
+        public string FileType
+        {
+            get { return _fileType; }
+        }
+
+        [Browsable(false)]
         public string LogMessageToolTipText
         {
             get { return String.Format("{0}: {1}", RelativePath, Change.PendingCommitText); }
@@ -229,9 +236,15 @@ namespace Ankh.Scc
             RefreshValue(ref m, ref _status, GetStatus(context, item));
             RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
             RefreshValue(ref m, ref _changeList, Item.Status.ChangeList);
+            RefreshValue(ref m, ref _fileType, GetFileType(context, item));
 
             return m || (_status == null);
         }
+
+        private string GetFileType(RefreshContext context, SvnItem item)
+        {
+            return context.IconMapper.GetFileType(item.FullPath);
+        }        
 
         private string GetRelativePath(RefreshContext context)
         {

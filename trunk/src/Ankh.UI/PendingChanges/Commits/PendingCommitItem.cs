@@ -68,7 +68,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
-                context.GetService<IFileIconMapper>().GetFileType(item),
+                PendingChange.FileType,                
                 SafeWorkingCopy(item));
 
             if (!SystemInformation.HighContrast)
