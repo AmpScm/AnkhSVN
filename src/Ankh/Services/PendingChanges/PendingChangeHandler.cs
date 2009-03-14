@@ -256,7 +256,7 @@ namespace Ankh.Services.PendingChanges
                     {
                         if (storeMessage)
                         {
-                            if (!string.IsNullOrEmpty(state.LogMessage))
+                            if (state.LogMessage != null && state.LogMessage.Trim().Length > 0)
                             {
                                 IAnkhConfigurationService config = GetService<IAnkhConfigurationService>();
 
