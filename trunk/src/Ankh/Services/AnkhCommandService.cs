@@ -27,16 +27,27 @@ using Microsoft.VisualStudio;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.Services
 {
     [GlobalService(typeof(IAnkhCommandService))]
-    class AnkhCommandService : AnkhService, IAnkhCommandService
+    sealed class AnkhCommandService : AnkhService, IAnkhCommandService, IAnkhIdleProcessor
     {
+        const int _tickCount = (int)AnkhCommand.TickLast - (int)AnkhCommand.TickFirst;
         readonly List<int> _delayedCommands = new List<int>();
+        readonly int[] _ticks = new int[_tickCount];
+
         public AnkhCommandService(IAnkhServiceProvider context)
             : base(context)
         {
+        }
+
+        protected override void OnInitialize()
+        {
+            base.OnInitialize();
+            GetService<IAnkhPackage>().RegisterIdleProcessor(this);
         }
 
         IVsUIShell _uiShell;
@@ -58,8 +69,6 @@ namespace Ankh.Services
             [DebuggerStepThrough]
             get { return _ankhContext ?? (_ankhContext = GetService<AnkhContext>()); }
         }
-
-        #region IAnkhCommandService Members
 
         public CommandResult ExecCommand(Ankh.Ids.AnkhCommand command)
         {
@@ -92,7 +101,7 @@ namespace Ankh.Services
 
             IOleCommandTarget dispatcher = CommandDispatcher;
 
-            if(dispatcher == null)
+            if (dispatcher == null)
                 return new CommandResult(false);
 
             Guid g = command.Guid;
@@ -120,7 +129,7 @@ namespace Ankh.Services
             {
                 vOut = Marshal.AllocCoTaskMem(128);
                 NativeMethods.VariantInit(vOut);
-                
+
                 if (argument != null)
                 {
                     vIn = Marshal.AllocCoTaskMem(128);
@@ -156,6 +165,13 @@ namespace Ankh.Services
             public static extern int VariantInit(IntPtr v);
         }
 
+        bool IsTickCommand(AnkhCommand c)
+        {
+            if (c < AnkhCommand.TickFirst || c >= AnkhCommand.TickLast)
+                return false;
+
+            return true;
+        }
         /// <summary>
         /// Posts the tick command.
         /// </summary>
@@ -164,6 +180,9 @@ namespace Ankh.Services
         /// <returns></returns>
         public bool PostTickCommand(ref bool tick, AnkhCommand command)
         {
+            if (IsTickCommand(command))
+                _ticks[command - AnkhCommand.TickFirst] = 1;
+
             if (tick)
                 return false;
 
@@ -182,11 +201,11 @@ namespace Ankh.Services
 
         public void SafePostTickCommand(ref bool tick, AnkhCommand command)
         {
-            if(tick)
+            if (tick)
                 return;
 
             tick = true;
-            lock(_delayTasks)
+            lock (_delayTasks)
             {
                 _delayedCommands.Add((int)command);
             }
@@ -229,9 +248,9 @@ namespace Ankh.Services
             if (command == null)
                 throw new ArgumentNullException("command");
 
-            lock(_delayTasks)
+            lock (_delayTasks)
             {
-                if(_delayed)
+                if (_delayed)
                 {
                     _delayTasks.Add(
                         delegate
@@ -241,11 +260,11 @@ namespace Ankh.Services
 
                     return true;
                 }
-                else if(PerformPost(command, prompt, args))
+                else if (PerformPost(command, prompt, args))
                 {
-                    for(int i = 0; i < _delayedCommands.Count; i++)
+                    for (int i = 0; i < _delayedCommands.Count; i++)
                     {
-                        if(!PerformPost(new CommandID(AnkhId.CommandSetGuid, _delayedCommands[i]), CommandPrompt.DoDefault, null))
+                        if (!PerformPost(new CommandID(AnkhId.CommandSetGuid, _delayedCommands[i]), CommandPrompt.DoDefault, null))
                         {
                             _delayedCommands.RemoveRange(0, i);
                             return true;
@@ -296,12 +315,12 @@ namespace Ankh.Services
             get { return _syncContext ?? (_syncContext = GetService<SynchronizationContext>()); }
         }
 
-        readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();        
+        readonly List<DelayDelegateCheck> _checks = new List<DelayDelegateCheck>();
         public void DelayPostCommands(DelayDelegateCheck check)
         {
             if (check == null)
                 throw new ArgumentNullException("check");
-            
+
             _checks.Add(check);
             if (!_delayed)
             {
@@ -312,11 +331,11 @@ namespace Ankh.Services
 
         void TryRelease(object v)
         {
-            if(_delayed)
+            if (_delayed)
                 TryReleaseDelayed();
 
             if (_delayed)
-                PostCheck();                
+                PostCheck();
         }
 
         void PostCheck()
@@ -356,10 +375,6 @@ namespace Ankh.Services
             }
         }
 
-        #endregion
-
-        #region IAnkhCommandService Members
-
         public CommandResult DirectlyExecCommand(AnkhCommand command)
         {
             return DirectlyExecCommand(command, null, CommandPrompt.DoDefault);
@@ -383,12 +398,7 @@ namespace Ankh.Services
             bool ok = mapper.Execute(command, e);
 
             return new CommandResult(ok, e.Result);
-        }        
-
-        #endregion
-
-        #region IAnkhCommandService Members
-
+        }
 
         /// <summary>
         /// Updates the command UI.
@@ -402,9 +412,6 @@ namespace Ankh.Services
                 shell.UpdateCommandUI(performImmediately ? 1 : 0);
         }
 
-        #endregion
-
-        #region IAnkhCommandService Members
 
         public void ShowContextMenu(AnkhCommandMenu menu, int x, int y)
         {
@@ -421,12 +428,33 @@ namespace Ankh.Services
                 {
                     /* Menu is not declared correctly (no items) */
                 }
-            }            
+            }
         }
 
         public void ShowContextMenu(AnkhCommandMenu menu, System.Drawing.Point location)
         {
             ShowContextMenu(menu, location.X, location.Y);
+        }
+
+        public void TockCommand(AnkhCommand ankhCommand)
+        {
+            if (IsTickCommand(ankhCommand))
+                _ticks[ankhCommand - AnkhCommand.TickFirst] = 0;
+        }
+
+        #region IAnkhIdleProcessor Members
+
+        public void OnIdle(AnkhIdleArgs e)
+        {
+            if (e.Periodic)
+                for (int i = 0; i < _tickCount; i++)
+                {
+                    if (_ticks[i] != 0)
+                    {
+                        Debug.WriteLine(string.Format("Tocking {0}", AnkhCommand.TickFirst + i));
+                        PostExecCommand(AnkhCommand.TickFirst + i);
+                    }
+                }
         }
 
         #endregion

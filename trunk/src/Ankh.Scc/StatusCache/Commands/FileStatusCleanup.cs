@@ -15,33 +15,35 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Commands;
-using Ankh.Scc;
 using Ankh.Ids;
 
 namespace Ankh.Scc.StatusCache.Commands
 {
-    [Command(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable=true)]
-    [Command(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable=true)]
+    [Command(AnkhCommand.FileCacheFinishTasks, AlwaysAvailable = true)]
+    [Command(AnkhCommand.TickRefreshSvnItems, AlwaysAvailable = true)]
     public class FileStatusCleanup : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
-        {            
+        {
         }
+
+        FileStatusCache _fileCache;
+        IAnkhCommandService _commandService;
 
         public void OnExecute(CommandEventArgs e)
         {
-            FileStatusCache cache = e.Context.GetService<FileStatusCache>(typeof(IFileStatusCache));
+            if (_commandService == null)
+                _commandService = e.GetService<IAnkhCommandService>();
+            if (_fileCache == null)
+                _fileCache = e.GetService<FileStatusCache>(typeof(IFileStatusCache));
 
-            if (cache != null)
-            {
-                if (e.Command == AnkhCommand.FileCacheFinishTasks)
-                    cache.OnCleanup();
-                else
-                    cache.BroadcastChanges();
-            }
+            _commandService.TockCommand(e.Command);
+
+            if (e.Command == AnkhCommand.FileCacheFinishTasks)
+                _fileCache.OnCleanup();
+            else
+                _fileCache.BroadcastChanges();
         }
     }
 }

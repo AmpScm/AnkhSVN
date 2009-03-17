@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
 
@@ -30,13 +28,19 @@ namespace Ankh.Scc.Commands
             // NOOP
         }
 
+        IAnkhCommandService _commandService;
+        PendingChangeManager _pendingChanges;        
+
         public void OnExecute(CommandEventArgs e)
         {
-            PendingChangeManager pm = e.GetService<PendingChangeManager>(typeof(IPendingChangesManager));
+            if (_commandService == null)
+                _commandService = e.GetService<IAnkhCommandService>();
+            if (_pendingChanges == null)
+                _pendingChanges = e.GetService<PendingChangeManager>(typeof(IPendingChangesManager));            
 
-            if (pm != null)
-                pm.OnTickRefresh();
+            _commandService.TockCommand(e.Command);
+
+            _pendingChanges.OnTickRefresh();
         }
-
     }
 }

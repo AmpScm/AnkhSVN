@@ -36,22 +36,32 @@ namespace Ankh.Ids
     {
         None = 0,
 
-        // Special task commands not used in menu's
+        // Special task commands not used in menu's; only for use by AnkhSVN internally
+
+        // Tick commands; one shot delayed task handlers
+        TickFirst,
         MarkProjectDirty,
         FileCacheFinishTasks,
         SccFinishTasks,
         TickRefreshPendingTasks,
         TickRefreshSvnItems,
+        // /Tick Commands
+        TickLast,
+
+        // Delayed implementation commands
         ActivateSccProvider,
         ActivateVsExtender,
-        SccLock,
+
+        // /Private commands
 
         // These values live in the same numberspace as the other values within 
         // the command set. So we start countin at this number to make sure we
         // do not reuse values
         CommandFirst = 0x1FFFFFF,
 
-        // Always visible+enabled entrance points to AnkhSvn
+        // Start of public commands; values shouldn't change between versions to
+        // allow interop with other packages (like Collabnet Desktop and others)
+
         FileFileOpenFromSubversion,
         FileFileAddFromSubversion,
 
@@ -226,9 +236,9 @@ namespace Ankh.Ids
         RepositoryShowChanges,
         RepositoryCompareWithWc,
         UpdateItemLatestRecursive,
+        SccLock,
 
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewLocked,
         PcColViewModified,
         PcColViewName,
         PcColViewRepository,
