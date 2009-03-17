@@ -645,6 +645,11 @@ namespace Ankh.Scc
 
         public ISvnProjectInfo GetProjectInfo(SvnProject project)
         {
+            if (project == null)
+                return null;
+
+            project = ResolveRawProject(project);
+
             if (project == null || project.RawHandle == null)
                 return null;
 
