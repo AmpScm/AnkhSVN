@@ -26,6 +26,7 @@ using System.Drawing;
 using Ankh.Scc;
 using SharpSvn.Implementation;
 using System.Collections.ObjectModel;
+using Ankh.VS;
 
 namespace Ankh.UI.SvnLog
 {
@@ -54,8 +55,25 @@ namespace Ankh.UI.SvnLog
                 "", // First column must be "" to work around owner draw issues!
                 Author,
                 Date.ToString(CultureInfo.CurrentCulture),
-                "", // Issue
+                GetIssueText(),
                 LogMessage);
+        }
+
+        private string GetIssueText()
+        {
+            StringBuilder sb = null;
+            
+            foreach(IssueMarker issue in _context.GetService<IProjectCommitSettings>().GetIssues(LogMessage))
+            {
+                if (sb == null)
+                    sb = new StringBuilder();
+                else
+                    sb.Append(",");
+
+                sb.Append(issue.Value);
+            }
+
+            return sb != null ? sb.ToString() : "";
         }
 
         void UpdateColors()

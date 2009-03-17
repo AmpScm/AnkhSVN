@@ -159,14 +159,22 @@ namespace Ankh.UI.SvnLog
 
             if (!isSelected)
                 e.DrawBackground();
-            else if (Focused)
-                e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
             else
-                e.Graphics.FillRectangle(SystemBrushes.Menu, e.Bounds);
+            {
+                Rectangle b = e.Bounds;
+                b.X += 4;
+                b.Width -= 4;
+                if (Focused)
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, b);
+                else
+                    e.Graphics.FillRectangle(SystemBrushes.Menu, b);
+            }
 
 
+            
             if ((e.State & ListViewItemStates.Focused) != 0)
-                ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+                e.DrawFocusRectangle();
+            //    ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
 
             // Draw the item text for views other than the Details view.
             if (View != View.Details)
