@@ -32,6 +32,7 @@ namespace Ankh.UI.SvnLog
         {
             Sorting = SortOrder.None;
             OwnerDraw = true;
+            DoubleBuffered = true;
             Init();
         }
         public LogRevisionView(IContainer container)
