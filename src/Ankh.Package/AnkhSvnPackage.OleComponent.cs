@@ -72,12 +72,16 @@ namespace Ankh.VSPackage
 
         int IOleComponent.FDoIdle(uint grfidlef)
         {
-            bool periodic = 0 != (grfidlef & (uint)_OLEIDLEF.oleidlefPeriodic);
+            AnkhIdleArgs args = new AnkhIdleArgs(this, unchecked((int)grfidlef));
             bool done = true;
 
             foreach (IAnkhIdleProcessor pp in _idleProcessors)
             {
-                done = pp.OnIdle(periodic) && done;
+                args.Done = true;
+
+                pp.OnIdle(args);
+
+                done = done && args.Done;
             }
 
             return done ? VSConstants.S_OK : VSConstants.S_FALSE;
