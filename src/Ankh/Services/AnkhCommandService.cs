@@ -16,19 +16,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.Commands;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.ComponentModel.Design;
-using Ankh.Ids;
-using Microsoft.VisualStudio.OLE.Interop;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio;
-using System.Windows.Forms;
-using System.Threading;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Commands;
+using Ankh.Ids;
 using Ankh.UI;
 using Ankh.VS;
+
 
 namespace Ankh.Services
 {
@@ -51,20 +52,20 @@ namespace Ankh.Services
         }
 
         IVsUIShell _uiShell;
-        protected IVsUIShell UIShell
+        IVsUIShell UIShell
         {
             get { return _uiShell ?? (_uiShell = GetService<IVsUIShell>(typeof(SVsUIShell))); }
         }
 
         IOleCommandTarget _commandDispatcher;
-        protected IOleCommandTarget CommandDispatcher
+        IOleCommandTarget CommandDispatcher
         {
             [DebuggerStepThrough]
             get { return _commandDispatcher ?? (_commandDispatcher = GetService<IOleCommandTarget>(typeof(SUIHostCommandDispatcher))); }
         }
 
         AnkhContext _ankhContext;
-        protected AnkhContext AnkhContext
+        AnkhContext AnkhContext
         {
             [DebuggerStepThrough]
             get { return _ankhContext ?? (_ankhContext = GetService<AnkhContext>()); }
@@ -446,7 +447,10 @@ namespace Ankh.Services
 
         public void OnIdle(AnkhIdleArgs e)
         {
-            if (e.Periodic && !_delayed)
+            if(_delayed)
+                TryReleaseDelayed();
+            else if (e.Periodic)
+            {
                 for (int i = 0; i < _tickCount; i++)
                 {
                     if (_ticks[i] != 0)
@@ -455,6 +459,7 @@ namespace Ankh.Services
                         PostExecCommand(AnkhCommand.TickFirst + i);
                     }
                 }
+            }
         }
 
         #endregion
