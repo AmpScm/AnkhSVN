@@ -446,12 +446,12 @@ namespace Ankh.Services
 
         public void OnIdle(AnkhIdleArgs e)
         {
-            if (e.Periodic)
+            if (e.Periodic && !_delayed)
                 for (int i = 0; i < _tickCount; i++)
                 {
                     if (_ticks[i] != 0)
                     {
-                        Debug.WriteLine(string.Format("Tocking {0}", AnkhCommand.TickFirst + i));
+                        Debug.WriteLine(string.Format("AnkhSVN: Tocking {0}", AnkhCommand.TickFirst + i));
                         PostExecCommand(AnkhCommand.TickFirst + i);
                     }
                 }
