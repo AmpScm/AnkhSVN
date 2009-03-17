@@ -235,7 +235,7 @@ namespace Ankh.Scc.ProjectMap
             ISvnItemStateUpdate sisu = item;
             sisu.SetDocumentDirty(dirty);
 
-            if(item.IsModified)
+            if (item.IsModified)
                 return; // No need to update glyph!
 
             UpdateGlyph(true);
@@ -619,7 +619,10 @@ namespace Ankh.Scc.ProjectMap
 
         public int FilesChanged(uint cChanges, string[] rgpszFile, uint[] rggrfChange)
         {
-            if (rgpszFile != null)
+            if (rgpszFile == null || cChanges == 0)
+                return VSConstants.S_OK;
+
+            try
             {
                 string[] nFiles = new string[cChanges];
 
@@ -629,6 +632,14 @@ namespace Ankh.Scc.ProjectMap
                 IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
 
                 monitor.ScheduleSvnStatus(nFiles);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
             }
 
             return VSConstants.S_OK;
