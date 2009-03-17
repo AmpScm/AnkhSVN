@@ -72,14 +72,16 @@ namespace Ankh.Commands
 
             foreach (SvnProject p in GetSelection(e.Selection))
             {
+                ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+
+                if (pi == null)
+                    continue; // Not an SCC project
+
                 if (!scc.IsProjectManaged(p))
                     return; // Something to enable
 
-                ISvnProjectInfo pi = pfm.GetProjectInfo(p);
-
-                if (pi != null && pi.ProjectDirectory != null)
-                    if (!cache[pi.ProjectDirectory].IsVersionable)
-                        return;
+                if (pi.ProjectDirectory != null && !cache[pi.ProjectDirectory].IsVersionable)
+                    return;
             }
 
             e.Enabled = false;
