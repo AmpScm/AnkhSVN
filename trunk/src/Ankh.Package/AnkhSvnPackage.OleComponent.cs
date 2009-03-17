@@ -54,13 +54,6 @@ namespace Ankh.VSPackage
             }
         }
 
-        #region NOOPed IOleComponent Members
-
-        int IOleComponent.FContinueMessageLoop(uint uReason, IntPtr pvLoopData, MSG[] pMsgPeeked)
-        {
-            return 1; // Please do
-        }
-
         static List<IAnkhIdleProcessor> _idleProcessors = new List<IAnkhIdleProcessor>();
         void IAnkhPackage.RegisterIdleProcessor(IAnkhIdleProcessor processor)
         {
@@ -70,6 +63,7 @@ namespace Ankh.VSPackage
             _idleProcessors.Add(processor);
         }
 
+        // Returns: BOOL
         int IOleComponent.FDoIdle(uint grfidlef)
         {
             AnkhIdleArgs args = new AnkhIdleArgs(this, unchecked((int)grfidlef));
@@ -84,7 +78,14 @@ namespace Ankh.VSPackage
                 done = done && args.Done;
             }
 
-            return done ? VSConstants.S_OK : VSConstants.S_FALSE;
+            return done ? 0 : 1; // TRUE to be called again
+        }
+
+        #region NOOPed IOleComponent Members
+
+        int IOleComponent.FContinueMessageLoop(uint uReason, IntPtr pvLoopData, MSG[] pMsgPeeked)
+        {
+            return 1; // Please do
         }
 
         int IOleComponent.FPreTranslateMessage(MSG[] pMsg)
