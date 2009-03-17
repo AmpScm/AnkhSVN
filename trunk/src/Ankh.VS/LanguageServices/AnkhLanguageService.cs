@@ -49,11 +49,11 @@ namespace Ankh.VS.LanguageServices
             GetService<IAnkhPackage>().RegisterIdleProcessor(this);
         }
 
-        bool IAnkhIdleProcessor.OnIdle(bool periodic)
+        void IAnkhIdleProcessor.OnIdle(AnkhIdleArgs e)
         {
             try
             {
-                OnIdle(periodic);
+                OnIdle(e.Periodic);
             }
             catch (COMException)
             {
@@ -61,8 +61,6 @@ namespace Ankh.VS.LanguageServices
             }
             catch 
             { }
-
-            return true;
         }
 
         protected internal IAnkhServiceProvider Context
