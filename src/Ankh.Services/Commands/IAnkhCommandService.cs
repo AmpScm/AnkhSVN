@@ -215,5 +215,7 @@ namespace Ankh.Commands
         /// </summary>
         /// <param name="check"></param>
         void DelayPostCommands(DelayDelegateCheck check);
+
+        void TockCommand(AnkhCommand ankhCommand);
     }
 }

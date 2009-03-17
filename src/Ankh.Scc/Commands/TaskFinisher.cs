@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Commands;
 using Ankh.Ids;
 
@@ -29,29 +27,27 @@ namespace Ankh.Scc.Commands
     [Command(AnkhCommand.SccFinishTasks, AlwaysAvailable=true)]
     sealed class TaskFinisher : ICommandHandler
     {
-        ProjectTracker _tracker;
-        AnkhSccProvider _scc;
-
-        #region ICommandHandler Members
-
         public void OnUpdate(CommandUpdateEventArgs e)
         {
         }
 
+        IAnkhCommandService _commandService;
+        ProjectTracker _projectTracker;
+        AnkhSccProvider _sccProvider;
+
         public void OnExecute(CommandEventArgs e)
         {
-            if (_tracker == null)
-                _tracker = (ProjectTracker)e.Context.GetService<IAnkhProjectDocumentTracker>();
-            if(_scc == null)
-                _scc = (AnkhSccProvider)e.Context.GetService<IAnkhSccService>();
+            if (_commandService == null)
+                _commandService = e.GetService<IAnkhCommandService>();
+            if (_projectTracker == null)
+                _projectTracker = e.GetService<ProjectTracker>(typeof(IAnkhProjectDocumentTracker));
+            if(_sccProvider == null)
+                _sccProvider = e.GetService<AnkhSccProvider>(typeof(IAnkhSccService));            
 
-            if(_tracker != null)
-                _tracker.OnSccCleanup(e);
+            _commandService.TockCommand(e.Command);
 
-            if (_scc != null)
-                _scc.OnSccCleanup(e);            
+            _projectTracker.OnSccCleanup(e);
+            _sccProvider.OnSccCleanup(e);            
         }
-
-        #endregion
     }
 }

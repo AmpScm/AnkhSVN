@@ -15,35 +15,31 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using Ankh.UI;
-using Ankh.Selection;
 using Ankh.Commands;
 using Ankh.Ids;
-using Ankh.Scc.ProjectMap;
-using System.Diagnostics;
 
 namespace Ankh.Scc.Commands
 {
-    [Command(AnkhCommand.MarkProjectDirty, AlwaysAvailable=true)]    
+    [Command(AnkhCommand.MarkProjectDirty, AlwaysAvailable = true)]
     public class MarkProjectDirty : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
         }
 
+        IAnkhCommandService _commandService;
+        ProjectNotifier _projectNotifier;        
+
         public void OnExecute(CommandEventArgs e)
         {
-            ProjectNotifier pn = e.GetService<ProjectNotifier>(typeof(IFileStatusMonitor));
+            if (_commandService == null)
+                _commandService = e.GetService<IAnkhCommandService>();
+            if (_projectNotifier == null)
+                _projectNotifier = e.GetService<ProjectNotifier>(typeof(IFileStatusMonitor));            
 
-            Debug.Assert(pn != null, "ProjectNotifier must be available!", "ProjectNotifier service not available");
-            if (pn != null)
-            {
-                pn.HandleEvent(e.Command);
-            }
+            _commandService.TockCommand(e.Command);
+
+            _projectNotifier.HandleEvent(e.Command);
         }
     }
 }
