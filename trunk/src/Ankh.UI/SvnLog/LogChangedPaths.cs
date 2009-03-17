@@ -158,6 +158,7 @@ namespace Ankh.UI
                 return;
 
             Point screen;
+            bool isHeaderContextMenu = false;
 
             if (e.X == -1 && e.Y == -1)
             {
@@ -166,15 +167,19 @@ namespace Ankh.UI
                     screen = changedPaths.PointToScreen(changedPaths.SelectedItems[changedPaths.SelectedItems.Count - 1].Position);
                 }
                 else
-                    return;
+                {
+                    screen = changedPaths.PointToScreen(new Point(1, 1));
+                    isHeaderContextMenu = true;
+                }
             }
             else
             {
+                isHeaderContextMenu = changedPaths.PointToClient(e.Location).Y < changedPaths.HeaderHeight;
                 screen = e.Location;
             }
 
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-            cs.ShowContextMenu(AnkhCommandMenu.LogChangedPathsContextMenu, screen);
+            cs.ShowContextMenu(isHeaderContextMenu ? AnkhCommandMenu.ListViewHeader : AnkhCommandMenu.LogChangedPathsContextMenu, screen);
         }
 
         private void changedPaths_MouseDoubleClick(object sender, MouseEventArgs e)

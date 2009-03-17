@@ -14,22 +14,19 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using SharpSvn;
-using System.Threading;
-using System.Runtime.Remoting.Messaging;
-using System;
-using Ankh.Scc;
-using Ankh.UI.Services;
-using Ankh.Ids;
-using Ankh.UI.RepositoryExplorer;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
+using SharpSvn;
+
 using Ankh.Commands;
+using Ankh.Ids;
+using Ankh.Scc;
+using Ankh.UI.RepositoryExplorer;
 
 namespace Ankh.UI.SvnLog
 {
@@ -465,6 +462,8 @@ namespace Ankh.UI.SvnLog
 
             Point screen;
 
+            bool headerContextMenu = false;
+
             if (e.X == -1 && e.Y == -1)
             {
                 if (logView.SelectedItems.Count > 0)
@@ -472,15 +471,19 @@ namespace Ankh.UI.SvnLog
                     screen = logView.PointToScreen(logView.SelectedItems[logView.SelectedItems.Count - 1].Position);
                 }
                 else
-                    return;
+                {
+                    headerContextMenu = true;
+                    screen = logView.PointToScreen(new Point(1, 1));
+                }
             }
             else
             {
+                headerContextMenu = (logView.PointToClient(e.Location).Y < this.logView.HeaderHeight);
                 screen = e.Location;
             }
 
             IAnkhCommandService cs = Context.GetService<IAnkhCommandService>();
-            cs.ShowContextMenu(AnkhCommandMenu.LogViewerContextMenu, screen);
+            cs.ShowContextMenu(headerContextMenu ? AnkhCommandMenu.ListViewHeader : AnkhCommandMenu.LogViewerContextMenu, screen);
         }        
     }
 
