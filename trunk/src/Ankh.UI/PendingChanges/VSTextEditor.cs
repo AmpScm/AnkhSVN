@@ -92,6 +92,22 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        public Point ViewToBuffer(Point p)
+        {
+            if (_nativeWindow == null)
+                return p;
+            else
+                return _nativeWindow.ViewToBuffer(p);
+        }
+
+        public Point BufferToView(Point p)
+        {
+            if (_nativeWindow == null)
+                return p;
+            else
+                return _nativeWindow.BufferToView(p);
+        }
+
         bool _enableSplitter;
         [Localizable(false), DefaultValue(false)]
         public bool EnableSplitter
@@ -1175,6 +1191,61 @@ namespace Ankh.UI.PendingChanges
             internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
         }
         #endregion
+
+        IVsTextLayer _topLayer;
+        bool _searchedTop;
+
+        IVsTextLayer TopLayer
+        {
+            get
+            {
+                if(_searchedTop)
+                    return _topLayer;
+
+                if(_textView == null)
+                    return null;
+                _searchedTop = true;
+                
+                IVsLayeredTextView layeredView = _textView as IVsLayeredTextView;
+
+                if(layeredView != null)
+                {
+                    IVsTextLayer topLayer;
+                    if(ErrorHandler.Succeeded(layeredView.GetTopmostLayer(out topLayer)))
+                        return _topLayer = topLayer;
+                }
+                
+                return null;
+            }
+        }
+
+        internal Point ViewToBuffer(Point p)
+        {
+            IVsTextLayer topLayer = TopLayer;
+
+            if(topLayer == null)
+                return p;
+            
+            int bY, bX;
+            if(ErrorHandler.Succeeded(topLayer.LocalLineIndexToBase(p.Y, p.X, out bY, out bX)))
+                return new Point(bX, bY);
+            else
+                return new Point(-1, -1); // Not represented in buffer
+        }
+
+        internal Point BufferToView(Point p)
+        {
+            IVsTextLayer topLayer = TopLayer;
+
+            if (topLayer == null)
+                return p;
+
+            int bY, bX;
+            if (ErrorHandler.Succeeded(topLayer.BaseLineIndexToLocal(p.Y, p.X, out bY, out bX)))
+                return new Point(bX, bY);
+            else
+                return new Point(-1, -1); // Not represented in view
+        }
     }
 
     public class TextViewScrollEventArgs : EventArgs
