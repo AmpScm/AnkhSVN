@@ -44,10 +44,11 @@ namespace Ankh.UI.SccManagement
             {
                 SmartListViewItem lvi = new SmartListViewItem(wcList);
                 SvnWorkingCopy wc = wcs[i];
+                Uri wcRoot = wc.RepositoryRoot;
                 lvi.SetValues(
                     wc.FullPath,
                     pcs[i].Count.ToString(),
-                    wc.RepositoryRoot.ToString());
+                    wcRoot != null ? wcRoot.ToString() : "");
                 lvi.Checked = (i == 0);
                 lvi.Tag = new List<PendingChange>(pcs[i]);
                 wcList.Items.Add(lvi);
