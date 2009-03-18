@@ -157,8 +157,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             else
             {
-                SelectedNode = this.GetNodeAt(e.X, e.Y);
-                screen = PointToScreen(e.Location);
+                SelectedNode = GetNodeAt(e.X, e.Y);
+                screen = e.Location;
             }
 
             IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
