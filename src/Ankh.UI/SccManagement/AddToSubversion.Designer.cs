@@ -48,7 +48,6 @@ namespace Ankh.UI.SccManagement
             this.locationBox = new System.Windows.Forms.GroupBox();
             this.repositoryUrl = new System.Windows.Forms.ComboBox();
             this.createFolderButton = new System.Windows.Forms.Button();
-            this.repositoryTree = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.localFolder = new System.Windows.Forms.ComboBox();
@@ -63,6 +62,7 @@ namespace Ankh.UI.SccManagement
             this.addTrunk = new System.Windows.Forms.CheckBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.bodyPanel = new System.Windows.Forms.Panel();
+            this.repositoryTree = new Ankh.UI.RepositoryExplorer.RepositoryTreeView();
             this.locationBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.projectBox.SuspendLayout();
@@ -103,25 +103,13 @@ namespace Ankh.UI.SccManagement
             // 
             this.createFolderButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.createFolderButton.Enabled = false;
-            this.createFolderButton.Location = new System.Drawing.Point(335, 46);
+            this.createFolderButton.Location = new System.Drawing.Point(334, 46);
             this.createFolderButton.Name = "createFolderButton";
             this.createFolderButton.Size = new System.Drawing.Size(93, 23);
             this.createFolderButton.TabIndex = 3;
             this.createFolderButton.Text = "&Create Folder...";
             this.createFolderButton.UseVisualStyleBackColor = true;
             this.createFolderButton.Click += new System.EventHandler(this.createFolderButton_Click);
-            // 
-            // repositoryTree
-            // 
-            this.repositoryTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.repositoryTree.Context = null;
-            this.repositoryTree.Location = new System.Drawing.Point(6, 46);
-            this.repositoryTree.Name = "repositoryTree";
-            this.repositoryTree.Size = new System.Drawing.Size(323, 205);
-            this.repositoryTree.TabIndex = 2;
-            this.repositoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // comboBox1
             // 
@@ -151,7 +139,7 @@ namespace Ankh.UI.SccManagement
             this.localFolder.FormattingEnabled = true;
             this.localFolder.Location = new System.Drawing.Point(6, 19);
             this.localFolder.Name = "localFolder";
-            this.localFolder.Size = new System.Drawing.Size(408, 21);
+            this.localFolder.Size = new System.Drawing.Size(421, 21);
             this.localFolder.TabIndex = 0;
             this.localFolder.SelectedIndexChanged += new System.EventHandler(this.localFolder_SelectedIndexChanged);
             // 
@@ -232,7 +220,7 @@ namespace Ankh.UI.SccManagement
             this.resultUriBox.Location = new System.Drawing.Point(6, 19);
             this.resultUriBox.Name = "resultUriBox";
             this.resultUriBox.ReadOnly = true;
-            this.resultUriBox.Size = new System.Drawing.Size(424, 20);
+            this.resultUriBox.Size = new System.Drawing.Size(421, 20);
             this.resultUriBox.TabIndex = 0;
             this.resultUriBox.TabStop = false;
             // 
@@ -240,7 +228,7 @@ namespace Ankh.UI.SccManagement
             // 
             this.addTrunk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.addTrunk.AutoSize = true;
-            this.addTrunk.Location = new System.Drawing.Point(12, 360);
+            this.addTrunk.Location = new System.Drawing.Point(18, 360);
             this.addTrunk.Name = "addTrunk";
             this.addTrunk.Size = new System.Drawing.Size(155, 17);
             this.addTrunk.TabIndex = 4;
@@ -267,6 +255,18 @@ namespace Ankh.UI.SccManagement
             this.bodyPanel.Name = "bodyPanel";
             this.bodyPanel.Size = new System.Drawing.Size(459, 440);
             this.bodyPanel.TabIndex = 8;
+            // 
+            // repositoryTree
+            // 
+            this.repositoryTree.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.repositoryTree.Context = null;
+            this.repositoryTree.Location = new System.Drawing.Point(6, 46);
+            this.repositoryTree.Name = "repositoryTree";
+            this.repositoryTree.Size = new System.Drawing.Size(322, 158);
+            this.repositoryTree.TabIndex = 2;
+            this.repositoryTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
             // AddToSubversion
             // 
