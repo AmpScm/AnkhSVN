@@ -43,11 +43,6 @@ namespace Ankh.Scc
             _solutionLoaded = false;
             SccProvider.OnStartedSolutionClose();
 
-            IAnkhTaskManager conflicts = GetService<IAnkhTaskManager>();
-
-            if (conflicts != null)
-                conflicts.OnCloseSolution();
-
             return VSConstants.S_OK;
         }
 
