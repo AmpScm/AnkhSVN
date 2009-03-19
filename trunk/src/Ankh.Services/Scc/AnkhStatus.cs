@@ -32,6 +32,7 @@ namespace Ankh
     [DebuggerDisplay("Content={LocalContentStatus}, Property={LocalPropertyStatus}, Uri={Uri}")]
     public sealed class AnkhStatus
     {
+        readonly SvnConflictData _treeConflict;
         readonly SvnNodeKind _nodeKind;        
         readonly string _changeList;
         readonly SvnStatus _localContentStatus;
@@ -65,7 +66,11 @@ namespace Ankh
                 _changeList = args.WorkingCopyInfo.ChangeList;
                 _localLocked = args.WorkingCopyInfo.LockToken != null;
             }
-        }        
+
+            _treeConflict = args.TreeConflict;
+            if(_treeConflict != null)
+                _treeConflict.Detach();
+        }
 
         /// <summary>
         /// Create non-locked, non-copied item with status specified
@@ -198,7 +203,13 @@ namespace Ankh
         public Uri Uri
         {
             get { return _uri; }
-        }           
+        }
+
+        public bool HasTreeConflict
+        {
+            get { return _treeConflict != null; }
+        }
+
     }
 
 }

@@ -138,7 +138,7 @@ namespace Ankh
                 | SvnItemState.SvnDirty | SvnItemState.PropertyModified | SvnItemState.PropertiesConflicted
                 | SvnItemState.Obstructed | SvnItemState.MustLock | SvnItemState.IsNested
                 | SvnItemState.HasProperties | SvnItemState.HasLockToken | SvnItemState.HasCopyOrigin
-                | SvnItemState.ContentConflicted;
+                | SvnItemState.TreeConflicted;
 
             switch (status)
             {
@@ -212,7 +212,8 @@ namespace Ankh
             _status = status;
 
             const SvnItemState unset = SvnItemState.Modified | SvnItemState.Added |
-                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted | SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
+                SvnItemState.HasCopyOrigin | SvnItemState.Deleted | SvnItemState.ContentConflicted |
+                SvnItemState.Ignored | SvnItemState.Obstructed | SvnItemState.Replaced;
 
             const SvnItemState managed = SvnItemState.Versioned;
 
@@ -296,6 +297,11 @@ namespace Ankh
                 SetState(SvnItemState.Versionable, SvnItemState.None);
             else
                 SetState(SvnItemState.None, SvnItemState.Versionable);
+
+            if (status.HasTreeConflict)
+                SetState(SvnItemState.TreeConflicted, SvnItemState.None);
+            else
+                SetState(SvnItemState.None, SvnItemState.TreeConflicted);
 
             bool hasProperties = true;
             switch (status.LocalPropertyStatus)
@@ -743,7 +749,7 @@ namespace Ankh
         /// </summary>
         public bool IsConflicted
         {
-            get { return 0 != GetState(SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted); }
+            get { return 0 != GetState(SvnItemState.ContentConflicted | SvnItemState.PropertiesConflicted | SvnItemState.TreeConflicted); }
         }
 
         /// <summary>

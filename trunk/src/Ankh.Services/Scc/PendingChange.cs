@@ -303,7 +303,7 @@ namespace Ankh.Scc
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
         {
             AnkhStatus status = item.Status;
-            _kind = CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, item);
+            _kind = CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
 
             if (_kind != PendingChangeKind.None)
                 return new PendingChangeStatus(_kind);
