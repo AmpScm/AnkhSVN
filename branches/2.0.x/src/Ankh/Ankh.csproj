@@ -1,0 +1,347 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
+    <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Ankh</AssemblyName>
+    <AssemblyOriginatorKeyFile>Ankh.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Ankh</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>default</LangVersion>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(ShellAssembly)" />
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="SharpSvn, Version=1.4999.350.29541, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn.UI, Version=1.4999.0.861, Culture=neutral, PublicKeyToken=33789aa53ca44aa9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.UI\Ankh.UI.csproj">
+      <Project>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</Project>
+      <Name>Ankh.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Migrate\Ankh.Migrate.csproj">
+      <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
+      <Name>Ankh.Migrate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utils\Utils.csproj">
+      <Name>Utils</Name>
+      <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
+      <Package>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Package>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.snk" />
+    <None Include="Ankh.wxs" />
+    <Compile Include="Commands\ApplyPatch.cs" />
+    <Compile Include="Commands\ItemCreatePatch.cs" />
+    <Compile Include="Commands\ItemMoveToChangeList.cs" />
+    <Compile Include="Commands\ItemResolveCasing.cs" />
+    <Compile Include="Commands\RepositoryExplorer\CopyToOrMove.cs" />
+    <Compile Include="Commands\RepositoryExplorer\CopyToWorkingCopy.cs" />
+    <Compile Include="Commands\RepositoryExplorer\DeleteRepositoryItemCommand.cs" />
+    <Compile Include="Commands\RepositoryExplorer\RenameNode.cs" />
+    <Compile Include="Commands\RepositoryExplorer\ShowRepositoryItemChanges.cs" />
+    <Compile Include="Services\AnkhHelpService.cs" />
+    <Compile Include="Services\AnkhClientPool.cs" />
+    <Compile Include="Services\PendingChanges\PccStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PccStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SolutionSettings.Commit.cs">
+      <DependentUpon>SolutionSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\BranchSolutionCommand.cs" />
+    <Compile Include="Commands\CheckForUpdates.cs" />
+    <Compile Include="Commands\CommandStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommandStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\ItemEditPropertiesCommand.cs" />
+    <Compile Include="Commands\ItemConflictEdit.cs" />
+    <Compile Include="Commands\ItemIgnore.cs" />
+    <Compile Include="Commands\ItemUnifiedDiffCommand.cs" />
+    <Compile Include="Commands\MigrateAnkhSettings.cs" />
+    <Compile Include="Commands\OpenInXExplorer.cs" />
+    <Compile Include="Commands\SolutionCommitCommand.cs" />
+    <Compile Include="Services\AnkhCommandService.cs" />
+    <Compile Include="AnkhModule.cs" />
+    <Compile Include="CommandResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CommandResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\AddItemCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\AddToSccCommands.cs" />
+    <Compile Include="Commands\ItemResolveCommand.cs" />
+    <Compile Include="Commands\OpenFromSubversion.cs" />
+    <Compile Include="Commands\OpenInVisualStudio.cs" />
+    <Compile Include="Commands\RepositoryExplorer\RepositoryBrowseCommand.cs" />
+    <Compile Include="Commands\SolutionUpdateCommand.cs" />
+    <Compile Include="Commands\RepositoryExplorer\ViewRepositoryFileCommand.cs" />
+    <Compile Include="Commands\WorkingCopyExplorer\WorkingCopyBrowseCommand.cs" />
+    <Compile Include="Commands\ItemAnnotateCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\CheckoutCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\CleanupCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\ItemCommitCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\CopyReposExplorerUrl.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ItemShowChanges.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ExportCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\LocalDiffCommandBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\LockCommand.cs" />
+    <Compile Include="Commands\LogCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\CreateDirectoryCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RefreshCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\RefreshRepositoryItemCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\RemoveRepositoryRootCommand.cs" />
+    <Compile Include="Commands\WorkingCopyExplorer\RemoveWorkingCopyExplorerRootCommand.cs" />
+    <Compile Include="Commands\ItemRevertCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\SaveToFileCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\ShowToolWindows.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\SwitchItemCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\UnlockCommand.cs" />
+    <Compile Include="Commands\UpdateItemCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Commands\RepositoryExplorer\ViewInVSNetCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AnkhDiff.cs" />
+    <Compile Include="Services\AnkhDiff.Internal.cs">
+      <DependentUpon>AnkhDiff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AnkhDiff.Tools.cs">
+      <DependentUpon>AnkhDiff.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\ConfigService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConflictManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\AnkhErrorHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\PendingChanges\PendingCommitState.cs" />
+    <Compile Include="Services\PendingChanges\PendingChangeHandler.cs" />
+    <Compile Include="Services\Scheduler.cs" />
+    <Compile Include="Services\SolutionSettings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ProgressRunner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\UIShell.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="CommandResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommandResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commands\CommandStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Services\PendingChanges\PccStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PccStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="GenerateSerializationAssemblies" Condition="'$(_SGenGenerateSerializationAssembliesConfig)' == 'On' or ('@(WebReferenceUrl)'!='' and '$(_SGenGenerateSerializationAssembliesConfig)' == 'Auto')" DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource" Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)" Outputs="$(IntermediateOutputPath)$(_SGenDllName)">
+    <SGen BuildAssemblyName="$(TargetFileName)" BuildAssemblyPath="$(IntermediateOutputPath)" References="@(ReferencePath)" ShouldGenerateSerializer="true" UseProxyTypes="false" KeyContainer="$(KeyContainerName)" KeyFile="$(KeyOriginatorFile)" DelaySign="$(DelaySign)" ToolPath="$(SGenToolPath)">
+      <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly" />
+    </SGen>
+  </Target>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

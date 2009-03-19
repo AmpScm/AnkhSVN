@@ -1,0 +1,353 @@
+                              
+<p><a name="totop"></a><b>Using the features of AnkhSVN</b></p>
+ 
+<ol>   
+<li> <a href="#1">AnkhSVN doesn't work for this project but TortoiseSVN works fine</a></li>
+   
+<li><a href="#2">How do I make AnkhSVN use &quot;_svn&quot; instead of &quot;.svn&quot;?</a></li>
+   
+<li><a href="#3">How do I identify the version of AnkhSVN I am using?</a></li>
+   
+<li><a href="#4">Some project settings not preserved across checkin/checkout (ie. Working Directory). Why?</a></li>
+   
+<li><a href="#5">Does subversion support locking of files? IE is there an equivalent of &quot;checked out by me&quot;, &quot;checked by other&quot; as in Visual Source Safe?</a></li>
+   
+<li><a href="#6">How does AnkhSVN determine whether a solution is version controlled?</a></li>
+   
+<li><a href="#7">I selected No when asked whether to load AnkhSVN for my solution. Now I have changed my mind!</a></li>
+   
+<li><a href="#8">What is the optimal solution layout for AnkhSVN?</a></li>
+   
+<li><a href="#9">But I can't create a layout like that with ASP.NET 2003 projects! VS places the ASP.NET projects under wwwroot</a></li>
+   
+<li><a href="#10">I can't figure out how to add a new project via AnkhSVN and yes, I read the Getting Started page</a></li>
+   
+<li><a href="#11">How do I create a proper layout for ASP in Visual Studio 2005?</a></li>
+</ol>
+ 
+<p><b> Using AnkhSVN with other software </b></p>
+ 
+<ol>   
+<li> <a href="#13">What versions of VS.NET does AnkhSVN run on?</a></li>
+   
+<li><a href="#14">Does it work with the Visual Studio 2005 Express versions?</a></li>
+   
+<li><a href="#16">What else do I need to have installed to use AnkhSVN?</a></li>
+   
+<li><a href="#17">How do I convert my Visual Sourcesafe repository to SVN?</a></li>
+   
+<li><a href="#20">Why doesn't AnkhSVN work with Intel Compiler projects/{insert favorite project type here}?</a></li>
+   
+<li><a href="#21">I am using svnserve, when I attempt to do a commit to the remote repository I get a Permission denied error. How do i set up user accounts for svnserve?</a></li>
+   
+<li><a href="#22">I'm trying use svn+ssh but i get an error dialog when I try to checkout or update.</a></li>
+</ol>
+ <p><strong>Errors</strong></p>
+ <ol>
+   <li><a href="#24">I get an error saying &quot;URI formats not supported&quot;</a></li>
+   <li><a href="#25">I get an error saying &quot;Cannot copy or move file: it's not in the repository yet. Try committing first&quot;</a></li>
+   <li><a href="#26">I get an error saying &quot;Failed to add file: object of the same name exists&quot;</a></li>
+   <li><a href="#27">I get an error saying &quot;This client is too old to work with working copy; please get a newer Subversion client</a></li>
+   <li><a href="#29">When committing, I get an error saying Aborting commit: file remains in conflict</a></li>
+   <li><a href="#30">If I do a &quot;Replace In Files&quot;, AnkhSVN doesn't notice that the files have changed.</a></li>
+   <li><a href="#32">I am getting the error &quot;Unable to retrieve folder information from the server with my ASP.NET web project&quot;.</a></li>
+   <li><a href="#32">I get an error saying &quot;PROPFIND of ...: 405 Method Not Allowed&quot;</a></li>
+   <li><a href="#33">I uninstalled AnkhSVN, but the menu entries are still there, how can I get rid of them?</a></li>
+   <li><a href="#34">I am getting an svn client error exception for svn_io_file_open: can't open (then a path to a file with a .projdata or a .ncb extension)</a></li>
+   <li><a href="#35">I'm getting a MissingMethodException - Method not found: System.Object AddCommandBar</a></li>
+ </ol>
+ <p><strong>Other</strong></p>
+ <ol>
+   <li><a href="#36">What's an Ankh?</a></li>
+ </ol>
+ <p><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ <h2><b>Using the features of AnkhSVN</b></h2> 
+<p><a name="1"></a><b>AnkhSVN doesn't work for this project but TortoiseSVN works fine</b></p>
+ 
+<p>The default directory for Subversion clients administrative data is &quot;.svn&quot; however Visual Studio has some issues with directories beginning with a . and so some clients use &quot;_svn&quot; instead.</p>
+ 
+<p>If you have TortoiseSVN set to use &quot;_svn&quot; then you should also tell AnkhSVN to do this too as per the following question.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="2"></a><b>How do I make AnkhSVN use &quot;_svn&quot; instead of &quot;.svn&quot;?</b></p>
+ 
+<p>Open Visual Studio without a project loaded.</p>
+ 
+<p>From within Visual Studio choose Tools -&gt; AnkhSVN -&gt; Edit the AnkhSVN configuration.</p>
+ 
+<p>Under Category &quot;Subversion&quot;, key AdminDirectoryName put in the value &quot;_svn&quot;</p>
+ 
+<p>Hit OK.</p>
+ 
+<p>Now open up a solution that is versioned with subversion and enable it for AnkhSVN.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="3"></a><b>How do I identify the version of AnkhSVN I am using?</b></p>
+ 
+<p>From within Visual Studo choose Help -&gt; About Microsoft Visual Studio</p>
+ 
+<p>In the dialog that is shown choose AnkhSVN from &quot;Installed products&quot; and the version details will then be displayed in &quot;Product details&quot;.</p>
+ 
+<p>Note both these lists may require scrolling to find AnkhSVN and the version numbers.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="4"></a><b>Some project settings not preserved across checkin/checkout (ie. Working Directory). Why?</b></p>
+ 
+<p>Those settings are considered to be the local user project options and they are not meant to be version controled by definition. (FYI they are not stored in the .vcproj / .csproj but in the .suo / .csproj.user Visual Studio user option files)</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="5"></a><b>Does subversion support locking of files? IE is there an equivalent of &quot;checked out by me&quot;, &quot;checked by other&quot; as in Visual Source Safe?</b></p>
+ 
+<p>Yes, later snapshots of AnkhSVN supports locking via the Lock and Unlock commands. It also has icons to indicate the lock status of a file.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="6"></a>How does AnkhSVN determine whether a solution is version controlled?</b></p>
+ 
+<p>Whenever VS.NET loads a solution, AnkhSVN looks at the directory that contains the solution(.sln) file. If this directory is version controlled, AnkhSVN will present the user with a choice whether AnkhSVN should be enabled for the current solution. You can also choose to have AnkhSVN load for a single session only.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="7"></a><b>I selected No when asked whether to load AnkhSVN for my solution. Now I have changed my mind!</b></p>
+ 
+<p>Right click on the solution node in the Solution Explorer and select AnkhSVN-&gt;Toggle AnkhSVN for this solution.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="8"></a>What is the optimal solution layout for AnkhSVN?</b></p>
+ 
+<p>AnkhSVN will perform best(solution load time, refresh time etc...) when the file system layout of the solution follows the logical layout. That means something like this:</p>
+ 
+<pre> SolutionDir\
+    Solution.sln
+    Project1\
+       File1.cs
+       File2.cs
+       SubNamespace\
+          File3.cs
+          File4.cs
+       Project1.csproj
+    Project2\
+       Foo.vb
+       Bar.vb
+       SubFoo\
+           Moo.vb
+       Project2.vbproj
+    Project3
+       Ooga.cpp
+       Ooga.h
+       Chacka.cpp
+       Chacka.h
+       Project3.vcproj</pre>
+<p>VS will create this kind of layout for you if you check the &quot;Create directory for solution&quot; checkbox when creating a new project.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="9"></a>But I can't create a layout like that with ASP.NET 2003 projects! VS places the ASP.NET projects under wwwroot</b></p>
+ 
+<p>That 'is' the default layout, yes. However, it is quite possible to put an ASP.NET project anywhere in the file system.</p>
+ 
+<p>Assume you have laid out the solution according to the above(either by creating other projects or by making a blank solution):</p>
+ 
+<p>These instructions only work in VS 2003:</p>
+ 
+<ul>
+  <li> Create the directory under the solution directory that is to hold the ASP.NET project, f.ex WebProject</li>
+  <li>Go into the Properties dialog of that folder and click the Web Sharing tab</li>
+  <li> Click &quot;Share this folder&quot; and enter a suitable name, f.ex mywebproject</li>
+  <li> In VS.NET, right click the solution and choose Add-&gt;New project</li>
+  <li> Select ASP.NET project and enter http://localhost/mywebproject as the URL</li>
+  <li> VS.NET will now create the solution under SolutionDir\WebProject</li>
+</ul>
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p> <a name="10"></a><b>I can't figure out how to add a new project via AnkhSVN and yes, I read the <a href="http://ankhsvn.open.collab.net/servlets/ProjectProcess?pageID=3794">Getting Started</a> page</b></p>
+ 
+<p>There is a good chance that Visual Studio is not showing you the Solution node in Solution Explorer. To rectify this, go to the menu bar and click Tools &gt; Options &gt; Projects and Solutions, and check the box next to 'Always show solution.' After clicking OK, right click on the solution node to bring up the context menu, follow the <a href="http://ankhsvn.open.collab.net/servlets/ProjectProcess?pageID=3794">Getting Started</a> instructions from there.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="11"></a><b>How do I create a proper layout for ASP in Visual Studio 2005?</b></p>
+ 
+<ul>
+  <li> Open Visual Studio and create a blank solution file (File&gt;New Project&gt;Other Project Types&gt;Visual Studio Solutions&gt;Blank Solution)</li>
+  <li> Right Click on the empty solution file in the Solution Explorer and Click Add&gt;New Website...</li>
+  <li> Browse to the place you just created and then in the Location textbox add a new subdirectory name onto the end of the path</li>
+  <li> Create some content, if desired</li>
+  <li> Click File&gt;Add Solution to Subversion Repository...</li>
+</ul>
+<p>Every time you open your ASP project you MUST use the Open Project command to browse to the .sln file you created instead of using the Open Website command. Anytime you use the Open Website command you will create a superfluous solution file (default is under My Documents\Visual Studio\Projects) that is not under subversion source control.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ <h2>Using AnkhSVN with other software</h2> 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="13"></a><strong>What versions of VS.NET does AnkhSVN run on?</strong></p>
+ 
+<p>AnkhSVN 1.0.2 supports VS.NET 2002, VS.NET 2003 and VS 2005. It is the same install file (msi) for all versions. Version 1.0.3 (currently in prelease), runs on MSVS 2005 and 2008.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><a name="14"></a><b>D</b><b>oes it work with the Visual Studio 2005 Express versions?</b></p>
+ 
+<p>No, and it might never do so. The current position from Microsoft is that these SKUs will not support addins. </p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="16"></a>What else do I need to have installed to use AnkhSVN?</b></p>
+ 
+<p>AnkhSVN links into the same libraries that svn.exe does, so if the Subversion repository is already created it is possible to use AnkhSVN without ever installing Subversion at all. However, with AnkhSVN you cannot yet do some things, including but not limited to creating a repository, merging, copying or moving. It is highly recommended that Subversion be installed as well at this point. You can <a href="http://downloads.open.collab.net/collabnet-subversion.html">download Subversion from openCollabNet</a>. . Other than that all you need is VS.NET.</p>
+<p><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+<p><strong><a name="17"></a>How do I convert my Visual Sourcesafe repository to Subversion?</strong></p>
+<p>Information is in the <a href="http://subversion-migration.open.collab.net/">Subversion Migration section of openCollabNet</a>. .</p>
+<p><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+<p><b><a name="20"></a>Why doesn't AnkhSVN work with Intel Compiler projects/{insert favorite project type here}</b></p>
+ 
+<p>In VS.NET, every vendor that provides a project type is also responsible for implementing its automation model. In some cases, they do a less than stellar job, and this leaves AnkhSVN in a position where it cannot get the information it needs.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="21"></a>I am using svnserve, when I attempt to do a commit to the remote repository I get a Permission denied error. How do i set up user accounts for svnserve?</b></p>
+ 
+<p>Svnserve has built-in authentication and authorization. You can setup users and realms within your /path-to-repos/conf/svnserve.conf file. See http://svnbook.red-bean.com/svnbook-1.0/ch06s03.html for instructions.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="22"></a>I'm trying use svn+ssh but i get an error dialog when I try to checkout or update.</b></p>
+ 
+<p>You may not have an ssh client available. You can specify the full path to the client in the c:\Documents and Settings\YOURUSERNAME\Application Data\Subversion\config. Make sure you uncomment the # tunnels section and add a line like this:</p>
+ 
+<p>ssh = c:\\Program\ Files\\TortoiseSVN\\bin\\TortoisePlink.exe</p>
+ 
+<p>(note the double \ characters and the single \ to escape the space ) </p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ <h2>Errors</h2> 
+<p><b><a name="24"></a>I get an error saying &quot;URI formats not supported&quot;</b></p>
+ 
+<p>This has been fixed in the upcoming 1.0 RC4.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="25"></a>I get an error saying &quot;Cannot copy or move file: it's not in the repository yet. Try committing first&quot;</b></p>
+ 
+<p>Subversion (and AnkhSVN by consequence) does not allow you to rename items that have been added, but not committed. If you need to do this, first perform a &quot;Revert&quot; on the item, then do the rename and read it.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="26"></a>I get an error saying &quot;Failed to add file: object of the same name exists&quot;</b></p>
+ 
+<p>This means that someone else has added a file with this name to the repository. When updating, Subversion will refuse to overwrite unversioned files. You have to move the unversioned file out of the way first.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="27"></a>I get an error saying &quot;This client is too old to work with working copy; please get a newer Subversion client</b></p>
+ 
+<p>Subversion 1.4 introduced a new working copy format. As a consequence, all clients linking to SVN 1.4 libraries will automatically upgrade any working copies they come into contact with, leaving the working copy unusable by older clients.</p>
+  
+<p>AnkhSVN 1.0 (RC) is linked to SVN 1.4, so upgrading will solve the problem.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="29"></a>When committing, I get an error saying Aborting commit: file remains in conflict</b></p>
+ 
+<p>This means you have a file that is in conflict, ie, someone else has made a change that conflicts with one of yours. You will have to resolve the conflict before proceeding. This can be done by editing the conflict markers in the file, then doing AnkhSVN-&gt;Resolve on the file in question.</p>
+ 
+<p>Alternatively, you can pick which version of the file you want to resolve in the Resolve dialog, or use an external merge tool (you need to set up one in the configuration dialog for this).</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="30"></a>If I do a &quot;Replace In Files&quot;, AnkhSVN doesn't notice that the files have changed.</b></p>
+ 
+<p>If you want to do &quot;Replace In Files&quot; on files controlled by AnkhSVN, make sure to check the checkbox in the dialog that comes up. This will make VS open all the affected files in the document editor and force you to do an explicit &quot;Save All&quot; in order to finalize the changes. AnkhSVN will notice in this case.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="32"></a>I am getting the error &quot;Unable to retrieve folder information from the server with my ASP.NET web project&quot;.</b></p>
+ 
+<p>This problem is described in detail here: <a href="http://subversion.tigris.org/servlets/ReadMsg?list=dev&msgNo=60681">http://subversion.tigris.org/servlets/ReadMsg?list=dev&amp;msgNo=60681</a> The best solution is to have AnkhSVN use _svn as the name of the Subversion administrative directory instead. This can be done in the configuration dialog (Tools-&gt;AnkhSVN-&gt;Edit AnkhSVN configuration).</p>
+ 
+<p>===I get an error saying &quot;The version resource does not correspond to the resource within the transaction.&quot; Running Update on the item in question solves this problem.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="32"></a>I get an error saying &quot;PROPFIND of ...: 405 Method Not Allowed&quot;</b></p>
+ 
+<p>This usually means you are trying to perform a Subversion operation against an URL that isn't set up as a Subversion repository.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="33"></a>I uninstalled AnkhSVN, but the menu entries are still there, how can I get rid of them?</b></p>
+ 
+<p>You can run devenv /setup from the command line which will set VS.NET back to the default state. However if you have any VS.NET customizations you may lose them.</p>
+ 
+<p align="left"><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="34"></a>I am getting an svn client error exception for svn_io_file_open: can't open (then a path to a file with a .projdata or a .ncb extension)</b></p>
+ 
+<p>You cannot put the .projdata file under Subversion version control. VS.NET puts a pretty tight lock on that whenever a solution is loaded - other applications cannot even read from it. In fact, this exact scenario was used for an AnkhSVN presentation to demonstrate how the error reporting worked. This file is generated by VS.NET, doesn't have much of interest in it, and there's no reason to put it under version control anyway. Other generated files that should never be put under version control include but are not limited to files of type .user, .suo, .obj, .exe, .pdb and dll.</p>
+ 
+<p>We recommend adding .projdata and some of the other file types to the global-ignores section in your %APPDATA%\Subversion\config file. This will ensure that they don't get accidentally imported if you use other clients to add your code to the repository. If you use AnkhSVN-&gt;Add solution to repository, AnkhSVN will of course ignore these files automatically.</p>
+ 
+<p>Here is a sample global-ignores:</p>
+ 
+<p> miscellany</p>
+ 
+<p> ### Set global-ignores to a set of whitespace-delimited globs</p>
+ 
+<p> ### which Subversion will ignore in its 'status' output.</p>
+ 
+<p> global-ignores = *.projdata *.pdb *.exe *.dll obj tmp temp bin *proj.user *.o *.obj *.ncb *.suo *.pyc</p>
+ 
+<p><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+ 
+<p><b><a name="35"></a>I'm getting a MissingMethodException - Method not found: System.Object AddCommandBar</b></p>
+ 
+<p>This is caused by a bug in the installer of either Whidbey or the Express SKUs. To fix:</p>
+ 
+<p>  &gt; cd %windir%\Microsoft.NET\Framework\v1.1.4322 </p>
+ 
+<p>  &gt; regasm /codebase envdte.dll</p>
+ 
+<p>The last line will give you a warning, but it's not dangerous.</p>
+ 
+<p><a href="#totop"><img src="../../../images/gotop.gif" width="14" height="12"></a></p>
+<h2>Other</h2>
+<p><b><a name="36"></a>What's an Ankh?</b></p>
+ 
+<p>Read  about this ancient <a href="http://en.wikipedia.org/wiki/Ankh">Egyptian sign of life</a>.</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><tt>(eof)</tt></p>
+<p>&nbsp;</p>
+               
