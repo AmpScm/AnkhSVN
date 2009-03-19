@@ -183,7 +183,7 @@ namespace Ankh.VS.Extenders
             get
             {
                 AnkhStatus status = SvnItem.Status;
-                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, false, SvnItem);
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, status.HasTreeConflict, SvnItem);
 
                 if (kind == PendingChangeKind.None)
                     return "";

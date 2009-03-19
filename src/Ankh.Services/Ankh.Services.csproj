@@ -116,7 +116,6 @@
     <Compile Include="Scc\SvnWorkingCopy.cs" />
     <Compile Include="Scc\UI\IAnkhDiffHandler.cs" />
     <Compile Include="Scc\UI\ILogControl.cs" />
-    <Compile Include="Selection\IAnkhTaskManager.cs" />
     <Compile Include="UI\AnkhMessageBox.cs" />
     <Compile Include="Scc\PendingChange.cs" />
     <Compile Include="UI\ICurrentItemSource.cs" />
@@ -184,17 +183,9 @@
   <ItemGroup>
     <Content Include="Ankh.Services.wxs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(ForceSVN)' == '1.6.x' ">
-    <DependencyDownload Include="SSvn-1.6000.1172.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/1744/</Url>
-      <TargetDir>..\autolib</TargetDir>
-      <Version>1</Version>
-      <Visible>false</Visible>
-    </DependencyDownload>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(ForceSVN)' != '1.6.x' ">
-    <DependencyDownload Include="SSvn-1.5006.1166.zip">
-      <Url>http://sharpsvn.open.collab.net/files/documents/180/1738/</Url>
+  <ItemGroup>
+    <DependencyDownload Include="SSvn-1.6000.1180.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/1753/</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>1</Version>
       <Visible>false</Visible>

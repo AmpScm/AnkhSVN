@@ -283,9 +283,6 @@
     <Compile Include="Services\ConfigService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConflictManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Services\AnkhErrorHandler.cs">
       <SubType>Code</SubType>
     </Compile>
