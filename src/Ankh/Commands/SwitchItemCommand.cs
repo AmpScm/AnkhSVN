@@ -141,7 +141,7 @@ namespace Ankh.Commands
             }
 
             IFileStatusCache statusCache = e.GetService<IFileStatusCache>();
-            
+
             SvnItem pathItem = statusCache[path];
             Uri uri = pathItem.Status.Uri;
 
@@ -189,9 +189,8 @@ namespace Ankh.Commands
             documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before merging!
 
             using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
+            using (lck.MonitorChangesForReload())
             {
-                lck.MonitorChanges();
-
                 Uri newRepositoryRoot = null;
                 e.GetService<IProgressRunner>().RunModal(
                     "Switching",
@@ -224,7 +223,7 @@ namespace Ankh.Commands
                                 {
                                     newRepositoryRoot = iea.RepositoryRoot;
                                 }
-                                else if(pathItem.WorkingCopy.RepositoryId == Guid.Empty)
+                                else if (pathItem.WorkingCopy.RepositoryId == Guid.Empty)
                                 {
                                     // No UUIDs and RepositoryRoot equal. Throw/show error?
 
@@ -279,8 +278,6 @@ namespace Ankh.Commands
                         });
                     }
                 }
-
-                lck.ReloadModified();
             }
         }
     }
