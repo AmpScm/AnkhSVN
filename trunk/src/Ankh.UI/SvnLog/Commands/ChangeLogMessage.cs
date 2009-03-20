@@ -63,18 +63,32 @@ namespace Ankh.UI.SvnLog.Commands
                     if (dialog.LogMessage == logItems[0].LogMessage)
                         return; // No changes
 
-                    using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
-                    {
-                        client.SetRevisionProperty(logItems[0].RepositoryRoot, logItems[0].Revision, SvnPropertyNames.SvnLog, dialog.LogMessage);
-                    }
-
                     IAnkhConfigurationService config = e.GetService<IAnkhConfigurationService>();
 
                     if (config != null)
                     {
-                        if(dialog.LogMessage != null && dialog.LogMessage.Trim().Length > 0)
+                        if (dialog.LogMessage != null && dialog.LogMessage.Trim().Length > 0)
                             config.GetRecentLogMessages().Add(dialog.LogMessage);
                     }
+
+                    using (SvnClient client = e.GetService<ISvnClientPool>().GetClient())
+                    {
+                        SvnSetRevisionPropertyArgs sa = new SvnSetRevisionPropertyArgs();
+                        sa.AddExpectedError(SvnErrorCode.SVN_ERR_REPOS_DISABLED_FEATURE);
+                        client.SetRevisionProperty(logItems[0].RepositoryRoot, logItems[0].Revision, SvnPropertyNames.SvnLog, dialog.LogMessage, sa);
+
+                        if (sa.LastException != null &&
+                            sa.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_REPOS_DISABLED_FEATURE)
+                        {
+                            AnkhMessageBox mb = new AnkhMessageBox(e.Context);
+
+                            mb.Show(sa.LastException.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            return;
+                        }
+                    }
+
+                    
 
                     logWindow.Restart();
                     // TODO: Somehow repair scroll position/number of items loaded
