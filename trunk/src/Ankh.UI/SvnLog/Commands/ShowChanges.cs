@@ -92,6 +92,10 @@ namespace Ankh.UI.SvnLog.Commands
                     e.Enabled = false;
                     break;
             }
+
+            if (change.NodeKind == SvnNodeKind.Directory)
+                e.Enabled = false;
+
             return true;
         }
 
