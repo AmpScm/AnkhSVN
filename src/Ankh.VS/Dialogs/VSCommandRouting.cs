@@ -16,18 +16,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.OLE.Interop;
-using System.Windows.Forms;
-using Ankh.UI;
-using IMessageFilter = System.Windows.Forms.IMessageFilter;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
+using IMessageFilter = System.Windows.Forms.IMessageFilter;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
-using Microsoft.VisualStudio.Shell;
+
 using Ankh.Selection;
+using Ankh.UI;
 
 namespace Ankh.VS.Dialogs
 {
@@ -45,6 +45,8 @@ namespace Ankh.VS.Dialogs
         List<IOleCommandTarget> _ctList;
         List<IVsWindowPane> _paneList;
         IDisposable _activeStack;
+        bool _disabled;
+        static readonly Stack<VSCommandRouting> _routers = new Stack<VSCommandRouting>();
 
         bool _installed;
         public VSCommandRouting(IAnkhServiceProvider context, VSContainerForm form)
@@ -56,7 +58,11 @@ namespace Ankh.VS.Dialogs
             _form = form;
             _vsForm = form;
 
+            if (_routers.Count > 0)
+                _routers.Peek().Enabled = false;
+
             Application.AddMessageFilter(this);
+            _routers.Push(this);
             _installed = true;
             _map.Add(form, this);
 
@@ -115,7 +121,14 @@ namespace Ankh.VS.Dialogs
 
             _map.Remove(_form);
             if (_installed)
+            {
+                VSCommandRouting cr = _routers.Pop();
+                Debug.Assert(cr == this, "Pop routing in the right order");
                 Application.RemoveMessageFilter(this);
+
+                if (_routers.Count > 0)
+                    _routers.Peek().Enabled = true;
+            }
         }
 
         private void RestoreLayout()
@@ -167,6 +180,9 @@ namespace Ankh.VS.Dialogs
                     }
                 }
             }
+
+            if (!Enabled)
+                return false;
 
             const int WM_KEYFIRST = 0x0100;
             const int WM_IME_KEYLAST = 0x010F;
@@ -236,6 +252,12 @@ namespace Ankh.VS.Dialogs
         }
 
         #endregion
+
+        bool Enabled
+        {
+            get { return !_disabled; }
+            set { _disabled = !value; }
+        }
 
         bool _loadRegistered;
         internal void OnHandleCreated()
