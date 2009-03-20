@@ -126,10 +126,18 @@ namespace Ankh.UI.SvnLog
         {
             SetValues(
                 _change.Action.ToString(),
-                _change.Path,
+                NodeKind == SvnNodeKind.Directory ? EnsureEndSlash(_change.Path) : _change.Path,
                 _change.CopyFromPath ?? "",
                 _change.CopyFromPath != null ? _change.CopyFromRevision.ToString() : ""
             );
+        }
+
+        private string EnsureEndSlash(string p)
+        {
+            if (!p.EndsWith("/", StringComparison.Ordinal))
+                return p + "/";
+
+            return p;
         }
 
         void UpdateColors()
@@ -178,6 +186,11 @@ namespace Ankh.UI.SvnLog
         internal ISvnLogItem LogItem
         {
             get { return _logItem;}
+        }
+
+        internal SvnNodeKind NodeKind
+        {
+            get { return _change.NodeKind; }
         }
     }
 
@@ -288,7 +301,7 @@ namespace Ankh.UI.SvnLog
 
         SvnNodeKind ISvnRepositoryItem.NodeKind
         {
-            get { return SvnNodeKind.Unknown; }
+            get { return _lvi.NodeKind; }
         }
 
         SvnOrigin ISvnRepositoryItem.Origin
