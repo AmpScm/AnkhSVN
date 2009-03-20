@@ -313,10 +313,10 @@ namespace Ankh.Scc
                 }
             }
 
-            public override void MonitorChanges()
+            public override IDisposable MonitorChangesForReload()
             {
                 if (_monitor.Count > 0)
-                    return;
+                    return null;
 
                 foreach (string path in _ignoring)
                 {
@@ -329,9 +329,29 @@ namespace Ankh.Scc
                         _monitor.Add(cky, path);
                     }
                 }
+
+                return new ReloadModifiedDisposer(this);
             }
 
-            public override void ReloadModified()
+            sealed class ReloadModifiedDisposer : IDisposable
+            {
+                readonly SccDocumentLock _lck;
+
+                public ReloadModifiedDisposer(SccDocumentLock lck)
+                {
+                    if (lck == null)
+                        throw new ArgumentNullException("lck");
+
+                    _lck = lck;
+                }
+
+                public void Dispose()
+                {
+                    _lck.ReloadModified();
+                }
+            }
+
+            internal void ReloadModified()
             {
                 if (_monitor == null || _change == null)
                     return;

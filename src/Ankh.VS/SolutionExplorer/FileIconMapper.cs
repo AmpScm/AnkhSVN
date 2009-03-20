@@ -44,7 +44,7 @@ namespace Ankh.VS.SolutionExplorer
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
             _folderMap = new SortedList<WindowsSpecialFolder, int>();
-            _fileTypeMap = new Dictionary<string, string>();
+            _fileTypeMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
         public int GetIcon(string path)
@@ -84,7 +84,7 @@ namespace Ankh.VS.SolutionExplorer
 
             rslt = GetTypeName(item.FullPath);
 
-            lock(_fileTypeMap)
+            lock (_fileTypeMap)
             {
                 if (extension.Length > 0)
                     _fileTypeMap[extension] = rslt;
@@ -109,7 +109,7 @@ namespace Ankh.VS.SolutionExplorer
 
             string typeName = GetTypeNameForExtension(extension);
 
-            lock(_fileTypeMap)
+            lock (_fileTypeMap)
             {
                 _fileTypeMap[extension] = typeName;
             }
@@ -412,9 +412,7 @@ namespace Ankh.VS.SolutionExplorer
             [DllImport("shell32.dll")]
             public static extern int SHGetFolderLocation(IntPtr hwndOwner,
                 [MarshalAs(UnmanagedType.I4)]WindowsSpecialFolder nFolder,
-                IntPtr hToken, uint dwReserved, out IntPtr ppidl);            
+                IntPtr hToken, uint dwReserved, out IntPtr ppidl);
         }
-
-
     }
 }
