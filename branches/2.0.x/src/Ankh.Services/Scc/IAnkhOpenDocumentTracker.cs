@@ -48,12 +48,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Registers a file listener on all locked paths; allowing selective reload
         /// </summary>
-        public abstract void MonitorChanges();
-
-        /// <summary>
-        /// Reloads all files modified since MonitorChanges()
-        /// </summary>
-        public abstract void ReloadModified();
+        public abstract IDisposable MonitorChangesForReload();
     }
 
     public enum DocumentLockType

@@ -237,16 +237,13 @@ namespace Ankh.Services.PendingChanges
 
                         bool ok = false;
                         using (DocumentLock dl = GetService<IAnkhOpenDocumentTracker>().LockDocuments(state.CommitPaths, DocumentLockType.NoReload))
+                        using (dl.MonitorChangesForReload()) // Monitor files that are changed by keyword expansion
                         {
-                            dl.MonitorChanges(); // Monitor files that are changed by keyword expansion
-
                             if (Commit_CommitToRepository(state))
                             {
                                 storeMessage = true;
                                 ok = true;
                             }
-
-                            dl.ReloadModified();
                         }
 
                         if (!ok)

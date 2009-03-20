@@ -30,7 +30,7 @@ namespace Ankh.Commands
     /// Command to revert current item to last updated revision.
     /// </summary>
     [Command(AnkhCommand.RevertItem)]
-    [Command(AnkhCommand.ItemRevertBase, HideWhenDisabled=false)]
+    [Command(AnkhCommand.ItemRevertBase, HideWhenDisabled = false)]
     class RevertItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -100,19 +100,16 @@ namespace Ankh.Commands
 
             // perform the actual revert 
             using (DocumentLock dl = documentTracker.LockDocuments(paths, DocumentLockType.NoReload))
+            using (dl.MonitorChangesForReload())
             {
-                dl.MonitorChanges();
-
                 SvnRevertArgs args = new SvnRevertArgs();
-                
+
                 args.Depth = depth;
                 args.ThrowOnError = false;
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {
                     client.Revert(paths, args);
                 }
-
-                dl.ReloadModified();
             }
         }
     }
