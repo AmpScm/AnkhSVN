@@ -24,6 +24,7 @@ using Ankh.UI;
 using Ankh.UI.Annotate;
 using Ankh.VS;
 using SharpSvn;
+using System.Collections.Generic;
 
 namespace Ankh.Commands
 {
@@ -201,6 +202,17 @@ namespace Ankh.Commands
             string tempFile = tempMgr.GetTempFileNamed(target.FileName);
 
             Collection<SvnBlameEventArgs> blameResult = null;
+            Dictionary<long, string> logMessages = new Dictionary<long, string>();
+
+            ba.Notify += delegate(object sender, SvnNotifyEventArgs ee)
+            {
+                if (ee.Action == SvnNotifyAction.BlameRevision && ee.RevisionProperties != null)
+                {
+                    if (ee.RevisionProperties.Contains(SvnPropertyNames.SvnLog))
+                        logMessages[ee.Revision] = ee.RevisionProperties[SvnPropertyNames.SvnLog].StringValue;
+                }
+            };
+
             ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
                 using (FileStream fs = File.Create(tempFile))
@@ -219,7 +231,7 @@ namespace Ankh.Commands
 
             annEditor.Create(e.Context, tempFile);
             annEditor.LoadFile(tempFile);
-            annEditor.AddLines(item, blameResult);
+            annEditor.AddLines(item, blameResult, logMessages);
 
             // Detect and set the language service
             Guid language;
