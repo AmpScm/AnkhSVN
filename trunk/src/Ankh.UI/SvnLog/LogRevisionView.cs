@@ -115,20 +115,7 @@ namespace Ankh.UI.SvnLog
         {
             if (Scrolled != null)
                 Scrolled(this, e);
-        }
-
-        protected override void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
-        {
-            lock (_items)
-            {
-                if (e.ItemIndex >= 0 && e.ItemIndex < _items.Count)
-                    e.Item = _items[e.ItemIndex];
-                else
-                    e.Item = new ListViewItem();
-            }
-
-            base.OnRetrieveVirtualItem(e);
-        }
+        }   
 
         protected override void OnSizeChanged(EventArgs e)
         {
@@ -136,14 +123,6 @@ namespace Ankh.UI.SvnLog
 
             if (!DesignMode && _messageColumn != null)
                 ResizeColumnsToFit(_messageColumn);
-        }
-
-        protected override void OnColumnWidthChanged(ColumnWidthChangedEventArgs e)
-        {
-            base.OnColumnWidthChanged(e);
-
-            if (!DesignMode && OwnerDraw)
-                Invalidate();
         }
 
         protected override void OnDrawColumnHeader(DrawListViewColumnHeaderEventArgs e)
