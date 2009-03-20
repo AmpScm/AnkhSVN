@@ -28,7 +28,7 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.PendingChangesUpdateHead, HideWhenDisabled=false)]
+    [Command(AnkhCommand.PendingChangesUpdateHead, HideWhenDisabled = false)]
     [Command(AnkhCommand.SolutionUpdateHead)]
     [Command(AnkhCommand.SolutionUpdateSpecific)]
     [Command(AnkhCommand.ProjectUpdateHead)]
@@ -257,7 +257,7 @@ namespace Ankh.Commands
 
                 List<string> inWc;
 
-                if(!groups.TryGetValue(wc.FullPath, out inWc))
+                if (!groups.TryGetValue(wc.FullPath, out inWc))
                 {
                     inWc = new List<string>();
                     groups.Add(wc.FullPath, inWc);
@@ -276,9 +276,8 @@ namespace Ankh.Commands
             documentTracker.SaveDocuments(lockPaths); // Make sure all files are saved before updating/merging!
 
             using (DocumentLock lck = documentTracker.LockDocuments(lockPaths, DocumentLockType.NoReload))
+            using (lck.MonitorChangesForReload())
             {
-                lck.MonitorChanges();
-
                 UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
 
                 e.GetService<IProgressRunner>().RunModal(
@@ -289,9 +288,6 @@ namespace Ankh.Commands
                 {
                     ci.SetLastChange("Updated to:", ur.LastResult.Revision.ToString());
                 }
-
-
-                lck.ReloadModified();
             }
         }
 
@@ -352,7 +348,7 @@ namespace Ankh.Commands
                 SvnUpdateResult result;
                 _result = null;
 
-                foreach(List<string> group in _groups)
+                foreach (List<string> group in _groups)
                 {
                     // Currently Subversion runs update per item passed and in
                     // Subversion 1.6 passing each item separately is actually 
@@ -362,7 +358,7 @@ namespace Ankh.Commands
                     {
                         e.Client.Update(path, ua, out result);
 
-                        if(_result == null)
+                        if (_result == null)
                             _result = result; // Return the primary update as version for output
                     }
                 }

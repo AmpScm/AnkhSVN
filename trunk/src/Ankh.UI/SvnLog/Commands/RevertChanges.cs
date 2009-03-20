@@ -123,9 +123,8 @@ namespace Ankh.UI.SvnLog.Commands
 
 
             using (DocumentLock dl = tracker.LockDocuments(nodes, DocumentLockType.NoReload))
+            using (dl.MonitorChangesForReload())
             {
-                dl.MonitorChanges();
-
                 SvnMergeArgs ma = new SvnMergeArgs();
 
                 progressRunner.RunModal("Reverting",
@@ -141,7 +140,6 @@ namespace Ankh.UI.SvnLog.Commands
                         ee.Client.Merge(target.FullPath, target, revisions, ma);
                     }
                 });
-                dl.ReloadModified();
             }
         }
     }
