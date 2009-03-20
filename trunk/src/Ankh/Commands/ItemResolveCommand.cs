@@ -15,13 +15,12 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Ankh.Ids;
+
 using SharpSvn;
+
+using Ankh.Ids;
+using Ankh.Scc;
 using Ankh.UI;
-using System.IO;
-using System.Diagnostics;
 
 namespace Ankh.Commands
 {
@@ -112,18 +111,31 @@ namespace Ankh.Commands
                     throw new NotImplementedException(); // Not available in 1.5
             }
 
+            HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+            {
+                if (!item.IsConflicted)
+                    continue;
+
+                if (!paths.Contains(item.FullPath))
+                    paths.Add(item.FullPath);
+            }
+
+
+            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+            documentTracker.SaveDocuments(paths); // Make sure all files are saved before updating/merging!
+
+            using (DocumentLock lck = documentTracker.LockDocuments(paths, DocumentLockType.NoReload))
+            using (lck.MonitorChangesForReload())
             using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
             {
                 SvnResolveArgs a = new SvnResolveArgs();
                 a.Depth = SvnDepth.Empty;
 
-                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                foreach (string p in paths)
                 {
-                    if (!item.IsConflicted)
-                        continue;
-
-                    // Let the command throw exceptions for now
-                    client.Resolve(item.FullPath, accept, a);
+                    client.Resolve(p, accept, a);
                 }
             }
         }
