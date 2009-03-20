@@ -91,7 +91,7 @@ namespace Ankh.UI.Annotate
             return editor.EditorClientTop.Y;
         }
 
-        public void AddLines(SvnOrigin origin, Collection<SharpSvn.SvnBlameEventArgs> blameResult)
+        public void AddLines(SvnOrigin origin, Collection<SharpSvn.SvnBlameEventArgs> blameResult, Dictionary<long, string> logMessages)
         {
             _origin = origin;
 
@@ -100,11 +100,27 @@ namespace Ankh.UI.Annotate
             AnnotateRegion section = null;
             blameSections.Clear();
 
+            long min = -1;
+            long max = -1;
             foreach (SvnBlameEventArgs e in blameResult)
             {
                 AnnotateSource src;
                 if (!_sources.TryGetValue(e.Revision, out src))
+                {
                     _sources.Add(e.Revision, src = new AnnotateSource(e, origin));
+
+                    string msg;
+                    if (logMessages.TryGetValue(e.Revision, out msg))
+                        src.LogMessage = msg ?? "";
+                    else
+                    {
+                        if (min >= 0 && min < e.Revision)
+                            min = e.Revision;
+
+                        if (e.Revision > max)
+                            max = e.Revision;
+                    }
+                }
 
                 int line = (int)e.LineNumber;
 
@@ -120,12 +136,12 @@ namespace Ankh.UI.Annotate
             }
             blameMarginControl1.Invalidate();
 
-            RetrieveLogs(origin, _sources);
+            RetrieveLogs(origin, _sources, min, max);
         }
 
-        private void RetrieveLogs(SvnOrigin origin, SortedList<long, AnnotateSource> _sources)
+        private void RetrieveLogs(SvnOrigin origin, SortedList<long, AnnotateSource> _sources, long min, long max)
         {
-            if (_sources.Count == 0)
+            if (_sources.Count == 0 || min == -1 || max == -1)
                 return;
 
             EventHandler<SvnLogEventArgs> lr =
@@ -142,8 +158,8 @@ namespace Ankh.UI.Annotate
                 {
                     SvnLogArgs la = new SvnLogArgs();
                     la.OperationalRevision = origin.Target.Revision;
-                    la.Start = _sources.Keys[_sources.Count - 1];
-                    la.End = _sources.Keys[0];
+                    la.Start = max;
+                    la.End = min;
                     la.ThrowOnError = false;
 
                     cl.Log(origin.Uri, la, lr);
