@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Ankh.Commands;
 using AnkhSvn_UnitTestProject.Helpers;
@@ -13,11 +10,8 @@ using Ankh.Selection;
 using Ankh.VS;
 using Ankh.Scc;
 using Microsoft.VisualStudio.TextManager.Interop;
-using System.ComponentModel.Design;
 using Ankh.UI;
-using Ankh.UI.PendingChanges;
 using Ankh.Diff;
-using Microsoft.VisualStudio.Shell;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {
@@ -47,8 +41,8 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             selection.Setup(x => x.Cache[It.IsAny<object>()]).Returns(null);
 
             var rawHandle = new Mock<IVsSccProject2>();
-            SvnProject p = new SvnProject("c:\foo\bar", rawHandle.Object);
-            selection.Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new SvnProject[] { p });
+            var p = new SvnProject("c:\foo\bar", rawHandle.Object);
+            selection.Setup(x => x.GetSelectedProjects(It.IsAny<bool>())).Returns(new[] { p });
             sp.AddService(typeof(ISelectionContext), selection.Object);
 
 
@@ -67,7 +61,7 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
             sp.AddService(typeof(IVsMonitorSelection), selectionMonitor.Object);
 
 
-            AnkhRuntime r = new AnkhRuntime(sp);
+            var r = new AnkhRuntime(sp);
             r.AddModule(new AnkhModule(r));
             r.AddModule(new AnkhSccModule(r));
             //r.AddModule(new AnkhVSModule(r));
@@ -116,14 +110,14 @@ namespace AnkhSvn_UnitTestProject.CommandRouting
 
             foreach (AnkhCommand command in Enum.GetValues(typeof(AnkhCommand)))
             {
-                CommandUpdateEventArgs e = new CommandUpdateEventArgs(command, context);
+                var e = new CommandUpdateEventArgs(command, context);
 
                 cm.PerformUpdate(command, e);
             }
 
             foreach (AnkhCommandMenu m in Enum.GetValues(typeof(AnkhCommandMenu)))
             {
-                CommandUpdateEventArgs e = new CommandUpdateEventArgs((AnkhCommand)m, context);
+                var e = new CommandUpdateEventArgs((AnkhCommand)m, context);
 
                 cm.PerformUpdate((AnkhCommand)m, e);
             }
