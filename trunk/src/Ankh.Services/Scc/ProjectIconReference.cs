@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Ankh.Scc
@@ -58,7 +56,7 @@ namespace Ankh.Scc
 
             if (_staticHandle != IntPtr.Zero)
                 return _staticHandle;
-            else if (_handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
                 return _handle;
 
             return _handle = NativeMethods.ImageList_GetIcon(_imageList, _index, 1);
@@ -69,14 +67,14 @@ namespace Ankh.Scc
             if (_disposed)
                 return;
 
-            if (_handle != null)
+            if (_handle != IntPtr.Zero)
             {
                 _disposed = true;
                 NativeMethods.DestroyIcon(_handle);
             }
         }
 
-        class NativeMethods
+        static class NativeMethods
         {
             [DllImport("comctl32.dll", SetLastError = true)]
             public static extern IntPtr ImageList_GetIcon(IntPtr himl, int i, int flags);
@@ -88,7 +86,9 @@ namespace Ankh.Scc
 
         public bool Equals(ProjectIconReference other)
         {
-            return _staticHandle == other._staticHandle && _imageList == other._imageList && _index == other._index;
+            return _staticHandle == other._staticHandle && 
+                _imageList == other._imageList && 
+                _index == other._index;
         }
 
         public override bool Equals(object obj)
