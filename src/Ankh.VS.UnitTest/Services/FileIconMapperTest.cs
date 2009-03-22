@@ -67,7 +67,7 @@ namespace AnkhSvn_UnitTestProject.Services
 
             try
             {
-                SvnItem item = new SvnItem(statusCache.Object, tempFile, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
+                var item = new SvnItem(statusCache.Object, tempFile, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
                 Assert.That(mapper.GetFileType(item), Is.EqualTo("TMP File"));
 
                 item = new SvnItem(statusCache.Object, exeTempFile, NoSccStatus.Unknown, SharpSvn.SvnNodeKind.File);
