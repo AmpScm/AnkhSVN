@@ -214,5 +214,11 @@ namespace AnkhSvn_UnitTestProject.Services
                 File.Delete(tempFileName);
             }
         }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void TestGetIcon_NullParam_Throws()
+        {
+            mapper.GetIcon(null);
+        }
     }
 }
