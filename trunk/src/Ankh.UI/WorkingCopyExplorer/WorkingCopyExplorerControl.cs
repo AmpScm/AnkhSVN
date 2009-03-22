@@ -24,6 +24,7 @@ using Ankh.Commands;
 using Ankh.VS;
 using Microsoft.VisualStudio.Shell;
 using System.Windows.Forms;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -81,8 +82,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
 
             // The Workingcopy explorer is a singleton toolwindow (Will never be destroyed unless VS closes)
-            environment.SolutionOpened += new EventHandler(environment_SolutionOpened);
-            environment.SolutionClosed += new EventHandler(environment_SolutionClosed);
+            environment.SolutionOpened += environment_SolutionOpened;
+            environment.SolutionClosed += environment_SolutionClosed;
         }
 
         void environment_SolutionClosed(object sender, EventArgs e)
@@ -93,14 +94,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         void environment_SolutionOpened(object sender, EventArgs e)
         {
             RefreshRoots();
-        }
-
-
-        protected override void  OnLoad(EventArgs e)
-        {
- 	        base.OnLoad(e);
-
-            AddRoots(true);
         }
 
         bool _rootsPresent;
@@ -128,6 +121,17 @@ namespace Ankh.UI.WorkingCopyExplorer
         IFileStatusCache FileStatusCache
         {
             get { return Context.GetService<IFileStatusCache>(); }
+        }
+
+        protected override void OnFrameShow(Ankh.Scc.UI.FrameEventArgs e)
+        {
+            base.OnFrameShow(e);
+            switch (e.Show)
+            {
+                case __FRAMESHOW.FRAMESHOW_WinShown:
+                    AddRoots(true);
+                    break;
+            }
         }
 
         protected override void OnFrameClose(EventArgs e)
