@@ -18,19 +18,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 using SharpSvn;
-using Ankh.UI.SvnLog;
-using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.Ids;
 using Ankh.Commands;
-using Ankh.Selection;
-using Ankh.Scc.UI;
 
-namespace Ankh.UI
+namespace Ankh.UI.SvnLog
 {
     partial class LogChangedPaths : UserControl, ICurrentItemDestination<ISvnLogItem>
     {

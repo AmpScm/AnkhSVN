@@ -14,17 +14,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using SharpSvn;
 using Ankh.Scc;
 
-namespace Ankh.UI
+namespace Ankh.UI.SvnLog
 {
     public partial class LogMessageView : UserControl
     {
@@ -33,11 +27,6 @@ namespace Ankh.UI
         public LogMessageView()
         {
             InitializeComponent();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
         }
 
         public LogMessageView(IContainer container)
@@ -52,12 +41,12 @@ namespace Ankh.UI
             set 
             { 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged -= new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(LogFocusChanged);
+                    logItemSource.FocusChanged -= LogFocusChanged;
 
                 logItemSource = value; 
                 
                 if(logItemSource != null)
-                    logItemSource.FocusChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(LogFocusChanged);
+                    logItemSource.FocusChanged += LogFocusChanged;
             }
         }
 

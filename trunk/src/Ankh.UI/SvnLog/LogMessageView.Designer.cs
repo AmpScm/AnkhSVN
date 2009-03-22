@@ -15,15 +15,15 @@
 //  limitations under the License.
 
 using Ankh.UI.PendingChanges;
-using System.Windows.Forms;
-namespace Ankh.UI
+
+namespace Ankh.UI.SvnLog
 {
     partial class LogMessageView
     {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components;
 
         /// <summary> 
         /// Clean up any resources being used.

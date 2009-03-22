@@ -14,7 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Ankh.UI
+namespace Ankh.UI.SvnLog
 {
     partial class LogChangedPaths
     {

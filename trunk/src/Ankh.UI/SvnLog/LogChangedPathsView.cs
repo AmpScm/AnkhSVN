@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.VSSelectionControls;
 using SharpSvn;
@@ -72,13 +70,13 @@ namespace Ankh.UI.SvnLog
             FinalSortColumn = path;            
         }
 
-        protected override void OnRetrieveSelection(ListViewWithSelection<PathListViewItem>.RetrieveSelectionEventArgs e)
+        protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
-            e.SelectionItem = new PathItem((PathListViewItem)e.Item);
+            e.SelectionItem = new PathItem(e.Item);
             base.OnRetrieveSelection(e);
         }
 
-        protected override void OnResolveItem(ListViewWithSelection<PathListViewItem>.ResolveItemEventArgs e)
+        protected override void OnResolveItem(ResolveItemEventArgs e)
         {
             e.Item = ((PathItem)e.SelectionItem).ListViewItem;
             base.OnResolveItem(e);
@@ -219,7 +217,7 @@ namespace Ankh.UI.SvnLog
         [DisplayName("Action")]
         public SvnChangeAction Action
         {
-            get { return _lvi.Action; ; }
+            get { return _lvi.Action; }
         }
 
         [Category("Origin")]

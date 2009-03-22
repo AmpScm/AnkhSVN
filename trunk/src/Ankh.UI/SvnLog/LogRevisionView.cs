@@ -20,7 +20,6 @@ using System.ComponentModel;
 using System.Windows.Forms;
 
 using Ankh.UI.VSSelectionControls;
-using System.Diagnostics;
 using System.Drawing;
 
 namespace Ankh.UI.SvnLog
@@ -79,13 +78,13 @@ namespace Ankh.UI.SvnLog
                 });
         }
 
-        protected override void OnRetrieveSelection(ListViewWithSelection<LogRevisionItem>.RetrieveSelectionEventArgs e)
+        protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
             e.SelectionItem = new LogItem(e.Item, LogSource.RepositoryRoot);
             base.OnRetrieveSelection(e);
         }
 
-        protected override void OnResolveItem(ListViewWithSelection<LogRevisionItem>.ResolveItemEventArgs e)
+        protected override void OnResolveItem(ResolveItemEventArgs e)
         {
             e.Item = ((LogItem)e.SelectionItem).ListViewItem;
             base.OnResolveItem(e);
@@ -176,11 +175,11 @@ namespace Ankh.UI.SvnLog
                 text = ((LogRevisionItem)e.Item).RevisionText;
             }
 
-            System.Drawing.Font fnt = e.Item.Font;
-            System.Drawing.Color clr;
+            var fnt = e.Item.Font;
+            Color clr;
 
             if (isSelected)
-                clr = Focused ? System.Drawing.SystemColors.HighlightText : SystemColors.MenuText;
+                clr = Focused ? SystemColors.HighlightText : SystemColors.MenuText;
             else
                 clr = e.Item.ForeColor;
 

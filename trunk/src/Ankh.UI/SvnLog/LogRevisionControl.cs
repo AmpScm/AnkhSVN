@@ -67,11 +67,11 @@ namespace Ankh.UI.SvnLog
             set
             {
                 _context = value;
-                OnContextChanged(EventArgs.Empty);
+                OnContextChanged();
             }
         }
 
-        private void OnContextChanged(EventArgs eventArgs)
+        private void OnContextChanged()
         {
             logView.SelectionPublishServiceProvider = Context;
         }
@@ -127,7 +127,7 @@ namespace Ankh.UI.SvnLog
 
         }
 
-        int fetchCount = 0;
+        int fetchCount;
         bool _running;
         bool _cancel;
         void DoFetch(SvnLogArgs args)
@@ -160,7 +160,7 @@ namespace Ankh.UI.SvnLog
                             la.Limit = args.Limit;
                             la.StrictNodeHistory = args.StrictNodeHistory;
                             la.RetrieveMergedRevisions = args.RetrieveMergedRevisions;
-                            la.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
+                            la.Cancel += OnLogCancel;
 
                             client.Log(uris, la, ReceiveItem);
                             break;
@@ -170,7 +170,7 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             meArgs.RetrieveChangedPaths = true;
-                            meArgs.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
+                            meArgs.Cancel += OnLogCancel;
                             client.ListMergesEligible(LogSource.MergeTarget.Target, single.Target, meArgs, ReceiveItem);
                             break;
                         case LogMode.MergesMerged:
@@ -179,7 +179,7 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             mmArgs.RetrieveChangedPaths = true;
-                            mmArgs.Cancel += new EventHandler<SvnCancelEventArgs>(OnLogCancel);
+                            mmArgs.Cancel += OnLogCancel;
                             client.ListMergesMerged(LogSource.MergeTarget.Target, single.Target, mmArgs, ReceiveItem);
                             break;
                     }
@@ -224,7 +224,7 @@ namespace Ankh.UI.SvnLog
             e.Detach();
 
             LogRevisionItem lri = new LogRevisionItem(logView, _context, e);
-            bool post = false;
+            bool post;
 
             lock (_logItems)
             {
@@ -248,10 +248,7 @@ namespace Ankh.UI.SvnLog
             LogRevisionItem[] items;
             lock (_logItems)
             {
-                if (_logItems.Count > 0)
-                    items = _logItems.ToArray();
-                else
-                    items = null;
+                items = _logItems.Count > 0 ? _logItems.ToArray() : null;
 
                 _logItems.Clear();
             }
@@ -302,7 +299,8 @@ namespace Ankh.UI.SvnLog
                 BeginInvoke(new AnkhAction(HideBusyIndicator));
                 return;
             }
-            else if (_busyOverlay != null)
+            
+            if (_busyOverlay != null)
                 _busyOverlay.Hide();
         }
 
@@ -478,7 +476,7 @@ namespace Ankh.UI.SvnLog
             }
             else
             {
-                headerContextMenu = (logView.PointToClient(e.Location).Y < this.logView.HeaderHeight);
+                headerContextMenu = (logView.PointToClient(e.Location).Y < logView.HeaderHeight);
                 screen = e.Location;
             }
 

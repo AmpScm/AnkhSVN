@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.UI.RepositoryExplorer;
+using Ankh.UI.SvnLog;
 using SharpSvn;
 using Ankh.Scc;
 

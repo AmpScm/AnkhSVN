@@ -16,19 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using SharpSvn;
 using Ankh.Scc;
 using System.Diagnostics;
-using Ankh.UI.SvnLog;
-using System.IO;
 using Ankh.Scc.UI;
 
-namespace Ankh.UI
+namespace Ankh.UI.SvnLog
 {
     public partial class LogViewerDialog : VSContainerForm, ILogControl
     {
@@ -84,7 +76,7 @@ namespace Ankh.UI
             if (LogTarget == null)
                 throw new InvalidOperationException("Log target is null");
 
-            logViewerControl.StartLog(new SvnOrigin[] { LogTarget }, null, null);
+            logViewerControl.StartLog(new[] { LogTarget }, null, null);
         }
 
         #region ILogControl Members
@@ -125,7 +117,7 @@ namespace Ankh.UI
 
         public IList<SvnOrigin> Origins
         {
-            get { return new SvnOrigin[] { LogTarget }; }
+            get { return new[] { LogTarget }; }
         }
 
         #endregion

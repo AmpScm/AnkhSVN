@@ -17,13 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using Ankh.UI.Services;
-using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Selection;
 using SharpSvn;
 using System.Diagnostics;
 using Ankh.Scc;
@@ -36,7 +30,7 @@ namespace Ankh.UI.SvnLog
         {
             InitializeComponent();
             ItemSource = logRevisionControl1;
-            logRevisionControl1.BatchDone += new EventHandler<BatchFinishedEventArgs>(logRevisionControl1_BatchDone);
+            logRevisionControl1.BatchDone += logRevisionControl1_BatchDone;
 
             LogSource = new LogDataSource();
             LogSource.Synchronizer = this;
@@ -114,12 +108,12 @@ namespace Ankh.UI.SvnLog
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (target == null)
+            if (target == null)
                 throw new ArgumentNullException("target");
-            else if (source == null)
+            if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -131,12 +125,12 @@ namespace Ankh.UI.SvnLog
         {
             if (context == null)
                 throw new ArgumentNullException("context");
-            else if (target == null)
+            if (target == null)
                 throw new ArgumentNullException("target");
-            else if (source == null)
+            if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
