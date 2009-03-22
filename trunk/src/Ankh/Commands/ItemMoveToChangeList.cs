@@ -14,9 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Ankh.Scc;
 using SharpSvn;
@@ -72,7 +70,7 @@ namespace Ankh.Commands
             if (names == null)
                 names = GetRecentNames(e);
 
-            int n = (int)(e.Command - AnkhCommand.MoveToExistingChangeList0);
+            int n = e.Command - AnkhCommand.MoveToExistingChangeList0;
 
             if(n >= names.Count)
             {
@@ -98,7 +96,7 @@ namespace Ankh.Commands
             {
                 string cl = pc.Item.Status.ChangeList;
 
-                if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, "ignore-on-commit"))
+                if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, IgnoreOnCommit))
                 {
                     if (!nm.ContainsKey(cl))
                         nm[cl] = cl;
@@ -110,10 +108,10 @@ namespace Ankh.Commands
 
             e.Selection.Cache[typeof(ItemMoveToChangeList)] = names = new List<string>(nm.Values);
 
-            return new List<string>(nm.Values);
+            return names;
         }
 
-        private void OnUpdateRemove(CommandUpdateEventArgs e)
+        private static void OnUpdateRemove(CommandUpdateEventArgs e)
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
@@ -130,14 +128,14 @@ namespace Ankh.Commands
             string name;
 
             if (e.Command == AnkhCommand.MoveToIgnoreChangeList)
-                name = "ignore-on-commit";
+                name = IgnoreOnCommit;
             else if (e.Command == AnkhCommand.RemoveFromChangeList)
                 name = null;
             else if (e.Command >= AnkhCommand.MoveToExistingChangeList0 && e.Command < AnkhCommand.MoveToExistingChangeListMax)
             {
                 List<string> names = GetRecentNames(e);
 
-                int n = (int)(e.Command - AnkhCommand.MoveToExistingChangeList0);
+                int n = e.Command - AnkhCommand.MoveToExistingChangeList0;
 
                 if (n >= names.Count)
                     return;

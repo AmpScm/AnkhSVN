@@ -175,7 +175,7 @@ namespace Ankh.UI.SvnLog
                 text = ((LogRevisionItem)e.Item).RevisionText;
             }
 
-            var fnt = e.Item.Font;
+            Font fnt = e.Item.Font;
             Color clr;
 
             if (isSelected)

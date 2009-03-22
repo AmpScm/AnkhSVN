@@ -14,17 +14,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections;
-
-using System.Text;
 using SharpSvn;
 using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
 using System.Windows.Forms;
 using Ankh.Scc;
-using System.Windows.Forms.Design;
 
 namespace Ankh.Commands
 {
@@ -60,7 +55,7 @@ namespace Ankh.Commands
             if (e.Command == AnkhCommand.SccLock && items == null)
                 return;
 
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items != null ? items : e.Selection.GetSelectedSvnItems(true));
+            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items ?? e.Selection.GetSelectedSvnItems(true));
             psi.VisibleFilter += delegate(SvnItem item)
             {
                 return item.IsFile && item.IsVersioned && !item.IsLocked;
@@ -75,7 +70,7 @@ namespace Ankh.Commands
             bool stealLocks = false;
             string comment = "";
 
-            if (e.PromptUser || !(CommandBase.Shift || e.DontPrompt))
+            if (e.PromptUser || !(Shift || e.DontPrompt))
             {
                 using (LockDialog dlg = new LockDialog(psi))
                 {

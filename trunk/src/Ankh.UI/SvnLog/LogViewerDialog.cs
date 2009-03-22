@@ -22,7 +22,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogViewerDialog : VSContainerForm, ILogControl
+    public sealed partial class LogViewerDialog : VSContainerForm, ILogControl
     {
         private SvnOrigin _logTarget;
 
@@ -76,7 +76,7 @@ namespace Ankh.UI.SvnLog
             if (LogTarget == null)
                 throw new InvalidOperationException("Log target is null");
 
-            logViewerControl.StartLog(new[] { LogTarget }, null, null);
+            logViewerControl.StartLog(new SvnOrigin[] { LogTarget }, null, null);
         }
 
         #region ILogControl Members
@@ -117,7 +117,7 @@ namespace Ankh.UI.SvnLog
 
         public IList<SvnOrigin> Origins
         {
-            get { return new[] { LogTarget }; }
+            get { return new SvnOrigin[] { LogTarget }; }
         }
 
         #endregion

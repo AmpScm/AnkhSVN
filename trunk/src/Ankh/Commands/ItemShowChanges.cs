@@ -14,18 +14,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.IO;
 using Ankh.UI;
 using Ankh.Ids;
-using Ankh.VS;
 using System;
-using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 using System.Collections.Generic;
-using Ankh.Configuration;
 using Ankh.Scc.UI;
 using Ankh.Scc;
-using System.Globalization;
 
 namespace Ankh.Commands
 {
@@ -143,15 +138,12 @@ namespace Ankh.Commands
 
                 PathSelectorResult result;
                 // should we show the path selector?
-                if (e.PromptUser || !CommandBase.Shift)
+                if (e.PromptUser || !Shift)
                 {
                     IUIShell ui = e.GetService<IUIShell>();
 
                     result = ui.ShowPathSelector(info);
                     if (!result.Succeeded)
-                        return;
-
-                    if (info == null)
                         return;
                 }
                 else
@@ -161,10 +153,6 @@ namespace Ankh.Commands
                 selectedFiles.AddRange(result.Selection);
                 revRange = new SvnRevisionRange(result.RevisionStart, result.RevisionEnd);
             }
-
-            List<AnkhDiffArgs> diffArgs = new List<AnkhDiffArgs>();
-
-            IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
             if (revRange.EndRevision.RevisionType == SvnRevisionType.Working ||
                 revRange.StartRevision.RevisionType == SvnRevisionType.Working)
@@ -176,6 +164,7 @@ namespace Ankh.Commands
                     tracker.SaveDocuments(SvnItem.GetPaths(selectedFiles));
             }
 
+            IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             foreach (SvnItem item in selectedFiles)
             {
                 AnkhDiffArgs da = new AnkhDiffArgs();
@@ -211,7 +200,6 @@ namespace Ankh.Commands
                         return; // Canceled
                     }
 
-                    SvnRevision startRev = revRange.StartRevision;
                     da.BaseTitle = diff.GetTitle(item, revRange.StartRevision);
                 }
 
@@ -232,7 +220,5 @@ namespace Ankh.Commands
                 diff.RunDiff(da);
             }
         }
-
-        
     }
 }

@@ -24,7 +24,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
+    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
         public LogControl()
         {
@@ -43,7 +43,7 @@ namespace Ankh.UI.SvnLog
         public LogDataSource LogSource
         {
             get { return _dataSource; }
-            set { _dataSource = value; }
+            private set { _dataSource = value; }
         }
 
         void logRevisionControl1_BatchDone(object sender, BatchFinishedEventArgs e)
@@ -113,7 +113,7 @@ namespace Ankh.UI.SvnLog
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();
@@ -130,7 +130,7 @@ namespace Ankh.UI.SvnLog
             if (source == null)
                 throw new ArgumentNullException("source");
 
-            LogSource.Targets = new[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
+            LogSource.Targets = new SvnOrigin[] { new SvnOrigin(context, source, target.RepositoryRoot) }; // Must be from the same repository!
             LogSource.MergeTarget = target;
             logRevisionControl1.Reset();
             logChangedPaths1.Reset();

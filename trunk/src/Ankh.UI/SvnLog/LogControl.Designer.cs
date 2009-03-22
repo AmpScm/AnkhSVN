@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.SvnLog
 {
-    partial class LogControl
+    sealed partial class LogControl
     {
         /// <summary> 
         /// Required designer variable.

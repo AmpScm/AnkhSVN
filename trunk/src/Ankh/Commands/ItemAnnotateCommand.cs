@@ -65,14 +65,7 @@ namespace Ankh.Commands
                         return;
                     }
 
-                    int count = 0;
-                    foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
-                    {
-                        count++;
-                        if (count > 1)
-                            break;
-                    }
-                    if (count == 1)
+                    if(!EnumTools.IsEmpty(e.Selection.GetSelection<ISvnLogChangedPathItem>()))
                         return;
                     break;
             }
@@ -98,7 +91,7 @@ namespace Ankh.Commands
             }
         }
 
-        void SvnNodeBlame(CommandEventArgs e)
+        static void SvnNodeBlame(CommandEventArgs e)
         {
             ISvnRepositoryItem blameSection = EnumTools.GetFirst(e.Selection.GetSelection<ISvnRepositoryItem>());
 
@@ -110,11 +103,8 @@ namespace Ankh.Commands
             DoBlame(e, blameSection.Origin, revisionStart, revisionEnd);
         }
 
-        void BlameRevision(CommandEventArgs e)
+        static void BlameRevision(CommandEventArgs e)
         {
-            ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
-            IUIShell uiShell = e.GetService<IUIShell>();
-
             HybridCollection<string> changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
             ISvnLogChangedPathItem item = null;
@@ -132,7 +122,7 @@ namespace Ankh.Commands
             DoBlame(e, item.Origin, revisionStart, revisionEnd);
         }
 
-        void BlameItem(CommandEventArgs e)
+        static void BlameItem(CommandEventArgs e)
         {
             IUIShell uiShell = e.GetService<IUIShell>();
 
@@ -140,7 +130,7 @@ namespace Ankh.Commands
             SvnRevision revisionEnd = SvnRevision.Base;
 
             SvnItem firstItem = null;
-            PathSelectorResult result = null;
+            PathSelectorResult result;
             PathSelectorInfo info = new PathSelectorInfo("Annotate",
                 e.Selection.GetSelectedSvnItems(false));
 
@@ -154,7 +144,7 @@ namespace Ankh.Commands
             info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
 
             // is shift depressed?
-            if (!CommandBase.Shift)
+            if (!Shift)
             {
 
                 info.RevisionStart = revisionStart;
@@ -165,11 +155,6 @@ namespace Ankh.Commands
 
                 // show the selector dialog
                 result = uiShell.ShowPathSelector(info);
-                if (info == null)
-                    return;
-
-                revisionStart = result.RevisionStart;
-                revisionEnd = result.RevisionEnd;
             }
             else
             {
@@ -186,9 +171,8 @@ namespace Ankh.Commands
             DoBlame(e, new SvnOrigin(blameItem), result.RevisionStart, result.RevisionEnd);
         }
 
-        void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd)
+        static void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd)
         {
-            IAnkhPackage p = e.GetService<IAnkhPackage>();
             SvnWriteArgs wa = new SvnWriteArgs();
             wa.Revision = revisionEnd;
 
@@ -256,7 +240,7 @@ namespace Ankh.Commands
             }
         }
 
-        void BlameDocument(CommandEventArgs e)
+        static void BlameDocument(CommandEventArgs e)
         {
             IUIShell uiShell = e.GetService<IUIShell>();
 
@@ -264,7 +248,7 @@ namespace Ankh.Commands
             SvnRevision revisionEnd = SvnRevision.Base;
 
             SvnItem firstItem = null;
-            PathSelectorResult result = null;
+            PathSelectorResult result;
             PathSelectorInfo info = new PathSelectorInfo("Annotate",
                 new SvnItem[] { e.Selection.ActiveDocumentItem });
 
@@ -278,7 +262,7 @@ namespace Ankh.Commands
             info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
 
             // is shift depressed?
-            if (!CommandBase.Shift)
+            if (!Shift)
             {
 
                 info.RevisionStart = revisionStart;
@@ -289,11 +273,6 @@ namespace Ankh.Commands
 
                 // show the selector dialog
                 result = uiShell.ShowPathSelector(info);
-                if (info == null)
-                    return;
-
-                revisionStart = result.RevisionStart;
-                revisionEnd = result.RevisionEnd;
             }
             else
             {

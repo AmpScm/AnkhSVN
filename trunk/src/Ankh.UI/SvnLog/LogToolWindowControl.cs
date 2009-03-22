@@ -26,7 +26,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
+    public sealed partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
         string _originalText;
         IList<SvnOrigin> _origins;
@@ -95,7 +95,7 @@ namespace Ankh.UI.SvnLog
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            StartLog(new[] { target }, start, end);
+            StartLog(new SvnOrigin[] { target }, start, end);
         }
 
         public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
@@ -116,7 +116,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             SvnOrigin origin = new SvnOrigin(target);
-            _origins = new[] { origin };
+            _origins = new SvnOrigin[] { origin };
             UpdateTitle();
             logControl.StartMergesEligible(context, origin, source);
         }
@@ -127,7 +127,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             SvnOrigin origin = new SvnOrigin(target);
-            _origins = new[] { origin };
+            _origins = new SvnOrigin[] { origin };
             UpdateTitle();
             logControl.StartMergesMerged(context, origin, source);
         }

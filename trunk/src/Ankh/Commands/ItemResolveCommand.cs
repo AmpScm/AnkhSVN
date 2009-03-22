@@ -64,9 +64,6 @@ namespace Ankh.Commands
             {
                 e.Enabled = !string.IsNullOrEmpty(e.GetService<IAnkhConfigurationService>().Instance.MergeExePath);
             }
-            else
-            {
-            }
         }
 
         public override void OnExecute(CommandEventArgs e)

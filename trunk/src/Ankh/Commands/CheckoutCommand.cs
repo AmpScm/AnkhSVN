@@ -16,6 +16,7 @@
 
 using System;
 using System.Windows.Forms;
+using Ankh.VS;
 using SharpSvn;
 
 using Ankh.Ids;
@@ -46,10 +47,9 @@ namespace Ankh.Commands
                 return;
 
             Uri uri = selected.Uri;
-            SharpSvn.SvnRevision rev = selected.Revision;
             string name = selected.Origin.Target.FileName;
 
-            Ankh.VS.IAnkhSolutionSettings ss = e.GetService<Ankh.VS.IAnkhSolutionSettings>();
+            IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
 
             using (CheckoutDialog dlg = new CheckoutDialog())
             {
