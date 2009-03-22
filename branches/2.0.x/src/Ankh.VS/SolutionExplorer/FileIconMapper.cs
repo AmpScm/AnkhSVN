@@ -16,14 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.VisualStudio;
-using SharpSvn;
 using System.Diagnostics;
 
 namespace Ankh.VS.SolutionExplorer
@@ -40,7 +38,7 @@ namespace Ankh.VS.SolutionExplorer
             : base(context)
         {
             _imageList = new ImageList();
-            _imageList.ImageSize = new System.Drawing.Size(16, 16);
+            _imageList.ImageSize = new Size(16, 16);
             _imageList.ColorDepth = ColorDepth.Depth32Bit;
             _iconMap = new Dictionary<ProjectIconReference, int>();
             _folderMap = new SortedList<WindowsSpecialFolder, int>();
@@ -117,7 +115,7 @@ namespace Ankh.VS.SolutionExplorer
             return typeName;
         }
 
-        string GetTypeName(string path)
+        static string GetTypeName(string path)
         {
             NativeMethods.SHFILEINFO fileinfo = new NativeMethods.SHFILEINFO();
             IntPtr rslt = NativeMethods.SHGetFileInfoW(path, 0, ref fileinfo,
@@ -129,7 +127,7 @@ namespace Ankh.VS.SolutionExplorer
             return fileinfo.szTypeName;
         }
 
-        string GetTypeNameForExtension(string extension)
+        static string GetTypeNameForExtension(string extension)
         {
             Debug.Assert(!string.IsNullOrEmpty(extension));
 
@@ -200,9 +198,6 @@ namespace Ankh.VS.SolutionExplorer
                     return -1;
                 }
 
-                if (icon == null)
-                    return -1;
-
                 try
                 {
                     _imageList.Images.Add(icon);
@@ -232,7 +227,7 @@ namespace Ankh.VS.SolutionExplorer
                 if (_dirIcon > 0)
                     return _dirIcon - 1;
 
-                int n = GetSpecialIcon("", FileAttributes.Directory);
+                int n = GetSpecialIcon(Path.GetTempPath(), FileAttributes.Directory);
 
                 if (n >= 0)
                     _dirIcon = n + 1;
@@ -249,7 +244,9 @@ namespace Ankh.VS.SolutionExplorer
                 if (_fileIcon > 0)
                     return _fileIcon - 1;
 
-                int n = GetSpecialIcon("", FileAttributes.Normal);
+                string dummyPath = Path.Combine(Path.GetTempPath(), "Dummy");
+
+                int n = GetSpecialIcon(dummyPath, FileAttributes.Normal);
 
                 if (n >= 0)
                     _fileIcon = n + 1;

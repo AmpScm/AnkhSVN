@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Ankh.VS.SolutionExplorer;
 using AnkhSvn_UnitTestProject.Helpers;
@@ -52,7 +49,6 @@ namespace AnkhSvn_UnitTestProject.Services
         public void TestExistingFileType()
         {
             var statusCache = new Mock<IFileStatusCache>();
-            IFileIconMapper mapper = new FileIconMapper(sp);
 
             string tempFile = Path.GetTempFileName();
             string exeTempFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".exe");
@@ -87,6 +83,69 @@ namespace AnkhSvn_UnitTestProject.Services
             Assert.That(mapper.GetIconForExtension(""), Is.EqualTo(mapper.FileIcon));
             Assert.That(mapper.GetIconForExtension("qweqweqeqwe"), Is.EqualTo(mapper.FileIcon));
             Assert.That(mapper.GetIconForExtension("exe"), Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void TestFolderIconAndDirectoryIconDiffer()
+        {
+            var dirIcon = mapper.DirectoryIcon;
+            var fileIcon = mapper.FileIcon;
+
+            Assert.That(dirIcon, Is.Not.EqualTo(fileIcon));
+        }
+
+        [Test]
+        public void TestProjectIconReference_DifferentIndex_NotEqual()
+        {
+            var one = new ProjectIconReference(new IntPtr(3),4);
+            var other = new ProjectIconReference(new IntPtr(3), 5);
+
+            Assert.That(one, Is.Not.EqualTo(other));
+        }
+
+        [Test]
+        public void TestProjectIconReference_DifferentImageList_NotEqual()
+        {
+            var one = new ProjectIconReference(new IntPtr(4), 5);
+            var other = new ProjectIconReference(new IntPtr(3), 5);
+
+            Assert.That(one, Is.Not.EqualTo(other));
+        }
+
+        [Test]
+        public void TestProjectIconReference_DifferentHandle_NotEqual()
+        {
+            var one = new ProjectIconReference(new IntPtr(4));
+            var other = new ProjectIconReference(new IntPtr(3));
+
+            Assert.That(one, Is.Not.EqualTo(other));
+        }
+
+        [Test]
+        public void TestProjectIconReference_SameImageListIndex_Equal()
+        {
+            var one = new ProjectIconReference(new IntPtr(3), 4);
+            var other = new ProjectIconReference(new IntPtr(3), 4);
+
+            Assert.That(one, Is.EqualTo(other));
+        }
+
+        [Test]
+        public void TestProjectIconReference_SameHandle_Equal()
+        {
+            var one = new ProjectIconReference(new IntPtr(3));
+            var other = new ProjectIconReference(new IntPtr(3));
+
+            Assert.That(one, Is.EqualTo(other));
+        }
+
+        [Test]
+        public void TestProjectIconReference_ImageListIndexVSHandle_NotEqual()
+        {
+            var one = new ProjectIconReference(new IntPtr(3), 3);
+            var other = new ProjectIconReference(new IntPtr(3));
+
+            Assert.That(one, Is.Not.EqualTo(other));
         }
 
         [Test]
