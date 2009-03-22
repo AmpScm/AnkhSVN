@@ -15,15 +15,13 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
+using Ankh.Scc;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
-using System.IO;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
-    class FileSystemTreeNode : TreeNode
+    sealed class FileSystemTreeNode : TreeNode
     {
         readonly WCTreeNode _wcNode;
         readonly SvnItem _item;
@@ -72,6 +70,8 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public void Refresh()
         {
+            StateImageIndex = (int) AnkhGlyph.None;
+
             if(SvnItem == null)
                 return;
 
@@ -79,7 +79,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             {
                 bool canRead;
 
-                foreach (Ankh.Scc.SccFileSystemNode node in Ankh.Scc.SccFileSystemNode.GetDirectoryNodes(SvnItem.FullPath, out canRead))
+                foreach (SccFileSystemNode node in SccFileSystemNode.GetDirectoryNodes(SvnItem.FullPath, out canRead))
                 {
                     canRead = true;
                     break;
