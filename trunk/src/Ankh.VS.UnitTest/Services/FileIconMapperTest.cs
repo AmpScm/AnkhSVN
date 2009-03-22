@@ -31,10 +31,20 @@ namespace AnkhSvn_UnitTestProject.Services
         }
 
         [Test]
-        public void TestNonExistingFileType()
+        public void TestGetFileType_NullParameter_DoesntThrow()
         {
             Assert.That(mapper.GetFileType((string)null), Is.EqualTo(""));
+        }
+
+        [Test]
+        public void TestGetFileType_EmptyString_DoesntThrow()
+        {
             Assert.That(mapper.GetFileType(""), Is.EqualTo(""));
+        }
+
+        [Test]
+        public void TestGetFileType_ExtensionWithAndWithDot_AreSame()
+        {
             Assert.That(mapper.GetFileType(".exe"), Is.EqualTo("Application"));
             Assert.That(mapper.GetFileType("exe"), Is.EqualTo("Application"));
         }
