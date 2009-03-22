@@ -16,21 +16,17 @@
 
 using System;
 using System.Windows.Forms;
-using System.ComponentModel;
-using System.Collections;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using Ankh.Scc;
-using System.IO;
 using Ankh.Commands;
 using Ankh.Ids;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
-    class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>
+    sealed class FileSystemDetailsView : ListViewWithSelection<FileSystemListViewItem>
     {
         public FileSystemDetailsView()
         {
@@ -50,7 +46,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 {
                     _context = value;
 
-                    OnContextChanged(EventArgs.Empty);
+                    OnContextChanged();
                 }
             }
         }
@@ -89,7 +85,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             get { return _statusMapper ?? (_statusMapper = Context.GetService<IStatusImageMapper>()); }
         }
 
-        protected virtual void OnContextChanged(EventArgs e)
+        private void OnContextChanged()
         {
             if (SmallImageList == null)
                 SmallImageList = IconMapper.ImageList;
@@ -111,22 +107,20 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         public WCTreeNode CurrentDirectory
         {
-            get { return this.currentDirectory; }
+            get { return currentDirectory; }
         }
 
-        public System.Drawing.Point GetSelectionPoint()
+        public Point GetSelectionPoint()
         {
-            if (this.SelectedItems.Count > 0)
+            if (SelectedItems.Count > 0)
             {
-                ListViewItem item = this.SelectedItems[0];
+                ListViewItem item = SelectedItems[0];
                 int offset = item.Bounds.Height / 3;
-                return this.PointToScreen(new Point(item.Bounds.X + offset + this.StateImageList.ImageSize.Width,
+                return PointToScreen(new Point(item.Bounds.X + offset + StateImageList.ImageSize.Width,
                     item.Bounds.Y + offset));
             }
-            else
-            {
-                return Point.Empty;
-            }
+            
+            return Point.Empty;
         }
 
         protected override void OnDoubleClick(EventArgs e)
@@ -154,7 +148,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             base.OnKeyDown(e);
 
             // Enter means open if there's only one selected item
-            if (e.KeyCode == Keys.Enter && this.SelectedItems.Count > 0)
+            if (e.KeyCode == Keys.Enter && SelectedItems.Count > 0)
             {
                 Context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ExplorerOpen);
             }
@@ -162,12 +156,12 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void AddChildren(WCTreeNode directory)
         {
-            this.currentDirectory = directory;
+            currentDirectory = directory;
 
-            this.BeginUpdate();
+            BeginUpdate();
             try
             {
-                this.Items.Clear();
+                Items.Clear();
 
                 foreach (WCTreeNode item in directory.GetChildren())
                 {
@@ -176,23 +170,8 @@ namespace Ankh.UI.WorkingCopyExplorer
                     //SvnItem svnItem = item.SvnItem;
                     if (fsNode != null)
                     {
-                        if (fsNode.SvnItem.IsDirectory)
-                        {
-                            bool canRead;
-
-                            foreach (Ankh.Scc.SccFileSystemNode node in Ankh.Scc.SccFileSystemNode.GetDirectoryNodes(fsNode.SvnItem.FullPath, out canRead))
-                            {
-                                canRead = true;
-                                break;
-                            }
-
-                            if (!canRead)
-                                continue;
-                        }
                         FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem);
-
                         Items.Add(lvi);
-
                         lvi.Tag = item;
                     }
                     else
@@ -213,7 +192,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             finally
             {
-                this.EndUpdate();
+                EndUpdate();
             }
         }
 
@@ -222,7 +201,7 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             AllColumns.Clear();
             SortColumns.Clear();
-            this.Columns.Clear();
+            Columns.Clear();
             _nameColumn = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
             SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 20);
             SmartColumn extension = new SmartColumn(this, "&Type", characterWidth * 7);
@@ -291,14 +270,14 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void InitializeCharacterWidth()
         {
-            using (Graphics g = this.CreateGraphics())
+            using (Graphics g = CreateGraphics())
             {
-                string measureString = "Name of Something To Measure";
-                this.characterWidth = (int)(g.MeasureString(measureString, this.Font).Width / measureString.Length);
+                const string measureString = "Name of Something To Measure";
+                characterWidth = (int)(g.MeasureString(measureString, Font).Width / measureString.Length);
             }
         }
 
-        protected override void OnRetrieveSelection(ListViewWithSelection<FileSystemListViewItem>.RetrieveSelectionEventArgs e)
+        protected override void OnRetrieveSelection(RetrieveSelectionEventArgs e)
         {
             e.SelectionItem = new SvnItemData(Context, e.Item.SvnItem);
         }
@@ -342,7 +321,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             sc.ShowContextMenu(menu, screen);
         }
 
-        protected override void OnResolveItem(ListViewWithSelection<FileSystemListViewItem>.ResolveItemEventArgs e)
+        protected override void OnResolveItem(ResolveItemEventArgs e)
         {
             SvnItemData sid = e.SelectionItem as SvnItemData;
 
@@ -371,18 +350,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
 
             return base.GetCanonicalName(item);
-        }
-
-        private ListViewItem FindListViewItemWithTag(WCTreeNode fileSystemItem)
-        {
-            foreach (ListViewItem lvi in this.Items)
-            {
-                if (Object.ReferenceEquals(lvi.Tag, fileSystemItem))
-                {
-                    return lvi;
-                }
-            }
-            return null;
         }
 
         private int characterWidth;
