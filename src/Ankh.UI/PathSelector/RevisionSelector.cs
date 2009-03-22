@@ -23,6 +23,7 @@ using System.Text;
 using System.Windows.Forms;
 using Ankh.Scc;
 using System.Globalization;
+using Ankh.UI.SvnLog;
 
 namespace Ankh.UI.PathSelector
 {

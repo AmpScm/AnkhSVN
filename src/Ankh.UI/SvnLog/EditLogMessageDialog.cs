@@ -14,15 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Ankh.UI.Services;
-
 namespace Ankh.UI.SvnLog
 {
     public partial class EditLogMessageDialog : VSContainerForm
@@ -32,11 +23,10 @@ namespace Ankh.UI.SvnLog
             InitializeComponent();
         }
 
-        string _originalText;
         public string LogMessage
         {
             get { return logMessageEditor.Text; }
-            set { logMessageEditor.Text = _originalText = value; }
+            set { logMessageEditor.Text = value; }
         }
     }
 }

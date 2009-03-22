@@ -17,11 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
-using System.Windows.Forms;
-using Ankh.UI.Services;
 using System.Diagnostics;
 using Ankh.Scc.UI;
 using Ankh.Ids;
@@ -99,7 +95,7 @@ namespace Ankh.UI.SvnLog
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            StartLog(new SvnOrigin[] { target }, start, end);
+            StartLog(new[] { target }, start, end);
         }
 
         public void StartLog(ICollection<SvnOrigin> targets, SvnRevision start, SvnRevision end)
@@ -120,7 +116,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             SvnOrigin origin = new SvnOrigin(target);
-            _origins = new SvnOrigin[] { origin };
+            _origins = new[] { origin };
             UpdateTitle();
             logControl.StartMergesEligible(context, origin, source);
         }
@@ -131,7 +127,7 @@ namespace Ankh.UI.SvnLog
                 throw new ArgumentNullException("target");
 
             SvnOrigin origin = new SvnOrigin(target);
-            _origins = new SvnOrigin[] { origin };
+            _origins = new[] { origin };
             UpdateTitle();
             logControl.StartMergesMerged(context, origin, source);
         }

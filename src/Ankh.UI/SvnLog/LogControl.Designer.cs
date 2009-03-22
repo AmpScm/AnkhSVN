@@ -21,7 +21,7 @@ namespace Ankh.UI.SvnLog
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -48,8 +48,8 @@ namespace Ankh.UI.SvnLog
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.logRevisionControl1 = new Ankh.UI.SvnLog.LogRevisionControl(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.logChangedPaths1 = new Ankh.UI.LogChangedPaths(this.components);
-            this.logMessageView1 = new Ankh.UI.LogMessageView(this.components);
+            this.logChangedPaths1 = new LogChangedPaths(this.components);
+            this.logMessageView1 = new LogMessageView(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -138,7 +138,7 @@ namespace Ankh.UI.SvnLog
 
         #endregion
 
-        private Ankh.UI.SvnLog.LogRevisionControl logRevisionControl1;
+        private LogRevisionControl logRevisionControl1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private LogChangedPaths logChangedPaths1;

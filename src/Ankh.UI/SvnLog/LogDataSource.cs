@@ -17,8 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Text;
 using Ankh.Scc;
 using SharpSvn;
 
@@ -66,8 +64,8 @@ namespace Ankh.UI.SvnLog
                 SvnOrigin o = EnumTools.GetFirst(Targets);
                 if (o != null)
                     return o.RepositoryRoot;
-                else
-                    return null;
+                
+                return null;
             }
         }
 

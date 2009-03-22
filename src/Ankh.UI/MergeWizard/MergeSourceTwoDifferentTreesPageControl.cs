@@ -16,16 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Resources;
-using System.Text;
 using System.Windows.Forms;
-using WizardFramework;
-using System.Windows.Forms.Design;
+using Ankh.UI.SvnLog;
 using Ankh.Scc;
-using System.Diagnostics;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -61,10 +54,8 @@ namespace Ankh.UI.MergeWizard
 
                 return;
             }
-            else
-            {
-                fromRevisionSelectButton.Enabled = true;
-            }
+            
+            fromRevisionSelectButton.Enabled = true;
 
             // Conditionally validate the To Url
             if (!useFromURLCheckBox.Checked && !Uri.TryCreate(toURLTextBox.Text, UriKind.Absolute, out tmpUri))
@@ -75,10 +66,8 @@ namespace Ankh.UI.MergeWizard
 
                 return;
             }
-            else
-            {
-                toRevisionSelectButton.Enabled = true;
-            }
+            
+            toRevisionSelectButton.Enabled = true;
 
             // Do not validate the revisions if To and From are using HEAD.
             if (fromHEADRevisionRadioButton.Checked && toHEADRevisionRadioButton.Checked)
@@ -240,9 +229,9 @@ namespace Ankh.UI.MergeWizard
 
         private void fromRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
-            long rev = -1;
             TogglePageComplete();
-
+            
+            long rev;
             if (long.TryParse(fromRevisionTextBox.Text, out rev))
                 ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = rev;
             else((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = -1;
@@ -250,9 +239,9 @@ namespace Ankh.UI.MergeWizard
 
         private void toRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
-            long rev = -1;
             TogglePageComplete();
-
+            
+            long rev;
             if (long.TryParse(toRevisionTextBox.Text, out rev))
                 ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = rev;
             else ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = -1;
