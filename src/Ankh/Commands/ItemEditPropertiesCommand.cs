@@ -16,13 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using SharpSvn;
 using Ankh.Ids;
 using Ankh.Scc;
-using Ankh.UI;
 using Ankh.UI.PropertyEditors;
 using Ankh.Selection;
 using Ankh.VS;
@@ -40,7 +37,7 @@ namespace Ankh.Commands
     class ItemEditPropertiesCommand : CommandBase
     {
         /// <summary>
-        /// Raises the <see cref="E:Update"/> event.
+        /// 
         /// </summary>
         /// <param name="e">The <see cref="Ankh.Commands.CommandUpdateEventArgs"/> instance containing the event data.</param>
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -67,7 +64,7 @@ namespace Ankh.Commands
 
                             if (e.Selection.IsSingleNodeSelection)
                                 break;
-                            else if (count > 1)
+                            if (count > 1)
                             {
                                 e.Enabled = false;
                                 return;
@@ -161,18 +158,17 @@ namespace Ankh.Commands
             if (firstVersioned == null)
                 return; // exceptional case
 
-            using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
+            //using (SvnClient client = e.GetService<ISvnClientPool>().GetNoUIClient())
             using (PropertyEditorDialog dialog = new PropertyEditorDialog(firstVersioned))
             {
                 dialog.Context = e.Context;
 
                 SortedList<string, PropertyEditItem> editItems = new SortedList<string, PropertyEditItem>();
-                SvnPropertyListArgs args = new SvnPropertyListArgs();
                 if (!e.GetService<IProgressRunner>().RunModal("Retrieving Properties",
                     delegate(object Sender, ProgressWorkerArgs wa)
                     {
                         // Retrieve base properties
-                        client.PropertyList(new SvnPathTarget(firstVersioned.FullPath, SvnRevision.Base),
+                        wa.Client.PropertyList(new SvnPathTarget(firstVersioned.FullPath, SvnRevision.Base),
                             delegate(object s, SvnPropertyListEventArgs la)
                             {
                                 foreach (SvnPropertyValue pv in la.Properties)
@@ -186,7 +182,7 @@ namespace Ankh.Commands
                             });
                         //
 
-                        client.PropertyList(firstVersioned.FullPath,
+                        wa.Client.PropertyList(firstVersioned.FullPath,
                             delegate(object s, SvnPropertyListEventArgs la)
                             {
                                 foreach (SvnPropertyValue pv in la.Properties)

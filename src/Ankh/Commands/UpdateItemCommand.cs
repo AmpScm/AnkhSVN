@@ -14,18 +14,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.UI;
 using Ankh.Ids;
-using Ankh.VS;
-using Ankh.Selection;
-using System.Collections.ObjectModel;
-using System.Windows.Forms.Design;
 using Ankh.Scc;
 
 namespace Ankh.Commands
@@ -51,13 +44,12 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             SvnRevision updateTo;
-            SvnDepth depth = SvnDepth.Empty;
+            SvnDepth depth;
             List<string> files = new List<string>();
             if (e.Command == AnkhCommand.UpdateItemSpecific)
             {
                 IUIShell uiShell = e.GetService<IUIShell>();
 
-                PathSelectorResult result = null;
                 PathSelectorInfo info = new PathSelectorInfo("Select Items to Update",
                     e.Selection.GetSelectedSvnItems(true));
 
@@ -66,14 +58,7 @@ namespace Ankh.Commands
                 info.EnableRecursive = true;
                 info.RevisionStart = SvnRevision.Head;
 
-                if (!CommandBase.Shift)
-                {
-                    result = uiShell.ShowPathSelector(info);
-                }
-                else
-                {
-                    result = info.DefaultResult;
-                }
+                PathSelectorResult result = !Shift ? uiShell.ShowPathSelector(info) : info.DefaultResult;
 
                 if (!result.Succeeded)
                     return;
@@ -104,7 +89,7 @@ namespace Ankh.Commands
             IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();            
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
-            SvnUpdateResult ur = null;
+            SvnUpdateResult ur;
 
             e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle,
                 delegate(object sender, ProgressWorkerArgs ee)

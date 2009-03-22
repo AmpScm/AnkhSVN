@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.SvnLog
 {
-    partial class LogViewerDialog
+    sealed partial class LogViewerDialog
     {
         /// <summary>
         /// Required designer variable.

@@ -15,10 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
@@ -44,32 +42,32 @@ namespace Ankh.Commands
             {
                 if (!item.Exists)
                     continue;
-                else
-                    switch (e.Command)
-                    {
-                        case AnkhCommand.ItemOpenTextEditor:
-                        case AnkhCommand.ItemOpenVisualStudio:
-                            if (!item.IsFile)
-                            {
-                                e.Enabled = false;
-                                return;
-                            }
-                            first = false;
-                            break;
-                        case AnkhCommand.ItemOpenSolutionExplorer:
-                            if (!item.InSolution)
-                                continue;
-                            goto default;
-                        default:
-                            if (!first)
-                            {
-                                e.Enabled = false;
-                                return;
-                            }
-                            else
-                                first = false;
-                            break;
-                    }
+
+                switch (e.Command)
+                {
+                    case AnkhCommand.ItemOpenTextEditor:
+                    case AnkhCommand.ItemOpenVisualStudio:
+                        if (!item.IsFile)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                        first = false;
+                        break;
+                    case AnkhCommand.ItemOpenSolutionExplorer:
+                        if (!item.InSolution)
+                            continue;
+                        goto default;
+                    default:
+                        if (!first)
+                        {
+                            e.Enabled = false;
+                            return;
+                        }
+                        
+                        first = false;
+                        break;
+                }
             }
 
             e.Enabled = !first;
@@ -91,7 +89,7 @@ namespace Ankh.Commands
 
                             if (mapper.IsProjectFileOrSolution(item.FullPath))
                                 goto case AnkhCommand.ItemOpenSolutionExplorer;
-                            else if (item.IsDirectory)
+                            if (item.IsDirectory)
                                 goto case AnkhCommand.ItemOpenFolder;
 
                             if (!item.IsFile || !item.Exists)

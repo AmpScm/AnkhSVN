@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
@@ -25,9 +23,7 @@ using System.Windows.Forms;
 using Ankh.VS;
 using SharpSvn;
 using System.IO;
-using System.Windows.Forms.Design;
 using Ankh.Scc;
-using System.Diagnostics;
 
 namespace Ankh.Commands
 {
@@ -138,8 +134,6 @@ namespace Ankh.Commands
                 if (sol != null)
                 {
                     sol.CloseSolutionElement(VSConstants.VSITEMID_ROOT, null, 0); // Closes the current solution
-
-                    sol = null;
                 }
 
                 IAnkhSccService scc = e.GetService<IAnkhSccService>();
@@ -164,11 +158,15 @@ namespace Ankh.Commands
             }
         }
 
-        private void CheckOutAndOpenSolution(CommandEventArgs e, SvnUriTarget checkoutLocation, SvnRevision revision, Uri projectTop, string localDir, Uri projectUri)
+        private static void CheckOutAndOpenSolution(CommandEventArgs e, SvnUriTarget checkoutLocation, SvnRevision revision, Uri projectTop, string localDir, Uri projectUri)
         {
             IProgressRunner runner = e.GetService<IProgressRunner>();
 
-            runner.RunModal("Checking Out Solution", delegate(object sender, ProgressWorkerArgs ee) { PerformCheckout(ee, checkoutLocation, revision, localDir); });
+            runner.RunModal("Checking Out Solution", 
+                delegate(object sender, ProgressWorkerArgs ee)
+                    {
+                        PerformCheckout(ee, checkoutLocation, revision, localDir);
+                    });
 
             Uri file = projectTop.MakeRelativeUri(projectUri);
 
@@ -177,14 +175,14 @@ namespace Ankh.Commands
             OpenProject(e, projectFile);
         }
 
-        private void OpenProject(CommandEventArgs e, string projectFile)
+        private static void OpenProject(CommandEventArgs e, string projectFile)
         {
             IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
 
             ss.OpenProjectFile(projectFile);
         }
 
-        private void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, SvnRevision revision, string localDir)
+        private static void PerformCheckout(ProgressWorkerArgs e, SvnUriTarget projectTop, SvnRevision revision, string localDir)
         {
             SvnCheckOutArgs a = new SvnCheckOutArgs();
             a.Revision = revision;
@@ -194,7 +192,7 @@ namespace Ankh.Commands
 
         delegate void DoSomething();
 
-        private void FindRoot(IAnkhServiceProvider context, Uri selectedUri, CheckoutProject dlg)
+        private static void FindRoot(IAnkhServiceProvider context, Uri selectedUri, CheckoutProject dlg)
         {
             DoSomething ds = delegate
             {

@@ -14,14 +14,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.Diagnostics;
-using System.Xml;
-using System.Xml.Xsl;
-using System.IO;
-using System.Collections;
 using SharpSvn;
-using System.Collections.ObjectModel;
 using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
@@ -114,13 +108,9 @@ namespace Ankh.Commands
                         Debug.Assert(needsRemoteCount == 1);
                         return;
                     }
-                    else
-                    {
-                        // Local log only
-                        return;
-                    }
-
-                //break;
+                    
+                    // Local log only
+                    return;
                 case AnkhCommand.ReposExplorerLog:
                     i = 0;
                     foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
