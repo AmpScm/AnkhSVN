@@ -21,7 +21,6 @@ using System.Windows.Forms;
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VS;
-using Ankh.UI.SccManagement;
 using Ankh.UI.PathSelector;
 
 namespace Ankh.Commands
@@ -68,9 +67,6 @@ namespace Ankh.Commands
             }
 
             Collection<SvnItem> resources = new Collection<SvnItem>();
-
-            IProjectFileMapper mapper = e.GetService<IProjectFileMapper>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             List<SvnItem> selectedItems = new List<SvnItem>(selectedChanges.Values);
 
             // TODO: Give the whole list to a refreshable dialog!
