@@ -195,5 +195,24 @@ namespace AnkhSvn_UnitTestProject.Services
                 Assert.That(mapper.GetStateIcon(icon), Is.GreaterThanOrEqualTo(0), "Failed with value: {0}", icon);
             }
         }
+
+        [Test]
+        public void TestGetIcon()
+        {
+            var tempFileName = Path.Combine(Path.GetTempPath(), Path.GetTempFileName() + ".txt");
+            using(File.Create(tempFileName))
+            {
+            }
+
+            try
+            {
+                var icon = mapper.GetIcon(tempFileName);
+                Assert.That(icon, Is.GreaterThan(-1));
+            }
+            finally
+            {
+                File.Delete(tempFileName);
+            }
+        }
     }
 }
