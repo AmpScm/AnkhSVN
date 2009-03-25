@@ -30,7 +30,7 @@ namespace Ankh.Scc.ProjectMap
     {
         readonly IAnkhServiceProvider _context;
         readonly string _filename;
-        SccProjectFileReference _firstReference;        
+        SccProjectFileReference _firstReference;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SccProjectFile"/> class.
@@ -47,7 +47,14 @@ namespace Ankh.Scc.ProjectMap
             _context = context;
             _filename = filename;
 
-            _context.GetService<IFileStatusCache>().SetSolutionContained(FullPath, true);
+            GetService<IFileStatusCache>().SetSolutionContained(FullPath, true);
+        }
+
+        [DebuggerStepThrough]
+        private T GetService<T>()
+            where T : class
+        {
+            return _context.GetService<T>();
         }
 
         /// <summary>
@@ -73,7 +80,7 @@ namespace Ankh.Scc.ProjectMap
                 {
                     i++;
 
-                    rf = rf.NextReference;                    
+                    rf = rf.NextReference;
                 }
 
                 return i;
@@ -111,7 +118,7 @@ namespace Ankh.Scc.ProjectMap
                 while (rf != null)
                 {
                     i += rf.ReferenceCount;
-                    rf = rf.NextReference;                    
+                    rf = rf.NextReference;
                 }
 
                 return i;
@@ -170,7 +177,7 @@ namespace Ankh.Scc.ProjectMap
                 throw new ArgumentNullException("reference");
 
             if (reference.NextReference != null || reference.ProjectFile != this)
-                throw new InvalidOperationException(); 
+                throw new InvalidOperationException();
 
             reference._nextReference = FirstReference;
             _firstReference = reference;
