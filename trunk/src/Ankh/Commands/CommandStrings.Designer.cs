@@ -160,6 +160,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The selected items will be deleted permanently..
+        /// </summary>
+        internal static string TheSelectedItemsWillBeDeletedPermanently {
+            get {
+                return ResourceManager.GetString("TheSelectedItemsWillBeDeletedPermanently", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Project.
         /// </summary>
         internal static string UpdateProject {
@@ -201,6 +210,15 @@ namespace Ankh.Commands {
         internal static string WouldYouLikeToAddXToTheIgnorePropertyOnY {
             get {
                 return ResourceManager.GetString("WouldYouLikeToAddXToTheIgnorePropertyOnY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; will be deleted permanently..
+        /// </summary>
+        internal static string XWillBeDeletedPermanently {
+            get {
+                return ResourceManager.GetString("XWillBeDeletedPermanently", resourceCulture);
             }
         }
     }

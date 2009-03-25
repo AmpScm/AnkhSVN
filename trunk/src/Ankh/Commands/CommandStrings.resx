@@ -165,4 +165,10 @@
   <data name="UpdatingTitle" xml:space="preserve">
     <value>Updating</value>
   </data>
+  <data name="TheSelectedItemsWillBeDeletedPermanently" xml:space="preserve">
+    <value>The selected items will be deleted permanently.</value>
+  </data>
+  <data name="XWillBeDeletedPermanently" xml:space="preserve">
+    <value>'{0}' will be deleted permanently.</value>
+  </data>
 </root>
