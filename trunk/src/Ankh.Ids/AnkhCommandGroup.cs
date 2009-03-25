@@ -180,5 +180,6 @@ namespace Ankh.Ids
         WceAdvanced,
         WceOpen,
         WceBranch,
+        WceEdit,
     }
 }

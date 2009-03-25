@@ -238,9 +238,9 @@ namespace Ankh.Ids
         UpdateItemLatestRecursive,
         SccLock,
 
+        ItemRename,
+        ItemDelete,
         // Currently unused block; values can be reused as they were never really handled                
-        PcColViewModified,
-        PcColViewName,
         PcColViewRepository,
         PcColViewType,
         // End of unused block
