@@ -417,32 +417,26 @@ namespace Ankh
 
         void UpdateNested()
         {
-            bool isNested;
             SvnItem parentItem;
 
-            AnkhStatus sMe = Status;
-
-            if (!IsDirectory || !IsVersioned)
-                isNested = false; // Not nested
-            else if ((null == (parentItem = Parent)) || !parentItem.IsVersioned)
-                isNested = false; // No versioned parent
-            else
+            if (IsDirectory && IsVersioned &&
+                null != (parentItem = Parent) && parentItem.IsVersioned)
             {
                 StatusCache.RefreshNested(this);
+
                 SvnItemState r;
 
-                Debug.Assert(TryGetState(SvnItemState.IsNested, out r));
+                bool foundNestedState = TryGetState(SvnItemState.IsNested, out r);
 
-                if (TryGetState(SvnItemState.IsNested, out r))
+                Debug.Assert(foundNestedState, "StatusCache.RefreshNested() should have updated status");
+
+                if (foundNestedState)
                     return;
 
-                isNested = false;
+                // Fall through to at least have some state
             }
 
-            if (isNested)
-                SetState(SvnItemState.IsNested, SvnItemState.None);
-            else
-                SetState(SvnItemState.None, SvnItemState.IsNested);
+            SetState(SvnItemState.None, SvnItemState.IsNested);
         }
         #endregion
 
