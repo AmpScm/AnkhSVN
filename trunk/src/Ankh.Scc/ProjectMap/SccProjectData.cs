@@ -81,6 +81,20 @@ namespace Ankh.Scc.ProjectMap
             _files = new SccProjectFileCollection();
         }
 
+        [DebuggerStepThrough]
+        private T GetService<T>()
+            where T : class
+        {
+            return _context.GetService<T>();
+        }
+
+        [DebuggerStepThrough]
+        private T GetService<T>(Type serviceType)
+            where T : class
+        {
+            return _context.GetService<T>(serviceType);
+        }
+
         public IVsSccProject2 SccProject
         {
             get { return _sccProject; }
@@ -132,7 +146,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (!_projectGuid.HasValue)
                 {
-                    IVsSolution solution = _context.GetService<IVsSolution>(typeof(SVsSolution));
+                    IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
                     Guid value;
                     if (ErrorHandler.Succeeded(solution.GetGuidOfProject(ProjectHierarchy, out value)))
@@ -152,7 +166,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (!_projectTypeGuid.HasValue)
                 {
-                    IVsSolution solution = _context.GetService<IVsSolution>(typeof(SVsSolution));
+                    IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
                     Guid value;
                     if (ErrorHandler.Succeeded(solution.GetProjectTypeGuid(0, ProjectFile, out value)))
@@ -253,8 +267,8 @@ namespace Ankh.Scc.ProjectMap
 
             // TODO: Insert project local settings check
 
-            IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
-            IFileStatusCache cache = _context.GetService<IFileStatusCache>();
+            IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
+            IFileStatusCache cache = GetService<IFileStatusCache>();
 
             SvnItem solutionRoot = settings.ProjectRootSvnItem;
 
@@ -321,8 +335,8 @@ namespace Ankh.Scc.ProjectMap
             string dir;
             if (smart && null != (dir = SccBaseDirectory))
             {
-                IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
-                SvnItem dirItem = _context.GetService<IFileStatusCache>()[dir];
+                IAnkhSolutionSettings settings = GetService<IAnkhSolutionSettings>();
+                SvnItem dirItem = GetService<IFileStatusCache>()[dir];
 
                 if (dirItem.IsBelowPath(settings.ProjectRootSvnItem))
                 {
@@ -341,7 +355,7 @@ namespace Ankh.Scc.ProjectMap
             {
                 if (_uniqueName != null)
                     return _uniqueName;
-                IVsSolution3 solution = _context.GetService<IVsSolution3>(typeof(SVsSolution));
+                IVsSolution3 solution = GetService<IVsSolution3>(typeof(SVsSolution));
 
                 if (solution != null)
                 {
@@ -467,7 +481,7 @@ namespace Ankh.Scc.ProjectMap
                 _svnProjectInstance = null;
                 _loaded = true;
 
-                ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+                ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
                 if (walker != null)
                 {
@@ -478,7 +492,7 @@ namespace Ankh.Scc.ProjectMap
                     }
                 }
 
-                IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+                IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
                 if (monitor != null)
                 {
                     // Make sure we see all files as possible pending changes
@@ -525,7 +539,7 @@ namespace Ankh.Scc.ProjectMap
                     // We only add these files if they are actually SCC items
 
                     bool add = false;
-                    ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+                    ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
                     foreach (string file in walker.GetSccFiles(ProjectHierarchy, fid, ProjectWalkDepth.SpecialFiles, null))
                     {
@@ -546,23 +560,26 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-
-            if (_files.Contains(path))
-                _files[path].AddReference();
+            SccProjectFileReference reference;
+            if (_files.TryGetValue(path, out reference))
+                reference.AddReference();
             else
             {
-                SccProjectFileReference reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
+                reference = new SccProjectFileReference(_context, this, Scc.GetFile(path));
                 _files.Add(reference);
 
-                if(string.Equals(path, ProjectFile, StringComparison.OrdinalIgnoreCase))
-                {
-                    reference.IsProjectFile = true;
-                }
+                if (_loaded)
+                    GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(path);
+            }
+
+            if (string.Equals(path, ProjectFile, StringComparison.OrdinalIgnoreCase))
+            {
+                reference.IsProjectFile = true;
             }
 
             if (!_inLoad && _loaded && !string.IsNullOrEmpty(ProjectFile))
             {
-                ISccProjectWalker walker = _context.GetService<ISccProjectWalker>();
+                ISccProjectWalker walker = GetService<ISccProjectWalker>();
 
                 if (walker != null)
                     walker.SetPrecreatedFilterItem(null, VSConstants.VSITEMID_NIL);
@@ -580,8 +597,9 @@ namespace Ankh.Scc.ProjectMap
             uint id;
             if (ids != null && ids.TryGetValue(path, out id))
             {
-                if (_files.Contains(path))
-                    _files[path].SetId(id);
+                SccProjectFileReference pf;
+                if (_files.TryGetValue(path, out pf))
+                    pf.SetId(id);
             }
         }
 
@@ -590,10 +608,11 @@ namespace Ankh.Scc.ProjectMap
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            if (!_files.Contains(path))
+            SccProjectFileReference pf;
+            if (!_files.TryGetValue(path, out pf))
                 return;
 
-            _files[path].ReleaseReference();
+            pf.ReleaseReference();
 
             ClearIdCache();
 
