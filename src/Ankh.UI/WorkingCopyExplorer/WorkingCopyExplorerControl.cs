@@ -106,7 +106,10 @@ namespace Ankh.UI.WorkingCopyExplorer
         bool _rootsPresent;
         void AddRoots(bool add)
         {
-            if (add && !_rootsPresent)
+            if (add == _rootsPresent)
+                return;
+
+            if (!_rootsPresent)
             {
                 IAnkhSolutionSettings slnSettings = Context.GetService<IAnkhSolutionSettings>();
                 if (!string.IsNullOrEmpty(slnSettings.SolutionFilename))
@@ -118,7 +121,7 @@ namespace Ankh.UI.WorkingCopyExplorer
 
                 _rootsPresent = true;
             }
-            else if(_rootsPresent)
+            else
             {
                 folderTree.ClearRoots();
                 _rootsPresent = false;
