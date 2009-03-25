@@ -498,8 +498,7 @@ namespace Ankh.Scc
 
         tagVSQuerySaveResult QueryReadOnlyFile(SvnItem item)
         {
-            Debug.Assert(item.IsReadOnly);
-            Debug.Assert(!item.IsReadOnlyMustLock);
+            Debug.Assert(item.IsReadOnly && !item.IsReadOnlyMustLock, "item.IsReadOnly && !item.IsReadOnlyMustLock");
 
             // Now we have to ask the user wether to overwrite, or to save as
             using (SccQuerySaveReadonlyDialog dlg = new SccQuerySaveReadonlyDialog())
