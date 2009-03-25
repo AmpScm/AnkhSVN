@@ -267,61 +267,42 @@ namespace Ankh.Scc
 
             if (rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
-
-            HybridCollection<string> mustLockFiles = null;
-            List<SvnItem> mustLockItems = null;
-
-
-            for (int i = 0; i < cFiles; i++)
+            try
             {
-                string file = rgpszMkDocuments[i];
+                HybridCollection<string> mustLockFiles = null;
+                List<SvnItem> mustLockItems = null;
 
-                if (!IsSafeSccPath(file))
-                    continue; // Skip non scc paths
-
-                file = SvnTools.GetNormalizedFullPath(file);
-
-                Monitor.ScheduleDirtyCheck(file, true);
-
-                SvnItem item = StatusCache[file];
-
-                if (item.IsReadOnlyMustLock && !item.IsDirectory)
+                for (int i = 0; i < cFiles; i++)
                 {
-                    if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
+                    string file = rgpszMkDocuments[i];
+
+                    if (!IsSafeSccPath(file))
+                        continue; // Skip non scc paths
+
+                    file = SvnTools.GetNormalizedFullPath(file);
+
+                    Monitor.ScheduleDirtyCheck(file, true);
+
+                    SvnItem item = StatusCache[file];
+
+                    if (item.IsReadOnlyMustLock && !item.IsDirectory)
                     {
-                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
-                            | tagVSQueryEditResultFlags.QER_EditNotPossible
-                            | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
+                        {
+                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                                | tagVSQueryEditResultFlags.QER_EditNotPossible
+                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
 
-                        return VSConstants.S_OK;
-                    }
+                            return VSConstants.S_OK;
+                        }
 
-                    if (mustLockItems == null)
-                    {
-                        mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                        mustLockItems = new List<SvnItem>();
-                    }
+                        if (mustLockItems == null)
+                        {
+                            mustLockFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                            mustLockItems = new List<SvnItem>();
+                        }
 
-                    if (!mustLockFiles.Contains(item.FullPath))
-                    {
-                        mustLockFiles.Add(item.FullPath);
-                        mustLockItems.Add(item);
-                    }
-                }
-            }
-            if (mustLockItems != null)
-            {
-                IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
-
-                List<SvnItem> mustBeLocked = new List<SvnItem>(mustLockItems);
-
-                // Look at all subfiles of the must be locked document and add these to the dialog
-                // to make it easier to lock them too
-                foreach (string lockFile in new List<string>(mustLockFiles))
-                {
-                    foreach (SvnItem item in GetAllDocumentItems(lockFile))
-                    {
                         if (!mustLockFiles.Contains(item.FullPath))
                         {
                             mustLockFiles.Add(item.FullPath);
@@ -329,21 +310,50 @@ namespace Ankh.Scc
                         }
                     }
                 }
-
-                cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
-                // Only check the original list; the rest of the items in mustLockItems is optional
-                foreach (SvnItem i in mustBeLocked)
+                if (mustLockItems != null)
                 {
-                    if (i.IsReadOnlyMustLock)
+                    IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
+
+                    List<SvnItem> mustBeLocked = new List<SvnItem>(mustLockItems);
+
+                    // Look at all subfiles of the must be locked document and add these to the dialog
+                    // to make it easier to lock them too
+                    foreach (string lockFile in new List<string>(mustLockFiles))
                     {
-                        // User has probably canceled the lock operation, or it failed.
-                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
-                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
-                            | tagVSQueryEditResultFlags.QER_EditNotPossible
-                            | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
-                        break;
+                        foreach (SvnItem item in GetAllDocumentItems(lockFile))
+                        {
+                            if (!mustLockFiles.Contains(item.FullPath))
+                            {
+                                mustLockFiles.Add(item.FullPath);
+                                mustLockItems.Add(item);
+                            }
+                        }
+                    }
+
+                    cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
+                    // Only check the original list; the rest of the items in mustLockItems is optional
+                    foreach (SvnItem i in mustBeLocked)
+                    {
+                        if (i.IsReadOnlyMustLock)
+                        {
+                            // User has probably canceled the lock operation, or it failed.
+                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_CheckoutCanceledOrFailed
+                                | tagVSQueryEditResultFlags.QER_EditNotPossible
+                                | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                            break;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
             }
 
             return VSConstants.S_OK;
