@@ -565,6 +565,14 @@
           <ButtonRef id="Cmd_Export" priority="0x300" />
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC" priority="0x200" />
+        <Group id="Grp_WceEdit" priority="0x300">
+          <ButtonRef id="guidVSStd97:cmdidCopy" priority="0x100" />
+          <ButtonRef id="guidVSStd97:cmdidPaste" priority="0x200" />
+          <Button id="Cmd_ItemDelete" name="SvnNodeDelete" priority="0x800" text="&amp;Delete..."
+                  iconFile="PendingChanges/Delete.png" dynamicVisibility="true" />
+          <Button id="Cmd_ItemRename" name="Rename" priority="0x900"
+                  text="&amp;Rename..." dynamicVisibility="true" allowParams="true" />
+        </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
     </GroupRef>

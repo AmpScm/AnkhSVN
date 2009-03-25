@@ -25,6 +25,7 @@ using Ankh.VS;
 using Microsoft.VisualStudio.Shell;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -78,6 +79,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
             VSCommandHandler.Install(Context, this, AnkhCommand.Refresh, OnRefresh, OnUpdateRefresh);
+            VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
 
             AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
 
@@ -94,6 +96,11 @@ namespace Ankh.UI.WorkingCopyExplorer
         void environment_SolutionOpened(object sender, EventArgs e)
         {
             RefreshRoots();
+        }
+
+        void OnDelete(object sender, CommandEventArgs e)
+        {
+            e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.ItemDelete);
         }
 
         bool _rootsPresent;
