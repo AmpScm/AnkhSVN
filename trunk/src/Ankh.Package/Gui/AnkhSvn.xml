@@ -549,6 +549,7 @@
           <Button id="Cmd_Export" name="Export" priority="0x300"
               text="E&amp;xport..."
               toolTip="Export to Folder" iconFile="menu/Export.png" />
+          <ButtonRef id="Cmd_ItemDelete" priority="0x700" />
         </Group>
         <Group id="Grp_WceBranch" priority="0x9000">
           
