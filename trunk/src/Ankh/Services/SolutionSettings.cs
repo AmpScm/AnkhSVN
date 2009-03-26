@@ -31,6 +31,7 @@ using FileVersionInfo = System.Diagnostics.FileVersionInfo;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using Ankh.Ids;
+using System.Runtime.InteropServices;
 
 namespace Ankh.Settings
 {
@@ -803,17 +804,20 @@ namespace Ankh.Settings
 
             IVsSolution solution = GetService<IVsSolution>(typeof(SVsSolution));
 
+            int hr;
             if (isSolution)
-                ErrorHandler.ThrowOnFailure(solution.OpenSolutionFile(0, projectFile));
+                hr = solution.OpenSolutionFile(0, projectFile);
             else
             {
                 Guid gnull = Guid.Empty;
                 Guid gInterface = Guid.Empty;
                 IntPtr pProj = IntPtr.Zero;
 
-                ErrorHandler.ThrowOnFailure(solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj));
+                hr = solution.CreateProject(ref gnull, projectFile, null, null, (uint)__VSCREATEPROJFLAGS.CPF_OPENFILE, ref gInterface, out pProj);
             }
 
+            if (!ErrorHandler.Succeeded(hr))
+                new AnkhMessageBox(this).Show(Marshal.GetExceptionForHR(hr).Message, "", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
         }
 
         #endregion
