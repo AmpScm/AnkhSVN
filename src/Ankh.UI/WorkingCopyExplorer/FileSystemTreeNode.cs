@@ -107,6 +107,11 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             // No subnode to expand; we reached the target, lets select it
             TreeView.SelectedNode = this;
+            EnsureVisible();
+            if (SvnItem != null && SvnItem.FullPath == path)
+            {
+                TreeView.Select();
+            }
         }
     }
 }

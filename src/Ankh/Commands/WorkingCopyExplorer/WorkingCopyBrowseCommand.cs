@@ -73,7 +73,7 @@ namespace Ankh.Commands
                             ctrl.AddRoot(info);
                             break;
                         case AnkhCommand.WorkingCopyBrowse:
-                            ctrl.BrowsePath(info);
+                            ctrl.BrowsePath(e.Context, info);
                             break;
                     }
                 }

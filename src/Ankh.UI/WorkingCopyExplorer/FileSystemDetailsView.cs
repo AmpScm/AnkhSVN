@@ -352,8 +352,23 @@ namespace Ankh.UI.WorkingCopyExplorer
             return base.GetCanonicalName(item);
         }
 
+        internal void SelectPath(string path)
+        {
+            foreach (FileSystemListViewItem i in Items)
+            {
+                if (string.Equals(i.SvnItem.FullPath, path))
+                {
+                    SelectedItems.Clear();
+                    i.Selected = true;
+                    EnsureVisible(i.Index);
+                    Select();
+                    return;
+                }
+            }
+        }
+
         private int characterWidth;
         private WCTreeNode currentDirectory;
-        private const int NameColumnNumberOfCharacters = 50;
+        private const int NameColumnNumberOfCharacters = 50;        
     }
 }
