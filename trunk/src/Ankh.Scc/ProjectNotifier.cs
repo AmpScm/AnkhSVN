@@ -129,7 +129,7 @@ namespace Ankh.Scc
         }
 
 
-        public void ScheduleAdd(string path)
+        public void ScheduleAddFile(string path)
         {
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");

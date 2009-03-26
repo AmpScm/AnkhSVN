@@ -563,7 +563,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (!_inLoad && GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
             {
-                GetService<IFileStatusMonitor>().ScheduleAdd(path);                
+                GetService<IFileStatusMonitor>().ScheduleAddFile(path);                
             }
 
             SccProjectFileReference reference;
