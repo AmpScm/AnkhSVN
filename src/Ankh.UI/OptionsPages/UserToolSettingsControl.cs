@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Ankh.Configuration;
 using Ankh.Scc.UI;
 
 namespace Ankh.UI.OptionsPages
@@ -29,28 +28,9 @@ namespace Ankh.UI.OptionsPages
             InitializeComponent();
         }
 
-        AnkhConfig _config;
-        AnkhConfig Config
+
+        protected override void LoadSettingsCore()
         {
-            get
-            {
-                if (_config == null)
-                {
-                    IAnkhConfigurationService configurationSvc = Context.GetService<IAnkhConfigurationService>();
-                    _config = configurationSvc.Instance;
-                }
-                return _config;
-            }
-        }
-
-        public override void LoadSettings()
-        {
-            base.LoadSettings();
-            IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
-
-            cfgSvc.LoadConfig(); // Load most recent settings from registry
-            _config = null;
-
             IAnkhDiffHandler diff = Context.GetService<IAnkhDiffHandler>();
 
             LoadBox(diffExeBox, Config.DiffExePath, diff.DiffToolTemplates);
@@ -58,7 +38,7 @@ namespace Ankh.UI.OptionsPages
             LoadBox(patchExeBox, Config.PatchExePath, diff.PatchToolTemplates);
         }
 
-        class OtherTool
+        sealed class OtherTool
         {
             string _title;
             public OtherTool(string title)
@@ -81,7 +61,7 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        void LoadBox(ComboBox combo, string value, IList<AnkhDiffTool> tools)
+        static void LoadBox(ComboBox combo, string value, IEnumerable<AnkhDiffTool> tools)
         {
             if (combo == null)
                 throw new ArgumentNullException("combo");
@@ -116,34 +96,14 @@ namespace Ankh.UI.OptionsPages
         }
 
 
-        public override void SaveSettings()
+        protected override void SaveSettingsCore()
         {
-            base.LoadSettings();
-
             Config.DiffExePath = SaveBox(diffExeBox);
             Config.MergeExePath = SaveBox(mergeExeBox);
             Config.PatchExePath = SaveBox(patchExeBox);
-
-            IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
-            try
-            {
-                cfgSvc.SaveConfig(Config);
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
-
-                if (eh != null && eh.IsEnabled(ex))
-                {
-                    eh.OnError(ex);
-                    return;
-                }
-
-                throw;
-            }
         }
 
-        string SaveBox(ComboBox box)
+        static string SaveBox(ComboBox box)
         {
             if (box == null)
                 throw new ArgumentNullException("box");

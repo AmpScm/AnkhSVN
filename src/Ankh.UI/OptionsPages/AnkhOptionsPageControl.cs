@@ -15,10 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
+using Ankh.Configuration;
 
 namespace Ankh.UI.OptionsPages
 {
@@ -47,6 +45,18 @@ namespace Ankh.UI.OptionsPages
             set { _context = value; OnContextChanged(EventArgs.Empty); }
         }
 
+
+        private IAnkhConfigurationService _configSvc;
+        IAnkhConfigurationService ConfigSvc
+        {
+            get { return _configSvc ?? (_configSvc = Context.GetService<IAnkhConfigurationService>()); }
+        }
+
+        protected AnkhConfig Config
+        {
+            get { return ConfigSvc.Instance; }
+        }
+
         /// <summary>
         /// Raises the <see cref="E:ContextChanged"/> event.
         /// </summary>
@@ -59,15 +69,47 @@ namespace Ankh.UI.OptionsPages
         /// <summary>
         /// Loads the settings.
         /// </summary>
-        public virtual void LoadSettings()
+        public void LoadSettings()
         {
+            ConfigSvc.LoadConfig();
+            LoadSettingsCore();
         }
 
         /// <summary>
         /// Saves the settings.
         /// </summary>
-        public virtual void SaveSettings()
+        public void SaveSettings()
+        {
+            // Load in case something changed in the mean time, other page/other VS instance
+            ConfigSvc.LoadConfig();
+
+            SaveSettingsCore();
+
+            try
+            {
+                ConfigSvc.SaveConfig(Config);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                {
+                    eh.OnError(ex);
+                    return;
+                }
+
+                throw;
+            }
+        }
+
+        protected virtual void LoadSettingsCore()
         {
         }
+
+        protected virtual void SaveSettingsCore()
+        {
+        }
+
     }
 }
