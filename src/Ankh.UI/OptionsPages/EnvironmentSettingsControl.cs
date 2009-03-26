@@ -15,12 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
 using Ankh.Configuration;
 
 namespace Ankh.UI.OptionsPages
@@ -89,11 +83,6 @@ namespace Ankh.UI.OptionsPages
             interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
             autoAddFiles.Checked = Config.AutoAddEnabled;
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void proxyEdit_Click(object sender, EventArgs e)

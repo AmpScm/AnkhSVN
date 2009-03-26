@@ -83,7 +83,6 @@ namespace Ankh.UI.OptionsPages
             this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 0;
             this.label2.Text = "&Proxy Settings:";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // proxyEdit
             // 
