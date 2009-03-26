@@ -32,6 +32,7 @@ namespace Ankh.Configuration
         string _patchExePath;
         bool _interactiveMergeOnConflict;
         bool _flashWindow;
+        bool _autoAddEnabled;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -78,6 +79,13 @@ namespace Ankh.Configuration
         {
             get { return _flashWindow; }
             set { _flashWindow = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool AutoAddEnabled
+        {
+            get { return _autoAddEnabled; }
+            set { _autoAddEnabled = value; }
         }
     }
 }

@@ -50,7 +50,6 @@ namespace Ankh.UI.OptionsPages
             this.label2 = new System.Windows.Forms.Label();
             this.mergeExeBox = new System.Windows.Forms.ComboBox();
             this.mergeBrowseBtn = new System.Windows.Forms.Button();
-            this.interactiveMergeOnConflict = new System.Windows.Forms.CheckBox();
             this.patchBrowseBtn = new System.Windows.Forms.Button();
             this.patchExeBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -120,16 +119,6 @@ namespace Ankh.UI.OptionsPages
             this.mergeBrowseBtn.UseVisualStyleBackColor = true;
             this.mergeBrowseBtn.Click += new System.EventHandler(this.mergeBrowseBtn_Click);
             // 
-            // interactiveMergeOnConflict
-            // 
-            this.interactiveMergeOnConflict.AutoSize = true;
-            this.interactiveMergeOnConflict.Location = new System.Drawing.Point(0, 124);
-            this.interactiveMergeOnConflict.Name = "interactiveMergeOnConflict";
-            this.interactiveMergeOnConflict.Size = new System.Drawing.Size(218, 17);
-            this.interactiveMergeOnConflict.TabIndex = 10;
-            this.interactiveMergeOnConflict.Text = "Start Interactive Merge on &Conflict (Beta)";
-            this.interactiveMergeOnConflict.UseVisualStyleBackColor = true;
-            // 
             // patchBrowseBtn
             // 
             this.patchBrowseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -163,14 +152,13 @@ namespace Ankh.UI.OptionsPages
             this.label3.TabIndex = 6;
             this.label3.Text = "External &Patch Tool:";
             // 
-            // AnkhSettingsControl
+            // UserToolSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.patchBrowseBtn);
             this.Controls.Add(this.patchExeBox);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.interactiveMergeOnConflict);
             this.Controls.Add(this.mergeBrowseBtn);
             this.Controls.Add(this.mergeExeBox);
             this.Controls.Add(this.label2);
@@ -178,8 +166,7 @@ namespace Ankh.UI.OptionsPages
             this.Controls.Add(this.label1);
             this.Controls.Add(this.diffExeBox);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "AnkhSettingsControl";
-            this.Size = new System.Drawing.Size(400, 271);
+            this.Name = "UserToolSettingsControl";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,7 +180,6 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox mergeExeBox;
         private System.Windows.Forms.Button mergeBrowseBtn;
-        private System.Windows.Forms.CheckBox interactiveMergeOnConflict;
         private System.Windows.Forms.Button patchBrowseBtn;
         private System.Windows.Forms.ComboBox patchExeBox;
         private System.Windows.Forms.Label label3;

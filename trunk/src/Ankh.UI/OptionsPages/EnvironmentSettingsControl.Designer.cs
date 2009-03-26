@@ -49,6 +49,9 @@ namespace Ankh.UI.OptionsPages
             this.label2 = new System.Windows.Forms.Label();
             this.proxyEdit = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.interactiveMergeOnConflict = new System.Windows.Forms.CheckBox();
+            this.autoAddFiles = new System.Windows.Forms.CheckBox();
+            this.flashWindowAfterOperation = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -108,16 +111,50 @@ namespace Ankh.UI.OptionsPages
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Subversion User Settings";
             // 
+            // interactiveMergeOnConflict
+            // 
+            this.interactiveMergeOnConflict.AutoSize = true;
+            this.interactiveMergeOnConflict.Location = new System.Drawing.Point(0, 40);
+            this.interactiveMergeOnConflict.Name = "interactiveMergeOnConflict";
+            this.interactiveMergeOnConflict.Size = new System.Drawing.Size(218, 17);
+            this.interactiveMergeOnConflict.TabIndex = 11;
+            this.interactiveMergeOnConflict.Text = "Start Interactive Merge on &Conflict (Beta)";
+            this.interactiveMergeOnConflict.UseVisualStyleBackColor = true;
+            // 
+            // autoAddFiles
+            // 
+            this.autoAddFiles.AutoSize = true;
+            this.autoAddFiles.Location = new System.Drawing.Point(0, 17);
+            this.autoAddFiles.Name = "autoAddFiles";
+            this.autoAddFiles.Size = new System.Drawing.Size(199, 17);
+            this.autoAddFiles.TabIndex = 12;
+            this.autoAddFiles.Text = "&Auto add files when they are created";
+            this.autoAddFiles.UseVisualStyleBackColor = true;
+            // 
+            // flashWindowAfterOperation
+            // 
+            this.flashWindowAfterOperation.AutoSize = true;
+            this.flashWindowAfterOperation.Location = new System.Drawing.Point(0, 63);
+            this.flashWindowAfterOperation.Name = "flashWindowAfterOperation";
+            this.flashWindowAfterOperation.Size = new System.Drawing.Size(261, 17);
+            this.flashWindowAfterOperation.TabIndex = 13;
+            this.flashWindowAfterOperation.Text = "&Flash title bar when a lengthy operation completes";
+            this.flashWindowAfterOperation.UseVisualStyleBackColor = true;
+            // 
             // EnvironmentSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.flashWindowAfterOperation);
+            this.Controls.Add(this.autoAddFiles);
+            this.Controls.Add(this.interactiveMergeOnConflict);
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "EnvironmentSettingsControl";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -128,5 +165,8 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button proxyEdit;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox interactiveMergeOnConflict;
+        private System.Windows.Forms.CheckBox autoAddFiles;
+        private System.Windows.Forms.CheckBox flashWindowAfterOperation;
     }
 }
