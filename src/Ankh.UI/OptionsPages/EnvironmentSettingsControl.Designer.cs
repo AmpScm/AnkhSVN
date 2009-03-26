@@ -61,7 +61,7 @@ namespace Ankh.UI.OptionsPages
             this.authenticationEdit.Location = new System.Drawing.Point(319, 51);
             this.authenticationEdit.Name = "authenticationEdit";
             this.authenticationEdit.Size = new System.Drawing.Size(75, 23);
-            this.authenticationEdit.TabIndex = 0;
+            this.authenticationEdit.TabIndex = 3;
             this.authenticationEdit.Text = "Edit";
             this.authenticationEdit.UseVisualStyleBackColor = true;
             this.authenticationEdit.Click += new System.EventHandler(this.authenticationEdit_Click);
@@ -72,8 +72,8 @@ namespace Ankh.UI.OptionsPages
             this.label1.Location = new System.Drawing.Point(6, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(112, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "&Authentication Cache:";
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Au&thentication Cache:";
             // 
             // label2
             // 
@@ -81,8 +81,8 @@ namespace Ankh.UI.OptionsPages
             this.label2.Location = new System.Drawing.Point(6, 23);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Proxy Settings:";
+            this.label2.TabIndex = 0;
+            this.label2.Text = "&Proxy Settings:";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // proxyEdit
@@ -91,7 +91,7 @@ namespace Ankh.UI.OptionsPages
             this.proxyEdit.Location = new System.Drawing.Point(319, 18);
             this.proxyEdit.Name = "proxyEdit";
             this.proxyEdit.Size = new System.Drawing.Size(75, 23);
-            this.proxyEdit.TabIndex = 3;
+            this.proxyEdit.TabIndex = 1;
             this.proxyEdit.Text = "Edit";
             this.proxyEdit.UseVisualStyleBackColor = true;
             this.proxyEdit.Click += new System.EventHandler(this.proxyEdit_Click);
@@ -107,7 +107,7 @@ namespace Ankh.UI.OptionsPages
             this.groupBox1.Location = new System.Drawing.Point(0, 185);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(400, 83);
-            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Subversion User Settings";
             // 
@@ -117,7 +117,7 @@ namespace Ankh.UI.OptionsPages
             this.interactiveMergeOnConflict.Location = new System.Drawing.Point(0, 40);
             this.interactiveMergeOnConflict.Name = "interactiveMergeOnConflict";
             this.interactiveMergeOnConflict.Size = new System.Drawing.Size(218, 17);
-            this.interactiveMergeOnConflict.TabIndex = 11;
+            this.interactiveMergeOnConflict.TabIndex = 1;
             this.interactiveMergeOnConflict.Text = "Start Interactive Merge on &Conflict (Beta)";
             this.interactiveMergeOnConflict.UseVisualStyleBackColor = true;
             // 
@@ -127,7 +127,7 @@ namespace Ankh.UI.OptionsPages
             this.autoAddFiles.Location = new System.Drawing.Point(0, 17);
             this.autoAddFiles.Name = "autoAddFiles";
             this.autoAddFiles.Size = new System.Drawing.Size(199, 17);
-            this.autoAddFiles.TabIndex = 12;
+            this.autoAddFiles.TabIndex = 0;
             this.autoAddFiles.Text = "&Auto add files when they are created";
             this.autoAddFiles.UseVisualStyleBackColor = true;
             // 
@@ -137,7 +137,7 @@ namespace Ankh.UI.OptionsPages
             this.flashWindowAfterOperation.Location = new System.Drawing.Point(0, 63);
             this.flashWindowAfterOperation.Name = "flashWindowAfterOperation";
             this.flashWindowAfterOperation.Size = new System.Drawing.Size(261, 17);
-            this.flashWindowAfterOperation.TabIndex = 13;
+            this.flashWindowAfterOperation.TabIndex = 2;
             this.flashWindowAfterOperation.Text = "&Flash title bar when a lengthy operation completes";
             this.flashWindowAfterOperation.UseVisualStyleBackColor = true;
             // 
