@@ -1043,6 +1043,8 @@ namespace Ankh.UI.PendingChanges
         internal void ReplaceContents(string pathToReplaceWith)
         {
             IVsTextBuffer tempBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
+            IntPtr buffer = IntPtr.Zero;
+            bool setReadOnly = false;
             try
             {
                 IVsPersistDocData2 tempDocData = (IVsPersistDocData2)tempBuffer;
@@ -1053,31 +1055,32 @@ namespace Ankh.UI.PendingChanges
                 int size;
                 ErrorHandler.ThrowOnFailure(tempStream.GetSize(out size));
 
-                IntPtr buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
-                try
-                {
-                    if (_ro)
-                        InternalSetReadOnly(false);
-                    ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
+                buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
 
-                    IVsTextStream destStream = (IVsTextStream)_textBuffer;
-                    int oldDestSize;
-                    ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
-
-                    destStream.ReplaceStream(0, oldDestSize, buffer, size);
+                if (_ro)
+                {                    
+                    InternalSetReadOnly(false);
+                    setReadOnly = true;
                 }
-                finally
-                {
-                    Marshal.FreeCoTaskMem(buffer);
-                    Marshal.ReleaseComObject(tempBuffer);
+                
+                ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
 
-                    if (_ro)
-                        InternalSetReadOnly(true);
-                }
+                IVsTextStream destStream = (IVsTextStream)_textBuffer;
+                int oldDestSize;
+                ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
+
+                destStream.ReplaceStream(0, oldDestSize, buffer, size);                
             }
             finally
             {
-                Marshal.ReleaseComObject(tempBuffer);
+                if (buffer != IntPtr.Zero)
+                    Marshal.FreeCoTaskMem(buffer);
+
+                if(tempBuffer != null)
+                    Marshal.ReleaseComObject(tempBuffer);
+
+                if (setReadOnly)
+                    InternalSetReadOnly(true);
             }
         }
 
