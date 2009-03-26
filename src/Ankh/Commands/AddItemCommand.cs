@@ -52,7 +52,7 @@ namespace Ankh.Commands
 
             PathSelectorResult result;
             // are we shifted?
-            if (!Shift)
+            if (!Shift && !e.DontPrompt && !e.IsInAutomation)
             {
                 info.EnableRecursive = false;
 
@@ -64,6 +64,8 @@ namespace Ankh.Commands
             if (!result.Succeeded)
                 return;
 
+            string argumentFile = e.Argument as string;
+
             e.GetService<IProgressRunner>().RunModal("Adding",
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
@@ -72,9 +74,14 @@ namespace Ankh.Commands
                     args.Depth = SvnDepth.Empty;
                     args.AddParents = true;
 
-                    foreach (SvnItem item in result.Selection)
+                    if (!string.IsNullOrEmpty(argumentFile))
+                        ee.Client.Add(argumentFile, args);
+                    else
                     {
-                        ee.Client.Add(item.FullPath, args);
+                        foreach (SvnItem item in result.Selection)
+                        {
+                            ee.Client.Add(item.FullPath, args);
+                        }
                     }
                 });
         }

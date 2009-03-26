@@ -16,15 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using Ankh.Commands;
-using Ankh.Ids;
-using Microsoft.VisualStudio.Shell.Interop;
-using System.Windows.Forms.Design;
 using Ankh.Configuration;
 using Ankh.Scc.UI;
 
@@ -64,8 +56,6 @@ namespace Ankh.UI.OptionsPages
             LoadBox(diffExeBox, Config.DiffExePath, diff.DiffToolTemplates);
             LoadBox(mergeExeBox, Config.MergeExePath, diff.MergeToolTemplates);
             LoadBox(patchExeBox, Config.PatchExePath, diff.PatchToolTemplates);
-
-            interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
         }
 
         class OtherTool
@@ -133,7 +123,6 @@ namespace Ankh.UI.OptionsPages
             Config.DiffExePath = SaveBox(diffExeBox);
             Config.MergeExePath = SaveBox(mergeExeBox);
             Config.PatchExePath = SaveBox(patchExeBox);
-            Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
 
             IAnkhConfigurationService cfgSvc = Context.GetService<IAnkhConfigurationService>();
             try

@@ -26,6 +26,7 @@ using System.Diagnostics;
 using SharpSvn;
 using System.IO;
 using Ankh.VS;
+using Ankh.Commands;
 
 namespace Ankh.Scc.ProjectMap
 {
@@ -558,6 +559,12 @@ namespace Ankh.Scc.ProjectMap
                     // File is either not in project or a scc special file
                     // Pass
                 }
+            }
+
+            if (!_inLoad && _context.GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
+            {
+                _context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.AddItem, path,
+                                                                           CommandPrompt.Never);
             }
 
             SccProjectFileReference reference;

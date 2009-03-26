@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.Configuration;
 
 namespace Ankh.UI.OptionsPages
 {
@@ -37,6 +38,38 @@ namespace Ankh.UI.OptionsPages
             {
                 editor.ShowDialog(Context);
             }
+        }
+
+        AnkhConfig _config;
+        AnkhConfig Config
+        {
+            get
+            {
+                if (_config == null)
+                {
+                    IAnkhConfigurationService configurationSvc = Context.GetService<IAnkhConfigurationService>();
+                    _config = configurationSvc.Instance;
+                }
+                return _config;
+            }
+        }
+
+        public override void SaveSettings()
+        {
+            base.SaveSettings();
+
+            Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
+            Config.AutoAddEnabled = autoAddFiles.Checked;
+            Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
+        }
+
+        public override void LoadSettings()
+        {
+            base.LoadSettings();
+
+            interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
+            autoAddFiles.Checked = Config.AutoAddEnabled;
+            flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
         }
 
         private void label2_Click(object sender, EventArgs e)
