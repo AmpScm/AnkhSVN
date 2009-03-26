@@ -94,6 +94,16 @@ namespace Ankh.Scc
             get { return Text; }
         }
 
+
+        /// <summary>
+        /// Gets the text as shown in the WC Explorer
+        /// </summary>
+        /// <value>The explorer text.</value>
+        public string ExplorerText
+        {
+            get { return PendingCommitText; }
+        }
+
         public override bool Equals(object obj)
         {
             if(!(obj is PendingChangeStatus))

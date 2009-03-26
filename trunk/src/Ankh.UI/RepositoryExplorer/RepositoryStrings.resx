@@ -126,17 +126,14 @@
   <data name="ExplorerDirectoryName" xml:space="preserve">
     <value>File Folder</value>
   </data>
-  <data name="ExtensionColumn" xml:space="preserve">
-    <value>&amp;Type</value>
-  </data>
-  <data name="FileColumn" xml:space="preserve">
-    <value>&amp;File</value>
-  </data>
   <data name="LocalRepositories" xml:space="preserve">
     <value>Local Repositories</value>
   </data>
   <data name="LockOwnerColumn" xml:space="preserve">
     <value>&amp;Lock Owner</value>
+  </data>
+  <data name="NameColumn" xml:space="preserve">
+    <value>&amp;Name</value>
   </data>
   <data name="RevisionColumn" xml:space="preserve">
     <value>&amp;Revision</value>
@@ -146,5 +143,8 @@
   </data>
   <data name="SizeColumn" xml:space="preserve">
     <value>&amp;Size</value>
+  </data>
+  <data name="TypeColumn" xml:space="preserve">
+    <value>&amp;Type</value>
   </data>
 </root>

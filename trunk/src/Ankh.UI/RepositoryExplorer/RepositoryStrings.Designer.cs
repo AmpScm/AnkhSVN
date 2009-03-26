@@ -88,24 +88,6 @@ namespace Ankh.UI.RepositoryExplorer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;Type.
-        /// </summary>
-        internal static string ExtensionColumn {
-            get {
-                return ResourceManager.GetString("ExtensionColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &amp;File.
-        /// </summary>
-        internal static string FileColumn {
-            get {
-                return ResourceManager.GetString("FileColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Local Repositories.
         /// </summary>
         internal static string LocalRepositories {
@@ -120,6 +102,15 @@ namespace Ankh.UI.RepositoryExplorer {
         internal static string LockOwnerColumn {
             get {
                 return ResourceManager.GetString("LockOwnerColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Name.
+        /// </summary>
+        internal static string NameColumn {
+            get {
+                return ResourceManager.GetString("NameColumn", resourceCulture);
             }
         }
         
@@ -147,6 +138,15 @@ namespace Ankh.UI.RepositoryExplorer {
         internal static string SizeColumn {
             get {
                 return ResourceManager.GetString("SizeColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Type.
+        /// </summary>
+        internal static string TypeColumn {
+            get {
+                return ResourceManager.GetString("TypeColumn", resourceCulture);
             }
         }
     }

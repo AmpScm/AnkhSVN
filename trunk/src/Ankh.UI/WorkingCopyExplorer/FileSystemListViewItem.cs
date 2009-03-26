@@ -22,6 +22,7 @@ using Ankh.UI.VSSelectionControls;
 using System.IO;
 using System.Diagnostics;
 using Ankh.VS;
+using Ankh.Scc;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -52,23 +53,32 @@ namespace Ankh.UI.WorkingCopyExplorer
             [DebuggerStepThrough]
             get { return _svnItem; }
         }
+
+        PendingChangeStatus _chg;
     
         private void RefreshValues()
         {
             bool exists = SvnItem.Exists;
             string name = string.IsNullOrEmpty(SvnItem.Name) ? SvnItem.FullPath : SvnItem.Name;
 
+            AnkhStatus status = SvnItem.Status;
+            PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, SvnItem.IsTreeConflicted, SvnItem);
+
+            if (_chg == null || _chg.State != kind)
+                _chg = new PendingChangeStatus(kind);
+
             SetValues(
                 name,
                 Modified.ToString("g"),
                 View.Context.GetService<IFileIconMapper>().GetFileType(SvnItem),
-                SvnItem.Status.LocalContentStatus.ToString(),
-                SvnItem.Status.LocalPropertyStatus.ToString(),
+                _chg.ExplorerText,
                 SvnItem.Status.IsLockedLocal ? Ankh.UI.PendingChanges.PCStrings.LockedValue : "",
                 SvnItem.Status.Revision.ToString(),
                 SvnItem.Status.LastChangeTime.ToLocalTime().ToString(),
                 SvnItem.Status.LastChangeRevision.ToString(),
                 SvnItem.Status.LastChangeAuthor,
+                SvnItem.Status.LocalContentStatus.ToString(),
+                SvnItem.Status.LocalPropertyStatus.ToString(),
                 SvnItem.Status.IsCopied.ToString(),
                 SvnItem.IsConflicted.ToString(),
                 SvnItem.FullPath
