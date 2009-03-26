@@ -190,6 +190,8 @@ namespace Ankh.Scc
             List<string> selectedFiles = null;
             SortedList<string, string> copies = null;
 
+            bool sccActive = SccProvider.IsActive;
+
             for (int iProject = 0; (iProject < cProjects) && (iFile < cFiles); iProject++)
             {
                 int iLastFileThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cFiles;
@@ -211,12 +213,13 @@ namespace Ankh.Scc
 
                     newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
-                    if(_solutionLoaded)
+                    if(sccActive && _solutionLoaded)
                         TryFindOrigin(newName, ref selectedFiles, out origin);
 
+                    // We do this before the copies to make sure a failed copy doesn't break the project
                     SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
 
-                    if (!string.IsNullOrEmpty(origin))
+                    if (sccActive && !string.IsNullOrEmpty(origin))
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -363,6 +366,7 @@ namespace Ankh.Scc
                                     break;
                                 }
                             }
+                            // TODO: Check for missing files at origin (Cut&Paste)
                         }
                     }
                 }
