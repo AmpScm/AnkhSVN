@@ -40,17 +40,17 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
+        private IAnkhConfigurationService _configSvc;
+        IAnkhConfigurationService ConfigSvc
+        {
+            get { return _configSvc ?? (_configSvc = Context.GetService<IAnkhConfigurationService>()); }
+        }
         AnkhConfig _config;
         AnkhConfig Config
         {
             get
             {
-                if (_config == null)
-                {
-                    IAnkhConfigurationService configurationSvc = Context.GetService<IAnkhConfigurationService>();
-                    _config = configurationSvc.Instance;
-                }
-                return _config;
+                return _config ?? (_config = ConfigSvc.Instance);
             }
         }
 
@@ -61,11 +61,30 @@ namespace Ankh.UI.OptionsPages
             Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
             Config.AutoAddEnabled = autoAddFiles.Checked;
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
+
+            try
+            {
+                ConfigSvc.SaveConfig(Config);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                {
+                    eh.OnError(ex);
+                    return;
+                }
+
+                throw;
+            }
         }
 
         public override void LoadSettings()
         {
             base.LoadSettings();
+
+            ConfigSvc.LoadConfig();
 
             interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
             autoAddFiles.Checked = Config.AutoAddEnabled;
