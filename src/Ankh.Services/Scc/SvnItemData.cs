@@ -143,6 +143,55 @@ namespace Ankh.Scc
             }
         }
 
+        [Category("Subversion"), Description("Current Revision")]
+        public long? Revision
+        {
+            get 
+            {
+                if (SvnItem.IsVersioned)
+                    return SvnItem.Status.Revision;
+                else
+                    return null;            
+            }
+        }
+
+        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
+        public string LastCommittedAuthor
+        {
+            get { return SvnItem.Status.LastChangeAuthor; }
+        }
+
+        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
+        public long? LastCommittedRevision
+        {
+            get 
+            {
+                if (SvnItem.IsVersioned)
+                    return SvnItem.Status.LastChangeRevision;
+                else
+                    return null;
+            }
+        }
+
+        [DisplayName("Url"), Category("Subversion")]
+        public Uri Uri
+        {
+            get { return SvnItem.Status.Uri; }
+        }
+
+        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
+        public DateTime LastCommittedDate
+        {
+            get
+            {
+                DateTime dt = SvnItem.Status.LastChangeTime;
+                if (dt != DateTime.MinValue)
+                    return dt.ToLocalTime();
+                else
+                    return DateTime.MinValue;
+            }
+        }
+
         protected override string ComponentName
         {
             get { return Name; }

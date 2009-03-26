@@ -152,9 +152,17 @@ namespace Ankh.VS.Extenders
         }
 
         [Category("Subversion"), Description("Current Revision")]
-        public long Revision
+        public long? Revision
         {
-            get { return SvnItem.Status.Revision; }
+            get 
+            {
+                SvnItem i = SvnItem;
+
+                if (i.IsVersioned && i.Status.Revision > 0)
+                    return SvnItem.Status.Revision;
+                else
+                    return null;
+            }
         }
 
         [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
@@ -171,9 +179,16 @@ namespace Ankh.VS.Extenders
         }
 
         [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
-        public long LastCommittedRevision
+        public long? LastCommittedRevision
         {
-            get { return SvnItem.Status.LastChangeRevision; }
+            get 
+            {
+                SvnItem i = SvnItem;
+                if (i.IsVersioned && i.Status.LastChangeRevision > 0)
+                    return SvnItem.Status.LastChangeRevision;
+                else
+                    return null;
+            }
         }
 
         PendingChangeStatus _chg;

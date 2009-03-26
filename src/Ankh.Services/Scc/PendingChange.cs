@@ -101,7 +101,7 @@ namespace Ankh.Scc
             }
         }
 
-        [DisplayName("Project")]
+        [DisplayName("Project"), Category("Visual Studio")]
         public string Project
         {
             get { return _projects; }
@@ -136,9 +136,15 @@ namespace Ankh.Scc
         }
 
         [Category("Subversion"), Description("Current Revision")]
-        public long Revision
+        public long? Revision
         {
-            get { return Item.Status.Revision; }
+            get 
+            {
+                if (Item.IsVersioned)
+                    return Item.Status.Revision;
+                else
+                    return null;
+            }
         }
 
         [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
@@ -155,9 +161,15 @@ namespace Ankh.Scc
         }
 
         [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
-        public long LastCommittedRevision
+        public long? LastCommittedRevision
         {
-            get { return Item.Status.LastChangeRevision; }
+            get 
+            {
+                if(Item.IsVersioned && Item.Status.LastChangeRevision > 0)
+                    return Item.Status.LastChangeRevision;
+                else
+                    return null; 
+            }
         }
 
         /// <summary>
