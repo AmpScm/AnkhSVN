@@ -126,7 +126,7 @@ namespace Ankh.Ids
         SolutionBranch,
 
         ItemOpenFolderInRepositoryExplorer,
-        ItemOpenFolderInWorkingCopyExplorer,
+        ItemSelectInWorkingCopyExplorer,
 
         PendingChangesSpacer, // Whitespace command to move all buttons a bit
 

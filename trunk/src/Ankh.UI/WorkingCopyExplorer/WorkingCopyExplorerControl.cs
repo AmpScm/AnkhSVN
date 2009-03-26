@@ -217,9 +217,19 @@ namespace Ankh.UI.WorkingCopyExplorer
             folderTree.SelectSubNode(item);
         }
 
-        public void BrowsePath(string path)
+        public void BrowsePath(IAnkhServiceProvider context, string path)
         {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            else if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
             folderTree.BrowsePath(path);
+
+            if (context.GetService<IFileStatusCache>()[path].IsFile)
+            {
+                fileList.SelectPath(path);
+            }
         }
 
         private WCTreeNode CreateRoot(string directory)

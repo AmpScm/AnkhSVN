@@ -390,8 +390,8 @@
                 toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
-          <Button id="Cmd_ItemOpenFolderInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
-                      text="Open Folder in &amp;Working Copy Explorer" defaultInvisible="true">
+          <Button id="Cmd_ItemSelectInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
+                      text="Select in &amp;Working Copy Explorer" defaultInvisible="true">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
           <Button id="Cmd_ItemOpenFolderInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
