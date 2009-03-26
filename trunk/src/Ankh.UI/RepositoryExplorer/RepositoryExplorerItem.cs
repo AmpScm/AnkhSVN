@@ -106,7 +106,7 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        [DisplayName("Name")]
+        [DisplayName("File Name")]
         public string Name
         {
             get 
