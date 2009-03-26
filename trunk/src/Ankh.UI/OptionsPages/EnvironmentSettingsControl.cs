@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Configuration;
 
 namespace Ankh.UI.OptionsPages
 {
@@ -34,52 +33,15 @@ namespace Ankh.UI.OptionsPages
             }
         }
 
-        private IAnkhConfigurationService _configSvc;
-        IAnkhConfigurationService ConfigSvc
+        protected override void SaveSettingsCore()
         {
-            get { return _configSvc ?? (_configSvc = Context.GetService<IAnkhConfigurationService>()); }
-        }
-        AnkhConfig _config;
-        AnkhConfig Config
-        {
-            get
-            {
-                return _config ?? (_config = ConfigSvc.Instance);
-            }
-        }
-
-        public override void SaveSettings()
-        {
-            base.SaveSettings();
-
             Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
             Config.AutoAddEnabled = autoAddFiles.Checked;
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
-
-            try
-            {
-                ConfigSvc.SaveConfig(Config);
-            }
-            catch (Exception ex)
-            {
-                IAnkhErrorHandler eh = Context.GetService<IAnkhErrorHandler>();
-
-                if (eh != null && eh.IsEnabled(ex))
-                {
-                    eh.OnError(ex);
-                    return;
-                }
-
-                throw;
-            }
         }
 
-        public override void LoadSettings()
+        protected override void LoadSettingsCore()
         {
-            base.LoadSettings();
-
-            ConfigSvc.LoadConfig();
-
             interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
             autoAddFiles.Checked = Config.AutoAddEnabled;
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
