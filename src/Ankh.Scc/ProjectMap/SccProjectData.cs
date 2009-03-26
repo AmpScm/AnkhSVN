@@ -561,10 +561,9 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            if (!_inLoad && _context.GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
+            if (!_inLoad && GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
             {
-                _context.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.AddItem, path,
-                                                                           CommandPrompt.Never);
+                GetService<IFileStatusMonitor>().ScheduleAdd(path);                
             }
 
             SccProjectFileReference reference;
@@ -641,7 +640,7 @@ namespace Ankh.Scc.ProjectMap
 
         AnkhSccProvider Scc
         {
-            get { return _scc ?? (_scc = _context.GetService<AnkhSccProvider>()); }
+            get { return _scc ?? (_scc = GetService<AnkhSccProvider>()); }
         }
 
         public SccTranslateData SccTranslateData
