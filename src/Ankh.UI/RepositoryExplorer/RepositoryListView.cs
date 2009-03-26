@@ -38,15 +38,15 @@ namespace Ankh.UI.RepositoryExplorer
 
         private void InitializeColumns()
         {
-            SmartColumn file = new SmartColumn(this, RepositoryStrings.FileColumn, 100);
-            SmartColumn extension = new SmartColumn(this, RepositoryStrings.ExtensionColumn, 70);
+            SmartColumn name = new SmartColumn(this, RepositoryStrings.NameColumn, 120);
+            SmartColumn type = new SmartColumn(this, RepositoryStrings.TypeColumn, 100);
             SmartColumn revision = new SmartColumn(this, RepositoryStrings.RevisionColumn, 60);
             SmartColumn author = new SmartColumn(this, RepositoryStrings.AuthorColumn, 60);
             SmartColumn size = new SmartColumn(this, RepositoryStrings.SizeColumn, 60);
             SmartColumn date = new SmartColumn(this, RepositoryStrings.DateColumn, 100);
             SmartColumn lockOwner = new SmartColumn(this, RepositoryStrings.LockOwnerColumn, 100);
 
-            file.Sorter = new SortWrapper(
+            name.Sorter = new SortWrapper(
                 delegate(RepositoryListItem x, RepositoryListItem y)
                 {
                     if (x.IsFolder ^ y.IsFolder)
@@ -80,8 +80,8 @@ namespace Ankh.UI.RepositoryExplorer
                     return x.Info.Entry.Time.CompareTo(y.Info.Entry.Time);
                 });
 
-            AllColumns.Add(file);
-            AllColumns.Add(extension);
+            AllColumns.Add(name);
+            AllColumns.Add(type);
             AllColumns.Add(revision);
             AllColumns.Add(author);
             AllColumns.Add(size);
@@ -90,20 +90,20 @@ namespace Ankh.UI.RepositoryExplorer
 
             Columns.AddRange(new ColumnHeader[]
             {
-                file,
-                extension,
+                name,
+                date,
+                type,
                 revision,
                 author,
-                size,
-                date,
+                size,                
                 lockOwner
             });
 
-            SortColumns.Add(file);
-            FinalSortColumn = file;
+            SortColumns.Add(name);
+            FinalSortColumn = name;
             UpdateSortGlyphs();
 
-            FinalSortColumn = file;
+            FinalSortColumn = name;
             AllowColumnReorder = true;
         }
 

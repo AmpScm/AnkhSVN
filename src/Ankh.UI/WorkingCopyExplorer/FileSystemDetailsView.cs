@@ -203,15 +203,16 @@ namespace Ankh.UI.WorkingCopyExplorer
             SortColumns.Clear();
             Columns.Clear();
             _nameColumn = new SmartColumn(this, "&Name", characterWidth * NameColumnNumberOfCharacters);
-            SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 20);
-            SmartColumn extension = new SmartColumn(this, "&Type", characterWidth * 7);
-            SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15);
-            SmartColumn propStatus = new SmartColumn(this, "&Property Status", characterWidth * 15);
+            SmartColumn modified = new SmartColumn(this, "&Modified", characterWidth * 15);
+            SmartColumn type = new SmartColumn(this, "&Type", characterWidth * 20);
+            SmartColumn change = new SmartColumn(this, "&Change", characterWidth * 15);
             SmartColumn locked = new SmartColumn(this, "&Locked", characterWidth * 8);
             SmartColumn revision = new SmartColumn(this, "&Revision", characterWidth * 8);
             SmartColumn lastChangeTime = new SmartColumn(this, "Last C&hange", characterWidth * 20);
             SmartColumn lastRev = new SmartColumn(this, "Last Re&vision", characterWidth * 8);
             SmartColumn lastAuthor = new SmartColumn(this, "Last &Author", characterWidth * 8);
+            SmartColumn contStatus = new SmartColumn(this, "&Content Status", characterWidth * 15);
+            SmartColumn propStatus = new SmartColumn(this, "&Property Status", characterWidth * 15);
             SmartColumn isCopied = new SmartColumn(this, "C&opied", characterWidth * 6);
             SmartColumn isConficted = new SmartColumn(this, "Co&nflicted", characterWidth * 6);
             SmartColumn fullPath = new SmartColumn(this, "Fu&ll Path", characterWidth * 60);
@@ -239,14 +240,15 @@ namespace Ankh.UI.WorkingCopyExplorer
 
             AllColumns.Add(_nameColumn);
             AllColumns.Add(modified);
-            AllColumns.Add(extension);
-            AllColumns.Add(contStatus);
-            AllColumns.Add(propStatus);
+            AllColumns.Add(type);
+            AllColumns.Add(change);
             AllColumns.Add(locked);
             AllColumns.Add(revision);
             AllColumns.Add(lastChangeTime);
             AllColumns.Add(lastRev);
             AllColumns.Add(lastAuthor);
+            AllColumns.Add(contStatus);
+            AllColumns.Add(propStatus);
             AllColumns.Add(isCopied);
             AllColumns.Add(isConficted);
             AllColumns.Add(fullPath);
@@ -256,9 +258,8 @@ namespace Ankh.UI.WorkingCopyExplorer
                 {
                     _nameColumn,
                     modified,
-                    extension,
-                    contStatus,
-                    propStatus,
+                    type,
+                    change,
                     locked,
                     revision
                 });
