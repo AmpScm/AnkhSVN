@@ -85,6 +85,10 @@ namespace Ankh.Scc
         /// <param name="path"></param>
         void ExternallyChanged(string path);
 
-        void ScheduleAdd(string path);
+        /// <summary>
+        /// Schedules the addition of the specified file
+        /// </summary>
+        /// <param name="path">The path.</param>
+        void ScheduleAddFile(string path);
     }
 }
