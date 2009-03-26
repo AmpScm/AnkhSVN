@@ -362,8 +362,6 @@ namespace Ankh.Scc
             }
             finally
             {
-                _posted = false; // Just kill this flag every now and then
-
                 foreach (DocumentLock dl in modified.Values)
                 {
                     if (dl != null)
