@@ -77,7 +77,7 @@ namespace Ankh.Commands
                 finally
                 {
                     // TODO: Notify the working copy explorer here!
-                    // (Maybe via of these methods below)
+                    // (Maybe via one of these methods below)
 
                     e.GetService<IFileStatusCache>().MarkDirtyRecursive(item.FullPath);
                     e.GetService<IFileStatusMonitor>().ScheduleGlyphUpdate(item.FullPath);
@@ -100,7 +100,7 @@ namespace Ankh.Commands
                     int found;
                     uint id;
                     if (!ErrorHandler.Succeeded(p2.IsDocumentInProject(item.FullPath, out found, prio, out id)) || found == 0)
-                        continue; // Probably removed via parent
+                        continue; // Probably already removed (mapping out of synch?)
 
                     hr = p2.RemoveItem(0, id, out found);
 
