@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6515</title>
+          AnkhSVN-Daily Update - 2.0.6533</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1792/AnkhSvn-Daily-2.0.6515.9.msi">AnkhSVN 2.0.6515</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1794/AnkhSvn-Daily-2.0.6533.10.msi">AnkhSVN 2.0.6533</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6515">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6533">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -417,56 +417,6 @@ explorer.</td></tr>
 <tr><td> </td><td class="r"><a id="6241" href="http://ankhsvn.net/rev/?r=6241">
             [r6241]
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeNode.cs, Nodes/WCMyComputerNode.cs, Nodes/WCSolutionNode.cs, Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Prepare refreshing nodes</td></tr>
-<tr><td> </td><td class="r"><a id="6239" href="http://ankhsvn.net/rev/?r=6239">
-            [r6239]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix possible double (or more) My Computer rootnode</td></tr>
-<tr><td> </td><td class="r"><a id="6238" href="http://ankhsvn.net/rev/?r=6238">
-            [r6238]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> WorkingCopyExplorer/Nodes/FileSystemFileItem.cs, Ankh.UI.csproj, WorkingCopyExplorer/WorkingCopyExplorerControl.cs, WorkingCopyExplorer/Nodes/FileSystemRootItem.cs, WorkingCopyExplorer/FileSystemTreeView.cs, WorkingCopyExplorer/Nodes/FileSystemDirectoryItem.cs, WorkingCopyExplorer/Nodes/FileSystemNode.cs, WorkingCopyExplorer/FileSystemDetailsView.cs, WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Clean up a lot of old code and commented code</td></tr>
-<tr><td> </td><td class="r"><a id="6237" href="http://ankhsvn.net/rev/?r=6237">
-            [r6237]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add comment</td></tr>
-<tr><td> </td><td class="r"><a id="6236" href="http://ankhsvn.net/rev/?r=6236">
-            [r6236]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs, FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make "Open folder in WorkingCopyExplorer" work</td></tr>
-<tr><td> </td><td class="r"><a id="6235" href="http://ankhsvn.net/rev/?r=6235">
-            [r6235]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> PendingChanges/AnkhToolWindowControl.cs, WorkingCopyExplorer/FileSystemListViewItem.cs, WorkingCopyExplorer/FileSystemTreeNode.cs, WorkingCopyExplorer/Nodes/FileSystemFileItem.cs, Ankh.UI.csproj, WorkingCopyExplorer/Nodes/WCDirectoryNode.cs, WorkingCopyExplorer/Nodes/WCMyComputerNode.cs, WorkingCopyExplorer/WorkingCopyExplorerControl.cs, WorkingCopyExplorer/FileSystemTreeView.cs, WorkingCopyExplorer/Nodes/FileSystemDirectoryItem.cs, WorkingCopyExplorer/Nodes/FileSystemNode.cs, WorkingCopyExplorer/Nodes/WCSolutionNode.cs, WorkingCopyExplorer/FileSystemDetailsView.cs, WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Working copy explorer working in progress. This fixes:
-- the doubleclick action on the details view (just descends into the directory now)
-- Status icons in the treeview (stretched)
-- Adds a default "My Computer" root
-- Publishes selection on the treeview
-- Enables the treeview context menu</td></tr>
-<tr><td> </td><td class="r"><a id="6234" href="http://ankhsvn.net/rev/?r=6234">
-            [r6234]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/SccManagement/MultiWorkingCopyCommit.resx, Ankh.UI/SccManagement/MultiWorkingCopyCommit.Designer.cs, Ankh.UI/SccManagement/MultiWorkingCopyCommit.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable committing to multiple working copies/repositories in a single commit
-by showing the user a list of working copies touched by the selected pending
-changes.</td></tr>
-<tr><td> </td><td class="r"><a id="6229" href="http://ankhsvn.net/rev/?r=6229">
-            [r6229]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/Selection/SelectionContext.Delay.cs, Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh.Services/Selection/ISelectionContext.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS.UnitTest/Mocks/SelectionContext.cs, Ankh.Scc/ProjectMap/SccDocumentData.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move the focus steal detection code from the SccDocumentData class into the selection
-manager</td></tr>
-<tr><td> </td><td class="r"><a id="6225" href="http://ankhsvn.net/rev/?r=6225">
-            [r6225]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Properties/AssemblyInfo.cs, Ankh.UI/SvnLog/LogRevisionItem.cs, Ankh.VS.UnitTest/MergeWizard.cs, Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, Ankh.UI/MergeWizard/MergeSummaryPageControl.cs, Ankh.Services/Scc/ISvnLogItem.cs, Ankh.UI/MergeWizard/MergeWizard.cs, Ankh.UI/MergeWizard/MergeRevisionsSelectionPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure we use fewer and bigger revision ranges when cherry picking merges.
-This should cause less conflicts while merging.</td></tr>
-<tr><td> </td><td class="r"><a id="6221" href="http://ankhsvn.net/rev/?r=6221">
-            [r6221]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/AnkhCommandService.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Commands/IAnkhCommandService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't post status cache cleanups request as normal post commands but post them
-with the next Post.</td></tr>
-<tr><td> </td><td class="r"><a id="6218" href="http://ankhsvn.net/rev/?r=6218">
-            [r6218]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.QueryEditSave.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Schedule a file dirty check when OnQueryEdit is called on a file. This
-should make the detection of editted project files more stable.</td></tr>
-<tr class="d"><td colspan="4">2009-02-24</td></tr>
-<tr><td> </td><td class="r"><a id="6217" href="http://ankhsvn.net/rev/?r=6217">
-            [r6217]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Set the solution to the Edited state when a project is added or removed.</td></tr>
-<tr><td> </td><td class="r"><a id="6216" href="http://ankhsvn.net/rev/?r=6216">
-            [r6216]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/MergeWizard:</strong> MergeWizard.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Partially fix the merge problem caused by specifying each eligible revision
-as a seperate revision range. This revision only fixes the problem for
-"All Eligble Revisions" merges.</td></tr>
 
 </table>
 <!--/Recent changes-->
