@@ -36,6 +36,7 @@ namespace Ankh.Scc
         readonly object _lock = new object();
         bool _posted;
         List<SvnProject> _dirtyProjects;
+        HybridCollection<string> _maybeAdd;
         uint _cookie;
 
         public ProjectNotifier(IAnkhServiceProvider context)
@@ -127,6 +128,24 @@ namespace Ankh.Scc
             }
         }
 
+
+        public void ScheduleAdd(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            lock (_lock)
+            {
+                if (_maybeAdd == null)
+                    _maybeAdd = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+
+                if (!_maybeAdd.Contains(path))
+                    _maybeAdd.Add(path);
+
+                PostDirty(true);
+            }
+        }
+
         HybridCollection<string> _dirtyCheck = null;
 
         /// <summary>
@@ -179,6 +198,7 @@ namespace Ankh.Scc
         {
             List<SvnProject> dirtyProjects;
             HybridCollection<string> dirtyCheck;
+            HybridCollection<string> maybeAdd;
 
             AnkhSccProvider provider = Context.GetService<AnkhSccProvider>();
 
@@ -191,8 +211,10 @@ namespace Ankh.Scc
 
                 dirtyProjects = _dirtyProjects;
                 dirtyCheck = _dirtyCheck;
+                maybeAdd = _maybeAdd;
                 _dirtyProjects = null;
                 _dirtyCheck = null;
+                _maybeAdd = null;
             }
 
             if (dirtyCheck != null)
@@ -216,6 +238,31 @@ namespace Ankh.Scc
                     project.RawHandle.SccGlyphChanged(0, null, null, null);
                 }
             }
+
+            if (maybeAdd != null)
+                using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
+                    foreach (string file in maybeAdd)
+                    {
+                        SvnItem item = Cache[file];
+
+                        // Only add
+                        // * files
+                        // * that are unversioned
+                        // * that are addable
+                        // * that are not ignored
+                        // * and just to be sure: that are still part of the solution
+                        if (item.IsFile && !item.IsVersioned && 
+                            item.IsVersionable && !item.IsIgnored && 
+                            item.InSolution)
+                        {
+                            SvnAddArgs aa = new SvnAddArgs();
+                            aa.ThrowOnError = false; // Just ignore errors here; make the user add them themselves
+                            aa.AddParents = true;
+
+                            cl.Add(item.FullPath, aa);
+                        }
+                    }
+
         }
 
         public void ScheduleSvnStatus(string path)

@@ -84,5 +84,7 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path"></param>
         void ExternallyChanged(string path);
+
+        void ScheduleAdd(string path);
     }
 }
