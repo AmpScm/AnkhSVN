@@ -112,7 +112,7 @@ namespace Ankh.Scc
             {
                 bool ok = true;
 
-                if (string.IsNullOrEmpty(rgpszNewMkDocuments[i]) || !SvnItem.IsValidPath(rgpszNewMkDocuments[i]))
+                if (string.IsNullOrEmpty(rgpszNewMkDocuments[i]) || !SccProvider.IsSafeSccPath(rgpszNewMkDocuments[i]))
                     continue;
 
                 // Save the origins of the to be added files as they are not available in the added event
@@ -125,7 +125,7 @@ namespace Ankh.Scc
 
                 if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
                     && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)
-                    && !origDoc.StartsWith(SccProvider.TempPathWithSeparator)) // VS tries to add the file
+                    && SccProvider.IsSafeSccPath(origDoc)) // VS tries to add the file
                 {
                     _fileOrigins[newDoc] = origDoc;
                 }
@@ -143,10 +143,10 @@ namespace Ankh.Scc
             if (pSummaryResult != null)
                 pSummaryResult[0] = allOk ? VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddOK : VSQUERYADDFILERESULTS.VSQUERYADDFILERESULTS_AddNotOK;
 
+            RegisterForSccCleanup(); // Clear the origins table after adding
+
             if (!allOk)
             {
-                RegisterForSccCleanup(); // Clear the origins table after adding
-
                 if (!_inBatch)
                     ShowQueryErrorDialog();
             }
@@ -213,8 +213,11 @@ namespace Ankh.Scc
 
                     newName = SvnTools.GetNormalizedFullPath(rgpszMkDocuments[iFile]);
 
-                    if(sccActive && _solutionLoaded)
+                    if (sccActive && _solutionLoaded)
+                    {
+                        StatusCache.MarkDirty(newName);
                         TryFindOrigin(newName, ref selectedFiles, out origin);
+                    }
 
                     // We do this before the copies to make sure a failed copy doesn't break the project
                     SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);

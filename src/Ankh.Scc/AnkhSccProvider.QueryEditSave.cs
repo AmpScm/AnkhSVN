@@ -208,7 +208,7 @@ namespace Ankh.Scc
         }
 
         string _tempPath;
-        internal string TempPathWithSeparator
+        string TempPathWithSeparator
         {
             get
             {
@@ -225,7 +225,7 @@ namespace Ankh.Scc
             }
         }
 
-        bool IsSafeSccPath(string file)
+        internal bool IsSafeSccPath(string file)
         {
             if (string.IsNullOrEmpty(file))
                 return false;
