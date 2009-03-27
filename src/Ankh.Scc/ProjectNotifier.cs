@@ -181,7 +181,7 @@ namespace Ankh.Scc
         public void ScheduleDirtyCheck(IEnumerable<string> paths, bool checkDelay)
         {
             if (paths == null)
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException("paths");
 
             lock (_lock)
             {
@@ -241,18 +241,21 @@ namespace Ankh.Scc
 
             if (maybeAdd != null)
                 using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
+                {
+                    // Some files might have been cached as not-existing on disk, clear this cache
+                    Cache.MarkDirty(maybeAdd);
+
                     foreach (string file in maybeAdd)
                     {
                         SvnItem item = Cache[file];
-
                         // Only add
                         // * files
                         // * that are unversioned
                         // * that are addable
                         // * that are not ignored
                         // * and just to be sure: that are still part of the solution
-                        if (item.IsFile && !item.IsVersioned && 
-                            item.IsVersionable && !item.IsIgnored && 
+                        if (item.IsFile && !item.IsVersioned &&
+                            item.IsVersionable && !item.IsIgnored &&
                             item.InSolution)
                         {
                             SvnAddArgs aa = new SvnAddArgs();
@@ -262,6 +265,7 @@ namespace Ankh.Scc
                             cl.Add(item.FullPath, aa);
                         }
                     }
+                }
 
         }
 
