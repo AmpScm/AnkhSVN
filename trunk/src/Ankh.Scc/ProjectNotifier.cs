@@ -242,9 +242,6 @@ namespace Ankh.Scc
             if (maybeAdd != null)
                 using (SvnClient cl = GetService<ISvnClientPool>().GetNoUIClient())
                 {
-                    // Some files might have been cached as not-existing on disk, clear this cache
-                    Cache.MarkDirty(maybeAdd);
-
                     foreach (string file in maybeAdd)
                     {
                         SvnItem item = Cache[file];
