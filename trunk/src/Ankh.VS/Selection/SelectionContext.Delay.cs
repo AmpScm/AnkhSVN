@@ -7,24 +7,25 @@ using Microsoft.VisualStudio.Shell;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Ankh.Commands;
+using Microsoft.VisualStudio;
 
 namespace Ankh.VS.Selection
 {
     sealed class DelayData
     {
         readonly IVsTextViewEx _textView;
-        readonly IntPtr _windowHandle;        
+        readonly IntPtr _windowHandle;
 
         public DelayData(IVsTextViewEx textView)
         {
-            if(textView == null)
+            if (textView == null)
                 throw new ArgumentNullException("textView");
             _textView = textView;
         }
 
         public DelayData(IntPtr windowHandle)
         {
-            if(windowHandle == IntPtr.Zero)
+            if (windowHandle == IntPtr.Zero)
                 throw new ArgumentNullException("windowHandle");
 
             _windowHandle = windowHandle;
@@ -47,12 +48,12 @@ namespace Ankh.VS.Selection
 
         public void MaybeInstallDelayHandler()
         {
-            if(_delayedDirty)
+            if (_delayedDirty)
                 return;
 
             DelayData dm = ShouldInstallDelayHandler();
-            
-            if(dm == null)
+
+            if (dm == null)
                 return;
 
             InstallDelayHandler(dm);
@@ -64,13 +65,13 @@ namespace Ankh.VS.Selection
 
             if (frame != null)
             {
-                IVsTextViewEx textView = VsShellUtilities.GetTextView(frame) as IVsTextViewEx;
+                IVsTextViewEx textView = GetTextView(frame) as IVsTextViewEx;
 
                 if (textView != null)
                 {
                     if (textView.IsCompletorWindowActive() == 0 || textView.IsExpansionUIActive() == 0)
                         return new DelayData(textView);
-                }                                
+                }
             }
 
             IntPtr handle;
@@ -152,11 +153,43 @@ namespace Ankh.VS.Selection
                             return false;
                         }
                     }
-                    
+
                     return true;
                 });
         }
-      
+
+        private IVsTextView GetTextView(IVsWindowFrame windowFrame)
+        {
+            if (windowFrame == null)
+                throw new ArgumentException("windowFrame");
+
+            try
+            {
+                object pvar;
+                int hr = windowFrame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out pvar);
+                if (!ErrorHandler.Succeeded(hr))
+                    return null;
+
+                IVsTextView textView = pvar as IVsTextView;
+                if (textView == null)
+                {
+                    IVsCodeWindow codeWin = pvar as IVsCodeWindow;
+                    if (codeWin != null)
+                    {
+                        hr = codeWin.GetPrimaryView(out textView);
+
+                        if (!ErrorHandler.Succeeded(hr))
+                            return null;
+                    }
+                }
+                return textView;
+            }
+            catch /* Handle broken frame implementations that throw errors instead of returning null */
+            {
+                return null;
+            }
+        }
+
         static class NativeMethods
         {
             [DllImport("user32.dll")]
