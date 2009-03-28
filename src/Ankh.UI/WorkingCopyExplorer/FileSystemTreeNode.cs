@@ -111,6 +111,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (SvnItem != null && SvnItem.FullPath == path)
             {
                 TreeView.Select();
+                TreeView.Focus();
             }
         }
     }

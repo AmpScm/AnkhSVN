@@ -773,18 +773,12 @@
                   text="Open Containing &amp;Folder" iconFile="PendingChanges/OpenFolder.png"/>
               <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
                   text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
-              <Button id="Cmd_ItemOpenInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
-                  text="Open in &amp;Repository Explorer" />
+              <ButtonRef id="Cmd_ItemSelectInWorkingCopyExplorer" priority="0x300" />
+              <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x400" />
             </Group>
           </Menu>
-          <Menu id="Menu_ItemRevert" priority="0x300" name="Revert" type="MenuControllerLatched">
-            <Group id="Menu_ItemRevert" priority="0x100">
-              <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x100" fixMenuController="true"
+          <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x400" defaultDisabled="true"
                   text="&amp;Revert to BASE Version" iconFile="PendingChanges/Revert.png"/>
-              <Button id="Cmd_ItemRevertSpecific" name="RevertSpecific" priority="0x100"
-                  text="&amp;Revert to Specific Version..." />
-            </Group>
-          </Menu>
         </Group>
         <Group id="Grp_PendingChangesAdmin" priority="0x400">
           <!--Menu id="Menu_ItemIgnore" priority="0x100" name="Ignore" type="MenuController">
