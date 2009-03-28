@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6556</title>
+          AnkhSVN-Daily Update - 2.1.6560</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,27 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1803/AnkhSvn-Daily-2.1.6556.12.msi">AnkhSVN 2.1.6556</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1804/AnkhSvn-Daily-2.1.6560.13.msi">AnkhSVN 2.1.6560</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6556">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6560">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-03-28</td></tr>
+<tr><td> </td><td class="r"><a id="6559" href="http://ankhsvn.net/rev/?r=6559">
+            [r6559]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh/Ankh.csproj, Ankh.Scc/PendingChangeManager.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Services/Scc/IFileStatusMonitor.cs, Ankh/Commands/ItemAddToPending.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add 'Add to Pending Changes' and 'Remove from Pending Changes' commands,
+which are available on files that are not part of the solution but that are
+svn-modified. This allows adding related files to a larger commit set (in WC
+explorer) or removing an unrelated change.</td></tr>
 <tr class="d"><td colspan="4">2009-03-27</td></tr>
 <tr><td> </td><td class="r"><a id="6555" href="http://ankhsvn.net/rev/?r=6555">
             [r6555]
@@ -521,14 +528,6 @@ checkout + enlist works, so users don't see UI thats not needed/functional yet</
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/ProjectMap/SccDocumentData.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/SvnItem.State.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Stop sending notifications from the SvnItem/FileStatusCache on solution
 containment and editted states. Our project system should handle these
 specific changes itself and this reduces the chance on focus steal issues.</td></tr>
-<tr><td> </td><td class="r"><a id="6261" href="http://ankhsvn.net/rev/?r=6261">
-            [r6261]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS/SolutionExplorer:</strong> SolutionTreeViewManager.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure we don't throw an exception when running in VS2010 in full WPF mode</td></tr>
-<tr class="d"><td colspan="4">2009-02-26</td></tr>
-<tr><td> </td><td class="r"><a id="6257" href="http://ankhsvn.net/rev/?r=6257">
-            [r6257]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn 1.5 reference to the new version based on Subversion 1.5.6.
-This should dramatically increase the log viewer speed for 1.4 http repositories.</td></tr>
 
 </table>
 <!--/Recent changes-->
