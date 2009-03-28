@@ -26,8 +26,8 @@ using SharpSvn;
 
 namespace Ankh.VS.Selection
 {
-	partial class SelectionContext
-	{
+    partial class SelectionContext
+    {
         IVsWindowFrame _activeFrame;
         object _activeFrameObject;
         Control _activeFrameControl;
@@ -35,6 +35,7 @@ namespace Ankh.VS.Selection
         IVsWindowFrame _activeDocumentFrame;
         object _activeDocumentFrameObject;
         Control _activeDocumentControl;
+        string _activeDocumentFileName;
 
         IVsUserContext _userContext;
 
@@ -68,7 +69,9 @@ namespace Ankh.VS.Selection
                     break;                
 #endif
             }
-            // Some property changed
+
+            _activeDocumentFileName = null; // Flush on every document state change
+
             return VSConstants.S_OK;
         }
 
@@ -132,7 +135,7 @@ namespace Ankh.VS.Selection
 
         object ActiveDocumentFrameObject
         {
-            get 
+            get
             {
                 if (_activeDocumentFrameObject == null && ActiveDocumentFrame != null)
                 {
@@ -154,8 +157,13 @@ namespace Ankh.VS.Selection
 
         public string ActiveDocumentFilename
         {
-            get 
+            get
             {
+                // ### The cached active document filename might be invalid if the document is saved to another name!
+                if (_activeDocumentFileName != null)
+                    return string.IsNullOrEmpty(_activeDocumentFileName) ? null : _activeDocumentFileName;
+
+                _activeDocumentFileName = "";
                 if (_activeDocumentFrame != null)
                 {
                     object value;
@@ -164,14 +172,14 @@ namespace Ankh.VS.Selection
                         && null != (path = value as string))
                     {
                         if (SvnItem.IsValidPath(path))
-                            return SvnTools.GetNormalizedFullPath(path);                        
+                            return _activeDocumentFileName = SvnTools.GetNormalizedFullPath(path);
                     }
                 }
                 return null;
             }
         }
 
-        public SvnItem ActiveDocumentItem 
+        public SvnItem ActiveDocumentItem
         {
             get
             {
@@ -192,10 +200,10 @@ namespace Ankh.VS.Selection
 
         private void RefreshContext()
         {
-            if(_shouldRefresh)
+            if (_shouldRefresh)
             {
                 _shouldRefresh = false;
-            
+
                 // TODO: Perhaps get the global context again instead of returning cached values
                 OnSelectionChanged(_currentHierarchy, _currentItem, _currentSelection, _currentContainer,
                     _hierCached, _idCached, _misCached, _contCached);
@@ -239,7 +247,7 @@ namespace Ankh.VS.Selection
                     else
                         _context._topPopup = null;
 
-                    if(_context._topPopup == null)
+                    if (_context._topPopup == null)
                         _context.RefreshContext();
                 }
             }
@@ -247,7 +255,7 @@ namespace Ankh.VS.Selection
 
         public IDisposable PushPopupContext(System.Windows.Forms.Control control)
         {
-            if(control == null)
+            if (control == null)
                 throw new ArgumentNullException("control");
 
             if (!_shouldRefresh)
@@ -367,7 +375,7 @@ namespace Ankh.VS.Selection
                         _ctx._currentHierarchy, _ctx._currentItem, _ctx._currentSelection, pSC);
                 }
 
-                return VSConstants.S_OK;                
+                return VSConstants.S_OK;
             }
 
             public int OnSelectChangeEx(IntPtr pHier, uint itemid, IVsMultiItemSelect pMIS, IntPtr pSC)
@@ -395,5 +403,5 @@ namespace Ankh.VS.Selection
             #endregion
         }
 
-	}
+    }
 }
