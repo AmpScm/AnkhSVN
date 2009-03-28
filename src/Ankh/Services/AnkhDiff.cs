@@ -511,8 +511,8 @@ namespace Ankh.Services
 
             if (_re == null)
             {
-                const string ifBody = "\\?(?<tick>['\"])(?<ifbody>([^'\"]|('')|(\"\"))*\\k<tick>)";
-                const string elseBody = "(:(?<tick2>['\"])(?<elsebody>([^'\"]|('')|(\"\"))*\\k<tick2>))?";
+                const string ifBody = "\\?(?<tick>['\"])(?<ifbody>([^'\"]|('')|(\"\"))*)\\k<tick>";
+                const string elseBody = "(:(?<tick2>['\"])(?<elsebody>([^'\"]|('')|(\"\"))*)\\k<tick2>)?";
 
                 _re = new Regex(@"(\%(?<pc>[a-zA-Z0-9_]+)(\%|\b))|(\$\((?<vs>[a-zA-Z0-9_-]*)(\((?<arg>[a-zA-Z0-9_-]*)\))?\))" +
                 "|(\\$\\((?<if>[a-zA-Z0-9_-]+)" + ifBody + elseBody + "\\))");
@@ -699,8 +699,7 @@ namespace Ankh.Services
                             value = "1";
                         else
                             value = "";
-
-                        return false;
+                        break;
                     case "VSHOME":
                         IVsSolution sol = _context.GetService<IVsSolution>(typeof(SVsSolution));
                         if (sol == null)
