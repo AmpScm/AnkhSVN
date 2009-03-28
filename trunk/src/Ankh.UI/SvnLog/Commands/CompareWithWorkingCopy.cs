@@ -68,7 +68,9 @@ namespace Ankh.UI.SvnLog.Commands
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
             AnkhDiffArgs da = new AnkhDiffArgs();
-            da.BaseFile = diff.GetTempFile(origin.Target, item.Revision, true); 
+            da.BaseFile = diff.GetTempFile(origin.Target, item.Revision, true);
+            if (da.BaseFile == null)
+                return; // User cancel
             da.MineFile = ((SvnPathTarget)origin.Target).FullPath;
             da.BaseTitle = string.Format("Base (r{0})", item.Revision);
             da.MineTitle = "Mine/Working";
