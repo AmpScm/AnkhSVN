@@ -68,6 +68,12 @@ namespace Ankh.Scc
         void ScheduleMonitor(IEnumerable<string> paths);
 
         /// <summary>
+        /// Removes a path that previously was scheduled for monitor with <see cref="ScheduleMonitor"/>
+        /// </summary>
+        /// <param name="path">The path.</param>
+        void StopMonitoring(string path);
+
+        /// <summary>
         /// Schedules a dirty check for the specified document
         /// </summary>
         /// <param name="path">The path.</param>
@@ -89,6 +95,6 @@ namespace Ankh.Scc
         /// Schedules the addition of the specified file
         /// </summary>
         /// <param name="path">The path.</param>
-        void ScheduleAddFile(string path);
+        void ScheduleAddFile(string path);        
     }
 }

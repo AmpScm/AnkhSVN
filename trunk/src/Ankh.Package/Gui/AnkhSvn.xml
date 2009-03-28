@@ -400,6 +400,10 @@
           </Button>
         </Group>
       </Menu>
+      <Button id="Cmd_ItemAddToPending" name="SvnAddToPending" priority="0x3000" defaultInvisible="true"
+              text="Add to &amp;Pending Changes"/>
+      <Button id="Cmd_ItemRemoveFromPending" name="SvnRemoveFromPending" priority="0x3000" defaultInvisible="true"
+              text="Remove from Pendin&amp;g Changes"/>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_PROJECT_EDITFILE">
       <!-- The 'Edit Project' group on unloaded projects -->

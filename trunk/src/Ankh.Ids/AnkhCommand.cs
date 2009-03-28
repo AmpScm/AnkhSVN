@@ -240,10 +240,9 @@ namespace Ankh.Ids
 
         ItemRename,
         ItemDelete,
-        // Currently unused block; values can be reused as they were never really handled                
-        PcColViewRepository,
-        PcColViewType,
-        // End of unused block
+
+        ItemAddToPending,
+        ItemRemoveFromPending,
 
         LogStrictNodeHistory,
         LogIncludeMergedRevisions,

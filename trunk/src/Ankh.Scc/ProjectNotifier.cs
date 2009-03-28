@@ -320,6 +320,14 @@ namespace Ankh.Scc
             ((PendingChangeManager)ChangeManager).ScheduleMonitor(paths);
         }
 
+        public void StopMonitoring(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            ((PendingChangeManager)ChangeManager).StopMonitor(path);
+        }
+
         readonly Dictionary<string, DocumentLock> _externallyChanged = new Dictionary<string, DocumentLock>(StringComparer.OrdinalIgnoreCase);
 
         public void ExternallyChanged(string path)

@@ -116,11 +116,7 @@ namespace Ankh.Scc
                 _toRefresh.Clear();
                 _fullRefresh = false;
 
-                foreach (string file in _toMonitor)
-                {
-                    if (!_extraFiles.Contains(file))
-                        _extraFiles.Add(file);
-                }
+                _extraFiles.UniqueAddRange(_toMonitor);
                 _toMonitor.Clear();
             }
 
@@ -361,6 +357,9 @@ namespace Ankh.Scc
             {
                 _toMonitor.Add(path);
 
+                if (!_fullRefresh && !_toRefresh.Contains(path))
+                    _toRefresh.Add(path);
+
                 ScheduleRefreshPreLocked();
             }            
         }
@@ -373,6 +372,19 @@ namespace Ankh.Scc
 
                 ScheduleRefreshPreLocked();
             }            
+        }
+
+        internal void StopMonitor(string path)
+        {
+            lock (_toRefresh)
+            {
+                _extraFiles.Remove(path);
+
+                if (!_fullRefresh && !_toRefresh.Contains(path))
+                    _toRefresh.Add(path);
+
+                ScheduleRefreshPreLocked();
+            }
         }
     }
 }
