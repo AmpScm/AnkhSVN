@@ -170,10 +170,10 @@ namespace Ankh.Ids
         ItemOpenTextEditor,
         ItemOpenFolder,
         ItemOpenSolutionExplorer,
-        ItemOpenInRepositoryExplorer,
+        ItemOpenInRepositoryExplorer, // Unused
 
         ItemRevertBase,
-        ItemRevertSpecific,
+        ItemRevertSpecific, // Unused
 
         ItemIgnoreFile,
         ItemIgnoreFileType,

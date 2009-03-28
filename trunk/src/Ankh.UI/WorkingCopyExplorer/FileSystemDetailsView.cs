@@ -361,8 +361,10 @@ namespace Ankh.UI.WorkingCopyExplorer
                 {
                     SelectedItems.Clear();
                     i.Selected = true;
+                    i.Focused = true;
                     EnsureVisible(i.Index);
                     Select();
+                    Focus();
                     return;
                 }
             }
