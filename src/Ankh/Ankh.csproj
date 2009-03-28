@@ -164,6 +164,8 @@
     <None Include="Ankh.snk" />
     <None Include="Ankh.wxs" />
     <Compile Include="Commands\ApplyPatch.cs" />
+    <Compile Include="Commands\ItemAddToPending.cs">
+    </Compile>
     <Compile Include="Commands\ItemCreatePatch.cs" />
     <Compile Include="Commands\ItemDelete.cs" />
     <Compile Include="Commands\ItemMoveToChangeList.cs" />
