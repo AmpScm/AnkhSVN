@@ -19,7 +19,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VS;
 using Microsoft.VisualStudio;

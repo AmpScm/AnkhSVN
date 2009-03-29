@@ -19,7 +19,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
-using Ankh.Ids;
 using Ankh.Scc;
 
 namespace Ankh.Commands.RepositoryExplorer

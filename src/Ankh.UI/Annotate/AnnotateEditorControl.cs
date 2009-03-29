@@ -16,20 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Forms;
+
 using SharpSvn;
-using Ankh.UI.PendingChanges;
-using Ankh.UI.VSSelectionControls;
+
 using Ankh.Scc;
 using Ankh.Scc.UI;
-using System.Collections.ObjectModel;
-using Ankh.Ids;
-using Microsoft.VisualStudio;
+using Ankh.UI.PendingChanges;
+using Ankh.UI.VSSelectionControls;
+
 
 namespace Ankh.UI.Annotate
 {

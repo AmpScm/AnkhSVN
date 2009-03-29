@@ -29,7 +29,6 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
-using Ankh.Ids;
 using Ankh.Trigger.Hooks;
 
 namespace Ankh.Trigger

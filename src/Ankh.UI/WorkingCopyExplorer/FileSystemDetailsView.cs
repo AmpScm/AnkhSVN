@@ -21,7 +21,6 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using Ankh.Scc;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 
 namespace Ankh.UI.WorkingCopyExplorer

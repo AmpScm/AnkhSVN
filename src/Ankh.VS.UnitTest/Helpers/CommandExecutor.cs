@@ -17,10 +17,10 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.Ids;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
+using Ankh;
 
 namespace AnkhSvn_UnitTestProject.Helpers
 {

@@ -20,7 +20,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel.Design;
 using Ankh.Commands;
-using Ankh.Ids;
 
 namespace Ankh.UI
 {

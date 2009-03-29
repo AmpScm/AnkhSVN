@@ -26,7 +26,6 @@ PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.
 ***************************************************************************/
 
 using System;
-using Ankh.Ids;
 using AnkhSvn_UnitTestProject.Mocks;
 using AnkhSvn_UnitTestProject.Helpers;
 using Ankh.VSPackage;
@@ -104,7 +103,7 @@ namespace UnitTestProject.MenuItemTests
             {
                 //Verify that the menu command can be found
                 OleMenuCommandService mcs = ReflectionHelper.InvokeMethod<Package, OleMenuCommandService>(package, "GetService", typeof(IMenuCommandService));
-                Assert.IsNotNull(mcs.FindCommand(new CommandID(AnkhId.CommandSetGuid, (int)Ankh.Ids.AnkhCommand.Refresh)));
+                Assert.IsNotNull(mcs.FindCommand(new CommandID(AnkhId.CommandSetGuid, (int)Ankh.AnkhCommand.Refresh)));
             }
         }
     }

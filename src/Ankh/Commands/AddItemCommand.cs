@@ -16,7 +16,6 @@
 
 using Ankh.UI;
 using SharpSvn;
-using Ankh.Ids;
 
 namespace Ankh.Commands
 {

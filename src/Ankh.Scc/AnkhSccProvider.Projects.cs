@@ -25,7 +25,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
-using Ankh.Ids;
 using Ankh.VS;
 using System.IO;
 using SharpSvn;

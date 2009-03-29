@@ -22,7 +22,6 @@ using System.Windows.Forms;
 
 using SharpSvn;
 using Ankh.UI.Services;
-using Ankh.Ids;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;

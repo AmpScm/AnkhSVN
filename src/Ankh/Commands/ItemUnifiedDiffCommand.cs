@@ -17,7 +17,6 @@
 using System;
 using System.Text;
 using SharpSvn;
-using Ankh.Ids;
 using Ankh.UI;
 using System.IO;
 using Ankh.VS;

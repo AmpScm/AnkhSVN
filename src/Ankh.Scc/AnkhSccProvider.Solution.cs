@@ -35,7 +35,7 @@ namespace Ankh.Scc
         {
             IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
 
-            cmdSvc.PostExecCommand(Ankh.Ids.AnkhCommand.FileSccAddSolutionToSubversion);
+            cmdSvc.PostExecCommand(AnkhCommand.FileSccAddSolutionToSubversion);
 
             return VSConstants.S_OK;
         }

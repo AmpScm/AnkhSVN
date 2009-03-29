@@ -27,7 +27,6 @@ using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Ankh.VS;
 using Ankh.Scc.UI;
-using Ankh.Ids;
 
 namespace Ankh.UI.PendingChanges
 {

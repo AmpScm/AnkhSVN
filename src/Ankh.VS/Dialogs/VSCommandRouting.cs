@@ -324,7 +324,7 @@ namespace Ankh.VS.Dialogs
 
             if (_form.ToolBar != 0)
             {
-                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(Ankh.Ids.AnkhId.CommandSetGuid, (int)_form.ToolBar);
+                System.ComponentModel.Design.CommandID tbId = new System.ComponentModel.Design.CommandID(AnkhId.CommandSetGuid, (int)_form.ToolBar);
 
                 if (_tbHost == null)
                 {

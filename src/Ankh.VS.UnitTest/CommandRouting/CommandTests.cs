@@ -1,17 +1,18 @@
 ﻿using System;
-using NUnit.Framework;
-using Ankh.Commands;
-using AnkhSvn_UnitTestProject.Helpers;
-using Ankh.Ids;
-using Ankh;
+
 using Microsoft.VisualStudio.Shell.Interop;
-using Moq;
-using Ankh.Selection;
-using Ankh.VS;
-using Ankh.Scc;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Ankh.UI;
+using Moq;
+using NUnit.Framework;
+
+using Ankh;
+using Ankh.Commands;
 using Ankh.Diff;
+using Ankh.Scc;
+using Ankh.Selection;
+using Ankh.UI;
+using Ankh.VS;
+using AnkhSvn_UnitTestProject.Helpers;
 
 namespace AnkhSvn_UnitTestProject.CommandRouting
 {

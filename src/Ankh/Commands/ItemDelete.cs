@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace Ankh.Commands
 {
-    [Command(Ankh.Ids.AnkhCommand.ItemDelete)]
+    [Command(AnkhCommand.ItemDelete)]
     class ItemDelete : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

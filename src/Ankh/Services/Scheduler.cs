@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Ids;
 using Ankh.Commands;
 
 namespace Ankh.Services
@@ -97,7 +96,7 @@ namespace Ankh.Services
 
         #region IAnkhScheduler Members
 
-        public void ScheduleAt(DateTime time, Ankh.Ids.AnkhCommand command)
+        public void ScheduleAt(DateTime time, AnkhCommand command)
         {
             ScheduleAt(time, CreateHandler(command));
         }
@@ -128,7 +127,7 @@ namespace Ankh.Services
             };
         }
 
-        public void Schedule(TimeSpan timeSpan, Ankh.Ids.AnkhCommand command)
+        public void Schedule(TimeSpan timeSpan, AnkhCommand command)
         {
             ScheduleAt(DateTime.Now + timeSpan, CreateHandler(command));
         }

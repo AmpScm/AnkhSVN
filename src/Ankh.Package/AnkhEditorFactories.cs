@@ -23,7 +23,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 
-using Ankh.Ids;
 using Ankh.UI;
 using Ankh.VS.Dialogs;
 

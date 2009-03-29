@@ -24,7 +24,6 @@ using System.Runtime.InteropServices;
 using Ankh.Selection;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.UI.PendingChanges;
 using System.Diagnostics;
 using System.ComponentModel;

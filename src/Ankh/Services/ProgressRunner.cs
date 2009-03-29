@@ -24,7 +24,6 @@ using SharpSvn;
 
 using Ankh.UI;
 using Ankh.VS;
-using Ankh.Ids;
 using System.Text;
 using System.IO;
 using Ankh.VS.OutputPane;

@@ -16,7 +16,7 @@
 
 namespace Ankh.Commands
 {
-    [Command(Ids.AnkhCommand.MigrateSettings, AlwaysAvailable = true)]
+    [Command(AnkhCommand.MigrateSettings, AlwaysAvailable = true)]
     class MigrateAnkhSettings : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
 using System.Collections.Generic;
 using SharpSvn;
 using Ankh.Scc;

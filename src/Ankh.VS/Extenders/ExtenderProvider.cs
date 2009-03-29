@@ -18,7 +18,6 @@ using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
-using Ankh.Ids;
 using Ankh.Selection;
 using Ankh.Commands;
 using Ankh.Scc;

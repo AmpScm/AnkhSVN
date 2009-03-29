@@ -16,7 +16,6 @@
 
 using System;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using System.Windows.Forms.Design;

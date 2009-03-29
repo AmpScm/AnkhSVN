@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Package;
 using System.ComponentModel.Design;
-using Ankh.Ids;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;

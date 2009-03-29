@@ -14,7 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Ankh.Ids;
 using SharpSvn;
 using Ankh.Scc.UI;
 using System.IO;

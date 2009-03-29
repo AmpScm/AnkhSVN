@@ -21,8 +21,8 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(Ids.AnkhCommand.SolutionApplyPatch)]
-    [Command(Ids.AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
+    [Command(AnkhCommand.SolutionApplyPatch)]
+    [Command(AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
     public class ApplyPatch : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

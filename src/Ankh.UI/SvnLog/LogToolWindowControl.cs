@@ -20,7 +20,6 @@ using System.ComponentModel;
 using System.Text;
 using System.Diagnostics;
 using Ankh.Scc.UI;
-using Ankh.Ids;
 using SharpSvn;
 using Ankh.Scc;
 

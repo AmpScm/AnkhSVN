@@ -21,7 +21,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.OLE.Interop;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VSPackage.Attributes;
 using Ankh.VS;

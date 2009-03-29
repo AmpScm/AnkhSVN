@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
-using Ankh.Ids;
 using System.Globalization;
 
 namespace Ankh.VSPackage.Attributes

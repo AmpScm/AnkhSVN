@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.Commands

@@ -7,7 +7,7 @@
     <ProjectGuid>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ankh.Ids</RootNamespace>
+    <RootNamespace>Ankh</RootNamespace>
     <AssemblyName>Ankh.Ids</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Ids.snk</AssemblyOriginatorKeyFile>

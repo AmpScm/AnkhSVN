@@ -21,7 +21,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using SharpSvn;
 using Ankh.Scc;
-using Ankh.Ids;
 using Ankh.Commands;
 
 namespace Ankh.UI.SvnLog

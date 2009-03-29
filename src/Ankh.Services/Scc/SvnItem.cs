@@ -22,7 +22,6 @@ using System.Runtime.InteropServices;
 
 using SharpSvn;
 
-using Ankh.Ids;
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.Selection;

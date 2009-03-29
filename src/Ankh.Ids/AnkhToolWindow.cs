@@ -15,10 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Ankh.Ids
+namespace Ankh
 {
     // Disable Missing XML comment warning for this file
 #pragma warning disable 1591 

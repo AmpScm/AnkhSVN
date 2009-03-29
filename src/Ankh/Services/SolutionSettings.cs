@@ -30,7 +30,6 @@ using System.Security;
 using FileVersionInfo = System.Diagnostics.FileVersionInfo;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
-using Ankh.Ids;
 using System.Runtime.InteropServices;
 
 namespace Ankh.Settings

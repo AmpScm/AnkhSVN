@@ -19,7 +19,6 @@ using System.Windows.Forms;
 using Ankh.VS;
 using SharpSvn;
 
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.UI.Commands;
 

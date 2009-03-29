@@ -16,7 +16,6 @@
 
 using System;
 using Ankh.UI;
-using Ankh.Ids;
 using Ankh.Scc;
 using Clipboard = System.Windows.Forms.Clipboard;
 

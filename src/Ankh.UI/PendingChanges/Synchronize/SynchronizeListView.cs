@@ -21,7 +21,6 @@ using System.Windows.Forms;
 using Ankh.UI.VSSelectionControls;
 using System.Drawing;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.VS;
 
 namespace Ankh.UI.PendingChanges.Synchronize

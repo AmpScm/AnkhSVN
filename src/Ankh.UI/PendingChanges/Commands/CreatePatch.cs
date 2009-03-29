@@ -14,7 +14,6 @@
 //  limitations under the License.
 
 using Ankh.Commands;
-using Ankh.Ids;
 using System.Windows.Forms;
 
 namespace Ankh.UI.PendingChanges.Commands

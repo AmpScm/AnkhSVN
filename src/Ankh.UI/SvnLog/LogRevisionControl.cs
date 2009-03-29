@@ -24,7 +24,6 @@ using System.Windows.Forms;
 using SharpSvn;
 
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer;
 

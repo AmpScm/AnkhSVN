@@ -20,7 +20,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel.Design;
 using Ankh.Scc;
-using Ankh.Ids;
 using Ankh.Commands;
 using Ankh.VS;
 using Ankh.UI.PendingChanges.Commits;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Ids;
 using System.IO;
 using Microsoft.VisualStudio;
 

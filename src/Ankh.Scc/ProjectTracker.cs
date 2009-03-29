@@ -23,7 +23,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using SharpSvn;
 
 using Ankh.Commands;
-using Ankh.Ids;
 
 namespace Ankh.Scc
 {

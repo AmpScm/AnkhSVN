@@ -29,7 +29,6 @@ using System.Collections.ObjectModel;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer.Dialogs;
 using Ankh.Commands;
-using Ankh.Ids;
 
 namespace Ankh.UI.RepositoryExplorer
 {

@@ -17,7 +17,6 @@
 using System.Windows.Forms;
 using SharpSvn;
 
-using Ankh.Ids;
 using Ankh.UI.Commands;
 
 namespace Ankh.Commands

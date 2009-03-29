@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI.PendingChanges;
-using Ankh.Ids;
 using Ankh.VSPackage.Attributes;
 using Ankh.VS.LanguageServices;
 using Ankh.Selection;
