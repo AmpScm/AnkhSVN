@@ -49,6 +49,7 @@ namespace Ankh
         // Delayed implementation commands
         ActivateSccProvider,
         ActivateVsExtender,
+        NotifyWcToNew,
 
         // /Private commands
 

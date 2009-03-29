@@ -232,6 +232,8 @@ namespace Ankh.Scc.StatusCache
             }
         }
 
+        bool _notifiedToNew;
+
         /// <summary>
         /// Refreshes the specified path using the specified depth
         /// </summary>
@@ -325,7 +327,17 @@ namespace Ankh.Scc.StatusCache
                 bool statSelf = false;
 
                 if (!ok)
+                {
+                    if (!_notifiedToNew && 
+                        args.LastException != null && 
+                        args.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_UNSUPPORTED_FORMAT)
+                    {
+                        _notifiedToNew = true;
+                        if (CommandService != null)
+                            CommandService.PostExecCommand(AnkhCommand.NotifyWcToNew, walkPath);
+                    }
                     statSelf = true;
+                }
                 else if (directory != null)
                     walkItem = directory.Directory; // Might have changed via casing
 
