@@ -51,7 +51,7 @@ namespace Ankh
     /// Represents a version controlled path on disk, caching its status
     /// </summary>
     [DebuggerDisplay("Path={FullPath}")]
-    public sealed partial class SvnItem : LocalSvnItem, ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
+    public sealed partial class SvnItem : ISvnItemUpdate, ISvnWcReference, IEquatable<SvnItem>
     {
         readonly IFileStatusCache _context;
         readonly string _fullPath;
