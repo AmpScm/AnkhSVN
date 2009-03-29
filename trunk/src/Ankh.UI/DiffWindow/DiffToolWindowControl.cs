@@ -27,7 +27,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Collections.ObjectModel;
 using System.IO;
 using Ankh.Diff.DiffUtils;
-using Ankh.Ids;
 
 namespace Ankh.UI.DiffWindow
 {

@@ -24,7 +24,6 @@ using System.Windows.Forms.Design;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using Ankh.Ids;
 using Ankh.VS;
 
 namespace Ankh.UI

@@ -23,7 +23,6 @@ using Ankh.VS;
 using System.IO;
 using System.CodeDom.Compiler;
 using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Ids;
 using Ankh.Scc.UI;
 using Ankh.Scc;
 

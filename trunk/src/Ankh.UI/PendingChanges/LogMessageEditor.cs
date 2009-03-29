@@ -19,7 +19,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-using Ankh.Ids;
 using Ankh.UI.PendingChanges.Commits;
 
 namespace Ankh.UI.PendingChanges

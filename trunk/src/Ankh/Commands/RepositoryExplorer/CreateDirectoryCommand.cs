@@ -16,7 +16,6 @@
 
 using System;
 using System.Windows.Forms;
-using Ankh.Ids;
 using SharpSvn;
 using Ankh.Selection;
 using Ankh.Scc;

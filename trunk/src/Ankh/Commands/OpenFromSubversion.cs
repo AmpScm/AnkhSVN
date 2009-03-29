@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Ankh.UI.RepositoryOpen;

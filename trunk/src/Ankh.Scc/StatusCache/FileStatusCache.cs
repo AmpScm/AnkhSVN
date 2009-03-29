@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using SharpSvn;
 

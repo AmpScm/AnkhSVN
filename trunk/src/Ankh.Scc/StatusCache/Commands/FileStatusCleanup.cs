@@ -16,7 +16,6 @@
 
 using System;
 using Ankh.Commands;
-using Ankh.Ids;
 
 namespace Ankh.Scc.StatusCache.Commands
 {

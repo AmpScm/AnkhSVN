@@ -20,7 +20,6 @@ using System.Windows.Forms;
 
 using SharpSvn;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.Scc.UI;

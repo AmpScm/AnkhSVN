@@ -43,7 +43,7 @@ namespace Ankh.Services
             else
                 nWnd = _nNext++;
 
-            pkg.ShowToolWindow(Ankh.Ids.AnkhToolWindow.Diff, nWnd, true);
+            pkg.ShowToolWindow(AnkhToolWindow.Diff, nWnd, true);
 
             DiffToolWindowControl twc = GetService<ISelectionContext>().ActiveFrameControl as DiffToolWindowControl;
 

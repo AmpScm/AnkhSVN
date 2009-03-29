@@ -22,7 +22,6 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 
-using Ankh.Ids;
 using Ankh.UI;
 using Ankh.Commands;
 

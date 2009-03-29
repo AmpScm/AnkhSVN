@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 

@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Package;
 using System.Runtime.InteropServices;
-using Ankh.Ids;
 
 namespace Ankh.VS.LanguageServices
 {

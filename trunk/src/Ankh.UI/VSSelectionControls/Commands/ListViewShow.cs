@@ -17,11 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-//using System.Windows.Forms;
-using Ankh.Commands;
-using Ankh.Ids;
 using System.Diagnostics;
 using System.Windows.Forms;
+using Ankh.Commands;
 
 namespace Ankh.UI.VSSelectionControls.Commands
 {

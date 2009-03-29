@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using SharpSvn;
 
 using Ankh.UI;
-using Ankh.Ids;
 using Ankh.Scc;
 
 namespace Ankh.Commands

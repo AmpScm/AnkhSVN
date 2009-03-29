@@ -25,7 +25,6 @@ using System.Text;
 using System.Xml;
 using Microsoft.Win32;
 
-using Ankh.Ids;
 using Ankh.UI;
 using Ankh.VS;
 

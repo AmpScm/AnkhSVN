@@ -17,7 +17,6 @@
 using System;
 using System.Text;
 using System.Collections;
-using Ankh.Ids;
 using Ankh.UI.WorkingCopyExplorer;
 
 namespace Ankh.Commands

@@ -18,7 +18,7 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Resources;
-using Ankh.Ids;
+using Ankh;
 
 //
 // General Information about an assembly is controlled through the following 

@@ -22,7 +22,6 @@ using AnkhSvn_UnitTestProject.Helpers;
 using Ankh.Commands;
 using Ankh;
 using AnkhSvn_UnitTestProject.Mocks;
-using Ankh.Ids;
 using Ankh.Selection;
 using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.UI.Services;

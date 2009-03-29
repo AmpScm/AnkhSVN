@@ -27,7 +27,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
-using Ankh.Ids;
 using Ankh.UI.Services;
 using Ankh.Scc;
 using Ankh.VS;

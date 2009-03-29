@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.Scc;
 using System.Windows.Forms;
 using Ankh.UI.PendingChanges.Commits;

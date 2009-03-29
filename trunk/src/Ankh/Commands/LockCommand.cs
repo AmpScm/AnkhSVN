@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using SharpSvn;
-using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.UI;
 using System.Windows.Forms;

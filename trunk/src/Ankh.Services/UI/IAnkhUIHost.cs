@@ -20,7 +20,6 @@ using System.Text;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using Ankh.Ids;
 using Microsoft.VisualStudio.OLE.Interop;
 
 namespace Ankh.UI.Services

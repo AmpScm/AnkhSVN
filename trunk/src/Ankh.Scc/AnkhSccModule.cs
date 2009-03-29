@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.Shell.Interop;
-using Ankh.Ids;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using Microsoft.VisualStudio;

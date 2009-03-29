@@ -27,7 +27,6 @@ using Ankh.Scc;
 using System.Drawing;
 using System.ComponentModel.Design;
 using Ankh.Commands;
-using Ankh.Ids;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.PendingChanges.Commits

@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System.Windows.Forms;
-using Ankh.Ids;
 using System.Collections.Generic;
 using Ankh.Scc;
 using Ankh.UI.SccManagement;

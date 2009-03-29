@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
 using Ankh.Scc;
 
 namespace Ankh.Commands.RepositoryExplorer

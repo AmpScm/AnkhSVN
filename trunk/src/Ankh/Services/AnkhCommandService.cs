@@ -26,10 +26,8 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell.Interop;
 
 using Ankh.Commands;
-using Ankh.Ids;
 using Ankh.UI;
 using Ankh.VS;
-
 
 namespace Ankh.Services
 {
@@ -71,13 +69,13 @@ namespace Ankh.Services
             get { return _ankhContext ?? (_ankhContext = GetService<AnkhContext>()); }
         }
 
-        public CommandResult ExecCommand(Ankh.Ids.AnkhCommand command)
+        public CommandResult ExecCommand(AnkhCommand command)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
             return ExecCommand(command, false);
         }
 
-        public CommandResult ExecCommand(Ankh.Ids.AnkhCommand command, bool verifyEnabled)
+        public CommandResult ExecCommand(AnkhCommand command, bool verifyEnabled)
         {
             // The commandhandler in the package always checks enabled; no need to do it here
             return ExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), verifyEnabled);
@@ -212,17 +210,17 @@ namespace Ankh.Services
             }
         }
 
-        public bool PostExecCommand(Ankh.Ids.AnkhCommand command)
+        public bool PostExecCommand(AnkhCommand command)
         {
             return PostExecCommand(command, null, CommandPrompt.DoDefault);
         }
 
-        public bool PostExecCommand(Ankh.Ids.AnkhCommand command, object args)
+        public bool PostExecCommand(AnkhCommand command, object args)
         {
             return PostExecCommand(command, args, CommandPrompt.DoDefault);
         }
 
-        public bool PostExecCommand(Ankh.Ids.AnkhCommand command, object args, CommandPrompt prompt)
+        public bool PostExecCommand(AnkhCommand command, object args, CommandPrompt prompt)
         {
             return PostExecCommand(new CommandID(AnkhId.CommandSetGuid, (int)command), args, prompt);
         }

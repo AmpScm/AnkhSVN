@@ -20,7 +20,6 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
-using Ankh.Ids;
 using System.ComponentModel.Design;
 using Ankh.UI;
 

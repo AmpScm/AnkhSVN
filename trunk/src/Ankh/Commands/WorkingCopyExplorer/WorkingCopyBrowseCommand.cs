@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
 using Ankh.UI;
 using Ankh.UI.WorkingCopyExplorer;
 using System.Windows.Forms;

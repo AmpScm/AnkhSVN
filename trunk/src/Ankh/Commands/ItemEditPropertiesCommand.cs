@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SharpSvn;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.UI.PropertyEditors;
 using Ankh.Selection;

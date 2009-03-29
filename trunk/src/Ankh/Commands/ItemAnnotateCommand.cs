@@ -17,7 +17,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI;

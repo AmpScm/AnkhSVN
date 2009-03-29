@@ -24,7 +24,7 @@ using Ankh.UI.RepositoryExplorer.Dialogs;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
-    [Command(Ankh.Ids.AnkhCommand.SvnNodeDelete, AlwaysAvailable=true)]
+    [Command(AnkhCommand.SvnNodeDelete, AlwaysAvailable=true)]
     class DeleteRepositoryItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)

@@ -15,17 +15,18 @@
 //  limitations under the License.
 
 using System;
-using Ankh.Ids;
-using Ankh.Scc;
-using SharpSvn;
-using Ankh.UI.WorkingCopyExplorer.Nodes;
 using System.ComponentModel.Design;
-using Ankh.Commands;
-using Ankh.VS;
-using Microsoft.VisualStudio.Shell;
 using System.Windows.Forms;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using SharpSvn;
+
+using Ankh.Commands;
+using Ankh.Scc;
+using Ankh.UI.WorkingCopyExplorer.Nodes;
+using Ankh.VS;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {

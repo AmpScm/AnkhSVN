@@ -22,7 +22,6 @@ using Ankh.VS;
 using System.Windows.Forms;
 using System.Drawing;
 using Ankh.Commands;
-using Ankh.Ids;
 using System.ComponentModel;
 
 namespace Ankh.UI.RepositoryExplorer

@@ -27,7 +27,6 @@ using Ankh.UI.WorkingCopyExplorer.Nodes;
 using Ankh.VS;
 using System.ComponentModel;
 using Ankh.Commands;
-using Ankh.Ids;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
