@@ -910,6 +910,7 @@
         <Button id="Cmd_SccLock" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_WorkingCopyBrowse" text="." priority="0" commandWellOnly="true" allowParams="true" />
+        <Button id="Cmd_NotifyWcToNew" text="." priority="0" commandWellOnly="true" allowParams="true"/>
       </Group>
     </MenuRef>
   </UI>

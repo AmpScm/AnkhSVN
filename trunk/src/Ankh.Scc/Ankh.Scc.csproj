@@ -98,6 +98,7 @@
     <Compile Include="Commands\ActivateSccProvider.cs">
     </Compile>
     <Compile Include="Commands\ProjectFileFilter.cs" />
+    <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="SccUI\SccManagementResources.Designer.cs">
       <DependentUpon>SccManagementResources.resx</DependentUpon>

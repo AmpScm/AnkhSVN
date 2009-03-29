@@ -169,6 +169,17 @@ namespace Ankh.Scc {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subversion detected an unsupported working copy version while checking the status of &apos;{0}&apos;. Most likely you upgraded another Subversion client (e.g. TortoiseSVN or the SVN client) to a newer version without upgrading your AnkhSVN. Please visit http://ankhsvn.net/ to find out about newer AnkhSVN versions supporting this Working Copy.
+        ///
+        ///Most likely AnkhSVN will not work correctly on this and other upgraded working copies until you upgrade to a newer version..
+        /// </summary>
+        internal static string UnsupportedWorkingCopyFound {
+            get {
+                return ResourceManager.GetString("UnsupportedWorkingCopyFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your external merge tool saved &apos;{0}&apos;.
         ///Would you like to mark this conflicted file as resolved?.
         /// </summary>
