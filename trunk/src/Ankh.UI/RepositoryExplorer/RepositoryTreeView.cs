@@ -241,9 +241,6 @@ namespace Ankh.UI.RepositoryExplorer
             get { return IconMapper.DirectoryIcon; }
         }
 
-        delegate void DoSomething();
-
-
         readonly Dictionary<Uri, RepositoryTreeNode> _nodeMap = new Dictionary<Uri, RepositoryTreeNode>();
 
         public void BrowseRoot(RepositoryTreeNode parent, Uri uri)
@@ -344,7 +341,7 @@ namespace Ankh.UI.RepositoryExplorer
             if (_running.Count == 1)
                 OnRetrievingChanged(EventArgs.Empty);
 
-            DoSomething d = delegate()
+            AnkhAction d = delegate()
             {
                 bool ok = false;
                 try
@@ -361,7 +358,7 @@ namespace Ankh.UI.RepositoryExplorer
                         client.GetList(uri, la, out items);
                     }
 
-                    DoSomething addItems = (DoSomething)delegate()
+                    AnkhAction addItems = (AnkhAction)delegate()
                         {
                             if (items != null && items.Count > 0)
                             {
@@ -397,7 +394,7 @@ namespace Ankh.UI.RepositoryExplorer
                 finally
                 {
                     if (!ok)
-                        BeginInvoke((DoSomething)delegate()
+                        BeginInvoke((AnkhAction)delegate()
                         {
                             _running.Remove(nUri);
 

@@ -83,8 +83,7 @@ namespace Ankh.UI
             public long LastCount;
         };
 
-        delegate void DoSomething();
-        readonly List<DoSomething> _todo = new List<DoSomething>();
+        readonly List<AnkhAction> _todo = new List<AnkhAction>();
         const int _bucketCount = 16;
         readonly long[] _buckets = new long[_bucketCount];
         int _curBuck;
@@ -339,7 +338,7 @@ namespace Ankh.UI
         /// Enqueus a task for processing in the UI thread. All tasks will run in the same order as in which they are enqueued
         /// </summary>
         /// <param name="task"></param>
-        void Enqueue(DoSomething task)
+        void Enqueue(AnkhAction task)
         {
             if (task == null)
                 return;
@@ -352,7 +351,7 @@ namespace Ankh.UI
                 {
                     if (!_queued && IsHandleCreated)
                     {
-                        BeginInvoke(new DoSomething(RunQueue));
+                        BeginInvoke(new AnkhAction(RunQueue));
                         _queued = true;
                     }
                 }
@@ -365,7 +364,7 @@ namespace Ankh.UI
 
         void RunQueue()
         {
-            DoSomething[] actions;
+            AnkhAction[] actions;
             lock(_todo)
             {
                 _queued = false;
@@ -375,7 +374,7 @@ namespace Ankh.UI
 
             int n = actionList.Items.Count;
 
-            foreach (DoSomething ds in actions)
+            foreach (AnkhAction ds in actions)
             {
                 ds();
             }

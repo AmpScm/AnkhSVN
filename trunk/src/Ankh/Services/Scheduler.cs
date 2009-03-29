@@ -117,9 +117,7 @@ namespace Ankh.Services
             }
         }
 
-        delegate void DoSomething();
-
-        DoSomething CreateHandler(AnkhCommand command)
+        AnkhAction CreateHandler(AnkhCommand command)
         {
             return delegate
             {

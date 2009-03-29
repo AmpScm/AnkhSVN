@@ -189,11 +189,9 @@ namespace Ankh.Commands
             e.Client.CheckOut(projectTop, localDir, a);
         }
 
-        delegate void DoSomething();
-
         private static void FindRoot(IAnkhServiceProvider context, Uri selectedUri, CheckoutProject dlg)
         {
-            DoSomething ds = delegate
+            AnkhAction ds = delegate
             {
                 using (SvnClient client = context.GetService<ISvnClientPool>().GetClient())
                 {
@@ -201,7 +199,7 @@ namespace Ankh.Commands
                     if (client.TryGetProperty(selectedUri, AnkhSccPropertyNames.ProjectRoot, out value))
                     {
                         if (dlg.IsHandleCreated)
-                            dlg.Invoke((DoSomething)delegate
+                            dlg.Invoke((AnkhAction)delegate
                             {
                                 try
                                 {
