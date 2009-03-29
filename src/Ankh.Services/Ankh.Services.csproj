@@ -151,8 +151,6 @@
     </Compile>
     <Compile Include="Scc\SvnItemFilters.cs" />
     <Compile Include="Selection\ISelectionContext.cs" />
-    <Compile Include="Selection\LocalSvnItem.cs" />
-    <Compile Include="Selection\RemoteSvnItem.cs" />
     <Compile Include="Selection\SvnProject.cs" />
     <Compile Include="UI\IAnkhConfigurationService.cs" />
     <Compile Include="UI\IAnkhUIHost.cs" />
