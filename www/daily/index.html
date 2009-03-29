@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6560</title>
+          AnkhSVN-Daily Update - 2.1.6566</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,21 +14,35 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1804/AnkhSvn-Daily-2.1.6560.13.msi">AnkhSVN 2.1.6560</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1812/AnkhSvn-Daily-2.1.6566.14.msi">AnkhSVN 2.1.6566</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6560">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6566">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-03-29</td></tr>
+<tr><td> </td><td class="r"><a id="6566" href="http://ankhsvn.net/rev/?r=6566">
+            [r6566]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn reference to a version that fixes the svn+ssh:// issue reported
+on the user list</td></tr>
 <tr class="d"><td colspan="4">2009-03-28</td></tr>
+<tr><td> </td><td class="r"><a id="6565" href="http://ankhsvn.net/rev/?r=6565">
+            [r6565]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix conditional argument parsing for difftools (found as not enabling
+diffmerge read only mode).</td></tr>
+<tr><td> </td><td class="r"><a id="6563" href="http://ankhsvn.net/rev/?r=6563">
+            [r6563]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs, Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove always disabled 'Revert to Specific version...' from Pending Changes
+window toolbar. At the same time add Select in WC Explorer and Repos Explorer
+commands.</td></tr>
 <tr><td> </td><td class="r"><a id="6559" href="http://ankhsvn.net/rev/?r=6559">
             [r6559]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh/Ankh.csproj, Ankh.Scc/PendingChangeManager.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Ids/AnkhCommand.cs, Ankh.Services/Scc/IFileStatusMonitor.cs, Ankh/Commands/ItemAddToPending.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add 'Add to Pending Changes' and 'Remove from Pending Changes' commands,
@@ -498,36 +512,6 @@ Detect if a solution is open when initially loading</td></tr>
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCDirectoryNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCMyComputerNode.cs, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, Ankh/Commands/WorkingCopyExplorer/WorkingCopyBrowseCommand.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCSolutionNode.cs, Ankh.Ids/AnkhCommand.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Split WCE Browse and WCE Add commands, Add a new root in the latter case and
 search for the path (in solution roots, custom roots and then "My Computer"
 in the Browse case.</td></tr>
-<tr><td> </td><td class="r"><a id="6284" href="http://ankhsvn.net/rev/?r=6284">
-            [r6284]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> CommandStrings.resx, CommandStrings.Designer.cs, BranchSolutionCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable branch command on Projects in the Solution Explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="6283" href="http://ankhsvn.net/rev/?r=6283">
-            [r6283]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs, FileSystemTreeView.cs, Nodes/WCSolutionNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SolutionNode to working copy explorer</td></tr>
-<tr><td> </td><td class="r"><a id="6281" href="http://ankhsvn.net/rev/?r=6281">
-            [r6281]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer/Nodes:</strong> WCMyComputerNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Show only removable, fixed, remote and ram drives below my computer.
-(This hides CDR/DVD drives to make sure we don't spin them up)</td></tr>
-<tr><td> </td><td class="r"><a id="6280" href="http://ankhsvn.net/rev/?r=6280">
-            [r6280]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/VSSelectionControls:</strong> SmartTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement our own state ImageList handling on the SmartTreeView class
-to work around the .Net limitation that state image lists should use 16x16
-images.</td></tr>
-<tr><td> </td><td class="r"><a id="6279" href="http://ankhsvn.net/rev/?r=6279">
-            [r6279]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Avoid crash when adding a root. The crash occurred because the added root was
-also the item that had to be selected (never the case for items in a working
-copy)</td></tr>
-<tr><td> </td><td class="r"><a id="6270" href="http://ankhsvn.net/rev/?r=6270">
-            [r6270]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc/SccUI:</strong> ChangeSourceControl.Designer.cs, ChangeSourceControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Hide the User settings tab and the text referring to it, until the multiple WC
-checkout + enlist works, so users don't see UI thats not needed/functional yet</td></tr>
-<tr class="d"><td colspan="4">2009-02-27</td></tr>
-<tr><td> </td><td class="r"><a id="6268" href="http://ankhsvn.net/rev/?r=6268">
-            [r6268]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/ProjectMap/SccDocumentData.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/SvnItem.State.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Stop sending notifications from the SvnItem/FileStatusCache on solution
-containment and editted states. Our project system should handle these
-specific changes itself and this reduces the chance on focus steal issues.</td></tr>
 
 </table>
 <!--/Recent changes-->
