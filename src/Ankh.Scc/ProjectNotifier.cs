@@ -34,6 +34,7 @@ namespace Ankh.Scc
     {
         readonly object _lock = new object();
         bool _posted;
+        bool _onIdle;
         List<SvnProject> _dirtyProjects;
         HybridCollection<string> _maybeAdd;
         uint _cookie;
@@ -103,6 +104,15 @@ namespace Ankh.Scc
             }
         }
 
+        void PostIdle()
+        {
+             if (!_onIdle)
+             {
+                 CommandService.PostIdleCommand(AnkhCommand.MarkProjectDirty);
+                 _onIdle = true;
+             }
+        }
+
         /// <summary>
         /// Schedules a glyph refresh of all specified projects
         /// </summary>
@@ -151,7 +161,7 @@ namespace Ankh.Scc
         /// Schedules a dirty check for the specified document
         /// </summary>
         /// <param name="path">The path.</param>
-        public void ScheduleDirtyCheck(string path, bool checkDelay)
+        public void ScheduleDirtyCheck(string path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -169,7 +179,7 @@ namespace Ankh.Scc
                 if (!_dirtyCheck.Contains(path))
                     _dirtyCheck.Add(path);
 
-                PostDirty(checkDelay);
+                PostIdle();
             }
         }
 
@@ -177,7 +187,7 @@ namespace Ankh.Scc
         /// Schedules a dirty check for the specified documents.
         /// </summary>
         /// <param name="paths">The paths.</param>
-        public void ScheduleDirtyCheck(IEnumerable<string> paths, bool checkDelay)
+        public void ScheduleDirtyCheck(IEnumerable<string> paths)
         {
             if (paths == null)
                 throw new ArgumentNullException("paths");
@@ -187,9 +197,9 @@ namespace Ankh.Scc
                 if (_dirtyCheck == null)
                     _dirtyCheck = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
-                _dirtyCheck.AddRange(paths);
+                _dirtyCheck.UniqueAddRange(paths);
 
-                PostDirty(checkDelay);
+                PostIdle();
             }
         }
 
@@ -204,6 +214,7 @@ namespace Ankh.Scc
             lock (_lock)
             {
                 _posted = false;
+                _onIdle = false;
 
                 if (provider == null)
                     return;
