@@ -396,6 +396,9 @@ namespace Ankh
         /// <remarks>When this method is called the other item will eventually replace this item</remarks>
         void ISvnItemUpdate.RefreshTo(SvnItem lead)
         {
+            if (lead == null)
+                throw new ArgumentNullException("lead");
+
             _status = lead._status;
             _statusDirty = lead._statusDirty;
 
@@ -404,7 +407,7 @@ namespace Ankh
 
             SetState(current & valid, (~current) & valid);
             _ticked = false;
-            _modified = new DateTime();
+            _modified = lead._modified;
             _cookie = NextCookie(); // Status 100% the same, but changed... Cookies are free ;)
         }
 
