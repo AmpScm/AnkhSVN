@@ -22,6 +22,8 @@ using SharpSvn;
 using Ankh.Selection;
 using Ankh.Scc;
 using System.Diagnostics;
+using Ankh.Services;
+using Ankh.Commands;
 
 
 namespace Ankh.VS.Extenders
@@ -84,13 +86,25 @@ namespace Ankh.VS.Extenders
                 return;
 
             _disposed = true;
-            // Extenders must notify the site when they are disposed
+
+            // Extenders must notify the site when they are disposed, but we might
+            // be executing in a background thread
+            AnkhAction release =
+                delegate
+                {
+                    try
+                    {
+                        _site.NotifyDelete(_cookie);
+                    }
+                    catch { }
+                };
+
             try
             {
-                // TODO: Maybe ensure this code is always run in the main thread
-                _site.NotifyDelete(_cookie);
+                _context.GetService<IAnkhCommandService>().PostIdleAction(release);
             }
-            catch { }
+            catch
+            { }
         }
 
         [Browsable(false)]
