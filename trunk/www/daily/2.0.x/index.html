@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6568</title>
+          AnkhSVN-Daily Update - 2.0.6578</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1814/AnkhSvn-Daily-2.0.6568.13.msi">AnkhSVN 2.0.6568</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1815/AnkhSvn-Daily-2.0.6578.14.msi">AnkhSVN 2.0.6578</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6568">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6578">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -313,57 +313,6 @@ make sure our global command handlers don't have to know about WCE details.</td>
 <tr><td> </td><td class="r"><a id="6322" href="http://ankhsvn.net/rev/?r=6322">
             [r6322]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade SharpSvn reference for experimental builds to a 1.6.0-rc3 version</td></tr>
-<tr class="d"><td colspan="4">2009-03-01</td></tr>
-<tr><td> </td><td class="r"><a id="6309" href="http://ankhsvn.net/rev/?r=6309">
-            [r6309]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package/Gui:</strong> AnkhSvn.xml</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">More cleanup of Working Copy Explorer context menu</td></tr>
-<tr><td> </td><td class="r"><a id="6307" href="http://ankhsvn.net/rev/?r=6307">
-            [r6307]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/UpdateItemCommand.cs, Ankh.Package/Gui/AnkhSvn.xml, Ankh.Ids/AnkhCommandGroup.cs, Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a few extra commands to the Working Copy Explorer toolbar. (Mostly commands
-from the Pending Changes Window)</td></tr>
-<tr><td> </td><td class="r"><a id="6306" href="http://ankhsvn.net/rev/?r=6306">
-            [r6306]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/ExportCommand.cs, Ankh/Commands/CommandStrings.resx, Ankh/Commands/CommandStrings.Designer.cs, Ankh.UI/Commands/ExportDialog.Designer.cs, Ankh.UI/Commands/ExportDialog.cs, Ankh.UI/PathSelector/VersionSelector.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the Working Copy Explorer Export command by using the version selector
-properly.</td></tr>
-<tr><td> </td><td class="r"><a id="6304" href="http://ankhsvn.net/rev/?r=6304">
-            [r6304]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the folder we're browsing to is always selected.</td></tr>
-<tr><td> </td><td class="r"><a id="6301" href="http://ankhsvn.net/rev/?r=6301">
-            [r6301]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/UpdateItemCommand.cs, Ankh.Package/Gui/AnkhSvn.xml, Ankh.VS.UnitTest/CommandRouting/CommandRoutingTest.cs, Ankh/Commands/CommandStrings.resx, Ankh/Commands/ItemCommitCommand.cs, Ankh/Commands/CommandStrings.Designer.cs, Ankh.Ids/AnkhCommandGroup.cs, Ankh.Ids/AnkhCommand.cs, Ankh/Commands/SolutionUpdateCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">On the File level in Solutions: Allow updating to latest and specific
-versions via different commands to make the file and menu level commands
-behave more alike.</td></tr>
-<tr><td> </td><td class="r"><a id="6294" href="http://ankhsvn.net/rev/?r=6294">
-            [r6294]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, Ankh/Commands/RefreshCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the refresh command work in the working copy explorer</td></tr>
-<tr><td> </td><td class="r"><a id="6293" href="http://ankhsvn.net/rev/?r=6293">
-            [r6293]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Package/Gui/PendingChanges/CleanUp.png, Ankh.Package/Gui/menu/Cleanup.png, Ankh.Ids/AnkhCommandGroup.cs, Ankh.Package/Ankh.Package.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add new cleanup icon; Move Cleanup and Refresh in a separate Command Group
-below the Subversion menus and move annotate to just below the diff tools.</td></tr>
-<tr><td> </td><td class="r"><a id="6292" href="http://ankhsvn.net/rev/?r=6292">
-            [r6292]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs, FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove dead code</td></tr>
-<tr class="d"><td colspan="4">2009-02-28</td></tr>
-<tr><td> </td><td class="r"><a id="6291" href="http://ankhsvn.net/rev/?r=6291">
-            [r6291]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/SvnItemData.cs, Ankh.VS/Extenders/SvnItemExtender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update file items in WC Explorer and solution explorer to show a combined
-status like when selecting a Pending Change instead of a separate Text and
-Project status.</td></tr>
-<tr><td> </td><td class="r"><a id="6290" href="http://ankhsvn.net/rev/?r=6290">
-            [r6290]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove the dummy node that causes the node to appear expandible when selecting it</td></tr>
-<tr><td> </td><td class="r"><a id="6289" href="http://ankhsvn.net/rev/?r=6289">
-            [r6289]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WorkingCopyExplorerControl.cs, FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Recycle the roots when a solution is opened/closed.
-Detect if a solution is open when initially loading</td></tr>
-<tr><td> </td><td class="r"><a id="6288" href="http://ankhsvn.net/rev/?r=6288">
-            [r6288]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> WCStrings.resx, WCStrings.Designer.cs, Nodes/WCSolutionNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update WCE Solution root to have a root similar to the Solution Explorer.</td></tr>
-<tr><td> </td><td class="r"><a id="6287" href="http://ankhsvn.net/rev/?r=6287">
-            [r6287]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCDirectoryNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCMyComputerNode.cs, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeView.cs, Ankh/Commands/WorkingCopyExplorer/WorkingCopyBrowseCommand.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCSolutionNode.cs, Ankh.Ids/AnkhCommand.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCTreeNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Split WCE Browse and WCE Add commands, Add a new root in the latter case and
-search for the path (in solution roots, custom roots and then "My Computer"
-in the Browse case.</td></tr>
 
 </table>
 <!--/Recent changes-->
