@@ -77,52 +77,20 @@ namespace Ankh.Scc
                 SvnWorkingCopyEntryEventArgs entry = null;
                 SvnWorkingCopyEntriesArgs wa = new SvnWorkingCopyEntriesArgs();
                 wa.ThrowOnError = false;
+                wa.ThrowOnCancel = false;
                 wcc.ListEntries(dir, wa,
                     delegate(object sender, SvnWorkingCopyEntryEventArgs e)
                     {
-                        if (entry == null && string.Equals(path, e.FullPath, StringComparison.OrdinalIgnoreCase))
+                        if (entry == null && path == e.FullPath)
                         {
                             e.Detach();
                             entry = e;
+                            e.Cancel = true;
                         }
                     });
 
                 return entry;
             }
-        }
-
-
-        /// <summary>
-        /// Gets the status as noted in the parent directory
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public SvnStatusEventArgs SafeGetStatusViaParent(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException("path");
-
-            string dir = SvnTools.GetNormalizedDirectoryName(path);
-
-            if (dir == null)
-                return null;
-
-            SvnStatusEventArgs saa = null;
-            SvnStatusArgs sa = new SvnStatusArgs();
-            sa.Depth = SvnDepth.Children;
-            sa.ThrowOnError = false;
-            sa.IgnoreExternals = true;
-
-            _client.Status(dir, sa, delegate(object sender, SvnStatusEventArgs e)
-                    {
-                        if (string.Equals(e.FullPath, path, StringComparison.OrdinalIgnoreCase))
-                        {
-                            e.Detach();
-                            saa = e;
-                        }
-                    });
-
-            return saa;
         }
 
         /// <summary>

@@ -239,11 +239,11 @@ namespace Ankh.Scc
                 SvnItem newItem = StatusCache[newDir];
 
                 using (SvnSccContext svn = new SvnSccContext(Context))
-                {    
-                    SvnStatusEventArgs sa = svn.SafeGetStatusViaParent(newDir);
+                {
+                    SvnWorkingCopyEntryEventArgs wa = svn.SafeGetEntry(newDir);
                     string newParent = SvnTools.GetNormalizedDirectoryName(newDir);
 
-                    if (sa != null && sa.LocalContentStatus != SvnStatus.NotVersioned && sa.LocalContentStatus != SvnStatus.Ignored)
+                    if (wa != null)
                         continue; // Not an unexpected WC root
                     else if (!SvnTools.IsManagedPath(newDir))
                         continue; // Not a wc root at all
