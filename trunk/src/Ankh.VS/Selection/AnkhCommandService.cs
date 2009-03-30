@@ -37,7 +37,7 @@ namespace Ankh.Services
         const int _tickCount = (int)AnkhCommand.TickLast - (int)AnkhCommand.TickFirst;
         readonly List<int> _delayedCommands = new List<int>();
         readonly int[] _ticks = new int[_tickCount];
-        readonly List<AnkhAction> _idleActions = new List<AnkhAction>();
+        readonly Queue<AnkhAction> _idleActions = new Queue<AnkhAction>();
 
         public AnkhCommandService(IAnkhServiceProvider context)
             : base(context)
@@ -458,26 +458,16 @@ namespace Ankh.Services
                     }
                 }
 
-            if (!e.Periodic)
-            {
-                AnkhAction[] actions = null;
-                lock (_idleActions)
-                {
-                    if (_idleActions.Count > 0)
-                    {
-                        actions = _idleActions.ToArray();
-                        _idleActions.Clear();
-                    }
-                }
+            if (e.NonPeriodic)
+            {                
+                AnkhAction action;
 
-                if (actions != null)
+                while (null != (action = GetIdleAction()))
                 {
                     try
                     {
-                        foreach (AnkhAction a in actions)
-                        {
-                            a();
-                        }
+                        if (action != null)
+                            action();
                     }
                     catch (Exception ex)
                     {
@@ -487,9 +477,23 @@ namespace Ankh.Services
                         else
                             throw;
                     }
+
+                    if (!e.ContinueIdle())
+                        break;
                 }
             }
         }
+
+        AnkhAction GetIdleAction()
+        {
+            lock (_idleActions)
+            {
+                if (_idleActions.Count > 0)
+                    return _idleActions.Dequeue();
+
+                return null;
+            }
+        }                
 
         public void PostIdleCommand(AnkhCommand command)
         {
@@ -512,7 +516,7 @@ namespace Ankh.Services
 
             lock (_idleActions)
             {
-                _idleActions.Add(action);
+                _idleActions.Enqueue(action);
             }
         }
     }
