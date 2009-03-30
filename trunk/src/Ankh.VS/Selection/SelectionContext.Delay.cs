@@ -71,6 +71,8 @@ namespace Ankh.VS.Selection
                 {
                     if (textView.IsCompletorWindowActive() == 0 || textView.IsExpansionUIActive() == 0)
                         return new DelayData(textView);
+
+                    return null;
                 }
             }
 
@@ -97,20 +99,15 @@ namespace Ankh.VS.Selection
 
                 if (cls.StartsWith("WindowsForms"))
                 {
-                    Control c = Control.FromHandle(focus);
-
-                    while (c != null)
+                    for(Control c = Control.FromHandle(focus); c != null; c = c.Parent)
                     {
-                        if (c is TextBox)
+                        DataGridView dataGrid = c as DataGridView;
+                        if (dataGrid != null)
                         {
-                            if (c is DataGridViewTextBoxEditingControl)
-                                return true; // At least true in the String Resource
-
+                            DataGridViewCell cell = dataGrid.CurrentCell;
+                            if (cell != null && cell.IsInEditMode)
+                                return true;
                         }
-                        else if (c is DataGridView)
-                            return true;
-
-                        c = c.Parent;
                     }
 
                     return false;
