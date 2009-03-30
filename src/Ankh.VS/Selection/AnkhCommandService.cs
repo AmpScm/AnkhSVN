@@ -37,6 +37,7 @@ namespace Ankh.Services
         const int _tickCount = (int)AnkhCommand.TickLast - (int)AnkhCommand.TickFirst;
         readonly List<int> _delayedCommands = new List<int>();
         readonly int[] _ticks = new int[_tickCount];
+        readonly List<AnkhAction> _idleActions = new List<AnkhAction>();
 
         public AnkhCommandService(IAnkhServiceProvider context)
             : base(context)
@@ -238,9 +239,8 @@ namespace Ankh.Services
             return PostExecCommand(command, args, CommandPrompt.DoDefault);
         }
 
-        delegate void PostTask();
         bool _delayed;
-        readonly List<PostTask> _delayTasks = new List<PostTask>();
+        readonly List<AnkhAction> _delayTasks = new List<AnkhAction>();
 
         public bool PostExecCommand(CommandID command, object args, CommandPrompt prompt)
         {
@@ -339,7 +339,7 @@ namespace Ankh.Services
 
         void PostCheck()
         {
-            PostTask pt = delegate()
+            AnkhAction pt = delegate()
             {
                 Thread.Sleep(50);
                 SyncContext.Post(TryRelease, null);
@@ -362,7 +362,7 @@ namespace Ankh.Services
                 {
                     try
                     {
-                        foreach (PostTask dpc in _delayTasks)
+                        foreach (AnkhAction dpc in _delayTasks)
                             dpc();
                     }
                     finally
@@ -441,25 +441,79 @@ namespace Ankh.Services
                 _ticks[ankhCommand - AnkhCommand.TickFirst] = 0;
         }
 
-        #region IAnkhIdleProcessor Members
-
         public void OnIdle(AnkhIdleArgs e)
         {
-            if(_delayed)
+            if (_delayed)
                 TryReleaseDelayed();
-            else if (e.Periodic)
-            {
-                for (int i = 0; i < _tickCount; i++)
+            else
+                if (e.Periodic)
                 {
-                    if (_ticks[i] != 0)
+                    for (int i = 0; i < _tickCount; i++)
                     {
-                        Debug.WriteLine(string.Format("AnkhSVN: Tocking {0}", AnkhCommand.TickFirst + i));
-                        PostExecCommand(AnkhCommand.TickFirst + i);
+                        if (_ticks[i] != 0)
+                        {
+                            Debug.WriteLine(string.Format("AnkhSVN: Tocking {0}", AnkhCommand.TickFirst + i));
+                            PostExecCommand(AnkhCommand.TickFirst + i);
+                        }
+                    }
+                }
+
+            if (!e.Periodic)
+            {
+                AnkhAction[] actions = null;
+                lock (_idleActions)
+                {
+                    if (_idleActions.Count > 0)
+                    {
+                        actions = _idleActions.ToArray();
+                        _idleActions.Clear();
+                    }
+                }
+
+                if (actions != null)
+                {
+                    try
+                    {
+                        foreach (AnkhAction a in actions)
+                        {
+                            a();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+                        if (handler != null && handler.IsEnabled(ex))
+                            handler.OnError(ex);
+                        else
+                            throw;
                     }
                 }
             }
         }
 
-        #endregion
+        public void PostIdleCommand(AnkhCommand command)
+        {
+            PostIdleCommand(command, null);
+        }
+
+        public void PostIdleCommand(AnkhCommand command, object args)
+        {
+            PostIdleAction(
+                delegate()
+                {
+                    DirectlyExecCommand(command, args);
+                });
+        }
+
+        public void PostIdleAction(AnkhAction action)
+        {
+            if (action == null)
+                throw new ArgumentNullException("action");
+
+            lock (_idleActions)
+            {
+                _idleActions.Add(action);
+            }
+        }
     }
 }

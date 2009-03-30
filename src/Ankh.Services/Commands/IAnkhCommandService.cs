@@ -201,6 +201,28 @@ namespace Ankh.Commands
         /// <returns></returns>
         bool PostExecCommand(CommandID command, object args, CommandPrompt prompt);
 
+        /// <summary>
+        /// Posts an AnkhSVN command to the idle queue
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        void PostIdleCommand(AnkhCommand command);
+
+
+        /// <summary>
+        /// Posts the action to the idle queue.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        void PostIdleAction(AnkhAction action);
+
+        /// <summary>
+        /// Posts an AnkhSVN command to the idle queue
+        /// </summary>
+        /// <param name="command">The command.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        void PostIdleCommand(AnkhCommand command, object args);
+
         // And those from the UI thread
         /// <summary>
         /// Updates the command UI.

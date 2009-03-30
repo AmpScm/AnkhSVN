@@ -199,7 +199,6 @@
     <Compile Include="Commands\MigrateAnkhSettings.cs" />
     <Compile Include="Commands\OpenInXExplorer.cs" />
     <Compile Include="Commands\SolutionCommitCommand.cs" />
-    <Compile Include="Services\AnkhCommandService.cs" />
     <Compile Include="AnkhModule.cs" />
     <Compile Include="CommandResources.Designer.cs">
       <AutoGen>True</AutoGen>

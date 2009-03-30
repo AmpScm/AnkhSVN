@@ -120,6 +120,7 @@
     <Compile Include="LanguageServices\UnifiedDiffDropDownBar.cs" />
     <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
     <Compile Include="OutputPane\OutputPaneManager.cs" />
+    <Compile Include="Selection\AnkhCommandService.cs" />
     <Compile Include="Selection\SelectionContext.Active.cs">
       <DependentUpon>SelectionContext.cs</DependentUpon>
     </Compile>
