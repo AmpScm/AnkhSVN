@@ -529,8 +529,6 @@ namespace Ankh.Scc
             if (rgpProjects == null || rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
 
-            int iDirectory = 0;
-
             for (int i = 0; i < cDirectories; i++)
             {
                 string dir = rgpszMkDocuments[i];
@@ -547,30 +545,29 @@ namespace Ankh.Scc
                 if (!item.Exists || !item.IsDirectory || !SvnTools.IsManagedPath(dir))
                     continue;
 
-                DirectoryInfo dirInfo = new DirectoryInfo(dir);
-
-                if (!dirInfo.Exists || (DateTime.Now - dirInfo.CreationTime) > new TimeSpan(0, 1, 0))
+                if ((DateTime.UtcNow - GetCreated(item)) > new TimeSpan(0, 1, 0))
                     continue; // Directory is older than one minute.. Not just copied
 
                 using (SvnSccContext svn = new SvnSccContext(Context))
                 {
                     // Ok; we have a 'new' directory here.. Lets check if VS broke the subversion working copy
-                    SvnStatusEventArgs status = svn.SafeGetStatusViaParent(dir);
+                    SvnWorkingCopyEntryEventArgs entry = svn.SafeGetEntry(dir);
 
-                    if (status == null)
-                    {
-                        string pd = SvnTools.GetNormalizedDirectoryName(dir);
-                        if (pd == null || SvnTools.IsManagedPath(pd))
-                            continue;
-                    }
-                    else if (status.LocalContentStatus != SvnStatus.NotVersioned && status.LocalContentStatus != SvnStatus.Ignored)
+                    if (entry != null && entry.NodeKind == SvnNodeKind.Directory) // Entry exists, valid dir
                         continue;
+
+                    // VS Added a versioned dir below our project -> Unversion the directory to allow adding files
+
+                    // Don't unversion the directory if the parent is not versioned
+                    string parentDir = SvnTools.GetNormalizedDirectoryName(dir);
+                    if (parentDir == null || !SvnTools.IsManagedPath(parentDir))
+                        continue; 
 
                     svn.UnversionRecursive(dir);
                 }
             }
 
-            for (int iProject = 0; (iProject < cProjects) && (iDirectory < cDirectories); iProject++)
+            for (int iProject = 0, iDir=0; (iProject < cProjects) && (iDir < cDirectories); iProject++)
             {
                 int iLastDirectoryThisProject = (iProject < cProjects - 1) ? rgFirstIndices[iProject + 1] : cDirectories;
 
@@ -578,12 +575,12 @@ namespace Ankh.Scc
 
                 bool track = SccProvider.TrackProjectChanges(sccProject);
 
-                for (; iDirectory < iLastDirectoryThisProject; iDirectory++)
+                for (; iDir < iLastDirectoryThisProject; iDir++)
                 {
                     if (!track)
                         continue;
 
-                    string dir = rgpszMkDocuments[iDirectory];
+                    string dir = rgpszMkDocuments[iDir];
 
                     if (string.IsNullOrEmpty(dir) || !SvnItem.IsValidPath(dir))
                         continue;
@@ -591,11 +588,23 @@ namespace Ankh.Scc
                     dir = SvnTools.GetNormalizedFullPath(dir);
 
                     if (sccProject != null)
-                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, rgFlags[iDirectory]);
+                        SccProvider.OnProjectDirectoryAdded(sccProject, dir, rgFlags[iDir]);
                 }
             }
 
             return VSConstants.S_OK;
+        }
+
+        static DateTime GetCreated(SvnItem item)
+        {
+            try
+            {
+                return File.GetCreationTimeUtc(item.FullPath);
+            }
+            catch
+            {
+                return DateTime.UtcNow;
+            }
         }
 
         internal void OnDocumentSaveAs(string oldName, string newName)
