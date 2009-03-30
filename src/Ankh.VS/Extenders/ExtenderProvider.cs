@@ -60,11 +60,32 @@ namespace Ankh.VS.Extenders
         {
         }
 
+        bool _solutionOpen;
         protected override void OnPreInitialize()
         {
             base.OnPreInitialize();
-            GetService<AnkhServiceEvents>().SccProviderActivated += new EventHandler(OnSccProviderActivated);
-            GetService<AnkhServiceEvents>().SccProviderDeactivated += new EventHandler(OnSccProviderDeactivated);
+
+            AnkhServiceEvents events = GetService<AnkhServiceEvents>();
+            events.SccProviderActivated += new EventHandler(OnSccProviderActivated);
+            events.SccProviderDeactivated += new EventHandler(OnSccProviderDeactivated);
+            events.SolutionOpened += new EventHandler(OnSolutionOpened);
+            events.SolutionClosed += new EventHandler(OnSolutionClosed);
+            events.Disposed += new EventHandler(OnRuntimeDisposed);
+        }
+
+        void OnRuntimeDisposed(object sender, EventArgs e)
+        {
+            _enabled = false;
+        }
+
+        void OnSolutionClosed(object sender, EventArgs e)
+        {
+            _solutionOpen = false;
+        }
+
+        void OnSolutionOpened(object sender, EventArgs e)
+        {
+            _solutionOpen = true;
         }
 
         bool _enabled;
@@ -177,7 +198,7 @@ namespace Ankh.VS.Extenders
 
         public bool CanExtend(string ExtenderCATID, string ExtenderName, object ExtendeeObject)
         {
-            if (!_enabled)
+            if (!_enabled || !_solutionOpen)
                 return false;
 
             SvnItem i = FindItem(ExtendeeObject, ExtenderCATID);
