@@ -280,7 +280,7 @@ namespace Ankh.Scc
 
                     file = SvnTools.GetNormalizedFullPath(file);
 
-                    Monitor.ScheduleDirtyCheck(file, true);
+                    Monitor.ScheduleDirtyCheck(file);
 
                     SvnItem item = StatusCache[file];
 
