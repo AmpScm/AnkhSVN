@@ -32,8 +32,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 {
     class FileSystemTreeView : TreeViewWithSelection<FileSystemTreeNode>
     {
-        public event EventHandler SelectedItemChanged;
-
         public FileSystemTreeView()
         {
             this.HideSelection = false;
@@ -47,45 +45,10 @@ namespace Ankh.UI.WorkingCopyExplorer
                 FileSystemTreeNode selected = this.SelectedNode as FileSystemTreeNode;
 
                 if(selected != null)
-                    return selected.WCNode as WCTreeNode;
-                return
-                    null;
-            }
-            set
-            {
-                if (value == null)
-                    SelectedNode = null;
-                else
-                    SelectedNode = GetSelectedItem(value);
-            }
-        }
-
-        private TreeNode GetSelectedItem(WCTreeNode value)
-        {
-            TreeNode parent = null;
-            if (value.Parent != null)
-            {
-                parent = GetSelectedItem(value.Parent);
-
-                if(parent != null)
-                    foreach (TreeNode tn in parent.Nodes)
-                    {
-                        FileSystemTreeNode ftn = tn as FileSystemTreeNode;
-
-                        if (ftn != null && ftn.WCNode == value)
-                            return ftn;
-                    }
+                    return selected.WCNode;
 
                 return null;
             }
-
-            foreach(FileSystemTreeNode ftn in Nodes)
-            {
-                if (ftn.WCNode == value)
-                    return ftn;
-            }
-
-            return null;
         }
 
         public void SelectSubNode(SvnItem item)
@@ -131,18 +94,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.SelectedNode = tn;
         }
 
-        public WCTreeNode[] GetSelectedItems()
-        {
-            if (this.SelectedItem != null)
-            {
-                return new WCTreeNode[] { this.SelectedItem };
-            }
-            else
-            {
-                return new WCTreeNode[] { };
-            }
-        }
-
         public override void OnShowContextMenu(MouseEventArgs e)
         {
             base.OnShowContextMenu(e);
@@ -163,16 +114,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             IAnkhCommandService sc = Context.GetService<IAnkhCommandService>();
 
             sc.ShowContextMenu(AnkhCommandMenu.WorkingCopyExplorerContextMenu, screen);
-        }
-
-        protected override void OnAfterSelect(TreeViewEventArgs e)
-        {
-            base.OnAfterSelect(e);
-
-            if (this.SelectedItemChanged != null)
-            {
-                this.SelectedItemChanged(this, EventArgs.Empty);
-            }
         }
 
         protected override void OnBeforeExpand(TreeViewCancelEventArgs e)
@@ -271,32 +212,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             normalTreeNode.Nodes.Add(d);
             d.Tag = DummyTag;
             return normalTreeNode;
-        }
-
-        private void HandleItemChanged(WCTreeNode item)
-        {
-            TreeNode node = this.SearchForNodeRecursivelyByTag(this.Nodes, item);
-            if (node != null)
-            {
-                this.FillNode(node);
-            }
-        }
-
-        private TreeNode SearchForNodeRecursivelyByTag(TreeNodeCollection coll, object tag)
-        {
-            foreach (TreeNode node in coll)
-            {
-                if (node.Tag == tag)
-                {
-                    return node;
-                }
-                TreeNode foundNode = SearchForNodeRecursivelyByTag(node.Nodes, tag);
-                if (foundNode != null)
-                {
-                    return foundNode;
-                }
-            }
-            return null;
         }
 
         protected override void OnRetrieveSelection(TreeViewWithSelection<FileSystemTreeNode>.RetrieveSelectionEventArgs e)

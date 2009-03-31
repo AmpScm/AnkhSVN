@@ -21,8 +21,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
-using SharpSvn;
-
 using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
@@ -38,8 +36,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         public WorkingCopyExplorerControl()
         {
             this.InitializeComponent();
-
-            this.folderTree.SelectedItemChanged += new EventHandler(treeView_SelectedItemChanged);
         }
 
         protected override void OnContextChanged(EventArgs e)
@@ -168,7 +164,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             item.Refresh();
         }
 
-        void treeView_SelectedItemChanged(object sender, EventArgs e)
+        private void folderTree_AfterSelect(object sender, TreeViewEventArgs e)
         {
             WCTreeNode item = this.folderTree.SelectedItem;
             if (item == null)
