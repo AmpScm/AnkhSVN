@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
+    <Compile Include="Commands\GroupItems.cs" />
     <Compile Include="Dialogs\VSDocumentHostService.cs" />
     <Compile Include="Dialogs\VSDocumentInstance.cs" />
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
@@ -125,6 +126,7 @@
       <DependentUpon>SelectionContext.cs</DependentUpon>
     </Compile>
     <Compile Include="Selection\SelectionContext.Delay.cs" />
+    <Compile Include="Selection\SelectionContext.SelectionItem.cs" />
     <Compile Include="SolutionExplorer\SolutionExplorerStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
