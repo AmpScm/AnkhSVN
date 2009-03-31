@@ -107,7 +107,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             }
             else
             {
-                SelectedNode = GetNodeAt(e.X, e.Y);
                 screen = e.Location;
             }
 
