@@ -74,7 +74,8 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.folderTree.Location = new System.Drawing.Point(0, 25);
             this.folderTree.Name = "folderTree";
             this.folderTree.Size = new System.Drawing.Size(300, 608);
-            this.folderTree.TabIndex = 2;
+            this.folderTree.TabIndex = 1;
+            this.folderTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.folderTree_AfterSelect);
             // 
             // foldersStrip
             // 
@@ -84,7 +85,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.foldersStrip.Location = new System.Drawing.Point(0, 0);
             this.foldersStrip.Name = "foldersStrip";
             this.foldersStrip.Size = new System.Drawing.Size(300, 25);
-            this.foldersStrip.TabIndex = 1;
+            this.foldersStrip.TabIndex = 0;
             this.foldersStrip.Text = "toolStrip1";
             // 
             // foldersLabel
