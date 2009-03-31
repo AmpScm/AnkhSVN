@@ -71,7 +71,6 @@ namespace Ankh.UI.RepositoryExplorer
             // treeView
             // 
             this.treeView.AllowRenames = true;
-            this.treeView.Context = null;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.LabelEdit = true;
             this.treeView.Location = new System.Drawing.Point(0, 25);

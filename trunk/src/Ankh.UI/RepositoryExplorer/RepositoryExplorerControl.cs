@@ -15,14 +15,11 @@
 //  limitations under the License.
 
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
 using SharpSvn;
-using Ankh.UI.Services;
-using Ankh.UI.RepositoryExplorer;
 using Ankh.VS;
 using Ankh.UI.VSSelectionControls;
 using Ankh.Commands;
@@ -30,7 +27,6 @@ using Microsoft.VisualStudio;
 using System.ComponentModel.Design;
 using Ankh.Scc;
 using System.IO;
-using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.UI.RepositoryExplorer
 {
