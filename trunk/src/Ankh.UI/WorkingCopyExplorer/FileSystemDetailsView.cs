@@ -89,7 +89,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             if (SmallImageList == null)
                 SmallImageList = IconMapper.ImageList;
 
-            if(StateImageList == null)
+            if (StateImageList == null)
                 StateImageList = StatusMapper.StatusImageList;
 
             SelectionPublishServiceProvider = Context;
@@ -102,13 +102,6 @@ namespace Ankh.UI.WorkingCopyExplorer
             AddChildren(directory);
         }
 
-
-
-        public WCTreeNode CurrentDirectory
-        {
-            get { return currentDirectory; }
-        }
-
         public Point GetSelectionPoint()
         {
             if (SelectedItems.Count > 0)
@@ -118,7 +111,7 @@ namespace Ankh.UI.WorkingCopyExplorer
                 return PointToScreen(new Point(item.Bounds.X + offset + StateImageList.ImageSize.Width,
                     item.Bounds.Y + offset));
             }
-            
+
             return Point.Empty;
         }
 
@@ -155,8 +148,6 @@ namespace Ankh.UI.WorkingCopyExplorer
 
         private void AddChildren(WCTreeNode directory)
         {
-            currentDirectory = directory;
-
             BeginUpdate();
             try
             {
@@ -167,23 +158,12 @@ namespace Ankh.UI.WorkingCopyExplorer
                     WCFileSystemNode fsNode = item as WCFileSystemNode;
 
                     //SvnItem svnItem = item.SvnItem;
-                    if (fsNode != null)
-                    {
-                        FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem);
-                        Items.Add(lvi);
-                        lvi.Tag = item;
-                    }
-                    else
-                        continue; // TODO: Implement this case
-                    //    fif = new FileInfo(svnItem.FullPath);
+                    if (fsNode == null)
+                        continue;
 
-                    //FileSystemListViewItem lvi = new FileSystemListViewItem(this, item.SvnItem, fif);
-
-                    //Items.Add(lvi);
-
-                    //lvi.Tag = item;
-
-                    // we need to know when this item changes
+                    FileSystemListViewItem lvi = new FileSystemListViewItem(this, fsNode.SvnItem);
+                    Items.Add(lvi);
+                    lvi.Tag = item;
                 }
 
                 if (Items.Count > 0 && _nameColumn.DisplayIndex >= 0)
@@ -370,7 +350,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         }
 
         private int characterWidth;
-        private WCTreeNode currentDirectory;
-        private const int NameColumnNumberOfCharacters = 50;        
+        private const int NameColumnNumberOfCharacters = 50;
     }
 }
