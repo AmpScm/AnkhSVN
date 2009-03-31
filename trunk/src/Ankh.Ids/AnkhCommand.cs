@@ -282,6 +282,9 @@ namespace Ankh
         MoveToExistingChangeList0,
         MoveToExistingChangeListMax = MoveToExistingChangeList0 + 20,
         MoveToIgnoreChangeList,
-        RemoveFromChangeList
+        RemoveFromChangeList,
+
+        ProjectItemGroup,
+        ProjectItemUngroup,
     }
 }

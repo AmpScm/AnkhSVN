@@ -194,7 +194,7 @@ namespace Ankh.VS.Selection
             return SvnItem.IsValidPath(path, extraChecks);
         }
 
-        internal static bool GetSccFiles(SelectionContext.SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)
+        internal static bool GetSccFiles(SelectionItem item, out string[] files, bool includeSpecial, bool includeNoScc, IDictionary<string, uint> map)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
