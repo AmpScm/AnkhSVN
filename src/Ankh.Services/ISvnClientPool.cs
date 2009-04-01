@@ -59,6 +59,61 @@ namespace Ankh
         void FlushAllClients();
     }
 
+    public sealed class SvnClientAction
+    {
+        readonly string _path;
+        bool _recursive;
+        bool _addOrRemove;
+        long _oldRevision;
+
+        public SvnClientAction(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException("path");
+
+            _path = path;
+        }
+
+        /// <summary>
+        /// Gets the path.
+        /// </summary>
+        /// <value>The path.</value>
+        public string FullPath
+        {
+            get { return _path; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="SvnClientAction"/> is recursive.
+        /// </summary>
+        /// <value><c>true</c> if recursive; otherwise, <c>false</c>.</value>
+        public bool Recursive
+        {
+            get { return _recursive; }
+            set { _recursive = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [add or remove].
+        /// </summary>
+        /// <value><c>true</c> if [add or remove]; otherwise, <c>false</c>.</value>
+        public bool AddOrRemove
+        {
+            get { return _addOrRemove; }
+            set { _addOrRemove = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the old revision.
+        /// </summary>
+        /// <value>The old revision.</value>
+        public long OldRevision
+        {
+            get { return _oldRevision; }
+            set { _oldRevision = value; }
+        }
+    }
+
     /// <summary>
     /// 
     /// </summary>
