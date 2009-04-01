@@ -72,11 +72,11 @@ namespace Ankh.Scc
             get { return _mapper ?? (_mapper = GetService<IProjectFileMapper>()); }
         }
 
-        IPendingChangesManager _changeManager;
-        IPendingChangesManager ChangeManager
+        PendingChangeManager _changeManager;
+        PendingChangeManager ChangeManager
         {
             [DebuggerStepThrough]
-            get { return _changeManager ?? (_changeManager = GetService<IPendingChangesManager>()); }
+            get { return _changeManager ?? (_changeManager = GetService<PendingChangeManager>(typeof(IPendingChangesManager))); }
         }
 
         IAnkhOpenDocumentTracker _tracker;
@@ -93,6 +93,13 @@ namespace Ankh.Scc
             get { return _selection ?? (_selection = GetService<ISelectionContextEx>(typeof(ISelectionContext))); }
         }
 
+        AnkhSccProvider _sccProvider;
+        AnkhSccProvider SccProvider
+        {
+            [DebuggerStepThrough]
+            get { return _sccProvider ?? (_sccProvider = GetService<AnkhSccProvider>(typeof(IAnkhSccService))); }
+        }
+
         void PostDirty(bool checkDelay)
         {
             if (!_posted)
@@ -106,11 +113,11 @@ namespace Ankh.Scc
 
         void PostIdle()
         {
-             if (!_onIdle)
-             {
-                 CommandService.PostIdleCommand(AnkhCommand.MarkProjectDirty);
-                 _onIdle = true;
-             }
+            if (!_onIdle)
+            {
+                CommandService.PostIdleCommand(AnkhCommand.MarkProjectDirty);
+                _onIdle = true;
+            }
         }
 
         /// <summary>
@@ -296,6 +303,37 @@ namespace Ankh.Scc
             ScheduleGlyphUpdate(paths);
         }
 
+        public void HandleSvnResult(IDictionary<string, SvnClientAction> actions)
+        {
+            List<SvnClientAction> sccRefreshItems = null;
+            ScheduleMonitor(actions.Keys);
+
+            ScheduleSvnStatus(actions.Keys);
+
+            foreach (SvnClientAction action in actions.Values)
+            {
+                if (action.Recursive)
+                {
+                    foreach (SvnItem item in Cache.GetCachedBelow(action.FullPath))
+                    {
+                        item.MarkDirty();
+                        ScheduleGlyphUpdate(item.FullPath);
+                    }
+                }
+
+                if (action.AddOrRemove)
+                {
+                    if(sccRefreshItems == null)
+                        sccRefreshItems = new List<SvnClientAction>();
+
+                    sccRefreshItems.Add(action);
+                }
+            }
+
+            //if (sccRefreshItems != null)
+            //    SccProvider.ScheduleSvnRefresh(sccRefreshItems);
+        }
+
         public void ScheduleGlyphUpdate(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -319,7 +357,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            ((PendingChangeManager)ChangeManager).ScheduleMonitor(path);
+            ChangeManager.ScheduleMonitor(path);
         }
 
         public void ScheduleMonitor(IEnumerable<string> paths)
@@ -327,7 +365,7 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            ((PendingChangeManager)ChangeManager).ScheduleMonitor(paths);
+            ChangeManager.ScheduleMonitor(paths);
         }
 
         public void StopMonitoring(string path)
@@ -335,7 +373,7 @@ namespace Ankh.Scc
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException("path");
 
-            ((PendingChangeManager)ChangeManager).StopMonitor(path);
+            ChangeManager.StopMonitor(path);
         }
 
         readonly Dictionary<string, DocumentLock> _externallyChanged = new Dictionary<string, DocumentLock>(StringComparer.OrdinalIgnoreCase);

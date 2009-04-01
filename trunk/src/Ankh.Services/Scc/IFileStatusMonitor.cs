@@ -95,6 +95,12 @@ namespace Ankh.Scc
         /// Schedules the addition of the specified file
         /// </summary>
         /// <param name="path">The path.</param>
-        void ScheduleAddFile(string path);        
+        void ScheduleAddFile(string path);
+
+        /// <summary>
+        /// Schedules the necessary refreshes after a subversion operation
+        /// </summary>
+        /// <param name="actions">The actions.</param>
+        void HandleSvnResult(IDictionary<string, SvnClientAction> actions);
     }
 }

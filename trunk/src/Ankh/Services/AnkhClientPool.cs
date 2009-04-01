@@ -129,27 +129,9 @@ namespace Ankh.Services
             return client;
         }
 
-        internal void NotifyChanges(HybridCollection<string> changedPaths, IList<string> fullRefresh)
+        internal void NotifyChanges(IDictionary<string, SvnClientAction> actions)
         {
-            if (changedPaths != null && changedPaths.Count > 0)
-                StatusMonitor.ScheduleMonitor(changedPaths); // Adds the files to the to-commit list while they are not in a project
-
-            if (fullRefresh != null && fullRefresh.Count > 0)
-            {
-                if (changedPaths == null)
-                    changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-
-                foreach (SvnItem item in StatusCache.GetCachedBelow(fullRefresh))
-                {
-                    if (!changedPaths.Contains(item.FullPath))
-                        changedPaths.Add(item.FullPath);
-                }
-            }
-
-            if (changedPaths != null && changedPaths.Count > 0)
-            {
-                StatusMonitor.ScheduleSvnStatus(changedPaths);
-            }
+            StatusMonitor.HandleSvnResult(actions);            
         }
 
         public bool ReturnClient(SvnPoolClient poolClient)
@@ -194,8 +176,7 @@ namespace Ankh.Services
 
         class AnkhSvnPoolClient : SvnPoolClient
         {
-            readonly HybridCollection<string> _touchedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-            readonly HybridCollection<string> _fullRefresh = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+            readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
             readonly int _returnCookie;
             public AnkhSvnPoolClient(AnkhClientPool pool, bool uiEnabled, int returnCookie)
@@ -214,32 +195,37 @@ namespace Ankh.Services
             {
                 base.OnNotify(e);
 
-                AddTouchedPath(e.FullPath, e.Action == SvnNotifyAction.CommitDeleted || e.Action == SvnNotifyAction.Revert);
-            }
+                string path = e.FullPath;
 
-            void AddTouchedPath(string path, bool fullRefresh)
-            {
-                if (!string.IsNullOrEmpty(path) && !_touchedPaths.Contains(path))
+                if (string.IsNullOrEmpty(path))
+                    return;
+
+                SvnClientAction action;
+                if (!_changes.TryGetValue(path, out action))
+                    _changes.Add(path, action = new SvnClientAction(path));
+
+                switch (e.Action)
                 {
-                    _touchedPaths.Add(path);
+                    case SvnNotifyAction.CommitDeleted:
+                    case SvnNotifyAction.Revert:
+                        action.Recursive = true;
+                        break;
+                    case SvnNotifyAction.UpdateDelete:
+                        action.Recursive = true;
+                        action.AddOrRemove = true;
+                        break;
+                    case SvnNotifyAction.UpdateReplace:
+                    case SvnNotifyAction.UpdateAdd:
+                        action.AddOrRemove = true;
+                        break;
+                    case SvnNotifyAction.UpdateUpdate:
+                        action.OldRevision = e.OldRevision;
+                        break;
                 }
-
-                if (fullRefresh && !_fullRefresh.Contains(path))
-                    _fullRefresh.Add(path);
             }
 
             protected override void ReturnClient()
             {
-                HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-                List<string> deleted = null;
-
-                if (_fullRefresh.Count > 0)
-                    deleted = new List<string>(_fullRefresh);
-
-                paths.AddRange(_touchedPaths);
-                _touchedPaths.Clear();
-                _fullRefresh.Clear();
-
                 AnkhClientPool pool = (AnkhClientPool)SvnClientPool;
                 SvnClientPool = null;
 
@@ -249,7 +235,15 @@ namespace Ankh.Services
                     return;
                 }
 
-                pool.NotifyChanges(paths, deleted);
+                try
+                {
+                    if(_changes.Count > 0)
+                        pool.NotifyChanges(_changes);
+                }
+                finally
+                {
+                    _changes.Clear();
+                }
 
                 if (base.IsCommandRunning || base.IsDisposed)
                 {
