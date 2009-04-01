@@ -22,7 +22,6 @@ namespace Ankh.Scc.ProjectMap
             readonly string _projectDir;
             readonly SvnItem _projectDirItem;
             readonly Dictionary<string, uint> _map = new Dictionary<string, uint>(StringComparer.OrdinalIgnoreCase);
-            bool _added;
 
             public RefreshState(IAnkhServiceProvider context, IVsHierarchy hier, IVsProject project, string projectDir)
             {
