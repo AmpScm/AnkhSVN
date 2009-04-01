@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6591</title>
+          AnkhSVN-Daily Update - 2.0.6599</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1819/AnkhSvn-Daily-2.0.6591.15.msi">AnkhSVN 2.0.6591</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1829/AnkhSvn-Daily-2.0.6599.16.msi">AnkhSVN 2.0.6599</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6591">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6599">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -298,21 +298,6 @@ if an editor implements the API wrong.</td></tr>
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> SccUI/SccQuerySaveReadonlyDialog.resx, AnkhSccProvider.QueryEditSave.cs, SccUI/SccQuerySaveReadonlyDialog.Designer.cs, SccUI/SccQuerySaveReadonlyDialog.cs, SccUI/SccManagementResources.resx, Ankh.Scc.csproj, SccUI/SccManagementResources.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement the QuerySaveFile(s) part of the EditQuerySave interface (hopefully)
 correctly. The means we also have to handle read-only files that cannot be made
 writeable by svn unlocking them.</td></tr>
-<tr class="d"><td colspan="4">2009-03-03</td></tr>
-<tr><td> </td><td class="r"><a id="6327" href="http://ankhsvn.net/rev/?r=6327">
-            [r6327]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/SccUI/ChangeSolutionRoot.cs, Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Scc/SvnSccContext.cs, Ankh.Scc/ProjectTracker.Rename.cs, Ankh.Services/Scc/SvnItem.cs, Ankh/Services/SolutionSettings.cs, Ankh.Scc/ProjectTracker.Add.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Replace all calls to System.IO.Path.GetDirectoryName() in our SCC layer to the
-new SvnTools.GetNormalizedDirectoryName() that is long path safe.
-(Updated SharpSvn reference of 1.5 and 1.6 builds to a version that
- includes this function)</td></tr>
-<tr><td> </td><td class="r"><a id="6325" href="http://ankhsvn.net/rev/?r=6325">
-            [r6325]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh/Commands/RefreshCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the Working Copy explorer handle the refresh command locally, to
-make sure our global command handlers don't have to know about WCE details.</td></tr>
-<tr class="d"><td colspan="4">2009-03-02</td></tr>
-<tr><td> </td><td class="r"><a id="6322" href="http://ankhsvn.net/rev/?r=6322">
-            [r6322]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade SharpSvn reference for experimental builds to a 1.6.0-rc3 version</td></tr>
 
 </table>
 <!--/Recent changes-->
