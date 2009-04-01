@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.IO;
 using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.Commands
 {
@@ -17,7 +18,8 @@ namespace Ankh.Commands
         public void OnUpdate(CommandUpdateEventArgs e)
         {
             e.Enabled = false;
-            /*switch (e.Command)
+            /*
+            switch (e.Command)
             {
                 case AnkhCommand.ProjectItemGroup:
                     OnUpdateGroup(e);
@@ -29,6 +31,7 @@ namespace Ankh.Commands
                     e.Enabled = false;
                     break;
             }
+            */
         }
 
         private void OnUpdateGroup(CommandUpdateEventArgs e)
@@ -88,14 +91,44 @@ namespace Ankh.Commands
             {
                 if (!enable)
                     e.Enabled = false;
-                else 
+                else
+                {
+                    SortedList<string,string> names = new SortedList<string,string>(StringComparer.OrdinalIgnoreCase);
                     foreach (SvnItem i in selection.GetSelectedSvnItems(false))
                     {
                         if (!i.Exists || !i.InSolution)
                         {
                             e.Enabled = false;
                         }
+
+                        string name = i.NameWithoutExtension;
+
+                        if (names.ContainsKey(name))
+                        {
+                            e.Enabled = false;
+                            break;
+                        }
+                        names.Add(name, i.FullPath);
                     }
+
+                    string first = null;
+                    string firstName = null;
+                    foreach (string i in names.Keys)
+                    {
+                        if (first == null)
+                        {
+                            first = i + ".";
+                            firstName = i;
+                        }
+                        else
+                            if (!i.StartsWith(i, StringComparison.OrdinalIgnoreCase))
+                            {
+                                e.Enabled = false;
+                            }
+                    }
+
+                    e.Selection.Cache[AnkhCommand.ProjectItemGroup] = names[firstName];
+                }
             }
         }
 
@@ -207,14 +240,84 @@ namespace Ankh.Commands
             }
         }
 
+        private void OnGroupItems(CommandEventArgs e)
+        {
+            // OnUpdateGroup checked whether the selection is ok, we just
+            // have to move the nodes below the parent node now
+
+            SelectionContext selection = e.Selection as SelectionContext;
+            string parentItem = e.Selection.Cache[AnkhCommand.ProjectItemGroup] as string;
+
+            if (parentItem == null || selection == null)
+                return;
+
+            IVsProject2 p2 = null;
+            uint newParent = VSConstants.VSITEMID_NIL; ;
+            List<KeyValuePair<string,SelectionItem>> children = new List<KeyValuePair<string,SelectionItem>>();
+            foreach (SelectionItem item in selection.GetSelectedItems(false))
+            {
+                if(p2 == null)
+                    p2 = (IVsProject2)item.Hierarchy;
+
+                string doc;
+                if (!ErrorHandler.Succeeded(p2.GetMkDocument(item.Id, out doc)))
+                    return;
+
+                doc = SvnTools.GetTruePath(doc);
+
+                if(doc == null)
+                    return;
+
+                if (string.Equals(parentItem, doc, StringComparison.OrdinalIgnoreCase))
+                    newParent = item.Id;
+                else
+                    children.Add(new KeyValuePair<string,SelectionItem>(doc,item));
+            }
+
+            IAnkhOpenDocumentTracker odt = e.GetService<IAnkhOpenDocumentTracker>();
+
+            VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+            VSADDRESULT[] addResult = new VSADDRESULT[1];
+            using(e.GetService<IAnkhSccService>().DisableSvnUpdates())
+                foreach (KeyValuePair<string, SelectionItem> v in children)
+                {
+                    int result;
+                    object vv;
+
+                    odt.SaveDocument(v.Key);
+
+                    string tmp = v.Key + ".!tmp~";
+                    File.Move(v.Key, tmp);
+                    try
+                    {
+                        if (!ErrorHandler.Succeeded(((IVsHierarchy)p2).GetProperty(v.Value.Id, (int)__VSHPROPID.VSHPROPID_Parent, out vv)) ||
+                            !ErrorHandler.Succeeded(p2.RemoveItem(0, v.Value.Id, out result)))
+                            continue;
+                    }
+                    finally
+                    {
+                        File.Move(tmp, v.Key);
+                    }
+
+                    uint parentId = SelectionContext.GetItemIdFromObject(vv);
+
+                    if (parentId == VSConstants.VSITEMID_NIL)
+                        return;
+
+                    if (!ErrorHandler.Succeeded(p2.AddItem(newParent, VSADDITEMOPERATION.VSADDITEMOP_LINKTOFILE, v.Key, 1, new string[] { v.Key }, IntPtr.Zero, addResult))
+                        || addResult[0] != VSADDRESULT.ADDRESULT_Success)
+                    {
+                        // Insert below old parent
+                        p2.AddItem(parentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, v.Key, 1, new string[] { v.Key }, IntPtr.Zero, addResult);
+                    }
+                }
+        }
+
         private void OnUngroupItems(CommandEventArgs e)
         {
             
         }
 
-        private void OnGroupItems(CommandEventArgs e)
-        {
-            
-        }
+        
     }
 }

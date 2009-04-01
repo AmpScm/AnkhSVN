@@ -89,7 +89,7 @@ namespace Ankh.Scc
 
             MarkDirty(filename);
 
-            if (!StatusCache[filename].IsVersioned)
+            if (SvnUpdatesDisabled || !StatusCache[filename].IsVersioned)
                 return; // Don't bother
 
             using (SvnSccContext svn = new SvnSccContext(Context))

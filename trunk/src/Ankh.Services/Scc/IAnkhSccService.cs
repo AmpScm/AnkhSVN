@@ -118,6 +118,14 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         void EnsureCheckOutReference(SvnProject project);
+
+        /// <summary>
+        /// Disables the SVN updates initiated by Scc events while the returned object is not disposed
+        /// </summary>
+        /// <returns></returns>
+        IDisposable DisableSvnUpdates();
+
+        bool SvnUpdatesDisabled { get; }
     }
 
     /// <summary>
