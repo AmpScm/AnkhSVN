@@ -607,12 +607,48 @@ namespace Ankh.Scc
             }
         }
 
+        public void ScheduleSvnRefresh(List<SvnClientAction> sccRefreshItems)
+        {
+            if (sccRefreshItems == null)
+                throw new ArgumentNullException("sccRefreshItems");
+
+            CommandService.PostIdleAction(
+                delegate
+                {
+                    foreach (SccProjectData project in _projectMap.Values)
+                    {
+                        if (project.RequiresForcedRefresh() && !string.IsNullOrEmpty(project.ProjectDirectory))
+                        {
+                            string dir = project.ProjectDirectory;
+                            
+                            if(!dir.EndsWith("\\"))
+                                dir += "\\";
+
+                            foreach (SvnClientAction action in sccRefreshItems)
+                            {
+                                if (action.FullPath.StartsWith(dir, StringComparison.OrdinalIgnoreCase))
+                                {
+                                    project.PerformRefresh(sccRefreshItems);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+        }
+
+        IAnkhCommandService _commandService;
+        IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
         void RegisterForSccCleanup()
         {
             if (_registeredSccCleanup)
                 return;
 
-            IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+            IAnkhCommandService cmd = CommandService;
 
             if (cmd != null)
                 cmd.PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);

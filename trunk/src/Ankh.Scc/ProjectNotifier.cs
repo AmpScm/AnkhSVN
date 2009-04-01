@@ -330,8 +330,8 @@ namespace Ankh.Scc
                 }
             }
 
-            //if (sccRefreshItems != null)
-            //    SccProvider.ScheduleSvnRefresh(sccRefreshItems);
+            if (sccRefreshItems != null)
+                SccProvider.ScheduleSvnRefresh(sccRefreshItems);
         }
 
         public void ScheduleGlyphUpdate(string path)
