@@ -64,8 +64,7 @@ namespace Ankh.VS.Selection
         readonly Hashtable _hashCache = new Hashtable();
         IVsHierarchy _miscFiles;
         bool _checkedMisc;
-        bool _deteminedSolutionExplorer;
-        bool _isSolutionExplorer;
+        bool? _isSolutionExplorer;
         bool? _isSolutionSelected;
         bool? _isSingleNodeSelection;
         string _solutionFilename;
@@ -166,13 +165,13 @@ namespace Ankh.VS.Selection
             _selectedProjectsRecursive = null;
             _ownerProjects = null;
 
-            _deteminedSolutionExplorer = false;
-            _isSolutionExplorer = false;
-            _solutionFilename = null;
+            _isSolutionExplorer = null;            
             _miscFiles = null;
             _checkedMisc = false;
             _selectedItemsMap = null;
             _isSolutionSelected = null;
+            _isSingleNodeSelection = null;
+            _solutionFilename = null;
             _hashCache.Clear();
 
             if (_disposer != null)
@@ -232,16 +231,16 @@ namespace Ankh.VS.Selection
         {
             get
             {
-                if (!_deteminedSolutionExplorer && _solutionExplorer != null)
+                if (!_isSolutionExplorer.HasValue && _solutionExplorer != null)
                 {
-                    _deteminedSolutionExplorer = true;
+                    _isSolutionExplorer = false;
                     IVsUIHierarchyWindow hw = _solutionExplorer.HierarchyWindow;
                     IntPtr hierarchy;
                     IVsMultiItemSelect ms;
                     uint itemId;
 
                     if (!ErrorHandler.Succeeded(hw.GetCurrentSelection(out hierarchy, out itemId, out ms)))
-                        return _isSolutionExplorer = false;
+                        return false;
 
                     IVsHierarchy hier = null;
                     if (hierarchy != IntPtr.Zero)
@@ -251,15 +250,15 @@ namespace Ankh.VS.Selection
                     }
 
                     if (_currentItem != itemId)
-                        return _isSolutionExplorer = false;
+                        return false;
 
                     if (ms != _currentSelection)
-                        return _isSolutionExplorer = false;
+                        return false;
 
                     _isSolutionExplorer = ((hier is IVsSolution) || (hier == null)) && (SolutionFilename != null);
                 }
 
-                return _isSolutionExplorer;
+                return _isSolutionExplorer.Value;
             }
         }
 
