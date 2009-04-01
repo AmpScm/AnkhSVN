@@ -311,8 +311,6 @@ namespace Ankh.Scc
                 }
                 if (mustLockItems != null)
                 {
-                    IAnkhCommandService cmdSvc = GetService<IAnkhCommandService>();
-
                     List<SvnItem> mustBeLocked = new List<SvnItem>(mustLockItems);
 
                     // Look at all subfiles of the must be locked document and add these to the dialog
@@ -329,7 +327,7 @@ namespace Ankh.Scc
                         }
                     }
 
-                    cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
+                    CommandService.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
                     // Only check the original list; the rest of the items in mustLockItems is optional
                     foreach (SvnItem i in mustBeLocked)
                     {
@@ -465,8 +463,7 @@ namespace Ankh.Scc
                 if (toBeSvnLocked.Count > 0)
                 {
                     // File(s) need to be locked
-                    IAnkhCommandService cmdSvc = Context.GetService<IAnkhCommandService>();
-                    cmdSvc.DirectlyExecCommand(AnkhCommand.SccLock, toBeSvnLocked.ToArray());
+                    CommandService.DirectlyExecCommand(AnkhCommand.SccLock, toBeSvnLocked.ToArray());
 
                     bool notWritable = false;
                     foreach (SvnItem item in toBeSvnLocked)
