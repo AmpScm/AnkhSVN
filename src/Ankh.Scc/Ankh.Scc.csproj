@@ -100,6 +100,7 @@
     <Compile Include="Commands\ProjectFileFilter.cs" />
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
+    <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs" />
     <Compile Include="SccUI\SccManagementResources.Designer.cs">
       <DependentUpon>SccManagementResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
