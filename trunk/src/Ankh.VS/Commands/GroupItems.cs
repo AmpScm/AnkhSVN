@@ -6,6 +6,7 @@ using Ankh.Selection;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.IO;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
@@ -27,7 +28,7 @@ namespace Ankh.Commands
                 default:
                     e.Enabled = false;
                     break;
-            }*/
+            }
         }
 
         private void OnUpdateGroup(CommandUpdateEventArgs e)
@@ -87,6 +88,14 @@ namespace Ankh.Commands
             {
                 if (!enable)
                     e.Enabled = false;
+                else 
+                    foreach (SvnItem i in selection.GetSelectedSvnItems(false))
+                    {
+                        if (!i.Exists || !i.InSolution)
+                        {
+                            e.Enabled = false;
+                        }
+                    }
             }
         }
 
@@ -94,7 +103,7 @@ namespace Ankh.Commands
         {
             SelectionContext selection = e.Selection as SelectionContext;
 
-            if (selection == null)
+            if (selection == null || selection.IsSingleNodeSelection)
             {
                 e.Enabled = false;
                 return;
@@ -103,7 +112,9 @@ namespace Ankh.Commands
             IVsSccProject2 project = null;
             IVsHierarchy hier = null;
             uint parentId = VSConstants.VSITEMID_NIL;
+            uint firstId = VSConstants.VSITEMID_NIL;
             bool enable = false;
+            bool foundParent = false;
 
             try
             {
@@ -116,7 +127,7 @@ namespace Ankh.Commands
                         if (project == null)
                             return;
 
-                        hier = (IVsHierarchy)project;
+                        hier = item.Hierarchy;
                         if (hier == null)
                             return;
                     }
@@ -127,41 +138,52 @@ namespace Ankh.Commands
 
                     if (!ErrorHandler.Succeeded(hier.GetProperty(item.Id, (int)__VSHPROPID.VSHPROPID_Parent, out value)))
                         return;
-                    if (!ErrorHandler.Succeeded(hier.GetProperty(item.Id, (int)__VSHPROPID.VSHPROPID_Parent, out value)))
+                    
+                    uint pId = SelectionContext.GetItemIdFromObject(value);
+
+                    if(pId == VSConstants.VSITEMID_NIL)
                         return;
 
-                    if (parentId == VSConstants.VSITEMID_NIL)
+                    if (firstId == VSConstants.VSITEMID_NIL && parentId == VSConstants.VSITEMID_NIL)
                     {
-                        parentId = SelectionContext.GetItemIdFromObject(value);
-
-                        if (parentId == VSConstants.VSITEMID_NIL)
-                            return;
+                        firstId = item.Id;
+                        parentId = pId;
                     }
-                    else if (parentId != SelectionContext.GetItemIdFromObject(value))
-                        return;
+                    else
+                    {
+                        if (parentId == pId)
+                            continue; // Same parent, continue
+                        else if (foundParent)
+                            return; // Not the same parent -> Break
+
+                        if (item.Id == parentId)
+                        {
+                            // Current node is the parent, continue
+                            foundParent = true;
+                        }
+                        else if (firstId == pId)
+                        {
+                            // First node was the parent
+                            parentId = pId;
+                            foundParent = true;
+                        }
+                        else
+                            return; // No parent child relation
+                    }
                 }
 
-                // All nodes have the same parent. Check if their filenames match the parent
-                if (hier == null || parentId == VSConstants.VSITEMID_NIL || parentId == VSConstants.VSITEMID_ROOT)
-                    return;
+                if (!foundParent)
+                    return; // You must select the parent to enable this command
 
-                IVsProject2 project2 = project as IVsProject2;
-                if (project2 == null)
-                    return;
+                string[] files;
+                if (!SelectionUtils.GetSccFiles(new SelectionItem(hier, parentId), out files, false, false, null)
+                    || files == null || files.Length == 0)
+                    return; // Parent is not a file
 
-                string parentName;
-                if (!ErrorHandler.Succeeded(project2.GetMkDocument(parentId, out parentName)) || !SvnItem.IsValidPath(parentName))
-                    return;
+                SvnItem parent = e.GetService<IFileStatusCache>()[files[0]];
 
-                parentName = Path.Combine(SharpSvn.SvnTools.GetNormalizedDirectoryName(parentName), Path.GetFileNameWithoutExtension(parentName) + ".");
-
-                foreach (string file in selection.GetSelectedFiles(false))
-                {
-                    if (!file.StartsWith(parentName, StringComparison.OrdinalIgnoreCase) && 0 > file.IndexOf(Path.DirectorySeparatorChar, parentName.Length))
-                        return; // File doesn't match parent name
-                }
-
-                enable = true; 
+                if(parent.IsFile)
+                    enable = true; 
             }
             catch
             { /* Just disable on buggy projects */ }
@@ -174,8 +196,25 @@ namespace Ankh.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            return;
+            switch (e.Command)
+            {
+                case AnkhCommand.ProjectItemGroup:
+                    OnGroupItems(e);
+                    break;
+                case AnkhCommand.ProjectItemUngroup:
+                    OnUngroupItems(e);
+                    break;
+            }
         }
 
+        private void OnUngroupItems(CommandEventArgs e)
+        {
+            
+        }
+
+        private void OnGroupItems(CommandEventArgs e)
+        {
+            
+        }
     }
 }
