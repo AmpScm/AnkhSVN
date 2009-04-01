@@ -653,5 +653,40 @@ namespace Ankh.Scc
             if (cmd != null)
                 cmd.PostTickCommand(ref _registeredSccCleanup, AnkhCommand.SccFinishTasks);
         }
+
+        int _disableSvnUpdates;
+        public IDisposable DisableSvnUpdates()
+        {
+            _disableSvnUpdates++;
+
+            return new UndisableSvnUpdate(this);
+        }
+
+        public bool SvnUpdatesDisabled
+        {
+            [DebuggerStepThrough]
+            get { return _disableSvnUpdates > 0; }
+        }
+
+        sealed class UndisableSvnUpdate : IDisposable
+        {
+            readonly AnkhSccProvider _provider;
+            bool _disposed;
+            public UndisableSvnUpdate(AnkhSccProvider provider)
+            {
+                _provider = provider;
+            }
+            #region IDisposable Members
+
+            public void Dispose()
+            {
+                if (_disposed)
+                    return;
+                _disposed = true;
+                _provider._disableSvnUpdates--;
+            }
+
+            #endregion
+        }
     }
 }
