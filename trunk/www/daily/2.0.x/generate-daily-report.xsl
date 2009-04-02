@@ -127,7 +127,7 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id={$buildRev}">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id={$buildRev}&amp;tag=2.0.x">Subversion Repository</a>.
         </p>
         <p>Published daily builds will be available for at least a week after they are build.</p>
         <xsl:text>&#13;&#10;</xsl:text>
