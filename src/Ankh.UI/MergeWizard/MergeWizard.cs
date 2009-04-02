@@ -39,7 +39,7 @@ namespace Ankh.UI.MergeWizard
         private WizardPage mergeSourceManuallyRecordPage;
         private WizardPage mergeSourceManuallyRemovePage;
         private WizardPage mergeRevisionsSelectionPage;
-        private WizardPage mergeOptionsPage;
+        private MergeOptionsPage mergeOptionsPage;
         private WizardPage mergeSummaryPage;
 
         MergeUtils _mergeUtils = null;
@@ -237,8 +237,11 @@ namespace Ankh.UI.MergeWizard
 
             this.currentMergeConflictHandler = CreateMergeConflictHandler();
 
+            ProgressRunnerArgs runnerArgs = new ProgressRunnerArgs();
+            runnerArgs.CreateLog = !PerformDryRun;
+
             // Perform merge using IProgressRunner
-            Context.GetService<IProgressRunner>().RunModal(Resources.MergingTitle,
+            Context.GetService<IProgressRunner>().RunModal(Resources.MergingTitle, runnerArgs,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     _mergeActions = new List<SvnNotifyEventArgs>();
@@ -309,13 +312,13 @@ namespace Ankh.UI.MergeWizard
                             SvnMergeArgs args = new SvnMergeArgs();
 
                             // Set the proper depth
-                            args.Depth = ((MergeOptionsPage)mergeOptionsPage).Depth;
+                            args.Depth = mergeOptionsPage.Depth;
 
                             // Set whether or not unversioned obstructions should be allowed
-                            args.Force = ((MergeOptionsPage)mergeOptionsPage).AllowUnversionedObstructions;
+                            args.Force = mergeOptionsPage.AllowUnversionedObstructions;
 
                             // Set whether or not to ignore ancestry
-                            args.IgnoreAncestry = ((MergeOptionsPage)mergeOptionsPage).IgnoreAncestry;
+                            args.IgnoreAncestry = mergeOptionsPage.IgnoreAncestry;
 
                             // Set whether or not this merge should just record the merge information
                             args.RecordOnly = (mergeType == MergeType.ManuallyRecord || mergeType == MergeType.ManuallyRemove);
@@ -365,7 +368,7 @@ namespace Ankh.UI.MergeWizard
                         // Detach the cancel handler
                         ee.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.OnCancel);
                     }
-                }, true);
+                });
 
             if (this.currentMergeConflictHandler != null)
             {

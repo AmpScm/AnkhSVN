@@ -104,6 +104,17 @@ namespace Ankh
         }
     }
 
+    public class ProgressRunnerArgs
+    {
+        bool _createLog;
+
+        public bool CreateLog
+        {
+            get { return _createLog; }
+            set { _createLog = value; }
+        }
+    }
+
     public interface IProgressRunner
     {
         /// <summary>
@@ -118,10 +129,10 @@ namespace Ankh
         /// Runs the specified action.
         /// </summary>
         /// <param name="caption">The caption.</param>
+        /// <param name="args">The args.</param>
         /// <param name="action">The action.</param>
-        /// <param name="logOutput">Indicates wether or not to log the output</param>
         /// <returns></returns>
-        ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action, bool logOutput);
+        ProgressRunnerResult RunModal(string caption, ProgressRunnerArgs args, EventHandler<ProgressWorkerArgs> action);
 
         /// <summary>
         /// Runs the specified action and when the action completes completer. (Currently implemented synchronously!)

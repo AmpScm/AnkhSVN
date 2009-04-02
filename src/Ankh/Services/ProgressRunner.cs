@@ -41,18 +41,20 @@ namespace Ankh
 
         public ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action)
         {
-            return RunModal(caption, action, false);
+            return RunModal(caption, new ProgressRunnerArgs(), action);
         }
 
-        public ProgressRunnerResult RunModal(string caption, EventHandler<ProgressWorkerArgs> action, bool log)
+        public ProgressRunnerResult RunModal(string caption, ProgressRunnerArgs args, EventHandler<ProgressWorkerArgs> action)
         {
             if (action == null)
                 throw new ArgumentNullException("action");
+            else if (args == null)
+                throw new ArgumentNullException("args");
             else if (string.IsNullOrEmpty(caption))
                 caption = AnkhId.PlkProduct;
 
             ProgressRunner pr = new ProgressRunner(this, action);
-            pr.LogOutput = log;
+            pr.CreateUpdateReport = args.CreateLog;
             pr.Start(caption);
 
             return new ProgressRunnerResult(!pr.Cancelled);
@@ -89,7 +91,7 @@ namespace Ankh
             bool _cancelled;
             bool _closed;
             Exception _exception;
-            bool _logOutput;
+            bool _updateReport;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="ProgressRunner"/> class.
@@ -107,10 +109,10 @@ namespace Ankh
                 _action = action;
             }
 
-            public bool LogOutput
+            public bool CreateUpdateReport
             {
-                get { return _logOutput; }
-                set { _logOutput = value; }
+                get { return _updateReport; }
+                set { _updateReport = value; }
             }
 
             /// <summary>
@@ -135,7 +137,7 @@ namespace Ankh
 
                 using (ProgressDialog dialog = new ProgressDialog())
                 using (SvnClient client = pool.GetClient())
-                using (LogOutput ? BindOutputPane(client) : null)
+                using (CreateUpdateReport ? BindOutputPane(client) : null)
                 using (dialog.Bind(client))
                 {
                     _sync = dialog;
@@ -180,7 +182,7 @@ namespace Ankh
 
             private IDisposable BindOutputPane(SvnClient client)
             {
-                return new OutputPaneReporter(client, _context);
+                return new OutputPaneReporter(_context, client);
             }
 
             private void Run(object arg)
@@ -273,17 +275,20 @@ namespace Ankh
                 }
             }
         }
-
         
-
         sealed class OutputPaneReporter : IDisposable
         {
             readonly IOutputPaneManager _mgr;
             readonly SvnClientReporter _reporter;
             readonly StringBuilder _sb;
 
-            public OutputPaneReporter(SvnClient client, IAnkhServiceProvider context)
+            public OutputPaneReporter(IAnkhServiceProvider context, SvnClient client)
             {
+                if (context == null)
+                    throw new ArgumentNullException("context");
+                else if (client == null)
+                    throw new ArgumentNullException("client");
+
                 _mgr = context.GetService<IOutputPaneManager>();
                 _sb = new StringBuilder();
                 _reporter = new SvnClientReporter(client, _sb);
