@@ -89,8 +89,10 @@ namespace Ankh.Commands
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
 
             SvnUpdateResult ur;
+            ProgressRunnerArgs pa = new ProgressRunnerArgs();
+            pa.CreateLog = true;
 
-            e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle,
+            e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle, pa,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {                    
                     SvnUpdateArgs ua = new SvnUpdateArgs();
@@ -98,7 +100,7 @@ namespace Ankh.Commands
                     ua.Revision = updateTo;
                     e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
                     ee.Client.Update(files, ua, out ur);
-                }, true);
+                });
         }
     }
 }

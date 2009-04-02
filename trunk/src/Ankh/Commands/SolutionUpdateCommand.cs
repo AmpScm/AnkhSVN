@@ -275,10 +275,12 @@ namespace Ankh.Commands
             using (lck.MonitorChangesForReload())
             {
                 UpdateRunner ur = new UpdateRunner(groups.Values, rev, updateExternals, allowUnversionedObstructions);
+                ProgressRunnerArgs pa = new ProgressRunnerArgs();
+                pa.CreateLog = true;
 
                 e.GetService<IProgressRunner>().RunModal(
                     string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution : CommandStrings.UpdatingProject),
-                    ur.Work, true);
+                    pa, ur.Work);
 
                 if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))
                 {
