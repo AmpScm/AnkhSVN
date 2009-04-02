@@ -657,7 +657,9 @@ namespace Ankh.UI.VSSelectionControls
 
                                 if (hi != null && hi.Location != ListViewHitTestLocations.StateImage)
                                 {
-                                    OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0));
+                                    MouseEventArgs me = new MouseEventArgs(MouseButtons.Left, 2, mp.X, mp.Y, 0);
+                                    OnDoubleClick(me);
+                                    OnMouseDoubleClick(me);
                                     return;
                                 }
                             }

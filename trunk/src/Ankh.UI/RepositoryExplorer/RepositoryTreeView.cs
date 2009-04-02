@@ -497,11 +497,11 @@ namespace Ankh.UI.RepositoryExplorer
             return false;
         }
 
-        protected override void OnDoubleClick(EventArgs e)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            base.OnDoubleClick(e);
+            base.OnMouseDoubleClick(e);
 
-            TreeViewHitTestInfo hti = HitTest(PointToClient(MousePosition));
+            TreeViewHitTestInfo hti = HitTest(e.Location);
 
             RepositoryTreeNode rtn = hti.Node as RepositoryTreeNode;
             if (rtn != null && hti.Location != TreeViewHitTestLocations.None)

@@ -115,11 +115,11 @@ namespace Ankh.UI.WorkingCopyExplorer
             return Point.Empty;
         }
 
-        protected override void OnDoubleClick(EventArgs e)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            base.OnDoubleClick(e);
+            base.OnMouseDoubleClick(e);
 
-            ListViewHitTestInfo ht = HitTest(PointToClient(MousePosition));
+            ListViewHitTestInfo ht = HitTest(e.Location);
 
             FileSystemListViewItem li = ht.Item as FileSystemListViewItem;
 
