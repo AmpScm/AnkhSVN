@@ -21,6 +21,8 @@ using Ankh.UI.VSSelectionControls;
 using Ankh.VS;
 using System.Windows.Forms;
 using Ankh.UI.PendingChanges.Commits;
+using System.Drawing;
+using Ankh.Commands;
 
 namespace Ankh.UI.PendingChanges.Conflicts
 {
@@ -112,6 +114,36 @@ namespace Ankh.UI.PendingChanges.Conflicts
         protected override string GetCanonicalName(ConflictListItem item)
         {
             return item.PendingChange.FullPath;
+        }
+
+        public override void OnShowContextMenu(MouseEventArgs e)
+        {
+            base.OnShowContextMenu(e);
+
+            Point p = e.Location;
+            bool showSort = false;
+            if (p != new Point(-1, -1))
+            {
+                // Mouse context menu
+                if (PointToClient(p).Y < HeaderHeight)
+                    showSort = true;
+            }
+            else
+            {
+                ListViewItem fi = FocusedItem;
+
+                if (fi != null)
+                    p = PointToScreen(fi.Position);
+            }
+
+            IAnkhCommandService mcs = Context.GetService<IAnkhCommandService>();
+            if (mcs != null)
+            {
+                if (showSort)
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsHeaderContextMenu, p);
+                else
+                    mcs.ShowContextMenu(AnkhCommandMenu.PendingCommitsContextMenu, p);
+            }
         }
     }
 }
