@@ -148,7 +148,9 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
                 RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
-                "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)'", true));
+                "/base:'$(Base)' /theirs:'$(Theirs)' /mine:'$(Mine)' /merged:'$(Merged)' " +
+                "/basename:'$(BaseName)' /theirsname:'$(TheirsName)' /minename:'$(MineName)' "+
+                "/mergedname:'$(MergedName)'", true));
 
             tools.Add(new DiffTool(this, "AraxisMerge", "Araxis Merge",
                 RelativePath(AppIdLocalServerSearch("Merge70.Application"), "Compare.exe")
