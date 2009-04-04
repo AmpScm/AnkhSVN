@@ -228,8 +228,8 @@ namespace Ankh.Services
             {
                 base.OnCommitting(e);
 
-                // TODO: On newe SharpSvn check e.CurrentCommandType for
-                // SvnCommandType.Commit and skip in all other cases
+                if (e.CurrentCommandType != SvnCommandType.Commit)
+                    return;
 
                 foreach (SvnCommitItem item in e.Items)
                 {
