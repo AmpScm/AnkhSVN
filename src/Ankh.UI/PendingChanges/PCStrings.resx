@@ -123,6 +123,12 @@
   <data name="ChangeListColumn" xml:space="preserve">
     <value>Change &amp;List</value>
   </data>
+  <data name="ConflictDescriptionColumn" xml:space="preserve">
+    <value>&amp;Description</value>
+  </data>
+  <data name="ConflictTypeColumn" xml:space="preserve">
+    <value>Con&amp;flict Type</value>
+  </data>
   <data name="FolderColumn" xml:space="preserve">
     <value>Fol&amp;der</value>
   </data>
