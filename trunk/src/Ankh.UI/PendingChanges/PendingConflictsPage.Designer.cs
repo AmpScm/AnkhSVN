@@ -44,13 +44,10 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.topLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.lastRevBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lastRevLabel = new System.Windows.Forms.Label();
-            this.updateTime = new System.Windows.Forms.Label();
+            this.conflictHeader = new System.Windows.Forms.Label();
             this.conflictEditSplitter = new System.Windows.Forms.SplitContainer();
             this.conflictView = new Ankh.UI.PendingChanges.Conflicts.ConflictListView();
             this.resolvePannel = new System.Windows.Forms.FlowLayoutPanel();
@@ -69,7 +66,6 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.topLayoutPanel.SuspendLayout();
             this.conflictEditSplitter.Panel1.SuspendLayout();
             this.conflictEditSplitter.Panel2.SuspendLayout();
             this.conflictEditSplitter.SuspendLayout();
@@ -88,90 +84,39 @@ namespace Ankh.UI.PendingChanges
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1MinSize = 23;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.conflictEditSplitter);
             this.splitContainer1.Size = new System.Drawing.Size(768, 300);
-            this.splitContainer1.SplitterDistance = 25;
+            this.splitContainer1.SplitterDistance = 23;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 3;
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.topLayoutPanel);
+            this.panel1.BackColor = System.Drawing.SystemColors.Info;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.conflictHeader);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(768, 25);
+            this.panel1.Size = new System.Drawing.Size(768, 23);
             this.panel1.TabIndex = 2;
             // 
-            // topLayoutPanel
+            // conflictHeader
             // 
-            this.topLayoutPanel.ColumnCount = 5;
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.topLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.topLayoutPanel.Controls.Add(this.lastRevBox, 2, 0);
-            this.topLayoutPanel.Controls.Add(this.label1, 0, 0);
-            this.topLayoutPanel.Controls.Add(this.lastRevLabel, 1, 0);
-            this.topLayoutPanel.Controls.Add(this.updateTime, 4, 0);
-            this.topLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.topLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.topLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
-            this.topLayoutPanel.Name = "topLayoutPanel";
-            this.topLayoutPanel.RowCount = 1;
-            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(764, 21);
-            this.topLayoutPanel.TabIndex = 0;
-            // 
-            // lastRevBox
-            // 
-            this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(311, 3);
-            this.lastRevBox.Name = "lastRevBox";
-            this.lastRevBox.ReadOnly = true;
-            this.lastRevBox.Size = new System.Drawing.Size(74, 13);
-            this.lastRevBox.TabIndex = 2;
-            this.lastRevBox.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Conflicts:";
-            // 
-            // lastRevLabel
-            // 
-            this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(239, 3);
-            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.lastRevLabel.Name = "lastRevLabel";
-            this.lastRevLabel.Size = new System.Drawing.Size(66, 13);
-            this.lastRevLabel.TabIndex = 1;
-            this.lastRevLabel.Text = "Last update:";
-            this.lastRevLabel.Visible = false;
-            // 
-            // updateTime
-            // 
-            this.updateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.updateTime.AutoSize = true;
-            this.updateTime.Location = new System.Drawing.Point(761, 3);
-            this.updateTime.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.updateTime.Name = "updateTime";
-            this.updateTime.Size = new System.Drawing.Size(0, 13);
-            this.updateTime.TabIndex = 7;
+            this.conflictHeader.AutoEllipsis = true;
+            this.conflictHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.conflictHeader.Location = new System.Drawing.Point(0, 0);
+            this.conflictHeader.Name = "conflictHeader";
+            this.conflictHeader.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.conflictHeader.Size = new System.Drawing.Size(766, 21);
+            this.conflictHeader.TabIndex = 0;
+            this.conflictHeader.Text = "0 Conflicts: 0 Version, 0 Tree Conflicts; 0 Automatic merges.";
+            this.conflictHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // conflictEditSplitter
             // 
@@ -191,8 +136,8 @@ namespace Ankh.UI.PendingChanges
             // 
             this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePannel);
             this.conflictEditSplitter.Panel2MinSize = 32;
-            this.conflictEditSplitter.Size = new System.Drawing.Size(768, 274);
-            this.conflictEditSplitter.SplitterDistance = 224;
+            this.conflictEditSplitter.Size = new System.Drawing.Size(768, 276);
+            this.conflictEditSplitter.SplitterDistance = 236;
             this.conflictEditSplitter.SplitterWidth = 2;
             this.conflictEditSplitter.TabIndex = 0;
             // 
@@ -203,7 +148,7 @@ namespace Ankh.UI.PendingChanges
             this.conflictView.Location = new System.Drawing.Point(0, 0);
             this.conflictView.Margin = new System.Windows.Forms.Padding(0);
             this.conflictView.Name = "conflictView";
-            this.conflictView.Size = new System.Drawing.Size(768, 224);
+            this.conflictView.Size = new System.Drawing.Size(768, 236);
             this.conflictView.TabIndex = 0;
             // 
             // resolvePannel
@@ -224,7 +169,7 @@ namespace Ankh.UI.PendingChanges
             this.resolvePannel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resolvePannel.Location = new System.Drawing.Point(0, 0);
             this.resolvePannel.Name = "resolvePannel";
-            this.resolvePannel.Size = new System.Drawing.Size(768, 48);
+            this.resolvePannel.Size = new System.Drawing.Size(768, 38);
             this.resolvePannel.TabIndex = 0;
             // 
             // resolveButton0
@@ -374,13 +319,11 @@ namespace Ankh.UI.PendingChanges
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Name = "PendingConflictsPage";
-            this.Text = "Conflicts";
+            this.Text = "Conflicts and Merges";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.topLayoutPanel.ResumeLayout(false);
-            this.topLayoutPanel.PerformLayout();
             this.conflictEditSplitter.Panel1.ResumeLayout(false);
             this.conflictEditSplitter.Panel2.ResumeLayout(false);
             this.conflictEditSplitter.ResumeLayout(false);
@@ -394,11 +337,6 @@ namespace Ankh.UI.PendingChanges
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TableLayoutPanel topLayoutPanel;
-        private System.Windows.Forms.TextBox lastRevBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lastRevLabel;
-        private System.Windows.Forms.Label updateTime;
         private System.Windows.Forms.SplitContainer conflictEditSplitter;
         private Ankh.UI.PendingChanges.Conflicts.ConflictListView conflictView;
         private System.Windows.Forms.FlowLayoutPanel resolvePannel;
@@ -413,6 +351,7 @@ namespace Ankh.UI.PendingChanges
         private System.Windows.Forms.LinkLabel resolveLinkLabel;
         private System.Windows.Forms.Button resolveButton6;
         private System.Windows.Forms.Button resolveButton7;
+        private System.Windows.Forms.Label conflictHeader;
 
 
 
