@@ -112,7 +112,7 @@ namespace Ankh.UI.PendingChanges
             this.conflictsButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.conflictsButton.Name = "conflictsButton";
             this.conflictsButton.Size = new System.Drawing.Size(35, 36);
-            this.conflictsButton.Text = "Conflicts";
+            this.conflictsButton.Text = "Conflicts and Merges";
             this.conflictsButton.Click += new System.EventHandler(this.conflictsButton_Click);
             // 
             // panel1
@@ -127,10 +127,10 @@ namespace Ankh.UI.PendingChanges
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 300);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pendingChangesTabs);
             this.Name = "PendingChangesToolControl";
+            this.Size = new System.Drawing.Size(804, 300);
             this.pendingChangesTabs.ResumeLayout(false);
             this.pendingChangesTabs.PerformLayout();
             this.ResumeLayout(false);
