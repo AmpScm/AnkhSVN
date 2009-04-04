@@ -131,7 +131,7 @@ namespace Ankh.Services
 
         internal void NotifyChanges(IDictionary<string, SvnClientAction> actions)
         {
-            StatusMonitor.HandleSvnResult(actions);            
+            StatusMonitor.HandleSvnResult(actions);
         }
 
         public bool ReturnClient(SvnPoolClient poolClient)
@@ -224,6 +224,27 @@ namespace Ankh.Services
                 }
             }
 
+            protected override void OnCommitting(SvnCommittingEventArgs e)
+            {
+                base.OnCommitting(e);
+
+                // TODO: On newe SharpSvn check e.CurrentCommandType for
+                // SvnCommandType.Commit and skip in all other cases
+
+                foreach (SvnCommitItem item in e.Items)
+                {
+                    string fp = item.FullPath;
+
+                    if (fp == null) // Non local operation
+                        return; 
+
+                    SvnClientAction action;
+
+                    if (!_changes.TryGetValue(fp, out action))
+                        _changes.Add(fp, action = new SvnClientAction(fp));
+                }
+            }
+
             protected override void ReturnClient()
             {
                 AnkhClientPool pool = (AnkhClientPool)SvnClientPool;
@@ -237,7 +258,7 @@ namespace Ankh.Services
 
                 try
                 {
-                    if(_changes.Count > 0)
+                    if (_changes.Count > 0)
                         pool.NotifyChanges(_changes);
                 }
                 finally
