@@ -45,6 +45,12 @@ namespace Ankh.UI.PendingChanges.Synchronize
             _localChange = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, item.IsTreeConflicted, item);
             _remoteChange = PendingChange.CombineStatus(status.RemoteContentStatus, status.RemotePropertyStatus, false, null);
 
+            if (_remoteChange == PendingChangeKind.None)
+            {
+                if (status.RemoteLock != null)
+                    _remoteChange = PendingChangeKind.LockedOnly;
+            }
+
             _localStatus = new PendingChangeStatus(_localChange);
             _remoteStatus = new PendingChangeStatus(_remoteChange);
 
