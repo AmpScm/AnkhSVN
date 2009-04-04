@@ -36,21 +36,21 @@ namespace Ankh.UI.PendingChanges
             logMessageEditor.PasteSource = pendingCommits;
         }
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
-			if (pendingCommits != null)
-			{
-				pendingCommits.SelectionPublishServiceProvider = Context;
-				pendingCommits.Context = Context;
+            if (pendingCommits != null)
+            {
+                pendingCommits.SelectionPublishServiceProvider = Context;
+                pendingCommits.Context = Context;
                 pendingCommits.HookCommands();
-			}
+            }
 
-			Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
+            Context.GetService<IServiceContainer>().AddService(typeof(ILastChangeInfo), this);
 
-			HookList();
-		}
+            HookList();
+        }
 
         IPendingChangesManager _manager;
         private void HookList()
@@ -60,12 +60,12 @@ namespace Ankh.UI.PendingChanges
 
             if (pendingCommits.SmallImageList == null)
             {
-				IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
+                IFileIconMapper mapper = Context.GetService<IFileIconMapper>();
 
                 pendingCommits.SmallImageList = mapper.ImageList;
             }
 
-			_manager = Context.GetService<IPendingChangesManager>();
+            _manager = Context.GetService<IPendingChangesManager>();
 
             if (_manager == null)
                 return;
@@ -86,7 +86,7 @@ namespace Ankh.UI.PendingChanges
                 PerformInitialUpdate(_manager);
 
             AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
-            
+
             ev.SolutionClosed += new EventHandler(OnSolutionRefresh);
             ev.SolutionOpened += new EventHandler(OnSolutionRefresh);
             OnSolutionRefresh(this, EventArgs.Empty);
@@ -162,7 +162,7 @@ namespace Ankh.UI.PendingChanges
 
             pci = new PendingCommitItem(pendingCommits, e.Change);
             _listItems.Add(path, pci);
-            pendingCommits.Items.Add(pci);                            
+            pendingCommits.Items.Add(pci);
 
             // TODO: Maybe add something like
             //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -202,7 +202,7 @@ namespace Ankh.UI.PendingChanges
 
             pendingCommits.BeginUpdate();
             _listItems.Clear(); // Make sure we are clear
-            pendingCommits.ClearItems();            
+            pendingCommits.ClearItems();
             try
             {
                 foreach (PendingChange pc in manager.GetAll())
@@ -279,9 +279,9 @@ namespace Ankh.UI.PendingChanges
 
             IAnkhOpenDocumentTracker dt = Context.GetService<IAnkhOpenDocumentTracker>();
 
-            if(dt != null)
+            if (dt != null)
                 dt.RefreshDirtyState();
-			
+
             Manager.FullRefresh(true);
         }
 
@@ -306,10 +306,10 @@ namespace Ankh.UI.PendingChanges
             if (info.Location == ListViewHitTestLocations.StateImage)
                 return; // Just check the item
 
-			IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+            IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
 
             if (cmd != null)
-                cmd.ExecCommand(Control.ModifierKeys == Keys.Control 
+                cmd.ExecCommand(Control.ModifierKeys == Keys.Control
                     ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
         }
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
@@ -337,7 +337,7 @@ namespace Ankh.UI.PendingChanges
                 case AnkhCommand.PcLogEditorPasteRecentLog:
                     break;
             }
-            if(sb.Length > 0)
+            if (sb.Length > 0)
                 logMessageEditor.PasteText(sb.ToString());
         }
 
@@ -379,9 +379,10 @@ namespace Ankh.UI.PendingChanges
             if (issueNumberBox.Visible)
                 a.IssueText = issueNumberBox.Text; // The pc handler verifies if it should be used            
 
-			if (pch.Commit(changes, a))
+            if (pch.Commit(changes, a))
             {
                 logMessageEditor.Text = "";
+                issueNumberBox.Text = "";
             }
         }
 
@@ -433,7 +434,7 @@ namespace Ankh.UI.PendingChanges
 
         internal bool CanCreatePatch()
         {
-            if(!CanCommit(false))
+            if (!CanCommit(false))
                 return false;
 
             foreach (PendingCommitItem pci in _listItems.Values)
@@ -442,9 +443,9 @@ namespace Ankh.UI.PendingChanges
                     continue;
                 PendingChange pc = pci.PendingChange;
 
-                if(pc.Item.IsModified)
+                if (pc.Item.IsModified)
                     return true;
-                else if(!pc.Item.IsVersioned && pc.Item.IsVersionable && pc.Item.InSolution)
+                else if (!pc.Item.IsVersioned && pc.Item.IsVersionable && pc.Item.InSolution)
                     return true; // Will be added                
             }
 
@@ -459,7 +460,7 @@ namespace Ankh.UI.PendingChanges
                     continue;
 
                 if (pci.PendingChange.CanApply)
-                    return true;                
+                    return true;
             }
 
             return false;
@@ -489,9 +490,9 @@ namespace Ankh.UI.PendingChanges
         {
             if (_issueNummeric)
             {
-                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',')
+                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',' && !char.IsControl(e.KeyChar))
                     e.Handled = true;
-            }            
+            }
         }
 
         private void issueNumberBox_TextChanged(object sender, EventArgs e)
