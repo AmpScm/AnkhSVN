@@ -488,7 +488,7 @@ namespace Ankh.UI.PendingChanges
         {
             if (_issueNummeric)
             {
-                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',')
+                if (!char.IsNumber(e.KeyChar) && e.KeyChar != ',' && !char.IsControl(e.KeyChar))
                     e.Handled = true;
             }            
         }
