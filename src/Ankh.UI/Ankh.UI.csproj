@@ -277,7 +277,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
-    <Compile Include="PendingChanges\Conflicts\ConflictItem.cs" />
+    <Compile Include="PendingChanges\Conflicts\ConflictListItem.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictListView.cs">
       <SubType>Component</SubType>
     </Compile>

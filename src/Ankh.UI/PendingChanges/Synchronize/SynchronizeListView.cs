@@ -141,17 +141,8 @@ namespace Ankh.UI.PendingChanges.Synchronize
             if (p != new Point(-1, -1))
             {
                 // Mouse context menu
-                Point clP = PointToClient(e.Location);
-                ListViewHitTestInfo hti = HitTest(clP);
-
-                showSort = (hti.Item == null || hti.Location == ListViewHitTestLocations.None || hti.Location == ListViewHitTestLocations.AboveClientArea);
-                if (!showSort && hti.Item != null)
-                {
-                    Rectangle r = hti.Item.GetBounds(ItemBoundsPortion.Entire);
-
-                    if (!r.Contains(clP))
-                        showSort = true;
-                }
+                if (PointToClient(p).Y < HeaderHeight)
+                    showSort = true;
             }
             else
             {
