@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6615</title>
+          AnkhSVN-Daily Update - 2.1.6629</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,47 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1850/AnkhSvn-Daily-2.1.6615.23.msi">AnkhSVN 2.1.6615</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1855/AnkhSvn-Daily-2.1.6629.24.msi">AnkhSVN 2.1.6629</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6615">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6629">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-04-04</td></tr>
+<tr><td> </td><td class="r"><a id="6629" href="http://ankhsvn.net/rev/?r=6629">
+            [r6629]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Ankh.UI.csproj, PendingChanges/Conflicts/ConflictListView.cs, PendingChanges/Synchronize/SynchronizeListView.cs, PendingChanges/Conflicts/ConflictListItem.cs, PendingChanges/Conflicts/ConflictItem.cs, PendingChanges/Commits/PendingCommitsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make all pending changes listviews use the same algorithm to detect
+header selection.</td></tr>
+<tr><td> </td><td class="r"><a id="6628" href="http://ankhsvn.net/rev/?r=6628">
+            [r6628]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/AnkhClientPool.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade SharpSvn version to make <a href="http://ankhsvn.net/rev/?r=6625">r6625</a> only apply to real commits.</td></tr>
+<tr><td> </td><td class="r"><a id="6626" href="http://ankhsvn.net/rev/?r=6626">
+            [r6626]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges/Synchronize:</strong> SynchronizeListItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In the recent changes view show remote change as locked when the node is not
+changed, but is locked.</td></tr>
+<tr><td> </td><td class="r"><a id="6625" href="http://ankhsvn.net/rev/?r=6625">
+            [r6625]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhClientPool.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When committing mark all paths touched by the commit as modified by Subversion
+to make sure we catch unlock operations that are not notified.</td></tr>
+<tr><td> </td><td class="r"><a id="6623" href="http://ankhsvn.net/rev/?r=6623">
+            [r6623]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingChangesToolControl.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Renamed the Conflicts page in the Pending Changes window to Conflicts and
+Merges.</td></tr>
+<tr><td> </td><td class="r"><a id="6619" href="http://ankhsvn.net/rev/?r=6619">
+            [r6619]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> PendingChanges/PendingCommitsPage.cs, SccManagement/ProjectCommitDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow control characters to pass the issue number box numeric filter to enable
+backspace (and possible other operations).</td></tr>
+<tr><td> </td><td class="r"><a id="6618" href="http://ankhsvn.net/rev/?r=6618">
+            [r6618]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update TortoiseMerge merge template: Provide titles for passed files.</td></tr>
 <tr class="d"><td colspan="4">2009-04-02</td></tr>
 <tr><td> </td><td class="r"><a id="6613" href="http://ankhsvn.net/rev/?r=6613">
             [r6613]
@@ -459,12 +486,6 @@ should only have to click cancel once in a batch.</td></tr>
 passed for locating svn:needs-lock. But when a svn:needs-lock is found, also
 add the other document files to the list of possible to be locked documents.
 (And don't error of one of these optional files is not locked).</td></tr>
-<tr class="d"><td colspan="4">2009-03-06</td></tr>
-<tr><td> </td><td class="r"><a id="6356" href="http://ankhsvn.net/rev/?r=6356">
-            [r6356]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/ItemEditPropertiesCommand.cs, Ankh/Commands/LogCommand.cs, Ankh.VS.UnitTest/Mocks/VsShellMock.cs, Ankh.UI/MergeWizard/Commands/Merge.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix ArgumentNullException from the StatusCache caused by the ProjectDirectory
-being null. According to <a href="http://ankhsvn.net/rev/?r=5548">r5548</a> this is reportedly caused by Business
-Intelligence/ Analysis services projects.</td></tr>
 
 </table>
 <!--/Recent changes-->
