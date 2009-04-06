@@ -23,6 +23,7 @@ using SharpSvn;
 using Ankh.UI.SvnLog;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
+using System.ComponentModel;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -181,8 +182,6 @@ namespace Ankh.UI.MergeWizard
             }
         }
 
-        private MergeConflictHandler currentMergeConflictHandler;
-
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
         public override bool PerformFinish()
         {
@@ -235,24 +234,23 @@ namespace Ankh.UI.MergeWizard
         {
             MergeType mergeType = ((MergeTypePage)GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
 
-            this.currentMergeConflictHandler = CreateMergeConflictHandler();
-
             ProgressRunnerArgs runnerArgs = new ProgressRunnerArgs();
             runnerArgs.CreateLog = !PerformDryRun;
-
             // Perform merge using IProgressRunner
             Context.GetService<IProgressRunner>().RunModal(Resources.MergingTitle, runnerArgs,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     _mergeActions = new List<SvnNotifyEventArgs>();
                     _resolvedMergeConflicts = new Dictionary<string, List<SvnConflictType>>();
+                    MergeConflictHandler mergeConflictHandler = CreateMergeConflictHandler();
+                    Handler conflictHandler = new Handler(Context, ee.Synchronizer, mergeConflictHandler);
 
                     try
                     {
                         if (!PerformDryRun)
                         {
                             // Attach the conflict handler
-                            ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(this.OnConflict);
+                            ee.Client.Conflict += new EventHandler<SvnConflictEventArgs>(conflictHandler.OnConflict);
                         }
 
                         // Attach the cancel handler
@@ -359,7 +357,7 @@ namespace Ankh.UI.MergeWizard
                         if (!PerformDryRun)
                         {
                             // Detach the conflict handler
-                            ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(OnConflict);
+                            ee.Client.Conflict -= new EventHandler<SvnConflictEventArgs>(conflictHandler.OnConflict);
                         }
 
                         // Detach the notify handler
@@ -367,13 +365,15 @@ namespace Ankh.UI.MergeWizard
 
                         // Detach the cancel handler
                         ee.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.OnCancel);
+
+                        if (mergeConflictHandler != null)
+                        {
+                            _resolvedMergeConflicts = mergeConflictHandler.ResolvedMergedConflicts;
+                            mergeConflictHandler = null;
+                        }
                     }
                 });
 
-            if (this.currentMergeConflictHandler != null)
-            {
-                _resolvedMergeConflicts = this.currentMergeConflictHandler.ResolvedMergedConflicts;
-            }
         }
 
         void OnCancel(object sender, SvnCancelEventArgs e)
@@ -482,22 +482,12 @@ namespace Ankh.UI.MergeWizard
             set { _logMode = value; }
         }
 
-        private void OnConflict(object sender, SvnConflictEventArgs args)
-        {
-            if (this.currentMergeConflictHandler == null)
-            {
-                this.currentMergeConflictHandler = CreateMergeConflictHandler();
-            }
-            this.currentMergeConflictHandler.OnConflict(args);
-        }
-
         private MergeConflictHandler CreateMergeConflictHandler()
         {
             MergeConflictHandler mergeConflictHandler = new MergeConflictHandler(Context);
             if (mergeOptionsPage != null)
             {
-                MergeOptionsPage optionsPage = (MergeOptionsPage)mergeOptionsPage;
-                MergeOptionsPage.ConflictResolutionOption binaryOption = optionsPage.BinaryConflictResolution;
+                MergeOptionsPage.ConflictResolutionOption binaryOption = mergeOptionsPage.BinaryConflictResolution;
                 if (binaryOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
                 {
                     mergeConflictHandler.PromptOnBinaryConflict = true;
@@ -507,7 +497,7 @@ namespace Ankh.UI.MergeWizard
                     mergeConflictHandler.BinaryConflictResolutionChoice = ToSvnAccept(binaryOption);
                 }
 
-                MergeOptionsPage.ConflictResolutionOption textOption = optionsPage.TextConflictResolution;
+                MergeOptionsPage.ConflictResolutionOption textOption = mergeOptionsPage.TextConflictResolution;
                 if (textOption == MergeOptionsPage.ConflictResolutionOption.PROMPT)
                 {
                     mergeConflictHandler.PromptOnTextConflict = true;
@@ -571,5 +561,34 @@ namespace Ankh.UI.MergeWizard
         {
             get { return _resolvedMergeConflicts; }
         }        
+    }
+
+    // Makes sure there is no cross-thread call during interactive merge handling
+    class Handler : AnkhService
+    {
+        ISynchronizeInvoke _synchronizer;
+        MergeConflictHandler _currentMergeConflictHandler;
+
+        public Handler(IAnkhServiceProvider context, ISynchronizeInvoke synchronizer, MergeConflictHandler conflictHandler)
+            : base(context)
+        {
+            _synchronizer = synchronizer;
+            _currentMergeConflictHandler = conflictHandler;
+        }
+
+        public void OnConflict(object sender, SvnConflictEventArgs e)
+        {
+            if (_synchronizer != null && _synchronizer.InvokeRequired)
+            {
+                // If needed marshall the call to the UI thread
+
+                e.Detach(); // Make this instance thread safe!
+
+                _synchronizer.Invoke(new EventHandler<SvnConflictEventArgs>(OnConflict), new object[] { sender, e });
+                return;
+            }
+
+            _currentMergeConflictHandler.OnConflict(e);
+        }
     }
 }
