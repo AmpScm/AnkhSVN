@@ -38,8 +38,8 @@ namespace Ankh.UI.MergeWizard
             : base(wizard, new MergeSourceTwoDifferentTreesPageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
-            Title = Resources.MergeSourceHeaderTitle;
-            Description = Resources.MergeSourceTwoDifferentTreesPageHeaderMessage;
+            Title = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceTwoDifferentTreesPageHeaderMessage;
             PageControl.WizardPage = this;
         }
 

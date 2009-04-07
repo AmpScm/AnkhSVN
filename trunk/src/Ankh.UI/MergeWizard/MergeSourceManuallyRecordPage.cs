@@ -38,8 +38,8 @@ namespace Ankh.UI.MergeWizard
             : base(wizard, new MergeSourceManuallyRecordPageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
-            Title = Resources.MergeSourceHeaderTitle;
-            Description = Resources.MergeSourceManuallyRecordPageHeaderMessage;
+            Title = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceManuallyRecordPageHeaderMessage;
         }
 
         /// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />

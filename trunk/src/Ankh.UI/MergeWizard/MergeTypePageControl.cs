@@ -81,36 +81,36 @@ namespace Ankh.UI.MergeWizard
 
             if (radioButton.Name == "rangeOfRevisionsRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = Resources.RangeOfRevisionsDescription;
-                page.mergeTypePictureBox.Image = Resources.RangeOfRevisionsImage;
+                page.mergeTypeDescriptionLabel.Text = MergeStrings.RangeOfRevisionsDescription;
+                page.mergeTypePictureBox.Image = MergeStrings.RangeOfRevisionsImage;
 
                 wizardPage.SelectedMergeType = MergeWizard.MergeType.RangeOfRevisions;
             }
             else if (radioButton.Name == "reintegrateABranchRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = Resources.ReintegrateABranchDescription;
-                page.mergeTypePictureBox.Image = Resources.ReintegrateABranchImage;
+                page.mergeTypeDescriptionLabel.Text = MergeStrings.ReintegrateABranchDescription;
+                page.mergeTypePictureBox.Image = MergeStrings.ReintegrateABranchImage;
 
                 wizardPage.SelectedMergeType = MergeWizard.MergeType.Reintegrate;
             }
             else if (radioButton.Name == "twoDifferentTreesRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = Resources.TwoDifferentTreesDescription;
-                page.mergeTypePictureBox.Image = Resources.TwoDifferentTreesImage;
+                page.mergeTypeDescriptionLabel.Text = MergeStrings.TwoDifferentTreesDescription;
+                page.mergeTypePictureBox.Image = MergeStrings.TwoDifferentTreesImage;
 
                 wizardPage.SelectedMergeType = MergeWizard.MergeType.TwoDifferentTrees;
             }
             else if (radioButton.Name == "manuallyRecordRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRecordDescription;
-                page.mergeTypePictureBox.Image = Resources.ManuallyRecordImage;
+                page.mergeTypeDescriptionLabel.Text = MergeStrings.ManuallyRecordDescription;
+                page.mergeTypePictureBox.Image = MergeStrings.ManuallyRecordImage;
 
                 wizardPage.SelectedMergeType = MergeWizard.MergeType.ManuallyRecord;
             }
             else if (radioButton.Name == "manuallyRemoveRadioButton")
             {
-                page.mergeTypeDescriptionLabel.Text = Resources.ManuallyRemoveDescription;
-                page.mergeTypePictureBox.Image = Resources.ManuallyRemoveImage;
+                page.mergeTypeDescriptionLabel.Text = MergeStrings.ManuallyRemoveDescription;
+                page.mergeTypePictureBox.Image = MergeStrings.ManuallyRemoveImage;
 
                 wizardPage.SelectedMergeType = MergeWizard.MergeType.ManuallyRemove;
             }

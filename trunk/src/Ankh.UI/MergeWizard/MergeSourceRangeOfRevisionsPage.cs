@@ -37,8 +37,8 @@ namespace Ankh.UI.MergeWizard
         public MergeSourceRangeOfRevisionsPage(MergeWizard wizard) 
             : base(wizard, new MergeSourceRangeOfRevisionsPageControl(), PAGE_NAME)
         {
-            Title = Resources.MergeSourceHeaderTitle;
-            Description = Resources.MergeSourceRangeOfRevisionsPageHeaderMessage;
+            Title = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceRangeOfRevisionsPageHeaderMessage;
             Control.Load += new EventHandler(Control_Load);
         }
 

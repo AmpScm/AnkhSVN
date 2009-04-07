@@ -58,9 +58,9 @@ namespace Ankh.UI.MergeWizard
             if (pBox != null)
             {
                 if (passed)
-                    pBox.Image = Resources.SuccessImage;
+                    pBox.Image = MergeStrings.SuccessImage;
                 else
-                    pBox.Image = Resources.ErrorImage;
+                    pBox.Image = MergeStrings.ErrorImage;
             }
         }
     }

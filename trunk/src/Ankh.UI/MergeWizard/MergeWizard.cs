@@ -69,7 +69,7 @@ namespace Ankh.UI.MergeWizard
             : base(context)
         {
             Container = container;
-            this.WindowTitle = Resources.MergeWizardTitle;
+            this.WindowTitle = MergeStrings.MergeWizardTitle;
 
             mergeTypePage = new MergeTypePage(this);
             bestPracticesPage = new MergeBestPracticesPage(this);
@@ -237,7 +237,7 @@ namespace Ankh.UI.MergeWizard
             ProgressRunnerArgs runnerArgs = new ProgressRunnerArgs();
             runnerArgs.CreateLog = !PerformDryRun;
             // Perform merge using IProgressRunner
-            Context.GetService<IProgressRunner>().RunModal(Resources.MergingTitle, runnerArgs,
+            Context.GetService<IProgressRunner>().RunModal(MergeStrings.MergingTitle, runnerArgs,
                 delegate(object sender, ProgressWorkerArgs ee)
                 {
                     _mergeActions = new List<SvnNotifyEventArgs>();
@@ -329,7 +329,7 @@ namespace Ankh.UI.MergeWizard
                             //no need to continue with the merge operation since there are no revisions to merge
                             if (MergeRevisions != null && EnumTools.GetFirst(MergeRevisions) == null)
                             {
-                                throw new Exception(Resources.NoLogItems);
+                                throw new Exception(MergeStrings.NoLogItems);
                             }
 
                             if (MergeRevisions == null)
@@ -402,7 +402,7 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                return Resources.MergeWizardHeaderImage;
+                return MergeStrings.MergeWizardHeaderImage;
             }
         }
 

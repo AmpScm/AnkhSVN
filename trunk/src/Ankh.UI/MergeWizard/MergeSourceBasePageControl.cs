@@ -36,7 +36,7 @@ namespace Ankh.UI.MergeWizard
     public partial class MergeSourceBasePageControl: BasePageControl
         
     {
-        private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
+        private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(MergeStrings.InvalidFromUrl,
             WizardMessage.MessageType.Error);
 
         readonly MergeSources _retrieveMergeSources;
@@ -148,7 +148,7 @@ namespace Ankh.UI.MergeWizard
             }
             else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
             {
-                WizardPage.Message = new WizardMessage(Resources.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
+                WizardPage.Message = new WizardMessage(MergeStrings.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
                 mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             }
 

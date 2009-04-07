@@ -39,8 +39,8 @@ namespace Ankh.UI.MergeWizard
             : base(wizard, new MergeSourceManuallyRemovePageControl(), PAGE_NAME)
         {
             IsPageComplete = false;
-            Title = Resources.MergeSourceHeaderTitle;
-            Description = Resources.MergeSourceManuallyRemovePageHeaderMessage;
+            Title = MergeStrings.MergeSourceHeaderTitle;
+            Description = MergeStrings.MergeSourceManuallyRemovePageHeaderMessage;
 
             ((MergeSourceManuallyRemovePageControl)PageControl).EnableSelectButton(false);
         }

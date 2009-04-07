@@ -308,13 +308,13 @@ namespace WizardFramework
                 switch(message.Type)
                 {
                     case WizardMessage.MessageType.Error:
-                        newImg = Ankh.UI.MergeWizard.Resources.ErrorIcon;
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.ErrorIcon;
                         break;
                     case WizardMessage.MessageType.Information:
-                        newImg = Ankh.UI.MergeWizard.Resources.InfoIcon;
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.InfoIcon;
                         break;
                     case WizardMessage.MessageType.Warning:
-                        newImg = Ankh.UI.MergeWizard.Resources.WarningIcon;
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.WarningIcon;
                         break;
                     case WizardMessage.MessageType.None:
                     default:
