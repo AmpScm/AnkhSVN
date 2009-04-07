@@ -36,8 +36,8 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = true;
 
-            Title = Resources.MergeTypePageHeaderTitle;
-            this.Description = Resources.MergeTypePageHeaderMessage;
+            Title = MergeStrings.MergeTypePageHeaderTitle;
+            this.Description = MergeStrings.MergeTypePageHeaderMessage;
 
             PageControl.WizardPage = this;
         }

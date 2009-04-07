@@ -130,13 +130,13 @@ namespace Ankh.UI.MergeWizard
             MergeOptionsPage page = ((MergeOptionsPage)WizardPage);
             SvnDepth depth = SvnDepth.Unknown;
 
-            if (box.Text == Resources.SvnDepthInfinity)
+            if (box.Text == MergeStrings.SvnDepthInfinity)
                 depth = SvnDepth.Infinity;
-            else if (box.Text == Resources.SvnDepthChildren)
+            else if (box.Text == MergeStrings.SvnDepthChildren)
                 depth = SvnDepth.Children;
-            else if (box.Text == Resources.SvnDepthFiles)
+            else if (box.Text == MergeStrings.SvnDepthFiles)
                 depth = SvnDepth.Files;
-            else if (box.Text == Resources.SvnDepthEmpty)
+            else if (box.Text == MergeStrings.SvnDepthEmpty)
                 depth = SvnDepth.Empty;
 
             page.Depth = depth;

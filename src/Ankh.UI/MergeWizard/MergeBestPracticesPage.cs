@@ -33,9 +33,9 @@ namespace Ankh.UI.MergeWizard
     {
         public const string PAGE_NAME = "Merge Best Practices Page";
 
-        public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(Resources.ReadyForMerge,
+        public static readonly WizardMessage READY_FOR_MERGE = new WizardMessage(MergeStrings.ReadyForMerge,
             WizardMessage.MessageType.None);
-        public static readonly WizardMessage NOT_READY_FOR_MERGE = new WizardMessage(Resources.NotReadyForMerge,
+        public static readonly WizardMessage NOT_READY_FOR_MERGE = new WizardMessage(MergeStrings.NotReadyForMerge,
             WizardMessage.MessageType.Error);
 
         /// <summary>
@@ -58,8 +58,8 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = true;
 
-            Title = Resources.MergeBestPracticesPageHeaderTitle;
-            Description = Resources.MergeBestPracticesPageHeaderMessage;
+            Title = MergeStrings.MergeBestPracticesPageHeaderTitle;
+            Description = MergeStrings.MergeBestPracticesPageHeaderMessage;
 
         }
 

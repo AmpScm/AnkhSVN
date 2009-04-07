@@ -65,69 +65,69 @@ namespace Ankh.UI.MergeWizard
                     else
                         mergeSource2TextBox.Text = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME)).MergeSourceOne;
                 else
-                    mergeSource2TextBox.Text = Resources.NotApplicableShort;
+                    mergeSource2TextBox.Text = MergeStrings.NotApplicableShort;
 
                 // Populate Revisions
                 if (mergeType == MergeWizard.MergeType.TwoDifferentTrees)
                 {
                     MergeSourceTwoDifferentTreesPage tdtPage = ((MergeSourceTwoDifferentTreesPage)mergeWizard.GetPage(MergeSourceTwoDifferentTreesPage.PAGE_NAME));
 
-                    revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : Resources.HEAD) + "-" +
-                        (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : Resources.HEAD);
+                    revisionsTextBox.Text = (tdtPage.MergeFromRevision != -1 ? tdtPage.MergeFromRevision.ToString() : MergeStrings.HEAD) + "-" +
+                        (tdtPage.MergeToRevision != -1 ? tdtPage.MergeToRevision.ToString() : MergeStrings.HEAD);
                 }
                 else
                     if (mergeWizard.MergeRevisions == null)
-                        revisionsTextBox.Text = Resources.All;
+                        revisionsTextBox.Text = MergeStrings.All;
                     else
                         revisionsTextBox.Text = MergeWizard.MergeRevisionsAsString(mergeWizard.MergeRevisions);
 
                 // Populate Binary Conflicts
                 if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
-                    binaryConflictsTextBox.Text = Resources.ConflictHandlingMark;
+                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingMark;
                 else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.MINE)
-                    binaryConflictsTextBox.Text = Resources.ConflictHandlingMine;
+                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingMine;
                 else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                    binaryConflictsTextBox.Text = Resources.ConflictHandlingPrompt;
+                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingPrompt;
                 else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
-                    binaryConflictsTextBox.Text = Resources.ConflictHandlingTheirs;
+                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingTheirs;
                 else if (mergeOptions.BinaryConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
-                    binaryConflictsTextBox.Text = Resources.ConflictHandlingBase;
+                    binaryConflictsTextBox.Text = MergeStrings.ConflictHandlingBase;
 
                 // Populate Text Conflicts
                 if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.MARK)
-                    textConflictsTextBox.Text = Resources.ConflictHandlingMark;
+                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingMark;
                 else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.MINE)
-                    textConflictsTextBox.Text = Resources.ConflictHandlingMine;
+                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingMine;
                 else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.PROMPT)
-                    textConflictsTextBox.Text = Resources.ConflictHandlingPrompt;
+                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingPrompt;
                 else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.THEIRS)
-                    textConflictsTextBox.Text = Resources.ConflictHandlingTheirs;
+                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingTheirs;
                 else if (mergeOptions.TextConflictResolution == MergeOptionsPage.ConflictResolutionOption.BASE)
-                    textConflictsTextBox.Text = Resources.ConflictHandlingBase;
+                    textConflictsTextBox.Text = MergeStrings.ConflictHandlingBase;
 
                 // Populate Depth
                 if (mergeOptions.Depth == SharpSvn.SvnDepth.Children)
-                    depthTextBox.Text = Resources.SvnDepthChildren;
+                    depthTextBox.Text = MergeStrings.SvnDepthChildren;
                 else if (mergeOptions.Depth == SharpSvn.SvnDepth.Empty)
-                    depthTextBox.Text = Resources.SvnDepthEmpty;
+                    depthTextBox.Text = MergeStrings.SvnDepthEmpty;
                 else if (mergeOptions.Depth == SharpSvn.SvnDepth.Files)
-                    depthTextBox.Text = Resources.SvnDepthFiles;
+                    depthTextBox.Text = MergeStrings.SvnDepthFiles;
                 else if (mergeOptions.Depth == SharpSvn.SvnDepth.Infinity)
-                    depthTextBox.Text = Resources.SvnDepthInfinity;
+                    depthTextBox.Text = MergeStrings.SvnDepthInfinity;
                 else if (mergeOptions.Depth == SharpSvn.SvnDepth.Unknown)
-                    depthTextBox.Text = Resources.SvnDepthUnknown;
+                    depthTextBox.Text = MergeStrings.SvnDepthUnknown;
 
                 // Populate Ignore Ancestry
                 if (mergeOptions.IgnoreAncestry)
-                    ignoreAncestryTextBox.Text = Resources.Yes;
+                    ignoreAncestryTextBox.Text = MergeStrings.Yes;
                 else
-                    ignoreAncestryTextBox.Text = Resources.No;
+                    ignoreAncestryTextBox.Text = MergeStrings.No;
 
                 // Populate Allow Unversioned Obstructions
                 if (mergeOptions.AllowUnversionedObstructions)
-                    unversionedObstructionsTextBox.Text = Resources.Yes;
+                    unversionedObstructionsTextBox.Text = MergeStrings.Yes;
                 else
-                    unversionedObstructionsTextBox.Text = Resources.No;
+                    unversionedObstructionsTextBox.Text = MergeStrings.No;
             }
         }
 

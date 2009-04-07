@@ -67,45 +67,45 @@ namespace Ankh.UI.MergeWizard
                 {
                     case SvnNotifyAction.Exists:
                         if (!model.ContainsKey(snea.FullPath) ||
-                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Existed)))
+                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Existed)))
                         {
                             fileExisted++;
-                            contentAction = Resources.Existed;
+                            contentAction = MergeStrings.Existed;
                         }
                         break;
                     case SvnNotifyAction.Skip:
                         if (!model.ContainsKey(snea.FullPath) ||
-                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Skipped)))
+                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Skipped)))
                         {
                             if (snea.NodeKind == SvnNodeKind.Directory)
                                 fileSkippedDirs++;
                             else if (snea.NodeKind == SvnNodeKind.File)
                                 fileSkippedFiles++;
-                            contentAction = Resources.Skipped;
+                            contentAction = MergeStrings.Skipped;
                         }
                         break;
                     case SvnNotifyAction.UpdateAdd:
                         if (!model.ContainsKey(snea.FullPath) ||
-                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Added)))
+                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Added)))
                         {
                             fileAdded++;
-                            contentAction = Resources.Added;
+                            contentAction = MergeStrings.Added;
                         }
                         break;
                     case SvnNotifyAction.UpdateDelete:
                         if (!model.ContainsKey(snea.FullPath) ||
-                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Deleted)))
+                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Deleted)))
                         {
                             fileDeleted++;
-                            contentAction = Resources.Deleted;
+                            contentAction = MergeStrings.Deleted;
                         }
                         break;
                     case SvnNotifyAction.UpdateReplace:
                         if (!model.ContainsKey(snea.FullPath) ||
-                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Replaced)))
+                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Replaced)))
                         {
                             fileAdded++;
-                            contentAction = Resources.Replaced;
+                            contentAction = MergeStrings.Replaced;
                         }
                         break;
                     case SvnNotifyAction.UpdateUpdate:
@@ -117,26 +117,26 @@ namespace Ankh.UI.MergeWizard
                             {
                                 case SvnNotifyState.Changed:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Modified)))
+                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Modified)))
                                     {
                                         fileUpdated++;
-                                        contentAction = Resources.Modified;
+                                        contentAction = MergeStrings.Modified;
                                     }
                                     break;
                                 case SvnNotifyState.Conflicted:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Conflicted)))
+                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Conflicted)))
                                     {
                                         fileConflicted++;
-                                        contentAction = Resources.Conflicted;
+                                        contentAction = MergeStrings.Conflicted;
                                     }
                                     break;
                                 case SvnNotifyState.Merged:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + Resources.Merged)))
+                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Text-" + MergeStrings.Merged)))
                                     {
                                         fileMerged++;
-                                        contentAction = Resources.Merged;
+                                        contentAction = MergeStrings.Merged;
                                     }
                                     break;
                                 default:
@@ -153,26 +153,26 @@ namespace Ankh.UI.MergeWizard
                             {
                                 case SvnNotifyState.Changed:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + Resources.Modified)))
+                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + MergeStrings.Modified)))
                                     {
                                         propertyUpdated++;
-                                        propertyAction = Resources.Modified;
+                                        propertyAction = MergeStrings.Modified;
                                     }
                                     break;
                                 case SvnNotifyState.Conflicted:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + Resources.Conflicted)))
+                                            (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + MergeStrings.Conflicted)))
                                     {
                                         propertyConflicted++;
-                                        propertyAction = Resources.Conflicted;
+                                        propertyAction = MergeStrings.Conflicted;
                                     }
                                     break;
                                 case SvnNotifyState.Merged:
                                     if (!model.ContainsKey(snea.FullPath) ||
-                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + Resources.Merged)))
+                                        (model.ContainsKey(snea.FullPath) && !model[snea.FullPath].Contains("Prop-" + MergeStrings.Merged)))
                                     {
                                         propertyMerged++;
-                                        propertyAction = Resources.Merged;
+                                        propertyAction = MergeStrings.Merged;
                                     }
                                     break;
                                 default:
@@ -272,12 +272,12 @@ namespace Ankh.UI.MergeWizard
                 }
 
                 if (contents.Length == 0)
-                    row[1] = Resources.Unchanged;
+                    row[1] = MergeStrings.Unchanged;
                 else
                     row[1] = contents;
 
                 if (properties.Length == 0)
-                    row[2] = Resources.Unchanged;
+                    row[2] = MergeStrings.Unchanged;
                 else
                     row[2] = properties;
 

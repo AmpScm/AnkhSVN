@@ -38,7 +38,7 @@ namespace Ankh.UI.MergeWizard
         {
             InitializeComponent();
 
-            Icon = Resources.MergeWizardIcon;
+            Icon = MergeStrings.MergeWizardIcon;
             Wizard = new MergeWizard(context, this);
 
             _context = context;

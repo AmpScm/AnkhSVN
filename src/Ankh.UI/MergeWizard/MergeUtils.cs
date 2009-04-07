@@ -25,15 +25,15 @@ namespace Ankh.UI.MergeWizard
 {
     internal class MergeUtils
     {
-        public static readonly WizardMessage INVALID_FROM_REVISION = new WizardMessage(Resources.InvalidFromRevision,
+        public static readonly WizardMessage INVALID_FROM_REVISION = new WizardMessage(MergeStrings.InvalidFromRevision,
             WizardMessage.MessageType.Error);
-        public static readonly WizardMessage INVALID_TO_REVISION = new WizardMessage(Resources.InvalidToRevision,
+        public static readonly WizardMessage INVALID_TO_REVISION = new WizardMessage(MergeStrings.InvalidToRevision,
             WizardMessage.MessageType.Error);
-        public static readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
+        public static readonly WizardMessage INVALID_FROM_URL = new WizardMessage(MergeStrings.InvalidFromUrl,
             WizardMessage.MessageType.Error);
-        public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(Resources.InvalidToUrl,
+        public static readonly WizardMessage INVALID_TO_URL = new WizardMessage(MergeStrings.InvalidToUrl,
             WizardMessage.MessageType.Error);
-        public static readonly WizardMessage NO_FROM_URL = new WizardMessage(Resources.NoFromUrl,
+        public static readonly WizardMessage NO_FROM_URL = new WizardMessage(MergeStrings.NoFromUrl,
             WizardMessage.MessageType.Error);
 
         private IAnkhServiceProvider _context;
@@ -60,11 +60,11 @@ namespace Ankh.UI.MergeWizard
                 {
                     _mergeDepths = new Dictionary<SvnDepth, string>();
 
-                    _mergeDepths.Add(SvnDepth.Unknown, Resources.SvnDepthUnknown);
-                    _mergeDepths.Add(SvnDepth.Infinity, Resources.SvnDepthInfinity);
-                    _mergeDepths.Add(SvnDepth.Children, Resources.SvnDepthChildren);
-                    _mergeDepths.Add(SvnDepth.Files, Resources.SvnDepthFiles);
-                    _mergeDepths.Add(SvnDepth.Empty, Resources.SvnDepthEmpty);
+                    _mergeDepths.Add(SvnDepth.Unknown, MergeStrings.SvnDepthUnknown);
+                    _mergeDepths.Add(SvnDepth.Infinity, MergeStrings.SvnDepthInfinity);
+                    _mergeDepths.Add(SvnDepth.Children, MergeStrings.SvnDepthChildren);
+                    _mergeDepths.Add(SvnDepth.Files, MergeStrings.SvnDepthFiles);
+                    _mergeDepths.Add(SvnDepth.Empty, MergeStrings.SvnDepthEmpty);
                 }
 
                 return _mergeDepths;

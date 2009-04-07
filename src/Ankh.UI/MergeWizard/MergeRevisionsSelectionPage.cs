@@ -41,8 +41,8 @@ namespace Ankh.UI.MergeWizard
         {
             IsPageComplete = false;
 
-            Title = Resources.MergeRevisionsSelectionPageTitle;
-            this.Message = new WizardMessage(Resources.MergeRevisionsSelectionPageMessage);
+            Title = MergeStrings.MergeRevisionsSelectionPageTitle;
+            this.Message = new WizardMessage(MergeStrings.MergeRevisionsSelectionPageMessage);
 
             PageControl.WizardPage = this;
             ((MergeRevisionsSelectionPageControl)PageControl).SelectionChanged += new EventHandler<EventArgs>(MergeRevisionsSelectionPage_SelectionChanged);
