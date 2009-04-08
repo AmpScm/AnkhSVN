@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.0.6635</title>
+          AnkhSVN-Daily Update - 2.0.6639</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1864/AnkhSvn-Daily-2.0.6635.22.msi">AnkhSVN 2.0.6635</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1880/AnkhSvn-Daily-2.0.6639.23.msi">AnkhSVN 2.0.6639</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6635&amp;tag=2.0.x">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6639&amp;tag=2.0.x">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -232,34 +232,6 @@ up of an in-use SvnClient.</td></tr>
             [r6372]
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> SolutionSettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure SolutionSettings.GetRepositoryUris also returns the list of
 recent repository urls used elsewhere in Ankh</td></tr>
-<tr><td> </td><td class="r"><a id="6370" href="http://ankhsvn.net/rev/?r=6370">
-            [r6370]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update SharpSvn to 1.5006.1154 and 1.5999.1157</td></tr>
-<tr><td> </td><td class="r"><a id="6369" href="http://ankhsvn.net/rev/?r=6369">
-            [r6369]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest/CommandRouting:</strong> CommandTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove debug output</td></tr>
-<tr><td> </td><td class="r"><a id="6368" href="http://ankhsvn.net/rev/?r=6368">
-            [r6368]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> ProgressRunner.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Write the line ending to the stringbuilder, not to the messagepane</td></tr>
-<tr><td> </td><td class="r"><a id="6367" href="http://ankhsvn.net/rev/?r=6367">
-            [r6367]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/lib:</strong> Rhino.Mocks.dll, Moq.dll</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add Moq assembly, was missing because it was ignored</td></tr>
-<tr><td> </td><td class="r"><a id="6366" href="http://ankhsvn.net/rev/?r=6366">
-            [r6366]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/LogCommand.cs, Ankh.Scc/Commands/ProjectFileFilter.cs, Ankh.VS.UnitTest/Helpers/AnkhServiceProvider.cs, Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, Ankh/Commands/BranchSolutionCommand.cs, Ankh.VS.UnitTest/CommandRouting/CommandTests.cs, Ankh.UI/PendingChanges/Commands/CommitPendingChanges.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a test that runs OnUpdate on all commands, with unavailable project and
-solution directories.
-Fix some NullRef exceptions that were not likely to occur, but did in the tests
-and were checked in 99% of all other cases</td></tr>
-<tr><td> </td><td class="r"><a id="6363" href="http://ankhsvn.net/rev/?r=6363">
-            [r6363]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/UpdateItemCommand.cs, Ankh/Services/ProgressRunner.cs, Ankh.Services/VS/IOutputPaneManager.cs, Ankh.Services/UI/IProgressRunner.cs, Ankh.VS/OutputPane, Ankh.VS/Ankh.VS.csproj, Ankh.VS/OutputPane/OutputPaneManager.cs, Ankh.UI/MergeWizard/MergeWizard.cs, Ankh/Commands/SolutionUpdateCommand.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement an outputpane writer to show what files have been changed
-by an update. Hook this writer from the SolutionUpdate, UpdateItem and
-Merge commands.</td></tr>
-<tr class="d"><td colspan="4">2009-03-09</td></tr>
-<tr><td> </td><td class="r"><a id="6361" href="http://ankhsvn.net/rev/?r=6361">
-            [r6361]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.QueryEditSave.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the case where a batch call to QuerySaveFiles is cancelled, the user
-should only have to click cancel once in a batch.</td></tr>
 
 </table>
 <!--/Recent changes-->
