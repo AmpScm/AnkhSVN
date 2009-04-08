@@ -117,13 +117,13 @@ namespace Ankh.VS.Dialogs
         {
             ppszFilename = "";
             pnFormatIndex = 0;
-            return VSConstants.E_UNEXPECTED;
+            return VSConstants.S_OK;
         }
 
         public int GetFormatList(out string ppszFormatList)
         {
             ppszFormatList = "";
-            return VSConstants.E_UNEXPECTED;
+            return VSConstants.S_OK;
         }
 
         public int InitNew(uint nFormatIndex)
@@ -134,22 +134,22 @@ namespace Ankh.VS.Dialogs
         public int IsDirty(out int pfIsDirty)
         {
             pfIsDirty = 0;
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int Load(string pszFilename, uint grfMode, int fReadOnly)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int Save(string pszFilename, int fRemember, uint nFormatIndex)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int SaveCompleted(string pszFilename)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -165,12 +165,12 @@ namespace Ankh.VS.Dialogs
 
         public int SetDocDataDirty(int fDirty)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int SetDocDataReadOnly(int fReadOnly)
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -179,12 +179,12 @@ namespace Ankh.VS.Dialogs
 
         public int HandsOffDocDataStorage()
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         public int HandsOnDocDataStorage()
         {
-            return 0;
+            return VSConstants.S_OK;
         }
 
         #endregion
@@ -207,7 +207,7 @@ namespace Ankh.VS.Dialogs
 
             pfImage[0] = false;
             pgrfOptions[0] = 0;
-            return 0;
+            return VSConstants.S_OK;
         }
 
         int IVsFindTarget.GetCurrentSpan(TextSpan[] pts)
@@ -232,7 +232,7 @@ namespace Ankh.VS.Dialogs
             if (_findTarget != null)
                 return _findTarget.GetMatchRect(prc);
 
-            return 0;
+            return VSConstants.S_OK;
         }
 
         int IVsFindTarget.GetProperty(uint propid, out object pvar)
