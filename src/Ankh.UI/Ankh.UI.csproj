@@ -176,6 +176,20 @@
     <Compile Include="Commands\UpdateDialog.Designer.cs">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
+    <None Include="Controls\Form1.cs">
+      <SubType>Form</SubType>
+    </None>
+    <None Include="Controls\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </None>
+    <None Include="Controls\StatusContainer.cs">
+      <SubType>Component</SubType>
+    </None>
+    <None Include="Controls\StatusContainerDesigner.cs" />
+    <None Include="Controls\StatusPanel.cs">
+      <SubType>Component</SubType>
+    </None>
+    <None Include="Controls\StatusPanelDesigner.cs" />
     <Compile Include="DiffWindow\DiffToolWindowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -893,6 +907,9 @@
       <DependentUpon>UpdateDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Controls\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </None>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
       <SubType>Designer</SubType>
