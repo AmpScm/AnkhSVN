@@ -29,6 +29,7 @@ using Ankh.VS;
 using Ankh.Xml;
 using Ankh.Commands;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Ankh
 {
@@ -325,9 +326,9 @@ namespace Ankh
                     {
                         SvnException rc = sx.RootCause as SvnException;
                         if (rc == null || rc.SvnErrorCode == sx.SvnErrorCode)
-                            subject += " (" + sx.SvnErrorCode.ToString() + ")";
+                            subject += " (" + ErrorToString(sx) + ")";
                         else
-                            subject += " (" + sx.SvnErrorCode.ToString() + "-" + rc.SvnErrorCode.ToString() + ")";
+                            subject += " (" + ErrorToString(sx) + "-" + ErrorToString(rc) + ")";
                     }
 
                     Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
@@ -335,6 +336,31 @@ namespace Ankh
                 }
             }
         }
+
+		static string ErrorToString(SvnException ex)
+		{
+			if (Enum.IsDefined(typeof(SvnErrorCode), ex.SvnErrorCode))
+				return ex.SvnErrorCode.ToString();
+			else if (ex.SvnErrorCategory == SvnErrorCategory.OperatingSystem)
+			{
+				// 
+				int num = ex.OperatingSystemErrorCode;
+
+				if ((num & 0x80000000) != 0x80000000)
+				{
+					num = unchecked((int)(((uint)num & 0xFFFF) | 0x80070000));
+				}
+
+				Exception sysEx = Marshal.GetExceptionForHR(num);
+
+				if (sysEx != null)
+					return "OS:"+sysEx.GetType().Name;
+			}
+			else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
+				return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
+			
+			return ((int)ex.SvnErrorCode).ToString();
+		}
 
         private static string GetNestedStackTraces(Exception ex)
         {
