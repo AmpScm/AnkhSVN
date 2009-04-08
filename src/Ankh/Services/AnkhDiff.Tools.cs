@@ -92,7 +92,7 @@ namespace Ankh.Services
 
             // Note: For TortoiseSVN use the host program files, as $(ProgramFiles) is invalid on X64 
             //       with TortoiseSVN integrated in explorer
-            tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseMerge",
+			tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
                 RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
