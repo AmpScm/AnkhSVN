@@ -12,7 +12,6 @@ namespace Ankh.UI.Controls
 	class StatusPanelDesigner : ScrollableControlDesigner
 	{
 		StatusPanel _panel;
-		bool _selected;
 
 		public override void Initialize(System.ComponentModel.IComponent component)
 		{

@@ -99,11 +99,12 @@ namespace Ankh.UI.Controls
 					continue;
 
 				panel.PanelLocation = new Point(0, i);
-				int height = panel.HeaderHeight + panel.Height + panel.FooterHeight;
+				int height = panel.HeaderHeight + panel.Height +panel.Margin.Vertical + panel.FooterHeight;
 				panel.PanelSize = new Size(clSize.Width - 2, height);
 
-				i += height + 4;
+				i += height + 1 + PanelSpace;
 			}
+			Invalidate();
 		}
 
 		internal void DoAddPanel(Control value)
@@ -116,8 +117,13 @@ namespace Ankh.UI.Controls
 			return false;
 		}
 
-
-
+		int _panelSpace = 3;
+		[DefaultValue(3), Localizable(false)]
+		public int PanelSpace
+		{
+			get { return _panelSpace; }
+			set { _panelSpace = Math.Max(0, value); ApplySizes(null); }
+		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
@@ -135,8 +141,13 @@ namespace Ankh.UI.Controls
 				e.Graphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(pl, pz));
 				e.Graphics.DrawLine(SystemPens.ControlDark, pl.X+1, pl.Y+hh-1, pl.X + pz.Width, pl.Y+hh-1);
 
-				using (Brush brush = new LinearGradientBrush(pl, pl+new Size(width,0), panel.HeaderLeft, panel.HeaderRight))
+				using (Brush brush = new LinearGradientBrush(pl, pl+new Size(width,0), panel.GradientLeft, panel.GradientRight))
 					e.Graphics.FillRectangle(brush, new Rectangle(pl.X+1,pl.Y+1, pz.Width-2, panel.HeaderHeight-2));
+
+				Image img = panel.HeaderImage;
+
+				if (img != null)
+					e.Graphics.DrawImageUnscaled(img, pl + new Size(4, 4));
 			}
 		}
 
