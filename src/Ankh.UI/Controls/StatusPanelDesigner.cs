@@ -9,38 +9,38 @@ using System.ComponentModel.Design;
 
 namespace Ankh.UI.Controls
 {
-	class StatusPanelDesigner : ScrollableControlDesigner
-	{
-		StatusPanel _panel;
+    class StatusPanelDesigner : ScrollableControlDesigner
+    {
+        StatusPanel _panel;
 
-		public override void Initialize(System.ComponentModel.IComponent component)
-		{
-			base.Initialize(component);
+        public override void Initialize(System.ComponentModel.IComponent component)
+        {
+            base.Initialize(component);
 
-			_panel = (StatusPanel)component;
-		}
+            _panel = (StatusPanel)component;
+        }
 
-		public override bool CanBeParentedTo(System.ComponentModel.Design.IDesigner parentDesigner)
-		{
-			return (parentDesigner != null) && parentDesigner.Component is StatusContainer;
-		}
+        public override bool CanBeParentedTo(System.ComponentModel.Design.IDesigner parentDesigner)
+        {
+            return (parentDesigner != null) && parentDesigner.Component is StatusContainer;
+        }
 
-		public override SelectionRules SelectionRules
-		{
-			get
-			{
-				return base.SelectionRules & (SelectionRules.BottomSizeable | SelectionRules.Visible);
-			}
-		}
+        public override SelectionRules SelectionRules
+        {
+            get
+            {
+                return base.SelectionRules & (SelectionRules.BottomSizeable | SelectionRules.Visible);
+            }
+        }
 
-		DesignerVerbCollection _verbs;
-		public override System.ComponentModel.Design.DesignerVerbCollection Verbs
-		{
-			get
-			{
-				_verbs = new DesignerVerbCollection();
-				return _verbs;
-			}
-		}
-	}
+        DesignerVerbCollection _verbs;
+        public override System.ComponentModel.Design.DesignerVerbCollection Verbs
+        {
+            get
+            {
+                _verbs = new DesignerVerbCollection();
+                return _verbs;
+            }
+        }
+    }
 }
