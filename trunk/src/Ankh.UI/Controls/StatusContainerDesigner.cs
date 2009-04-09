@@ -10,7 +10,6 @@ namespace Ankh.UI.Controls
 	class StatusContainerDesigner : ParentControlDesigner
 	{
 		StatusContainer _container;
-		StatusPanel _selected;
 		IDesignerHost _designerHost;
 		bool _disableGrid;
 

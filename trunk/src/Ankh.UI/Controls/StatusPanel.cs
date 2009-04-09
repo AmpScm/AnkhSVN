@@ -11,6 +11,7 @@ namespace Ankh.UI.Controls
 	class StatusPanel : Panel
 	{
 		StatusContainer _owner;
+		Image _panelImage;
 		string _title;
 		string _summary;
 		bool _collapsed;
@@ -78,7 +79,7 @@ namespace Ankh.UI.Controls
 		{
 			get
 			{
-				return new Padding(0, 0, 0, 0);
+				return new Padding(3, 3, 3, 3);
 			}
 		}
 
@@ -115,6 +116,13 @@ namespace Ankh.UI.Controls
 			}
 		}
 
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
+		public new Size Size
+		{
+			get { return base.Size; }
+			set { base.Size = value; }
+		}
+
 		public bool ShouldSerializeHeight()
 		{
 			return (Height != DefaultSize.Height) && !Collapsed;
@@ -140,33 +148,128 @@ namespace Ankh.UI.Controls
 			}
 		}
 
-		Color _left = Color.Red;
-		Color _right = SystemColors.Window;
+		Color _gradientLeft = SystemColors.Window;
+		Color _gradientRight = SystemColors.Window;
 
-		public Color HeaderLeft
+		[Category("Panel")]
+		public Color GradientLeft
 		{
-			get { return _left; }
-			set { _left = value; }
+			get { return _gradientLeft; }
+			set 
+			{
+				if (_gradientLeft != value)
+				{
+					_mode = StatusPanelMode.None;
+					_gradientLeft = value;
+
+					if (Owner != null && Owner.IsHandleCreated)
+						Owner.Invalidate();
+				}
+			}
 		}
 
-		public Color HeaderRight
+		bool ShouldSerializeGradientLeft()
 		{
-			get { return _right; }
-			set { _right = value; }
+			return (_mode == StatusPanelMode.None) && GradientLeft != SystemColors.Window;
 		}
+
+		[Category("Panel")]
+		public Color GradientRight
+		{
+			get { return _gradientRight; }
+			set
+			{
+				if (_gradientRight != value)
+				{
+					_mode = StatusPanelMode.None;
+					_gradientRight = value;
+
+					if (Owner != null && Owner.IsHandleCreated)
+						Owner.Invalidate();
+				}
+			}
+		}
+
+		bool ShouldSerializeGradientRight()
+		{
+			return (_mode == StatusPanelMode.None) && GradientRight != SystemColors.Window;
+		}
+
+
+		[Category("Panel")]
+		public Image HeaderImage
+		{
+			get { return _panelImage; }
+			set
+			{
+				if (_panelImage != value)
+				{
+					_mode = StatusPanelMode.None;
+					_panelImage = value;
+					if (Owner != null && Owner.IsHandleCreated)
+						Owner.Invalidate();
+				}
+			}
+		}
+
+		bool ShouldSerializeHeaderImage()
+		{
+			return _mode == StatusPanelMode.None && HeaderImage != null;
+		}
+
+		bool ShouldSerializeHeaderRight()
+		{
+			return (_mode == StatusPanelMode.None) && GradientRight != SystemColors.Window;
+		}
+
+		StatusPanelMode _mode;
+		[DefaultValue(StatusPanelMode.None), Localizable(false), Category("Panel")]
+		public StatusPanelMode PanelMode
+		{
+			get { return _mode; }
+			set
+			{
+				switch (value)
+				{
+					case StatusPanelMode.None:
+						return;
+					default:
+						throw new InvalidOperationException();
+					case StatusPanelMode.Error:
+						_gradientLeft = Color.FromArgb(0xB0, 0xFF, 0, 0);
+						_panelImage = StatusPanelResources.Status_Error;
+						break;
+					case StatusPanelMode.Warning:
+						_gradientLeft = Color.FromArgb(0xB0, 0xFF, 0xFF, 0);
+						_panelImage = StatusPanelResources.Status_Warning;
+						break;
+					case StatusPanelMode.Ok:
+						_gradientLeft = Color.PaleGreen;
+						_panelImage = StatusPanelResources.Status_Ok;
+						break;
+					case StatusPanelMode.Suggestion:
+						_gradientLeft = (Owner ?? (Control)this).BackColor;
+						_panelImage = StatusPanelResources.Status_Suggestion;
+						break;
+				}
+
+				_mode = value;
+				_gradientRight = (Owner ?? (Control)this).BackColor;
+			}
+		}		
 
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
 		public Point PanelLocation
 		{
-			get { return base.Location - new Size(6, HeaderHeight); }
-			set { base.Location = value + new Size(6, HeaderHeight); }
+			get { return base.Location - new Size(2+Margin.Horizontal, HeaderHeight + Margin.Top); }
+			set { base.Location = value + new Size(2+Margin.Horizontal, HeaderHeight + Margin.Top); }
 		}
 
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
 		public Size PanelSize
 		{
-			get { return Size + new Size(12, HeaderHeight + FooterHeight); }
-			set { Size = value - new Size(12, HeaderHeight + FooterHeight); }
+			get { return Size + new Size(12, HeaderHeight + FooterHeight + Margin.Vertical); }
+			set { Size = value - new Size(12, HeaderHeight + FooterHeight+ Margin.Vertical); }
 		}
 
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), Browsable(false)]
@@ -253,7 +356,7 @@ namespace Ankh.UI.Controls
 
 		protected internal StatusContainer Owner
 		{
-			get { return _owner; }
+			get { return _owner ?? (_owner = Parent as StatusContainer); }
 			internal set { _owner = value; }
 		}
 

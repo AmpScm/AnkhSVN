@@ -8,24 +8,19 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.Controls
 {
-	public partial class Form1 : Form
+	public partial class StatusPanelTestForm : Form
 	{
-		public Form1()
+		public StatusPanelTestForm()
 		{
 			InitializeComponent();
 		}
 
 		public static void TestForm()
 		{
-			using (Form1 f = new Form1())
+			using (StatusPanelTestForm f = new StatusPanelTestForm())
 			{
 				f.ShowDialog();
 			}
-		}
-
-		private void statusContainer_Click(object sender, EventArgs e)
-		{
-
 		}
 	}
 }
