@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6645</title>
+          AnkhSVN-Daily Update - 2.1.6649</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,24 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1896/AnkhSvn-Daily-2.1.6645.28.msi">AnkhSVN 2.1.6645</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1898/AnkhSvn-Daily-2.1.6649.29.msi">AnkhSVN 2.1.6649</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6645">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6649">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-04-09</td></tr>
+<tr><td> </td><td class="r"><a id="6649" href="http://ankhsvn.net/rev/?r=6649">
+            [r6649]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/Controls:</strong> StatusPanel.cs, StatusPanelDesigner.cs, StatusContainer.cs, StatusPanelTestForm.Designer.cs, StatusContainerDesigner.cs, StatusPanelTestForm.cs, StatusPanelMode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement title and fix size calculation on the new status panels.</td></tr>
 <tr class="d"><td colspan="4">2009-04-07</td></tr>
 <tr><td> </td><td class="r"><a id="6638" href="http://ankhsvn.net/rev/?r=6638">
             [r6638]
@@ -402,16 +406,6 @@ exceptions on unreadable directories and to support long path browsing.<br>
             [r6408]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Scc/SccFilesystemNode.cs, Scc/SccFilesystemNodeQ.cs, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a FileSystemInfo variant based on PInvoke that is long-path capable to
 work around the next class of long path problems.</td></tr>
-<tr><td> </td><td class="r"><a id="6403" href="http://ankhsvn.net/rev/?r=6403">
-            [r6403]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/VS/IProjectCommitSettings.cs, Ankh/Services/SolutionSettings.Commit.cs, Ankh/Services/SolutionSettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add support for parsing log summary (tsvn:logsummary) in preparation for using
-this value in the history and recent messages list.</td></tr>
-<tr class="d"><td colspan="4">2009-03-11</td></tr>
-<tr><td> </td><td class="r"><a id="6395" href="http://ankhsvn.net/rev/?r=6395">
-            [r6395]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/AnkhToolWindowControl.cs, Ankh.Services/Scc/UI/IAnkhToolWindowControl.cs, Ankh.UI/RepositoryExplorer/BusyOverlay.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Clear the BusyIndicator in another way; this allows removing the .Visible
-hack on the AnkhToolWindowControl that sometimes made the control invisible
-in 'strange' dockstates.</td></tr>
 
 </table>
 <!--/Recent changes-->
