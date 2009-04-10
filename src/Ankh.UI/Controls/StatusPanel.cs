@@ -372,6 +372,20 @@ namespace Ankh.UI.Controls
             }
         }
 
+        bool _designerHidden;
+        [Localizable(false), Category("Panel"), DefaultValue(false)]
+        public bool HiddenInDesigner
+        {
+            get { return _designerHidden; }
+            set
+            {
+                _designerHidden = value;
+
+                if (DesignMode)
+                    Visible = !value;
+            }
+        }
+
         protected internal StatusContainer Owner
         {
             get { return _owner ?? (_owner = Parent as StatusContainer); }
