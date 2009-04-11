@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6649</title>
+          AnkhSVN-Daily Update - 2.1.6652</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1898/AnkhSvn-Daily-2.1.6649.29.msi">AnkhSVN 2.1.6649</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1903/AnkhSvn-Daily-2.1.6652.30.msi">AnkhSVN 2.1.6652</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6649">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6652">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -388,24 +388,6 @@ the Working Copy Explorer</td></tr>
             [r6423]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> LogCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark log commands in repository and annotate viewer as available when AnkhSVN
 is not the active SCC provider.</td></tr>
-<tr><td> </td><td class="r"><a id="6419" href="http://ankhsvn.net/rev/?r=6419">
-            [r6419]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/SolutionExplorer/FileIconMapper.cs, Ankh.UI/WorkingCopyExplorer/FileSystemListViewItem.cs, Ankh.VS/SolutionExplorer/SolutionExplorerStrings.resx, Ankh.UI/PendingChanges/Synchronize/SynchronizeListItem.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS/SolutionExplorer/SolutionExplorerStrings.Designer.cs, Ankh.UI/PendingChanges/Conflicts/ConflictItem.cs, Ankh.Services/VS/IFileIconMapper.cs, Ankh.UI/PendingChanges/Commits/PendingCommitItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the real file 'type' from SHGetFileInfo, instead of just showing the extension.</td></tr>
-<tr><td> </td><td class="r"><a id="6410" href="http://ankhsvn.net/rev/?r=6410">
-            [r6410]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh.Services/Scc/IFileStatusCache.cs, Ankh.Services/Scc/SccFilesystemNode.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rewrite our non-subversion directory stat to use the SccFileSystemNode class
-instead of .Net's DirectoryInfo class to support long paths in the status walker.</td></tr>
-<tr class="d"><td colspan="4">2009-03-12</td></tr>
-<tr><td> </td><td class="r"><a id="6409" href="http://ankhsvn.net/rev/?r=6409">
-            [r6409]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/Nodes/WCDirectoryNode.cs, Ankh.Services/Scc/SccFilesystemNode.cs, Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs, Ankh.Services/Scc/SccFilesystemNodeQ.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the SccFileSystemNode class in the working copy explorer to avoid several
-exceptions on unreadable directories and to support long path browsing.<br>
-(File icons are broken on long paths; The Windows shell doesn't support these
- long paths; and doesn't provide icons).</td></tr>
-<tr><td> </td><td class="r"><a id="6408" href="http://ankhsvn.net/rev/?r=6408">
-            [r6408]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Scc/SccFilesystemNode.cs, Scc/SccFilesystemNodeQ.cs, Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a FileSystemInfo variant based on PInvoke that is long-path capable to
-work around the next class of long path problems.</td></tr>
 
 </table>
 <!--/Recent changes-->
