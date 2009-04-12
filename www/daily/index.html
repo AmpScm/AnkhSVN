@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6652</title>
+          AnkhSVN-Daily Update - 2.1.6654</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1903/AnkhSvn-Daily-2.1.6652.30.msi">AnkhSVN 2.1.6652</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1911/AnkhSvn-Daily-2.1.6654.31.msi">AnkhSVN 2.1.6654</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6652">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6654">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -330,64 +330,6 @@ include some documentation from the idl file</td></tr>
 <tr><td> </td><td class="r"><a id="6442" href="http://ankhsvn.net/rev/?r=6442">
             [r6442]
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest:</strong> CommandRouting/CommandRoutingTest.cs, Mocks/AnkhUIShellMock.cs, Ankh.VS.UnitTest.csproj, Mocks/DteMock.cs, MenuItemTests/MenuItemCallback.cs, Mocks/SelectionContext.cs, Mocks/VsShellMock.cs, Mocks/OutputPaneMock.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove reference to RhinoMocks and clean up now unused helpers</td></tr>
-<tr><td> </td><td class="r"><a id="6441" href="http://ankhsvn.net/rev/?r=6441">
-            [r6441]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest:</strong> CommandRouting/CommandRoutingTest.cs, Helpers/ServiceProviderHelper.cs, MenuItemTests/MenuItemCallback.cs, Mocks/SelectionContext.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move to NUnit and Moq here too</td></tr>
-<tr><td> </td><td class="r"><a id="6439" href="http://ankhsvn.net/rev/?r=6439">
-            [r6439]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest:</strong> PackageTest.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix init problems</td></tr>
-<tr><td> </td><td class="r"><a id="6438" href="http://ankhsvn.net/rev/?r=6438">
-            [r6438]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest:</strong> PackageTest.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Convert to nUnit + Moq</td></tr>
-<tr><td> </td><td class="r"><a id="6437" href="http://ankhsvn.net/rev/?r=6437">
-            [r6437]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS.UnitTest/Services:</strong> FileIconMapperTest.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add some more tests to the FileIconMapper</td></tr>
-<tr><td> </td><td class="r"><a id="6436" href="http://ankhsvn.net/rev/?r=6436">
-            [r6436]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.VS/SolutionExplorer:</strong> FileIconMapper.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the key used for caching file types is based on "ext", not on a mixture
-of ".ext" and "ext"</td></tr>
-<tr><td> </td><td class="r"><a id="6435" href="http://ankhsvn.net/rev/?r=6435">
-            [r6435]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer:</strong> RepositoryStrings.resx, RepositoryStrings.Designer.cs, RepositoryListItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use IFileIconMapper to get the real file type name, instead of displaying the
-extension</td></tr>
-<tr><td> </td><td class="r"><a id="6434" href="http://ankhsvn.net/rev/?r=6434">
-            [r6434]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/SolutionExplorer/FileIconMapper.cs, Ankh.VS.UnitTest/Services, Ankh.VS.UnitTest/Services/FileIconMapperTest.cs, Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, Ankh.VS/Properties/AssemblyInfo.cs, Ankh.Services/VS/IFileIconMapper.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add overload to IFileIconMapper for retrieving the file 'type' string based on
-just an extension (for use in the RepositoryExplorer).</td></tr>
-<tr><td> </td><td class="r"><a id="6432" href="http://ankhsvn.net/rev/?r=6432">
-            [r6432]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog/Commands:</strong> ChangeLogMessage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add changed message to recent messages list after changing logmessages</td></tr>
-<tr><td> </td><td class="r"><a id="6431" href="http://ankhsvn.net/rev/?r=6431">
-            [r6431]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> RecentMessageDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Replace line endings with return symbol</td></tr>
-<tr><td> </td><td class="r"><a id="6430" href="http://ankhsvn.net/rev/?r=6430">
-            [r6430]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services/PendingChanges:</strong> PendingChangeHandler.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure we don't add whitespace only log messages to the recent logmessages
-list</td></tr>
-<tr><td> </td><td class="r"><a id="6429" href="http://ankhsvn.net/rev/?r=6429">
-            [r6429]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog:</strong> LogRevisionItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use a return symbol in the repository list in the log viewer, intead of trimming
-after the first CRLF.</td></tr>
-<tr><td> </td><td class="r"><a id="6428" href="http://ankhsvn.net/rev/?r=6428">
-            [r6428]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/SvnLog:</strong> LogRevisionControl.cs, LogChangedPaths.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix contextmenu positions in log viewer, when invoked with the keyboard</td></tr>
-<tr><td> </td><td class="r"><a id="6427" href="http://ankhsvn.net/rev/?r=6427">
-            [r6427]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> RepositoryExplorer/RepositoryListView.cs, WorkingCopyExplorer/FileSystemTreeView.cs, RepositoryExplorer/RepositoryExplorerControl.cs, VSSelectionControls/SmartTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix context menu location when using the keyboard context menu in the
-repository explorer treeview and listview</td></tr>
-<tr><td> </td><td class="r"><a id="6426" href="http://ankhsvn.net/rev/?r=6426">
-            [r6426]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemTreeView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=6425">r6425</a>, fix context menu key in the treeview of the WorkingCopy
-Explorer</td></tr>
-<tr><td> </td><td class="r"><a id="6425" href="http://ankhsvn.net/rev/?r=6425">
-            [r6425]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/WorkingCopyExplorer:</strong> FileSystemDetailsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the behavior of the (keyboard) context menu button in the right pane of
-the Working Copy Explorer</td></tr>
-<tr class="d"><td colspan="4">2009-03-13</td></tr>
-<tr><td> </td><td class="r"><a id="6423" href="http://ankhsvn.net/rev/?r=6423">
-            [r6423]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> LogCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark log commands in repository and annotate viewer as available when AnkhSVN
-is not the active SCC provider.</td></tr>
 
 </table>
 <!--/Recent changes-->
