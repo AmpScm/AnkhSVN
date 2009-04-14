@@ -249,7 +249,7 @@ namespace Ankh.UI.Controls
                         _panelImage = StatusPanelResources.Status_Ok;
                         break;
                     case StatusPanelMode.Suggestion:
-                        _gradientLeft = (Owner ?? (Control)this).BackColor;
+                        _gradientLeft = SystemColors.Control;
                         _panelImage = StatusPanelResources.Status_Suggestion;
                         break;
                 }
@@ -266,6 +266,11 @@ namespace Ankh.UI.Controls
         {
             base.OnParentChanged(e);
 
+            UpdateGradient();
+        }
+
+        void UpdateGradient()
+        {
             switch (_mode)
             {
                 case StatusPanelMode.Error:
@@ -389,7 +394,7 @@ namespace Ankh.UI.Controls
         protected internal StatusContainer Owner
         {
             get { return _owner ?? (_owner = Parent as StatusContainer); }
-            internal set { _owner = value; }
+            internal set { _owner = value; UpdateGradient(); }
         }
 
         protected override void OnVisibleChanged(EventArgs e)
