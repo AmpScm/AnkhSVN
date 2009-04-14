@@ -52,6 +52,7 @@ namespace Ankh.UI.Controls
                 }
 
                 _owner.ApplySizes(sp);
+                sp.Owner = _owner;
             }
         }
 
