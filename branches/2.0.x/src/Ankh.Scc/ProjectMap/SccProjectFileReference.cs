@@ -151,7 +151,7 @@ namespace Ankh.Scc.ProjectMap
                     if (ErrorHandler.Succeeded(
                         Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconIndex, out value)))
                     {
-                        icon = new ProjectIconReference(imageList, (int)value);
+                        icon = new ProjectIconReference(imageList, SafeToInt(value));
                         return true;
                     }
                 }
@@ -161,7 +161,7 @@ namespace Ankh.Scc.ProjectMap
                 if (imageList == IntPtr.Zero && ErrorHandler.Succeeded(
                     Project.ProjectHierarchy.GetProperty(id, (int)__VSHPROPID.VSHPROPID_IconHandle, out value)))
                 {
-                    icon = new ProjectIconReference((IntPtr)(int)value); // Marshalled by VS as 32 bit integer
+                    icon = new ProjectIconReference((IntPtr)SafeToInt(value)); // Marshalled by VS as 32 bit integer
                     return true;
                 }
             }
@@ -169,6 +169,24 @@ namespace Ankh.Scc.ProjectMap
             { /* Eat all project exceptions */ }
 
             return false;
+        }
+
+        private int SafeToInt(object value)
+        {
+            if(value == null)
+                return 0;
+
+            if (value is int) return (int)value;
+            if (value is uint) return (int)(uint)value;
+            if (value is short) return (int)(short)value;
+            if (value is ushort) return (int)(ushort)value;
+            if (value is byte) return (int)(byte)value;
+            if (value is sbyte) return (int)(sbyte)value;
+            if (value is long) return (int)(long)value;
+            if (value is ulong) return (int)(ulong)value;
+            if (value is IntPtr) return (int)(IntPtr)value;
+
+            return 0; 
         }
 
         internal IList<string> GetSubFiles()
