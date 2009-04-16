@@ -66,7 +66,9 @@ namespace Ankh.Commands
                     {
                         using (SvnClient cl = e.GetService<ISvnClientPool>().GetNoUIClient())
                         {
-                            cl.Delete(item.FullPath);
+                            SvnDeleteArgs da = new SvnDeleteArgs();
+                            da.Force = true;
+                            cl.Delete(item.FullPath, da);
                         }
                     }
                     else if (item.IsFile)
