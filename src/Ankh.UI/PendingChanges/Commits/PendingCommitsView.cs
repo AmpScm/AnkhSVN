@@ -83,7 +83,7 @@ namespace Ankh.UI.PendingChanges.Commits
             modified.Sorter = new SortWrapper(
                 delegate(PendingCommitItem x, PendingCommitItem y)
                 {
-                    return x.PendingChange.Item.Modified.CompareTo(y.PendingChange.Item.Modified);
+                    return x.PendingChange.SvnItem.Modified.CompareTo(y.PendingChange.SvnItem.Modified);
                 });
             
             change.Groupable = true;

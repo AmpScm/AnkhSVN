@@ -93,7 +93,7 @@ namespace Ankh.Commands
 
             foreach (PendingChange pc in e.GetService<IPendingChangesManager>().GetAll())
             {
-                string cl = pc.Item.Status.ChangeList;
+                string cl = pc.SvnItem.Status.ChangeList;
 
                 if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, IgnoreOnCommit))
                 {

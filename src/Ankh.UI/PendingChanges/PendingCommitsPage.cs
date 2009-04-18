@@ -424,7 +424,7 @@ namespace Ankh.UI.PendingChanges
                 if (!pci.Checked)
                     continue;
 
-                if (!keepingLocks || pci.PendingChange.Item.IsLocked)
+                if (!keepingLocks || pci.PendingChange.SvnItem.IsLocked)
                     return true;
             }
 
@@ -442,9 +442,9 @@ namespace Ankh.UI.PendingChanges
                     continue;
                 PendingChange pc = pci.PendingChange;
 
-                if (pc.Item.IsModified)
+                if (pc.SvnItem.IsModified)
                     return true;
-                else if (!pc.Item.IsVersioned && pc.Item.IsVersionable && pc.Item.InSolution)
+                else if (!pc.SvnItem.IsVersioned && pc.SvnItem.IsVersionable && pc.SvnItem.InSolution)
                     return true; // Will be added                
             }
 

@@ -105,7 +105,7 @@ namespace Ankh.Services.PendingChanges
                     {
                         foreach (PendingChange pc in changes)
                         {
-                            SvnItem item = pc.Item;
+                            SvnItem item = pc.SvnItem;
                             SvnWorkingCopy wc;
                             if (!string.IsNullOrEmpty(relativeToPath)
                                 && item.FullPath.StartsWith(relativeToPathP, StringComparison.OrdinalIgnoreCase))
@@ -143,7 +143,7 @@ namespace Ankh.Services.PendingChanges
 
             foreach (PendingChange pc in changes)
             {
-                SvnItem item = pc.Item;
+                SvnItem item = pc.SvnItem;
                 SvnWorkingCopy wc = item.WorkingCopy;
 
                 if (wc != null)
@@ -274,7 +274,7 @@ namespace Ankh.Services.PendingChanges
             SvnWorkingCopy wc = null;
             foreach (PendingChange pc in state.Changes)
             {
-                SvnItem item = pc.Item;
+                SvnItem item = pc.SvnItem;
 
                 if (item.IsVersioned || item.IsVersionable)
                 {
@@ -361,7 +361,7 @@ namespace Ankh.Services.PendingChanges
             {
                 if (pc.Change != null && pc.Change.State == PendingChangeKind.New)
                 {
-                    SvnItem item = pc.Item;
+                    SvnItem item = pc.SvnItem;
 
                     // HACK: figure out why PendingChangeKind.New is still true
                     if (item.IsVersioned)
