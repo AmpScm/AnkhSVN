@@ -25,7 +25,7 @@ using SharpSvn;
 namespace Ankh.Scc
 {
     [DebuggerDisplay("File={FullPath}, Status={Status}")]
-    public class SvnItemData : AnkhPropertyGridItem
+    public partial class SvnItemData : AnkhPropertyGridItem
     {
         readonly IAnkhServiceProvider _context;
         readonly SvnItem _item;
@@ -58,7 +58,7 @@ namespace Ankh.Scc
             get { return _item.Name; }
         }
 
-        [DisplayName("Change List"), Category("Subversion")]
+        [Browsable(false)]
         public string ChangeList
         {
             get { return _item.Status.ChangeList; }
@@ -88,6 +88,13 @@ namespace Ankh.Scc
                     }
                 }
             }
+        }
+
+        [DisplayName("Change List"), Category("Subversion"), DefaultValue(null)]
+        public SvnChangeList ChangeListValue
+        {
+            get { return ChangeList; }
+            set { ChangeList = value; }
         }
 
         [DisplayName("Project"), Category("Visual Studio")]

@@ -89,23 +89,17 @@ namespace Ankh.Commands
             if (names != null)
                 return names;
 
-            SortedList<string, string> nm = new SortedList<string, string>();
+            names = new List<string>();
 
-            foreach (PendingChange pc in e.GetService<IPendingChangesManager>().GetAll())
+            foreach (string cl in e.GetService<IPendingChangesManager>().GetSuggestedChangeLists())
             {
-                string cl = pc.SvnItem.Status.ChangeList;
+                names.Add(cl);
 
-                if (!string.IsNullOrEmpty(cl) && !string.Equals(cl, IgnoreOnCommit))
-                {
-                    if (!nm.ContainsKey(cl))
-                        nm[cl] = cl;
-
-                    if (nm.Count >= 10)
-                        break; // We have enough items
-                }
+                if (names.Count >= 10)
+                    break;
             }
 
-            e.Selection.Cache[typeof(ItemMoveToChangeList)] = names = new List<string>(nm.Values);
+            e.Selection.Cache[typeof(ItemMoveToChangeList)] = names;
 
             return names;
         }

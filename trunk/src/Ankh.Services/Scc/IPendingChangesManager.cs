@@ -69,7 +69,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Gets a boolean indicating whether the pending changes manager is active
         /// </summary>
-        bool IsActive { get; set;  }
+        bool IsActive { get; set; }
 
         /// <summary>
         /// Gets a list of all current pending changes
@@ -97,7 +97,7 @@ namespace Ankh.Scc
         /// Schedules a refresh of thepending change state for the specified paths
         /// </summary>
         /// <param name="paths"></param>
-        void Refresh(IEnumerable<string> paths);      
+        void Refresh(IEnumerable<string> paths);
 
         /// <summary>
         /// Gets the pending change information for the specified path or <c>null</c> if none is available
@@ -167,8 +167,10 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>
-        /// 	<c>true</c> if the specified path contains path; otherwise, <c>false</c>.
+        /// <c>true</c> if the specified path contains path; otherwise, <c>false</c>.
         /// </returns>
         bool Contains(string path);
+
+        IEnumerable<string> GetSuggestedChangeLists();
     }
 }
