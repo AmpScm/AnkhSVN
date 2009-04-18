@@ -64,7 +64,7 @@ namespace Ankh.UI.PendingChanges.Conflicts
             modified.Sorter = new SortWrapper(
                 delegate(ConflictListItem x, ConflictListItem y)
                 {
-                    return x.PendingChange.Item.Modified.CompareTo(y.PendingChange.Item.Modified);
+                    return x.PendingChange.SvnItem.Modified.CompareTo(y.PendingChange.SvnItem.Modified);
                 });
 
             change.Groupable = true;

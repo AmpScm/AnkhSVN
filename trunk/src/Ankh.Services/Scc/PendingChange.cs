@@ -29,80 +29,21 @@ using System.IO;
 namespace Ankh.Scc
 {
     [DebuggerDisplay("File={FullPath}, Change={ChangeText}")]
-    public sealed class PendingChange : AnkhPropertyGridItem
+    public sealed class PendingChange : SvnItemData
     {
-        readonly IAnkhServiceProvider _context;
-        readonly SvnItem _item;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="PendingChange"/> class
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="item">The item.</param>
         public PendingChange(RefreshContext context, SvnItem item)
+            : base(context, item)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-            else if (item == null)
-                throw new ArgumentNullException("item");
-
-            _context = context;
-            _item = item;
             Refresh(context, item);
-        }
-
-        [Browsable(false)]
-        public SvnItem Item
-        {
-            get { return _item; }
-        }
-
-        [DisplayName("Full Path")]
-        public string FullPath
-        {
-            get { return _item.FullPath; }
-        }
-
-        [DisplayName("File Name")]
-        public string Name
-        {
-            get { return _item.Name; }
-        }
-
-        [DisplayName("Change List"), Category("Subversion")]
-        public string ChangeList
-        {
-            get { return _changeList; }
-            set
-            {
-                string cl = string.IsNullOrEmpty(value) ? null : value.Trim();
-
-                if (_item.IsVersioned && _item.Status != null && _item.IsFile)
-                {
-                    if (value != _item.Status.ChangeList)
-                    {
-                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
-                        {
-                            if (cl != null)
-                            {
-                                SvnAddToChangeListArgs ca = new SvnAddToChangeListArgs();
-                                ca.ThrowOnError = false;
-                                client.AddToChangeList(_item.FullPath, cl);
-                            }
-                            else
-                            {
-                                SvnRemoveFromChangeListArgs ca = new SvnRemoveFromChangeListArgs();
-                                ca.ThrowOnError = false;
-                                client.RemoveFromChangeList(_item.FullPath, ca);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        }  
 
         [DisplayName("Project"), Category("Visual Studio")]
-        public string Project
+        public new string Project
         {
             get { return _projects; }
         }
@@ -121,56 +62,7 @@ namespace Ankh.Scc
         protected override string ComponentName
         {
             get { return Name; }
-        }
-
-        [DisplayName("Url"), Category("Subversion")]
-        public Uri Uri
-        {
-            get { return Item.Status.Uri; }
-        }
-
-        [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
-        public string LastCommittedAuthor
-        {
-            get { return Item.Status.LastChangeAuthor; }
-        }
-
-        [Category("Subversion"), Description("Current Revision")]
-        public long? Revision
-        {
-            get 
-            {
-                if (Item.IsVersioned)
-                    return Item.Status.Revision;
-                else
-                    return null;
-            }
-        }
-
-        [Category("Subversion"), Description("Last committed date"), DisplayName("Last Committed")]
-        public DateTime LastCommittedDate
-        {
-            get 
-            {
-                DateTime dt = Item.Status.LastChangeTime;
-                if (dt != DateTime.MinValue)
-                    return dt.ToLocalTime();
-                else
-                    return DateTime.MinValue;
-            }
-        }
-
-        [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
-        public long? LastCommittedRevision
-        {
-            get 
-            {
-                if(Item.IsVersioned && Item.Status.LastChangeRevision > 0)
-                    return Item.Status.LastChangeRevision;
-                else
-                    return null; 
-            }
-        }
+        } 
 
         /// <summary>
         /// Gets a boolean indicating whether this pending change is clear / is no longer a pending change
@@ -178,7 +70,7 @@ namespace Ankh.Scc
         [Browsable(false)]
         public bool IsClean
         {
-            get { return !PendingChange.IsPending(Item); }
+            get { return !PendingChange.IsPending(SvnItem); }
         }
 
         /// <summary>
@@ -211,7 +103,7 @@ namespace Ankh.Scc
         }
 
         [Browsable(false)]
-        public PendingChangeStatus Change
+        public new PendingChangeStatus Change
         {
             get { return _status; }
         }
@@ -247,7 +139,7 @@ namespace Ankh.Scc
             RefreshValue(ref m, ref _projects, GetProjects(context));
             RefreshValue(ref m, ref _status, GetStatus(context, item));
             RefreshValue(ref m, ref _relativePath, GetRelativePath(context));
-            RefreshValue(ref m, ref _changeList, Item.Status.ChangeList);
+            RefreshValue(ref m, ref _changeList, SvnItem.Status.ChangeList);
             RefreshValue(ref m, ref _fileType, GetFileType(context, item));
 
             return m || (_status == null);
@@ -299,17 +191,17 @@ namespace Ankh.Scc
 
         int GetIcon(RefreshContext context)
         {
-            if (Item.Exists)
+            if (SvnItem.Exists)
             {
-                if (Item.IsDirectory || Item.NodeKind == SvnNodeKind.Directory)
+                if (SvnItem.IsDirectory || SvnItem.NodeKind == SvnNodeKind.Directory)
                     return context.IconMapper.DirectoryIcon; // Is or was a directory
                 else
                     return context.IconMapper.GetIcon(FullPath);
             }
-            else if (Item.Status != null && Item.Status.NodeKind == SvnNodeKind.Directory)
+            else if (SvnItem.Status != null && SvnItem.Status.NodeKind == SvnNodeKind.Directory)
                 return context.IconMapper.DirectoryIcon;
             else
-                return context.IconMapper.GetIconForExtension(Item.Extension);
+                return context.IconMapper.GetIconForExtension(SvnItem.Extension);
         }
 
         PendingChangeStatus GetStatus(RefreshContext context, SvnItem item)
@@ -348,7 +240,9 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("item");
 
             bool create = false;
-            if (item.IsModified) // true for conflicts
+            if (item.IsConflicted)
+                create = true; // Tree conflict (unversioned) or other conflict
+            else if (item.IsModified)
                 create = true; // Must commit
             else if (item.InSolution && !item.IsVersioned && !item.IsIgnored && item.IsVersionable)
                 create = true; // To be added
@@ -456,12 +350,14 @@ namespace Ankh.Scc
         /// <returns>
         /// 	<c>true</c> if [is cleanup change]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsCleanupChange()
+        public bool IsChangeForPatching()
         {
             switch (Kind)
             {
                 case PendingChangeKind.LockedOnly:
                     return true;
+                case PendingChangeKind.TreeConflict:
+                    return !SvnItem.IsVersioned;
             }
 
             return false;
@@ -476,7 +372,7 @@ namespace Ankh.Scc
         /// </returns>
         public bool IsBelowPath(string path)
         {
-            return Item.IsBelowPath(path);
+            return SvnItem.IsBelowPath(path);
         }
 
         /// <summary>
@@ -490,11 +386,10 @@ namespace Ankh.Scc
         public static PendingChangeKind CombineStatus(SvnStatus contentStatus, SvnStatus propertyStatus, bool treeConflict, SvnItem item)
         {
             // item can be null!
-
-            if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted)
-                return PendingChangeKind.Conflicted;
-            else if (treeConflict)
+            if (treeConflict || (item != null && item.IsTreeConflicted))
                 return PendingChangeKind.TreeConflict;
+            else if (contentStatus == SvnStatus.Conflicted || propertyStatus == SvnStatus.Conflicted)
+                return PendingChangeKind.Conflicted;
 
             switch (contentStatus)
             {
