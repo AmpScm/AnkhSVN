@@ -111,8 +111,9 @@ namespace Ankh.UI.PendingChanges
             this.conflictHeader.AutoEllipsis = true;
             this.conflictHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.conflictHeader.Location = new System.Drawing.Point(0, 0);
+            this.conflictHeader.Margin = new System.Windows.Forms.Padding(2, 0, 3, 0);
             this.conflictHeader.Name = "conflictHeader";
-            this.conflictHeader.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.conflictHeader.Padding = new System.Windows.Forms.Padding(2, 0, 0, 0);
             this.conflictHeader.Size = new System.Drawing.Size(766, 21);
             this.conflictHeader.TabIndex = 0;
             this.conflictHeader.Text = "0 Conflicts: 0 Version, 0 Tree Conflicts; 0 Automatic merges.";
@@ -137,7 +138,7 @@ namespace Ankh.UI.PendingChanges
             this.conflictEditSplitter.Panel2.Controls.Add(this.resolvePannel);
             this.conflictEditSplitter.Panel2MinSize = 32;
             this.conflictEditSplitter.Size = new System.Drawing.Size(768, 276);
-            this.conflictEditSplitter.SplitterDistance = 236;
+            this.conflictEditSplitter.SplitterDistance = 238;
             this.conflictEditSplitter.SplitterWidth = 2;
             this.conflictEditSplitter.TabIndex = 0;
             // 
@@ -148,7 +149,7 @@ namespace Ankh.UI.PendingChanges
             this.conflictView.Location = new System.Drawing.Point(0, 0);
             this.conflictView.Margin = new System.Windows.Forms.Padding(0);
             this.conflictView.Name = "conflictView";
-            this.conflictView.Size = new System.Drawing.Size(768, 236);
+            this.conflictView.Size = new System.Drawing.Size(768, 238);
             this.conflictView.TabIndex = 0;
             // 
             // resolvePannel
@@ -169,7 +170,7 @@ namespace Ankh.UI.PendingChanges
             this.resolvePannel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resolvePannel.Location = new System.Drawing.Point(0, 0);
             this.resolvePannel.Name = "resolvePannel";
-            this.resolvePannel.Size = new System.Drawing.Size(768, 38);
+            this.resolvePannel.Size = new System.Drawing.Size(768, 36);
             this.resolvePannel.TabIndex = 0;
             // 
             // resolveButton0
