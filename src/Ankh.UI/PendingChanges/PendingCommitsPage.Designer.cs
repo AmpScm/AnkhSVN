@@ -127,8 +127,8 @@ namespace Ankh.UI.PendingChanges
             this.issueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.issueLabel.AutoSize = true;
             this.issueLabel.Enabled = false;
-            this.issueLabel.Location = new System.Drawing.Point(583, 3);
-            this.issueLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.issueLabel.Location = new System.Drawing.Point(583, 2);
+            this.issueLabel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.issueLabel.Name = "issueLabel";
             this.issueLabel.Size = new System.Drawing.Size(35, 13);
             this.issueLabel.TabIndex = 3;
@@ -138,8 +138,8 @@ namespace Ankh.UI.PendingChanges
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.label1.Location = new System.Drawing.Point(3, 2);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 1;
@@ -173,8 +173,8 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(237, 3);
-            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lastRevLabel.Location = new System.Drawing.Point(237, 2);
+            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(69, 13);
             this.lastRevLabel.TabIndex = 5;
