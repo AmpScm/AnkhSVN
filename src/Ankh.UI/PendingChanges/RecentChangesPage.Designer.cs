@@ -67,7 +67,7 @@ namespace Ankh.UI.PendingChanges
             this.syncView.Location = new System.Drawing.Point(0, 0);
             this.syncView.Margin = new System.Windows.Forms.Padding(0);
             this.syncView.Name = "syncView";
-            this.syncView.Size = new System.Drawing.Size(768, 274);
+            this.syncView.Size = new System.Drawing.Size(768, 277);
             this.syncView.TabIndex = 0;
             // 
             // topLayoutPanel
@@ -87,16 +87,16 @@ namespace Ankh.UI.PendingChanges
             this.topLayoutPanel.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.topLayoutPanel.Name = "topLayoutPanel";
             this.topLayoutPanel.RowCount = 1;
-            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+            this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(764, 21);
+            this.topLayoutPanel.Size = new System.Drawing.Size(766, 20);
             this.topLayoutPanel.TabIndex = 1;
             // 
             // lastRevBox
             // 
             this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(311, 3);
+            this.lastRevBox.Location = new System.Drawing.Point(312, 3);
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
             this.lastRevBox.Size = new System.Drawing.Size(74, 13);
@@ -117,7 +117,7 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(239, 3);
+            this.lastRevLabel.Location = new System.Drawing.Point(240, 3);
             this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(66, 13);
@@ -129,7 +129,7 @@ namespace Ankh.UI.PendingChanges
             // 
             this.updateTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.updateTime.AutoSize = true;
-            this.updateTime.Location = new System.Drawing.Point(761, 3);
+            this.updateTime.Location = new System.Drawing.Point(763, 3);
             this.updateTime.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.updateTime.Name = "updateTime";
             this.updateTime.Size = new System.Drawing.Size(0, 13);
@@ -147,24 +147,25 @@ namespace Ankh.UI.PendingChanges
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1MinSize = 22;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.syncView);
             this.splitContainer1.Size = new System.Drawing.Size(768, 300);
-            this.splitContainer1.SplitterDistance = 25;
+            this.splitContainer1.SplitterDistance = 22;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 2;
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.topLayoutPanel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(768, 25);
+            this.panel1.Size = new System.Drawing.Size(768, 22);
             this.panel1.TabIndex = 2;
             // 
             // RecentChangesPage

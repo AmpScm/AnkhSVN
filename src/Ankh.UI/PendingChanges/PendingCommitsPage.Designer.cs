@@ -90,7 +90,7 @@ namespace Ankh.UI.PendingChanges
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.topLayoutPanel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -119,7 +119,7 @@ namespace Ankh.UI.PendingChanges
             this.topLayoutPanel.RowCount = 2;
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(764, 79);
+            this.topLayoutPanel.Size = new System.Drawing.Size(766, 81);
             this.topLayoutPanel.TabIndex = 0;
             // 
             // issueLabel
@@ -127,7 +127,7 @@ namespace Ankh.UI.PendingChanges
             this.issueLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.issueLabel.AutoSize = true;
             this.issueLabel.Enabled = false;
-            this.issueLabel.Location = new System.Drawing.Point(581, 3);
+            this.issueLabel.Location = new System.Drawing.Point(583, 3);
             this.issueLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.issueLabel.Name = "issueLabel";
             this.issueLabel.Size = new System.Drawing.Size(35, 13);
@@ -152,7 +152,7 @@ namespace Ankh.UI.PendingChanges
             this.logMessageEditor.Location = new System.Drawing.Point(0, 20);
             this.logMessageEditor.Margin = new System.Windows.Forms.Padding(0);
             this.logMessageEditor.Name = "logMessageEditor";
-            this.logMessageEditor.Size = new System.Drawing.Size(764, 59);
+            this.logMessageEditor.Size = new System.Drawing.Size(766, 61);
             this.logMessageEditor.TabIndex = 4;
             this.logMessageEditor.Text = null;
             // 
@@ -160,7 +160,7 @@ namespace Ankh.UI.PendingChanges
             // 
             this.issueNumberBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.issueNumberBox.Enabled = false;
-            this.issueNumberBox.Location = new System.Drawing.Point(619, 0);
+            this.issueNumberBox.Location = new System.Drawing.Point(621, 0);
             this.issueNumberBox.Margin = new System.Windows.Forms.Padding(0);
             this.issueNumberBox.Name = "issueNumberBox";
             this.issueNumberBox.Size = new System.Drawing.Size(144, 20);
@@ -173,7 +173,7 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(236, 3);
+            this.lastRevLabel.Location = new System.Drawing.Point(237, 3);
             this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(69, 13);
@@ -185,7 +185,7 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(311, 3);
+            this.lastRevBox.Location = new System.Drawing.Point(312, 3);
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
             this.lastRevBox.Size = new System.Drawing.Size(74, 13);
