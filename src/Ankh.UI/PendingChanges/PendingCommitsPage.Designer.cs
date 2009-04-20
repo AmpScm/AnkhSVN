@@ -77,7 +77,7 @@ namespace Ankh.UI.PendingChanges
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.panel1);
-            this.splitContainer.Panel1MinSize = 10;
+            this.splitContainer.Panel1MinSize = 23;
             // 
             // splitContainer.Panel2
             // 
@@ -85,7 +85,7 @@ namespace Ankh.UI.PendingChanges
             this.splitContainer.Panel2MinSize = 10;
             this.splitContainer.Size = new System.Drawing.Size(768, 300);
             this.splitContainer.SplitterDistance = 83;
-            this.splitContainer.SplitterWidth = 3;
+            this.splitContainer.SplitterWidth = 2;
             this.splitContainer.TabIndex = 0;
             // 
             // panel1
@@ -201,7 +201,7 @@ namespace Ankh.UI.PendingChanges
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
             this.pendingCommits.ShowItemToolTips = true;
-            this.pendingCommits.Size = new System.Drawing.Size(768, 214);
+            this.pendingCommits.Size = new System.Drawing.Size(768, 215);
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
             this.pendingCommits.ResolveItem += new System.EventHandler<Ankh.UI.VSSelectionControls.ListViewWithSelection<Ankh.UI.PendingChanges.Commits.PendingCommitItem>.ResolveItemEventArgs>(this.pendingCommits_ResolveItem);
