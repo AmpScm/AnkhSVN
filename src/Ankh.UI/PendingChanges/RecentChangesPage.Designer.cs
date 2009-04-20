@@ -67,7 +67,7 @@ namespace Ankh.UI.PendingChanges
             this.syncView.Location = new System.Drawing.Point(0, 0);
             this.syncView.Margin = new System.Windows.Forms.Padding(0);
             this.syncView.Name = "syncView";
-            this.syncView.Size = new System.Drawing.Size(768, 277);
+            this.syncView.Size = new System.Drawing.Size(768, 276);
             this.syncView.TabIndex = 0;
             // 
             // topLayoutPanel
@@ -89,7 +89,7 @@ namespace Ankh.UI.PendingChanges
             this.topLayoutPanel.RowCount = 1;
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.topLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topLayoutPanel.Size = new System.Drawing.Size(766, 20);
+            this.topLayoutPanel.Size = new System.Drawing.Size(766, 21);
             this.topLayoutPanel.TabIndex = 1;
             // 
             // lastRevBox
@@ -106,8 +106,8 @@ namespace Ankh.UI.PendingChanges
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 3);
-            this.label1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.label1.Location = new System.Drawing.Point(3, 2);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
             this.label1.TabIndex = 1;
@@ -117,8 +117,8 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lastRevLabel.AutoSize = true;
-            this.lastRevLabel.Location = new System.Drawing.Point(240, 3);
-            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lastRevLabel.Location = new System.Drawing.Point(240, 2);
+            this.lastRevLabel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 0);
             this.lastRevLabel.Name = "lastRevLabel";
             this.lastRevLabel.Size = new System.Drawing.Size(66, 13);
             this.lastRevLabel.TabIndex = 5;
@@ -147,13 +147,13 @@ namespace Ankh.UI.PendingChanges
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.panel1);
-            this.splitContainer1.Panel1MinSize = 22;
+            this.splitContainer1.Panel1MinSize = 23;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.syncView);
             this.splitContainer1.Size = new System.Drawing.Size(768, 300);
-            this.splitContainer1.SplitterDistance = 22;
+            this.splitContainer1.SplitterDistance = 23;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -165,7 +165,7 @@ namespace Ankh.UI.PendingChanges
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(768, 22);
+            this.panel1.Size = new System.Drawing.Size(768, 23);
             this.panel1.TabIndex = 2;
             // 
             // RecentChangesPage
