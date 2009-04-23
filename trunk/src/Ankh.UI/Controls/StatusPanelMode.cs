@@ -11,5 +11,6 @@ namespace Ankh.UI.Controls
         Error,
         Warning,
         Suggestion,
+        Exclamation
     }
 }

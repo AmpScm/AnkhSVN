@@ -67,6 +67,13 @@ namespace Ankh.UI.Controls {
             }
         }
         
+        internal static System.Drawing.Bitmap Status_Exclamation {
+            get {
+                object obj = ResourceManager.GetObject("Status_Exclamation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Status_Ok {
             get {
                 object obj = ResourceManager.GetObject("Status_Ok", resourceCulture);
