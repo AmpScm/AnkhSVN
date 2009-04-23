@@ -252,6 +252,10 @@ namespace Ankh.UI.Controls
                         _gradientLeft = SystemColors.Control;
                         _panelImage = StatusPanelResources.Status_Suggestion;
                         break;
+                    case StatusPanelMode.Exclamation:
+                        _gradientLeft = Color.FromArgb(0xB0, 0xFF, 0xFF, 0);
+                        _panelImage = StatusPanelResources.Status_Exclamation;
+                        break;
                 }
 
                 _mode = value;

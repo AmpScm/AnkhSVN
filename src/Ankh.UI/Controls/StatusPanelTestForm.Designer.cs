@@ -55,7 +55,7 @@
             this.statusContainer.Location = new System.Drawing.Point(12, 24);
             this.statusContainer.Name = "statusContainer";
             this.statusContainer.PanelSpace = 9;
-            this.statusContainer.Size = new System.Drawing.Size(695, 494);
+            this.statusContainer.Size = new System.Drawing.Size(695, 450);
             this.statusContainer.TabIndex = 0;
             // 
             // statusPanel1
@@ -103,7 +103,7 @@
             // statusPanel5
             // 
             this.statusPanel5.Name = "statusPanel5";
-            this.statusPanel5.PanelMode = Ankh.UI.Controls.StatusPanelMode.Warning;
+            this.statusPanel5.PanelMode = Ankh.UI.Controls.StatusPanelMode.Exclamation;
             this.statusPanel5.TabIndex = 4;
             this.statusPanel5.Title = "??";
             // 

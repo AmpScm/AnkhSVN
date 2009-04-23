@@ -1281,6 +1281,7 @@
       <LastGenOutput>StatusPanelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
+    <Content Include="Controls\Status.Exclamation.png" />
     <Content Include="MergeWizard\images\Error.png" />
     <Content Include="MergeWizard\images\ManuallyRecord.png" />
     <None Include="MergeWizard\images\MergeWizardHeader.png" />
