@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6691</title>
+          AnkhSVN-Daily Update - 2.1.6694</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,25 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1969/AnkhSvn-Daily-2.1.6691.43.msi">AnkhSVN 2.1.6691</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/1971/AnkhSvn-Daily-2.1.6694.44.msi">AnkhSVN 2.1.6694</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6691">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6694">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-04-23</td></tr>
+<tr><td> </td><td class="r"><a id="6694" href="http://ankhsvn.net/rev/?r=6694">
+            [r6694]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Controls/StatusPanel.cs, Controls/Status.Exclamation.png, Ankh.UI.csproj, Controls/Status.Warning.png, Controls/StatusPanelTestForm.Designer.cs, Controls/StatusPanelMode.cs, Controls/StatusPanelResources.resx, Controls/StatusPanelResources.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Delayed commit: Add Exclamation status for the current warning UI and use the
+Vista Warning sign for real warnings.</td></tr>
 <tr class="d"><td colspan="4">2009-04-20</td></tr>
 <tr><td> </td><td class="r"><a id="6684" href="http://ankhsvn.net/rev/?r=6684">
             [r6684]
@@ -189,37 +194,6 @@ is behind here</td></tr>
           </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/OptionsPages:</strong> AnkhOptionsPageControl.cs, UserToolSettingsControl.cs, EnvironmentSettingsControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Refactor the option pages to bring the loading/saving of the config instance
 to the base class, so the derived classes only need to get/set their option
 values when saving/loading</td></tr>
-<tr><td> </td><td class="r"><a id="6548" href="http://ankhsvn.net/rev/?r=6548">
-            [r6548]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/OptionsPages:</strong> EnvironmentSettingsControl.Designer.cs, EnvironmentSettingsControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove label click event handler and unused usings</td></tr>
-<tr><td> </td><td class="r"><a id="6547" href="http://ankhsvn.net/rev/?r=6547">
-            [r6547]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/OptionsPages:</strong> EnvironmentSettingsControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Load the most recent configuration before loading the settings, and save the
-current config after changes</td></tr>
-<tr><td> </td><td class="r"><a id="6544" href="http://ankhsvn.net/rev/?r=6544">
-            [r6544]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.Scc/ProjectNotifier.cs, Ankh.Services/Scc/IFileStatusMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Reroute automatically adding files to the projectnotifier to make sure we
-don't miss add events through invalid selections or missed commands.</td></tr>
-<tr><td> </td><td class="r"><a id="6537" href="http://ankhsvn.net/rev/?r=6537">
-            [r6537]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/RepositoryExplorer/RepositoryStrings.resx, Ankh.UI/RepositoryExplorer/RepositoryListView.cs, Ankh.UI/WorkingCopyExplorer/FileSystemListViewItem.cs, Ankh.UI/RepositoryExplorer/RepositoryStrings.Designer.cs, Ankh.Services/Scc/PendingChangeStatus.cs, Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make Workingcopy and repository look more similar by reordering and slightly
-resizing columns. Use the same order as the Windows Explorer for the first few
-columns.</td></tr>
-<tr><td> </td><td class="r"><a id="6533" href="http://ankhsvn.net/rev/?r=6533">
-            [r6533]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/Scc/PendingChange.cs, Ankh.Services/Scc/SvnItemData.cs, Ankh.VS/Extenders/SvnItemExtender.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add extra properties to the property grid for files selected in the Working Copy
-Explorer and hide some 0 and -1 revisions on unversioned/new files
-(WC Explorer, PC Window and Solution explorer)</td></tr>
-<tr><td> </td><td class="r"><a id="6531" href="http://ankhsvn.net/rev/?r=6531">
-            [r6531]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/ProjectMap/SccProjectData.cs, Ankh.UI/OptionsPages/UserToolSettingsControl.Designer.cs, Ankh.UI/OptionsPages/UserToolSettingsControl.cs, Ankh/Commands/AddItemCommand.cs, Ankh.UI/OptionsPages/EnvironmentSettingsControl.Designer.cs, Ankh.UI/OptionsPages/EnvironmentSettingsControl.cs, Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add auto-add setting for users that need this in a workflow where committing with
-TortoiseSvn or the cmdline client is necessary.
-Also move the "start interactive merge" setting to the Environment settings page
-and add the missing checkbox to the 'flash title bar' setting</td></tr>
-<tr><td> </td><td class="r"><a id="6530" href="http://ankhsvn.net/rev/?r=6530">
-            [r6530]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh/Commands/OpenInXExplorer.cs, Ankh.UI/WorkingCopyExplorer/FileSystemTreeNode.cs, Ankh.UI/WorkingCopyExplorer/WorkingCopyExplorerControl.cs, Ankh/Commands/WorkingCopyExplorer/WorkingCopyBrowseCommand.cs, Ankh.UI/WorkingCopyExplorer/FileSystemDetailsView.cs, Ankh.Ids/AnkhCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update 'Open folder in Workingcopy Explorer' command to 'Select in Workingcopy
-explorer'; automatically selecting the right file/folder.</td></tr>
 
 </table>
 <!--/Recent changes-->
