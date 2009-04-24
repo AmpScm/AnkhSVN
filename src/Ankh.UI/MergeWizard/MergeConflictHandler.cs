@@ -298,28 +298,13 @@ namespace Ankh.UI.MergeWizard
             }
             else
             {
-                //Temporary file for the working copy file
-                string workingTempFile = CreateTempFile();
-
-                //copy working file contents to temporary working file
-                CopyFile(e.MyFile, workingTempFile);
-
-                //Temporary file for the merged file (in case user quits editing and original nerged file needs to be restored)
-                string mergeTempFile = CreateTempFile();
-                string mergeFilePath = e.MergedFile;
-
-                //Copy original merged file to the temporary merged file
-                CopyFile(mergeFilePath, mergeTempFile);
-                string conflictOldFile = e.BaseFile;
-                string conflictNewFile = e.TheirFile;
-
                 AnkhMergeArgs ama = new AnkhMergeArgs();
-                //Replace "/" with "\\" otherwise 
-                //DiffToolMonitor constructor throws argument exception validatig the file path to be monitored.
-                ama.BaseFile = conflictOldFile.Replace("/",@"\\");
-                ama.TheirsFile = conflictNewFile.Replace("/", @"\\"); ;
-                ama.MineFile = workingTempFile.Replace("/", @"\\"); ;
-                ama.MergedFile = mergeFilePath.Replace("/", @"\\"); ;
+                // Ensure paths are in valid format or the DiffToolMonitor constructor
+                // throws argument exception validatig the file path to be monitored.
+                ama.BaseFile = SvnTools.GetNormalizedFullPath(e.BaseFile);
+                ama.TheirsFile = SvnTools.GetNormalizedFullPath(e.TheirFile);
+                ama.MineFile = SvnTools.GetNormalizedFullPath(e.MyFile);
+                ama.MergedFile = SvnTools.GetNormalizedFullPath(e.MergedFile);
                 ama.Mode = DiffMode.PreferExternal;
                 ama.BaseTitle = "Base";
                 ama.TheirsTitle = "Theirs";
@@ -329,15 +314,17 @@ namespace Ankh.UI.MergeWizard
                 if (merged)
                 {
                     IUIService ui = Context.GetService<IUIService>();
-                    string message = "Did you resolve all of the conflicts in the file (Mark this file resolved)?";
+                    string message = "Did you resolve all of the conflicts in the file?\n\nAnswering yes marks this file as resolved, no will keep it as conflicted.";
                     string caption = "Resolve Conflict";
-                    DialogResult result = ui.ShowMessage(message, caption, MessageBoxButtons.YesNo);
-                    merged = result == DialogResult.Yes;
+                    DialogResult result = ui.ShowMessage(message, caption, MessageBoxButtons.YesNoCancel);
+                    e.Cancel = result == DialogResult.Cancel;
+
+                    if(!e.Cancel)
+                        merged = result == DialogResult.Yes;
                 }
                 if (!merged)
                 {
                     //Restore original merged file.
-                    CopyFile(mergeTempFile, mergeFilePath);
                     HandleConflictWithDialog(e);
                 }
                 else
