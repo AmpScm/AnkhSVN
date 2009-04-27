@@ -39,7 +39,7 @@ namespace Ankh.UI.PathSelector
             // 
             this.typeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.typeCombo.FormattingEnabled = true;
-            this.typeCombo.Location = new System.Drawing.Point(41, 2);
+            this.typeCombo.Location = new System.Drawing.Point(40, 2);
             this.typeCombo.Name = "typeCombo";
             this.typeCombo.Size = new System.Drawing.Size(111, 21);
             this.typeCombo.TabIndex = 1;
@@ -48,7 +48,7 @@ namespace Ankh.UI.PathSelector
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(1, 5);
+            this.typeLabel.Location = new System.Drawing.Point(0, 5);
             this.typeLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
             this.typeLabel.Name = "typeLabel";
             this.typeLabel.Size = new System.Drawing.Size(34, 13);
@@ -60,9 +60,9 @@ namespace Ankh.UI.PathSelector
             this.versionTypePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.versionTypePanel.Location = new System.Drawing.Point(158, 0);
+            this.versionTypePanel.Location = new System.Drawing.Point(157, 0);
             this.versionTypePanel.Name = "versionTypePanel";
-            this.versionTypePanel.Size = new System.Drawing.Size(262, 25);
+            this.versionTypePanel.Size = new System.Drawing.Size(263, 25);
             this.versionTypePanel.TabIndex = 2;
             // 
             // VersionSelector
