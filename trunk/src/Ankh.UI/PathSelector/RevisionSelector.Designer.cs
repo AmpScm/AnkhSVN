@@ -53,7 +53,7 @@ namespace Ankh.UI.PathSelector
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.browseButton.Enabled = false;
-            this.browseButton.Location = new System.Drawing.Point(221, 0);
+            this.browseButton.Location = new System.Drawing.Point(224, 0);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(28, 23);
             this.browseButton.TabIndex = 0;
@@ -65,14 +65,14 @@ namespace Ankh.UI.PathSelector
             // 
             this.revisionBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.revisionBox.Location = new System.Drawing.Point(3, 2);
+            this.revisionBox.Location = new System.Drawing.Point(0, 2);
             this.revisionBox.Maximum = new decimal(new int[] {
             1569325055,
             23283064,
             0,
             0});
             this.revisionBox.Name = "revisionBox";
-            this.revisionBox.Size = new System.Drawing.Size(215, 20);
+            this.revisionBox.Size = new System.Drawing.Size(221, 20);
             this.revisionBox.TabIndex = 1;
             this.revisionBox.TextChanged += new System.EventHandler(this.revisionBox_TextChanged);
             // 
