@@ -59,7 +59,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.workingCopyRootTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.workingCopyRootTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.workingCopyRootTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.AllUrl;
+            this.workingCopyRootTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystem;
             this.workingCopyRootTextBox.Location = new System.Drawing.Point(12, 25);
             this.workingCopyRootTextBox.Name = "workingCopyRootTextBox";
             this.workingCopyRootTextBox.Size = new System.Drawing.Size(349, 20);
@@ -97,12 +97,7 @@ namespace Ankh.UI.WorkingCopyExplorer
             this.Controls.Add(this.workingCopyRootTextBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "AddWorkingCopyExplorerRootDialog";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Browse Working Copy";
             this.ResumeLayout(false);
             this.PerformLayout();
