@@ -133,7 +133,7 @@
     <value>10</value>
   </data>
   <data name="mergeFromComboBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 21</value>
+    <value>384, 21</value>
   </data>
   <data name="mergeFromComboBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -157,19 +157,19 @@
     <value>NoControl</value>
   </data>
   <data name="selectButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>420, 5</value>
+    <value>470, 5</value>
   </data>
   <data name="selectButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="selectButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>25, 23</value>
   </data>
   <data name="selectButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="selectButton.Text" xml:space="preserve">
-    <value>Select...</value>
+    <value>...</value>
   </data>
   <data name="&gt;&gt;selectButton.Name" xml:space="preserve">
     <value>selectButton</value>
@@ -186,9 +186,6 @@
   <data name="mergeFromLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="mergeFromLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
-  </data>
   <data name="mergeFromLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -199,13 +196,13 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="mergeFromLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 13</value>
+    <value>63, 13</value>
   </data>
   <data name="mergeFromLabel.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="mergeFromLabel.Text" xml:space="preserve">
-    <value>Merge from:</value>
+    <value>&amp;Merge from:</value>
   </data>
   <data name="&gt;&gt;mergeFromLabel.Name" xml:space="preserve">
     <value>mergeFromLabel</value>
@@ -235,6 +232,6 @@
     <value>MergeSourceBasePageControl</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3082.27136, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BasePageControl, Ankh.UI, Version=2.0.3404.27275, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>

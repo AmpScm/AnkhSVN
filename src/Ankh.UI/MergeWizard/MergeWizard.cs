@@ -159,23 +159,11 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <see cref="WizardFramework.IWizard.CanFinish" />
-        public override bool CanFinish
+        public override bool NextIsFinish
         {
             get
             {
-                if (Container.CurrentPage is MergeTypePage)
-                    return false;
-
-                if (Container.CurrentPage is MergeBestPracticesPage)
-                    return false;
-
-                if (Container.CurrentPage is MergeSourceRangeOfRevisionsPage)
-                {
-                    return Container.CurrentPage.IsPageComplete &&
-                        !((MergeSourceRangeOfRevisionsPage)Container.CurrentPage).NextPageRequired;
-                }
-
-                if (Container.CurrentPage is MergeSourceManuallyRecordPage)
+                if (!(Container.CurrentPage is MergeSummaryPage))
                     return false;
                 
                 return Container.CurrentPage.IsPageComplete;

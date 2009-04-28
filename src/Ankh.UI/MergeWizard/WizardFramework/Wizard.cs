@@ -67,13 +67,14 @@ namespace WizardFramework
         public virtual void AddPages() { }
 
         /// <see cref="WizardFramework.IWizard.CanFinish" />
-        public virtual bool CanFinish
+        public virtual bool NextIsFinish
         {
             get
             {
                 foreach (IWizardPage page in pages_prop)
                 {
-                    if (!page.IsPageComplete) return false;
+                    if (!page.IsPageComplete)
+                        return false;
                 }
 
                 return true;

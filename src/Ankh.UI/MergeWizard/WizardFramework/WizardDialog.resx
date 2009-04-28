@@ -117,105 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;horizontalDividerLabel.Name" xml:space="preserve">
-    <value>horizontalDividerLabel</value>
-  </data>
-  <data name="&gt;&gt;horizontalDividerLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;horizontalDividerLabel.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;horizontalDividerLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;backButton.Name" xml:space="preserve">
-    <value>backButton</value>
-  </data>
-  <data name="&gt;&gt;backButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;backButton.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;backButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;nextButton.Name" xml:space="preserve">
-    <value>nextButton</value>
-  </data>
-  <data name="&gt;&gt;nextButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nextButton.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;nextButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;finishButton.Name" xml:space="preserve">
-    <value>finishButton</value>
-  </data>
-  <data name="&gt;&gt;finishButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;finishButton.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;finishButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Name" xml:space="preserve">
-    <value>cancelButton</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.Parent" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="controlPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 425</value>
-  </data>
-  <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>574, 50</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Name" xml:space="preserve">
-    <value>controlPanel</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="horizontalDividerLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="horizontalDividerLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
   <data name="horizontalDividerLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>574, 1</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="horizontalDividerLabel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
@@ -241,7 +154,7 @@
     <value>NoControl</value>
   </data>
   <data name="backButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>242, 16</value>
+    <value>302, 16</value>
   </data>
   <data name="backButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -250,7 +163,7 @@
     <value>1</value>
   </data>
   <data name="backButton.Text" xml:space="preserve">
-    <value>Back</value>
+    <value>&lt; &amp;Back</value>
   </data>
   <data name="&gt;&gt;backButton.Name" xml:space="preserve">
     <value>backButton</value>
@@ -274,7 +187,7 @@
     <value>NoControl</value>
   </data>
   <data name="nextButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>323, 16</value>
+    <value>383, 16</value>
   </data>
   <data name="nextButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -283,7 +196,7 @@
     <value>2</value>
   </data>
   <data name="nextButton.Text" xml:space="preserve">
-    <value>Next</value>
+    <value>&amp;Next &gt;</value>
   </data>
   <data name="&gt;&gt;nextButton.Name" xml:space="preserve">
     <value>nextButton</value>
@@ -307,7 +220,7 @@
     <value>NoControl</value>
   </data>
   <data name="finishButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>404, 16</value>
+    <value>384, 16</value>
   </data>
   <data name="finishButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -317,6 +230,9 @@
   </data>
   <data name="finishButton.Text" xml:space="preserve">
     <value>Finish</value>
+  </data>
+  <data name="finishButton.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;finishButton.Name" xml:space="preserve">
     <value>finishButton</value>
@@ -356,6 +272,33 @@
   </data>
   <data name="&gt;&gt;cancelButton.ZOrder" xml:space="preserve">
     <value>4</value>
+  </data>
+  <data name="controlPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="controlPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 425</value>
+  </data>
+  <data name="controlPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="controlPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>574, 50</value>
+  </data>
+  <data name="controlPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Name" xml:space="preserve">
+    <value>controlPanel</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;controlPanel.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="wizardPagePanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -672,9 +615,6 @@
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>349, 332</value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterParent</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Wizard Dialog</value>
   </data>
@@ -682,6 +622,6 @@
     <value>WizardDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Ankh.UI.VSContainerForm, Ankh.Services, Version=2.0.3404.24380, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>
