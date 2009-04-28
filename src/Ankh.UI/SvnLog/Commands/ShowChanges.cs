@@ -33,7 +33,7 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
             if (logWindow == null || logWindow.Origins == null)
             {
