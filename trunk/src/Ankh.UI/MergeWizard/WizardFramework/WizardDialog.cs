@@ -31,6 +31,8 @@ namespace WizardFramework
     /// </summary>
     public partial class WizardDialog : VSContainerForm, IWizardContainer, IWizardPageChangeProvider
     {
+        readonly string _nextText;
+        readonly string _finishText;
         /// <summary>
         /// Default parameterless constructor required by VS.NET Designer.
         /// Do not use this constructor when trying to instantiate a
@@ -39,6 +41,8 @@ namespace WizardFramework
         protected WizardDialog()
         {
             InitializeComponent();
+            _nextText = nextButton.Text;
+            _finishText = finishButton.Text;
         }
 
         /// <summary>
@@ -256,17 +260,10 @@ namespace WizardFramework
         /// <see cref="WizardFramework.IWizardContainer.UpdateButtons" />
         public void UpdateButtons()
         {
-            bool canFinish = wizard_prop.CanFinish;
+            bool isFinish = wizard_prop.NextIsFinish;
+            nextButton.Text = isFinish ? _finishText : _nextText;
             backButton.Enabled = currPage_prop.PreviousPage != null;
-            nextButton.Enabled = currPage_prop.CanFlipToNextPage;
-            finishButton.Enabled = canFinish;
-
-            if (finishButton.Enabled)
-                this.AcceptButton = finishButton;
-            else if (nextButton.Enabled)
-                this.AcceptButton = nextButton;
-            else
-                this.AcceptButton = cancelButton;
+            nextButton.Enabled = isFinish ? currPage_prop.IsPageComplete : currPage_prop.CanFlipToNextPage;
         }
 
         /// <see cref="WizardFramework.IWizardContainer.UpdateTitleBar" />
@@ -404,12 +401,19 @@ namespace WizardFramework
         /// </summary>
         private void nextButton_Click(object sender, EventArgs e)
         {
-            IWizardPage page = currPage_prop.NextPage;
+            if (wizard_prop.NextIsFinish)
+            {
+                finishButton_Click(sender, e);
+            }
+            else
+            {
+                IWizardPage page = currPage_prop.NextPage;
 
-            if (page == null) 
-                return; // Should never happen if the next button is enabled
-            
-            ShowPage(page); // Show the page
+                if (page == null)
+                    return; // Should never happen if the next button is enabled
+
+                ShowPage(page); // Show the page
+            }
         }
 
         /// <summary>

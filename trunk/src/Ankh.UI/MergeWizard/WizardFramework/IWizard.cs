@@ -40,12 +40,11 @@ namespace WizardFramework
         void AddPages();
 
         /// <summary>
-        /// Gets whether or not the wizard could finish without
-        /// further user interaction.
+        /// Gets whether the next button should be shown as finish on this page
         /// </summary>
-        /// <returns>Returns <code>true</code> if the wizard can finish
-        /// or <code>false</code> if it cannot.</returns>
-        bool CanFinish { get; }
+        /// <returns>Returns <code>true</code> if the wizard finishes on nect
+        /// or <code>false</code> if it is not.</returns>
+        bool NextIsFinish { get; }
 
         /// <summary>
         /// Returns the successor for the given page.

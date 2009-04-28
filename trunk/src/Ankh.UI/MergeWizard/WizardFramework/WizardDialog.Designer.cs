@@ -168,16 +168,14 @@ namespace WizardFramework
             // 
             // WizardDialog
             // 
+            this.AcceptButton = this.nextButton;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.Controls.Add(this.headerPanel);
             this.Controls.Add(this.wizardPagePanel);
             this.Controls.Add(this.controlPanel);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "WizardDialog";
-            this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.controlPanel.ResumeLayout(false);
             this.headerPanel.ResumeLayout(false);

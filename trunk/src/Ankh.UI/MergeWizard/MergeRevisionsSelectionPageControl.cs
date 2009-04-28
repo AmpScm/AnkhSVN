@@ -25,10 +25,11 @@ using WizardFramework;
 using SharpSvn;
 using Ankh.UI.SvnLog;
 using Ankh.Scc;
+using Ankh.Scc.UI;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeRevisionsSelectionPageControl : BasePageControl
+    public partial class MergeRevisionsSelectionPageControl : BasePageControl, ILogControl
     {
         public MergeRevisionsSelectionPageControl()
         {
@@ -124,5 +125,48 @@ namespace Ankh.UI.MergeWizard
                 WizardPage.Message = new WizardMessage("", WizardMessage.MessageType.None);
             }
         }
+
+        #region ILogControl Members
+
+        bool ILogControl.ShowChangedPaths
+        {
+            get { return logToolControl1.ShowChangedPaths; }
+            set { logToolControl1.ShowChangedPaths = value; }
+        }
+
+        bool ILogControl.ShowLogMessage
+        {
+            get { return logToolControl1.ShowLogMessage; }
+            set { logToolControl1.ShowLogMessage = value; }
+        }
+
+        bool ILogControl.StrictNodeHistory
+        {
+            get { return logToolControl1.StrictNodeHistory; }
+            set { logToolControl1.StrictNodeHistory = value; }
+        }
+
+        bool ILogControl.IncludeMergedRevisions
+        {
+            get { return logToolControl1.IncludeMergedRevisions; }            
+            set { logToolControl1.IncludeMergedRevisions = value; }
+        }
+
+        void ILogControl.FetchAll()
+        {
+            logToolControl1.FetchAll();
+        }
+
+        void ILogControl.Restart()
+        {
+            logToolControl1.Restart();
+        }
+
+        IList<SvnOrigin> ILogControl.Origins
+        {
+            get { return new SvnOrigin[] { MergeSource }; }
+        }
+
+        #endregion
     }
 }
