@@ -1,29 +1,21 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Choose>
-    <When Condition="Exists('$(ProgramFiles)\Windows Installer XML v3\bin')">
-      <PropertyGroup>
-        <WixToolPathProp>$(ProgramFiles)\Windows Installer XML v3\bin\</WixToolPathProp>
-        <SccProjectName>Svn</SccProjectName>
-        <SccProvider>SubversionScc</SccProvider>
-        <SccAuxPath>Svn</SccAuxPath>
-        <SccLocalPath>Svn</SccLocalPath>
-      </PropertyGroup>
-    </When>
-  </Choose>
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{94f8e63f-0ade-40c1-ba57-2f50fe88ecd2}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>AnkhSVN</OutputName>
     <OutputType>Package</OutputType>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
-    <WixToolsPath>$(WixToolsPathProp)</WixToolsPath>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <SccProjectName>Svn</SccProjectName>
+    <SccProvider>SubversionScc</SccProvider>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <Cultures>
-    </Cultures>
+    <Cultures>en-US</Cultures>
     <DefineConstants>Debug;SharpSvn_NoXml=yes</DefineConstants>
     <LeaveTemporaryFiles>False</LeaveTemporaryFiles>
     <LibBindFiles>False</LibBindFiles>
@@ -172,10 +164,4 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>
