@@ -52,7 +52,7 @@ namespace Ankh.UI.PathSelector
             // 
             this.datePicker.Location = new System.Drawing.Point(0, 3);
             this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(171, 20);
+            this.datePicker.Size = new System.Drawing.Size(173, 20);
             this.datePicker.TabIndex = 0;
             this.datePicker.ValueChanged += new System.EventHandler(this.datePicker_ValueChanged);
             // 
@@ -61,7 +61,7 @@ namespace Ankh.UI.PathSelector
             this.timePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.timePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.timePicker.Location = new System.Drawing.Point(177, 3);
+            this.timePicker.Location = new System.Drawing.Point(179, 3);
             this.timePicker.Name = "timePicker";
             this.timePicker.ShowUpDown = true;
             this.timePicker.Size = new System.Drawing.Size(73, 20);
@@ -74,6 +74,7 @@ namespace Ankh.UI.PathSelector
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.timePicker);
             this.Controls.Add(this.datePicker);
+            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "DateSelector";
             this.Size = new System.Drawing.Size(252, 25);
             this.ResumeLayout(false);
