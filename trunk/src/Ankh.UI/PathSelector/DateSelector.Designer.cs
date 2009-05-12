@@ -50,6 +50,8 @@ namespace Ankh.UI.PathSelector
             // 
             // datePicker
             // 
+            this.datePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.datePicker.Location = new System.Drawing.Point(0, 3);
             this.datePicker.Name = "datePicker";
             this.datePicker.Size = new System.Drawing.Size(173, 20);
