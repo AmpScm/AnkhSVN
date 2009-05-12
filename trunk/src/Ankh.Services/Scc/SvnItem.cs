@@ -762,7 +762,7 @@ namespace Ankh
         /// </value>
         public bool IsTreeConflicted
         {
-            get { return false; } // TODO: Fill for 1.6
+            get { return 0 != GetState(SvnItemState.TreeConflicted); }
         }
 
         /// <summary>
