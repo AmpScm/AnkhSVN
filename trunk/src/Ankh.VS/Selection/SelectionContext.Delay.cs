@@ -99,7 +99,7 @@ namespace Ankh.VS.Selection
 
                 if (cls.StartsWith("WindowsForms"))
                 {
-                    for(Control c = Control.FromHandle(focus); c != null; c = c.Parent)
+                    for (Control c = Control.FromHandle(focus); c != null; c = c.Parent)
                     {
                         DataGridView dataGrid = c as DataGridView;
                         if (dataGrid != null)
@@ -181,7 +181,8 @@ namespace Ankh.VS.Selection
                 }
                 return textView;
             }
-            catch /* Handle broken frame implementations that throw errors instead of returning null */
+            catch /* Handle broken frame implementations that throw errors instead of 
+                   * returning null or an error HResult */
             {
                 return null;
             }
