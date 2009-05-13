@@ -153,7 +153,7 @@ namespace Ankh.Scc.ProjectMap
             set { _hierarchy = value; }
         }
 
-        uint _itemId;
+        uint _itemId = VSConstants.VSITEMID_NIL;
         internal uint ItemId
         {
             get { return _itemId; }
@@ -439,33 +439,51 @@ namespace Ankh.Scc.ProjectMap
             if (pdd != null && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) && (dirty != 0))
                 return true;
 
-            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
-
-            Guid gV = Guid.Empty;
-            IVsUIHierarchy hier;
-            uint[] openId = new uint[1];
             IVsWindowFrame wf;
-            int open;
-            if (ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
-                out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+
+            if (TryGetOpenDocumentFrame(out wf))
             {
-                if (wf != null)
+                object ok;
+                if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
                 {
-                    object ok;
-                    if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                    if (ok == null)
+                    { }
+                    else if (ok is bool) // Implemented by VS as bool
                     {
-                        if (ok == null)
-                        { }
-                        else if (ok is bool) // Implemented by VS as bool
-                        {
-                            if ((bool)ok)
-                                return true;
-                        }
+                        if ((bool)ok)
+                            return true;
                     }
                 }
             }
 
             return fallback && _isDirty;
+        }
+
+        private bool TryGetOpenDocumentFrame(out IVsWindowFrame wf)
+        {
+            Guid gV = Guid.Empty;
+            IVsUIHierarchy hier;
+            uint[] openId = new uint[1];
+
+            int open;
+
+            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+            wf = null;
+
+            if (so == null)
+                return false;
+
+            try
+            {
+                return ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV,
+                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
+                    && (open != 0)
+                    && (wf != null);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
