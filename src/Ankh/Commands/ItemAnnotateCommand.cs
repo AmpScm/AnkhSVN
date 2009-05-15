@@ -17,6 +17,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows.Forms;
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI;
@@ -196,6 +197,7 @@ namespace Ankh.Commands
                 }
             };
 
+            bool retry = false;
             ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
             {
                 using (FileStream fs = File.Create(tempFile))
@@ -203,8 +205,37 @@ namespace Ankh.Commands
                     ee.Client.Write(target, fs, wa);
                 }
 
+                ee.Client.SvnError +=
+                    delegate(object errorSender, SvnErrorEventArgs errorEventArgs)
+                        {
+                            if (errorEventArgs.Exception is SvnClientBinaryFileException)
+                            {
+                                retry = true;
+                                errorEventArgs.Cancel = true;
+                            }
+                        };
                 ee.Client.GetBlame(target, ba, out blameResult);
             });
+
+            if (retry)
+            {
+                using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
+                {
+                    if (DialogResult.Yes == mb.Show(
+                                                "You are trying to annotate a binary fily. Are you sure you want to continue?",
+                                                "Binary file detected",
+                                                MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                    {
+                        r = e.GetService<IProgressRunner>()
+                            .RunModal("Annotating",
+                                      delegate(object sender, ProgressWorkerArgs ee)
+                                          {
+                                              ba.IgnoreMimeType = true;
+                                              ee.Client.GetBlame(target, ba, out blameResult);
+                                          });
+                    }
+                }
+            }
 
             if (!r.Succeeded)
                 return;
