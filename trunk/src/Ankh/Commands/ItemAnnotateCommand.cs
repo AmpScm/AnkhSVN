@@ -205,7 +205,7 @@ namespace Ankh.Commands
                     ee.Client.Write(target, fs, wa);
                 }
 
-                ee.Client.SvnError +=
+                ba.SvnError +=
                     delegate(object errorSender, SvnErrorEventArgs errorEventArgs)
                         {
                             if (errorEventArgs.Exception is SvnClientBinaryFileException)
