@@ -185,7 +185,8 @@ namespace Ankh.UI.PendingChanges
             // 
             this.lastRevBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.lastRevBox.Enabled = false;
-            this.lastRevBox.Location = new System.Drawing.Point(312, 3);
+            this.lastRevBox.Location = new System.Drawing.Point(311, 2);
+            this.lastRevBox.Margin = new System.Windows.Forms.Padding(2);
             this.lastRevBox.Name = "lastRevBox";
             this.lastRevBox.ReadOnly = true;
             this.lastRevBox.Size = new System.Drawing.Size(74, 13);
