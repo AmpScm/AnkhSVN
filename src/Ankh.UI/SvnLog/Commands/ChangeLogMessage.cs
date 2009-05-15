@@ -46,7 +46,6 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
             IAnkhSolutionSettings slnSettings = e.GetService<IAnkhSolutionSettings>();
             List<ISvnLogItem> logItems = new List<ISvnLogItem>(e.Selection.GetSelection<ISvnLogItem>());
             if (logItems.Count != 1)
@@ -87,10 +86,13 @@ namespace Ankh.UI.SvnLog.Commands
                         }
                     }
 
-                    
+                    ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
-                    logWindow.Restart();
-                    // TODO: Somehow repair scroll position/number of items loaded
+                    if (logWindow != null)
+                    {
+                        // TODO: Somehow repair scroll position/number of items loaded
+                        logWindow.Restart();
+                    }
                 }
             }
         }

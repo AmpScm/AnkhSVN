@@ -43,9 +43,6 @@ namespace Ankh.UI.SvnLog.Commands
             if (selectedLog == null)
                 return;
 
-            ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
-
-
             using (PropertyEditorDialog dialog = new PropertyEditorDialog(selectedLog.RepositoryRoot, selectedLog.Revision, true))
             {
                 SvnRevisionPropertyListArgs args = new SvnRevisionPropertyListArgs();
@@ -61,7 +58,7 @@ namespace Ankh.UI.SvnLog.Commands
                 {
                     return;
                 }
-                else if(properties != null)
+                else if (properties != null)
                 {
                     List<PropertyEditItem> propItems = new List<PropertyEditItem>();
                     foreach (SvnPropertyValue prop in properties)
@@ -113,7 +110,10 @@ namespace Ankh.UI.SvnLog.Commands
 
                 if (result.Succeeded)
                 {
-                    logWindow.Restart();
+                    ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
+
+                    if (logWindow != null)
+                        logWindow.Restart();
                 }
 
             } // using

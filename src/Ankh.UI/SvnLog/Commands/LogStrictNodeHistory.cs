@@ -22,12 +22,12 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.SvnLog.Commands
 {
-    [Command(AnkhCommand.LogStrictNodeHistory, AlwaysAvailable=true)]
-    class LogStrictNodeHistory:ICommandHandler
+    [Command(AnkhCommand.LogStrictNodeHistory, AlwaysAvailable = true)]
+    class LogStrictNodeHistory : ICommandHandler
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
             if (lc == null)
             {
@@ -40,12 +40,12 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
             if (lc == null)
                 return;
 
-            lc.StrictNodeHistory = !lc.StrictNodeHistory;            
+            lc.StrictNodeHistory = !lc.StrictNodeHistory;
         }
     }
 }
