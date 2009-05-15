@@ -477,7 +477,8 @@
       </Menu>
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_MENU_CONTEXTMENUS">
-      <Menu id="Grp_AnkhContextMenus" priority="0x0F0" name="AnkhSVNContextMenus" text="&amp;AnkhSVN Context Menus" type="Context" noCustomize="true" notInTBList="true">
+			<ButtonRef id="Cmd_ForceUIShow" priority="0x000001" />
+			<Menu id="Grp_AnkhContextMenus" priority="0x0F0" name="AnkhSVNContextMenus" text="&amp;AnkhSVN Context Menus" type="Context" noCustomize="true" notInTBList="true">				
         <Group id="Grp_AnkhContextMenus" priority="0x100">
 
         </Group>
@@ -919,6 +920,9 @@
         <Button id="Cmd_CheckForUpdates" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_WorkingCopyBrowse" text="." priority="0" commandWellOnly="true" allowParams="true" />
         <Button id="Cmd_NotifyWcToNew" text="." priority="0" commandWellOnly="true" allowParams="true"/>
+				<Button id="Cmd_ForceUIShow" text="." priority="0"
+								noShowOnMenuController="true" noButtonCustomize ="true" noCustomize ="true" noKeyCustomize="true" 
+								defaultInvisible="true" textOnly="true" />
       </Group>
     </MenuRef>
   </UI>

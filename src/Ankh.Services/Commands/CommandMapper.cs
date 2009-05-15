@@ -347,7 +347,7 @@ namespace Ankh.Commands
                 SetText(pCmdText, updateArgs.Text);
             }
 
-            if (IsInCustomize())
+            if (_customizeMode && updateArgs.Command != AnkhCommand.ForceUIShow)
                 prgCmds[0].cmdf = (uint)(cmdf & ~OLECMDF.OLECMDF_INVISIBLE);
             else
                 prgCmds[0].cmdf = (uint)cmdf;
@@ -355,16 +355,9 @@ namespace Ankh.Commands
             return 0; // S_OK
         }
 
-        IAnkhCommandService _commandService;
-        IAnkhCommandService CommandService
-        {
-            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
-        }
-
         int _nModal;
         bool _isModal;
         bool _customizeMode;
-        bool _maybeInCustomize;
         public void SetModal(bool modal)
         {
             if (modal)
@@ -376,24 +369,16 @@ namespace Ankh.Commands
                 return; // Not switched
 
             _isModal = (_nModal != 0);
-
-            if (_isModal)
-            {
-                // Check for customize mode
-                _customizeMode = false;
-                _maybeInCustomize = true;
-            }
-            else
-                _customizeMode = false;
+            _customizeMode = false;
         }
 
-        bool IsInCustomize()
+        /// <summary>
+        /// Enables Menu Customize mode until the modal state is cleared
+        /// </summary>
+        public void EnableCustomizeMode()
         {
-            if (_customizeMode || !_maybeInCustomize)
-                return _customizeMode;
-
-            _maybeInCustomize = false;
-            return _customizeMode = false;// CommandService.InCustomizeMode;
+            if(_isModal)
+                _customizeMode = true;
         }
 
 

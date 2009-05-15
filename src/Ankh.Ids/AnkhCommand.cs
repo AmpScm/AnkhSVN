@@ -50,6 +50,7 @@ namespace Ankh
         ActivateSccProvider,
         ActivateVsExtender,
         NotifyWcToNew,
+        ForceUIShow,
 
         // /Private commands
 
