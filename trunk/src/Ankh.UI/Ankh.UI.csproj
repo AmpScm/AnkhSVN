@@ -173,6 +173,7 @@
     <Compile Include="Commands\CreateChangeListDialog.Designer.cs">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\UIEditCommand.cs" />
     <Compile Include="Commands\UpdateDialog.cs">
       <SubType>Form</SubType>
     </Compile>
