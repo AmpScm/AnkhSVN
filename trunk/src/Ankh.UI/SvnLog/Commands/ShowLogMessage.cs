@@ -27,7 +27,7 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
             if (lc == null)
             {
@@ -40,7 +40,7 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl lc = e.Selection.ActiveFrameControl as ILogControl;
+            ILogControl lc = e.Selection.GetActiveControl<ILogControl>();
 
             if (lc == null)
                 return;

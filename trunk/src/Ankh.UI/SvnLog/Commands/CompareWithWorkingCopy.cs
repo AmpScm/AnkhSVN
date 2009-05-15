@@ -33,7 +33,7 @@ namespace Ankh.UI.SvnLog.Commands
 
             if (item != null)
             {
-                ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+                ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
                 if (logWindow != null)
                 {
@@ -48,7 +48,12 @@ namespace Ankh.UI.SvnLog.Commands
                             SvnItem svnItem = e.GetService<IFileStatusCache>()[pt.FullPath];
 
                             if (svnItem != null && !svnItem.IsDirectory)
+                            {
+                                if (null == e.Selection.GetActiveControl<ILogControl>())
+                                    e.Enabled = false;
+
                                 return;
+                            }
                         }
                     }
                 }
@@ -56,11 +61,11 @@ namespace Ankh.UI.SvnLog.Commands
 
             e.Enabled = false;
         }
-   
+
         public void OnExecute(CommandEventArgs e)
         {
             // All checked in OnUpdate            
-            ILogControl logWindow = (ILogControl)e.Selection.ActiveDialogOrFrameControl;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
             SvnOrigin origin = EnumTools.GetSingle(logWindow.Origins);
             ISvnLogItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
 
@@ -72,7 +77,7 @@ namespace Ankh.UI.SvnLog.Commands
                 return; // User cancel
             da.MineFile = ((SvnPathTarget)origin.Target).FullPath;
             da.BaseTitle = string.Format("Base (r{0})", item.Revision);
-            da.MineTitle = "Mine/Working";
+            da.MineTitle = "Working";
 
             diff.RunDiff(da);
         }

@@ -57,7 +57,7 @@ namespace Ankh.Commands
                         return;
                     break;
                 case AnkhCommand.LogAnnotateRevision:
-                    ILogControl logControl = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+                    ILogControl logControl = e.Selection.GetActiveControl<ILogControl>();
                     if (logControl == null || logControl.Origins == null)
                     {
                         e.Visible = e.Enabled = false;
