@@ -198,7 +198,7 @@ namespace Ankh.Commands
             };
 
             bool retry = false;
-            ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal("Annotating", delegate(object sender, ProgressWorkerArgs ee)
+            ProgressRunnerResult r = e.GetService<IProgressRunner>().RunModal(CommandStrings.Annotating, delegate(object sender, ProgressWorkerArgs ee)
             {
                 using (FileStream fs = File.Create(tempFile))
                 {
@@ -222,12 +222,12 @@ namespace Ankh.Commands
                 using (AnkhMessageBox mb = new AnkhMessageBox(e.Context))
                 {
                     if (DialogResult.Yes == mb.Show(
-                                                "You are trying to annotate a binary fily. Are you sure you want to continue?",
-                                                "Binary file detected",
+                                                CommandStrings.AnnotateBinaryFileContinueAnywayText,
+                                                CommandStrings.AnnotateBinaryFileContinueAnywayTitle,
                                                 MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                     {
                         r = e.GetService<IProgressRunner>()
-                            .RunModal("Annotating",
+                            .RunModal(CommandStrings.Annotating,
                                       delegate(object sender, ProgressWorkerArgs ee)
                                           {
                                               ba.IgnoreMimeType = true;

@@ -61,6 +61,33 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are trying to annotate a binary fily. Are you sure you want to continue?.
+        /// </summary>
+        internal static string AnnotateBinaryFileContinueAnywayText {
+            get {
+                return ResourceManager.GetString("AnnotateBinaryFileContinueAnywayText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Binary file detected.
+        /// </summary>
+        internal static string AnnotateBinaryFileContinueAnywayTitle {
+            get {
+                return ResourceManager.GetString("AnnotateBinaryFileContinueAnywayTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annotating.
+        /// </summary>
+        internal static string Annotating {
+            get {
+                return ResourceManager.GetString("Annotating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Branch Project.
         /// </summary>
         internal static string BranchProject {
