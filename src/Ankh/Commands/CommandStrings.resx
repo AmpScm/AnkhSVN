@@ -171,4 +171,13 @@
   <data name="XWillBeDeletedPermanently" xml:space="preserve">
     <value>'{0}' will be deleted permanently.</value>
   </data>
+  <data name="AnnotateBinaryFileContinueAnywayText" xml:space="preserve">
+    <value>You are trying to annotate a binary fily. Are you sure you want to continue?</value>
+  </data>
+  <data name="AnnotateBinaryFileContinueAnywayTitle" xml:space="preserve">
+    <value>Binary file detected</value>
+  </data>
+  <data name="Annotating" xml:space="preserve">
+    <value>Annotating</value>
+  </data>
 </root>
