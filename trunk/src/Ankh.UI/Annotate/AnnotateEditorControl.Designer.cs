@@ -89,6 +89,7 @@ namespace Ankh.UI.Annotate
             this.editor.EnableNavigationBar = true;
             this.editor.Location = new System.Drawing.Point(0, 0);
             this.editor.Name = "editor";
+            this.editor.ShowHorizontalScrollBar = true;
             this.editor.Size = new System.Drawing.Size(183, 300);
             this.editor.TabIndex = 2;
             this.editor.Text = "logMessageEditor1";
