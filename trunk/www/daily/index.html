@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6758</title>
+          AnkhSVN-Daily Update - 2.1.6768</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,40 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2054/AnkhSvn-Daily-2.1.6758.69.msi">AnkhSVN 2.1.6758</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2056/AnkhSvn-Daily-2.1.6768.70.msi">AnkhSVN 2.1.6768</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6758">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6768">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-05-15</td></tr>
+<tr><td> </td><td class="r"><a id="6766" href="http://ankhsvn.net/rev/?r=6766">
+            [r6766]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Services/Commands/CommandMapper.cs, Ankh.Ids/AnkhCommand.cs, Ankh.UI/Commands/UIEditCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable all AnkhSVN commands when editting the context menus via the Visual Studio
+menu customizer.</td></tr>
+<tr><td> </td><td class="r"><a id="6764" href="http://ankhsvn.net/rev/?r=6764">
+            [r6764]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> CommandStrings.resx, CommandStrings.Designer.cs, ItemAnnotateCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up to <a href="http://ankhsvn.net/rev/?r=6763">r6763</a>; move strings to resource files</td></tr>
+<tr><td> </td><td class="r"><a id="6763" href="http://ankhsvn.net/rev/?r=6763">
+            [r6763]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> ItemAnnotateCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Detect that we're trying to annotate a binary file, and offer to retry anyway</td></tr>
+<tr><td> </td><td class="r"><a id="6762" href="http://ankhsvn.net/rev/?r=6762">
+            [r6762]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/SvnLog/Commands/ChangeLogMessage.cs, Ankh.UI/SvnLog/Commands/ShowRevisionProperties.cs, Ankh.UI/SvnLog/Commands/CompareWithWorkingCopy.cs, Ankh.UI/SvnLog/Commands/FetchAll.cs, Ankh.UI/SvnLog/Commands/LogStrictNodeHistory.cs, Ankh/Commands/ItemAnnotateCommand.cs, Ankh.UI/SvnLog/Commands/ShowLogMessage.cs, Ankh.UI/SvnLog/Commands/IncludeMergedRevisions.cs, Ankh.UI/SvnLog/Commands/ShowChangedPaths.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix several log commands in the merge wizard by removing the assumption that
+ILogControl is implemented by the top level control/form.</td></tr>
+<tr><td> </td><td class="r"><a id="6761" href="http://ankhsvn.net/rev/?r=6761">
+            [r6761]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/Annotate:</strong> AnnotateEditorControl.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix <a href="http://ankhsvn.net/issues/?id=586">issue #586</a> by turning on the horizontal scrollbar. This makes the scrollbar
+visible/invisible according the the user setting
+(in Tools-Options-Text Editor-General)</td></tr>
 <tr class="d"><td colspan="4">2009-05-13</td></tr>
 <tr><td> </td><td class="r"><a id="6754" href="http://ankhsvn.net/rev/?r=6754">
             [r6754]
@@ -84,10 +104,6 @@ explorer).</td></tr>
 property grid) and prioritize tree conflicts over other conflicts in the
 change calculating of pending changes. Make tree conflicts of unversioned items
 a pending change to allow resolving them.</td></tr>
-<tr class="d"><td colspan="4">2009-04-16</td></tr>
-<tr><td> </td><td class="r"><a id="6672" href="http://ankhsvn.net/rev/?r=6672">
-            [r6672]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> ItemDelete.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow deleting modified files/directories from the working copy explorer.</td></tr>
 
 </table>
 <!--/Recent changes-->
