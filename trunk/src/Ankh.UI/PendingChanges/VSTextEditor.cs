@@ -577,7 +577,6 @@ namespace Ankh.UI.PendingChanges
 
         readonly Control _container;
         readonly IOleServiceProvider _serviceProvider;
-        readonly IOleServiceProvider _site;
         IVsWindowPane _windowPane;
 
         /// <summary>
@@ -611,14 +610,6 @@ namespace Ankh.UI.PendingChanges
 
             _container = container;
             _serviceProvider = context.GetService<IOleServiceProvider>();
-
-            if (Marshal.IsComObject(_serviceProvider))
-                _site = _serviceProvider;
-            else
-            {
-                // VS 2010 Beta 1 fails to create the editor if _serviceProvider is no COM Object
-                _site = GetService<IAnkhPackage>().GetService<IOleServiceProvider>();
-            }
         }
 
         public string Text
@@ -894,7 +885,7 @@ namespace Ankh.UI.PendingChanges
 
             // create pane window
             _windowPane = (IVsWindowPane)codeWindow;
-            ErrorHandler.ThrowOnFailure(_windowPane.SetSite(_site));
+            ErrorHandler.ThrowOnFailure(_windowPane.SetSite(_serviceProvider));
 
             ErrorHandler.ThrowOnFailure(_windowPane.CreatePaneWindow(parentHandle, place.X, place.Y, place.Width, place.Height, out editorHwnd));
 
