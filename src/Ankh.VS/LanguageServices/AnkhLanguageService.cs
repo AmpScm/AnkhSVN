@@ -23,6 +23,8 @@ using System.ComponentModel.Design;
 using Ankh.Selection;
 using Ankh.UI;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -101,6 +103,35 @@ namespace Ankh.VS.LanguageServices
         public virtual void PrepareContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
         {
             
+        }
+
+        public override void Dispose()
+        {
+            Type vf = typeof(ViewFilter);
+            const BindingFlags privateField = BindingFlags.NonPublic | BindingFlags.Instance;
+
+            if (TextView != null && !Marshal.IsComObject(TextView))
+            {
+                // Avoid exception on dispose
+                FieldInfo textView = vf.GetField("textView", privateField);
+
+                if (textView != null)
+                    textView.SetValue(this, null);
+            }
+
+            FieldInfo nextTarget = vf.GetField("nextTarget", privateField);
+
+            if (nextTarget != null)
+            {
+                object nt = nextTarget.GetValue(this);
+
+                if (nt != null && !Marshal.IsComObject(nt))
+                {
+                    nextTarget.SetValue(this, null);
+                }
+            }
+
+            base.Dispose();
         }
     }
 }
