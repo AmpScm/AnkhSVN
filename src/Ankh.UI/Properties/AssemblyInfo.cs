@@ -50,7 +50,7 @@ using Ankh;
 // You can specify all the value or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersionAttribute("2.0.*")]
+[assembly: AssemblyVersionAttribute("2.1.*")]
 // TODO: These should not be set in release code
 #if !FOR_MSI
 [assembly: InternalsVisibleTo("AnkhSvn.IntegrationTest, PublicKey=00240000048000009400000006020000002400005253413100040000010001000bcfcfdecfef04d5fd7772440779a083c6c3b83a8afd1c770f94b88f7f4fdc3153717ddd2f299c898835bd8e79d82eb0a3cd557d5782b8cf784d36bb2d59a4d65e96612585de3a10b41ad3101072e2c0f04b89ff9a6218b22275bef93f41fa98942adcebd4bb6fcf8404f56d25183b496dbfcedb70952abbcceecf478e1b72f3")]
