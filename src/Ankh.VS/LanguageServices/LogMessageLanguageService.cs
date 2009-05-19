@@ -237,7 +237,7 @@ namespace Ankh.VS.LanguageServices
         }
     }
 
-    class LogmessageSource : Source
+    class LogmessageSource : AnkhSource
     {
         public LogmessageSource(LogMessageLanguageService service, IVsTextLines textLines, Colorizer colorizer)
             : base(service, textLines, colorizer)
