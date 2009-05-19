@@ -29,6 +29,7 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
+using System.Diagnostics;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -280,24 +281,32 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
-        public void Init(IAnkhServiceProvider context, bool allowModal)
+        protected virtual void Init(IAnkhServiceProvider context, bool allowModal)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
             _context = context;
             IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
-            _nativeWindow = new CodeEditorWindow(_context, this);
+            try
+            {
+                _nativeWindow = new CodeEditorWindow(_context, this);
 
-            // Set init only values
-            _nativeWindow.EnableSplitter = EnableSplitter;
-            _nativeWindow.EnableNavigationBar = EnableNavigationBar;
-            _nativeWindow.Init(allowModal, ForceLanguageService);
-            _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;            
-            _nativeWindow.Size = ClientSize;
-            _nativeWindow.SetReadOnly(_readOnly);
+                // Set init only values
+                _nativeWindow.EnableSplitter = EnableSplitter;
+                _nativeWindow.EnableNavigationBar = EnableNavigationBar;
+                _nativeWindow.Init(allowModal, ForceLanguageService);
+                _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
+                _nativeWindow.Size = ClientSize;
+                _nativeWindow.SetReadOnly(_readOnly);
 
-            _nativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
+                _nativeWindow.Scroll += new EventHandler<TextViewScrollEventArgs>(codeEditorNativeWindow_Scroll);
+            }
+            catch
+            {
+                _nativeWindow = null;
+                throw;
+            }
         }
 
         void codeEditorNativeWindow_Scroll(object sender, TextViewScrollEventArgs e)
@@ -663,9 +672,16 @@ namespace Ankh.UI.PendingChanges
                         InternalSetReadOnly(true);
                 }
 
-                ErrorHandler.ThrowOnFailure(_textView.SetCaretPos(0, 0)); // Move cursor to 0,0
-                ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(0, 0)); // Scroll horizontally
-                ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(1, 0)); // Scroll vertically     
+                try
+                {
+                    ErrorHandler.ThrowOnFailure(_textView.SetCaretPos(0, 0)); // Move cursor to 0,0
+                    ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(0, 0)); // Scroll horizontally
+                    ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(1, 0)); // Scroll vertically     
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine(string.Format("Ignoring {0}: {1}", e.GetType().Name, e.Message));
+                }
             }
         }
 
