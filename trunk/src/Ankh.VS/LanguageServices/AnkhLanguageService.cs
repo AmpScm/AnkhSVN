@@ -134,4 +134,41 @@ namespace Ankh.VS.LanguageServices
             base.Dispose();
         }
     }
+
+    class AnkhSource : Source
+    {
+        public AnkhSource(AnkhLanguageService service, IVsTextLines textLines, Colorizer colorizer)
+            : base(service, textLines, colorizer)
+        {
+        }
+
+        public override void Dispose()
+        {
+            Type sc = typeof(Source);
+            const BindingFlags privateField = BindingFlags.NonPublic | BindingFlags.Instance;
+            FieldInfo field;
+            
+            field = sc.GetField("colorState", privateField);
+
+            if (field != null)
+            {
+                object v = field.GetValue(this);
+
+                if (!Marshal.IsComObject(v))
+                    field.SetValue(this, null);
+            }
+
+            field = sc.GetField("textLines", privateField);
+
+            if (field != null)
+            {
+                object v = field.GetValue(this);
+
+                if (!Marshal.IsComObject(v))
+                    field.SetValue(this, null);
+            }
+
+            base.Dispose();
+        }
+    }
 }
