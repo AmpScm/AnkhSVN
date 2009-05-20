@@ -448,7 +448,7 @@
         </Group>
         <Group id="Grp_RepositoryExplorerTbOpen" priority="0x300">
           <Menu id="Menu_RepositoryExplorerTbOpen" name="ReposExplorerOpen" text="&amp;Open" priority="0x100"
-                type="MenuControllerLatched" iconAndText="true">
+                type="MenuController" iconAndText="true">
             <Group id="Menu_RepositoryExplorerTbOpen" priority="0x100">
               <ButtonRef id="Cmd_ExplorerOpen" priority="0x680" />
               <ButtonRef id="Cmd_ViewInVsNet" priority="0x700" />
@@ -675,7 +675,7 @@
         <Group id="Grp_PendingChangesSolutionCommands" priority="0x100">
           <Button id="Cmd_PendingChangesSpacer" name="Spacer" text=" " iconAndText="true" priority="0x001"
               toolTip="AnkhSVN" />
-          <Menu id="Menu_PendingChangesCommit" name="Commit" text="Co&amp;mmit" priority="0x100" type="MenuControllerLatched" iconAndText="true">
+          <Menu id="Menu_PendingChangesCommit" name="Commit" text="Co&amp;mmit" priority="0x100" type="MenuController" iconAndText="true" >
             <Group id="Grp_PendingChangesCommit1" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
                   text="&amp;Commit Changes"
@@ -696,7 +696,7 @@
               <ButtonRef id="Cmd_SolutionBranch" priority="0x100" />
             </Group>
           </Menu>
-          <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuControllerLatched" iconAndText="true">
+          <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuController" iconAndText="true">
             <Group id="Grp_PendingChangesUpdate1" priority="0x100">
               <Button id="Cmd_PendingChangesUpdateHead" name="UpdatePendingChanges" priority="0x100"
                   text="U&amp;pdate to Latest Version"
@@ -718,7 +718,7 @@
           </Menu>
         </Group>
         <Group id="Grp_PendingChangesView" priority="0x200">
-          <Menu id="Menu_PendingChangesView" priority="0x100" name="View" type="MenuControllerLatched">
+          <Menu id="Menu_PendingChangesView" priority="0x100" name="View" type="MenuController">
             <Group id="Menu_PendingChangesView" priority="0x100">
               <Button id="Cmd_PendingChangesViewFlat" name="ViewFlat" priority="0x100"
                   text="&amp;Flat"
@@ -740,7 +740,7 @@
               text="View &amp;Message" iconFile="PendingChanges/ShowComment.png"/>
         </Group>
         <Group id="Grp_PendingChangesItems" priority="0x300">
-          <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuControllerLatched">
+          <Menu id="Menu_ItemConflict" priority="0x100" name="Conflicts" type="MenuController">
             <Group id="Menu_ItemConflict" priority="0x100">
               <Button id="Cmd_ItemConflictEdit" name="ItemConflictEdit" priority="0x100" defaultInvisible="true"
                   text="&amp;Edit Conflicts" menuText="Edit Con&amp;flicts" iconFile="PendingChanges/EditConflict.png" fixMenuController="true"/>
@@ -754,7 +754,7 @@
                   text="Resolve using &amp;Their Version" dynamicVisibility="true"/>
             </Group>
           </Menu>
-          <Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuControllerLatched" dynamicVisibility="true">
+          <Menu id="Menu_ItemCompare" priority="0x200" name="Compare" type="MenuController" dynamicVisibility="true">
             <Group id="Menu_ItemCompare" priority="0x100">
               <Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
                   text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
