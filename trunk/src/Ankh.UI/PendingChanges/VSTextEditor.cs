@@ -373,7 +373,12 @@ namespace Ankh.UI.PendingChanges
                 if (_nativeWindow == null)
                     return Point.Empty;
 
-                return PointToClient(_nativeWindow.EditorClientTop);
+                Point? p = _nativeWindow.EditorClientTop;
+
+                if (p.HasValue)
+                    return PointToClient(p.Value);
+                else
+                    return Point.Empty;
             }
         }
 
@@ -1112,7 +1117,7 @@ namespace Ankh.UI.PendingChanges
             ErrorHandler.ThrowOnFailure(dfc.IgnoreFileChanges(ignore ? 1 : 0));
         }
 
-        public Point EditorClientTop
+        public Point? EditorClientTop
         {
             get
             {
@@ -1120,7 +1125,7 @@ namespace Ankh.UI.PendingChanges
                 if (viewHwnd == IntPtr.Zero
                     || !NativeMethods.GetWindowRect(viewHwnd, out rect))
                 {
-                    return Point.Empty;
+                    return null;
                 }
 
                 return new Point(rect.left, rect.top);
