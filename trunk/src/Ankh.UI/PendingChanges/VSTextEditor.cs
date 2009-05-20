@@ -596,8 +596,8 @@ namespace Ankh.UI.PendingChanges
         /// <summary>
         /// Editor window handle
         /// </summary>
-        private IntPtr editorHwnd;
-        private IntPtr viewHwnd;
+        IntPtr editorHwnd;
+        IntPtr viewHwnd;
 
         /// <summary>
         /// The IOleCommandTarget interface enables objects and their containers to dispatch commands to each other.
@@ -953,8 +953,9 @@ namespace Ankh.UI.PendingChanges
             _textView = textView;
             IntPtr h = textView.GetWindowHandle();
 
-            if (h != IntPtr.Zero)
+            if (h != IntPtr.Zero && NativeMethods.IsWindow(h))
                 viewHwnd = h;
+
             NativeMethods.ShowWindow(editorHwnd, 4); // 4 = SW_SHOWNOACTIVATE
 
             HookEvents(true);
@@ -1212,6 +1213,10 @@ namespace Ankh.UI.PendingChanges
             [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
             [return: MarshalAs(UnmanagedType.Bool)]
             internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool IsWindow(IntPtr hWnd);
         }
         #endregion
 
