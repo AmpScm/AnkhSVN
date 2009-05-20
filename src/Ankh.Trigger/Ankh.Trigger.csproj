@@ -1,19 +1,25 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
     <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '4.0') AND ('$(UseVS2005MPF)' != 'true')">10.0</VsSdkVersion>
     <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
     <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
-    <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == '4.0'">10.0</VisualStudioVersion>
     <SccProjectName>Svn</SccProjectName>
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30428</ProductVersion>
+    <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -21,7 +27,8 @@
     <AssemblyName>Ankh.Trigger</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Trigger.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(VsSdkVersion)' != '10.0'">v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(VsSdkVersion)' == '10.0'">v4.0</TargetFrameworkVersion>
     <ProjectGuid>{D81A44B8-57A9-4296-832C-7D29019D989B}</ProjectGuid>
     <ApplicationIcon>Resources\Package.ico</ApplicationIcon>
   </PropertyGroup>
@@ -57,8 +64,12 @@
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '10.0'">Microsoft.VisualStudio.Shell.10.0</ShellAssembly>
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Package.LanguageService</VSLangAssembly>
     <VSLangAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Package.LanguageService.9.0</VSLangAssembly>
+    <VSLangAssembly Condition="'$(VsSdkVersion)' == '10.0'">Microsoft.VisualStudio.Package.LanguageService.10.0</VSLangAssembly>
+    <VSLangHintPath Condition="'$(VsSdkVersion)' == '10.0'">$(VsSDKIncludes)$(VSLangAssembly).dll</VSLangHintPath>
+    <VSShellHintPath Condition="'$(VsSdkVersion)' == '10.0'">$(VsSDKIncludes)$(ShellAssembly).dll</VSShellHintPath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop" />
@@ -66,9 +77,21 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
-    <Reference Include="$(ShellAssembly)" />
-    <Reference Include="$(VSLangAssembly)" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="'$(VsSdkVersion)' == '9.0'">
+    <Reference Include="$(ShellAssembly)">
+      <HintPath>$(VSShellHintPath)</HintPath>
+    </Reference>
+    <Reference Include="$(VSLangAssembly)">
+      <HintPath>$(VSLangHintPath)</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="('$(VsSdkVersion)' == '9.0') OR ('$(VsSdkVersion)' == '10.0')">
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
+      <HintPath>$(VsSDKIncludes)Microsoft.VisualStudio.Shell.Interop.10.0</HintPath>
+      <Visible>false</Visible>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
+      <HintPath>$(VsSDKIncludes)Microsoft.VisualStudio.Shell.Immutable.10.0</HintPath>
       <Visible>false</Visible>
     </Reference>
     <Reference Include="System" />
@@ -123,6 +146,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '9.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '10.0'" />
   <Import Project="..\tools\VSSdk2005Tasks\Microsoft.VsSDK.targets" Condition="$(VisualStudioVersion) == '8.0'" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
