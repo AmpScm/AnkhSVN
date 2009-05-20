@@ -396,7 +396,7 @@
       <xsl:if test="@noToolbarClose='true'">
         <xsl:text>|NOTOOLBARCLOSE</xsl:text>
       </xsl:if>
-      <xsl:if test="@textChanges='true'">
+      <xsl:if test="@textChanges='true' or @textIsAnchorCommand='true'">
         <xsl:text>|TEXTCHANGES</xsl:text>
       </xsl:if>
       <xsl:if test="@textIsAnchorCommand='true'">
