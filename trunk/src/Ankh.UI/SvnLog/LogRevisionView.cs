@@ -144,7 +144,7 @@ namespace Ankh.UI.SvnLog
                 if (Focused)
                     e.Graphics.FillRectangle(SystemBrushes.Highlight, b);
                 else
-                    e.Graphics.FillRectangle(SystemBrushes.Menu, b);
+                    e.Graphics.FillRectangle(SystemBrushes.ButtonFace, b);
             }
 
 
