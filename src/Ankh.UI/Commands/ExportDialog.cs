@@ -31,7 +31,6 @@ namespace Ankh.UI.Commands
     /// </summary>
     public partial class ExportDialog : VSDialogForm
     {
-        readonly IAnkhServiceProvider _context;
         protected ExportDialog()
         {
             //
@@ -47,7 +46,7 @@ namespace Ankh.UI.Commands
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            _context = context;
+            Context = context;
         }    
 
         public string OriginPath
@@ -134,7 +133,7 @@ namespace Ankh.UI.Commands
             {
                 if (this.revisionPicker.Valid && ExportSource != null && !string.IsNullOrEmpty(toBox.Text))
                 {
-                    string origin = string.IsNullOrEmpty(originBox.Text) ? originBox.Text : null;
+                    string origin = string.IsNullOrEmpty(originBox.Text) ? null : originBox.Text;
 
                     if (origin != null)
                     {
@@ -206,7 +205,7 @@ namespace Ankh.UI.Commands
         {
             get
             {
-                string origin = string.IsNullOrEmpty(originBox.Text) ? originBox.Text : null;
+                string origin = string.IsNullOrEmpty(originBox.Text) ? null : originBox.Text;
 
                 if (origin != null)
                 {

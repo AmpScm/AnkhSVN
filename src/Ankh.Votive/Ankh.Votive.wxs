@@ -44,7 +44,7 @@
     <Media Id="1" Cabinet="AnkhSVN.cab" EmbedCab="yes" CompressionLevel="high"/>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2.0">
+        <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
           <Directory Id="APP_bin" Name="." FileSource="$(sys.SOURCEFILEDIR)..\">
             <Directory Id="DIR_SharpSvn" Name=".">
               <!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
@@ -87,7 +87,7 @@
       <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
     </InstallExecuteSequence>
 
-    <Property Id="ApplicationFolderName" Value="AnkhSVN 2.0" />
+    <Property Id="ApplicationFolderName" Value="AnkhSVN 2" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
 
     <WixVariable Id="WixUIDialogBmp" Value="Ankh.Votive/SetupPage.bmp"/>
@@ -97,7 +97,7 @@
     <WixVariable Id="WixUISupportPerUser" Value="0" />
     <UIRef Id="WixUI_Advanced"/>
 
-    <Feature Id="ProductFeature" Title="AnkhSVN 2.0" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
+    <Feature Id="ProductFeature" Title="AnkhSVN $(var.ankhVersion)" Level="1" ConfigurableDirectory="APPLICATIONFOLDER" AllowAdvertise="no" Display="expand">
       <ComponentGroupRef Id="Ankh.Package"/>
       <ComponentGroupRef Id="Ankh.Trigger"/>
       <ComponentRef Id="C_CONTRIBUTORS"/>
