@@ -95,7 +95,9 @@
     
     return a.GetType(type);
   }
-      
+  
+  Dictionary<string,string> _idMap = new Dictionary<string,string>();
+  
   public string InputType(string type, string from, string prefix, string sourceFile, string configuration)
   {
     StringBuilder sb = new StringBuilder();
@@ -110,6 +112,10 @@
 
     sb.AppendFormat("\n // Imported from: {0}", from);
     sb.AppendFormat("\n // Type: {0}\n", tp.AssemblyQualifiedName);
+    
+    string typeName = tp.FullName.Replace('.','_');
+    if (typeAttr != null)
+      sb.AppendFormat("#define {0} {1}\n", typeName, formatGuid(typeAttr.Value.ToString()));
     foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
     {
       object v = fif.GetValue(null);
@@ -133,10 +139,13 @@
         
         string val = "";
         if(itemAttr != null)
+        {
           val = formatGuid(itemAttr.Value.ToString()) + ":";
+          _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name + "_IdOnly";
+        }
 
-        sb.AppendFormat("#define {0}{1} {3}0x{2,-8:X}\n", prefix, fif.Name, v, val);
-        sb.AppendFormat("#define {0}{1}_IdOnly 0x{2,-8:X}\n", prefix, fif.Name, v);
+        sb.AppendFormat("#define {0}{1} {3}0x{2:X}\n", prefix, fif.Name, v, val);
+        sb.AppendFormat("#define {0}{1}_IdOnly 0x{2:X}\n", prefix, fif.Name, v);
       }
       else if(v is Guid)
       {
@@ -153,6 +162,16 @@
     sb.AppendFormat("// /Loaded\n", tp.AssemblyQualifiedName);
 
     return sb.ToString();
+  }
+  
+  public string MakeId(string value)
+  {
+    string v;
+    
+    if (_idMap.TryGetValue(value, out v))
+      return v;
+
+    return value;
   }
   
   public string formatGuid(string v)
@@ -360,10 +379,10 @@
   <xsl:template match="gui:Menu" mode="menus">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Menu-Id -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Group-Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Priority -->
     <xsl:value-of select="@priority"/>
@@ -429,10 +448,10 @@
   <xsl:template match="gui:Group" mode="groups">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Group-Id -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Menu-Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Priority -->
     <xsl:value-of select="@priority"/>
@@ -444,10 +463,10 @@
   <xsl:template match="gui:Button" mode="buttons">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Button-Id -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Group-Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Priority -->
     <xsl:value-of select="@priority"/>
@@ -598,10 +617,10 @@
   <xsl:template match="gui:ComboBox">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Combo Box ID -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Group-Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Priority -->
     <xsl:value-of select="@priority"/>
@@ -695,10 +714,10 @@
   <xsl:template match="gui:ButtonRef" mode="placement">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Item ID -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Parent-Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Priority -->
     <xsl:value-of select="@priority"/>
@@ -710,10 +729,10 @@
             (self::gui:GroupRef and (parent::gui:Menu or parent::gui:MenuRef))">
       <xsl:text>&#9;&#9;</xsl:text>
       <!-- Item ID -->
-      <xsl:value-of select="@id"/>
+      <xsl:value-of select="me:MakeId(@id)"/>
       <xsl:text>, </xsl:text>
       <!-- Parent-Id -->
-      <xsl:value-of select="../@id"/>
+      <xsl:value-of select="me:MakeId(../@id)"/>
       <xsl:text>, </xsl:text>
       <!-- Priority -->
       <xsl:value-of select="@priority"/>
@@ -723,7 +742,7 @@
   <xsl:template match="gui:KeyBinding">
     <xsl:text>&#9;</xsl:text>
     <!-- Command Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Editor Id -->
     <xsl:value-of select="@editor"/>
@@ -779,13 +798,13 @@
   <xsl:template match="gui:BindKey">
     <xsl:text>&#9;</xsl:text>
     <!-- Command Id -->
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Editor Id -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <!-- Emulation (Defined as for future use; repeat editor) -->
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <xsl:choose>
       <xsl:when test="string-length(@key1) = 1">
@@ -834,14 +853,14 @@
   </xsl:template>
   <xsl:template match="gui:Visibility[parent::gui:*/@id and @context]" mode="visibility">
     <xsl:text>&#9;</xsl:text>
-    <xsl:value-of select="../@id"/>
+    <xsl:value-of select="me:MakeId(../@id)"/>
     <xsl:text>, </xsl:text>
     <xsl:value-of select="@context"/>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
   <xsl:template match="gui:Command">
     <xsl:text>&#9;</xsl:text>
-    <xsl:value-of select="@id"/>
+    <xsl:value-of select="me:MakeId(@id)"/>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>
