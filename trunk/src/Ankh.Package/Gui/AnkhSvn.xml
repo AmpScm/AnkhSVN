@@ -66,7 +66,7 @@
             <ButtonRef id="Cmd_AddItem" priority="0x10" />
           </Group>
           <Group id="Grp_FileSccOpen" priority="0x01A0">
-            <Button id="Cmd_FileSccOpenFromSubversion" text="Open &amp;from Subve&amp;rsion..." name="OpenFromSubversion" priority="0x100"
+            <Button id="Cmd_FileSccOpenFromSubversion" text="Open &amp;from Subversion..." name="OpenFromSubversion" priority="0x100"
                     toolTip="Open a Project or Solution from Subversion" dynamicVisibility="true">
               <Visibility context="Ankh_SccProviderGuid" />
             </Button>
@@ -811,7 +811,6 @@
                 stretchHorizontally="true"
                 toolTip="Switch to"
                 text="Wo&amp;rking on:"
-                iconAndText="true"
                 />
           <Button id="Cmd_SolutionSwitchDialog" name="SwitchDialog" priority="0x200" allowParams="true"
               text="&amp;Switch Solution..." iconFile="PendingChanges/Switch.png" defaultInvisible="true"/>
