@@ -4,10 +4,9 @@
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
                 xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
-  <xsl:param name="Src" select="'F:\ankhsvn\trunk\src\ankh.package\gui\AnkhSvn.xml'" />
+  <xsl:param name="Src" select="'F:\ankhsvn\trunk-2\src\ankh.package\gui\AnkhSvn.xml'" />
   <xsl:param name="Configuration" select="'Debug'" />
   <xsl:param name="BitmapFile" select="'../obj/CtCBitmap.bmp'" />
-  <xsl:param name="BitmapId" select="555" />
   <msxsl:script implements-prefix="me" language="C#">
     <msxsl:assembly name="System.Drawing" />
     <msxsl:using namespace="System.Collections.Generic" />
@@ -95,7 +94,12 @@
       _assemblies[from] = a;
     }
     
-    return a.GetType(type);
+    Type tp = a.GetType(type);
+    
+    if(tp == null)
+      throw new InvalidOperationException(string.Format("Class {0} not found in assembly: {1}", type, from));
+
+    return tp;
   }
   
   Dictionary<string,string> _idMap = new Dictionary<string,string>();
@@ -343,6 +347,11 @@
     }
     
     return -1;
+  }
+  
+  public string FullPath(string value)
+  {
+    return System.IO.Path.GetFullPath(value);
   }
    ]]>
   </msxsl:script>

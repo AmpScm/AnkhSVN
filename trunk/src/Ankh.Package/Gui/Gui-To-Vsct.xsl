@@ -28,6 +28,29 @@
         <Buttons>
           <xsl:apply-templates select="gui:UI//gui:Button" mode="buttons" />
         </Buttons>
+        <Bitmaps>
+          <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
+            <Bitmap guid="{gui:UI/@autoBmpId}">
+              <xsl:choose>
+                <xsl:when test="1=1">
+                  <!-- This caches the bitmap file inside the CTC -->
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="$BitmapFile"/>
+                  </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <!-- This replicates the old behavior -->
+                  <xsl:attribute name="resID">
+                    <xsl:value-of select="gui:UI/@autoBmpResId"/>
+                  </xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
+              <xsl:attribute name="usedList">
+                <xsl:value-of select="normalize-space(substring-after(me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src),','))"/>
+              </xsl:attribute>
+            </Bitmap>
+          </xsl:if>
+        </Bitmaps>
 
       </Commands>
 
@@ -43,16 +66,6 @@
         <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
         <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
-
-        <xsl:text>&#9;BITMAPS_BEGIN&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// Bitmap ID, Icon Index...&#10;</xsl:text>
-        <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
-          <xsl:text>&#9;&#9;</xsl:text>
-          <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapId"/>
-          <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src)"/>
-          <xsl:text>;&#10;</xsl:text>
-        </xsl:if>
-        <xsl:text>&#9;BITMAPS_END&#10;&#10;</xsl:text>
 
         <xsl:text>&#9;COMBOS_BEGIN&#10;</xsl:text>
         <xsl:text>&#9;&#9;// Combo Box ID, Group ID, Priority, Fill Command ID, Width, Type, Flags, Button Text, Menu Text, ToolTip Text, CommandWellName, CannonicalName, LocalizedCanonicalName;&#10;</xsl:text>
@@ -82,19 +95,20 @@
         <xsl:text>&#9;// Groups&#10;</xsl:text>
         <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
         <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
-        <xsl:for-each select="gui:BitmapStrips/gui:Strip">
-          <xsl:text>// Created Strip </xsl:text>
-          <xsl:value-of select="@name"/>
+      </xsl:comment>
+      <xsl:for-each select="gui:BitmapStrips/gui:Strip">
+        <xsl:comment>
+          <xsl:value-of select="concat('Creating strip: ', @name)" />
+        </xsl:comment>
+        <xsl:variable name="q">
           <xsl:if test="@bitmap">
             <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
           </xsl:if>
           <xsl:if test="@bitmap24">
             <xsl:value-of select="me:generateStrip(@bitmap24, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 0, $Src, $Configuration)"/>
           </xsl:if>
-          <xsl:text>&#10;</xsl:text>
-        </xsl:for-each>
-      </xsl:comment>
-      <xsl:comment>Symbols</xsl:comment>
+        </xsl:variable>
+      </xsl:for-each>
       <Symbols>
         <xsl:copy-of select="$symbols" />
       </Symbols>
@@ -135,16 +149,16 @@
         <CanonicalName>
           <xsl:value-of select="@name"/>
         </CanonicalName>
-      </xsl:if>  
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="@localizedName">
           <LocCanonicalName>
-          <xsl:value-of select="me:CQuote(@localizedName)"/>
+            <xsl:value-of select="@localizedName"/>
           </LocCanonicalName>
         </xsl:when>
         <xsl:when test="@name">
           <LocCanonicalName>
-          <xsl:value-of select="me:CQuote(@name)"/>
+            <xsl:value-of select="@name"/>
           </LocCanonicalName>
         </xsl:when>
       </xsl:choose>

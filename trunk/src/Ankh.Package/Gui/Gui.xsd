@@ -111,6 +111,11 @@
               <xs:documentation>Id of the auto-generated bmp</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="autoBmpResId" type="gui:qPrefix">
+            <xs:annotation>
+              <xs:documentation>Id of the auto-generated bmp</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
