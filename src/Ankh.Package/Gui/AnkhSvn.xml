@@ -674,8 +674,8 @@
       <!-- The Working Copy Explorer Toolbar -->
       <Menu id="ToolBar_PendingChanges" name="PendingChanges" priority="0" type="ToolWindowToolbar">
         <Group id="Grp_PendingChangesSolutionCommands" priority="0x100">
-          <Button id="Cmd_PendingChangesSpacer" name="Spacer" text=" " iconAndText="true" priority="0x001"
-              toolTip="AnkhSVN" />
+          <Button id="Cmd_PendingChangesSpacer" name="Spacer" text="&#160;" iconAndText="true" priority="0x001"
+              toolTip="AnkhSVN" iconFile="PendingChanges/Blank.png" />
           <Menu id="Menu_PendingChangesCommit" name="Commit" text="Co&amp;mmit" priority="0x100" type="MenuController" iconAndText="true" >
             <Group id="Grp_PendingChangesCommit1" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"

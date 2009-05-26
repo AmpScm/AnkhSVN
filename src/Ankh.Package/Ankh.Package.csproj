@@ -224,6 +224,7 @@
     <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
     <Content Include="Gui\PendingChanges\Annotate.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\Blank.png" />
     <Content Include="Gui\PendingChanges\Branch.png" />
     <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
