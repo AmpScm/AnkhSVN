@@ -902,6 +902,14 @@
         </xs:documentation>
       </xs:annotation>
     </xs:attribute>
+    <xs:attribute name="defaultDisabled" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          By default, the command is disabled if the VSPackage that implements the command is not
+          loaded or the QueryStatus method has not been called.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
     <xs:attribute name="defaultInvisible" type="gui:trueFalse">
       <xs:annotation>
         <xs:documentation>
