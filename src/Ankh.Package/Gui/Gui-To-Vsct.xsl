@@ -32,7 +32,7 @@
           <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
             <Bitmap guid="{gui:UI/@autoBmpId}">
               <xsl:choose>
-                <xsl:when test="1=1">
+                <xsl:when test="1=0">
                   <!-- This caches the bitmap file inside the CTC -->
                   <xsl:attribute name="href">
                     <xsl:value-of select="$BitmapFile"/>
@@ -51,51 +51,42 @@
             </Bitmap>
           </xsl:if>
         </Bitmaps>
+        <Combos>
+          <xsl:apply-templates select="gui:UI//gui:ComboBox" mode="combo"/>
+        </Combos>
 
       </Commands>
-
-      <xsl:comment>
-        <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
-        <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
+      <CommandPlacements>
+        <xsl:comment>Menus</xsl:comment>
         <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
-        <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
+        <xsl:comment>Groups</xsl:comment>
         <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
-        <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
+        <xsl:comment>Buttons</xsl:comment>
+        <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
+      </CommandPlacements>
 
-        <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
-
-        <xsl:text>&#9;COMBOS_BEGIN&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// Combo Box ID, Group ID, Priority, Fill Command ID, Width, Type, Flags, Button Text, Menu Text, ToolTip Text, CommandWellName, CannonicalName, LocalizedCanonicalName;&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:ComboBox" />
-        <xsl:text>&#9;COMBOS_END&#10;&#10;</xsl:text>
-
-        <xsl:text>CMDS_END&#10;&#10;</xsl:text>
-
-        <xsl:text>CMDUSED_SECTION&#10;</xsl:text>
-        <xsl:text>&#9;// Command ID&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UsedCommands/gui:Command" />
-        <xsl:text>CMDUSED_END&#10;&#10;</xsl:text>
-
-        <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
-        <xsl:text>&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
-        <xsl:text>&#9;// Out of context commands&#10;</xsl:text>
-        <xsl:apply-templates select="gui:KeyBindings/gui:Editor/gui:BindKey" />
-        <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
-
-        <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
-        <xsl:text>&#9;// Item ID, Context ID&#10;</xsl:text>
-        <xsl:text>&#9;// Buttons&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
-        <xsl:text>&#9;// Menus&#10;</xsl:text>
+      <VisibilityConstraints>
+        <xsl:comment>&#9;// Menus</xsl:comment>
         <xsl:apply-templates select="gui:UI//gui:Menu/gui:Visibility | gui:UI//gui:MenuRef/gui:Visibility" mode="visibility" />
-        <xsl:text>&#9;// Groups&#10;</xsl:text>
+        <xsl:comment>&#9;// Groups</xsl:comment>
         <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
-        <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
-      </xsl:comment>
+        <xsl:comment>&#9;// Buttons</xsl:comment>
+        <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
+      </VisibilityConstraints>
+
+      <KeyBindings>
+        <xsl:comment>Button bindings</xsl:comment>
+        <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
+        <xsl:comment>Out of context commands</xsl:comment>
+        <xsl:apply-templates select="gui:KeyBindings/gui:Editor/gui:BindKey" />
+      </KeyBindings>
+
+      <xsl:if test="gui:UsedCommands/gui:Command">
+        <UsedCommands>
+          <xsl:apply-templates select="gui:UsedCommands/gui:Command" mode="usedCommand" />
+        </UsedCommands>
+      </xsl:if>
+
       <xsl:for-each select="gui:BitmapStrips/gui:Strip">
         <xsl:comment>
           <xsl:value-of select="concat('Creating strip: ', @name)" />
@@ -340,253 +331,155 @@
       <xsl:call-template name="strings" />
     </Button>
   </xsl:template>
-  <xsl:template match="gui:ComboBox">
-    <xsl:text>&#9;&#9;</xsl:text>
-    <!-- Combo Box ID -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Group-Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Priority -->
-    <xsl:value-of select="@priority"/>
-    <xsl:text>, </xsl:text>
-    <!-- Fill Command ID -->
-    <xsl:value-of select="@fillCommand"/>
-    <xsl:text>, </xsl:text>
-    <!-- Width -->
-    <xsl:value-of select="@width"/>
-    <xsl:text>, </xsl:text>
-    <!-- Type -->
-    <xsl:value-of select="@type"/>
-    <xsl:text>, </xsl:text>
-    <!-- Flags -->
-    <xsl:variable name="flags">
-      <xsl:if test="@noKeyCustomize='true'">
-        <xsl:text>NOKEYCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noButtonCustomize='true'">
-        <xsl:text>|NOBUTTONCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noCustomize='true'">
-        <xsl:text>|NOCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
-        <xsl:text>|DEFAULTINVISIBLE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
-        <xsl:text>|DYNAMICVISIBILITY</xsl:text>
+  <xsl:template match="gui:ComboBox" mode="combo">
+    <Combo
+      guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}"
+      idCommandList="{@fillCommand}"
+      defaultWidth="{@width}"
+      priority="{@priority}"
+      type="{@type}">
+      <xsl:call-template name="parentRef" />
+      <xsl:if test="@caseSensitive='true'">
+        <CommandFlag>CaseSensitive</CommandFlag>
       </xsl:if>
       <xsl:if test="@commandWellOnly='true'">
-        <xsl:text>|COMMANDWELLONLY</xsl:text>
+        <CommandFlag>CommandWellOnly</CommandFlag>
       </xsl:if>
-      <xsl:if test="@iconAndText='true'">
-        <xsl:text>|ICONANDTEXT</xsl:text>
+      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+        <CommandFlag>DefaultDisabled</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
+        <CommandFlag>DefaultInvisible</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
+        <CommandFlag>DynamicVisibility</CommandFlag>
       </xsl:if>
       <xsl:if test="@filterKeys='true'">
-        <xsl:text>|FILTERKEYS</xsl:text>
+        <CommandFlag>FilterKeys</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@iconAndText='true'">
+        <CommandFlag>IconAndText</CommandFlag>
       </xsl:if>
       <xsl:if test="@noAutoComplete='true'">
-        <xsl:text>|NOAUTOCOMPLETE</xsl:text>
+        <CommandFlag>NoAutoComplete</CommandFlag>
       </xsl:if>
-      <xsl:if test="@caseSensitive='true'">
-        <xsl:text>|CASESENSITIVE</xsl:text>
+      <xsl:if test="@noButtonCustomize='true'">
+        <CommandFlag>NoButtonCustomize</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noCustomize='true'">
+        <CommandFlag>NoCustomize</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noKeyCustomize='true'">
+        <CommandFlag>NoKeyCustomize</CommandFlag>
       </xsl:if>
       <xsl:if test="@stretchHorizontally='true'">
-        <xsl:text>|STRETCHHORIZONTALLY</xsl:text>
+        <CommandFlag>StretchHorizontally</CommandFlag>
       </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="string-length($flags) = 0">
-        <xsl:value-of select="'0'"/>
-      </xsl:when>
-      <xsl:when test="starts-with($flags,'|')">
-        <xsl:value-of select="substring($flags, 2)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$flags"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, </xsl:text>
-    <!-- Button Text -->
-    <xsl:value-of select="me:CQuote(@text)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Menu Text -->
-    <xsl:if test="@menuText">
-      <xsl:value-of select="me:CQuote(@menuText)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- ToolTip -->
-    <xsl:if test="@toolTip">
-      <xsl:value-of select="me:CQuote(@toolTip)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Command Well Name-->
-    <xsl:if test="@commandWellText">
-      <xsl:value-of select="me:CQuote(@commandWellText)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Command Name-->
-    <xsl:if test="@name">
-      <xsl:value-of select="me:CQuote(@name)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Localized Command Name-->
-    <xsl:if test="@localizedName">
-      <xsl:value-of select="me:CQuote(@localizedName)"/>
-    </xsl:if>
-    <xsl:text>;&#10;</xsl:text>
+      <xsl:call-template name="strings" />
+    </Combo>
   </xsl:template>
   <xsl:template match="gui:ButtonRef" mode="placement">
-    <xsl:text>&#9;&#9;</xsl:text>
-    <!-- Item ID -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Parent-Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Priority -->
-    <xsl:value-of select="@priority"/>
-    <xsl:text>;&#10;</xsl:text>
+    <CommandPlacement
+      guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}"
+      priority="{@priority}">
+      <xsl:call-template name="parentRef" />
+    </CommandPlacement>
   </xsl:template>
   <xsl:template match="gui:MenuRef | gui:GroupRef" mode="placement">
     <xsl:if test="
             (self::gui:MenuRef and (parent::gui:Group or parent::gui:GroupRef)) or
             (self::gui:GroupRef and (parent::gui:Menu or parent::gui:MenuRef))">
-      <xsl:text>&#9;&#9;</xsl:text>
-      <!-- Item ID -->
-      <xsl:value-of select="me:MakeId(@id)"/>
-      <xsl:text>, </xsl:text>
-      <!-- Parent-Id -->
-      <xsl:value-of select="me:MakeId(../@id)"/>
-      <xsl:text>, </xsl:text>
-      <!-- Priority -->
-      <xsl:value-of select="@priority"/>
-      <xsl:text>;&#10;</xsl:text>
+      <CommandPlacement
+        guid="{substring-before(me:MakeId(@id),':')}"
+        id="{substring-after(me:MakeId(@id), ':')}"
+        priority="{@priority}">
+        <xsl:call-template name="parentRef" />
+      </CommandPlacement>
+
+    </xsl:if>
+  </xsl:template>
+  <xsl:template name="keys">
+    <xsl:variable name="key1">
+      <xsl:choose>
+        <xsl:when test="string-length(@key1) = 1">
+          <xsl:value-of select="me:safeToUpper(@key1)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@key1"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="mod1">
+      <xsl:if test="contains(@mod1, 'ctrl')">Control </xsl:if>
+      <xsl:if test="contains(@mod1, 'alt')">Alt </xsl:if>
+      <xsl:if test="contains(@mod1, 'shift')">Shift </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="key2">
+      <xsl:choose>
+        <xsl:when test="string-length(@key2) = 1">
+          <xsl:value-of select="me:safeToUpper(@key2)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@key2"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="mod2">
+      <xsl:if test="contains(@mod2, 'ctrl')">Control </xsl:if>
+      <xsl:if test="contains(@mod2, 'alt')">Alt </xsl:if>
+      <xsl:if test="contains(@mod2, 'shift')">Shift </xsl:if>
+    </xsl:variable>
+    <xsl:if test="@key1">
+      <xsl:attribute name="key1">
+        <xsl:value-of select="$key1"/>
+      </xsl:attribute>
+
+      <xsl:if test="string-length(normalize-space($mod1))">
+        <xsl:attribute name="mod1">
+          <xsl:value-of select="normalize-space($mod1)"/>
+        </xsl:attribute>
+      </xsl:if>
+    </xsl:if>
+    <xsl:if test="@key2">
+      <xsl:attribute name="key2">
+        <xsl:value-of select="$key2"/>
+      </xsl:attribute>
+      <xsl:if test="string-length(normalize-space($mod2))">
+        <xsl:attribute name="mod2">
+          <xsl:value-of select="normalize-space($mod2)"/>
+        </xsl:attribute>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   <xsl:template match="gui:KeyBinding">
-    <xsl:text>&#9;</xsl:text>
-    <!-- Command Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Editor Id -->
-    <xsl:value-of select="@editor"/>
-    <xsl:text>, </xsl:text>
-    <!-- Emulation (Defined as for future use; repeat editor) -->
-    <xsl:value-of select="@editor"/>
-    <xsl:text>, </xsl:text>
-    <xsl:choose>
-      <xsl:when test="string-length(@key1) = 1">
-        <xsl:text>'</xsl:text>
-        <xsl:value-of select="me:safeToUpper(@key1)"/>
-        <xsl:text>'</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="@key1"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:value-of select="':'"/>
-    <xsl:if test="contains(@mod1, 'ctrl')">
-      <xsl:value-of select="'C'"/>
-    </xsl:if>
-    <xsl:if test="contains(@mod1, 'alt')">
-      <xsl:value-of select="'A'"/>
-    </xsl:if>
-    <xsl:if test="contains(@mod1, 'shift')">
-      <xsl:value-of select="'S'"/>
-    </xsl:if>
-    <xsl:if test="@key2">
-      <xsl:text> : </xsl:text>
-      <xsl:choose>
-        <xsl:when test="string-length(@key2) = 1">
-          <xsl:text>'</xsl:text>
-          <xsl:value-of select="me:safeToUpper(@key2)"/>
-          <xsl:text>'</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@key2"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="':'"/>
-      <xsl:if test="contains(@mod2, 'ctrl')">
-        <xsl:value-of select="'C'"/>
-      </xsl:if>
-      <xsl:if test="contains(@mod2, 'alt')">
-        <xsl:value-of select="'A'"/>
-      </xsl:if>
-      <xsl:if test="contains(@mod2, 'shift')">
-        <xsl:value-of select="'S'"/>
-      </xsl:if>
-    </xsl:if>
-    <xsl:text>;&#10;</xsl:text>
+    <KeyBinding
+      guid="{substring-before(me:MakeId(../@id),':')}"
+        id="{substring-after(me:MakeId(../@id), ':')}"
+      editor="{@editor}"
+      emulator="{@editor}">
+      <xsl:call-template name="keys" />
+    </KeyBinding>
   </xsl:template>
   <xsl:template match="gui:BindKey">
-    <xsl:text>&#9;</xsl:text>
-    <!-- Command Id -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Editor Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Emulation (Defined as for future use; repeat editor) -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <xsl:choose>
-      <xsl:when test="string-length(@key1) = 1">
-        <xsl:text>'</xsl:text>
-        <xsl:value-of select="me:safeToUpper(@key1)"/>
-        <xsl:text>'</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="@key1"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:value-of select="':'"/>
-    <xsl:if test="contains(@mod1, 'ctrl')">
-      <xsl:value-of select="'C'"/>
-    </xsl:if>
-    <xsl:if test="contains(@mod1, 'alt')">
-      <xsl:value-of select="'A'"/>
-    </xsl:if>
-    <xsl:if test="contains(@mod1, 'shift')">
-      <xsl:value-of select="'S'"/>
-    </xsl:if>
-    <xsl:if test="@key2">
-      <xsl:text> : </xsl:text>
-      <xsl:choose>
-        <xsl:when test="string-length(@key2) = 1">
-          <xsl:text>'</xsl:text>
-          <xsl:value-of select="me:safeToUpper(@key2)"/>
-          <xsl:text>'</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@key2"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="':'"/>
-      <xsl:if test="contains(@mod2, 'ctrl')">
-        <xsl:value-of select="'C'"/>
-      </xsl:if>
-      <xsl:if test="contains(@mod2, 'alt')">
-        <xsl:value-of select="'A'"/>
-      </xsl:if>
-      <xsl:if test="contains(@mod2, 'shift')">
-        <xsl:value-of select="'S'"/>
-      </xsl:if>
-    </xsl:if>
-    <xsl:text>;&#10;</xsl:text>
+    <KeyBinding
+      guid="{substring-before(me:MakeId(@id),':')}"
+        id="{substring-after(me:MakeId(@id), ':')}"
+      editor="{../@id}"
+      emulator="{../@id}">
+      <xsl:call-template name="keys" />
+    </KeyBinding>
   </xsl:template>
   <xsl:template match="gui:Visibility[parent::gui:*/@id and @context]" mode="visibility">
-    <xsl:text>&#9;</xsl:text>
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <xsl:value-of select="@context"/>
-    <xsl:text>;&#10;</xsl:text>
+    <VisibilityItem
+       guid="{substring-before(me:MakeId(../@id),':')}"
+       id="{substring-after(me:MakeId(../@id), ':')}"
+       context="{@context}" />
   </xsl:template>
-  <xsl:template match="gui:Command">
-    <xsl:text>&#9;</xsl:text>
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>;&#10;</xsl:text>
+  <xsl:template match="gui:Command" mode="usedCommand">
+    <UsedCommand
+       guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}" />
   </xsl:template>
 </xsl:stylesheet>
