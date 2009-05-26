@@ -609,7 +609,7 @@
         </Group>
         <!--Group id="Grp_LogViewerSearch" priority="0xFFF0">
           <ComboBox id="Cmd_LogViewerSearchCombo" type="DropDownCombo" width="100" priority="0x100"
-                fillCommand="Cmd_LogViewerSearchComboFill_IdOnly" 
+                fillCommand="Cmd_LogViewerSearchComboFill" 
                 caseSensitive="true"
                 toolTip="Search"
                 text="Search:"
@@ -805,7 +805,7 @@
         </Group>
         <Group id="Grp_PendingChangesSwitch" priority="0x500">
           <ComboBox id="Cmd_SolutionSwitchCombo" type="DropDownCombo" width="100" priority="0x100"
-                fillCommand="Cmd_SolutionSwitchComboFill_IdOnly"
+                fillCommand="Cmd_SolutionSwitchComboFill"
                 caseSensitive="true"
                 stretchHorizontally="true"
                 toolTip="Switch to"
