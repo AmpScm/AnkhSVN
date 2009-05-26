@@ -1,104 +1,109 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns="http://schemas.studioturtle.net/2007/01/gui/"
+                xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
                 xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
-  <xsl:include href="Gui-Common.xsl"/>
-  <xsl:output method="text" />
+
+  <xsl:include href="./Gui-Common.xsl"/>
+  <xsl:output method="xml" indent="yes"/>
   <!-- Simple XML schema to generate the ctc file from our own format. -->
   <xsl:template match="/gui:VsGui">
-    <xsl:text>/* Generated file; please edit the .gui file instead of this file */&#10;&#10;&#10;</xsl:text>
-    <xsl:text>/* Includes */&#10;</xsl:text>
-    <xsl:apply-templates select="gui:Imports/gui:Import" mode="include" />
-    <xsl:text>/* /Includes */&#10;&#10;</xsl:text>
+    <CommandTable>
+      <xsl:comment>Generated file; please edit the .gui file instead of this file</xsl:comment>
+      <xsl:comment>Includes</xsl:comment>
+      <xsl:apply-templates select="gui:Imports/gui:Import[@include]" mode="include" />
 
-    <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
-    <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
-    <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
-    <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
+      <xsl:comment>
+        <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// Buttons&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:ButtonRef" mode="placement" />
+        <xsl:text>&#9;&#9;// Menus&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:MenuRef" mode="placement" />
+        <xsl:text>&#9;&#9;// Groups&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:GroupRef" mode="placement" />
+        <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
-    <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
+        <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
 
-    <xsl:text>&#10;&#10;&#9;MENUS_BEGIN&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// New Menu ID, Parent Group ID, Priority, Type, Menu Name, Menu Text&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
-    <xsl:text>&#9;MENUS_END&#10;&#10;</xsl:text>
+        <xsl:text>&#10;&#10;&#9;MENUS_BEGIN&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// New Menu ID, Parent Group ID, Priority, Type, Menu Name, Menu Text&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
+        <xsl:text>&#9;MENUS_END&#10;&#10;</xsl:text>
 
 
-    <xsl:text>&#9;NEWGROUPS_BEGIN&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// New Group ID, Parent Menu ID, Priority&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Group" mode="groups" />
-    <xsl:text>&#9;NEWGROUPS_END&#10;&#10;</xsl:text>
+        <xsl:text>&#9;NEWGROUPS_BEGIN&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// New Group ID, Parent Menu ID, Priority&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Group" mode="groups" />
+        <xsl:text>&#9;NEWGROUPS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>&#9;BUTTONS_BEGIN&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Command ID, Group ID, Priority, Icon ID, Button Type, Flags, Button Text, Menu Text, ToolTip Text, Command Well Text, English Name, Localized Name&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Button" mode="buttons" />
-    <xsl:text>&#9;BUTTONS_END&#10;&#10;</xsl:text>
+        <xsl:text>&#9;BUTTONS_BEGIN&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// Command ID, Group ID, Priority, Icon ID, Button Type, Flags, Button Text, Menu Text, ToolTip Text, Command Well Text, English Name, Localized Name&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Button" mode="buttons" />
+        <xsl:text>&#9;BUTTONS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>&#9;BITMAPS_BEGIN&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Bitmap ID, Icon Index...&#10;</xsl:text>
-    <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
-      <xsl:text>&#9;&#9;</xsl:text>
-      <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapId"/>
-      <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src)"/>
-      <xsl:text>;&#10;</xsl:text>
-    </xsl:if>
-    <xsl:text>&#9;BITMAPS_END&#10;&#10;</xsl:text>
+        <xsl:text>&#9;BITMAPS_BEGIN&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// Bitmap ID, Icon Index...&#10;</xsl:text>
+        <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
+          <xsl:text>&#9;&#9;</xsl:text>
+          <xsl:value-of select="gui:UI/@autoBmpId"/>:<xsl:value-of select="$BitmapId"/>
+          <xsl:value-of select="me:generateBitmap(//gui:UI//gui:Button[@iconFile]/@iconFile, $BitmapFile, $Src)"/>
+          <xsl:text>;&#10;</xsl:text>
+        </xsl:if>
+        <xsl:text>&#9;BITMAPS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>&#9;COMBOS_BEGIN&#10;</xsl:text>
-    <xsl:text>&#9;&#9;// Combo Box ID, Group ID, Priority, Fill Command ID, Width, Type, Flags, Button Text, Menu Text, ToolTip Text, CommandWellName, CannonicalName, LocalizedCanonicalName;&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:ComboBox" />
-    <xsl:text>&#9;COMBOS_END&#10;&#10;</xsl:text>
+        <xsl:text>&#9;COMBOS_BEGIN&#10;</xsl:text>
+        <xsl:text>&#9;&#9;// Combo Box ID, Group ID, Priority, Fill Command ID, Width, Type, Flags, Button Text, Menu Text, ToolTip Text, CommandWellName, CannonicalName, LocalizedCanonicalName;&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:ComboBox" />
+        <xsl:text>&#9;COMBOS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>CMDS_END&#10;&#10;</xsl:text>
+        <xsl:text>CMDS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>CMDUSED_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;// Command ID&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UsedCommands/gui:Command" />
-    <xsl:text>CMDUSED_END&#10;&#10;</xsl:text>
+        <xsl:text>CMDUSED_SECTION&#10;</xsl:text>
+        <xsl:text>&#9;// Command ID&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UsedCommands/gui:Command" />
+        <xsl:text>CMDUSED_END&#10;&#10;</xsl:text>
 
-    <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
-    <xsl:text>&#9;// Out of context commands&#10;</xsl:text>
-    <xsl:apply-templates select="gui:KeyBindings/gui:Editor/gui:BindKey" />
-    <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
+        <xsl:text>KEYBINDINGS_SECTION&#10;</xsl:text>
+        <xsl:text>&#9;// Command ID, Editor ID, Emulation ID, Key state&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:KeyBinding" />
+        <xsl:text>&#9;// Out of context commands&#10;</xsl:text>
+        <xsl:apply-templates select="gui:KeyBindings/gui:Editor/gui:BindKey" />
+        <xsl:text>KEYBINDINGS_END&#10;&#10;</xsl:text>
 
-    <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
-    <xsl:text>&#9;// Item ID, Context ID&#10;</xsl:text>
-    <xsl:text>&#9;// Buttons&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
-    <xsl:text>&#9;// Menus&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Menu/gui:Visibility | gui:UI//gui:MenuRef/gui:Visibility" mode="visibility" />
-    <xsl:text>&#9;// Groups&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
-    <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
-    <xsl:for-each select="gui:BitmapStrips/gui:Strip">
-      <xsl:text>// Created Strip </xsl:text>
-      <xsl:value-of select="@name"/>
-      <xsl:if test="@bitmap">
-        <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
-      </xsl:if>
-      <xsl:if test="@bitmap24">
-        <xsl:value-of select="me:generateStrip(@bitmap24, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 0, $Src, $Configuration)"/>
-      </xsl:if>
-      <xsl:text>&#10;</xsl:text>
-    </xsl:for-each>
-    <xsl:text>/* END */&#10;</xsl:text>
+        <xsl:text>VISIBILITY_SECTION&#10;</xsl:text>
+        <xsl:text>&#9;// Item ID, Context ID&#10;</xsl:text>
+        <xsl:text>&#9;// Buttons&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Button/gui:Visibility | gui:UI//gui:ButtonRef/gui:Visibility" mode="visibility" />
+        <xsl:text>&#9;// Menus&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Menu/gui:Visibility | gui:UI//gui:MenuRef/gui:Visibility" mode="visibility" />
+        <xsl:text>&#9;// Groups&#10;</xsl:text>
+        <xsl:apply-templates select="gui:UI//gui:Group/gui:Visibility | gui:UI//gui:GroupRef/gui:Visibility" mode="visibility" />
+        <xsl:text>VISIBILITY_END&#10;&#10;</xsl:text>
+        <xsl:for-each select="gui:BitmapStrips/gui:Strip">
+          <xsl:text>// Created Strip </xsl:text>
+          <xsl:value-of select="@name"/>
+          <xsl:if test="@bitmap">
+            <xsl:value-of select="me:generateStrip(@bitmap, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 1, $Src, $Configuration)"/>
+          </xsl:if>
+          <xsl:if test="@bitmap24">
+            <xsl:value-of select="me:generateStrip(@bitmap24, @type, @from, gui:StripIcon/@id, gui:StripIcon/@iconFile, 0, $Src, $Configuration)"/>
+          </xsl:if>
+          <xsl:text>&#10;</xsl:text>
+        </xsl:for-each>
+      </xsl:comment>
+      <xsl:comment>Symbols</xsl:comment>
+      <Symbols>
+        <xsl:apply-templates select="gui:Imports/gui:Import[not (@include)]" mode="include" />
+      </Symbols>
+    </CommandTable>
   </xsl:template>
   <xsl:template match="gui:Import[@include]" mode="include">
-    <xsl:text>#include "</xsl:text>
-    <xsl:value-of select="@include" />
-    <xsl:text>"&#10;</xsl:text>
+    <Extern href="{@include}" />
   </xsl:template>
   <xsl:template match="gui:Import[@type]" mode="include">
-    <xsl:value-of select="me:InputType(@type, @from, @prefix, $Src, $Configuration)"/>
+    <xsl:copy-of select="me:InputSymbol(@type, @from, @prefix, $Src, $Configuration)"/>
   </xsl:template>
 
   <!-- ************************************************* -->
