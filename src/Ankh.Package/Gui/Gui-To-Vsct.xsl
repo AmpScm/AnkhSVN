@@ -14,6 +14,13 @@
       <xsl:comment>Includes</xsl:comment>
       <xsl:apply-templates select="gui:Imports/gui:Import[@include]" mode="include" />
 
+      <xsl:text>&#10;&#10;&#10;</xsl:text>
+      <Commands package="{gui:UI/@packageId}">
+        <Menus>
+        <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
+        </Menus>
+      </Commands>
+
       <xsl:comment>
         <xsl:text>&#10;&#10;CMDPLACEMENT_SECTION&#10;</xsl:text>
         <xsl:text>&#9;&#9;// Item ID, Parent ID, Priority&#10;</xsl:text>
@@ -26,11 +33,6 @@
         <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
         <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
-
-        <xsl:text>&#10;&#10;&#9;MENUS_BEGIN&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// New Menu ID, Parent Group ID, Priority, Type, Menu Name, Menu Text&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
-        <xsl:text>&#9;MENUS_END&#10;&#10;</xsl:text>
 
 
         <xsl:text>&#9;NEWGROUPS_BEGIN&#10;</xsl:text>
@@ -110,6 +112,7 @@
   <!-- **                 Menus                       ** -->
   <!-- ************************************************* -->
   <xsl:template match="gui:Menu" mode="menus">
+    <Menu>
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Menu-Id -->
     <xsl:value-of select="me:MakeId(@id)"/>
@@ -173,7 +176,8 @@
     <xsl:if test="@text">
       <xsl:value-of select="me:CQuote(@text)"/>
     </xsl:if>
-    <xsl:text>;&#10;</xsl:text>
+    </Menu>
+    <xsl:text>&#10;</xsl:text>
   </xsl:template>
   <!-- ************************************************* -->
   <!-- **                 Groups                      ** -->
