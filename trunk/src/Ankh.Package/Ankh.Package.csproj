@@ -60,7 +60,7 @@
     <RegisterOutputPackage>true</RegisterOutputPackage>
     <RegisterWithCodebase>true</RegisterWithCodebase>
     <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
-    <VsctCompileDependsOn>ApplyXslTemplates;$(VsctCompileDependsOn)</VsctCompileDependsOn>
+    <VSCTCompileDependsOn>ApplyXslTemplates;$(VsctCompileDependsOn)</VSCTCompileDependsOn>
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
     <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
@@ -224,7 +224,6 @@
     <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
     <Content Include="Gui\PendingChanges\Annotate.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
-    <Content Include="Gui\PendingChanges\Blank.png" />
     <Content Include="Gui\PendingChanges\Branch.png" />
     <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
