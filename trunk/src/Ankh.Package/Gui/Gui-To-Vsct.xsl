@@ -14,11 +14,21 @@
       <xsl:comment>Includes</xsl:comment>
       <xsl:apply-templates select="gui:Imports/gui:Import[@include]" mode="include" />
 
-      <xsl:text>&#10;&#10;&#10;</xsl:text>
+      <xsl:variable name="symbols">
+        <xsl:apply-templates select="gui:Imports/gui:Import[not (@include)]" mode="include" />
+      </xsl:variable>
+
       <Commands package="{gui:UI/@packageId}">
         <Menus>
-        <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
+          <xsl:apply-templates select="gui:UI//gui:Menu" mode="menus" />
         </Menus>
+        <Groups>
+          <xsl:apply-templates select="gui:UI//gui:Group" mode="groups" />
+        </Groups>
+        <Buttons>
+          <xsl:apply-templates select="gui:UI//gui:Button" mode="buttons" />
+        </Buttons>
+
       </Commands>
 
       <xsl:comment>
@@ -33,17 +43,6 @@
         <xsl:text>&#10;CMDPLACEMENT_END&#10;&#10;</xsl:text>
 
         <xsl:value-of select="concat('CMDS_SECTION ', gui:UI/@packageId)"/>
-
-
-        <xsl:text>&#9;NEWGROUPS_BEGIN&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// New Group ID, Parent Menu ID, Priority&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:Group" mode="groups" />
-        <xsl:text>&#9;NEWGROUPS_END&#10;&#10;</xsl:text>
-
-        <xsl:text>&#9;BUTTONS_BEGIN&#10;</xsl:text>
-        <xsl:text>&#9;&#9;// Command ID, Group ID, Priority, Icon ID, Button Type, Flags, Button Text, Menu Text, ToolTip Text, Command Well Text, English Name, Localized Name&#10;</xsl:text>
-        <xsl:apply-templates select="gui:UI//gui:Button" mode="buttons" />
-        <xsl:text>&#9;BUTTONS_END&#10;&#10;</xsl:text>
 
         <xsl:text>&#9;BITMAPS_BEGIN&#10;</xsl:text>
         <xsl:text>&#9;&#9;// Bitmap ID, Icon Index...&#10;</xsl:text>
@@ -97,7 +96,7 @@
       </xsl:comment>
       <xsl:comment>Symbols</xsl:comment>
       <Symbols>
-        <xsl:apply-templates select="gui:Imports/gui:Import[not (@include)]" mode="include" />
+        <xsl:copy-of select="$symbols" />
       </Symbols>
     </CommandTable>
   </xsl:template>
@@ -107,249 +106,225 @@
   <xsl:template match="gui:Import[@type]" mode="include">
     <xsl:copy-of select="me:InputSymbol(@type, @from, @prefix, $Src, $Configuration)"/>
   </xsl:template>
-
+  <xsl:template name="parentRef">
+    <Parent
+        guid="{substring-before(me:MakeId(../@id),':')}"
+        id="{substring-after(me:MakeId(../@id),':')}" />
+  </xsl:template>
+  <xsl:template name="strings">
+    <Strings>
+      <ButtonText>
+        <xsl:value-of select="@text"/>
+      </ButtonText>
+      <xsl:if test="@menuText">
+        <MenuText>
+          <xsl:value-of select="@menuText"/>
+        </MenuText>
+      </xsl:if>
+      <xsl:if test="@toolTip">
+        <ToolTipText>
+          <xsl:value-of select="@toolTip"/>
+        </ToolTipText>
+      </xsl:if>
+      <xsl:if test="@commandWellText">
+        <CommandName>
+          <xsl:value-of select="@commandWellText"/>
+        </CommandName>
+      </xsl:if>
+      <xsl:if test="@name">
+        <CanonicalName>
+          <xsl:value-of select="@name"/>
+        </CanonicalName>
+      </xsl:if>  
+      <xsl:choose>
+        <xsl:when test="@localizedName">
+          <LocCanonicalName>
+          <xsl:value-of select="me:CQuote(@localizedName)"/>
+          </LocCanonicalName>
+        </xsl:when>
+        <xsl:when test="@name">
+          <LocCanonicalName>
+          <xsl:value-of select="me:CQuote(@name)"/>
+          </LocCanonicalName>
+        </xsl:when>
+      </xsl:choose>
+    </Strings>
+  </xsl:template>
+  <xsl:template name="iconRef">
+    <xsl:choose>
+      <xsl:when test="@iconFile">
+        <Icon
+          guid="{//gui:UI/@autoBmpId}"
+          id="{me:nodePosition(., //gui:UI//gui:Button[@iconFile])+1}" />
+      </xsl:when>
+      <xsl:when test="@iconId and contains(@iconId, ':')">
+        <Icon
+          guid="{substring-before(@iconId,':')}"
+          id="{substring-after(@iconId,':')}" />
+      </xsl:when>
+      <xsl:when test="@iconId">
+        <Icon
+          guid="{ancestor-or-self::gui:*/@default-prefix}"
+          id="{@iconId}" />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
   <!-- ************************************************* -->
   <!-- **                 Menus                       ** -->
   <!-- ************************************************* -->
   <xsl:template match="gui:Menu" mode="menus">
-    <Menu>
-    <xsl:text>&#9;&#9;</xsl:text>
-    <!-- Menu-Id -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Group-Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Priority -->
-    <xsl:value-of select="@priority"/>
-    <xsl:text>, </xsl:text>
-    <!-- Type -->
-    <xsl:variable name="type">
-      <xsl:value-of select="@type"/>
+    <Menu
+      guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}"
+      priority="{@priority}" >
+      <xsl:attribute name="type">
+        <xsl:choose>
+          <xsl:when test="@type">
+            <xsl:value-of select="@type"/>
+          </xsl:when>
+          <xsl:otherwise>Menu</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:call-template name="parentRef" />
       <xsl:if test="@alwaysCreate='true'">
-        <xsl:text>|ALWAYSCREATE</xsl:text>
+        <CommandFlag>AlwaysCreate</CommandFlag>
       </xsl:if>
       <xsl:if test="@defaultDocked='true'">
-        <xsl:text>|DEFAULTDOCKED</xsl:text>
+        <CommandFlag>DefaultDocked</CommandFlag>
       </xsl:if>
       <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
-        <xsl:text>|DEFAULTINVISIBLE</xsl:text>
+        <CommandFlag>DefaultInvisible</CommandFlag>
       </xsl:if>
       <xsl:if test="@dontCache='true'">
-        <xsl:text>|DONTCACHE</xsl:text>
+        <CommandFlag>DontCache</CommandFlag>
       </xsl:if>
       <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
-        <!-- Should set if default invisible-->
-        <xsl:text>|DYNAMICVISIBILITY</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noCustomize='true'">
-        <xsl:text>|NOCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@notInTBList='true'">
-        <xsl:text>|NOTINTBLIST</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noToolbarClose='true'">
-        <xsl:text>|NOTOOLBARCLOSE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textChanges='true' or @textIsAnchorCommand='true'">
-        <xsl:text>|TEXTCHANGES</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textIsAnchorCommand='true'">
-        <xsl:text>|TEXTISANCHORCOMMAND</xsl:text>
+        <CommandFlag>DynamicVisibility</CommandFlag>
       </xsl:if>
       <xsl:if test="@iconAndText='true'">
-        <xsl:text>|ICONANDTEXT</xsl:text>
+        <CommandFlag>IconAndText</CommandFlag>
       </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="starts-with($type,'|')">
-        <xsl:value-of select="substring($type, 2)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$type"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, </xsl:text>
-    <!-- Name -->
-    <xsl:value-of select="me:CQuote(@name)"/>
-    <xsl:text>, </xsl:text>
-    <xsl:if test="@text">
-      <xsl:value-of select="me:CQuote(@text)"/>
-    </xsl:if>
+      <xsl:if test="@noCustomize='true'">
+        <CommandFlag>NoCustomize</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@notInTBList='true'">
+        <CommandFlag>NotInTBList</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noToolbarClose='true'">
+        <CommandFlag>NoToolbarClose</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textChanges='true' or @textIsAnchorCommand='true'">
+        <CommandFlag>TextChanges</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textIsAnchorCommand='true'">
+        <CommandFlag>TextIsAnchorCommand</CommandFlag>
+      </xsl:if>
+      <xsl:call-template name="strings" />
     </Menu>
-    <xsl:text>&#10;</xsl:text>
   </xsl:template>
   <!-- ************************************************* -->
   <!-- **                 Groups                      ** -->
   <!-- ************************************************* -->
   <xsl:template match="gui:Group" mode="groups">
-    <xsl:text>&#9;&#9;</xsl:text>
-    <!-- Group-Id -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Menu-Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Priority -->
-    <xsl:value-of select="@priority"/>
-    <xsl:text>;&#10;</xsl:text>
+    <Group
+      guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}"
+      priority="{@priority}" >
+      <xsl:call-template name="parentRef" />
+    </Group>
   </xsl:template>
   <!-- ************************************************* -->
   <!-- **                 Buttons                     ** -->
   <!-- ************************************************* -->
   <xsl:template match="gui:Button" mode="buttons">
-    <xsl:text>&#9;&#9;</xsl:text>
-    <!-- Button-Id -->
-    <xsl:value-of select="me:MakeId(@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Group-Id -->
-    <xsl:value-of select="me:MakeId(../@id)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Priority -->
-    <xsl:value-of select="@priority"/>
-    <xsl:text>, </xsl:text>
-    <!-- Icon ID -->
-    <xsl:choose>
-      <xsl:when test="@iconFile">
-        <xsl:value-of select="concat(//gui:UI/@autoBmpId,':', me:nodePosition(., //gui:UI//gui:Button[@iconFile])+1)" />
-      </xsl:when>
-      <xsl:when test="@iconId and contains(@iconId, ':')">
-        <xsl:value-of select="@iconId"/>
-      </xsl:when>
-      <xsl:when test="@iconId">
-        <!-- TODO: Using the default is probably not what we want here! -->
-        <xsl:value-of select="concat(ancestor-or-self::gui:*/@default-prefix, ':', @iconId)" />
-      </xsl:when>
-      <!--xsl:when test="Icon">
-        
-      </xsl:when-->
-      <xsl:otherwise>
-        <xsl:text>guidOfficeIcon:msotcidNoIcon</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, </xsl:text>
-    <!-- Type -->
-    <xsl:choose>
-      <xsl:when test="@type">
-        <xsl:value-of select="@type"/>
-      </xsl:when>
-      <xsl:otherwise>BUTTON</xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, </xsl:text>
-    <!-- Flags -->
-    <xsl:variable name="flags">
-      <xsl:if test="@noKeyCustomize='true'">
-        <xsl:text>NOKEYCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noButtonCustomize='true'">
-        <xsl:text>|NOBUTTONCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@noCustomize='true'">
-        <xsl:text>|NOCUSTOMIZE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@pict='true'">
-        <xsl:text>|PICT</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textOnly='true'">
-        <xsl:text>|TEXTONLY</xsl:text>
-      </xsl:if>
-      <xsl:if test="@iconAndText='true'">
-        <xsl:text>|ICONANDTEXT</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textContextUseButton='true'">
-        <xsl:text>|TEXTCONTEXTUSEBUTTON</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textMenuUseButton='true'">
-        <xsl:text>|TEXTMENUUSEBUTTON</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textMenuCtrlUseMenu='true'">
-        <xsl:text>|TEXTMENUCTRLUSEMENU</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textCascadeUseButton='true'">
-        <xsl:text>|TEXTCASCADEUSEBUTTON</xsl:text>
-      </xsl:if>
-      <xsl:if test="@textChanges='true'">
-        <xsl:text>|TEXTCHANGES</xsl:text>
-      </xsl:if>
-      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
-        <xsl:text>|DEFAULTDISABLED</xsl:text>
-      </xsl:if>
-      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
-        <xsl:text>|DEFAULTINVISIBLE</xsl:text>
-      </xsl:if>
-      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
-        <xsl:text>|DYNAMICVISIBILITY</xsl:text>
-      </xsl:if>
-      <xsl:if test="@dynamicItemStart='true'">
-        <xsl:text>|DYNAMICITEMSTART</xsl:text>
+    <Button
+      guid="{substring-before(me:MakeId(@id),':')}"
+      id="{substring-after(me:MakeId(@id), ':')}"
+      priority="{@priority}" >
+      <xsl:attribute name="type">
+        <xsl:choose>
+          <xsl:when test="@type">
+            <xsl:value-of select="@type"/>
+          </xsl:when>
+          <xsl:otherwise>Button</xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:call-template name="parentRef" />
+      <xsl:call-template name="iconRef" />
+      <!-- Flags -->
+      <xsl:if test="@allowParams='true'">
+        <CommandFlag>AllowParams</CommandFlag>
       </xsl:if>
       <xsl:if test="@commandWellOnly='true'">
-        <xsl:text>|COMMANDWELLONLY</xsl:text>
+        <CommandFlag>CommandWellOnly</CommandFlag>
       </xsl:if>
-      <xsl:if test="@allowParams='true'">
-        <xsl:text>|ALLOWPARAMS</xsl:text>
+      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+        <CommandFlag>DefaultDisabled</CommandFlag>
       </xsl:if>
-      <xsl:if test="@postExec='true'">
-        <xsl:text>|POSTEXEC</xsl:text>
+      <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
+        <CommandFlag>DefaultInvisible</CommandFlag>
       </xsl:if>
       <xsl:if test="@dontCache='true'">
-        <xsl:text>|DONTCACHE</xsl:text>
+        <CommandFlag>DontCache</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@dynamicItemStart='true'">
+        <CommandFlag>DynamicItemStart</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@dynamicVisibility='true' or @defaultInvisible='true' or gui:Visibility[@context]">
+        <CommandFlag>DynamicVisibility</CommandFlag>
       </xsl:if>
       <xsl:if test="@fixMenuController='true'">
-        <xsl:text>|FIXMENUCONTROLLER</xsl:text>
+        <CommandFlag>FixMenuController</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@iconAndText='true'">
+        <CommandFlag>IconAndText</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noButtonCustomize='true'">
+        <CommandFlag>NoButtonCustomize</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noCustomize='true'">
+        <CommandFlag>NoCustomize</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@noKeyCustomize='true'">
+        <CommandFlag>NoKeyCustomize</CommandFlag>
       </xsl:if>
       <xsl:if test="@noShowOnMenuController='true'">
-        <xsl:text>|NOSHOWONMENUCONTROLLER</xsl:text>
+        <CommandFlag>NoShowOnMenuController</CommandFlag>
       </xsl:if>
+      <xsl:if test="@pict='true'">
+        <CommandFlag>Pict</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@postExec='true'">
+        <CommandFlag>PostExec</CommandFlag>
+      </xsl:if>
+      <!-- ProfferedCmd -->
       <xsl:if test="@routeToDocs='true'">
-        <xsl:text>|ROUTETODOCS</xsl:text>
+        <CommandFlag>RouteToDocs</CommandFlag>
       </xsl:if>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="string-length($flags) = 0">
-        <xsl:value-of select="'0'"/>
-      </xsl:when>
-      <xsl:when test="starts-with($flags,'|')">
-        <xsl:value-of select="substring($flags, 2)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$flags"/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>, </xsl:text>
-    <!-- Button Text -->
-    <xsl:value-of select="me:CQuote(@text)"/>
-    <xsl:text>, </xsl:text>
-    <!-- Menu Text -->
-    <xsl:if test="@menuText">
-      <xsl:value-of select="me:CQuote(@menuText)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- ToolTip -->
-    <xsl:if test="@toolTip">
-      <xsl:value-of select="me:CQuote(@toolTip)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Command Well Name-->
-    <xsl:if test="@commandWellText">
-      <xsl:value-of select="me:CQuote(@commandWellText)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Command Name-->
-    <xsl:if test="@name">
-      <xsl:value-of select="me:CQuote(@name)"/>
-    </xsl:if>
-    <xsl:text>, </xsl:text>
-    <!-- Localized Command Name-->
-    <xsl:choose>
-      <xsl:when test="@localizedName">
-        <xsl:value-of select="me:CQuote(@localizedName)"/>
-      </xsl:when>
-      <xsl:when test="@name">
-        <xsl:value-of select="me:CQuote(@name)"/>
-      </xsl:when>
-    </xsl:choose>
-    <xsl:text>;&#10;</xsl:text>
+      <xsl:if test="@textCascadeUseButton='true'">
+        <CommandFlag>TextCascadeUseBtn</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textMenuUseButton='true'">
+        <CommandFlag>|TEXTMENUUSEBUTTON</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textChanges='true'">
+        <CommandFlag>TextChanges</CommandFlag>
+      </xsl:if>
+      <!-- TextChangesButton?? -->
+      <xsl:if test="@textContextUseButton='true'">
+        <CommandFlag>TextContextUseButton</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textMenuCtrlUseMenu='true'">
+        <CommandFlag>TextMenuCtrlUseMenu</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textMenuUseButtton='true'">
+        <CommandFlag>TextMenuUseButton</CommandFlag>
+      </xsl:if>
+      <xsl:if test="@textOnly='true'">
+        <CommandFlag>TextOnly</CommandFlag>
+      </xsl:if>
+      <xsl:call-template name="strings" />
+    </Button>
   </xsl:template>
   <xsl:template match="gui:ComboBox">
     <xsl:text>&#9;&#9;</xsl:text>
