@@ -18,14 +18,6 @@
     <![CDATA[	
     
   const string VsctNs = "http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable";
-  public string UpperFirst(string value)
-  {
-    if(string.IsNullOrEmpty(value))
-      return "";
-    else
-      return char.ToUpper(value[0]) + value.Substring(1);
-  }   
-
   public string CQuote(string value)
   {
     value = value ?? "";
@@ -53,7 +45,7 @@
 
     Type undertype = Enum.GetUnderlyingType(entype);
 
-    return Convert.ChangeType( enval, undertype );
+    return Convert.ChangeType(enval, undertype);
   }
   
   Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
@@ -73,17 +65,13 @@
         
       string altFrom = from.Replace("$(Configuration)", configuration);
       
-      //if(System.IO.File.Exists(altFrom))
-        from = altFrom;
+      from = altFrom;
     }
     
     from = Path.GetFullPath(from);
     
     if(!File.Exists(from))
-    {
       throw new FileNotFoundException(string.Format("Import {0} missing", from));
-      //return string.Format(" // Ignored loading inputtype; from={0}\n\n", from);
-    }
     
     Assembly a;
     

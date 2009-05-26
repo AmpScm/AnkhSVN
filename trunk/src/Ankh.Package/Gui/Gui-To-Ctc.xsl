@@ -53,7 +53,7 @@
 
     <xsl:text>&#9;COMBOS_BEGIN&#10;</xsl:text>
     <xsl:text>&#9;&#9;// Combo Box ID, Group ID, Priority, Fill Command ID, Width, Type, Flags, Button Text, Menu Text, ToolTip Text, CommandWellName, CannonicalName, LocalizedCanonicalName;&#10;</xsl:text>
-    <xsl:apply-templates select="gui:UI//gui:ComboBox" />
+    <xsl:apply-templates select="gui:UI//gui:ComboBox" mode="combo" />
     <xsl:text>&#9;COMBOS_END&#10;&#10;</xsl:text>
 
     <xsl:text>CMDS_END&#10;&#10;</xsl:text>
@@ -345,7 +345,7 @@
     </xsl:choose>
     <xsl:text>;&#10;</xsl:text>
   </xsl:template>
-  <xsl:template match="gui:ComboBox">
+  <xsl:template match="gui:ComboBox" mode="combo">
     <xsl:text>&#9;&#9;</xsl:text>
     <!-- Combo Box ID -->
     <xsl:value-of select="me:MakeId(@id)"/>
@@ -375,6 +375,9 @@
       </xsl:if>
       <xsl:if test="@noCustomize='true'">
         <xsl:text>|NOCUSTOMIZE</xsl:text>
+      </xsl:if>
+      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+        <xsl:text>|DEFAULTDISABLED</xsl:text>
       </xsl:if>
       <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
         <xsl:text>|DEFAULTINVISIBLE</xsl:text>
