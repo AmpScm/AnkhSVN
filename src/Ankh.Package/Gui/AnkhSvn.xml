@@ -11,9 +11,10 @@
     <Import type="Ankh.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
     <Import type="Ankh.AnkhCommandGroup" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Grp_" />
     <Import type="Ankh.AnkhCommandMenu" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Menu_" />
+    <Import type="Ankh.AnkhCommandBitmap" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Bmp_" />
     <Import type="Ankh.AnkhToolBar" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="ToolBar_" />
   </Imports>
-  <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_BmpGuid">
+  <UI packageId="Ankh_PackageGuid" autoBmpId="Ankh_AnkhCommandBitmap" autoBmpResId="Bmp_AnkhBmp">
     <MenuRef id="guidSHLMainMenu:IDM_VS_CSCD_OPEN">
       <Group id="Grp_FileFileOpen" priority="0x800">
         <!-- The bottom of the File->Open->* menu-->
