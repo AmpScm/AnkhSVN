@@ -5,7 +5,7 @@
   <Imports>
     <Import include="stdidcmd.h" />
     <Import include="vsshlids.h" />
-    <Import include="msobtnid.h" />
+    <Import include="office10/msobtnid.h" />
     <Import include="virtkeys.h" />
     <Import type="Ankh.AnkhId" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Ankh_" />
     <Import type="Ankh.AnkhCommand" from="..\..\Ankh.Ids\bin\$(Configuration)\Ankh.Ids.dll" prefix="Cmd_" />
