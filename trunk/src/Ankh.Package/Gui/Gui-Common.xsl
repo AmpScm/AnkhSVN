@@ -143,11 +143,10 @@
         if(itemAttr != null)
         {
           val = formatGuid(itemAttr.Value.ToString()) + ":";
-          _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name + "_IdOnly";
+          _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name;
         }
 
-        sb.AppendFormat("#define {0}{1} {3}0x{2:X}\n", prefix, fif.Name, v, val);
-        sb.AppendFormat("#define {0}{1}_IdOnly 0x{2:X}\n", prefix, fif.Name, v);
+        sb.AppendFormat("#define {0}{1} 0x{2:X}\n", prefix, fif.Name, v);
       }
       else if(v is Guid)
       {
@@ -177,7 +176,6 @@
     if(attrs.Length > 0)
       typeAttr = (GuidAttribute)attrs[0];
 
-    de.AppendChild(doc.CreateComment(string.Format("Imported from: {0}", from)));
     de.AppendChild(doc.CreateComment(string.Format("Type: {0}", tp.AssemblyQualifiedName)));
     
     string typeName = tp.FullName.Replace('.','_');
@@ -189,8 +187,6 @@
       parent.SetAttribute("value", new Guid(typeAttr.Value).ToString("B"));
     }
     
-    StringBuilder sb = new StringBuilder();
-      
     foreach(System.Reflection.FieldInfo fif in tp.GetFields(BindingFlags.Public | System.Reflection.BindingFlags.Static))
     {
       object v = fif.GetValue(null);
@@ -216,7 +212,7 @@
         if(itemAttr != null)
         {
           val = formatGuid(itemAttr.Value.ToString()) + ":";
-          _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name + "_IdOnly";
+          _idMap[prefix+fif.Name] = typeName + ':' + prefix + fif.Name;
         }
         
         XmlElement idSymbol = doc.CreateElement("IDSymbol", VsctNs);
@@ -234,13 +230,6 @@
       }
     }
 
-    //sb.AppendFormat("// /Loaded\n", tp.AssemblyQualifiedName);
-
-    //de.AppendChild(gs);
-    
-    de.AppendChild(doc.CreateComment(sb.ToString()));
-    
-    
     return doc.CreateNavigator().Select("/*/node()");
   }
   
