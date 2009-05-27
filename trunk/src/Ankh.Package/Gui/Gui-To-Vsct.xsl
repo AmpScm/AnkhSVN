@@ -142,18 +142,11 @@
           <xsl:value-of select="@name"/>
         </CanonicalName>
       </xsl:if>
-      <xsl:choose>
-        <xsl:when test="@localizedName">
-          <LocCanonicalName>
-            <xsl:value-of select="@localizedName"/>
-          </LocCanonicalName>
-        </xsl:when>
-        <xsl:when test="@name">
-          <LocCanonicalName>
-            <xsl:value-of select="@name"/>
-          </LocCanonicalName>
-        </xsl:when>
-      </xsl:choose>
+      <xsl:if test="@localizedName">
+        <LocCanonicalName>
+          <xsl:value-of select="@localizedName"/>
+        </LocCanonicalName>
+      </xsl:if>
     </Strings>
   </xsl:template>
   <xsl:template name="iconRef">
