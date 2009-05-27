@@ -2,7 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://schemas.studioturtle.net/2007/01/gui/"
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
-                xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
   <xsl:include href="Gui-Common.xsl"/>
   <xsl:output method="text" />
