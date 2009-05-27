@@ -2,16 +2,17 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
-                xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
+                xmlns:me="local-script"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+                exclude-result-prefixes="gui me msxsl">
 
   <xsl:include href="./Gui-Common.xsl"/>
-  <xsl:output method="xml" indent="yes"/>
+  <xsl:output method="xml" indent="yes" />
   <!-- Simple XML schema to generate the ctc file from our own format. -->
   <xsl:template match="/gui:VsGui">
-    <CommandTable>
-      <xsl:comment>Generated file; please edit the .gui file instead of this file</xsl:comment>
-      <xsl:comment>Includes</xsl:comment>
+    <CommandTable language="en-us">
+      <xsl:comment>Generated file; please edit the original file instead of this generated file</xsl:comment>
       <xsl:apply-templates select="gui:Imports/gui:Import[@include]" mode="include" />
 
       <xsl:variable name="symbols">
@@ -32,10 +33,10 @@
           <xsl:if test="gui:UI/@autoBmpId and //gui:UI//gui:Button[@iconFile]">
             <Bitmap guid="{gui:UI/@autoBmpId}">
               <xsl:choose>
-                <xsl:when test="1=0">
+                <xsl:when test="1=1">
                   <!-- This caches the bitmap file inside the CTC -->
                   <xsl:attribute name="href">
-                    <xsl:value-of select="$BitmapFile"/>
+                    <xsl:value-of select="me:FullPath($BitmapFile, $Src)"/>
                   </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
@@ -106,7 +107,7 @@
     </CommandTable>
   </xsl:template>
   <xsl:template match="gui:Import[@include]" mode="include">
-    <Extern href="{@include}" />
+    <Extern href="{translate(@include,'/','\')}" />
   </xsl:template>
   <xsl:template match="gui:Import[@type]" mode="include">
     <xsl:copy-of select="me:InputSymbol(@type, @from, @prefix, $Src, $Configuration)"/>

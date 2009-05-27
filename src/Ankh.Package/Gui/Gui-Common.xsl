@@ -2,7 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://schemas.studioturtle.net/2007/01/gui/"
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
-                xmlns:task="http://schemas.studioturtle.net/2006/12/layout-task"
                 xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:me="local-script">
   <xsl:param name="Src" select="'F:\ankhsvn\trunk-2\src\ankh.package\gui\AnkhSvn.xml'" />
   <xsl:param name="Configuration" select="'Debug'" />
@@ -337,9 +336,9 @@
     return -1;
   }
   
-  public string FullPath(string value)
+  public string FullPath(string value, string sourceFile)
   {
-    return System.IO.Path.GetFullPath(value);
+    return System.IO.Path.GetFullPath(Path.Combine(Path.GetDirectoryName(sourceFile), value));
   }
    ]]>
   </msxsl:script>
