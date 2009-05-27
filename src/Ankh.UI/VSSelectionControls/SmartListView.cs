@@ -232,6 +232,8 @@ namespace Ankh.UI.VSSelectionControls
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool GetScrollInfo(IntPtr hwnd, int fnBar, ref SCROLLINFO lpsi);
 
+            [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+            public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
 
             [StructLayout(LayoutKind.Sequential)]
             public struct SCROLLINFO
@@ -392,8 +394,21 @@ namespace Ankh.UI.VSSelectionControls
             base.OnHandleCreated(e);
 
             UpdateSortGlyphs();
+
+            if (IsXPPlus && DoubleBuffered)
+                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
         }
 
+        protected override bool DoubleBuffered
+        {
+            get { return base.DoubleBuffered; }
+            set
+            {
+                base.DoubleBuffered = value;
+                if (value && IsHandleCreated && IsXPPlus)
+                    NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the listview supports grouping.
