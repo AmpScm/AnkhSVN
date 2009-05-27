@@ -680,7 +680,7 @@
             <Group id="Grp_PendingChangesCommit1" priority="0x100">
               <Button id="Cmd_CommitPendingChanges" name="CommitPendingChanges" priority="0x100"
                   text="Co&amp;mmit"
-                  menuText="&amp;Commit Changes"
+                  menuText="&amp;Commit Changes" textMenuCtrlUseMenu="true"
                   toolTip="Commit Pending Changes" fixMenuController="true" iconFile="PendingChanges/Commit.png" defaultDisabled="true" />
               <Button id="Cmd_CommitPendingChangesKeepingLocks" name="CommitPendingChangesKeepingLocks" priority="0x200"
                   text="Commit &amp;Keeping Locks"
@@ -702,7 +702,7 @@
             <Group id="Grp_PendingChangesUpdate1" priority="0x100">
               <Button id="Cmd_PendingChangesUpdateHead" name="UpdatePendingChanges" priority="0x100"
                   text="&amp;Update"
-                  menuText="U&amp;pdate to Latest Version"
+                  menuText="U&amp;pdate to Latest Version" textMenuCtrlUseMenu="true"
                   toolTip="Update your solution to the HEAD version"
                   fixMenuController="true" iconFile="PendingChanges/Update.png" defaultDisabled="true"/>
               <Button id="Cmd_SolutionUpdateSpecific" name="UpdateSpecific" priority="0x200" defaultInvisible="true"
