@@ -33,15 +33,15 @@
       </Component>
       <Component Id="CR_Pkg_2005" Guid="ADF3EF9B-1DF7-4238-93F1-4D47A964F59F">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2005" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2005.wxi ?>
+        <?include $(var.Ankh.Package.ProjectDir)obj\$(var.Ankh.Package.Configuration)\$(var.Ankh.Package.TargetName)-2005.wxi ?>
       </Component>
       <Component Id="CR_Pkg_2008" Guid="51603B09-8C31-4414-8D10-FADD5001886A">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2008" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2008.wxi ?>
+        <?include $(var.Ankh.Package.ProjectDir)obj\$(var.Ankh.Package.Configuration)\$(var.Ankh.Package.TargetName)-2008.wxi ?>
       </Component>
       <Component Id="CR_Pkg_2010" Guid="A55BCCF0-ED5E-469F-A8A9-430FC8179055">
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Pkg-VS2010" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(var.Ankh.Package.TargetDir)$(var.Ankh.Package.TargetName)-2010.wxi ?>
+        <?include $(var.Ankh.Package.ProjectDir)obj\$(var.Ankh.Package.Configuration)\$(var.Ankh.Package.TargetName)-2010.wxi ?>
       </Component>
     </DirectoryRef>
     <ComponentGroup Id="PkgReg2005">
