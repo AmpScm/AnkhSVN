@@ -105,7 +105,10 @@ namespace Ankh.Commands
                 args.ThrowOnError = false;
                 using (SvnClient client = e.Context.GetService<ISvnClientPool>().GetClient())
                 {
-                    client.Revert(paths, args);
+                    foreach (string path in paths)
+                    {
+                        client.Revert(path, args);
+                    }
                 }
             }
         }
