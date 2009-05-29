@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
@@ -23,6 +24,7 @@ using Ankh.UI.OptionsPages;
 
 namespace Ankh.VSPackage
 {
+    [Guid(AnkhId.UserToolsSettingsPageGuid)]
     class UserToolsSettingsPage : DialogPage
     {
         UserToolSettingsControl _control;
