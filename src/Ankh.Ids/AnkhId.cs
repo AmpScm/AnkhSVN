@@ -127,6 +127,9 @@ namespace Ankh
         public const string DynamicEditorId = "923F6990-98C1-4DD5-983E-25088C02975D";
         public const string DiffEditorViewId = "3D9F7A9D-F9D1-4DD6-A89F-C89312708923";
 
+        public const string EnvironmentSettingsPageGuid = "F362B52E-E8F8-43DE-A02D-5072A2A96E6A";
+        public const string UserToolsSettingsPageGuid = "AE1A4DB8-09C3-438D-93BD-0FE37412CE34";
+
         /// <summary>
         /// The command set as a guid
         /// </summary>
