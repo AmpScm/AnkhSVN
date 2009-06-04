@@ -2,6 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 10
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Definitions", "Definitions", "{01F3ED56-C896-409C-8464-DB82B3AF1364}"
 	ProjectSection(SolutionItems) = preProject
+		tools\Ankh-Common.targets = tools\Ankh-Common.targets
 		BUILD.txt = BUILD.txt
 		CHANGES.txt = CHANGES.txt
 		CONTRIBUTORS.txt = CONTRIBUTORS.txt
