@@ -207,37 +207,51 @@ namespace Ankh.UI.PendingChanges
             if (DesignMode)
                 return;
 
-            Control topParent = TopLevelControl;
-
-            if (topParent == null)
+            try
             {
-                topParent = this;
-                Control parent;
-                while (null != (parent = topParent.Parent))
+                Control topParent = TopLevelControl;
+
+                if (topParent == null)
                 {
-                    topParent = parent;
+                    topParent = this;
+                    Control parent;
+                    while (null != (parent = topParent.Parent))
+                    {
+                        topParent = parent;
+                    }
+                }
+
+                VSContainerForm ownerForm = topParent as VSContainerForm;
+                if (ownerForm != null && ownerForm.Modal)
+                {
+                    InitializeForm(ownerForm);
+                    return;
+                }
+
+                IAnkhToolWindowControl toolWindow = topParent as IAnkhToolWindowControl;
+
+                if (toolWindow != null)
+                {
+                    InitializeToolWindow(toolWindow);
+                    return;
+                }
+
+                VSEditorControl documentForm = topParent as VSEditorControl;
+                if (documentForm != null)
+                {
+                    InitializeDocumentForm(documentForm);
                 }
             }
-
-            VSContainerForm ownerForm = topParent as VSContainerForm;
-            if (ownerForm != null && ownerForm.Modal)
+            finally
             {
-                InitializeForm(ownerForm);
-                return;
-            }
-
-            IAnkhToolWindowControl toolWindow = topParent as IAnkhToolWindowControl;
-
-            if (toolWindow != null)
-            {
-                InitializeToolWindow(toolWindow);
-                return;
-            }
-
-            VSEditorControl documentForm = topParent as VSEditorControl;
-            if (documentForm != null)
-            {
-                InitializeDocumentForm(documentForm);
+                if (!string.IsNullOrEmpty(_text))
+                {
+                    Text = _text;
+                }
+                else if (_nativeWindow.Text == null)
+                {
+                    _nativeWindow.Text = "";
+                }
             }
         }
 
@@ -252,12 +266,7 @@ namespace Ankh.UI.PendingChanges
 
             cf.AddCommandTarget(CommandTarget);
             cf.AddWindowPane(WindowPane);
-            cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;
-
-            if (!string.IsNullOrEmpty(_text))
-            {
-                Text = _text;
-            }
+            cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;            
         }
 
         bool _inToolWindow;
