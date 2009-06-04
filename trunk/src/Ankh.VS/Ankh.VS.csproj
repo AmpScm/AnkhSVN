@@ -9,11 +9,10 @@
     <ProjectGuid>{906E3F01-CD79-4F80-BCA7-1105224328C4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
     <RootNamespace>Ankh.VS</RootNamespace>
     <AssemblyName>Ankh.VS</AssemblyName>
-    <TargetFrameworkVersion Condition="'$(PackageTargetVersion)' != ''">$(PackageTargetVersion)</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(PackageTargetVersion)' == ''">v2.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == ''">v2.0</TargetFrameworkVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.VS.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>Svn</SccProjectName>
@@ -39,7 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-
     <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhLanguageServiceFile>
     <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' != '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhLanguageServiceFile>
     <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhOtherLanguageServiceFile>
