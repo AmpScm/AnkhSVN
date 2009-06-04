@@ -8,10 +8,10 @@
     <ProjectGuid>{1AD899A2-9283-4AB6-9426-E251E5772196}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
     <RootNamespace>Ankh.Migrate</RootNamespace>
     <AssemblyName>Ankh.Migrate</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>    
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Migrate.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>Svn</SccProjectName>
