@@ -1,19 +1,10 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="../tools/Ankh-Common.targets" />
   <PropertyGroup>
-    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
-    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
-    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '4.0') AND ('$(UseVS2005MPF)' != 'true')">10.0</VsSdkVersion>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
-    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == '4.0'">10.0</VisualStudioVersion>
     <SccProjectName>Svn</SccProjectName>
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,8 +17,7 @@
     <AssemblyName>Ankh.Package</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Ankh.Package.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion Condition="'$(VsSdkVersion)' != '10.0'">v2.0</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(VsSdkVersion)' == '10.0'">v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == ''">v2.0</TargetFrameworkVersion>
     <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
     <ApplicationIcon>Resources\Package.ico</ApplicationIcon>
   </PropertyGroup>
@@ -63,10 +53,6 @@
     <CtcCompileDependsOn>ApplyXslTemplates;$(CtcCompileDependsOn)</CtcCompileDependsOn>
     <VSCTCompileDependsOn>ApplyXslTemplates;$(VsctCompileDependsOn)</VSCTCompileDependsOn>
     <ApplyXslTemplatesDependsOn>ResolveAssemblyReferences;$(ResolveAssemblyReferences)</ApplyXslTemplatesDependsOn>
-    <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
-    <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
-    <ShellAssembly Condition="'$(VsSdkVersion)' == '10.0'">Microsoft.VisualStudio.Shell.10.0</ShellAssembly>
-    <VSShellHintPath Condition="'$(VsSdkVersion)' == '10.0'">$(VsSDKIncludes)$(ShellAssembly).dll</VSShellHintPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release %28With MSI%29|AnyCPU' ">
     <DefineConstants>FOR_MSI</DefineConstants>
@@ -77,22 +63,19 @@
     <Reference Include="Microsoft.VisualStudio.Shell.Interop" />
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop" />
-    <Reference Include="$(ShellAssembly)">
-      <HintPath>$(VSShellHintPath)</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0" />
+    <Reference Include="$(MsVsShellAssembly)" />
     <Reference Include="Microsoft.VisualStudio.Package.LanguageService.9.0" Condition="('$(VsSdkVersion)' == '9.0') OR ('$(VsSdkVersion)' == '10.0')" />
     <Reference Include="Microsoft.VisualStudio.Package.LanguageService.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
-      <HintPath>$(VsSDKIncludes)Microsoft.VisualStudio.Package.LanguageService.10.0.dll</HintPath>
+      <Visible>false</Visible>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0" Condition="('$(VsSdkVersion)' == '9.0') OR ('$(VsSdkVersion)' == '10.0')">
       <Visible>false</Visible>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
-      <HintPath>$(VsSDKIncludes)Microsoft.VisualStudio.Shell.Interop.10.0.dll</HintPath>
       <Visible>false</Visible>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0" Condition="'$(VsSdkVersion)' == '10.0'">
-      <HintPath>$(VsSDKIncludes)Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
       <Visible>false</Visible>
     </Reference>
     <Reference Include="SharpSvn, Version=1.4999.373.29609, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
@@ -148,6 +131,7 @@
       <Debug>true</Debug>
     </XslSource>
     <None Include="Ankh.Package.snk" />
+    <None Include="extension.VsixManifest" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
