@@ -64,8 +64,6 @@ namespace Ankh.UI.PendingChanges
         protected override void Init(IAnkhServiceProvider context, bool allowModal)
         {
             base.Init(context, allowModal);
-
-            Text = ""; // Somehow this is required? -> Clean up
         }
     }    
 }
