@@ -172,7 +172,7 @@ namespace Ankh.VS.Dialogs
                 if (ErrorHandler.Succeeded(hr))
                 {
                     // ProcessMouseActivationModal returns S_FALSE to stop the message processing, but this
-                    // function have to return true in this case.
+                    // function has to return true in this case.
                     if (hr == VSConstants.S_FALSE)
                     {
                         m.Result = (IntPtr)lResult;
