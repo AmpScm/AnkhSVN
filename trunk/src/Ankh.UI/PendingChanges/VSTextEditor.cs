@@ -248,7 +248,7 @@ namespace Ankh.UI.PendingChanges
                 {
                     Text = _text;
                 }
-                else if (_nativeWindow.Text == null)
+                else if (string.IsNullOrEmpty(_nativeWindow.Text))
                 {
                     _nativeWindow.Text = "";
                 }
