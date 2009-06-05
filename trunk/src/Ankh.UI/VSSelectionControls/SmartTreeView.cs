@@ -20,7 +20,6 @@ namespace Ankh.UI.VSSelectionControls
         {
             if (VSVersion.VS2010OrLater)
             {
-                DoubleBuffered = true; // Enables Themed look&feel
                 HotTracking = true;
                 ShowLines = false;
             }
@@ -81,7 +80,7 @@ namespace Ankh.UI.VSSelectionControls
             if (_stateImageList != null)
                 SetStateList();
 
-            if (DoubleBuffered && VSVersion.VS2010OrLater)
+            if (VSVersion.VS2010OrLater)
             {
                 NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
