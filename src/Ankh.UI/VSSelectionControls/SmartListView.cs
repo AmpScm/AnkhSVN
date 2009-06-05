@@ -50,9 +50,6 @@ namespace Ankh.UI.VSSelectionControls
             _groups = new SortedList<SmartGroup, ListViewGroup>(new SmartGroupSorter(this));
             Sorting = SortOrder.Ascending;
             base.UseCompatibleStateImageBehavior = false;
-
-            if (VSVersion.VS2010OrLater)
-                DoubleBuffered = true; // Enables Themed look&feel
         }
 
         [DefaultValue(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -392,24 +389,19 @@ namespace Ankh.UI.VSSelectionControls
             set { _groupSeparator = value; }
         }
 
+        private const int LVM_FIRST = 0x1000;
+        private const int LVM_SETEXTENDEDLISTVIEWSTYLE = LVM_FIRST + 54;
+
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && DoubleBuffered && VSVersion.VS2010OrLater)
-                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
-        }
-
-        protected override bool DoubleBuffered
-        {
-            get { return base.DoubleBuffered; }
-            set
+            if (IsXPPlus && VSVersion.VS2010OrLater)
             {
-                base.DoubleBuffered = value;
-                if (value && IsHandleCreated && IsXPPlus)
-                    NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+                NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)0x00010000, (IntPtr)0x00010000);
             }
         }
 
