@@ -50,6 +50,9 @@ namespace Ankh.UI.VSSelectionControls
             _groups = new SortedList<SmartGroup, ListViewGroup>(new SmartGroupSorter(this));
             Sorting = SortOrder.Ascending;
             base.UseCompatibleStateImageBehavior = false;
+
+            if (VSVersion.VS2010OrLater)
+                DoubleBuffered = true; // Enables Themed look&feel
         }
 
         [DefaultValue(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -395,7 +398,7 @@ namespace Ankh.UI.VSSelectionControls
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && DoubleBuffered)
+            if (IsXPPlus && DoubleBuffered && VSVersion.VS2010OrLater)
                 NativeMethods.SetWindowTheme(Handle, "Explorer", null);
         }
 

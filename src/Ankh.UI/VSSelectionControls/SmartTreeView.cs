@@ -13,6 +13,19 @@ namespace Ankh.UI.VSSelectionControls
         ImageList _stateImageList;
         ImageList _realStateImageList;
 
+        /// <summary>
+        /// Initializes a new SmartTreeView
+        /// </summary>
+        public SmartTreeView()
+        {
+            if (VSVersion.VS2010OrLater)
+            {
+                DoubleBuffered = true; // Enables Themed look&feel
+                HotTracking = true;
+                ShowLines = false;
+            }
+        }
+
         [DefaultValue(null)]
         public new ImageList StateImageList
         {
@@ -57,12 +70,27 @@ namespace Ankh.UI.VSSelectionControls
             }
         }
 
+        private const int TV_FIRST = 0x1100;
+        private const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
+        private const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
+
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
 
             if (_stateImageList != null)
                 SetStateList();
+
+            if (DoubleBuffered && VSVersion.VS2010OrLater)
+            {
+                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+
+                uint flags = (uint)NativeMethods.SendMessage(Handle, TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+
+                flags |= 0x0004 | 0x0040; // TVS_EX_DOUBLEBUFFER | TVS_EX_FADEINOUTEXPANDOS
+
+                NativeMethods.SendMessage(Handle, TVM_SETEXTENDEDSTYLE, (IntPtr)flags, (IntPtr)flags);
+            }
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
@@ -156,6 +184,9 @@ namespace Ankh.UI.VSSelectionControls
         {
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+            [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
+            public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
         }
     }
 }
