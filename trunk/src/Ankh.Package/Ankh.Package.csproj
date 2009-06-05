@@ -101,7 +101,7 @@
       <ResourceName>1000.ctmenu</ResourceName>
       <Visible>false</Visible>
     </CtcFile>
-    <VSCTCompile Include="$(IntermediateOutputPath)AnkhSvn.vsct" Condition="'$(VsSdkVersion)' != '8.0'">
+    <VSCTCompile Include="$(IntermediateOutputPath)..\AnkhSvn.vsct" Condition="'$(VsSdkVersion)' != '8.0'">
       <ResourceName>1000.ctmenu</ResourceName>
       <Visible>false</Visible>
     </VSCTCompile>
@@ -118,7 +118,7 @@
       <Transform Condition="'$(VsSdkVersion)' == '8.0'">Gui\Gui-To-Ctc.xsl</Transform>
       <To Condition="'$(VsSdkVersion)' == '8.0'">$(IntermediateOutputPath)AnkhSvn.ctc</To>
       <Transform Condition="'$(VsSdkVersion)' != '8.0'">Gui\Gui-To-Vsct.xsl</Transform>
-      <To Condition="'$(VsSdkVersion)' != '8.0'">$(IntermediateOutputPath)AnkhSvn.vsct</To>
+      <To Condition="'$(VsSdkVersion)' != '8.0'">$(IntermediateOutputPath)..\AnkhSvn.vsct</To>
       <Debug>true</Debug>
     </XslSource>
     <None Include="Ankh.Package.snk" />
@@ -294,5 +294,14 @@
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2010.wxi&quot; /codebase &gt; nul:" />
+  </Target>
+  <!-- Fix VS2010 SDK issue with packaging files over 8MB by explicitly marking what to package-->
+  <Target
+          Name="GetVsixItemsToBundle"
+          Condition="'$(CreateVsix)' == 'true'"
+          DependsOnTargets="$(GetVsixItemsToBundleDependsOn)">
+    <ItemGroup>
+      <ZipPackageItems Include="$(OutDir)\**\*.dll;$(OutDir)\**\*.*exe;$(OutDir)\**\*.pkgdef;$(OutDir)\**\*.Vsix*" />
+    </ItemGroup>
   </Target>
 </Project>
