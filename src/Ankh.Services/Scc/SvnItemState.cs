@@ -122,7 +122,7 @@ namespace Ankh.Scc
         /// </summary>
         Replaced                = 0x00020000,
         /// <summary>
-        /// The file must be locked before editting
+        /// The file must be locked before editing
         /// </summary>
         MustLock                = 0x00040000,
 

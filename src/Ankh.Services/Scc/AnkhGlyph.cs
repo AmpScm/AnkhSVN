@@ -32,7 +32,7 @@ namespace Ankh.Scc
         None, // Icon 0 is drawn as icon 5
 
         /// <summary>
-        /// The file must be locked before editting is allowed (STATEICON_CHECKEDIN /0x1)
+        /// The file must be locked before editing is allowed (STATEICON_CHECKEDIN /0x1)
         /// </summary>
         MustLock,
 

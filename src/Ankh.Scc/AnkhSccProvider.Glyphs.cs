@@ -300,9 +300,6 @@ namespace Ankh.Scc
                 if (item.IsObstructed)
                     sb.AppendFormat(format, item.Name, item.IsFile ? Resources.ToolTipFileObstructed : Resources.ToolTipDirObstructed).AppendLine();
 
-                if (item.IsReadOnlyMustLock && !item.IsLocked)
-                    sb.AppendFormat(format, item.Name, Resources.ToolTipMustLock).AppendLine();
-
                 if (!item.Exists)
                     sb.AppendFormat(format, item.Name, Resources.ToolTipDoesNotExist).AppendLine();
 
