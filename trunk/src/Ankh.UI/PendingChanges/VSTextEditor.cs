@@ -717,16 +717,9 @@ namespace Ankh.UI.PendingChanges
                         InternalSetReadOnly(true);
                 }
 
-                try
-                {
-                    ErrorHandler.ThrowOnFailure(_textView.SetCaretPos(0, 0)); // Move cursor to 0,0
-                    ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(0, 0)); // Scroll horizontally
-                    ErrorHandler.ThrowOnFailure(_textView.SetScrollPosition(1, 0)); // Scroll vertically     
-                }
-                catch (Exception e)
-                {
-                    Trace.WriteLine(string.Format("Ignoring {0}: {1}", e.GetType().Name, e.Message));
-                }
+                _textView.SetCaretPos(0, 0); // Move cursor to 0,0
+                _textView.SetScrollPosition(0, 0); // Scroll horizontally
+                _textView.SetScrollPosition(1, 0); // Scroll vertically     
             }
         }
 
