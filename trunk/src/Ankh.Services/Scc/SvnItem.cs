@@ -705,7 +705,7 @@ namespace Ankh
         }
 
         /// <summary>
-        /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editting
+        /// Gets a boolean indicating whether you must lock the <see cref="SvnItem"/> before editing
         /// </summary>
         /// <remarks>Assumes a mustlock file is readonly to speed up testing</remarks>
         public bool IsReadOnlyMustLock
