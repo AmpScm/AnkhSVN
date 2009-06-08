@@ -37,16 +37,18 @@ namespace Ankh.UI.PendingChanges
     /// This class is used to implement CodeEditorUserControl
     /// </summary>
     /// <seealso cref="UserControl"/>
-    public partial class VSTextEditor : Control
+    public partial class VSTextEditor : Control, IAnkhPreFilterMessage
     {
         CodeEditorWindow _nativeWindow;
         IAnkhServiceProvider _context;
         BorderStyle _borderStyle;
         Guid? _forceLanguageService;
+        readonly bool _containsWpfEditor;
 
         public VSTextEditor()
         {
             BackColor = SystemColors.Window;
+            _containsWpfEditor = VSVersion.VS2010OrLater;
         }
 
         public VSTextEditor(IContainer container)
@@ -588,6 +590,26 @@ namespace Ankh.UI.PendingChanges
 
                 return null;
             }
+        }
+
+        public bool PreFilterMessage(ref Message msg)
+        {
+            if (!_containsWpfEditor)
+                return false;
+
+            const int WM_CHAR = 0x0102;
+
+            if (msg.Msg == WM_CHAR)
+                switch ((uint)msg.WParam & 0xFFFF)
+                {
+                    case '\b':
+                    case '\r':
+                        return true;
+                    default:
+                        return false;
+                }
+
+            return false;
         }
     }
 

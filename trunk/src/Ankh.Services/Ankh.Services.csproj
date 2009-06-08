@@ -84,6 +84,7 @@
     <Compile Include="UI\AnkhPropertyGridItem.cs" />
     <Compile Include="Scc\UI\IAnnotateSection.cs" />
     <Compile Include="Scc\SvnOrigin.cs" />
+    <Compile Include="UI\IAnkhPreFilterMessage.cs" />
     <Compile Include="UI\VSDialogForm.cs">
       <SubType>Form</SubType>
     </Compile>
