@@ -30,7 +30,7 @@ namespace Ankh.UI.SvnLog.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
             if (logWindow == null)
             {
@@ -71,7 +71,7 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
             IProgressRunner progressRunner = e.GetService<IProgressRunner>();
 
             if (logWindow == null)
