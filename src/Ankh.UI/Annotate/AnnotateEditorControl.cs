@@ -40,6 +40,9 @@ namespace Ankh.UI.Annotate
         {
             InitializeComponent();
             editor.ReadOnly = true;
+
+            if (VSVersion.VS2008OrOlder)
+                editor.EnableNavigationBar = true;
         }
 
         protected override void OnFrameCreated(EventArgs e)
