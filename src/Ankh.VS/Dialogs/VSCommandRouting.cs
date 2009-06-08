@@ -191,7 +191,7 @@ namespace Ankh.VS.Dialogs
 
             const int WM_KEYDOWN = 0x0100;
             //const int WM_KEYUP = 0x0101;
-            const int WM_CHAR = 0x0102;
+            //const int WM_CHAR = 0x0102;
 
             if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
                 return false; // Only key translation below
