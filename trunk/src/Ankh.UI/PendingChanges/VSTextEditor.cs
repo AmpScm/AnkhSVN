@@ -597,6 +597,8 @@ namespace Ankh.UI.PendingChanges
             if (!_containsWpfEditor)
                 return false;
 
+            const int WM_KEYDOWN = 0x100;
+            const int WM_KEYUP = 0x101;
             const int WM_CHAR = 0x0102;
 
             if (msg.Msg == WM_CHAR)
@@ -608,6 +610,13 @@ namespace Ankh.UI.PendingChanges
                     default:
                         return false;
                 }
+            else if (msg.Msg == WM_KEYDOWN || msg.Msg == WM_KEYUP)
+                switch ((uint)msg.WParam)
+                {
+                    case 0x26:
+                        return true; // VK_UP
+                }
+
 
             return false;
         }
