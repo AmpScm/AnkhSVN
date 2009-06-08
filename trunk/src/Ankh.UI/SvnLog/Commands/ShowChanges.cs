@@ -100,7 +100,7 @@ namespace Ankh.UI.SvnLog.Commands
 
         public void OnExecute(CommandEventArgs e)
         {
-            ILogControl logWindow = e.Selection.ActiveDialogOrFrameControl as ILogControl;
+            ILogControl logWindow = e.Selection.GetActiveControl<ILogControl>();
 
             if (PerformRevisionChanges(logWindow, e))
                 return;

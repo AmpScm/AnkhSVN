@@ -52,21 +52,7 @@ namespace Ankh.UI.VSSelectionControls.Commands
             if (e == null)
                 throw new ArgumentNullException("e");
 
-            Control c = e.Selection.ActiveDialogOrFrameControl;
-            SmartListView list = null;
-            ContainerControl cc;
-            while (null != (cc = c as ContainerControl))
-            {
-                c = cc.ActiveControl;
-
-                list = c as SmartListView;
-                if (list != null)
-                    break;
-            }
-
-            if (list != null)
-                list = c as SmartListView;
-            return list;
+            return e.Selection.GetActiveControl<SmartListView>();
         }
 
         protected abstract void OnUpdate(SmartListView list, CommandUpdateEventArgs e);
