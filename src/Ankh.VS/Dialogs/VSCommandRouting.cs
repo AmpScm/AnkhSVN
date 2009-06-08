@@ -36,6 +36,7 @@ namespace Ankh.VS.Dialogs
         readonly VSContainerForm _form;
         readonly IAnkhVSContainerForm _vsForm;
         readonly static Dictionary<VSContainerForm, VSCommandRouting> _map = new Dictionary<VSContainerForm, VSCommandRouting>();
+        readonly bool _vsWpf;
         VSFormContainerPane _pane;
         IVsToolWindowToolbarHost _tbHost;
         IVsFilterKeys2 _fKeys;
@@ -45,7 +46,7 @@ namespace Ankh.VS.Dialogs
         List<IOleCommandTarget> _ctList;
         List<IVsWindowPane> _paneList;
         IDisposable _activeStack;
-        bool _disabled;
+        bool _disabled;        
         static readonly Stack<VSCommandRouting> _routers = new Stack<VSCommandRouting>();
 
         bool _installed;
@@ -64,6 +65,7 @@ namespace Ankh.VS.Dialogs
             Application.AddMessageFilter(this);
             _routers.Push(this);
             _installed = true;
+            _vsWpf = !VSVersion.VS2008OrOlder;
             _map.Add(form, this);
 
             _rPct = GetService<IVsRegisterPriorityCommandTarget>(typeof(SVsRegisterPriorityCommandTarget));
@@ -186,7 +188,10 @@ namespace Ankh.VS.Dialogs
 
             const int WM_KEYFIRST = 0x0100;
             const int WM_IME_KEYLAST = 0x010F;
+
             const int WM_KEYDOWN = 0x0100;
+            //const int WM_KEYUP = 0x0101;
+            const int WM_CHAR = 0x0102;
 
             if (m.Msg < WM_KEYFIRST || m.Msg > WM_IME_KEYLAST)
                 return false; // Only key translation below
@@ -246,6 +251,23 @@ namespace Ankh.VS.Dialogs
                     if (pane.TranslateAccelerator(messages) == 0)
                         return true;
                 }
+            }
+
+            Control c = _form.ActiveControl;
+
+            while (c != null)
+            {
+                IAnkhPreFilterMessage filter = c as IAnkhPreFilterMessage;
+
+                if (filter != null && filter.PreFilterMessage(ref m))
+                    return true;
+
+                ContainerControl cc = c as ContainerControl;
+
+                if (cc == null)
+                    break;
+
+                c = cc.ActiveControl;
             }
 
             return false;
