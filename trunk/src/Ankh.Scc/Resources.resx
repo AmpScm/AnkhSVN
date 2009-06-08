@@ -151,7 +151,7 @@
     <value>This file is modified</value>
   </data>
   <data name="ToolTipMustLock" xml:space="preserve">
-    <value>This file must be locked before it can be editted.</value>
+    <value>This file must be locked before it can be edited.</value>
   </data>
   <data name="UnsupportedWorkingCopyFound" xml:space="preserve">
     <value>Subversion detected an unsupported working copy version while checking the status of '{0}'. Most likely you upgraded another Subversion client (e.g. TortoiseSVN or the SVN client) to a newer version without upgrading your AnkhSVN. Please visit http://ankhsvn.net/ to find out about newer AnkhSVN versions supporting this Working Copy.
