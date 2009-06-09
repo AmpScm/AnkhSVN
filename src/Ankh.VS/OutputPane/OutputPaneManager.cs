@@ -23,23 +23,10 @@ namespace Ankh.VS.OutputPane
             get { return _window ?? (_window = GetService<IVsOutputWindow>(typeof(SVsOutputWindow))); }
         }
 
-        bool _created;
-        void EnsureCreated()
-        {
-            if (_created)
-                return;
-            _created = true;
-
-            ErrorHandler.ThrowOnFailure(Window.CreatePane(ref g, AnkhId.PlkProduct, 1, 0));
-        }
-
         public void WriteToPane(string s)
-        {
-            EnsureCreated();
-
+        {           
             IVsOutputWindowPane pane;
-            ErrorHandler.ThrowOnFailure(Window.GetPane(ref g, out pane));
-            
+            ErrorHandler.ThrowOnFailure(Window.GetPane(ref g, out pane));            
             ErrorHandler.ThrowOnFailure(pane.OutputString(s));
         }
     }

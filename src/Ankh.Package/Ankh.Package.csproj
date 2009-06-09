@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA90174C-5763-46E8-9C95-328CA8451072}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnkhEditorFactories.cs" />
+    <Compile Include="Attributes\ProvideOutputWindow.cs" />
     <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -296,10 +297,7 @@
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2010.wxi&quot; /codebase &gt; nul:" />
   </Target>
   <!-- Fix VS2010 SDK issue with packaging files over 8MB by explicitly marking what to package-->
-  <Target
-          Name="GetVsixItemsToBundle"
-          Condition="'$(CreateVsix)' == 'true'"
-          DependsOnTargets="$(GetVsixItemsToBundleDependsOn)">
+  <Target Name="GetVsixItemsToBundle" Condition="'$(CreateVsix)' == 'true'" DependsOnTargets="$(GetVsixItemsToBundleDependsOn)">
     <ItemGroup>
       <ZipPackageItems Include="$(OutDir)\**\*.dll;$(OutDir)\**\*.*exe;$(OutDir)\**\*.pkgdef;$(OutDir)\**\*.Vsix*" />
     </ItemGroup>
