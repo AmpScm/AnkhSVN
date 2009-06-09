@@ -29,7 +29,7 @@ namespace Ankh.VSPackage.Attributes
     /// of declaring the options page visibility, so a custom attribute needs to be used.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public sealed class ProvideToolsOptionsPageVisibilityAttribute : MsVsShell.RegistrationAttribute
+	internal sealed class ProvideToolsOptionsPageVisibilityAttribute : MsVsShell.RegistrationAttribute
     {
         private string _categoryName = null;
         private string _pageName = null;

@@ -22,7 +22,7 @@ using Microsoft.VisualStudio.Shell;
 namespace Ankh.VSPackage.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    class ProvideLanguageSettingsAttribute : RegistrationAttribute
+    internal sealed class ProvideLanguageSettingsAttribute : RegistrationAttribute
     {
         readonly Type _type;
         readonly string _key;
