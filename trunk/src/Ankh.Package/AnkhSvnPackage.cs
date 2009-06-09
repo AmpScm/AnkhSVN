@@ -14,9 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// VsPkg.cs : Implementation of AnkhSvn
-//
-
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -73,6 +70,7 @@ namespace Ankh.VSPackage
     [CLSCompliant(false)]
     [ProvideSourceControlProvider(AnkhId.SccProviderTitle, "#100")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]    
+	[ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible=false, Name=AnkhId.PlkProduct, ClearWithSolution=false)]
     sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
         readonly AnkhRuntime _runtime;
