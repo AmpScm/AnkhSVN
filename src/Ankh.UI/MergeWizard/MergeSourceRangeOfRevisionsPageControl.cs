@@ -28,9 +28,10 @@ using SharpSvn;
 namespace Ankh.UI.MergeWizard
 {
 
-    public partial class MergeSourceRangeOfRevisionsPageControl : MergeSourceBasePageControl
+    partial class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
-        public MergeSourceRangeOfRevisionsPageControl()
+        [Obsolete()]
+        public MergeSourceRangeOfRevisionsPage()
         {
             InitializeComponent();
         }
@@ -43,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (((RadioButton)sender).Checked)
             {
-                ((MergeSourceRangeOfRevisionsPage)WizardPage).NextPageRequired = true;
+                NextPageRequired = true;
             }
         }
 
@@ -54,7 +55,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (((RadioButton)sender).Checked)
             {
-                ((MergeSourceRangeOfRevisionsPage)WizardPage).NextPageRequired = false;
+                NextPageRequired = false;
             }
         }
         #endregion

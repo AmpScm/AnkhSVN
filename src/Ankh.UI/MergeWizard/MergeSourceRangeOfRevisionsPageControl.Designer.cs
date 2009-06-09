@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeSourceRangeOfRevisionsPageControl
+    partial class MergeSourceRangeOfRevisionsPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceRangeOfRevisionsPageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceRangeOfRevisionsPage));
             this.revisionsGroupBox = new System.Windows.Forms.GroupBox();
             this.selectRevisionsRadioButton = new System.Windows.Forms.RadioButton();
             this.allRevisionsRadioButton = new System.Windows.Forms.RadioButton();

@@ -27,11 +27,12 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeOptionsPageControl : BasePageControl
+    public partial class MergeOptionsPage : BasePage
     {
         private Dictionary<SvnDepth, string> mergeDepths;
 
-        public MergeOptionsPageControl()
+        [Obsolete("Designer Only")]
+        public MergeOptionsPage()
         {
             InitializeComponent();
         }
@@ -39,7 +40,7 @@ namespace Ankh.UI.MergeWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         #region UI Events
@@ -48,7 +49,7 @@ namespace Ankh.UI.MergeWizard
             if (!DesignMode)
             {
                 // Moved from Constructor to _Load for timing reasons.
-                mergeDepths = ((MergeWizard)WizardPage.Wizard).MergeUtils.MergeDepths;
+                mergeDepths = ((MergeWizard)Wizard).MergeUtils.MergeDepths;
 
                 // Decided against using BindingSource due to rendering time
                 // and the requirement of threading to keep the UI from 
@@ -66,68 +67,67 @@ namespace Ankh.UI.MergeWizard
 
         private void textConflictsPromptRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.PROMPT;
+            TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.PROMPT;
         }
 
         private void textConflictsMarkRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.MARK;
+            TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.MARK;
         }
 
         private void textConflictsMyRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.MINE;
+            TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.MINE;
         }
 
         private void textConflictsRepositoryRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
+            TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
         }
 
         private void textConflictsBaseRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
+            TextConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
         }
 
         private void binaryConflictsPromptRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.PROMPT;
+            BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.PROMPT;
         }
 
         private void binaryConflictsMarkRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.MARK;
+            BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.MARK;
         }
 
         private void binaryConflictsMyRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.MINE;
+            BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.MINE;
         }
 
         private void binaryConflictsRepositoryRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
+            BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.THEIRS;
         }
 
         private void binaryConflictsBaseRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
+            BinaryConflictResolution = MergeOptionsPage.ConflictResolutionOption.BASE;
         }
 
         private void ignoreAncestryCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).IgnoreAncestry = ((CheckBox)sender).Checked;
+            IgnoreAncestry = ((CheckBox)sender).Checked;
         }
 
         private void unversionedCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeOptionsPage)WizardPage).AllowUnversionedObstructions = ((CheckBox)sender).Checked;
+            AllowUnversionedObstructions = ((CheckBox)sender).Checked;
         }
 
         private void depthComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox box = (ComboBox)sender;
-            MergeOptionsPage page = ((MergeOptionsPage)WizardPage);
             SvnDepth depth = SvnDepth.Unknown;
 
             if (box.Text == MergeStrings.SvnDepthInfinity)
@@ -139,13 +139,13 @@ namespace Ankh.UI.MergeWizard
             else if (box.Text == MergeStrings.SvnDepthEmpty)
                 depth = SvnDepth.Empty;
 
-            page.Depth = depth;
+            Depth = depth;
         }
         #endregion
 
         private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
         {
-            if (e.CurrentPage == WizardPage)
+            if (e.CurrentPage == this)
             {
                 PopulateUI();
             }
@@ -154,7 +154,7 @@ namespace Ankh.UI.MergeWizard
         private void PopulateUI()
         {
             // clear the message, 
-            WizardPage.Message = null;
+            Message = null;
         }
     }
 }

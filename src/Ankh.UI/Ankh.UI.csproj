@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -175,12 +175,12 @@
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardMessage.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPage.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangedEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="OptionsPages\AnkhOptionsPageControl.cs">
       <SubType>UserControl</SubType>
@@ -345,11 +345,9 @@
     <Compile Include="SvnLog\LogViewerDialog.Designer.cs">
       <DependentUpon>LogViewerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\AnkhWizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\BasePage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\BasePageControl.Wizard.cs">
+      <DependentUpon>BasePageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\BasePageControl.cs">
       <SubType>UserControl</SubType>
@@ -358,8 +356,8 @@
       <DependentUpon>BasePageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\Commands\Merge.cs" />
-    <Compile Include="MergeWizard\MergeBestPracticesPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeBestPracticesPage.Wizard.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.cs">
       <SubType>UserControl</SubType>
@@ -367,8 +365,9 @@
     <Compile Include="MergeWizard\MergeBestPracticesPageControl.Designer.cs">
       <DependentUpon>MergeBestPracticesPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeOptionsPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeOptionsPageControl.Wizard.cs">
+      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeOptionsPageControl.cs">
       <SubType>UserControl</SubType>
@@ -376,8 +375,9 @@
     <Compile Include="MergeWizard\MergeOptionsPageControl.Designer.cs">
       <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeRevisionsSelectionPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeRevisionsSelectionPageControl.Wizard.cs">
+      <DependentUpon>MergeRevisionsSelectionPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeRevisionsSelectionPageControl.cs">
       <SubType>UserControl</SubType>
@@ -385,8 +385,9 @@
     <Compile Include="MergeWizard\MergeRevisionsSelectionPageControl.Designer.cs">
       <DependentUpon>MergeRevisionsSelectionPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceBasePage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceBasePageControl.Wizard.cs">
+      <DependentUpon>MergeSourceBasePageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceBasePageControl.cs">
       <SubType>UserControl</SubType>
@@ -394,8 +395,9 @@
     <Compile Include="MergeWizard\MergeSourceBasePageControl.Designer.cs">
       <DependentUpon>MergeSourceBasePageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceManuallyRecordPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.Wizard.cs">
+      <DependentUpon>MergeSourceManuallyRecordPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.cs">
       <SubType>UserControl</SubType>
@@ -403,8 +405,9 @@
     <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.Designer.cs">
       <DependentUpon>MergeSourceManuallyRecordPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceManuallyRemovePage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceManuallyRemovePageControl.Wizard.cs">
+      <DependentUpon>MergeSourceManuallyRemovePageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRemovePageControl.cs">
       <SubType>UserControl</SubType>
@@ -412,8 +415,9 @@
     <Compile Include="MergeWizard\MergeSourceManuallyRemovePageControl.Designer.cs">
       <DependentUpon>MergeSourceManuallyRemovePageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.Wizard.cs">
+      <DependentUpon>MergeSourceRangeOfRevisionsPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.cs">
       <SubType>UserControl</SubType>
@@ -421,8 +425,9 @@
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.Designer.cs">
       <DependentUpon>MergeSourceRangeOfRevisionsPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceReintegratePage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceReintegratePageControl.Wizard.cs">
+      <DependentUpon>MergeSourceReintegratePageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceReintegratePageControl.cs">
       <SubType>UserControl</SubType>
@@ -430,8 +435,9 @@
     <Compile Include="MergeWizard\MergeSourceReintegratePageControl.Designer.cs">
       <DependentUpon>MergeSourceReintegratePageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.Wizard.cs">
+      <DependentUpon>MergeSourceTwoDifferentTreesPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.cs">
       <SubType>UserControl</SubType>
@@ -439,8 +445,9 @@
     <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.Designer.cs">
       <DependentUpon>MergeSourceTwoDifferentTreesPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSummaryPage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeSummaryPageControl.Wizard.cs">
+      <DependentUpon>MergeSummaryPageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSummaryPageControl.cs">
       <SubType>UserControl</SubType>
@@ -448,8 +455,9 @@
     <Compile Include="MergeWizard\MergeSummaryPageControl.Designer.cs">
       <DependentUpon>MergeSummaryPageControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeTypePage.cs">
-      <SubType>Component</SubType>
+    <Compile Include="MergeWizard\MergeTypePageControl.Wizard.cs">
+      <DependentUpon>MergeTypePageControl.cs</DependentUpon>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeTypePageControl.cs">
       <SubType>UserControl</SubType>

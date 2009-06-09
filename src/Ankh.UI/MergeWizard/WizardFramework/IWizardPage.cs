@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using Ankh;
 
 /* 
  * IWizardPage.cs
@@ -102,5 +103,11 @@ namespace WizardFramework
         /// Sets the control's visibility.
         /// </summary>
         bool Visible { set; }
+
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        IAnkhServiceProvider Context { get; set; }
     }
 }

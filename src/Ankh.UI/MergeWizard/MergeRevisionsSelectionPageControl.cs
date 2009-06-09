@@ -29,9 +29,10 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeRevisionsSelectionPageControl : BasePageControl, ILogControl
+    public partial class MergeRevisionsSelectionPage : BasePage, ILogControl
     {
-        public MergeRevisionsSelectionPageControl()
+        [Obsolete()]
+        public MergeRevisionsSelectionPage()
         {
             InitializeComponent();
 
@@ -72,36 +73,35 @@ namespace Ankh.UI.MergeWizard
         /// <value>The merge source.</value>
         public SvnOrigin MergeSource
         {
-            get { return ((MergeWizard)WizardPage.Wizard).MergeSource; }
+            get { return ((MergeWizard)Wizard).MergeSource; }
         }
 
         public SvnOrigin MergeTarget
         {
-            get { return new SvnOrigin(((MergeWizard)WizardPage.Wizard).MergeTarget); }
+            get { return new SvnOrigin(((MergeWizard)Wizard).MergeTarget); }
         }
 
         protected void PopulateUI()
         {
-            logToolControl1.Site = Site;
-            switch (((MergeWizard)WizardPage.Wizard).LogMode)
+            switch (((MergeWizard)Wizard).LogMode)
             {
                 case LogMode.MergesEligible:
                     logToolControl1.IncludeMergedRevisions = false;
-                    logToolControl1.StartMergesEligible(WizardPage.Context, MergeTarget, MergeSource.Target);
+                    logToolControl1.StartMergesEligible(Context, MergeTarget, MergeSource.Target);
                     break;
                 case LogMode.MergesMerged:
                     logToolControl1.IncludeMergedRevisions = true;
-                    logToolControl1.StartMergesMerged(WizardPage.Context, MergeTarget, MergeSource.Target);
+                    logToolControl1.StartMergesMerged(Context, MergeTarget, MergeSource.Target);
                     break;
                 case LogMode.Log:
-                    logToolControl1.StartLog(new SvnOrigin[] { new SvnOrigin(WizardPage.Context, MergeSource.Target, MergeTarget.RepositoryRoot) }, null, null);
+                    logToolControl1.StartLog(new SvnOrigin[] { new SvnOrigin(Context, MergeSource.Target, MergeTarget.RepositoryRoot) }, null, null);
                     break;
             }
         }
 
         private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
         {
-            if (e.CurrentPage == WizardPage)
+            if (e.CurrentPage == this)
             {
                 PopulateUI();
             }
@@ -111,18 +111,18 @@ namespace Ankh.UI.MergeWizard
         {
             base.OnLoad(e);
 
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         private void logToolControl1_BatchFinished(object sender, BatchFinishedEventArgs e)
         {
             if (e.TotalCount == 0)
             {
-                WizardPage.Message = new WizardMessage(MergeStrings.NoLogItems, WizardMessage.MessageType.Error);
+                Message = new WizardMessage(MergeStrings.NoLogItems, WizardMessage.MessageType.Error);
             }
             else
             {
-                WizardPage.Message = new WizardMessage("", WizardMessage.MessageType.None);
+                Message = new WizardMessage("", WizardMessage.MessageType.None);
             }
         }
 

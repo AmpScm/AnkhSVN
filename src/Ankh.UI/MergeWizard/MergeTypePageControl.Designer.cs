@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeTypePageControl
+    partial class MergeTypePage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeTypePageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeTypePage));
             this.mergeTypeGroupBox = new System.Windows.Forms.GroupBox();
             this.manuallyRemoveRadioButton = new System.Windows.Forms.RadioButton();
             this.manuallyRecordRadioButton = new System.Windows.Forms.RadioButton();

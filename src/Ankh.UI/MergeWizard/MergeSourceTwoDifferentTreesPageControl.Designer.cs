@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeSourceTwoDifferentTreesPageControl
+    partial class MergeSourceTwoDifferentTreesPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceTwoDifferentTreesPageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceTwoDifferentTreesPage));
             this.fromGroupBox = new System.Windows.Forms.GroupBox();
             this.fromRevisionSelectButton = new System.Windows.Forms.Button();
             this.fromRevisionTextBox = new System.Windows.Forms.TextBox();

@@ -24,9 +24,10 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceManuallyRecordPageControl : MergeSourceBasePageControl
+    public partial class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
-        public MergeSourceManuallyRecordPageControl()
+        [Obsolete()]
+        public MergeSourceManuallyRecordPage()
         {
             InitializeComponent();
         }

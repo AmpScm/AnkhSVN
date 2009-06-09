@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Ankh;
 
 /* 
  * Wizard.cs
@@ -29,9 +30,19 @@ namespace WizardFramework
     /// </summary>
     /// <para>The most common scenario is that
     /// you will subclass this to implement your own wizard.</para>
-    public abstract class Wizard : Component,IWizard
+    public abstract class Wizard : Component, IWizard
     {
         bool _disposed;
+        IAnkhServiceProvider _context;
+
+        protected Wizard(IAnkhServiceProvider context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+
+            _context = context;
+        }
+
         #region IWizard Members
 
         /// <summary>
@@ -44,12 +55,8 @@ namespace WizardFramework
                 if (_disposed)
                     return;
 
-                if(disposing)
+                if (disposing)
                 {
-                    foreach (IWizardPage page in pages_prop)
-                    {
-                        page.Dispose();
-                    }
                 }
             }
             finally
@@ -57,6 +64,15 @@ namespace WizardFramework
                 _disposed = true;
                 base.Dispose(disposing);
             }
+        }
+
+        /// <summary>
+        /// Gets the context.
+        /// </summary>
+        /// <value>The context.</value>
+        public IAnkhServiceProvider Context
+        {
+            get { return _context; }
         }
 
         /// <summary>
@@ -96,7 +112,8 @@ namespace WizardFramework
         {
             foreach (IWizardPage page in pages_prop)
             {
-                if (page.PageName == pageName) return page;
+                if (page.PageName == pageName)
+                    return page;
             }
 
             return null;
@@ -201,6 +218,7 @@ namespace WizardFramework
             if (GetPage(page.PageName) == null) this.pages_prop.Add(page);
 
             page.Wizard = this;
+            page.Context = Context;
         }
 
         /// <see cref="WizardFramework.IWizard.Form" />
