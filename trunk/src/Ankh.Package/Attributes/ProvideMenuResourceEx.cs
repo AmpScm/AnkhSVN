@@ -23,7 +23,7 @@ using System.Globalization;
 namespace Ankh.VSPackage.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public sealed class ProvideMenuResourceExAttribute : RegistrationAttribute
+	internal sealed class ProvideMenuResourceExAttribute : RegistrationAttribute
     {
 
         private string _resourceID;

@@ -22,7 +22,7 @@ using Microsoft.VisualStudio.Shell;
 
 namespace Ankh.VSPackage.Attributes
 {
-    public sealed class ProvideUIVersionAttribute : MsVsShell.RegistrationAttribute
+	internal sealed class ProvideUIVersionAttribute : MsVsShell.RegistrationAttribute
     {
         public ProvideUIVersionAttribute()
         {
