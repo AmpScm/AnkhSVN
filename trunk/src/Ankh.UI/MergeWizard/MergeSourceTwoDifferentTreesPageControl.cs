@@ -22,9 +22,10 @@ using Ankh.Scc;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceTwoDifferentTreesPageControl : BasePageControl
+    partial class MergeSourceTwoDifferentTreesPage : BasePage
     {
-        public MergeSourceTwoDifferentTreesPageControl()
+        [Obsolete("Designer Only")]
+        protected MergeSourceTwoDifferentTreesPage()
         {
             InitializeComponent();
         }
@@ -48,8 +49,8 @@ namespace Ankh.UI.MergeWizard
             // Validate the From Url
             if (!Uri.TryCreate(fromURLTextBox.Text, UriKind.Absolute, out tmpUri))
             {
-                WizardPage.Message = MergeUtils.INVALID_FROM_URL;
-                WizardPage.IsPageComplete = false;
+                Message = MergeUtils.INVALID_FROM_URL;
+                IsPageComplete = false;
                 fromRevisionSelectButton.Enabled = false;
 
                 return;
@@ -60,8 +61,8 @@ namespace Ankh.UI.MergeWizard
             // Conditionally validate the To Url
             if (!useFromURLCheckBox.Checked && !Uri.TryCreate(toURLTextBox.Text, UriKind.Absolute, out tmpUri))
             {
-                WizardPage.Message = MergeUtils.INVALID_TO_URL;
-                WizardPage.IsPageComplete = false;
+                Message = MergeUtils.INVALID_TO_URL;
+                IsPageComplete = false;
                 toRevisionSelectButton.Enabled = false;
 
                 return;
@@ -72,8 +73,8 @@ namespace Ankh.UI.MergeWizard
             // Do not validate the revisions if To and From are using HEAD.
             if (fromHEADRevisionRadioButton.Checked && toHEADRevisionRadioButton.Checked)
             {
-                WizardPage.Message = null;
-                WizardPage.IsPageComplete = true;
+                Message = null;
+                IsPageComplete = true;
 
                 return;
             }
@@ -81,8 +82,8 @@ namespace Ankh.UI.MergeWizard
             // Conditionally validate the From Revision number
             if (fromRevisionRadioButton.Checked && (!Int32.TryParse(fromRevisionTextBox.Text, out tmpInt) || tmpInt < 0))
             {
-                WizardPage.Message = MergeUtils.INVALID_FROM_REVISION;
-                WizardPage.IsPageComplete = false;
+                Message = MergeUtils.INVALID_FROM_REVISION;
+                IsPageComplete = false;
 
                 return;
             }
@@ -90,14 +91,14 @@ namespace Ankh.UI.MergeWizard
             // Conditionally validate the To Revision number
             if (toRevisionRadioButton.Checked && (!Int32.TryParse(toRevisionTextBox.Text, out tmpInt) || tmpInt < 0))
             {
-                WizardPage.Message = MergeUtils.INVALID_TO_REVISION;
-                WizardPage.IsPageComplete = false;
+                Message = MergeUtils.INVALID_TO_REVISION;
+                IsPageComplete = false;
 
                 return;
             }
 
-            WizardPage.Message = null;
-            WizardPage.IsPageComplete = true;
+            Message = null;
+            IsPageComplete = true;
 
             return;
         }
@@ -121,11 +122,11 @@ namespace Ankh.UI.MergeWizard
                 return;
             }
 
-            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(WizardPage.Context, new Uri(target), null)))
+            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(Context, new Uri(target), null)))
             {
                 dialog.LogControl.StrictNodeHistory = true;
 
-                if (dialog.ShowDialog(WizardPage.Context) == DialogResult.OK)
+                if (dialog.ShowDialog(Context) == DialogResult.OK)
                 {
                     IEnumerable<ISvnLogItem> selected = dialog.SelectedItems;
                     long low = -1;
@@ -168,12 +169,12 @@ namespace Ankh.UI.MergeWizard
                 toURLTextBox.Visible = false;
                 toURLTextBox.Text = "";
 
-                if (WizardPage.Message == MergeUtils.INVALID_TO_URL)
+                if (Message == MergeUtils.INVALID_TO_URL)
                 {
-                    WizardPage.Message = null;
+                    Message = null;
                 }
 
-                ((MergeSourceTwoDifferentTreesPage)WizardPage).HasSecondMergeSourceUrl = false;
+                HasSecondMergeSourceUrl = false;
             }
             else
             {
@@ -185,7 +186,7 @@ namespace Ankh.UI.MergeWizard
                 toURLTextBox.Text = fromURLTextBox.Text;
                 toURLTextBox.SelectAll();
 
-                ((MergeSourceTwoDifferentTreesPage)WizardPage).HasSecondMergeSourceUrl = true;
+                HasSecondMergeSourceUrl = true;
             }
         }
 
@@ -196,7 +197,7 @@ namespace Ankh.UI.MergeWizard
 
             TogglePageComplete();
 
-            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = -1;
+            MergeFromRevision = -1;
         }
 
         private void fromRevisionRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -215,7 +216,7 @@ namespace Ankh.UI.MergeWizard
 
             TogglePageComplete();
 
-            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = -1;
+            MergeToRevision = -1;
         }
 
         private void toRevisionRadioButton_CheckedChanged(object sender, EventArgs e)
@@ -233,39 +234,41 @@ namespace Ankh.UI.MergeWizard
             
             long rev;
             if (long.TryParse(fromRevisionTextBox.Text, out rev))
-                ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = rev;
-            else((MergeSourceTwoDifferentTreesPage)WizardPage).MergeFromRevision = -1;
+                MergeFromRevision = rev;
+            else
+                MergeFromRevision = -1;
         }
 
         private void toRevisionTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
-            
+
             long rev;
             if (long.TryParse(toRevisionTextBox.Text, out rev))
-                ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = rev;
-            else ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeToRevision = -1;
+                MergeToRevision = rev;
+            else
+                MergeToRevision = -1;
         }
 
         private void fromURLTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
 
-            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceOne = fromURLTextBox.Text;
+            MergeSourceOne = fromURLTextBox.Text;
         }
 
         private void toURLTextBox_TextChanged(object sender, EventArgs e)
         {
             TogglePageComplete();
 
-            ((MergeSourceTwoDifferentTreesPage)WizardPage).MergeSourceTwo = toURLTextBox.Text;
+            MergeSourceTwo = toURLTextBox.Text;
         }
 
         private void MergeSourceTwoDifferentTreesPageControl_Load(object sender, EventArgs e)
         {
             if (!DesignMode)
             {
-                fromURLTextBox.Text = ((MergeWizard)WizardPage.Wizard).MergeTarget.Status.Uri.ToString();
+                fromURLTextBox.Text = ((MergeWizard)Wizard).MergeTarget.Status.Uri.ToString();
                 fromURLTextBox.SelectAll();
 
                 TogglePageComplete();
@@ -284,8 +287,8 @@ namespace Ankh.UI.MergeWizard
 
         private void fromURLSelectButton_Click(object sender, EventArgs e)
         {
-            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
-                ((MergeWizard)WizardPage.Wizard).MergeTarget,
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(this,
+                ((MergeWizard)Wizard).MergeTarget,
                 fromURLTextBox.Text);
 
             if (uri != null)
@@ -294,8 +297,8 @@ namespace Ankh.UI.MergeWizard
 
         private void toURLSelectButton_Click(object sender, EventArgs e)
         {
-            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(WizardPage,
-                ((MergeWizard)WizardPage.Wizard).MergeTarget,
+            Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(this,
+                ((MergeWizard)Wizard).MergeTarget,
                 toURLTextBox.Text);
 
             if (uri != null)

@@ -25,18 +25,19 @@ using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSummaryPageControl : BasePageControl
+    public partial class MergeSummaryPage : BasePage
     {
-        public MergeSummaryPageControl()
+        [Obsolete()]
+        public MergeSummaryPage()
         {
             InitializeComponent();
         }
 
         private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
         {
-            if (e.CurrentPage == WizardPage)
+            if (e.CurrentPage == this)
             {
-                WizardPage.Message = null;
+                Message = null;
 
                 PopulateUI();
             }
@@ -46,7 +47,7 @@ namespace Ankh.UI.MergeWizard
         {
             if (!DesignMode)
             {
-                MergeWizard mergeWizard = ((MergeWizard)WizardPage.Wizard);
+                MergeWizard mergeWizard = ((MergeWizard)Wizard);
                 MergeWizard.MergeType mergeType = ((MergeTypePage)mergeWizard.GetPage(MergeTypePage.PAGE_NAME)).SelectedMergeType;
                 MergeOptionsPage mergeOptions = (MergeOptionsPage)mergeWizard.GetPage(MergeOptionsPage.PAGE_NAME);
 
@@ -136,12 +137,12 @@ namespace Ankh.UI.MergeWizard
         {
             PopulateUI();
 
-            ((MergeWizard)WizardPage.Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
         }
 
         private void performDryRunCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            ((MergeWizard)WizardPage.Wizard).PerformDryRun = performDryRunCheckBox.Checked;
+            ((MergeWizard)Wizard).PerformDryRun = performDryRunCheckBox.Checked;
         }
         #endregion
     }

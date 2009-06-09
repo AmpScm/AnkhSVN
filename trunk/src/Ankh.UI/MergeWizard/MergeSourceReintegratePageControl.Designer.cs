@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeSourceReintegratePageControl
+    partial class MergeSourceReintegratePage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceReintegratePageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSourceReintegratePage));
             this.SuspendLayout();
             // 
             // MergeSourceReintegratePageControl

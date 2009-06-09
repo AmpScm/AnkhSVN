@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeSummaryPageControl
+    partial class MergeSummaryPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSummaryPageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeSummaryPage));
             this.mergeDetailsGroupBox = new System.Windows.Forms.GroupBox();
             this.revisionsTextBox = new System.Windows.Forms.TextBox();
             this.mergeSource2TextBox = new System.Windows.Forms.TextBox();

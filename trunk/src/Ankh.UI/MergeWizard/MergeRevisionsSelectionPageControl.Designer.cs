@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeRevisionsSelectionPageControl
+    partial class MergeRevisionsSelectionPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,7 +45,7 @@ namespace Ankh.UI.MergeWizard
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeRevisionsSelectionPageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeRevisionsSelectionPage));
             this.logToolControl1 = new Ankh.UI.SvnLog.LogControl(this.components);
             this.SuspendLayout();
             // 

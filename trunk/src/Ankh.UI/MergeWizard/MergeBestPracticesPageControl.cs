@@ -24,9 +24,10 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeBestPracticesPageControl : BasePageControl
+    public partial class MergeBestPracticesPage : BasePage
     {
-        public MergeBestPracticesPageControl()
+        [Obsolete("Designer Only")]
+        public MergeBestPracticesPage()
         {
             InitializeComponent();
         }

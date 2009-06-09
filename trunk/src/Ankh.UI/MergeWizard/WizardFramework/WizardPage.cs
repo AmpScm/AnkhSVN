@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
+using Ankh;
 
 /* 
  * WizardPage.cs
@@ -27,9 +28,22 @@ namespace WizardFramework
     /// <summary>
     /// An abstract implementation of a wizard page.
     /// </summary>
-    public abstract class WizardPage : Component, IWizardPage
+    public abstract class WizardPage : UserControl, IWizardPage
     {
+        private string title_prop = null;
+        private WizardMessage message_prop = null;
+        private string description_prop = null;
+        private bool isPageComplete_prop = false;
+        private IWizardPage previousPage_prop = null;
+        private Image image_prop = null;
+        private IWizard wizard_prop = null;
+        private string name_prop = null;
         bool _disposed;
+
+        [Obsolete("Designer Only")]
+        protected WizardPage()
+        {
+        }
         /// <summary>
         /// Constructor for a named wizard page.
         /// </summary>
@@ -49,7 +63,24 @@ namespace WizardFramework
             name_prop = name;
             image_prop = image;
         }
- 
+
+        IAnkhServiceProvider _context;
+        public virtual IAnkhServiceProvider Context
+        {
+            get { return _context; }
+            set
+            {
+                if (_context != value)
+                {
+                    _context = value;
+                    OnContextChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        protected virtual void OnContextChanged(EventArgs e)
+        {
+        } 
         #region IWizardPage Members
 
         /// <see cref="WizardFramework.IWizardPage.CanFlipToNextPage" />
@@ -87,11 +118,6 @@ namespace WizardFramework
 
                 if(disposing)
                 {
-                    if (Control != null && !Control.IsDisposed)
-                    {
-                        Control.Dispose();
-                    }
-
                     if (image_prop != null)
                     {
                         image_prop.Dispose();
@@ -186,7 +212,10 @@ namespace WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizardPage.Control" />
-        public abstract UserControl Control { get; }
+        public virtual UserControl Control
+        {
+            get { return this; }
+        }
 
         /// <see cref="WizardFramework.IWizardPage.Image" />
         /// <para>If the page hasn't explicitly created an image
@@ -213,13 +242,6 @@ namespace WizardFramework
             {
                 title_prop = value;
             }
-        }
-
-        /// <see cref="WizardFramework.IWizardPage.Visible" />
-        public bool Visible
-        {
-            set { Control.Visible = Control.Enabled = value; }
-            get { return Control.Visible; }
         }
 
         /// <summary>
@@ -261,15 +283,7 @@ namespace WizardFramework
                 return (Container != null && this == Container.CurrentPage);
             }
         }
-
-        private string title_prop = null;
-        private WizardMessage message_prop = null;
-        private string description_prop = null;
-        private bool isPageComplete_prop = false;
-        private IWizardPage previousPage_prop = null;
-        private Image image_prop = null;
-        private IWizard wizard_prop = null;
-        private string name_prop = null;
+        
         #endregion
     }
 }

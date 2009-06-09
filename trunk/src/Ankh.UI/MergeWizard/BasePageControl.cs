@@ -21,39 +21,17 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class BasePageControl : UserControl
+    public partial class BasePage : WizardPage
     {
-        public BasePageControl()
+        [Obsolete("Designer Only")]
+        protected BasePage()
         {
             InitializeComponent();
         }
 
-        IAnkhServiceProvider _context;
-        internal IAnkhServiceProvider Context
-        {
-            get { return _context; }
-            set 
-            {
-                if (_context != value)
-                {
-                    _context = value;
-                    OnContextChanged(EventArgs.Empty);
-                }
-            }
-        }
-
-        protected virtual void OnContextChanged(EventArgs e)
-        {
-        }
-
-        BasePage _page;
-        internal BasePage WizardPage
-        {
-            get { return _page; }
-            set { _page = value; }
-        }
     }
 }

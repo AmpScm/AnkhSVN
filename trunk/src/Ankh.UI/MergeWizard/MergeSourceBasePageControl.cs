@@ -33,7 +33,7 @@ using Ankh.Scc;
 namespace Ankh.UI.MergeWizard
 {
     
-    public partial class MergeSourceBasePageControl: BasePageControl
+    public partial class MergeSourceBasePage : BasePage
         
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(MergeStrings.InvalidFromUrl,
@@ -45,13 +45,10 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeSourceBasePageControl()
+        [Obsolete("Designer Only")]
+        protected MergeSourceBasePage()
         {
-            InitializeComponent();
-            _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
-            
-            bindingSource = new BindingSource(suggestedSources, "");
-            mergeFromComboBox.DataSource = bindingSource;
+            InitializeComponent();            
         }
 
         /// <summary>
@@ -81,7 +78,7 @@ namespace Ankh.UI.MergeWizard
                     {
                         try
                         {
-                            mergeSource = new SvnOrigin(WizardPage.Context, mergeFromUri, null);
+                            mergeSource = new SvnOrigin(Context, mergeFromUri, null);
                         }
                         catch
                         {
@@ -90,20 +87,6 @@ namespace Ankh.UI.MergeWizard
                     }
                 }
                 return mergeSource;
-            }
-        }
-
-        MergeSourceBasePage _wizardPage;
-        /// <summary>
-        /// Gets/Sets the wizard page associated with this UserControl.
-        /// </summary>
-        internal new MergeSourceBasePage WizardPage
-        {
-            get { return _wizardPage ?? (_wizardPage = (MergeSourceBasePage)base.WizardPage); }
-            set
-            { 
-                _wizardPage = value;
-                base.WizardPage = value;
             }
         }
 
@@ -132,7 +115,7 @@ namespace Ankh.UI.MergeWizard
                 BeginInvoke(c, new object[] { mergeSources });
                 return;
             }
-            MergeWizard wizard = (MergeWizard)WizardPage.Wizard;
+            MergeWizard wizard = (MergeWizard)Wizard;
 
             bool containsAtLeastOne = false;
 
@@ -146,13 +129,13 @@ namespace Ankh.UI.MergeWizard
             {
                 UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
             }
-            else if (WizardPage.MergeType == MergeWizard.MergeType.ManuallyRemove)
+            else if (MergeType == MergeWizard.MergeType.ManuallyRemove)
             {
-                WizardPage.Message = new WizardMessage(MergeStrings.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
+                Message = new WizardMessage(MergeStrings.NoRevisionsToUnblock, WizardMessage.MessageType.Error);
                 mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             }
 
-            ((WizardDialog)WizardPage.Form).EnablePageAndButtons(true);
+            ((WizardDialog)Form).EnablePageAndButtons(true);
         }
 
         /// <summary>
@@ -160,12 +143,12 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         ICollection<Uri> RetrieveMergeSources()
         {
-            return WizardPage.GetMergeSources(MergeTarget);
+            return GetMergeSources(MergeTarget);
         }
 
         SvnItem MergeTarget
         {
-            get { return ((MergeWizard)WizardPage.Wizard).MergeTarget; }
+            get { return ((MergeWizard)Wizard).MergeTarget; }
         }
 
         void MergesRetrieved(IAsyncResult result)
@@ -184,7 +167,7 @@ namespace Ankh.UI.MergeWizard
         void selectButton_Click(object sender, EventArgs e)
         {
             Uri uri = UIUtils.DisplayBrowseDialogAndGetResult(
-                WizardPage,
+                this,
                 MergeTarget,
                 MergeTarget.Status.Uri);
 

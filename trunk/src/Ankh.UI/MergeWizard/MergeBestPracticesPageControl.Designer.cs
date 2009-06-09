@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class MergeBestPracticesPageControl
+    partial class MergeBestPracticesPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace Ankh.UI.MergeWizard
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeBestPracticesPageControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MergeBestPracticesPage));
             this.noUncommitedModificationsLabel = new System.Windows.Forms.Label();
             this.noUncommittedModificationsDescriptionLabel = new System.Windows.Forms.Label();
             this.noUncommitedModificationsPictureBox = new System.Windows.Forms.PictureBox();

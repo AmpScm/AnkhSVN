@@ -1,6 +1,6 @@
 // $Id$
 //
-// Copyright 2008-2009 The AnkhSVN Project
+// Copyright 2008 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,20 +16,24 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Text;
-using System.Windows.Forms;
-using WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSourceManuallyRemovePage : MergeSourceBasePage
+    /// <summary>
+    /// Wizard page that will display the current merge options.
+    /// </summary>
+    partial class MergeSummaryPage
     {
-        [Obsolete()]
-        public MergeSourceManuallyRemovePage()
+        public const string PAGE_NAME = "Merge Summary Page";
+
+        public MergeSummaryPage(MergeWizard wizard)
+            : base(wizard, PAGE_NAME)
         {
+            IsPageComplete = true;
+
+            Title = MergeStrings.MergeSummaryPageHeaderTitle;
+            this.Description = MergeStrings.MergeSummaryPageHeaderMessage;
             InitializeComponent();
         }
     }
