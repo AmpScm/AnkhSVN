@@ -153,7 +153,7 @@ namespace Ankh.Scc.ProjectMap
             set { _hierarchy = value; }
         }
 
-        uint _itemId;
+        uint _itemId = VSConstants.VSITEMID_NIL;
         internal uint ItemId
         {
             get { return _itemId; }
@@ -433,39 +433,87 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return false; // Not interested
 
-            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
-
             int dirty;
+
+            // Implemented by most editors
+            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
             if (pdd != null && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) && (dirty != 0))
                 return true;
 
-            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+            // Implemented by the common project types (Microsoft Project Base)
+            IPersistFileFormat pff = RawDocument as IPersistFileFormat;
+            if (pff != null && ErrorHandler.Succeeded(pff.IsDirty(out dirty)) && (dirty != 0))
+                return true;
 
-            Guid gV = Guid.Empty;
-            IVsUIHierarchy hier;
-            uint[] openId = new uint[1];
-            IVsWindowFrame wf;
-            int open;
-            if (ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV, (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView,
-                out hier, openId, out wf, out open)) && (open != 0) && wf != null)
+            // Project based documents will probably handle this
+            IVsPersistHierarchyItem phier = Hierarchy as IVsPersistHierarchyItem;
+            if (phier != null)
             {
-                if (wf != null)
+                IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
+                try
                 {
-                    object ok;
-                    if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                    try
                     {
-                        if (ok == null)
-                        { }
-                        else if (ok is bool) // Implemented by VS as bool
+                        if (ErrorHandler.Succeeded(phier.IsItemDirty(ItemId, docHandle, out dirty)))
                         {
-                            if ((bool)ok)
-                                return true;
+                            return _isDirty = (dirty != 0);
                         }
+                    }
+                    catch
+                    { // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
+                    } // which we tried before */ 
+                }
+                finally
+                {
+                    Marshal.Release(docHandle);
+                }
+            }
+
+            // Literally look if the frame window has a modified *
+            IVsWindowFrame wf;
+            if (TryGetOpenDocumentFrame(out wf))
+            {
+                object ok;
+                if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
+                {
+                    if (ok == null)
+                    { }
+                    else if (ok is bool) // Implemented by VS as bool
+                    {
+                        if ((bool)ok)
+                            return true;
                     }
                 }
             }
 
             return fallback && _isDirty;
+        }
+
+        private bool TryGetOpenDocumentFrame(out IVsWindowFrame wf)
+        {
+            Guid gV = Guid.Empty;
+            IVsUIHierarchy hier;
+            uint[] openId = new uint[1];
+
+            int open;
+
+            IVsUIShellOpenDocument so = GetService<IVsUIShellOpenDocument>(typeof(SVsUIShellOpenDocument));
+            wf = null;
+
+            if (so == null)
+                return false;
+
+            try
+            {
+                return ErrorHandler.Succeeded(so.IsDocumentOpen(Hierarchy as IVsUIHierarchy, ItemId, this.Name, ref gV,
+                    (uint)__VSIDOFLAGS.IDO_IgnoreLogicalView, out hier, openId, out wf, out open))
+                    && (open != 0)
+                    && (wf != null);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
