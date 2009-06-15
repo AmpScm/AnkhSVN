@@ -433,14 +433,44 @@ namespace Ankh.Scc.ProjectMap
             if (!_isFileDocument)
                 return false; // Not interested
 
-            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
-
             int dirty;
+
+            // Implemented by most editors
+            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
             if (pdd != null && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) && (dirty != 0))
                 return true;
 
-            IVsWindowFrame wf;
+            // Implemented by the common project types (Microsoft Project Base)
+            IPersistFileFormat pff = RawDocument as IPersistFileFormat;
+            if (pff != null && ErrorHandler.Succeeded(pff.IsDirty(out dirty)) && (dirty != 0))
+                return true;
 
+            // Project based documents will probably handle this
+            IVsPersistHierarchyItem phier = Hierarchy as IVsPersistHierarchyItem;
+            if (phier != null)
+            {
+                IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
+                try
+                {
+                    try
+                    {
+                        if (ErrorHandler.Succeeded(phier.IsItemDirty(ItemId, docHandle, out dirty)))
+                        {
+                            return _isDirty = (dirty != 0);
+                        }
+                    }
+                    catch
+                    { // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
+                    } // which we tried before */ 
+                }
+                finally
+                {
+                    Marshal.Release(docHandle);
+                }
+            }
+
+            // Literally look if the frame window has a modified *
+            IVsWindowFrame wf;
             if (TryGetOpenDocumentFrame(out wf))
             {
                 object ok;
