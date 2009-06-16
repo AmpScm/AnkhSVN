@@ -435,33 +435,46 @@ namespace Ankh.Scc.ProjectMap
 
             int dirty;
 
-            // Implemented by most editors
-            IVsPersistDocData pdd = RawDocument as IVsPersistDocData;
-            if (pdd != null && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)) && (dirty != 0))
-                return true;
+            IVsPersistDocData pdd;
+            IPersistFileFormat pff;
+            IVsPersistHierarchyItem phi;
+            IVsWindowFrame wf;
+
+            // Implemented by most editors             
+            if (null != (pdd = RawDocument as IVsPersistDocData)
+                && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
+            {
+                if (dirty != 0)
+                    return true;
+            }
 
             // Implemented by the common project types (Microsoft Project Base)
-            IPersistFileFormat pff = RawDocument as IPersistFileFormat;
-            if (pff != null && ErrorHandler.Succeeded(pff.IsDirty(out dirty)) && (dirty != 0))
-                return true;
+            else if (null != (pff = RawDocument as IPersistFileFormat)
+                && ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
+            {
+                if (dirty != 0)
+                    return true;
+            }
 
-            // Project based documents will probably handle this
-            IVsPersistHierarchyItem phier = Hierarchy as IVsPersistHierarchyItem;
-            if (phier != null)
+            // Project based documents will probably handle this            
+            else if (null != (phi = Hierarchy as IVsPersistHierarchyItem))
             {
                 IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
                 try
                 {
                     try
                     {
-                        if (ErrorHandler.Succeeded(phier.IsItemDirty(ItemId, docHandle, out dirty)))
+                        if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
                         {
-                            return _isDirty = (dirty != 0);
+                            if (dirty != 0)
+                                return true;
                         }
                     }
                     catch
-                    { // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
-                    } // which we tried before */ 
+                    {
+                        // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
+                        // which we tried before getting here*/ 
+                    }
                 }
                 finally
                 {
@@ -469,9 +482,8 @@ namespace Ankh.Scc.ProjectMap
                 }
             }
 
-            // Literally look if the frame window has a modified *
-            IVsWindowFrame wf;
-            if (TryGetOpenDocumentFrame(out wf))
+            // Literally look if the frame window has a modified *            
+            else if (TryGetOpenDocumentFrame(out wf))
             {
                 object ok;
                 if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
