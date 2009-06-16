@@ -338,6 +338,7 @@
     <Compile Include="SvnLog\LogDataSource.Designer.cs">
       <DependentUpon>LogDataSource.cs</DependentUpon>
     </Compile>
+    <Compile Include="SvnLog\LogRequest.cs" />
     <Compile Include="SvnLog\LogRevisionItem.cs" />
     <Compile Include="SvnLog\LogViewerDialog.cs">
       <SubType>Form</SubType>

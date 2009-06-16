@@ -37,6 +37,7 @@ namespace Ankh.UI.SvnLog
         readonly Action<SvnLogArgs> _logAction;
         readonly object _instanceLock = new object();
         readonly Queue<LogRevisionItem> _logItems = new Queue<LogRevisionItem>();
+        LogRequest _currentRequest;
         LogMode _mode;
         BusyOverlay _busyOverlay;
 
@@ -75,13 +76,11 @@ namespace Ankh.UI.SvnLog
             logView.SelectionPublishServiceProvider = Context;
         }
 
-        IAsyncResult _logRunner;
         public void Start(LogMode mode)
         {
             lock (_instanceLock)
             {
                 _mode = mode;
-                _cancel = false;
                 SvnLogArgs args = new SvnLogArgs();
                 args.Start = LogSource.Start;
                 args.End = LogSource.End;
@@ -97,26 +96,23 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        public void Stop()
-        {
-        }
-
         void StartFetch(SvnLogArgs args)
         {
             fetchCount += args.Limit;
-            ShowBusyIndicator();
-            _logRunner = _logAction.BeginInvoke(args, null, null);
+            _logAction.BeginInvoke(args, null, null);
         }
 
         public void Reset()
         {
             lock (_instanceLock)
             {
-                if (_running)
+                LogRequest rq = _currentRequest;
+                if (rq != null)
                 {
-                    _cancel = true;
-                    _logAction.EndInvoke(_logRunner);
+                    _currentRequest = null;
+                    rq.Cancel = true;
                 }
+                _running = false;
             }
 
             _logItems.Clear();
@@ -128,10 +124,10 @@ namespace Ankh.UI.SvnLog
 
         int fetchCount;
         bool _running;
-        bool _cancel;
         void DoFetch(SvnLogArgs args)
         {
-            _running = true;
+            LogRequest rq = _currentRequest = null;
+            ShowBusyIndicator();
             try
             {
                 using (SvnClient client = _context.GetService<ISvnClientPool>().GetClient())
@@ -159,9 +155,9 @@ namespace Ankh.UI.SvnLog
                             la.Limit = args.Limit;
                             la.StrictNodeHistory = args.StrictNodeHistory;
                             la.RetrieveMergedRevisions = args.RetrieveMergedRevisions;
-                            la.Cancel += OnLogCancel;
 
-                            client.Log(uris, la, ReceiveItem);
+                            _currentRequest = rq = new LogRequest(la, OnReceivedItem);
+                            client.Log(uris, la, null);
                             break;
                         case LogMode.MergesEligible:
                             SvnMergesEligibleArgs meArgs = new SvnMergesEligibleArgs();
@@ -169,8 +165,9 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             meArgs.RetrieveChangedPaths = true;
-                            meArgs.Cancel += OnLogCancel;
-                            client.ListMergesEligible(LogSource.MergeTarget.Target, single.Target, meArgs, ReceiveItem);
+
+                            _currentRequest = rq = new LogRequest(meArgs, OnReceivedItem);
+                            client.ListMergesEligible(LogSource.MergeTarget.Target, single.Target, meArgs, null);
                             break;
                         case LogMode.MergesMerged:
                             SvnMergesMergedArgs mmArgs = new SvnMergesMergedArgs();
@@ -178,8 +175,8 @@ namespace Ankh.UI.SvnLog
                                 SvnErrorCode.SVN_ERR_CLIENT_UNRELATED_RESOURCES, // File not there, prevent exception
                                 SvnErrorCode.SVN_ERR_UNSUPPORTED_FEATURE); // Merge info from 1.4 server
                             mmArgs.RetrieveChangedPaths = true;
-                            mmArgs.Cancel += OnLogCancel;
-                            client.ListMergesMerged(LogSource.MergeTarget.Target, single.Target, mmArgs, ReceiveItem);
+                            _currentRequest = rq = new LogRequest(mmArgs, OnReceivedItem);
+                            client.ListMergesMerged(LogSource.MergeTarget.Target, single.Target, mmArgs, null);
                             break;
                     }
                 }
@@ -187,39 +184,20 @@ namespace Ankh.UI.SvnLog
             finally
             {
                 // Don't lock here, we can be called from within a lock
-                _running = false;
-
-                OnBatchDone();
+                if (rq == _currentRequest)
+                {
+                    _running = false;
+                    OnBatchDone(rq);
+                }
                 HideBusyIndicator();
             }
-        }
+        }       
 
-        void OnLogCancel(object sender, SvnCancelEventArgs e)
+        void OnReceivedItem(object sender, SvnLoggingEventArgs e)
         {
-            if (_cancel)
-                e.Cancel = true;
-        }
+            if (sender != _currentRequest)
+                return;
 
-        void ReceiveItem(object sender, SvnLogEventArgs e)
-        {
-            if (!_cancel)
-                OnReceivedItem(e);
-        }
-
-        void ReceiveItem(object sender, SvnMergesMergedEventArgs e)
-        {
-            if (!_cancel)
-                OnReceivedItem(e);
-        }
-
-        void ReceiveItem(object sender, SvnMergesEligibleEventArgs e)
-        {
-            if (!_cancel)
-                OnReceivedItem(e);
-        }
-
-        void OnReceivedItem(SvnLoggingEventArgs e)
-        {
             e.Detach();
 
             LogRevisionItem lri = new LogRevisionItem(logView, _context, e);
@@ -259,11 +237,11 @@ namespace Ankh.UI.SvnLog
             }
         }
 
-        void OnBatchDone()
+        void OnBatchDone(LogRequest rq)
         {
             if (InvokeRequired)
             {
-                BeginInvoke(new AnkhAction(OnBatchDone));
+                BeginInvoke(new Action<LogRequest>(OnBatchDone), rq);
                 return;
             }
 
@@ -271,7 +249,7 @@ namespace Ankh.UI.SvnLog
                 FetchAll();
 
             if (BatchDone != null)
-                BatchDone(this, new BatchFinishedEventArgs(logView.Items.Count, _logItems.Count));
+                BatchDone(this, new BatchFinishedEventArgs(rq, logView.Items.Count, _logItems.Count));
 
             ExtendList();
         }
@@ -488,8 +466,10 @@ namespace Ankh.UI.SvnLog
     {
         readonly int _batchCount;
         readonly int _totalCount;
-        public BatchFinishedEventArgs(int totalCount, int batchCount)
+        readonly LogRequest _rq;
+        internal BatchFinishedEventArgs(LogRequest rq, int totalCount, int batchCount)
         {
+            _rq = rq;
             _totalCount = totalCount;
             _batchCount = batchCount;
         }
@@ -502,6 +482,11 @@ namespace Ankh.UI.SvnLog
         public int BatchCount
         {
             get { return _batchCount; }
+        }
+
+        internal LogRequest Request
+        {
+            get { return _rq; }
         }
     }
 
