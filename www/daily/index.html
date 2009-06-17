@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.6916</title>
+          AnkhSVN-Daily Update - 2.1.6920</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,25 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2188/AnkhSvn-Daily-2.1.6916.116.msi">AnkhSVN 2.1.6916</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2190/AnkhSvn-Daily-2.1.6920.117.msi">AnkhSVN 2.1.6920</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6916">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=6920">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-06-16</td></tr>
+<tr><td> </td><td class="r"><a id="6920" href="http://ankhsvn.net/rev/?r=6920">
+            [r6920]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> Ankh.UI.csproj, SvnLog/LogRevisionControl.cs, SvnLog/LogRequest.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Wrap logging in a LogRequest class to allow starting a new log request
+directly instead of waiting on the previous request to cancel.</td></tr>
 <tr class="d"><td colspan="4">2009-06-15</td></tr>
 <tr><td> </td><td class="r"><a id="6913" href="http://ankhsvn.net/rev/?r=6913">
             [r6913]
@@ -142,19 +147,6 @@ and menu texts to hopefully fix the PC toolbar in VS2010.</td></tr>
             [r6792]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Return top position of editor as Nullable&lt;Point&gt; to allow detecting when its
 value is invalid.</td></tr>
-<tr class="d"><td colspan="4">2009-05-19</td></tr>
-<tr><td> </td><td class="r"><a id="6786" href="http://ankhsvn.net/rev/?r=6786">
-            [r6786]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/LanguageServices:</strong> AnkhLanguageService.cs, LogMessageLanguageService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make sure the Managed Package Framework doesn't call Marshal.Release() on objects
-managed by the Language Service Source class</td></tr>
-<tr><td> </td><td class="r"><a id="6784" href="http://ankhsvn.net/rev/?r=6784">
-            [r6784]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/OutputPane:</strong> OutputPaneManager.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create the AnkhSVN output pane on first use instead of on startup</td></tr>
-<tr class="d"><td colspan="4">2009-05-18</td></tr>
-<tr><td> </td><td class="r"><a id="6779" href="http://ankhsvn.net/rev/?r=6779">
-            [r6779]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/LanguageServices:</strong> AnkhLanguageService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Avoid 2 exceptions on closing a language service from a managed language
-service host (like that in VS 2010 beta 1)</td></tr>
 
 </table>
 <!--/Recent changes-->
