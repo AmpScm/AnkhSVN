@@ -50,10 +50,8 @@ namespace Ankh.Scc
         bool _tryRegisteredBefore;
         internal void TryRegisterSccProvider()
         {
-            if (_tryRegisteredBefore || IsActive)
-            {
+            if (_tryRegisteredBefore || IsActive || SelectionMonitor == null)
                 return;
-            }
 
             int active;
             if (!ErrorHandler.Succeeded(SelectionMonitor.IsCmdUIContextActive(SccContextCookie, out active))
