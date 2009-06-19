@@ -72,7 +72,7 @@ namespace Ankh.UI.MergeWizard
             this.WindowTitle = MergeStrings.MergeWizardTitle;
 
             mergeTypePage = new MergeTypePage(this);
-            /*bestPracticesPage = new MergeBestPracticesPage(this);
+            bestPracticesPage = new MergeBestPracticesPage(this);
             mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage(this);
             mergeSourceReintegratePage = new MergeSourceReintegratePage(this);
             mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage(this);
@@ -80,7 +80,7 @@ namespace Ankh.UI.MergeWizard
             mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage(this);
             mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage(this);
             mergeOptionsPage = new MergeOptionsPage(this);
-            mergeSummaryPage = new MergeSummaryPage(this);*/
+            mergeSummaryPage = new MergeSummaryPage(this);
         }
 
         public override void AddPages()
