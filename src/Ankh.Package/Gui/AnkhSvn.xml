@@ -34,12 +34,12 @@
       </Group>
     </MenuRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_INCLUDEEXCLUDE">
-      <Button id="Cmd_ProjectItemGroup" name="SvnGroupItem" priority="0xE000"
+      <!--      <Button id="Cmd_ProjectItemGroup" name="SvnGroupItem" priority="0xE000"
               text="&amp;Group Files in Project" defaultInvisible="true"
               />
       <Button id="Cmd_ProjectItemUngroup" name="SvnUngroupItem" priority="0xE001"
               text="&amp;Ungroup Files" defaultInvisible="true"
-              />
+              />-->
     </GroupRef>
     <MenuRef id="guidSHLMainMenu:IDM_VS_MENU_FILE">
       <!-- Visual Studio file menu -->

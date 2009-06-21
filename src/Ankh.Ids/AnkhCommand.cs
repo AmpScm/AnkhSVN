@@ -285,7 +285,5 @@ namespace Ankh
         MoveToIgnoreChangeList,
         RemoveFromChangeList,
 
-        ProjectItemGroup,
-        ProjectItemUngroup,
     }
 }
