@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{906E3F01-CD79-4F80-BCA7-1105224328C4}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -92,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.VS.snk" />
-    <Compile Include="Commands\GroupItems.cs" />
     <Compile Include="Dialogs\VSDocumentHostService.cs" />
     <Compile Include="Dialogs\VSDocumentInstance.cs" />
     <Compile Include="Dialogs\VSCommandInstaller.cs" />
@@ -142,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SolutionExplorer\UpDnListView.png" />
     <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
