@@ -69,7 +69,7 @@
     </Directory>
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
-    <CustomActionRef Id="VS90Setup"/>
+    <CustomActionRef Id="VS90SetupNoVSTemplates"/>
     <CustomActionRef Id="VS100Setup"/>
     <UI>
       <InstallUISequence>

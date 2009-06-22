@@ -443,6 +443,15 @@
     </Fragment>
 
     <Fragment>
+        <CustomAction Id="VS90SetupNoVSTemplates" Property="VS90DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+        <PropertyRef Id="VS90DEVENV" />
+
+        <InstallExecuteSequence>
+            <Custom Action="VS90SetupNoVSTemplates" Before="InstallFinalize" Overridable="yes">VS90DEVENV</Custom>
+        </InstallExecuteSequence>
+    </Fragment>
+
+    <Fragment>
         <CustomAction Id="VS90InstallVSTemplates" Property="VS90DEVENV" ExeCommand="/InstallVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
         <PropertyRef Id="VS90DEVENV" />
 
