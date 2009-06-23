@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <page visibility="2">
   <component_list>
-    <component visibility="2" type="Html" order="1">
+    <component visibility="1" type="Html" order="1">
       <title localize="false">Ankh-2.1.6941</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
