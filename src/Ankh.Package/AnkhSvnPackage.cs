@@ -30,6 +30,7 @@ using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using Ankh.Diff;
+using System.Windows.Forms;
 
 namespace Ankh.VSPackage
 {
@@ -69,8 +70,8 @@ namespace Ankh.VSPackage
 
     [CLSCompliant(false)]
     [ProvideSourceControlProvider(AnkhId.SccProviderTitle, "#100")]
-    [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName="AnkhSVN SubversionScc")]    
-	[ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible=false, Name=AnkhId.PlkProduct, ClearWithSolution=false)]
+    [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName = AnkhId.SubversionSccName)]
+    [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
     sealed partial class AnkhSvnPackage : Package, IAnkhPackage
     {
         readonly AnkhRuntime _runtime;
@@ -96,15 +97,19 @@ namespace Ankh.VSPackage
         /// </summary>
         protected override void Initialize()
         {
-            base.Initialize();                        
+            base.Initialize();
 
             if (InCommandLineMode)
-            {
-                Trace.WriteLine("Ankh.Package: Skipping package initialization. (VS Running in commandline mode)");
                 return; // Do nothing; speed up devenv /setup by not loading all our modules!
-            }
 
-            Trace.WriteLine("AnkhSVN: Loading package");
+            try
+            {
+                Trace.WriteLine("AnkhSVN: Loading package");
+            }
+            catch
+            {
+                new AnkhMessageBox(this).Show(Resources.DotNetTracingFails);
+            }
 
             InitializeRuntime(); // Moved to function of their own to speed up devenv /setup
             RegisterAsOleComponent();
@@ -114,7 +119,7 @@ namespace Ankh.VSPackage
         {
             IServiceContainer container = GetService<IServiceContainer>();
             container.AddService(typeof(IAnkhPackage), this, true);
-            
+
             _runtime.AddModule(new AnkhModule(_runtime));
             _runtime.AddModule(new AnkhSccModule(_runtime));
             _runtime.AddModule(new AnkhVSModule(_runtime));
@@ -146,7 +151,7 @@ namespace Ankh.VSPackage
                 Guid gAnkhLoaded = new Guid(started ? AnkhId.AnkhRuntimeStarted : AnkhId.AnkhServicesAvailable);
 
                 uint cky;
-                if(ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))
+                if (ErrorHandler.Succeeded(ms.GetCmdUIContextCookie(ref gAnkhLoaded, out cky)))
                 {
                     ms.SetCmdUIContext(cky, 1);
                 }

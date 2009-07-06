@@ -103,10 +103,7 @@ namespace Ankh.Trigger
             base.Initialize();
 
             if (InCommandLineMode)
-            {
-                Trace.WriteLine("Ankh.Trigger: Skipping package initialization. (VS Running in commandline mode)");
-                return;
-            }
+                return; // Do nothing; speed up devenv /setup by not loading all our modules!
 
             IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
 
