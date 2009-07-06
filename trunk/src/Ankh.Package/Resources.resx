@@ -143,4 +143,7 @@
   <data name="AddToSubversionCommandName" xml:space="preserve">
     <value>Add to Sub&amp;version</value>
   </data>
+  <data name="DotNetTracingFails" xml:space="preserve">
+    <value>The .Net Trace handling fails. Please check your .Net machine and enterprise configuration</value>
+  </data>
 </root>
