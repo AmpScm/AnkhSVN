@@ -342,6 +342,15 @@ namespace Ankh.Commands
                 ua.Revision = _rev;
                 ua.AllowObstructions = _allowUnversionedObstructions;
                 ua.IgnoreExternals = !_updateExternals;
+                HybridCollection<string> handledExternals = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                ua.Notify += delegate(object ss, SvnNotifyEventArgs ee)
+                {
+                    if (ee.Action == SvnNotifyAction.UpdateExternal)
+                    {
+                        if (!handledExternals.Contains(ee.FullPath))
+                            handledExternals.Add(ee.FullPath);
+                    }
+                };
                 e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
                 _result = null;
 
@@ -349,10 +358,13 @@ namespace Ankh.Commands
                 {
                     // Currently Subversion runs update per item passed and in
                     // Subversion 1.6 passing each item separately is actually 
-                    // a tiny but faster than passing them all at once. 
+                    // a tiny bit faster than passing them all at once. 
                     // (sleep_for_timestamp fails its fast route)
                     foreach (string path in group)
                     {
+                        if (handledExternals.Contains(path))
+                            continue;
+
                         SvnUpdateResult result;
                         e.Client.Update(path, ua, out result);
 
