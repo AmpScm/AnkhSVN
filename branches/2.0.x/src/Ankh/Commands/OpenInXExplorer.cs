@@ -14,9 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 
 namespace Ankh.Commands
@@ -30,15 +27,11 @@ namespace Ankh.Commands
             SvnItem parent = null;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                SvnItem p;
-                if (item.IsDirectory)
-                    p = item;
-                else
-                    p = item.Parent;
+                SvnItem p = item.IsDirectory ? item : item.Parent;
 
                 if (parent == null)
                     parent = p;
-                else if (parent != null && parent != p)
+                else if (parent != p)
                 {
                     parent = null;
                     break;
@@ -59,15 +52,11 @@ namespace Ankh.Commands
             SvnItem parent = null;
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
             {
-                SvnItem p;
-                if (item.IsDirectory)
-                    p = item;
-                else
-                    p = item.Parent;
+                SvnItem p = item.IsDirectory ? item : item.Parent;
 
                 if (parent == null)
                     parent = p;
-                else if (parent != null && parent != p)
+                else if (parent != p)
                 {
                     parent = null;
                     break;

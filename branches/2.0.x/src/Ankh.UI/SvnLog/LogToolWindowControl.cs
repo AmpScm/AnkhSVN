@@ -30,7 +30,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    public partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
+    public sealed partial class LogToolWindowControl : AnkhToolWindowControl, ILogControl
     {
         string _originalText;
         IList<SvnOrigin> _origins;

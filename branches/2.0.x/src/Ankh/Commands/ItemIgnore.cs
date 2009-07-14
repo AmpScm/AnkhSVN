@@ -91,7 +91,7 @@ namespace Ankh.Commands
                         e.Text = string.Format(CommandStrings.IgnoreFileType, foundOne.Extension);
                         break;
                     case AnkhCommand.ItemIgnoreFolder:
-                        SvnItem pp = null;
+                        SvnItem pp;
                         SvnItem p = foundOne.Parent;
 
                         while (p != null && (pp = p.Parent) != null && !pp.IsVersioned)
@@ -185,7 +185,7 @@ namespace Ankh.Commands
             }
         }
 
-        private void AddIgnores(IAnkhServiceProvider context, string path, List<string> ignores)
+        private static void AddIgnores(IAnkhServiceProvider context, string path, List<string> ignores)
         {
             try
             {
@@ -245,11 +245,11 @@ namespace Ankh.Commands
             }
         }
 
-        private void AddIgnore(Dictionary<string, List<string>> add, SvnItem item, string name)
+        private static void AddIgnore(Dictionary<string, List<string>> add, SvnItem item, string name)
         {
             if (item == null)
                 return;
-            else if (!item.IsVersioned)
+            if (!item.IsVersioned)
                 return;
             List<string> toAdd;
 

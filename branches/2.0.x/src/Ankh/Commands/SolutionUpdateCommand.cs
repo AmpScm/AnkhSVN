@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Selection;
@@ -35,7 +34,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.ProjectUpdateSpecific)]
     class SolutionUpdateCommand : CommandBase
     {
-        bool IsSolutionCommand(AnkhCommand command)
+        static bool IsSolutionCommand(AnkhCommand command)
         {
             switch (command)
             {
@@ -48,7 +47,7 @@ namespace Ankh.Commands
             }
         }
 
-        bool IsHeadCommand(AnkhCommand command)
+        static bool IsHeadCommand(AnkhCommand command)
         {
             switch (command)
             {
@@ -61,7 +60,7 @@ namespace Ankh.Commands
             }
         }
 
-        IEnumerable<SvnProject> GetSelectedProjects(BaseCommandEventArgs e)
+        static IEnumerable<SvnProject> GetSelectedProjects(BaseCommandEventArgs e)
         {
             foreach (SvnProject p in e.Selection.GetSelectedProjects(false))
             {
@@ -230,8 +229,6 @@ namespace Ankh.Commands
                 }
             }
 
-            IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
-
             Dictionary<string, SvnItem> itemsToUpdate = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             Dictionary<string, List<string>> groups = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
 
@@ -291,7 +288,7 @@ namespace Ankh.Commands
             }
         }
 
-        private IEnumerable<SvnItem> GetAllUpdateRoots(CommandEventArgs e)
+        private static IEnumerable<SvnItem> GetAllUpdateRoots(CommandEventArgs e)
         {
             // Duplicate handling is handled above this method!
             IAnkhProjectLayoutService pls = e.GetService<IAnkhProjectLayoutService>();
@@ -310,19 +307,19 @@ namespace Ankh.Commands
                 }
         }
 
-        class UpdateRunner
+        sealed class UpdateRunner
         {
-            SvnRevision _rev;
-            IEnumerable<List<string>> _groups;
+            readonly SvnRevision _rev;
+            readonly IEnumerable<List<string>> _groups;
             SvnUpdateResult _result;
-            bool _updateExternals;
-            bool _allowUnversionedObstructions;
+            readonly bool _updateExternals;
+            readonly bool _allowUnversionedObstructions;
 
             public UpdateRunner(IEnumerable<List<string>> groups, SvnRevision rev, bool updateExternals, bool allowUnversionedObstructions)
             {
                 if (groups == null)
                     throw new ArgumentNullException("groups");
-                else if (rev == null)
+                if (rev == null)
                     throw new ArgumentNullException("rev");
 
                 _groups = groups;
@@ -344,18 +341,30 @@ namespace Ankh.Commands
                 ua.Revision = _rev;
                 ua.AllowObstructions = _allowUnversionedObstructions;
                 ua.IgnoreExternals = !_updateExternals;
+                HybridCollection<string> handledExternals = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                ua.Notify += delegate(object ss, SvnNotifyEventArgs ee)
+                {
+                    if (ee.Action == SvnNotifyAction.UpdateExternal)
+                    {
+                        if (!handledExternals.Contains(ee.FullPath))
+                            handledExternals.Add(ee.FullPath);
+                    }
+                };
                 e.Context.GetService<IConflictHandler>().RegisterConflictHandler(ua, e.Synchronizer);
-                SvnUpdateResult result;
                 _result = null;
 
                 foreach (List<string> group in _groups)
                 {
                     // Currently Subversion runs update per item passed and in
                     // Subversion 1.6 passing each item separately is actually 
-                    // a tiny but faster than passing them all at once. 
+                    // a tiny bit faster than passing them all at once. 
                     // (sleep_for_timestamp fails its fast route)
                     foreach (string path in group)
                     {
+                        if (handledExternals.Contains(path))
+                            continue;
+
+                        SvnUpdateResult result;
                         e.Client.Update(path, ua, out result);
 
                         if (_result == null)

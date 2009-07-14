@@ -15,17 +15,14 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using Ankh.Ids;
 using Ankh.UI;
 using System.IO;
 using Ankh.VS;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 using Ankh.Scc;
-using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
@@ -93,7 +90,7 @@ namespace Ankh.Commands
             }
         }
 
-        PathSelectorResult ShowDialog(CommandEventArgs e)
+        static PathSelectorResult ShowDialog(CommandEventArgs e)
         {
             PathSelectorInfo info = new PathSelectorInfo("Select items for diffing", e.Selection.GetSelectedSvnItems(true));
             IUIShell uiShell = e.GetService<IUIShell>();
@@ -104,14 +101,11 @@ namespace Ankh.Commands
             info.RevisionEnd = SvnRevision.Working;
 
             // should we show the path selector?
-            if (!CommandBase.Shift)
+            if (!Shift)
             {
                 return uiShell.ShowPathSelector(info);
             }
-            else
-                return info.DefaultResult;
-
-
+            return info.DefaultResult;
         }
     }
 }

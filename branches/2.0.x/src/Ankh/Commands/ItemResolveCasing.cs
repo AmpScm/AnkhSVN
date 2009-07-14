@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Ankh.Scc;
 using SharpSvn;
@@ -62,7 +61,7 @@ namespace Ankh.Commands
 
                     if (svnPath == null || actualPath == null)
                         continue; // not found
-                    else if (!string.Equals(svnPath, actualPath, StringComparison.OrdinalIgnoreCase))
+                    if (!string.Equals(svnPath, actualPath, StringComparison.OrdinalIgnoreCase))
                         continue; // More than casing rename
 
                     string svnName = Path.GetFileName(svnPath);

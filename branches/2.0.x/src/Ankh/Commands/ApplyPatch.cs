@@ -14,9 +14,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.VS;
 using Ankh.UI;
 using Ankh.Scc.UI;
@@ -24,8 +21,8 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(Ankh.Ids.AnkhCommand.SolutionApplyPatch)]
-    [Command(Ankh.Ids.AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
+    [Command(Ids.AnkhCommand.SolutionApplyPatch)]
+    [Command(Ids.AnkhCommand.PendingChangesApplyPatch, HideWhenDisabled=false)]
     public class ApplyPatch : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -46,7 +43,6 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
-            IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
 
             AnkhPatchArgs args = new AnkhPatchArgs();

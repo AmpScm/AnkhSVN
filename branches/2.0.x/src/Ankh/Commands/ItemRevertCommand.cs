@@ -15,11 +15,9 @@
 //  limitations under the License.
 
 using System;
-using System.Collections;
 using System.Windows.Forms;
 using Ankh.Ids;
 using SharpSvn;
-using System.Collections.Generic;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI;
@@ -52,14 +50,14 @@ namespace Ankh.Commands
             SvnDepth depth = SvnDepth.Empty;
             bool confirmed = false;
 
-            PathSelectorResult result = null;
+            PathSelectorResult result;
             PathSelectorInfo info = new PathSelectorInfo("Select items to revert",
                 e.Selection.GetSelectedSvnItems(true));
 
             info.CheckedFilter += delegate(SvnItem item) { return item.IsModified || (item.IsVersioned && item.IsDocumentDirty); };
             info.VisibleFilter += delegate(SvnItem item) { return item.IsModified || (item.IsVersioned && item.IsDocumentDirty); };
 
-            if (!CommandBase.Shift &&
+            if (!Shift &&
                 e.Command == AnkhCommand.RevertItem)
             {
                 //if(e.Command == AnkhCommand.ItemRevertSpecific)

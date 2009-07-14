@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using Ankh.Selection;
 using Ankh.Scc;
 
@@ -24,7 +23,7 @@ namespace Ankh.Commands
     /// <summary>
     /// Base class for ICommand instances
     /// </summary>
-    public abstract class CommandBase : Ankh.Commands.ICommandHandler
+    public abstract class CommandBase : ICommandHandler
     {
         public virtual void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -36,7 +35,7 @@ namespace Ankh.Commands
         /// <summary>
         /// Gets whether the Shift key was down when the current window message was send
         /// </summary>
-        public static bool Shift
+        protected static bool Shift
         {
             get
             {
@@ -57,7 +56,7 @@ namespace Ankh.Commands
                 throw new ArgumentNullException("context");
 
             IAnkhOpenDocumentTracker tracker = context.GetService<IAnkhOpenDocumentTracker>();
-            if (selection != null && tracker != null)
+            if (tracker != null)
                 tracker.SaveDocuments(selection.GetSelectedFiles(true));
         }
     }

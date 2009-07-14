@@ -65,5 +65,25 @@ namespace Ankh
 
             return first;
         }
+
+        public static bool IsNullOrEmpty<T>(IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+                return true;
+
+            foreach (T t in enumerable)
+                return false;
+            return true;
+        }
+
+        public static bool IsEmpty<T>(IEnumerable<T> enumerable)
+        {
+            if (enumerable == null) 
+                throw new ArgumentNullException("enumerable");
+
+            foreach(T t in enumerable)
+                return false;
+            return true;
+        }
     }
 }
