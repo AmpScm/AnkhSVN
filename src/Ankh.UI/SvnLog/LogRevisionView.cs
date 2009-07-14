@@ -198,8 +198,8 @@ namespace Ankh.UI.SvnLog
                 text = ((LogRevisionItem)e.Item).RevisionText;
             }
 
-            System.Drawing.Font fnt = e.Item.Font;
-            System.Drawing.Color clr;
+            Font fnt = e.Item.Font;
+            Color clr;
 
             if (isSelected)
                 clr = Focused ? System.Drawing.SystemColors.HighlightText : SystemColors.MenuText;

@@ -30,7 +30,7 @@ using Ankh.Scc;
 
 namespace Ankh.UI.SvnLog
 {
-    partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
+    sealed partial class LogControl : UserControl, ICurrentItemSource<ISvnLogItem>, ICurrentItemDestination<ISvnLogItem>
     {
         public LogControl()
         {
@@ -49,7 +49,7 @@ namespace Ankh.UI.SvnLog
         public LogDataSource LogSource
         {
             get { return _dataSource; }
-            set { _dataSource = value; }
+            private set { _dataSource = value; }
         }
 
         void logRevisionControl1_BatchDone(object sender, BatchFinishedEventArgs e)

@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Ankh.VS;
 using Ankh.Scc;
@@ -40,7 +38,7 @@ namespace Ankh.Commands
                 e.Enabled = false;
         }
 
-        public SvnItem GetRoot(BaseCommandEventArgs e)
+        private static SvnItem GetRoot(BaseCommandEventArgs e)
         {
             SvnItem item = null;
             switch (e.Command)
@@ -76,7 +74,6 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {         
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             SvnItem root = GetRoot(e);
 
             if (root == null)
@@ -131,7 +128,7 @@ namespace Ankh.Commands
                                     retry = true;
                                     return;
                                 }
-                                else if (dr != DialogResult.Yes)
+                                if (dr != DialogResult.Yes)
                                     return;
                             }
 
@@ -139,10 +136,9 @@ namespace Ankh.Commands
                             ca.CreateParents = true;
                             ca.LogMessage = msg;
 
-                            if (dlg.CopyFromUri)
-                                ok = ee.Client.RemoteCopy(new SvnUriTarget(dlg.SrcUri, dlg.SelectedRevision), dlg.NewDirectoryName, ca);
-                            else
-                                ok = ee.Client.RemoteCopy(new SvnPathTarget(dlg.SrcFolder), dlg.NewDirectoryName, ca);
+                            ok = dlg.CopyFromUri ? 
+                                ee.Client.RemoteCopy(new SvnUriTarget(dlg.SrcUri, dlg.SelectedRevision), dlg.NewDirectoryName, ca) :
+                                ee.Client.RemoteCopy(new SvnPathTarget(dlg.SrcFolder), dlg.NewDirectoryName, ca);
                         });
 
                     if(rr.Succeeded && ok && dlg.SwitchToBranch)

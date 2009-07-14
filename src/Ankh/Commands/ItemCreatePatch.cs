@@ -114,7 +114,7 @@ namespace Ankh.Commands
             }            
         }
 
-        private string GetFileName(IWin32Window dialogOwner)
+        private static string GetFileName(IWin32Window dialogOwner)
         {
             string fileName = null;
             using (SaveFileDialog dlg = new SaveFileDialog())

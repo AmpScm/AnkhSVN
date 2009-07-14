@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.Selection;
@@ -33,11 +32,7 @@ namespace Ankh.Commands
         string issueId;
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            foreach (PendingChange pc in GetChanges(e))
-            {
-                return;
-            }
-            e.Enabled = false;            
+            e.Enabled = !EnumTools.IsEmpty(GetChanges(e));
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -72,7 +67,7 @@ namespace Ankh.Commands
             }
         }
 
-        class ProjectListFilter
+        sealed class ProjectListFilter
         {
             readonly HybridCollection<string> files = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
             readonly HybridCollection<string> folders = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
@@ -82,7 +77,7 @@ namespace Ankh.Commands
             {
                 if (context == null)
                     throw new ArgumentNullException("context");
-                else if (projects == null)
+                if (projects == null)
                     throw new ArgumentNullException("projects");
 
                 _mapper = context.GetService<IProjectFileMapper>();
@@ -108,7 +103,7 @@ namespace Ankh.Commands
             {
                 if (files.Contains(pc.FullPath))
                     return true;
-                else if (!_mapper.ContainsPath(pc.FullPath))
+                if (!_mapper.ContainsPath(pc.FullPath))
                 {
                     foreach (string f in folders)
                     {
@@ -119,12 +114,12 @@ namespace Ankh.Commands
                         }
                     }
                 }
-                
+
                 return false;
             }
         }
 
-        IEnumerable<PendingChange> GetChanges(BaseCommandEventArgs e)
+        static IEnumerable<PendingChange> GetChanges(BaseCommandEventArgs e)
         {
             IPendingChangesManager pcm = e.GetService<IPendingChangesManager>();
             if (e.Command == AnkhCommand.SolutionCommit)

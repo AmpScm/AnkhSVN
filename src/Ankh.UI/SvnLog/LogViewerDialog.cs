@@ -30,7 +30,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI
 {
-    public partial class LogViewerDialog : VSContainerForm, ILogControl
+    public sealed partial class LogViewerDialog : VSContainerForm, ILogControl
     {
         private SvnOrigin _logTarget;
 

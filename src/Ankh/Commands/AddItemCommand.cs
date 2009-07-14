@@ -14,14 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Ankh.UI;
-using System.Windows.Forms;
-using System.IO;
-
 using SharpSvn;
 using Ankh.Ids;
 
@@ -33,15 +26,13 @@ namespace Ankh.Commands
     [Command(AnkhCommand.AddItem)]
     class AddItemCommand : CommandBase
     {
-        
-
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
             {
                 if (item.IsVersioned)
                     continue;
-                else if (item.IsVersionable)
+                if (item.IsVersionable)
                     return; // We found an add item
             }
 
@@ -52,19 +43,16 @@ namespace Ankh.Commands
         {
             IUIShell uiShell = e.GetService<IUIShell>();
 
-            SortedList<string, SvnItem> paths = new SortedList<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
-            Collection<SvnItem> resources = new Collection<SvnItem>();
-            ICollection<SvnItem> addItems = resources;
-
+            
             PathSelectorInfo info = new PathSelectorInfo("Select items to add",
                 e.Selection.GetSelectedSvnItems(true));
 
             info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned && !item.IsIgnored && item.IsVersionable; };
             info.VisibleFilter += delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; };
 
-            PathSelectorResult result = null;
+            PathSelectorResult result;
             // are we shifted?
-            if (!CommandBase.Shift)
+            if (!Shift)
             {
                 info.EnableRecursive = false;
 

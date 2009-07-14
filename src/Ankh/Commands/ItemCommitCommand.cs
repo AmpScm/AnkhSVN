@@ -14,19 +14,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Ankh.UI;
-using System;
 using System.Windows.Forms;
-using System.Collections;
-using System.Threading;
-using System.IO;
-using SharpSvn;
 using Ankh.Ids;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Ankh.Scc;
-using Ankh.Selection;
-using Ankh.VS;
 using Ankh.UI.SccManagement;
 
 namespace Ankh.Commands
@@ -37,8 +28,8 @@ namespace Ankh.Commands
     [Command(AnkhCommand.CommitItem)]
     class ItemCommitCommand : CommandBase
     {
-        string storedLogMessage = null;
-        string storedIssueNumber = null;
+        string storedLogMessage;
+        string storedIssueNumber;
 
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -87,8 +78,8 @@ namespace Ankh.Commands
 
             // not in the finally, because we want to preserve the message for a 
             // non-successful commit
-            this.storedLogMessage = null;
-            this.storedIssueNumber = null;
+            storedLogMessage = null;
+            storedIssueNumber = null;
         }
     }
 }

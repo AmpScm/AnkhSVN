@@ -15,7 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -24,7 +23,6 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 
 using Ankh.Ids;
@@ -78,7 +76,7 @@ using Ankh.VS;
 namespace Ankh.Commands
 {
     [Command(AnkhCommand.CheckForUpdates, AlwaysAvailable = true)]
-    class CheckForUpdates : CommandBase, IComponent
+    sealed class CheckForUpdates : CommandBase, IComponent
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -98,8 +96,7 @@ namespace Ankh.Commands
 
             if (pkg != null)
                 return _currentVersion = pkg.PackageVersion;
-            else
-                return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version;
+            return _currentVersion = typeof(CheckForUpdates).Assembly.GetName().Version;
         }
 
         static Version GetUIVersion(AnkhContext context)
@@ -111,8 +108,8 @@ namespace Ankh.Commands
 
             if (pkg != null)
                 return pkg.UIVersion;
-            else
-                return GetCurrentVersion(context);
+            
+            return GetCurrentVersion(context);
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -175,7 +172,7 @@ namespace Ankh.Commands
             }
             catch { }
 
-            sb.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "&xx={0}", x);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "&xx={0}", x);
 
             Uri updateUri = new Uri(sb.ToString());
             WebRequest wr = WebRequest.Create(updateUri);
@@ -189,7 +186,7 @@ namespace Ankh.Commands
                 hwr.UserAgent = string.Format("AnkhSVN/{0} VisualStudio/{1} Windows/{2}", version, vsVersion, osVersion);
             }
 
-            wr.BeginGetResponse(new AsyncCallback(OnResponse), wr);
+            wr.BeginGetResponse(OnResponse, wr);
         }
 
         static bool? _isDevVersion;
@@ -208,7 +205,7 @@ namespace Ankh.Commands
             return _isDevVersion.Value;
         }
 
-        private void ShowUpdate(CommandEventArgs e)
+        private static void ShowUpdate(CommandEventArgs e)
         {
             string[] args;
 
@@ -224,7 +221,7 @@ namespace Ankh.Commands
             string title = args[0], header = args[1], description = args[2], url = args[3],
                 urltext = args[4], version = args[5], newVersion = args[6], tag = args[7];
 
-            using (Ankh.UI.SccManagement.UpdateAvailableDialog uad = new Ankh.UI.SccManagement.UpdateAvailableDialog())
+            using (UI.SccManagement.UpdateAvailableDialog uad = new UI.SccManagement.UpdateAvailableDialog())
             {
                 try
                 {
@@ -262,7 +259,7 @@ namespace Ankh.Commands
             }
         }
 
-        public void OnResponse(IAsyncResult ar)
+        private void OnResponse(IAsyncResult ar)
         {
             IAnkhConfigurationService config = Context.GetService<IAnkhConfigurationService>();
             bool failed = true;
@@ -432,7 +429,7 @@ namespace Ankh.Commands
             context.GetService<IAnkhScheduler>().Schedule(new TimeSpan(0, 0, 20), AnkhCommand.CheckForUpdates);
         }
 
-        private string NodeText(XmlDocument doc, string xpath)
+        private static string NodeText(XmlDocument doc, string xpath)
         {
             XmlNode node = doc.SelectSingleNode(xpath);
 
@@ -457,7 +454,7 @@ namespace Ankh.Commands
             set { _site = value; }
         }
 
-        protected IAnkhServiceProvider Context
+        private IAnkhServiceProvider Context
         {
             get { return (IAnkhServiceProvider)_site.GetService(typeof(IAnkhServiceProvider)); }
         }

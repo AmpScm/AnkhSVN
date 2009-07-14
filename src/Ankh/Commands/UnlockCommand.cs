@@ -14,15 +14,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using SharpSvn;
 
 using Ankh.Ids;
 using Ankh.Scc;
 using Ankh.UI;
-using Ankh.VS;
 
 namespace Ankh.Commands
 {
@@ -58,7 +55,7 @@ namespace Ankh.Commands
             };
             
             PathSelectorResult psr;
-            if (!CommandBase.Shift)
+            if (!Shift)
             {
                 IUIShell uiShell = e.GetService<IUIShell>();
 
