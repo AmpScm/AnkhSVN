@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Ankh.Interop.IssueTracker
 {
     [System.Runtime.InteropServices.Guid("E1E1B50C-366C-4f3e-934A-6BCCF78C96E8")]
-    public interface IIssueRepository
+    public interface IIssueRepository : IIssueRepositorySettings
     {
-        /// <summary>
-        /// Gets the issue repository connector's registered name
-        /// </summary>
-        string ConnectorName { get; }
-
-        /// <summary>
-        /// Issue repository URL.
-        /// </summary>
-        Uri RepositoryUri { get; }
-
         /// <summary>
         /// Label for the issue repository.
         /// </summary>

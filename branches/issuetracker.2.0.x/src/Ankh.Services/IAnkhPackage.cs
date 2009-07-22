@@ -48,5 +48,7 @@ namespace Ankh.UI
         AmbientProperties AmbientProperties { get; }
 
         bool LoadUserProperties(string streamName);
+
+        Microsoft.Win32.RegistryKey ApplicationRegistryRoot { get; }
     }
 }

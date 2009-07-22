@@ -87,7 +87,7 @@ namespace Ankh.UI.PendingChanges
             // issuesButton
             // 
             this.issuesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.issuesButton.Enabled = false;
+            this.issuesButton.Enabled = true;
             this.issuesButton.Image = ((System.Drawing.Image)(resources.GetObject("issuesButton.Image")));
             this.issuesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.issuesButton.Name = "issuesButton";
