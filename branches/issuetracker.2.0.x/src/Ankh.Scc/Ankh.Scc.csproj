@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' == '') OR ('$(UseVS2005MPF)' == 'true')">8.0</VsSdkVersion>
+    <VsSdkVersion Condition="('$(MSBuildToolsVersion)' != '') AND ('$(UseVS2005MPF)' != 'true')">9.0</VsSdkVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' == ''">8.0</VisualStudioVersion>
+    <VisualStudioVersion Condition="'$(MSBuildToolsVersion)' != ''">9.0</VisualStudioVersion>
+    <!-- BH: Hopefully MSBuild 4.0 adds some kind of property to retrieve the real version; luckily we only need to check 8.0 vs 8.0+ -->
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ankh.Scc</RootNamespace>
+    <AssemblyName>Ankh.Scc</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ankh.Scc.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '8.0'">Microsoft.VisualStudio.Shell</ShellAssembly>
+    <ShellAssembly Condition="'$(VsSdkVersion)' == '9.0'">Microsoft.VisualStudio.Shell.9.0</ShellAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(ShellAssembly)" />
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnkhSccModule.cs" />
+    <Compile Include="AnkhSccProvider.ActivateMonitor.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.cs" />
+    <Compile Include="AnkhSccProvider.Enlistment.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.Glyphs.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.Projects.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.QueryEditSave.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.Solution.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccProvider.FileMap.cs">
+      <DependentUpon>AnkhSccProvider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccSettingStorage.Map.cs">
+      <DependentUpon>AnkhSccSettingStorage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AnkhSccSettingStorage.Props.cs">
+      <DependentUpon>AnkhSccSettingStorage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\PendingChangeTicker.cs" />
+    <Compile Include="Commands\ActivateSccProvider.cs">
+    </Compile>
+    <Compile Include="Commands\ProjectFileFilter.cs" />
+    <Compile Include="Native\ICOMPropertyBag.cs" />
+    <Compile Include="SccUI\SccManagementResources.Designer.cs">
+      <DependentUpon>SccManagementResources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SccUI\SccQuerySaveReadonlyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\SccQuerySaveReadonlyDialog.Designer.cs">
+      <DependentUpon>SccQuerySaveReadonlyDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SettingsMap\SccCategorySettings.cs" />
+    <Compile Include="SettingsMap\SccProjectSettings.cs" />
+    <Compile Include="ProjectMap\SccTranslateEnlistData.cs" />
+    <Compile Include="ProjectMap\SccTranslateData.cs" />
+    <Compile Include="AnkhSccSettingStorage.cs" />
+    <Compile Include="SccUI\ChangeSourceControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\ChangeSourceControl.Designer.cs">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SccUI\ChangeSourceControlRow.cs" />
+    <Compile Include="SccUI\Commands\ChangeSourceControlCommand.cs" />
+    <Compile Include="SccUI\ChangeSolutionRoot.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\ChangeSolutionRoot.Designer.cs">
+      <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatusCache\DeletedFilesList.cs" />
+    <Compile Include="StatusCache\FileStatusCache.cs" />
+    <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
+    <Compile Include="TextEditingTracker.cs" />
+    <Compile Include="OpenDocumentTracker.cs" />
+    <Compile Include="OpenDocumentTracker.Api.cs">
+      <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenDocumentTracker.Visibility.cs">
+      <DependentUpon>OpenDocumentTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Commands\MarkProjectDirty.cs" />
+    <Compile Include="PendingChangeManager.cs" />
+    <Compile Include="PendingChangeManager.Map.cs">
+      <DependentUpon>PendingChangeManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectMap\SccDocumentData.cs" />
+    <Compile Include="ProjectTracker.cs" />
+    <Compile Include="ProjectTracker.Add.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectTracker.Batching.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectTracker.Remove.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectTracker.Rename.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectTracker.Solution.cs">
+      <DependentUpon>ProjectTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectMap\SccProjectData.cs" />
+    <Compile Include="ProjectMap\SccProjectData.Hierarchy.cs">
+      <DependentUpon>SccProjectData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProjectMap\SccProjectFile.cs" />
+    <Compile Include="ProjectMap\SccProjectFileCollection.cs" />
+    <Compile Include="ProjectMap\SccProjectFileReference.cs" />
+    <Compile Include="ProjectNotifier.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SvnSccContext.cs" />
+    <Compile Include="Commands\TaskFinisher.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.Scc.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\ChangeSolutionRoot.resx">
+      <DependentUpon>ChangeSolutionRoot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\ChangeSourceControl.resx">
+      <DependentUpon>ChangeSourceControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\SccManagementResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SccManagementResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\SccQuerySaveReadonlyDialog.resx">
+      <DependentUpon>SccQuerySaveReadonlyDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ankh.Scc.wxs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

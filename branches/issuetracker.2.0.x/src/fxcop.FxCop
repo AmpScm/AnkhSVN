@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<FxCopProject Version="1.074">
+    <ProjectOptions>
+        <PersistViolations>False</PersistViolations>
+        <SharedProject>False</SharedProject>
+    </ProjectOptions>
+    <TargetAssemblies>
+        <TargetAssembly Visible="True">ankh.ui\bin\debug\ankh.ui.exe</TargetAssembly>
+        <TargetAssembly Visible="True">ankh.commands\bin\debug\ankh.commands.dll</TargetAssembly>
+        <TargetAssembly Visible="True">ankh\bin\debug\ankh.dll</TargetAssembly>
+        <TargetAssembly Visible="True">nsvn\bin\debug\nsvn.dll</TargetAssembly>
+    </TargetAssemblies>
+    <Rules>
+        <RuleAssemblies>
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\comrules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\designrules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\globalizationrules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\namingrules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\performancerules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\securityrules.dll" />
+            <RuleAssembly Visible="True" Name="%fxcop%\rules\usagerules.dll" />
+        </RuleAssemblies>
+    </Rules>
+    <ExcludeFiles>
+        <ProjectExclude Visible="True" />
+    </ExcludeFiles>
+    <Exclusions />
+</FxCopProject>

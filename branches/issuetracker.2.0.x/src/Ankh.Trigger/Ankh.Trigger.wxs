@@ -1,0 +1,41 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Ankh.Trigger">
+      <ComponentGroupRef Id="Ankh.Ids"/>
+      <ComponentRef Id="C_Ankh.Trigger.dll"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Trigger.TargetDir)">
+      <Component Id="C_Ankh.Trigger.dll" Guid="906523B9-39E5-4903-A179-A85BBB3492C5">
+		  <!-- File must be called File_$(Ankh.Trigger.TargetName).dll for the following includes-->
+		  <File Id="File_Ankh.Trigger.dll" Name="Ankh.Trigger.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+		  <?ifdef Ankh_Pdb?>
+		  <File Id="CF_Ankh.Trigger.pdb" Name="Ankh.Trigger.pdb" Checksum="yes" Vital="yes" />
+		  <?endif?>		  
+      </Component>
+      <Component Id="CR_Trigger_2005" Guid="59AD639C-11B3-4097-8D5E-5EE489FDF04D">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2005" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2005.wxi ?>
+      </Component>
+      <Component Id="CR_Trigger_2008" Guid="0BDB7652-D0ED-409A-910A-FBBBF383A198">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2008" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2008.wxi ?>
+      </Component>
+      <Component Id="CR_Trigger_2010" Guid="6F4DFE75-A4FF-40E9-A189-15C743EE223D">
+        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2010" Value="1" Type="integer" KeyPath="yes" />
+        <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2010.wxi ?>
+      </Component>
+    </DirectoryRef>
+    <ComponentGroup Id="TriggerReg2005">
+      <ComponentGroupRef Id="Ankh.Trigger" />
+      <ComponentRef Id="CR_Trigger_2005"/>
+    </ComponentGroup>
+    <ComponentGroup Id="TriggerReg2008">
+      <ComponentGroupRef Id="Ankh.Trigger" />
+      <ComponentRef Id="CR_Trigger_2008"/>
+    </ComponentGroup>
+    <ComponentGroup Id="TriggerReg2010">
+      <ComponentGroupRef Id="Ankh.Trigger" />
+      <ComponentRef Id="CR_Trigger_2010"/>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

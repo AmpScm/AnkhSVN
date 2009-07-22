@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{62F97060-6A9E-477D-B15B-E1A1F5320039}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ankh.Diff</RootNamespace>
+    <AssemblyName>Ankh.Diff</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ankh.Diff.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="SharpSvn, Version=1.5001.642.32356, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnkhDiffModule.cs" />
+    <Compile Include="Common\Classes\Caret.cs" />
+    <Compile Include="Common\Classes\Enumerations.cs" />
+    <Compile Include="Common\Classes\Finder.cs" />
+    <Compile Include="Common\Classes\SettingsKey.cs" />
+    <Compile Include="Common\Classes\Utilities.cs" />
+    <Compile Include="Common\Classes\Windows.cs" />
+    <Compile Include="Common\Components\NumericTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Forms\FindDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\Forms\FindDlg.Designer.cs">
+      <DependentUpon>FindDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiffPatch\diff_match_patch.cs" />
+    <Compile Include="DiffUtils\Classes\AddCopyList.cs" />
+    <Compile Include="DiffUtils\Classes\BinaryDiff.cs" />
+    <Compile Include="DiffUtils\Classes\BinaryDiffLines.cs" />
+    <Compile Include="DiffUtils\Classes\DiagonalVector.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiff.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiffFileFilter.cs" />
+    <Compile Include="DiffUtils\Classes\DirectoryDiffHelpers.cs" />
+    <Compile Include="DiffUtils\Classes\EditDataTypes.cs" />
+    <Compile Include="DiffUtils\Classes\Functions.cs" />
+    <Compile Include="DiffUtils\Classes\MyersDiff.cs" />
+    <Compile Include="DiffUtils\Classes\StringHasher.cs" />
+    <Compile Include="DiffUtils\Classes\SubArray.cs" />
+    <Compile Include="DiffUtils\Classes\TextDiff.cs" />
+    <Compile Include="DiffUtils\Controls\DiffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffControl.Designer.cs">
+      <DependentUpon>DiffControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffOptions.cs" />
+    <Compile Include="DiffUtils\Controls\DiffOverview.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DiffViewLines.cs" />
+    <Compile Include="DiffUtils\Controls\DiffViewPosition.cs" />
+    <Compile Include="DiffUtils\Controls\DirDiffControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DirDiffControl.Designer.cs">
+      <DependentUpon>DirDiffControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\DirDiffTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\GoToDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DiffUtils\Controls\GoToDlg.Designer.cs">
+      <DependentUpon>GoToDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DiffUtils\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common\Components\NumericTextBox.resx">
+      <DependentUpon>NumericTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Forms\FindDlg.resx">
+      <DependentUpon>FindDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DiffControl.resx">
+      <DependentUpon>DiffControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DiffView.resx">
+      <DependentUpon>DiffView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DirDiffControl.resx">
+      <DependentUpon>DirDiffControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\DirDiffTreeView.resx">
+      <DependentUpon>DirDiffTreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Controls\GoToDlg.resx">
+      <DependentUpon>GoToDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DiffUtils\Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.Diff.wxs" />
+    <Content Include="DiffUtils\Controls\Bitmaps\16x16.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Changed.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Copy.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Delete.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Deleted.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffControl.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffOverview.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DiffView.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DirDiffControl.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\DirDiffTreeView.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\File.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FileError.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Find.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FindNext.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FindPrev.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FirstDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FolderClosed.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\FolderOpen.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\GotoLine.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Inserted.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\LastDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\MissingFile.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\MissingFolder.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\NextDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\NonSelectButton.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\PrevDiff.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\Recompare.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\ShowDifferences.bmp" />
+    <Content Include="DiffUtils\Controls\Bitmaps\View.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.Diff.snk" />
+    <None Include="DiffUtils\Docs\BurnsBinaryDiff_Paper.pdf" />
+    <None Include="DiffUtils\Docs\BurnsBinaryDiff_Thesis.pdf" />
+    <None Include="DiffUtils\Docs\MyersDiff.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

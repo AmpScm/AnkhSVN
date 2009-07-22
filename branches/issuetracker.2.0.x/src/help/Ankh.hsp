@@ -1,0 +1,957 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<HSProject ProjectType="0" Version="2.0.28" SaveDateTime="22/06/2008 20:32:06" DXPFileName="" TemplateName="HelpStudio Lite 2005 Style" SpellLastCheckDateTime="12:00:00 AM" Title="ankh03" SCCActivated="False" SCCProject="" HelpContextIDHeaderFile="" OutputDirectory="" AutoGenerateIndexEntries="True" AutoGenerateCategoryIndex="False" BuildDXProject="False" DefaultTopic="" Lite="True">
+    <SpellIgnoreAllWordList/>
+    <cat Name="AnkhSVN" Key="{7C33D76F-BAB6-4691-BF44-B06C936BD284}" AutoIndex="True"/>
+    <cat Name="Getting Started" Key="C1" AutoIndex="True"/>
+    <cat Name="Tutorials" Key="C2" AutoIndex="True"/>
+    <cat Name="Reference" Key="C3" AutoIndex="True"/>
+    <cat Name="Support" Key="C4" AutoIndex="True"/>
+    <cat Name="Microsoft Help 2.x Error Pages" Key="C5" AutoIndex="True"/>
+    <file FileName="stopwordlist.txt" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\commit-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-soln.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-soln-commit.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\modify-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-repo-explorer-icon.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\lock-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\lock.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\revert-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\revert-to-rev.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\unlock-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\update-wc.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\wc-explorer.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\blame-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\blame-item-text.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\switch-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\view-messages-icon.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\pending-changes-combined.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\external-diff.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\external-merge.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-new-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-property.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\diff-item.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\add-icon.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\open-fromsvn.png" CaptureInfo="" IncludeInOutput="True"/>
+    <file FileName="images\view-history.png" CaptureInfo="" IncludeInOutput="True"/>
+    <Topic Key="{95CA4353-34B0-4493-B8AB-FF7BF1C9352E}" Name="_index_entry_not_found" Title="Empty Index Entry" ContentsTitle="Empty Index Entry" Status="In Progress" CreatedOn="23-09-2005 00:00:00" ModifiedOn="23-09-2005 00:00:00" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="False" IncludeInHelpFile="True" HelpContextIDs="" Category="C5">
+        <Notes/>
+        <K Value="@_vsipsample_index_entry_not_found"/>
+        <s k="BodyText"><![CDATA[<H1>Empty Index Entry</H1>
+<P>The index entry you selected has no target topics associated with it.</P>
+<P>If you have chosen a parent entry, please select a child entry.</P>
+<xml><MSHelp:NoSearch/></xml>]]></s>
+    </Topic>
+    <Topic Key="{11A66232-56ED-4B86-A42C-835E93506F4A}" Name="_topic_not_found" Title="Topic Not Found" ContentsTitle="Topic Not Found" Status="In Progress" CreatedOn="23-09-2005 00:00:00" ModifiedOn="23-09-2005 00:00:00" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="False" IncludeInHelpFile="True" HelpContextIDs="" Category="C5">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<script type="text/javascript">
+// ****************************************************************************
+// *                       NavFailPage Parameter Insertion                    *
+// ****************************************************************************
+
+function navfailpageparam() {
+        var keyString = "keywords=";
+        var idxString = "index=";
+        var urlString = "url=";
+        var query = window.location.search;
+        var j = 0;
+        var delim;
+        var i = query.indexOf(keyString);
+
+        if (i >= 0) {
+                i += keyString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("keywordsSpan").innerText = query.substring(i, j+1);
+        }
+
+        i = query.indexOf(idxString);
+        if (i >= 0) {
+                i += idxString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("indexSpan").innerText = query.substring(i, j+1);
+        }
+
+        i = query.indexOf(urlString);
+        if (i >= 0) {
+                i += urlString.length;
+                delim = query.charAt(i);
+                j = query.indexOf(delim, i+1);
+                if (j > 0) document.getElementById("urlSpan").innerText = query.substring(i, j+1);
+        }
+}
+</script>
+
+<h1>Topic Not Found</h1>
+
+<p>The link you just clicked was not able to connect to the target page.</p>
+
+<p>Some possible reasons and remedies are as follows:</p>
+
+<table class="msdn" cellspacing="0">
+    <tbody>
+        <tr valign="top">
+            <th width="47%">Reason</th>
+
+            <th width="53%">Remedy</th>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">Destination topic is not part of the area you specified in the <b>Filtered by</b>
+            field.</td>
+
+            <td width="53%">Either select another filter or select <b>(no filter)</b>.</td>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">The URL of the destination topic is incorrect or has changed.</td>
+
+            <td width="53%">Use the index or the search function instead.</td>
+        </tr>
+
+        <tr valign="top">
+            <td width="47%">Problems with the help installation.</td>
+
+            <td width="53%">Rerun Setup for the product this help is related to and select the 'Repair'
+            option.</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Additional help is available for filters, search, and the index.</p>
+
+<p>Click <a href="javascript:history.back(-1)">Back</a> to return to the page you were on.</p>
+<hr>
+
+<p>The target parameters are:</p>
+<p>Keyword: <span id="keywordsSpan"></span><br>
+Index Moniker: <span id="indexSpan"></span><br>
+URL: <span id="urlSpan"></span></p>
+<script type="text/javascript">
+    navfailpageparam()
+</script>
+<xml><MSHelp:NoSearch/></xml>]]></s>
+    </Topic>
+    <Topic Key="{813DA293-7A26-45E8-87AD-0A251C4E0282}" Name="index" Title="AnkhSVN" ContentsTitle="AnkhSVN" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 13:02:14" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<UL>
+<LI><A href="ankh_concepts.html">Background knowledge</A> 
+<UL>
+<LI><A href="ankh_whatis.html">What is AnkSVN?</A> 
+<LI><A href="ankh_repo_explorer.html">What is the Repository Explorer?</A> 
+<LI><A href="ankh_wc_explorer.html">What is the Working Copy Explorer?</A> 
+<LI><A href="ankh_pendingchanges.html">What is the Pending Changes feature?</A> 
+<LI><A href="ankh_branching_c.html">How does branching work?</A> 
+<LI><A href="ankh_mergetracking.html">How does merging work?</A> 
+<LI><A href="ankh_locking_c.html">How does locking work?</A> </LI></UL>
+<LI><A href="ankh_getting_started.html">Getting started</A> 
+<UL>
+<LI><A href="ankh_select.html">Enable AnkhSVN for source control</A> 
+<LI><A href="ankh_connect_soln.html">Connect a project to AnkhSVN</A> 
+<LI><A href="ankh_open_svnproject.html">Open a project from Subversion</A> </LI></UL>
+<LI><A href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A> 
+<UL>
+<LI><A href="ankh_add_item.html">Add an item to the repository</A> 
+<LI><A href="ankh_commit_item.html">Commit an item</A> 
+<LI><A href="ankh_update_wc.html">Update the working copy</A> 
+<LI><A href="ankh_lock.html">Lock an item</A> 
+<LI><A href="ankh_unlock.html">Unlock an item</A> 
+<LI><A href="ankh_revert.html">Undo changes</A> 
+<LI><A href="ankh_revert_revision.html">Revert an item to a specific revision</A> 
+<LI><A href="ankh_blame.html">Find out who made what changes to a line</A> 
+<LI><A href="ankh_switch.html">Switch to a branch</A> 
+<LI><A href="ankh_diff.html">Compare revisions</A> 
+<LI><A href="ankh_add_property.html">Add a Subversion property</A> 
+<LI><A href="ankh_view_history.html">View revision history</A> 
+<LI><A href="ankh_cleanup.html">Clean up the working copy</A> </LI></UL>
+<LI><A href="ankh_configuring.html">Configure AnkhSVN</A> 
+<UL>
+<LI><A href="ankh_configuring_merge.html">Configure an external merge tool</A> 
+<LI><A href="ankh_configuring_diff.html">Configure an external diff tool</A> </LI></UL>
+<LI><A href="ankh_other_repo_tasks.html">Other version control tasks</A> 
+<UL>
+<LI><A href="ankh_commit_pendingchanges.html">Commit pending changes</A> 
+<LI><A href="ankh_explore_repo.html">Explore a repository</A> 
+<LI><A href="ankh_explore_wc.html">Add your working copy to the Working Copy Explorer</A> </LI></UL></LI></UL>]]></s>
+    </Topic>
+    <Topic Key="{C3F1E6AE-1917-42A9-8C30-FC091D8D535F}" Name="ankh_add_item" Title="Add an item to the repository" ContentsTitle="Add an item to the repository" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_add_wc_resource><!-- --></A>
+<H1 class=topictitle1>Add an item to the repository</H1>
+<DIV>
+<P>To add a new item in your solution to source control, you must <SPAN class=uicontrol>Add</SPAN> and then <SPAN class=uicontrol>Commit</SPAN> it to the Subversion repository.</P>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click an item and select <SPAN class=menucascade><SPAN class=uicontrol>Ankh</SPAN> &gt; <SPAN class=uicontrol>Add</SPAN></SPAN>.</SPAN> 
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> A new item item is indicated with a blue "plus" icon.</DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Select items to add</SPAN> window, click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Add an item" src="images\add-new-item.png"></DIV>A yellow "plus" icon appears next to the item, indicating that it has been queued for addition to the repository. 
+<LI class=stepexpand><SPAN>Select the item, right-click and choose the <SPAN class=uicontrol>Commit</SPAN> option.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Commit</SPAN> window, enter a log message and click <SPAN class=uicontrol>Commit</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Commit item to the repository" src="images\commit-item.png"></DIV></LI></OL>
+<DIV class=section>The item is added to the Subversion repository and a green check mark appears against it.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{50A53124-6D64-4C47-AA77-9D1A9CBFF178}" Name="ankh_add_soln" Title="Add a solution to a repository" ContentsTitle="Add a solution to a repository" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="23-04-2008 14:51:43" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_add_soln><!-- --></A>
+<H1 class=topictitle1>Add a solution to a repository</H1>
+<DIV>
+<P>To start versioning your project folders and files, you must add the containing solution to a Subversion repository.</P>
+<DIV class=p>
+<DIV class=important><SPAN class=importanttitle>Important:</SPAN> You must first create a Subversion repository from outside the Visual Studio environment. You can do this using a Subversion client such as TortoiseSVN, or the command "svnadmin create &lt;repository_path&gt;" at the Subversion command line.</DIV></DIV>
+<OL>
+<LI class=stepexpand><SPAN>In Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>View</SPAN> &gt; <SPAN class=uicontrol>Solution Explorer</SPAN> </SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>Right-click your solution and select <SPAN class=menucascade><SPAN class=uicontrol>Ankh</SPAN> &gt; <SPAN class=uicontrol>Add solution to Subversion repository</SPAN></SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Add a solution to a repository" src="images\add-soln.png"></DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Add solution to repository</SPAN> window, supply these details:</SPAN> 
+<OL type=a>
+<LI><SPAN>Enter the URL to your Subversion repository. For example, to add the solution to the directory "src" of your Subversion repository at "https://Project1.demo.collab.net/", enter "https://Project1.demo.collab.net/svn/Project1/trunk/src/". </SPAN>
+<LI><SPAN>To add the solution to a new subdirectory, select the <SPAN class=uicontrol>Create subdirectory</SPAN> option, and enter an appropriate name and log message.</SPAN> 
+<LI><SPAN>Click <SPAN class=uicontrol>Add</SPAN>.</SPAN> </LI></OL>When the operation completes, a <SPAN class=uicontrol>Commit</SPAN> window appears. 
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> If your Subversion repository uses certificates, the system will authenticate those credentials and your username and password for the repository.</DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Commit</SPAN>window, enter a log message in the text pane and click <SPAN class=uicontrol>Commit</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Commit a solution to a repository" src="images\add-soln-commit.png"></DIV></LI></OL>
+<DIV class=section>When the commit operation succeeds, you will see a green check mark for the solution in the <SPAN class=wintitle>Solution Explorer</SPAN>. </DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some basic tasks to help you get started with AnkhSVN." href="ankh_getting_started.html">Getting started</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title='When you "checkout" a Subversion repository, a working copy of the repository content is created locally.' href="ankh_checkout_soln.html">Check out the working copy</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{6573C1AA-90DF-4F62-98FC-FD401BF3753C}" Name="ankh_checkout_soln" Title="Check out the working copy" ContentsTitle="Check out the working copy" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="19-06-2008 15:32:37" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_checkout_soln></A>
+<H1 class=topictitle1>Check out a working copy</H1>
+<DIV>
+<P>When you "check out" a Subversion repository, a working copy of the repository content is created locally.</P>
+<OL>
+<LI class=stepexpand><SPAN>From the <SPAN class=uicontrol>File</SPAN> menu in Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Open from Subversion</SPAN> </SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Open from Subversion</SPAN> window, select a VS.NET project or solution and click <SPAN class=uicontrol>Open</SPAN>.</SPAN> The <SPAN class=wintitle>Open Project from Subversion </SPAN>window appears. It displays the URL of the parent project's Subversion repository. 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Check Out from</SPAN> field, specify the location of the Subversion repository from which you want to check out your working copy. For example, "https://project1.demo.collab.net/svn/project2/trunk".</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Local Directory</SPAN> field, browse to the location where you want the repository content to be checked out on your local system. For example, "C:/project1". </SPAN>
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Version</SPAN> field, select the repository revision you want to check out. By default, the latest revision is checked out.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>The project/solution is opened in Solution Explorer.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some basic tasks to help you get started with AnkhSVN." href="ankh_getting_started.html">Getting started</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="When you enable AnkhSVN as a VS.NET source control tool, you can use it to perform perform common version control operations using Subversion directly within the Visual Studio environment." href="ankh_select.html">Enable AnkhSVN for source control</A></DIV>
+<DIV><A title='When you have a different source control system set as your default for VS.NET, and you want to start using AnkhSVN, the first step is to "connect" to AnkhSVN.' href="ankh_connect_soln.html">Connect a project to AnkhSVN</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{03A0AEE9-48F9-46E2-B23E-E673BF2D8776}" Name="ankh_cleanup" Title="Clean up the working copy" ContentsTitle="Clean up the working copy" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 12:11:56" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_revert><!-- --></A>
+<H1 class=topictitle1>Clean up the working copy</H1>
+<DIV>
+<P>When you encounter problems due to incomplete Subversion operations or unfinished commits, use the <SPAN class=uicontrol>Cleanup</SPAN> option to make your working copy usable.</P>
+<DIV class=p><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click an item and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Cleanup</SPAN></SPAN>.</SPAN> 
+<DIV class=tip><SPAN class=tiptitle>Tip:</SPAN> If you get a "working copy locked" error, try this option at the top level of your working copy.</DIV></DIV>
+<DIV class=section>When the operations completes, you will see a success message.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{F1D1A6AD-7C45-4B6A-93DE-D26A97E6EE77}" Name="ankh_commit_item" Title="Commit an item" ContentsTitle="Commit an item" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_commit_wc_item><!-- --></A>
+<H1 class=topictitle1>Commit an item</H1>
+<DIV>
+<P>When you modify an existing item, you can make your changes permanent by committing them to the repository.</P>
+<DIV class=section>Items that you modified in the working copy of your solution have a red box next to them, as in this example: 
+<DIV class=fignone><IMG alt="Add a solution to a repository" src="images\modify-item.png"></DIV>
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> When you have finished working on an item, it is recommended that you update your working copy just before you commit your changes, so that changes made by other users, if any, can be merged with yours.</DIV></DIV>
+<OL>
+<LI class=stepexpand><SPAN>Right-click on the item you modified, for example, a file, and select <SPAN class=uicontrol>Commit</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Commit</SPAN>window, enter a log message containing details abbout your changes, and click <SPAN class=uicontrol>Commit</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Commit item to the repository" src="images\commit-item.png"></DIV></LI></OL>
+<DIV class=section>When the your changes are committed, a green check mark appears against the item in the <SPAN class=wintitle>Solution Explorer</SPAN>.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{D8129E73-905F-4DC6-81BE-4C09161D92E1}" Name="ankh_explore_repo" Title="Explore a repository" ContentsTitle="Explore a repository" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_explore_repo><!-- --></A>
+<H1 class=topictitle1>Explore a repository</H1>
+<DIV>
+<P>To be able to view the hierarchy of a repository, you must add its URL to the <SPAN class=uicontrol>Repository Explorer</SPAN>.</P>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>View</SPAN> menu, select <SPAN class=uicontrol>Repository Explorer</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Repository Explorer</SPAN>, click the <SPAN class=uicontrol>Add repository URL</SPAN> icon.</SPAN> 
+<DIV class=fignone><IMG alt="Add a URL to the Repository Explorer" src="images\add-repo-explorer-icon.png"></DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Add repository URL</SPAN> window, enter the URL of the Subversion repository. For example, "https://Project1.collabnetdemo.net/svn/Project1".</SPAN> 
+<LI class=stepexpand><SPAN>Specify a revision number for the repository and click <SPAN class=uicontrol>Add</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>The URL is added in the <SPAN class=wintitle>Repository Explorer</SPAN> window. You can expand it and view the contents of the repository.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some administrative and other tasks you can perform with AnkhSVN." href="ankh_other_repo_tasks.html">Other version control tasks</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{FE256B51-DB6D-4C20-9950-AACAD28DFEC0}" Name="ankh_explore_wc" Title="Add your working copy to the Working Copy Explorer" ContentsTitle="Add your working copy to the Working Copy Explorer" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 12:12:13" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_explore_repo><!-- --></A>
+<H1 class=topictitle1>Add your working copy to the Working Copy Explorer</H1>
+<DIV>
+<P>To easily work with files and folders in your local copy of the repository, including ones that are not part of your project or solution, add their location to the <SPAN class=uicontrol>Working Copy Explorer</SPAN>.</P>
+<OL>
+<LI><SPAN>In the <SPAN class=wintitle>View</SPAN> menu, select <SPAN class=uicontrol>Working Copy Explorer</SPAN>.</SPAN> 
+<LI><SPAN>In the <SPAN class=wintitle>Working Copy Explorer</SPAN>, right-click on the left pane and select <SPAN class=uicontrol>Add new root</SPAN>.</SPAN> 
+<LI><SPAN>In the <SPAN class=wintitle>Add working copy root</SPAN> window, specify the path to your local working copy and click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>In the <SPAN class=wintitle>Working Copy Explorer</SPAN>, you can right-click on a local file or folder and use the same version control commands as in the <SPAN class=wintitle>Solution Explorer</SPAN>.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some administrative and other tasks you can perform with AnkhSVN." href="ankh_other_repo_tasks.html">Other version control tasks</A></DIV></DIV>
+<DIV class=relconcepts><STRONG>Related concepts</STRONG><BR>
+<DIV><A title="The Working Copy Explorer lets you work with the files and folders in your local copy of the repository, within Visual Studio. This includes items that are not part of your project or solution." href="ankh_wc_explorer.html">What is the Working Copy Explorer?</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{4029669B-65B5-4B1F-9B70-5EADDEBF0A3D}" Name="ankh_getting_started" Title="Getting started" ContentsTitle="Getting started" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 12:12:18" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_getting_started><!-- --></A>
+<H1 class=topictitle1>Getting started</H1>
+<DIV>
+<P>Here are some basic tasks to help you get started with AnkhSVN.</P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_select.html">Enable AnkhSVN for source control</A></STRONG><BR>When you enable AnkhSVN as a VS.NET source control tool, you can use it to perform perform common version control operations using Subversion directly within the Visual Studio environment. 
+<LI class=ulchildlink><STRONG><A href="ankh_connect_soln.html">Connect a project to AnkhSVN</A></STRONG><BR>When you have a different source control system set as your default for VS.NET, and you want to start using AnkhSVN, the first step is to "connect" to AnkhSVN. 
+<LI class=ulchildlink><STRONG><A href="ankh_open_svnproject.html">Open a project from Subversion</A></STRONG><BR>Use the Open from Subversion option to check out a project or solution controlled by Subversion and open it in the Solution Explorer. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{9F75226F-1DDF-46BE-84C9-920472AA8251}" Name="ankh_lock" Title="Lock an item" ContentsTitle="Lock an item" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_lock><!-- --></A>
+<H1 class=topictitle1>Lock an item</H1>
+<DIV>
+<P>When you need to be the only user able to edit and commit changes to an item, you can use the <SPAN class=uicontrol>Lock</SPAN> option. </P>
+<DIV class=section>Examples of such situations are when you are working on files whose changes cannot be merged, such as graphics or binary files. Until you release the lock, other users will be blocked from committing their changes to that item. </DIV>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click a file and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Lock</SPAN></SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Lock</SPAN> window, enter your reason for locking the file.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Lock an item" src="images\lock-item.png"></DIV></LI></OL>
+<DIV class=section>When the operation completes, you will see a "lock" icon next to the item in the <SPAN class=uicontrol>Solution Explorer</SPAN>. 
+<DIV class=fignone><IMG alt="Lock an item" src="images\lock.png"></DIV>
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> When you commit your changes to a locked item, the lock is released. If you want to retain the lock, select the <SPAN class=uicontrol>Keep locks</SPAN> option while committing it.</DIV></DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=relconcepts><STRONG>Related concepts</STRONG><BR>
+<DIV><A title='While Subversion is based on the "copy-modify-merge model" for version control, it is possible for a user to lock a file and be the only one able to commit changes to it.' href="ankh_locking_c.html">How does locking work?</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="To allow other users to edit and commit changes to an item that you have locked, use the Unlock option and release the lock." href="ankh_unlock.html">Unlock an item</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{3DBF4E4D-5F80-42F7-B243-2623BDE74EC3}" Name="ankh_locking_c" Title="How does locking work?" ContentsTitle="How does locking work?" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 12:12:25" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_locking_c><!-- --></A>
+<H1 class=topictitle1>How does locking work?</H1>
+<DIV>
+<P>While Subversion is based on the "copy-modify-merge model" for version control, it is possible for a user to lock a file and be the only one able to commit changes to it.</P>
+<DL>
+<DT class=dlterm>Creating a lock 
+<DD>When you need to be the only user able to edit and commit changes to an item, you can lock it. 
+<DT class=dlterm>Releasing a lock 
+<DD>To allow other users to commit their changes to an item you've locked, you need to release the lock. 
+<DT class=dlterm>Stealing a lock 
+<DD>To seize a lock set by some other user, you can use the <SPAN class=uicontrol>Steal Locks</SPAN> option available in the <SPAN class=wintitle>Lock</SPAN> window. </DD></DL>
+<P>For further information about acquiring, releasing, stealing and breaking locks in Subversion, please see <A href="http://svnbook.red-bean.com/en/1.4/svn.advanced.locking.html" target=_blank>Version Control with Subversion - Locking.</A> </P></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="When you need to be the only user able to edit and commit changes to an item, you can use the Lock option." href="ankh_lock.html">Lock an item</A></DIV>
+<DIV><A title="To allow other users to edit and commit changes to an item that you have locked, use the Unlock option and release the lock." href="ankh_unlock.html">Unlock an item</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on openCollabNet</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{69508DD3-5FCF-4B65-8B42-6A88D5D7B4EE}" Name="ankh_other_repo_tasks" Title="Other version control tasks" ContentsTitle="Other version control tasks" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="23-04-2008 15:02:13" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_other_repo_tasks><!-- --></A>
+<H1 class=topictitle1>Other version control tasks</H1>
+<DIV>
+<P>Here are some administrative and other tasks you can perform with AnkhSVN.</P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_commit_pendingchanges.html">Commit pending changes</A></STRONG><BR>It is often useful to see all the modified files in your working copy, as well as any new ones, before you commit them. 
+<LI class=ulchildlink><STRONG><A href="ankh_explore_repo.html">Explore a repository</A></STRONG><BR>To be able to view the hierarchy of a repository, you must add its URL to the Repository Explorer. 
+<LI class=ulchildlink><STRONG><A href="ankh_explore_wc.html">Add your working copy to the Working Copy Explorer</A></STRONG><BR>To easily work with files and folders in your local copy of the repository, including ones that are not part of your project or solution, add their location to the Working Copy Explorer. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{4B4EE257-1753-4711-A159-DD15E90ED49D}" Name="ankh_repo_explorer" Title="What is the Repository Explorer?" ContentsTitle="What is the Repository Explorer?" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="23-04-2008 14:55:26" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_repo_explorer><!-- --></A>
+<H1 class=topictitle1>What is the Repository Explorer?</H1>
+<DIV>
+<P>The <SPAN class=wintitle>Repository Explorer</SPAN> is a window that shows you the the files and folders in the Subversion repository for your solution.</P>
+<P>When you add the URL of a Subversion repository in the <SPAN class=wintitle>Repository Explorer</SPAN>, you can: </P>
+<UL>
+<LI>Easily browse the contents of the repository 
+<LI>Check out or export a folder 
+<LI>Open a file in Visual Studio, view it in a browser, or copy it </LI></UL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on openCollabNet</A></DIV>
+<DIV><A href="http://svnbook.red-bean.com/" target=_blank>Version control with Subversion</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{F85F0A23-74A0-4302-A3B3-070C5B96AFC0}" Name="ankh_revert" Title="Undo changes" ContentsTitle="Undo changes" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_revert><!-- --></A>
+<H1 class=topictitle1>Undo changes</H1>
+<DIV>
+<P>To undo all your local changes to an item since the last update, use the <SPAN class=uicontrol>Revert</SPAN> option.</P>
+<DIV class=section>This operation does not affect any changes that you have already committed. It only reverts your local changes, and restores the item to the version to which it was last updated. To undo all changes up to a specific revision, you need to use the <SPAN class=uicontrol>Revert to Revision</SPAN> option.</DIV>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click an item and select <SPAN class=uicontrol>Revert</SPAN>.</SPAN> The <SPAN class=wintitle>Revert</SPAN> window displays a list of all the items you changed locally since your last update. 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Select items to revert</SPAN> window, check the required items.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> Since you cannot undo a revert operation, you might consider backing up your local changes before reverting them.</DIV>
+<DIV class=fignone><IMG alt="Undo changes to an item" src="images\revert-item.png"></DIV></LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="To revert an item to a specific version, use the Revert to revision option." href="ankh_revert_revision.html">Revert an item to a specific revision</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{A4F18AD7-9B8C-4AC3-9FCE-7B129D73B2ED}" Name="ankh_revert_revision" Title="Revert an item to a specific revision" ContentsTitle="Revert an item to a specific revision" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_revert_revision><!-- --></A>
+<H1 class=topictitle1>Revert an item to a specific revision</H1>
+<DIV>
+<P>To revert an item to a specific version, use the <SPAN class=uicontrol>Revert to revision</SPAN> option.</P>
+<DIV class=section>To revert only your local changes since the item was last updated, use the <SPAN class=uicontrol>Revert</SPAN> option.</DIV>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click an item and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Revert to revision</SPAN></SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Reverse Merge</SPAN> window, select the revison you want to revert to.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>Merge</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Revert an item to a specific revision" src="images\revert-to-rev.png"></DIV></LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="To undo all your local changes to an item since the last update, use the Revert option." href="ankh_revert.html">Undo changes</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://svnbook.red-bean.com/en/1.4/svn.tour.revs.specifiers.html" target=_blank>Revision Keywords</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{C15F1E79-4C2C-4941-81B5-438EDDBA87EA}" Name="ankh_tasks" Title="Basic version control tasks" ContentsTitle="Basic version control tasks" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="21-03-2008 12:12:39" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_tasks><!-- --></A>
+<H1 class=topictitle1>Basic version control operations in the Solution Explorer</H1>
+<DIV>
+<P>For most version control tasks, you can right-click on a source-controlled item in the <SPAN class=wintitle>Solution Explorer</SPAN>, select <SPAN class=uicontrol>Ankh</SPAN>, and then the respective command.</P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_add_item.html">Add an item to the repository</A></STRONG><BR>To add a new item in your solution to source control, you must Add and then Commit it to the Subversion repository. 
+<LI class=ulchildlink><STRONG><A href="ankh_commit_item.html">Commit an item</A></STRONG><BR>When you modify an existing item, you can make your changes permanent by committing them to the repository. 
+<LI class=ulchildlink><STRONG><A href="ankh_update_wc.html">Update the working copy</A></STRONG><BR>You update the items in the working copy of your solution to bring them up-to-date with the content in the repository. 
+<LI class=ulchildlink><STRONG><A href="ankh_lock.html">Lock an item</A></STRONG><BR>When you need to be the only user able to edit and commit changes to an item, you can use the Lock option. 
+<LI class=ulchildlink><STRONG><A href="ankh_unlock.html">Unlock an item</A></STRONG><BR>To allow other users to edit and commit changes to an item that you have locked, use the Unlock option and release the lock. 
+<LI class=ulchildlink><STRONG><A href="ankh_revert.html">Undo changes</A></STRONG><BR>To undo all your local changes to an item since the last update, use the Revert option. 
+<LI class=ulchildlink><STRONG><A href="ankh_revert_revision.html">Revert an item to a specific revision</A></STRONG><BR>To revert an item to a specific version, use the Revert to revision option. 
+<LI class=ulchildlink><STRONG><A href="ankh_blame.html">Find out who made what changes to a line</A></STRONG><BR>When you need to know what changes were made to a specific line in a file, as well as who made them, you can use the blame option. 
+<LI class=ulchildlink><STRONG><A href="ankh_switch.html">Switch to a branch</A></STRONG><BR>To switch your working copy from the line of development you're working on to a branck, use the Switch option. 
+<LI class=ulchildlink><STRONG><A href="ankh_diff.html">Compare revisions</A></STRONG><BR>To compare different revisions of a project file or folder, use the Diff option. 
+<LI class=ulchildlink><STRONG><A href="ankh_add_property.html">Add a Subversion property</A></STRONG><BR>You can specify special Subversion properties for your project files and folders. These properties contain the .svn prefix. 
+<LI class=ulchildlink><STRONG><A href="ankh_view_history.html">View revision history</A></STRONG><BR>Use the View History option to see the revision information for a project file or folder as it exists in the Subversion repository. 
+<LI class=ulchildlink><STRONG><A href="ankh_cleanup.html">Clean up the working copy</A></STRONG><BR>When you encounter problems due to incomplete Subversion operations or unfinished commits, use the Cleanup option to make your working copy usable. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{5F2F571E-E2C3-4C46-9125-1335742D2999}" Name="ankh_unlock" Title="Unlock an item" ContentsTitle="Unlock an item" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_unlock><!-- --></A>
+<H1 class=topictitle1>Unlock an item</H1>
+<DIV>
+<P>To allow other users to edit and commit changes to an item that you have locked, use the <SPAN class=uicontrol>Unlock</SPAN> option and release the lock. </P>
+<DIV class=section>When you commit a locked item, usually the lock is released. However, if you had selected the <SPAN class=uicontrol>Keep locks</SPAN> option while committing it, the lock does not get released. In that case, you need to manually unlock the item.</DIV>
+<DIV class=p><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click a locked item and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Unlock</SPAN></SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Unlock an item" src="images\unlock-item.png"></DIV></DIV>
+<DIV class=section>When the operation completes, the "lock" icon next to the item is removed.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=relconcepts><STRONG>Related concepts</STRONG><BR>
+<DIV><A title='While Subversion is based on the "copy-modify-merge model" for version control, it is possible for a user to lock a file and be the only one able to commit changes to it.' href="ankh_locking_c.html">How does locking work?</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="When you need to be the only user able to edit and commit changes to an item, you can use the Lock option." href="ankh_lock.html">Lock an item</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{3BB806DB-1DB6-415C-B8C6-D463052EC2D0}" Name="ankh_update_wc" Title="Update the working copy" ContentsTitle="Update the working copy" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_update_wc><!-- --></A>
+<H1 class=topictitle1>Update the working copy</H1>
+<DIV>
+<P>You update the items in the working copy of your solution to bring them up-to-date with the content in the repository.</P>
+<DIV class=section>While you work on items in a solution, other users might have made changes to them as well. You must update your working copy in order to see those changes.</DIV>
+<OL>
+<LI class=stepexpand><SPAN>In the Solution Explorer, right-click an item and select <SPAN class=uicontrol>Update</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Update</SPAN> window, make sure that the item is selected.</SPAN> 
+<LI class=stepexpand><SPAN>Select the revision to update to, and click <SPAN class=uicontrol>Update</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Update an item" src="images\update-wc.png"></DIV></LI></OL>
+<DIV class=section>When the update completes, you will see a "Done" message in the <SPAN class=wintitle>Output</SPAN> window with details about the items that were updated. In case another user has modified the same item as you, and committed those changes to the repository, Subversion attempts to merge the changes. If your changes do not overlap, they are merged. An example of such a change is when two users modify different lines of code in the same program file. If your changes conflict, the file in your working copy is displayed with a "!" icon, indicating the conflict. An example of such a change is when different users modify the same lines of code within the same file.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://svnbook.red-bean.com/en/1.4/svn.tour.revs.specifiers.html" target=_blank>Revision Keywords</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{A9DF295F-CA0A-4EA8-A075-18A3C983D391}" Name="ankh_wc_explorer" Title="What is the Working Copy Explorer?" ContentsTitle="What is the Working Copy Explorer?" Status="In Progress" CreatedOn="19-03-2008 11:55:44" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_wc_explorer><!-- --></A>
+<H1 class=topictitle1>What is the Working Copy Explorer?</H1>
+<DIV>
+<P>The <SPAN class=wintitle>Working Copy Explorer</SPAN> lets you work with the files and folders in your local copy of the repository, within Visual Studio. This includes items that are not part of your project or solution.</P>
+<P>In the <SPAN class=wintitle>Working Copy Explorer</SPAN>, you can: </P>
+<UL>
+<LI>View the version control status of your files and folders 
+<LI>Double-click on an item to open it in the task pane 
+<LI>Right-click on an item and use the same version control command options as in the <SPAN class=wintitle>Solution Explorer</SPAN> </LI></UL>
+<P>Here's an example of the Working Copy Explorer:</P>
+<DIV class=fignone><IMG alt="The Working Copy Explorer" src="images\wc-explorer.png"> </DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="To easily work with files and folders in your local copy of the repository, including ones that are not part of your project or solution, add their location to the Working Copy Explorer." href="ankh_explore_wc.html">Add your working copy to the Working Copy Explorer</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on openCollabNet</A></DIV>
+<DIV><A href="http://svnbook.red-bean.com/" target=_blank>Version control with Subversion</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{B09D7B4A-4223-47CD-B7F2-3B31506C2F5F}" Name="ankh_whatis" Title="What is AnkSVN?" ContentsTitle="What is AnkSVN?" Status="In Progress" CreatedOn="19-03-2008 11:55:45" ModifiedOn="22-06-2008 17:02:07" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_whatis></A>
+<H1 class=topictitle1>What is AnkSVN?</H1>
+<DIV>
+<P>AnkhSVN provides source control with Subversion for Visual Studio. It allows you to perform common version control operations directly within the Visual Studio environment.</P>
+<P>With AnkhSVN, you can:</P>
+<UL>
+<LI>View the source control status of all files and folders in your project or solution 
+<LI>Import new solutions directly from the <SPAN class=uicontrol>Solution Explorer</SPAN> into your Subversion repository 
+<LI>Using the <SPAN class=uicontrol>Working Copy Explorer</SPAN>: 
+<UL>
+<LI>Easily work with files that aren not part of your project or solution 
+<LI>Use the same commands as in the <SPAN class=uicontrol>Solution Explorer</SPAN> </LI></UL>
+<LI>Using the <SPAN class=uicontrol>Repository Explorer</SPAN>: 
+<UL>
+<LI>Easily browse the contents of the repository 
+<LI>Check out or export a folder 
+<LI>Open a file in Visual Studio, view it in a browser, or copy it </LI></UL>
+<LI>View the status of your file changes in real time in the <SPAN class=uicontrol>Pending Changes</SPAN> window 
+<LI>Merge changes and track&nbsp;them based on the functionality provided by Subversion 1.5 
+<LI>Plug in diff and merge tools of your choice </LI></UL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on openCollabNet</A></DIV>
+<DIV><A href="http://svnbook.red-bean.com/" target=_blank>Version control with Subversion</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{4C61B1C8-9597-4094-AAA6-D1E9A969CEDD}" Name="ankh_work_cycle" Title="What does a typical work cycle involve?" ContentsTitle="What does a typical work cycle involve?" Status="In Progress" CreatedOn="19-03-2008 11:55:45" ModifiedOn="21-03-2008 12:12:54" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=perspectives_views><!-- --></A>
+<H1 class=topictitle1>What does a typical work cycle involve?</H1>
+<DIV>
+<P>After you check out a working copy of your solution, a typical work cycle involves making changes to the working copy, updating it with changes made by other users, then resolving conflicts, if any, and finally, committing your changes to the repository.</P>
+<P>TO DO</P></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{6C599D68-12C4-45CA-A119-E239B7560E84}" Name="concepts" Title="Background knowledge" ContentsTitle="Background knowledge" Status="In Progress" CreatedOn="19-03-2008 11:55:45" ModifiedOn="21-03-2008 12:12:56" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=xxx><!-- --></A>
+<H1 class=topictitle1>Background knowledge</H1>
+<DIV>
+<P>Here are some concepts, definitions and best practices to help you make the most of this CollabNet product. </P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_whatis.html">What is AnkSVN?</A></STRONG><BR>AnkhSVN provides source control with Subversion for Visual Studio. It allows you to perform common version control operations directly within the Visual Studio environment. 
+<LI class=ulchildlink><STRONG><A href="ankh_repo_explorer.html">What is the Repsoitory Explorer?</A></STRONG><BR>The Repository Explorer is a window that shows you the the files and folders in the Subversion repository for your solution. 
+<LI class=ulchildlink><STRONG><A href="ankh_wc_explorer.html">What is the Working Copy Explorer?</A></STRONG><BR>The Working Copy Explorer lets you work with the files and folders in your local copy of the repository, within Visual Studio. This includes items that are not part of your project or solution. 
+<LI class=ulchildlink><STRONG><A href="ankh_work_cycle.html">What does a typical work cycle involve?</A></STRONG><BR>After you check out a working copy of your solution, a typical work cycle involves making changes to the working copy, updating it with changes made by other users, then rolving conflicts, if any, and finally, committing your changes to the repository. 
+<LI class=ulchildlink><STRONG><A href="ankh_locking_c.html">How does locking work?</A></STRONG><BR>While Subversion is based on the "copy-modify-merge model" for version control, it is possible for a user to lock a file and be the only one able to commit changes to it. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{83A9BA76-806B-4207-87AF-22F1F3B694B7}" Name="Glossary" Title="Glossary" ContentsTitle="Glossary" Status="In Progress" CreatedOn="19-03-2008 13:13:59" ModifiedOn="21-03-2008 12:12:59" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="{7C33D76F-BAB6-4691-BF44-B06C936BD284}">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<p> </p>]]></s>
+    </Topic>
+    <Topic Key="{F2C3BB36-3976-4B0B-9C76-1843E90B6D4A}" Name="ankh_blame" Title="Find out who made what changes to a line" ContentsTitle="Find out who made what changes to a line" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_blame><!-- --></A>
+<H1 class=topictitle1>Find out who made what changes to a line</H1>
+<DIV>
+<P>When you need to know what changes were made to a specific line in a file, as well as who made them, you can use the <SPAN class=uicontrol>blame</SPAN> option.</P>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click an item and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Blame</SPAN></SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Blame</SPAN> window, the item appears selected. Specify its start and end revisions within which you want to view the changes.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="The blame window - finding out who made specific line changes" src="images\blame-item.png"></DIV></LI></OL>
+<DIV class=section>A temporary text file containing the author, revision number and content for each line is displayed. Example: 
+<DIV class=fignone><IMG alt="Example of Blame text file" src="images\blame-item-text.png"></DIV>Within the text file, you can right-click and select <SPAN class=uicontrol>Quick find</SPAN>to locate an author, a revison number or specific words in the content. A <SPAN class=uicontrol>Quick replace</SPAN> option is also available. </DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{4C82AE04-7E60-4053-9D1A-86FBC24353C9}" Name="ankh_branching_c" Title="How does branching work?" ContentsTitle="How does branching work?" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_branching_c><!-- --></A>
+<H1 class=topictitle1>How does branching work?</H1>
+<DIV>
+<P>Subversion supports separate lines of development within a project. These lines are isolated within the repository, but you can compare, copy, and merge their content.</P>
+<DL>
+<DT class=dlterm>Branching 
+<DD>A branch starts as a copy of a main line of development, but continues independently thereafter, with its own changes. You may need to create a branch, for example, if you plan to start working on a major new feature and do not want to affect the main line of development. 
+<DT class=dlterm>Tagging 
+<DD>A tag is a static snapshot of a particular revision of the repository. Usually you create a tag when your project reaches a milestone or the product is ready for release. By convention, you do not commit changes to a tag, although it is possible. 
+<DT class=dlterm>Merging 
+<DD>When development on a branch reaches a particular stage, the changes are generally merged into the main line of development. For example, if your work on the new feature is stable, the changes in the branch can be merged to the trunk. </DD></DL>
+<P>For further information on branching, tagging, and merging concepts, please see <A href="http://svnbook.red-bean.com/en/1.4/svn.branchmerge.html" target=_blank>Version Control with Subversion - Branching.</A> </P></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="To switch your working copy from the line of development you're working on to a branck, use the Switch option." href="ankh_switch.html">Switch to a branch</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on openCollabNet</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{2C52DDE2-9300-4603-BF76-F03F3E76E497}" Name="ankh_concepts" Title="Background knowledge" ContentsTitle="Background knowledge" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=xxx><!-- --></A>
+<H1 class=topictitle1>Background knowledge</H1>
+<DIV>
+<P>Here are some concepts, definitions and best practices to help you make the most of this product. </P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_whatis.html">What is AnkSVN?</A></STRONG><BR>AnkhSVN provides source control with Subversion for Visual Studio. It allows you to perform common version control operations directly within the Visual Studio environment. 
+<LI class=ulchildlink><STRONG><A href="ankh_repo_explorer.html">What is the Repository Explorer?</A></STRONG><BR>The Repository Explorer is a window that shows you the the files and folders in the Subversion repository for your solution. 
+<LI class=ulchildlink><STRONG><A href="ankh_wc_explorer.html">What is the Working Copy Explorer?</A></STRONG><BR>The Working Copy Explorer lets you work with the files and folders in your local copy of the repository, within Visual Studio. This includes items that are not part of your project or solution. 
+<LI class=ulchildlink><STRONG><A href="ankh_pendingchanges.html">What is the Pending Changes feature?</A></STRONG><BR>The Pending Changes window displays the status of of all source files that are eligible to be committed, in real time. 
+<LI class=ulchildlink><STRONG><A href="ankh_branching_c.html">How does branching work?</A></STRONG><BR>Subversion supports separate lines of development within a project. These lines are isolated within the repository, but you can compare, copy, and merge their content. 
+<LI class=ulchildlink><STRONG><A href="ankh_mergetracking.html">How does merging work?</A></STRONG><BR>AnkhSVN's merge functionality is based on the Merge Tracking feature of Subversion 1.5. 
+<LI class=ulchildlink><STRONG><A href="ankh_locking_c.html">How does locking work?</A></STRONG><BR>While Subversion is based on the "copy-modify-merge model" for version control, it is possible for a user to lock a file and be the only one able to commit changes to it. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{7B4D4C11-B040-4AA6-B403-FCBA1AD4EEED}" Name="ankh_configuring" Title="Configure AnkhSVN" ContentsTitle="Configure AnkhSVN" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_configuring><!-- --></A>
+<H1 class=topictitle1>Configure AnkhSVN</H1>
+<DIV>
+<P>To set up an external merge or file comparison tool for AnkhSVN to use, or change a setting such as the Subversion administrative directory, specify the corresponding values in the <SPAN class=wintitle>AnkhSVN Configuration</SPAN> window.</P></DIV>
+<DIV>
+<UL class=ullinks>
+<LI class=ulchildlink><STRONG><A href="ankh_configuring_merge.html">Configure an external merge tool</A></STRONG><BR>You can configure AnkhSVN to use an external merge tool to resolve conflicts. 
+<LI class=ulchildlink><STRONG><A href="ankh_configuring_diff.html">Configure an external diff tool</A></STRONG><BR>You can configure AnkhSVN to use an external diff tool to compare files. </LI></UL></DIV>]]></s>
+    </Topic>
+    <Topic Key="{9A8A53AE-0C08-4FC1-9BDE-76E28FE1D6F0}" Name="ankh_configuring_admin" Title="Change the Subversion administrative directory" ContentsTitle="Change the Subversion administrative directory" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_configuring_merge><!-- --></A>
+<H1 class=topictitle1>Change the Subversion administrative directory</H1>
+<DIV>
+<P>You can configure AnkhSVN to use "-svn" instead of ".svn" for the administrative directory that maintains Subversion metadata for your working copy.</P>
+<DIV class=section>The default Subversion administrative directory is ".svn". Sometimes, however, Visual Studio has problems with projects using folders that begin with "." . In that case, you can specify the Subversion administrative directory as "-svn". Let's say you have a solution containing a web project, it is version controlled with Subversion, and you want to change its administrative directory to"-svn". Follow these steps:</DIV>
+<OL>
+<LI><SPAN>Open Visual Studio without loading the solution, and select <SPAN class=menucascade><SPAN class=uicontrol>Tools</SPAN> &gt; <SPAN class=uicontrol>AnkSVN</SPAN> &gt; <SPAN class=uicontrol>Configuration</SPAN></SPAN>. </SPAN>
+<LI><SPAN>In the <SPAN class=wintitle>AnkhSVN Configuration</SPAN> window, select <SPAN class=uicontrol>AdminDirectoryName</SPAN>.</SPAN> 
+<LI><SPAN>From the corresponding dropdown box, select <SPAN class=uicontrol>-svn</SPAN>.</SPAN> 
+<LI><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<LI><SPAN>Load the solution into Visual Studio, right-click on it in <SPAN class=wintitle>Solution Explorer</SPAN> and select <SPAN class=uicontrol>Enable AnkhSVN for this solution</SPAN>.</SPAN> </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="To set up an external merge or file comparison tool for AnkhSVN to use, or change a setting such as the Subversion administrative directory, specify the corresponding values in the AnkhSVN Configuration window." href="ankh_configuring.html">Configure AnkhSVN</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{9476FDE3-367B-4FC3-911B-69764C087889}" Name="ankh_configuring_diff" Title="Configure an external diff tool" ContentsTitle="Configure an external diff tool" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_configuring_merge><!-- --></A>
+<H1 class=topictitle1>Configure an external diff tool</H1>
+<DIV>
+<P>You can configure AnkhSVN to use an external diff tool to compare files.</P>
+<OL>
+<LI class=stepexpand><SPAN>In Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Tools</SPAN> &gt; <SPAN class=uicontrol>Options</SPAN> </SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Options</SPAN> window, select <SPAN class=uicontrol>Subversion</SPAN> under <SPAN class=uicontrol>Source Control</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>For <SPAN class=uicontrol>External diff path</SPAN>, click the ellipsis button to bring up the <SPAN class=wintitle>DiffExe</SPAN> window.</SPAN> 
+<LI class=stepexpand><SPAN>Specify the diff option to use for comparing files.</SPAN> 
+<DIV class=fignone><IMG alt="Configure an external diff tool" src="images\external-diff.png"></DIV>
+<DIV class=tip><SPAN class=tiptitle>Tip:</SPAN> Press Ctrl+T to select a tool such as TortoiseMerge, WinMerge, Araxis, and so on. You can also specify whether a specific version be used for comparison - for example, "%mine" for "My version".</DIV>
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Options</SPAN> window, click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="To set up an external merge or file comparison tool for AnkhSVN to use, or change a setting such as the Subversion administrative directory, specify the corresponding values in the AnkhSVN Configuration window." href="ankh_configuring.html">Configure AnkhSVN</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{988150C3-23B5-4140-BA9B-B6EBF6BA3FB9}" Name="ankh_configuring_merge" Title="Configure an external merge tool" ContentsTitle="Configure an external merge tool" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_configuring_merge><!-- --></A>
+<H1 class=topictitle1>Configure an external merge tool</H1>
+<DIV>
+<P>You can configure AnkhSVN to use an external merge tool to resolve conflicts.</P>
+<OL>
+<LI class=stepexpand><SPAN>In Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Tools</SPAN> &gt; <SPAN class=uicontrol>Options</SPAN> </SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Options</SPAN> window, select <SPAN class=uicontrol>Subversion</SPAN> under <SPAN class=uicontrol>Source Control</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>For <SPAN class=uicontrol>External merge path</SPAN>, click the ellipsis button to bring up the <SPAN class=wintitle>MergeExe</SPAN> window.</SPAN> 
+<LI class=stepexpand><SPAN>Specify the merge option to be used when resolving conflicts.</SPAN> 
+<DIV class=fignone><IMG alt="Configure an external merge tool" src="images\external-merge.png"></DIV>
+<DIV class=tip><SPAN class=tiptitle>Tip:</SPAN> Press Ctrl+T to select a tool such as TortoiseMerge. You can also specify whether a specific version be used to resolve conflicts - for example, "%mine" for "My version".</DIV>
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Options</SPAN> window, click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="To set up an external merge or file comparison tool for AnkhSVN to use, or change a setting such as the Subversion administrative directory, specify the corresponding values in the AnkhSVN Configuration window." href="ankh_configuring.html">Configure AnkhSVN</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{A5577B9D-0BD0-4F44-89CB-345B53FC7C68}" Name="ankh_switch" Title="Switch to a branch" ContentsTitle="Switch to a branch" Status="In Progress" CreatedOn="23-04-2008 14:51:43" ModifiedOn="19-06-2008 15:22:25" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_switch><!-- --></A>
+<H1 class=topictitle1>Switch to a branch</H1>
+<DIV>
+<P>To switch your working copy from the line of development you're working on to a branck, use the <SPAN class=uicontrol>Switch</SPAN> option.</P>
+<OL>
+<LI><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN> , right-click an item and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Switch</SPAN></SPAN>.</SPAN> 
+<LI><SPAN>In the <SPAN class=wintitle>Switch to</SPAN> window, enter the URL of the branch you want to switch to.</SPAN> 
+<LI><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL>
+<DIV class=section></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV>
+<DIV class=relconcepts><STRONG>Related concepts</STRONG><BR>
+<DIV><A title="Subversion supports separate lines of development within a project. These lines are isolated within the repository, but you can compare, copy, and merge their content." href="ankh_branching_c.html">How does branching work?</A></DIV></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{0DF89290-5F1B-4351-A0BB-537669DCAE7B}" Name="ankh_commit_pendingchanges" Title="Commit pending changes" ContentsTitle="Commit pending changes" Status="In Progress" CreatedOn="19-06-2008 15:22:25" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_commit_pendingchanges><!-- --></A>
+<H1 class=topictitle1>Commit pending changes</H1>
+<DIV>
+<P>It is often useful to see all the modified files in your working copy, as well as any new ones, before you commit them.</P>
+<OL>
+<LI class=stepexpand><SPAN>View your pending changes in one of these ways:</SPAN> 
+<UL>
+<LI>In the <SPAN class=wintitle>File</SPAN> menu, select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Show Pending Changes</SPAN> </SPAN>. 
+<LI>In the <SPAN class=wintitle>View</SPAN> menu, select <SPAN class=uicontrol>Repository Explorer</SPAN>. </LI></UL>The <SPAN class=wintitle>Pending Changes</SPAN> window appears. The <SPAN class=wintitle>Local File Changes</SPAN> view shows you all files that you added but are as yet unversioned, files that you edited but did not save, files that you modified and saved, and files where your changes conflict with those made by other users. 
+<LI class=stepexpand><SPAN>Click the <SPAN class=uicontrol>View Messages</SPAN> icon <IMG alt="View Messages icon" src="images\view-messages-icon.png">, and enter a descriptive message for your commit.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>Commit</SPAN>.</SPAN> All files in the <SPAN class=wintitle>Pending Changes</SPAN> window get committed to the source repository. </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some administrative and other tasks you can perform with AnkhSVN." href="ankh_other_repo_tasks.html">Other version control tasks</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{B86553E2-4D3F-4A11-850D-2A43B2F0F540}" Name="ankh_connect_soln" Title="Connect a project to AnkhSVN" ContentsTitle="Connect a project to AnkhSVN" Status="In Progress" CreatedOn="19-06-2008 15:22:25" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_add_soln><!-- --></A>
+<H1 class=topictitle1>Connect a project to AnkhSVN</H1>
+<DIV>
+<P>When you have a different source control system set as your default for VS.NET, and you want to start using AnkhSVN, the first step is to "connect" to AnkhSVN.</P>
+<OL>
+<LI><SPAN>Open the project in Solution Explorer.</SPAN> 
+<LI><SPAN>From the <SPAN class=uicontrol>File</SPAN> menu in Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Change Source Control</SPAN> </SPAN>.</SPAN> 
+<LI><SPAN>In the <SPAN class=wintitle>Change Source Control</SPAN> window, select the row containing your project or solution, and click <SPAN class=uicontrol>Connect</SPAN>.</SPAN> 
+<LI><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some basic tasks to help you get started with AnkhSVN." href="ankh_getting_started.html">Getting started</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="When you enable AnkhSVN as a VS.NET source control tool, you can use it to perform perform common version control operations using Subversion directly within the Visual Studio environment." href="ankh_select.html">Enable AnkhSVN for source control</A></DIV>
+<DIV><A title="Use the Open from Subversion option to check out a project or solution controlled by Subversion and open it in the Solution Explorer." href="ankh_open_svnproject.html">Open a project from Subversion</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{B7D3F3D1-1878-4770-8573-0ECEEB102B26}" Name="ankh_mergetracking" Title="How does merging work?" ContentsTitle="How does merging work?" Status="In Progress" CreatedOn="19-06-2008 15:22:25" ModifiedOn="22-06-2008 16:48:51" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_mergetracking></A>
+<H1 class=topictitle1>How does merging work?</H1>
+<DIV>
+<P>AnkhSVN's merge functionality is based on the Merge Tracking feature of Subversion 1.5.</P>
+<P>For concepts on advanced merging and merge tracking, see the <A href="http://svnbook.red-bean.com/nightly/en/svn-book.html#svn.branchmerge.advanced" target=_blank>Subversion manual</A>.</P>
+<P>For an overview on how to use the merge client, see the information under <A href="http://merge-tracking.open.collab.net/servlets/ProjectProcess?pageID=3709&amp;freeformpage=Merge%20Client%20Overview" target=_blank>"Performing a Merge"</A>. While that contains references to Eclipse, the same client is used here.</P></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV>
+<DIV class=relinfo><STRONG>Related information</STRONG><BR>
+<DIV><A href="http://merge-tracking.open.collab.net/" target=_blank>The Merge Tracking project on collab.net</A></DIV>
+<DIV><A href="http://ankhsvn.open.collab.net/" target=_blank>The AnkhSVN project on collab.nett</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{A7BC328C-3706-4B3B-A934-88739E5F467D}" Name="ankh_pendingchanges" Title="What is the Pending Changes feature?" ContentsTitle="What is the Pending Changes feature?" Status="In Progress" CreatedOn="19-06-2008 15:22:25" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_pendingchanges><!-- --></A>
+<H1 class=topictitle1>What is the Pending Changes feature?</H1>
+<DIV>
+<P>The <SPAN class=wintitle>Pending Changes</SPAN> window displays the status of of all source files that are eligible to be committed, in real time.</P>
+<DIV class=section>
+<H2 class=sectiontitle>File status</H2>
+<DIV class=p>
+<DL>
+<DT class=dlterm>New 
+<DD>This shows a new file that you have not yet scheduled for addition to the repository. 
+<DT class=dlterm>Added 
+<DD>This shows a file that has been added, but not yet committed, to the repository. 
+<DT class=dlterm>Edited 
+<DD>This shows a file where you made changes, but did not save them. 
+<DT class=dlterm>Modified 
+<DD>This shows a file where you made changes and saved them. 
+<DT class=dlterm>Conflicted 
+<DD>This shows a file where your changes conflicted with those made by another user, when you updated it from the repository. 
+<DT class=dlterm>Deleted, Copied 
+<DD>When you rename a file, it gets copied under the new name and the original is removed. "Deleted" shows the file with original name, and "Copied" shows the same file with the new name. </DD></DL>Files where your local copy matches the version in the repository, do not appear in the Pending Changes window. </DIV>
+<P>Here is an example that shows source files in Solution Explorer and the corresponding <SPAN class=wintitle>Local File Changes</SPAN> view in the <SPAN class=wintitle>Pending Changes</SPAN> window: <IMG alt="Pending Changes" src="images\pending-changes-combined.png"> </P></DIV>
+<DIV class=section>
+<H2 class=sectiontitle>Features</H2>
+<DIV class=p>
+<UL>
+<LI>In the <SPAN class=wintitle>Pending Changes</SPAN> window, four views are available: 
+<UL>
+<LI>Local File Changes 
+<LI>Issues 
+<LI>Recent Changes 
+<LI>Conflicts </LI></UL>
+<LI>When you right-click a file in the <SPAN class=wintitle>Pending Changes</SPAN> window, you have the same options as available in the Solution Explorer. 
+<LI>Using the Commit option, you can select individual files or all eligible ones in your local working copy, and commit them in a single operation. 
+<LI>You can update the solution to a specific revision. 
+<LI>You can compare the current version of a file to some other version such as HEAD, previous, and so on. 
+<LI>The flat changes view lets you see the changed files in your working copy at various hierarchical levels. 
+<LI>The <SPAN class=uicontrol>Working on</SPAN> field displays the path to the repository you are currently working with. The <SPAN class=uicontrol>Switch</SPAN> option lets you select a different one. </LI></UL></DIV></DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some concepts, definitions and best practices to help you make the most of this product." href="ankh_concepts.html">Background knowledge</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{2E35819D-4225-4A8C-97C5-ACED55A5BB1C}" Name="ankh_select" Title="Enable AnkhSVN for source control" ContentsTitle="Enable AnkhSVN for source control" Status="In Progress" CreatedOn="19-06-2008 15:22:25" ModifiedOn="" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_select><!-- --></A>
+<H1 class=topictitle1>Enable AnkhSVN for source control</H1>
+<DIV>
+<P>When you enable AnkhSVN as a VS.NET source control tool, you can use it to perform perform common version control operations using Subversion directly within the Visual Studio environment. </P>
+<OL>
+<LI><SPAN>In Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Tools</SPAN> &gt; <SPAN class=uicontrol>Options</SPAN> </SPAN>.</SPAN> 
+<LI><SPAN>In the <SPAN class=wintitle>Options</SPAN> window, select <SPAN class=uicontrol>Plug-in Selection</SPAN> under <SPAN class=uicontrol>Source Control</SPAN>.</SPAN> 
+<LI><SPAN>Select <SPAN class=uicontrol>AnkhSVN - Subversion Support for Visual Studio</SPAN> for <SPAN class=uicontrol>Current source control plug-in</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>Various menu options for AnkhSVN are now available.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some basic tasks to help you get started with AnkhSVN." href="ankh_getting_started.html">Getting started</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title='When you have a different source control system set as your default for VS.NET, and you want to start using AnkhSVN, the first step is to "connect" to AnkhSVN.' href="ankh_connect_soln.html">Connect a project to AnkhSVN</A></DIV>
+<DIV><A title="Use the Open from Subversion option to check out a project or solution controlled by Subversion and open it in the Solution Explorer." href="ankh_open_svnproject.html">Open a project from Subversion</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{A61008B9-E462-4EB1-A564-6F4B31AE03A0}" Name="ankh_add_property" Title="Add a Subversion property" ContentsTitle="Add a Subversion property" Status="In Progress" CreatedOn="22-06-2008 16:41:51" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_add_property><!-- --></A>
+<H1 class=topictitle1>Add a Subversion property</H1>
+<DIV>
+<P>You can specify special Subversion properties for your project files and folders. These properties contain the <SAMP class=codeph>.svn</SAMP> prefix.</P>
+<DIV class=section>For example, use the <SAMP class=codeph>svn:ignore</SAMP> property to make some Subversion operations ignore a list of file patterns. For details about the Subversion properties available, and how to use them, please see the <A href="http://svnbook.red-bean.com/en/1.4/svn-book.html#svn.ref.properties" target=_blank>Subversion manual</A>.</DIV>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click a file or folder controlled by Subversion, and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Properties</SPAN></SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>SVN Properties</SPAN> window, click <SPAN class=uicontrol>Add</SPAN>.</SPAN> 
+<DIV class=fignone><IMG alt="Add a Subversion property" src="images\add-property.png"></DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Add/Edit Property</SPAN> window, select a property from the <SPAN class=uicontrol>Property Name</SPAN> dropdown list.</SPAN> 
+<LI class=stepexpand><SPAN>Depending on the property you selected, provide additional information. For example, if you selected the <SAMP class=codeph>svn:ignore</SAMP> property, specify the lines or patterns that Subversion operations should ignore.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>SVN Properties</SPAN> window, click <SPAN class=uicontrol>Save</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>The property is attached to the file. To update or remove the property, click the <SPAN class=uicontrol>Edit</SPAN> or <SPAN class=uicontrol>Delete</SPAN> button in the <SPAN class=wintitle>SVN Properties</SPAN> window.</DIV>
+<DIV class=section>
+<DIV class=note><SPAN class=notetitle>Note:</SPAN> After you add a property, you must commit your changes.</DIV></DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{5E3239B0-2AA4-48FA-BBF1-F4217A3E475B}" Name="ankh_diff" Title="Compare revisions" ContentsTitle="Compare revisions" Status="In Progress" CreatedOn="22-06-2008 16:41:51" ModifiedOn="22-06-2008 17:23:06" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_diff></A>
+<H1 class=topictitle1>Compare revisions</H1>
+<DIV>
+<P>To compare different revisions of a project file or folder, use the <SPAN class=uicontrol>Diff</SPAN> option.</P>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click a projet file or folder and select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Diff</SPAN></SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Select items for diffing</SPAN> window, select the revisions you want to compare. For example, select the head and previous revisions to compare the latest revision with the previous one. </SPAN>To compare versions of the file or folder as it existed on different dates, select the <SPAN class=uicontrol>Date</SPAN> option for the "start" and "end" revisions and specify the corresponding dates. 
+<DIV class=fignone><IMG alt="Compare file revisons" src="images\diff-item.png"></DIV>
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> By default, the differences are displayed in a Unified Diff format. You may find it helpful to check them before you commit your changes. </LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{0AC248E9-10FF-475D-8581-B106281E64F8}" Name="ankh_open_svnproject" Title="Open a project from Subversion" ContentsTitle="Open a project from Subversion" Status="In Progress" CreatedOn="22-06-2008 16:41:52" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_checkout_soln><!-- --></A>
+<H1 class=topictitle1>Open a project from Subversion</H1>
+<DIV>
+<P>Use the <SPAN class=uicontrol>Open from Subversion</SPAN> option to check out a project or solution controlled by Subversion and open it in the Solution Explorer.</P>
+<OL>
+<LI class=stepexpand><SPAN>From the <SPAN class=uicontrol>File</SPAN> menu in Visual Studio, select <SPAN class=menucascade><SPAN class=uicontrol>Subversion</SPAN> &gt; <SPAN class=uicontrol>Open from Subversion</SPAN> </SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Open from Subversion</SPAN> window, click the icon <IMG alt="Add URL icon" src="images\add-icon.png"> to add a new URL for a Subversion repository.</SPAN> 
+<DIV class=fignone><IMG alt="Open from Subversion window" src="images\open-fromsvn.png"></DIV>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Add Subversion url</SPAN> window, enter the URL for the Subversion repository and click <SPAN class=uicontrol>OK</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>Select a VS.NET project or solution and click <SPAN class=uicontrol>Open</SPAN>.</SPAN> The <SPAN class=wintitle>Open Project from Subversion </SPAN>window appears. It displays the URL of the parent project's Subversion repository. 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Check Out from</SPAN> field, specify the location of the Subversion repository from which you want to check out your working copy. For example, "https://project1.demo.collab.net/svn/project2/trunk".</SPAN> 
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Local Directory</SPAN> field, browse to the location where you want the repository content to be checked out on your local system. For example, "C:/project1". </SPAN>
+<LI class=stepexpand><SPAN>In the <SPAN class=uicontrol>Version</SPAN> field, select the repository revision you want to check out. By default, the latest revision is checked out.</SPAN> 
+<LI class=stepexpand><SPAN>Click <SPAN class=uicontrol>OK</SPAN>.</SPAN> </LI></OL>
+<DIV class=section>The project or solution is opened in Solution Explorer.</DIV></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="Here are some basic tasks to help you get started with AnkhSVN." href="ankh_getting_started.html">Getting started</A></DIV></DIV>
+<DIV class=reltasks><STRONG>Related tasks</STRONG><BR>
+<DIV><A title="When you enable AnkhSVN as a VS.NET source control tool, you can use it to perform perform common version control operations using Subversion directly within the Visual Studio environment." href="ankh_select.html">Enable AnkhSVN for source control</A></DIV>
+<DIV><A title='When you have a different source control system set as your default for VS.NET, and you want to start using AnkhSVN, the first step is to "connect" to AnkhSVN.' href="ankh_connect_soln.html">Connect a project to AnkhSVN</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <Topic Key="{7E8C1362-B62B-4DDE-ADB5-63CA81CA4E43}" Name="ankh_view_history" Title="View revision history" ContentsTitle="View revision history" Status="In Progress" CreatedOn="22-06-2008 16:41:52" ModifiedOn="22-06-2008 16:41:52" LayoutName="" AllStyleSheets="True" AllScripts="True" AutoGenerateIndexEntry="True" IncludeInHelpFile="True" HelpContextIDs="" Category="">
+        <Notes/>
+        <s k="BodyText"><![CDATA[<A name=ankh_view_history><!-- --></A>
+<H1 class=topictitle1>View revision history</H1>
+<DIV>
+<P>Use the <SPAN class=uicontrol>View History</SPAN> option to see the revision information for a project file or folder as it exists in the Subversion repository.</P>
+<OL>
+<LI class=stepexpand><SPAN>In the <SPAN class=wintitle>Solution Explorer</SPAN>, right-click a project file or folder and select <SPAN class=uicontrol>View History</SPAN>.</SPAN> The <SPAN class=wintitle>History Viewer </SPAN>is displayed. It shows the revision number, date and time of revision, the author, and the first line of the commit log message. 
+<LI class=stepexpand><SPAN>To see other items affected by a particular revision, click <SPAN class=uicontrol>Show changed paths</SPAN>.</SPAN> 
+<LI class=stepexpand><SPAN>To see the complete log message for a particular revision, click the <SPAN class=uicontrol>Show log message</SPAN> icon <IMG alt="Show log message icon" src="images\view-messages-icon.png">.</SPAN> 
+<DIV class=fignone><IMG alt="History Viewer" src="images\view-history.png"></DIV></LI></OL></DIV>
+<DIV>
+<DIV class=familylinks>
+<DIV class=parentlink><STRONG>Parent topic:</STRONG> <A title="For most version control tasks, you can right-click on a source-controlled item in the Solution Explorer, select Ankh, and then the respective command." href="ankh_tasks.html">Basic version control operations in the Solution Explorer</A></DIV></DIV></DIV>]]></s>
+    </Topic>
+    <GlossaryItems>
+        <glossaryitem Key="{8B96E46E-2531-4065-B8C3-0327D89654B2}" Term="AnkhSVN">Subversion source control tool for visual Studio.</glossaryitem>
+        <glossaryitem Key="{096015CD-5152-45AD-96A3-928E1BF68D2F}" Term="Working Copy">Local copy of the content in your Subversion repository.</glossaryitem>
+    </GlossaryItems>
+    <Nodes>
+        <n key="{98F87656-738A-40DC-AEB4-2418C61AC6B7}" nt="0" ct="2" c="AnkSVN" i="-1" cfn="" tid="" url="" tb="">
+            <n key="{4BC80AE7-4E90-4866-93C5-767FD5BFC530}" nt="1" ct="1" c="" i="-1" cfn="" tid="{2C52DDE2-9300-4603-BF76-F03F3E76E497}" url="" tb="">
+                <n key="{4B87EE6C-EF53-4BC5-A764-713145CCEDCF}" nt="1" ct="1" c="" i="-1" cfn="" tid="{B09D7B4A-4223-47CD-B7F2-3B31506C2F5F}" url="" tb=""/>
+                <n key="{BE65B205-797B-45CF-BCBB-83017F00595F}" nt="1" ct="1" c="" i="-1" cfn="" tid="{4B4EE257-1753-4711-A159-DD15E90ED49D}" url="" tb=""/>
+                <n key="{5C99BDD0-FEA2-4076-86F3-0AAA3853B85C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{A9DF295F-CA0A-4EA8-A075-18A3C983D391}" url="" tb=""/>
+                <n key="{EAEB3D46-2B83-4335-8AD5-86C38B2F2696}" nt="1" ct="1" c="" i="-1" cfn="" tid="{A7BC328C-3706-4B3B-A934-88739E5F467D}" url="" tb=""/>
+                <n key="{FF561100-F411-487A-ACBF-814010EC3E77}" nt="1" ct="1" c="" i="-1" cfn="" tid="{4C82AE04-7E60-4053-9D1A-86FBC24353C9}" url="" tb=""/>
+                <n key="{ECB21568-B106-452A-B31B-092F9AEE27CD}" nt="1" ct="1" c="" i="-1" cfn="" tid="{B7D3F3D1-1878-4770-8573-0ECEEB102B26}" url="" tb=""/>
+                <n key="{C0639F9D-A2EC-4AFE-8B0F-C6B85B8DC105}" nt="1" ct="1" c="" i="-1" cfn="" tid="{3DBF4E4D-5F80-42F7-B243-2623BDE74EC3}" url="" tb=""/>
+            </n>
+            <n key="{C66F73E4-CD4F-4899-B4B3-6E030111B132}" nt="1" ct="1" c="" i="-1" cfn="" tid="{4029669B-65B5-4B1F-9B70-5EADDEBF0A3D}" url="" tb="">
+                <n key="{23C6A19F-B7E5-4456-BF18-1CE04AEAFA07}" nt="1" ct="1" c="" i="-1" cfn="" tid="{2E35819D-4225-4A8C-97C5-ACED55A5BB1C}" url="" tb=""/>
+                <n key="{38E3A806-398B-4DDB-87FC-BA02DA08FBB4}" nt="1" ct="1" c="" i="-1" cfn="" tid="{B86553E2-4D3F-4A11-850D-2A43B2F0F540}" url="" tb=""/>
+                <n key="{E4B81116-ADB1-4CAB-BD96-EBF5CBD7E14C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{0AC248E9-10FF-475D-8581-B106281E64F8}" url="" tb=""/>
+            </n>
+            <n key="{B698F091-6AC7-49F3-939E-D570DB7736F2}" nt="1" ct="1" c="" i="-1" cfn="" tid="{C15F1E79-4C2C-4941-81B5-438EDDBA87EA}" url="" tb="">
+                <n key="{56DA74DB-3A44-452D-87CF-50FE61B25BD4}" nt="1" ct="1" c="" i="-1" cfn="" tid="{C3F1E6AE-1917-42A9-8C30-FC091D8D535F}" url="" tb=""/>
+                <n key="{4C0806F6-C06E-4A41-A802-95436407760C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{F1D1A6AD-7C45-4B6A-93DE-D26A97E6EE77}" url="" tb=""/>
+                <n key="{0117448D-9947-4BE3-9E96-5E5444869867}" nt="1" ct="1" c="" i="-1" cfn="" tid="{3BB806DB-1DB6-415C-B8C6-D463052EC2D0}" url="" tb=""/>
+                <n key="{D6C7521A-2D98-44D9-A920-1D2900E0F845}" nt="1" ct="1" c="" i="-1" cfn="" tid="{9F75226F-1DDF-46BE-84C9-920472AA8251}" url="" tb=""/>
+                <n key="{D0036E00-D6DA-4DA4-9DD4-F0F7A096A76C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{5F2F571E-E2C3-4C46-9125-1335742D2999}" url="" tb=""/>
+                <n key="{B59F5645-BB2D-455F-A8ED-DD195918096F}" nt="1" ct="1" c="" i="-1" cfn="" tid="{F85F0A23-74A0-4302-A3B3-070C5B96AFC0}" url="" tb=""/>
+                <n key="{42301500-9553-4314-9E91-627EFBDC61E7}" nt="1" ct="1" c="" i="-1" cfn="" tid="{A4F18AD7-9B8C-4AC3-9FCE-7B129D73B2ED}" url="" tb=""/>
+                <n key="{14F13491-34E2-4337-B831-00692A2FE71E}" nt="1" ct="1" c="" i="-1" cfn="" tid="{F2C3BB36-3976-4B0B-9C76-1843E90B6D4A}" url="" tb=""/>
+                <n key="{1624AD1B-8E93-4FE6-8074-ACE60D5E5DED}" nt="1" ct="1" c="" i="-1" cfn="" tid="{A5577B9D-0BD0-4F44-89CB-345B53FC7C68}" url="" tb=""/>
+                <n key="{7D1C70EB-2AB8-4F05-9A9B-A79A27F2094C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{5E3239B0-2AA4-48FA-BBF1-F4217A3E475B}" url="" tb=""/>
+                <n key="{9BD67845-C47C-4A2B-ABB6-D2A64F2215E0}" nt="1" ct="1" c="" i="-1" cfn="" tid="{A61008B9-E462-4EB1-A564-6F4B31AE03A0}" url="" tb=""/>
+                <n key="{F8BED96B-37B9-4F52-AC90-943089489020}" nt="1" ct="1" c="" i="-1" cfn="" tid="{7E8C1362-B62B-4DDE-ADB5-63CA81CA4E43}" url="" tb=""/>
+                <n key="{683A4937-7A9E-4CBB-966E-DAA33F96069C}" nt="1" ct="1" c="" i="-1" cfn="" tid="{03A0AEE9-48F9-46E2-B23E-E673BF2D8776}" url="" tb=""/>
+            </n>
+            <n key="{E1796D87-031A-4885-8D2B-71C5570680C0}" nt="1" ct="1" c="" i="-1" cfn="" tid="{7B4D4C11-B040-4AA6-B403-FCBA1AD4EEED}" url="" tb="">
+                <n key="{867AFEEC-9F7A-41D9-83A8-5AE1F61BC1BB}" nt="1" ct="1" c="" i="-1" cfn="" tid="{988150C3-23B5-4140-BA9B-B6EBF6BA3FB9}" url="" tb=""/>
+                <n key="{B06C841A-6910-4CE6-931C-E78901BBB37D}" nt="1" ct="1" c="" i="-1" cfn="" tid="{9476FDE3-367B-4FC3-911B-69764C087889}" url="" tb=""/>
+            </n>
+            <n key="{6A1C4CC3-82B9-4854-9763-097B11A1947F}" nt="1" ct="1" c="" i="-1" cfn="" tid="{69508DD3-5FCF-4B65-8B42-6A88D5D7B4EE}" url="" tb="">
+                <n key="{804FAAC4-9849-4C90-95B0-F91469EEC2DF}" nt="1" ct="1" c="" i="-1" cfn="" tid="{0DF89290-5F1B-4351-A0BB-537669DCAE7B}" url="" tb=""/>
+                <n key="{7CE6C75F-112E-4EF4-8D63-86D8119E4F43}" nt="1" ct="1" c="" i="-1" cfn="" tid="{D8129E73-905F-4DC6-81BE-4C09161D92E1}" url="" tb=""/>
+                <n key="{E7FD0447-491B-4E95-8E62-B0E45F579371}" nt="1" ct="1" c="" i="-1" cfn="" tid="{FE256B51-DB6D-4C20-9950-AACAD28DFEC0}" url="" tb=""/>
+            </n>
+        </n>
+    </Nodes>
+    <Tasks>
+        <Task Key="{7CFEE3F1-9689-4EF0-A38C-0F59E9C2D274}" Priority="2" Title="" AssignedTo="" TopicID="" Status="Not Started" CreatedOn="19-03-2008 11:55:45" CreatedBy="Import" ModifiedOn="19-03-2008 11:55:45" ModifiedBy="kavitha"><![CDATA[The import detected 2 broken links. It is recommended that you run the 'Project Verify Links...' command before attempting to build your project.]]></Task>
+        <Task Key="{66A54FA2-4722-4F4F-AECB-D38D94D06127}" Priority="2" Title="" AssignedTo="" TopicID="" Status="Not Started" CreatedOn="19-03-2008 12:08:48" CreatedBy="Import" ModifiedOn="19-03-2008 12:08:48" ModifiedBy="kavitha"><![CDATA[The import detected 2 broken links. It is recommended that you run the 'Project Verify Links...' command before attempting to build your project.]]></Task>
+        <Task Key="{4F0B3A37-4C97-420C-8B53-4CC7DE422C7C}" Priority="2" Title="" AssignedTo="" TopicID="" Status="Not Started" CreatedOn="19-03-2008 12:09:17" CreatedBy="Import" ModifiedOn="19-03-2008 12:09:17" ModifiedBy="kavitha"><![CDATA[The import detected 2 broken links. It is recommended that you run the 'Project Verify Links...' command before attempting to build your project.]]></Task>
+    </Tasks>
+    <BuildProfiles>
+        <BuildProfile ID="{190E2D49-3873-43F9-88C1-3565CFF009B9}" Name="Default" OutputDirectory="Build\Default\" CompileHelpFile="True" HTMLHelpVersion="2" H2Namespace="ankh03" H2FileID="ankh03" H2PlugIn="" HelpFileName="c:\ankhsvn02\ankh03.hxs" UseBuildFlags="False" ProjectTitle="ankh03" RemoveOutputFiles="True" BuildFlags="" IncludeInBuild="True" DefaultTopicID="" LocaleID="0">
+            <TemplateProperty Name="GlossaryTitle">Glossary</TemplateProperty>
+        </BuildProfile>
+    </BuildProfiles>
+    <ProjectProperties/>
+</HSProject>

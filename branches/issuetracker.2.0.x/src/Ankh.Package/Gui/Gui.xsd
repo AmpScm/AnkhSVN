@@ -1,0 +1,1182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.studioturtle.net/2007/01/gui/" xmlns="http://schemas.studioturtle.net/2007/01/gui/">
+  <xs:complexType name="Imports-Type">
+    <xs:complexContent>
+      <xs:extension base="gui:Base-Type">
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="gui:Import" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Group-Base">
+    <xs:complexContent>
+      <xs:extension base="gui:Base-Type">
+        <xs:sequence>
+          <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element ref="gui:Menu" />
+            <xs:element ref="gui:MenuRef" />
+            <xs:element ref="gui:Button" />
+            <xs:element ref="gui:ComboBox" />
+            <xs:element ref="gui:ButtonRef" />
+            <xs:element ref="gui:Visibility" />
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="gui:qId" use="required">
+          <xs:annotation>
+            <xs:documentation>
+            </xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Menu-Base">
+    <xs:complexContent>
+      <xs:extension base="gui:Base-Type">
+        <xs:sequence>
+          <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element ref="gui:Group">
+              <xs:annotation>
+                <xs:documentation>Defines a new group to be placed within this context</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element ref="gui:GroupRef">
+              <xs:annotation>
+                <xs:documentation>References an existing group within this context</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element ref="gui:Visibility" />
+          </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="gui:qId" use="required">
+          <xs:annotation>
+            <xs:documentation>The new id of the menu (in case of &lt;Menu&gt;), or id of an existing menu (in case of &lt;MenuRef&gt;)</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="qId">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[_a-zA-Z][a-zA-Z0-9_]*(:[a-zA-Z][a-zA-Z0-9_]*)?" />
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="Base-Type" abstract="true">
+    <xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VsGui">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:sequence>
+          <xs:element ref="gui:Imports" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:UI" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:KeyBindings" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:UsedCommands" minOccurs="0" maxOccurs="1" />
+          <xs:element ref="gui:BitmapStrips" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Imports" type="gui:Imports-Type">
+  </xs:element>
+  <xs:element name="UI">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:Base-Type">
+          <xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="gui:GroupRef">
+                <xs:annotation>
+                  <xs:documentation>The reference to an existing group</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element ref="gui:MenuRef">
+                <xs:annotation>
+                  <xs:documentation>The reference to an existing menu</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attribute name="packageId" type="gui:qPrefix" use="required">
+            <xs:annotation>
+              <xs:documentation>The packageid of this package</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="autoBmpId" type="gui:qPrefix">
+            <xs:annotation>
+              <xs:documentation>Id of the auto-generated bmp</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Menu">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:Menu-Base">
+          <xs:sequence>
+          </xs:sequence>
+          <xs:attribute name="priority" type="gui:intValue" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                A value that is used to position this menu relative to other menus in the same group.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="type" type="gui:menuType" use="optional">
+            <xs:annotation>
+              <xs:documentation>
+                Describes the type of menu.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attributeGroup ref="gui:menuFlags" />
+          <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                The name of the menu.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="text" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>
+                This is the text that the user clicks on to open the menu. This field is also the name of a toolbar that appears in the Toolbars submenu of the View menu. This field is also the name of the shortcut menu that appears in the Shortcut Menus toolbar during customization.
+
+                This field is optional; if not specified, the name attribute is used.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MenuRef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:Menu-Base">
+          <xs:sequence />
+          <xs:attribute name="priority" type="gui:intValue" use="optional" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Group">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:Group-Base">
+          <xs:sequence>
+          </xs:sequence>
+          <xs:attribute name="priority" type="gui:intValue" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                A value that is used to position this group relative to other groups on the same menu.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GroupRef">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:Group-Base">
+          <xs:sequence>
+          </xs:sequence>
+          <xs:attribute name="priority" type="gui:intValue" use="optional" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Import">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+      <xs:attribute name="include" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Used to include header files</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="prefix" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Use with from and type. Describes the target prefix</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="type" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Use with from and prefix. Describes the assembly to load from</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="from" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The enum in the assembly (defined by type) that contains the enum that should be bound to prefix</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="intValue">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:pattern value="(0x[0-9A-Fa-f]+)|([0-9]+)" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="menuType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a drop-down menu that has the following characteristics:
+
+            Is specified by leaving the type argument blank in a menu declaration.
+
+            Respects the Group ID field in its definition.
+
+            Must have a parent group that is defined either in the Group ID field or the command placement section.
+
+            Can be a submenu in any other menu.
+
+            Is automatically made visible by the IDE whenever the parent menu of a menu is visible.
+
+            Does not require the implementation of any VSPackage code to make it visible.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Toolbar">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a standard toolbar in the IDE that has the following characteristics:
+
+            Ignores the Group ID field in its definition.
+
+            Cannot be made a submenu of any group, not even by using command placement.
+
+            Is always available on the Toolbars menu in the IDE.
+
+            Can be made visible and a default part of the user's IDE environment by setting flags. For more information, see the "Type Flags" section in this topic.
+
+            Is automatically made available by the IDE.
+
+            Does not require the implementation of any VSPackage code to make it visible.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="ToolWindowToolbar">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a toolbar that is attached to a specific tool window and has the following characteristics:
+
+            Ignores the Group ID field in its definition.
+
+            Cannot be made a submenu of any group, not even by using command placement.
+
+            Is not automatically made available by the IDE.
+
+            Is only visible when its host tool window is visible and the VSPackage explicitly adds the toolbar to the tool window.
+
+            This is typically done when the tool window is created by obtaining the toolbar host property (as represented by the IVsToolWindowToolbarHost interface) from the tool window frame and then calling the AddToolbar method.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Context">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a menu that can be shown when a user right-clicks on a window. A Context menu has the following characteristics:
+
+            Does not use the Group ID and Priority fields when the menu is displayed as a shortcut menu.
+
+            Can be used as a submenu or a shortcut menu. In this case, both Group ID and Priority fields are respected.
+
+            Is not automatically made available by the IDE as a shortcut menu.
+
+            Is only visible as a shortcut menu when the following conditions are true:
+
+            The window that hosts it is visible.
+
+            A VSPackage's mouse handler detects a right-click on the window and calls an implementing method.
+
+            This shortcut menu is displayed by using a call to either the ShowContextMenu method in the IOleComponentUIManager interface (the preferred approach), or the ShowContextMenu method in the IVsUIShell interface.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MenuController">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a split-button menu, which is typically used in toolbars. A MenuController menu has the following characteristics:
+
+            Must be contained in another menu by using a group or command placement.
+
+            Respects the Group ID field in its definition.
+
+            Can have any kind of menu as its parent.
+
+            Is automatically made available by the IDE whenever its parent menu is visible.
+
+            Does not require programmatic support to make the menu visible.
+
+            A command name is always displayed on the menu button. The displayed command is one of the following:
+
+            The last command that was selected, if the command is still visible and enabled.
+
+            The first visible command.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MenuControllerLatched">
+        <xs:annotation>
+          <xs:documentation>
+            Provides a split-button menu in which a default selection can be specified by marking the command as latched. A MenuControllerLatched menu has the following characteristics:
+            Must be contained in another menu by using a group or command placement.
+            Respects the Group ID field in its definition.
+            Can have any kind of menu as its parent.
+            Is automatically made available by the IDE whenever its parent menu is visible.
+            Does not require programmatic support to make the menu visible.
+            A command name is displayed on the menu button. The displayed command is one of the following:
+            The first visible command that is latched.
+            The first visible command.
+            A latched command is command that is marked in the menu as having been selected, typically by displaying a check mark. A command can be marked as latched if it has the OLECMDF_LATCHED flag set on it in an implementation of the QueryStatus method of the IOleCommandTarget interface.
+            Note:
+            In managed code that uses the managed package framework (MPF), the MenuCommand class offers the Checked property, which sets or clears the latched status of the command.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:attributeGroup name="menuFlags">
+    <xs:attribute name="alwaysCreate" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Menu is created even if it has no groups or buttons.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultDocked" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          By default, docked to the IDE. This is valid only for Toolbar menu types.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultInvisible" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The menu is hidden until the VSPackage that implements the menu
+          is loaded. This flag is typically assigned to submenus.
+          This flag should be combined with the DynamicVisibility flag.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dontCache" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Tells a menu controller not to cache the text of its menu items. Use this
+          flag when the menu contains dynamic items or items that have dynamic text.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dynamicVisibility" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The visibility of a menu is dynamic and can be changed by by using an entry in
+          the VISIBILITY_SECTION – VISIBILITY_END section of the .ctc file. The VSPackage
+          that implements the menu does not have to be loaded.
+          This flag also indicates that the menu is automatically hidden when all
+          its members are hidden. This flag is typically assigned to submenus because
+          top-level menus already have this behavior.
+          This flag should be combined with the DefaultInvisible flag.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Users cannot rename any items on the menu or change the order in which they appear.
+          This is valid only for Context menu types.
+          Shortcut menus can be customized by selecting Shortcut Menus in the list of
+          toolbars in the Customize dialog box. Doing this displays a toolbar that has all
+          available shortcut menus. If a shortcut menu is marked by the NoCustomize flag, it
+          can be viewed on the Shortcut Menus toolbar, but it cannot be changed.
+          Note:
+          Tool window toolbars can never be customized.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="notInTBList" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Does not appear in the list of available toolbars. This is valid only for Toolbar menu types.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noToolBarClose" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          User cannot close the toolbar. This is valid only for Toolbar menu types.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textChanges" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Menu has dynamic text. This affects the text that the user can click.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textIsAnchorCommand" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          For a menu controller, the text of the menu is taken from the anchor command.
+          An anchor command is the last command that was selected or latched. If this flag
+          is not set, the menu controller uses its own Menu Text field. However, clicking
+          the menu controller still runs the last selected command from that controller.
+          This flag should be combined with the TextChanges flag.
+          This flag applies only to menus of type MenuController or MenuControllerLatched.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="iconAndText" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:simpleType name="trueFalse">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="true" />
+      <xs:enumeration value="false" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="Button">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="gui:KeyBinding">
+            <xs:annotation>
+              <xs:documentation>
+                Commands can have both single and dual key bindings. An example of a
+                single key binding is CTRL+S to trigger the save command. Dual key bindings,
+                or chords, require two key combinations to be pressed successively to trigger
+                a command. An example of a dual key binding is CTRL+K CTRL+K to set a bookmark.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+          <xs:element ref="gui:Visibility" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="buttonFlags" />
+      <xs:attribute name="localizedName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the command in the local language. This field is optional.
+            If this field is not specified, the Button Text field is converted to
+            a canonical form (for example, "&amp;My Menu Item" becomes "MyMenuItem").
+            This field specifies the command name to be used from the Command Window.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="name" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the command in English. This field is optional.
+            If this field is not specified, the Button Text field is
+            converted to a canonical form (for example, "&amp;My Menu Item" becomes "MyMenuItem").
+            This field specifies the command name to be used from the Command Window.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="commandWellText" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The text that is used in the menu and toolbar customization display
+            that describes the command. This field is optional; if not specified,
+            the Button Text field is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="toolTip" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The text that appears when the cursor is held over the command, when the
+            command is placed on a toolbar. This field is optional. If this field is
+            not specified, the Button Text field is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="text" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            The text that appears on a button on a toolbar or as the menu text on a menu if the Menu Text field is not specified.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="type" type="gui:buttonType" default="Button">
+        <xs:annotation>
+          <xs:documentation>
+            A constant that specifies the type of command.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="iconId" type="gui:qId">
+        <xs:annotation>
+          <xs:documentation>
+            A GUID:ID pair that identifies the icon to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="priority" type="gui:intValue" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            A value used to position this command relative to other commands in the same group.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id" type="gui:qId" use="required" />
+      <xs:attribute name="menuText" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The text that appears in a drop-down or context menu. This field is optional.
+            If this field is not specified, the Button Text field is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="iconFile" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The relative path to the full-transparent PNG to use as the icon
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="buttonFlags">
+    <xs:attribute name="noKeyCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Do not allow keyboard customization.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noButtonCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Do not allow the user to customize this button.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          A combination of both the NoKeyCustomize and NoButtonCustomize flags.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="pict" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Show only an icon on a toolbar, but only text on a menu. If no icon
+          is specified, shows a selectable blank space on a toolbar.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textOnly" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Show only text on a toolbar or a menu but no icon even if the icon is specified.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="iconAndText" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Show an icon and text on menu and toolbar.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textContextUseButton" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Use the Button Text field on context menus. The default is the Menu Text field if specified.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textMenuUseButtton" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Use the Command Text field for menus. The default is the Menu Text field if specified.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textMenuCtrlUseMenu" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Use the Menu Text field on menu controllers. The default is the Command Text field.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textCascadeUseButton" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Use the Command Text field on a cascade menu. The default is
+          the Menu Text field if specified.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="textChanges" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The command's text can be changed at runtime, typically through the QueryStatus method.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultDisabled" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          By default, the command is disabled if the VSPackage that implements the command is not
+          loaded or the QueryStatus method has not been called.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultInvisible" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          By default, the command is invisible if the VSPackage that implements the command
+          is not loaded or the QueryStatus method has not been called.
+          This should be combined with the DynamicVisibility flag.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dynamicVisibility" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The command's visibility can be changed through the QueryStatus method
+          or through a context GUID placed in the VISIBILITY_SECTION – VISIBILITY_END section.
+          This applies to commands that appear on menus, not on toolbars. Top-level toolbar
+          items can be disabled but not hidden, when the OLECMDF_INVISIBLE flag is returned
+          from the QueryStatus method.
+          This flag should be combined with the DefaultInvisible flag.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dynamicItemStart" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Indicates the beginning of a dynamic list. This allows the environment to
+          build a list by successively calling the QueryStatus method on list items
+          until the OLECMDERR_E_UNSUPPORTED flag is returned. This works well for items
+          such as most recently used (MRU) lists and window lists.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="commandWellOnly" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Apply this flag if the command does not appear on the top-level menu and
+          you would like to make it available for additional shell customization,
+          for instance, binding it to a key. After the VSPackage is installed you
+          may customize these commands by opening the Options dialog box from the
+          Tools menu and editing the command placement under the Keyboard Environment
+          category. This flag does not affect placement on context menus, toolbars,
+          menu controllers, or cascade menus.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="allowParams" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Indicates that the user can enter command parameters in the command window
+          when typing the command's canonical name.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="postExec" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Makes the command non-blocking. The environment defers execution until all
+          pre-processing queries are complete.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dontCache" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The environment does not cache the QueryStatus method results for this command.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="fixMenuController" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          If this command is placed on a menu controller, the command is always the default,
+          that is, the command is always selected whenever the menu controller button itself
+          is selected. If the menu controller has the TextIsAnchorCommand flag set, then the
+          menu controller also takes its text from the command with the FixMenuController flag.
+          See the MENUS_BEGIN – MENUS_END section for more details on the TextIsAnchorCommand flag.
+          There should be only one command on a menu controller that is marked with the
+          FixMenuController flag. If there is more than one command so marked, the last
+          command in the menu becomes the default command.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noShowOnMenuController" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          If this command is placed on a menu controller, the command does not appear in
+          the drop-down list.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="routeToDocs" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The command is routed to the active document.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:simpleType name="buttonType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Button">
+        <xs:annotation>
+          <xs:documentation>
+            A standard command that appears on toolbars (typically as an iconic button),
+            menus, and context menus.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="MenuButton">
+        <xs:annotation>
+          <xs:documentation>
+            A menu item that does not execute a command, but produces another menu.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SplitDropDown">
+        <xs:annotation>
+          <xs:documentation>
+            Controls, such as the Undo/Redo buttons on the standard toolbar in Microsoft Word.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Swatch">
+        <xs:annotation>
+          <xs:documentation>
+            Controls that display color choices, such as a font color dialog box.
+            Requires the implementation of some underlying interfaces.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="qPrefix">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+      <xs:pattern value="[_a-zA-Z][a-zA-Z0-9_]*(:[a-zA-Z][a-zA-Z0-9_]*)?" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="guidValue">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="36" />
+      <xs:maxLength value="36" />
+      <xs:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ComboBox">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+      <xs:attributeGroup ref="gui:comboFlags" />
+      <xs:attribute name="localizedName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the command in the local language. This field is optional.
+            If this field is not specified, the Button Text field is converted to
+            a canonical form (for example, "&amp;My Menu Item" becomes "MyMenuItem").
+            This field specifies the command name to be used from the Command Window.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="name" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The name of the command in English. This field is optional.
+            If this field is not specified, the Button Text field is converted
+            to a canonical form (for example, "&amp;My Menu Item" becomes "MyMenuItem").
+            This field specifies the command name to be used from the Command Window.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="commandWellText" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The text that is used in the menu and toolbar customization display
+            that describes the command. This field is optional; if not specified,
+            the Button Text field is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="toolTip" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            The text that is displayed in a ToolTip for the combo box control.
+            This field is optional; if not specified, the Button Text field is used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="text" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            The text that appears on a button on a toolbar or as the menu
+            text on a menu if the Menu Text field is not specified.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="type" type="gui:comboBoxType" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            A constant that specifies the type of command.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="priority" type="gui:intValue" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            A value used to position this command relative to other commands in the same group.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id" type="gui:qId" use="required" />
+      <xs:attribute name="menuText" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>
+            This is not normally used for a combo box control.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="fillCommand" type="gui:qPrefix" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            An command that is passed to the VSPackage when the contents of the
+            combo box drop-down list needs to be filled in.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="width" type="xs:int" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            The width of the combo box in logical units.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="comboFlags">
+    <xs:attribute name="noKeyCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Disables key customization.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noButtonCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Disables button customization
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noCustomize" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Inhibits both key and button customization.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="defaultInvisible" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Combo box is invisible by default.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="dynamicVisibility" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Visibility is controlled through QueryStatus.
+          This applies to combo boxes that appear on menus, not on toolbars.
+          Top-level toolbar items can be are disabled, but not hidden,
+          when OLECMDF_INVISIBLE is returned from QueryStatus.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="commandWellOnly" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          The combo box does not appear on the top-level menu. The user can add the
+          combo box to its parent menu through the Command Well dialog box. This flag
+          does not affect placements on context menus, toolbars, menu controllers, or
+          cascade menus.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="iconAndText" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Text for the combo box is to be displayed. Default is no text.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="filterKeys" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="noAutoComplete" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          Auto complete feature is disabled.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="caseSensitive" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          User entries are case sensitive.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="stretchHorizontally" type="gui:trueFalse">
+      <xs:annotation>
+        <xs:documentation>
+          When this flag is set, the width becomes the minimum width for the combo box,
+          and if there is room on the toolbar, the combo box stretches to fill any spare
+          space. This happens only if the toolbar is horizontally docked, and only one combo
+          box on the toolbar can use the flag (the flag is ignored on all but the last
+          combo box). This flag is new to Visual Studio SDK.
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:simpleType name="comboBoxType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MRUCombo">
+        <xs:annotation>
+          <xs:documentation>
+            The Most Recently Used (MRUCombo) combo box is created and filled
+            by the environment on behalf of the VSPackage. The user is able to
+            type in the combo box, and the environment remembers up to the last
+            16 entries per combo box. When the user selects something in the combo
+            box, or types in something new, the environment sends the text string
+            to the appropriate VSPackage.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DynamicCombo">
+        <xs:annotation>
+          <xs:documentation>
+            The DynamicCombo is created by the environment on behalf of the VSPackage.
+            The VSPackage is responsible for filling in the contents of this combo box.
+            The user is allowed to type in this combo box as well as select items within
+            it. When the environment makes calls to the Exec method on the combo box,
+            your VSPackage must return the contents of the combo box in a safe array.
+            The environment then populates the combo box with the array data.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="DropDownCombo">
+        <xs:annotation>
+          <xs:documentation>
+            The DropDownCombo is also created by the environment on the VSPackage's behalf.
+            The VSPackage is responsible for filling in the contents for this combo box as
+            well. However, the user cannot type anything into the edit field of the drop-down
+            list — it is simply a place where a user can choose from a list of items.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="IndexCombo">
+        <xs:annotation>
+          <xs:documentation>
+            The IndexCombo is similar to a DropDownCombo, with the difference being the
+            way command execution is initiated. In a DropDownCombo, the environment uses
+            the command text to identify the command. In an IndexCombo, the environment
+            uses the index number of the item in the drop down list as the command identifier.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ButtonRef">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0">
+          <xs:element minOccurs="0" ref="gui:KeyBinding" />
+          <xs:element ref="gui:Visibility" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="priority" type="gui:intValue" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            A value used to position this command relative to other commands in the same group.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="id" type="gui:qId" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Editor">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element minOccurs="0" ref="gui:BindKey" />
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="id" type="gui:qPrefix" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BindKey">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:KeyDef">
+          <xs:attribute name="id" type="gui:qId" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="modifier">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="shift" />
+      <xs:enumeration value="ctrl" />
+      <xs:enumeration value="alt" />
+      <xs:enumeration value="ctrl+shift" />
+      <xs:enumeration value="ctrl+alt" />
+      <xs:enumeration value="ctrl+alt+shift" />
+      <xs:enumeration value="alt+shift" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="key">
+    <xs:restriction base="xs:string">
+      <xs:pattern value=".|(0x[0-9A-Fa-f][0-9A-Fa-f])|(VK_[A-Z0-9_]+)" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="KeyDef">
+    <xs:attribute name="key1" type="gui:key" use="required">
+      <xs:annotation>
+        <xs:documentation>The key value of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="mod1" type="gui:modifier">
+      <xs:annotation>
+        <xs:documentation>The optional modifier(s) of the single key binding, or first part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="key2" type="gui:key">
+      <xs:annotation>
+        <xs:documentation>The optional key value of the second part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="mod2" type="gui:modifier">
+      <xs:annotation>
+        <xs:documentation>The optional modifier(s) of the second part of a dual key binding or chord.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="KeyBinding">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="gui:KeyDef">
+          <xs:attribute name="editor" type="gui:qPrefix" use="required">
+            <xs:annotation>
+              <xs:documentation>
+                A command UI context GUID (CmdUIGUID) identifying the editor in which the key
+                combination is available. If the editor has a single view or tab, the GUID
+                should be the same as that of the editor. If the editor has multiple tabs or
+                views, use a value of either guidVSStd97 or GuidKeyDupe.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Visibility">
+    <xs:complexType>
+      <xs:sequence />
+      <xs:attribute name="context" type="gui:qPrefix" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UsedCommands">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gui:Command">
+            <xs:annotation>
+              <xs:documentation>Defines a new group to be placed within this context</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KeyBindings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gui:Editor">
+            <xs:annotation>
+              <xs:documentation>Allows adding extra keybindings</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Command">
+    <xs:complexType>
+      <xs:sequence/>
+      <xs:attribute name="id" type="gui:qPrefix" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BitmapStrips">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="gui:Strip" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Strip">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="gui:StripIcon" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+      <xs:attribute name="bitmap" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The 32 bit transparent image to create</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="bitmap24" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The 24 bit opaque image to create</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>      
+      <xs:attribute name="type" use="required" type="xs:string"/>
+      <xs:attribute name="from" use="required" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StripIcon">
+    <xs:complexType>
+      <xs:attribute name="id" use="required" type="xs:string"/>
+      <xs:attribute name="iconFile" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>The relative path to the full-transparent PNG to use as the icon</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
