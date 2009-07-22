@@ -70,7 +70,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Migrate", "Ankh.Migrat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Diff", "Ankh.Diff\Ankh.Diff.csproj", "{62F97060-6A9E-477D-B15B-E1A1F5320039}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Interop", "..\Ankh.Interop\Ankh.Interop.csproj", "{B7168874-E05E-458D-95CC-5D7BBC243986}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Interop", "Ankh.Interop\Ankh.Interop.csproj", "{B7168874-E05E-458D-95CC-5D7BBC243986}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
