@@ -91,6 +91,9 @@ namespace Ankh.Services
                 {
                     using (RegistryKey aKey = key.OpenSubKey("IssueRepositoryConnectors"))
                     {
+                        if (aKey == null)
+                            return;
+
                         string[] connectorKeys = aKey.GetSubKeyNames();
                         foreach (string connectorKey in connectorKeys)
                         {
