@@ -199,6 +199,26 @@
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="IssueTracker\ConnectorNode.cs" />
+    <Compile Include="IssueTracker\ConnectorSelectionPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IssueTracker\ConnectorSelectionPageControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="IssueTracker\ConnectorSelectionPageControl.Designer.cs">
+      <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IssueTracker\ConnectorWizard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IssueTracker\ConnectorWizardPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IssueTracker\IssueTrackerConfigWizard.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IssueTracker\IssueTrackerSetupCommand.cs" />
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
@@ -928,13 +948,16 @@
   <ItemGroup>
     <EmbeddedResource Include="Annotate\AnnotateEditorControl.resx">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Commands\CommandStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>CommandStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Commands\CreateChangeListDialog.resx">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Commands\UpdateDialog.resx">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
@@ -942,6 +965,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DiffWindow\DiffToolWindowControl.resx">
       <DependentUpon>DiffToolWindowControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IssueTracker\ConnectorSelectionPageControl.resx">
+      <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeConflictHandlerDialog.resx">
@@ -961,16 +988,20 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\EnvironmentSettingsControl.resx">
       <DependentUpon>EnvironmentSettingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\OptionsResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>OptionsResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\SvnAuthenticationCacheEditor.resx">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\SvnProxyEditor.resx">
       <DependentUpon>SvnProxyEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PathSelector\RevisionSelector.resx">
       <DependentUpon>RevisionSelector.cs</DependentUpon>
@@ -1013,6 +1044,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\AddProjectToSubversion.resx">
       <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SccManagement\CopyToDialog.resx">
       <DependentUpon>CopyToDialog.cs</DependentUpon>
@@ -1237,6 +1269,7 @@
     <EmbeddedResource Include="WorkingCopyExplorer\WCStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>WCStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WorkingCopyExplorer\WorkingCopyExplorerControl.resx">
       <SubType>Designer</SubType>

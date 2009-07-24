@@ -284,6 +284,8 @@ namespace Ankh.Ids
         MoveToExistingChangeList0,
         MoveToExistingChangeListMax = MoveToExistingChangeList0 + 20,
         MoveToIgnoreChangeList,
-        RemoveFromChangeList
+        RemoveFromChangeList,
+
+        SolutionIssueTrackerSetup
     }
 }

@@ -20,7 +20,7 @@ namespace Ankh
         bool TryGetConnector(string name, out IIssueRepositoryConnector connector);
 
         /// <summary>
-        /// Gets the issue repository associated with the current solution.
+        /// Gets or Sets the issue repository associated with the current solution.
         /// </summary>
         IIssueRepository CurrentIssueRepository { get; set; }
     }

@@ -144,6 +144,10 @@
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
                   iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
+      <Button id="Cmd_SolutionIssueTrackerSetup" name="IssueTrackerSetup" priority="0x1400"
+                  text="&amp;Issue tracker Setup"
+                  toolTip="Associate your solution with an Issue Repository"
+                  iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionCommit" priority="0x1500" name="SolutionCommit" defaultInvisible="true"
               text="Comm&amp;it Solution Changes" iconFile="PendingChanges/Commit.png" />
       <ButtonRef id="Cmd_LockMustLock" priority="0x1550" />

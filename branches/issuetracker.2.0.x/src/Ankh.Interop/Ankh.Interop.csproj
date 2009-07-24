@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IssueTracker\CommitArgs.cs" />
     <Compile Include="IssueTracker\IIssueRepository.cs" />
+    <Compile Include="IssueTracker\IIssueRepositoryConfigurationPage.cs" />
     <Compile Include="IssueTracker\IIssueRepositoryConnector.cs" />
     <Compile Include="IssueTracker\IIssueRepositorySettings.cs" />
     <Compile Include="IssueTracker\ProvideIssueRepositoryConnector.cs" />

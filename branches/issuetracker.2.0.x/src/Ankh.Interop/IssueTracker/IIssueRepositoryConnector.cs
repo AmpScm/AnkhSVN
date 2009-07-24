@@ -17,9 +17,8 @@ namespace Ankh.Interop.IssueTracker
         IIssueRepository Create(IIssueRepositorySettings settings);
 
         /// <summary>
-        /// Configures an existing repository
+        /// Gets the IWin32Window (to edit/setup an issue repository)
         /// </summary>
-        /// <param name="repository"></param>
-        bool Configure(IIssueRepository repository);
+        IIssueRepositoryConfigurationPage ConfigurationPage { get; }
     }
 }

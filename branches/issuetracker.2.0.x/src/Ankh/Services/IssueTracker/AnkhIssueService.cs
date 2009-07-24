@@ -24,12 +24,13 @@ namespace Ankh.Services
         {
             get
             {
-                IIssueRepositoryConnector[] result = new IIssueRepositoryConnector[]{};
                 if (_nameConnectorMap != null)
                 {
+                    IIssueRepositoryConnector[] result = new IIssueRepositoryConnector[_nameConnectorMap.Count];
                     _nameConnectorMap.Values.CopyTo(result, 0);
+                    return result;
                 }
-                return result;
+                return new IIssueRepositoryConnector[]{};
             }
         }
 
@@ -161,14 +162,17 @@ namespace Ankh.Services
             return null;
         }
 
-        public bool Configure(IIssueRepository repository)
+        public IIssueRepositoryConfigurationPage ConfigurationPage
         {
-            IIssueRepositoryConnector dlg = Delegate;
-            if (dlg != null)
+            get
             {
-                return dlg.Configure(repository);
+                IIssueRepositoryConnector dlg = Delegate;
+                if (dlg != null)
+                {
+                    return dlg.ConfigurationPage;
+                }
+                return null;
             }
-            return false;
         }
 
         public string Name
