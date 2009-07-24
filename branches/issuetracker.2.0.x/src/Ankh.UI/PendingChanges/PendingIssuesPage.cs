@@ -46,17 +46,35 @@ namespace Ankh.UI.PendingChanges
             IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>(typeof(IAnkhIssueService));
             if (issueService != null)
             {
+                RefreshPageContents();
+                issueService.IssueRepositoryChanged += new EventHandler(issueService_IssueRepositoryChanged);
+            }
+        }
+
+        void issueService_IssueRepositoryChanged(object sender, EventArgs e)
+        {
+            RefreshPageContents();
+        }
+
+        public void RefreshPageContents()
+        {
+            this.Controls.Clear();
+            IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>(typeof(IAnkhIssueService));
+            if (issueService != null)
+            {
                 IIssueRepository repository = issueService.CurrentIssueRepository;
                 if (repository != null)
                 {
                     Control control = repository.Control;
                     if (control != null)
                     {
-                        this.Controls.Clear();
+                        control.Dock = DockStyle.Fill;
                         this.Controls.Add(control);
+                        return;
                     }
                 }
             }
+            this.Controls.Add(label1);
         }
     }
 }

@@ -23,5 +23,7 @@ namespace Ankh
         /// Gets or Sets the issue repository associated with the current solution.
         /// </summary>
         IIssueRepository CurrentIssueRepository { get; set; }
+
+        event EventHandler IssueRepositoryChanged;
     }
 }

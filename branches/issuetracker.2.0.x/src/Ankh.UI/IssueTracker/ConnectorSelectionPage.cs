@@ -14,6 +14,8 @@ namespace Ankh.UI.IssueTracker
             : base("Issue Tracker Connector Selection Page")
         {
             _context = context;
+            base.Title = "Issue Tracker Connectors";
+            base.Description = "Select a repository connector.";
         }
 
         public override System.Windows.Forms.UserControl Control

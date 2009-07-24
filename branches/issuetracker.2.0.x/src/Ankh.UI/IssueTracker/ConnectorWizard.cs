@@ -8,7 +8,6 @@ namespace Ankh.UI.IssueTracker
     {
         IIssueRepositoryConnector _connector;
         IIssueRepositoryConfigurationPage _page;
-        Control _pageControl;
 
         public ConnectorWizard(IAnkhServiceProvider context, IIssueRepositoryConnector connector)
             : base(context)
@@ -22,11 +21,10 @@ namespace Ankh.UI.IssueTracker
             _page = _connector.ConfigurationPage;
             if (_page != null)
             {
-                _pageControl = Control.FromHandle(_page.Handle);
-                if (_pageControl != null)
-                {
-                    AddPage(new ConnectorWizardPage(_connector.Name, _pageControl));
-                }
+                ConnectorWizardPage wizardPage = new ConnectorWizardPage(_connector.Name, _page);
+                wizardPage.Title = _connector.Name;
+                wizardPage.Description = "Configure issue repository.";
+                AddPage(wizardPage);
             }
         }
 

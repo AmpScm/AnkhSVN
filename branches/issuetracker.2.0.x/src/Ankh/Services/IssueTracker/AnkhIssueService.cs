@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.Win32;
 using Ankh.UI;
-using Microsoft.VisualStudio.Shell.Interop;
 using Ankh.Interop.IssueTracker;
 
 namespace Ankh.Services
@@ -70,6 +69,12 @@ namespace Ankh.Services
             set
             {
                 _repository = value;
+
+                if (IssueRepositoryChanged != null)
+                {
+                    IssueRepositoryChanged(this, EventArgs.Empty);
+                }
+
                 SetSolutionSettings(_repository);
             }
         }
@@ -110,18 +115,26 @@ namespace Ankh.Services
         private IIssueRepositorySettings ReadRepositorySettings()
         {
             // TODO read solution settings
-            AnkhIssueRepositorySettings settings = new AnkhIssueRepositorySettings();
-            settings.ConnectorName = "CollabNet CEE IssueTracker Connector";
-            settings.RepositoryUri = new Uri("http://ankhsvn.open.collab.net");
-            return settings;
+            return null;
         }
 
         private void SetSolutionSettings(IIssueRepositorySettings settings)
         {
             // TODO set solution settings
         }
+
+        #region IAnkhIssueService Members
+        public event EventHandler IssueRepositoryChanged;
+
+        #endregion
     }
 
+    /// <summary>
+    /// This class acts as a proxy to the actual connector.
+    /// This proxy serves "descriptive" properties w/o initializing the actual connector.
+    /// The actual connector package initialization is delayed until a non-descriptive property is needed.
+    /// Currently, "connector name" is the only descriptive property.
+    /// </summary>
     class AnkhIssueRepositoryConnectorDelegate : IIssueRepositoryConnector
     {
         private IIssueRepositoryConnector _delegate = null;

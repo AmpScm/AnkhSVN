@@ -48,5 +48,15 @@ namespace Ankh.UI.IssueTracker
             _page.SelectedNode = e.Node.Tag as IWizardNode;
         }
 
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            _page.IsPageComplete = checkBox1.Checked;
+            if (checkBox1.Checked)
+            {
+                connectorTreeView.SelectedNode = null;
+                _page.SelectedNode = null;
+            }
+            connectorTreeView.Enabled = !checkBox1.Checked;
+        }
     }
 }
