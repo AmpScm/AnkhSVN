@@ -1,5 +1,5 @@
 ﻿using Ankh.UI.MergeWizard;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 using System.Windows.Forms;
 
 namespace Ankh.UI.IssueTracker

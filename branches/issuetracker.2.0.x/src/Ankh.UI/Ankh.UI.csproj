@@ -14,7 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AC32DD7A-4FC3-42C5-AFA7-ADE81F13A6DE}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -142,13 +142,13 @@
       <Project>{62F97060-6A9E-477D-B15B-E1A1F5320039}</Project>
       <Name>Ankh.Diff</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
+      <Name>Ankh.ExtensionPoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ankh.Interop\Ankh.Interop.csproj">
-      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
-      <Name>Ankh.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>

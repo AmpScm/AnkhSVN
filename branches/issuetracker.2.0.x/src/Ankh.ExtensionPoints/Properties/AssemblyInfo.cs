@@ -6,8 +6,8 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ankh.Interop")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Ankh.ExtensionPoints")]
+[assembly: AssemblyDescription("AnkhSVN Extension Points")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("AnkhSVN")]
 [assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]

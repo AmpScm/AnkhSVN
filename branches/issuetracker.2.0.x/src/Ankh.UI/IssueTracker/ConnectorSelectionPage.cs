@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using WizardFramework;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.IssueTracker
 {

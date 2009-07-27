@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Win32;
 using Ankh.UI;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.Services
 {

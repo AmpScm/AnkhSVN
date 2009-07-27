@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WizardFramework;
 using System.Windows.Forms;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.IssueTracker
 {

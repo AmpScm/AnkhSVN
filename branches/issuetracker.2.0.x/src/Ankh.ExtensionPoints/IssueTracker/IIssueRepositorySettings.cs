@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ankh.Interop.IssueTracker
+namespace Ankh.ExtensionPoints.IssueTracker
 {
     [System.Runtime.InteropServices.Guid("9817F698-D118-4a20-AB2C-6491F2028838")]
     public interface IIssueRepositorySettings

@@ -12,7 +12,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -138,13 +138,13 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
+      <Name>Ankh.ExtensionPoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ankh.Interop\Ankh.Interop.csproj">
-      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
-      <Name>Ankh.Interop</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
       <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>

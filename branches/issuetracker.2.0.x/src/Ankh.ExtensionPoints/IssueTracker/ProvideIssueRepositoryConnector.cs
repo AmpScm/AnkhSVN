@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using System.Globalization;
 
-namespace Ankh.Interop.IssueTracker
+namespace Ankh.ExtensionPoints.IssueTracker
 {
     /// <summary>
     /// This attribute registers the package as Issue Repository Connector.

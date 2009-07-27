@@ -25,7 +25,7 @@ using Ankh.UI;
 using Ankh.Services.PendingChanges;
 using Ankh.VS;
 using Ankh.UI.SccManagement;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.Services.PendingChanges
 {

@@ -21,7 +21,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -65,7 +65,7 @@ namespace Ankh.UI.PendingChanges
                 IIssueRepository repository = issueService.CurrentIssueRepository;
                 if (repository != null)
                 {
-                    Control control = repository.Control;
+                    Control control = Control.FromHandle(repository.Handle);
                     if (control != null)
                     {
                         control.Dock = DockStyle.Fill;

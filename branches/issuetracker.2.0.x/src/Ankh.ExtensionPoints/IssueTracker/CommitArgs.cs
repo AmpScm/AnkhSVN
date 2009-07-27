@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Ankh.Interop.IssueTracker
+namespace Ankh.ExtensionPoints.IssueTracker
 {
     public abstract class CommitArgs
     {

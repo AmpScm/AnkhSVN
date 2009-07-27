@@ -2,20 +2,15 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-namespace Ankh.Interop.IssueTracker
+namespace Ankh.ExtensionPoints.IssueTracker
 {
     [System.Runtime.InteropServices.Guid("E1E1B50C-366C-4f3e-934A-6BCCF78C96E8")]
-    public interface IIssueRepository : IIssueRepositorySettings
+    public interface IIssueRepository : IIssueRepositorySettings, IWin32Window
     {
         /// <summary>
         /// Label for the issue repository.
         /// </summary>
         string Label { get; }
-
-        /// <summary>
-        /// Gets the control to be hosted in AnkhSVN PendingChanges window.
-        /// </summary>
-        Control Control { get; }
 
         /// <summary>
         /// Handles the request to open the issue.

@@ -1,5 +1,5 @@
 ﻿using Ankh.Commands;
-using Ankh.Interop.IssueTracker;
+using Ankh.ExtensionPoints.IssueTracker;
 using WizardFramework;
 
 namespace Ankh.UI.IssueTracker
