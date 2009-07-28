@@ -10,7 +10,6 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// Gets or sets the current repository settings.
         /// </summary>
         IIssueRepositorySettings Settings { get; set; }
-
     }
 
     /// <summary>
@@ -20,7 +19,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     public interface IIssueRepositoryConfigurationPageEvents
     {
         /// <summary>
-        /// Raised on a config page event
+        /// Raised with ConfigPageEventArgs by Issue Tracker Connector configuration page
         /// </summary>
         event EventHandler<ConfigPageEventArgs> OnPageEvent;
     }

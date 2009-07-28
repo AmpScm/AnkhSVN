@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh
 {
+    [CLSCompliant(false)]
     public interface IAnkhIssueService
     {
         /// <summary>
@@ -24,6 +24,9 @@ namespace Ankh
         /// </summary>
         IIssueRepository CurrentIssueRepository { get; set; }
 
+        /// <summary>
+        /// Occurs when current solution's Issue Tracker Repository association settings are changed
+        /// </summary>
         event EventHandler IssueRepositoryChanged;
     }
 }
