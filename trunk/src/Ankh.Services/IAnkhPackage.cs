@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Ankh.VS;
+using Microsoft.Win32;
 
 namespace Ankh.UI
 {
@@ -47,5 +48,13 @@ namespace Ankh.UI
         AmbientProperties AmbientProperties { get; }
 
         bool LoadUserProperties(string streamName);
+
+        //
+        // Summary:
+        //     Gets a registry key that can be used to store user data.
+        //
+        // Returns:
+        //     A Microsoft.Win32.RegistryKey that can be used to store user data.
+        RegistryKey UserRegistryRoot { get; }
     }
 }
