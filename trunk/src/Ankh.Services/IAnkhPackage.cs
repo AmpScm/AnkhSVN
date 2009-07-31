@@ -49,12 +49,11 @@ namespace Ankh.UI
 
         bool LoadUserProperties(string streamName);
 
-        //
         // Summary:
-        //     Gets a registry key that can be used to store user data.
+        //     Gets the root registry key of the current Visual Studio registry hive.
         //
         // Returns:
-        //     A Microsoft.Win32.RegistryKey that can be used to store user data.
-        RegistryKey UserRegistryRoot { get; }
+        //     The root Microsoft.Win32.RegistryKey of the Visual Studio registry hive.
+        RegistryKey ApplicationRegistryRoot { get; }
     }
 }
