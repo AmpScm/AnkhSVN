@@ -56,6 +56,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <ProjectReference Include="..\Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Project>{B7168874-E05E-458D-95CC-5D7BBC243986}</Project>
+      <Name>Ankh.ExtensionPoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
@@ -94,6 +98,9 @@
     <Compile Include="Commands\RepositoryExplorer\ShowRepositoryItemChanges.cs" />
     <Compile Include="Services\AnkhHelpService.cs" />
     <Compile Include="Services\AnkhClientPool.cs" />
+    <Compile Include="Services\IssueTracker\AnkhIssueService.cs" />
+    <Compile Include="Services\IssueTracker\IssueRepositoryConnectorProxy.cs" />
+    <Compile Include="Services\IssueTracker\IssueRepositorySettings.cs" />
     <Compile Include="Services\PendingChanges\PccStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -229,6 +236,7 @@
     <EmbeddedResource Include="Services\PendingChanges\PccStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PccStrings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
