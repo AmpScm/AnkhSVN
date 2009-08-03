@@ -25,6 +25,7 @@ using Ankh.UI;
 using Ankh.Services.PendingChanges;
 using Ankh.VS;
 using Ankh.UI.SccManagement;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.Services.PendingChanges
 {
@@ -213,6 +214,9 @@ namespace Ankh.Services.PendingChanges
                         if (!PreCommit_VerifySingleRoot(state)) // Verify single root 'first'
                             return false;
 
+                        if (!PreCommit_VerifyIssueTracker(state))
+                            return false;
+                        
                         if (!PreCommit_VerifyLogMessage(state))
                             return false;
 
@@ -300,6 +304,28 @@ namespace Ankh.Services.PendingChanges
             return true;
         }
 
+        private bool PreCommit_VerifyIssueTracker(PendingCommitState state)
+        {
+            IAnkhIssueService iService = state.GetService<IAnkhIssueService>();
+            if (iService != null)
+            {
+                IIssueRepository iRepo = iService.CurrentIssueRepository;
+                if (iRepo != null)
+                {
+                    List<Uri> uris = new List<Uri>();
+                    foreach (PendingChange pc in state.Changes)
+                    {
+                        uris.Add(pc.Uri);
+                    }
+                    PreCommitArgs args = new PreCommitArgs(uris.ToArray(), 1);
+                    args.CommitMessage = state.LogMessage;
+                    iRepo.PreCommit(args);
+                    if (args.Cancel) { return false; }
+                    state.LogMessage = args.CommitMessage;
+                }
+            }
+            return true;
+        }
         /// <summary>
         /// Verifies if the log message is valid for the current policy
         /// </summary>
@@ -540,9 +566,36 @@ namespace Ankh.Services.PendingChanges
 
                 if (!string.IsNullOrEmpty(rslt.PostCommitError))
                     state.MessageBox.Show(rslt.PostCommitError, PccStrings.PostCommitError, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                else
+                {
+                    PostCommit_IssueTracker(state, rslt);
+                }
             }
-
             return ok;
+        }
+
+        private void PostCommit_IssueTracker(PendingCommitState state, SvnCommitResult result)
+        {
+            IAnkhIssueService iService = GetService<IAnkhIssueService>();
+            if (iService != null)
+            {
+                IIssueRepository iRepo = iService.CurrentIssueRepository;
+                if (iRepo != null)
+                {
+                    List<Uri> uris = new List<Uri>();
+                    foreach (PendingChange pc in state.Changes)
+                    {
+                        uris.Add(pc.Uri);
+                    }
+
+                    PostCommitArgs pca = new PostCommitArgs(uris.ToArray(), result.Revision, state.LogMessage);
+                    try
+                    {
+                        iRepo.PostCommit(pca);
+                    }
+                    catch { };
+                }
+            }
         }
     }
 }
