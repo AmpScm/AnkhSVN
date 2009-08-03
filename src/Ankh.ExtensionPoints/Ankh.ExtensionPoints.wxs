@@ -1,0 +1,15 @@
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Ankh.ExtensionPoints">
+      <ComponentRef Id="C_Ankh.ExtensionPoints.dll"/>
+    </ComponentGroup>
+    <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Services.TargetDir)">
+      <Component Id="C_Ankh.ExtensionPoints.dll" Guid="173DFEC9-E396-4884-94EE-127D4C7D1D20">
+        <File Id="CFAnkh.ExtensionPoints.dll" Name="Ankh.ExtensionPoints.dll" Checksum="yes" Vital="yes" KeyPath="yes" />
+        <?ifdef Ankh_Pdb?>
+        <File Id="CF_Ankh.ExtensionPoints.pdb" Name="Ankh.ExtensionPoints.pdb" Checksum="yes" Vital="yes" />
+        <?endif?>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

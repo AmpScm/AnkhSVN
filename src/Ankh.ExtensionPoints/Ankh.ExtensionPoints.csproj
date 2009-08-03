@@ -37,7 +37,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.Shell.9.0, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -49,11 +48,14 @@
     <Compile Include="IssueTracker\IIssueRepositoryConfigurationPage.cs" />
     <Compile Include="IssueTracker\IIssueRepositoryConnector.cs" />
     <Compile Include="IssueTracker\IIssueRepositorySettings.cs" />
-    <Compile Include="IssueTracker\ProvideIssueRepositoryConnector.cs" />
+    <Content Include="IssueTracker\ProvideIssueRepositoryConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.ExtensionPoints.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ankh.ExtensionPoints.wxs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
