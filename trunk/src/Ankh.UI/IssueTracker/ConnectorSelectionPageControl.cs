@@ -24,16 +24,20 @@ namespace Ankh.UI.IssueTracker
             {
                 if (_connectorNodes == null)
                 {
-                    IAnkhIssueService service = Context.GetService<IAnkhIssueService>(typeof(IAnkhIssueService));
-                    if (service == null) { return null; }
-                    ICollection<IIssueRepositoryConnector> connectors = service.Connectors;
-                    if (connectors == null) { return null; }
                     _connectorNodes = new Dictionary<string, ConnectorNode>();
-                    List<ConnectorNode> connectorNodeList = new List<ConnectorNode>();
-                    foreach (IIssueRepositoryConnector connector in connectors)
+                    IAnkhIssueService service = Context.GetService<IAnkhIssueService>();
+                    if (service != null)
                     {
-                        ConnectorNode cn = new ConnectorNode(Context, connector);
-                        _connectorNodes.Add(connector.Name, cn);
+                        ICollection<IIssueRepositoryConnector> connectors = service.Connectors;
+                        if (connectors != null && connectors.Count > 0)
+                        {
+                            List<ConnectorNode> connectorNodeList = new List<ConnectorNode>();
+                            foreach (IIssueRepositoryConnector connector in connectors)
+                            {
+                                ConnectorNode cn = new ConnectorNode(Context, connector);
+                                _connectorNodes.Add(connector.Name, cn);
+                            }
+                        }
                     }
                 }
                 return _connectorNodes.Values;
@@ -43,14 +47,35 @@ namespace Ankh.UI.IssueTracker
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-                ICollection<ConnectorNode> connectors = ConnectorNodes;
-                if (connectors != null && connectors.Count > 0)
+
+            IAnkhIssueService service = Context.GetService<IAnkhIssueService>();
+            IIssueRepositorySettings currentSettings = service == null
+                ? null
+                : service.CurrentIssueRepositorySettings;
+            string currentConnectorName = currentSettings == null ? string.Empty : currentSettings.ConnectorName;
+            removeCheckBox.Enabled = currentSettings != null;
+
+            ICollection<ConnectorNode> connectors = ConnectorNodes;
+            TreeNode selectedNode = null;
+            if (connectors != null && connectors.Count > 0)
+            {
+                foreach (ConnectorNode connector in connectors)
                 {
-                    foreach (ConnectorNode connector in connectors)
+                    TreeNode connectorNode = CreateTreeNode(connector);
+                    connectorTreeView.Nodes.Add(connectorNode);
+                    if (string.Equals(currentConnectorName, connector.Connector.Name))
                     {
-                        connectorTreeView.Nodes.Add(CreateTreeNode(connector));
+                        selectedNode = connectorNode;
                     }
                 }
+            }
+            else
+            {
+                TreeNode noConnectorNode = new TreeNode("No Issue Repository Connector is registered.");
+                connectorTreeView.Nodes.Add(noConnectorNode);
+            }
+            connectorTreeView.SelectedNode = selectedNode;
+
         }
 
         private TreeNode CreateTreeNode(ConnectorNode connector)
@@ -74,6 +99,14 @@ namespace Ankh.UI.IssueTracker
                 SelectedNode = null;
             }
             connectorTreeView.Enabled = !removeCheckBox.Checked;
+        }
+
+        internal bool RemoveIssueRepository
+        {
+            get
+            {
+                return removeCheckBox.Checked;
+            }
         }
     }
 }

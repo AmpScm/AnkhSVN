@@ -54,7 +54,7 @@ namespace Ankh.UI.PendingChanges
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(135, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Placeholder for issues view";
+            this.label1.Text = "This solution is not associated with an Issue Repository.";
             // 
             // PendingIssuesPage
             // 

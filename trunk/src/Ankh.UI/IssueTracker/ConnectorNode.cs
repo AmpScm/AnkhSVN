@@ -15,7 +15,7 @@ namespace Ankh.UI.IssueTracker
             _context = contex;
         }
 
-        internal string Label
+        internal virtual string Label
         {
             get
             {
@@ -45,7 +45,7 @@ namespace Ankh.UI.IssueTracker
 
         #endregion
 
-        private IWizard SupplyWizard()
+        protected virtual IWizard SupplyWizard()
         {
             if (_wizard == null)
             {

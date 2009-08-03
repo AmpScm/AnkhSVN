@@ -23,6 +23,15 @@ namespace Ankh.UI.IssueTracker
 
         public override bool PerformFinish()
         {
+            if (_selectionPage != null
+                && _selectionPage.RemoveIssueRepository)
+            {
+                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
+                if (iService != null)
+                {
+                    iService.CurrentIssueRepository = null;
+                }
+            }
             return true;
         }
     }
