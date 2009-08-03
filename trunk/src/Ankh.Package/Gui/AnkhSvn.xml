@@ -149,6 +149,10 @@
       <!-- VS Predefined group for SCC commands on the solution -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
+      <Button id="Cmd_SolutionIssueTrackerSetup" name="IssueTrackerSetup" priority="0x1400"
+                  text="&amp;Issue tracker Setup"
+                  toolTip="Associate your solution with an Issue Repository"
+                  iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
