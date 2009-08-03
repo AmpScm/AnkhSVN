@@ -21,6 +21,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -35,8 +36,45 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                return typeof(PendingConflictsPage);
+                return typeof(PendingIssuesPage);
             }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
+            if (issueService != null)
+            {
+                RefreshPageContents();
+                issueService.IssueRepositoryChanged += new EventHandler(issueService_IssueRepositoryChanged);
+            }
+        }
+
+        void issueService_IssueRepositoryChanged(object sender, EventArgs e)
+        {
+            RefreshPageContents();
+        }
+
+        public void RefreshPageContents()
+        {
+            this.Controls.Clear();
+            IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
+            if (issueService != null)
+            {
+                IIssueRepository repository = issueService.CurrentIssueRepository;
+                if (repository != null)
+                {
+                    Control control = Control.FromHandle(repository.Handle);
+                    if (control != null)
+                    {
+                        control.Dock = DockStyle.Fill;
+                        this.Controls.Add(control);
+                        return;
+                    }
+                }
+            }
+            this.Controls.Add(label1);
         }
     }
 }
