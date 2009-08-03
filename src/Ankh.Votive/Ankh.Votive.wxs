@@ -109,16 +109,19 @@
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2005" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2005"/>
         <ComponentGroupRef Id="TriggerReg2005"/>
+        <ComponentGroupRef Id="Extension2005"/>
       </Feature>
       <Feature Id="RegVS9" Title="Register in Microsoft Visual Studio 2008" 
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2008"/>
         <ComponentGroupRef Id="TriggerReg2008"/>
+        <ComponentGroupRef Id="Extension2008"/>
       </Feature>
       <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010" 
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2010"/>
         <ComponentGroupRef Id="TriggerReg2010"/>
+        <ComponentGroupRef Id="Extension2010"/>
       </Feature>
     </Feature>    
   </Product>

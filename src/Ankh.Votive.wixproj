@@ -58,6 +58,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ankh.Diff\Ankh.Diff.wxs" />
+    <Compile Include="Ankh.ExtensionPoints\Ankh.ExtensionPoints.wxs" />
+    <None Include="Ankh.ExtensionPoints\Ankh.Ankh.ExtensionReg.wxi" />
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
@@ -76,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Ankh.Diff\" />
+    <Folder Include="Ankh.ExtensionPoints\" />
     <Folder Include="Ankh.Ids\" />
     <Folder Include="Ankh.Scc\" />
     <Folder Include="Ankh.Migrate\" />
@@ -93,6 +96,11 @@
     <Folder Include="Ankh.Votive" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Ankh.ExtensionPoints\Ankh.ExtensionPoints.csproj">
+      <Name>Ankh.ExtensionPoints</Name>
+      <Project>{b7168874-e05e-458d-95cc-5d7bbc243986}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="Ankh.Ids\Ankh.Ids.csproj">
       <Name>Ankh.Ids</Name>
       <Project>{61d343cf-77ba-4ef2-96f5-e0d4efd04844}</Project>
