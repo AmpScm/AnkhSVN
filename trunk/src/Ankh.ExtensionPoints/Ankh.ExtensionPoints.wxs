@@ -52,7 +52,7 @@
           <Directory Name="IDE" Id="VSIDE_2008">
             <Directory Name="PublicAssemblies" Id="PublicAssemblies_2008">
               <Component Id="C_Extension2008" Guid="F147C06C-3F77-42A2-AD68-D2FA838385D7">
-                <Condition>VS2008DEVENV</Condition>
+                <Condition>VS90DEVENV</Condition>
                 <CopyFile Id="CF_Extension2008" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2008" />
                 <CopyFile Id="CF_Extension2008Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2008" />
                 <?undef extId?>
@@ -66,6 +66,27 @@
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <ComponentGroup Id="Extension2010"></ComponentGroup>
+    <ComponentGroup Id="Extension2010">
+      <ComponentRef Id="C_Extension2010"/>
+    </ComponentGroup>
+    <PropertyRef Id="VS100_ROOT_FOLDER"/>
+    <DirectoryRef Id="TARGETDIR">
+      <Directory Id="VS100_ROOT_FOLDER">
+        <Directory Name="Common7" Id="Common7_2010">
+          <Directory Name="IDE" Id="VSIDE_2010">
+            <Directory Name="PublicAssemblies" Id="PublicAssemblies_2010">
+              <Component Id="C_Extension2010" Guid="56E444E1-541C-44C2-8DF6-1F48B06B4E06">
+                <Condition>VS100DEVENV</Condition>
+                <CopyFile Id="CF_Extension2010" FileId="CF_Ankh.ExtensionPoints.dll" DestinationProperty="PublicAssemblies_2010" />
+                <CopyFile Id="CF_Extension2010Xml" FileId="CF_Ankh.ExtensionPoints.xml" DestinationProperty="PublicAssemblies_2010" />
+                <?undef extId?>
+                <?define extId=VS100DEVENV ?>
+                <?include $(var.Ankh.ExtensionPoints.ProjectDir)\Ankh.ExtensionReg.wxi?>
+              </Component>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </DirectoryRef>
   </Fragment>
 </Wix>
