@@ -11,6 +11,7 @@
       <ComponentGroupRef Id="Ankh.UI"/>
       <ComponentGroupRef Id="Ankh.VS"/>
       <ComponentGroupRef Id="Ankh.Diff"/>
+      <ComponentGroupRef Id="Ankh.ExtensionPoints"/>
       <ComponentRef Id="C_Ankh.Package.dll"/>
     </ComponentGroup>
     <DirectoryRef Id="APP_bin" FileSource="$(var.Ankh.Package.TargetDir)">
