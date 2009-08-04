@@ -8,11 +8,13 @@ using Ankh.UI;
 
 namespace Ankh.Services.IssueTracker
 {
-    //[GlobalService(typeof(IAnkhIssueService))]
+    [GlobalService(typeof(IAnkhIssueService))]
     class AnkhIssueService : AnkhService, IAnkhIssueService
     {
         private Dictionary<string, IIssueRepositoryConnector> _nameConnectorMap;
         private IIssueRepository _repository;
+        private IIssueRepositorySettings _repositorySettings;
+
         private bool _settingsRead;
 
         private readonly object _syncLock = new object();
@@ -49,26 +51,46 @@ namespace Ankh.Services.IssueTracker
             return false;
         }
 
+        public IIssueRepositorySettings CurrentIssueRepositorySettings
+        {
+            get
+            {
+                if (_repository != null)
+                {
+                    return _repository;
+                }
+                lock (_syncLock)
+                {
+                    if (_repositorySettings == null
+                        && !_settingsRead)
+                    {
+                        _repositorySettings = ReadRepositorySettings();
+                    }
+                }
+                return _repositorySettings;
+            }
+        }
+
         public IIssueRepository CurrentIssueRepository
         {
             get
             {
-                lock (_syncLock)
+                if (_repository == null)
                 {
-                    if (_repository == null
-                        && !_settingsRead)
+                    IIssueRepositorySettings settings = CurrentIssueRepositorySettings;
+                    if (settings != null)
                     {
-                        IIssueRepositorySettings settings = ReadRepositorySettings();
-                        if (settings != null)
+                        string connectorName = settings.ConnectorName;
+                        if (!string.IsNullOrEmpty(connectorName))
                         {
-                            string connectorName = settings.ConnectorName;
-                            if (!string.IsNullOrEmpty(connectorName))
+                            IIssueRepositoryConnector connector;
+                            if (TryGetConnector(connectorName, out connector))
                             {
-                                IIssueRepositoryConnector connector;
-                                if (TryGetConnector(connectorName, out connector))
+                                try
                                 {
                                     _repository = connector.Create(settings);
                                 }
+                                catch { } // TODO connector error
                             }
                         }
                     }
@@ -142,15 +164,5 @@ namespace Ankh.Services.IssueTracker
         {
             // TODO set solution settings
         }
-
-        #region IAnkhIssueService Members
-
-
-        public IIssueRepositorySettings CurrentIssueRepositorySettings
-        {
-            get { return null; }
-        }
-
-        #endregion
     }
 }
