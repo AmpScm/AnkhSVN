@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7096</title>
+          AnkhSVN-Daily Update - 2.1.7099</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2370/AnkhSvn-Daily-2.1.7096.167.msi">AnkhSVN 2.1.7096</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2372/AnkhSvn-Daily-2.1.7099.168.msi">AnkhSVN 2.1.7099</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7096">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7099">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -29,6 +29,21 @@
 <h2>Recent changes</h2>
 <table>
 <tr class="d"><td colspan="4">2009-08-04</td></tr>
+<tr><td> </td><td class="r"><a id="7099" href="http://ankhsvn.net/rev/?r=7099">
+            [r7099]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.ExtensionPoints/Ankh.ExtensionReg.wxi, Ankh.Votive.wixproj, Ankh.ExtensionPoints/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark Ankh.ExtensionPoints.dll as CLSCompliant and switch to an
+auto-incrementing version number. Our setup will now apply a version
+redirect to all devenv.exe's upgrading all older references to the current
+version.<br>
+Third party components should link to the Ankh.ExtensionPoints that is
+installed in $(VsRoot)\Common7\IDE\PublicAssemblies. (Automatically available
+in the add-references dialog. They can just distribute the version they are
+linked to in their private directory to avoid linking errors.</td></tr>
+<tr><td> </td><td class="r"><a id="7098" href="http://ankhsvn.net/rev/?r=7098">
+            [r7098]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.ExtensionPoints/Ankh.ExtensionReg.wxi, Ankh.Votive.wixproj, Ankh.ExtensionPoints/Ankh.ExtensionPoints.wxs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Initial attempt on applying a version redirect on Ankh.ExtensionPoints.dll on
+setup / uninstall. This will allow linking to an older version, while using a
+newer version.</td></tr>
 <tr><td> </td><td class="r"><a id="7096" href="http://ankhsvn.net/rev/?r=7096">
             [r7096]
           </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Services/IssueTracker:</strong> AnkhIssueService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">enable IAnkhIssueService
