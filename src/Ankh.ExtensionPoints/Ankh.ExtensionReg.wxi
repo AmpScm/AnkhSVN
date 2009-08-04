@@ -1,4 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Include xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
+  <?ifdef DevEnvConfig?>
+  <?undef DevEnvConfig?>
+  <?endif?>
+
+  <?define DevEnvConfig = "[$(var.extId)].config" ?>
+
+  <?ifndef ExtensionPointsVersion?>
+  <?define ExtensionPointsVersion=2.0.0.1?>
+  <?endif?>
+
+  <!-- Create root element (to be updated and removed later)-->
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="1"
+             Id="$(var.extId)_TC_DependentAssembly" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding"
+             Node="element" Name="dependentAssembly"
+             VerifyPath="dependentAssembly[\[]@id='[UpgradeCode]'[\]]">
+
+    <!-- Add unique id-->
+    <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="2"
+               Id="$(var.extId)_TC_DependentAssembly_id"
+               ElementId="$(var.extId)_TC_DependentAssembly"
+               Name="id" Value="[UpgradeCode]"/>
+  </u:XmlConfig>
+
+  <!-- Add assembly identity -->
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="10"
+             Id="$(var.extId)_TC_AssemblyIdentity" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]"
+             Node="element" Name="assemblyIdentity">
+
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_AssemblyIdentity_name"
+               ElementId="$(var.extId)_TC_AssemblyIdentity"
+               Name="name" Value="Ankh.ExtensionPoints" />
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_AssemblyIdentity_publickey"
+               ElementId="$(var.extId)_TC_AssemblyIdentity"
+               Name="publicKeyToken" Value="068e4b3e6ce74d73" />
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_AssemblyIdentity_culture"
+               ElementId="$(var.extId)_TC_AssemblyIdentity"
+               Name="culture" Value="neutral" />
+  </u:XmlConfig>
+
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="20"
+             Id="$(var.extId)_TC_BindingRedirect" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]"
+             Node="element" Name="bindingRedirect">
+
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_oldversion"
+               ElementId="$(var.extId)_TC_BindingRedirect" Name="oldVersion" Value="2.0.0.0-$(var.ExtensionPointsVersion)" />
+    <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_newVersion"
+               ElementId="$(var.extId)_TC_BindingRedirect" Name="newVersion" Value="$(var.ExtensionPointsVersion)" />
+  </u:XmlConfig>
   
+  <!-- And now fix the xml namespaces -->
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="900" 
+             Id="$(var.extId)_TC_DependentAssemblyIdentityNs" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]/assemblyIdentity"
+             Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="910" 
+             Id="$(var.extId)_TC_DependentAssemblyBindingNs" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]/bindingRedirect"
+             Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="920" 
+             Id="$(var.extId)_TC_DependentAssemblyNs" Action="create" On="install"
+             ElementPath="//configuration/runtime/assemblyBinding/dependentAssembly[\[]@id='[UpgradeCode]'[\]]"
+             Node="value" Name="xmlns" Value="urn:schemas-microsoft-com:asm.v1"/>
+  
+  <!-- And register that we remove on uninstall-->
+  <u:XmlConfig File="$(var.DevEnvConfig)" Sequence="4000" 
+             Id="$(var.extId)_TC_DependentAssemblyDelete" Action="delete" On="uninstall"
+             ElementPath="//configuration/runtime/assemblyBinding"
+             Node="element"
+             VerifyPath="dependentAssembly[\[]@id='[UpgradeCode]'[\]]"/>
 </Include>

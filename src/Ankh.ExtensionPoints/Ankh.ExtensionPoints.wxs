@@ -1,4 +1,4 @@
-﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+﻿<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:u="http://schemas.microsoft.com/wix/UtilExtension">
   <Fragment>
     <ComponentGroup Id="Ankh.ExtensionPoints">
       <ComponentRef Id="C_Ankh.ExtensionPoints.dll"/>
