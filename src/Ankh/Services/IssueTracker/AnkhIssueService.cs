@@ -142,5 +142,15 @@ namespace Ankh.Services.IssueTracker
         {
             // TODO set solution settings
         }
+
+        #region IAnkhIssueService Members
+
+
+        public IIssueRepositorySettings CurrentIssueRepositorySettings
+        {
+            get { return null; }
+        }
+
+        #endregion
     }
 }
