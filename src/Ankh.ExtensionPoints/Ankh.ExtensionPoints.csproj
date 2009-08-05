@@ -50,7 +50,6 @@
     <Compile Include="IssueTracker\IIssueRepositoryConfigurationPage.cs" />
     <Compile Include="IssueTracker\IIssueRepositoryConnector.cs" />
     <Compile Include="IssueTracker\IIssueRepositorySettings.cs" />
-    <Content Include="IssueTracker\ProvideIssueRepositoryConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
