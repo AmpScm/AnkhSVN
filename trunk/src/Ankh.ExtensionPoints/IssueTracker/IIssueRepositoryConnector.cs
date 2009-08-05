@@ -3,7 +3,9 @@ using System.Windows.Forms;
 
 namespace Ankh.ExtensionPoints.IssueTracker
 {
-    [System.Runtime.InteropServices.Guid("0E080D53-D4A1-4609-8AB1-45ABD217BA4B")]
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IIssueRepositoryConnector
     {
         /// <summary>

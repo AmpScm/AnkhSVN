@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 namespace Ankh.ExtensionPoints.IssueTracker
 {
-    [System.Runtime.InteropServices.Guid("E1E1B50C-366C-4f3e-934A-6BCCF78C96E8")]
+    // ### BH: If we make this a base class it will be easier to extend it in future versions
+
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IIssueRepository : IIssueRepositorySettings, IWin32Window
     {
         /// <summary>
@@ -15,7 +19,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <summary>
         /// Handles the request to open the issue.
         /// </summary>
-        /// <param name="IssueId">Issue identifier</param>
+        /// <param name="issueId">Issue identifier</param>
         void NavigateTo(string issueId);
 
         /// <summary>
