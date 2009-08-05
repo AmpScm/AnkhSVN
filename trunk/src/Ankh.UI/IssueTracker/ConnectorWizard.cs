@@ -46,5 +46,28 @@ namespace Ankh.UI.IssueTracker
             }
             return false;
         }
+
+        internal IIssueRepositorySettings SolutionSettings
+        {
+            get
+            {
+                if (Context != null)
+                {
+                    IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
+                    if (iService != null)
+                    {
+                        IIssueRepositorySettings settings = iService.CurrentIssueRepositorySettings;
+
+                        if (settings != null
+                            && string.Equals(settings.ConnectorName, _connector.Name)
+                            )
+                        {
+                            return settings;
+                        }
+                    }
+                }
+                return null;
+            }
+        }
     }
 }

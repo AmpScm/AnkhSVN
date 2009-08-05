@@ -38,6 +38,17 @@ namespace Ankh.UI.IssueTracker
             }
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            // pass the current settings to the config page for editing
+            if (_configPage != null)
+            {
+                _configPage.Settings = Wizard.SolutionSettings;
+            }
+        }
+
         public override UserControl Control
         {
             get
@@ -61,5 +72,18 @@ namespace Ankh.UI.IssueTracker
                 return control;
             }
         }
+
+        public new ConnectorWizard Wizard
+        {
+            get
+            {
+                return base.Wizard as ConnectorWizard;
+            }
+            set
+            {
+                base.Wizard = value;
+            }
+        }
+
     }
 }
