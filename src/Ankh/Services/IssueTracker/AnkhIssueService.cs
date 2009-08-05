@@ -99,6 +99,8 @@ namespace Ankh.Services.IssueTracker
             }
             set
             {
+                IIssueRepository oldRepository = _repository;
+
                 _repository = value;
 
                 if (IssueRepositoryChanged != null)
@@ -107,6 +109,19 @@ namespace Ankh.Services.IssueTracker
                 }
 
                 SetSolutionSettings(_repository);
+
+                if (oldRepository != null && oldRepository != _repository)
+                {
+                    IDisposable disposableRepository = oldRepository as IDisposable;
+                    if (disposableRepository != null)
+                    {
+                        try
+                        {
+                            disposableRepository.Dispose();
+                        }
+                        catch { } // Connector code
+                    }
+                }
             }
         }
 
