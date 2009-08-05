@@ -185,6 +185,7 @@
     <Content Include="Gui\menu\AddUrl.png" />
     <Content Include="Gui\menu\CopyUrlToClipboard.png" />
     <Content Include="Gui\menu\Export.png" />
+    <Content Include="Gui\menu\IssueRepository.png" />
     <Content Include="Gui\menu\Lock.png" />
     <Content Include="Gui\menu\MakeDirectory.png" />
     <Content Include="Gui\menu\Merge.png" />
