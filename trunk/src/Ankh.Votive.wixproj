@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="Ankh.Diff\Ankh.Diff.wxs" />
     <Compile Include="Ankh.ExtensionPoints\Ankh.ExtensionPoints.wxs" />
-    <None Include="Ankh.ExtensionPoints\Ankh.Ankh.ExtensionReg.wxi" />
+    <None Include="Ankh.ExtensionPoints\Ankh.ExtensionReg.wxi" />
     <Compile Include="Ankh.Ids\Ankh.Ids.wxs" />
     <Compile Include="Ankh.Package\Ankh.Package.wxs" />
     <Compile Include="Ankh.Scc\Ankh.Scc.wxs" />
