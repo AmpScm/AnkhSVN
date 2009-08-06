@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="../tools/Ankh-Common.targets" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{906E3F01-CD79-4F80-BCA7-1105224328C4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Ankh.VS</RootNamespace>
+    <AssemblyName>Ankh.VS</AssemblyName>
+    <TargetFrameworkVersion Condition="'$(TargetFrameworkVersion)' == ''">v2.0</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Ankh.VS.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhLanguageServiceFile>
+    <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' != '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhLanguageServiceFile>
+    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhOtherLanguageServiceFile>
+    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' != '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhOtherLanguageServiceFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="$(MsVsShellAssembly)" />
+    <Reference Include="$(MsVsLangAssembly)" />
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" Condition="'$(VsSdkVersion)' == '10.0'" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="SharpSvn, Version=1.4999.384.29813, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 2008 SDK\VisualStudioIntegration\Common\Assemblies\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TempDirManager.cs" />
+    <Compile Include="VsActivatorCommand.cs" />
+    <Compile Include="Extenders\ExtenderProvider.cs" />
+    <Compile Include="Extenders\SvnItemExtender.cs" />
+    <Compile Include="TempFileManager.cs" />
+    <Compile Include="AnkhVSColor.cs" />
+    <Compile Include="Dialogs\AnkhDialogOwner.cs" />
+    <Compile Include="AnkhVSModule.cs" />
+    <Compile Include="Dialogs\VSCommandRouting.cs" />
+    <Compile Include="Dialogs\VSFormContainerPane.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Selection\CachedEnumerable.cs" />
+    <Compile Include="Selection\CommandState.cs" />
+    <Compile Include="Selection\SelectionContext.cs" />
+    <Compile Include="Selection\SelectionUtils.cs" />
+    <Compile Include="SolutionExplorer\FileIconMapper.cs" />
+    <Compile Include="SolutionExplorer\SolutionExplorerWindow.cs" />
+    <Compile Include="SolutionExplorer\SolutionTreeViewManager.cs" />
+    <Compile Include="SolutionExplorer\StatusImageMapper.cs" />
+    <Compile Include="SolutionExplorer\Win32TreeView.cs" />
+    <Compile Include="WebBrowser\AnkhWebBrowser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ankh.VS.snk" />
+    <Compile Include="Dialogs\VSDocumentHostService.cs" />
+    <Compile Include="Dialogs\VSDocumentInstance.cs" />
+    <Compile Include="Dialogs\VSCommandInstaller.cs" />
+    <Compile Include="Dialogs\VSDocumentFormPane.cs">
+    </Compile>
+    <Compile Include="Extenders\SvnProjectExtender.cs" />
+    <Compile Include="Extenders\SvnSolutionExtender.cs" />
+    <Compile Include="LanguageServices\AnkhEditorResolver.cs" />
+    <Compile Include="LanguageServices\AnkhLanguageService.cs" />
+    <Compile Include="$(AnkhLanguageServiceFile)">
+      <DependentUpon>AnkhLanguageService.cs</DependentUpon>
+    </Compile>
+    <None Include="$(AnkhOtherLanguageServiceFile)">
+      <DependentUpon>AnkhLanguageService.cs</DependentUpon>
+    </None>
+    <Compile Include="LanguageServices\LogMessageLanguageService.cs" />
+    <Compile Include="LanguageServices\UnifiedDiffDropDownBar.cs" />
+    <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
+    <Compile Include="OutputPane\OutputPaneManager.cs" />
+    <Compile Include="Selection\AnkhCommandService.cs" />
+    <Compile Include="Selection\SelectionContext.Active.cs">
+      <DependentUpon>SelectionContext.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\SelectionContext.Delay.cs" />
+    <Compile Include="Selection\SelectionContext.SelectionItem.cs" />
+    <Compile Include="SolutionExplorer\SolutionExplorerStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SolutionExplorerStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Ankh.Ids\Ankh.Ids.csproj">
+      <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
+      <Name>Ankh.Ids</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ankh.Services\Ankh.Services.csproj">
+      <Project>{D90A8E89-66B2-451E-8B31-3D86F0CD4AFB}</Project>
+      <Name>Ankh.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ankh.VS.wxs" />
+    <EmbeddedResource Include="SolutionExplorer\SolutionExplorerStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SolutionExplorerStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SolutionExplorer\UpDnListView.png" />
+    <EmbeddedResource Include="SolutionExplorer\StatusGlyphs.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

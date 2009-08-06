@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == ''">
+    <VisualStudioVersion>8.0</VisualStudioVersion>
+    <VsSdkVersion>8.0</VsSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <VisualStudioVersion>9.0</VisualStudioVersion>
+    <!-- The Visual Studio 2008 SDK allows building a 2005 compatible version -->
+    <VsSdkVersion Condition="'$(UseVS2005MPF)' == 'true'">8.0</VsSdkVersion>
+    <VsSdkVersion Condition="'$(UseVS2005MPF)' != 'true'">9.0</VsSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '4.0'">
+    <VisualStudioVersion>10.0</VisualStudioVersion>
+    <VsSdkVersion>10.0</VsSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VsSdkVersion)' == '8.0'">
+    <!-- Visual Studio 2005 SDK 1.1 -->
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsShellAssembly>
+    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsLangAssembly>
+    <!-- Required setting for VS2005 SDK -->
+    <TargetRegistryRoot>Software\Microsoft\VisualStudio\8.0Exp</TargetRegistryRoot>
+		<TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VsSdkVersion)' == '9.0'">
+    <!-- Visual Studio 2008 SP1 SDK-->
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.9.0, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsShellAssembly>
+    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.9.0, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</MsVsLangAssembly>
+		<TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '4.0'">
+    <!-- Visual Studio 2010 Beta 1-->
+    <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
+    <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
+		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+</Project>

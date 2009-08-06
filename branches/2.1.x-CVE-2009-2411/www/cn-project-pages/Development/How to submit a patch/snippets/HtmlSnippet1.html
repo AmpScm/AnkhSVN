@@ -1,0 +1,104 @@
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<p>
+Anybody can submit patches to fix bugs or implement new features in AnkhSVN. Before submitting a patch, please read our coding guidelines. After you have submitted a couple of good patches, we might invite you to become a committer to the AnkhSVN project.<br />
+<br />
+We welcome anybody developing one of the features on the roadmap and submitting a patch. Before you do, we'd appreciate it if you get in touch with us first to discuss the implementation. Send an email to dev@ankhsvn.open.collab.net. 
+</p>
+
+<p>
+<strong>Submitting patches</strong> 
+</p>
+
+<p>
+Mail patches to <a href="mailto:dev@ankhsvn.open.collab.net">dev@ankhsvn.open.collab.net</a>, starting the subject line with [PATCH]. This helps our patch manager spot patches right away. For example:<br />
+
+</p>
+<blockquote>Subject: [PATCH] fix for issue 123<br />
+</blockquote>
+<p>
+If the patch addresses a particular issue, include the issue number as well: &quot;[PATCH] issue #1729: ...&quot;. Developers who are interested in that particular issue will know to read the mail.<br />
+<br />
+A patch submission should contain one logical change; please don't mix unrelated changes in one submission &mdash; send separate emails instead.<br />
+<br />
+Generate the patch using svn diff from the top of a Subversion trunk working copy. If the file you're diffing is not under revision control, you can achieve the same effect by using diff -u.<br />
+<br />
+Please include a log message with your patch. A good log message helps potential reviewers understand the changes in your patch, and increases the likelihood that it will be applied. You can put the log message in the body of the email, or at the top of the patch attachment (see below). Either way, it should follow the guidelines given in Writing log messages , and be enclosed in triple square brackets, like so:
+</p>
+
+<p>
+<br />
+[[[<br />
+Fix issue #1729: Don't crash because of a missing file.<br />
+<br />
+* subversion/libsvn_ra_ansible/get_editor.c<br />
+(frobnicate_file): Check that file exists before frobnicating.<br />
+]]]
+</p>
+
+<p>
+<br />
+The brackets are not actually part of the log message, they're just a way to clearly mark off the log message from its surrounding context.<br />
+<br />
+If possible, send the patch as an attachment with a mime-type of text/x-diff, text/x-patch, or text/plain. Most people's mailreaders can display those inline, and having the patch as an attachment allows them to extract the patch from the message conveniently. Never send patches in archived or compressed form (e.g., tar, gzip, zip, bzip2), because that prevents people from reviewing the patch directly in their mailreaders.<br />
+<br />
+If you can't attach the patch with one of these mime-types, or if the patch is very short, then it's okay to include it directly in the body of your message. But watch out: some mail editors munge inline patches by inserting unasked-for line breaks in the middle of long lines. If you think your mail software might do this, then please use an attachment instead.<br />
+<br />
+If the patch implements a new feature, make sure to describe the feature completely in your mail; if the patch fixes a bug, describe the bug in detail and give a reproduction recipe. An exception to these guidelines is when the patch addresses a specific issue in the issues database &mdash; in that case, just refer to the issue number in your log message, as described in Writing log messages.<br />
+<br />
+It is normal for patches to undergo several rounds of feedback and change before being applied. Don't be discouraged if your patch is not accepted immediately, it just means that there are a lot of eyes looking at every code submission, and it's a rare patch that doesn't have at least a little room for improvement. After reading people's responses to your patch, make the appropriate changes and resubmit, wait for the next round of feedback, and lather, rinse, repeat, until some committer applies it.<br />
+<br />
+If you don't get a response for a while, and don't see the patch applied, it may just mean that people are really busy. Go ahead and repost, and don't hesitate to point out that you're still waiting for a response. One way to think of it is that patch management is highly parallizable, and we need you to shoulder your share of the management as well as the coding. Every patch needs someone to shepherd it through the process, and the person best qualified to do that is the original submitter. <br />
+<br />
+                                                
+</p>
+
+<!-- SiteCatalyst code version: H.17. Copyright 1997-2008 Omniture, Inc. More info available at http://www.omniture.com --> 
+<script language="JavaScript" type="text/javascript" src="/branding/cn_js/s_code.js"></script> <script language="JavaScript" type="text/javascript">
+s.pageName="AnkhSVN Development - How to submit a patch Page" 
+s.server="collab.net"
+s.channel="Development" 
+s.pageType="" 
+s.prop1="How to submit a patch" 
+s.prop2="" 
+s.prop3="" 
+s.prop4="" 
+s.prop5="" 
+s.prop6="nav 2" 
+s.prop7="" 
+s.prop8="" 
+s.prop9="" 
+//s.prop10="" 
+//s.prop11="" 
+s.prop12="" 
+s.prop13="" 
+s.prop14="" 
+s.prop15="" 
+s.prop16="" 
+s.prop17="" 
+s.prop18="" 
+s.prop19="" 
+s.prop20="U.S." 
+s.prop21="" 
+s.prop22="" 
+s.prop23="" 
+s.hier1=s.channel +":"+s.prop1+":"+s.prop2+":"+s.prop3
+/* Conversion Variables */ 
+s.campaign="" 
+s.state="" 
+s.zip="" 
+s.events="" 
+s.products="" 
+s.purchaseID="" 
+s.eVar1="" 
+s.eVar2="" 
+s.eVar3="" 
+s.eVar4="" 
+s.eVar5="" 
+s.eVar6="" 
+s.eVar7="" 
+s.eVar8="" 
+s.eVar9="" 
+s.eVar10="" 
+s.eVar11=s.prop10 
+s.eVar12=s.prop11
+/************* DO NOT ALTER ANYTHING BELOW THIS LINE ! **************/ var s_code=s.t();if(s_code)document.write(s_code)//--></script> <script language="JavaScript" type="text/javascript"><!-- if(navigator.appVersion.indexOf('MSIE')>=0)document.write(unescape('%3C')+'\!-'+'-') //--></script><noscript><a href="http://www.omniture.com" title="Web Analytics"><img src="http://asknetcoldev.112.2O7.net/b/ss/asknetcoldev/1/H.17--NS/0" height="1" width="1" border="0" alt="" /></a></noscript><!--/DO NOT REMOVE/--> <!-- End SiteCatalyst code version: H.17. --> 

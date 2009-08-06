@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page visibility="1">
+  <component_list>
+    <component visibility="1" type="Html" order="1">
+      <title localize="false" />
+      <filename>HtmlSnippet7.html</filename>
+    </component>
+    <component visibility="1" type="Html" order="2">
+      <title localize="false">Features</title>
+      <filename>HtmlSnippet3.html</filename>
+    </component>
+    <component visibility="3" type="Html" order="3">
+      <title localize="false">See It! (1.X)</title>
+      <filename>HtmlSnippet4.html</filename>
+    </component>
+    <component visibility="3" type="Html" order="4">
+      <title localize="false">See It! (2.0)</title>
+      <filename>HtmlSnippet1.html</filename>
+    </component>
+    <component visibility="1" type="Html" order="5">
+      <title localize="false">What's new in 2.0</title>
+      <filename>HtmlSnippet2.html</filename>
+    </component>
+    <component visibility="1" type="Html" order="6">
+      <title localize="false">About AnkhSVN</title>
+      <filename>HtmlSnippet5.html</filename>
+    </component>
+    <component visibility="3" type="Subproject" order="7">
+      <title localize="false" />
+    </component>
+    <component visibility="1" type="Html" order="8">
+      <title localize="false" />
+      <filename>HtmlSnippet6.html</filename>
+    </component>
+  </component_list>
+</page>
+
