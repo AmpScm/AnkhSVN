@@ -5,6 +5,10 @@
       <title localize="false">Ankh-2.1.6941</title>
       <filename>HtmlSnippet1.html</filename>
     </component>
+    <component visibility="1" type="Html" order="2">
+      <title localize="false">Ankh-2.1.6941 copy</title>
+      <filename>HtmlSnippet2.html</filename>
+    </component>
   </component_list>
 </page>
 
