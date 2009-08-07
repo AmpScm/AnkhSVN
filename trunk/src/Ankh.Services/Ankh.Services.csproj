@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Ankh.Ids.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>Ankh.Services.snk</AssemblyOriginatorKeyFile>
     <SccProjectName>Svn</SccProjectName>
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
@@ -184,7 +184,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ankh.Ids.snk" />
+    <None Include="Ankh.Services.snk" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Ankh.Services.wxs" />
