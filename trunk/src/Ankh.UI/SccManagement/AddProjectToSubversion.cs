@@ -20,6 +20,10 @@ namespace Ankh.UI.SccManagement
         protected override void ValidateAdd(object sender, CancelEventArgs e)
         {
             base.ValidateAdd(sender, e);
+
+            if (e.Cancel)
+                return;
+
             Debug.Assert(RepositoryAddUrl != null);
 
             IAnkhSolutionSettings ss = Context.GetService<IAnkhSolutionSettings>();
