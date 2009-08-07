@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.Scc;
 
 namespace Ankh
 {
@@ -33,5 +34,31 @@ namespace Ankh
         /// Occurs when current solution's Issue Tracker Repository association settings are changed
         /// </summary>
         event EventHandler IssueRepositoryChanged;
+
+        #region VS Solution persistence
+
+        /// <summary>
+        /// Gets or sets a boolean indicating whether te solution should be saved for changed scc settings
+        /// </summary>
+        bool IsSolutionDirty { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance has solution property data.
+        /// </summary>
+        bool HasSolutionData { get; }
+
+        /// <summary>
+        /// Writes the Issue Repository Settings to the solution
+        /// </summary>
+        /// <param name="propertyBag">The property bag.</param>
+        void WriteSolutionProperties(IPropertyMap propertyBag);
+
+        /// <summary>
+        /// Loads the Issue Repository Settings
+        /// </summary>
+        /// <param name="propertyBag">The property bag.</param>
+        void ReadSolutionProperties(IPropertyMap propertyBag);
+
+        #endregion
     }
 }

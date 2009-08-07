@@ -100,6 +100,9 @@ namespace Ankh
 
         public const string ExtenderProviderName = "AnkhExtenderProvider";
 
+        /// <summary>The Issue Tracker structure name as used in the solution file</summary>
+        public const string IssueTrackerStructureName = "AnkhIssueTracker";
+
         /// <summary>
         /// The guid used for our on-and-only bitmap resource
         /// </summary>
