@@ -1263,6 +1263,9 @@
     <EmbeddedResource Include="IssueTracker\ConnectorSelectionPageControl.resx">
       <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="IssueTracker\IssueTrackerConfigWizardDialog.resx">
+      <DependentUpon>IssueTrackerConfigWizardDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />
     <Content Include="MergeWizard\images\Error.png" />

@@ -6,7 +6,7 @@ using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.Services.IssueTracker
 {
-    class IssueRepositorySettings : IIssueRepositorySettings
+    class IssueRepositorySettings : IIssueRepositorySettings, IComparable<IIssueRepositorySettings>
     {
         private string _connectorName;
         private Uri _repositoryUri;
@@ -41,5 +41,39 @@ namespace Ankh.Services.IssueTracker
 
         #endregion
 
+        #region IComparable<IIssueRepositorySettings> Members
+
+        public int CompareTo(IIssueRepositorySettings other)
+        {
+            if (true
+                && other != null
+                && string.Equals(ConnectorName, other.ConnectorName)
+                && Uri.Equals(RepositoryUri, other.RepositoryUri)
+                && string.Equals(RepositoryId, other.RepositoryId)
+                && HasSameProperties(CustomProperties, other.CustomProperties)
+                )
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        static bool HasSameProperties(Dictionary<string, object> props1, Dictionary<string, object> props2)
+        {
+            if (props1 == null && props2 == null) { return true; }
+            int props1Count = props1 == null ? -1 : props1.Count;
+            int props2Count = props2 == null ? -1 : props2.Count;
+            if (props1Count != props2Count) {return false;}
+            foreach (string key in props1.Keys)
+            {
+                if (!props2.ContainsKey(key)) { return false; }
+                object value1 = props1[key];
+                object value2 = props2[key];
+                if (!object.Equals(value1, value2)) { return false; }
+            }
+            return true;
+        }
+
+        #endregion
     }
 }
