@@ -92,7 +92,7 @@ namespace Ankh.Services
 
             // Note: For TortoiseSVN use the host program files, as $(ProgramFiles) is invalid on X64 
             //       with TortoiseSVN integrated in explorer
-			tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
+            tools.Add(new DiffTool(this, "TortoiseMerge", "TortoiseSVN TortoiseMerge",
                 RegistrySearch("SOFTWARE\\TortoiseSVN", "TMergePath")
                     ?? "$(HostProgramFiles)\\TortoiseSVN\\bin\\TortoiseMerge.exe",
                 "/base:'$(Base)' /mine:'$(Mine)' /basename:'$(BaseName)' /minename:'$(MineName)'", true));
@@ -133,6 +133,12 @@ namespace Ankh.Services
                 RegistrySearch("SOFTWARE\\Ellié Computing\\Merge", "Path")
                     ?? "$(ProgramFiles)\\Ellié Computing\\Merge\\guimerge.exe",
                 "'$(Base)' '$(Mine)' --mode=diff2 --title1='$(BaseName)' --title2='$(MineName)'", true));
+
+            tools.Add(new DiffTool(this, "ExamDiff", "PrestoSoft ExamDiff",
+                RegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath")
+                    ?? UserRegistrySearch("SOFTWARE\\PrestoSoft\\ExamDiff", "ExePath")
+                    ?? "$(ProgramFiles)\\ExamDiff\\ExamDiff.exe",
+                "'$(Base)' '$(Mine)'", true));
 
             LoadRegistryTools(DiffToolMode.Diff, tools);
 
@@ -228,6 +234,22 @@ namespace Ankh.Services
         static string RegistrySearch(string key, string value)
         {
             using (RegistryKey k = Registry.LocalMachine.OpenSubKey(key, false))
+            {
+                if (k == null)
+                    return null;
+
+                string path = k.GetValue(value) as string;
+
+                if (string.IsNullOrEmpty(path))
+                    return null;
+
+                return GetAppLocation(path);
+            }
+        }
+
+        static string UserRegistrySearch(string key, string value)
+        {
+            using (RegistryKey k = Registry.CurrentUser.OpenSubKey(key, false))
             {
                 if (k == null)
                     return null;
