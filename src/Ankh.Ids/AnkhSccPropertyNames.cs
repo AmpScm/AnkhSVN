@@ -43,6 +43,6 @@ namespace Ankh
         /// that are specified on different lines in this property as if they were not included in the project
         /// </summary>
         /// <remarks>Files that are not in the project are ignored</remarks>
-        public const string ProjectExclude = "vs:scc-excluded";
+        public const string ProjectExclude = "vs:scc-exclude";
     }
 }
