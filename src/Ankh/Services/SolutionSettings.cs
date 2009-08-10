@@ -246,10 +246,10 @@ namespace Ankh.Settings
             string solutionFile = cache.SolutionFilename;
 
             SvnItem directory = StatusCache[solutionFile].Parent;
-            SvnWorkingCopy wc = directory.WorkingCopy;
-
             if (directory == null)
                 return;
+
+            SvnWorkingCopy wc = directory.WorkingCopy;
 
             int up = 0;
 
