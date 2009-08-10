@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable"
                 xmlns:gui="http://schemas.studioturtle.net/2007/01/gui/"
@@ -142,9 +142,16 @@
           <xsl:value-of select="@name"/>
         </CanonicalName>
       </xsl:if>
-      <xsl:if test="@localizedName">
+      <xsl:if test="@localizedName or @name">
         <LocCanonicalName>
-          <xsl:value-of select="@localizedName"/>
+          <xsl:choose>
+            <xsl:when test="@localizedName">
+              <xsl:value-of select="@localizedName"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@name"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </LocCanonicalName>
       </xsl:if>
     </Strings>
