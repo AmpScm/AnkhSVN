@@ -120,8 +120,8 @@
   <data name="label1.Text" xml:space="preserve">
     <value>You are trying to commit files from several Subversion working copies.
 
-Subversion does not committing these changes in a single revision, but we can commit it as multiple revisions.
+Subversion does not support committing these changes in a single revision, but we can commit it as multiple revisions.
 
-Which working copies would you like to commit with this log message?</value>
+Which working copies would you like to commit with the current log message?</value>
   </data>
 </root>
