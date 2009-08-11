@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Text;
 
 using WizardFramework;
 
@@ -12,13 +10,16 @@ namespace Ankh.UI.IssueTracker
     public class ConnectorWizardPage : WizardPage
     {
         UserControl _pageControl;
-        IIssueRepositoryConfigurationPage _configPage;
+        IssueRepositoryConfigurationPageBase _configPage;
 
-        public ConnectorWizardPage(string name, IIssueRepositoryConfigurationPage configPage)
+        public ConnectorWizardPage(string name, IssueRepositoryConfigurationPageBase configPage)
             : base(name)
         {
             _configPage = configPage;
-            _configPage.OnPageEvent += new EventHandler<ConfigPageEventArgs>(_configPage_OnPageEvent);
+            if (_configPage != null)
+            {
+                _configPage.OnPageEvent += new EventHandler<ConfigPageEventArgs>(_configPage_OnPageEvent);
+            }
         }
 
         void _configPage_OnPageEvent(object sender, ConfigPageEventArgs e)
@@ -55,11 +56,13 @@ namespace Ankh.UI.IssueTracker
             {
                 UserControl control = base.Control;
                 if (_pageControl == null
-                    && _configPage != null)
+                    && _configPage != null
+                    && _configPage.Window != null)
                 {
                     try
                     {
-                        _pageControl = UserControl.FromHandle(_configPage.Handle) as UserControl;
+                        IWin32Window window = _configPage.Window;
+                        _pageControl = UserControl.FromHandle(window.Handle) as UserControl;
                         if (control != null)
                         {
                             control.Controls.Clear();

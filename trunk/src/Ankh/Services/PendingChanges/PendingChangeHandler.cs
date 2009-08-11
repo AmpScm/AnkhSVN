@@ -309,7 +309,7 @@ namespace Ankh.Services.PendingChanges
             IAnkhIssueService iService = state.GetService<IAnkhIssueService>();
             if (iService != null)
             {
-                IIssueRepository iRepo = iService.CurrentIssueRepository;
+                IssueRepositoryBase iRepo = iService.CurrentIssueRepository;
                 if (iRepo != null)
                 {
                     List<Uri> uris = new List<Uri>();
@@ -579,7 +579,7 @@ namespace Ankh.Services.PendingChanges
             IAnkhIssueService iService = GetService<IAnkhIssueService>();
             if (iService != null)
             {
-                IIssueRepository iRepo = iService.CurrentIssueRepository;
+                IssueRepositoryBase iRepo = iService.CurrentIssueRepository;
                 if (iRepo != null)
                 {
                     List<Uri> uris = new List<Uri>();

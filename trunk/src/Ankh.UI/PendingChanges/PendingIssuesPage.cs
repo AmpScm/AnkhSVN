@@ -62,10 +62,12 @@ namespace Ankh.UI.PendingChanges
             IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
             if (issueService != null)
             {
-                IIssueRepository repository = issueService.CurrentIssueRepository;
-                if (repository != null)
+                IssueRepositoryBase repository = issueService.CurrentIssueRepository;
+                IWin32Window window = null;
+                if (repository != null
+                    && (window = repository.Window) != null)
                 {
-                    Control control = Control.FromHandle(repository.Handle);
+                    Control control = Control.FromHandle(window.Handle);
                     if (control != null)
                     {
                         control.Dock = DockStyle.Fill;
