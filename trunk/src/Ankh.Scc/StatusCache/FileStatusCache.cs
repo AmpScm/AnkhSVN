@@ -30,7 +30,7 @@ namespace Ankh.Scc.StatusCache
     /// </summary>
     [GlobalService(typeof(IFileStatusCache), AllowPreRegistered=true)]
     [GlobalService(typeof(ISvnItemChange), AllowPreRegistered=true)]
-    sealed class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
+    sealed partial class FileStatusCache : AnkhService, Ankh.Scc.IFileStatusCache, ISvnItemChange
     {
         readonly object _lock = new object();
         readonly SvnClient _client;
@@ -49,8 +49,15 @@ namespace Ankh.Scc.StatusCache
             _wcClient = new SvnWorkingCopyClient();
             _map = new Dictionary<string, SvnItem>(StringComparer.OrdinalIgnoreCase);
             _dirMap = new Dictionary<string, SvnDirectory>(StringComparer.OrdinalIgnoreCase);
+            InitializeShellMonitor();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            ReleaseShellMonitor(disposing);
+            
+            base.Dispose(disposing);
+        }
 
         /// <summary>
         /// Gets the command service.
