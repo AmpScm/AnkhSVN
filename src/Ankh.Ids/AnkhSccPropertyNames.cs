@@ -44,5 +44,31 @@ namespace Ankh
         /// </summary>
         /// <remarks>Files that are not in the project are ignored</remarks>
         public const string ProjectExclude = "vs:scc-exclude";
+
+        /// <summary>
+        /// When specified on project root, Issue Tracker Connector loaded with this unique name
+        /// </summary>
+        public const string IssueRepositoryConnector = "vs:issuerepository-connector";
+
+        /// <summary>
+        /// Specified on project root, and represents the Uri of the issue repository.
+        /// </summary>
+        public const string IssueRepositoryUri = "vs:issuerepository-uri";
+
+        /// <summary>
+        /// Specified on project root, and represents the the specific repository on Issue Repository Uri.
+        /// </summary>
+        public const string IssueRepositoryId = "vs:issuerepository-id";
+
+        /// <summary>
+        /// Specified on project root, and represents the list of connector specific property names (comma separated).
+        /// </summary>
+        public const string IssueRepositoryPropertyNames = "vs:issuerepository-propertynames";
+
+        /// <summary>
+        /// Specified on project root, and represents the list of connector specific property values (comma separated).
+        /// </summary>
+        /// <remarks>number of values must be equal to the number of property names</remarks>
+        public const string IssueRepositoryPropertyValues = "vs:issuerepository-propertyvalues";
     }
 }

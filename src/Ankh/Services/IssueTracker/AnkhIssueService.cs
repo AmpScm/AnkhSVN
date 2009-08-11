@@ -5,23 +5,16 @@ using Microsoft.Win32;
 
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.UI;
+using Ankh.VS;
+using Ankh.IssueTracker;
 
 namespace Ankh.Services.IssueTracker
 {
     [GlobalService(typeof(IAnkhIssueService))]
     class AnkhIssueService : AnkhService, IAnkhIssueService
     {
-        static readonly string SOLUTION_PROPERTY__CONNECTOR = "Connector"; // holds the connector name
-        static readonly string SOLUTION_PROPERTY__URI = "Uri"; // holds the reposiory uri string
-        static readonly string SOLUTION_PROPERTY__REPOSITORY_ID = "RepositoryId"; // holds the repository id
-        static readonly string SOLUTION_PROPERTY__PROPERTY_NAMES = "PropertyNames"; // holds the connector's custom property names
-        static readonly string SOLUTION_PROPERTY__PROPERTY_VALUES = "PropertyValues"; // holds the repository's custom property values
-
         private Dictionary<string, IIssueRepositoryConnector> _nameConnectorMap;
         private IIssueRepository _repository;
-        private IIssueRepositorySettings _repositorySettings;
-        private IIssueRepositorySettings _persistedSettings;
-        private bool _isSolutionDirty;
 
         private readonly object _syncLock = new object();
 
@@ -78,7 +71,16 @@ namespace Ankh.Services.IssueTracker
                 {
                     return _repository;
                 }
-                return _repositorySettings;
+                return Context.GetService<IIssueTrackerSettings>();
+            }
+        }
+
+        public void MarkDirty()
+        {
+            IIssueTrackerSettings persistedSettings = Context.GetService<IIssueTrackerSettings>();
+            if (persistedSettings.ShouldPersist(_repository))
+            {
+                CurrentIssueRepository = null;
             }
         }
 
@@ -102,7 +104,10 @@ namespace Ankh.Services.IssueTracker
                             {
                                 try
                                 {
-                                    _repository = connector.Create(settings);
+                                    if (settings.RepositoryUri != null)
+                                    {
+                                        _repository = connector.Create(settings);
+                                    }
                                 }
                                 catch { } // TODO connector error
                             }
@@ -114,7 +119,7 @@ namespace Ankh.Services.IssueTracker
             set
             {
                 IIssueRepository oldRepository = _repository;
-                _repositorySettings =_repository = value;
+                _repository = value;
                 if (IssueRepositoryChanged != null)
                 {
                     IssueRepositoryChanged(this, EventArgs.Empty);
@@ -132,8 +137,6 @@ namespace Ankh.Services.IssueTracker
                         catch { } // Connector code
                     }
                 }
-
-                IsSolutionDirty = HasChanged(CurrentIssueRepositorySettings, _persistedSettings);
             }
         }
 
@@ -143,12 +146,13 @@ namespace Ankh.Services.IssueTracker
         /// <returns>true/false</returns>
         private bool HasChanged(IIssueRepositorySettings settings1, IIssueRepositorySettings settings2)
         {
-            return true
+            return true;
+                /*
                 && settings1 != settings2 // handles both null values
                 && (false
-                    || (settings1 is IComparable<IIssueRepositorySettings> && ((IComparable<IIssueRepositorySettings>)settings1).CompareTo(settings2) != 0)
-                    || (settings2 is IComparable<IIssueRepositorySettings> && ((IComparable<IIssueRepositorySettings>)settings2).CompareTo(settings1) != 0)
-                    );
+                    || (settings1 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings1).Equals(settings2))
+                    || (settings2 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings2).Equals(settings1))
+                    );*/
         }
 
         /// <summary>
@@ -158,115 +162,28 @@ namespace Ankh.Services.IssueTracker
 
         #region VS Solution persistence
 
-        /// <summary>
-        /// Get or Sets the dirty property to indicate the need for persistence
-        /// </summary>
-        public bool IsSolutionDirty
+        public void ReadSolutionProperties()
         {
-            get
+            IIssueTrackerSettings solSettings = GetService<IIssueTrackerSettings>();
+            if (solSettings != null)
             {
-                return _isSolutionDirty;;
-            }
-            set
-            {
-                _isSolutionDirty = value;
-            }
-        }
-
-        public bool HasSolutionData
-        {
-            get
-            {
-                return CurrentIssueRepositorySettings != null;
-            }
-        }
-
-        public void ReadSolutionProperties(Ankh.Scc.IPropertyMap propertyBag)
-        {
-            string connector;
-            if (propertyBag.TryGetValue(SOLUTION_PROPERTY__CONNECTOR, out connector))
-            {
-                string uriString;
-                if (propertyBag.TryGetValue(SOLUTION_PROPERTY__URI, out uriString))
+                string connector = solSettings.ConnectorName;
+                if (!string.IsNullOrEmpty(connector))
                 {
-                    Uri uri;
-                    if (Uri.TryCreate(uriString, UriKind.Absolute, out uri))
+                    Uri uri = solSettings.IssueRepositoryUri;
+                    if (uri != null)
                     {
-                        string repoId;
-                        if (!propertyBag.TryGetValue(SOLUTION_PROPERTY__REPOSITORY_ID, out repoId))
-                        {
-                            repoId = null;
-                        }
-
-                        Dictionary<string, object> customProperties = null;
-                        string propNames;
-                        if (propertyBag.TryGetValue(SOLUTION_PROPERTY__PROPERTY_NAMES, out propNames))
-                        {
-                            string[] propNameArray = propNames.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                            if (propNameArray.Length > 0)
-                            {
-                                string propValues;
-                                if (propertyBag.TryGetValue(SOLUTION_PROPERTY__PROPERTY_VALUES, out propValues))
-                                {
-                                    string[] propValueArray = propValues.Split(new string[] { "," }, StringSplitOptions.None);
-                                    int propIndex = 0;
-                                    if (propValueArray.Length == propNameArray.Length)
-                                    {
-                                        customProperties = new Dictionary<string, object>();
-                                        foreach (string propName in propNameArray)
-                                        {
-                                            string propValue = propValueArray[propIndex++];
-                                            if (!string.IsNullOrEmpty(propValue))
-                                            {
-                                                customProperties.Add(propName, propValue);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
+                        string repoId = solSettings.IssueRepositoryId;
+                        IDictionary<string, object> customProperties = solSettings.CustomProperties;
+                        Dictionary<string, object> cProperties = customProperties == null ? null : new Dictionary<string, object>(customProperties);
                         IssueRepositorySettings iSettings = new IssueRepositorySettings();
                         iSettings.ConnectorName = connector;
                         iSettings.RepositoryUri = uri;
                         iSettings.RepositoryId = repoId;
-                        iSettings.CustomProperties = customProperties;
-                        _repositorySettings = _persistedSettings = iSettings;
+                        iSettings.CustomProperties = cProperties;
                     }
                 }
             }
-        }
-
-        public void WriteSolutionProperties(Ankh.Scc.IPropertyMap propertyBag)
-        {
-            if (_repository != null)
-            {
-                propertyBag.SetRawValue(SOLUTION_PROPERTY__CONNECTOR, _repository.ConnectorName);
-                propertyBag.SetRawValue(SOLUTION_PROPERTY__URI, _repository.RepositoryUri.ToString());
-                propertyBag.SetRawValue(SOLUTION_PROPERTY__REPOSITORY_ID, _repository.RepositoryId);
-                Dictionary<string, object> customProperties = _repository.CustomProperties;
-                if (customProperties != null) {
-                    string[] propNameArray = new string[customProperties.Keys.Count];
-                    customProperties.Keys.CopyTo(propNameArray, 0);
-                    string propNames = string.Join(",", propNameArray);
-
-                    List<string> propValueList = new List<string>();
-                    foreach (string propName in propNameArray)
-                    {
-                        object propValue;
-                        if (!customProperties.TryGetValue(propName, out propValue))
-                        {
-                            propValue = string.Empty;
-                        }
-                        propValueList.Add(propValue == null ? string.Empty : propValue.ToString());
-                    }
-                    string propValues = string.Join(",", propValueList.ToArray());
-                    propertyBag.SetRawValue(SOLUTION_PROPERTY__PROPERTY_NAMES, propNames);
-                    propertyBag.SetRawValue(SOLUTION_PROPERTY__PROPERTY_VALUES, propValues);
-                }
-            }
-            _persistedSettings = CurrentIssueRepositorySettings;
-            _isSolutionDirty = false;
         }
 
         #endregion
@@ -280,7 +197,6 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         void OnSolutionClosed(object sender, EventArgs e)
         {
-            _persistedSettings = null;
             CurrentIssueRepository = null; // handles IsSolutionDirty
         }
 
@@ -302,8 +218,7 @@ namespace Ankh.Services.IssueTracker
             base.OnPreInitialize();
             _nameConnectorMap = new Dictionary<string, IIssueRepositoryConnector>();
             _repository = null;
-            _repositorySettings = _persistedSettings = null;
-            ReadRegistry();
+            ReadConnectorRegistry();
         }
 
         protected override void OnInitialize()
@@ -319,9 +234,9 @@ namespace Ankh.Services.IssueTracker
         }
 
         /// <summary>
-        /// Reads the isse repository connector information from the registry
+        /// Reads the issue repository connector information from the registry
         /// </summary>
-        private void ReadRegistry()
+        private void ReadConnectorRegistry()
         {
             IAnkhPackage ankhPackage = GetService<IAnkhPackage>(typeof(IAnkhPackage));
             if (ankhPackage != null)

@@ -171,6 +171,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerSetupCommand.cs" />
+    <Compile Include="IssueTracker\IssueTrackerWizard.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">

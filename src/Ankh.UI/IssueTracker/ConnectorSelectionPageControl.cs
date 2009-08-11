@@ -18,6 +18,18 @@ namespace Ankh.UI.IssueTracker
             base.Description = "Select a repository connector.";
         }
 
+        public new IssueTrackerWizard Wizard
+        {
+            get
+            {
+                return base.Wizard as IssueTrackerWizard;
+            }
+            set
+            {
+                base.Wizard = value;
+            }
+        }
+
         public ICollection<ConnectorNode> ConnectorNodes
         {
             get
@@ -48,12 +60,9 @@ namespace Ankh.UI.IssueTracker
         {
             base.OnLoad(e);
 
-            IAnkhIssueService service = Context.GetService<IAnkhIssueService>();
-            IIssueRepositorySettings currentSettings = service == null
-                ? null
-                : service.CurrentIssueRepositorySettings;
+            IIssueRepositorySettings currentSettings = Wizard.Container.CurrentIssueRepositorySettings;
             string currentConnectorName = currentSettings == null ? string.Empty : currentSettings.ConnectorName;
-            removeCheckBox.Enabled = currentSettings != null;
+            removeCheckBox.Enabled = !string.IsNullOrEmpty(currentConnectorName);
 
             ICollection<ConnectorNode> connectors = ConnectorNodes;
             TreeNode selectedNode = null;

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using WizardFramework;
+using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.UI.IssueTracker
 {
-    public class IssueTrackerConfigWizard : Wizard
+    public class IssueTrackerConfigWizard : IssueTrackerWizard
     {
         ConnectorSelectionPageControl _selectionPage;
 
@@ -21,18 +22,14 @@ namespace Ankh.UI.IssueTracker
             AddPage(_selectionPage);
         }
 
-        public override bool PerformFinish()
+        protected override bool TryCreateIssueRepository(out IIssueRepository repository)
         {
-            if (_selectionPage != null
-                && _selectionPage.RemoveIssueRepository)
+            repository = null;
+            if (Container.CurrentPage == _selectionPage)
             {
-                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
-                if (iService != null)
-                {
-                    iService.CurrentIssueRepository = null;
-                }
+                return _selectionPage.RemoveIssueRepository;
             }
-            return true;
+            return false;
         }
     }
 }
