@@ -165,6 +165,8 @@ namespace Ankh.UI.PendingChanges
 
             // TODO: Maybe add something like
             //pendingCommits.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            OnPendingChangeActivity(sender, e);
         }
 
         HybridCollection<string> _checkedItems;
@@ -251,6 +253,7 @@ namespace Ankh.UI.PendingChanges
 
                 pci.RefreshText(Context);
             }
+            OnPendingChangeActivity(sender, e);
         }
 
         void OnPendingChangeRemoved(object sender, PendingChangeEventArgs e)
@@ -264,6 +267,25 @@ namespace Ankh.UI.PendingChanges
                 _listItems.Remove(path);
                 pci.Remove();
                 pendingCommits.RefreshGroupsAvailable();
+            }
+            OnPendingChangeActivity(sender, e);
+        }
+
+        void OnPendingChangeActivity(object sender, PendingChangeEventArgs args)
+        {
+            IAnkhSolutionSettings settings = null;
+            if (true
+                && args.Change != null
+                && (settings = Context.GetService<IAnkhSolutionSettings>()) != null
+                && string.Equals(settings.ProjectRoot, args.Change.FullPath)
+                // TODO add filter for property changes
+                )
+            {
+                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
+                if (iService != null)
+                {
+                    iService.MarkDirty();
+                }
             }
         }
 

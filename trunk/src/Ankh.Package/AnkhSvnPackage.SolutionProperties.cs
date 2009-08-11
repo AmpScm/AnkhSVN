@@ -30,7 +30,7 @@ namespace Ankh.VSPackage
 {
     [ProvideSolutionProperties(AnkhSvnPackage.SubversionPropertyCategory)]
     [ProvideSolutionProperties(AnkhId.SccStructureName)]
-    [ProvideSolutionProperties(AnkhId.IssueTrackerStructureName)]
+    //[ProvideSolutionProperties(AnkhId.IssueTrackerStructureName)]
     partial class AnkhSvnPackage : IVsPersistSolutionProps
     {
         const string SubversionPropertyCategory = AnkhId.SubversionSccName;
@@ -70,21 +70,18 @@ namespace Ankh.VSPackage
                 // We will write solution properties only for the solution
                 IAnkhSccService scc = GetService<IAnkhSccService>();
                 ISccSettingsStore translate = GetService<ISccSettingsStore>();
-                IAnkhIssueService iService = GetService<IAnkhIssueService>();
 
                 VSQUERYSAVESLNPROPS result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
 
                 if(scc != null && translate != null)
                 {
                     if (scc.IsSolutionDirty
-                        || translate.IsSolutionDirty
-                        || (iService != null && iService.IsSolutionDirty))
+                        || translate.IsSolutionDirty)
                     {
                         result = VSQUERYSAVESLNPROPS.QSP_HasDirtyProps;
                     }
                     else if (!scc.HasSolutionData
-                        && !translate.HasSolutionData
-                        && (iService == null || !iService.HasSolutionData))
+                        && !translate.HasSolutionData)
                     {
                         result = VSQUERYSAVESLNPROPS.QSP_HasNoProps;
                     }
@@ -122,10 +119,6 @@ namespace Ankh.VSPackage
                 if (translate != null && translate.HasSolutionData)
                     pPersistence.SavePackageSolutionProps(1 /* TRUE */, null, this, AnkhId.SccStructureName);
 
-                IAnkhIssueService iService = GetService<IAnkhIssueService>();
-                if (iService != null && iService.HasSolutionData)
-                    pPersistence.SavePackageSolutionProps( 0/* FALSE */, null, this, AnkhId.IssueTrackerStructureName);
-
                 // Once we saved our props, the solution is not dirty anymore
                 scc.IsSolutionDirty = false;
             }
@@ -158,13 +151,6 @@ namespace Ankh.VSPackage
                         break;
                     case AnkhId.SccStructureName:
                         translate.WriteSolutionProperties(map);
-                        break;
-                    case AnkhId.IssueTrackerStructureName:
-                        IAnkhIssueService iService = GetService<IAnkhIssueService>();
-                        if (iService != null)
-                        {
-                            iService.WriteSolutionProperties(map);
-                        }
                         break;
                 }
             }
@@ -210,13 +196,6 @@ namespace Ankh.VSPackage
                         break;
                     case AnkhId.SccStructureName:
                         translate.ReadSolutionProperties(map);
-                        break;
-                    case AnkhId.IssueTrackerStructureName:
-                        IAnkhIssueService iService = GetService<IAnkhIssueService>();
-                        if (iService != null)
-                        {
-                            iService.ReadSolutionProperties(map);
-                        }
                         break;
                 }
             }

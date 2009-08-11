@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{CE58AAC8-2271-4223-882F-0CD1A7105A52}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -220,6 +220,10 @@
     <Compile Include="Services\ProgressRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\SolutionSettings.IssueRepository.cs">
+      <DependentUpon>SolutionSettings.cs</DependentUpon>
+    </Compile>
+
     <Compile Include="Services\UIShell.cs">
       <SubType>Code</SubType>
     </Compile>

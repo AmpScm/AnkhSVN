@@ -108,6 +108,12 @@ namespace Ankh.Settings
             public Regex LogSummaryRe;
 
             public bool BrokenRegex;
+
+            public string IssueRepositoryConnectorName;
+            public string IssueRepositoryUri;
+            public string IssueRepositoryId;
+            public string IssueRepositoryPropertyNames;
+            public string IssueRepositoryPropertyValues;
         }
 
         ISelectionContext _selectionContext;
@@ -351,6 +357,21 @@ namespace Ankh.Settings
                 case SvnPropertyNames.TortoiseSvnLogSummary:
                     if (cache.LogSummary == null)
                         cache.LogSummary = pv.StringValue;
+                    break;
+                case AnkhSccPropertyNames.IssueRepositoryConnector:
+                    cache.IssueRepositoryConnectorName = pv.StringValue;
+                    break;
+                case AnkhSccPropertyNames.IssueRepositoryUri:
+                    cache.IssueRepositoryUri = pv.StringValue;
+                    break;
+                case AnkhSccPropertyNames.IssueRepositoryId:
+                    cache.IssueRepositoryId = pv.StringValue;
+                    break;
+                case AnkhSccPropertyNames.IssueRepositoryPropertyNames:
+                    cache.IssueRepositoryPropertyNames = pv.StringValue;
+                    break;
+                case AnkhSccPropertyNames.IssueRepositoryPropertyValues:
+                    cache.IssueRepositoryPropertyValues = pv.StringValue;
                     break;
             }
         }
