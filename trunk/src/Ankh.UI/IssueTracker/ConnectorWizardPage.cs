@@ -10,9 +10,9 @@ namespace Ankh.UI.IssueTracker
     public class ConnectorWizardPage : WizardPage
     {
         UserControl _pageControl;
-        IssueRepositoryConfigurationPageBase _configPage;
+        IssueRepositoryConfigurationPage _configPage;
 
-        public ConnectorWizardPage(string name, IssueRepositoryConfigurationPageBase configPage)
+        public ConnectorWizardPage(string name, IssueRepositoryConfigurationPage configPage)
             : base(name)
         {
             _configPage = configPage;

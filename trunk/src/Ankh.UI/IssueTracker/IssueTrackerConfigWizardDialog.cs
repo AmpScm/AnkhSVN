@@ -6,7 +6,7 @@ namespace Ankh.UI.IssueTracker
     public partial class IssueTrackerConfigWizardDialog : WizardDialog
     {
         IAnkhServiceProvider _context;
-        IssueRepositoryBase _newRepository;
+        IssueRepository _newRepository;
 
         public IssueTrackerConfigWizardDialog(IAnkhServiceProvider context)
         {
@@ -16,13 +16,13 @@ namespace Ankh.UI.IssueTracker
             Wizard = new IssueTrackerConfigWizard(_context);
         }
 
-        public IssueRepositoryBase NewIssueRepository
+        public IssueRepository NewIssueRepository
         {
             get { return _newRepository; }
             internal set { _newRepository = value; }
         }
 
-        public IssueRepositorySettingsBase CurrentIssueRepositorySettings
+        public IssueRepositorySettings CurrentIssueRepositorySettings
         {
             get
             {

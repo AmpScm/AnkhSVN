@@ -112,14 +112,14 @@ namespace Ankh.Settings
             }
         }
 
-        public IssueRepositorySettingsBase ToIssueRepositorySettings()
+        public IssueRepositorySettings ToIssueRepositorySettings()
         {
             return new IssueRepositorySettingsProxy(Context, ConnectorName);
         }
 
         #endregion
 
-        public bool ShouldPersist(IssueRepositorySettingsBase other)
+        public bool ShouldPersist(IssueRepositorySettings other)
         {
             return !(true
                 && other != null

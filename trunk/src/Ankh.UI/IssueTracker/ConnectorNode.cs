@@ -5,11 +5,11 @@ namespace Ankh.UI.IssueTracker
 {
     public class ConnectorNode : IWizardNode
     {
-        IssueRepositoryConnectorBase _connector;
+        IssueRepositoryConnector _connector;
         IWizard _wizard = null;
         IAnkhServiceProvider _context;
 
-        public ConnectorNode(IAnkhServiceProvider contex, IssueRepositoryConnectorBase connector)
+        public ConnectorNode(IAnkhServiceProvider contex, IssueRepositoryConnector connector)
         {
             _connector = connector;
             _context = contex;
@@ -23,7 +23,7 @@ namespace Ankh.UI.IssueTracker
             }
         }
 
-        internal IssueRepositoryConnectorBase Connector
+        internal IssueRepositoryConnector Connector
         {
             get
             {

@@ -7,7 +7,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// Base class for Issue Repository Connector service
     /// </summary>
-    public abstract class IssueRepositoryConnectorBase
+    public abstract class IssueRepositoryConnector
     {
         /// <summary>
         /// Gets the registered connector's unique name 
@@ -17,12 +17,12 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <summary>
         /// Creates an Issue Repository based on the settings.
         /// </summary>
-        public abstract IssueRepositoryBase Create(IssueRepositorySettingsBase settings);
+        public abstract IssueRepository Create(IssueRepositorySettings settings);
 
         /// <summary>
         /// Gets the repository configuration page (to edit/setup an issue repository)
         /// </summary>
-        public abstract IssueRepositoryConfigurationPageBase ConfigurationPage { get; }
+        public abstract IssueRepositoryConfigurationPage ConfigurationPage { get; }
 
     }
 }

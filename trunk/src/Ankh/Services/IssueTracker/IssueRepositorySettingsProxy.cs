@@ -7,7 +7,7 @@ using Ankh.IssueTracker;
 
 namespace Ankh.Services.IssueTracker
 {
-    public class IssueRepositorySettingsProxy : IssueRepositorySettingsBase
+    public class IssueRepositorySettingsProxy : IssueRepositorySettings
     {
         private string _connectorName;
         private Uri _repositoryUri;

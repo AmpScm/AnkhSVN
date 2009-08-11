@@ -15,7 +15,7 @@ namespace Ankh.UI.IssueTracker
 
         public override bool PerformFinish()
         {
-            IssueRepositoryBase newRepository;
+            IssueRepository newRepository;
             if (TryCreateIssueRepository(out newRepository))
             {
                 Container.NewIssueRepository = newRepository;
@@ -24,7 +24,7 @@ namespace Ankh.UI.IssueTracker
             return true;
         }
 
-        protected virtual bool TryCreateIssueRepository(out IssueRepositoryBase repository)
+        protected virtual bool TryCreateIssueRepository(out IssueRepository repository)
         {
             repository = null;
             return true;
