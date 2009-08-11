@@ -145,6 +145,7 @@
     <Compile Include="StatusCache\DeletedFilesList.cs" />
     <Compile Include="StatusCache\FileStatusCache.cs" />
     <Compile Include="StatusCache\Commands\FileStatusCleanup.cs" />
+    <Compile Include="StatusCache\FileStatusCache.ShellMonitor.cs" />
     <Compile Include="TextEditingTracker.cs" />
     <Compile Include="OpenDocumentTracker.cs" />
     <Compile Include="OpenDocumentTracker.Api.cs">
