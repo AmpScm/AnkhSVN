@@ -46,10 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IssueTracker\CommitArgs.cs" />
-    <Compile Include="IssueTracker\IIssueRepository.cs" />
-    <Compile Include="IssueTracker\IIssueRepositoryConfigurationPage.cs" />
-    <Compile Include="IssueTracker\IIssueRepositoryConnector.cs" />
-    <Compile Include="IssueTracker\IIssueRepositorySettings.cs" />
+    <Compile Include="IssueTracker\IssueRepositoryBase.cs" />
+    <Compile Include="IssueTracker\IssueRepositoryConfigurationPageBase.cs" />
+    <Compile Include="IssueTracker\IssueRepositoryConnectorBase.cs" />
+    <Compile Include="IssueTracker\IssueRepositorySettingsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
