@@ -6,14 +6,14 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// Base class for Issue Repository configuration page
     /// </summary>
-    public abstract class IssueRepositoryConfigurationPageBase : IIssueRepositoryConfigurationPageEvents
+    public abstract class IssueRepositoryConfigurationPage : IIssueRepositoryConfigurationPageEvents
     {
-        private IssueRepositorySettingsBase _settings;
+        private IssueRepositorySettings _settings;
 
         /// <summary>
         /// Gets or sets the current repository settings.
         /// </summary>
-        public virtual IssueRepositorySettingsBase Settings
+        public virtual IssueRepositorySettings Settings
         {
             get { return _settings; }
             set { _settings = value; }

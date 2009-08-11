@@ -13,8 +13,8 @@ namespace Ankh.Services.IssueTracker
     [GlobalService(typeof(IAnkhIssueService))]
     class AnkhIssueService : AnkhService, IAnkhIssueService
     {
-        private Dictionary<string, IssueRepositoryConnectorBase> _nameConnectorMap;
-        private IssueRepositoryBase _repository;
+        private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
+        private IssueRepository _repository;
 
         private readonly object _syncLock = new object();
 
@@ -28,17 +28,17 @@ namespace Ankh.Services.IssueTracker
         /// <summary>
         /// Gets the registered Issue Repository connector collection.
         /// </summary>
-        public ICollection<IssueRepositoryConnectorBase> Connectors
+        public ICollection<IssueRepositoryConnector> Connectors
         {
             get
             {
                 if (_nameConnectorMap != null)
                 {
-                    IssueRepositoryConnectorBase[] result = new IssueRepositoryConnectorBase[_nameConnectorMap.Count];
+                    IssueRepositoryConnector[] result = new IssueRepositoryConnector[_nameConnectorMap.Count];
                     _nameConnectorMap.Values.CopyTo(result, 0);
                     return result;
                 }
-                return new IssueRepositoryConnectorBase[]{};
+                return new IssueRepositoryConnector[]{};
             }
         }
 
@@ -46,7 +46,7 @@ namespace Ankh.Services.IssueTracker
         /// Tries to find the issue repository connector identified by yhe <paramref name="name"/>.
         /// </summary>
         /// <returns>true if the connector exists, false otherwise</returns>
-        public bool TryGetConnector(string name, out IssueRepositoryConnectorBase connector)
+        public bool TryGetConnector(string name, out IssueRepositoryConnector connector)
         {
             connector = null;
             if (_nameConnectorMap != null
@@ -63,7 +63,7 @@ namespace Ankh.Services.IssueTracker
         /// <remarks>
         /// This property holds the latest repository settings including the changes made in the session.
         /// </remarks>
-        public IssueRepositorySettingsBase CurrentIssueRepositorySettings
+        public IssueRepositorySettings CurrentIssueRepositorySettings
         {
             get
             {
@@ -86,7 +86,7 @@ namespace Ankh.Services.IssueTracker
             }
             else
             {
-                IssueRepositorySettingsBase currentRepositorySettings = settings.ToIssueRepositorySettings();
+                IssueRepositorySettings currentRepositorySettings = settings.ToIssueRepositorySettings();
                 if (currentRepositorySettings == null)
                 {
                     isReallyDirty = _repository != null;
@@ -105,19 +105,19 @@ namespace Ankh.Services.IssueTracker
         /// <summary>
         /// Gets or sets the Current Issue Repository
         /// </summary>
-        public IssueRepositoryBase CurrentIssueRepository
+        public IssueRepository CurrentIssueRepository
         {
             get
             {
                 if (_repository == null)
                 {
-                    IssueRepositorySettingsBase settings = CurrentIssueRepositorySettings;
+                    IssueRepositorySettings settings = CurrentIssueRepositorySettings;
                     if (settings != null)
                     {
                         string connectorName = settings.ConnectorName;
                         if (!string.IsNullOrEmpty(connectorName))
                         {
-                            IssueRepositoryConnectorBase connector;
+                            IssueRepositoryConnector connector;
                             if (TryGetConnector(connectorName, out connector))
                             {
                                 try
@@ -136,7 +136,7 @@ namespace Ankh.Services.IssueTracker
             }
             set
             {
-                IssueRepositoryBase oldRepository = _repository;
+                IssueRepository oldRepository = _repository;
                 _repository = value;
                 if (IssueRepositoryChanged != null)
                 {
@@ -162,7 +162,7 @@ namespace Ankh.Services.IssueTracker
         /// Compares two issue repository settings instance
         /// </summary>
         /// <returns>true/false</returns>
-        private bool HasChanged(IssueRepositorySettingsBase settings1, IssueRepositorySettingsBase settings2)
+        private bool HasChanged(IssueRepositorySettings settings1, IssueRepositorySettings settings2)
         {
             return true;
                 /*
@@ -206,7 +206,7 @@ namespace Ankh.Services.IssueTracker
         protected override void OnPreInitialize()
         {
             base.OnPreInitialize();
-            _nameConnectorMap = new Dictionary<string, IssueRepositoryConnectorBase>();
+            _nameConnectorMap = new Dictionary<string, IssueRepositoryConnector>();
             _repository = null;
             ReadConnectorRegistry();
         }
@@ -252,7 +252,7 @@ namespace Ankh.Services.IssueTracker
                         {
                             RegistryKey connector = aKey.OpenSubKey(connectorKey);
                             string serviceName = (string)connector.GetValue("");
-                            IssueRepositoryConnectorBase descriptor = new IssueRepositoryConnectorProxy(this, serviceName, connectorKey);
+                            IssueRepositoryConnector descriptor = new IssueRepositoryConnectorProxy(this, serviceName, connectorKey);
                             _nameConnectorMap.Add(serviceName, descriptor);
                         }
                     }

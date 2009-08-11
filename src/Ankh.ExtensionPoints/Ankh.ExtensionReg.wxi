@@ -47,7 +47,7 @@
              Node="element" Name="bindingRedirect">
 
     <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_oldversion"
-               ElementId="$(var.extId)_TC_BindingRedirect" Name="oldVersion" Value="2.1.7100.0-$(var.AnkhExtensionPointsVersion)" />
+               ElementId="$(var.extId)_TC_BindingRedirect" Name="oldVersion" Value="2.1.7172.0-$(var.AnkhExtensionPointsVersion)" />
     <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_newVersion"
                ElementId="$(var.extId)_TC_BindingRedirect" Name="newVersion" Value="$(var.AnkhExtensionPointsVersion)" />
   </u:XmlConfig>

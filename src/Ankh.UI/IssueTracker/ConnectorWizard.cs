@@ -7,11 +7,11 @@ namespace Ankh.UI.IssueTracker
 {
     public class ConnectorWizard : IssueTrackerWizard
     {
-        IssueRepositoryConnectorBase _connector;
-        IssueRepositoryConfigurationPageBase _page;
-        IssueRepositoryBase _newRepository;
+        IssueRepositoryConnector _connector;
+        IssueRepositoryConfigurationPage _page;
+        IssueRepository _newRepository;
 
-        public ConnectorWizard(IAnkhServiceProvider context, IssueRepositoryConnectorBase connector)
+        public ConnectorWizard(IAnkhServiceProvider context, IssueRepositoryConnector connector)
             : base(context)
         {
             _connector = connector;
@@ -31,12 +31,12 @@ namespace Ankh.UI.IssueTracker
             }
         }
 
-        protected override bool TryCreateIssueRepository(out IssueRepositoryBase repository)
+        protected override bool TryCreateIssueRepository(out IssueRepository repository)
         {
             repository = null;
             if (_page != null)
             {
-                IssueRepositorySettingsBase settings = _page.Settings;
+                IssueRepositorySettings settings = _page.Settings;
                 if (settings != null)
                 {
                     try
@@ -50,12 +50,12 @@ namespace Ankh.UI.IssueTracker
             return false;
         }
 
-        internal IssueRepositorySettingsBase SolutionSettings
+        internal IssueRepositorySettings SolutionSettings
         {
             get
             {
                 IAnkhIssueService iService = Context == null ? null : Context.GetService<IAnkhIssueService>();
-                IssueRepositorySettingsBase settings = iService == null ? null : iService.CurrentIssueRepositorySettings;
+                IssueRepositorySettings settings = iService == null ? null : iService.CurrentIssueRepositorySettings;
 
                 if (settings != null
                     && string.Equals(settings.ConnectorName, _connector.Name)
@@ -67,7 +67,7 @@ namespace Ankh.UI.IssueTracker
             }
         }
 
-        internal IssueRepositoryBase NewIssueRepository
+        internal IssueRepository NewIssueRepository
         {
             get
             {

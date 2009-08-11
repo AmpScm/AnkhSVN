@@ -14,9 +14,9 @@ namespace Ankh.Services.IssueTracker
     /// The actual connector package initialization is delayed until a non-descriptive property is needed.
     /// Currently, "connector name" is the only descriptive property.
     /// </remarks>
-    class IssueRepositoryConnectorProxy : IssueRepositoryConnectorBase
+    class IssueRepositoryConnectorProxy : IssueRepositoryConnector
     {
-        private IssueRepositoryConnectorBase _delegate = null;
+        private IssueRepositoryConnector _delegate = null;
         private IAnkhServiceProvider _context;
         private string _name = null;
         private string _delegateId = null;
@@ -28,7 +28,7 @@ namespace Ankh.Services.IssueTracker
             _delegateId = delegateServiceId;
         }
 
-        private IssueRepositoryConnectorBase Delegate
+        private IssueRepositoryConnector Delegate
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Ankh.Services.IssueTracker
                     Type serviceType = Type.GetTypeFromCLSID(new Guid(_delegateId));
                     if (serviceType != null)
                     {
-                        _delegate = _context.GetService<IssueRepositoryConnectorBase>(serviceType);
+                        _delegate = _context.GetService<IssueRepositoryConnector>(serviceType);
                     }
                 }
                 return _delegate;
@@ -47,9 +47,9 @@ namespace Ankh.Services.IssueTracker
 
         #region IIssueRepositoryConnector Members
 
-        public override IssueRepositoryBase Create(IssueRepositorySettingsBase settings)
+        public override IssueRepository Create(IssueRepositorySettings settings)
         {
-            IssueRepositoryConnectorBase dlg = Delegate;
+            IssueRepositoryConnector dlg = Delegate;
             if (dlg != null)
             {
                 return dlg.Create(settings);
@@ -57,11 +57,11 @@ namespace Ankh.Services.IssueTracker
             return null;
         }
 
-        public override IssueRepositoryConfigurationPageBase ConfigurationPage
+        public override IssueRepositoryConfigurationPage ConfigurationPage
         {
             get
             {
-                IssueRepositoryConnectorBase dlg = Delegate;
+                IssueRepositoryConnector dlg = Delegate;
                 if (dlg != null)
                 {
                     return dlg.ConfigurationPage;

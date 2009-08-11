@@ -39,7 +39,7 @@ namespace Ankh.UI.IssueTracker
 
             IIssueTrackerSettings currentSettings = e.GetService<IIssueTrackerSettings>();
             bool updateIssueService = false;
-            IssueRepositoryBase newRepository = null;
+            IssueRepository newRepository = null;
 
             // TODO pass the current settings (repository) to the dialog so that this command serves for "edit" purpose.
             using (IssueTrackerConfigWizardDialog dialog = new IssueTrackerConfigWizardDialog(e.Context))
@@ -76,7 +76,7 @@ namespace Ankh.UI.IssueTracker
 
         }
 
-        private bool SetIssueRepositoryProperties(AnkhContext context, SvnItem item, IssueRepositorySettingsBase settings)
+        private bool SetIssueRepositoryProperties(AnkhContext context, SvnItem item, IssueRepositorySettings settings)
         {
             return context.GetService<IProgressRunner>().RunModal("Applying Issue Repository settings",
                 delegate(object sender, ProgressWorkerArgs wa)

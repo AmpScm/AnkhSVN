@@ -5,13 +5,13 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// Base class for IssueRepository implementation
     /// </summary>
-    public abstract class IssueRepositoryBase : IssueRepositorySettingsBase
+    public abstract class IssueRepository : IssueRepositorySettings
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="connectorName">Unique connector name(as registered with the registry)</param>
-        public IssueRepositoryBase(string connectorName)
+        public IssueRepository(string connectorName)
             : base(connectorName)
         {
         }

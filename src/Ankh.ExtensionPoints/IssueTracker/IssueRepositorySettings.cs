@@ -6,7 +6,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// Base class for Issue Repository Settings
     /// </summary>
-    public abstract class IssueRepositorySettingsBase
+    public abstract class IssueRepositorySettings
     {
         private string _connectorName;
 
@@ -14,7 +14,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// Constructor
         /// </summary>
         /// <param name="connectorName">Unique connector name(as registered with the registry)</param>
-        public IssueRepositorySettingsBase(string connectorName)
+        public IssueRepositorySettings(string connectorName)
         {
             _connectorName = connectorName;
         }
@@ -58,7 +58,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <summary>
         /// Determines whether the <paramref name="otherSettings"/> is different from this settings
         /// </summary>
-        public virtual bool IsDifferentFrom(IssueRepositorySettingsBase otherSettings)
+        public virtual bool IsDifferentFrom(IssueRepositorySettings otherSettings)
         {
             return !(true
                 && otherSettings != null
