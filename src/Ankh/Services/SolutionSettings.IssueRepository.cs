@@ -3,75 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using Ankh.IssueTracker;
 using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.Services.IssueTracker;
 
 namespace Ankh.Settings
 {
     [GlobalService(typeof(IIssueTrackerSettings))]
     partial class SolutionSettings : IIssueTrackerSettings
     {
-        #region IIssueRepositorySettings Members
-
-        public Uri RepositoryUri
-        {
-            get
-            {
-                return IssueRepositoryUri;
-            }
-        }
-
-        public string RepositoryId
-        {
-            get
-            {
-                return IssueRepositoryId;
-            }
-        }
-
-        public Dictionary<string, object> CustomProperties
-        {
-            get
-            {
-                RefreshIfDirty();
-                SettingsCache cache = _cache;
-
-                if (cache == null)
-                    return null;
-
-                Dictionary<string, object> customProperties = null;
-
-                string propNames = _cache.IssueRepositoryPropertyNames;
-                if (!string.IsNullOrEmpty(propNames))
-                {
-                    string[] propNameArray = propNames.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-                    if (propNameArray.Length > 0)
-                    {
-                        string propValues = _cache.IssueRepositoryPropertyValues;
-                        if (!string.IsNullOrEmpty(propValues))
-                        {
-                            string[] propValueArray = propValues.Split(new string[] { "," }, StringSplitOptions.None);
-                            int propIndex = 0;
-                            if (propValueArray.Length == propNameArray.Length)
-                            {
-                                customProperties = new Dictionary<string, object>();
-                                foreach (string propName in propNameArray)
-                                {
-                                    string propValue = propValueArray[propIndex++];
-                                    if (!string.IsNullOrEmpty(propValue))
-                                    {
-                                        customProperties.Add(propName, propValue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return customProperties;
-            }
-        }
-
-        #endregion
-
-
         #region IIssueTrackerSettings Members
 
         public string ConnectorName
@@ -138,7 +76,7 @@ namespace Ankh.Settings
             }
         }
 
-        IDictionary<string, object> IIssueTrackerSettings.CustomProperties
+        public IDictionary<string, object> CustomProperties
         {
             get
             {
@@ -174,15 +112,20 @@ namespace Ankh.Settings
             }
         }
 
+        public IssueRepositorySettingsBase ToIssueRepositorySettings()
+        {
+            return new IssueRepositorySettingsProxy(Context, ConnectorName);
+        }
+
         #endregion
 
-        public bool ShouldPersist(IIssueRepositorySettings other)
+        public bool ShouldPersist(IssueRepositorySettingsBase other)
         {
             return !(true
                 && other != null
                 && string.Equals(ConnectorName, other.ConnectorName)
-                && Uri.Equals(RepositoryUri, other.RepositoryUri)
-                && string.Equals(RepositoryId, other.RepositoryId)
+                && Uri.Equals(IssueRepositoryUri, other.RepositoryUri)
+                && string.Equals(IssueRepositoryId, other.RepositoryId)
                 && HasSameProperties(CustomProperties, other.CustomProperties)
                 )
                 ;
@@ -203,6 +146,5 @@ namespace Ankh.Settings
             }
             return true;
         }
-
     }
 }

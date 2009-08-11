@@ -14,9 +14,9 @@ namespace Ankh.Services.IssueTracker
     /// The actual connector package initialization is delayed until a non-descriptive property is needed.
     /// Currently, "connector name" is the only descriptive property.
     /// </remarks>
-    class IssueRepositoryConnectorProxy : IIssueRepositoryConnector
+    class IssueRepositoryConnectorProxy : IssueRepositoryConnectorBase
     {
-        private IIssueRepositoryConnector _delegate = null;
+        private IssueRepositoryConnectorBase _delegate = null;
         private IAnkhServiceProvider _context;
         private string _name = null;
         private string _delegateId = null;
@@ -28,7 +28,7 @@ namespace Ankh.Services.IssueTracker
             _delegateId = delegateServiceId;
         }
 
-        private IIssueRepositoryConnector Delegate
+        private IssueRepositoryConnectorBase Delegate
         {
             get
             {
@@ -38,7 +38,7 @@ namespace Ankh.Services.IssueTracker
                     Type serviceType = Type.GetTypeFromCLSID(new Guid(_delegateId));
                     if (serviceType != null)
                     {
-                        _delegate = _context.GetService<IIssueRepositoryConnector>(serviceType);
+                        _delegate = _context.GetService<IssueRepositoryConnectorBase>(serviceType);
                     }
                 }
                 return _delegate;
@@ -47,9 +47,9 @@ namespace Ankh.Services.IssueTracker
 
         #region IIssueRepositoryConnector Members
 
-        public IIssueRepository Create(IIssueRepositorySettings settings)
+        public override IssueRepositoryBase Create(IssueRepositorySettingsBase settings)
         {
-            IIssueRepositoryConnector dlg = Delegate;
+            IssueRepositoryConnectorBase dlg = Delegate;
             if (dlg != null)
             {
                 return dlg.Create(settings);
@@ -57,11 +57,11 @@ namespace Ankh.Services.IssueTracker
             return null;
         }
 
-        public IIssueRepositoryConfigurationPage ConfigurationPage
+        public override IssueRepositoryConfigurationPageBase ConfigurationPage
         {
             get
             {
-                IIssueRepositoryConnector dlg = Delegate;
+                IssueRepositoryConnectorBase dlg = Delegate;
                 if (dlg != null)
                 {
                     return dlg.ConfigurationPage;
@@ -70,7 +70,7 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
-        public string Name
+        public override string Name
         {
             get { return _name; }
         }

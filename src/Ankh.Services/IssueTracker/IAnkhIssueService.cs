@@ -12,23 +12,23 @@ namespace Ankh
         /// Gets all the registered Issue repository connectors.
         /// </summary>
         /// <remarks>This call DOES NOT trigger connector package initialization.</remarks>
-        ICollection<IIssueRepositoryConnector> Connectors { get; }
+        ICollection<IssueRepositoryConnectorBase> Connectors { get; }
 
         /// <summary>
         /// Tries to find a registered connector with the given name.
         /// </summary>
         /// <remarks>This call DOES NOT trigger connector package initialization.</remarks>
-        bool TryGetConnector(string name, out IIssueRepositoryConnector connector);
+        bool TryGetConnector(string name, out IssueRepositoryConnectorBase connector);
 
         /// <summary>
         /// Gets the issue repository settings associated with the current solution.
         /// </summary>
-        IIssueRepositorySettings CurrentIssueRepositorySettings { get; }
+        IssueRepositorySettingsBase CurrentIssueRepositorySettings { get; }
 
         /// <summary>
         /// Gets or Sets the issue repository associated with the current solution.
         /// </summary>
-        IIssueRepository CurrentIssueRepository { get; set; }
+        IssueRepositoryBase CurrentIssueRepository { get; set; }
 
         /// <summary>
         /// Occurs when current solution's Issue Tracker Repository association settings are changed

@@ -22,7 +22,7 @@ namespace Ankh.UI.IssueTracker
             AddPage(_selectionPage);
         }
 
-        protected override bool TryCreateIssueRepository(out IIssueRepository repository)
+        protected override bool TryCreateIssueRepository(out IssueRepositoryBase repository)
         {
             repository = null;
             if (Container.CurrentPage == _selectionPage)

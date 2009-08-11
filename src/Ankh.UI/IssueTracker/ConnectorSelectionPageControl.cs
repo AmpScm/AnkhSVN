@@ -40,11 +40,11 @@ namespace Ankh.UI.IssueTracker
                     IAnkhIssueService service = Context.GetService<IAnkhIssueService>();
                     if (service != null)
                     {
-                        ICollection<IIssueRepositoryConnector> connectors = service.Connectors;
+                        ICollection<IssueRepositoryConnectorBase> connectors = service.Connectors;
                         if (connectors != null && connectors.Count > 0)
                         {
                             List<ConnectorNode> connectorNodeList = new List<ConnectorNode>();
-                            foreach (IIssueRepositoryConnector connector in connectors)
+                            foreach (IssueRepositoryConnectorBase connector in connectors)
                             {
                                 ConnectorNode cn = new ConnectorNode(Context, connector);
                                 _connectorNodes.Add(connector.Name, cn);
@@ -60,7 +60,7 @@ namespace Ankh.UI.IssueTracker
         {
             base.OnLoad(e);
 
-            IIssueRepositorySettings currentSettings = Wizard.Container.CurrentIssueRepositorySettings;
+            IssueRepositorySettingsBase currentSettings = Wizard.Container.CurrentIssueRepositorySettings;
             string currentConnectorName = currentSettings == null ? string.Empty : currentSettings.ConnectorName;
             removeCheckBox.Enabled = !string.IsNullOrEmpty(currentConnectorName);
 

@@ -100,7 +100,7 @@
     <Compile Include="Services\AnkhClientPool.cs" />
     <Compile Include="Services\IssueTracker\AnkhIssueService.cs" />
     <Compile Include="Services\IssueTracker\IssueRepositoryConnectorProxy.cs" />
-    <Compile Include="Services\IssueTracker\IssueRepositorySettings.cs" />
+    <Compile Include="Services\IssueTracker\IssueRepositorySettingsProxy.cs" />
     <Compile Include="Services\PendingChanges\PccStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -223,7 +223,6 @@
     <Compile Include="Services\SolutionSettings.IssueRepository.cs">
       <DependentUpon>SolutionSettings.cs</DependentUpon>
     </Compile>
-
     <Compile Include="Services\UIShell.cs">
       <SubType>Code</SubType>
     </Compile>

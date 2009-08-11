@@ -5,7 +5,7 @@ using Ankh.ExtensionPoints.IssueTracker;
 
 namespace Ankh.IssueTracker
 {
-    public interface IIssueTrackerSettings : Ankh.ExtensionPoints.IssueTracker.IIssueRepositorySettings
+    public interface IIssueTrackerSettings
     {
         string ConnectorName { get; }
         string RawIssueRepositoryUri { get; }
@@ -14,6 +14,7 @@ namespace Ankh.IssueTracker
         string RawPropertyNames { get; }
         string RawPropertyValues { get; }
         IDictionary<string, object> CustomProperties { get; }
-        bool ShouldPersist(IIssueRepositorySettings otherSettings);
+        IssueRepositorySettingsBase ToIssueRepositorySettings();
+        bool ShouldPersist(IssueRepositorySettingsBase otherSettings);
     }
 }
