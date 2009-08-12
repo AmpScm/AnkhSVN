@@ -7,7 +7,20 @@
   <?define DevEnvConfig = "[$(var.extId)].config" ?>
 
   <?ifndef ExtensionPointsVersion?>
+  <!-- This version number is defined by Ankh.Votive.wixproj, so this is just a placeholder -->
   <?define ExtensionPointsVersion=2.0.0.1?>
+  <?endif?>
+  
+  <!-- *************************************************************************
+       * Change the version number of AnkhExtensionPointsMinVersion to disable *
+       * the automatic upgrading of Ankh.ExtensionPoints.dll releases.         *
+       * We should only do this if there is no other way to work around        *
+       * versioning issues, as it makes all third party extensions relying on  *
+       * older versions think that AnkhSVN is not installed                    *
+       *************************************************************************
+  -->
+  <?ifndef AnkhExtensionPointsMinVersion?>
+  <?define AnkhExtensionPointsMinVersion=2.1.7172.0?>
   <?endif?>
 
   <!-- Create root element (to be updated and removed later)-->
@@ -47,7 +60,7 @@
              Node="element" Name="bindingRedirect">
 
     <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_oldversion"
-               ElementId="$(var.extId)_TC_BindingRedirect" Name="oldVersion" Value="2.1.7172.0-$(var.AnkhExtensionPointsVersion)" />
+               ElementId="$(var.extId)_TC_BindingRedirect" Name="oldVersion" Value="$(var.AnkhExtensionPointsMinVersion)-$(var.AnkhExtensionPointsVersion)" />
     <u:XmlConfig File="$(var.DevEnvConfig)" Id="$(var.extId)_TC_BindingRedirect_newVersion"
                ElementId="$(var.extId)_TC_BindingRedirect" Name="newVersion" Value="$(var.AnkhExtensionPointsVersion)" />
   </u:XmlConfig>
