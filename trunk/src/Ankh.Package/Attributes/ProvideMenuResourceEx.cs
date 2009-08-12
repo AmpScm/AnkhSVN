@@ -1,6 +1,6 @@
 ﻿// $Id: ProvideLanguageSettings.cs 5699 2008-12-12 13:03:53Z rhuijben $
 //
-// Copyright 2008 The AnkhSVN Project
+// Copyright 2008-2009 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
