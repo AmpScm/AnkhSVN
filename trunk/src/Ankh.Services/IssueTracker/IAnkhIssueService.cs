@@ -1,4 +1,4 @@
-// $Id$
+﻿// $Id$
 //
 // Copyright 2009 The AnkhSVN Project
 //
@@ -21,7 +21,6 @@ using Ankh.Scc;
 
 namespace Ankh
 {
-    [CLSCompliant(false)]
     public interface IAnkhIssueService
     {
         /// <summary>
