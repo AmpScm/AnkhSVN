@@ -1,11 +1,8 @@
 ﻿using Ankh.Commands;
 using Ankh.ExtensionPoints.IssueTracker;
-using WizardFramework;
 using Ankh.VS;
 using Ankh.Scc;
-using SharpSvn;
 using Ankh.IssueTracker;
-using System;
 using System.Collections.Generic;
 
 namespace Ankh.UI.IssueTracker
@@ -47,7 +44,9 @@ namespace Ankh.UI.IssueTracker
                 if (dialog.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                 {
                     newRepository = dialog.NewIssueRepository;
-                    if (newRepository == null)
+                    if (newRepository == null
+                        || string.IsNullOrEmpty(newRepository.ConnectorName)
+                        || newRepository.RepositoryUri == null)
                     {
                         updateIssueService = DeleteIssueRepositoryProperties(e.Context, firstVersioned);
                     }
@@ -83,9 +82,24 @@ namespace Ankh.UI.IssueTracker
                 {
                     wa.Client.SetProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryConnector, settings.ConnectorName);
                     wa.Client.SetProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryUri, settings.RepositoryUri.ToString());
-                    wa.Client.SetProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryId, settings.RepositoryId);
+                    string repositoryId = settings.RepositoryId;
+                    if (string.IsNullOrEmpty(repositoryId))
+                    {
+                        wa.Client.DeleteProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryId);
+                    }
+                    else
+                    {
+                        wa.Client.SetProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryId, settings.RepositoryId);
+                    }
                     IDictionary<string, object> customProperties = settings.CustomProperties;
-                    if (customProperties != null)
+                    if (customProperties == null
+                        || customProperties.Count == 0
+                        )
+                    {
+                        wa.Client.DeleteProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryPropertyNames);
+                        wa.Client.DeleteProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryPropertyValues);
+                    }
+                    else
                     {
                         string[] propNameArray = new string[customProperties.Keys.Count];
                         customProperties.Keys.CopyTo(propNameArray, 0);
