@@ -330,8 +330,15 @@ namespace Ankh.Scc.StatusCache
                         ((ISvnItemUpdate)walkItem).TickItem();
                 }
 
-                bool ok = _client.Status(walkPath, args, RefreshCallback); // RefreshC
+                bool ok;
                 bool statSelf = false;
+
+                // Don't retry file open/read operations on failure. These would only delay the result 
+                // (default number of delays = 100)
+                using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
+                {
+                    ok = _client.Status(walkPath, args, RefreshCallback);
+                }
 
                 if (!ok)
                 {
