@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="../tools/Ankh-Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -93,7 +93,6 @@
     </Compile>
     <Compile Include="Annotate\AnnotateSection.cs" />
     <Compile Include="Annotate\AnnotateEditorControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Annotate\AnnotateEditorControl.Designer.cs">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
@@ -104,20 +103,17 @@
       <DependentUpon>CommandStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.Designer.cs">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\UIEditCommand.cs" />
     <Compile Include="Commands\UpdateDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\UpdateDialog.Designer.cs">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.Designer.cs">
       <DependentUpon>StatusPanelTestForm.cs</DependentUpon>
@@ -159,7 +155,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.Designer.cs">
       <DependentUpon>IssueTrackerConfigWizardDialog.cs</DependentUpon>
@@ -177,13 +172,11 @@
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.Designer.cs">
       <DependentUpon>MergeConflictHandlerDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeResultsDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
@@ -198,7 +191,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardDialog.Designer.cs">
       <DependentUpon>WizardDialog.cs</DependentUpon>
@@ -227,13 +219,11 @@
       <DependentUpon>OptionsResources.resx</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.Designer.cs">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\SvnProxyEditor.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OptionsPages\SvnProxyEditor.Designer.cs">
       <DependentUpon>SvnProxyEditor.cs</DependentUpon>
@@ -293,68 +283,57 @@
       <DependentUpon>PropertyEditStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="RecentMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RecentMessageDialog.Designer.cs">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.Designer.cs">
       <DependentUpon>ConfirmDeleteDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
       <DependentUpon>RenameDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.Designer.cs">
       <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.Designer.cs">
       <DependentUpon>CopyToDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.Designer.cs">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PathSelector\PendingChangeSelector.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PendingChangeSelector.Designer.cs">
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.Designer.cs">
       <DependentUpon>MultiWorkingCopyCommit.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.Designer.cs">
       <DependentUpon>ProjectCommitDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\RepositoryUrlUtils.cs" />
     <Compile Include="SccManagement\UpdateAvailableDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\UpdateAvailableDialog.Designer.cs">
       <DependentUpon>UpdateAvailableDialog.cs</DependentUpon>
@@ -371,7 +350,6 @@
     <Compile Include="SvnLog\LogRequest.cs" />
     <Compile Include="SvnLog\LogRevisionItem.cs" />
     <Compile Include="SvnLog\LogViewerDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogViewerDialog.Designer.cs">
       <DependentUpon>LogViewerDialog.cs</DependentUpon>
@@ -501,7 +479,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.Designer.cs">
       <DependentUpon>MergeWizardDialog.cs</DependentUpon>
@@ -517,13 +494,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="PropertyEditors\PropertyDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyDialog.Designer.cs">
       <DependentUpon>PropertyDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.Designer.cs">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
@@ -533,7 +508,6 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -549,13 +523,11 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeNode.cs" />
     <Compile Include="SccManagement\AddToSubversion.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddToSubversion.Designer.cs">
       <DependentUpon>AddToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.Designer.cs">
       <DependentUpon>SccEditEnlistment.cs</DependentUpon>
@@ -568,7 +540,6 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
@@ -583,7 +554,6 @@
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\SwitchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -615,7 +585,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.Designer.cs">
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
@@ -628,19 +597,16 @@
     </Compile>
     <Compile Include="AnkhUIModule.cs" />
     <Compile Include="Commands\CheckoutDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CheckoutDialog.Designer.cs">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\ExportDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\ExportDialog.Designer.cs">
       <DependentUpon>ExportDialog.cs</DependentUpon>
@@ -714,7 +680,6 @@
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.Designer.cs">
       <DependentUpon>CheckoutProject.cs</DependentUpon>
@@ -778,7 +743,6 @@
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.Designer.cs">
       <DependentUpon>RepositoryOpenDialog.cs</DependentUpon>
@@ -796,7 +760,6 @@
       <DependentUpon>LogControl.cs</DependentUpon>
     </Compile>
     <Compile Include="LockDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogChangedPaths.cs">
       <SubType>UserControl</SubType>
@@ -811,22 +774,18 @@
       <DependentUpon>LogMessageView.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PathSelectionTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PathSelector\PathSelector.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PathTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeView.cs">
       <SubType>Component</SubType>
