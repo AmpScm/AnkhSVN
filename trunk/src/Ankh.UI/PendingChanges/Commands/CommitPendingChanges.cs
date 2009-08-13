@@ -29,9 +29,9 @@ namespace Ankh.UI.PendingChanges.Commands
     {
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            PendingCommitsPage page = e.Context.GetService<PendingCommitsPage>();
-
-            if (page == null || !page.Visible)
+            PendingCommitsPage commitPage = e.Context.GetService<PendingCommitsPage>();
+            PendingIssuesPage issuesPage = e.Context.GetService<PendingIssuesPage>();
+            if (commitPage == null)
             {
                 e.Enabled = false;
                 return;
@@ -41,10 +41,18 @@ namespace Ankh.UI.PendingChanges.Commands
             {
                 case AnkhCommand.CommitPendingChanges:
                 case AnkhCommand.CommitPendingChangesKeepingLocks:
-                    e.Enabled = page.CanCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks);
+                    e.Enabled = true
+                        // check if commit page or issues page is visible
+                        && (false
+                             || commitPage.Visible
+                             || (issuesPage != null && issuesPage.Visible)
+                             )
+                         // make sure commit page can commit
+                         && commitPage.CanCommit(e.Command == AnkhCommand.CommitPendingChangesKeepingLocks)
+                         ;
                     break;
                 case AnkhCommand.PendingChangesApplyWorkingCopy:
-                    e.Enabled = page.CanApplyToWorkingCopy();
+                    e.Enabled = commitPage.Visible && commitPage.CanApplyToWorkingCopy();
                     break;
             }
         }
