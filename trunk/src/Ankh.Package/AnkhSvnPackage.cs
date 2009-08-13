@@ -201,13 +201,13 @@ namespace Ankh.VSPackage
         public T QueryService<T>(Guid serviceGuid) where T : class
         {
             IOleServiceProvider sp = GetService<IOleServiceProvider>();
-            Guid gClass = typeof(T).GUID;
+            Guid gInterface = typeof(IOleObject).GUID;
             IntPtr handle;
 
             if (sp == null)
                 return null;
 
-            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gClass, out handle)) || handle == IntPtr.Zero)
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gInterface, out handle)) || handle == IntPtr.Zero)
                 return null;
 
             try
