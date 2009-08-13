@@ -218,25 +218,15 @@ namespace Ankh.VS.Selection
                     {
                         // Ok, let's ask the service if it has any files under source control?
 
-                        IOleServiceProvider sp = GetService<IOleServiceProvider>();
                         Guid gService = new Guid(scc._service);
-                        Guid gInterface = typeof(IVsSccProvider).GUID;
-                        IntPtr handle;
 
-                        if (sp == null)
-                            continue;
+                        IVsSccProvider pv = GetService<IAnkhQueryService>().QueryService<IVsSccProvider>(gService);
 
-                        if (ErrorHandler.Succeeded(sp.QueryService(ref gService, ref gInterface, out handle)) && handle != IntPtr.Zero)
+                        int iManaging;
+                        if (pv != null && ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
                         {
-                            IVsSccProvider pv = (IVsSccProvider)Marshal.GetObjectForIUnknown(handle);
-                            Marshal.Release(handle);
-
-                            int iManaging;
-                            if (ErrorHandler.Succeeded(pv.AnyItemsUnderSourceControl(out iManaging)))
-                            {
-                                if (iManaging != 0)
-                                    return true;
-                            }
+                            if (iManaging != 0)
+                                return true;
                         }
                     }
                 }

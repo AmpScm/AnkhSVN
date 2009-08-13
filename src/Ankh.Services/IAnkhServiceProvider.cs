@@ -177,4 +177,16 @@ namespace Ankh
             return value;
         }
     }
+
+    public interface IAnkhQueryService : IAnkhServiceProvider
+    {
+        /// <summary>
+        /// Gets the Visual Studio service by its guid
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serviceGuid">The service GUID.</param>
+        /// <returns></returns>
+        T QueryService<T>(Guid serviceGuid)
+            where T : class;
+    }
 }
