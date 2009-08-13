@@ -23,7 +23,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
 
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using IOleObject = Microsoft.VisualStudio.OLE.Interop.IOleObject;
 
 using Ankh.Scc;
 using Ankh.VS;
@@ -203,13 +202,12 @@ namespace Ankh.VSPackage
         public T QueryService<T>(Guid serviceGuid) where T : class
         {
             IOleServiceProvider sp = GetService<IOleServiceProvider>();
-            Guid gInterface = typeof(IOleObject).GUID;
             IntPtr handle;
 
             if (sp == null)
                 return null;
 
-            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref IID_IUnknown, out handle)) 
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref IID_IUnknown, out handle))
                 || handle == IntPtr.Zero)
                 return null;
 
