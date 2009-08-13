@@ -51,11 +51,7 @@ namespace Ankh.Services.IssueTracker
                 if (_delegate == null
                     && !string.IsNullOrEmpty(_delegateId))
                 {
-                    Type serviceType = Type.GetTypeFromCLSID(new Guid(_delegateId));
-                    if (serviceType != null)
-                    {
-                        _delegate = _context.GetService<IssueRepositoryConnector>(serviceType);
-                    }
+                    _delegate = _context.GetService<IAnkhQueryService>().QueryService<IssueRepositoryConnector>(new Guid(_delegateId));
                 }
                 return _delegate;
             }

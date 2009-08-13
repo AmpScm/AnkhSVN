@@ -25,11 +25,6 @@ namespace Ankh.Services.IssueTracker
 {
     public class IssueRepositorySettingsProxy : IssueRepositorySettings
     {
-        private string _connectorName;
-        private Uri _repositoryUri;
-        private string _repositoryId;
-        private Dictionary<string, object> _customProperties;
-
         IAnkhServiceProvider _context;
 
         public IssueRepositorySettingsProxy(IAnkhServiceProvider context, string connectorName)

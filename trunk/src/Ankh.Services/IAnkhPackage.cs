@@ -26,7 +26,7 @@ namespace Ankh.UI
     /// <summary>
     /// Public api of the ankh package as used by other components
     /// </summary>
-    public interface IAnkhPackage : IAnkhServiceProvider, System.ComponentModel.Design.IServiceContainer
+    public interface IAnkhPackage : IAnkhServiceProvider, System.ComponentModel.Design.IServiceContainer, IAnkhQueryService
     {
         /// <summary>
         /// Gets the UI version. Retrieved from the registry after being installed by our MSI

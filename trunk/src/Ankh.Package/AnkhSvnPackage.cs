@@ -16,21 +16,21 @@
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
-using Microsoft.Win32;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
-using Ankh.UI.Services;
+
+using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
+using IOleObject = Microsoft.VisualStudio.OLE.Interop.IOleObject;
+
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using Ankh.Diff;
-using System.Windows.Forms;
+
 
 namespace Ankh.VSPackage
 {
@@ -72,7 +72,7 @@ namespace Ankh.VSPackage
     [ProvideSourceControlProvider(AnkhId.SccProviderTitle, "#100")]
     [ProvideService(typeof(ITheAnkhSvnSccProvider), ServiceName = AnkhId.SubversionSccName)]
     [ProvideOutputWindow(AnkhId.AnkhOutputPaneId, "#111", InitiallyInvisible = false, Name = AnkhId.PlkProduct, ClearWithSolution = false)]
-    sealed partial class AnkhSvnPackage : Package, IAnkhPackage
+    sealed partial class AnkhSvnPackage : Package, IAnkhPackage, IAnkhQueryService
     {
         readonly AnkhRuntime _runtime;
 
@@ -119,6 +119,7 @@ namespace Ankh.VSPackage
         {
             IServiceContainer container = GetService<IServiceContainer>();
             container.AddService(typeof(IAnkhPackage), this, true);
+            container.AddService(typeof(IAnkhQueryService), this, true);
 
             _runtime.AddModule(new AnkhModule(_runtime));
             _runtime.AddModule(new AnkhSccModule(_runtime));
@@ -194,5 +195,33 @@ namespace Ankh.VSPackage
                 return _inCommandLineMode.Value;
             }
         }
+
+        #region IAnkhQueryService Members
+
+        public T QueryService<T>(Guid serviceGuid) where T : class
+        {
+            IOleServiceProvider sp = GetService<IOleServiceProvider>();
+            Guid gClass = typeof(T).GUID;
+            IntPtr handle;
+
+            if (sp == null)
+                return null;
+
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gClass, out handle)) && handle != IntPtr.Zero)
+                return null;
+
+            try
+            {
+                object ob = Marshal.GetObjectForIUnknown(handle);
+
+                return ob as T;
+            }
+            finally
+            {
+                Marshal.Release(handle);
+            }
+        }
+
+        #endregion
     }
 }
