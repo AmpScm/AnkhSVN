@@ -207,7 +207,7 @@ namespace Ankh.VSPackage
             if (sp == null)
                 return null;
 
-            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gClass, out handle)) && handle != IntPtr.Zero)
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gClass, out handle)) || handle == IntPtr.Zero)
                 return null;
 
             try
