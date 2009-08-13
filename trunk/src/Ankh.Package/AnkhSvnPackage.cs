@@ -198,6 +198,8 @@ namespace Ankh.VSPackage
 
         #region IAnkhQueryService Members
 
+        static Guid IID_IUnknown = VSConstants.IID_IUnknown;
+
         public T QueryService<T>(Guid serviceGuid) where T : class
         {
             IOleServiceProvider sp = GetService<IOleServiceProvider>();
@@ -207,7 +209,8 @@ namespace Ankh.VSPackage
             if (sp == null)
                 return null;
 
-            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref gInterface, out handle)) || handle == IntPtr.Zero)
+            if (!ErrorHandler.Succeeded(sp.QueryService(ref serviceGuid, ref IID_IUnknown, out handle)) 
+                || handle == IntPtr.Zero)
                 return null;
 
             try
