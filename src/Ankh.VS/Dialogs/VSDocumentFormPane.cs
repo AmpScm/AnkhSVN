@@ -84,7 +84,7 @@ namespace Ankh.VS.Dialogs
         {
             if (serviceType == typeof(AmbientProperties))
             {
-                return GetService<IAnkhPackage>(typeof(IAnkhPackage)).AmbientProperties;
+                return GetService<IAnkhPackage>().AmbientProperties;
             }
 
             System.IServiceProvider paneSp = _pane;

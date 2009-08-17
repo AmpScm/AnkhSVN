@@ -54,7 +54,7 @@ namespace Ankh.Services.IssueTracker
                     _nameConnectorMap.Values.CopyTo(result, 0);
                     return result;
                 }
-                return new IssueRepositoryConnector[]{};
+                return new IssueRepositoryConnector[] { };
             }
         }
 
@@ -181,12 +181,12 @@ namespace Ankh.Services.IssueTracker
         private bool HasChanged(IssueRepositorySettings settings1, IssueRepositorySettings settings2)
         {
             return true;
-                /*
-                && settings1 != settings2 // handles both null values
-                && (false
-                    || (settings1 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings1).Equals(settings2))
-                    || (settings2 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings2).Equals(settings1))
-                    );*/
+            /*
+            && settings1 != settings2 // handles both null values
+            && (false
+                || (settings1 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings1).Equals(settings2))
+                || (settings2 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings2).Equals(settings1))
+                );*/
         }
 
         /// <summary>
@@ -265,12 +265,12 @@ namespace Ankh.Services.IssueTracker
 
                         string[] connectorKeys = aKey.GetSubKeyNames();
                         foreach (string connectorKey in connectorKeys)
-                        {
-                            RegistryKey connector = aKey.OpenSubKey(connectorKey);
-                            string serviceName = (string)connector.GetValue("");
-                            IssueRepositoryConnector descriptor = new IssueRepositoryConnectorProxy(this, serviceName, connectorKey);
-                            _nameConnectorMap.Add(serviceName, descriptor);
-                        }
+                            using (RegistryKey connector = aKey.OpenSubKey(connectorKey))
+                            {
+                                string serviceName = (string)connector.GetValue("");
+                                IssueRepositoryConnector descriptor = new IssueRepositoryConnectorProxy(this, serviceName, connectorKey);
+                                _nameConnectorMap.Add(serviceName, descriptor);
+                            }
                     }
                 }
             }
