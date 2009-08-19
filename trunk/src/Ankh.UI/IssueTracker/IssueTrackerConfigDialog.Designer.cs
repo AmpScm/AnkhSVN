@@ -48,6 +48,7 @@
             // 
             this.connectorComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.connectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.connectorComboBox.FormattingEnabled = true;
             this.connectorComboBox.Location = new System.Drawing.Point(15, 25);
             this.connectorComboBox.Name = "connectorComboBox";
