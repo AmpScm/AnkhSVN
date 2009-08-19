@@ -144,36 +144,12 @@
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="IssueTracker\ConnectorNode.cs" />
-    <Compile Include="IssueTracker\ConnectorSelectionPageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="IssueTracker\ConnectorSelectionPageControl.designer.cs">
-      <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IssueTracker\ConnectorWizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.cs">
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.Designer.cs">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.cs">
-    </Compile>
-    <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.Designer.cs">
-      <DependentUpon>IssueTrackerConfigWizardDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="IssueTracker\ConnectorWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="IssueTracker\IssueTrackerConfigWizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="IssueTracker\IssueTrackerSetupCommand.cs" />
-    <Compile Include="IssueTracker\IssueTrackerWizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\MergeConflictHandlerDialog.cs">
@@ -1227,14 +1203,8 @@
       <LastGenOutput>StatusPanelResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="IssueTracker\ConnectorSelectionPageControl.resx">
-      <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="IssueTracker\IssueTrackerConfigWizardDialog.resx">
-      <DependentUpon>IssueTrackerConfigWizardDialog.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />
