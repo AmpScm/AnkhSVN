@@ -50,26 +50,23 @@ namespace Ankh.UI.IssueTracker
             if (firstVersioned == null)
                 return; // exceptional case
 
-            IIssueTrackerSettings currentSettings = e.GetService<IIssueTrackerSettings>();
-            bool updateIssueService = false;
-            IssueRepository newRepository = null;
-
-            // TODO pass the current settings (repository) to the dialog so that this command serves for "edit" purpose.
-            using (IssueTrackerConfigWizardDialog dialog = new IssueTrackerConfigWizardDialog(e.Context))
+            using (IssueTrackerConfigDialog dialog = new IssueTrackerConfigDialog(e.Context))
             {
                 if (dialog.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                 {
-                    newRepository = dialog.NewIssueRepository;
+                    IIssueTrackerSettings currentSettings = e.GetService<IIssueTrackerSettings>();
+
+                    IssueRepository newRepository = dialog.NewIssueRepository;
                     if (newRepository == null
                         || string.IsNullOrEmpty(newRepository.ConnectorName)
                         || newRepository.RepositoryUri == null)
                     {
-                        updateIssueService = DeleteIssueRepositoryProperties(e.Context, firstVersioned);
+                        DeleteIssueRepositoryProperties(e.Context, firstVersioned);
                     }
                     else if (currentSettings == null
                         || currentSettings.ShouldPersist(newRepository))
                     {
-                        updateIssueService = SetIssueRepositoryProperties(e.Context, firstVersioned, newRepository);
+                        SetIssueRepositoryProperties(e.Context, firstVersioned, newRepository);
                     }
                 }
             }
