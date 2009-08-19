@@ -154,6 +154,11 @@
     <Compile Include="IssueTracker\ConnectorWizard.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="IssueTracker\IssueTrackerConfigDialog.cs">
+    </Compile>
+    <Compile Include="IssueTracker\IssueTrackerConfigDialog.Designer.cs">
+      <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.cs">
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigWizardDialog.Designer.cs">
@@ -1224,6 +1229,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\ConnectorSelectionPageControl.resx">
       <DependentUpon>ConnectorSelectionPageControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
+      <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigWizardDialog.resx">
       <DependentUpon>IssueTrackerConfigWizardDialog.cs</DependentUpon>
