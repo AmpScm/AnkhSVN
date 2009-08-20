@@ -21,6 +21,7 @@ using Ankh.UI;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using System.Windows.Forms;
 
 namespace Ankh.Services
 {
@@ -40,10 +41,13 @@ namespace Ankh.Services
 
             try
             {
+                bool showHelpInBrowser = false;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
-
                 if (help != null)
-                    ErrorHandler.ThrowOnFailure(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+                    showHelpInBrowser = !ErrorHandler.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
+
+                if (showHelpInBrowser)
+                    Help.ShowHelp(form, ub.Uri.AbsoluteUri);
             }
             catch (Exception ex)
             {
