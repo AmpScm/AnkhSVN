@@ -30,9 +30,12 @@ namespace Ankh.UI.IssueTracker
 
         public void OnUpdate(CommandUpdateEventArgs e)
         {
-            IAnkhIssueService service = e.GetService<IAnkhIssueService>(typeof(IAnkhIssueService));
+            IAnkhIssueService service = null;
+            SvnItem item = null;
             e.Enabled = true
-                && service != null
+                && (item = GetRoot(e)) != null
+                && item.IsVersioned // ensure solution (project root) is versioned
+                && (service = e.GetService<IAnkhIssueService>())!= null
                 && service.Connectors != null
                 && service.Connectors.Count > 0;
         }
@@ -85,7 +88,6 @@ namespace Ankh.UI.IssueTracker
                     wa.Client.DeleteProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryPropertyNames);
                     wa.Client.DeleteProperty(item.FullPath, AnkhSccPropertyNames.IssueRepositoryPropertyValues);
                 }).Succeeded;
-
         }
 
         private bool SetIssueRepositoryProperties(AnkhContext context, SvnItem item, IssueRepositorySettings settings)
@@ -134,7 +136,33 @@ namespace Ankh.UI.IssueTracker
                     }
 
                 }).Succeeded;
+        }
 
+        /// <summary>
+        /// Gets the "project root"
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static SvnItem GetRoot(BaseCommandEventArgs e)
+        {
+            SvnItem item = null;
+            switch (e.Command)
+            {
+                case AnkhCommand.SolutionIssueTrackerSetup:
+                    IAnkhSolutionSettings ss = e.GetService<IAnkhSolutionSettings>();
+                    if (ss == null)
+                        return null;
+
+                    string root = ss.ProjectRoot;
+
+                    if (string.IsNullOrEmpty(root))
+                        return null;
+
+                    item = e.GetService<IFileStatusCache>()[root];
+                    break;
+            }
+
+            return item;
         }
     }
 }
