@@ -14,15 +14,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
-using Microsoft.Win32;
-
 using Ankh.ExtensionPoints.IssueTracker;
+using Ankh.IssueTracker;
 using Ankh.UI;
 using Ankh.VS;
-using Ankh.IssueTracker;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Ankh.Services.IssueTracker
 {
@@ -31,6 +30,7 @@ namespace Ankh.Services.IssueTracker
     {
         private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
         private IssueRepository _repository;
+        private Regex _issueIdRegex = null;
 
         private readonly object _syncLock = new object();
 
@@ -92,6 +92,10 @@ namespace Ankh.Services.IssueTracker
             }
         }
 
+        /// <summary>
+        /// Clears current repository object
+        /// </summary>
+        /// <remarks>if the new settings are "really" different from the current settings, reset</remarks>
         public void MarkDirty()
         {
             bool isReallyDirty = false;
@@ -116,6 +120,34 @@ namespace Ankh.Services.IssueTracker
             {
                 CurrentIssueRepository = null;
             }
+        }
+
+        /// <summary>
+        /// Gets the issue references from the specified text
+        /// </summary>
+        /// <param name="logmessage">text.</param>
+        /// <returns></returns>
+        public IEnumerable<IssueMarker> GetIssues(string text)
+        {
+            // Using CurrentIssueRepositorySettings property not to trigger 
+            // Issue Tracker Connector Package initialization
+            IssueRepository repository = CurrentIssueRepositorySettings as IssueRepository;
+            if (repository != null)
+            {
+                if (_issueIdRegex == null)
+                {
+                string pattern = repository.IssueIdPattern;
+                if (!string.IsNullOrEmpty(pattern))
+                {
+                    _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                }
+                }
+                if (_issueIdRegex != null)
+                {
+                    return PerformRegex(text);
+                }
+            }
+            return new IssueMarker[0];
         }
 
         /// <summary>
@@ -154,6 +186,7 @@ namespace Ankh.Services.IssueTracker
             {
                 IssueRepository oldRepository = _repository;
                 _repository = value;
+                _issueIdRegex = null; // reset RegEx
                 if (IssueRepositoryChanged != null)
                 {
                     IssueRepositoryChanged(this, EventArgs.Empty);
@@ -218,6 +251,20 @@ namespace Ankh.Services.IssueTracker
         }
 
         #endregion
+
+        private IEnumerable<IssueMarker> PerformRegex(string text)
+        {
+            foreach (Match m in _issueIdRegex.Matches(text))
+            {
+                if (!m.Success)
+                    continue;
+                foreach (Group g in m.Groups)
+                {
+                    foreach (Capture c in g.Captures)
+                        yield return new IssueMarker(c.Index, c.Length, c.Value);
+                }
+            }
+        }
 
         protected override void OnPreInitialize()
         {
