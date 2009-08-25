@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.Scc;
+using Ankh.VS;
 
 namespace Ankh
 {
@@ -54,5 +55,13 @@ namespace Ankh
         /// Marks Issue Service as dirty which signals Issues page to refresh itself.
         /// </summary>
         void MarkDirty();
+
+        /// <summary>
+        /// Gets the issue references from the specified text
+        /// </summary>
+        /// <param name="logmessage">text.</param>
+        /// <returns></returns>
+        /// <remarks>Precondition: Current solution is associated with a repository.</remarks>
+        IEnumerable<IssueMarker> GetIssues(string text);
     }
 }
