@@ -41,7 +41,7 @@ namespace Ankh.Services
 
             try
             {
-                bool showHelpInBrowser = false;
+                bool showHelpInBrowser = true;
                 IVsHelpSystem help = GetService<IVsHelpSystem>(typeof(SVsHelpService));
                 if (help != null)
                     showHelpInBrowser = !ErrorHandler.Succeeded(help.DisplayTopicFromURL(ub.Uri.AbsoluteUri, (uint)VHS_COMMAND.VHS_Default));
