@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using Ankh.UI;
 using System.Windows.Forms;
 using Ankh.Scc;
+using Ankh.Configuration;
 
 namespace Ankh.Commands
 {
@@ -40,7 +41,7 @@ namespace Ankh.Commands
             {
                 if (item.IsFile && item.IsVersioned && !item.IsLocked)
                 {
-                    if(!mustOnly || item.IsReadOnlyMustLock)
+                    if (!mustOnly || item.IsReadOnlyMustLock)
                         return;
                 }
             }
@@ -69,26 +70,37 @@ namespace Ankh.Commands
             bool stealLocks = false;
             string comment = "";
 
-            if (e.PromptUser || !(Shift || e.DontPrompt))
+            IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
+            AnkhConfig Config = cs.Instance;
+
+            IEnumerable<SvnItem> selectedItems = items;
+
+            if (!Config.SuppressLockingUI || e.PromptUser)
             {
-                using (LockDialog dlg = new LockDialog(psi))
+                if (e.PromptUser || !(Shift || e.DontPrompt))
                 {
-                    bool succeeded = (dlg.ShowDialog(e.Context)== DialogResult.OK);
-                    psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
-                    stealLocks = dlg.StealLocks;
-                    comment = dlg.Message;
+                    using (LockDialog dlg = new LockDialog(psi))
+                    {
+                        bool succeeded = (dlg.ShowDialog(e.Context) == DialogResult.OK);
+                        psr = new PathSelectorResult(succeeded, dlg.CheckedItems);
+                        stealLocks = dlg.StealLocks;
+                        comment = dlg.Message;
+                    }
+
                 }
-
+                else
+                {
+                    psr = psi.DefaultResult;
+                }
+                if (!psr.Succeeded)
+                {
+                    return;
+                }
+                selectedItems = psr.Selection;
             }
-            else
-                psr = psi.DefaultResult;
-
-            if (!psr.Succeeded)
-                return;
-
             List<string> files = new List<string>();
 
-            foreach (SvnItem item in psr.Selection)
+            foreach (SvnItem item in selectedItems)
             {
                 if (item.IsFile) // svn lock is only for files
                 {
@@ -116,6 +128,6 @@ namespace Ankh.Commands
                 e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
             }
 
-        } // OnExecute        
+        } // OnExecute
     }
 }
