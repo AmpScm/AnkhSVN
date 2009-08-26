@@ -33,6 +33,7 @@ namespace Ankh.Configuration
         bool _interactiveMergeOnConflict;
         bool _flashWindow;
         bool _autoAddEnabled;
+        bool _autoLockEnabled;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -86,6 +87,13 @@ namespace Ankh.Configuration
         {
             get { return _autoAddEnabled; }
             set { _autoAddEnabled = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool SuppressLockingUI
+        {
+            get { return _autoLockEnabled; }
+            set { _autoLockEnabled = value; }
         }
     }
 }

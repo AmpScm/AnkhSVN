@@ -52,6 +52,7 @@ namespace Ankh.UI.OptionsPages
             this.interactiveMergeOnConflict = new System.Windows.Forms.CheckBox();
             this.autoAddFiles = new System.Windows.Forms.CheckBox();
             this.flashWindowAfterOperation = new System.Windows.Forms.CheckBox();
+            this.autoLockFiles = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,17 +107,17 @@ namespace Ankh.UI.OptionsPages
             this.groupBox1.Location = new System.Drawing.Point(0, 185);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(400, 83);
-            this.groupBox1.TabIndex = 3;
+            this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Subversion User Settings";
             // 
             // interactiveMergeOnConflict
             // 
             this.interactiveMergeOnConflict.AutoSize = true;
-            this.interactiveMergeOnConflict.Location = new System.Drawing.Point(0, 40);
+            this.interactiveMergeOnConflict.Location = new System.Drawing.Point(0, 63);
             this.interactiveMergeOnConflict.Name = "interactiveMergeOnConflict";
             this.interactiveMergeOnConflict.Size = new System.Drawing.Size(218, 17);
-            this.interactiveMergeOnConflict.TabIndex = 1;
+            this.interactiveMergeOnConflict.TabIndex = 2;
             this.interactiveMergeOnConflict.Text = "Start Interactive Merge on &Conflict (Beta)";
             this.interactiveMergeOnConflict.UseVisualStyleBackColor = true;
             // 
@@ -125,25 +126,36 @@ namespace Ankh.UI.OptionsPages
             this.autoAddFiles.AutoSize = true;
             this.autoAddFiles.Location = new System.Drawing.Point(0, 17);
             this.autoAddFiles.Name = "autoAddFiles";
-            this.autoAddFiles.Size = new System.Drawing.Size(199, 17);
+            this.autoAddFiles.Size = new System.Drawing.Size(192, 17);
             this.autoAddFiles.TabIndex = 0;
-            this.autoAddFiles.Text = "&Auto add files when they are created";
+            this.autoAddFiles.Text = "Directly &add new files to subversion";
             this.autoAddFiles.UseVisualStyleBackColor = true;
             // 
             // flashWindowAfterOperation
             // 
             this.flashWindowAfterOperation.AutoSize = true;
-            this.flashWindowAfterOperation.Location = new System.Drawing.Point(0, 63);
+            this.flashWindowAfterOperation.Location = new System.Drawing.Point(0, 86);
             this.flashWindowAfterOperation.Name = "flashWindowAfterOperation";
             this.flashWindowAfterOperation.Size = new System.Drawing.Size(261, 17);
-            this.flashWindowAfterOperation.TabIndex = 2;
+            this.flashWindowAfterOperation.TabIndex = 3;
             this.flashWindowAfterOperation.Text = "&Flash title bar when a lengthy operation completes";
             this.flashWindowAfterOperation.UseVisualStyleBackColor = true;
+            // 
+            // autoLockFiles
+            // 
+            this.autoLockFiles.AutoSize = true;
+            this.autoLockFiles.Location = new System.Drawing.Point(0, 40);
+            this.autoLockFiles.Name = "autoLockFiles";
+            this.autoLockFiles.Size = new System.Drawing.Size(306, 17);
+            this.autoLockFiles.TabIndex = 1;
+            this.autoLockFiles.Text = "Automatically &lock files on change without user confirmation";
+            this.autoLockFiles.UseVisualStyleBackColor = true;
             // 
             // EnvironmentSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.autoLockFiles);
             this.Controls.Add(this.flashWindowAfterOperation);
             this.Controls.Add(this.autoAddFiles);
             this.Controls.Add(this.interactiveMergeOnConflict);
@@ -167,5 +179,6 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.CheckBox interactiveMergeOnConflict;
         private System.Windows.Forms.CheckBox autoAddFiles;
         private System.Windows.Forms.CheckBox flashWindowAfterOperation;
+        private System.Windows.Forms.CheckBox autoLockFiles;
     }
 }

@@ -37,6 +37,7 @@ namespace Ankh.UI.OptionsPages
         {
             Config.InteractiveMergeOnConflict = interactiveMergeOnConflict.Checked;
             Config.AutoAddEnabled = autoAddFiles.Checked;
+            Config.SuppressLockingUI = autoLockFiles.Checked;
             Config.FlashWindowWhenOperationCompletes = flashWindowAfterOperation.Checked;
         }
 
@@ -44,6 +45,7 @@ namespace Ankh.UI.OptionsPages
         {
             interactiveMergeOnConflict.Checked = Config.InteractiveMergeOnConflict;
             autoAddFiles.Checked = Config.AutoAddEnabled;
+            autoLockFiles.Checked = Config.AutoLockEnabled;
             flashWindowAfterOperation.Checked = Config.FlashWindowWhenOperationCompletes;
         }
 
