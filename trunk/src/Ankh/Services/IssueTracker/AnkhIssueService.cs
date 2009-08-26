@@ -127,27 +127,53 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         /// <param name="logmessage">text.</param>
         /// <returns></returns>
-        public IEnumerable<IssueMarker> GetIssues(string text)
+        public bool TryGetIssues(string text, out IEnumerable<IssueMarker> issues)
         {
-            // Using CurrentIssueRepositorySettings property not to trigger 
+            // potentially triggers 
             // Issue Tracker Connector Package initialization
-            IssueRepository repository = CurrentIssueRepositorySettings as IssueRepository;
+            IssueRepository repository = CurrentIssueRepository;
             if (repository != null)
             {
                 if (_issueIdRegex == null)
                 {
-                string pattern = repository.IssueIdPattern;
-                if (!string.IsNullOrEmpty(pattern))
-                {
-                    _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
-                }
+                    string pattern = repository.IssueIdPattern;
+                    if (!string.IsNullOrEmpty(pattern))
+                    {
+                        _issueIdRegex = new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Multiline);
+                    }
                 }
                 if (_issueIdRegex != null)
                 {
-                    return PerformRegex(text);
+                    issues = PerformRegex(text);
+                    return true;
                 }
             }
-            return new IssueMarker[0];
+            // meaning 
+            // no solution
+            // or no issue repository is associated with the solution
+            // or issue repository does not provide an issue id pattern
+            issues = new IssueMarker[0];
+            return false;
+        }
+
+        /// <summary>
+        /// Passes the open request to the current issue repository
+        /// </summary>
+        /// <param name="issueId"></param>
+        public void OpenIssue(string issueId)
+        {
+            if (!string.IsNullOrEmpty(issueId))
+            {
+                IssueRepository repository = CurrentIssueRepository;
+                if (repository != null)
+                {
+                    try
+                    {
+                        repository.NavigateTo(issueId);
+                    }
+                    catch { } // connector code
+                }
+            }
         }
 
         /// <summary>
