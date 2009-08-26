@@ -231,6 +231,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PendingChanges\Commands\CreatePatch.cs" />
+    <Compile Include="PendingChanges\Commands\OpenIssue.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictListItem.cs" />
     <Compile Include="PendingChanges\Conflicts\ConflictListView.cs">
       <SubType>Component</SubType>
