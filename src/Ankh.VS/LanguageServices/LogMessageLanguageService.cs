@@ -16,14 +16,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Microsoft.VisualStudio.Package;
-using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Scc;
-using Ankh.VS;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -99,15 +96,22 @@ namespace Ankh.VS.LanguageServices
             }
 
             IProjectCommitSettings _projectCommitSettings;
+            IAnkhIssueService _issueService;
 
             IProjectCommitSettings CommitSettings
             {
                 get { return _projectCommitSettings ?? (_projectCommitSettings = GetService<IProjectCommitSettings>()); }
             }
 
+            IAnkhIssueService IssueService
+            {
+                get { return _issueService ?? (_issueService = GetService<IAnkhIssueService>()); }
+            }
+
             IEnumerable<IssueMarker> _issueIds;
             IEnumerator<IssueMarker> _mover;
             IssueMarker _nextIssue;
+            TokenType _issueTokenType = TokenType.Keyword;
 
             /// <summary>
             /// Scans the token and provide info about it.
@@ -119,7 +123,6 @@ namespace Ankh.VS.LanguageServices
             {
                 if (string.IsNullOrEmpty(_line) || _offset >= _line.Length)
                     return false;
-
                 int pState = state;
                 state = 0;
                 bool atStart = false;
@@ -157,7 +160,18 @@ namespace Ankh.VS.LanguageServices
                         default:
                             if (_issueIds == null)
                             {
-                                _issueIds = CommitSettings.GetIssues(_line);
+                                IAnkhIssueService iService = IssueService;
+                                IEnumerable<IssueMarker> calculated = null;
+                                if (iService != null
+                                    && iService.TryGetIssues(_line, out calculated))
+                                {
+                                    _issueIds = calculated;
+                                    _issueTokenType = TokenType.Identifier;
+                                }
+                                else
+                                {
+                                    _issueIds = CommitSettings.GetIssues(_line);
+                                }
                                 _mover = _issueIds.GetEnumerator();
                                 if (_mover.MoveNext())
                                     _nextIssue = _mover.Current;
@@ -178,7 +192,6 @@ namespace Ankh.VS.LanguageServices
                                 if (_offset < _nextIssue.Index)
                                 {
                                     // Text before the issue
-
                                     if (tokenInfo != null)
                                     {
                                         tokenInfo.Color = TokenColor.Text;
@@ -198,7 +211,7 @@ namespace Ankh.VS.LanguageServices
                                         tokenInfo.StartIndex = _offset;
                                         tokenInfo.EndIndex = _offset + _nextIssue.Length-1;
                                         tokenInfo.Trigger = TokenTriggers.None;
-                                        tokenInfo.Type = TokenType.Keyword;
+                                        tokenInfo.Type = _issueTokenType;
                                     }
 
                                     state = 2;
@@ -230,6 +243,7 @@ namespace Ankh.VS.LanguageServices
                 _offset = offset;
                 _issueIds = null;
                 _nextIssue = null;
+                _issueTokenType = TokenType.Keyword;
             }
 
             #endregion
@@ -279,6 +293,19 @@ namespace Ankh.VS.LanguageServices
                 groupGuid = AnkhId.CommandSetGuid;
                 menuId = (int)AnkhCommandMenu.LogMessageEditorContextMenu;
             }
+        }
+
+        /// <summary>
+        /// Handles "Open Issue" request
+        /// </summary>
+        protected override int ExecCommand(ref Guid guidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            bool handled = true
+                && guidCmdGroup == AnkhId.CommandSetGuid
+                && nCmdId == (uint)AnkhCommand.PcLogEditorOpenIssue
+                && HandleOpenIssue();
+
+            return handled ? VSConstants.S_OK : base.ExecCommand(ref guidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
         }
 
         /// <summary>
@@ -335,6 +362,41 @@ namespace Ankh.VS.LanguageServices
             textValue = change.LogMessageToolTipText;
 
             return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Handles the current token if it is an "identifier"
+        /// </summary>
+        /// <returns></returns>
+        private bool HandleOpenIssue()
+        {
+            if (TextView != null && Source != null)
+            {
+                IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
+                if (iService != null)
+                {
+                    int cLine;
+                    int cCol;
+                    if (TextView.GetCaretPos(out cLine, out cCol) == VSConstants.S_OK)
+                    {
+                        TokenInfo ti = Source.GetTokenInfo(cLine, cCol);
+                        if (ti != null && ti.Type == TokenType.Identifier)
+                        {
+                            string issueId;
+                            // extract issue id
+                            if (TextView.GetTextStream(cLine, ti.StartIndex, cLine, ti.EndIndex + 1, out issueId) == VSConstants.S_OK)
+                            {
+                                if (!string.IsNullOrEmpty(issueId))
+                                {
+                                    iService.OpenIssue(issueId);
+                                }
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

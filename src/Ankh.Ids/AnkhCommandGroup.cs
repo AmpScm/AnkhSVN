@@ -179,5 +179,7 @@ namespace Ankh
         WceOpen,
         WceBranch,
         WceEdit,
+
+        PendingChangesLogEditor3,
     }
 }

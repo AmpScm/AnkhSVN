@@ -889,6 +889,10 @@
           <ButtonRef id="guidVSStd97:cmdidDelete" priority="0x100"  />
           <ButtonRef id="guidVSStd97:cmdidSelectAll"  priority="0x200" />
         </Group>
+        <Group id="Grp_PendingChangesLogEditor3" priority="0x500">
+          <Button id="Cmd_PcLogEditorOpenIssue" name="OpenIssue" priority="0x100"
+                  text="Open &amp;Issue" dynamicVisibility="true"/>
+        </Group>
       </Menu>
     </GroupRef>
     <GroupRef id="ToolBar_SourceControl">

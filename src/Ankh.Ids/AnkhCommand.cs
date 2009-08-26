@@ -286,5 +286,6 @@ namespace Ankh
         RemoveFromChangeList,
 
         SolutionIssueTrackerSetup,
+        PcLogEditorOpenIssue,
     }
 }
