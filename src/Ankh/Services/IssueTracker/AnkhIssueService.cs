@@ -28,6 +28,8 @@ namespace Ankh.Services.IssueTracker
     [GlobalService(typeof(IAnkhIssueService))]
     class AnkhIssueService : AnkhService, IAnkhIssueService
     {
+        private const string REGEX_GROUPNAME_ID = "id";
+
         private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
         private IssueRepository _repository;
         private Regex _issueIdRegex = null;
@@ -284,10 +286,21 @@ namespace Ankh.Services.IssueTracker
             {
                 if (!m.Success)
                     continue;
-                foreach (Group g in m.Groups)
+
+                // try to find an "ID" group
+                Group grp = m.Groups[REGEX_GROUPNAME_ID];
+                if (grp != null && grp.Success)
                 {
-                    foreach (Capture c in g.Captures)
+                    foreach (Capture c in grp.Captures)
                         yield return new IssueMarker(c.Index, c.Length, c.Value);
+                }
+                else
+                {
+                    foreach (Group g in m.Groups)
+                    {
+                        foreach (Capture c in g.Captures)
+                            yield return new IssueMarker(c.Index, c.Length, c.Value);
+                    }
                 }
             }
         }
