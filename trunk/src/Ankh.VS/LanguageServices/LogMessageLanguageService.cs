@@ -43,11 +43,6 @@ namespace Ankh.VS.LanguageServices
             base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
         }
 
-        public override ExpansionProvider CreateExpansionProvider(Source src)
-        {
-            return base.CreateExpansionProvider(src);
-        }
-
         public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
         {
             return new LogMessageViewFilter(this, mgr, newView);
