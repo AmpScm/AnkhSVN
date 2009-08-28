@@ -38,10 +38,14 @@ namespace Ankh.VS.LanguageServices
         {
         }
 
-
         public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
         {
             base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
+        }
+
+        public override ExpansionProvider CreateExpansionProvider(Source src)
+        {
+            return base.CreateExpansionProvider(src);
         }
 
         public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
@@ -295,17 +299,39 @@ namespace Ankh.VS.LanguageServices
             }
         }
 
+        protected override int QueryCommandStatus(ref Guid guidCmdGroup, uint nCmdId)
+        {
+            if (true
+                && guidCmdGroup == AnkhId.CommandSetGuid
+                && nCmdId == (uint)AnkhCommand.PcLogEditorOpenIssue // Handle OpenIssue command only
+                )
+            {
+                string issueId;
+                if (false
+                    || !GetIssueIdAtCurrentCaretPosition(out issueId, true)
+                    || string.IsNullOrEmpty(issueId) // caret is not on a recognized issue
+                    )
+                {
+                    return (int)(Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_DISABLED);
+                }
+            }
+            return base.QueryCommandStatus(ref guidCmdGroup, nCmdId);
+        }
+
         /// <summary>
         /// Handles "Open Issue" request
         /// </summary>
         protected override int ExecCommand(ref Guid guidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            bool handled = true
+            if (true
                 && guidCmdGroup == AnkhId.CommandSetGuid
                 && nCmdId == (uint)AnkhCommand.PcLogEditorOpenIssue
-                && HandleOpenIssue();
-
-            return handled ? VSConstants.S_OK : base.ExecCommand(ref guidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
+                )
+            {
+                HandleOpenIssue();
+                return VSConstants.S_OK;
+            }
+            return base.ExecCommand(ref guidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
         }
 
         /// <summary>
@@ -365,37 +391,54 @@ namespace Ankh.VS.LanguageServices
         }
 
         /// <summary>
-        /// Handles the current token if it is an "identifier"
+        /// Handles open-request if the current token is an issue "identifier"
         /// </summary>
         /// <returns></returns>
         private bool HandleOpenIssue()
         {
+            IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
+            string issueId;
+            if (iService != null
+                && GetIssueIdAtCurrentCaretPosition(out issueId, false))
+            {
+                if (!string.IsNullOrEmpty(issueId))
+                {
+                    iService.OpenIssue(issueId);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the issue id at the current caret.
+        /// </summary>
+        /// <param name="issueId">filled with the identified issue id</param>
+        /// <param name="select">true if the issue needs to be highlighted</param>
+        /// <returns></returns>
+        private bool GetIssueIdAtCurrentCaretPosition(out string issueId, bool select)
+        {
             if (TextView != null && Source != null)
             {
-                IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
-                if (iService != null)
+                int cLine;
+                int cCol;
+                if (TextView.GetCaretPos(out cLine, out cCol) == VSConstants.S_OK)
                 {
-                    int cLine;
-                    int cCol;
-                    if (TextView.GetCaretPos(out cLine, out cCol) == VSConstants.S_OK)
+                    TokenInfo ti = Source.GetTokenInfo(cLine, cCol);
+                    if (ti != null && ti.Type == TokenType.Identifier)
                     {
-                        TokenInfo ti = Source.GetTokenInfo(cLine, cCol);
-                        if (ti != null && ti.Type == TokenType.Identifier)
+                        // extract issue id
+                        if (TextView.GetTextStream(cLine, ti.StartIndex, cLine, ti.EndIndex + 1, out issueId) == VSConstants.S_OK
+                            && select)
                         {
-                            string issueId;
-                            // extract issue id
-                            if (TextView.GetTextStream(cLine, ti.StartIndex, cLine, ti.EndIndex + 1, out issueId) == VSConstants.S_OK)
-                            {
-                                if (!string.IsNullOrEmpty(issueId))
-                                {
-                                    iService.OpenIssue(issueId);
-                                }
-                            }
-                            return true;
+                            // highlight the issue
+                            TextView.SetSelection(cLine, ti.StartIndex, cLine, ti.EndIndex + 1);
                         }
+                        return true;
                     }
                 }
             }
+            issueId = null;
             return false;
         }
     }
