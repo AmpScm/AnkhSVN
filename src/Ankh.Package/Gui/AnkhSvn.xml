@@ -639,6 +639,8 @@
                   text="Revert &amp;Changes from this revision" dynamicVisibility="true" iconFile="PendingChanges/Revert.png"/>
           <Button id="Cmd_LogShowRevisionProperties" name="LogShowRevisionProperties" priority="0xB400"
                   text="Show Revision &amp;Properties" dynamicVisibility="true" iconFile="menu/Properties.png"/>
+          <Button id="Cmd_LogOpenIssue" name="LogOpenIssue" priority="0xB500"
+                  text="Open &amp;Issue" dynamicVisibility="true"/>
         </Group>
         <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_PROPERTIES" priority="0xF000" />
       </Menu>
