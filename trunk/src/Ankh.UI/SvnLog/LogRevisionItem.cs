@@ -26,6 +26,7 @@ using Ankh.Scc;
 using SharpSvn.Implementation;
 using System.Collections.ObjectModel;
 using Ankh.VS;
+using System.Collections.Generic;
 
 namespace Ankh.UI.SvnLog
 {
@@ -61,17 +62,17 @@ namespace Ankh.UI.SvnLog
         private string GetIssueText()
         {
             StringBuilder sb = null;
-            
-            foreach(IssueMarker issue in _context.GetService<IProjectCommitSettings>().GetIssues(LogMessage))
+            ICollection<string> issueList = new List<string>();
+            foreach (IssueMarker issue in Issues)
             {
-                if (sb == null)
-                    sb = new StringBuilder();
-                else
-                    sb.Append(",");
-
-                sb.Append(issue.Value);
+                if (!issueList.Contains(issue.Value))
+                {
+                    if (sb == null) { sb = new StringBuilder(); }
+                    else { sb.Append(","); }
+                    sb.Append(issue);
+                    issueList.Add(issue.Value);
+                }
             }
-
             return sb != null ? sb.ToString() : "";
         }
 
@@ -131,6 +132,37 @@ namespace Ankh.UI.SvnLog
         internal IAnkhServiceProvider Context
         {
             get { return _context; }
+        }
+
+        /// <summary>
+        /// Returns IEnumerable for issue ids combining the issues found via associated issue repository and project commit settings.
+        /// </summary>
+        internal IEnumerable<IssueMarker> Issues
+        {
+            get
+            {
+                string logMessage = LogMessage;
+
+                if (string.IsNullOrEmpty(logMessage))
+                    yield break;
+
+                IAnkhIssueService iService = Context.GetService<IAnkhIssueService>();
+                if (iService != null)
+                {
+                    IEnumerable<IssueMarker> issues;
+                    if (iService.TryGetIssues(logMessage, out issues))
+                    {
+                        foreach (IssueMarker issue in issues)
+                        {
+                            yield return issue;
+                        }
+                    }
+                }
+                else
+                {
+                    yield break;
+                }
+            }
         }
     }
 
@@ -224,19 +256,14 @@ namespace Ankh.UI.SvnLog
             get { return string.Format("r{0}", Revision); }
         }
 
-        public System.Collections.Generic.IEnumerable<string> Issues
+        /// <summary>
+        /// Returns IEnumerable combining the issues found via associated issue repository and project commit settings.
+        /// </summary>
+        public System.Collections.Generic.IEnumerable<IssueMarker> Issues
         {
             get 
             {
-                string logMessage = LogMessage;
-
-                if (string.IsNullOrEmpty(logMessage))
-                    yield break;
-
-                foreach (IssueMarker issue in _lvi.Context.GetService<IProjectCommitSettings>().GetIssues(logMessage))
-                {
-                    yield return issue.Value;
-                }
+                return _lvi.Issues;
             }
         }
     }

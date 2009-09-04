@@ -150,6 +150,11 @@ namespace Ankh.Services.IssueTracker
                     return true;
                 }
             }
+            else if (GetService<IProjectCommitSettings>() != null)
+            {
+                issues = GetIssuesFromCommitSettings(text);
+                return true;
+            }
             // meaning 
             // no solution
             // or no issue repository is associated with the solution
@@ -159,9 +164,10 @@ namespace Ankh.Services.IssueTracker
         }
 
         /// <summary>
-        /// Passes the open request to the current issue repository
+        /// Passes the open request to the current issue repository if available,
+        /// otherwise tries to open web browser base on project settings
         /// </summary>
-        /// <param name="issueId"></param>
+        /// <param name="issueId">Issue Id</param>
         public void OpenIssue(string issueId)
         {
             if (string.IsNullOrEmpty(issueId))
@@ -179,16 +185,13 @@ namespace Ankh.Services.IssueTracker
             else
             {
                 IProjectCommitSettings projectSettings = GetService<IProjectCommitSettings>();
-                if (projectSettings != null && !string.IsNullOrEmpty(projectSettings.RawIssueTrackerUri))
+                if (projectSettings != null)
                 {
                     IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
-
-                    Uri uri;
-                    issueId = Uri.EscapeDataString(issueId);
-
-                    if (Uri.TryCreate(projectSettings.RawIssueTrackerUri.Replace("%BUGID%", issueId), UriKind.Absolute, out uri))
+                    if (web != null)
                     {
-                        if (!uri.IsFile && !uri.IsUnc)
+                        Uri uri = projectSettings.GetIssueTrackerUri(issueId);
+                        if (uri != null && !uri.IsFile && !uri.IsUnc)
                             web.Navigate(uri);
                     }
                 }
@@ -319,6 +322,17 @@ namespace Ankh.Services.IssueTracker
                             yield return new IssueMarker(c.Index, c.Length, c.Value);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets issue ids from project commit settings
+        /// </summary>
+        private IEnumerable<IssueMarker> GetIssuesFromCommitSettings(string text)
+        {
+            foreach (IssueMarker issue in GetService<IProjectCommitSettings>().GetIssues(text))
+            {
+                yield return issue;
             }
         }
 
