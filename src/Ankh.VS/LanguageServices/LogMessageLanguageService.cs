@@ -394,25 +394,9 @@ namespace Ankh.VS.LanguageServices
             if (GetIssueIdAtCurrentCaretPosition(false, out issueId))
             {
                 IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
-                IIssueTrackerSettings iTracker = _service.GetService<IIssueTrackerSettings>();
 
                 if (iService != null)
                     iService.OpenIssue(issueId);
-                else if (iTracker != null && !string.IsNullOrEmpty(iTracker.RawIssueRepositoryUri))
-                {
-                    IAnkhWebBrowser web = _service.GetService<IAnkhWebBrowser>();
-
-                    Uri uri;
-                    issueId = Uri.EscapeDataString(issueId);
-
-                    if (Uri.TryCreate(iTracker.RawIssueRepositoryUri.Replace("%BUGID%", issueId), UriKind.Absolute, out uri))
-                    {
-                        if (!uri.IsFile && !uri.IsUnc)
-                            web.Navigate(uri);
-                    }
-                }
-                else
-                    return false;
             }
             return true;
         }
