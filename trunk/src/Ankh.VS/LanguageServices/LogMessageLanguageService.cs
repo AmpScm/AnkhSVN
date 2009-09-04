@@ -302,7 +302,7 @@ namespace Ankh.VS.LanguageServices
             {
                 string issueId;
                 if (false
-                    || !GetIssueIdAtCurrentCaretPosition(true, out issueId)
+                    || !GetIssueIdAtCurrentCaretPosition(false, out issueId)
                     || string.IsNullOrEmpty(issueId) // caret is not on a recognized issue
                     )
                 {
