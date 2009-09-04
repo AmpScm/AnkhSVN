@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Scc;
+using Ankh.IssueTracker;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -110,7 +111,7 @@ namespace Ankh.VS.LanguageServices
             IEnumerable<IssueMarker> _issueIds;
             IEnumerator<IssueMarker> _mover;
             IssueMarker _nextIssue;
-            TokenType _issueTokenType = TokenType.Keyword;
+            const TokenType _issueTokenType = TokenType.Identifier;
 
             /// <summary>
             /// Scans the token and provide info about it.
@@ -165,7 +166,6 @@ namespace Ankh.VS.LanguageServices
                                     && iService.TryGetIssues(_line, out calculated))
                                 {
                                     _issueIds = calculated;
-                                    _issueTokenType = TokenType.Identifier;
                                 }
                                 else
                                 {
@@ -242,7 +242,6 @@ namespace Ankh.VS.LanguageServices
                 _offset = offset;
                 _issueIds = null;
                 _nextIssue = null;
-                _issueTokenType = TokenType.Keyword;
             }
 
             #endregion
@@ -303,7 +302,7 @@ namespace Ankh.VS.LanguageServices
             {
                 string issueId;
                 if (false
-                    || !GetIssueIdAtCurrentCaretPosition(out issueId, true)
+                    || !GetIssueIdAtCurrentCaretPosition(true, out issueId)
                     || string.IsNullOrEmpty(issueId) // caret is not on a recognized issue
                     )
                 {
@@ -391,27 +390,40 @@ namespace Ankh.VS.LanguageServices
         /// <returns></returns>
         private bool HandleOpenIssue()
         {
-            IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
             string issueId;
-            if (iService != null
-                && GetIssueIdAtCurrentCaretPosition(out issueId, false))
+            if (GetIssueIdAtCurrentCaretPosition(false, out issueId))
             {
-                if (!string.IsNullOrEmpty(issueId))
-                {
+                IAnkhIssueService iService = _service.GetService<IAnkhIssueService>();
+                IIssueTrackerSettings iTracker = _service.GetService<IIssueTrackerSettings>();
+
+                if (iService != null)
                     iService.OpenIssue(issueId);
+                else if (iTracker != null && !string.IsNullOrEmpty(iTracker.RawIssueRepositoryUri))
+                {
+                    IAnkhWebBrowser web = _service.GetService<IAnkhWebBrowser>();
+
+                    Uri uri;
+                    issueId = Uri.EscapeDataString(issueId);
+
+                    if (Uri.TryCreate(iTracker.RawIssueRepositoryUri.Replace("%BUGID%", issueId), UriKind.Absolute, out uri))
+                    {
+                        if (!uri.IsFile && !uri.IsUnc)
+                            web.Navigate(uri);
+                    }
                 }
-                return true;
+                else
+                    return false;
             }
-            return false;
+            return true;
         }
 
         /// <summary>
         /// Gets the issue id at the current caret.
         /// </summary>
-        /// <param name="issueId">filled with the identified issue id</param>
         /// <param name="select">true if the issue needs to be highlighted</param>
+        /// <param name="issueId">filled with the identified issue id</param>
         /// <returns></returns>
-        private bool GetIssueIdAtCurrentCaretPosition(out string issueId, bool select)
+        private bool GetIssueIdAtCurrentCaretPosition(bool select, out string issueId)
         {
             if (TextView != null && Source != null)
             {
