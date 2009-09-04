@@ -22,15 +22,16 @@ using SharpSvn.Implementation;
 
 namespace Ankh.Scc
 {
-	public interface ISvnLogItem
-	{
-		DateTime CommitDate { get; }
-		string Author { get; }
-		string LogMessage { get; }
-		long Revision { get; }
+    public interface ISvnLogItem
+    {
+        DateTime CommitDate { get; }
+        string Author { get; }
+        string LogMessage { get; }
+        IEnumerable<string> Issues { get; }
+        long Revision { get; }
         int Index { get; }
         SvnChangeItemCollection ChangedPaths { get; }
 
         Uri RepositoryRoot { get; }
-	}
+    }
 }

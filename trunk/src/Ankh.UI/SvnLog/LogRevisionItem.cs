@@ -127,6 +127,11 @@ namespace Ankh.UI.SvnLog
         {
             get { return _args; }
         }
+
+        internal IAnkhServiceProvider Context
+        {
+            get { return _context; }
+        }
     }
 
     sealed class LogItem : AnkhPropertyGridItem, ISvnLogItem
@@ -217,6 +222,22 @@ namespace Ankh.UI.SvnLog
         protected override string ComponentName
         {
             get { return string.Format("r{0}", Revision); }
+        }
+
+        public System.Collections.Generic.IEnumerable<string> Issues
+        {
+            get 
+            {
+                string logMessage = LogMessage;
+
+                if (string.IsNullOrEmpty(logMessage))
+                    yield break;
+
+                foreach (IssueMarker issue in _lvi.Context.GetService<IProjectCommitSettings>().GetIssues(logMessage))
+                {
+                    yield return issue.Value;
+                }
+            }
         }
     }
 }
