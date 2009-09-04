@@ -58,7 +58,7 @@ namespace Ankh.Services.PendingChanges
             get
             {
                 if (_client == null)
-                    _client = GetService<ISvnClientPool>().GetClient();
+                    _client = GetService<ISvnClientPool>().GetNoUIClient();
 
                 return _client;
             }
