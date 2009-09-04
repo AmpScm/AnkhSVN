@@ -144,6 +144,14 @@
     <Compile Include="DiffWindow\MergeToolWindowControl.Designer.cs">
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="IssueTracker\IssueSelector.cs">
+    </Compile>
+    <Compile Include="IssueTracker\IssueSelector.Designer.cs">
+      <DependentUpon>IssueSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IssueTracker\IssuesView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.cs">
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.Designer.cs">
@@ -328,6 +336,9 @@
     </Compile>
     <Compile Include="SvnLog\LogDataSource.Designer.cs">
       <DependentUpon>LogDataSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SvnLog\LogIssuesView.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="SvnLog\LogRequest.cs" />
     <Compile Include="SvnLog\LogRevisionItem.cs" />
@@ -1203,6 +1214,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StatusPanelResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IssueTracker\IssueSelector.resx">
+      <DependentUpon>IssueSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
