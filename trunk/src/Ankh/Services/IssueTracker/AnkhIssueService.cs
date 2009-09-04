@@ -164,16 +164,33 @@ namespace Ankh.Services.IssueTracker
         /// <param name="issueId"></param>
         public void OpenIssue(string issueId)
         {
-            if (!string.IsNullOrEmpty(issueId))
+            if (string.IsNullOrEmpty(issueId))
+                throw new ArgumentNullException("issueId");
+
+            IssueRepository repository = CurrentIssueRepository;
+            if (repository != null)
             {
-                IssueRepository repository = CurrentIssueRepository;
-                if (repository != null)
+                try
                 {
-                    try
+                    repository.NavigateTo(issueId);
+                }
+                catch { } // connector code
+            }
+            else
+            {
+                IProjectCommitSettings projectSettings = GetService<IProjectCommitSettings>();
+                if (projectSettings != null && !string.IsNullOrEmpty(projectSettings.RawIssueTrackerUri))
+                {
+                    IAnkhWebBrowser web = GetService<IAnkhWebBrowser>();
+
+                    Uri uri;
+                    issueId = Uri.EscapeDataString(issueId);
+
+                    if (Uri.TryCreate(projectSettings.RawIssueTrackerUri.Replace("%BUGID%", issueId), UriKind.Absolute, out uri))
                     {
-                        repository.NavigateTo(issueId);
+                        if (!uri.IsFile && !uri.IsUnc)
+                            web.Navigate(uri);
                     }
-                    catch { } // connector code
                 }
             }
         }
