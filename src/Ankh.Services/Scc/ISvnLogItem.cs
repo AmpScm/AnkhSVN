@@ -27,7 +27,7 @@ namespace Ankh.Scc
         DateTime CommitDate { get; }
         string Author { get; }
         string LogMessage { get; }
-        IEnumerable<string> Issues { get; }
+        IEnumerable<Ankh.VS.IssueMarker> Issues { get; }
         long Revision { get; }
         int Index { get; }
         SvnChangeItemCollection ChangedPaths { get; }

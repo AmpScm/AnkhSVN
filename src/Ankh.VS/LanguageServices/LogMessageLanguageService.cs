@@ -95,13 +95,7 @@ namespace Ankh.VS.LanguageServices
             {
             }
 
-            IProjectCommitSettings _projectCommitSettings;
             IAnkhIssueService _issueService;
-
-            IProjectCommitSettings CommitSettings
-            {
-                get { return _projectCommitSettings ?? (_projectCommitSettings = GetService<IProjectCommitSettings>()); }
-            }
 
             IAnkhIssueService IssueService
             {
@@ -169,7 +163,7 @@ namespace Ankh.VS.LanguageServices
                                 }
                                 else
                                 {
-                                    _issueIds = CommitSettings.GetIssues(_line);
+                                    _issueIds = new IssueMarker[0];
                                 }
                                 _mover = _issueIds.GetEnumerator();
                                 if (_mover.MoveNext())

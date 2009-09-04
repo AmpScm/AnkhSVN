@@ -27,14 +27,12 @@ namespace Ankh.UI.PendingChanges.Commands
             else if (e.Command == AnkhCommand.LogOpenIssue)
             {
                 ISvnLogItem item = EnumTools.GetSingle(e.Selection.GetSelection<ISvnLogItem>());
-                string issue;
-
                 if (item == null)
                     e.Enabled = false;
-                else if (null == (issue = EnumTools.GetSingle(item.Issues)))
+                else if (EnumTools.IsEmpty(item.Issues))
                     e.Enabled = false;
+                }
             }
-        }
 
         public void OnExecute(CommandEventArgs e)
         {
@@ -44,11 +42,28 @@ namespace Ankh.UI.PendingChanges.Commands
                 if (selectedLog == null)
                     return;
 
-                string issue = EnumTools.GetSingle(selectedLog.Issues);
-
                 IAnkhIssueService iService = e.Context.GetService<IAnkhIssueService>();
-                if (!string.IsNullOrEmpty(issue) && iService != null)
-                    iService.OpenIssue(issue);
+                if (iService != null)
+                {
+                    string issueid = null;
+                    IEnumerable<IssueMarker> issues = selectedLog.Issues;
+                    if (!EnumTools.IsEmpty<IssueMarker>(issues))
+                    {
+                        using (Ankh.UI.IssueTracker.IssueSelector dlg = new Ankh.UI.IssueTracker.IssueSelector())
+                        {
+                            dlg.Context = e.Context;
+                            dlg.LoadIssues(issues);
+                            if (!dlg.IsSingleIssue(out issueid))
+                            {
+                                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                                {
+                                    issueid = dlg.SelectedIssue;
+                                }
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(issueid)) { iService.OpenIssue(issueid); }
+                }
             }
             // PcLogEditorOpenIssue execution is handled via LogViewFilter in LogMessageEditor
         }
