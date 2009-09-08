@@ -55,7 +55,7 @@ namespace Ankh.UI.PendingChanges.Commands
                             dlg.LoadIssues(issues);
                             if (!dlg.IsSingleIssue(out issueid))
                             {
-                                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                                if (dlg.ShowDialog(e.Context) == System.Windows.Forms.DialogResult.OK)
                                 {
                                     issueid = dlg.SelectedIssue;
                                 }
