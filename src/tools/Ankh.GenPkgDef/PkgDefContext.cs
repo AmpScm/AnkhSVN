@@ -44,7 +44,7 @@ namespace Ankh.GenPkgDef
 
         public override string InprocServerPath
         {
-            get { return "%windir%\\system32\\mscoree.dll"; }
+            get { return "mscoree.dll"; }
         }
 
         StringWriter _sw;
@@ -89,7 +89,7 @@ namespace Ankh.GenPkgDef
 
         static string EscapeString(string value)
         {
-            return (value ?? "").Replace("\\", "\\\\").Replace("\"", "\\\\");
+            return value;
         }
 
         internal string FormatValue(object value)
@@ -102,6 +102,22 @@ namespace Ankh.GenPkgDef
                 return FormatValue(value.ToString());
         }
 
+        bool _lastWasText;
+        void WriteLine(string format, string[] args)
+        {
+            _lastWasText = true;
+            Tw.WriteLine(string.Format(format, args));
+        }
+
+        void WriteLine()
+        {
+            if (!_lastWasText)
+                return;
+
+            Tw.WriteLine();
+            _lastWasText = false;
+        }
+        
         class PkgDefKey : RegistrationAttribute.Key
         {
             readonly PkgDefContext _context;
@@ -119,16 +135,23 @@ namespace Ankh.GenPkgDef
 
                 _context = context;
                 _name = name;
-                context._writer.WriteLine(string.Format("[$RootKey$\\{0}]", name));
+                WriteLine();
+                WriteLine("[$RootKey$\\{0}]", name);
             }
 
-            internal TextWriter Tw
+            void WriteLine(string format, params string[] args)
             {
-                get { return _context.Tw; }
+                _context.WriteLine(format, args);
+            }
+
+            void WriteLine()
+            {
+                _context.WriteLine();
             }
 
             public override void Close()
             {
+                _context.WriteLine();
                 if(_parent != null)
                     _parent._open = null;
             }
@@ -147,7 +170,7 @@ namespace Ankh.GenPkgDef
                 if (_wasOpen)
                     throw new InvalidOperationException();
                 string name = string.IsNullOrEmpty(valueName) ? "@" : FormatValue(valueName);
-                Tw.WriteLine(string.Format("{0}={1}", name, FormatValue(value)));
+                WriteLine("{0}={1}", name, FormatValue(value));
             }
 
             private string FormatValue(object value)
@@ -155,7 +178,5 @@ namespace Ankh.GenPkgDef
                 return _context.FormatValue(value);
             }
         }
-
-        
     }
 }
