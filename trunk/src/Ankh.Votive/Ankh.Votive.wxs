@@ -104,8 +104,9 @@
       <ComponentGroupRef Id="Ankh.Package"/>
       <ComponentGroupRef Id="Ankh.Trigger"/>
       <ComponentRef Id="C_CONTRIBUTORS"/>
-      <ComponentRef Id="C_LICENSE"/>
-      <ComponentRef Id="C_NOTICE"/>
+      <ComponentRef Id="C_LICENSE" />
+      <ComponentRef Id="C_NOTICE" />
+      <ComponentRef Id="C_PKGDEF" />
       <ComponentGroupRef Id="SharpSvn_LICENSES"/>
       <MergeRef Id="CRT"/>
       <Feature Id="RegVS8" Title="Register in Microsoft Visual Studio 2005" 
