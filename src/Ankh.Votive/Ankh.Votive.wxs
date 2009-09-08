@@ -62,6 +62,9 @@
             <Component Id="C_NOTICE" Guid="768C16AE-3159-4eb0-8976-0FCC3AA020AA">
               <File Id="CF_NOTICE.txt" Name="NOTICE.txt" />
             </Component>
+            <Component Id="C_PKGDEF" Guid="E1ABF0EB-ADDA-4158-95A0-46B3B977768E">
+              <File Id="Ankh.pkgdef" Name="Ankh.Pkgdef" Vital="yes" />
+            </Component>
             <!-- All assemblies are placed here -->
           </Directory>
         </Directory>
