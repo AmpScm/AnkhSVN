@@ -183,6 +183,8 @@
       ">
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
     </CreateProperty>
+    <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll Ankh.Trigger\bin\$(Configuration)\Ankh.Trigger.dll" />
+                                    
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
