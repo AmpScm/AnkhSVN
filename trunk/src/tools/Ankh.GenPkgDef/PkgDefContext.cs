@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Ankh.GenPkgDef
 {
-    class PkgDefContext : RegistrationAttribute.RegistrationContext, IDisposable
+    partial class PkgDefContext : RegistrationAttribute.RegistrationContext, IDisposable
     {
         readonly TextWriter _writer;
         readonly Type _componentType;
@@ -71,11 +71,6 @@ namespace Ankh.GenPkgDef
         public override void RemoveValue(string keyname, string valuename)
         {
             throw new NotImplementedException();
-        }
-
-        public override string RootFolder
-        {
-            get { throw new NotImplementedException(); }
         }
 
         #region IDisposable Members
