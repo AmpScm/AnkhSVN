@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7272</title>
+          AnkhSVN-Daily Update - 2.1.7278</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,32 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2578/AnkhSvn-Daily-2.1.7272.219.msi">AnkhSVN 2.1.7272</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2586/AnkhSvn-Daily-2.1.7278.220.msi">AnkhSVN 2.1.7278</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7272">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7278">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-09-08</td></tr>
+<tr><td> </td><td class="r"><a id="7276" href="http://ankhsvn.net/rev/?r=7276">
+            [r7276]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/tools/Ankh.GenPkgDef:</strong> PkgDefContext.VS2005.cs, Ankh.GenPkgDef.csproj, PkgDefContext.cs, PkgDefContext.VS2008.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix yet another difference between the VS2005 and VS2008 SDK.</td></tr>
+<tr><td> </td><td class="r"><a id="7275" href="http://ankhsvn.net/rev/?r=7275">
+            [r7275]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> tools/Ankh.GenPkgDef/Properties, Ankh.Votive/Ankh.Votive.wxs, tools/Ankh.GenPkgDef, AnkhSvn.2008.sln, Ankh.Votive.wixproj, tools/Ankh.GenPkgDef/Ankh.GenPkgDef.csproj, tools/Ankh.GenPkgDef/PkgDefContext.cs, tools/Ankh.GenPkgDef/Program.cs, tools/Ankh.GenPkgDef/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a very minimalistic pkgdef generator and use this to generate an
+Ankh.pkgdef that is now distributed with AnkhSVN.
+(We can't use the VS2008/VS2010 tools for this, because our releas binaries
+ are compiled against the VS2005 SDK)<br>
+Isolated shell developers can use this file to register AnkhSVN in their
+shell. (Most likely by copying all our files in their common7 folder</td></tr>
 <tr class="d"><td colspan="4">2009-09-05</td></tr>
 <tr><td> </td><td class="r"><a id="7266" href="http://ankhsvn.net/rev/?r=7266">
             [r7266]
@@ -144,34 +156,6 @@ delete issuetracker svn property if its value is null</td></tr>
             [r7174]
           </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.ExtensionPoints/IssueTracker/IssueRepositoryConfigurationPageBase.cs, Ankh.Services/IssueTracker/IIssueTrackerSettings.cs, Ankh.ExtensionPoints/IssueTracker/IssueRepositorySettings.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/IssueTracker/ConnectorWizardPage.cs, Ankh.ExtensionPoints/IssueTracker/IssueRepositoryConfigurationPage.cs, Ankh.UI/IssueTracker/IssueTrackerConfigWizard.cs, Ankh.UI/IssueTracker/ConnectorWizard.cs, Ankh/Services/IssueTracker/IssueRepositoryConnectorProxy.cs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.csproj, Ankh.ExtensionPoints/IssueTracker/IssueRepositoryBase.cs, Ankh/Services/IssueTracker/AnkhIssueService.cs, Ankh/Services/IssueTracker/IssueRepositorySettingsProxy.cs, Ankh.UI/IssueTracker/IssueTrackerSetupCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">refactored Issue Tracker base classes to remove "Base" suffix,
 set minimum Ankh.ExtensionPoints.dll binding version</td></tr>
-<tr><td> </td><td class="r"><a id="7173" href="http://ankhsvn.net/rev/?r=7173">
-            [r7173]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints:</strong> Ankh.ExtensionReg.wxi</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">set minimum Ankh.ExtensionPoints.dll binding version</td></tr>
-<tr><td> </td><td class="r"><a id="7171" href="http://ankhsvn.net/rev/?r=7171">
-            [r7171]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/IssueTracker/IIssueTrackerSettings.cs, Ankh.UI/IssueTracker/ConnectorWizardPage.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/IssueTracker/ConnectorWizard.cs, Ankh.UI/IssueTracker/IssueTrackerConfigWizard.cs, Ankh/Services/IssueTracker/IssueRepositoryConnectorProxy.cs, Ankh/Services/IssueTracker/IssueRepositorySettings.cs, Ankh/Services/IssueTracker/AnkhIssueService.cs, Ankh/Services/IssueTracker/IssueRepositorySettingsProxy.cs, Ankh.UI/IssueTracker/IssueTrackerSetupCommand.cs, Ankh.UI/IssueTracker/IssueTrackerWizard.cs, Ankh.UI/PendingChanges/PendingIssuesPage.cs, Ankh/Services/SolutionSettings.IssueRepository.cs, Ankh.Services/IssueTracker/IAnkhIssueService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use abstract base classes for IssueTracker integration</td></tr>
-<tr><td> </td><td class="r"><a id="7170" href="http://ankhsvn.net/rev/?r=7170">
-            [r7170]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> IIssueRepositoryConfigurationPage.cs, IIssueRepositoryConnector.cs, IIssueRepository.cs, IIssueRepositorySettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">delete interfaces</td></tr>
-<tr><td> </td><td class="r"><a id="7169" href="http://ankhsvn.net/rev/?r=7169">
-            [r7169]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints:</strong> IssueTracker/IssueRepositoryConfigurationPageBase.cs, IssueTracker/IssueRepositoryConnectorBase.cs, Ankh.ExtensionPoints.csproj, IssueTracker/IssueRepositoryBase.cs, IssueTracker/IssueRepositorySettingsBase.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">convert interfaces to abstract base classes in Ankh.ExtensionPoints</td></tr>
-<tr><td> </td><td class="r"><a id="7168" href="http://ankhsvn.net/rev/?r=7168">
-            [r7168]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Ids/AnkhSccPropertyNames.cs, Ankh.Services/IssueTracker/IIssueTrackerSettings.cs, Ankh.UI/IssueTracker/ConnectorWizard.cs, Ankh.UI/IssueTracker/IssueTrackerConfigWizard.cs, Ankh/Services/IssueTracker/IssueRepositorySettings.cs, Ankh/Services/IssueTracker/AnkhIssueService.cs, Ankh.UI/IssueTracker/IssueTrackerSetupCommand.cs, Ankh.UI/Ankh.UI.csproj, Ankh.UI/IssueTracker/IssueTrackerWizard.cs, Ankh.UI/PendingChanges/PendingCommitsPage.cs, Ankh.Package/AnkhSvnPackage.SolutionProperties.cs, Ankh/Services/SolutionSettings.IssueRepository.cs, Ankh.Services/IssueTracker/IAnkhIssueService.cs, Ankh.UI/IssueTracker/IssueTrackerConfigWizardDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">[WIP] issue repository settings are persisted as SVN properties on "Project Root"</td></tr>
-<tr><td> </td><td class="r"><a id="7167" href="http://ankhsvn.net/rev/?r=7167">
-            [r7167]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> StatusCache/FileStatusCache.ShellMonitor.cs, StatusCache/FileStatusCache.cs, Ankh.Scc.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Register for shell change notifications and use them to flush the cache. This
-should give us more information on what a user is doing with TortoiseSVN.
-(TortoiseSVN has to send this kind of notifications to make Windows Explorer
-refresh its views).</td></tr>
-<tr><td> </td><td class="r"><a id="7166" href="http://ankhsvn.net/rev/?r=7166">
-            [r7166]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/SccManagement:</strong> MultiWorkingCopyCommit.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update text in multi-commit dialog to make more sense.</td></tr>
-<tr class="d"><td colspan="4">2009-08-10</td></tr>
-<tr><td> </td><td class="r"><a id="7159" href="http://ankhsvn.net/rev/?r=7159">
-            [r7159]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> SolutionSettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">move the "directory null check" up</td></tr>
 
 </table>
 <!--/Recent changes-->
