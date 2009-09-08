@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <AnkhPkgDefContextFile Condition="'$(VsSdkVersion)' == '8.0'">PkgDefContext.VS2005.cs</AnkhPkgDefContextFile>
+    <AnkhPkgDefContextFile Condition="'$(VsSdkVersion)' != '8.0'">PkgDefContext.VS2008.cs</AnkhPkgDefContextFile>
+    <AnkhOtherPkgDefContextFile Condition="'$(VsSdkVersion)' == '8.0'">PkgDefContext.VS2008.cs</AnkhOtherPkgDefContextFile>
+    <AnkhOtherPkgDefContextFile Condition="'$(VsSdkVersion)' != '8.0'">PkgDefContext.VS2005.cs</AnkhOtherPkgDefContextFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -38,10 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PkgDefContext.cs" />
+    <Compile Include="$(AnkhPkgDefContextFile)">
+      <DependentUpon>PkgDefContext.cs</DependentUpon>
+    </Compile>
+    <None Include="$(AnkhOtherPkgDefContextFile)">
+      <DependentUpon>PkgDefContext.cs</DependentUpon>
+    </None>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
