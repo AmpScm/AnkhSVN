@@ -217,16 +217,14 @@ namespace Ankh.UI
 
 		private void linkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
 		{
-			Uri uri; // Just some minor precautions
-			if (Uri.TryCreate((string)e.Link.LinkData, UriKind.Absolute, out uri) && !uri.IsFile && !uri.IsUnc)
+			try
 			{
-				try
-				{
+				Uri uri = new Uri((string)e.Link.LinkData);
+				if(!uri.IsFile && !uri.IsUnc)
 					System.Diagnostics.Process.Start((string)e.Link.LinkData);
-				}
-				catch
-				{ }
 			}
+			catch
+			{ }
 		}
 	}
 }
