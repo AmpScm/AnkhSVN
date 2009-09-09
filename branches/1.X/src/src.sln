@@ -64,7 +64,6 @@ Global
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.ActiveCfg = Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Debug.Build.0 = Debug|.NET
 		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Release.ActiveCfg = Release|.NET
-		{1882FE23-6EE3-46AF-82B2-929E371E6218}.Release.Build.0 = Release|.NET
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9}.(svnlib) Debug.ActiveCfg = (svnlib) Debug|.NET
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9}.(svnlib) Debug.Build.0 = (svnlib) Debug|.NET
 		{3A8DF134-05F1-4357-9682-AB14CDDA48A9}.(svnlib) Release.ActiveCfg = (svnlib) Release|.NET
@@ -80,7 +79,6 @@ Global
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug.ActiveCfg = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Debug.Build.0 = Debug|Win32
 		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.ActiveCfg = Release|Win32
-		{05E011D8-54B5-4558-80BF-A8AD64DDAC97}.Release.Build.0 = Release|Win32
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Debug.Build.0 = Debug|.NET
 		{A3248E1E-8272-4227-AF02-BB86040FBED9}.(svnlib) Release.ActiveCfg = Release|.NET
@@ -104,7 +102,6 @@ Global
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.ActiveCfg = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Debug.Build.0 = Debug|.NET
 		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.ActiveCfg = Release|.NET
-		{D07135AF-9397-4EAB-BD75-2410DC1F6F4E}.Release.Build.0 = Release|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.(svnlib) Release.ActiveCfg = Release|.NET
@@ -112,7 +109,6 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
-		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.Build.0 = Release|.NET
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.ActiveCfg = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.ActiveCfg = Release
@@ -120,7 +116,6 @@ Global
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.ActiveCfg = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.Build.0 = Debug
 		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.Build.0 = Release
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.ActiveCfg = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.Build.0 = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Release.ActiveCfg = Release|Win32
@@ -133,8 +128,8 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		ThisSolutionNotes = 
 		DPBuild = 5
+		ThisSolutionNotes = 
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
