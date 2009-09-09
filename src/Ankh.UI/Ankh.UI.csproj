@@ -633,6 +633,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "UpdateAvailableDialog.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "UpdateAvailableDialog.resx"
+                    DependentUpon = "UpdateAvailableDialog.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "UpdateDialog.cs"
                     SubType = "Form"
                     BuildAction = "Compile"
