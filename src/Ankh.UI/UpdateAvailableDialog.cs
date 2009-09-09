@@ -66,11 +66,11 @@ namespace Ankh.UI
 			this.linkLabel = new System.Windows.Forms.LinkLabel();
 			this.sameCheck = new System.Windows.Forms.CheckBox();
 			this.versionPanel = new System.Windows.Forms.Panel();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.newVerLabel = new System.Windows.Forms.Label();
 			this.curVerLabel = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
 			this.versionPanel.SuspendLayout();
 			this.panel1.SuspendLayout();
@@ -110,6 +110,7 @@ namespace Ankh.UI
 			this.linkLabel.TabIndex = 2;
 			this.linkLabel.TabStop = true;
 			this.linkLabel.Text = "linkLabel";
+			this.linkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_LinkClicked);
 			// 
 			// sameCheck
 			// 
@@ -133,6 +134,22 @@ namespace Ankh.UI
 			this.versionPanel.Name = "versionPanel";
 			this.versionPanel.Size = new System.Drawing.Size(384, 45);
 			this.versionPanel.TabIndex = 4;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(-3, 23);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(88, 13);
+			this.label2.TabIndex = 8;
+			this.label2.Text = "Updated version:";
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(-3, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(91, 13);
+			this.label1.TabIndex = 7;
+			this.label1.Text = "Current version:";
 			// 
 			// newVerLabel
 			// 
@@ -163,22 +180,6 @@ namespace Ankh.UI
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(411, 199);
 			this.panel1.TabIndex = 7;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(-3, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(91, 13);
-			this.label1.TabIndex = 7;
-			this.label1.Text = "Current version:";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(-3, 23);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(88, 13);
-			this.label2.TabIndex = 8;
-			this.label2.Text = "Updated version:";
 			// 
 			// button1
 			// 
@@ -213,5 +214,19 @@ namespace Ankh.UI
 
 		}
 		#endregion
+
+		private void linkLabel_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+		{
+			Uri uri; // Just some minor precautions
+			if (Uri.TryCreate((string)e.Link.LinkData, UriKind.Absolute, out uri) && !uri.IsFile && !uri.IsUnc)
+			{
+				try
+				{
+					System.Diagnostics.Process.Start((string)e.Link.LinkData);
+				}
+				catch
+				{ }
+			}
+		}
 	}
 }
