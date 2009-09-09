@@ -91,7 +91,7 @@ namespace Ankh
 
 		static void PerformCheckInternal()
 		{
-			//Thread.Sleep(new TimeSpan(0,0,0,20));
+			Thread.Sleep(new TimeSpan(0,0,0,20));
 			int interval = 24 * 7; // 1 week
 			using (RegistryKey rk = OpenUpdateCheck())
 			{
