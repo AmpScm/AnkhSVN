@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using Microsoft.Win32;
 
@@ -14,10 +15,8 @@ namespace Ankh
 	/// </summary>
 	public class UpdateChecker
 	{
-		IContext _context;
-		public UpdateChecker(IContext context)
+		private UpdateChecker()
 		{
-			_context = context;
 		}
 
 
@@ -66,8 +65,8 @@ namespace Ankh
 		 */
 
 
-		Version _currentVersion;
-		Version GetCurrentVersion()
+		static Version _currentVersion;
+		static Version GetCurrentVersion()
 		{
 			if (_currentVersion != null)
 				return _currentVersion;
@@ -75,25 +74,24 @@ namespace Ankh
 			return _currentVersion = typeof(UpdateChecker).Assembly.GetName().Version;
 		}
 
-		RegistryKey OpenUpdateCheck()
+		static RegistryKey OpenUpdateCheck()
 		{
 			return Registry.CurrentUser.CreateSubKey("SOFTWARE\\AnkhSVN\\UpdateCheck");
 		}
 
-		void PerformCheck()
+		static Thread t;
+		static void PerformCheck()
 		{
-			AsyncCallback cb = new AsyncCallback(UpdateDone);
-			Action a = new Action(PerformCheckInternal);
-			a.BeginInvoke(cb, null);
+			if(t != null)
+				return;
+
+			t = new Thread(new ThreadStart(PerformCheckInternal));
+			t.Start();
 		}
 
-		void UpdateDone(IAsyncResult result)
+		static void PerformCheckInternal()
 		{
-		}
-
-		public delegate void Action();
-		private void PerformCheckInternal()
-		{
+			//Thread.Sleep(new TimeSpan(0,0,0,20));
 			int interval = 24 * 7; // 1 week
 			using (RegistryKey rk = OpenUpdateCheck())
 			{
@@ -186,7 +184,7 @@ namespace Ankh
 			return _isDevVersion;
 		}
 		delegate void ShowUpdateHandler(string title, string header, string description, string url, string urltext, string version, string newVersion, string tag);
-		private void ShowUpdate(string title, string header, string description, string url, string urltext, string version, string newVersion, string tag)
+		static void ShowUpdate(string title, string header, string description, string url, string urltext, string version, string newVersion, string tag)
 		{
 			using (Ankh.UI.UpdateAvailableDialog uad = new UI.UpdateAvailableDialog())
 			{
@@ -232,7 +230,7 @@ namespace Ankh
 			return second;
 		}
 
-		private void OnResponse(IAsyncResult ar)
+		static void OnResponse(IAsyncResult ar)
 		{
 			bool failed = true;
 			string tag = null;
@@ -349,17 +347,20 @@ namespace Ankh
 					}
 				}
 			}
+			t = null;
 		}
 
 		
-
+		static IContext _context;
 		static bool _checkedOnce;
-		public void MaybePerformUpdateCheck()
+		public static void MaybePerformUpdateCheck(IContext context)
 		{
 			if (_checkedOnce)
 				return;
 
 			_checkedOnce = true;
+
+			_context = context;
 
 			using (RegistryKey rk = OpenUpdateCheck())
 			{

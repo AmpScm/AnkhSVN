@@ -108,8 +108,7 @@ namespace Ankh
                 if ( this.context.DTE.Solution.IsOpen )
                     this.context.EnableAnkhForLoadedSolution();
   
-				UpdateChecker uc = new UpdateChecker(context);
-				uc.MaybePerformUpdateCheck();
+				UpdateChecker.MaybePerformUpdateCheck(context);
                 
             }
             catch( Exception ex )
