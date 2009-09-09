@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests", "Utils.Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ankh.Tests", "Ankh.Tests\Ankh.Tests.csproj", "{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "AnkhSetup", "Ankh\AnkhSetup\AnkhSetup.vdproj", "{58D0A5F8-5173-4422-B5E1-EE89CE567759}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InstallLib", "InstallLib\InstallLib.vcproj", "{2A753B40-AB06-4D27-A093-D1D351BC9522}"
 EndProject
 Global
@@ -109,13 +107,6 @@ Global
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.ActiveCfg = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Debug.Build.0 = Debug|.NET
 		{1686CB0A-A3C2-4E39-9543-01B7D9CCD747}.Release.ActiveCfg = Release|.NET
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Debug.Build.0 = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.ActiveCfg = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.(svnlib) Release.Build.0 = Release
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.ActiveCfg = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Debug.Build.0 = Debug
-		{58D0A5F8-5173-4422-B5E1-EE89CE567759}.Release.ActiveCfg = Release
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.ActiveCfg = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Debug.Build.0 = Debug|Win32
 		{2A753B40-AB06-4D27-A093-D1D351BC9522}.(svnlib) Release.ActiveCfg = Release|Win32
@@ -128,8 +119,8 @@ Global
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		DPBuild = 5
 		ThisSolutionNotes = 
+		DPBuild = 5
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
