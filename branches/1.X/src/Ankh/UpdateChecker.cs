@@ -169,6 +169,9 @@ namespace Ankh
 		static bool _hasDevVersionValue;
 		static private bool IsDevVersion()
 		{
+			// Figure out why it always returns true, for now just return false, there won't be a lot of dev versions
+			return false;
+
 			if (_hasDevVersionValue)
 				return _isDevVersion;
 
