@@ -23,23 +23,27 @@ DOTNETVER = "1.0"
 ANKHSVN_SRC_URL = "http://ankhsvn.open.collab.net/svn/ankhsvn/branches/1.X"
 
 # Version numbers to put in the filename
-MAJOR, MINOR, PATCH, LABEL = 1, 0, 4, "Release"
+MAJOR, MINOR, PATCH, LABEL = 1, 0, 6, "Release"
 
 # The URL of the Subversion version
-SUBVERSION = "http://subversion.tigris.org/downloads/subversion-1.5.2.tar.gz"
-SUBVERSION_VERSION = "1.5.2"
+SUBVERSION = "http://subversion.tigris.org/downloads/subversion-1.6.5.tar.gz"
+SUBVERSION_VERSION = "1.6.5"
 
 # The URL of neon
-NEON = "http://www.webdav.org/neon/neon-0.28.3.tar.gz"
-NEON_VERSION = "0.28.3"
+NEON = "http://www.webdav.org/neon/neon-0.28.5.tar.gz"
+NEON_VERSION = "0.28.5"
 
 # Berkeley DB
 BDB = "ftp://ftp.sleepycat.com/releases/db-4.4.20.tar.gz"
 BDB_VERSION = "4.4.20"
 
 # OpenSSL
-OPENSSL = "http://www.openssl.org/source/openssl-0.9.8g.tar.gz"
-OPENSSL_VERSION = "0.9.8-g"
+OPENSSL = "http://www.openssl.org/source/openssl-0.9.8k.tar.gz"
+OPENSSL_VERSION = "0.9.8-k"
+
+# SQLite
+SQLITE = "http://www.sqlite.org/sqlite-amalgamation-3.6.17.tar.gz"
+SQLITE_VERSION = "3.6.17"
 
 # Whether to build openssl as a static library
 # Must be an environment variable so that neon.mak picks up on it
@@ -52,12 +56,12 @@ ZLIB = "http://www.zlib.net/zlib-1.2.3.tar.gz"
 ZLIB_VERSION = "1.2.3"
 
 # APR
-APR = "http://archive.apache.org/dist/apr/apr-1.3.3-win32-src.zip"
-APR_VERSION = "1.3.3"
+APR = "http://archive.apache.org/dist/apr/apr-1.3.8-win32-src.zip"
+APR_VERSION = "1.3.8"
 
 # APR-UTIL
-APR_UTIL = "http://archive.apache.org/dist/apr/apr-util-1.3.4-win32-src.zip"
-APR_UTIL_VERSION = "1.3.4"
+APR_UTIL = "http://archive.apache.org/dist/apr/apr-util-1.3.9-win32-src.zip"
+APR_UTIL_VERSION = "1.3.9"
 
 # The build directory
 BUILDDIR = os.path.join(os.path.dirname(__file__), "build")
@@ -173,7 +177,8 @@ def build_subversion():
     svn_gen_make_call = ["python", "gen-make.py", "-t", "vcproj", "--disable-shared", "--vsnet-version", VSNETVER,
                          "--with-berkeley-db=%s" % os.path.join(subversion_source_root, "db4-win32"),
                          "--with-openssl=%s" % os.path.join(subversion_source_root, "openssl"),
-                         "--with-zlib=%s" % os.path.join(subversion_source_root, "zlib")]
+                         "--with-zlib=%s" % os.path.join(subversion_source_root, "zlib"),
+                         "--with-sqlite=%s" % os.path.join(subversion_source_root, "sqlite")]
     svn_build_call = ["devenv", subversion_sln_file, "/Build", CONFIG, "/project", "svn"]
     svn_debug_call = ["devenv", subversion_sln_file, "/Build", "Debug", "/project", "svn"]
     svn_release_call = ["devenv", subversion_sln_file, "/Build", "Release", "/project", "svn"]
@@ -213,6 +218,8 @@ def build_subversion():
     if VERBOSE:
         print "    Running gen-make.py"
     
+    download_and_extract(SQLITE, "sqlite")
+
     if call(svn_gen_make_call, cwd=subversion_source_root, stdout=tempfile, stderr=tempfile, env=os.environ, shell=True):
         print "Problem building Subversion.  Details can be found in %s" % log_file
     
