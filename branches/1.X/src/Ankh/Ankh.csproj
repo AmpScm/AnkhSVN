@@ -50,7 +50,7 @@
                     IncrementalBuild = "true"
                     Optimize = "true"
                     OutputPath = "bin\Release\"
-                    RegisterForComInterop = "true"
+                    RegisterForComInterop = "false"
                     RemoveIntegerChecks = "false"
                     TreatWarningsAsErrors = "false"
                     WarningLevel = "4"
