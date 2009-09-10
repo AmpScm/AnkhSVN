@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7280</title>
+          AnkhSVN-Daily Update - 2.1.7299</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2587/AnkhSvn-Daily-2.1.7280.221.msi">AnkhSVN 2.1.7280</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2592/AnkhSvn-Daily-2.1.7299.222.msi">AnkhSVN 2.1.7299</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7280">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7299">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -135,27 +135,6 @@ is not available.</td></tr>
 The Type.GetTypeFromCLSID() call previously used by the issue tracker code
 assumed the .Net class is already loaded and/or registered with regasm. Which is
 not the case for unused packages.</td></tr>
-<tr class="d"><td colspan="4">2009-08-12</td></tr>
-<tr><td> </td><td class="r"><a id="7182" href="http://ankhsvn.net/rev/?r=7182">
-            [r7182]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/StatusCache:</strong> FileStatusCache.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Using new support in SharpSvn, disable the access denied retry loop in the status
-cache updater.</td></tr>
-<tr><td> </td><td class="r"><a id="7181" href="http://ankhsvn.net/rev/?r=7181">
-            [r7181]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade to latest SharpSvn, to take advantage of the new SvnFsOperationRetryOverride class.</td></tr>
-<tr><td> </td><td class="r"><a id="7179" href="http://ankhsvn.net/rev/?r=7179">
-            [r7179]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/Ankh.UI.csproj, Ankh.Ids/Ankh.Ids.csproj, Ankh.Migrate/Ankh.Migrate.csproj, Ankh.VS/Ankh.VS.csproj, Utils/Utils.csproj, Ankh/Ankh.csproj, Ankh.Trigger/Ankh.Trigger.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Set ToolsVersion attribute in most project files back to VS2008 to hide
-several warnings.</td></tr>
-<tr><td> </td><td class="r"><a id="7177" href="http://ankhsvn.net/rev/?r=7177">
-            [r7177]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/IssueTracker:</strong> IssueTrackerSetupCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">enforce connectorname, and repository url settings,
-delete issuetracker svn property if its value is null</td></tr>
-<tr class="d"><td colspan="4">2009-08-11</td></tr>
-<tr><td> </td><td class="r"><a id="7174" href="http://ankhsvn.net/rev/?r=7174">
-            [r7174]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src:</strong> Ankh.ExtensionPoints/IssueTracker/IssueRepositoryConfigurationPageBase.cs, Ankh.Services/IssueTracker/IIssueTrackerSettings.cs, Ankh.ExtensionPoints/IssueTracker/IssueRepositorySettings.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.UI/IssueTracker/ConnectorWizardPage.cs, Ankh.ExtensionPoints/IssueTracker/IssueRepositoryConfigurationPage.cs, Ankh.UI/IssueTracker/IssueTrackerConfigWizard.cs, Ankh.UI/IssueTracker/ConnectorWizard.cs, Ankh/Services/IssueTracker/IssueRepositoryConnectorProxy.cs, Ankh.ExtensionPoints/Ankh.ExtensionPoints.csproj, Ankh.ExtensionPoints/IssueTracker/IssueRepositoryBase.cs, Ankh/Services/IssueTracker/AnkhIssueService.cs, Ankh/Services/IssueTracker/IssueRepositorySettingsProxy.cs, Ankh.UI/IssueTracker/IssueTrackerSetupCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">refactored Issue Tracker base classes to remove "Base" suffix,
-set minimum Ankh.ExtensionPoints.dll binding version</td></tr>
 
 </table>
 <!--/Recent changes-->
