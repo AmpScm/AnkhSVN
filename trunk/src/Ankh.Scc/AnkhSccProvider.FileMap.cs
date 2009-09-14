@@ -221,13 +221,6 @@ namespace Ankh.Scc
             if (!IsActive)
                 return;
 
-            if (oldName != newName && string.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
-            {
-                // Block case-only rename
-                ok = false;
-                return;
-            }
-
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
                 if (!svn.CouldAdd(newName, SvnNodeKind.File))
@@ -251,13 +244,6 @@ namespace Ankh.Scc
             //{
             //    // TODO: Is enlisted -> Ask user!
             //}
-
-            if (oldName != newName && string.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
-            {
-                // Block case-only rename
-                ok = false;
-                return;
-            }
 
             using (SvnSccContext svn = new SvnSccContext(Context))
             {
