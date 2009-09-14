@@ -115,10 +115,28 @@
                   name="DocumentAnnotate" defaultInvisible="true"
                   text="&amp;Annotate..." iconFile="PendingChanges/Annotate.png" />
             <Button id="Cmd_DocumentConflictEdit" name="DocumentConflictEdit" priority="0x3000" defaultInvisible="true"
-                  text="&amp;Edit Conflicts" iconFile="PendingChanges/EditConflict.png" />
+                  text="&amp;Edit Conflicts" iconFile="PendingChanges/EditConflict.png" />            
+          </Group>
+          <Group id="Grp_DocumentPending" priority="0x8000">
+            <Button id="Cmd_DocumentAddToPending" name="SvnAddToPending" priority="0x3000" defaultInvisible="true"
+              text="Add to &amp;Pending Changes"/>
+            <Button id="Cmd_DocumentRemoveFromPending" name="SvnRemoveFromPending" priority="0x3000" defaultInvisible="true"
+                    text="Remove from Pendin&amp;g Changes"/>
           </Group>
         </Menu>
       </Group>
+    </MenuRef>
+    <MenuRef id="guidSHLMainMenu:IDM_VS_CTXT_EZDOCWINTAB">
+      <Group id="Grp_MdiDocumentScc" priority="0xE110">
+        <ButtonRef id="Cmd_DocumentHistory" priority="0x2000" />
+        <ButtonRef id="Cmd_DocumentShowChanges" priority="0x2100" />
+        <ButtonRef id="Cmd_DocumentAnnotate" priority="0x3000" />
+        <ButtonRef id="Cmd_DocumentConflictEdit" priority="0x4000" />
+        <Menu id="Menu_MdiSccMenu" name="SvnMenu" text="Sub&amp;version" priority="0xFF00">
+          <GroupRef id="Grp_DocumentPending" priority="0xE111" />
+        </Menu>
+      </Group>
+      
     </MenuRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_VIEW_ORG_WINDOWS">
       <!-- View - The Group containing the Solution Explorer,.. -->

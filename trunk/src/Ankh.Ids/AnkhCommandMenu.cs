@@ -89,5 +89,6 @@ namespace Ankh
         RepositoryExplorerTbOpen,
 
         MoveToChangeList,
+        MdiSccMenu
     }
 }

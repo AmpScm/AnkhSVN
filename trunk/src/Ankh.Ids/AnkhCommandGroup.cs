@@ -181,5 +181,7 @@ namespace Ankh
         WceEdit,
 
         PendingChangesLogEditor3,
+        MdiDocumentScc,
+        DocumentPending,
     }
 }

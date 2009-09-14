@@ -288,5 +288,7 @@ namespace Ankh
         SolutionIssueTrackerSetup,
         PcLogEditorOpenIssue,
         LogOpenIssue,
+        DocumentAddToPending,
+        DocumentRemoveFromPending,
     }
 }
