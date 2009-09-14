@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7303</title>
+          AnkhSVN-Daily Update - 2.1.7310</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,37 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2596/AnkhSvn-Daily-2.1.7303.224.msi">AnkhSVN 2.1.7303</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2597/AnkhSvn-Daily-2.1.7310.225.msi">AnkhSVN 2.1.7310</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7303">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7310">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-09-14</td></tr>
+<tr><td> </td><td class="r"><a id="7310" href="http://ankhsvn.net/rev/?r=7310">
+            [r7310]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Package/Gui/AnkhSvn.xml, Ankh.Ids/AnkhCommandMenu.cs, Ankh.Ids/AnkhCommandGroup.cs, Ankh.Ids/AnkhCommand.cs, Ankh/Commands/ItemAddToPending.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add 'View History', 'Show Changes', 'Annotate' and 'Add to Pending Changes'
+to the context menu of the document tabs. Also add 'Add to Pending Changes'
+to the code window context menu.</td></tr>
+<tr><td> </td><td class="r"><a id="7308" href="http://ankhsvn.net/rev/?r=7308">
+            [r7308]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.FileMap.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix XML documentation</td></tr>
+<tr><td> </td><td class="r"><a id="7307" href="http://ankhsvn.net/rev/?r=7307">
+            [r7307]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.FileMap.cs, SvnSccContext.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert <a href="http://ankhsvn.net/rev/?r=7306">r7306</a>
+Fix the real bug that allows case-only renames in SvnSccContext.CouldAdd</td></tr>
+<tr class="d"><td colspan="4">2009-09-13</td></tr>
+<tr><td> </td><td class="r"><a id="7306" href="http://ankhsvn.net/rev/?r=7306">
+            [r7306]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.FileMap.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Block case-only renames. This avoids the broken behavior with left-behind .AnkhSVN.X.tmp files</td></tr>
 <tr class="d"><td colspan="4">2009-09-08</td></tr>
 <tr><td> </td><td class="r"><a id="7276" href="http://ankhsvn.net/rev/?r=7276">
             [r7276]
