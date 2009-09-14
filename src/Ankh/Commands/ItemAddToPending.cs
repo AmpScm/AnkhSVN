@@ -26,19 +26,34 @@ namespace Ankh.Commands
 {
     [Command(AnkhCommand.ItemAddToPending)]
     [Command(AnkhCommand.ItemRemoveFromPending)]
+    [Command(AnkhCommand.DocumentAddToPending)]
+    [Command(AnkhCommand.DocumentRemoveFromPending)]
     class ItemAddToPending : CommandBase
     {
+        IEnumerable<SvnItem> GetSelection(BaseCommandEventArgs e)
+        {
+            if (e.Command == AnkhCommand.DocumentAddToPending || e.Command == AnkhCommand.DocumentRemoveFromPending)
+            {
+                SvnItem i = e.Selection.ActiveDocumentItem;
+                if (i == null)
+                    return new SvnItem[0];
+                else
+                    return new SvnItem[] { i };
+            }
+            else
+                return e.Selection.GetSelectedSvnItems(false);
+        }
+
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
-            bool add = (e.Command == AnkhCommand.ItemAddToPending);
-            IPendingChangesManager pcm= null;
+            bool add;
+            IPendingChangesManager pcm = null;
 
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            add = (e.Command == AnkhCommand.ItemAddToPending) || (e.Command == AnkhCommand.DocumentAddToPending);
+
+            foreach (SvnItem i in GetSelection(e))
             {
-                if (i.InSolution)
-                    continue;
-
-                if (!PendingChange.IsPending(i))
+                if (i.InSolution || !PendingChange.IsPending(i))
                     continue;
 
                 if (pcm == null)
@@ -59,16 +74,16 @@ namespace Ankh.Commands
         {
             IFileStatusMonitor fsm = e.GetService<IFileStatusMonitor>();
 
-            foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+            foreach (SvnItem i in GetSelection(e))
             {
                 if (i.InSolution)
                     continue;
 
-                if (e.Command == AnkhCommand.ItemAddToPending)
+                if (e.Command == AnkhCommand.ItemAddToPending || e.Command == AnkhCommand.DocumentAddToPending)
                     fsm.ScheduleMonitor(i.FullPath);
                 else
                     fsm.StopMonitoring(i.FullPath);
-            }            
+            }
         }
     }
 }
