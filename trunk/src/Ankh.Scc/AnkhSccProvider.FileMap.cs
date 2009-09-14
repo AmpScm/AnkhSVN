@@ -74,7 +74,6 @@ namespace Ankh.Scc
         /// </summary>
         /// <param name="project">The project.</param>
         /// <param name="filename">The filename.</param>
-        /// <param name="forDelete">if set to <c>true</c> the file was deleted; if set to <c>false</c> the file was removed.</param>
         /// <param name="flags">The flags.</param>
         internal void OnProjectFileRemoved(IVsSccProject2 project, string filename, VSREMOVEFILEFLAGS flags)
         {
@@ -184,7 +183,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called when a directory is removed from a project
         /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
+        /// <param name="project">The SCC project.</param>
         /// <param name="directoryname">The directoryname.</param>
         /// <param name="flags">The flags.</param>
         internal void OnProjectDirectoryRemoved(IVsSccProject2 project, string directoryname, VSREMOVEDIRECTORYFLAGS flags)
@@ -206,7 +205,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called just before a file in a project is renamed
         /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
+        /// <param name="project">The SCC project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
@@ -261,7 +260,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called when a file in a project is renamed
         /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
+        /// <param name="project">The SCC project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
@@ -333,7 +332,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called just before a directory in a project is renamed
         /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
+        /// <param name="project">The SCC project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
@@ -358,7 +357,7 @@ namespace Ankh.Scc
         /// <summary>
         /// Called when a directory in a project is renamed
         /// </summary>
-        /// <param name="sccProject">The SCC project.</param>
+        /// <param name="project">The SCC project.</param>
         /// <param name="oldName">The old name.</param>
         /// <param name="newName">The new name.</param>
         /// <param name="flags">The flags.</param>
