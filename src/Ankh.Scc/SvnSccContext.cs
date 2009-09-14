@@ -846,7 +846,7 @@ namespace Ankh.Scc
                 wcc.ListEntries(parentDir, wa,
                 delegate(object sender, SvnWorkingCopyEntryEventArgs e)
                 {
-                    if (string.Equals(e.FullPath, file, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(e.FullPath, path, StringComparison.OrdinalIgnoreCase))
                     {
                         if (!string.Equals(e.Name, file, StringComparison.Ordinal))
                         {
