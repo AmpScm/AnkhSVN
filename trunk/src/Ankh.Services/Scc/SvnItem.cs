@@ -280,7 +280,6 @@ namespace Ankh
                     throw new InvalidOperationException();
                 case SvnStatus.Incomplete:
                     SetState(managed, unset);
-                    provideDiskInfo = false; // Can't trust subversion in this case
                     break;
                 default:
                     Trace.WriteLine(string.Format("Ignoring undefined status {0} in SvnItem.Refresh()", status.LocalContentStatus));
