@@ -197,7 +197,11 @@ namespace Ankh.Scc.ProjectMap
 
                     if (monitor != null)
                     {
-                        monitor.ScheduleSvnStatus(Name);
+                        bool dirty = GetIsDirty(false);
+                        if(dirty != IsDirty)
+                            SetDirty(dirty);
+
+                        monitor.ScheduleGlyphUpdate(Name);
                     }
                 }
                 else
