@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7318</title>
+          AnkhSVN-Daily Update - 2.1.7321</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,26 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2605/AnkhSvn-Daily-2.1.7318.229.msi">AnkhSVN 2.1.7318</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2607/AnkhSvn-Daily-2.1.7321.230.msi">AnkhSVN 2.1.7321</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7318">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7321">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-09-18</td></tr>
+<tr><td> </td><td class="r"><a id="7321" href="http://ankhsvn.net/rev/?r=7321">
+            [r7321]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Try to reduce our impact when project implementation fire document reloaded
+events rapidly. This should help reduce the perf problem described in
+<a href="http://ankhsvn.net/issues/?id=602">issue #602</a></td></tr>
 <tr class="d"><td colspan="4">2009-09-14</td></tr>
 <tr><td> </td><td class="r"><a id="7310" href="http://ankhsvn.net/rev/?r=7310">
             [r7310]
@@ -117,11 +123,6 @@ is not available.</td></tr>
 <tr><td> </td><td class="r"><a id="7227" href="http://ankhsvn.net/rev/?r=7227">
             [r7227]
           </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/IssueTracker:</strong> IssueTrackerSetupCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">disable (hide) issue tracker setup option if the solution is not versioned</td></tr>
-<tr class="d"><td colspan="4">2009-08-20</td></tr>
-<tr><td> </td><td class="r"><a id="7218" href="http://ankhsvn.net/rev/?r=7218">
-            [r7218]
-          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhHelpService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use System.Windows.Forms.Help.ShowHelp to open the help page in browser if document explorer call does not succeed.
-<a href="http://ankhsvn.net/issues/?id=583">Issue 583</a>: Show help in browser when Microsoft Document Explorer not available</td></tr>
 
 </table>
 <!--/Recent changes-->
