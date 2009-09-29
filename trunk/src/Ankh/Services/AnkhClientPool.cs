@@ -208,6 +208,7 @@ namespace Ankh.Services
                 {
                     case SvnNotifyAction.CommitDeleted:
                     case SvnNotifyAction.Revert:
+                    case SvnNotifyAction.TreeConflict:
                         action.Recursive = true;
                         break;
                     case SvnNotifyAction.UpdateDelete:
