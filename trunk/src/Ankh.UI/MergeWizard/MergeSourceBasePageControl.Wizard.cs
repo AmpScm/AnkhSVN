@@ -39,7 +39,6 @@ namespace Ankh.UI.MergeWizard
             : base(wizard, name)
         {
             InitializeComponent();
-            _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
 
             bindingSource = new BindingSource(suggestedSources, "");
             mergeFromComboBox.DataSource = bindingSource;
@@ -52,7 +51,6 @@ namespace Ankh.UI.MergeWizard
             : base(wizard, name, image)
         {
             InitializeComponent();
-            _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
 
             bindingSource = new BindingSource(suggestedSources, "");
             mergeFromComboBox.DataSource = bindingSource;
