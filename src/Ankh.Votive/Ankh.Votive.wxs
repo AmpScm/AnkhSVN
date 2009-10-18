@@ -47,8 +47,8 @@
         <Directory Id="APPLICATIONFOLDER" Name="AnkhSVN 2">
           <Directory Id="APP_bin" Name="." FileSource="$(sys.SOURCEFILEDIR)..\">
             <Directory Id="DIR_SharpSvn" Name=".">
-              <!-- Include the VC 8.0 SP1 CRT to make sure we run correctly on Visual Studio 8.0 pre SP1 -->
-              <Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc80_crt_x86.msm" DiskId="1" />
+              <!-- Include the VC 9.0 CRT to make sure we can load SharpSvn -->
+              <Merge Id="CRT" Language="0" SourceFile="$(sys.SOURCEFILEDIR)..\lib\microsoft_vc90_crt_x86.msm" DiskId="1" />
             </Directory>
             <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
               <!-- SharpSvn licenses will be placed here -->
