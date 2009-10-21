@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release %28With MSI%29|AnyCPU'">
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <Import Project="../tools/Ankh-Common.targets" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -122,7 +131,7 @@
       <Debug>true</Debug>
     </XslSource>
     <None Include="Ankh.Package.snk" />
-    <None Include="extension.VsixManifest" />
+    <None Include="source.extension.VsixManifest" />
     <None Include="Gui\Gui-To-Ctc.xsl" />
     <None Include="Gui\Gui.xsd">
       <SubType>
@@ -260,6 +269,10 @@
       <Project>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</Project>
       <Name>Ankh.Ids</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ankh.Migrate\Ankh.Migrate.csproj">
+      <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
+      <Name>Ankh.Migrate</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ankh.Scc\Ankh.Scc.csproj">
       <Project>{ECE36A69-DD85-4AAB-B329-12BAE4675056}</Project>
       <Name>Ankh.Scc</Name>
@@ -300,11 +313,5 @@
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\8.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2005.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\9.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2008.wxi&quot; /codebase &gt; nul:" />
     <Exec Condition="'$(UseVS2005MPF)' != ''" Command="&quot;$(VsSDKInstall)VisualStudioIntegration\Tools\Bin\VS2005\RegPkg.exe&quot; /root:Software\Microsoft\VisualStudio\10.0 &quot;$(TargetPath)&quot; &quot;/wixfile:$(IntermediateOutputPath)$(AssemblyName)-2010.wxi&quot; /codebase &gt; nul:" />
-  </Target>
-  <!-- Fix VS2010 SDK issue with packaging files over 8MB by explicitly marking what to package-->
-  <Target Name="GetVsixItemsToBundle" Condition="'$(CreateVsix)' == 'true'" DependsOnTargets="$(GetVsixItemsToBundleDependsOn)">
-    <ItemGroup>
-      <ZipPackageItems Include="$(OutDir)\**\*.dll;$(OutDir)\**\*.*exe;$(OutDir)\**\*.pkgdef;$(OutDir)\**\*.Vsix*" />
-    </ItemGroup>
   </Target>
 </Project>

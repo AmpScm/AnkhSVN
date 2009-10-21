@@ -30,7 +30,7 @@
     <!-- Older Microsoft.VsSDK.Build.Tasks.dll versions have a bug in compiling the vsct from our location -->
     <MinVsTasksVersion>9.0.30820.0</MinVsTasksVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '4.0'">
+  <PropertyGroup Condition="'$(VsSdkVersion)' == '10.0'">
     <!-- Visual Studio 2010 Beta 1-->
     <MsVsShellAssembly>Microsoft.VisualStudio.Shell.10.0</MsVsShellAssembly>
     <MsVsLangAssembly>Microsoft.VisualStudio.Package.LanguageService.10.0</MsVsLangAssembly>
