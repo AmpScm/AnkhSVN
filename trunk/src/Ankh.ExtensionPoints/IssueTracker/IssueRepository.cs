@@ -27,7 +27,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// Constructor
         /// </summary>
         /// <param name="connectorName">Unique connector name(as registered with the registry)</param>
-        public IssueRepository(string connectorName)
+        protected IssueRepository(string connectorName)
             : base(connectorName)
         {
         }

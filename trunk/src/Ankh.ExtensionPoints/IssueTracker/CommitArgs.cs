@@ -24,8 +24,8 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// </summary>
     public abstract class CommitArgs
     {
-        private ICollection<Uri> _paths;
-        private long _revision;
+        private readonly ICollection<Uri> _paths;
+        private readonly long _revision;
         string _commitMessage;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <param name="paths">The paths.</param>
         /// <param name="revision">The revision.</param>
         /// <param name="commitMessage">The commit message.</param>
-        public CommitArgs(ICollection<Uri> paths, long revision, string commitMessage)
+        protected CommitArgs(ICollection<Uri> paths, long revision, string commitMessage)
         {
             _paths = paths;
             _revision = revision;
@@ -76,7 +76,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// </summary>
     public class PreCommitArgs : CommitArgs
     {
-        bool _cancel = false;
+        bool _cancel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PreCommitArgs"/> class.
@@ -115,8 +115,8 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <value>The commit message.</value>
         public string CommitMessage
         {
-            get { return base.InternalCommitMessage; }
-            set { base.InternalCommitMessage = value; }
+            get { return InternalCommitMessage; }
+            set { InternalCommitMessage = value; }
         }
     }
 
@@ -152,7 +152,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <value>The commit message.</value>
         public string CommitMessage
         {
-            get { return base.InternalCommitMessage; }
+            get { return InternalCommitMessage; }
         }
     }
 }

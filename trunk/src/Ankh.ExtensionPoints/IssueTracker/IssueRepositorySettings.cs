@@ -24,13 +24,13 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// </summary>
     public abstract class IssueRepositorySettings
     {
-        private string _connectorName;
+        private readonly string _connectorName;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="connectorName">Unique connector name(as registered with the registry)</param>
-        public IssueRepositorySettings(string connectorName)
+        protected IssueRepositorySettings(string connectorName)
         {
             _connectorName = connectorName;
         }
