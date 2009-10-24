@@ -63,7 +63,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <summary>
         /// Raised on a configuration page event 
         /// </summary>
-        public event System.EventHandler<ConfigPageEventArgs> OnPageEvent;
+        public event EventHandler<ConfigPageEventArgs> OnPageEvent;
 
         #endregion
     }
@@ -82,7 +82,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// 
     /// </summary>
-    public class ConfigPageEventArgs : EventArgs
+    public sealed class ConfigPageEventArgs : EventArgs
     {
         private bool _isComplete;
         private Exception _exception;
