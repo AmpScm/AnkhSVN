@@ -79,7 +79,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
             return !(true
                 && otherSettings != null
                 && string.Equals(ConnectorName, otherSettings.ConnectorName)
-                && Uri.Equals(RepositoryUri, otherSettings.RepositoryUri)
+                && object.Equals(RepositoryUri, otherSettings.RepositoryUri)
                 && string.Equals(RepositoryId, otherSettings.RepositoryId)
                 && HasSameProperties(CustomProperties, otherSettings.CustomProperties)
                 )
