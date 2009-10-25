@@ -83,11 +83,19 @@ namespace Ankh.UI.Annotate
 
         internal int GetLineHeight()
         {
+            // TODO: implement real fix for VS2010
+            if (VSVersion.VS2010)
+                return editor.LineHeight + 4;
+
             return editor.LineHeight;
         }
 
         internal int GetTopLine()
         {
+            // TODO: implement real fix for VS2010
+            if (VSVersion.VS2010)
+                return 0;
+
             return editor.EditorClientTop.Y;
         }
 
