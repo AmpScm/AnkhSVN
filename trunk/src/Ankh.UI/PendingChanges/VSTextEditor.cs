@@ -1137,7 +1137,7 @@ namespace Ankh.UI.PendingChanges
                 if (buffer != IntPtr.Zero)
                     Marshal.FreeCoTaskMem(buffer);
 
-                if(tempBuffer != null && !Marshal.IsComObject(tempBuffer))
+                if(tempBuffer != null && Marshal.IsComObject(tempBuffer))
                     Marshal.ReleaseComObject(tempBuffer);
 
                 if (setReadOnly)
