@@ -36,7 +36,6 @@ namespace Ankh.UI.VSSelectionControls
         {
             if (VSVersion.VS2010OrLater)
             {
-                HotTracking = true;
                 ShowLines = false;
             }
         }
@@ -96,15 +95,19 @@ namespace Ankh.UI.VSSelectionControls
             if (_stateImageList != null)
                 SetStateList();
 
-            if (VSVersion.VS2010OrLater)
+            if (SmartListView.IsXPPlus)
             {
-                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+                if (VSVersion.VS2010OrLater)
+                    NativeMethods.SetWindowTheme(Handle, "Explorer", null);
 
-                uint flags = (uint)NativeMethods.SendMessage(Handle, TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
+                if (VSVersion.VS2010OrVistaOrLater)
+                {
+                    uint flags = (uint)NativeMethods.SendMessage(Handle, TVM_GETEXTENDEDSTYLE, IntPtr.Zero, IntPtr.Zero);
 
-                flags |= 0x0004 | 0x0040; // TVS_EX_DOUBLEBUFFER | TVS_EX_FADEINOUTEXPANDOS
+                    flags |= 0x0004; // TVS_EX_DOUBLEBUFFER
 
-                NativeMethods.SendMessage(Handle, TVM_SETEXTENDEDSTYLE, (IntPtr)flags, (IntPtr)flags);
+                    NativeMethods.SendMessage(Handle, TVM_SETEXTENDEDSTYLE, (IntPtr)flags, (IntPtr)flags);
+                }
             }
         }
 
