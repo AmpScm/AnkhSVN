@@ -26,6 +26,7 @@ namespace Ankh
     {
         static readonly object _lock = new object();
         static Version _vsVersion;
+        static Version _osVersion;
 
         public static Version FullVersion
         {
@@ -62,6 +63,11 @@ namespace Ankh
             }
         }
 
+        public static Version OSVersion
+        {
+            get { return _osVersion ?? (_osVersion = Environment.OSVersion.Version); }
+        }
+
         public static bool VS2010OrLater
         {
             get { return FullVersion >= new Version(10, 0); }
@@ -85,6 +91,16 @@ namespace Ankh
         public static bool VS2010
         {
             get { return FullVersion.Minor == 10; }
+        }
+
+        public static bool VistaOrLater
+        {
+            get { return OSVersion.Minor >= 6; }
+        }
+
+        public static bool VS2010OrVistaOrLater
+        {
+            get { return VS2010OrLater || VistaOrLater; }
         }
     }
 }

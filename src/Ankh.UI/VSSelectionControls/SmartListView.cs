@@ -398,10 +398,13 @@ namespace Ankh.UI.VSSelectionControls
 
             UpdateSortGlyphs();
 
-            if (IsXPPlus && !OwnerDraw && VSVersion.VS2010OrLater)
+            if (IsXPPlus && !OwnerDraw)
             {
-                NativeMethods.SetWindowTheme(Handle, "Explorer", null);
-                NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)0x00010000, (IntPtr)0x00010000);
+                if (VSVersion.VS2010OrLater)
+                    NativeMethods.SetWindowTheme(Handle, "Explorer", null);
+
+                if (VSVersion.VS2010OrVistaOrLater)
+                    NativeMethods.SendMessage(Handle, LVM_SETEXTENDEDLISTVIEWSTYLE, (IntPtr)0x00010000, (IntPtr)0x00010000);
             }
         }
 
