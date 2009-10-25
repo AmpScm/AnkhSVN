@@ -172,7 +172,14 @@ namespace Ankh.UI.PendingChanges
             if (_nativeWindow == null)
                 throw new InvalidOperationException("Code editor not initialized");
 
-            _nativeWindow.LoadFile(path);
+            if (VSVersion.VS2008OrOlder)
+                _nativeWindow.LoadFile(path);
+            else
+            {
+                // Temporary quick fix for beta2
+                // TODO: See what's the real issue when loading in VS2010
+                _nativeWindow.ReplaceContents(path);
+            }
         }
 
         internal void IgnoreFileChanges(bool ignore)
