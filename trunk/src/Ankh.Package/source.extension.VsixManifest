@@ -15,7 +15,6 @@
         <Edition>VSTS</Edition>
         <Edition>VSTD</Edition>
         <Edition>Pro</Edition>
-        <Edition>Express_All</Edition>
         <Edition>IntegratedShell</Edition>
       </VisualStudio>
     </SupportedProducts>
