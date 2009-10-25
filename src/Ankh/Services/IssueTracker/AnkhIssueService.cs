@@ -115,7 +115,7 @@ namespace Ankh.Services.IssueTracker
                 }
                 else
                 {
-                    isReallyDirty = currentRepositorySettings.IsDifferentFrom(_repository);
+                    isReallyDirty = !currentRepositorySettings.ValueEquals(_repository);
                 }
             }
             if (isReallyDirty)
