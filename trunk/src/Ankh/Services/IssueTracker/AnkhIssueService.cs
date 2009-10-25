@@ -127,7 +127,8 @@ namespace Ankh.Services.IssueTracker
         /// <summary>
         /// Gets the issue references from the specified text
         /// </summary>
-        /// <param name="logmessage">text.</param>
+        /// <param name="text"></param>
+        /// <param name="issues"></param>
         /// <returns></returns>
         public bool TryGetIssues(string text, out IEnumerable<IssueMarker> issues)
         {
