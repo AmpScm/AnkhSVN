@@ -438,6 +438,7 @@ namespace Ankh.Scc.ProjectMap
                 return false; // Not interested
 
             int dirty;
+            bool done = false;
 
             IVsPersistDocData pdd;
             IPersistFileFormat pff;
@@ -445,7 +446,7 @@ namespace Ankh.Scc.ProjectMap
             IVsWindowFrame wf;
 
             // Implemented by most editors             
-            if (null != (pdd = RawDocument as IVsPersistDocData)
+            if (null != (pdd = RawDocument as IVsPersistDocData))
             {
                 try
                 {
@@ -453,41 +454,53 @@ namespace Ankh.Scc.ProjectMap
                     {
                         if (dirty != 0)
                             return true;
+
+                        done = true;
                     }
                 }
                 catch 
                 {
-                    /* Some stupid implementations throw an exception here */
+                    /* Some stupid implementations throw an exception from IsDocDataDirty */
                 }
             }
 
             // Implemented by the common project types (Microsoft Project Base)
-            else if (null != (pff = RawDocument as IPersistFileFormat)
-                && ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
+            if (!done && null != (pff = RawDocument as IPersistFileFormat))
             {
-                if (dirty != 0)
-                    return true;
+                try
+                {
+                    if (ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
+                    {
+                        if (dirty != 0)
+                            return true;
+
+                        done = true;
+                    }
+                }
+                catch
+                {
+                    /* Some stupid implementations may throw an exception from IsDirty */
+                }
             }
 
             // Project based documents will probably handle this            
-            else if (null != (phi = Hierarchy as IVsPersistHierarchyItem))
+            if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem))
             {
                 IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
                 try
                 {
-                    try
+                    if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
                     {
-                        if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
-                        {
-                            if (dirty != 0)
-                                return true;
-                        }
+                        if (dirty != 0)
+                            return true;
+
+                        done = true;
                     }
-                    catch
-                    {
-                        // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
-                        // which we tried before getting here*/ 
-                    }
+                }
+                catch
+                {
+                    // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
+                    // which we tried before getting here*/ 
                 }
                 finally
                 {
@@ -496,7 +509,7 @@ namespace Ankh.Scc.ProjectMap
             }
 
             // Literally look if the frame window has a modified *            
-            else if (TryGetOpenDocumentFrame(out wf))
+            if (!done && TryGetOpenDocumentFrame(out wf))
             {
                 object ok;
                 if (ErrorHandler.Succeeded(wf.GetProperty((int)__VSFPROPID2.VSFPROPID_OverrideDirtyState, out ok)))
