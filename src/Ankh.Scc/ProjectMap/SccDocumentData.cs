@@ -198,7 +198,7 @@ namespace Ankh.Scc.ProjectMap
                     if (monitor != null)
                     {
                         bool dirty = GetIsDirty(false);
-                        if(dirty != IsDirty)
+                        if (dirty != IsDirty)
                             SetDirty(dirty);
 
                         monitor.ScheduleGlyphUpdate(Name);
@@ -446,10 +446,19 @@ namespace Ankh.Scc.ProjectMap
 
             // Implemented by most editors             
             if (null != (pdd = RawDocument as IVsPersistDocData)
-                && ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
             {
-                if (dirty != 0)
-                    return true;
+                try
+                {
+                    if (ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
+                    {
+                        if (dirty != 0)
+                            return true;
+                    }
+                }
+                catch 
+                {
+                    /* Some stupid implementations throw an exception here */
+                }
             }
 
             // Implemented by the common project types (Microsoft Project Base)
