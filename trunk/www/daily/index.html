@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7399</title>
+          AnkhSVN-Daily Update - 2.1.7407</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,41 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2722/AnkhSvn-Daily-2.1.7399.271.msi">AnkhSVN 2.1.7399</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2727/AnkhSvn-Daily-2.1.7407.272.msi">AnkhSVN 2.1.7407</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7399">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7407">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-10-24</td></tr>
+<tr><td> </td><td class="r"><a id="7407" href="http://ankhsvn.net/rev/?r=7407">
+            [r7407]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> IssueRepositorySettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use object.Equals instead of Uri.Equals, because object defines the method.
+(Uri doesn't have a static Equals). This will correctly call Uri.Equals(other) after null-checks</td></tr>
+<tr><td> </td><td class="r"><a id="7406" href="http://ankhsvn.net/rev/?r=7406">
+            [r7406]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> IssueRepositorySettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve 2 possible NullReferenceException in HasSameProperties</td></tr>
+<tr><td> </td><td class="r"><a id="7405" href="http://ankhsvn.net/rev/?r=7405">
+            [r7405]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> IssueRepositoryConfigurationPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark EventArgs class sealed</td></tr>
+<tr><td> </td><td class="r"><a id="7404" href="http://ankhsvn.net/rev/?r=7404">
+            [r7404]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> CommitArgs.cs, IssueRepository.cs, IssueRepositorySettings.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Mark constructors of abstract classes protected
+Mark fields readonly where possible</td></tr>
+<tr><td> </td><td class="r"><a id="7403" href="http://ankhsvn.net/rev/?r=7403">
+            [r7403]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> IssueRepositoryConnector.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove unused usings</td></tr>
+<tr><td> </td><td class="r"><a id="7402" href="http://ankhsvn.net/rev/?r=7402">
+            [r7402]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update to SharpSvn 1.6006 (Subversion 1.6)</td></tr>
 <tr class="d"><td colspan="4">2009-10-21</td></tr>
 <tr><td> </td><td class="r"><a id="7395" href="http://ankhsvn.net/rev/?r=7395">
             [r7395]
