@@ -82,7 +82,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// 
     /// </summary>
-    public sealed class ConfigPageEventArgs : EventArgs
+    public class ConfigPageEventArgs : EventArgs
     {
         private bool _isComplete;
         private Exception _exception;

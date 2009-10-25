@@ -74,7 +74,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// 
     /// </summary>
-    public class PreCommitArgs : CommitArgs
+    public sealed class PreCommitArgs : CommitArgs
     {
         bool _cancel;
 
@@ -123,7 +123,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
     /// <summary>
     /// 
     /// </summary>
-    public class PostCommitArgs : CommitArgs
+    public sealed class PostCommitArgs : CommitArgs
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PostCommitArgs"/> class.
