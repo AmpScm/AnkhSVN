@@ -257,21 +257,6 @@ namespace Ankh.Services.IssueTracker
         }
 
         /// <summary>
-        /// Compares two issue repository settings instance
-        /// </summary>
-        /// <returns>true/false</returns>
-        private bool HasChanged(IssueRepositorySettings settings1, IssueRepositorySettings settings2)
-        {
-            return true;
-            /*
-            && settings1 != settings2 // handles both null values
-            && (false
-                || (settings1 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings1).Equals(settings2))
-                || (settings2 is IEquatable<IIssueRepositorySettings> && !((IEquatable<IIssueRepositorySettings>)settings2).Equals(settings1))
-                );*/
-        }
-
-        /// <summary>
         /// Raised when <code>CurrentIssueRepository is changed</code>
         /// </summary>
         public event EventHandler IssueRepositoryChanged;
