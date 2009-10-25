@@ -16,8 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-
 using Ankh.ExtensionPoints.IssueTracker;
 using Ankh.IssueTracker;
 
@@ -25,7 +23,7 @@ namespace Ankh.Services.IssueTracker
 {
     public class IssueRepositorySettingsProxy : IssueRepositorySettings
     {
-        IAnkhServiceProvider _context;
+        readonly IAnkhServiceProvider _context;
 
         public IssueRepositorySettingsProxy(IAnkhServiceProvider context, string connectorName)
             : base(connectorName)

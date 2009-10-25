@@ -32,9 +32,7 @@ namespace Ankh.Services.IssueTracker
 
         private Dictionary<string, IssueRepositoryConnector> _nameConnectorMap;
         private IssueRepository _repository;
-        private Regex _issueIdRegex = null;
-
-        private readonly object _syncLock = new object();
+        private Regex _issueIdRegex;
 
         public AnkhIssueService(IAnkhServiceProvider context)
             : base(context)
@@ -100,7 +98,7 @@ namespace Ankh.Services.IssueTracker
         /// <remarks>if the new settings are "really" different from the current settings, reset</remarks>
         public void MarkDirty()
         {
-            bool isReallyDirty = false;
+            bool isReallyDirty;
             IIssueTrackerSettings settings = Settings;
             if (settings == null)
             {

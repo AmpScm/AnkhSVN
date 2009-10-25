@@ -15,8 +15,6 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Ankh.ExtensionPoints.IssueTracker;
 
@@ -32,10 +30,10 @@ namespace Ankh.Services.IssueTracker
     /// </remarks>
     class IssueRepositoryConnectorProxy : IssueRepositoryConnector
     {
-        private IssueRepositoryConnector _delegate = null;
-        private IAnkhServiceProvider _context;
-        private string _name = null;
-        private string _delegateId = null;
+        private IssueRepositoryConnector _delegate;
+        private readonly IAnkhServiceProvider _context;
+        private readonly string _name;
+        private readonly string _delegateId;
 
         public IssueRepositoryConnectorProxy(IAnkhServiceProvider context, string name, string delegateServiceId)
         {
