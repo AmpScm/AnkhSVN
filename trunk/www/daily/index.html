@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7407</title>
+          AnkhSVN-Daily Update - 2.1.7424</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,56 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2727/AnkhSvn-Daily-2.1.7407.272.msi">AnkhSVN 2.1.7407</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2735/AnkhSvn-Daily-2.1.7424.273.msi">AnkhSVN 2.1.7424</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7407">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7424">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-10-25</td></tr>
+<tr><td> </td><td class="r"><a id="7422" href="http://ankhsvn.net/rev/?r=7422">
+            [r7422]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=7420">r7420</a>, fix check for IsComObject().</td></tr>
+<tr><td> </td><td class="r"><a id="7420" href="http://ankhsvn.net/rev/?r=7420">
+            [r7420]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use Marshal.IsComObject() instead of GetType().IsComObject()</td></tr>
+<tr><td> </td><td class="r"><a id="7419" href="http://ankhsvn.net/rev/?r=7419">
+            [r7419]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/Annotate:</strong> AnnotateEditorControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add some VS2010 specific workarounds to make annotate work (in 100% zoom)</td></tr>
+<tr><td> </td><td class="r"><a id="7418" href="http://ankhsvn.net/rev/?r=7418">
+            [r7418]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> VSVersion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix VS2005, VS2008 and VS2010 specific version checks. Checks 8, 9 and 10 against
+the major part instead of the minor part.</td></tr>
+<tr><td> </td><td class="r"><a id="7417" href="http://ankhsvn.net/rev/?r=7417">
+            [r7417]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix exception when calling ReleaseComObject on something that's not a COM object (in VS2010)</td></tr>
+<tr><td> </td><td class="r"><a id="7416" href="http://ankhsvn.net/rev/?r=7416">
+            [r7416]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/VSSelectionControls/SmartListView.cs, Ankh.UI/VSSelectionControls/SmartTreeView.cs, Ankh.Services/VSVersion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update List and Tree view flags for Visual Studio 2010 to match Visual Studio
+itself a bit better. Remove fade in/fade out effects which where removed with
+VS2010 beta 2.  Always enable translucent selection on Vista and later
+(Not just on 2010)</td></tr>
+<tr><td> </td><td class="r"><a id="7415" href="http://ankhsvn.net/rev/?r=7415">
+            [r7415]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use ReplaceContents for now when we're on VS2010 instead of LoadFile. This
+fixes the issue where the annotate viewer fails to open the file.</td></tr>
+<tr><td> </td><td class="r"><a id="7414" href="http://ankhsvn.net/rev/?r=7414">
+            [r7414]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services/IssueTracker:</strong> AnkhIssueService.cs, IssueRepositorySettingsProxy.cs, IssueRepositoryConnectorProxy.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">mark fields readonly where possible, don't set default values explicitly</td></tr>
+<tr><td> </td><td class="r"><a id="7412" href="http://ankhsvn.net/rev/?r=7412">
+            [r7412]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services/IssueTracker:</strong> AnkhIssueService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix XML comment</td></tr>
+<tr><td> </td><td class="r"><a id="7410" href="http://ankhsvn.net/rev/?r=7410">
+            [r7410]
+          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh.ExtensionPoints/IssueTracker:</strong> CommitArgs.cs, IssueRepositoryConfigurationPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Unseal ConfigPageEventArgs; seal Pre/Post CommitArgs</td></tr>
 <tr class="d"><td colspan="4">2009-10-24</td></tr>
 <tr><td> </td><td class="r"><a id="7407" href="http://ankhsvn.net/rev/?r=7407">
             [r7407]
@@ -53,7 +89,7 @@ Mark fields readonly where possible</td></tr>
 <tr><td> </td><td class="r"><a id="7395" href="http://ankhsvn.net/rev/?r=7395">
             [r7395]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS.UnitTest/Ankh.VS.UnitTest.csproj, tools/Ankh-Common.targets, Ankh.VS.IntegrationTest/Ankh.VS.IntegrationTest.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the two VS test projects use the 3.5 framework when compiling
-in Visual Studio 2005. (But keep them on 4.0 in 2010 Beta 2).</td></tr>
+in Visual Studio 2008. (But keep them on 4.0 in 2010 Beta 2).</td></tr>
 <tr><td> </td><td class="r"><a id="7394" href="http://ankhsvn.net/rev/?r=7394">
             [r7394]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS.IntegrationTest:</strong> PackageTest.cs, Ankh.VS.IntegrationTest.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make Ankh.VS.IntegrationTest VS2008 compatible by using the common
