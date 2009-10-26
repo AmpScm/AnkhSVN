@@ -234,11 +234,7 @@ namespace Ankh.Services.IssueTracker
                 IssueRepository oldRepository = _repository;
                 _repository = value;
                 _issueIdRegex = null; // reset RegEx
-                if (IssueRepositoryChanged != null)
-                {
-                    IssueRepositoryChanged(this, EventArgs.Empty);
-                }
-
+                OnIssueRepositoryChanged();
                 if (oldRepository != null && oldRepository != _repository)
                 {
                     IDisposable disposableRepository = oldRepository as IDisposable;
@@ -259,6 +255,17 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         public event EventHandler IssueRepositoryChanged;
 
+        /// <summary>
+        /// Fires IssueRepositoryChanged event.
+        /// </summary>
+        private void OnIssueRepositoryChanged()
+        {
+            if (IssueRepositoryChanged != null)
+            {
+                IssueRepositoryChanged(this, EventArgs.Empty);
+            }
+        }
+
         #endregion
 
         #region IAnkhServiceEvents handlers
@@ -276,10 +283,7 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         void OnSolutionOpened(object sender, EventArgs e)
         {
-            if (IssueRepositoryChanged != null)
-            {
-                IssueRepositoryChanged(this, EventArgs.Empty);
-            }
+            OnIssueRepositoryChanged();
         }
 
         #endregion
