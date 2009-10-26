@@ -32,8 +32,8 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <param name="connectorName">Unique connector name(as registered with the registry)</param>
         protected IssueRepositorySettings(string connectorName)
         {
-            if(connectorName == null)
-                throw new ArgumentNullException("connectorName");
+            // SR: Apparently connectorName is sometimes/often null. Is this what we expect?
+
             _connectorName = connectorName;
         }
 
