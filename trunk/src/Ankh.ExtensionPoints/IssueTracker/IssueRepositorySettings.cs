@@ -56,10 +56,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <remarks>This value can be used to identify a specific (sub) issue repository on RepositoryUri</remarks>
         public virtual string RepositoryId
         {
-            get
-            {
-                return string.Empty;
-            }
+            get { return string.Empty; }
         }
 
         /// <summary>
@@ -67,10 +64,7 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// </summary>
         public virtual IDictionary<string, object> CustomProperties
         {
-            get
-            {
-                return null;
-            }
+            get { return null; }
         }
 
         /// <summary>
@@ -82,7 +76,10 @@ namespace Ankh.ExtensionPoints.IssueTracker
         /// <filterpriority>2</filterpriority>
         public override int GetHashCode()
         {
-            return ConnectorName.GetHashCode() ^ RepositoryUri.GetHashCode() ^ RepositoryId.GetHashCode();
+            int cName = ConnectorName == null ? 0 : ConnectorName.GetHashCode();
+            int rUri = RepositoryUri == null ? 0 : RepositoryUri.GetHashCode();
+            int rId = RepositoryId == null ? 0 : RepositoryId.GetHashCode();
+            return cName ^ rUri ^ rId;
         }
 
         /// <summary>
@@ -97,7 +94,6 @@ namespace Ankh.ExtensionPoints.IssueTracker
         public override bool Equals(object obj)
         {
             IssueRepositorySettings otherSettings = obj as IssueRepositorySettings;
-
             return Equals(otherSettings);
         }
 
