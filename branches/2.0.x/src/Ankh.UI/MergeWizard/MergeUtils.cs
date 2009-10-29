@@ -130,22 +130,6 @@ namespace Ankh.UI.MergeWizard
         }
 
         /// <summary>
-        /// Returns the working copy root for the opened solution.
-        /// </summary>
-        public string WorkingCopyRootPath
-        {
-            get
-            {
-                IAnkhSolutionSettings settings = _context.GetService<IAnkhSolutionSettings>();
-
-                if (settings == null)
-                    return null;
-
-                return settings.ProjectRoot;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the context.
         /// </summary>
         /// <value>The context.</value>
