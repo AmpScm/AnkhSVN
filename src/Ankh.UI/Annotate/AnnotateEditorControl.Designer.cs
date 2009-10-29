@@ -91,7 +91,7 @@ namespace Ankh.UI.Annotate
             this.editor.ShowHorizontalScrollBar = true;
             this.editor.Size = new System.Drawing.Size(183, 300);
             this.editor.TabIndex = 2;
-            this.editor.Text = "logMessageEditor1";
+            this.editor.Text = "";
             this.editor.Scroll += new System.EventHandler<Ankh.UI.PendingChanges.TextViewScrollEventArgs>(this.logMessageEditor1_Scroll);
             // 
             // AnnotateEditorControl
