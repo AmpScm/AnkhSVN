@@ -61,10 +61,13 @@ namespace Ankh.UI.MergeWizard
         {
             SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
             
-            List<Uri> rslt = new List<Uri>(items.Count);
+            List<Uri> rslt = new List<Uri>(items == null ? 0 : items.Count);
 
-            foreach (SvnMergeItem i in items)
-                rslt.Add(i.Uri);
+            if (items != null)
+            {
+                foreach (SvnMergeItem i in items)
+                    rslt.Add(i.Uri);
+            }
 
             return rslt;
         }
