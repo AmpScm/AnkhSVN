@@ -16,14 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 using Ankh.Commands;
 
-using WizardFramework;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using System.ComponentModel;
 using Ankh.Scc;
 using Ankh.VS;
 using Ankh.Selection;
@@ -40,7 +36,6 @@ namespace Ankh.UI.MergeWizard.Commands
         {
             IFileStatusCache statusCache;
             int n = 0;
-            bool ok = true;
             switch (e.Command)
             {
                 case AnkhCommand.ItemMerge:
@@ -98,10 +93,7 @@ namespace Ankh.UI.MergeWizard.Commands
                     throw new InvalidOperationException();
             }
 
-            if (!ok || n == 0 || n > 1)
-                e.Enabled = false;
-            else
-                e.Enabled = true;
+            e.Enabled = n == 1;
         }
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
@@ -147,8 +139,8 @@ namespace Ankh.UI.MergeWizard.Commands
                 {
                     using (MergeResultsDialog mrd = new MergeResultsDialog())
                     {
-                        mrd.MergeActions = ((MergeWizard)dialog.Wizard).MergeActions;
-                        mrd.ResolvedMergeConflicts = ((MergeWizard)dialog.Wizard).ResolvedMergeConflicts;
+                        mrd.MergeActions = dialog.Wizard.MergeActions;
+                        mrd.ResolvedMergeConflicts = dialog.Wizard.ResolvedMergeConflicts;
 
                         mrd.ShowDialog(e.Context);
                     }
