@@ -81,50 +81,27 @@ namespace Ankh.UI.MergeWizard
 
                 using (SvnWorkingCopyClient client = wizard.MergeUtils.GetWcClient())
                 {
-                    WizardDialog dialog = (WizardDialog)wizard.Form;
                     SvnItem mergeTarget = wizard.MergeTarget;
-                    SvnWorkingCopyVersion wcRevision;
 
-                    client.GetVersion(wizard.MergeUtils.WorkingCopyRootPath,
-                        out wcRevision);
-                    
+                    SvnWorkingCopyVersion wcRevision;
+                    client.GetVersion(mergeTarget.FullPath, out wcRevision);
+
                     bool hasLocalModifications = wcRevision.Modified;
                     bool hasMixedRevisions = (wcRevision.Start != wcRevision.End);
                     bool hasSwitchedChildren = wcRevision.Switched;
                     bool isIncomplete = wcRevision.IncompleteWorkingCopy;
-                    bool status = hasLocalModifications || hasMixedRevisions || hasSwitchedChildren || isIncomplete;
 
-                    if (status)
-                    {
-                        Message = MergeBestPracticesPage.NOT_READY_FOR_MERGE;
-                    }
-                    else
-                    {
-                        Message = MergeBestPracticesPage.READY_FOR_MERGE;
-                    }
+                    bool statusNotOk = hasLocalModifications || hasMixedRevisions || hasSwitchedChildren || isIncomplete;
+
+                    Message = statusNotOk ? NOT_READY_FOR_MERGE : READY_FOR_MERGE;
 
                     // Update the images based on the return of the best practices checks
-                    if (hasLocalModifications)
-                        UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, false);
-                    else
-                        UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, true);
+                    UpdateBestPracticeStatus(BestPractices.NO_LOCAL_MODIFICATIONS, !hasLocalModifications);
+                    UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, !hasMixedRevisions);
+                    UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, !hasSwitchedChildren);
+                    UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, !isIncomplete);
 
-                    if (hasMixedRevisions)
-                        UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, false);
-                    else
-                        UpdateBestPracticeStatus(BestPractices.NO_MIXED_REVISIONS, true);
-
-                    if (hasSwitchedChildren)
-                        UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, false);
-                    else
-                        UpdateBestPracticeStatus(BestPractices.NO_SWITCHED_CHILDREN, true);
-
-                    if (isIncomplete)
-                        UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, false);
-                    else
-                        UpdateBestPracticeStatus(BestPractices.COMPLETE_WORKING_COPY, true);
-
-                    return status;
+                    return statusNotOk;
                 }
             }
         }
