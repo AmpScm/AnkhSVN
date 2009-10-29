@@ -39,7 +39,6 @@ namespace Ankh.UI.MergeWizard
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(Resources.InvalidFromUrl,
             WizardMessage.MessageType.Error);
 
-        readonly MergeSources _retrieveMergeSources;
         readonly BindingList<string> suggestedSources = new BindingList<string>();
         readonly BindingSource bindingSource;
         /// <summary>
@@ -48,7 +47,6 @@ namespace Ankh.UI.MergeWizard
         public MergeSourceBasePageControl()
         {
             InitializeComponent();
-            _retrieveMergeSources = new MergeSources(RetrieveMergeSources);
             
             bindingSource = new BindingSource(suggestedSources, "");
             mergeFromComboBox.DataSource = bindingSource;
@@ -108,6 +106,8 @@ namespace Ankh.UI.MergeWizard
         }
 
         IAsyncResult _mergeRetrieveResult;
+        
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -117,7 +117,9 @@ namespace Ankh.UI.MergeWizard
 
             mergeFromComboBox.Text = MergeTarget.Status.Uri.ToString();
 
-            _mergeRetrieveResult = _retrieveMergeSources.BeginInvoke(new AsyncCallback(MergesRetrieved), null);
+            MergeSources retrieveMergeSources = new MergeSources(RetrieveMergeSources);
+
+            IAsyncResult mergeRetrieveResult = retrieveMergeSources.BeginInvoke(new AsyncCallback(MergesRetrieved), retrieveMergeSources);
             
         }
 
@@ -170,8 +172,10 @@ namespace Ankh.UI.MergeWizard
 
         void MergesRetrieved(IAsyncResult result)
         {
-            ICollection<Uri> mergeSources = 
-                _retrieveMergeSources.EndInvoke(_mergeRetrieveResult);
+            MergeSources mergeSourcesCallback = result.AsyncState as MergeSources;
+            ICollection<Uri> mergeSources = (mergeSourcesCallback != null)
+                ? mergeSourcesCallback.EndInvoke(result)
+                : new Uri[0];
             SetMergeSources(mergeSources);
         }
 
