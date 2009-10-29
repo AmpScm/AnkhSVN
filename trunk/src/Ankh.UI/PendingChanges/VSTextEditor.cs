@@ -172,14 +172,7 @@ namespace Ankh.UI.PendingChanges
             if (_nativeWindow == null)
                 throw new InvalidOperationException("Code editor not initialized");
 
-            if (VSVersion.VS2008OrOlder)
-                _nativeWindow.LoadFile(path);
-            else
-            {
-                // Temporary quick fix for beta2
-                // TODO: See what's the real issue when loading in VS2010
-                _nativeWindow.ReplaceContents(path);
-            }
+            _nativeWindow.LoadFile(path);
         }
 
         internal void IgnoreFileChanges(bool ignore)
@@ -256,10 +249,6 @@ namespace Ankh.UI.PendingChanges
                 if (!string.IsNullOrEmpty(_text))
                 {
                     Text = _text;
-                }
-                else if (string.IsNullOrEmpty(_nativeWindow.Text))
-                {
-                    _nativeWindow.Text = "";
                 }
             }
         }
@@ -934,12 +923,13 @@ namespace Ankh.UI.PendingChanges
 
             // set buffer
             _textBuffer = CreateLocalInstance<IVsTextBuffer>(typeof(VsTextBufferClass), _serviceProvider);
+            _textBuffer.InitializeContent("", 0);
 
             if (forceLanguageService.HasValue)
             {
                 Guid languageService = forceLanguageService.Value;
 
-                SetLanguageService(languageService);
+                SetLanguageServiceInternal(languageService);
             }
 
             ErrorHandler.ThrowOnFailure(codeWindow.SetBuffer((IVsTextLines)_textBuffer));
@@ -1147,8 +1137,17 @@ namespace Ankh.UI.PendingChanges
 
         internal void LoadFile(string path)
         {
-            IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
-            ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+            if (VSVersion.VS2010)
+            {
+                // Work around issue with splitter with black top appearing in beta2
+                string content = System.IO.File.ReadAllText(path);
+                _textBuffer.InitializeContent(content, content.Length);
+            }
+            else
+            {
+                IVsPersistDocData2 docData = (IVsPersistDocData2)_textBuffer;
+                ErrorHandler.ThrowOnFailure(docData.LoadDocData(path));
+            }
         }
 
         internal void IgnoreFileChanges(bool ignore)
@@ -1232,7 +1231,15 @@ namespace Ankh.UI.PendingChanges
         {
             if(_textBuffer == null)
                 throw new InvalidOperationException();
-                        
+
+            if (VSVersion.VS2010)
+                return; // Setting the languageservice causes an acces violation exception (cpp files)
+
+            SetLanguageServiceInternal(languageService);
+        }
+
+        private void SetLanguageServiceInternal(Guid languageService)
+        {
             ErrorHandler.ThrowOnFailure(_textBuffer.SetLanguageServiceID(ref languageService));
         }
 
