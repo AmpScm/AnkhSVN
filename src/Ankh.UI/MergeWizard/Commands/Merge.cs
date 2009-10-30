@@ -130,6 +130,11 @@ namespace Ankh.UI.MergeWizard.Commands
                     throw new InvalidOperationException();
             }
 
+            IEnumerable<string> selectedFiles = e.Selection.GetSelectedFiles(true);
+            IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();
+
+            using (DocumentLock lck = tracker.LockDocuments(selectedFiles, DocumentLockType.ReadOnly))
+            using (lck.MonitorChangesForReload())
             using (MergeWizardDialog dialog = new MergeWizardDialog(e.Context, new MergeUtils(e.Context), svnItems[0]))
             {
                 DialogResult result = dialog.ShowDialog(e.Context);
@@ -145,6 +150,7 @@ namespace Ankh.UI.MergeWizard.Commands
                         mrd.ShowDialog(e.Context);
                     }
                 }
+
             }
         }
     }
