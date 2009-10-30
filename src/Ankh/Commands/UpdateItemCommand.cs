@@ -87,20 +87,24 @@ namespace Ankh.Commands
 
             IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();            
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
+            using (DocumentLock lck = tracker.LockDocuments(files, DocumentLockType.NoReload))
+            {
+                SvnUpdateResult ur;
+                ProgressRunnerArgs pa = new ProgressRunnerArgs();
+                pa.CreateLog = true;
 
-            SvnUpdateResult ur;
-            ProgressRunnerArgs pa = new ProgressRunnerArgs();
-            pa.CreateLog = true;
-
-            e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle, pa,
-                delegate(object sender, ProgressWorkerArgs ee)
-                {                    
-                    SvnUpdateArgs ua = new SvnUpdateArgs();
-                    ua.Depth = depth;
-                    ua.Revision = updateTo;
-                    e.GetService<IConflictHandler>().RegisterConflictHandler(ua, ee.Synchronizer);
-                    ee.Client.Update(files, ua, out ur);
-                });
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.UpdatingTitle, pa,
+                                                         delegate(object sender, ProgressWorkerArgs ee)
+                                                             {
+                                                                 SvnUpdateArgs ua = new SvnUpdateArgs();
+                                                                 ua.Depth = depth;
+                                                                 ua.Revision = updateTo;
+                                                                 e.GetService<IConflictHandler>().
+                                                                     RegisterConflictHandler(ua, ee.Synchronizer);
+                                                                 ee.Client.Update(files, ua, out ur);
+                                                             });
+                lck.Reload(files);
+            }
         }
     }
 }
