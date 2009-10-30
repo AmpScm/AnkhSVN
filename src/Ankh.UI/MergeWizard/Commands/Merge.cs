@@ -93,7 +93,8 @@ namespace Ankh.UI.MergeWizard.Commands
                     throw new InvalidOperationException();
             }
 
-            e.Enabled = n == 1;
+            if (n != 1)
+                e.Enabled = false;
         }
 
         /// <see cref="Ankh.Commands.ICommandHandler.OnExecute" />
