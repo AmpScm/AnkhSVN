@@ -88,6 +88,7 @@ namespace Ankh.Commands
             IAnkhOpenDocumentTracker tracker = e.GetService<IAnkhOpenDocumentTracker>();            
             tracker.SaveDocuments(e.Selection.GetSelectedFiles(true));
             using (DocumentLock lck = tracker.LockDocuments(files, DocumentLockType.NoReload))
+            using(lck.MonitorChangesForReload())
             {
                 SvnUpdateResult ur;
                 ProgressRunnerArgs pa = new ProgressRunnerArgs();
@@ -103,7 +104,6 @@ namespace Ankh.Commands
                                                                      RegisterConflictHandler(ua, ee.Synchronizer);
                                                                  ee.Client.Update(files, ua, out ur);
                                                              });
-                lck.Reload(files);
             }
         }
     }
