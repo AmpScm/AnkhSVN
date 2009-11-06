@@ -43,11 +43,13 @@ namespace Ankh.Commands
                 if (dlg.ShowDialog(e.Context) != DialogResult.OK)
                     return;
 
+                SvnDepth depth = dlg.NonRecursive ? SvnDepth.Empty : SvnDepth.Infinity;
+
                 e.GetService<IProgressRunner>().RunModal(CommandStrings.Exporting,
                     delegate(object sender, ProgressWorkerArgs wa)
                     {
                         SvnExportArgs args = new SvnExportArgs();
-                        args.Depth = dlg.NonRecursive ? SvnDepth.Infinity : SvnDepth.Empty;
+                        args.Depth = depth;
                         args.Revision = dlg.Revision;
 
                         wa.Client.Export(dlg.ExportSource, dlg.LocalPath, args);
