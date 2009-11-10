@@ -52,17 +52,13 @@ namespace Ankh.Commands
             }
 
             if (!foundOne)
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
             else if (!canDiff && (e.Command == AnkhCommand.ItemResolveTheirsConflict || e.Command == AnkhCommand.ItemResolveMineConflict))
-                e.Visible = e.Enabled = false;
-            else if (/* Subversion 1.5 && */ (e.Command == AnkhCommand.ItemResolveTheirsConflict || e.Command == AnkhCommand.ItemResolveMineConflict))
-                e.Visible = e.Enabled = false;
+                e.Enabled = false;
             else if (e.Command == AnkhCommand.ItemResolveMergeTool)
-                e.Visible = e.Enabled = false;
-            else if (e.Command == AnkhCommand.ItemResolveMergeTool)
-            {
-                e.Enabled = !string.IsNullOrEmpty(e.GetService<IAnkhConfigurationService>().Instance.MergeExePath);
-            }
+                e.Enabled = false;
+            else if (e.Command == AnkhCommand.ItemResolveMergeTool && string.IsNullOrEmpty(e.GetService<IAnkhConfigurationService>().Instance.MergeExePath))
+                e.Enabled = false;
         }
 
         public override void OnExecute(CommandEventArgs e)
@@ -99,14 +95,6 @@ namespace Ankh.Commands
 
         static void Resolve(CommandEventArgs e, SvnAccept accept)
         {
-            switch (accept)
-            {
-                case SvnAccept.Postpone:
-                case SvnAccept.Mine:
-                case SvnAccept.Theirs:
-                    throw new NotImplementedException(); // Not available in 1.5
-            }
-
             HybridCollection<string> paths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
