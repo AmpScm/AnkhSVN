@@ -186,7 +186,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
                 Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
                     ?? "$(ProgramFiles)\\Perforce"), "p4merge.exe"),
-                    "'$(Theirs)' '$(Base)' '$(Mine)' '$(Merged)'", true));
+                    "'$(Base)' '$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "BeyondCompare3W", "Beyond Compare Pro (3-Way)",
                 RelativePath(ShellOpenSearch("BeyondCompare.Snapshot"), "BComp.exe")
