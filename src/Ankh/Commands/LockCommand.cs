@@ -73,7 +73,7 @@ namespace Ankh.Commands
             IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
             AnkhConfig Config = cs.Instance;
 
-            IEnumerable<SvnItem> selectedItems = items;
+            IEnumerable<SvnItem> selectedItems = null;
 
             if (!Config.SuppressLockingUI || e.PromptUser)
             {
@@ -98,8 +98,12 @@ namespace Ankh.Commands
                 }
                 selectedItems = psr.Selection;
             }
-            List<string> files = new List<string>();
 
+
+            if (selectedItems == null)
+                selectedItems = items ?? e.Selection.GetSelectedSvnItems(true);
+
+            List<string> files = new List<string>();
             foreach (SvnItem item in selectedItems)
             {
                 if (item.IsFile) // svn lock is only for files
