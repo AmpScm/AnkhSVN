@@ -327,7 +327,7 @@ namespace Ankh.Scc
                         }
                     }
 
-                    CommandService.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.Always);
+                    CommandService.DirectlyExecCommand(AnkhCommand.SccLock, mustLockItems, CommandPrompt.DoDefault);
                     // Only check the original list; the rest of the items in mustLockItems is optional
                     foreach (SvnItem i in mustBeLocked)
                     {
