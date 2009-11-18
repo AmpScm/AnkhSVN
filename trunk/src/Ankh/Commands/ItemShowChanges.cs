@@ -42,7 +42,7 @@ namespace Ankh.Commands
             {
                 SvnItem sel = e.Selection.ActiveDocumentItem;
 
-                if (sel == null || !sel.IsLocalDiffAvailable)
+                if (sel == null || sel.IsDirectory || !sel.IsLocalDiffAvailable)
                     e.Enabled = false;
 
                 return;
