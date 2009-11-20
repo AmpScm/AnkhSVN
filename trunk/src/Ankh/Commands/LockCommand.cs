@@ -71,11 +71,11 @@ namespace Ankh.Commands
             string comment = "";
 
             IAnkhConfigurationService cs = e.GetService<IAnkhConfigurationService>();
-            AnkhConfig Config = cs.Instance;
+            AnkhConfig config = cs.Instance;
 
             IEnumerable<SvnItem> selectedItems = null;
 
-            if (!Config.SuppressLockingUI || e.PromptUser)
+            if (!config.SuppressLockingUI || e.PromptUser)
             {
                 if (e.PromptUser || !(Shift || e.DontPrompt))
                 {
