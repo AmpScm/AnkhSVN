@@ -117,7 +117,7 @@ namespace Ankh.Commands
                 return;
 
 
-            List<string> lockErrors = new List<string>();
+            List<string> alreadyLockedFiles = new List<string>();
             e.GetService<IProgressRunner>().RunModal(
                 "Locking",
                  delegate(object sender, ProgressWorkerArgs ee)
@@ -126,22 +126,24 @@ namespace Ankh.Commands
                      la.StealLock = stealLocks;
                      la.Comment = comment;
                      la.AddExpectedError(SvnErrorCode.SVN_ERR_FS_PATH_ALREADY_LOCKED);
-
-                     la.SvnError += delegate(object errorSender, SvnErrorEventArgs errorArgs)
-                     {
-                         lockErrors.Add(errorArgs.Exception.Message);
-                     };
+                     la.Notify += delegate(object nSender, SvnNotifyEventArgs notifyArgs)
+                                      {
+                                          if (notifyArgs.Action == SvnNotifyAction.LockFailedLock)
+                                          {
+                                              alreadyLockedFiles.Add(notifyArgs.FullPath);
+                                          }
+                                      };
                      ee.Client.Lock(files, la);
                  });
 
-            if (lockErrors.Count == 0)
+            if (alreadyLockedFiles.Count == 0)
                 return;
 
             // TODO: Create a dialog where the user can select what locks to steal, and also what files are already locked.
             AnkhMessageBox box = new AnkhMessageBox(e.Context);
             DialogResult rslt = box.Show(
-                "The following items could not be locked, because they were already locked. Do you want to steal these locks? \r\n\r\n" +
-                string.Join("\r\n", lockErrors.ToArray()),
+                "The following items could not be locked, because they were already locked. Do you want to steal the locks on these files? \r\n\r\n" +
+                string.Join("\r\n", alreadyLockedFiles.ToArray()),
                 "Already locked",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
