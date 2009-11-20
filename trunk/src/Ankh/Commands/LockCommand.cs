@@ -141,7 +141,7 @@ namespace Ankh.Commands
             AnkhMessageBox box = new AnkhMessageBox(e.Context);
             DialogResult rslt = box.Show(
                 "The following items could not be locked, because they were already locked. Do you want to steal these locks? \r\n\r\n" +
-                string.Join("\r\n", lockErrors),
+                string.Join("\r\n", lockErrors.ToArray()),
                 "Already locked",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
