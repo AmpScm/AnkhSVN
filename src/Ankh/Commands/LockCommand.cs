@@ -101,7 +101,7 @@ namespace Ankh.Commands
 
 
             if (selectedItems == null)
-                selectedItems = items ?? e.Selection.GetSelectedSvnItems(true);
+                selectedItems = psi.DefaultResult.Selection;
 
             List<string> files = new List<string>();
             foreach (SvnItem item in selectedItems)
