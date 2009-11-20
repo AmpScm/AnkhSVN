@@ -25,8 +25,8 @@ namespace Ankh.Commands
     /// <summary>
     /// Command to unlock the selected items.
     /// </summary>
-    [Command(AnkhCommand.Unlock, HideWhenDisabled=true)] 
-	class UnlockCommand : CommandBase
+    [Command(AnkhCommand.Unlock, HideWhenDisabled = true)]
+    class UnlockCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
@@ -44,15 +44,15 @@ namespace Ankh.Commands
             PathSelectorInfo psi = new PathSelectorInfo("Select Files to Unlock", e.Selection.GetSelectedSvnItems(true));
 
             psi.VisibleFilter += delegate(SvnItem item)
-            {
-				return item.IsLocked;
-            };
+                                     {
+                                         return item.IsLocked;
+                                     };
 
             psi.CheckedFilter += delegate(SvnItem item)
-            {
-				return item.IsLocked;
-            };
-            
+                                     {
+                                         return item.IsLocked;
+                                     };
+
             PathSelectorResult psr;
             if (!Shift)
             {
@@ -73,24 +73,17 @@ namespace Ankh.Commands
                 files.Add(item.FullPath);
             }
 
-            if(files.Count == 0)
+            if (files.Count == 0)
                 return;
 
-            try
-            {
-                e.GetService<IProgressRunner>().RunModal("Unlocking",
-                    delegate(object sender, ProgressWorkerArgs ee)
+            e.GetService<IProgressRunner>().RunModal(
+                "Unlocking",
+                delegate(object sender, ProgressWorkerArgs ee)
                     {
                         SvnUnlockArgs ua = new SvnUnlockArgs();
 
                         ee.Client.Unlock(files, ua);
                     });
-            }
-            finally
-            {
-                // Subversion 1.5.0 bug. Invalid path passed to notify handler :(
-                e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
-            }
         }
-	}
+    }
 }
