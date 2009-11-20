@@ -55,16 +55,17 @@ namespace Ankh.Commands
             if (e.Command == AnkhCommand.SccLock && items == null)
                 return;
 
-            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock", items ?? e.Selection.GetSelectedSvnItems(true));
+            PathSelectorInfo psi = new PathSelectorInfo("Select Files to Lock",
+                                                        items ?? e.Selection.GetSelectedSvnItems(true));
             psi.VisibleFilter += delegate(SvnItem item)
-            {
-                return item.IsFile && item.IsVersioned && !item.IsLocked;
-            };
+                                     {
+                                         return item.IsFile && item.IsVersioned && !item.IsLocked;
+                                     };
 
             psi.CheckedFilter += delegate(SvnItem item)
-            {
-                return item.IsFile && item.IsVersioned && !item.IsLocked;
-            };
+                                     {
+                                         return item.IsFile && item.IsVersioned && !item.IsLocked;
+                                     };
 
             PathSelectorResult psr;
             bool stealLocks = false;
@@ -115,56 +116,48 @@ namespace Ankh.Commands
             if (files.Count == 0)
                 return;
 
-            try
+
+            List<string> lockErrors = new List<string>();
+            e.GetService<IProgressRunner>().RunModal(
+                "Locking",
+                 delegate(object sender, ProgressWorkerArgs ee)
+                 {
+                     SvnLockArgs la = new SvnLockArgs();
+                     la.StealLock = stealLocks;
+                     la.Comment = comment;
+                     la.AddExpectedError(SvnErrorCode.SVN_ERR_FS_PATH_ALREADY_LOCKED);
+
+                     la.SvnError += delegate(object errorSender, SvnErrorEventArgs errorArgs)
+                     {
+                         lockErrors.Add(errorArgs.Exception.Message);
+                     };
+                     ee.Client.Lock(files, la);
+                 });
+
+            if (lockErrors.Count == 0)
+                return;
+
+            // TODO: Create a dialog where the user can select what locks to steal, and also what files are already locked.
+            AnkhMessageBox box = new AnkhMessageBox(e.Context);
+            DialogResult rslt = box.Show(
+                "The following items could not be locked, because they were already locked. Do you want to steal these locks? \r\n\r\n" +
+                string.Join("\r\n", lockErrors),
+                "Already locked",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (rslt == DialogResult.Yes)
             {
-                List<string> lockErrors = new List<string>();
-                e.GetService<IProgressRunner>().RunModal("Locking",
-                    delegate(object sender, ProgressWorkerArgs ee)
-                    {
-                        SvnLockArgs la = new SvnLockArgs();
-                        la.StealLock = stealLocks;
-                        la.Comment = comment;
-                        la.AddExpectedError(SvnErrorCode.SVN_ERR_FS_PATH_ALREADY_LOCKED);
-
-                        la.SvnError += delegate(object errorSender, SvnErrorEventArgs errorArgs)
-                                           {
-                                               lockErrors.Add(errorArgs.Exception.Message);
-                                           };
-                        ee.Client.Lock(files, la);
-                        
-
-                    });
-
-                if(lockErrors.Count > 0)
-                {
-                    // TODO: Create a dialog where the user can select what locks to steal, and also what files are already locked.
-                    AnkhMessageBox box = new AnkhMessageBox(e.Context);
-                    DialogResult rslt = box.Show(
-                            "The following items could not be locked, because they were already locked. Do you want to steal these locks? \r\n\r\n" +
-                            string.Join("\r\n", lockErrors), 
-                            "Already locked",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-
-                    if(rslt == DialogResult.Yes)
-                    {
-                        e.GetService<IProgressRunner>().RunModal("Locking",
-                            delegate(object sender, ProgressWorkerArgs ee)
-                            {
-                                SvnLockArgs la = new SvnLockArgs();
-                                la.StealLock = true;
-                                la.Comment = comment;
-                                ee.Client.Lock(files, la);
-                            });
-                    }
-                }
+                e.GetService<IProgressRunner>().RunModal(
+                    "Locking",
+                     delegate(object sender, ProgressWorkerArgs ee)
+                     {
+                         SvnLockArgs la = new SvnLockArgs();
+                         la.StealLock = true;
+                         la.Comment = comment;
+                         ee.Client.Lock(files, la);
+                     });
             }
-            finally
-            {
-                // TODO: this can be removed when switching to Subversion 1.6
-                e.GetService<IFileStatusMonitor>().ScheduleSvnStatus(files);
-            }
-
         } // OnExecute
     }
 }
