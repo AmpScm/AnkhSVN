@@ -393,9 +393,11 @@ namespace Ankh.UI.Annotate
 
                     AnnotateSource src = region.Source;
 
+                    const int revisionWidth = 30; // TODO: Fix for higher/lower revisions than the 10000-99999 range
+
                     Brush color = IsSelected(region) ? selectedTextColor : textColor;
-                    e.Graphics.DrawString(src.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, 30, LineHeight), sfr);
-                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(35, rect.Top + 2, Width-62, LineHeight), sfl);
+                    e.Graphics.DrawString(src.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, revisionWidth, LineHeight), sfr);
+                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(revisionWidth + 5, rect.Top + 2, Width - revisionWidth -32, LineHeight), sfl);
                     e.Graphics.DrawString(src.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
                 }
 
