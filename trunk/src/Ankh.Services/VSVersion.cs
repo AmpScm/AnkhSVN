@@ -93,6 +93,11 @@ namespace Ankh
             get { return FullVersion.Major == 10; }
         }
 
+        public static bool VS2010Beta2
+        {
+            get { return FullVersion.Major == 10 && FullVersion.Minor == 0 && FullVersion.Build == 21006; }
+        }
+
         public static bool VistaOrLater
         {
             get { return OSVersion.Minor >= 6; }
