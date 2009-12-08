@@ -350,6 +350,12 @@ namespace Ankh.Services.PendingChanges
 
             // Use the project commit settings class to add an issue number (if available)
             IProjectCommitSettings pcs = state.GetService<IProjectCommitSettings>();
+            if (pcs.WarnIfNoIssue && pcs.ShowIssueBox && string.IsNullOrEmpty(state.IssueText) &&
+                state.MessageBox.Show(PccStrings.NoIssueNumber, "",
+                                      MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                return false;
+            }
             msg = pcs.BuildLogMessage(msg, state.IssueText);
 
             // And make sure the log message ends with a single newline
