@@ -176,6 +176,7 @@ namespace Ankh
 
             private void DoHandle(SvnAuthorizationException ex, ExceptionInfo info)
             {
+                // TODO: Show at least some parts of the real error to help resolve it.
                 MessageBox.Show(Owner,
                     "You failed to authorize against the remote repository. ",
                     "Authorization failed", MessageBoxButtons.OK,
