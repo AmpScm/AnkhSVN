@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommitSingleWc" xml:space="preserve">
     <value>You can only commit from one working copy at a time</value>
@@ -155,5 +155,9 @@
   </data>
   <data name="YouCanDownloadAnkh" xml:space="preserve">
     <value>You can download the latest AnkhSVN release on http://ankhsvn.net/downloads</value>
+  </data>
+  <data name="NoIssueNumber" xml:space="preserve">
+    <value>You haven't entered an issue number.
+Are you sure you want to commit without an issue number?</value>
   </data>
 </root>

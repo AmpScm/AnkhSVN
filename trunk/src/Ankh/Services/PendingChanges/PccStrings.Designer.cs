@@ -142,6 +142,16 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t entered an issue number.
+        ///Are you sure you want to commit without an issue number?.
+        /// </summary>
+        internal static string NoIssueNumber {
+            get {
+                return ResourceManager.GetString("NoIssueNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repository Post-Commit hook Result.
         /// </summary>
         internal static string PostCommitError {
