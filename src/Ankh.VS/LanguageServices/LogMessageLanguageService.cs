@@ -52,7 +52,10 @@ namespace Ankh.VS.LanguageServices
 
         public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
         {
-            return new LogMessageViewFilter(this, mgr, newView);
+            if (VSVersion.VS2010 && !VSVersion.VS2010Beta2)
+                return new LogMessageViewFilter(this, mgr, newView);
+            else
+                return base.CreateViewFilter(mgr, newView);
         }
 
         LanguagePreferences _preferences;
@@ -442,12 +445,13 @@ namespace Ankh.VS.LanguageServices
         {
             _context = context;
         }
+
         public int AddAdornments()
         {
             return VSConstants.S_OK;
         }
 
-        public int OnNewView(IVsTextView pView)
+        public int OnNewView(IVsTextView newView)
         {
             return VSConstants.S_OK;
         }
