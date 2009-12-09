@@ -41,8 +41,13 @@ namespace Ankh.VS.LanguageServices
 
         public override int GetCodeWindowManager(IVsCodeWindow codeWindow, out IVsCodeWindowManager mgr)
         {
-            mgr = new LogMessageCodeWindowManager(this);
-            return VSConstants.S_OK;
+            if (VSVersion.VS2010 && !VSVersion.VS2010Beta2)
+            {
+                mgr = new LogMessageCodeWindowManager(this);
+                return VSConstants.S_OK;
+            }
+            else
+                return base.GetCodeWindowManager(codeWindow, out mgr);
         }
 
         public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
@@ -52,10 +57,7 @@ namespace Ankh.VS.LanguageServices
 
         public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
         {
-            if (VSVersion.VS2010 && !VSVersion.VS2010Beta2)
-                return new LogMessageViewFilter(this, mgr, newView);
-            else
-                return base.CreateViewFilter(mgr, newView);
+            return new LogMessageViewFilter(this, mgr, newView);
         }
 
         LanguagePreferences _preferences;
