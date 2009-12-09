@@ -843,7 +843,12 @@ namespace Ankh.UI.PendingChanges
                             {
                                 // Only hide the horizontal scrollbar if one would have been visible 
                                 if (items[0].fHorzScrollbar != 0 && (lp == null || lp[0].fWordWrap == 0))
+                                {
                                     height += SystemInformation.HorizontalScrollBarHeight;
+
+                                    if (VSVersion.VS2010OrLater)
+                                        height += 2; // WPF control uses 2 exta pixels for dropdown.
+                                }
                             }
                         }
                     }
