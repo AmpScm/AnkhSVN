@@ -39,6 +39,12 @@ namespace Ankh.VS.LanguageServices
         {
         }
 
+        public override int GetCodeWindowManager(IVsCodeWindow codeWindow, out IVsCodeWindowManager mgr)
+        {
+            mgr = new LogMessageCodeWindowManager(this);
+            return VSConstants.S_OK;
+        }
+
         public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
         {
             base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
@@ -425,6 +431,30 @@ namespace Ankh.VS.LanguageServices
             }
             issueId = null;
             return false;
+        }
+    }
+
+    [ComVisible(true)]
+    sealed class LogMessageCodeWindowManager : IVsCodeWindowManager
+    {
+        readonly IAnkhServiceProvider _context;
+        public LogMessageCodeWindowManager(IAnkhServiceProvider context)
+        {
+            _context = context;
+        }
+        public int AddAdornments()
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int OnNewView(IVsTextView pView)
+        {
+            return VSConstants.S_OK;
+        }
+
+        public int RemoveAdornments()
+        {
+            return VSConstants.S_OK;
         }
     }
 }
