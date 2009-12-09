@@ -29,7 +29,7 @@ using System.Reflection;
 namespace Ankh.VS.LanguageServices
 {
     [CLSCompliant(false)]
-    public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider, IObjectWithAutomation, IAnkhIdleProcessor
+    public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider, IObjectWithAutomation, IAnkhIdleProcessor, IVsLanguageInfo
     {
         readonly IAnkhServiceProvider _context;
 
@@ -49,6 +49,16 @@ namespace Ankh.VS.LanguageServices
         public virtual void OnInitialize()
         {
             GetService<IAnkhPackage>().RegisterIdleProcessor(this);
+        }
+
+        public new virtual int GetCodeWindowManager(IVsCodeWindow codeWindow, out IVsCodeWindowManager mgr)
+        {
+            return base.GetCodeWindowManager(codeWindow, out mgr);
+        }
+
+        public override Source CreateSource(IVsTextLines buffer)
+        {
+            return base.CreateSource(buffer);
         }
 
         void IAnkhIdleProcessor.OnIdle(AnkhIdleArgs e)
