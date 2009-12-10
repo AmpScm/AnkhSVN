@@ -50,6 +50,22 @@ namespace Ankh.UI.DiffWindow
 
             ToolWindowHost.CommandContext = AnkhId.DiffMergeContextGuid;
             ToolWindowHost.KeyboardContext = AnkhId.DiffMergeContextGuid;
+
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            ToolStripRenderer renderer = null;
+            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
+            if (ds != null)
+            {
+                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+            }
+
+            if (renderer != null)
+                diffControl1.ToolStripRenderer = renderer;
+
+            base.OnLoad(e);
         }
 
         int _nFrame;
@@ -64,7 +80,7 @@ namespace Ankh.UI.DiffWindow
         {
             base.OnFrameShow(e);
 
-            switch(e.Show)
+            switch (e.Show)
             {
                 case __FRAMESHOW.FRAMESHOW_Hidden:
                 case __FRAMESHOW.FRAMESHOW_DestroyMultInst:
