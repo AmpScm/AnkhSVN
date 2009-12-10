@@ -392,7 +392,12 @@ namespace Ankh.Diff.DiffUtils.Controls
 
         #endregion
 
-        
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ToolStripRenderer ToolStripRenderer
+        {
+            get { return ToolBar.Renderer; }
+            set { ToolBar.Renderer = value; }
+        }
 
         #region Protected Members
 
