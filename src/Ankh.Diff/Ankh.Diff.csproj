@@ -67,7 +67,6 @@
     <Compile Include="Common\Forms\FindDlg.Designer.cs">
       <DependentUpon>FindDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiffPatch\diff_match_patch.cs" />
     <Compile Include="DiffUtils\Classes\AddCopyList.cs" />
     <Compile Include="DiffUtils\Classes\BinaryDiff.cs" />
     <Compile Include="DiffUtils\Classes\BinaryDiffLines.cs" />
