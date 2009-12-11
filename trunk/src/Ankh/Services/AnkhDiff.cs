@@ -83,8 +83,6 @@ namespace Ankh.Services
                 return false;
             }
 
-            // TODO: Maybe Handle file saves and program exits
-
             Process p = new Process();
             p.StartInfo = new ProcessStartInfo(program, arguments);
 
@@ -855,8 +853,6 @@ namespace Ankh.Services
                 throw new ArgumentNullException("from");
             else if (to == null)
                 throw new ArgumentNullException("to");
-
-            // TODO: Replace with SvnClient.FileVersions call when to = from+1
 
             string f1;
             string f2;
