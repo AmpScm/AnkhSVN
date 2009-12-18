@@ -168,7 +168,7 @@ namespace Ankh
             private void DoHandle(SvnWorkingCopyLockException ex, ExceptionInfo info)
             {
                 MessageBox.Show(Owner,
-                    "Your working copy appear to be locked. " + NL +
+                    "Your working copy appears to be locked. " + NL +
                     "Run Cleanup to amend the situation.",
                     "Working copy locked", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -198,41 +198,7 @@ namespace Ankh
                     "You need to run Update before you can proceed with the operation",
                     "Resource(s) out of date", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-            }
-
-            private void DoHandle(SvnInvalidNodeKindException ex, ExceptionInfo info)
-            {
-                MessageBox.Show(Owner,
-                    "One or more of the resources selected are not valid targets for this operation" +
-                    Environment.NewLine +
-                    "(Are you trying to commit a child of a newly added, but not committed resource?)",
-                    "Illegal target for this operation",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-
-
-
-            private void DoHandle(SvnException ex, ExceptionInfo info)
-            {
-                const int LockedFileErrorCode = 720032; // This is a wrapped OS error
-
-                if (ex.SubversionErrorCode == LockedFileErrorCode)
-                {
-                    MessageBox.Show(Owner,
-                        ex.Message + NL + NL +
-                        "Avoid versioning files that can be locked by VS.NET. " +
-                        "These include *.ncb, *.projdata etc." + NL +
-                        "See the AnkhSVN FAQ for more details.",
-                        "File exclusively locked",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-                else
-                {
-                    _handler.ShowErrorDialog(ex, false, false, info);
-                }
-            }
+            }  
 
             private void DoHandle(Exception ex, ExceptionInfo info)
             {
