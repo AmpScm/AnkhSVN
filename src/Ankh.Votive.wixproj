@@ -73,7 +73,6 @@
     <Compile Include="Ankh.Votive\VSExtension.wxs" />
     <Compile Include="autolib\SharpSvn\SharpSvn.wxs" />
     <Compile Include="autolib\SharpSvn\Licenses\SharpSvn-Licenses.wxs" />
-    <Compile Include="lib\lib.wxs" />
     <Compile Include="Utils\Utils.wxs" />
   </ItemGroup>
   <ItemGroup>
