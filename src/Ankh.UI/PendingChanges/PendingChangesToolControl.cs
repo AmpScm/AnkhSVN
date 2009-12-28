@@ -30,7 +30,7 @@ using Ankh.Scc.UI;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class PendingChangesToolControl : AnkhToolWindowControl
+    public partial class PendingChangesToolControl : AnkhToolWindowControl, IAnkhHasVsTextView
     {
         readonly List<PendingChangesPage> _pages;
         readonly PendingCommitsPage _commitsPage;
@@ -198,5 +198,13 @@ namespace Ankh.UI.PendingChanges
         {
             ShowPanel(_conflictsPage, true);
         }
+
+        #region IAnkhHasVsTextView Members
+        Microsoft.VisualStudio.TextManager.Interop.IVsTextView IAnkhHasVsTextView.TextView
+        {
+            get { return _commitsPage.TextView; }
+        }
+
+        #endregion
     }
 }

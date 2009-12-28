@@ -15,11 +15,13 @@
 //  limitations under the License.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms;
-using System.Collections;
+
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.Selection
 {
@@ -174,6 +176,8 @@ namespace Ankh.Selection
         /// </summary>
         /// <returns></returns>
         IVsTrackSelectionEx GetModalTracker(Control control);
+
+        IVsTextView ActiveFrameTextView { get; }
 
         /// <summary>
         /// Maybes the install delay handler.

@@ -186,6 +186,11 @@ namespace AnkhSvn_UnitTestProject.Mocks
                 
             }
 
+            public Microsoft.VisualStudio.TextManager.Interop.IVsTextView ActiveFrameTextView
+            {
+                get { return null; }
+            }
+
             #endregion
         }
     }
