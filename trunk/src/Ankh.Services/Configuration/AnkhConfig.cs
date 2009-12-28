@@ -97,7 +97,7 @@ namespace Ankh.Configuration
             set { _autoLockEnabled = value; }
         }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool DisableDashInLogComment
         {
             get { return _noDashComment; }
