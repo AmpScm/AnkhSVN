@@ -20,13 +20,13 @@ using System.Text;
 
 namespace Ankh.VS.LanguageServices
 {
-	partial class AnkhLanguageService
-	{
+    partial class MPFBasedLanguageService
+    {
         public override string GetFormatFilterList()
         {
             return "";
         }
-	}
+    }
 
     partial class AnkhViewFilter
     {

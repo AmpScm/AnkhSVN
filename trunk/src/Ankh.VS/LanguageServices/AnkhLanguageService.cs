@@ -29,11 +29,11 @@ using System.Reflection;
 namespace Ankh.VS.LanguageServices
 {
     [CLSCompliant(false)]
-    public abstract partial class AnkhLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider, IObjectWithAutomation, IAnkhIdleProcessor, IVsLanguageInfo
+    public abstract partial class MPFBasedLanguageService : LanguageService, IAnkhServiceImplementation, IAnkhServiceProvider, IObjectWithAutomation, IAnkhIdleProcessor, IVsLanguageInfo
     {
         readonly IAnkhServiceProvider _context;
 
-        protected AnkhLanguageService(IAnkhServiceProvider context)
+        protected MPFBasedLanguageService(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
@@ -71,7 +71,7 @@ namespace Ankh.VS.LanguageServices
             {
                 OnActiveViewChanged(null);
             }
-            catch 
+            catch
             { }
         }
 
@@ -112,7 +112,7 @@ namespace Ankh.VS.LanguageServices
         }
         public virtual void PrepareContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
         {
-            
+
         }
 
         public override void Dispose()
@@ -147,7 +147,7 @@ namespace Ankh.VS.LanguageServices
 
     class AnkhSource : Source
     {
-        public AnkhSource(AnkhLanguageService service, IVsTextLines textLines, Colorizer colorizer)
+        public AnkhSource(MPFBasedLanguageService service, IVsTextLines textLines, Colorizer colorizer)
             : base(service, textLines, colorizer)
         {
         }
@@ -157,7 +157,7 @@ namespace Ankh.VS.LanguageServices
             Type sc = typeof(Source);
             const BindingFlags privateField = BindingFlags.NonPublic | BindingFlags.Instance;
             FieldInfo field;
-            
+
             field = sc.GetField("colorState", privateField);
 
             if (field != null)

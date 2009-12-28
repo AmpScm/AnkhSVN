@@ -30,12 +30,12 @@ namespace Ankh.VS.LanguageServices
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
     [GlobalService(typeof(LogMessageLanguageService), PublicService = true)]
-    public partial class LogMessageLanguageService : AnkhLanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
+    public partial class LogMessageLanguageService : MPFBasedLanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
 
         public LogMessageLanguageService(IAnkhServiceProvider context)
-            :base(context)
+            : base(context)
         {
         }
 
@@ -149,7 +149,7 @@ namespace Ankh.VS.LanguageServices
                     switch (_line[_offset])
                     {
                         case '#':
-                            if(!atStart)
+                            if (!atStart)
                                 goto default;
                             if (tokenInfo != null)
                             {
@@ -200,7 +200,7 @@ namespace Ankh.VS.LanguageServices
                                     {
                                         tokenInfo.Color = TokenColor.Text;
                                         tokenInfo.StartIndex = _offset;
-                                        tokenInfo.EndIndex = _nextIssue.Index -1;
+                                        tokenInfo.EndIndex = _nextIssue.Index - 1;
                                         tokenInfo.Trigger = TokenTriggers.None;
                                         tokenInfo.Type = TokenType.Text;
                                     }
@@ -213,7 +213,7 @@ namespace Ankh.VS.LanguageServices
                                     {
                                         tokenInfo.Color = TokenColor.Keyword;
                                         tokenInfo.StartIndex = _offset;
-                                        tokenInfo.EndIndex = _offset + _nextIssue.Length-1;
+                                        tokenInfo.EndIndex = _offset + _nextIssue.Length - 1;
                                         tokenInfo.Trigger = TokenTriggers.None;
                                         tokenInfo.Type = _issueTokenType;
                                     }
