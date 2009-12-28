@@ -93,7 +93,7 @@ namespace Ankh.VS.LanguageServices
             get;
         }
 
-        
+        [CLSCompliant(false)]
         protected virtual LanguagePreferences CreatePreferences()
         {
             LanguagePreferences preferences;
@@ -105,6 +105,7 @@ namespace Ankh.VS.LanguageServices
         }
 
         LanguagePreferences _preferences;
+        [CLSCompliant(false)]
         public LanguagePreferences LanguagePreferences
         {
             get { return _preferences ?? (_preferences = CreatePreferences()); }
@@ -414,6 +415,7 @@ namespace Ankh.VS.LanguageServices
                 return VSConstants.E_FAIL; // delegate to next command target.
         }
 
+        [CLSCompliant(false)]
         protected virtual int QueryStatus(ref Guid cmdGroup, ref OLECMD oleCmd, IntPtr pCmdText)
         {
             if (cmdGroup == VSConstants.VSStd2K)
@@ -455,6 +457,7 @@ namespace Ankh.VS.LanguageServices
                 return VSConstants.E_FAIL; // delegate to next command target.
         }
 
+        [CLSCompliant(false)]
         public virtual void ShowContextMenu(Guid cmdGroup, int menuId, IOleCommandTarget target)
         {
             IVsUIShell uiShell = GetService<IVsUIShell>(typeof(SVsUIShell));
