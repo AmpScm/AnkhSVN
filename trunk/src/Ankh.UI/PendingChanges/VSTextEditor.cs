@@ -588,6 +588,12 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        [CLSCompliant(false)]
+        public IVsTextView TextView
+        {
+            get { return _nativeWindow.TextView; }
+        }
+
         public bool PreFilterMessage(ref Message msg)
         {
             if (!_containsWpfEditor)
@@ -612,7 +618,6 @@ namespace Ankh.UI.PendingChanges
                     case 0x26:
                         return true; // VK_UP
                 }
-
 
             return false;
         }
@@ -957,6 +962,16 @@ namespace Ankh.UI.PendingChanges
                     Guid CMDUIGUID_TextEditor = new Guid(0x8B382828, 0x6202, 0x11d1, 0x88, 0x70, 0x00, 0x00, 0xF8, 0x75, 0x79, 0xD2);
                     ErrorHandler.ThrowOnFailure(frame.SetGuidProperty((int)__VSFPROPID.VSFPROPID_InheritKeyBindings, ref CMDUIGUID_TextEditor));
                 }
+            }
+        }
+
+        public IVsTextView TextView
+        {
+            get
+            {
+                IVsTextView view;
+                ErrorHandler.ThrowOnFailure(_codeWindow.GetPrimaryView(out view));
+                return view;
             }
         }
 

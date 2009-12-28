@@ -23,6 +23,8 @@ using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
 using Ankh.Selection;
 using SharpSvn;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Ankh.UI;
 
 namespace Ankh.VS.Selection
 {
@@ -36,6 +38,9 @@ namespace Ankh.VS.Selection
         object _activeDocumentFrameObject;
         Control _activeDocumentControl;
         string _activeDocumentFileName;
+        IVsTextView _activeFrameTextView;
+        bool _determinedActiveFrameTextView;
+
 
         IVsUserContext _userContext;
 
@@ -45,10 +50,14 @@ namespace Ankh.VS.Selection
             {
                 case VSConstants.VSSELELEMID.SEID_WindowFrame:
                     _activeFrameObject = _activeFrameControl = null;
+                    _activeFrameTextView = null;
+                    _determinedActiveFrameTextView = false;
                     _activeFrame = varValueNew as IVsWindowFrame;
                     break;
                 case VSConstants.VSSELELEMID.SEID_DocumentFrame:
                     _activeDocumentFrameObject = _activeDocumentControl = null;
+                    _activeFrameTextView = null;
+                    _determinedActiveFrameTextView = false;
                     _activeDocumentFrame = varValueNew as IVsWindowFrame;
                     break;
                 case VSConstants.VSSELELEMID.SEID_UserContext:
@@ -71,6 +80,7 @@ namespace Ankh.VS.Selection
             }
 
             _activeDocumentFileName = null; // Flush on every document state change
+            ClearCache();
 
             return VSConstants.S_OK;
         }
@@ -189,6 +199,34 @@ namespace Ankh.VS.Selection
                     return _cache[p];
                 else
                     return null;
+            }
+        }
+
+        public IVsTextView ActiveFrameTextView
+        {
+            get
+            {
+                if (!_determinedActiveFrameTextView)
+                {
+                    _determinedActiveFrameTextView = true;
+                    _activeFrameTextView = null;
+                    IVsWindowFrame frame = ActiveFrame;
+
+                    if (frame != null)
+                    {
+                        _activeFrameTextView = GetTextView(frame);
+
+                        if (_activeFrameTextView == null)
+                        {
+                            IAnkhHasVsTextView hasView = ActiveFrameControl as IAnkhHasVsTextView;
+
+                            if (hasView != null)
+                                _activeFrameTextView = hasView.TextView;
+                        }
+                    }
+                }
+
+                return _activeFrameTextView;
             }
         }
 

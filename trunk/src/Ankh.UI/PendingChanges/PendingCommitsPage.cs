@@ -536,5 +536,10 @@ namespace Ankh.UI.PendingChanges
                     issueNumberBox.Text = txt;
             }
         }
+
+        internal Microsoft.VisualStudio.TextManager.Interop.IVsTextView TextView
+        {
+            get { return logMessageEditor.TextView; }
+        }
     }
 }
