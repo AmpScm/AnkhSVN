@@ -104,9 +104,9 @@ namespace Ankh.VS.LanguageServices
         #endregion
     }
 
-    abstract partial class AnkhViewFilter : ViewFilter
+    abstract partial class MPFBasedViewFilter : ViewFilter
     {
-        protected AnkhViewFilter(CodeWindowManager mgr, IVsTextView view)
+        protected MPFBasedViewFilter(CodeWindowManager mgr, IVsTextView view)
             : base(mgr, view)
         {
         }
