@@ -22,6 +22,8 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using Ankh.Scc;
 using Ankh.IssueTracker;
+using System.Diagnostics;
+using Ankh.UI;
 
 namespace Ankh.VS.LanguageServices
 {
@@ -30,230 +32,114 @@ namespace Ankh.VS.LanguageServices
     /// </summary>
     [Guid(AnkhId.LogMessageLanguageServiceId), ComVisible(true), CLSCompliant(false)]
     [GlobalService(typeof(LogMessageLanguageService), PublicService = true)]
-    public partial class LogMessageLanguageService : MPFBasedLanguageService, IAnkhServiceImplementation, IAnkhServiceProvider
+    public partial class LogMessageLanguageService : AnkhLanguageService
     {
         public const string ServiceName = AnkhId.LogMessageServiceName;
 
         public LogMessageLanguageService(IAnkhServiceProvider context)
             : base(context)
         {
+            DefaultContextMenu = AnkhCommandMenu.LogMessageEditorContextMenu;
         }
 
-        public override int GetCodeWindowManager(IVsCodeWindow codeWindow, out IVsCodeWindowManager mgr)
+        protected override AnkhColorizer CreateColorizer(IVsTextLines textLines)
         {
-            if (VSVersion.VS2010 && !VSVersion.VS2010Beta2)
-            {
-                mgr = new LogMessageCodeWindowManager(this);
-                return VSConstants.S_OK;
-            }
-            else
-                return base.GetCodeWindowManager(codeWindow, out mgr);
+            return new LogMessageColorizer(this, textLines);
         }
 
-        public override void UpdateLanguageContext(Microsoft.VisualStudio.TextManager.Interop.LanguageContextHint hint, Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer, Microsoft.VisualStudio.TextManager.Interop.TextSpan[] ptsSelection, Microsoft.VisualStudio.Shell.Interop.IVsUserContext context)
+        public override bool NeedsPerLineState
         {
-            base.UpdateLanguageContext(hint, buffer, ptsSelection, context);
-        }
-
-        public override ViewFilter CreateViewFilter(CodeWindowManager mgr, IVsTextView newView)
-        {
-            return new LogMessageViewFilter(this, mgr, newView);
-        }
-
-        LanguagePreferences _preferences;
-        public override LanguagePreferences GetLanguagePreferences()
-        {
-            if (_preferences == null)
-            {
-                _preferences = new LanguagePreferences(this.Site, typeof(LogMessageLanguageService).GUID, ServiceName);
-                _preferences.Init();
-            }
-
-            return _preferences;
-        }
-
-        CommentScanner _scanner;
-        public override IScanner GetScanner(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
-        {
-            if (_scanner == null)
-                _scanner = new CommentScanner(Context);
-            return _scanner;
+            get { return true; }
         }
 
         public override string Name
         {
             get { return ServiceName; }
         }
+    }
 
-        public override AuthoringScope ParseSource(ParseRequest req)
+    class LogMessageColorizer : AnkhColorizer
+    {
+        public LogMessageColorizer(LogMessageLanguageService language, IVsTextLines lines)
+            : base(language, lines)
         {
-            return null;
         }
 
-        public override Source CreateSource(Microsoft.VisualStudio.TextManager.Interop.IVsTextLines buffer)
+        IAnkhIssueService _issueService;
+        IAnkhIssueService IssueService
         {
-            return new LogmessageSource(this, buffer, GetColorizer(buffer));
+            [DebuggerStepThrough]
+            get { return _issueService ?? (_issueService = GetService<IAnkhIssueService>()); }
         }
 
-        class CommentScanner : AnkhService, IScanner
+        IAnkhConfigurationService _svc;
+        IAnkhConfigurationService Configuration
         {
-            int _offset;
-            string _line;
-            #region IScanner Members
+            get { return _svc ?? (_svc = GetService<IAnkhConfigurationService>()); }
+        }
 
-            public CommentScanner(IAnkhServiceProvider context)
-                : base(context)
+        protected override void ColorizeLine(string line, int lineNr, int startState, uint[] attrs, out int endState)
+        {
+            if (!Configuration.Instance.DisableDashInLogComment)
             {
-            }
-
-            IAnkhIssueService _issueService;
-
-            IAnkhIssueService IssueService
-            {
-                get { return _issueService ?? (_issueService = GetService<IAnkhIssueService>()); }
-            }
-
-            IEnumerable<IssueMarker> _issueIds;
-            IEnumerator<IssueMarker> _mover;
-            IssueMarker _nextIssue;
-            const TokenType _issueTokenType = TokenType.Identifier;
-
-            /// <summary>
-            /// Scans the token and provide info about it.
-            /// </summary>
-            /// <param name="tokenInfo">The token info.</param>
-            /// <param name="state">The state.</param>
-            /// <returns></returns>
-            public bool ScanTokenAndProvideInfoAboutIt(TokenInfo tokenInfo, ref int state)
-            {
-                if (string.IsNullOrEmpty(_line) || _offset >= _line.Length)
-                    return false;
-                int pState = state;
-                state = 0;
-                bool atStart = false;
-
-                if (_offset == 0)
+                bool isComment = false;
+                for (int i = 0; i < line.Length; i++)
                 {
-                    atStart = true;
-                    while (_offset < _line.Length)
+                    if (!char.IsWhiteSpace(line, i))
                     {
-                        if (char.IsWhiteSpace(_line, _offset))
-                            _offset++;
-                        else
-                            break;
+                        if (line[i] == '#')
+                            isComment = true;
+                        break;
                     }
                 }
 
-                if (_offset < _line.Length)
+                if (isComment)
                 {
-                    switch (_line[_offset])
-                    {
-                        case '#':
-                            if (!atStart)
-                                goto default;
-                            if (tokenInfo != null)
-                            {
-                                tokenInfo.Color = TokenColor.Comment;
-                                tokenInfo.StartIndex = _offset;
-                                tokenInfo.EndIndex = _line.Length;
-                                tokenInfo.Trigger = TokenTriggers.None;
-                                tokenInfo.Type = TokenType.LineComment;
-                            }
-                            state = 1;
-                            _offset = _line.Length;
-                            return true;
-                        default:
-                            if (_issueIds == null)
-                            {
-                                IAnkhIssueService iService = IssueService;
-                                IEnumerable<IssueMarker> calculated = null;
-                                if (iService != null
-                                    && iService.TryGetIssues(_line, out calculated))
-                                {
-                                    _issueIds = calculated;
-                                }
-                                else
-                                {
-                                    _issueIds = new IssueMarker[0];
-                                }
-                                _mover = _issueIds.GetEnumerator();
-                                if (_mover.MoveNext())
-                                    _nextIssue = _mover.Current;
-                                else
-                                    _nextIssue = null;
-                            }
+                    for (int i = 0; i < attrs.Length; i++)
+                        attrs[i] = (uint)TokenColor.Comment | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
 
-                            while (_nextIssue != null && _mover.Current.Index < _offset)
-                            {
-                                if (_mover.MoveNext())
-                                    _nextIssue = _mover.Current;
-                                else
-                                    _nextIssue = null;
-                            }
-
-                            if (_nextIssue != null)
-                            {
-                                if (_offset < _nextIssue.Index)
-                                {
-                                    // Text before the issue
-                                    if (tokenInfo != null)
-                                    {
-                                        tokenInfo.Color = TokenColor.Text;
-                                        tokenInfo.StartIndex = _offset;
-                                        tokenInfo.EndIndex = _nextIssue.Index - 1;
-                                        tokenInfo.Trigger = TokenTriggers.None;
-                                        tokenInfo.Type = TokenType.Text;
-                                    }
-                                    _offset = _nextIssue.Index;
-                                    return true;
-                                }
-                                else if (_offset == _nextIssue.Index)
-                                {
-                                    if (tokenInfo != null)
-                                    {
-                                        tokenInfo.Color = TokenColor.Keyword;
-                                        tokenInfo.StartIndex = _offset;
-                                        tokenInfo.EndIndex = _offset + _nextIssue.Length - 1;
-                                        tokenInfo.Trigger = TokenTriggers.None;
-                                        tokenInfo.Type = _issueTokenType;
-                                    }
-
-                                    state = 2;
-
-                                    _offset += _nextIssue.Length;
-                                    return true;
-                                }
-                            }
-
-                            if (tokenInfo != null)
-                            {
-                                tokenInfo.Color = TokenColor.Text;
-                                tokenInfo.StartIndex = _offset;
-                                tokenInfo.EndIndex = _line.Length;
-                                tokenInfo.Trigger = TokenTriggers.None;
-                                tokenInfo.Type = TokenType.Text;
-                            }
-                            state = 0;
-                            _offset = _line.Length;
-                            return true;
-                    }
+                    endState = 1; 
+                    return;
                 }
-                return false;
             }
+            for (int i = 0; i < attrs.Length; i++)
+                attrs[i] = (uint)TokenColor.Text | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
 
-            public void SetSource(string source, int offset)
+            string combined = null;
+            int start = 0, end;
+            endState = 1;
+
+            if (startState == 0 && lineNr > 0)
             {
-                _line = source;
-                _offset = offset;
-                _issueIds = null;
-                _nextIssue = null;
+                combined = GetLine(lineNr - 1) + "\n";
+                start = combined.Length;
             }
 
-            #endregion
+            combined += line;
+
+            end = combined.Length;
+
+            string followed = GetLine(lineNr + 1);
+            if (!string.IsNullOrEmpty(followed))
+                combined += "\n" + followed;
+
+            if (!string.IsNullOrEmpty(line))
+                endState = 0;
+
+            IEnumerable<IssueMarker> markers;
+            if (IssueService.TryGetIssues(combined, out markers))
+                foreach (IssueMarker im in markers)
+                {
+                    int from = Math.Max(im.Index, start);
+                    int to = Math.Min(end, im.Index + im.Length);
+
+                    for (int i = from; i < to; i++)
+                        attrs[i-start] = (uint)TokenColor.Keyword | (uint)COLORIZER_ATTRIBUTE.HUMAN_TEXT_ATTR;
+                }
         }
     }
 
-    class LogmessageSource : AnkhSource
+    /*class LogmessageSource : AnkhSource
     {
         public LogmessageSource(LogMessageLanguageService service, IVsTextLines textLines, Colorizer colorizer)
             : base(service, textLines, colorizer)
@@ -274,65 +160,10 @@ namespace Ankh.VS.LanguageServices
                 _initializedInfo = true;
             }
             return _commentInfo;
-        }
-    }
+        //}
+    }*/
 
-    class LogMessageViewFilter : AnkhViewFilter
-    {
-        readonly LogMessageLanguageService _service;
-        public LogMessageViewFilter(LogMessageLanguageService service, CodeWindowManager mgr, IVsTextView view)
-            : base(mgr, view)
-        {
-            if (service == null)
-                throw new ArgumentNullException("service");
-
-            _service = service;
-        }
-
-        public override void PrepareContextMenu(ref int menuId, ref Guid groupGuid, ref Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target)
-        {
-            if (groupGuid == Microsoft.VisualStudio.Shell.VsMenus.guidSHLMainMenu && menuId == Microsoft.VisualStudio.Shell.VsMenus.IDM_VS_CTXT_CODEWIN)
-            {
-                groupGuid = AnkhId.CommandSetGuid;
-                menuId = (int)AnkhCommandMenu.LogMessageEditorContextMenu;
-            }
-        }
-
-        protected override int QueryCommandStatus(ref Guid guidCmdGroup, uint nCmdId)
-        {
-            if (true
-                && guidCmdGroup == AnkhId.CommandSetGuid
-                && nCmdId == (uint)AnkhCommand.PcLogEditorOpenIssue // Handle OpenIssue command only
-                )
-            {
-                string issueId;
-                if (false
-                    || !GetIssueIdAtCurrentCaretPosition(false, out issueId)
-                    || string.IsNullOrEmpty(issueId) // caret is not on a recognized issue
-                    )
-                {
-                    return (int)(Microsoft.VisualStudio.OLE.Interop.Constants.OLECMDERR_E_DISABLED);
-                }
-            }
-            return base.QueryCommandStatus(ref guidCmdGroup, nCmdId);
-        }
-
-        /// <summary>
-        /// Handles "Open Issue" request
-        /// </summary>
-        protected override int ExecCommand(ref Guid guidCmdGroup, uint nCmdId, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
-        {
-            if (true
-                && guidCmdGroup == AnkhId.CommandSetGuid
-                && nCmdId == (uint)AnkhCommand.PcLogEditorOpenIssue
-                )
-            {
-                HandleOpenIssue();
-                return VSConstants.S_OK;
-            }
-            return base.ExecCommand(ref guidCmdGroup, nCmdId, nCmdexecopt, pvaIn, pvaOut);
-        }
-
+#if NOT
         /// <summary>
         /// Gets the data tip text.
         /// </summary>
@@ -438,29 +269,5 @@ namespace Ankh.VS.LanguageServices
             return false;
         }
     }
-
-    [ComVisible(true)]
-    sealed class LogMessageCodeWindowManager : IVsCodeWindowManager
-    {
-        readonly IAnkhServiceProvider _context;
-        public LogMessageCodeWindowManager(IAnkhServiceProvider context)
-        {
-            _context = context;
-        }
-
-        public int AddAdornments()
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnNewView(IVsTextView newView)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int RemoveAdornments()
-        {
-            return VSConstants.S_OK;
-        }
-    }
+#endif
 }

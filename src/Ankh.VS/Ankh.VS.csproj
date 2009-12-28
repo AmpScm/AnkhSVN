@@ -108,6 +108,7 @@
       <DependentUpon>AnkhLanguageService.cs</DependentUpon>
     </None>
     <Compile Include="LanguageServices\LogMessageLanguageService.cs" />
+    <Compile Include="LanguageServices\NewLanguageService.cs" />
     <Compile Include="LanguageServices\UnifiedDiffDropDownBar.cs" />
     <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
     <Compile Include="OutputPane\OutputPaneManager.cs" />

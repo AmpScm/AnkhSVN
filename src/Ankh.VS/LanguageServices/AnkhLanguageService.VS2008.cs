@@ -28,7 +28,7 @@ namespace Ankh.VS.LanguageServices
         }
     }
 
-    partial class AnkhViewFilter
+    partial class MPFBasedViewFilter
     {
         public override void ShowContextMenu(int menuId, Guid groupGuid, Microsoft.VisualStudio.OLE.Interop.IOleCommandTarget target, int x, int y)
         {

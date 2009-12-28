@@ -34,6 +34,7 @@ namespace Ankh.Configuration
         bool _flashWindow;
         bool _autoAddEnabled;
         bool _autoLockEnabled;
+        bool _noDashComment;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -94,6 +95,13 @@ namespace Ankh.Configuration
         {
             get { return _autoLockEnabled; }
             set { _autoLockEnabled = value; }
+        }
+
+        [DefaultValue(true)]
+        public bool DisableDashInLogComment
+        {
+            get { return _noDashComment; }
+            set { _noDashComment = value; }
         }
     }
 }
