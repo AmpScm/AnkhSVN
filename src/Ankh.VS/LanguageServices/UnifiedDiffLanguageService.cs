@@ -24,7 +24,7 @@ namespace Ankh.VS.LanguageServices
 {
     [Guid(AnkhId.UnifiedDiffLanguageServiceId), ComVisible(true), CLSCompliant(false)]
     [GlobalService(typeof(UnifiedDiffLanguageService), PublicService = true)]
-    public class UnifiedDiffLanguageService : AnkhLanguageService
+    public class UnifiedDiffLanguageService : MPFBasedLanguageService
     {
         public const string ServiceName = AnkhId.UnifiedDiffServiceName;
 
@@ -83,26 +83,26 @@ namespace Ankh.VS.LanguageServices
                 {
                     c = _line[0];
                 }
-                    switch (c)
-                    {
-                        case '+':
-                            tokenInfo.Color = TokenColor.String;
-                            tokenInfo.Type = TokenType.String;
-                            break;
-                        case '-':
-                            tokenInfo.Color = TokenColor.Keyword;
-                            tokenInfo.Type = TokenType.Keyword;
-                            break;
-                        case '@':
-                            tokenInfo.Color = TokenColor.Comment;
-                            tokenInfo.Type = TokenType.Comment;
-                            break;
-                        default:
-                            tokenInfo.Color = TokenColor.Text;
-                            tokenInfo.Type = TokenType.Text;
-                            break;
-                    }
-                
+                switch (c)
+                {
+                    case '+':
+                        tokenInfo.Color = TokenColor.String;
+                        tokenInfo.Type = TokenType.String;
+                        break;
+                    case '-':
+                        tokenInfo.Color = TokenColor.Keyword;
+                        tokenInfo.Type = TokenType.Keyword;
+                        break;
+                    case '@':
+                        tokenInfo.Color = TokenColor.Comment;
+                        tokenInfo.Type = TokenType.Comment;
+                        break;
+                    default:
+                        tokenInfo.Color = TokenColor.Text;
+                        tokenInfo.Type = TokenType.Text;
+                        break;
+                }
+
 
                 if (_offset < _line.Length)
                 {
