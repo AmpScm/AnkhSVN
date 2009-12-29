@@ -11,7 +11,7 @@ namespace Ankh.VS.LanguageServices.Core
     {
         IVsCodeWindow _window;
         AnkhLanguageDropDownBar _bar;
-        List<IVsTextView> _views;
+        readonly List<IVsTextView> _views;
         uint _cookie;
 
         [CLSCompliant(false)]
@@ -22,6 +22,7 @@ namespace Ankh.VS.LanguageServices.Core
                 throw new ArgumentNullException("window");
 
             _window = window;
+            _views = new List<IVsTextView>();
 
             if (!TryHookConnectionPoint<IVsCodeWindowEvents>(_window, this, out _cookie))
                 _cookie = 0;
@@ -30,6 +31,12 @@ namespace Ankh.VS.LanguageServices.Core
         public AnkhLanguage Language
         {
             get { return (AnkhLanguage)Context; }
+        }
+
+        [CLSCompliant(false)]
+        public IVsCodeWindow CodeWindow
+        {
+            get { return _window; }
         }
 
         public void Close()
@@ -70,7 +77,7 @@ namespace Ankh.VS.LanguageServices.Core
                 {
                     _bar = bar;
 
-                    bar.Initialize(this);
+                    bar.Initialize();
                 }
             }
 
