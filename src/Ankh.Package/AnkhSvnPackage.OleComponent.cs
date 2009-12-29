@@ -63,6 +63,14 @@ namespace Ankh.VSPackage
             _idleProcessors.Add(processor);
         }
 
+        void IAnkhPackage.UnregisterIdleProcessor(IAnkhIdleProcessor processor)
+        {
+            if (processor == null)
+                throw new ArgumentNullException("processor");
+
+            _idleProcessors.Remove(processor);
+        }
+
         // Returns: BOOL
         int IOleComponent.FDoIdle(uint grfidlef)
         {
