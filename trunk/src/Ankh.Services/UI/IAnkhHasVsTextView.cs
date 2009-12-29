@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.UI
 {
+    [CLSCompliant(false)]
     public interface IAnkhHasVsTextView
     {
         IVsTextView TextView { get; }
