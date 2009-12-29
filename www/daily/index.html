@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7609</title>
+          AnkhSVN-Daily Update - 2.1.7615</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,37 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2923/AnkhSvn-Daily-2.1.7609.344.msi">AnkhSVN 2.1.7609</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2924/AnkhSvn-Daily-2.1.7615.345.msi">AnkhSVN 2.1.7615</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7609">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7615">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-12-28</td></tr>
+<tr><td> </td><td class="r"><a id="7615" href="http://ankhsvn.net/rev/?r=7615">
+            [r7615]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/PendingChanges/Commands/OpenIssue.cs, Ankh.UI/PendingChanges/PendingChangesToolControl.cs, Ankh.UI/PendingChanges/PendingCommitsPage.cs, Ankh.Services/Selection/ISelectionContext.cs, Ankh.VS.UnitTest/Mocks/SelectionContext.cs, Ankh.UI/PendingChanges/VSTextEditor.cs, Ankh.Services/UI/IAnkhHasVsTextView.cs, Ankh.Services/Ankh.Services.csproj, Ankh.VS/Selection/SelectionContext.Active.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move the 'Open Issue' implementation to the open issue command, which
+also makes it possible to use the same command handler on other common
+editors. (This is tested, but not yet enabled because it can trigger
+performance issues)</td></tr>
+<tr><td> </td><td class="r"><a id="7612" href="http://ankhsvn.net/rev/?r=7612">
+            [r7612]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs, Ankh.VS/LanguageServices/AnkhLanguageService.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, Ankh.VS/LanguageServices/LogMessageLanguageService.cs, Ankh.VS/Ankh.VS.csproj, Ankh.VS/LanguageServices/NewLanguageService.cs, Ankh.Services/Configuration/AnkhConfig.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement a native language service instead of using the existing MPF language
+service to work around several differences between Visual Studio versions.<br>
+For our very simple language services without outside context this also allows
+removing several kinds of background processing just to keep unused state valid.</td></tr>
+<tr><td> </td><td class="r"><a id="7611" href="http://ankhsvn.net/rev/?r=7611">
+            [r7611]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs, Ankh.VS/LanguageServices/AnkhLanguageService.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, Ankh.VS/LanguageServices/LogMessageLanguageService.cs, Ankh/RepositoryRootInfo.cs, Ankh.VS/LanguageServices/UnifiedDiffLanguageService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rename old AnkhLanguageService to MPFBasedLanguageService to allow
+implementing a new language service with that name.</td></tr>
 <tr class="d"><td colspan="4">2009-12-22</td></tr>
 <tr><td> </td><td class="r"><a id="7603" href="http://ankhsvn.net/rev/?r=7603">
             [r7603]
