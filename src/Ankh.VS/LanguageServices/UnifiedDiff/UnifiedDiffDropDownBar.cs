@@ -16,20 +16,51 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
-using System.Runtime.InteropServices;
 using Ankh.VS.LanguageServices.Core;
 
 namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
-    class UnifiedDiffDropDownBar : AnkhLanguageDropDownBar
+    class UnifiedDiffDropDownBar : AnkhLanguageDropDownBar, IVsTextLinesEvents
     {
+        IVsTextLines _buffer;
+        uint _linesCookie;
+
         public UnifiedDiffDropDownBar(UnifiedDiffLanguage language, AnkhCodeWindowManager manager)
             : base(language, manager)
         {
+            IVsTextView view = EnumTools.GetFirst(manager.GetViews());
+            
+            if (ErrorHandler.Succeeded(view.GetBuffer(out _buffer)))
+            {
+                if (!TryHookConnectionPoint<IVsTextLinesEvents>(_buffer, this, out _linesCookie))
+                    _linesCookie = 0;
+            }
+        }
+
+        protected override void OnInitialize()
+        {
+            _shouldParse = true;
+            base.OnInitialize();
+        }
+
+        protected override void OnClose()
+        {
+            try
+            {
+                if (_buffer != null)
+                {
+                    if (_linesCookie != 0)
+                        ReleaseHook<IVsTextLinesEvents>(_buffer, _linesCookie);
+                }
+            }
+            finally
+            {
+                _buffer = null;
+                _linesCookie = 0;
+                base.OnClose();
+            }
         }
 
         protected override int NumberOfCombos
@@ -37,23 +68,32 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
             get { return 1; }
         }
 
+        bool _shouldParse;
+        protected override void OnIdle(AnkhIdleArgs e)
+        {
+            base.OnIdle(e);
+
+            if (_shouldParse)
+            {
+                _shouldParse = false;
+
+                if (Parse())
+                {
+                    ScheduleSynchronize();
+                }
+            }
+        }
+
         readonly List<string> _indexes = new List<string>();
         readonly List<int> _lines = new List<int>();
-        int _lastSelectedType = -1;
-        public bool OnSynchronizeDropdowns(LanguageService languageService, Microsoft.VisualStudio.TextManager.Interop.IVsTextView textView, int line, int col, System.Collections.ArrayList dropDownTypes, System.Collections.ArrayList dropDownMembers, ref int selectedType, ref int selectedMember)
+        private bool Parse()
         {
-            IVsTextLines lines;
-
-            if (!ErrorHandler.Succeeded(textView.GetBuffer(out lines)))
-                return false;
+            IVsTextLines lines = _buffer;
 
             int lastLine, linelen;
             ErrorHandler.ThrowOnFailure(lines.GetLastLineIndex(out lastLine, out linelen));
 
             bool changed = false;
-
-            selectedType = -1;
-            selectedMember = -1;
 
             int n = 0;
             for (int i = 0; i < lastLine; i++)
@@ -88,7 +128,7 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
 
             if (changed)
             {
-                dropDownTypes.Clear();
+                DropDownTypes.Clear();
                 for (int i = 0; i < _indexes.Count; i++)
                 {
                     TextSpan ts;
@@ -98,28 +138,40 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
                     ErrorHandler.ThrowOnFailure(lines.GetLengthOfLine(ts.iEndLine, out ts.iEndIndex));
                     ts.iEndIndex++;
 
-                    dropDownTypes.Add(new DropDownMember(_indexes[i], ts, 1, DROPDOWNFONTATTR.FONTATTR_PLAIN));
+                    DropDownTypes.Add(new ComboMember(_indexes[i], 1, DROPDOWNFONTATTR.FONTATTR_PLAIN, ts));
                 }
             }
 
-            int j = 0;
-            foreach (DropDownMember dm in dropDownTypes)
-            {
-                TextSpan ts = dm.Span;
-                if ((line > ts.iStartLine || line == ts.iStartLine && col >= ts.iStartIndex) &&
-                    (line < ts.iEndLine || line == ts.iEndLine && col < ts.iEndIndex))
-                {
-                    selectedType = j;
-                }
-                j++;
-            }
-
-            if (!changed && _lastSelectedType != selectedType)
-                changed = true;
-
-            _lastSelectedType = selectedType;
-            
             return changed;
-        }        
+        }
+
+        #region IVsTextBufferDataEvents Members
+
+        public void OnFileChanged(uint grfChange, uint dwFileAttrs)
+        {
+            _shouldParse = true;
+        }
+
+        public int OnLoadCompleted(int fReload)
+        {
+            _shouldParse = true;
+            return VSConstants.S_OK;
+        }
+
+        #endregion
+
+        #region IVsTextLinesEvents Members
+
+        public void OnChangeLineAttributes(int iFirstLine, int iLastLine)
+        {
+            _shouldParse = true;
+        }
+
+        public void OnChangeLineText(TextLineChange[] pTextLineChange, int fLast)
+        {
+            _shouldParse = true;
+        }
+
+        #endregion
     }
 }

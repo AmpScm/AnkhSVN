@@ -132,11 +132,18 @@ namespace Ankh.VS.LanguageServices.Core
             return VSConstants.S_OK;
         }
 
+        [CLSCompliant(false)]
         protected virtual void OnCloseView(IVsTextView view)
         {
             
         }
 
         #endregion
+
+        [CLSCompliant(false)]
+        protected internal IEnumerable<IVsTextView> GetViews()
+        {
+            return _views;
+        }
     }
 }

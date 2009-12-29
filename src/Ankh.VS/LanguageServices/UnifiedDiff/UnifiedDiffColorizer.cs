@@ -16,17 +16,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
-using Microsoft.VisualStudio.Package;
+using Microsoft.VisualStudio.TextManager.Interop;
 
 using Ankh.VS.LanguageServices.Core;
-using Microsoft.VisualStudio.TextManager.Interop;
 
 namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
-    public class UnifiedDiffColorizer : AnkhColorizer
+    class UnifiedDiffColorizer : AnkhColorizer
     {
         public UnifiedDiffColorizer(UnifiedDiffLanguage language, IVsTextLines lines)
             : base(language, lines)
