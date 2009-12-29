@@ -37,12 +37,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhLanguageServiceFile>
-    <AnkhLanguageServiceFile Condition="'$(VsSdkVersion)' != '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhLanguageServiceFile>
-    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' == '8.0'">LanguageServices\AnkhLanguageService.VS2008.cs</AnkhOtherLanguageServiceFile>
-    <AnkhOtherLanguageServiceFile Condition="'$(VsSdkVersion)' != '8.0'">LanguageServices\AnkhLanguageService.VS2005.cs</AnkhOtherLanguageServiceFile>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="$(MsVsShellAssembly)" />
     <Reference Include="$(MsVsLangAssembly)" />
@@ -100,17 +94,16 @@
     <Compile Include="Extenders\SvnProjectExtender.cs" />
     <Compile Include="Extenders\SvnSolutionExtender.cs" />
     <Compile Include="LanguageServices\AnkhEditorResolver.cs" />
-    <Compile Include="LanguageServices\AnkhLanguageService.cs" />
-    <Compile Include="$(AnkhLanguageServiceFile)">
-      <DependentUpon>AnkhLanguageService.cs</DependentUpon>
-    </Compile>
-    <None Include="$(AnkhOtherLanguageServiceFile)">
-      <DependentUpon>AnkhLanguageService.cs</DependentUpon>
-    </None>
-    <Compile Include="LanguageServices\LogMessageLanguageService.cs" />
-    <Compile Include="LanguageServices\NewLanguageService.cs" />
-    <Compile Include="LanguageServices\UnifiedDiffDropDownBar.cs" />
-    <Compile Include="LanguageServices\UnifiedDiffLanguageService.cs" />
+    <Compile Include="LanguageServices\Core\AnkhLanguageDropDownBar.cs" />
+    <Compile Include="LanguageServices\Core\AnkhLanguage.cs" />
+    <Compile Include="LanguageServices\Core\AnkhCodeWindowManager.cs" />
+    <Compile Include="LanguageServices\Core\AnkhColorizer.cs" />
+    <Compile Include="LanguageServices\LogMessages\LogMessageColorizer.cs" />
+    <Compile Include="LanguageServices\LogMessages\LogMessageLanguage.cs" />
+    <Compile Include="LanguageServices\Core\AnkhViewFilter.cs" />
+    <Compile Include="LanguageServices\UnifiedDiff\UnifiedDiffDropDownBar.cs" />
+    <Compile Include="LanguageServices\UnifiedDiff\UnifiedDiffColorizer.cs" />
+    <Compile Include="LanguageServices\UnifiedDiff\UnifiedDiffLanguage.cs" />
     <Compile Include="OutputPane\OutputPaneManager.cs" />
     <Compile Include="Selection\AnkhCommandService.cs" />
     <Compile Include="Selection\SelectionContext.Active.cs">

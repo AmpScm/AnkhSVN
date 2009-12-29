@@ -21,22 +21,21 @@ using Microsoft.VisualStudio.Package;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio;
 using System.Runtime.InteropServices;
+using Ankh.VS.LanguageServices.Core;
 
-namespace Ankh.VS.LanguageServices
+namespace Ankh.VS.LanguageServices.UnifiedDiff
 {
-    class UnifiedDiffDropDownBar : TypeAndMemberDropdownBars
+    class UnifiedDiffDropDownBar : AnkhLanguageDropDownBar
     {
-        readonly IAnkhServiceProvider _context;
-        public UnifiedDiffDropDownBar(UnifiedDiffLanguageService languageService)
-            : base(languageService)
+        public UnifiedDiffDropDownBar(UnifiedDiffLanguage language, AnkhCodeWindowManager manager)
+            : base(language, manager)
         {
-            _context = languageService;
         }
 
         readonly List<string> _indexes = new List<string>();
         readonly List<int> _lines = new List<int>();
         int _lastSelectedType = -1;
-        public override bool OnSynchronizeDropdowns(LanguageService languageService, Microsoft.VisualStudio.TextManager.Interop.IVsTextView textView, int line, int col, System.Collections.ArrayList dropDownTypes, System.Collections.ArrayList dropDownMembers, ref int selectedType, ref int selectedMember)
+        public bool OnSynchronizeDropdowns(LanguageService languageService, Microsoft.VisualStudio.TextManager.Interop.IVsTextView textView, int line, int col, System.Collections.ArrayList dropDownTypes, System.Collections.ArrayList dropDownMembers, ref int selectedType, ref int selectedMember)
         {
             IVsTextLines lines;
 
@@ -117,40 +116,5 @@ namespace Ankh.VS.LanguageServices
             
             return changed;
         }        
-
-        public override int OnItemChosen(int combo, int entry)
-        {
-            return base.OnItemChosen(combo, entry);
-        }
-
-        public override int OnItemSelected(int combo, int index)
-        {
-            return base.OnItemSelected(combo, index);
-        }
-
-        public override int GetComboTipText(int combo, out string text)
-        {
-            return base.GetComboTipText(combo, out text);
-        }
-
-        public override int GetComboAttributes(int combo, out uint entries, out uint entryType, out IntPtr iList)
-        {
-            return base.GetComboAttributes(combo, out entries, out entryType, out iList);
-        }
-
-        public override int GetEntryText(int combo, int entry, out string text)
-        {
-            return base.GetEntryText(combo, entry, out text);
-        }
-
-        public override int GetEntryAttributes(int combo, int entry, out uint fontAttrs)
-        {
-            return base.GetEntryAttributes(combo, entry, out fontAttrs);
-        }
-
-        public override int GetEntryImage(int combo, int entry, out int imgIndex)
-        {
-            return base.GetEntryImage(combo, entry, out imgIndex);
-        }
     }
 }

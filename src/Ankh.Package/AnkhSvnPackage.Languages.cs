@@ -17,41 +17,38 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Microsoft.VisualStudio.Shell;
-using Ankh.UI.PendingChanges;
-using Ankh.VSPackage.Attributes;
-using Ankh.VS.LanguageServices;
+
 using Ankh.Selection;
+using Ankh.UI.PendingChanges;
+using Ankh.VS.LanguageServices;
+using Ankh.VS.LanguageServices.LogMessages;
+using Ankh.VSPackage.Attributes;
+using Ankh.VS.LanguageServices.UnifiedDiff;
 
 namespace Ankh.VSPackage
 {
-    [ProvideLanguageService(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, 301,
-        AutoOutlining = false,
-        CodeSense = false,
+    [ProvideLanguageService(typeof(LogMessageLanguage), LogMessageLanguage.ServiceName, 301,
         DefaultToInsertSpaces = true,
-        EnableAdvancedMembersOption = false,
-        EnableAsyncCompletion = false,
-        EnableCommenting = true,
-        EnableLineNumbers = false,
+        EnableLineNumbers = true,
         MatchBraces = true,
         MatchBracesAtCaret = true,
         MaxErrorMessages = 10,
-        QuickInfo = false,
         RequestStockColors = true,
-        ShowCompletion = false,
         ShowHotURLs = true,
         ShowMatchingBrace = true,
         SingleCodeWindowOnly = true)]
-    [ProvideLanguageSettings(typeof(LogMessageLanguageService), LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, LogMessageLanguageService.ServiceName, 305)]
-    [ProvideService(typeof(LogMessageLanguageService), ServiceName = AnkhId.LogMessageServiceName)]
-    [ProvideLanguageService(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, 304,
+    [ProvideLanguageSettings(typeof(LogMessageLanguage), LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, LogMessageLanguage.ServiceName, 305)]
+    [ProvideService(typeof(LogMessageLanguage), ServiceName = AnkhId.LogMessageServiceName)]
+    [ProvideLanguageService(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, 304,
         CodeSense = false,
         ShowDropDownOptions = true,
         RequestStockColors = true)]
-    [ProvideLanguageSettings(typeof(UnifiedDiffLanguageService), UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, UnifiedDiffLanguageService.ServiceName, 306)]
-    [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".patch")]
-    [ProvideLanguageExtension(typeof(UnifiedDiffLanguageService), ".diff")]
-    [ProvideService(typeof(UnifiedDiffLanguageService), ServiceName = AnkhId.UnifiedDiffServiceName)]
+    [ProvideLanguageSettings(typeof(UnifiedDiffLanguage), UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, UnifiedDiffLanguage.ServiceName, 306)]
+    [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".patch")]
+    [ProvideLanguageExtension(typeof(UnifiedDiffLanguage), ".diff")]
+    [ProvideService(typeof(UnifiedDiffLanguage), ServiceName = AnkhId.UnifiedDiffServiceName)]
     partial class AnkhSvnPackage
     {
         protected override object GetAutomationObject(string name)

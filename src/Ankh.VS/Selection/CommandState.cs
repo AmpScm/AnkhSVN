@@ -41,7 +41,7 @@ namespace Ankh.VS.Selection
         {
             base.OnInitialize();
 
-			GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += new EventHandler(OnCmdUIContextChanged);
+            GetService<SelectionContext>(typeof(ISelectionContext)).CmdUIContextChanged += new EventHandler(OnCmdUIContextChanged);
         }
 
         IVsMonitorSelection Monitor
@@ -49,7 +49,7 @@ namespace Ankh.VS.Selection
             get { return _monitor ?? (_monitor = GetService<IVsMonitorSelection>()); }
         }
 
-		void OnCmdUIContextChanged(object sender, EventArgs e)
+        void OnCmdUIContextChanged(object sender, EventArgs e)
         {
             ClearState();
         }
