@@ -9,7 +9,7 @@ namespace Ankh.VS.LanguageServices.Core
     public class AnkhLanguageDropDownBar : AnkhService, IVsDropdownBarClient
     {
         AnkhCodeWindowManager _manager;
-        uint _codeWindowCookie;
+        bool _added;
 
         public AnkhLanguageDropDownBar(AnkhLanguage language, AnkhCodeWindowManager manager)
             : base(language)
@@ -20,15 +20,53 @@ namespace Ankh.VS.LanguageServices.Core
             _manager = manager;
         }
 
-        protected internal virtual void Initialize(AnkhCodeWindowManager codeWindowManager)
+        protected AnkhCodeWindowManager Manager
         {
-
-            
-            //throw new NotImplementedException();
+            get { return _manager; }
         }
+
+        protected virtual int NumberOfCombos
+        {
+            get { return 2; }
+        }
+
+        protected internal virtual void Initialize()
+        {
+            IVsDropdownBarManager dbm = Manager.CodeWindow as IVsDropdownBarManager;
+
+            if (dbm == null)
+                return;
+
+            if (!ErrorHandler.Succeeded(dbm.AddDropdownBar(NumberOfCombos, this)))
+                return;
+
+            IVsDropdownBar bar;
+            if (!ErrorHandler.Succeeded(dbm.GetDropdownBar(out bar)))
+                return;
+            
+            _added = true;
+        }
+
         internal void Close()
         {
-            _manager = null;
+            if (Manager == null)
+                return;
+
+            try
+            {
+
+                if (_added)
+                {
+                    IVsDropdownBarManager dbm = Manager.CodeWindow as IVsDropdownBarManager;
+
+                    dbm.RemoveDropdownBar();
+                }
+            }
+            finally
+            {
+                _added = false;
+                _manager = null;
+            }
         }
 
         #region IVsDropdownBarClient Members
@@ -84,7 +122,7 @@ namespace Ankh.VS.LanguageServices.Core
         [CLSCompliant(false)]
         public int SetDropdownBar(IVsDropdownBar pDropdownBar)
         {
-            return VSConstants.E_NOTIMPL;
+            return VSConstants.S_OK;
         }
 
         #endregion

@@ -32,6 +32,11 @@ namespace Ankh.VS.LanguageServices.UnifiedDiff
         {
         }
 
+        protected override int NumberOfCombos
+        {
+            get { return 1; }
+        }
+
         readonly List<string> _indexes = new List<string>();
         readonly List<int> _lines = new List<int>();
         int _lastSelectedType = -1;
