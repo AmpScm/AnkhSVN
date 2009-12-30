@@ -53,7 +53,6 @@ namespace Ankh.UI.PropertyEditors
             this.externalGrid.MultiSelect = false;
             this.externalGrid.Name = "externalGrid";
             this.externalGrid.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.externalGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.externalGrid.Size = new System.Drawing.Size(348, 196);
             this.externalGrid.TabIndex = 0;
