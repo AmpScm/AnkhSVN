@@ -252,14 +252,13 @@ namespace Ankh.UI.PropertyEditors
             {
                 e.Cancel = true;
                 MessageBox.Show(this, "Revision is not valid", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
             }
 
             if (e.Cancel)
                 return;
 
             SvnExternalItem ei;
-            if(!TryCreatItemFromRow(r, out ei))
+            if(!TryCreateItemFromRow(r, out ei))
             {
                 e.Cancel = true;
                 MessageBox.Show(this, "External definition generates invalid definition", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -279,7 +278,7 @@ namespace Ankh.UI.PropertyEditors
             // Validated in RowValidating!
             
             SvnExternalItem ei;
-            if (TryCreatItemFromRow(r, out ei))
+            if (TryCreateItemFromRow(r, out ei))
             {
                 r.Tag = ei;
                 RowRefresh(r, ei);
@@ -291,7 +290,7 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
-        private static bool TryCreatItemFromRow(DataGridViewRow r, out SvnExternalItem item)
+        private static bool TryCreateItemFromRow(DataGridViewRow r, out SvnExternalItem item)
         {
             if (r == null)
                 throw new ArgumentNullException("r");
@@ -300,6 +299,19 @@ namespace Ankh.UI.PropertyEditors
             string target = r.Cells[2].Value as string;
             string rev = r.Cells[1].Value as string;
             SvnRevision rr = string.IsNullOrEmpty(rev) ? SvnRevision.None : long.Parse(rev);
+
+            if (url.Contains("://"))
+            {
+                Uri uri;
+
+                if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
+                {
+                    item = null;
+                    return false;
+                }
+
+                url = uri.AbsoluteUri;
+            }
 
             SvnExternalItem ei = new SvnExternalItem(target, url, rr, rr);
             SvnExternalItem p;
