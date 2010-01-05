@@ -17,14 +17,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Ankh.Scc.Native;
-using Ankh.Scc.SettingMap;
-using Ankh.UI;
+using System.IO;
+using System.Text;
+
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Shell;
-using System.Text;
+
 using SharpSvn;
+
+using Ankh.Scc.Native;
+using Ankh.Scc.SettingMap;
+using Ankh.UI;
+
 
 namespace Ankh.Scc
 {
@@ -97,7 +102,8 @@ namespace Ankh.Scc
             if (!SvnItem.IsValidPath(path, true))
                 return path; // Not an on-disk path -> Nothing to normalize
 
-            string np = SvnTools.GetFullTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
+            string np = SvnTools.GetFullTruePath(path) ?? 
+                AlternateTruePath(SvnTools.GetNormalizedFullPath(path));
 
             if(path[path.Length -1] == '\\' && np[np.Length-1] != '\\')
                 np += '\\';
@@ -105,6 +111,23 @@ namespace Ankh.Scc
             return np;
         }
 
+        private string AlternateTruePath(string path)
+        {
+            if (SvnItem.PathExists(path))
+            {
+                path = SvnTools.GetTruePath(path) ?? path;
+            }
+            else
+            {
+                string dir = Path.GetDirectoryName(path);
+                string item = Path.GetFileName(path);
+
+                if (!string.IsNullOrEmpty(dir) && !string.IsNullOrEmpty(item))
+                    return Path.Combine(AlternateTruePath(dir), item);
+            }
+
+            return path;
+        }
 
         public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
         {
