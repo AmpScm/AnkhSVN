@@ -1022,6 +1022,16 @@ namespace Ankh
             }
         }
 
+        /// <summary>
+        /// Long path safe version of File.Exists(path) || Directory.Exists(path)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool PathExists(string path)
+        {
+            return NativeMethods.GetFileAttributes(path) != NativeMethods.INVALID_FILE_ATTRIBUTES;
+        }
+
         static class NativeMethods
         {
             /// <summary>
