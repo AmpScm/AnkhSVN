@@ -310,11 +310,7 @@ namespace Ankh.UI.PropertyEditors
             SvnExternalItem ei = new SvnExternalItem(target, url, rr, rr);
             SvnExternalItem p;
 
-            if (!SvnExternalItem.TryParse(ei.ToString(), out p)
-                || p.Target != ei.Target
-                || p.Reference != ei.Reference
-                || p.Revision != ei.Revision
-                || p.OperationalRevision != ei.OperationalRevision)
+            if (!SvnExternalItem.TryParse(ei.ToString(), out p) || !p.Equals(ei))
             {
                 item = null;
                 return false;
