@@ -76,15 +76,12 @@ namespace Ankh.UI.PropertyEditors
                     SvnExternalItem other;
                     if (nw.TryGetValue(i.Target, out other))
                     {
-                        if ((i.Reference == other.Reference) &&
-                            (i.Revision == other.Revision) &&
-                            (i.OperationalRevision == other.OperationalRevision))
-                        {
+                        if (i.Equals(other))
                             continue;
-                        }
                     }
 
                     foundChanges = true;
+                    break;
                 }
 
                 if (!foundChanges)
@@ -93,15 +90,12 @@ namespace Ankh.UI.PropertyEditors
                         SvnExternalItem other;
                         if (_originals.TryGetValue(i.Target, out other))
                         {
-                            if ((i.Reference == other.Reference) &&
-                                (i.Revision == other.Revision) &&
-                                (i.OperationalRevision == other.OperationalRevision))
-                            {
+                            if (i.Equals(other))
                                 continue;
-                            }
                         }
 
                         foundChanges = true;
+                        break;
                     }
 
                 if (!foundChanges)
@@ -147,7 +141,7 @@ namespace Ankh.UI.PropertyEditors
 
             foreach (SvnExternalItem i in items)
             {
-                int n =externalGrid.Rows.Add();
+                int n = externalGrid.Rows.Add();
                 externalGrid.Rows[n].Tag = i;
             }
 
@@ -157,7 +151,7 @@ namespace Ankh.UI.PropertyEditors
 
                 if (ii != null)
                     RowRefresh(r, ii);
-                
+
             }
         }
 
@@ -223,7 +217,7 @@ namespace Ankh.UI.PropertyEditors
                 }
             }
             base.Dispose(disposing);
-        }       
+        }
 
         private void externalGrid_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
@@ -258,7 +252,7 @@ namespace Ankh.UI.PropertyEditors
                 return;
 
             SvnExternalItem ei;
-            if(!TryCreateItemFromRow(r, out ei))
+            if (!TryCreateItemFromRow(r, out ei))
             {
                 e.Cancel = true;
                 MessageBox.Show(this, "External definition generates invalid definition", "Property Editor", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -266,7 +260,7 @@ namespace Ankh.UI.PropertyEditors
             }
 
             r.Tag = ei;
-        }        
+        }
 
         private void externalGrid_RowValidated(object sender, DataGridViewCellEventArgs e)
         {
@@ -276,7 +270,7 @@ namespace Ankh.UI.PropertyEditors
                 return;
 
             // Validated in RowValidating!
-            
+
             SvnExternalItem ei;
             if (TryCreateItemFromRow(r, out ei))
             {
@@ -327,7 +321,7 @@ namespace Ankh.UI.PropertyEditors
             }
             item = ei;
             return true;
-        }    
+        }
     }
 }
 
