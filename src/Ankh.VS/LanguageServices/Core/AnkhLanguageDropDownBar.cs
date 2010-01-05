@@ -441,6 +441,7 @@ namespace Ankh.VS.LanguageServices.Core
                 return false;
             }
 
+            [CLSCompliant(false)]
             public virtual void OnSelect(IVsTextView view)
             {
                 /* Just ignore errors */
