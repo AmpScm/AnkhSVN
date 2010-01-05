@@ -102,6 +102,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VBClassLibrary", "VBClassLi
 EndProject
 Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "Analysis Services Project1", "SubDir\Analysis Services Project1\Analysis Services Project1.dwproj", "{B16867C9-6B4B-42DB-B4E4-087D95DF704F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "qweqwe\ClassLibrary1\ClassLibrary1.csproj", "{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -547,6 +549,27 @@ Global
 		{B16867C9-6B4B-42DB-B4E4-087D95DF704F}.Release|x86.ActiveCfg = Development
 		{B16867C9-6B4B-42DB-B4E4-087D95DF704F}.Release|x86.Build.0 = Development
 		{B16867C9-6B4B-42DB-B4E4-087D95DF704F}.Release|x86.Deploy.0 = Development
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|.NET.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|Win32.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Development|x86.ActiveCfg = Debug|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|.NET.ActiveCfg = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{AD21EB28-1E4A-4959-89A0-F4E8D8A7986A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
