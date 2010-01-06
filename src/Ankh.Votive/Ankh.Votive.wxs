@@ -70,7 +70,6 @@
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
     <CustomActionRef Id="VS90SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS100Setup"/>
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
@@ -78,7 +77,6 @@
       </InstallUISequence>
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
       <ProgressText Action="VS90Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
-      <ProgressText Action="VS100Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>
@@ -114,11 +112,6 @@
                Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2008" Level="1" AllowAdvertise="no">
         <ComponentGroupRef Id="PkgReg2008"/>
         <ComponentGroupRef Id="TriggerReg2008"/>
-      </Feature>
-      <Feature Id="RegVS10" Title="Register in Microsoft Visual Studio 2010" 
-               Description="Register AnkhSVN as SCC Provider in Microsoft Visual Studio 2010" Level="1" AllowAdvertise="no">
-        <ComponentGroupRef Id="PkgReg2010"/>
-        <ComponentGroupRef Id="TriggerReg2010"/>
       </Feature>
     </Feature>    
   </Product>
