@@ -20,10 +20,6 @@
         <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2008" Value="1" Type="integer" KeyPath="yes" />
         <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2008.wxi ?>
       </Component>
-      <Component Id="CR_Trigger_2010" Guid="6F4DFE75-A4FF-40E9-A189-15C743EE223D">
-        <RegistryValue Root="HKLM" Key="Software\AnkhSVN\AnkhSVN\Installation\2.0" Name="Trigger-VS2010" Value="1" Type="integer" KeyPath="yes" />
-        <?include $(var.Ankh.Trigger.TargetDir)$(var.Ankh.Trigger.TargetName)-2010.wxi ?>
-      </Component>
     </DirectoryRef>
     <ComponentGroup Id="TriggerReg2005">
       <ComponentGroupRef Id="Ankh.Trigger" />
@@ -32,10 +28,6 @@
     <ComponentGroup Id="TriggerReg2008">
       <ComponentGroupRef Id="Ankh.Trigger" />
       <ComponentRef Id="CR_Trigger_2008"/>
-    </ComponentGroup>
-    <ComponentGroup Id="TriggerReg2010">
-      <ComponentGroupRef Id="Ankh.Trigger" />
-      <ComponentRef Id="CR_Trigger_2010"/>
     </ComponentGroup>
   </Fragment>
 </Wix>
