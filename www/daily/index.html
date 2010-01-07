@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7638</title>
+          AnkhSVN-Daily Update - 2.1.7642</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2953/AnkhSvn-Daily-2.1.7638.354.msi">AnkhSVN 2.1.7638</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2957/AnkhSvn-Daily-2.1.7642.355.msi">AnkhSVN 2.1.7642</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7638">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7642">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -51,7 +51,7 @@ and handle initializing the language combo box. Use just one combo
 for the Unified diff language service.</td></tr>
 <tr><td> </td><td class="r"><a id="7617" href="http://ankhsvn.net/rev/?r=7617">
             [r7617]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/LanguageServices/LogMessages/LogMessageLanguage.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs, Ankh.VS/LanguageServices/LogMessages, Ankh.Package/AnkhSvnPackage.Languages.cs, Ankh.VS/LanguageServices/AnkhLanguageService.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, Ankh.VS/LanguageServices/UnifiedDiff, Ankh.VS/LanguageServices/Core/AnkhViewFilter.cs, Ankh.VS/LanguageServices/LogMessageLanguageService.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.VS/Ankh.VS.csproj, Ankh.VS/LanguageServices/Core/AnkhLanguage.cs, Ankh.VS/Selection/CommandState.cs, Ankh.VS/LanguageServices/NewLanguageService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move away from the MPF language service that throws several exceptions
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.VS/LanguageServices/LogMessages/LogMessageLanguage.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2005.cs, Ankh.VS/LanguageServices/LogMessages, Ankh.Package/AnkhSvnPackage.Languages.cs, Ankh.VS/LanguageServices/AnkhLanguageService.cs, Ankh.VS/LanguageServices/AnkhLanguageService.VS2008.cs, Ankh.VS/LanguageServices/UnifiedDiff, Ankh.VS/LanguageServices/Core/AnkhViewFilter.cs, Ankh.VS/LanguageServices/LogMessageLanguageService.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.VS/Ankh.VS.csproj, Ankh.VS/LanguageServices/Core/AnkhLanguage.cs, Ankh.VS/Selection/CommandState.cs, Ankh.VS/LanguageServices/NewLanguageService.cs (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Move away from the MPF language service that throws several exceptions
 in VS 2010, some of which we can and some we can't handle. This commit
 switches the unified diff viewer to the new internal language framework.<br>
 We only use the MPF framework for its configuration support now.</td></tr>
@@ -85,17 +85,6 @@ can't occur in this</td></tr>
 <tr><td> </td><td class="r"><a id="7577" href="http://ankhsvn.net/rev/?r=7577">
             [r7577]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.UI/DiffWindow/DiffToolWindowControl.cs, Ankh.Diff/DiffUtils/Controls/DiffControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make our internal diff use the Visual Studio toolstrip renderer for its toolbars.</td></tr>
-<tr class="d"><td colspan="4">2009-12-09</td></tr>
-<tr><td> </td><td class="r"><a id="7573" href="http://ankhsvn.net/rev/?r=7573">
-            [r7573]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> VSTextEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When hiding the horizontal scrollbar in VS2010, make it two pixels higher to hide
-the size combo.</td></tr>
-<tr><td> </td><td class="r"><a id="7570" href="http://ankhsvn.net/rev/?r=7570">
-            [r7570]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.VS/LanguageServices:</strong> AnkhLanguageService.cs, LogMessageLanguageService.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't create a code window manager for the log message language service.
-We don't need this for this simplistic language service, and this
-removes several hooks into Visual Studio that fail under some debugging
-circumstances.</td></tr>
 
 </table>
 <!--/Recent changes-->
