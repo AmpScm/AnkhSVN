@@ -648,7 +648,7 @@ namespace Ankh
         {
             get
             {
-                if (!IsModified)
+                if (!IsModified && IsVersioned)
                     return IsDocumentDirty;
 
                 switch (Status.LocalContentStatus)
@@ -662,6 +662,8 @@ namespace Ankh
                     case SvnStatus.Deleted:
                         // To be replaced
                         return Exists;
+                    case SvnStatus.NotVersioned:
+                        return false;
                     default:
                         return true;
                 }
