@@ -108,7 +108,7 @@ namespace Ankh.UI.PropertyEditors
                     if (ei == null)
                         continue;
 
-                    sb.Append(ei);
+                    ei.WriteTo(sb, true);
                     sb.AppendLine();
                 }
 
