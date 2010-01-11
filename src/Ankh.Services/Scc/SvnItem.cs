@@ -648,7 +648,9 @@ namespace Ankh
         {
             get
             {
-                if (!IsModified && IsVersioned)
+                if (!IsVersioned)
+                    return false;
+                if (!IsModified)
                     return IsDocumentDirty;
 
                 switch (Status.LocalContentStatus)
