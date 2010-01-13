@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using SharpSvn;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Ankh.UI.MergeWizard
 {
@@ -305,6 +306,12 @@ namespace Ankh.UI.MergeWizard
             modifiedPathsListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
         #endregion
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            headerTitle.Font = new Font(Font, FontStyle.Bold);
+        }
 
         long fileUpdated = 0;
         long fileAdded = 0;
