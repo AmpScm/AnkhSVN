@@ -450,5 +450,10 @@ namespace WizardFramework
         private bool isMovingToPreviousPage = false;
         #endregion
 
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            headerTitle.Font = new Font(Font, FontStyle.Bold);
+        }
     }
 }
