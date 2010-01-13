@@ -64,5 +64,17 @@ namespace Ankh.UI.MergeWizard
                     pBox.Image = MergeStrings.ErrorImage;
             }
         }
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+
+            Font boldFont = new Font(Font, FontStyle.Bold);
+            noUncommitedModificationsLabel.Font = boldFont;
+            singleRevisionLabel.Font = boldFont;
+            noSwitchedChildrenLabel.Font = boldFont;
+            completeWorkingCopyLabel.Font = boldFont;
+            validRevisionLabel.Font = boldFont;
+        }
     }
 }
