@@ -174,7 +174,7 @@ namespace Ankh.UI.PendingChanges
         {
             if (_listItems.Count > 0)
             {
-                _checkedItems = new HybridCollection<string>();
+                _checkedItems = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (PendingCommitItem pci in _listItems.Values)
                 {
                     if (pci.Checked && !_checkedItems.Contains(pci.FullPath))
