@@ -61,7 +61,11 @@ namespace Ankh.VS.SolutionExplorer
         {
             if (_solutionExplorer2 != null)
             {
-                _solutionExplorer2.Unadvise(_cookie);
+                try
+                {
+                    _solutionExplorer2.Unadvise(_cookie);
+                }
+                catch { /* Probably unclean shutdown */ }
                 _solutionExplorer2 = null;
             }
 
