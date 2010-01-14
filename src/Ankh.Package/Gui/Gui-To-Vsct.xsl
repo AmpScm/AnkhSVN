@@ -264,7 +264,7 @@
       <xsl:if test="@commandWellOnly='true'">
         <CommandFlag>CommandWellOnly</CommandFlag>
       </xsl:if>
-      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+      <xsl:if test="@defaultDisabled='true' or (@defaultInvisible='true' and not(@defaultDisabled))">
         <CommandFlag>DefaultDisabled</CommandFlag>
       </xsl:if>
       <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
