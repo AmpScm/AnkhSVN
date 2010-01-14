@@ -464,7 +464,7 @@ namespace Ankh.Services.PendingChanges
                 if (item.IsCasingConflicted)
                 {
                     string correctCasing = GetSvnCasing(item);
-                    string actualCasing = SvnTools.GetFullTruePath(item.FullPath);
+                    string actualCasing = SvnTools.GetTruePath(item.FullPath);
 
                     if (correctCasing == null || actualCasing == null || !string.Equals(correctCasing, actualCasing, StringComparison.OrdinalIgnoreCase))
                         continue; // Nothing to fix here :(

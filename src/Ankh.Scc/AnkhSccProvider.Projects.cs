@@ -314,12 +314,12 @@ namespace Ankh.Scc
             else
             {
                 if (SvnItem.IsValidPath(dir))
-                    _solutionDirectory = SvnTools.GetTruePath(dir) ?? SvnTools.GetNormalizedFullPath(dir);
+                    _solutionDirectory = SvnTools.GetTruePath(dir, true) ?? SvnTools.GetNormalizedFullPath(dir);
                 else
                     _solutionDirectory = "";
 
                 if (SvnItem.IsValidPath(path))
-                    _solutionFile = SvnTools.GetTruePath(path) ?? SvnTools.GetNormalizedFullPath(path);
+                    _solutionFile = SvnTools.GetTruePath(path, true) ?? SvnTools.GetNormalizedFullPath(path);
                 else
                     _solutionFile = "";
             }

@@ -56,7 +56,7 @@ namespace Ankh.Commands
                 foreach (SvnItem item in toResolve)
                 {
                     string svnPath = GetSvnCasing(item);
-                    string actualPath = SvnTools.GetFullTruePath(item.FullPath);
+                    string actualPath = SvnTools.GetTruePath(item.FullPath);
 
                     if (svnPath == null || actualPath == null)
                         continue; // not found

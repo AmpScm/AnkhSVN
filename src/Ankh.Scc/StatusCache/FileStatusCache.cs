@@ -375,7 +375,7 @@ namespace Ankh.Scc.StatusCache
 
                         if (walkItem == null)
                         {
-                            string truepath = SvnTools.GetFullTruePath(walkPath); // Gets the on-disk casing if it exists
+                            string truepath = SvnTools.GetTruePath(walkPath); // Gets the on-disk casing if it exists
 
                             StoreItem(walkItem = CreateItem(truepath ?? walkPath,
                                 (truepath != null) ? NoSccStatus.NotVersioned : NoSccStatus.NotExisting, SvnNodeKind.Unknown));
@@ -694,7 +694,7 @@ namespace Ankh.Scc.StatusCache
 
                     if (!_map.TryGetValue(path, out item))
                     {
-                        string truePath = SvnTools.GetTruePath(path);
+                        string truePath = SvnTools.GetTruePath(path, true);
 
                         // Just create an item based on his name. Delay the svn calls as long as we can
                         StoreItem(item = new SvnItem(this, truePath ?? path, NoSccStatus.Unknown, SvnNodeKind.Unknown));
