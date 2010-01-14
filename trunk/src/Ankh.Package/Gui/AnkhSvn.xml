@@ -942,7 +942,7 @@
         <Button id="Cmd_SccFinishTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_TickRefreshPendingTasks" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_TickRefreshSvnItems" text="&#160;" priority="0" commandWellOnly="true" postExec="true" defaultInvisible="true" defaultDisabled="false" />
-        <Button id="Cmd_ActivateSccProvider" text="&#160;" priority="0" commandWellOnly="true" defaultInvisible="true" defaultDisabled="false" />
+        <Button id="Cmd_ActivateSccProvider" text="&#160;" priority="0" commandWellOnly="true" />
         <Button id="Cmd_ActivateVsExtender" text="&#160;" priority="0" commandWellOnly="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_SccLock" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_CheckForUpdates" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
