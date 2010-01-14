@@ -264,7 +264,7 @@
       <xsl:if test="@textChanges='true'">
         <xsl:text>|TEXTCHANGES</xsl:text>
       </xsl:if>
-      <xsl:if test="@defaultDisabled='true' or @defaultInvisible='true'">
+      <xsl:if test="@defaultDisabled='true' or (@defaultInvisible='true' and not(@defaultDisabled))">
         <xsl:text>|DEFAULTDISABLED</xsl:text>
       </xsl:if>
       <xsl:if test="@defaultInvisible='true' or gui:Visibility[@context]">
