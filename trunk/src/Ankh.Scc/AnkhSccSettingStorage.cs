@@ -97,36 +97,17 @@ namespace Ankh.Scc
 
         #region IVsSccEnlistmentPathTranslation Members
 
-        string NormalizePathFormat(string path)
+        static string NormalizePathFormat(string path)
         {
             if (!SvnItem.IsValidPath(path, true))
                 return path; // Not an on-disk path -> Nothing to normalize
 
-            string np = SvnTools.GetFullTruePath(path) ?? 
-                AlternateTruePath(SvnTools.GetNormalizedFullPath(path));
+            string np = SvnTools.GetTruePath(path, true);
 
             if(path[path.Length -1] == '\\' && np[np.Length-1] != '\\')
                 np += '\\';
 
             return np;
-        }
-
-        private string AlternateTruePath(string path)
-        {
-            if (SvnItem.PathExists(path))
-            {
-                path = SvnTools.GetTruePath(path) ?? path;
-            }
-            else
-            {
-                string dir = Path.GetDirectoryName(path);
-                string item = Path.GetFileName(path);
-
-                if (!string.IsNullOrEmpty(dir) && !string.IsNullOrEmpty(item))
-                    return Path.Combine(AlternateTruePath(dir), item);
-            }
-
-            return path;
         }
 
         public int TranslateEnlistmentPathToProjectPath(string lpszEnlistmentPath, out string pbstrProjectPath)
