@@ -64,7 +64,7 @@ namespace Ankh.Scc.StatusCache
         {
             if (_notifyCookie != 0)
             {
-                NativeMethods.SHChangeNotifyUnregister(_notifyCookie);
+                NativeMethods.SHChangeNotifyDeregister(_notifyCookie);
                 _notifyCookie = 0;
             }
             if (disposing && _notifyWindow != null)
@@ -138,7 +138,7 @@ namespace Ankh.Scc.StatusCache
 
             [DllImport("shell32.dll", EntryPoint = "#4", CharSet = CharSet.Auto)]
             [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern Boolean SHChangeNotifyUnregister(ulong hNotify);
+            public static extern Boolean SHChangeNotifyDeregister(uint hNotify);
 
             [DllImport("shell32.dll", SetLastError = true, EntryPoint = "#644", CharSet = CharSet.Auto)]
             public static extern IntPtr SHChangeNotification_Lock(IntPtr hChange, IntPtr dwProcId, out IntPtr pidlList, ref int plEvent);
