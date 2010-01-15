@@ -73,7 +73,8 @@ namespace Ankh.VS
             filename = Path.GetFileName(filename); // Remove any paths
 
             string name;
-            if(_lastDir == null || File.Exists(name = Path.Combine(_lastDir, filename)))
+            if(_lastDir == null || File.Exists(name = Path.Combine(_lastDir, filename)) ||
+               !Directory.Exists(_lastDir))
             {
                 _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
                 name = Path.Combine(_lastDir, filename);
