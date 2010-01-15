@@ -264,6 +264,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PCStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="PendingChanges\PendingActivationPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PendingChanges\PendingActivationPage.Designer.cs">
+      <DependentUpon>PendingActivationPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="PendingChanges\Synchronize\SynchronizeItem.cs" />
     <Compile Include="PendingChanges\Synchronize\SynchronizeListItem.cs" />
     <Compile Include="PendingChanges\Synchronize\SynchronizeListView.cs">
@@ -1263,6 +1269,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PendingChanges\PendingActivationPage.resx">
+      <DependentUpon>PendingActivationPage.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Controls\Status.Suggestion.png" />
     <Content Include="Controls\Status.Exclamation.png" />

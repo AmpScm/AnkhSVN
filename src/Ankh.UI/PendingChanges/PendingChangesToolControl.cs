@@ -27,184 +27,234 @@ using Ankh.Commands;
 using Microsoft.VisualStudio;
 using Ankh.VS;
 using Ankh.Scc.UI;
+using Ankh.Selection;
 
 namespace Ankh.UI.PendingChanges
 {
-    public partial class PendingChangesToolControl : AnkhToolWindowControl, IAnkhHasVsTextView
-    {
-        readonly List<PendingChangesPage> _pages;
-        readonly PendingCommitsPage _commitsPage;
-        readonly PendingIssuesPage _issuesPage;
-        readonly RecentChangesPage _changesPage;
-        readonly PendingConflictsPage _conflictsPage;
-        PendingChangesPage _currentPage;
+	public partial class PendingChangesToolControl : AnkhToolWindowControl, IAnkhHasVsTextView
+	{
+		readonly List<PendingChangesPage> _pages;
+		readonly PendingActivationPage _activatePage;
+		readonly PendingCommitsPage _commitsPage;
+		readonly PendingIssuesPage _issuesPage;
+		readonly RecentChangesPage _changesPage;
+		readonly PendingConflictsPage _conflictsPage;
+		PendingChangesPage _currentPage;
+		PendingChangesPage _lastPage;
 
-        public PendingChangesToolControl()
+		public PendingChangesToolControl()
         {
             InitializeComponent();
 
+			_activatePage = new PendingActivationPage();
             _commitsPage = new PendingCommitsPage();
             _issuesPage = new PendingIssuesPage();
             _changesPage = new RecentChangesPage();
             _conflictsPage = new PendingConflictsPage();
 
             _pages = new List<PendingChangesPage>();
+            _pages.Add(_activatePage);
             _pages.Add(_commitsPage);
             _pages.Add(_issuesPage);
             _pages.Add(_changesPage);
             _pages.Add(_conflictsPage);
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            ToolStripRenderer renderer = null;
-            System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
-            if(ds != null)
-            {
-                renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
-            }
+		protected override void OnLoad(EventArgs e)
+		{
+			ToolStripRenderer renderer = null;
+			System.Windows.Forms.Design.IUIService ds = Context.GetService<System.Windows.Forms.Design.IUIService>();
+			if (ds != null)
+			{
+				renderer = ds.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+			}
 
-            if (renderer != null)
-                pendingChangesTabs.Renderer = renderer;
+			if (renderer != null)
+				pendingChangesTabs.Renderer = renderer;
 
-            foreach (PendingChangesPage p in _pages)
-            {
-                p.Context = Context;
-                p.ToolControl = this;
+			foreach (PendingChangesPage p in _pages)
+			{
+				p.Context = Context;
+				p.ToolControl = this;
 
-                if (!panel1.Controls.Contains(p))
-                {
-                    p.Enabled = p.Visible = false;
-                    p.Dock = DockStyle.Fill;
-                    panel1.Controls.Add(p);
-                }
-            }
+				if (!panel1.Controls.Contains(p))
+				{
+					p.Enabled = p.Visible = false;
+					p.Dock = DockStyle.Fill;
+					panel1.Controls.Add(p);
+				}
+			}
 
-            base.OnLoad(e);
+			base.OnLoad(e);
 
-            ShowPanel(_commitsPage, false);
-            UpdateColors(renderer != null);
-        }
+			UpdateColors(renderer != null);
 
-        protected override void OnFrameCreated(EventArgs e)
-        {
-            base.OnFrameCreated(e);
+			AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
 
-            ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
-            //ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;            
-            UpdateCaption();
-        }
+			ev.SccProviderActivated += new EventHandler(OnSccProviderActivated);
+			ev.SccProviderDeactivated += new EventHandler(OnSccProviderDeactivated);
 
-        private void UpdateColors(bool hasRenderer)
-        {
-            if (Context == null || SystemInformation.HighContrast)
-                return;
+			IVsShell sh = Context.GetService<IVsShell>(typeof(SVsShell));
 
-            // We should use the VS colors instead of the ones provided by the OS
-            IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
+			bool shouldActivate = false;
+			if (sh != null)
+			{
+				object v;
+				if (ErrorHandler.Succeeded(sh.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+				{
+					if (v is bool)
+						shouldActivate = !(bool)v;
+				}
+			}
 
-            Color color;
-            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
-                BackColor = color;
+			if (shouldActivate)
+			{
+				IAnkhCommandStates states = Context.GetService<IAnkhCommandStates>();
 
-            if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
-            {
-                pendingChangesTabs.BackColor = color;
-                pendingChangesTabs.OverflowButton.BackColor = color;                
-            }
+				if (states != null)
+					shouldActivate = states.SccProviderActive;
+			}
 
-            if (!hasRenderer && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
-            {
-                pendingChangesTabs.ForeColor = color;
-                pendingChangesTabs.OverflowButton.ForeColor = color;
-            }
-        }
+			_lastPage = _commitsPage;
 
-        void ShowPanel(PendingChangesPage page, bool select)
-        {
-            if (page == null)
-                throw new ArgumentNullException("page");
-            else if (page == _currentPage)
-                return;
+			ShowPanel(shouldActivate ? _lastPage : _activatePage, false);
+			pendingChangesTabs.Enabled = shouldActivate;
+		}
 
-            bool foundPage = false;
-            foreach (PendingChangesPage p in panel1.Controls)
-            {
-                if (p != page)
-                {
-                    p.Enabled = p.Visible = false;
-                }
-                else
-                {
-                    foundPage = true;
-                    p.Enabled = p.Visible = true;
-                }
-            }
+		void OnSccProviderDeactivated(object sender, EventArgs e)
+		{
+			ShowPanel(_activatePage, true);
+			pendingChangesTabs.Enabled = false;
+		}
 
-            if (!foundPage)
-            {
-                panel1.Controls.Add(page);
-                page.Dock = DockStyle.Fill;
-            }
+		void OnSccProviderActivated(object sender, EventArgs e)
+		{
+			ShowPanel(_lastPage, true);
+			pendingChangesTabs.Enabled = true;
+		}
 
-            _currentPage = page;
+		protected override void OnFrameCreated(EventArgs e)
+		{
+			base.OnFrameCreated(e);
 
-            fileChangesButton.Checked = (page == _commitsPage);
-            issuesButton.Checked = (page == _issuesPage);
-            recentChangesButton.Checked = (page == _changesPage);
-            conflictsButton.Checked = (page == _conflictsPage);
+			ToolWindowHost.CommandContext = AnkhId.PendingChangeContextGuid;
+			//ToolWindowSite.KeyboardContext = AnkhId.PendingChangeContextGuid;
+			UpdateCaption();
+		}
 
-            if(select)
-                page.Select();
+		private void UpdateColors(bool hasRenderer)
+		{
+			if (Context == null || SystemInformation.HighContrast)
+				return;
 
-            if (Context != null)
-            {
-                IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+			// We should use the VS colors instead of the ones provided by the OS
+			IAnkhVSColor colorSvc = Context.GetService<IAnkhVSColor>();
 
-                if (cmd != null)
-                    cmd.UpdateCommandUI(false);
+			Color color;
+			if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_TOOLWINDOW_BACKGROUND, out color))
+				BackColor = color;
 
-                UpdateCaption();
-            }
-        }
+			if (colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_GRADIENT_MIDDLE, out color))
+			{
+				pendingChangesTabs.BackColor = color;
+				pendingChangesTabs.OverflowButton.BackColor = color;
+			}
 
-        void UpdateCaption()
-        {
-            if (ToolWindowHost != null)
-            {
-                if (_currentPage == null || string.IsNullOrEmpty(_currentPage.Text))
-                    ToolWindowHost.Title = ToolWindowHost.OriginalTitle;
-                else
-                    ToolWindowHost.Title = ToolWindowHost.OriginalTitle + " - " + _currentPage.Text;
-            }
-        }
+			if (!hasRenderer && colorSvc.TryGetColor(__VSSYSCOLOREX.VSCOLOR_COMMANDBAR_HOVEROVERSELECTED, out color))
+			{
+				pendingChangesTabs.ForeColor = color;
+				pendingChangesTabs.OverflowButton.ForeColor = color;
+			}
+		}
 
-        private void fileChangesButton_Click(object sender, EventArgs e)
-        {
-            ShowPanel(_commitsPage, true);
-        }
+		void ShowPanel(PendingChangesPage page, bool select)
+		{
+			if (page == null)
+				throw new ArgumentNullException("page");
+			else if (page == _currentPage)
+				return;
 
-        private void issuesButton_Click(object sender, EventArgs e)
-        {
-            ShowPanel(_issuesPage, true);
-        }
+			bool foundPage = false;
+			foreach (PendingChangesPage p in panel1.Controls)
+			{
+				if (p != page)
+				{
+					p.Enabled = p.Visible = false;
+				}
+				else
+				{
+					foundPage = true;
+					p.Enabled = p.Visible = true;
+				}
+			}
 
-        private void recentChangesButton_Click(object sender, EventArgs e)
-        {
-            ShowPanel(_changesPage, true);
-        }
+			if (!foundPage)
+			{
+				panel1.Controls.Add(page);
+				page.Dock = DockStyle.Fill;
+			}
 
-        private void conflictsButton_Click(object sender, EventArgs e)
-        {
-            ShowPanel(_conflictsPage, true);
-        }
+			_currentPage = page;
 
-        #region IAnkhHasVsTextView Members
-        Microsoft.VisualStudio.TextManager.Interop.IVsTextView IAnkhHasVsTextView.TextView
-        {
-            get { return _commitsPage.TextView; }
-        }
+			if (page != _activatePage)
+				_lastPage = page;
 
-        #endregion
-    }
+			fileChangesButton.Checked = (_lastPage == _commitsPage);
+			issuesButton.Checked = (_lastPage == _issuesPage);
+			recentChangesButton.Checked = (_lastPage == _changesPage);
+			conflictsButton.Checked = (_lastPage == _conflictsPage);
+
+			if (select)
+				page.Select();
+
+			if (Context != null)
+			{
+				IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
+
+				if (cmd != null)
+					cmd.UpdateCommandUI(false);
+
+				UpdateCaption();
+			}
+		}
+
+		void UpdateCaption()
+		{
+			if (ToolWindowHost != null)
+			{
+				if (_currentPage == null || string.IsNullOrEmpty(_currentPage.Text))
+					ToolWindowHost.Title = ToolWindowHost.OriginalTitle;
+				else
+					ToolWindowHost.Title = ToolWindowHost.OriginalTitle + " - " + _currentPage.Text;
+			}
+		}
+
+		private void fileChangesButton_Click(object sender, EventArgs e)
+		{
+			ShowPanel(_commitsPage, true);
+		}
+
+		private void issuesButton_Click(object sender, EventArgs e)
+		{
+			ShowPanel(_issuesPage, true);
+		}
+
+		private void recentChangesButton_Click(object sender, EventArgs e)
+		{
+			ShowPanel(_changesPage, true);
+		}
+
+		private void conflictsButton_Click(object sender, EventArgs e)
+		{
+			ShowPanel(_conflictsPage, true);
+		}
+
+		#region IAnkhHasVsTextView Members
+		Microsoft.VisualStudio.TextManager.Interop.IVsTextView IAnkhHasVsTextView.TextView
+		{
+			get { return _commitsPage.TextView; }
+		}
+
+		#endregion
+	}
 }
