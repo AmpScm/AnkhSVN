@@ -36,6 +36,7 @@ namespace Ankh.Commands
         bool _latched;
         bool _ninched;
         bool _dynamicMenuEnd;
+        bool _hideOnContextMenu;
         string _text;
 
         public CommandUpdateEventArgs(AnkhCommand command, AnkhContext context, TextQueryType textQuery)
@@ -65,6 +66,12 @@ namespace Ankh.Commands
         {
             get { return !_invisible; }
             set { _invisible = !value; }
+        }
+
+        public bool HideOnContextMenu
+        {
+            get { return _hideOnContextMenu; }
+            set { _hideOnContextMenu = value; }
         }
 
         /// <summary>
@@ -132,6 +139,9 @@ namespace Ankh.Commands
 
             if (!Visible)
                 cmdf |= OLECMDF.OLECMDF_INVISIBLE;
+
+            if (HideOnContextMenu)
+                cmdf |= OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
         }
     }
 }
