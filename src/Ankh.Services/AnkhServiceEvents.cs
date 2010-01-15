@@ -239,7 +239,7 @@ namespace Ankh
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         void IAnkhServiceEvents.OnSccProviderDeactivated(EventArgs e)
         {
-            OnSccProviderActivated(e);
+            OnSccProviderDeactivated(e);
         }
 
         /// <summary>
