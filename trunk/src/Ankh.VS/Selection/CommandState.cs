@@ -324,7 +324,8 @@ namespace Ankh.VS.Selection
                     return false;
 
                 object v;
-                shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v);
+                if (!ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+                    return false;
 
                 return (v is bool) && !((bool)v);
             }
