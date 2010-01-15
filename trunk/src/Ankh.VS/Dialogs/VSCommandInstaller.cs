@@ -16,14 +16,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.UI;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.OLE.Interop;
 using System.ComponentModel.Design;
-using Ankh.Commands;
+using System.Windows.Forms;
+
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
+
+using Ankh.Commands;
 using Ankh.Scc.UI;
+using Ankh.UI;
+
+using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 
 namespace Ankh.VS.Dialogs
 {
@@ -187,6 +190,9 @@ namespace Ankh.VS.Dialogs
 
                 if (d.UpdateHandler != null)
                     d.UpdateHandler(d.Control, ee);
+
+                if (ee.DynamicMenuEnd)
+                    return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
                 OLECMDF cmdf = OLECMDF.OLECMDF_SUPPORTED;
 
