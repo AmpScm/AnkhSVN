@@ -314,6 +314,22 @@ namespace Ankh.VS.Selection
             return false;
         }
 
+        public bool UIShellAvailable
+        {
+            get
+            {
+                IVsShell shell = GetService<IVsShell>(typeof(SVsShell));
+
+                if (shell == null)
+                    return false;
+
+                object v;
+                shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v);
+
+                return (v is bool) && ((bool)v);
+            }
+        }
+
         #endregion
     }
 }
