@@ -69,6 +69,12 @@ namespace Ankh
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         void OnSolutionClosed(EventArgs e);
+
+        /// <summary>
+        /// Raises the <see cref="SccShellAvailable"/>
+        /// </summary>
+        /// <param name="e"></param>
+        void OnSccShellAvailable(EventArgs e);
     }
 
     /// <summary>
@@ -125,6 +131,12 @@ namespace Ankh
         public event EventHandler SolutionClosed;
 
         /// <summary>
+        /// When the SCC provider was activated before the UI Shell was available, this event is raised
+        /// to allow initiating services that really need the UI Shell
+        /// </summary>
+        public event EventHandler SccShellAvailable;
+
+        /// <summary>
         /// Raises the <see cref="E:RuntimeLoaded"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -168,7 +180,7 @@ namespace Ankh
         /// Raises the <see cref="E:DocumentTrackerActivated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnDocumentTrackerActivated(EventArgs e)
+        protected void OnDocumentTrackerActivated(EventArgs e)
         {
             if (DocumentTrackerActivated != null)
                 DocumentTrackerActivated(this, e);
@@ -178,7 +190,7 @@ namespace Ankh
         /// Raises the <see cref="E:DocumentTrackerDeactivated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnDocumentTrackerDeactivated(EventArgs e)
+        protected void OnDocumentTrackerDeactivated(EventArgs e)
         {
             if (DocumentTrackerDeactivated != null)
                 DocumentTrackerDeactivated(this, e);
@@ -188,7 +200,7 @@ namespace Ankh
         /// Raises the <see cref="E:SolutionOpened"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnSolutionOpened(EventArgs e)
+        protected void OnSolutionOpened(EventArgs e)
         {
             if (SolutionOpened != null)
                 SolutionOpened(this, e);
@@ -198,10 +210,20 @@ namespace Ankh
         /// Raises the <see cref="E:SolutionClosed"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnSolutionClosed(EventArgs e)
+        protected void OnSolutionClosed(EventArgs e)
         {
             if (SolutionClosed != null)
                 SolutionClosed(this, e);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="UIShellAvailable"/>
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnSccShellAvailable(EventArgs e)
+        {
+            if (SccShellAvailable != null)
+                SccShellAvailable(this, e);
         }
 
         #region IAnkhServiceEvents Members
@@ -290,6 +312,23 @@ namespace Ankh
             try
             {
                 OnSolutionClosed(e);
+            }
+            catch (Exception ex)
+            {
+                IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                if (eh != null && eh.IsEnabled(ex))
+                    eh.OnError(ex);
+                else
+                    throw;
+            }
+        }
+
+        void IAnkhServiceEvents.OnSccShellAvailable(EventArgs e)
+        {
+            try
+            {
+                OnSccShellAvailable(e);
             }
             catch (Exception ex)
             {
