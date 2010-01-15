@@ -27,6 +27,7 @@ using Microsoft.VisualStudio;
 using System.ComponentModel.Design;
 using Ankh.Scc;
 using System.IO;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -54,6 +55,16 @@ namespace Ankh.UI.RepositoryExplorer
             VSCommandHandler.Install(Context, this, new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.Delete), OnDelete);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerOpen, OnOpen, OnUpdateOpen);
             VSCommandHandler.Install(Context, this, AnkhCommand.ExplorerUp, OnUp, OnUpdateUp);
+
+            IUIService ui = Context.GetService<IUIService>();
+
+            if (ui != null)
+            {
+                ToolStripRenderer renderer = ui.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+
+                if (renderer != null)
+                    toolFolders.Renderer = renderer;
+            }
         }
 
         void OnDelete(object sender, CommandEventArgs e)
@@ -116,7 +127,7 @@ namespace Ankh.UI.RepositoryExplorer
                 return;
 
             Point screen;
-            if(e.X == -1 && e.Y == -1)
+            if (e.X == -1 && e.Y == -1)
             {
                 screen = treeView.GetSelectionPoint();
                 if (screen.IsEmpty)

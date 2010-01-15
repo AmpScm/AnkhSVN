@@ -25,6 +25,7 @@ using Ankh.Commands;
 using Ankh.Scc;
 using Ankh.UI.WorkingCopyExplorer.Nodes;
 using Ankh.VS;
+using System.Windows.Forms.Design;
 
 namespace Ankh.UI.WorkingCopyExplorer
 {
@@ -42,21 +43,6 @@ namespace Ankh.UI.WorkingCopyExplorer
         {
             folderTree.Context = Context;
             fileList.Context = Context;
-
-            Context.GetService<AnkhServiceEvents>().SolutionClosed += new EventHandler(WorkingCopyExplorerControl_SolutionClosed);
-            Context.GetService<AnkhServiceEvents>().SolutionOpened += new EventHandler(WorkingCopyExplorerControl_SolutionOpened);
-        }
-
-        void WorkingCopyExplorerControl_SolutionOpened(object sender, EventArgs e)
-        {
-            AddRoots(false);
-            AddRoots(true);
-        }
-
-        void WorkingCopyExplorerControl_SolutionClosed(object sender, EventArgs e)
-        {
-            AddRoots(false);
-            AddRoots(true);
         }
 
         /// <summary>
@@ -81,17 +67,31 @@ namespace Ankh.UI.WorkingCopyExplorer
             AnkhServiceEvents environment = Context.GetService<AnkhServiceEvents>();
 
             // The Workingcopy explorer is a singleton toolwindow (Will never be destroyed unless VS closes)
-            environment.SolutionOpened += environment_SolutionOpened;
-            environment.SolutionClosed += environment_SolutionClosed;
+            environment.SolutionClosed += OnSolutionClosed;
+            environment.SolutionOpened += OnSolutionOpened;
+
+            IUIService ui = Context.GetService<IUIService>();
+
+            if (ui != null)
+            {
+                ToolStripRenderer renderer = ui.Styles["VsToolWindowRenderer"] as ToolStripRenderer;
+
+                if (renderer != null)
+                    foldersStrip.Renderer = renderer;
+            }
         }
 
-        void environment_SolutionClosed(object sender, EventArgs e)
+        void OnSolutionOpened(object sender, EventArgs e)
         {
+            AddRoots(false);
+            AddRoots(true);
             RefreshRoots();
         }
 
-        void environment_SolutionOpened(object sender, EventArgs e)
+        void OnSolutionClosed(object sender, EventArgs e)
         {
+            AddRoots(false);
+            AddRoots(true);
             RefreshRoots();
         }
 
