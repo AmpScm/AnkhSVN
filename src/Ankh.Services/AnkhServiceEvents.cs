@@ -71,10 +71,10 @@ namespace Ankh
         void OnSolutionClosed(EventArgs e);
 
         /// <summary>
-        /// Raises the <see cref="SccShellAvailable"/>
+        /// Raises the <see cref="SccShellActivate"/>
         /// </summary>
         /// <param name="e"></param>
-        void OnSccShellAvailable(EventArgs e);
+        void OnSccShellActivate(EventArgs e);
     }
 
     /// <summary>
@@ -134,7 +134,7 @@ namespace Ankh
         /// When the SCC provider was activated before the UI Shell was available, this event is raised
         /// to allow initiating services that really need the UI Shell
         /// </summary>
-        public event EventHandler SccShellAvailable;
+        public event EventHandler SccShellActivate;
 
         /// <summary>
         /// Raises the <see cref="E:RuntimeLoaded"/> event.
@@ -220,10 +220,10 @@ namespace Ankh
         /// Raises the <see cref="UIShellAvailable"/>
         /// </summary>
         /// <param name="e"></param>
-        private void OnSccShellAvailable(EventArgs e)
+        private void OnSccShellActivate(EventArgs e)
         {
-            if (SccShellAvailable != null)
-                SccShellAvailable(this, e);
+            if (SccShellActivate != null)
+                SccShellActivate(this, e);
         }
 
         #region IAnkhServiceEvents Members
@@ -324,11 +324,11 @@ namespace Ankh
             }
         }
 
-        void IAnkhServiceEvents.OnSccShellAvailable(EventArgs e)
+        void IAnkhServiceEvents.OnSccShellActivate(EventArgs e)
         {
             try
             {
-                OnSccShellAvailable(e);
+                OnSccShellActivate(e);
             }
             catch (Exception ex)
             {

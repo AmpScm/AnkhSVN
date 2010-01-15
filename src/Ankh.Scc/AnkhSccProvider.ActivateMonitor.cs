@@ -63,7 +63,7 @@ namespace Ankh.Scc
                     {
                         _wasZombie = false;
 
-                        GetService<IAnkhServiceEvents>().OnSccShellAvailable(EventArgs.Empty);
+                        GetService<IAnkhServiceEvents>().OnSccShellActivate(EventArgs.Empty);
                     }
                 }
 
