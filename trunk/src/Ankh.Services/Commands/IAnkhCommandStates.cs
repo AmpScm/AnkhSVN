@@ -22,6 +22,8 @@ namespace Ankh.Commands
 {
     public interface IAnkhCommandStates
     {
+        bool UIShellAvailable { get; }
+
         bool CodeWindow { get; }
 
         bool Debugging { get; }
