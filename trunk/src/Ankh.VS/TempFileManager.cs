@@ -45,22 +45,22 @@ namespace Ankh.VS
 
             File.WriteAllBytes(name, new byte[0]);
             TempFileCollection.AddFile(name, false);
-            return name;            
+            return name;
         }
 
         public string GetTempFile(string extension)
         {
             if (string.IsNullOrEmpty(extension))
                 throw new ArgumentNullException("extension");
+
             string name = Path.ChangeExtension(
                 Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N")),
                 extension);
-            using (FileStream fs = File.Create(name))
-            {
-            }
 
             File.WriteAllBytes(name, new byte[0]);
-            return name;            
+            TempFileCollection.AddFile(name, false);
+
+            return name;
         }
 
         string _lastDir;
@@ -73,7 +73,7 @@ namespace Ankh.VS
             filename = Path.GetFileName(filename); // Remove any paths
 
             string name;
-            if(_lastDir == null || File.Exists(name = Path.Combine(_lastDir, filename)) ||
+            if (_lastDir == null || File.Exists(name = Path.Combine(_lastDir, filename)) ||
                !Directory.Exists(_lastDir))
             {
                 _lastDir = GetService<IAnkhTempDirManager>().GetTempDir();
@@ -81,6 +81,7 @@ namespace Ankh.VS
             }
 
             File.WriteAllBytes(name, new byte[0]);
+            TempFileCollection.AddFile(name, false);
 
             return name;
         }
