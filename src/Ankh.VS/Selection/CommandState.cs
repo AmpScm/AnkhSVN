@@ -326,7 +326,7 @@ namespace Ankh.VS.Selection
                 object v;
                 shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v);
 
-                return (v is bool) && ((bool)v);
+                return (v is bool) && !((bool)v);
             }
         }
 
