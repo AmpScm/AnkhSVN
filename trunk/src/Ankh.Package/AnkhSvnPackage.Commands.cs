@@ -30,43 +30,43 @@ using VSConstants = Microsoft.VisualStudio.VSConstants;
 
 namespace Ankh.VSPackage
 {
-	// The command routing at package level
-	public partial class AnkhSvnPackage : IOleCommandTarget
-	{
-		/// <summary>
-		/// Queries the status of a command handled by this package
-		/// </summary>
-		/// <param name="pguidCmdGroup">The guid of the Command.</param>
-		/// <param name="cCmds">The number of commands.</param>
-		/// <param name="prgCmds">The Commands to update.</param>
-		/// <param name="pCmdText">Command text update pointer.</param>
-		/// <returns></returns>
-		public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
-		{
-			if ((prgCmds == null))
-				return VSConstants.E_INVALIDARG;
+    // The command routing at package level
+    public partial class AnkhSvnPackage : IOleCommandTarget
+    {
+        /// <summary>
+        /// Queries the status of a command handled by this package
+        /// </summary>
+        /// <param name="pguidCmdGroup">The guid of the Command.</param>
+        /// <param name="cCmds">The number of commands.</param>
+        /// <param name="prgCmds">The Commands to update.</param>
+        /// <param name="pCmdText">Command text update pointer.</param>
+        /// <returns></returns>
+        public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
+        {
+            if ((prgCmds == null))
+                return VSConstants.E_INVALIDARG;
 
-			Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
+            Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
-			if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
-			{
-				// Filter out commands that are not defined by this package
-				return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-			}
+            if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
+            {
+                // Filter out commands that are not defined by this package
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+            }
 
             int hr = CommandMapper.QueryStatus(Context, cCmds, prgCmds, pCmdText);
 
 
             return hr;
-		}
+        }
 
 
-		public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
-		{
-			if(Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
-			{
-				return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
-			}
+        public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
+        {
+            if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
+            {
+                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
+            }
 
             switch ((OLECMDEXECOPT)nCmdexecopt)
             {
@@ -86,7 +86,7 @@ namespace Ankh.VSPackage
                         return VSConstants.E_POINTER;
 
                     string definition;
-                    if(pvaOut != IntPtr.Zero && CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
+                    if (pvaOut != IntPtr.Zero && CommandMapper.TryGetParameterList((AnkhCommand)nCmdID, out definition))
                     {
                         Marshal.GetNativeVariantForObject(definition, pvaOut);
 
@@ -95,50 +95,49 @@ namespace Ankh.VSPackage
 
                     return VSConstants.E_NOTIMPL;
             }
-			
-			object argIn = null;
 
-			if(pvaIn != IntPtr.Zero)
-				argIn = Marshal.GetObjectForNativeVariant(pvaIn);
+            object argIn = null;
 
-			CommandEventArgs args = new CommandEventArgs(
-				(AnkhCommand)nCmdID, 
-				Context,
-				argIn,
-				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER,
-				(OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
+            if (pvaIn != IntPtr.Zero)
+                argIn = Marshal.GetObjectForNativeVariant(pvaIn);
 
-           if (!CommandMapper.Execute(args.Command, args))
+            CommandEventArgs args = new CommandEventArgs(
+                (AnkhCommand)nCmdID,
+                Context,
+                argIn,
+                (OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER,
+                (OLECMDEXECOPT)nCmdexecopt == OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER);
+
+            if (!CommandMapper.Execute(args.Command, args))
                 return (int)OLEConstants.OLECMDERR_E_DISABLED;
 
-			if (pvaOut != IntPtr.Zero)
-			{
-				Marshal.GetNativeVariantForObject(args.Result, pvaOut);
-			}
+            if (pvaOut != IntPtr.Zero)
+            {
+                Marshal.GetNativeVariantForObject(args.Result, pvaOut);
+            }
 
-			return VSConstants.S_OK;
-		}
+            return VSConstants.S_OK;
+        }
 
+        [DebuggerStepThrough]
         public T GetService<T>()
             where T : class
         {
             return (T)GetService(typeof(T));
         }
 
+        [DebuggerStepThrough]
         public T GetService<T>(Type serviceType)
             where T : class
         {
             return (T)GetService(serviceType);
         }
 
-		Ankh.Commands.CommandMapper _mapper;
+        Ankh.Commands.CommandMapper _mapper;
 
-		public Ankh.Commands.CommandMapper CommandMapper
-		{
-			get
-			{
-                return _mapper ?? (_mapper = _runtime.CommandMapper);
-			}
-		}		
-	}
+        public Ankh.Commands.CommandMapper CommandMapper
+        {
+            get { return _mapper ?? (_mapper = _runtime.CommandMapper); }
+        }
+    }
 }
