@@ -42,7 +42,7 @@ namespace Ankh.Scc
         AnkhSccSettingStorage _sccStore;
         bool _collectHints;
         bool _solutionLoaded;
-        readonly List<string> _fileHints = new List<string>();
+        readonly HybridCollection<string> _fileHints = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
         readonly SortedList<string, string> _fileOrigins;
 
         public ProjectTracker(IAnkhServiceProvider context)
@@ -168,6 +168,9 @@ namespace Ankh.Scc
                 // Some projects call HandsOffFiles of files they want to add. Use that to collect extra origin information
                 foreach (string file in rgpszMkDocuments)
                 {
+                    if (!SccProvider.IsSafeSccPath(file))
+                        continue;
+
                     string fullFile = SvnTools.GetNormalizedFullPath(file);
                     if (!_fileHints.Contains(fullFile))
                         _fileHints.Add(fullFile);
