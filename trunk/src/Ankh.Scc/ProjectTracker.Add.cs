@@ -222,7 +222,8 @@ namespace Ankh.Scc
                     // We do this before the copies to make sure a failed copy doesn't break the project
                     SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
 
-                    if (sccActive && !string.IsNullOrEmpty(origin))
+                    if (sccActive && !string.IsNullOrEmpty(origin) &&
+                        StatusCache[origin].IsVersioned)
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -239,7 +240,7 @@ namespace Ankh.Scc
                     {
                         string toFile = copies.Keys[0];
                         string fromFile = copies.Values[0];
-                        string dir = SvnTools.GetNormalizedDirectoryName(copies.Keys[0]);
+                        string dir = SvnTools.GetNormalizedDirectoryName(toFile);
 
                         copies.RemoveAt(0);
                         Guid addGuid;
