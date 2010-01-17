@@ -120,12 +120,13 @@ namespace Ankh.Scc
                 string newDoc = SvnTools.GetNormalizedFullPath(rgpszNewMkDocuments[i]);
                 string origDoc = rgpszSrcMkDocuments[i];
 
-                if (origDoc != null)
+                if (origDoc != null && SccProvider.IsSafeSccPath(origDoc))
                     origDoc = SvnTools.GetNormalizedFullPath(origDoc);
+                else
+                    origDoc = null;
 
                 if (!string.IsNullOrEmpty(newDoc) && !string.IsNullOrEmpty(origDoc)
-                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)
-                    && SccProvider.IsSafeSccPath(origDoc)) // VS tries to add the file
+                    && !string.Equals(newDoc, origDoc, StringComparison.OrdinalIgnoreCase)) // VS tries to add the file
                 {
                     _fileOrigins[newDoc] = origDoc;
                 }
@@ -198,7 +199,8 @@ namespace Ankh.Scc
 
                 IVsSccProject2 sccProject = rgpProjects[iProject] as IVsSccProject2;
 
-                bool track = SccProvider.TrackProjectChanges(sccProject);
+                bool trackCopies;
+                bool track = SccProvider.TrackProjectChanges(sccProject, out trackCopies);
 
                 for (; iFile < iLastFileThisProject; iFile++)
                 {
@@ -222,8 +224,9 @@ namespace Ankh.Scc
                     // We do this before the copies to make sure a failed copy doesn't break the project
                     SccProvider.OnProjectFileAdded(sccProject, newName, origin, rgFlags[iFile]);
 
-                    if (sccActive && !string.IsNullOrEmpty(origin) &&
-                        StatusCache[origin].IsVersioned)
+                    if (sccActive && trackCopies &&
+                        !string.IsNullOrEmpty(origin) &&
+                        StatusCache[origin].HasCopyableHistory)
                     {
                         if (copies == null)
                             copies = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
