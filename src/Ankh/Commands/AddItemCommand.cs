@@ -40,30 +40,37 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
-            IUIShell uiShell = e.GetService<IUIShell>();
+            string argumentFile = e.Argument as string;
+            PathSelectorResult result = null;
 
-            
-            PathSelectorInfo info = new PathSelectorInfo("Select items to add",
-                e.Selection.GetSelectedSvnItems(true));
-
-            info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned && !item.IsIgnored && item.IsVersionable; };
-            info.VisibleFilter += delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; };
-
-            PathSelectorResult result;
-            // are we shifted?
-            if (!Shift && !e.DontPrompt && !e.IsInAutomation)
+            if (string.IsNullOrEmpty(argumentFile))
             {
-                info.EnableRecursive = false;
+                IUIShell uiShell = e.GetService<IUIShell>();
 
-                result = uiShell.ShowPathSelector(info);
+                PathSelectorInfo info = new PathSelectorInfo("Select items to add",
+                    e.Selection.GetSelectedSvnItems(true));
+
+                info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned && !item.IsIgnored && item.IsVersionable; };
+                info.VisibleFilter += delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; };
+
+                // are we shifted?
+                if (!Shift && !e.DontPrompt && !e.IsInAutomation)
+                {
+                    info.EnableRecursive = false;
+
+                    result = uiShell.ShowPathSelector(info);
+                }
+                else
+                    result = info.DefaultResult;
+
+                if (!result.Succeeded)
+                    return;
             }
             else
-                result = info.DefaultResult;
-                
-            if (!result.Succeeded)
-                return;
-
-            string argumentFile = e.Argument as string;
+            {
+                // Fix casing from user passed path
+                argumentFile = SvnTools.GetTruePath(argumentFile, true);
+            }
 
             e.GetService<IProgressRunner>().RunModal("Adding",
                 delegate(object sender, ProgressWorkerArgs ee)
