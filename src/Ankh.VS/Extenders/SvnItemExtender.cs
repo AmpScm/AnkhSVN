@@ -72,7 +72,7 @@ namespace Ankh.VS.Extenders
             }
         }
 
-        
+
         ~SvnItemExtender()
         {
             Dispose(false);
@@ -101,7 +101,12 @@ namespace Ankh.VS.Extenders
 
             try
             {
-                _context.GetService<IAnkhCommandService>().PostIdleAction(release);
+                IAnkhCommandService svc = _context.GetService<IAnkhCommandService>();
+
+                if (svc != null)
+                    svc.PostIdleAction(release);
+                else
+                    release();
             }
             catch
             { }
@@ -110,7 +115,7 @@ namespace Ankh.VS.Extenders
         [Browsable(false)]
         private SvnItem SvnItem
         {
-            get 
+            get
             {
                 return _provider.FindItem(_extendeeObject, _catId);
             }
@@ -129,7 +134,7 @@ namespace Ankh.VS.Extenders
             set
             {
                 string cl = value;
-                
+
                 cl = string.IsNullOrEmpty(cl) ? null : cl.Trim();
 
                 if (SvnItem.IsVersioned && SvnItem.Status != null && SvnItem.IsFile)
@@ -170,7 +175,7 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Current Revision")]
         public long? Revision
         {
-            get 
+            get
             {
                 SvnItem i = SvnItem;
 
@@ -197,7 +202,7 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Last committed revision"), DisplayName("Last Revision")]
         public long? LastCommittedRevision
         {
-            get 
+            get
             {
                 SvnItem i = SvnItem;
                 if (i.IsVersioned && i.Status.LastChangeRevision > 0)
