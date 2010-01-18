@@ -1157,7 +1157,7 @@ namespace Ankh.UI.PendingChanges
 
         internal void LoadFile(string path)
         {
-            if (VSVersion.VS2010)
+            if (VSVersion.VS2010Beta2)
             {
                 // Work around issue with splitter with black top appearing in beta2
                 string content = System.IO.File.ReadAllText(path);
