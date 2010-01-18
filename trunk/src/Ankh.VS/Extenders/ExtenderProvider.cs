@@ -157,7 +157,7 @@ namespace Ankh.VS.Extenders
             try
             {
                 string path = null;
-                Type type = extendeeObject.GetType();
+                Type type;
                 switch (catId)
                 {
                     case CATID_CscFileBrowse:
@@ -177,6 +177,7 @@ namespace Ankh.VS.Extenders
                         break;
                     default:
                         // Currently untested project types
+                        type = extendeeObject.GetType();
                         path = type.InvokeMember("FullPath", BindingFlags.GetProperty | BindingFlags.IgnoreCase, null, extendeeObject, null) as string;
                         break;
                 }
