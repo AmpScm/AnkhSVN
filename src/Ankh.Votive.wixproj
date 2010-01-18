@@ -145,6 +145,11 @@
       <Project>{ce58aac8-2271-4223-882f-0cd1a7105a52}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="tools\Ankh.GenPkgDef\Ankh.GenPkgDef.csproj">
+      <Name>Ankh.GenPkgDef</Name>
+      <Project>{9392145e-1047-4ffc-84f5-6b5f3c80ca9b}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="Utils\Utils.csproj">
       <Name>Utils</Name>
       <Project>{a3248e1e-8272-4227-af02-bb86040fbed9}</Project>
@@ -177,13 +182,10 @@
           ItemName="MyVersionAssembly" />
     </GetAssemblyIdentity>    
     <Message Text="Generating ExtensionPoints redirects for version %(MyVersionAssembly.Version)" Importance="High" />
-    <CreateProperty Value="$(ProjectDefineConstants);
-      AnkhExtensionPointsVersion=%(MyVersionAssembly.Version)
-      ">
+    <CreateProperty Value="$(ProjectDefineConstants);AnkhExtensionPointsVersion=%(MyVersionAssembly.Version)">
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
     </CreateProperty>
     <Exec Command="tools\Ankh.GenPkgDef\bin\$(Configuration)\Ankh.GenPkgDef.exe Ankh.pkgdef Ankh.Package\bin\$(Configuration)\Ankh.Package.dll Ankh.Trigger\bin\$(Configuration)\Ankh.Trigger.dll" />
-                                    
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
