@@ -123,13 +123,13 @@
  * Subversion {2} via SharpSvn {3}</value>
   </data>
   <data name="AboutDynamicallyLinkedTo" xml:space="preserve">
-    <value>AnkhSVN is dynamically linked to: </value>
+    <value>SharpSvn is dynamically linked to: </value>
   </data>
   <data name="AboutLinkedTo" xml:space="preserve">
-    <value>AnkhSVN is linked to: </value>
+    <value>SharpSvn is linked to: </value>
   </data>
   <data name="AboutOptionallyLinkedTo" xml:space="preserve">
-    <value>AnkhSVN is optionally linked to: </value>
+    <value>SharpSvn is optionally linked to: </value>
   </data>
   <data name="AboutProductId" xml:space="preserve">
     <value>{0}</value>
