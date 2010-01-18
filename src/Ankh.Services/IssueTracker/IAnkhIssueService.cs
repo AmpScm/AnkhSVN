@@ -69,5 +69,7 @@ namespace Ankh
         /// </summary>
         /// <param name="issueId"></param>
         void OpenIssue(string issueId);
-    }
+
+		void ShowConnectHelp();
+	}
 }

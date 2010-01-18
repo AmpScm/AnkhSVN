@@ -76,7 +76,22 @@ namespace Ankh.UI.PendingChanges
                     }
                 }
             }
-            this.Controls.Add(label1);
+            this.Controls.Add(pleaseConfigureLabel);
         }
+
+		protected override void OnFontChanged(EventArgs e)
+		{
+			base.OnFontChanged(e);
+
+			pleaseConfigureLabel.Font = new Font(Font, FontStyle.Bold);
+		}
+
+		private void pleaseConfigureLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			IAnkhIssueService issueService = Context.GetService<IAnkhIssueService>();
+
+			if (issueService != null)
+				issueService.ShowConnectHelp();
+		}
     }
 }
