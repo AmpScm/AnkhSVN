@@ -44,33 +44,32 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "This solution is not associated with an Issue Repository.";
-            // 
-            // PendingIssuesPage
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
-            this.Name = "PendingIssuesPage";
-            this.Text = "Issues";
-            this.ResumeLayout(false);
-            this.PerformLayout();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PendingIssuesPage));
+			this.pleaseConfigureLabel = new System.Windows.Forms.LinkLabel();
+			this.SuspendLayout();
+			// 
+			// pleaseConfigureLabel
+			// 
+			this.pleaseConfigureLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			resources.ApplyResources(this.pleaseConfigureLabel, "pleaseConfigureLabel");
+			this.pleaseConfigureLabel.Name = "pleaseConfigureLabel";
+			this.pleaseConfigureLabel.TabStop = true;
+			this.pleaseConfigureLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.pleaseConfigureLabel_LinkClicked);
+			// 
+			// PendingIssuesPage
+			// 
+			resources.ApplyResources(this, "$this");
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.Controls.Add(this.pleaseConfigureLabel);
+			this.Name = "PendingIssuesPage";
+			this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.LinkLabel pleaseConfigureLabel;
 
-    }
+
+	}
 }
