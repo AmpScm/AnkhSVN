@@ -27,6 +27,7 @@ using Microsoft.Win32;
 
 using Ankh.UI;
 using Ankh.VS;
+using System.Text.RegularExpressions;
 
 /*****************************************************************
  * This command performs update checks by calling our webservice
@@ -40,6 +41,8 @@ using Ankh.VS;
  *  os: OS version
  *  iv: Update interval in hours (For usage statistics)
  *  xx: Hashcode per machine (For usage statistics)
+ *  dn: Comma separated list of installed .Net versions (For usage statistics)
+ *  pc: Number of processors available (For usage statistics)
  * 
  * Some sample valid responses are:
  *   * A 0 byte file or a file containing just whitespace. There is no update available
@@ -107,7 +110,7 @@ namespace Ankh.Commands
 
             if (pkg != null)
                 return pkg.UIVersion;
-            
+
             return GetCurrentVersion(context);
         }
 
@@ -171,7 +174,45 @@ namespace Ankh.Commands
             }
             catch { }
 
-            sb.AppendFormat(CultureInfo.InvariantCulture, "&xx={0}", x);
+            sb.AppendFormat(CultureInfo.InvariantCulture, "&xx={0}&pc={1}", x, Environment.ProcessorCount);
+
+            try
+            {
+                using (RegistryKey rk = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP"))
+                {
+                    if (rk != null)
+                    {
+                        sb.Append("&dn=");
+                        Regex re = new Regex("^[vV]([0-9]+\\.[0-9]+)(\\.[0-9]+)*", RegexOptions.Singleline);
+                        bool first = true;
+                        HybridCollection<string> vers = new HybridCollection<string>();
+
+                        foreach (string s in rk.GetSubKeyNames())
+                        {
+                            Match m = re.Match(s);
+
+                            if (m.Success)
+                            {
+                                string v = m.Groups[1].Value;
+
+                                if (vers.Contains(v))
+                                    continue;
+
+                                vers.Add(v);
+
+                                if (first)
+                                    first = false;
+                                else
+                                    sb.Append(',');
+
+                                sb.Append(v);
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            { }
 
             Uri updateUri = new Uri(sb.ToString());
             WebRequest wr = WebRequest.Create(updateUri);
