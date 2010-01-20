@@ -26,6 +26,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 using SharpSvn;
 
+using Ankh.Commands;
 using Ankh.Scc.ProjectMap;
 using Ankh.Selection;
 using Ankh.VS;
@@ -151,6 +152,11 @@ namespace Ankh.Scc
 
             _ensureIcons = true;
             RegisterForSccCleanup();
+
+            IAnkhCommandStates states = GetService<IAnkhCommandStates>();
+
+            if (states == null || !states.UIShellAvailable)
+                _wasZombieWhenActivated = true;
 
             GetService<IAnkhServiceEvents>().OnSccProviderActivated(EventArgs.Empty);
 
