@@ -88,7 +88,7 @@ namespace Ankh.Scc
             }
             else
             {
-                // Ok, Visual decided to activate the user context with our GUID
+                // Ok, Visual Studio decided to activate the user context with our GUID
                 // This tells us VS wants us to be the active SCC
                 //
                 // This is not documented directly. But it is documented that we should
