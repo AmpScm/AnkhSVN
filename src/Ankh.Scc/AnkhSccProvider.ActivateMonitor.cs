@@ -48,20 +48,20 @@ namespace Ankh.Scc
         }
 
         bool _tryRegisteredBefore;
-        bool _wasZombie;
+        bool _wasZombieWhenActivated;
         internal void TryRegisterSccProvider()
         {
             IAnkhCommandStates states;
 
             if (IsActive)
             {
-                if (_wasZombie)
+                if (_wasZombieWhenActivated)
                 {
                     states = GetService<IAnkhCommandStates>();
 
                     if (states != null && states.UIShellAvailable)
                     {
-                        _wasZombie = false;
+                        _wasZombieWhenActivated = false;
 
                         GetService<IAnkhServiceEvents>().OnSccShellActivate(EventArgs.Empty);
                     }
@@ -98,9 +98,6 @@ namespace Ankh.Scc
                 RegisterAsPrimarySccProvider();
 
                 _tryRegisteredBefore = true;
-
-                if (!states.UIShellAvailable)
-                    _wasZombie = true;
             }
         }
     }
