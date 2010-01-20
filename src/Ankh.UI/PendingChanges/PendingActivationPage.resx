@@ -140,6 +140,9 @@ Click here to set the current Source Control plug-in.</value>
   <data name="openSccSelectorLink.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
   </data>
+  <data name="openSccSelectorLink.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="&gt;&gt;openSccSelectorLink.Name" xml:space="preserve">
     <value>openSccSelectorLink</value>
   </data>
