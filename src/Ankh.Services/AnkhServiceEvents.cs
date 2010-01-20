@@ -160,7 +160,7 @@ namespace Ankh
         /// Raises the <see cref="E:SccProviderActivated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnSccProviderActivated(EventArgs e)
+        protected void OnSccProviderActivated(EventArgs e)
         {
             if (SccProviderActivated != null)
                 SccProviderActivated(this, e);
@@ -170,7 +170,7 @@ namespace Ankh
         /// Raises the <see cref="E:SccProviderDeactivated"/> event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected internal void OnSccProviderDeactivated(EventArgs e)
+        protected void OnSccProviderDeactivated(EventArgs e)
         {
             if (SccProviderDeactivated != null)
                 SccProviderDeactivated(this, e);
