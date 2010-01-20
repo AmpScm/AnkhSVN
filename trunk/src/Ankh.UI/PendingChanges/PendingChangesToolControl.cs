@@ -128,6 +128,7 @@ namespace Ankh.UI.PendingChanges
 
         void OnSccProviderDeactivated(object sender, EventArgs e)
         {
+            _activatePage.ShowMessage = true;
             ShowPanel(_activatePage, false);
             pendingChangesTabs.Enabled = false;
         }

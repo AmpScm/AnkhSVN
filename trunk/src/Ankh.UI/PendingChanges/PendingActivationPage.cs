@@ -38,5 +38,11 @@ namespace Ankh.UI.PendingChanges
                 return typeof(PendingActivationPage);
             }
         }
+
+        public bool ShowMessage
+        {
+            get { return openSccSelectorLink.Visible; }
+            set { openSccSelectorLink.Visible = value; }
+        }
     }
 }
