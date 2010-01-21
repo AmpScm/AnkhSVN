@@ -119,7 +119,7 @@ namespace Ankh.UI.PendingChanges.Commands
             if (value != null && value == "Other...")
                 cs.PostExecCommand(AnkhCommand.SolutionSwitchDialog);
             else
-                cs.PostExecCommand(AnkhCommand.SolutionSwitchDialog, value);
+                cs.PostExecCommand(AnkhCommand.SolutionSwitchDialog, new Uri(value));
         }
 
         void OnExecuteGet(CommandEventArgs e)
