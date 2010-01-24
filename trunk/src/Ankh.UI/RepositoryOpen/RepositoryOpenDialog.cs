@@ -574,7 +574,7 @@ namespace Ankh.UI.RepositoryOpen
             {
                 using (SvnRemoteSession session = GetSession(uri))
                 {
-                    string path = session.SessionUri.MakeRelativeUri(uri).ToString();
+                    string path = Uri.UnescapeDataString(session.SessionUri.MakeRelativeUri(uri).ToString());
 
                     SvnRemoteListArgs la = new SvnRemoteListArgs();
                     la.ThrowOnError = false;
