@@ -36,7 +36,7 @@ namespace Ankh
         /// <param name="time"></param>
         /// <param name="dlg"></param>
         /// <param name="args"></param>
-        void ScheduleAt(DateTime time, Delegate dlg, params object[] args);
+        void ScheduleAt(DateTime time, AnkhAction action);
         /// <summary>
         /// Schedules the specified command at or after the specified interval
         /// </summary>
@@ -48,6 +48,6 @@ namespace Ankh
         /// </summary>
         /// <param name="timeSpan"></param>
         /// <param name="command"></param>
-        void Schedule(TimeSpan timeSpan, Delegate dlg, params object[] args);
+        void Schedule(TimeSpan timeSpan, AnkhAction action);
     }
 }

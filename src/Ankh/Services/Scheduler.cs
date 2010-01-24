@@ -28,7 +28,7 @@ namespace Ankh.Services
     {
         readonly Timer _timer;
         IAnkhCommandService _commands;
-        readonly SortedList<DateTime, KeyValuePair<Delegate, object[]>> _actions = new SortedList<DateTime, KeyValuePair<Delegate, object[]>>();
+        readonly SortedList<DateTime, AnkhAction> _actions = new SortedList<DateTime, AnkhAction>();
         Guid _grp = AnkhId.CommandSetGuid;
 
         public AnkhScheduler(IAnkhServiceProvider context)
@@ -52,7 +52,7 @@ namespace Ankh.Services
                 DateTime now = DateTime.Now;
                 while (true)
                 {
-                    KeyValuePair<Delegate, object[]> vals;
+                    AnkhAction action;
                     lock (_actions)
                     {
                         if (_actions.Count == 0)
@@ -62,11 +62,11 @@ namespace Ankh.Services
                         if (d > now)
                             break;
 
-                        vals = _actions.Values[0];
+                        action = _actions.Values[0];
                         _actions.RemoveAt(0);
                     }
 
-                    vals.Key.DynamicInvoke(vals.Value);
+                    action();
                 }
             }
             catch
@@ -101,17 +101,17 @@ namespace Ankh.Services
             ScheduleAt(time, CreateHandler(command));
         }
 
-        public void ScheduleAt(DateTime time, Delegate dlg, params object[] args)
+        public void ScheduleAt(DateTime time, AnkhAction action)
         {
-            if(dlg == null)
-                throw new ArgumentNullException("dlg");
+            if(action == null)
+                throw new ArgumentNullException("action");
 
             lock (_actions)
             {
                 while (_actions.ContainsKey(time))
                     time = time.Add(TimeSpan.FromMilliseconds(1));
 
-                _actions.Add(time, new KeyValuePair<Delegate,object[]>(dlg, args));
+                _actions.Add(time, action);
 
                 Reschedule();
             }
@@ -130,9 +130,9 @@ namespace Ankh.Services
             ScheduleAt(DateTime.Now + timeSpan, CreateHandler(command));
         }
 
-        public void Schedule(TimeSpan timeSpan, Delegate dlg, params object[] args)
+        public void Schedule(TimeSpan timeSpan, AnkhAction action)
         {
-            ScheduleAt(DateTime.Now + timeSpan, dlg, args);
+            ScheduleAt(DateTime.Now + timeSpan, action);
         }
 
         #endregion
