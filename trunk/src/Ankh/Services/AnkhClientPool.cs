@@ -181,7 +181,7 @@ namespace Ankh.Services
 
             lock (_remoteSessions)
             {
-                foreach(SvnPoolRemoteSession rs in _remoteSessions)
+                foreach (SvnPoolRemoteSession rs in _remoteSessions)
                     toDispose.Add(rs);
                 _remoteSessions.Clear();
             }
@@ -195,61 +195,78 @@ namespace Ankh.Services
         #region ISvnClientPool Members
 
 
-        public SvnPoolRemoteSession GetRemoteSession(Uri sessionUri)
+        public SvnPoolRemoteSession GetRemoteSession(Uri sessionUri, bool parentOk)
         {
             if (sessionUri == null)
                 throw new ArgumentNullException("sessionUri");
 
-            if (_remoteSessions.Count > 0)
+            SvnPoolRemoteSession reuse = null;
+            lock (_remoteSessions)
             {
-
-                foreach (SvnPoolRemoteSession rs in _remoteSessions)
+                if (_remoteSessions.Count > 0)
                 {
-                    if (rs.SessionUri == sessionUri)
-                        return rs;
-                }
-
-                string schemeAndServer = sessionUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
-                foreach (SvnPoolRemoteSession rs in _remoteSessions)
-                {
-                    Uri reposUri = rs.RepositoryRootUri;
-
-                    if (reposUri == null || reposUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped) != schemeAndServer)
-                        continue;
-
-                    if (sessionUri.AbsolutePath.StartsWith(reposUri.AbsolutePath, StringComparison.Ordinal))
+                    foreach (SvnPoolRemoteSession rs in _remoteSessions)
                     {
-                        SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
-                        rca.ThrowOnError = false;
-                        if (rs.Reparent(sessionUri, rca))
-                            return rs;
+                        if (rs.SessionUri == sessionUri)
+                        {
+                            reuse = rs;
+                            _remoteSessions.Remove(rs);
+                            break;
+                        }
                     }
+
+                    if (reuse == null)
+                    {
+                        string schemeAndServer = sessionUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+                        foreach (SvnPoolRemoteSession rs in _remoteSessions)
+                        {
+                            Uri reposUri = rs.RepositoryRootUri ?? rs.SessionUri;
+
+                            if (reposUri == null || reposUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped) != schemeAndServer)
+                                continue;
+
+                            if (sessionUri.AbsolutePath.StartsWith(reposUri.AbsolutePath, StringComparison.Ordinal))
+                            {
+                                reuse = rs;
+                            }
+                        }
+                    }
+
+                    if (reuse != null)
+                        _remoteSessions.Remove(reuse);
                 }
+            }
+
+            if (reuse != null)
+            {
+                    if (sessionUri != reuse.SessionUri)
+                    {
+                        if (!parentOk || !sessionUri.AbsolutePath.StartsWith(reuse.SessionUri.AbsolutePath))
+                        {
+                            SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
+                            rca.ThrowOnError = false;
+
+                            if (!reuse.Reparent(sessionUri, rca))
+                                reuse = null;
+                        }
+                    }
+
+                if (reuse != null)
+                    return reuse;
+
+                // else -> GC will cleanup
             }
 
             AnkhSvnPoolRemoteSession session = new AnkhSvnPoolRemoteSession(this, true, _returnCookie);
-            bool ok = false;
-            try
-            {
-                ok = session.Open(sessionUri);
-            }
-            finally
-            {
-                if (!ok)
-                    session.Dispose();
-            }
-
-            if (ok)
-                return session;
-            else
-                return null;
+            session.Open(sessionUri);
+            return session;
         }
 
         public bool ReturnClient(SvnPoolRemoteSession session)
         {
             AnkhSvnPoolRemoteSession pc = session as AnkhSvnPoolRemoteSession;
 
-            if (pc != null && pc.ReturnCookie == _returnCookie)
+            if (pc != null && pc.ReturnCookie == _returnCookie && pc.SessionUri != null)
             {
                 pc.ReturnTime = DateTime.Now;
 
@@ -295,7 +312,7 @@ namespace Ankh.Services
             lock (_remoteSessions)
             {
                 DateTime now = DateTime.Now;
-                
+
                 foreach (AnkhSvnPoolRemoteSession rs in _remoteSessions)
                 {
                     bool dispose = false;
@@ -403,7 +420,7 @@ namespace Ankh.Services
                     string fp = item.FullPath;
 
                     if (fp == null) // Non local operation
-                        return; 
+                        return;
 
                     SvnClientAction action;
 
@@ -454,7 +471,6 @@ namespace Ankh.Services
 
         sealed class AnkhSvnPoolRemoteSession : SvnPoolRemoteSession
         {
-            readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
             readonly int _returnCookie;
             DateTime _returnTime;
@@ -479,16 +495,6 @@ namespace Ankh.Services
                 {
                     Debug.Assert(false, "Returning pool client a second time");
                     return;
-                }
-
-                try
-                {
-                    if (_changes.Count > 0)
-                        pool.NotifyChanges(_changes);
-                }
-                finally
-                {
-                    _changes.Clear();
                 }
 
                 if (base.IsCommandRunning || base.IsDisposed)
