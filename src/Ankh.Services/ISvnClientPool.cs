@@ -53,8 +53,9 @@ namespace Ankh
         /// the connection can't be opened
         /// </summary>
         /// <param name="sessionUri">The session URI.</param>
+        /// <param name="parentOk">if set to <c>true</c> a session hosted at a parent directory is ok.</param>
         /// <returns></returns>
-        SvnPoolRemoteSession GetRemoteSession(Uri sessionUri);
+        SvnPoolRemoteSession GetRemoteSession(Uri sessionUri, bool parentOk);
 
         /// <summary>
         /// Returns the client.
@@ -253,12 +254,12 @@ namespace Ankh
             // In our common implementation this code is not used
             // Update AnkhSvnClientPool.AnkhSvnPoolClient
 
-            if (_shouldDispose || _nReturns++ > 32 || IsCommandRunning || !_pool.ReturnClient(this))
+            if (_shouldDispose || _nReturns++ > 1024 || IsCommandRunning || !_pool.ReturnClient(this))
             {
-                // Recycle the SvnClient if at least one of the following is true
+                // Recycle the SvnPoolRemoteSession if at least one of the following is true
                 // * A command is still active in it (User error)
                 // * The pool doesn't accept the client (Pool error)
-                // * The client has handled 32 sessions (Garbage collection of apr memory)
+                // * The client has handled 1024 sessions (Garbage collection of apr memory)
 
                 _pool = null;
                 InnerDispose();
@@ -280,7 +281,7 @@ namespace Ankh
         {
             get
             {
-                if (_repositoryUri != null && !IsDisposed)
+                if (_repositoryUri == null && !IsDisposed)
                 {
                     SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
                     rca.ThrowOnError = false;
