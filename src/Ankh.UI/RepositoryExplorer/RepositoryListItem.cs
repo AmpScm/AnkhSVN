@@ -28,23 +28,25 @@ namespace Ankh.UI.RepositoryExplorer
 {
     class RepositoryListItem : SmartListViewItem
     {
-        SvnListEventArgs _info;
+        SvnDirEntry _entry;
         SvnOrigin _origin;
 
-        public RepositoryListItem(RepositoryListView view, SvnListEventArgs info, SvnOrigin dirOrigin, IFileIconMapper iconMapper)
+        public RepositoryListItem(RepositoryListView view, Uri entryUri, SvnDirEntry entry, SvnOrigin dirOrigin, IFileIconMapper iconMapper)
             : base(view)
         {
-            if (info == null)
-                throw new ArgumentNullException("info");
+            if (entryUri == null)
+                throw new ArgumentNullException("entryUri");
+            else if (entry == null)
+                throw new ArgumentNullException("entry");
             else if (dirOrigin == null)
                 throw new ArgumentNullException("dirOrigin");
 
-            _info = info;
-            _origin = new SvnOrigin(info.EntryUri, dirOrigin);
+            _entry = entry;
+            _origin = new SvnOrigin(entryUri, dirOrigin);
 
-            string name = SvnTools.GetFileName(info.EntryUri);
+            string name = SvnTools.GetFileName(entryUri);
 
-            bool isFile = (info.Entry.NodeKind == SvnNodeKind.File);
+            bool isFile = (entry.NodeKind == SvnNodeKind.File);
 
             string extension = isFile ? Path.GetExtension(name) : "";
 
@@ -58,14 +60,16 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
 
+            SvnLockInfo lockInfo = view.GetLockInfo(entryUri);
+
             SetValues(
                 name,
                 IsFolder ? RepositoryStrings.ExplorerDirectoryName : view.Context.GetService<IFileIconMapper>().GetFileType(extension),
-                info.Entry.Revision.ToString(),
-                info.Entry.Author,
-                IsFolder ? "" : info.Entry.FileSize.ToString(),
-                info.Entry.Time.ToLocalTime().ToString("g"),
-                (info.Lock != null) ? info.Lock.Owner : "");
+                entry.Revision.ToString(),
+                entry.Author,
+                IsFolder ? "" : entry.FileSize.ToString(),
+                entry.Time.ToLocalTime().ToString("g"),
+                (lockInfo != null) ? lockInfo.Owner : "");
         }
 
         /// <summary>
@@ -95,14 +99,14 @@ namespace Ankh.UI.RepositoryExplorer
             get { return _origin; }
         }
 
-        public SvnListEventArgs Info
+        public SvnDirEntry Entry
         {
-            get { return _info; }
+            get { return _entry; }
         }
 
         public bool IsFolder
         {
-            get { return Info.Entry.NodeKind == SvnNodeKind.Directory; }
+            get { return Entry.NodeKind == SvnNodeKind.Directory; }
         }
     }
 }

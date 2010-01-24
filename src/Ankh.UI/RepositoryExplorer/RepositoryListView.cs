@@ -23,6 +23,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using Ankh.Commands;
 using System.ComponentModel;
+using Ankh.Scc;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -63,8 +64,8 @@ namespace Ankh.UI.RepositoryExplorer
                         return x.IsFolder ? -1 : 1;
                     }
 
-                    long lx = x.Info.Entry.FileSize;
-                    long ly = y.Info.Entry.FileSize;
+                    long lx = x.Entry.FileSize;
+                    long ly = y.Entry.FileSize;
 
                     if (lx < ly)
                         return -1;
@@ -76,7 +77,7 @@ namespace Ankh.UI.RepositoryExplorer
             date.Sorter = new SortWrapper(
                 delegate(RepositoryListItem x, RepositoryListItem y)
                 {
-                    return x.Info.Entry.Time.CompareTo(y.Info.Entry.Time);
+                    return x.Entry.Time.CompareTo(y.Entry.Time);
                 });
 
             AllColumns.Add(name);
@@ -108,10 +109,10 @@ namespace Ankh.UI.RepositoryExplorer
 
         protected override string GetCanonicalName(RepositoryListItem item)
         {
-            Uri uri = item.Info.EntryUri;
+            SvnOrigin origin = item.Origin;
 
-            if (uri != null)
-                return uri.AbsoluteUri;
+            if (origin != null)
+                return origin.Uri.AbsoluteUri;
             else
                 return null;
         }
@@ -239,6 +240,11 @@ namespace Ankh.UI.RepositoryExplorer
         {
             e.SelectionItem = new RepositoryExplorerItem(Context, e.Item.Origin, e.Item);
             base.OnRetrieveSelection(e);
+        }
+
+        internal SharpSvn.SvnLockInfo GetLockInfo(Uri entryUri)
+        {
+            return null;
         }
     }
 }
