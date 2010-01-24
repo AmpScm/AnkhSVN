@@ -28,6 +28,7 @@ using System.ComponentModel.Design;
 using Ankh.Scc;
 using System.IO;
 using System.Windows.Forms.Design;
+using SharpSvn.Remote;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -172,16 +173,17 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     if (sn.FolderItems.Contains(sn.RawUri))
                     {
-                        RepositoryListItem item = new RepositoryListItem(fileView, sn.FolderItems[sn.RawUri], tn.Origin, IconMapper);
+                        ISvnRepositoryListItem ea = sn.FolderItems[sn.RawUri];
+                        RepositoryListItem item = new RepositoryListItem(fileView, ea.Uri, ea.Entry, tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }
                 }
-                foreach (SvnListEventArgs ee in tn.FolderItems)
+                foreach (ISvnRepositoryListItem ee in tn.FolderItems)
                 {
-                    if (ee.EntryUri != tn.RawUri)
+                    if (ee.Uri != tn.RawUri)
                     {
-                        RepositoryListItem item = new RepositoryListItem(fileView, ee, tn.Origin, IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, ee.Uri, ee.Entry, tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }
@@ -254,7 +256,7 @@ namespace Ankh.UI.RepositoryExplorer
         {
             RepositoryExplorerItem item = EnumTools.GetSingle(e.Selection.GetSelection<RepositoryExplorerItem>());
 
-            if (item.Info == null || item.Info.Entry.NodeKind == SvnNodeKind.Directory || item.Origin == null)
+            if (item.Entry == null || item.Entry.NodeKind == SvnNodeKind.Directory || item.Origin == null)
             {
                 treeView.BrowseTo(item.Uri);
                 return;

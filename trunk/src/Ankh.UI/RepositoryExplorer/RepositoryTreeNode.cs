@@ -22,14 +22,15 @@ using SharpSvn;
 using System.Collections.ObjectModel;
 using Ankh.Scc;
 using System.Diagnostics;
+using SharpSvn.Remote;
 
 namespace Ankh.UI.RepositoryExplorer
 {
-    sealed class ListItemCollection : KeyedCollection<Uri, SvnListEventArgs>
+    sealed class ListItemCollection : KeyedCollection<Uri, SharpSvn.Remote.ISvnRepositoryListItem>
     {
-        protected override Uri GetKeyForItem(SvnListEventArgs item)
+        protected override Uri GetKeyForItem(SharpSvn.Remote.ISvnRepositoryListItem item)
         {
-            return item.EntryUri;
+            return item.Uri;
         }
     }
 
@@ -166,20 +167,20 @@ namespace Ankh.UI.RepositoryExplorer
             get { return _items ?? (_items = new ListItemCollection()); }
         }
 
-        internal void AddItem(SharpSvn.SvnListEventArgs item)
+        internal void AddItem(ISvnRepositoryListItem item)
         {
-            if (FolderItems.Contains(item.EntryUri))
-                FolderItems.Remove(item.EntryUri);
+            if (FolderItems.Contains(item.Uri))
+                FolderItems.Remove(item.Uri);
 
             FolderItems.Add(item);
         }
 
-        public SvnListEventArgs DirectoryItem
+        public SvnDirEntry DirectoryEntry
         {
             get
             {
                 if (FolderItems.Count > 0)
-                    return FolderItems[0]; // First is folder itself
+                    return FolderItems[0].Entry; // First is folder itself
 
                 return null;
             }

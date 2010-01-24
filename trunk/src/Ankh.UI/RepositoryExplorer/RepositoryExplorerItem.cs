@@ -68,30 +68,16 @@ namespace Ankh.UI.RepositoryExplorer
             get { return "Repository Item"; }
         }
 
-        internal SvnListEventArgs Info
+        internal SvnDirEntry Entry
         {
             get
             {
                 if (_li != null)
-                    return _li.Info;
+                    return _li.Entry;
                 else if (_tn != null)
-                    return _tn.DirectoryItem;
+                    return _tn.DirectoryEntry;
 
                 throw new InvalidOperationException();
-            }
-        }
-
-
-        SvnDirEntry Entry
-        {
-            get
-            {
-                SvnListEventArgs info = Info;
-
-                if(info != null)
-                    return info.Entry;
-
-                return null;
             }
         }
 

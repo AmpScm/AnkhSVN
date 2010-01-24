@@ -29,6 +29,7 @@ using System.Collections.ObjectModel;
 using Ankh.Scc;
 using Ankh.UI.RepositoryExplorer.Dialogs;
 using Ankh.Commands;
+using SharpSvn.Remote;
 
 namespace Ankh.UI.RepositoryExplorer
 {
@@ -372,7 +373,7 @@ namespace Ankh.UI.RepositoryExplorer
                                             EnsureRoot(a.RepositoryRoot);
                                     }
 
-                                    AddItem(a, first);
+                                    AddItem(a, a.RepositoryRoot, first);
                                     first = false;
                                 }
 
@@ -595,12 +596,12 @@ namespace Ankh.UI.RepositoryExplorer
             return rtn;
         }
 
-        private void AddItem(SvnListEventArgs item, bool first)
+        private void AddItem(ISvnRepositoryListItem item, Uri repositoryRoot, bool first)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
 
-            Uri uri = item.EntryUri;
+            Uri uri = item.Uri;
 
             Uri folderUri;
 
@@ -609,7 +610,7 @@ namespace Ankh.UI.RepositoryExplorer
             else
                 folderUri = uri;
 
-            RepositoryTreeNode s = EnsureFolderUri(folderUri, item.RepositoryRoot);
+            RepositoryTreeNode s = EnsureFolderUri(folderUri, repositoryRoot);
 
             if (s != null)
             {
