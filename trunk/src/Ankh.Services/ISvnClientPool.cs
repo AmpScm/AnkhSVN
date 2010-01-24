@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using System.Diagnostics;
+using SvnRemoteSession = SharpSvn.Remote.SvnRemoteSession;
+using SharpSvn.Remote;
 
 namespace Ankh
 {
@@ -47,11 +49,26 @@ namespace Ankh
         SvnWorkingCopyClient GetWcClient();
 
         /// <summary>
+        /// Gets a SvnRemote session to the specified Uri. Throws an SvnException if
+        /// the connection can't be opened
+        /// </summary>
+        /// <param name="sessionUri">The session URI.</param>
+        /// <returns></returns>
+        SvnPoolRemoteSession GetRemoteSession(Uri sessionUri);
+
+        /// <summary>
         /// Returns the client.
         /// </summary>
         /// <param name="poolClient">The pool client.</param>
         /// <returns>true if the pool accepts the client, otherwise false</returns>
         bool ReturnClient(SvnPoolClient poolClient);
+
+        /// <summary>
+        /// Returns the client.
+        /// </summary>
+        /// <param name="session">The session.</param>
+        /// <returns></returns>
+        bool ReturnClient(SvnPoolRemoteSession session);
 
         /// <summary>
         /// Flushes all clients to read settings again
@@ -183,6 +200,99 @@ namespace Ankh
         protected void InnerDispose()
         {
             base.Dispose(); // Includes GC.SuppressFinalize()
+        }
+    }
+
+    public abstract class SvnPoolRemoteSession : SvnRemoteSession, IDisposable
+    {
+        ISvnClientPool _pool;
+        int _nReturns;
+        Uri _repositoryUri;
+        bool _shouldDispose;
+
+        // Note: We can only implement our own Dispose over the existing
+        // As VC++ unconditionally calls GC.SuppressFinalize() just before returning
+        // Luckily the using construct uses the last defined or IDisposable methods which we can override
+
+        protected SvnPoolRemoteSession(ISvnClientPool pool)
+        {
+            if (pool == null)
+                throw new ArgumentNullException("pool");
+
+            _pool = pool;
+        }  
+
+        /// <summary>
+        /// Returns the client to the client pool
+        /// </summary>
+        public new void Dispose()
+        {
+            ReturnClient();
+
+            // No GC.SuppressFinalize() as SvnClient() really needs to have a finalize if we don't dispose
+        }
+
+        void IDisposable.Dispose()
+        {
+            ReturnClient();
+
+            // No GC.SuppressFinalize() as SvnClient() really needs to have a finalize if we don't dispose
+        }
+
+        protected ISvnClientPool SvnClientPool
+        {
+            get { return _pool; }
+            set { _pool = value; }
+        }
+
+        /// <summary>
+        /// Returns the client to the threadpool, or disposes the cleint
+        /// </summary>
+        protected virtual void ReturnClient()
+        {
+            // In our common implementation this code is not used
+            // Update AnkhSvnClientPool.AnkhSvnPoolClient
+
+            if (_shouldDispose || _nReturns++ > 32 || IsCommandRunning || !_pool.ReturnClient(this))
+            {
+                // Recycle the SvnClient if at least one of the following is true
+                // * A command is still active in it (User error)
+                // * The pool doesn't accept the client (Pool error)
+                // * The client has handled 32 sessions (Garbage collection of apr memory)
+
+                _pool = null;
+                InnerDispose();
+            }
+        }
+
+        /// <summary>
+        /// Calls the original dispose method
+        /// </summary>
+        protected void InnerDispose()
+        {
+            base.Dispose(); // Includes GC.SuppressFinalize()
+        }
+
+        /// <summary>
+        /// The repository root url, or NULL if unavailable
+        /// </summary>
+        public Uri RepositoryRootUri
+        {
+            get
+            {
+                if (_repositoryUri != null && !IsDisposed)
+                {
+                    SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
+                    rca.ThrowOnError = false;
+                    if (!GetRepositoryRoot(rca, out _repositoryUri))
+                    {
+                        _repositoryUri = null;
+                        _shouldDispose = true;
+                    }
+                }
+
+                return _repositoryUri;
+            }
         }
     }
 }
