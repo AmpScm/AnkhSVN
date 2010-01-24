@@ -16,19 +16,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Text;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+
 using SharpSvn;
+using SharpSvn.Remote;
+using SharpSvn.UI;
 
 using Ankh.Scc;
-using Ankh.VS;
-using System.IO;
-using System.Windows.Forms;
-using System.ComponentModel;
-using SharpSvn.UI;
-using System.Windows.Forms.Design;
 using Ankh.UI;
-using System.Diagnostics;
+using Ankh.VS;
 
 namespace Ankh.Services
 {
@@ -37,6 +36,7 @@ namespace Ankh.Services
     {
         readonly Stack<SvnPoolClient> _clients = new Stack<SvnPoolClient>();
         readonly Stack<SvnPoolClient> _uiClients = new Stack<SvnPoolClient>();
+        readonly List<SvnPoolRemoteSession> _remoteSessions = new List<SvnPoolRemoteSession>();
         readonly Control _syncher;
         const int MaxPoolSize = 10;
         int _returnCookie;
@@ -116,17 +116,21 @@ namespace Ankh.Services
             AnkhSvnPoolClient client = new AnkhSvnPoolClient(this, hookUI, _returnCookie);
 
             if (hookUI)
-            {
-                // Let SharpSvnUI handle login and SSL dialogs
-                SvnUIBindArgs bindArgs = new SvnUIBindArgs();
-                bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
-                bindArgs.UIService = GetService<IUIService>();
-                bindArgs.Synchronizer = _syncher;
-
-                SvnUI.Bind(client, bindArgs);
-            }
+                HookUI(client);
 
             return client;
+        }
+
+        // Use separate function to delay loading the SharpSvn.UI.dll
+        private void HookUI(AnkhSvnPoolClient client)
+        {
+            // Let SharpSvnUI handle login and SSL dialogs
+            SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+            bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
+            bindArgs.UIService = GetService<IUIService>();
+            bindArgs.Synchronizer = _syncher;
+
+            SvnUI.Bind(client, bindArgs);
         }
 
         internal void NotifyChanges(IDictionary<string, SvnClientAction> actions)
@@ -161,20 +165,182 @@ namespace Ankh.Services
         {
             _returnCookie++;
 
+            List<IDisposable> toDispose = new List<IDisposable>();
+
             lock (_uiClients)
             {
                 while (_uiClients.Count > 0)
-                    _uiClients.Pop().Dispose();
+                    toDispose.Add(_uiClients.Pop());
             }
 
             lock (_clients)
             {
                 while (_clients.Count > 0)
-                    _clients.Pop().Dispose();
+                    toDispose.Add(_clients.Pop());
+            }
+
+            lock (_remoteSessions)
+            {
+                foreach(SvnPoolRemoteSession rs in _remoteSessions)
+                    toDispose.Add(rs);
+                _remoteSessions.Clear();
+            }
+
+            foreach (IDisposable d in toDispose)
+            {
+                d.Dispose();
             }
         }
 
-        class AnkhSvnPoolClient : SvnPoolClient
+        #region ISvnClientPool Members
+
+
+        public SvnPoolRemoteSession GetRemoteSession(Uri sessionUri)
+        {
+            if (sessionUri == null)
+                throw new ArgumentNullException("sessionUri");
+
+            if (_remoteSessions.Count > 0)
+            {
+
+                foreach (SvnPoolRemoteSession rs in _remoteSessions)
+                {
+                    if (rs.SessionUri == sessionUri)
+                        return rs;
+                }
+
+                string schemeAndServer = sessionUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped);
+                foreach (SvnPoolRemoteSession rs in _remoteSessions)
+                {
+                    Uri reposUri = rs.RepositoryRootUri;
+
+                    if (reposUri == null || reposUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.UriEscaped) != schemeAndServer)
+                        continue;
+
+                    if (sessionUri.AbsolutePath.StartsWith(reposUri.AbsolutePath, StringComparison.Ordinal))
+                    {
+                        SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
+                        rca.ThrowOnError = false;
+                        if (rs.Reparent(sessionUri, rca))
+                            return rs;
+                    }
+                }
+            }
+
+            AnkhSvnPoolRemoteSession session = new AnkhSvnPoolRemoteSession(this, true, _returnCookie);
+            bool ok = false;
+            try
+            {
+                ok = session.Open(sessionUri);
+            }
+            finally
+            {
+                if (!ok)
+                    session.Dispose();
+            }
+
+            if (ok)
+                return session;
+            else
+                return null;
+        }
+
+        public bool ReturnClient(SvnPoolRemoteSession session)
+        {
+            AnkhSvnPoolRemoteSession pc = session as AnkhSvnPoolRemoteSession;
+
+            if (pc != null && pc.ReturnCookie == _returnCookie)
+            {
+                pc.ReturnTime = DateTime.Now;
+
+                lock (_remoteSessions)
+                {
+                    _remoteSessions.Insert(0, pc);
+
+                    ScheduleDisposeSessions();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        IAnkhScheduler _scheduler;
+        IAnkhScheduler Scheduler
+        {
+            get { return _scheduler ?? (_scheduler = GetService<IAnkhScheduler>()); }
+        }
+
+
+        DateTime? nextCleanup;
+        private void ScheduleDisposeSessions()
+        {
+            if (nextCleanup.HasValue)
+            {
+                TimeSpan ts = nextCleanup.Value - DateTime.Now;
+
+                if (ts.Minutes < 5 && ts.Minutes > -1)
+                    return;
+            }
+
+            DateTime nextTime = DateTime.Now + new TimeSpan(0, 2, 0);
+            nextCleanup = nextTime;
+
+            Scheduler.ScheduleAt(nextTime, OnCleanup);
+        }
+
+        void OnCleanup()
+        {
+            List<SvnPoolRemoteSession> toDispose = null;
+            bool left = false;
+            lock (_remoteSessions)
+            {
+                DateTime now = DateTime.Now;
+                
+                foreach (AnkhSvnPoolRemoteSession rs in _remoteSessions)
+                {
+                    bool dispose = false;
+                    switch (rs.SessionUri.Scheme)
+                    {
+                        case "svn":
+                            dispose = (now - rs.ReturnTime) > new TimeSpan(0, 3, 0);
+                            break;
+                        case "https":
+                        case "http":
+                            dispose = (now - rs.ReturnTime) > new TimeSpan(0, 5, 0);
+                            break;
+                        default:
+                            dispose = true;
+                            break;
+                    }
+
+                    if (!dispose)
+                        left = true;
+                    else
+                    {
+                        if (toDispose == null)
+                            toDispose = new List<SvnPoolRemoteSession>();
+
+                        toDispose.Add(rs);
+                    }
+                }
+
+                if (toDispose != null)
+                    foreach (SvnPoolRemoteSession rs in toDispose)
+                        _remoteSessions.Remove(rs);
+            }
+
+
+            if (toDispose != null)
+                foreach (AnkhSvnPoolRemoteSession rs in toDispose)
+                    rs.Dispose();
+
+            if (left)
+                ScheduleDisposeSessions();
+        }
+
+        #endregion
+
+        sealed class AnkhSvnPoolClient : SvnPoolClient
         {
             readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
             readonly bool _uiEnabled;
@@ -283,6 +449,70 @@ namespace Ankh.Services
             public int ReturnCookie
             {
                 get { return _returnCookie; }
+            }
+        }
+
+        sealed class AnkhSvnPoolRemoteSession : SvnPoolRemoteSession
+        {
+            readonly SortedDictionary<string, SvnClientAction> _changes = new SortedDictionary<string, SvnClientAction>(StringComparer.OrdinalIgnoreCase);
+            readonly bool _uiEnabled;
+            readonly int _returnCookie;
+            DateTime _returnTime;
+            public AnkhSvnPoolRemoteSession(AnkhClientPool pool, bool uiEnabled, int returnCookie)
+                : base(pool)
+            {
+                _uiEnabled = uiEnabled;
+                _returnCookie = returnCookie;
+            }
+
+            public bool UIEnabled
+            {
+                get { return _uiEnabled; }
+            }
+
+            protected override void ReturnClient()
+            {
+                AnkhClientPool pool = (AnkhClientPool)SvnClientPool;
+                SvnClientPool = null;
+
+                if (pool == null)
+                {
+                    Debug.Assert(false, "Returning pool client a second time");
+                    return;
+                }
+
+                try
+                {
+                    if (_changes.Count > 0)
+                        pool.NotifyChanges(_changes);
+                }
+                finally
+                {
+                    _changes.Clear();
+                }
+
+                if (base.IsCommandRunning || base.IsDisposed)
+                {
+                    Debug.Assert(!IsCommandRunning, "Returning pool client while it is running");
+                    Debug.Assert(!IsDisposed, "Returning pool client while it is disposed");
+
+                    return; // No return on these errors.. Leave it to the GC to clean it up eventually
+                }
+                else if (!pool.ReturnClient(this))
+                    InnerDispose(); // The pool wants to get rid of us
+                else
+                    SvnClientPool = pool; // Reinstated
+            }
+
+            public int ReturnCookie
+            {
+                get { return _returnCookie; }
+            }
+
+            public DateTime ReturnTime
+            {
+                get { return _returnTime.ToLocalTime(); }
+                set { _returnTime = value.ToUniversalTime(); }
             }
         }
     }
