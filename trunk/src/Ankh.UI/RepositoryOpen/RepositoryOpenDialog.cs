@@ -32,6 +32,7 @@ using System.Diagnostics;
 using Ankh.UI.RepositoryExplorer;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Windows.Forms.Design;
+using SharpSvn.Remote;
 
 namespace Ankh.UI.RepositoryOpen
 {
@@ -571,29 +572,36 @@ namespace Ankh.UI.RepositoryOpen
 
             try
             {
-                using (SvnClient client = GetClient())
+                using (SvnRemoteSession session = GetSession(uri))
                 {
-                    SvnListArgs la = new SvnListArgs();
+                    string path = session.SessionUri.MakeRelativeUri(uri).ToString();
+
+                    SvnRemoteListArgs la = new SvnRemoteListArgs();
                     la.ThrowOnError = false;
-                    la.Depth = SvnDepth.Children;
                     la.RetrieveEntries = SvnDirEntryItems.Kind;
 
                     Uri repositoryRoot = null;
                     List<ListViewItem> items = new List<ListViewItem>();
-                    bool ok = client.List(uri, la,
-                        delegate(object sender, SvnListEventArgs e)
+
+                    SvnRemoteCommonArgs commonArgs = new SvnRemoteCommonArgs();
+                    commonArgs.ThrowOnError = false;
+                    SvnNodeKind kind;
+
+                    session.GetNodeKind(path, commonArgs, out kind);
+
+                    session.GetRepositoryRoot(out repositoryRoot);
+
+                    bool ok = (kind == SvnNodeKind.File) || session.List(path, la,
+                        delegate(object sender, SvnRemoteListEventArgs e)
                         {
                             if (string.IsNullOrEmpty(e.Path))
                                 return;
 
                             ListViewItem lvi = new ListViewItem();
-                            lvi.Tag = e.EntryUri;
-                            lvi.Text = e.Path;
+                            lvi.Tag = e.Uri;
+                            lvi.Text = SvnTools.GetFileName(e.Uri);
                             lvi.ImageIndex = (e.Entry.NodeKind == SvnNodeKind.Directory) ? _dirOffset : _fileOffset;
                             items.Add(lvi);
-
-                            if (repositoryRoot == null)
-                                repositoryRoot = e.RepositoryRoot;
                         });
 
 
@@ -663,6 +671,16 @@ namespace Ankh.UI.RepositoryOpen
                 });
                 // Exception or something
             }
+        }
+
+        private SvnRemoteSession GetSession(Uri uri)
+        {
+            ISvnClientPool pool = (Context != null) ? Context.GetService<ISvnClientPool>() : null;
+
+            if (pool != null)
+                return pool.GetRemoteSession(uri, true);
+            else
+                return new SvnRemoteSession(uri);
         }
 
         IList<ListViewItem> _currentItems;
