@@ -57,7 +57,7 @@ namespace Ankh.UI.RepositoryOpen
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.versionButton = new System.Windows.Forms.ToolStripButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dirView = new System.Windows.Forms.ListView();
+            this.dirView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.label2 = new System.Windows.Forms.Label();
             this.fileNameBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -286,7 +286,7 @@ namespace Ankh.UI.RepositoryOpen
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripComboBox urlBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ListView dirView;
+        private Ankh.UI.VSSelectionControls.SmartListView dirView;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox fileNameBox;
         private System.Windows.Forms.Label label3;
