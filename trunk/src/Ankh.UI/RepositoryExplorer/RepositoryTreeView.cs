@@ -373,7 +373,7 @@ namespace Ankh.UI.RepositoryExplorer
                                             EnsureRoot(a.RepositoryRoot);
                                     }
 
-                                    AddItem(a, a.RepositoryRoot, first);
+                                    AddItem(a, a.RepositoryRoot);
                                     first = false;
                                 }
 
@@ -596,7 +596,7 @@ namespace Ankh.UI.RepositoryExplorer
             return rtn;
         }
 
-        private void AddItem(ISvnRepositoryListItem item, Uri repositoryRoot, bool first)
+        private void AddItem(ISvnRepositoryListItem item, Uri repositoryRoot)
         {
             if (item == null)
                 throw new ArgumentNullException("item");
