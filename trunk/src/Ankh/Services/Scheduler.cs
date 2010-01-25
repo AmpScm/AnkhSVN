@@ -45,7 +45,7 @@ namespace Ankh.Services
         }
 
         void OnTimerElapsed(object sender, ElapsedEventArgs e)
-        {            
+        {
             try
             {
                 _timer.Enabled = false;
@@ -92,7 +92,7 @@ namespace Ankh.Services
                 _timer.Enabled = true;
             }
         }
-                   
+
 
         #region IAnkhScheduler Members
 
@@ -103,7 +103,7 @@ namespace Ankh.Services
 
         public void ScheduleAt(DateTime time, AnkhAction action)
         {
-            if(action == null)
+            if (action == null)
                 throw new ArgumentNullException("action");
 
             lock (_actions)
