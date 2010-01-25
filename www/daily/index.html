@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7716</title>
+          AnkhSVN-Daily Update - 2.1.7729</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,46 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/2997/AnkhSvn-Daily-2.1.7716.379.msi">AnkhSVN 2.1.7716</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3004/AnkhSvn-Daily-2.1.7729.380.msi">AnkhSVN 2.1.7729</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7716">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7729">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-01-24</td></tr>
+<tr><td> </td><td class="r"><a id="7725" href="http://ankhsvn.net/rev/?r=7725">
+            [r7725]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryExplorer:</strong> RepositoryTreeNode.cs, RepositoryListView.cs, RepositoryListItem.cs, RepositoryTreeView.cs, RepositoryExplorerItem.cs, RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Decouple the repository explorer support from SvnListEventArgs, to
+allow refactoring it to use SvnRemoteSession.</td></tr>
+<tr><td> </td><td class="r"><a id="7723" href="http://ankhsvn.net/rev/?r=7723">
+            [r7723]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryOpen:</strong> RepositoryOpenDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the new SharpSvn SvnRemoteSession class to browse the
+repository.</td></tr>
+<tr><td> </td><td class="r"><a id="7722" href="http://ankhsvn.net/rev/?r=7722">
+            [r7722]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/ISvnClientPool.cs, Ankh/Services/AnkhClientPool.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow retrieving a pooled session for an Uri or a higher uri within the
+same repository to reduce the number of reparentings.</td></tr>
+<tr><td> </td><td class="r"><a id="7721" href="http://ankhsvn.net/rev/?r=7721">
+            [r7721]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update to SharpSvn 1.6009.1458 to resolve SvnRemoteSession issue.</td></tr>
+<tr><td> </td><td class="r"><a id="7720" href="http://ankhsvn.net/rev/?r=7720">
+            [r7720]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/ISvnClientPool.cs, Ankh/Services/AnkhClientPool.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Enable pooling of SvnRemoteSessions, just like how we pool SvnClients.</td></tr>
+<tr><td> </td><td class="r"><a id="7719" href="http://ankhsvn.net/rev/?r=7719">
+            [r7719]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/Scheduler.cs, Ankh.Services/IAnkhScheduler.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use a standard delegate with no arguments for the scheduler api, instead
+of using a dynamic invoke on a generic delegate.</td></tr>
+<tr><td> </td><td class="r"><a id="7718" href="http://ankhsvn.net/rev/?r=7718">
+            [r7718]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade SharpSvn reference to 1.6009.1456</td></tr>
 <tr class="d"><td colspan="4">2010-01-20</td></tr>
 <tr><td> </td><td class="r"><a id="7711" href="http://ankhsvn.net/rev/?r=7711">
             [r7711]
