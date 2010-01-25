@@ -239,17 +239,17 @@ namespace Ankh.Services
 
             if (reuse != null)
             {
-                    if (sessionUri != reuse.SessionUri)
+                if (sessionUri != reuse.SessionUri)
+                {
+                    if (!parentOk || !sessionUri.AbsolutePath.StartsWith(reuse.SessionUri.AbsolutePath))
                     {
-                        if (!parentOk || !sessionUri.AbsolutePath.StartsWith(reuse.SessionUri.AbsolutePath))
-                        {
-                            SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
-                            rca.ThrowOnError = false;
+                        SvnRemoteCommonArgs rca = new SvnRemoteCommonArgs();
+                        rca.ThrowOnError = false;
 
-                            if (!reuse.Reparent(sessionUri, rca))
-                                reuse = null;
-                        }
+                        if (!reuse.Reparent(sessionUri, rca))
+                            reuse = null;
                     }
+                }
 
                 if (reuse != null)
                     return reuse;
@@ -344,15 +344,21 @@ namespace Ankh.Services
                 if (toDispose != null)
                     foreach (SvnPoolRemoteSession rs in toDispose)
                         _remoteSessions.Remove(rs);
-            }
 
+                if (left)
+                    ScheduleDisposeSessions();
+            }
 
             if (toDispose != null)
                 foreach (AnkhSvnPoolRemoteSession rs in toDispose)
-                    rs.DisposeSession();
-
-            if (left)
-                ScheduleDisposeSessions();
+                {
+                    try
+                    {
+                        rs.DisposeSession();
+                    }
+                    catch
+                    { }
+                }
         }
 
         #endregion
