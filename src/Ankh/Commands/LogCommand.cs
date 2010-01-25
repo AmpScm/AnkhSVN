@@ -124,15 +124,7 @@ namespace Ankh.Commands
                         return;
                     break;
                 case AnkhCommand.AnnotateShowLog:
-                    i = 0;
-                    foreach (IAnnotateSection section in e.Selection.GetSelection<IAnnotateSection>())
-                    {
-                        if (section == null)
-                            continue;
-                        i++;
-                    }
-
-                    if (i == 1)
+                    if (EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>()) != null)
                         return;
                     break;
             }
@@ -202,12 +194,8 @@ namespace Ankh.Commands
                         PerformLog(e.Context, new SvnOrigin[] { item.Origin }, null, null);
                     break;
                 case AnkhCommand.AnnotateShowLog:
-                    IAnnotateSection section = null;
-                    foreach (IAnnotateSection s in e.Selection.GetSelection<IAnnotateSection>())
-                    {
-                        section = s;
-                        break;
-                    }
+                    IAnnotateSection section = EnumTools.GetSingle(e.Selection.GetSelection<IAnnotateSection>());
+
                     if (section == null)
                         return;
 
