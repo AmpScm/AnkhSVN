@@ -100,7 +100,7 @@ namespace Ankh
 
         public static bool VistaOrLater
         {
-            get { return OSVersion.Minor >= 6; }
+            get { return OSVersion.Major >= 6; }
         }
 
         public static bool VS2010OrVistaOrLater
