@@ -323,10 +323,10 @@ namespace Ankh.Services
                             break;
                         case "https":
                         case "http":
-                            dispose = (now - rs.ReturnTime) > new TimeSpan(0, 5, 0);
+                            dispose = (now - rs.ReturnTime) > new TimeSpan(0, 8, 0);
                             break;
                         default:
-                            dispose = true;
+                            dispose = (now - rs.ReturnTime) > new TimeSpan(0, 1, 0);
                             break;
                     }
 
@@ -349,7 +349,7 @@ namespace Ankh.Services
 
             if (toDispose != null)
                 foreach (AnkhSvnPoolRemoteSession rs in toDispose)
-                    rs.Dispose();
+                    rs.DisposeSession();
 
             if (left)
                 ScheduleDisposeSessions();
@@ -519,6 +519,14 @@ namespace Ankh.Services
             {
                 get { return _returnTime.ToLocalTime(); }
                 set { _returnTime = value.ToUniversalTime(); }
+            }
+
+            /// <summary>
+            /// Really dispose the session (.Dispose() returns to the pool)
+            /// </summary>
+            internal void DisposeSession()
+            {
+                InnerDispose();
             }
         }
     }
