@@ -1,0 +1,69 @@
+body {
+  background: white;
+  margin: 0;
+  font-family: Segoe UI, Segoe, Arial, Verdana, Sans-Serif; 
+}
+#site-banner img { float: left; width: 64px; height: 64px; padding: 8px; border: 0; }
+#site-banner h1 { font-weight: normal; font-size: 24pt; margin: 0; padding: 0; }
+#site-banner h1 span { font-weight: bold; }
+#site-banner a { color: black; text-decoration: none; }
+
+#site-banner {
+  height: 100px;
+  padding: 8px;
+  background: white url("/images/banner-gradient.jpg") repeat-x;
+}
+
+/* Only do absolute positioning for screen media types. */
+@media screen {
+  #site-nav {
+    position: absolute;
+    top: 101px;
+    left: 0px;
+    width: 15em;
+    border-top: solid 10px #9598d7;
+    background-color: #e8e8e8;
+  }
+  #site-nav-menu {
+    padding: 0 0.5em;
+  }
+  #site-nav-menu a {
+    color: blue;
+  }
+  #site-search {
+    padding: 0 0.5em;
+  }
+  #copyright {
+    padding: 0 0.5em;
+    margin-top: 2em;
+    border-top: 1px solid black;
+    font-size: 80%;
+  }
+  #site-content {
+    border-top: solid 10px rgb(147,176,218);
+    position: absolute;
+    top: 101px;
+    left: 15.1em;
+    right: 0px;
+    padding: 1em 2em;
+  }
+}
+/* In print media, we only really want the #site-content stuff. */
+@media print {
+  #site-banner, #site-notice, #site-nav {
+    display: none;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+#site-nav ul {
+  list-style: none;
+  padding-left: 0em;
+}
+#site-nav li {
+  line-height: 1.4em;
+}
+#site-nav ul ul {
+  padding-left: 2em;
+}
