@@ -2,7 +2,7 @@
 <page visibility="1">
   <component_list>
     <component visibility="1" type="Html" order="1">
-      <title localize="false">AnkhSVN | Subversion Support for Visual Studio</title>
+      <title localize="false" />
       <filename>HtmlSnippet7.html</filename>
     </component>
     <component visibility="1" type="Html" order="2">
