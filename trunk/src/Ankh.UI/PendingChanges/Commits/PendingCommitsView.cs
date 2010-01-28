@@ -69,6 +69,7 @@ namespace Ankh.UI.PendingChanges.Commits
             SmartColumn locked = new SmartColumn(this, PCStrings.LockedColumn, 38);
             SmartColumn modified = new SmartColumn(this, PCStrings.ModifiedColumn, 76);
             SmartColumn name = new SmartColumn(this, PCStrings.NameColumn, 76);
+            SmartColumn revision = new SmartColumn(this, PCStrings.RevisionColumn, 38);
             SmartColumn type = new SmartColumn(this, PCStrings.TypeColumn, 76);
             SmartColumn workingCopy = new SmartColumn(this, PCStrings.WorkingCopyColumn, 76);
 
@@ -85,7 +86,22 @@ namespace Ankh.UI.PendingChanges.Commits
                 {
                     return x.PendingChange.SvnItem.Modified.CompareTo(y.PendingChange.SvnItem.Modified);
                 });
-            
+
+            revision.Sorter = new SortWrapper(
+                delegate(PendingCommitItem x, PendingCommitItem y)
+                {
+                    long? xRev, yRev;
+                    xRev = x.PendingChange.Revision;
+                    yRev = y.PendingChange.Revision;
+
+                    if (xRev.HasValue && yRev.HasValue)
+                        return xRev.Value.CompareTo(yRev.Value);
+                    else if (!xRev.HasValue)
+                        return yRev.HasValue ? 1 : 0;
+                    else
+                        return -1;
+                });
+
             change.Groupable = true;
             changeList.Groupable = true;
             folder.Groupable = true;
@@ -95,7 +111,7 @@ namespace Ankh.UI.PendingChanges.Commits
             workingCopy.Groupable = true;
 
             path.Hideable = false;
-            
+
             AllColumns.Add(change);
             AllColumns.Add(changeList);
             AllColumns.Add(folder);
@@ -105,6 +121,7 @@ namespace Ankh.UI.PendingChanges.Commits
             AllColumns.Add(name);
             AllColumns.Add(path);
             AllColumns.Add(project);
+            AllColumns.Add(revision);
             AllColumns.Add(type);
             AllColumns.Add(workingCopy);
 
@@ -127,19 +144,19 @@ namespace Ankh.UI.PendingChanges.Commits
             if (_hooked)
                 return;
 
-			if (Context != null)
-			{
+            if (Context != null)
+            {
                 _hooked = true;
-				VSCommandHandler.Install(Context, this,
-					new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
-					OnSelectAll);
-			}
+                VSCommandHandler.Install(Context, this,
+                    new CommandID(VSConstants.GUID_VSStandardCommandSet97, (int)VSConstants.VSStd97CmdID.SelectAll),
+                    OnSelectAll);
+            }
         }
 
-		void OnSelectAll(object sender, CommandEventArgs e)
-		{
+        void OnSelectAll(object sender, CommandEventArgs e)
+        {
             SelectAllItems();
-		}
+        }
 
         bool IPendingChangeSource.HasPendingChanges
         {
@@ -161,7 +178,7 @@ namespace Ankh.UI.PendingChanges.Commits
                 if (sorter != null)
                     list.Sort(sorter);
 
-                foreach(PendingCommitItem pi in list)
+                foreach (PendingCommitItem pi in list)
                     yield return pi.PendingChange;
             }
         }
@@ -171,10 +188,10 @@ namespace Ankh.UI.PendingChanges.Commits
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
-			{ 
-				_context = value;
-			}
+            set
+            {
+                _context = value;
+            }
         }
 
         PendingCommitsSelectionMap _map;
@@ -182,14 +199,14 @@ namespace Ankh.UI.PendingChanges.Commits
         {
             get { return _map ?? (_map = new PendingCommitsSelectionMap(this)); }
         }
-   
+
         sealed class PendingCommitsSelectionMap : SelectionItemMap
         {
             public PendingCommitsSelectionMap(PendingCommitsView view)
                 : base(CreateData(view))
             {
 
-            }            
+            }
         }
 
         protected override string GetCanonicalName(PendingCommitItem item)
