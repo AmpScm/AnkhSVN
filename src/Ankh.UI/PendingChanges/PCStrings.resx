@@ -165,6 +165,9 @@
   <data name="RemoteChangeColumn" xml:space="preserve">
     <value>&amp;Remote Change</value>
   </data>
+  <data name="RevisionColumn" xml:space="preserve">
+    <value>&amp;Revision</value>
+  </data>
   <data name="TypeColumn" xml:space="preserve">
     <value>&amp;Type</value>
   </data>

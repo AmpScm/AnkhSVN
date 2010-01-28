@@ -68,7 +68,8 @@ namespace Ankh.UI.PendingChanges.Commits
                 PendingChange.Name,
                 PendingChange.RelativePath,
                 PendingChange.Project,
-                PendingChange.FileType,                
+                GetRevision(PendingChange),
+                PendingChange.FileType,
                 SafeWorkingCopy(item));
 
             if (!SystemInformation.HighContrast)
@@ -87,6 +88,14 @@ namespace Ankh.UI.PendingChanges.Commits
                 ForeColor = clr;
             }
         }
+
+		private string GetRevision(PendingChange PendingChange)
+		{
+			if (PendingChange.Revision.HasValue)
+				return PendingChange.Revision.ToString();
+			else
+				return "";
+		}
 
         private string SafeDate(DateTime dateTime)
         {
