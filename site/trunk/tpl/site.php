@@ -14,7 +14,9 @@ header('X-UA-Compatible: IE=8');
 <html>
   <head>
     <title><?=htmlentities($title)?></title>
-    <link rel="stylesheet" type="text/css" href="/styles/site.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/site.css">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico"> 
+    
 <?php
 }
 
@@ -36,7 +38,7 @@ function page_end()
 {
 ?>
     </div>
-    <div id="#site-footer">
+    <div id="site-footer">
       <!-- TODO -->
     </div>
   </body>

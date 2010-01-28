@@ -21,10 +21,13 @@ body {
     top: 101px;
     left: 0px;
     width: 15em;
-    border-top: solid 10px #9598d7;
     background-color: #e8e8e8;
+    margin: 0;
+    padding: 0;
   }
   #site-nav-menu {
+    border-top: solid 8px #9598d7;
+
     padding: 0 0.5em;
   }
   #site-nav-menu a {
@@ -40,12 +43,49 @@ body {
     font-size: 80%;
   }
   #site-content {
-    border-top: solid 10px rgb(147,176,218);
+    border-top: solid 8px #93b0da;
     position: absolute;
     top: 101px;
     left: 15.1em;
     right: 0px;
     padding: 1em 2em;
+  }
+
+  #site-nav ul {
+    list-style: none;
+    padding-left: 0em;
+  }
+  #site-nav li {
+     line-height: 1.4em;
+  }
+  #site-nav ul ul {
+    padding-left: 2em;
+    padding-bottom: 12px;
+  }
+
+
+  #site-ohloh {
+    padding: 15px;
+    border-top: solid 2px #cccccc;
+    height: 90px;
+  }
+  #site-ohloh .left {
+    float: left;
+  }
+
+  #site-ohloh .right {
+    display: inline;
+    margin: 15px;
+  }
+
+  #site-ohloh a {
+    text-decoration: none;
+  }
+
+  #site-info {
+    border-top: solid 2px #cccccc;
+    padding: 5px;
+    font-size: 60%;
   }
 }
 /* In print media, we only really want the #site-content stuff. */
@@ -57,13 +97,4 @@ body {
     text-decoration: none;
   }
 }
-#site-nav ul {
-  list-style: none;
-  padding-left: 0em;
-}
-#site-nav li {
-  line-height: 1.4em;
-}
-#site-nav ul ul {
-  padding-left: 2em;
-}
+
