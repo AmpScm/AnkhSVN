@@ -46,7 +46,7 @@ namespace Ankh.Scc.ProjectMap
                 _walker = context.GetService<ISccProjectWalker>();
                 _project = project as IVsProject2;
                 _projectDir = projectDir;
-                if(projectDir != null)
+                if (projectDir != null)
                     _projectDirItem = Cache[projectDir];
             }
 
@@ -78,15 +78,15 @@ namespace Ankh.Scc.ProjectMap
             {
                 string itemDir = item.Directory;
 
-                if(string.Equals(itemDir, ProjectDirectory, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(itemDir, ProjectDirectory, StringComparison.OrdinalIgnoreCase))
                     parentId = VSConstants.VSITEMID_ROOT;
                 else
                 {
                     parentId = GetId(itemDir, VSConstants.VSITEMID_ROOT);
 
-                    if(parentId == VSConstants.VSITEMID_NIL)
+                    if (parentId == VSConstants.VSITEMID_NIL)
                     {
-                        if(!AddItem(item.Parent, out parentId))
+                        if (!AddItem(item.Parent, out parentId))
                             return false;
 
                         parentId = GetId(itemDir, parentId);
@@ -97,26 +97,26 @@ namespace Ankh.Scc.ProjectMap
                 }
                 VSADDRESULT[] result = new VSADDRESULT[1];
 
-                return ErrorHandler.Succeeded(VsProject.AddItem(parentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, item.FullPath, 
+                return ErrorHandler.Succeeded(VsProject.AddItem(parentId, VSADDITEMOPERATION.VSADDITEMOP_OPENFILE, item.FullPath,
                     1, new string[] { item.FullPath }, IntPtr.Zero, result)) && result[0] == VSADDRESULT.ADDRESULT_Success;
             }
 
             private uint GetId(string itemPath, uint searchBelow)
             {
                 uint id;
-                if(_map.TryGetValue(itemPath, out id))
+                if (_map.TryGetValue(itemPath, out id))
                     return id;
 
-                foreach(string s in _walker.GetSccFiles(_hier, searchBelow, ProjectWalkDepth.AllDescendants, _map))
+                foreach (string s in _walker.GetSccFiles(_hier, searchBelow, ProjectWalkDepth.AllDescendants, _map))
                 {
-                    if(string.Equals(itemPath, s, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(itemPath, s, StringComparison.OrdinalIgnoreCase))
                     {
-                        if(_map.TryGetValue(itemPath, out id))
+                        if (_map.TryGetValue(itemPath, out id))
                             return id;
                     }
                 }
 
-                if(_map.TryGetValue(itemPath, out id))
+                if (_map.TryGetValue(itemPath, out id))
                     return id;
                 else
                     return VSConstants.VSITEMID_NIL;
@@ -140,6 +140,7 @@ namespace Ankh.Scc.ProjectMap
                 return; // Can't fix it
 
             VSDOCUMENTPRIORITY[] prio = new VSDOCUMENTPRIORITY[1];
+            IVsHierarchy hierarchy = null;
 
             foreach (SvnClientAction action in sccRefreshItems)
             {
@@ -156,17 +157,29 @@ namespace Ankh.Scc.ProjectMap
                 // Check the real project here instead of our cache to keep the update initiative
                 // at the project. Checking our cache might be unsafe, as we get file add and remove 
                 // events from the project while we are updating
-                if (!ErrorHandler.Succeeded(
-                    VsProject.IsDocumentInProject(item.FullPath, out found, prio, out id)))
+                if (!ErrorHandler.Succeeded(VsProject.IsDocumentInProject(item.FullPath, out found, prio, out id)))
                     continue;
 
-                bool bFound = (found == 0);
+                bool bFound = (found != 0);
+
+                if (!bFound)
+                {
+                    if (hierarchy == null)
+                        hierarchy = VsProject as IVsHierarchy;
+
+                    // We need this additional check to find directories in Websites
+                    if (hierarchy != null &&
+                        ErrorHandler.Succeeded(hierarchy.ParseCanonicalName(item.FullPath, out id)))
+                    {
+                        bFound = (id != VSConstants.VSITEMID_NIL) && (id != VSConstants.VSITEMID_ROOT);
+                    }
+                }
                 if (bFound == item.Exists)
                     continue; //
 
                 if (!bFound)
                     state.AddItem(item);
-                else if (!item.Exists && found == 1)
+                else
                     state.RemoveItem(item, id);
             }
         }
