@@ -31,15 +31,16 @@ namespace Ankh.UI.RepositoryExplorer
         SvnDirEntry _entry;
         SvnOrigin _origin;
 
-        public RepositoryListItem(RepositoryListView view, Uri entryUri, SvnDirEntry entry, SvnOrigin dirOrigin, IFileIconMapper iconMapper)
+        public RepositoryListItem(RepositoryListView view, SharpSvn.Remote.ISvnRepositoryListItem listItem, SvnOrigin dirOrigin, IFileIconMapper iconMapper)
             : base(view)
         {
-            if (entryUri == null)
-                throw new ArgumentNullException("entryUri");
-            else if (entry == null)
-                throw new ArgumentNullException("entry");
+            if (listItem == null)
+                throw new ArgumentNullException("listItem");
             else if (dirOrigin == null)
                 throw new ArgumentNullException("dirOrigin");
+
+            SvnDirEntry entry = listItem.Entry;
+            Uri entryUri = listItem.Uri;
 
             _entry = entry;
             _origin = new SvnOrigin(entryUri, dirOrigin);
@@ -60,7 +61,10 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
 
-            SvnLockInfo lockInfo = view.GetLockInfo(entryUri);
+            SvnLockInfo lockInfo = null;
+            SvnListEventArgs lea = listItem as SvnListEventArgs;
+            if (lea != null)
+                lockInfo = lea.Lock;
 
             SetValues(
                 name,
