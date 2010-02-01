@@ -4,7 +4,6 @@
       <ComponentGroupRef Id="Ankh.Ids" />
       <ComponentGroupRef Id="Ankh.Services" />
       <ComponentGroupRef Id="Ankh.Migrate" />
-      <ComponentGroupRef Id="Utils" />
       <ComponentGroupRef Id="LOCAL_SharpSvn_Win32"/>
       <ComponentGroupRef Id="LOCAL_SharpSvnUI"/>
       <ComponentRef Id="C_Ankh.dll" />
