@@ -76,10 +76,6 @@
       <Project>{1AD899A2-9283-4AB6-9426-E251E5772196}</Project>
       <Name>Ankh.Migrate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Utils\Utils.csproj">
-      <Project>{A3248E1E-8272-4227-AF02-BB86040FBED9}</Project>
-      <Name>Utils</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Ankh.snk" />
@@ -98,6 +94,7 @@
     <Compile Include="Commands\RepositoryExplorer\ShowRepositoryItemChanges.cs" />
     <Compile Include="Services\AnkhHelpService.cs" />
     <Compile Include="Services\AnkhClientPool.cs" />
+    <Compile Include="Services\AnkhErrorMessage.cs" />
     <Compile Include="Services\IssueTracker\AnkhIssueService.cs" />
     <Compile Include="Services\IssueTracker\IssueRepositoryConnectorProxy.cs" />
     <Compile Include="Services\IssueTracker\IssueRepositorySettingsProxy.cs" />

@@ -26,12 +26,11 @@ using SharpSvn;
 
 using Ankh.UI;
 using Ankh.VS;
-using Ankh.Xml;
 using Ankh.Commands;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Ankh
+namespace Ankh.Services
 {
     /// <summary>
     /// Encapsulates error handling functionality.
@@ -39,7 +38,10 @@ namespace Ankh
     [GlobalService(typeof(IAnkhErrorHandler), AllowPreRegistered = true)]
     class AnkhErrorHandler : AnkhService, IAnkhErrorHandler
     {
+        const string _errorReportMailAddress = "error@ankhsvn.tigris.org";
+        const string _errorReportSubject = "Exception";
         readonly HandlerDelegator Handler;
+
         public AnkhErrorHandler(IAnkhServiceProvider context)
             : base(context)
         {
@@ -85,15 +87,8 @@ namespace Ankh
             System.Collections.Specialized.StringDictionary dict = new
                 System.Collections.Specialized.StringDictionary();
 
-            Utils.ErrorMessage.SendByMail(ErrorReportMailAddress, ErrorReportSubject, null,
+            AnkhErrorMessage.SendByMail(_errorReportMailAddress, _errorReportSubject, null,
                 typeof(AnkhErrorHandler).Assembly, dict);
-        }
-
-        public void Write(string message, Exception ex, TextWriter writer)
-        {
-            writer.WriteLine(message);
-            string exceptionMessage = GetNestedMessages(ex);
-            writer.WriteLine(exceptionMessage);
         }
 
         sealed class ExceptionInfo
@@ -168,7 +163,7 @@ namespace Ankh
             private void DoHandle(SvnWorkingCopyLockException ex, ExceptionInfo info)
             {
                 MessageBox.Show(Owner,
-                    "Your working copy appears to be locked. " + NL +
+                    "Your working copy appears to be locked. " + Environment.NewLine +
                     "Run Cleanup to amend the situation.",
                     "Working copy locked", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -198,52 +193,12 @@ namespace Ankh
                     "You need to run Update before you can proceed with the operation",
                     "Resource(s) out of date", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-            }  
+            }
 
             private void DoHandle(Exception ex, ExceptionInfo info)
             {
-                _handler.DoLogException(ex, info);
                 _handler.ShowErrorDialog(ex, true, true, info);
             }
-        }
-
-        private void DoLogException(Exception ex, ExceptionInfo info)
-        {
-            ErrorItems errorItems = this.LoadErrorItems();
-
-            errorItems.Add(new ErrorItem(ex));
-
-            errorItems.Serialize(this.ErrorFile);
-        }
-
-
-        private ErrorItems LoadErrorItems()
-        {
-            this.EnsureErrorLogFile();
-
-            return ErrorItems.Deserialize(this.ErrorFile);
-        }
-
-        /// <summary>
-        /// Make sure the error log file exists and contains a valid serialized object.
-        /// </summary>
-        /// <returns></returns>
-        private void EnsureErrorLogFile()
-        {
-            if (File.Exists(this.ErrorFile))
-            {
-                return;
-            }
-
-            // Create an empty file containing no items.
-            ErrorItems items = new ErrorItems();
-            items.Serialize(this.ErrorFile);
-        }
-
-        private string ErrorFile
-        {
-            [DebuggerStepThrough]
-            get { return Path.Combine(Path.GetTempPath(), "AnkhErrors.txt");/* this.context.ConfigLoader.ConfigDir, ErrorLogFile );*/ }
         }
 
         private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError, ExceptionInfo info)
@@ -278,7 +233,7 @@ namespace Ankh
 
                 if (dlg.ShowDialog(Context) == DialogResult.Retry)
                 {
-                    string subject = ErrorReportSubject;
+                    string subject = _errorReportSubject;
 
                     SvnException sx = ex as SvnException;
 
@@ -298,36 +253,36 @@ namespace Ankh
                             subject += " (" + ErrorToString(sx) + "-" + ErrorToString(rc) + ")";
                     }
 
-                    Utils.ErrorMessage.SendByMail(ErrorReportMailAddress,
+                    AnkhErrorMessage.SendByMail(_errorReportMailAddress,
                         subject, ex, typeof(AnkhErrorHandler).Assembly, additionalInfo);
                 }
             }
         }
 
-		static string ErrorToString(SvnException ex)
-		{
-			if (Enum.IsDefined(typeof(SvnErrorCode), ex.SvnErrorCode))
-				return ex.SvnErrorCode.ToString();
-			else if (ex.SvnErrorCategory == SvnErrorCategory.OperatingSystem)
-			{
-				// 
-				int num = ex.OperatingSystemErrorCode;
+        static string ErrorToString(SvnException ex)
+        {
+            if (Enum.IsDefined(typeof(SvnErrorCode), ex.SvnErrorCode))
+                return ex.SvnErrorCode.ToString();
+            else if (ex.SvnErrorCategory == SvnErrorCategory.OperatingSystem)
+            {
+                // 
+                int num = ex.OperatingSystemErrorCode;
 
-				if ((num & 0x80000000) != 0x80000000)
-				{
-					num = unchecked((int)(((uint)num & 0xFFFF) | 0x80070000));
-				}
+                if ((num & 0x80000000) != 0x80000000)
+                {
+                    num = unchecked((int)(((uint)num & 0xFFFF) | 0x80070000));
+                }
 
-				Exception sysEx = Marshal.GetExceptionForHR(num);
+                Exception sysEx = Marshal.GetExceptionForHR(num);
 
-				if (sysEx != null)
-					return "OS:"+sysEx.GetType().Name;
-			}
-			else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
-				return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
-			
-			return ((int)ex.SvnErrorCode).ToString();
-		}
+                if (sysEx != null)
+                    return "OS:" + sysEx.GetType().Name;
+            }
+            else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
+                return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
+
+            return ((int)ex.SvnErrorCode).ToString();
+        }
 
         private static string GetNestedStackTraces(Exception ex)
         {
@@ -345,89 +300,6 @@ namespace Ankh
             }
 
             return sb.ToString();
-        }
-
-        private static readonly string NL = Environment.NewLine;
-        private const string ErrorReportUrl = "http://ankhsvn.com/error/report.aspx";
-        private const string ErrorReportMailAddress = "error@ankhsvn.tigris.org";
-        private const string ErrorReportSubject = "Exception";
-        private const string ErrorLogFile = "errors.xml";
-    }
-
-    namespace Xml
-    {
-        /// <summary>
-        /// Must be public for the sake of the XmlSerializer
-        /// </summary>
-        public class ErrorItem
-        {
-            public ErrorItem(Exception ex)
-            {
-                this.Message = ex.Message;
-                this.StackTrace = ex.StackTrace;
-                if (this.InnerException != null)
-                {
-                    this.InnerException = new ErrorItem(ex.InnerException);
-                }
-                this.Source = ex.Source;
-                this.Time = DateTime.Now;
-            }
-
-            public ErrorItem()
-            {
-            }
-
-            public string Message;
-            public string StackTrace;
-            public string Source;
-            public ErrorItem InnerException;
-            public DateTime Time;
-
-        }
-
-        /// <summary>
-        /// Must be public for the sake of the XmlSerializer
-        /// </summary>
-        public class ErrorItems
-        {
-            public ErrorItems(ErrorItem[] items)
-            {
-                this.Items = items;
-            }
-
-            public ErrorItems()
-            {
-                this.Items = new ErrorItem[0];
-            }
-
-            public void Add(ErrorItem item)
-            {
-                ErrorItem[] items = new ErrorItem[this.Items.Length + 1];
-                this.Items.CopyTo(items, 0);
-                items[this.Items.Length] = item;
-
-                this.Items = items;
-            }
-
-            public void Serialize(string errorFile)
-            {
-                using (StreamWriter writer = new StreamWriter(errorFile))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(ErrorItems));
-                    serializer.Serialize(writer, this);
-                }
-            }
-
-            public ErrorItem[] Items;
-
-            public static ErrorItems Deserialize(string errorFile)
-            {
-                using (StreamReader reader = new StreamReader(errorFile))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(ErrorItems));
-                    return (ErrorItems)serializer.Deserialize(reader);
-                }
-            }
         }
     }
 }
