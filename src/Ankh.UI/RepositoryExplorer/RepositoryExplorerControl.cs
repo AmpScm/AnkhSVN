@@ -174,7 +174,7 @@ namespace Ankh.UI.RepositoryExplorer
                     if (sn.FolderItems.Contains(sn.RawUri))
                     {
                         ISvnRepositoryListItem ea = sn.FolderItems[sn.RawUri];
-                        RepositoryListItem item = new RepositoryListItem(fileView, ea.Uri, ea.Entry, tn.Origin, IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, ea, tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }
@@ -183,7 +183,7 @@ namespace Ankh.UI.RepositoryExplorer
                 {
                     if (ee.Uri != tn.RawUri)
                     {
-                        RepositoryListItem item = new RepositoryListItem(fileView, ee.Uri, ee.Entry, tn.Origin, IconMapper);
+                        RepositoryListItem item = new RepositoryListItem(fileView, ee, tn.Origin, IconMapper);
 
                         fileView.Items.Add(item);
                     }
