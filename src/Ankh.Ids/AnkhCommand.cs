@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 namespace Ankh
 {
     // Disable Missing XML comment warning for this file
-#pragma warning disable 1591 
+#pragma warning disable 1591
 
     /// <summary>
     /// List of ankh commands
@@ -133,13 +133,13 @@ namespace Ankh
         CommitPendingChanges,
         CommitPendingChangesKeepingLocks,
 
-        PendingChangesUpdateHead,
+        PendingChangesUpdateLatest,
         SolutionUpdateSpecific,
         SolutionCommit,
         SolutionHistory,
         SolutionMerge,
 
-        ProjectUpdateHead,
+        ProjectUpdateLatest,
         ProjectUpdateSpecific,
         ProjectCommit,
         ProjectHistory,
@@ -160,7 +160,7 @@ namespace Ankh
         ItemConflictResolvedTheirsFull,
 
         ItemCompareBase,
-        ItemCompareHead,
+        ItemCompareLatest,
         ItemCompareCommitted,
         ItemComparePrevious,
         ItemCompareSpecific,
@@ -216,7 +216,7 @@ namespace Ankh
 
         LockMustLock,
         SvnNodeDelete,
-        SolutionUpdateHead,
+        SolutionUpdateLatest,
 
         PendingChangesApplyWorkingCopy,
         PendingChangesCreatePatch,
@@ -225,8 +225,8 @@ namespace Ankh
 
         ExplorerOpen,
         ExplorerUp,
-        ReposExplorerOpenWith,        
-        ReposExplorerShowPrevChanges,        
+        ReposExplorerOpenWith,
+        ReposExplorerShowPrevChanges,
         ViewInVsText,
         ViewInWindowsWith,
 
@@ -268,7 +268,7 @@ namespace Ankh
         ListViewSortAscending,
         ListViewSortDescending,
         ListViewSort0,
-        ListViewSortMax = ListViewSort0+64,        
+        ListViewSortMax = ListViewSort0 + 64,
         ListViewGroup0,
         ListViewGroupMax = ListViewGroup0 + 64,
         ListViewShow0,
@@ -290,5 +290,8 @@ namespace Ankh
         LogOpenIssue,
         DocumentAddToPending,
         DocumentRemoveFromPending,
+
+        FolderUpdateSpecific,
+        FolderUpdateLatest,
     }
 }

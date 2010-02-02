@@ -180,4 +180,16 @@
   <data name="Annotating" xml:space="preserve">
     <value>Annotating</value>
   </data>
+  <data name="CantUpdateDirectoriesNonRecursive" xml:space="preserve">
+    <value>You can't update directories non recursively without the possibility of loosing files in your working copy. Would you like to update recursively?</value>
+  </data>
+  <data name="UpdateFolder" xml:space="preserve">
+    <value>Update Folder</value>
+  </data>
+  <data name="UpdateFolderLabel" xml:space="preserve">
+    <value>&amp;Folder:</value>
+  </data>
+  <data name="UpdatingFolder" xml:space="preserve">
+    <value>Updating Folder</value>
+  </data>
 </root>
