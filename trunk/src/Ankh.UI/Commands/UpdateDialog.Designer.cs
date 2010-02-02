@@ -63,7 +63,6 @@ namespace Ankh.UI.Commands
             this.projectRootLabel.Size = new System.Drawing.Size(69, 13);
             this.projectRootLabel.TabIndex = 5;
             this.projectRootLabel.Text = "&Project Root:";
-            this.projectRootLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // label4
             // 

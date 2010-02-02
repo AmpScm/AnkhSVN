@@ -171,7 +171,7 @@
                   text="&amp;Issue Tracker Setup"
                   toolTip="Associate your solution with an Issue Repository"
                   iconFile="menu/IssueRepository.png" defaultInvisible="true"/>
-      <Button id="Cmd_SolutionUpdateHead" name="UpdateHead" priority="0x100"
+      <Button id="Cmd_SolutionUpdateLatest" name="UpdateLatest" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
                   iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
@@ -237,7 +237,7 @@
       <!-- VS Predefined group for SCC commands on projects -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
-      <Button id="Cmd_ProjectUpdateHead" priority="0x1400" name="ProjectUpdateHead" text="U&amp;pdate to Latest Version"
+      <Button id="Cmd_ProjectUpdateLatest" priority="0x1400" name="ProjectUpdateLatest" text="U&amp;pdate to Latest Version"
               iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectCommit" priority="0x1500" name="ProjectCommit"
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
@@ -303,6 +303,9 @@
     </GroupRef>
     <GroupRef id="guidSHLMainMenu:IDG_VS_CTXT_ITEM_SCC">
       <!-- VS Predefined group for SCC commands on project items -->
+      <Button id="Cmd_FolderUpdateLatest" name="UpdateFolderLatest" priority="0xFF"
+                text="&amp;Update Folder to Latest Version"
+                toolTip="Update all items in the folder with changes from the Subversion repository."  iconFile="PendingChanges/Update.png" defaultInvisible="true" />
       <Button id="Cmd_UpdateItemLatest" name="UpdateItemLatest" priority="0x100"
                 text="&amp;Update to Latest Version"
                 toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
@@ -342,6 +345,9 @@
       <ButtonRef id="Cmd_RevertItem" priority="0x1B00" />
       <Menu id="Menu_SolutionExplorerSccForItem" priority="0x1D00" name="Subversion" text="&amp;Subversion">
         <Group id="Grp_SccItemUpdate" priority="0x1000">
+          <Button id="Cmd_FolderUpdateSpecific" name="UpdateFolderSpecific" priority="0xFF"
+                text="&amp;Update Folder to Specific Version..."
+                toolTip="Updates folder with changes from the Subversion repositor."  iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true" />
           <Button id="Cmd_UpdateItemSpecific" name="UpdateItemSpecific" priority="0x100"
                 text="&amp;Update to Specific Version..."
                 toolTip="Updates local items with changes from the Subversion repository." iconFile="PendingChanges/UpdateSpecific.png" defaultInvisible="true"/>
@@ -723,7 +729,7 @@
           </Menu>
           <Menu id="Menu_PendingChangesUpdate" priority="0x200" name="Update" text="&amp;Update" type="MenuController" iconAndText="true">
             <Group id="Grp_PendingChangesUpdate1" priority="0x100">
-              <Button id="Cmd_PendingChangesUpdateHead" name="UpdatePendingChanges" priority="0x100"
+              <Button id="Cmd_PendingChangesUpdateLatest" name="UpdatePendingChanges" priority="0x100"
                   text="U&amp;pdate to Latest Version"
                   toolTip="Update your solution to the HEAD version"
                   fixMenuController="true" iconFile="PendingChanges/Update.png" defaultDisabled="true"/>
@@ -783,8 +789,8 @@
             <Group id="Menu_ItemCompare" priority="0x100">
               <Button id="Cmd_ItemCompareBase" name="CompareBase" priority="0x100"
                   text="&amp;Compare to Original Version" fixMenuController="true" iconFile="PendingChanges/Compare.png"/>
-              <Button id="Cmd_ItemCompareHead" name="CompareHead" priority="0x200"
-                  text="Compare to &amp;HEAD Version" />
+              <Button id="Cmd_ItemCompareLatest" name="CompareLatest" priority="0x200"
+                  text="Compare to &amp;Latest Version" />
               <Button id="Cmd_ItemCompareCommitted" name="ComparePrevious" priority="0x300"
                   text="Compare to Co&amp;mmitted Version" />
               <Button id="Cmd_ItemComparePrevious" name="ComparePrevious" priority="0x400"

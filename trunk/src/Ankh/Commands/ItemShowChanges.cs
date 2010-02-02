@@ -29,7 +29,7 @@ namespace Ankh.Commands
     [Command(AnkhCommand.DiffLocalItem)]
     [Command(AnkhCommand.ItemCompareBase)]
     [Command(AnkhCommand.ItemCompareCommitted)]
-    [Command(AnkhCommand.ItemCompareHead)]
+    [Command(AnkhCommand.ItemCompareLatest)]
     [Command(AnkhCommand.ItemComparePrevious)]
     [Command(AnkhCommand.ItemCompareSpecific)]
     [Command(AnkhCommand.ItemShowChanges)]
@@ -117,7 +117,7 @@ namespace Ankh.Commands
                 case AnkhCommand.ItemCompareCommitted:
                     revRange = new SvnRevisionRange(SvnRevision.Committed, SvnRevision.Working);
                     break;
-                case AnkhCommand.ItemCompareHead:
+                case AnkhCommand.ItemCompareLatest:
                     revRange = new SvnRevisionRange(SvnRevision.Head, SvnRevision.Working);
                     break;
                 case AnkhCommand.ItemComparePrevious:

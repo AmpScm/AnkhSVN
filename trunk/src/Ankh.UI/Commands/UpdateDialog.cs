@@ -33,9 +33,11 @@ namespace Ankh.UI.Commands
             InitializeComponent();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public string FolderLabelText
         {
-
+            get { return projectRootLabel.Text; }
+            set { projectRootLabel.Text = value; }
         }
 
         SvnItem _item;
@@ -49,7 +51,7 @@ namespace Ankh.UI.Commands
                 {
                     projectRootBox.Text = value.FullPath;
                     urlBox.Text = _item.Status.Uri.ToString();
-                    versionBox.SvnOrigin = new Ankh.Scc.SvnOrigin(value);                    
+                    versionBox.SvnOrigin = new Ankh.Scc.SvnOrigin(value);
                 }
             }
         }
@@ -95,6 +97,6 @@ namespace Ankh.UI.Commands
             base.OnLoad(e);
             if (Context != null)
                 versionBox.Context = Context;
-        }        
+        }
     }
 }

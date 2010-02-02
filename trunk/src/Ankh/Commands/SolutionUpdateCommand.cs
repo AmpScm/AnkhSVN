@@ -26,20 +26,34 @@ using System.Windows.Forms;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.PendingChangesUpdateHead, HideWhenDisabled = false)]
-    [Command(AnkhCommand.SolutionUpdateHead)]
+    [Command(AnkhCommand.PendingChangesUpdateLatest, HideWhenDisabled = false)]
+    [Command(AnkhCommand.SolutionUpdateLatest)]
     [Command(AnkhCommand.SolutionUpdateSpecific)]
-    [Command(AnkhCommand.ProjectUpdateHead)]
+    [Command(AnkhCommand.ProjectUpdateLatest)]
     [Command(AnkhCommand.ProjectUpdateSpecific)]
+    [Command(AnkhCommand.FolderUpdateSpecific)]
+    [Command(AnkhCommand.FolderUpdateLatest)]
     class SolutionUpdateCommand : CommandBase
     {
         static bool IsSolutionCommand(AnkhCommand command)
         {
             switch (command)
             {
-                case AnkhCommand.SolutionUpdateHead:
+                case AnkhCommand.SolutionUpdateLatest:
                 case AnkhCommand.SolutionUpdateSpecific:
-                case AnkhCommand.PendingChangesUpdateHead:
+                case AnkhCommand.PendingChangesUpdateLatest:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        static bool IsFolderCommand(AnkhCommand command)
+        {
+            switch (command)
+            {
+                case AnkhCommand.FolderUpdateLatest:
+                case AnkhCommand.FolderUpdateSpecific:
                     return true;
                 default:
                     return false;
@@ -50,9 +64,10 @@ namespace Ankh.Commands
         {
             switch (command)
             {
-                case AnkhCommand.SolutionUpdateHead:
-                case AnkhCommand.ProjectUpdateHead:
-                case AnkhCommand.PendingChangesUpdateHead:
+                case AnkhCommand.SolutionUpdateLatest:
+                case AnkhCommand.ProjectUpdateLatest:
+                case AnkhCommand.PendingChangesUpdateLatest:
+                case AnkhCommand.FolderUpdateLatest:
                     return true;
                 default:
                     return false;
@@ -80,6 +95,43 @@ namespace Ankh.Commands
 
                 if (!settings.ProjectRootSvnItem.IsVersioned)
                     e.Enabled = false;
+            }
+            else if (IsFolderCommand(e.Command))
+            {
+                bool forHead = IsHeadCommand(e.Command);
+                bool foundOne = false;
+                Uri root = null;
+                foreach (SvnItem dir in e.Selection.GetSelectedSvnItems(false))
+                {
+                    if (!dir.IsDirectory || !dir.IsVersioned)
+                    {
+                        e.Enabled = false;
+                        break;
+                    }
+
+                    foundOne = true;
+
+                    if (!forHead)
+                    {
+                        Uri reposRoot = dir.WorkingCopy.RepositoryRoot;
+
+                        if (root != reposRoot)
+                        {
+                            if (root == null)
+                                reposRoot = root;
+                            else
+                            {
+                                e.Enabled = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!foundOne)
+                {
+                    e.Enabled = false;
+                }
             }
             else
             {
@@ -150,6 +202,27 @@ namespace Ankh.Commands
                 using (UpdateDialog ud = new UpdateDialog())
                 {
                     ud.ItemToUpdate = projectItem;
+                    ud.Revision = SvnRevision.Head;
+
+                    if (ud.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
+
+                    rev = ud.Revision;
+                    allowUnversionedObstructions = ud.AllowUnversionedObstructions;
+                    updateExternals = ud.UpdateExternals;
+                }
+            }
+            else if (IsFolderCommand(e.Command))
+            {
+                SvnItem dirItem = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
+
+                Debug.Assert(dirItem != null && dirItem.IsDirectory && dirItem.IsVersioned);
+
+                using (UpdateDialog ud = new UpdateDialog())
+                {
+                    ud.Text = CommandStrings.UpdateFolder;
+                    ud.FolderLabelText = CommandStrings.UpdateFolderLabel;
+                    ud.ItemToUpdate = dirItem;
                     ud.Revision = SvnRevision.Head;
 
                     if (ud.ShowDialog(e.Context) != DialogResult.OK)
@@ -279,7 +352,8 @@ namespace Ankh.Commands
                 pa.CreateLog = true;
 
                 e.GetService<IProgressRunner>().RunModal(
-                    string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution : CommandStrings.UpdatingProject),
+                    string.Format(IsSolutionCommand(e.Command) ? CommandStrings.UpdatingSolution :
+                    (IsFolderCommand(e.Command) ? CommandStrings.UpdatingFolder : CommandStrings.UpdatingProject)),
                     pa, ur.Work);
 
                 if (ci != null && ur.LastResult != null && IsSolutionCommand(e.Command))
@@ -296,6 +370,12 @@ namespace Ankh.Commands
             if (IsSolutionCommand(e.Command))
                 foreach (SvnItem item in pls.GetUpdateRoots(null))
                 {
+                    yield return item;
+                }
+            else if (IsFolderCommand(e.Command))
+                foreach (SvnItem item in e.Selection.GetSelectedSvnItems(false))
+                {
+                    // Everything is checked in the OnUpdate
                     yield return item;
                 }
             else
