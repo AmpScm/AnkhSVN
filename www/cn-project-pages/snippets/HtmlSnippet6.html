@@ -20,6 +20,9 @@ function _loadUserVoice() {
   s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
   document.getElementsByTagName('head')[0].appendChild(s);
 }
+_loadSuper = window.onload;
+window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+</script>
 <!-- SiteCatalyst code version: H.17. Copyright 1997-2008 Omniture, Inc. More info available at http://www.omniture.com -->  <script src="/branding/cn_js/s_code.js" type="text/javascript" language="JavaScript"></script> <script type="text/javascript" language="JavaScript"> 
 s.pageName="AnkhSVN Home Page"; 
 s.server="collab.net"; 
