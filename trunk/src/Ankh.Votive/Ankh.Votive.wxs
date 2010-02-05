@@ -74,15 +74,15 @@
     <!-- Make sure the packages are set up in The VS Environment -->
     <CustomActionRef Id="VS2005Setup"/>
     <CustomActionRef Id="VS90SetupNoVSTemplates"/>
-    <CustomActionRef Id="VS100Setup"/>
+    <CustomActionRef Id="VS100SetupNoVSTemplates"/>
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
         <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
       </InstallUISequence>
       <ProgressText Action="VS2005Setup" Template="[1]">Updating Visual Studio 2005 registration</ProgressText>
-      <ProgressText Action="VS90Setup" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
-      <ProgressText Action="VS100Setup" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
+      <ProgressText Action="VS90SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2008 registration</ProgressText>
+      <ProgressText Action="VS100SetupNoVSTemplates" Template="[1]">Updating Visual Studio 2010 registration</ProgressText>
     </UI>
 
     <InstallExecuteSequence>

@@ -53,6 +53,15 @@
   </Fragment>
 
   <Fragment>
+    <CustomAction Id="VS100SetupNoVSTemplates" Property="VS100DEVENV" ExeCommand="/setup /NoSetupVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
+    <PropertyRef Id="VS100DEVENV" />
+
+    <InstallExecuteSequence>
+      <Custom Action="VS100SetupNoVSTemplates" Before="InstallFinalize" Overridable="yes">VS100DEVENV</Custom>
+    </InstallExecuteSequence>
+  </Fragment>
+
+  <Fragment>
     <CustomAction Id="VS100InstallVSTemplates" Property="VS100DEVENV" ExeCommand="/InstallVSTemplates" Execute="deferred" Return="ignore" Impersonate="no" />
     <PropertyRef Id="VS100DEVENV" />
 
