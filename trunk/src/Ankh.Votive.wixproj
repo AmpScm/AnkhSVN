@@ -157,6 +157,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <WixExtension Include="WixVSExtension">
+      <HintPath>$(WixExtDir)\WixVSExtension.dll</HintPath>
+    </WixExtension>
     <WixExtension Include="WixUtilExtension">
       <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
     </WixExtension>
@@ -175,12 +178,9 @@
     <CompileDependsOn>$(AddCompilerDefineConstantsDependsOn);AddVersionDefines</CompileDependsOn>
   </PropertyGroup>
   <Target Name="AddVersionDefines" DependsOnTargets="AddProjectReferenceDefineConstants">
-    <GetAssemblyIdentity
-      AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">
-      <Output
-          TaskParameter="Assemblies"
-          ItemName="MyVersionAssembly" />
-    </GetAssemblyIdentity>    
+    <GetAssemblyIdentity AssemblyFiles="Ankh.ExtensionPoints\bin\$(Configuration)\Ankh.ExtensionPoints.dll">
+      <Output TaskParameter="Assemblies" ItemName="MyVersionAssembly" />
+    </GetAssemblyIdentity>
     <Message Text="Generating ExtensionPoints redirects for version %(MyVersionAssembly.Version)" Importance="High" />
     <CreateProperty Value="$(ProjectDefineConstants);AnkhExtensionPointsVersion=%(MyVersionAssembly.Version)">
       <Output TaskParameter="Value" PropertyName="ProjectDefineConstants" />
