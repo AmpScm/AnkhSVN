@@ -31,6 +31,15 @@ namespace Ankh.UI.SccManagement
             InitializeComponent();
         }
 
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+
+            Font boldFont = new Font(Font, FontStyle.Bold);
+
+            headLabel.Font = boldFont;
+        }
+
         private void linkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Uri uri; // Just some minor precautions
