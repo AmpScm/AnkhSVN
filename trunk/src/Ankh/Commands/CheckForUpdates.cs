@@ -274,7 +274,7 @@ namespace Ankh.Commands
                     if (!string.IsNullOrEmpty(version))
                     {
                         uad.newVerLabel.Text = newVersion;
-                        uad.curVerLabel.Text = GetUIVersion(e.Context).ToString();
+                        uad.curVerLabel.Text = GetUIVersion(e.Context).ToString(3);
                         uad.versionPanel.Enabled = uad.versionPanel.Visible = true;
                     }
 
