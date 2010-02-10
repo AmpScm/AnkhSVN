@@ -101,8 +101,8 @@ namespace Ankh.UI.OptionsPages
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.proxyEdit);
+            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.authenticationEdit);
             this.groupBox1.Location = new System.Drawing.Point(0, 185);
             this.groupBox1.Name = "groupBox1";
@@ -155,10 +155,10 @@ namespace Ankh.UI.OptionsPages
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.autoLockFiles);
-            this.Controls.Add(this.flashWindowAfterOperation);
             this.Controls.Add(this.autoAddFiles);
+            this.Controls.Add(this.autoLockFiles);
             this.Controls.Add(this.interactiveMergeOnConflict);
+            this.Controls.Add(this.flashWindowAfterOperation);
             this.Controls.Add(this.groupBox1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "EnvironmentSettingsControl";
