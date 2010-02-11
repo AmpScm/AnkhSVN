@@ -162,11 +162,21 @@ namespace Ankh.Services
 
             private void DoHandle(SvnWorkingCopyLockException ex, ExceptionInfo info)
             {
-                MessageBox.Show(Owner,
-                    "Your working copy appears to be locked. " + Environment.NewLine +
-                    "Run Cleanup to amend the situation.",
-                    "Working copy locked", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                if (ex.SvnErrorCode != SvnErrorCode.SVN_ERR_WC_NOT_LOCKED)
+                {
+                    MessageBox.Show(Owner,
+                        "Your working copy appears to be locked. " + Environment.NewLine +
+                        "Run Cleanup to amend the situation.",
+                        "Working copy locked", MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(Owner,
+                        "The working copy lock appears to be broken.",
+                        "Working copy not locked", MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
             }
 
             private void DoHandle(SvnAuthorizationException ex, ExceptionInfo info)
@@ -265,8 +275,10 @@ namespace Ankh.Services
                 return ex.SvnErrorCode.ToString();
             else if (ex.SvnErrorCategory == SvnErrorCategory.OperatingSystem)
             {
+                if (Enum.IsDefined(typeof(SvnWindowsErrorCode), ex.WindowsErrorCode))
+                    return ex.WindowsErrorCode.ToString();
                 // 
-                int num = ex.OperatingSystemErrorCode;
+                int num = (int)ex.WindowsErrorCode;
 
                 if ((num & 0x80000000) != 0x80000000)
                 {
