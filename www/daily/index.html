@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7793</title>
+          AnkhSVN-Daily Update - 2.1.7795</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3068/AnkhSvn-Daily-2.1.7793.401.msi">AnkhSVN 2.1.7793</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3072/AnkhSvn-Daily-2.1.7795.402.msi">AnkhSVN 2.1.7795</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7793">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7795">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -146,26 +146,6 @@ in this not-active state and switch to active when the SCC provider is really
 activated (which assumes a working UI shell).<br>
 This should resolve issues in 3th party and Microsoft extensions that assume
 language services can only be instantiated when the UI shell is available.</td></tr>
-<tr class="d"><td colspan="4">2010-01-14</td></tr>
-<tr><td> </td><td class="r"><a id="7665" href="http://ankhsvn.net/rev/?r=7665">
-            [r7665]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services:</strong> Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade to SharpSvn 1.6008.1435 in preparation for Subversion 1.6.8.</td></tr>
-<tr><td> </td><td class="r"><a id="7661" href="http://ankhsvn.net/rev/?r=7661">
-            [r7661]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Package/Gui:</strong> AnkhSvn.xml, Gui-To-Ctc.xsl, Gui-To-Vsct.xsl</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://ankhsvn.net/rev/?r=7656">r7656</a>, do mark internal commands invisiblem, but don't
-mark them initially disabled as that breaks loading our package via them.</td></tr>
-<tr><td> </td><td class="r"><a id="7660" href="http://ankhsvn.net/rev/?r=7660">
-            [r7660]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/StatusCache:</strong> FileStatusCache.ShellMonitor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the calling convention of the SHChangeNotifyDeregister function.</td></tr>
-<tr><td> </td><td class="r"><a id="7658" href="http://ankhsvn.net/rev/?r=7658">
-            [r7658]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Commands/ItemResolveCasing.cs, Ankh.Scc/AnkhSccProvider.Projects.cs, Ankh.Scc/AnkhSccSettingStorage.cs, Ankh.Scc/StatusCache/FileStatusCache.cs, Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.Services/Ankh.Services.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update to a newer SharpSvn to use the new GetTruePath overload. This allows us
-to fix caching of incorrectly cased paths that occur when the path does not exist,
-but its parents do.</td></tr>
-<tr><td> </td><td class="r"><a id="7657" href="http://ankhsvn.net/rev/?r=7657">
-            [r7657]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges:</strong> PendingCommitsPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When refreshing the pending changes list; keep the checkbox information in a
-case insensitive hashtable, to allow keeping the checks for casing changes.</td></tr>
 
 </table>
 <!--/Recent changes-->
