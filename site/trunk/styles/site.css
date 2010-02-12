@@ -8,6 +8,8 @@ body {
 #site-banner h1 span { font-weight: bold; }
 #site-banner a { color: black; text-decoration: none; }
 
+h2 { text-align: center; }
+
 #site-banner {
   height: 100px;
   padding: 8px;
@@ -63,6 +65,10 @@ body {
     padding-bottom: 12px;
   }
 
+  #site-search {
+    padding: 15px;
+    border-top: solid 2px #cccccc;
+  }
 
   #site-ohloh {
     padding: 15px;
@@ -98,3 +104,43 @@ body {
   }
 }
 
+#welcome, #welcome tr {
+  border: 5px solid #9598d7;
+  padding: 0;
+  border-collapse: collapse;
+  max-width: 900px;
+  margin: 30px 30px 0 0;
+}
+
+#welcome-img, #welcome-img img {
+  margin: 0px;
+  padding: 0px;
+  background-color: #9598d7;
+  border: 3px solid #9598d7;
+}
+
+#welcome-text {
+  background-color: #e8e8e8;
+/*  vertical-align: top;*/
+  padding: 4px;
+}
+
+#welcome-head {
+  display: block;
+  margin-bottom: 10px;
+}
+
+#welcome em {
+  font-weight: bold;
+}
+
+#license-burp {
+  max-width: 700px;
+  border: 2px outset #666666;
+  margin: 20px;
+  padding: 6px 30px;
+}
+
+#site-content > p, #site-content > h2 {
+  max-width: 900px;
+}

@@ -38,9 +38,6 @@ function page_end()
 {
 ?>
     </div>
-    <div id="site-footer">
-      <!-- TODO -->
-    </div>
   </body>
 </html>
 <?php

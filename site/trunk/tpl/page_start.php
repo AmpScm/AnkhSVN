@@ -33,6 +33,18 @@
           </li>
         </ul>
       </div>
+<?/*      <div id="site-search">
+        <form action="http://www.google.com/search" method="get"
+                style="margin-top: 10px; margin-bottom: 10px; display: inline;">
+          <div style="display: inline;">
+            <input value="ankhsvn.open.collab.net" name="sitesearch" type="hidden" />
+            <input name="q" id="query" type="text" value="Search..."
+                style="width: 10em; color: gray;" 
+                onclick="if(this.value == 'Search...') { this.value = ''; this.style.color = 'black'; }" />
+            <input name="Search" value="Go" type="submit"/>
+          </div>
+        </form>
+      </div>*/?>
       <div id="site-ohloh">
         <div class="left"><script type="text/javascript" src="http://www.ohloh.net/p/3226/widgets/project_users.js?style=blue"></script></div>
         <div class="right"><script type="text/javascript" src="http://www.ohloh.net/p/3226/widgets/project_thin_badge.js"></script></div>
