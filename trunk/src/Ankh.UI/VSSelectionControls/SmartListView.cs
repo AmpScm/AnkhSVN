@@ -41,6 +41,8 @@ namespace Ankh.UI.VSSelectionControls
         ISmartValueComparer _topSorter;
         ISmartValueComparer _finalSorter;
         bool _autoSizeRightColumn;
+        bool _selectAllCheckBox;
+        bool _selectAllChecked;
 
         public SmartListView()
         {
@@ -58,6 +60,36 @@ namespace Ankh.UI.VSSelectionControls
             get { return base.UseCompatibleStateImageBehavior; }
             set { base.UseCompatibleStateImageBehavior = value; }
         }
+
+        [DefaultValue(false)]
+        public bool ShowSelectAllCheckBox
+        {
+            get { return _selectAllCheckBox; }
+            set
+            {
+                if (value == _selectAllCheckBox)
+                    return;
+
+                _selectAllCheckBox = value;
+                UpdateSortGlyphs();
+            }
+        }
+
+        [DefaultValue(false)]
+        protected virtual bool SelectAllChecked
+        {
+            get { return _selectAllChecked; }
+            set
+            {
+                if (value == _selectAllChecked)
+                    return;
+
+                _selectAllChecked = value;
+                if (IsHandleCreated && ShowSelectAllCheckBox)
+                    UpdateSortGlyphs();
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets how items are displayed in the control.
@@ -202,7 +234,11 @@ namespace Ankh.UI.VSSelectionControls
                 public IntPtr lParam;
                 public Int32 iImage;
                 public Int32 iOrder;
+                public Int32 type;
+                public IntPtr pvFilter;
             };
+
+            public const Int32 GWL_STYLE = -16;
 
             // Parameters for ListView-Headers
             public const Int32 HDI_FORMAT = 0x0004;
@@ -210,9 +246,28 @@ namespace Ankh.UI.VSSelectionControls
             public const Int32 HDF_STRING = 0x4000;
             public const Int32 HDF_SORTUP = 0x0400;
             public const Int32 HDF_SORTDOWN = 0x0200;
+            public const Int32 HDF_CHECKBOX = 0x0040;
+            public const Int32 HDF_CHECKED = 0x0080;
+
+            public const Int32 HDS_CHECKBOXES = 0x0400;
+            public const Int32 HDS_NOSIZING = 0x0800;
+            public const Int32 HDS_OVERFLOW = 0x1000;
+
             public const Int32 LVM_GETHEADER = 0x1000 + 31;  // LVM_FIRST + 31
             public const Int32 HDM_GETITEM = 0x1200 + 11;  // HDM_FIRST + 11
             public const Int32 HDM_SETITEM = 0x1200 + 12;  // HDM_FIRST + 12
+
+            public const int WM_NOTIFY = 0x004E;
+            public const int OCM_NOTIFY = 0x204E;
+
+            public const int NM_CLICK = -2;
+            public const int NM_DBLCLK = -3;
+            public const int NM_RETURN = -4;
+
+            public const int HDN_ITEMSTATEICONCLICK = -316;
+
+            public const int WM_HSCROLL = 0x114;
+            public const int WM_VSCROLL = 0x115;
 
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
@@ -220,6 +275,7 @@ namespace Ankh.UI.VSSelectionControls
             [DllImport("user32.dll")]
             public static extern IntPtr SendMessage(IntPtr Handle, Int32 msg, IntPtr wParam, ref HDITEM lParam);
 
+            [StructLayout(LayoutKind.Sequential)]
             public struct RECT
             {
                 public int left, top, right, bottom;
@@ -231,6 +287,12 @@ namespace Ankh.UI.VSSelectionControls
             [DllImport("user32.dll")]
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool GetScrollInfo(IntPtr hwnd, int fnBar, ref SCROLLINFO lpsi);
+
+            [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+            public static extern int SetWindowLongW(IntPtr hWnd, int nIndex, int dwNewLong);
+
+            [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+            public static extern int GetWindowLongW(IntPtr hWnd, int nIndex);
 
             [DllImport("uxtheme.dll", ExactSpelling = true, CharSet = CharSet.Unicode)]
             public static extern int SetWindowTheme(IntPtr hWnd, String pszSubAppName, String pszSubIdList);
@@ -284,7 +346,7 @@ namespace Ankh.UI.VSSelectionControls
             rtn = NativeMethods.SendMessage(hHeader, NativeMethods.HDM_GETITEM, col, ref hdItem);
 
             hdItem.mask = NativeMethods.HDI_FORMAT;
-            hdItem.fmt &= ~(NativeMethods.HDF_SORTDOWN | NativeMethods.HDF_SORTUP);
+            hdItem.fmt &= ~(NativeMethods.HDF_SORTDOWN | NativeMethods.HDF_SORTUP | NativeMethods.HDF_CHECKBOX | NativeMethods.HDF_CHECKED);
             switch (mode)
             {
                 case SortIcon.Ascending:
@@ -293,6 +355,22 @@ namespace Ankh.UI.VSSelectionControls
                 case SortIcon.Descending:
                     hdItem.fmt |= NativeMethods.HDF_SORTDOWN;
                     break;
+            }
+
+            if (column == 0 && CheckBoxes && ShowSelectAllCheckBox && VSVersion.VistaOrLater)
+            {
+                if (!_setHeaderStyle)
+                {
+                    _setHeaderStyle = true;
+                    int style = NativeMethods.GetWindowLongW(hHeader, NativeMethods.GWL_STYLE);
+
+                    NativeMethods.SetWindowLongW(hHeader, NativeMethods.GWL_STYLE, style | NativeMethods.HDS_CHECKBOXES);
+                }
+
+                hdItem.fmt |= NativeMethods.HDF_CHECKBOX;
+
+                if (SelectAllChecked)
+                    hdItem.fmt |= NativeMethods.HDF_CHECKED;
             }
 
             rtn = NativeMethods.SendMessage(hHeader, NativeMethods.HDM_SETITEM, col, ref hdItem);
@@ -391,10 +469,13 @@ namespace Ankh.UI.VSSelectionControls
 
         private const int LVM_FIRST = 0x1000;
         private const int LVM_SETEXTENDEDLISTVIEWSTYLE = LVM_FIRST + 54;
+        private bool _setHeaderStyle;
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
+
+            _setHeaderStyle = false;
 
             UpdateSortGlyphs();
 
@@ -424,9 +505,9 @@ namespace Ankh.UI.VSSelectionControls
 
         internal void UpdateSortGlyphs()
         {
-            if (!SupportsSortGlypgs || DesignMode || View != View.Details)
+            if (!IsHandleCreated || !SupportsSortGlypgs || DesignMode || View != View.Details)
                 return;
-            //throw new NotImplementedException();
+
             foreach (ColumnHeader ch in Columns)
             {
                 SmartColumn sc = ch as SmartColumn;
@@ -446,7 +527,7 @@ namespace Ankh.UI.VSSelectionControls
 
         protected override void OnColumnClick(ColumnClickEventArgs e)
         {
-            if (!DesignMode && !VirtualMode)
+            if (!DesignMode && View == View.Details && !VirtualMode)
             {
                 ColumnHeader column = Columns[e.Column];
 
@@ -658,12 +739,13 @@ namespace Ankh.UI.VSSelectionControls
                             return;
                         }
 
-                    case 8270: // WM_REFLECTNOTIFY
+                    case NativeMethods.OCM_NOTIFY:
+                        // Receives ListView notifications
                         if (CheckBoxes && StrictCheckboxesClick)
                         {
                             NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
 
-                            if (hdr.code == -3) // Double click
+                            if (hdr.code == NativeMethods.NM_DBLCLK)
                             {
                                 Point mp = PointToClient(MousePosition);
                                 ListViewHitTestInfo hi = HitTest(mp);
@@ -678,15 +760,111 @@ namespace Ankh.UI.VSSelectionControls
                             }
                         }
                         break;
-                    case 0x114: // WM_HSCROLL
+                    case NativeMethods.WM_NOTIFY:
+                        // Receives child control notifications (like that of the header control)
+                        if (CheckBoxes && ShowSelectAllCheckBox)
+                        {
+                            NMHDR hdr = (NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NMHDR));
+
+                            if (hdr.code == NativeMethods.HDN_ITEMSTATEICONCLICK)
+                            {
+                                CancelEventArgs ce = new CancelEventArgs();
+
+                                PerformSelectAllCheckedChange(ce);
+
+                                if (ce.Cancel)
+                                    return;
+                            }
+                        }
+                        break;
+
+                    case NativeMethods.WM_HSCROLL:
                         WmHScroll(ref m);
                         break;
-                    case 0x115: // WM_VSCROLL
+                    case NativeMethods.WM_VSCROLL:
                         WmVScroll(ref m);
                         break;
                 }
             }
             base.WndProc(ref m);
+        }
+
+        private void PerformSelectAllCheckedChange(CancelEventArgs ce)
+        {
+            OnSelectAllCheckedChanging(ce);
+
+            if (ce.Cancel)
+                return;
+
+            bool check = !SelectAllChecked;
+
+            if (Items.Count == 0)
+                check = false;
+
+            SelectAllChecked = check;
+            UpdateSortGlyphs();
+
+            foreach (ListViewItem i in Items)
+            {
+                if (IsPartOfSelectAll(i))
+                {
+                    i.Checked = check;
+                }
+                else
+                    i.Checked = false;
+            }
+
+            OnSelectAllCheckedChanged(EventArgs.Empty);
+
+            ce.Cancel = true; // Kill default behavior
+        }
+
+        protected virtual bool IsPartOfSelectAll(ListViewItem i)
+        {
+            return true;
+        }
+
+        protected override void OnItemChecked(ItemCheckedEventArgs e)
+        {
+            base.OnItemChecked(e);
+
+            if (CheckBoxes && ShowSelectAllCheckBox)
+            {
+                bool check = e.Item.Checked;
+                if (SelectAllChecked && !check && IsPartOfSelectAll(e.Item))
+                {
+                    SelectAllChecked = false;
+                    UpdateSortGlyphs();
+                }
+                else if (!SelectAllChecked && check)
+                {
+                    bool allChecked = true;
+                    foreach (ListViewItem i in Items)
+                    {
+                        if (!i.Checked && IsPartOfSelectAll(e.Item))
+                        {
+                            allChecked = false;
+                            break;
+                        }
+                    }
+
+                    if (allChecked)
+                    {
+                        SelectAllChecked = true;
+                        UpdateSortGlyphs();
+                    }
+                }
+            }
+        }
+
+        protected virtual void OnSelectAllCheckedChanging(CancelEventArgs ce)
+        {
+
+        }
+
+        protected virtual void OnSelectAllCheckedChanged(EventArgs eventArgs)
+        {
+
         }
 
         private void WmVScroll(ref Message m)
