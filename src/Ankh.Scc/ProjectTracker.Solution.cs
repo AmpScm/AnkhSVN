@@ -15,11 +15,17 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.VisualStudio.Shell.Interop;
+using System.IO;
+using System.Windows.Forms;
+
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Scc.SccUI;
 using Ankh.Selection;
+using Ankh.UI;
+using Ankh.VS;
+
 
 namespace Ankh.Scc
 {
@@ -33,6 +39,56 @@ namespace Ankh.Scc
             SccProvider.OnSolutionOpened(true);
 
             GetService<IAnkhServiceEvents>().OnSolutionOpened(EventArgs.Empty);
+
+            if (SccProvider.IsActive)
+            try
+            {
+                IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
+
+                if (ss != null && ss.ProjectRoot != null)
+                {
+                    string rootDir = Path.GetPathRoot(ss.ProjectRoot);
+                    if (rootDir.Length == 3 && rootDir.EndsWith(":\\", StringComparison.OrdinalIgnoreCase))
+                    {
+                        DriveInfo di = new DriveInfo(rootDir);
+                        bool oldFs = false;
+
+                        switch ((di.DriveFormat ?? "").ToUpperInvariant())
+                        {
+                            case "FAT32":
+                            case "FAT":
+                                oldFs = true;
+                                break;
+                        }
+
+                        if (oldFs)
+                        {
+                            IAnkhConfigurationService cs = GetService<IAnkhConfigurationService>();
+
+                            if (!cs.GetWarningBool(AnkhWarningBool.FatFsFound))
+                            {
+                                using (SccFilesystemWarningDialog dlg = new SccFilesystemWarningDialog())
+                                {
+                                    dlg.Text = Path.GetFileName(ss.SolutionFilename);
+                                    if (DialogResult.OK == dlg.ShowDialog(Context))
+                                    {
+                                        cs.SetWarningBool(AnkhWarningBool.FatFsFound, true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                IAnkhErrorHandler handler = GetService<IAnkhErrorHandler>();
+
+                if (handler.IsEnabled(ex))
+                    handler.OnError(ex);
+                else
+                    throw;
+            }
 
             return VSConstants.S_OK;
         }
