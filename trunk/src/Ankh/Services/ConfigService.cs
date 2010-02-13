@@ -38,7 +38,7 @@ namespace Ankh.Configuration
     /// Contains functions used to load and save configuration data.
     /// </summary>
     [GlobalService(typeof(IAnkhConfigurationService))]
-    sealed class ConfigService : AnkhService, IAnkhConfigurationService, IDisposable
+    sealed class ConfigService : AnkhService, IAnkhConfigurationService
     {
         readonly object _lock = new object();
         AnkhConfig _instance;
@@ -248,6 +248,38 @@ namespace Ankh.Configuration
         public RegistryLifoList GetRecentReposUrls()
         {
             return new RegistryLifoList(Context, "RecentRepositoryUrls", 32);
+        }
+
+        #endregion
+
+        #region IAnkhConfigurationService Members
+
+
+        public bool GetWarningBool(AnkhWarningBool ankhWarningBool)
+        {
+            using(RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
+            {
+                if (rk == null)
+                    return false;
+
+                object v = rk.GetValue(ankhWarningBool.ToString());
+
+                if (!(v is int))
+                    return false;
+
+                return ((int)v) != 0;
+            }
+        }
+
+        public void SetWarningBool(AnkhWarningBool ankhWarningBool, bool value)
+        {
+            using (RegistryKey rk = OpenHKCUKey("Warnings\\Bools"))
+            {
+                if (rk == null)
+                    return;
+
+                rk.SetValue(ankhWarningBool.ToString(), value ? 1 : 0);
+            }
         }
 
         #endregion

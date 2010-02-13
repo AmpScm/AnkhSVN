@@ -111,6 +111,12 @@
     <Compile Include="Commands\UnsupportedWcVersion.cs" />
     <Compile Include="Native\ICOMPropertyBag.cs" />
     <Compile Include="ProjectMap\SccProjectData.ProjectRefresh.cs" />
+    <Compile Include="SccUI\SccFilesystemWarningDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SccUI\SccFilesystemWarningDialog.Designer.cs">
+      <DependentUpon>SccFilesystemWarningDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="SccUI\SccManagementResources.Designer.cs">
       <DependentUpon>SccManagementResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -217,6 +223,9 @@
     <EmbeddedResource Include="SccUI\ChangeSourceControl.resx">
       <DependentUpon>ChangeSourceControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SccUI\SccFilesystemWarningDialog.resx">
+      <DependentUpon>SccFilesystemWarningDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SccUI\SccManagementResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

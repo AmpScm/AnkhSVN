@@ -22,6 +22,10 @@ using Microsoft.Win32;
 
 namespace Ankh.UI
 {
+    public enum AnkhWarningBool
+    {
+        FatFsFound
+    }
     /// <summary>
     /// 
     /// </summary>
@@ -71,5 +75,9 @@ namespace Ankh.UI
         /// </summary>
         /// <returns></returns>
         RegistryLifoList GetRecentReposUrls();
+
+        bool GetWarningBool(AnkhWarningBool ankhWarningBool);
+        void SetWarningBool(AnkhWarningBool ankhWarningBool, bool value);
     }
 }
+
