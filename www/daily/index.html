@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7795</title>
+          AnkhSVN-Daily Update - 2.1.7800</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,14 +14,14 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3072/AnkhSvn-Daily-2.1.7795.402.msi">AnkhSVN 2.1.7795</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3077/AnkhSvn-Daily-2.1.7800.403.msi">AnkhSVN 2.1.7800</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7795">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7800">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
@@ -122,30 +122,6 @@ our website).</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc:</strong> AnkhSccProvider.Projects.cs, ProjectTracker.Add.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When a website tells the SCC provider that it added a file, check if we
 are currently building the solution. In this specific case don't try to
 handle the copy operation with Subversion history.</td></tr>
-<tr class="d"><td colspan="4">2010-01-15</td></tr>
-<tr><td> </td><td class="r"><a id="7678" href="http://ankhsvn.net/rev/?r=7678">
-            [r7678]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> WorkingCopyExplorer/WorkingCopyExplorerControl.cs, RepositoryExplorer/RepositoryExplorerControl.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Initialize the toolstrip renderer on the repository and working copy explorer
-folders bar.</td></tr>
-<tr><td> </td><td class="r"><a id="7676" href="http://ankhsvn.net/rev/?r=7676">
-            [r7676]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Services/Commands:</strong> CommandUpdateEventArgs.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow hiding a command when it is shown on a context menu, but not
-if it is in a normal menu or toolbar.</td></tr>
-<tr><td> </td><td class="r"><a id="7673" href="http://ankhsvn.net/rev/?r=7673">
-            [r7673]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/AnkhSccProvider.ActivateMonitor.cs, Ankh.UI/PendingChanges/PendingChangesToolControl.cs, Ankh.Services/AnkhServiceEvents.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Hook the Scc UI Shell available event to enable the Pending changes Window
-automatically under specific loading conditions triggered by VS2010.</td></tr>
-<tr><td> </td><td class="r"><a id="7670" href="http://ankhsvn.net/rev/?r=7670">
-            [r7670]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI:</strong> PendingChanges/PendingChangesPage.cs, Ankh.UI.csproj, PendingChanges/PendingChangesToolControl.cs, PendingChanges/PendingActivationPage.resx, PendingChanges/PendingActivationPage.Designer.cs, PendingChanges/PendingActivationPage.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When AnkhSVN is not (yet) enabled, place the Pending Changes window in a
-generic disabled state which allows easy access to the SCC enable function
-like that in Team Foundation server.<br>
-If the ToolWindow state stored in the Visual Studio settings indicates that
-the ToolWindow should be opened when Visual Studio starts, we now only load
-in this not-active state and switch to active when the SCC provider is really
-activated (which assumes a working UI shell).<br>
-This should resolve issues in 3th party and Microsoft extensions that assume
-language services can only be instantiated when the UI shell is available.</td></tr>
 
 </table>
 <!--/Recent changes-->
