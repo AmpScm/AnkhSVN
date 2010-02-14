@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7800</title>
+          AnkhSVN-Daily Update - 2.1.7802</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,29 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3077/AnkhSvn-Daily-2.1.7800.403.msi">AnkhSVN 2.1.7800</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3078/AnkhSvn-Daily-2.1.7802.404.msi">AnkhSVN 2.1.7802</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7800">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7802">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-02-13</td></tr>
+<tr><td> </td><td class="r"><a id="7802" href="http://ankhsvn.net/rev/?r=7802">
+            [r7802]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Services/UI/IAnkhConfigurationService.cs, Ankh.Scc/ProjectTracker.Solution.cs, Ankh/Services/ConfigService.cs, Ankh.Scc/Ankh.Scc.csproj, Ankh.Scc/SccUI/SccFilesystemWarningDialog.resx, Ankh.Scc/SccUI/SccFilesystemWarningDialog.Designer.cs, Ankh.Scc/SccUI/SccFilesystemWarningDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Warn AnkhSVN users that they should upgrade their filesystem if the solution
+is located on a FAT or FAT32 disk. While this is not directly an error condition,
+subversion can miss certain kinds of changes on these partitions.<br>
+If you only use Windows XP and later there are enough valid alternatives
+to avoid FAT and FAT32.<br>
+Add generic support for suppressing warnings.</td></tr>
 <tr class="d"><td colspan="4">2010-02-11</td></tr>
 <tr><td> </td><td class="r"><a id="7793" href="http://ankhsvn.net/rev/?r=7793">
             [r7793]
