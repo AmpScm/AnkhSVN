@@ -278,7 +278,10 @@ namespace Ankh.Configuration
                 if (rk == null)
                     return;
 
-                rk.SetValue(ankhWarningBool.ToString(), value ? 1 : 0);
+                if (value)
+                    rk.SetValue(ankhWarningBool.ToString(), 1);
+                else
+                    rk.DeleteValue(ankhWarningBool.ToString());
             }
         }
 
