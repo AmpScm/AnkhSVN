@@ -17,6 +17,8 @@
 using System;
 using System.Windows.Forms;
 using Ankh.Configuration;
+using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Ankh.UI.OptionsPages
 {
@@ -111,5 +113,57 @@ namespace Ankh.UI.OptionsPages
         {
         }
 
+#if DEBUG
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		[DefaultValue(false)]
+		public bool SortedAsTabOrder
+		{
+			get { return false; }
+			set
+			{
+				if (!DesignMode)
+					throw new InvalidOperationException("Designtime only property");
+
+				OrderChildren(this);
+			}
+		}
+
+		private void OrderChildren(ContainerControl parent)
+		{
+			if (parent == null)
+				throw new ArgumentNullException();
+
+			List<Control> children = new List<Control>();
+
+			foreach(Control c in parent.Controls)
+			{
+				int to = c.TabIndex;
+				bool found = false;
+				for(int i = 0; i < children.Count; i++)
+				{
+					if (c.TabIndex < children[i].TabIndex)
+					{
+						children.Insert(i, c);
+						found = true;
+						break;
+					}
+				}
+
+				if (!found)
+					children.Add(c);
+			}
+
+			parent.Controls.Clear();
+			parent.Controls.AddRange(children.ToArray());
+
+			foreach(Control c in children)
+			{
+				ContainerControl cc = (c as ContainerControl);
+
+				if (cc != null)
+					OrderChildren(parent);
+			}
+		}
+#endif
     }
 }

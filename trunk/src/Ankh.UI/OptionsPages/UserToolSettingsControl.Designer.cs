@@ -156,15 +156,15 @@ namespace Ankh.UI.OptionsPages
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.patchBrowseBtn);
-            this.Controls.Add(this.patchExeBox);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.mergeBrowseBtn);
-            this.Controls.Add(this.mergeExeBox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.diffBrowseBtn);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.diffExeBox);
+            this.Controls.Add(this.diffBrowseBtn);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.mergeExeBox);
+            this.Controls.Add(this.mergeBrowseBtn);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.patchExeBox);
+            this.Controls.Add(this.patchBrowseBtn);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "UserToolSettingsControl";
             this.ResumeLayout(false);
