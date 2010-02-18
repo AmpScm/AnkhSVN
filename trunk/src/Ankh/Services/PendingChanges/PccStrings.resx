@@ -166,4 +166,7 @@ Are you sure you want to commit without an issue number?</value>
   <data name="OneOrMoreItemsConflicted" xml:space="preserve">
     <value>You are trying to commit conflicted items. Please review the conflicted files and resolve them, or remove the check when retrying the commit.</value>
   </data>
+  <data name="OutOfDateCaption" xml:space="preserve">
+    <value>Please update the out of date items and then retry the commit.</value>
+  </data>
 </root>
