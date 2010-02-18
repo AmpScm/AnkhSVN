@@ -220,6 +220,9 @@ namespace Ankh.Services.PendingChanges
                         if (!PreCommit_VerifyLogMessage(state))
                             return false;
 
+                        if (!PreCommit_VerifyNoConflicts(state))
+                            return false;
+
                         if (!PreCommit_SaveDirty(state))
                             return false;
 
@@ -268,6 +271,28 @@ namespace Ankh.Services.PendingChanges
                             }
                         }
                     }
+            }
+
+            return true;
+        }
+
+        private bool PreCommit_VerifyNoConflicts(PendingCommitState state)
+        {
+            foreach (PendingChange pc in state.Changes)
+            {
+                SvnItem item = pc.SvnItem;
+
+                if(!item.IsVersioned)
+                    continue;
+
+                if(item.IsConflicted)
+                {
+                    state.MessageBox.Show(PccStrings.OneOrMoreItemsConflicted,
+                        PccStrings.ConflictsFoundCaption,
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    
+                    return false;
+                }
             }
 
             return true;

@@ -160,4 +160,10 @@
     <value>You haven't entered an issue number.
 Are you sure you want to commit without an issue number?</value>
   </data>
+  <data name="ConflictsFoundCaption" xml:space="preserve">
+    <value>Found conflicts</value>
+  </data>
+  <data name="OneOrMoreItemsConflicted" xml:space="preserve">
+    <value>You are trying to commit conflicted items. Please review the conflicted files and resolve them, or remove the check when retrying the commit.</value>
+  </data>
 </root>
