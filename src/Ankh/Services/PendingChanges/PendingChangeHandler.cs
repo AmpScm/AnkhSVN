@@ -572,6 +572,7 @@ namespace Ankh.Services.PendingChanges
             if (depth == SvnDepth.Unknown)
                 return false;
 
+            StringBuilder outOfDateMessage = null;
             ProgressRunnerResult r = state.GetService<IProgressRunner>().RunModal(PccStrings.CommitTitle,
                 delegate(object sender, ProgressWorkerArgs e)
                 {
@@ -580,10 +581,41 @@ namespace Ankh.Services.PendingChanges
                     ca.KeepLocks = state.KeepLocks;
                     ca.KeepChangeLists = state.KeepChangeLists;
                     ca.LogMessage = state.LogMessage;
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE);
+                    ca.AddExpectedError(SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE);
+
                     ok = e.Client.Commit(
                         state.CommitPaths,
                         ca, out rslt);
+
+                    if(!ok && ca.LastException != null)
+                    {
+                        switch (ca.LastException.SvnErrorCode)
+                        {
+                            case SvnErrorCode.SVN_ERR_WC_NOT_UP_TO_DATE:
+                            case SvnErrorCode.SVN_ERR_RA_OUT_OF_DATE:
+                            case SvnErrorCode.SVN_ERR_FS_TXN_OUT_OF_DATE:
+                                outOfDateMessage = new StringBuilder();
+                                Exception ex = ca.LastException;
+
+                                while(ex != null)
+                                {
+                                    outOfDateMessage.AppendLine(ex.Message);
+                                    ex = ex.InnerException;
+                                }
+
+                                break;
+                        }
+                    }
                 });
+
+            if (outOfDateMessage != null)
+            {
+                state.MessageBox.Show(outOfDateMessage.ToString(),
+                                      PccStrings.OutOfDateCaption,
+                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             if (rslt != null)
             {
