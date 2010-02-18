@@ -285,7 +285,7 @@ namespace Ankh.Services.PendingChanges
                 if(item.IsConflicted)
                 {
                     state.MessageBox.Show(PccStrings.OneOrMoreItemsConflicted,
-                        PccStrings.ConflictsFoundCaption,
+                        "",
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     
                     return false;

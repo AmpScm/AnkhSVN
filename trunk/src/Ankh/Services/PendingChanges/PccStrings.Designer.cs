@@ -88,15 +88,6 @@ namespace Ankh.Services.PendingChanges {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found conflicts.
-        /// </summary>
-        internal static string ConflictsFoundCaption {
-            get {
-                return ResourceManager.GetString("ConflictsFoundCaption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Diffing.
         /// </summary>
         internal static string DiffTitle {
