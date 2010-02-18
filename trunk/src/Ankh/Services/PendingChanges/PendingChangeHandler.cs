@@ -282,9 +282,6 @@ namespace Ankh.Services.PendingChanges
             {
                 SvnItem item = pc.SvnItem;
 
-                if(!item.IsVersioned)
-                    continue;
-
                 if(item.IsConflicted)
                 {
                     state.MessageBox.Show(PccStrings.OneOrMoreItemsConflicted,
