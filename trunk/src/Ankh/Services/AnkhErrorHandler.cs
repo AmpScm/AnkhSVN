@@ -79,18 +79,6 @@ namespace Ankh.Services
                 Handler.Invoke(ex, new ExceptionInfo(commandArgs));
         }
 
-        /// <summary>
-        /// Send a non-specific report.
-        /// </summary>
-        public void SendReport()
-        {
-            System.Collections.Specialized.StringDictionary dict = new
-                System.Collections.Specialized.StringDictionary();
-
-            AnkhErrorMessage.SendByMail(_errorReportMailAddress, _errorReportSubject, null,
-                typeof(AnkhErrorHandler).Assembly, dict);
-        }
-
         sealed class ExceptionInfo
         {
             readonly BaseCommandEventArgs _commandArgs;
@@ -213,11 +201,10 @@ namespace Ankh.Services
 
         private void ShowErrorDialog(Exception ex, bool showStackTrace, bool internalError, ExceptionInfo info)
         {
-            string stackTrace = GetNestedStackTraces(ex);
+            string stackTrace = ex.ToString();
             string message = GetNestedMessages(ex);
             System.Collections.Specialized.StringDictionary additionalInfo =
                 new System.Collections.Specialized.StringDictionary();
-
 
             IAnkhSolutionSettings ss = GetService<IAnkhSolutionSettings>();
             if (ss != null)
@@ -245,6 +232,9 @@ namespace Ankh.Services
                 {
                     string subject = _errorReportSubject;
 
+                    if (info != null && info.CommandArgs != null)
+                        subject = string.Format("Error handling {0}", info.CommandArgs.Command);
+
                     SvnException sx = ex as SvnException;
 
                     Exception e = ex;
@@ -252,6 +242,9 @@ namespace Ankh.Services
                     {
                         e = e.InnerException;
                         sx = e as SvnException;
+
+                        if (sx != null && sx.SvnErrorCode == SvnErrorCode.SVN_ERR_BASE)
+                            sx = null; // "A problem occurred; see other errors for details"
                     }
 
                     if (sx != null)
@@ -294,11 +287,6 @@ namespace Ankh.Services
                 return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
 
             return ((int)ex.SvnErrorCode).ToString();
-        }
-
-        private static string GetNestedStackTraces(Exception ex)
-        {
-            return ex.ToString();
         }
 
         private static string GetNestedMessages(Exception ex)
