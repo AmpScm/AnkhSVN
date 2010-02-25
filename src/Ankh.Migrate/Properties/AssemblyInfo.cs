@@ -22,12 +22,12 @@ using System;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AnkhAddinCleanup")]
+[assembly: AssemblyTitle("Ankh.Migrate")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("AnkhAddinCleanup")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2008")]
+[assembly: AssemblyCompany("AnkhSVN")]
+[assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
+[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2008-2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

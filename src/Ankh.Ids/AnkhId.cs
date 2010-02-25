@@ -52,7 +52,7 @@ namespace Ankh
         /// <summary>The company name as used in the PLK</summary>
         public const string TriggerPlkCompany = PlkCompany;
 
-        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2009";
+        public const string AssemblyCopyright = "Copyright © AnkhSVN Team 2003-2010";
         public const string AssemblyProduct = "AnkhSVN - Subversion Support for Visual Studio";
         public const string AssemblyCompany = "AnkhSVN Team";
         //**********************************************************************************
@@ -129,6 +129,7 @@ namespace Ankh
 
         public const string EnvironmentSettingsPageGuid = "F362B52E-E8F8-43DE-A02D-5072A2A96E6A";
         public const string UserToolsSettingsPageGuid = "AE1A4DB8-09C3-438D-93BD-0FE37412CE34";
+        public const string IssueTrackerSettingsPageGuid = "363B3E68-EE94-403D-88BA-681A7CAD247A";
 
         /// <summary>
         /// The command set as a guid
