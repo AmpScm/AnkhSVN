@@ -33,6 +33,27 @@ namespace Ankh.VSPackage
     // The command routing at package level
     public partial class AnkhSvnPackage : IOleCommandTarget
     {
+        static bool GuidRefIsNull(ref Guid pguidCmdGroup)
+        {
+            // According to MSDN the Guid for the command group can be null and in this case the default
+            // command group should be used. Given the interop definition of IOleCommandTarget, the only way
+            // to detect a null guid is to try to access it and catch the NullReferenceExeption.
+            Guid commandGroup;
+            try
+            {
+                commandGroup = pguidCmdGroup;
+            }
+            catch (NullReferenceException)
+            {
+                // Here we assume that the only reason for the exception is a null guidGroup.
+                // We do not handle the default command group as definied in the spec for IOleCommandTarget,
+                // so we have to return OLECMDERR_E_NOTSUPPORTED.
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Queries the status of a command handled by this package
         /// </summary>
@@ -44,18 +65,19 @@ namespace Ankh.VSPackage
         public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText)
         {
             if ((prgCmds == null))
-                return VSConstants.E_INVALIDARG;
+                return VSConstants.E_POINTER;
+            else if (GuidRefIsNull(ref pguidCmdGroup))
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
 
             Debug.Assert(cCmds == 1, "Multiple commands"); // Should never happen in VS
 
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
                 // Filter out commands that are not defined by this package
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+                return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
             }
 
             int hr = CommandMapper.QueryStatus(Context, cCmds, prgCmds, pCmdText);
-
 
             return hr;
         }
@@ -63,6 +85,9 @@ namespace Ankh.VSPackage
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
+            if (GuidRefIsNull(ref pguidCmdGroup))
+                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
+
             if (Zombied || pguidCmdGroup != AnkhId.CommandSetGuid)
             {
                 return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
