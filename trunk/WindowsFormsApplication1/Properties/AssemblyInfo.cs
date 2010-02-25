@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Ankh.GenPkgDef")]
+[assembly: AssemblyTitle("WindowsFormsApplication1")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("AnkhSVN")]
-[assembly: AssemblyProduct("AnkhSVN - Subversion Support for Visual Studio")]
-[assembly: AssemblyCopyright("Copyright © AnkhSVN Team 2009-2010")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("WindowsFormsApplication1")]
+[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3b922cb9-2555-4479-bfed-1e62690b9b54")]
+[assembly: Guid("2f10cc8f-7d87-4bfc-83de-489f3bd8f7bb")]
 
 // Version information for an assembly consists of the following four values:
 //
