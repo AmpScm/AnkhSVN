@@ -34,7 +34,7 @@ using Ankh;
 [assembly: AssemblyCopyright(AnkhId.AssemblyCopyright)]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.MainAssembly)]
+[assembly: NeutralResourcesLanguage("en-US")]
 
 // We only want the Connect class to be visible
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
