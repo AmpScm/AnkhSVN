@@ -18,8 +18,8 @@
 //
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
 using Microsoft.Win32;
@@ -46,6 +46,7 @@ namespace Ankh.Trigger
     // This attribute tells the registration utility (regpkg.exe) that this class needs
     // to be registered as package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
+    [Description(AnkhId.TriggerPackageDescription)]
     // A Visual Studio component can be registered under different regitry roots; for instance
     // when you debug your package you want to register it in the experimental hive. This
     // attribute specifies the registry root to use if no one is provided to regpkg.exe with
