@@ -15,6 +15,7 @@
 //  limitations under the License.
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.ComponentModel.Design;
@@ -29,7 +30,6 @@ using Ankh.VS;
 using Ankh.UI;
 using Ankh.VSPackage.Attributes;
 using Ankh.Diff;
-
 
 namespace Ankh.VSPackage
 {
@@ -46,6 +46,7 @@ namespace Ankh.VSPackage
     // This attribute tells the registration utility (regpkg.exe) that this class needs
     // to be registered as package.
     [PackageRegistration(UseManagedResourcesOnly = true)]
+    [Description(AnkhId.PackageDescription)]
     // A Visual Studio component can be registered under different regitry roots; for instance
     // when you debug your package you want to register it in the experimental hive. This
     // attribute specifies the registry root to use if no one is provided to regpkg.exe with

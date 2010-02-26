@@ -30,6 +30,7 @@ namespace Ankh
         /// The guid the AnkhSvn package is registered with inside Visual Studio
         /// </summary>
         public const string PackageId = "604ad610-5cf9-4bd5-8acc-f49810e2efd4";
+        public const string PackageDescription = "AnkhSVN - Subversion Support for Visual Studio";
 
         /// <summary>The package version as used in the PLK</summary>
         public const string PlkVersion = "2.0";
@@ -44,6 +45,7 @@ namespace Ankh
         /// The guid the Ankh Trigger package is registered with inside Visual Studio
         /// </summary>
         public const string TriggerPackageId = "2340124C-5DAE-4D72-84AA-4DEF3EFDFA1D";
+        public const string TriggerPackageDescription = "AnkhSVN Trigger Package";
 
         /// <summary>The product version as used in the PLK for the trigger package</summary>
         public const string TriggerPlkVersion = PlkVersion;
