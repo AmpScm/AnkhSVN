@@ -40,13 +40,16 @@ namespace Ankh.VSPackage.Attributes
             using (Key childKey = context.CreateKey(GetPath(context)))
             {
                 // Set the value for the command UI guid.
-                childKey.SetValue(RemapName, "[ProductVersion]");
+                if (context.GetType().Name.ToUpperInvariant().Contains("PKGDEF"))
+                    childKey.SetValue(RemapName, new System.Reflection.AssemblyName(context.ComponentType.Assembly.FullName).Version.ToString());
+                else
+                    childKey.SetValue(RemapName, "[ProductVersion]");
             }
         }
 
         public override void Unregister(Microsoft.VisualStudio.Shell.RegistrationAttribute.RegistrationContext context)
         {
-            context.RemoveValue(GetPath(context), RemapName);
+            context.RemoveKey(GetPath(context));
         }
     }
 }
