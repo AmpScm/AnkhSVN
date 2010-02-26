@@ -41,18 +41,12 @@ namespace Ankh.VSPackage.Attributes
             {
                 // Set the value for the command UI guid.
                 childKey.SetValue(RemapName, "[ProductVersion]");
-
-                if (context.RegistrationMethod == RegistrationMethod.CodeBase)
-                    childKey.SetValue("Assembly", typeof(AnkhSvnPackage).Assembly.FullName);
             }
         }
 
         public override void Unregister(Microsoft.VisualStudio.Shell.RegistrationAttribute.RegistrationContext context)
         {
             context.RemoveValue(GetPath(context), RemapName);
-
-            if (context.RegistrationMethod == RegistrationMethod.CodeBase)
-                context.RemoveValue("Assembly", typeof(AnkhSvnPackage).Assembly.FullName);
         }
     }
 }
