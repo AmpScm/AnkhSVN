@@ -41,7 +41,7 @@ namespace Ankh.UI.PropertyEditors
             this.propListView = new Ankh.UI.VSSelectionControls.SmartListView();
             this.nameColumn = new System.Windows.Forms.ColumnHeader();
             this.stateColumn = new System.Windows.Forms.ColumnHeader();
-            this.baseValueColumn = new System.Windows.Forms.ColumnHeader();
+            this.originalValueColumn = new System.Windows.Forms.ColumnHeader();
             this.valueColumn = new System.Windows.Forms.ColumnHeader();
             this.propGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -102,7 +102,7 @@ namespace Ankh.UI.PropertyEditors
             this.propListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.nameColumn,
             this.stateColumn,
-            this.baseValueColumn,
+            this.originalValueColumn,
             this.valueColumn});
             this.propListView.GridLines = true;
             this.propListView.HideSelection = false;
@@ -118,9 +118,9 @@ namespace Ankh.UI.PropertyEditors
             // 
             resources.ApplyResources(this.stateColumn, "stateColumn");
             // 
-            // baseValueColumn
+            // originalValueColumn
             // 
-            resources.ApplyResources(this.baseValueColumn, "baseValueColumn");
+            resources.ApplyResources(this.originalValueColumn, "originalValueColumn");
             // 
             // valueColumn
             // 
@@ -149,7 +149,7 @@ namespace Ankh.UI.PropertyEditors
 		#endregion
 
         private System.Windows.Forms.ColumnHeader nameColumn;
-        private System.Windows.Forms.ColumnHeader baseValueColumn;
+        private System.Windows.Forms.ColumnHeader originalValueColumn;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button deleteButton;

@@ -384,10 +384,10 @@
   <data name="stateColumn.Width" type="System.Int32, mscorlib">
     <value>80</value>
   </data>
-  <data name="baseValueColumn.Text" xml:space="preserve">
-    <value>Base Value</value>
+  <data name="originalValueColumn.Text" xml:space="preserve">
+    <value>Original Value</value>
   </data>
-  <data name="baseValueColumn.Width" type="System.Int32, mscorlib">
+  <data name="originalValueColumn.Width" type="System.Int32, mscorlib">
     <value>130</value>
   </data>
   <data name="valueColumn.Text" xml:space="preserve">
@@ -409,7 +409,7 @@
     <value>propListView</value>
   </data>
   <data name="&gt;&gt;propListView.Type" xml:space="preserve">
-    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.0.3294.25307, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.VSSelectionControls.SmartListView, Ankh.UI, Version=2.1.3711.38096, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
   <data name="&gt;&gt;propListView.Parent" xml:space="preserve">
     <value>$this</value>
@@ -426,9 +426,6 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>610, 338</value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SVN Properties</value>
   </data>
@@ -444,10 +441,10 @@
   <data name="&gt;&gt;stateColumn.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;baseValueColumn.Name" xml:space="preserve">
-    <value>baseValueColumn</value>
+  <data name="&gt;&gt;originalValueColumn.Name" xml:space="preserve">
+    <value>originalValueColumn</value>
   </data>
-  <data name="&gt;&gt;baseValueColumn.Type" xml:space="preserve">
+  <data name="&gt;&gt;originalValueColumn.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;valueColumn.Name" xml:space="preserve">
@@ -460,6 +457,6 @@
     <value>PropertyEditorDialog</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.0.3294.25260, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
+    <value>Ankh.UI.VSDialogForm, Ankh.Services, Version=2.1.3711.38095, Culture=neutral, PublicKeyToken=a8604ba8fc87eddd</value>
   </data>
 </root>

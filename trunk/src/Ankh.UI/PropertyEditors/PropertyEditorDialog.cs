@@ -305,7 +305,7 @@ namespace Ankh.UI.PropertyEditors
         private void ResizeGrid()
         {
             if (propListView != null)
-                propListView.ResizeColumnsToFit(baseValueColumn, valueColumn);            
+                propListView.ResizeColumnsToFit(originalValueColumn, valueColumn);            
         }
 
         private void propListView_MouseDoubleClick(object sender, MouseEventArgs e)
