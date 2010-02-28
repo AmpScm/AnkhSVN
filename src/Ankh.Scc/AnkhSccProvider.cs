@@ -33,7 +33,7 @@ using Ankh.VS;
 
 namespace Ankh.Scc
 {
-    [GuidAttribute(AnkhId.SccServiceId), CLSCompliant(false)]
+    [GuidAttribute(AnkhId.SccServiceId), ComVisible(true)]
     public interface ITheAnkhSvnSccProvider : IVsSccProvider
     {
     }
