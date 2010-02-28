@@ -30,7 +30,6 @@ namespace Ankh.VS.Extenders
     /// </summary>
     [GlobalService(typeof(AnkhExtenderProvider))]
     [GlobalService(typeof(Ankh.AnkhCatId.IAnkhInternalExtenderProvider), true)]
-    [ComVisible(true)] // Required for promotion
     public sealed class AnkhExtenderProvider : AnkhService, AnkhCatId.IAnkhInternalExtenderProvider
     {
         public AnkhExtenderProvider(IAnkhServiceProvider context)

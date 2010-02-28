@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Ankh.UI;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Ankh
 {
@@ -277,6 +278,10 @@ namespace Ankh
                             continue;
                         }
                     }
+#if DEBUG
+                    if (attr.PublicService && !Marshal.IsTypeVisibleFromCom(serviceType))
+                        Trace.WriteLine(string.Format("ServiceType {0} is not visible from com, but promoted", serviceType.AssemblyQualifiedName));
+#endif
                     container.AddService(serviceType, instance, attr.PublicService);
                 }
 
