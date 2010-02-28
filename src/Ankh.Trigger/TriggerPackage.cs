@@ -62,7 +62,7 @@ namespace Ankh.Trigger
     // package has a load key embedded in its resources.
     [ProvideLoadKey("Standard", AnkhId.TriggerPlkVersion, AnkhId.TriggerPlkProduct, AnkhId.TriggerPlkCompany, 1)]
     [Guid(AnkhId.TriggerPackageId)]
-    sealed class TriggerPackage : Package, IVsShellPropertyEvents, IOleCommandTarget
+    sealed partial class TriggerPackage : Package, IVsShellPropertyEvents, IOleCommandTarget
     {
         /// <summary>
         /// Default constructor of the package.
@@ -114,6 +114,8 @@ namespace Ankh.Trigger
 
                 EnsureHooks(); // Will unregister the advise if no longer needed
             }
+
+            ((IServiceContainer)this).AddService(typeof(TriggerPackage), this, true);
         }
         #endregion
 
@@ -268,6 +270,11 @@ namespace Ankh.Trigger
 
                 return _inCommandLineMode.Value;
             }
+        }
+
+        public bool SccProviderLoaded
+        {
+            get { return _loaded; }
         }
     }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{61D343CF-77BA-4EF2-96F5-E0D4EFD04844}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnkhCatId.cs" />
     <Compile Include="AnkhCommand.cs" />
     <Compile Include="AnkhCommandBitmap.cs" />
     <Compile Include="AnkhCommandContext.cs" />

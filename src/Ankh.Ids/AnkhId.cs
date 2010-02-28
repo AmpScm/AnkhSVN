@@ -100,7 +100,9 @@ namespace Ankh
         public const string UnifiedDiffLanguageServiceId = "9E5AB2DC-5A41-4D39-AB71-5DCA5908AA32";
         public const string UnifiedDiffServiceName = "AnkhSVN Unified Diff";
 
-        public const string ExtenderProviderName = "AnkhExtenderProvider";
+        public const string TriggerExtenderGuid = "83B9F93B-20E9-4CE2-8B1B-BD18F14DF582";
+        public const string TriggerExtenderName = "AnkhExtenderProvider";
+        public const string SccExtenderGuid = "5E7F5850-6409-49F3-ABF4-E9E87C011D00";
 
         /// <summary>
         /// The guid used for our on-and-only bitmap resource

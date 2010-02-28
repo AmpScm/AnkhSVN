@@ -39,7 +39,6 @@ namespace Ankh.VS
 
             _activated = true;
 
-            e.GetService<AnkhExtenderProvider>().Initialize();
             e.GetService<SolutionExplorerWindow>(typeof(IAnkhSolutionExplorerWindow)).Initialize();
         }
     }

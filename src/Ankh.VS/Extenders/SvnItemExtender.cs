@@ -32,31 +32,29 @@ namespace Ankh.VS.Extenders
     /// Extends <see cref="SvnItem"/> in the property grid
     /// </summary>
     [ComVisible(true)] // This class must be public or the extender won't accept it.
-    public class SvnItemExtender : EnvDTE.IFilterProperties, IDisposable
+    public class SvnItemExtender : IDisposable
     {
         readonly AnkhExtenderProvider _provider;
         readonly IAnkhServiceProvider _context;
         readonly object _extendeeObject;
-        readonly EnvDTE.IExtenderSite _site;
-        readonly int _cookie;
+        readonly IDisposable _disposer;
         readonly string _catId;
 
-        internal SvnItemExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
+        internal SvnItemExtender(object extendeeObject, AnkhExtenderProvider provider, IDisposable disposer, string catId)
         {
             if (extendeeObject == null)
                 throw new ArgumentNullException("extendeeObject");
             else if (provider == null)
                 throw new ArgumentNullException("provider");
-            else if (extenderSite == null)
-                throw new ArgumentNullException("extenderSite");
+            else if (disposer == null)
+                throw new ArgumentNullException("disposer");
             else if (catId == null)
                 throw new ArgumentNullException("catId");
 
             _extendeeObject = extendeeObject;
             _provider = provider;
             _context = provider;
-            _site = extenderSite;
-            _cookie = cookie;
+            _disposer = disposer;
             _catId = catId;
         }
 
@@ -89,24 +87,14 @@ namespace Ankh.VS.Extenders
 
             // Extenders must notify the site when they are disposed, but we might
             // be executing in a background thread
-            AnkhAction release =
-                delegate
-                {
-                    try
-                    {
-                        _site.NotifyDelete(_cookie);
-                    }
-                    catch { }
-                };
-
             try
             {
                 IAnkhCommandService svc = _context.GetService<IAnkhCommandService>();
 
                 if (svc != null)
-                    svc.PostIdleAction(release);
+                    svc.PostIdleAction(_disposer.Dispose);
                 else
-                    release();
+                    _disposer.Dispose();
             }
             catch
             { }
@@ -130,7 +118,14 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), DisplayName("Change List"), Description("Change List"), DefaultValue(null)]
         public SvnItemData.SvnChangeList ChangeList
         {
-            get { return SvnItem.Status.ChangeList; }
+            get 
+            {
+                SvnItem item = SvnItem;
+                if (item != null && item.Status != null)
+                    return SvnItem.Status.ChangeList;
+                else
+                    return "";
+            }
             set
             {
                 string cl = value;
@@ -361,15 +356,6 @@ namespace Ankh.VS.Extenders
 
             monitor.ScheduleSvnStatus(SvnItem.FullPath);
         }
-        #endregion
-
-        #region IFilterProperties Members
-
-        EnvDTE.vsFilterProperties EnvDTE.IFilterProperties.IsPropertyHidden(string PropertyName)
-        {
-            return EnvDTE.vsFilterProperties.vsFilterPropertiesNone;
-        }
-
         #endregion
     }
 
