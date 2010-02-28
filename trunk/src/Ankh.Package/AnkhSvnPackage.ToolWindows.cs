@@ -208,7 +208,10 @@ namespace Ankh.VSPackage
         {
             if (serviceType == typeof(AmbientProperties))
             {
-                return GetService<AnkhSvnPackage>(typeof(IAnkhPackage)).AmbientProperties;
+                if (Package != null)
+                    return Package.AmbientProperties;
+                else
+                    return null;
             }
 
             System.IServiceProvider paneSp = _pane;
@@ -384,7 +387,7 @@ namespace Ankh.VSPackage
 
                         _control.Visible = true; // If .Visible = false no window is created!
                         _control.CreateControl();
-                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507                        
+                        _control.Visible = false; // And hide the window now or we hijack the focus. See issue #507
                         _control.Size = sz;
                     }
                 }
