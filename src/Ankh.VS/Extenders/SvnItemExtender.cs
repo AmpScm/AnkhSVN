@@ -115,14 +115,14 @@ namespace Ankh.VS.Extenders
             get { return SvnItem.Status.Uri; }
         }
 
-        [Category("Subversion"), DisplayName("Change List"), Description("Change List"), DefaultValue(null)]
+        [Category("Subversion"), DisplayName("Change List"), Description("Change List")]
         public SvnItemData.SvnChangeList ChangeList
         {
             get 
             {
                 SvnItem item = SvnItem;
-                if (item != null && item.Status != null)
-                    return SvnItem.Status.ChangeList;
+                if (item != null && item.IsVersioned && item.IsFile)
+                    return SvnItem.Status.ChangeList ?? "";
                 else
                     return "";
             }
