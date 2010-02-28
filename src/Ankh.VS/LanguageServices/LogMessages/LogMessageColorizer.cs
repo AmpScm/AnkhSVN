@@ -97,7 +97,8 @@ namespace Ankh.VS.LanguageServices.LogMessages
                 endState = 0;
 
             IEnumerable<IssueMarker> markers;
-            if (IssueService.TryGetIssues(combined, out markers))
+            if (IssueService != null &&
+                IssueService.TryGetIssues(combined, out markers))
                 foreach (IssueMarker im in markers)
                 {
                     int from = Math.Max(im.Index, start);
