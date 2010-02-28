@@ -29,11 +29,10 @@ namespace Ankh.VS.Extenders
         /// </summary>
         /// <param name="extendeeObject">The extendee object.</param>
         /// <param name="provider">The provider.</param>
-        /// <param name="extenderSite">The extender site.</param>
-        /// <param name="cookie">The cookie.</param>
+        /// <param name="disposer">The disposer.</param>
         /// <param name="catId">The cat id.</param>
-        internal SvnProjectExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
-            : base(extendeeObject, provider, extenderSite, cookie, catId)
+        internal SvnProjectExtender(object extendeeObject, AnkhExtenderProvider provider, IDisposable disposer, string catId)
+            : base(extendeeObject, provider, disposer, catId)
         {
         }
     }

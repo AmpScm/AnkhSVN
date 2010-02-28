@@ -35,8 +35,8 @@ namespace Ankh.VS.Extenders
         /// <param name="extenderSite">The extender site.</param>
         /// <param name="cookie">The cookie.</param>
         /// <param name="catId">The cat id.</param>
-        internal SvnSolutionExtender(object extendeeObject, AnkhExtenderProvider provider, EnvDTE.IExtenderSite extenderSite, int cookie, string catId)
-            : base(extendeeObject, provider, extenderSite, cookie, catId)
+        internal SvnSolutionExtender(object extendeeObject, AnkhExtenderProvider provider, IDisposable disposer, string catId)
+            : base(extendeeObject, provider, disposer, catId)
         {
         }
     }
