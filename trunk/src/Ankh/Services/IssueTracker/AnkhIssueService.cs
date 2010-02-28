@@ -362,7 +362,7 @@ namespace Ankh.Services.IssueTracker
         /// </summary>
         private void ReadConnectorRegistry()
         {
-            IAnkhPackage ankhPackage = GetService<IAnkhPackage>(typeof(IAnkhPackage));
+            IAnkhPackage ankhPackage = GetService<IAnkhPackage>();
             if (ankhPackage != null)
             {
                 using (RegistryKey key = ankhPackage.ApplicationRegistryRoot)
