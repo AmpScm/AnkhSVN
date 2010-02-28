@@ -28,6 +28,7 @@ using IServiceProvider = System.IServiceProvider;
 using Microsoft.VisualStudio.Shell;
 using Ankh.UI;
 using Ankh.VS;
+using Ankh.Commands;
 
 namespace Ankh.VS.SolutionExplorer
 {
@@ -53,8 +54,35 @@ namespace Ankh.VS.SolutionExplorer
 
         internal void Initialize()
         {
+            AnkhServiceEvents ev = Context.GetService<AnkhServiceEvents>();
+            IAnkhCommandStates states = Context.GetService<IAnkhCommandStates>();
+
+            bool shouldActivate = false;
+
+            if (states != null)
+            {
+                if (!states.UIShellAvailable)
+                {
+                    ev.SccShellActivate += new EventHandler(OnSccShellActivate);
+                    shouldActivate = false;
+                }
+                else
+                    shouldActivate = states.SccProviderActive;
+            }
+
+            if (shouldActivate)
+                MaybeEnsure();
+        }
+
+        void MaybeEnsure()
+        {
             if (SolutionExplorerFrame.IsVisible() == VSConstants.S_OK)
                 _manager.Ensure(this);
+        }
+
+        void OnSccShellActivate(object sender, EventArgs e)
+        {
+            MaybeEnsure();
         }
 
         public void Dispose()
