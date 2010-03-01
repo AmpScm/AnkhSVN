@@ -38,6 +38,7 @@ using Ankh.UI.WorkingCopyExplorer;
 using Ankh.UI.DiffWindow;
 using Ankh.Scc.UI;
 using Ankh.UI.Annotate;
+using System.Reflection;
 
 namespace Ankh.VSPackage
 {
@@ -51,7 +52,7 @@ namespace Ankh.VSPackage
     [ProvideToolWindow(typeof(DiffToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindow(typeof(MergeToolWindow), Style = VsDockStyle.Float, Transient = true)]
     [ProvideToolWindowVisibility(typeof(PendingChangesToolWindow), AnkhId.SccProviderId)]
-    public partial class AnkhSvnPackage
+    public partial class AnkhSvnPackage : IVsToolWindowFactory
     {
         public void ShowToolWindow(AnkhToolWindow window)
         {
@@ -81,7 +82,7 @@ namespace Ankh.VSPackage
 
         public void ShowToolWindow(AnkhToolWindow toolWindow, int id, bool create)
         {
-            ToolWindowPane pane = FindToolWindow(GetPaneType(toolWindow), id, create);
+            ToolWindowPane pane = base.FindToolWindow(GetPaneType(toolWindow), id, create);
 
             IVsWindowFrame frame = pane.Frame as IVsWindowFrame;
             if (frame == null)
@@ -107,6 +108,60 @@ namespace Ankh.VSPackage
                 }
                 return _ambientProperties;
             }
+        }
+
+        delegate ToolWindowPane FindToolWindow(Type toolWindowType, int id, bool create, ProvideToolWindowAttribute tool);
+        FindToolWindow _findToolWindow;
+
+        int IVsToolWindowFactory.CreateToolWindow(ref Guid toolWindowType, uint id)
+        {
+            if (id > int.MaxValue)
+                throw new ArgumentOutOfRangeException(String.Format(System.Globalization.CultureInfo.CurrentUICulture, "Instance ID cannot be more then {0}", int.MaxValue));
+
+            if (_findToolWindow == null)
+            {
+                MethodInfo findToolWindowInfo =
+                    typeof(Package).GetMethod("FindToolWindow", BindingFlags.NonPublic | BindingFlags.InvokeMethod | BindingFlags.Instance, null,
+                        new Type[] { typeof(Type), typeof(int), typeof(bool), typeof(ProvideToolWindowAttribute) }, null);
+
+                _findToolWindow = (FindToolWindow)Delegate.CreateDelegate(typeof(FindToolWindow), this, findToolWindowInfo, true);
+            }
+
+            int instanceID = (int)id;
+
+            // Find the Type for this GUID
+            Attribute[] attributes = Attribute.GetCustomAttributes(this.GetType());
+            foreach (Attribute attribute in attributes)
+            {
+                if (attribute is ProvideToolWindowAttribute)
+                {
+                    ProvideToolWindowAttribute tool = (ProvideToolWindowAttribute)attribute;
+                    if (tool.ToolType.GUID == toolWindowType)
+                    {
+                        // We found the corresponding type
+                        // If a window get created this way, FindToolWindow should be used to get a reference to it
+                        try
+                        {
+                            _findToolWindow(tool.ToolType, instanceID, true, tool);
+                        }
+                        catch (Exception ex)
+                        {
+                            IAnkhErrorHandler eh = GetService<IAnkhErrorHandler>();
+
+                            if (eh != null && eh.IsEnabled(ex))
+                            {
+                                eh.OnError(ex);
+                                break;
+                            }
+
+                            throw;
+                        }
+
+                        break;
+                    }
+                }
+            }
+            return VSConstants.S_OK;
         }
     }
 
