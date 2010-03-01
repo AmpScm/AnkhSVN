@@ -112,7 +112,12 @@ namespace Ankh.Trigger
             {
                 shell.AdviseShellPropertyChanges(this, out _shellCookie);
 
-                EnsureHooks(); // Will unregister the advise if no longer needed
+                object v;
+                if (ErrorHandler.Succeeded(shell.GetProperty((int)__VSSPROPID.VSSPROPID_Zombie, out v)))
+                {
+                    if (v is bool && !(bool)v)
+                        EnsureHooks(); // Will unregister the advise if no longer needed
+                }
             }
 
             ((IServiceContainer)this).AddService(typeof(TriggerPackage), this, true);
@@ -226,9 +231,7 @@ namespace Ankh.Trigger
             {
                 _filter = new SelectionFilter(this, monitorSelection);
             }
-
         }
-
 
         #region IOleCommandTarget Members
 
