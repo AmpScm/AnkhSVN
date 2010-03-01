@@ -124,13 +124,13 @@ namespace Ankh.Trigger
             try
             {
                 ReleaseShellHook();
+                DisposeComHandles();
             }
             finally
             {
                 base.Dispose(disposing);
             }
         }
-
 
         #region IVsShellPropertyEvents Members
 

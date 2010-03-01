@@ -1,6 +1,6 @@
 ﻿// $Id: TriggerPackage.cs 7840 2010-02-26 13:22:09Z rhuijben $
 //
-// Copyright 2008-2009 The AnkhSVN Project
+// Copyright 2010 The AnkhSVN Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -40,6 +41,28 @@ namespace Ankh.Trigger
     [ProvideObject(typeof(TriggerExtenderHandler))]
     partial class TriggerPackage
     {
+        readonly Dictionary<IDisposable, IDisposable> _disposers = new Dictionary<IDisposable, IDisposable>();
+
+        internal void RemoveDispose(IDisposable value)
+        {
+            _disposers.Remove(value);
+        }
+
+        internal void AddDispose(IDisposable value)
+        {
+            _disposers[value] = value;
+        }
+
+        void DisposeComHandles()
+        {
+            List<IDisposable> d = new List<IDisposable>(_disposers.Values);
+            _disposers.Clear();
+
+            foreach (IDisposable dd in d)
+            {
+                dd.Dispose();
+            }
+        }
     }
 
     // This class must be ComVisible, as it is created via its guid
@@ -91,14 +114,13 @@ namespace Ankh.Trigger
         public object GetExtender(string ExtenderCATID, string ExtenderName, object ExtendeeObject, EnvDTE.IExtenderSite ExtenderSite, int Cookie)
         {
             AnkhCatId.IAnkhInternalExtenderProvider extender = Extender;
-            object ex = null;
 
             IDisposable disposer = new ExtenderDisposer(TriggerPackage, ExtenderSite, Cookie);
 
             if (extender != null)
-                ex = extender.GetExtender(ExtendeeObject, ExtenderCATID, new ExtenderDisposer(TriggerPackage, ExtenderSite, Cookie));
+                return extender.GetExtender(ExtendeeObject, ExtenderCATID, new ExtenderDisposer(TriggerPackage, ExtenderSite, Cookie));
 
-            return ex ?? new NopDisposer(disposer);
+            return null;
         }
 
         sealed class ExtenderDisposer : IDisposable
@@ -112,17 +134,21 @@ namespace Ankh.Trigger
                 _package = package;
                 _site = site;
                 _cookie = cookie;
+                package.AddDispose(this);
             }
 
-            [DebuggerNonUserCode]
             private void Dispose(bool dispose)
             {
-                if (_cookie.HasValue && !_package.Zombied)
+                if (_cookie.HasValue && !_package.Zombied && _site != null)
                     try
                     {
-                        _site.NotifyDelete(_cookie.Value);
+                        _package.RemoveDispose(this);
+                        DoDispose();
                     }
-                    catch { }
+                    catch (Exception e)
+                    {
+                        Debug.Write("Failure disposing extender: " + e.Message);
+                    }
                     finally
                     {
                         _cookie = null;
@@ -135,24 +161,14 @@ namespace Ankh.Trigger
                 Dispose(true);
                 GC.SuppressFinalize(this);
             }
+
+            [DebuggerNonUserCode]
+            private void DoDispose()
+            {
+                _site.NotifyDelete(_cookie.Value);
+            }
         }
 
         #endregion
-
-        [ComVisible(true)]
-        sealed class NopDisposer : IDisposable
-        {
-            IDisposable _disposer;
-
-            public NopDisposer(IDisposable disposer)
-            {
-                _disposer = disposer;
-            }
-
-            void IDisposable.Dispose()
-            {
-                _disposer.Dispose();
-            }
-        }
     }
 }
