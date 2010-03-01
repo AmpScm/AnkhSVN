@@ -75,12 +75,20 @@ namespace Ankh.VS.Extenders
         {
             _enabled = true;
         }
+
+        IAnkhCommandService _commandService;
+
+        internal IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = GetService<IAnkhCommandService>()); }
+        }
+
         protected override void OnInitialize()
         {
             base.OnInitialize();
 
             // This will call Initialize() as postback command
-            IAnkhCommandService cs = GetService<IAnkhCommandService>();
+            IAnkhCommandService cs = CommandService;
 
             if (cs != null)
             {
