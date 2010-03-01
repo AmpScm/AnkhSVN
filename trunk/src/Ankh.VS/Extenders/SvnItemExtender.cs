@@ -35,7 +35,6 @@ namespace Ankh.VS.Extenders
     public class SvnItemExtender : IDisposable
     {
         readonly AnkhExtenderProvider _provider;
-        readonly IAnkhServiceProvider _context;
         readonly object _extendeeObject;
         readonly IDisposable _disposer;
         readonly string _catId;
@@ -53,7 +52,6 @@ namespace Ankh.VS.Extenders
 
             _extendeeObject = extendeeObject;
             _provider = provider;
-            _context = provider;
             _disposer = disposer;
             _catId = catId;
         }
@@ -69,7 +67,6 @@ namespace Ankh.VS.Extenders
                 GC.SuppressFinalize(this);
             }
         }
-
 
         ~SvnItemExtender()
         {
@@ -87,17 +84,15 @@ namespace Ankh.VS.Extenders
 
             // Extenders must notify the site when they are disposed, but we might
             // be executing in a background thread
-            try
-            {
-                IAnkhCommandService svc = _context.GetService<IAnkhCommandService>();
+            IAnkhCommandService svc = _provider.CommandService;
 
-                if (svc != null)
-                    svc.PostIdleAction(_disposer.Dispose);
-                else
-                    _disposer.Dispose();
-            }
-            catch
-            { }
+            if (svc != null)
+                svc.PostIdleAction(_disposer.Dispose);
+        }
+
+        private T GetService<T>() where T : class
+        {
+            return ((IAnkhServiceProvider)_provider).GetService<T>();
         }
 
         [Browsable(false)]
@@ -118,13 +113,13 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), DisplayName("Change List"), Description("Change List")]
         public SvnItemData.SvnChangeList ChangeList
         {
-            get 
+            get
             {
                 SvnItem item = SvnItem;
                 if (item != null && item.IsVersioned && item.IsFile)
                     return SvnItem.Status.ChangeList ?? "";
                 else
-                    return "";
+                    return null;
             }
             set
             {
@@ -136,7 +131,7 @@ namespace Ankh.VS.Extenders
                 {
                     if (value != SvnItem.Status.ChangeList)
                     {
-                        using (SvnClient client = _context.GetService<ISvnClientPool>().GetNoUIClient())
+                        using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
                         {
                             if (cl != null)
                             {
@@ -335,10 +330,7 @@ namespace Ankh.VS.Extenders
         #region Helpers
         SvnPoolClient GetNoUIClient()
         {
-            if (_context == null)
-                return null;
-
-            ISvnClientPool pool = _context.GetService<ISvnClientPool>();
+            ISvnClientPool pool = GetService<ISvnClientPool>();
             if (pool == null)
                 return null;
 
@@ -347,10 +339,10 @@ namespace Ankh.VS.Extenders
 
         void ScheduleUpdate()
         {
-            if (_context == null || SvnItem == null)
+            if (SvnItem == null)
                 return;
 
-            IFileStatusMonitor monitor = _context.GetService<IFileStatusMonitor>();
+            IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
             if (monitor == null)
                 return;
 
