@@ -59,6 +59,7 @@ namespace Ankh.VSPackage
     // package has a load key embedded in its resources.
     [ProvideLoadKey("Standard", AnkhId.PlkVersion, AnkhId.PlkProduct, AnkhId.PlkCompany, 1)]
     [Guid(AnkhId.PackageId)]
+    [ProvideAutoLoad(AnkhId.SccProviderId)] // Load on 'Scc active'
 
     // This attribute is needed to let the shell know that this package exposes some menus.
     [ProvideMenuResourceEx("1000.ctmenu", 1)] // The number must match the number in the .csproj file for the ctc task
