@@ -23,6 +23,7 @@ using Ankh.Scc;
 using Ankh.Commands;
 using Ankh.VS;
 using Ankh.UI.PendingChanges.Commits;
+using Ankh.Configuration;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -33,6 +34,11 @@ namespace Ankh.UI.PendingChanges
             InitializeComponent();
             logMessageEditor.ShowHorizontalScrollBar = false;
             logMessageEditor.PasteSource = pendingCommits;
+        }
+
+        AnkhConfig Config
+        {
+            get { return Context.GetService<IAnkhConfigurationService>().Instance; }
         }
 
         protected override void OnLoad(EventArgs e)
@@ -328,9 +334,9 @@ namespace Ankh.UI.PendingChanges
                 return; // Just check the item
 
             IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
-
+            
             if (cmd != null)
-                cmd.ExecCommand(Control.ModifierKeys == Keys.Control
+                cmd.ExecCommand(Config.PCDoubleClickShowsChanges
                     ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
         }
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)

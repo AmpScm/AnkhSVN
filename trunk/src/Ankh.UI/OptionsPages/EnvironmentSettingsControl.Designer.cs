@@ -53,6 +53,8 @@ namespace Ankh.UI.OptionsPages
             this.autoAddFiles = new System.Windows.Forms.CheckBox();
             this.flashWindowAfterOperation = new System.Windows.Forms.CheckBox();
             this.autoLockFiles = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.pcDefaultDoubleClick = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -151,6 +153,29 @@ namespace Ankh.UI.OptionsPages
             this.autoLockFiles.Text = "Automatically &lock files on change without user confirmation";
             this.autoLockFiles.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 115);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(238, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "When &double clicking items in Pending Changes:";
+            // 
+            // pcDefaultDoubleClick
+            // 
+            this.pcDefaultDoubleClick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pcDefaultDoubleClick.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.pcDefaultDoubleClick.FormattingEnabled = true;
+            this.pcDefaultDoubleClick.Items.AddRange(new object[] {
+            "Open the file in Visual Studio",
+            "Show changes in the current diff tool"});
+            this.pcDefaultDoubleClick.Location = new System.Drawing.Point(3, 131);
+            this.pcDefaultDoubleClick.Name = "pcDefaultDoubleClick";
+            this.pcDefaultDoubleClick.Size = new System.Drawing.Size(339, 21);
+            this.pcDefaultDoubleClick.TabIndex = 6;
+            // 
             // EnvironmentSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,6 +185,8 @@ namespace Ankh.UI.OptionsPages
             this.Controls.Add(this.interactiveMergeOnConflict);
             this.Controls.Add(this.flashWindowAfterOperation);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.pcDefaultDoubleClick);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "EnvironmentSettingsControl";
             this.groupBox1.ResumeLayout(false);
@@ -180,5 +207,7 @@ namespace Ankh.UI.OptionsPages
         private System.Windows.Forms.CheckBox autoAddFiles;
         private System.Windows.Forms.CheckBox flashWindowAfterOperation;
         private System.Windows.Forms.CheckBox autoLockFiles;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox pcDefaultDoubleClick;
     }
 }
