@@ -35,6 +35,7 @@ namespace Ankh.Configuration
         bool _autoAddEnabled;
         bool _autoLockEnabled;
         bool _noDashComment;
+        bool _pcDoubleClickShowsChanges;
 
         /// <summary>
         /// Gets or sets the merge exe path.
@@ -102,6 +103,13 @@ namespace Ankh.Configuration
         {
             get { return _noDashComment; }
             set { _noDashComment = value; }
+        }
+
+        [DefaultValue(false)]
+        public bool PCDoubleClickShowsChanges
+        {
+            get { return _pcDoubleClickShowsChanges; }
+            set { _pcDoubleClickShowsChanges = value; }
         }
     }
 }
