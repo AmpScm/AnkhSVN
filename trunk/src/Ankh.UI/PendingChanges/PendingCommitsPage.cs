@@ -41,6 +41,12 @@ namespace Ankh.UI.PendingChanges
             get { return Context.GetService<IAnkhConfigurationService>().Instance; }
         }
 
+        IAnkhCommandService _commandService;
+        IAnkhCommandService CommandService
+        {
+            get { return _commandService ?? (_commandService = Context.GetService<IAnkhCommandService>()); }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -323,6 +329,18 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        private void pendingCommits_KeyUp(object sender, KeyEventArgs e)
+        {
+            // TODO: Replace with VS command handling, instead of hooking it with Winforms
+            if(e.KeyCode == Keys.Enter)
+            {
+                // TODO: We should probably open just the focused file instead of the selection in the ItemOpenVisualStudio case to make it more deterministic what file is active after opening
+                if (CommandService != null)
+                    CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
+                        ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
+            }
+        }
+
         private void pendingCommits_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ListViewHitTestInfo info = pendingCommits.HitTest(e.X, e.Y);
@@ -333,10 +351,8 @@ namespace Ankh.UI.PendingChanges
             if (info.Location == ListViewHitTestLocations.StateImage)
                 return; // Just check the item
 
-            IAnkhCommandService cmd = Context.GetService<IAnkhCommandService>();
-            
-            if (cmd != null)
-                cmd.ExecCommand(Config.PCDoubleClickShowsChanges
+            if (CommandService != null)
+                CommandService.ExecCommand(Config.PCDoubleClickShowsChanges
                     ? AnkhCommand.ItemShowChanges : AnkhCommand.ItemOpenVisualStudio, true);
         }
         internal void OnUpdate(Ankh.Commands.CommandUpdateEventArgs e)
