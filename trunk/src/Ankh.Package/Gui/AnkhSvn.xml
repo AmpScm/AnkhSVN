@@ -956,6 +956,7 @@
         <Button id="Cmd_NotifyWcToNew" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" defaultInvisible="true" defaultDisabled="false" />
         <Button id="Cmd_ForceUIShow" text="&#160;" priority="0" noShowOnMenuController="true" noButtonCustomize ="true"
                 noCustomize="true" noKeyCustomize="true" defaultInvisible="true" textOnly="true" />
+        <Button id="Cmd_MakeNonSccFileWriteable" text="&#160;" priority="0" commandWellOnly="true" allowParams="true" postExec="false" defaultInvisible="true" defaultDisabled="false" />
       </Group>
     </MenuRef>
   </UI>
