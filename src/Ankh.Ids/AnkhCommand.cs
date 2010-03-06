@@ -293,5 +293,6 @@ namespace Ankh
 
         FolderUpdateSpecific,
         FolderUpdateLatest,
+        MakeNonSccFileWriteable
     }
 }
