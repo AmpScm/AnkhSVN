@@ -46,19 +46,19 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(82, 25);
+            this.label1.Location = new System.Drawing.Point(70, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(636, 59);
+            this.label1.Size = new System.Drawing.Size(573, 59);
             this.label1.TabIndex = 1;
             this.label1.Text = "The file {0}, which you attempted to edit, is read-only on disk. Would you like t" +
-                "o make the file writeable, or edit it anyway?";
+                "o make the file writeable or edit it anyway?";
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.No;
-            this.button1.Location = new System.Drawing.Point(116, 129);
+            this.button1.Location = new System.Drawing.Point(99, 101);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(149, 23);
+            this.button1.Size = new System.Drawing.Size(128, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "&Edit In-Memory";
             this.button1.UseVisualStyleBackColor = true;
@@ -66,9 +66,9 @@
             // button2
             // 
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.button2.Location = new System.Drawing.Point(282, 129);
+            this.button2.Location = new System.Drawing.Point(242, 101);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(152, 23);
+            this.button2.Size = new System.Drawing.Size(131, 23);
             this.button2.TabIndex = 3;
             this.button2.Text = "&Make Writeable";
             this.button2.UseVisualStyleBackColor = true;
@@ -76,9 +76,9 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(451, 129);
+            this.cancelButton.Location = new System.Drawing.Point(388, 101);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(106, 23);
+            this.cancelButton.Size = new System.Drawing.Size(91, 23);
             this.cancelButton.TabIndex = 4;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -88,7 +88,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(761, 164);
+            this.ClientSize = new System.Drawing.Size(655, 136);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
