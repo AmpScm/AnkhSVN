@@ -178,5 +178,24 @@ namespace Ankh.UI.RepositoryExplorer
                 }
             }
         }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            RepositoryTreeNode rtn = reposBrowser.SelectedNode;
+
+            if (rtn != null && rtn.Origin != null)
+            {
+                IAnkhConfigurationService ics = GetService<IAnkhConfigurationService>();
+                RegistryLifoList lifo = null;
+
+                if (ics != null)
+                    lifo = ics.GetRecentReposUrls();
+
+                string url = rtn.Origin.RepositoryRoot.AbsoluteUri;
+
+                if (lifo != null && !lifo.Contains(url))
+                    lifo.Add(url);
+            }
+        }
     }
 }

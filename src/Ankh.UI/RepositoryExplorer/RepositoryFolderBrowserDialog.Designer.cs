@@ -77,6 +77,7 @@ namespace Ankh.UI.RepositoryExplorer
             this.okButton.TabIndex = 1;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // cancelButton
             // 
@@ -119,7 +120,6 @@ namespace Ankh.UI.RepositoryExplorer
             this.reposBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.reposBrowser.Context = null;
             this.reposBrowser.Location = new System.Drawing.Point(12, 36);
             this.reposBrowser.Name = "reposBrowser";
             this.reposBrowser.Size = new System.Drawing.Size(386, 269);
