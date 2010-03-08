@@ -40,7 +40,7 @@ namespace Ankh.Commands.RepositoryExplorer
             else if (e.Argument is Uri)
                 info = (Uri)e.Argument;
             else
-                using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(e.Context))
+                using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
                 {
                     if (dlg.ShowDialog(e.Context) != DialogResult.OK || dlg.Uri == null)
                         return;

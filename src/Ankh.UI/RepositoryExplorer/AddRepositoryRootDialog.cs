@@ -29,7 +29,6 @@ namespace Ankh.UI
     /// </summary>
     public partial class AddRepositoryRootDialog : VSDialogForm
     {
-        readonly IAnkhServiceProvider _context;
         public AddRepositoryRootDialog()
         {
             //
@@ -38,25 +37,20 @@ namespace Ankh.UI
             InitializeComponent();
 
             //Set revision choices in combobox
-
-            this.ValidateAdd();
         }
 
-        public AddRepositoryRootDialog(IAnkhServiceProvider context)
-            :this()
+        protected override void OnLoad(EventArgs e)
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
-
-            _context = context;
+            base.OnLoad(e);
 
             foreach (string url in GetService<IAnkhConfigurationService>().GetRecentReposUrls())
             {
                 urlTextBox.Items.Add(url);
             }
+            this.ValidateAdd();
         }
 
-   
+
         /// <summary>
         /// The URL entered in the text box.
         /// </summary>
@@ -75,21 +69,21 @@ namespace Ankh.UI
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         private void revisionPicker_Changed(object sender, System.EventArgs e)
         {
-            this.ValidateAdd();            
+            this.ValidateAdd();
         }
 
         private void urlTextBox_TextChanged(object sender, System.EventArgs e)
@@ -104,7 +98,7 @@ namespace Ankh.UI
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            RegistryLifoList recentUrls = _context.GetService<IAnkhConfigurationService>().GetRecentReposUrls();
+            RegistryLifoList recentUrls = GetService<IAnkhConfigurationService>().GetRecentReposUrls();
 
             Uri fullUri;
             if (!string.IsNullOrEmpty(urlTextBox.Text) && Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out fullUri))
