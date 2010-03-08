@@ -263,23 +263,33 @@ namespace Ankh.Scc
         {
             tagVSQueryEditFlags queryFlags = (tagVSQueryEditFlags)rgfQueryEdit;
             pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags)0;
+            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEdit | tagVSQueryEditResultFlags.QER_MaybeChanged);
 
-            bool allowReadonlyNonSccWrites = AllowReadonlyNonSccWrites();
+            bool allowUI = (queryFlags & (tagVSQueryEditFlags.QEF_SilentMode | tagVSQueryEditFlags.QEF_ReportOnly | tagVSQueryEditFlags.QEF_ForceEdit_NoPrompting)) == 0;
+
+            bool? allowReadOnlyNonSccWrites = null;
 
             if (rgpszMkDocuments == null)
                 return VSConstants.E_POINTER;
+
             try
             {
+                // If the editor asks us to do anything in our power to make it editable
+                // without prompting, just make those files writable.
+                if ((queryFlags & tagVSQueryEditFlags.QEF_ForceEdit_NoPrompting) != 0)
+                    return QueryEditForceWritable(rgpszMkDocuments);
+
                 HybridCollection<string> mustLockFiles = null;
+                HybridCollection<string> readOnlyEditFiles = null;
                 List<SvnItem> mustLockItems = null;
+                List<SvnItem> readOnlyItems = null;
 
                 for (int i = 0; i < cFiles; i++)
                 {
                     string file = rgpszMkDocuments[i];
 
                     if (!IsSafeSccPath(file))
-                        continue; // Skip non scc paths
+                        continue; // Skip non scc paths (Includes %TEMP%\*)
 
                     file = SvnTools.GetNormalizedFullPath(file);
 
@@ -289,12 +299,13 @@ namespace Ankh.Scc
 
                     if (item.IsReadOnlyMustLock && !item.IsDirectory)
                     {
-                        if ((queryFlags & tagVSQueryEditFlags.QEF_ReportOnly) != 0)
+                        if (!allowUI)
                         {
-                            pfEditVerdict = (uint) tagVSQueryEditResult.QER_EditNotOK;
-                            prgfMoreInfo = (uint) (tagVSQueryEditResultFlags.QER_MaybeCheckedout
+                            pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                            prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_MaybeCheckedout
                                                    | tagVSQueryEditResultFlags.QER_EditNotPossible
-                                                   | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc);
+                                                   | tagVSQueryEditResultFlags.QER_ReadOnlyUnderScc
+                                                   | tagVSQueryEditResultFlags.QER_NoisyCheckoutRequired);
 
                             return VSConstants.S_OK;
                         }
@@ -313,28 +324,39 @@ namespace Ankh.Scc
                     }
                     else if (item.IsReadOnly)
                     {
-                        if (!allowReadonlyNonSccWrites)
+                        if (!allowReadOnlyNonSccWrites.HasValue)
+                            allowReadOnlyNonSccWrites = AllowReadOnlyNonSccWrites();
+
+                        if (!allowReadOnlyNonSccWrites.Value)
                         {
-                            CommandResult result =
-                                CommandService.DirectlyExecCommand(AnkhCommand.MakeNonSccFileWriteable, item, CommandPrompt.DoDefault);
-
-                            bool allowed = result.Result is bool ? (bool)result.Result : false;
-
-                            if (allowed)
+                            if (!allowUI)
                             {
-                                pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditOK;
-                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_InMemoryEdit);
-                            }
-                            else
-                            {
-                                pfEditVerdict = (uint) tagVSQueryEditResult.QER_EditNotOK;
-                                prgfMoreInfo = (uint) (tagVSQueryEditResultFlags.QER_EditNotPossible
+                                pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                                prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_EditNotPossible
                                                        | tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
-                                                       | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc);
+                                                       | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc
+                                                       | tagVSQueryEditResultFlags.QER_NoisyPromptRequired);
+
+                                return VSConstants.S_OK;
                             }
 
-                            return VSConstants.S_OK;
+                            if (readOnlyEditFiles == null)
+                            {
+                                readOnlyEditFiles = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
+                                readOnlyItems = new List<SvnItem>();
+                            }
 
+                            if (!readOnlyEditFiles.Contains(item.FullPath))
+                            {
+                                readOnlyEditFiles.Add(item.FullPath);
+                                readOnlyItems.Add(item);
+                            }
+                        }
+                        else
+                        {
+                            // What?
+                            // Deny? or Make the file writable?
+                            // Fallthrough = OK to edit
                         }
                     }
                 }
@@ -371,6 +393,24 @@ namespace Ankh.Scc
                         }
                     }
                 }
+                if (readOnlyItems != null)
+                {
+                    // TODO: Handle multiple items correctly
+                    // Is this only for non-scc items or also for scc items that are readonly for other reasons?
+                    CommandResult result =
+                        CommandService.DirectlyExecCommand(AnkhCommand.MakeNonSccFileWriteable, readOnlyItems[0], CommandPrompt.DoDefault);
+
+                    bool allowed = result.Result is bool ? (bool)result.Result : false;
+
+                    if (!allowed)
+                    {
+                        pfEditVerdict = (uint)tagVSQueryEditResult.QER_EditNotOK;
+                        prgfMoreInfo = (uint)(tagVSQueryEditResultFlags.QER_EditNotPossible
+                                               | tagVSQueryEditResultFlags.QER_InMemoryEditNotAllowed
+                                               | tagVSQueryEditResultFlags.QER_ReadOnlyNotUnderScc // TODO: Specialize to SCC?
+                                               );
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -385,22 +425,46 @@ namespace Ankh.Scc
             return VSConstants.S_OK;
         }
 
-        bool AllowReadonlyNonSccWrites()
+        private int QueryEditForceWritable(string[] rgpszMkDocuments)
         {
-            IVsSccToolsOptions sccToolsOptions = GetService<IVsSccToolsOptions>(typeof (SVsSccToolsOptions));
-            if(sccToolsOptions == null)
+            // Force all real files to be writable
+            foreach (string file in rgpszMkDocuments)
+            {
+                if (SvnItem.IsValidPath(file))
+                {
+                    SvnItem item = StatusCache[file];
+
+                    if (item.IsReadOnly)
+                    {
+                        try
+                        {
+                            FileAttributes attrs = File.GetAttributes(item.FullPath);
+                            File.SetAttributes(item.FullPath, attrs & ~FileAttributes.ReadOnly);
+                        }
+                        catch
+                        { }
+                    }
+                }
+            }
+            return VSConstants.S_OK;
+        }
+
+        bool AllowReadOnlyNonSccWrites()
+        {
+            IVsSccToolsOptions sccToolsOptions = GetService<IVsSccToolsOptions>(typeof(SVsSccToolsOptions));
+            if (sccToolsOptions == null)
                 return true;
 
             object o;
-            if(!ErrorHandler.Succeeded(
+            if (!ErrorHandler.Succeeded(
                 sccToolsOptions.GetSccToolsOption(SccToolsOptionsEnum.ksctoAllowReadOnlyFilesNotUnderSccToBeEdited,
                                                   out o)))
                 return true;
 
-            if(!(o is bool))
+            if (!(o is bool))
                 return true;
 
-            return (bool) o;
+            return (bool)o;
         }
 
         /// <summary>
