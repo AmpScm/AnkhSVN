@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using Ankh.UI;
 using System.IO;
+using Ankh.Commands;
 
-namespace Ankh.Commands
+namespace Ankh.Scc.SccUI.Commands
 {
-    [Command(AnkhCommand.MakeNonSccFileWriteable)]
-    class MakeNonSccFileWriteableCommand : CommandBase
+    [Command(AnkhCommand.MakeNonSccFileWriteable, AlwaysAvailable=true)]
+    class MakeNonSccFileWritableCommand : ICommandHandler
     {
-        public override void OnExecute(CommandEventArgs e)
+        public void OnUpdate(CommandUpdateEventArgs e)
+        {
+        }
+
+        public void OnExecute(CommandEventArgs e)
         {
             SvnItem item = e.Argument as SvnItem;
             if (item == null)
                 return;
 
-            using(EditReadonlyFileDialog dialog = new EditReadonlyFileDialog(item))
+            using(EditReadOnlyFileDialog dialog = new EditReadOnlyFileDialog(item))
             {
                 switch(dialog.ShowDialog(e.Context))
                 {
@@ -37,5 +41,9 @@ namespace Ankh.Commands
                 }
             }
         }
+
+        #region ICommandHandler Members
+
+        #endregion
     }
 }

@@ -87,7 +87,6 @@
     <Compile Include="Commands\ItemDelete.cs" />
     <Compile Include="Commands\ItemMoveToChangeList.cs" />
     <Compile Include="Commands\ItemResolveCasing.cs" />
-    <Compile Include="Commands\MakeNonSccFileWriteableCommand.cs" />
     <Compile Include="Commands\RepositoryExplorer\CopyToOrMove.cs" />
     <Compile Include="Commands\RepositoryExplorer\CopyToWorkingCopy.cs" />
     <Compile Include="Commands\RepositoryExplorer\DeleteRepositoryItemCommand.cs" />
