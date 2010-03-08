@@ -50,7 +50,7 @@ namespace Ankh.UI
 
             _context = context;
 
-            foreach (string url in _context.GetService<IAnkhConfigurationService>().GetRecentReposUrls())
+            foreach (string url in GetService<IAnkhConfigurationService>().GetRecentReposUrls())
             {
                 urlTextBox.Items.Add(url);
             }
@@ -106,11 +106,14 @@ namespace Ankh.UI
         {
             RegistryLifoList recentUrls = _context.GetService<IAnkhConfigurationService>().GetRecentReposUrls();
 
-            Uri unused;
-            if (!string.IsNullOrEmpty(urlTextBox.Text) && Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out unused))
+            Uri fullUri;
+            if (!string.IsNullOrEmpty(urlTextBox.Text) && Uri.TryCreate(urlTextBox.Text, UriKind.Absolute, out fullUri))
             {
-                if (!recentUrls.Contains(urlTextBox.Text))
-                    recentUrls.Add(urlTextBox.Text);
+                string toAdd = fullUri.AbsoluteUri;
+                if (!recentUrls.Contains(toAdd))
+                {
+                    GetService<IAnkhConfigurationService>().GetRecentReposUrls().Add(toAdd);
+                }
             }
         }
     }
