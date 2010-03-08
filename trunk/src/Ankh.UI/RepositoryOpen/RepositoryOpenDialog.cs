@@ -469,7 +469,7 @@ namespace Ankh.UI.RepositoryOpen
         void ShowAddUriDialog()
         {
             Uri dirUri;
-            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog(Context))
+            using (AddRepositoryRootDialog dlg = new AddRepositoryRootDialog())
             {
                 if (dlg.ShowDialog(Context) != DialogResult.OK || dlg.Uri == null)
                     return;
