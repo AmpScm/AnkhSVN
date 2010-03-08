@@ -83,7 +83,7 @@ namespace Ankh.Scc
                     OnIsActiveChanged(new PendingChangeEventArgs(this, null));
                 }
             }
-        }        
+        }
 
         ISvnItemChange _change;
         ISvnItemChange Change
@@ -131,10 +131,10 @@ namespace Ankh.Scc
         }
 
         void OnSvnItemsChanged(object sender, SvnItemsEventArgs e)
-        {            
+        {
             lock (_toRefresh)
             {
-                if (_fullRefresh)
+                if (_fullRefresh || !_solutionOpen)
                     return;
 
                 foreach (SvnItem item in e.ChangedItems)
@@ -152,7 +152,7 @@ namespace Ankh.Scc
         {
             lock (_toRefresh)
             {
-                ScheduleRefreshPreLocked();                
+                ScheduleRefreshPreLocked();
             }
         }
 
@@ -181,7 +181,7 @@ namespace Ankh.Scc
                 _pendingChanges.Clear();
             }
 
-            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);            
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
             OnListFlushed(ee);
 
             lock (_toRefresh)
@@ -195,7 +195,7 @@ namespace Ankh.Scc
 
         public void Clear()
         {
-            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);            
+            PendingChangeEventArgs ee = new PendingChangeEventArgs(this, null);
             OnListFlushed(ee);
 
             lock (_toRefresh)
@@ -212,7 +212,7 @@ namespace Ankh.Scc
             if (path != null && string.IsNullOrEmpty(path)) // path == ""
                 throw new ArgumentNullException("path");
 
-            if (!_isActive)
+            if (!_isActive || !_solutionOpen)
                 return;
 
             lock (_toRefresh)
@@ -231,7 +231,7 @@ namespace Ankh.Scc
             if (paths == null)
                 throw new ArgumentNullException("paths");
 
-            if (!_isActive)
+            if (!_isActive || !_solutionOpen)
                 return;
 
             lock (_toRefresh)
@@ -359,8 +359,11 @@ namespace Ankh.Scc
                 if (!_fullRefresh && !_toRefresh.Contains(path))
                     _toRefresh.Add(path);
 
+                if (!_isActive || !_solutionOpen)
+                    return;
+
                 ScheduleRefreshPreLocked();
-            }            
+            }
         }
 
         internal void ScheduleMonitor(IEnumerable<string> paths)
@@ -369,8 +372,13 @@ namespace Ankh.Scc
             {
                 _toMonitor.AddRange(paths);
 
+                if (!_isActive || !_solutionOpen)
+                    return;
+
+                _toRefresh.UniqueAddRange(paths);
+
                 ScheduleRefreshPreLocked();
-            }            
+            }
         }
 
         internal void StopMonitor(string path)
@@ -378,6 +386,9 @@ namespace Ankh.Scc
             lock (_toRefresh)
             {
                 _extraFiles.Remove(path);
+
+                if (!_isActive || !_solutionOpen)
+                    return;
 
                 if (!_fullRefresh && !_toRefresh.Contains(path))
                     _toRefresh.Add(path);
