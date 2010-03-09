@@ -151,7 +151,7 @@ namespace Ankh.Scc
 
                 if (ppunkDocData != IntPtr.Zero)
                 {
-                    document = Marshal.GetObjectForIUnknown(ppunkDocData);
+                    document = Marshal.GetUniqueObjectForIUnknown(ppunkDocData);
                     Marshal.Release(ppunkDocData);
                 }
 
@@ -351,13 +351,6 @@ namespace Ankh.Scc
 
         public int OnAfterFirstDocumentLock(uint docCookie, uint dwRDTLockType, uint dwReadLocksRemaining, uint dwEditLocksRemaining)
         {
-            SccDocumentData data;
-
-            if (TryGetDocument(docCookie, out data))
-            {
-                data.CheckDirty();
-            }
-
             return VSConstants.S_OK;
         }
 

@@ -138,7 +138,7 @@ namespace Ankh.Scc.ProjectMap
 
                 if (data != IntPtr.Zero)
                 {
-                    _rawDocument = Marshal.GetObjectForIUnknown(data);
+                    _rawDocument = Marshal.GetUniqueObjectForIUnknown(data);
                     Marshal.Release(data);
                 }
             }
