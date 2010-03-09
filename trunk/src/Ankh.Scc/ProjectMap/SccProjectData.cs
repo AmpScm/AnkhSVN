@@ -355,7 +355,8 @@ namespace Ankh.Scc.ProjectMap
                 IVsSccProjectProviderBinding providerBinding = VsProject as IVsSccProjectProviderBinding;
 
                 VSSCCPROVIDERBINDING[] ppb = new VSSCCPROVIDERBINDING[1];
-                if (Microsoft.VisualStudio.ErrorHandler.Succeeded(providerBinding.GetProviderBinding(ppb)))
+                if (providerBinding != null &&
+                    Microsoft.VisualStudio.ErrorHandler.Succeeded(providerBinding.GetProviderBinding(ppb)))
                 {
                     VSSCCPROVIDERBINDING pb = ppb[0];
 
