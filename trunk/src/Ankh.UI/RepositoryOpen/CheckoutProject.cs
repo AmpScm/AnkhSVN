@@ -166,7 +166,7 @@ namespace Ankh.UI.RepositoryOpen
 
                 Uri info = RepositoryRootUri.MakeRelativeUri(inner);
 
-                if(info.IsAbsoluteUri || !info.ToString().StartsWith("../", StringComparison.Ordinal))
+                if(info.IsAbsoluteUri || info.ToString().StartsWith("../", StringComparison.Ordinal))
                     RepositoryRootUri = new Uri(inner, "/");
 
                 while(inner != RepositoryRootUri)
