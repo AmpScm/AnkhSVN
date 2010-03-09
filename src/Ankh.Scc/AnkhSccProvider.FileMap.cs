@@ -881,9 +881,9 @@ namespace Ankh.Scc
                 get { return _data.EnlistMode; }
             }
 
-            public bool IsSccManageable
+            public bool IsSccBindable
             {
-                get { return _data.IsSccManageable; }
+                get { return _data.IsSccBindable; }
 
             }
 

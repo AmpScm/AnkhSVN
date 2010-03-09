@@ -80,7 +80,10 @@ namespace Ankh.Scc.SccUI
             }
 
             // TODO: Optimize to one time init and then just refresh
-            bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
+            if (SvnItem.IsValidPath(SolutionSettings.SolutionFilename))
+            {
+                bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, SvnProject.Solution));
+            }
             foreach (SvnProject project in ProjectMapper.GetAllProjects())
             {
                 if (project.IsSolution)
@@ -89,6 +92,9 @@ namespace Ankh.Scc.SccUI
                 ISvnProjectInfo projectInfo = ProjectMapper.GetProjectInfo(project);
 
                 if (projectInfo == null || string.IsNullOrEmpty(projectInfo.ProjectDirectory))
+                    continue;
+
+                if (!projectInfo.IsSccBindable && !Scc.IsProjectManaged(project))
                     continue;
 
                 bindingGrid.Rows.Add(new ChangeSourceControlRow(Context, project));

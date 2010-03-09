@@ -132,13 +132,13 @@ namespace Ankh.Scc.SccUI
                     Scc.IsSolutionManaged,
                     "Solution: " + Path.GetFileNameWithoutExtension(SolutionSettings.SolutionFilename),
                     SafeRepositoryRoot(rootItem),
-                    SafeRepositoryPath(rootItem),                    
+                    SafeRepositoryPath(rootItem),
                     GetStatus(rootItem, null, SolutionSettings.SolutionFilename),
-                    EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, Path.GetDirectoryName(SolutionSettings.SolutionFilename))),                    
+                    EmptyToDot(PackageUtilities.MakeRelative(rootItem.FullPath, SvnTools.GetNormalizedDirectoryName(SolutionSettings.SolutionFilename))),
                     rootItem.FullPath
                     );
             }
-            else if(null != (projectInfo = ProjectMap.GetProjectInfo(_project)) && null != (projectInfo.ProjectDirectory))
+            else if (null != (projectInfo = ProjectMap.GetProjectInfo(_project)) && null != (projectInfo.ProjectDirectory))
             {
                 SvnItem dirItem = Cache[projectInfo.SccBaseDirectory];
 
@@ -146,11 +146,11 @@ namespace Ankh.Scc.SccUI
                     Scc.IsProjectManaged(_project),
                     projectInfo.UniqueProjectName,
                     SafeRepositoryRoot(dirItem),
-                    SafeRepositoryPath(dirItem),                    
+                    SafeRepositoryPath(dirItem),
                     GetStatus(dirItem, projectInfo, projectInfo.ProjectFile),
-                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),                    
+                    EmptyToDot(PackageUtilities.MakeRelative(projectInfo.SccBaseDirectory, projectInfo.ProjectDirectory)),
                     projectInfo.SccBaseDirectory
-                    );                
+                    );
             }
             else
             {
@@ -179,7 +179,7 @@ namespace Ankh.Scc.SccUI
                 else
                     return "Not Connected";
             }
-            
+
             if (dirItem.IsBelowPath(SolutionSettings.ProjectRootSvnItem)
                     && dirItem.WorkingCopy == SolutionSettings.ProjectRootSvnItem.WorkingCopy)
             {
@@ -201,19 +201,19 @@ namespace Ankh.Scc.SccUI
                 return "";
 
             SvnWorkingCopy wc = item.WorkingCopy;
-            if(wc != null)
+            if (wc != null)
             {
                 Uri root = wc.RepositoryRoot;
 
-                if(root != null)
+                if (root != null)
                 {
                     Uri relative = root.MakeRelativeUri(item.Status.Uri);
 
-                    if(!relative.IsAbsoluteUri)
+                    if (!relative.IsAbsoluteUri)
                     {
                         string v = SvnTools.UriPartToPath(relative.ToString()).Replace(Path.DirectorySeparatorChar, '/');
 
-                        if(!string.IsNullOrEmpty(v) && !v.StartsWith("/") && !v.StartsWith("../") && v != ".")
+                        if (!string.IsNullOrEmpty(v) && !v.StartsWith("/") && !v.StartsWith("../") && v != ".")
                             return "^/" + v;
                     }
                 }
@@ -226,7 +226,7 @@ namespace Ankh.Scc.SccUI
         {
             if (item == null || item.WorkingCopy == null)
                 return "";
-            
+
             Uri root = item.WorkingCopy.RepositoryRoot;
 
             if (root != null)

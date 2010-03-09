@@ -92,5 +92,10 @@ namespace Ankh.Scc
         /// </summary>
         /// <value>The enlist mode.</value>
         SccEnlistMode SccEnlistMode { get; }
+
+        /// <summary>
+        /// Gets a boolean indicating whether the project support binding to SCC
+        /// </summary>
+        bool IsSccBindable { get; }
     }
 }
