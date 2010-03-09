@@ -99,13 +99,18 @@
     <Compile Include="Annotate\AnnotateEditorControl.Designer.cs">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\AnnotateDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Commands\AnnotateDialog.Designer.cs">
+      <DependentUpon>AnnotateDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Commands\CommandStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CommandStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.Designer.cs">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>
@@ -118,7 +123,6 @@
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.Designer.cs">
       <DependentUpon>StatusPanelTestForm.cs</DependentUpon>
@@ -159,7 +163,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.Designer.cs">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
@@ -218,7 +221,6 @@
       <DependentUpon>OptionsResources.resx</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.Designer.cs">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
@@ -297,37 +299,31 @@
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.Designer.cs">
       <DependentUpon>ConfirmDeleteDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
       <DependentUpon>RenameDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.Designer.cs">
       <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.Designer.cs">
       <DependentUpon>CopyToDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.Designer.cs">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
@@ -339,7 +335,6 @@
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.Designer.cs">
       <DependentUpon>MultiWorkingCopyCommit.cs</DependentUpon>
@@ -352,7 +347,6 @@
     </Compile>
     <Compile Include="SccManagement\RepositoryUrlUtils.cs" />
     <Compile Include="SccManagement\UpdateAvailableDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\UpdateAvailableDialog.Designer.cs">
       <DependentUpon>UpdateAvailableDialog.cs</DependentUpon>
@@ -502,7 +496,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.Designer.cs">
       <DependentUpon>MergeWizardDialog.cs</DependentUpon>
@@ -534,7 +527,6 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -556,7 +548,6 @@
       <DependentUpon>AddToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.Designer.cs">
       <DependentUpon>SccEditEnlistment.cs</DependentUpon>
@@ -629,13 +620,11 @@
     </Compile>
     <Compile Include="AnkhUIModule.cs" />
     <Compile Include="Commands\CheckoutDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CheckoutDialog.Designer.cs">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
@@ -715,7 +704,6 @@
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.Designer.cs">
       <DependentUpon>CheckoutProject.cs</DependentUpon>
@@ -779,7 +767,6 @@
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.Designer.cs">
       <DependentUpon>RepositoryOpenDialog.cs</DependentUpon>
@@ -824,7 +811,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
       <SubType>Form</SubType>
@@ -1259,6 +1245,9 @@
     <None Include="Resources\refreshButton.Image.png" />
     <None Include="Controls\Status.Error.png" />
     <None Include="Controls\Status.Warning.png" />
+    <EmbeddedResource Include="Commands\AnnotateDialog.resx">
+      <DependentUpon>AnnotateDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\StatusPanelResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StatusPanelResources.Designer.cs</LastGenOutput>
