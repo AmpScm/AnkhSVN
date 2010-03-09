@@ -30,58 +30,100 @@ using System.Diagnostics;
 
 namespace Ankh.Commands
 {
-    [Command(AnkhCommand.FileSccAddProjectToSubversion)]
-    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true)]
+    [Command(AnkhCommand.FileSccAddProjectToSubversion, HideWhenDisabled = false)]
+    [Command(AnkhCommand.FileSccAddSolutionToSubversion, AlwaysAvailable = true, HideWhenDisabled = false)]
     sealed class AddToSccCommands : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
         {
             if (!e.State.SolutionExists || (e.Command == AnkhCommand.FileSccAddProjectToSubversion && e.State.EmptySolution))
             {
-                e.Enabled = false;
+                e.Visible = e.Enabled = false;
                 return;
             }
 
             if (e.State.OtherSccProviderActive)
             {
-                e.Enabled = false;
+                e.Visible = e.Enabled = false;
                 return; // Only one scc provider can be active at a time
             }
 
             IAnkhSccService scc = e.GetService<IAnkhSccService>();
-            IFileStatusCache cache = e.GetService<IFileStatusCache>();            
+            IFileStatusCache cache = e.GetService<IFileStatusCache>();
             if (scc == null || cache == null)
             {
-                e.Enabled = false;
+                e.Visible = e.Enabled = false;
                 return;
             }
 
-            if (!scc.IsSolutionManaged || !cache[e.Selection.SolutionFilename].IsVersioned)
-                return; // Nothing is added unless the solution is added
+            string solutionFilename = e.Selection.SolutionFilename;
+
+            if (string.IsNullOrEmpty(solutionFilename) || !SvnItem.IsValidPath(solutionFilename))
+                solutionFilename = null;
 
             if (e.Command == AnkhCommand.FileSccAddSolutionToSubversion)
             {
-                e.Enabled = false;
+                if (solutionFilename == null || scc.IsSolutionManaged)
+                {
+                    e.Visible = e.Enabled = false; // Already handled
+                    return;
+                }
+                SvnItem item = cache[solutionFilename];
+
+                if (!item.Exists || !item.IsFile)
+                {
+                    // Decide where you store the .sln first
+                    e.Visible = e.Enabled = false;
+                    return;
+                }
+
+                if (!item.IsVersioned)
+                {
+                    // If the .sln is ignored hide it in the context menus
+                    // but don't hide it on 
+                    e.HideOnContextMenu = item.IsIgnored && !e.Selection.IsSolutionSelected;
+                }
                 return;
             }
 
             IProjectFileMapper pfm = e.GetService<IProjectFileMapper>();
 
-            foreach (SvnProject p in GetSelection(e.Selection))
+            int n = 0;
+            bool foundOne = false;
+            foreach (IEnumerable<SvnProject> projects in
+                new IEnumerable<SvnProject>[] 
+                { 
+                    e.Selection.GetSelectedProjects(true),
+                    e.Selection.GetSelectedProjects(false) 
+                })
             {
-                ISvnProjectInfo pi = pfm.GetProjectInfo(p);
+                foreach (SvnProject p in projects)
+                {
+                    foundOne = true;
+                    if (scc.IsProjectManaged(p))
+                        continue; // Something to enable
 
-                if (pi == null)
-                    continue; // Not an SCC project
+                    ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
-                if (!scc.IsProjectManaged(p))
-                    return; // Something to enable
+                    if (pi == null || !pi.IsSccBindable)
+                        continue; // Not an SCC project
 
-                if (pi.ProjectDirectory != null && !cache[pi.ProjectDirectory].IsVersionable)
-                    return;
+                    if (pi.ProjectDirectory != null && !cache[pi.ProjectDirectory].IsVersionable)
+                    {
+                        string file = pi.ProjectFile;
+
+                        if (n > 1 && file != null && cache[file].IsIgnored)
+                            e.HideOnContextMenu = true;
+
+                        return;
+                    }
+                }
+                n++;
+                if (foundOne)
+                    break;
             }
 
-            e.Enabled = false;
+            e.Visible = e.Enabled = false;
         }
 
         private static IEnumerable<SvnProject> GetSelection(ISelectionContext iSelectionContext)
@@ -105,7 +147,7 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             IFileStatusCache cache = e.GetService<IFileStatusCache>();
-            
+
             if (cache == null || e.Selection.SolutionFilename == null)
                 return;
 
@@ -139,7 +181,7 @@ namespace Ankh.Commands
                 return true; // Projects should still be checked
 
             bool confirmed = false;
-            
+
 
             if (solutionItem.IsVersioned)
             { /* File is in subversion; just enable */ }
@@ -168,7 +210,7 @@ namespace Ankh.Commands
 
         static SvnItem GetVersionedParent(SvnItem child)
         {
-            if(!child.IsVersionable)
+            if (!child.IsVersionable)
                 return null;
 
             if (!child.IsVersioned)
@@ -211,7 +253,7 @@ namespace Ankh.Commands
                 }
                 return false;
             }
-            
+
             confirmed = true;
             return true;
         }
@@ -276,7 +318,7 @@ namespace Ankh.Commands
 
                     return true;
                 }
-                
+
                 return false; // User cancelled the "Add to subversion" dialog, don't set as managed by Ankh
             }
         }
@@ -308,7 +350,7 @@ namespace Ankh.Commands
                     cl.RemoteCreateDirectory(uri, cdArg);
                     return true;
                 }
-                
+
                 return false; // bail out, we cannot continue without directory in the repository
             }
         }
@@ -341,12 +383,12 @@ namespace Ankh.Commands
                 {
                     // This is a 'normal' project, part of the solution and in the same working copy
                     projectsToBeManaged.Add(project);
-                    continue; 
+                    continue;
                 }
 
                 bool markAsManaged;
                 bool writeReference;
-                
+
                 if (projectDir.IsVersioned)
                     continue; // We don't have to add this one
                 if (projectDir.IsVersionable)
