@@ -1084,6 +1084,16 @@ namespace Ankh
             }
         }
 
+
+        /// <summary>
+        /// Checks if the node is somehow added. In this case its parents are
+        /// needed for commits
+        /// </summary>
+        public bool IsNewAddition
+        {
+            get { return IsAdded || IsReplaced || Status.IsCopied; }
+        }
+
         static int _globalCookieBox = 0;
 
         /// <summary>
