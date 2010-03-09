@@ -54,7 +54,7 @@ namespace Ankh.UI.RepositoryOpen
 
             dirView.SmallImageList = mapper.ImageList;
             _dirOffset = mapper.DirectoryIcon;
-            _fileOffset = mapper.FileIcon;        
+            _fileOffset = mapper.FileIcon;
 
             IUIService ds = GetService<IUIService>();
 
@@ -342,45 +342,54 @@ namespace Ankh.UI.RepositoryOpen
 
         private void CheckResult(Uri combined, bool forceLoad)
         {
-            using (SvnClient client = Context.GetService<ISvnClientPool>().GetClient())
+            using (SvnRemoteSession session = GetSession(combined))
             {
-                SvnInfoArgs args = new SvnInfoArgs();
-                args.ThrowOnError = false;
-                args.Depth = SvnDepth.Empty;
+                SvnRemoteCommonArgs ca = new SvnRemoteCommonArgs();
+                ca.ThrowOnError = false;
 
-                client.Info(combined, args,
-                    delegate(object sender, SvnInfoEventArgs e)
+
+
+                SvnRemoteStatArgs sa = new SvnRemoteStatArgs();
+                sa.ThrowOnError = false;
+                SvnNodeKind kind;
+
+                string path = Uri.UnescapeDataString(session.SessionUri.MakeRelativeUri(combined).ToString());
+
+                if (session.GetNodeKind(path, ca, out kind))
+                    Invoke((AnkhAction)delegate
                     {
-                        e.Detach();
-                        if (!IsHandleCreated)
-                            return;
-
-                        Invoke((AnkhAction)delegate
+                        switch (kind)
                         {
-                            if (e.NodeKind == SvnNodeKind.Directory)
-                            {
-                                Uri parentUri = new Uri(e.Uri, "../");
+                            case SvnNodeKind.Directory:
+                                {
+                                    Uri parentUri = new Uri(combined, "../");
 
-                                if (!forceLoad && parentUri.ToString() != urlBox.Text)
-                                    return; // The user selected something else while we where busy
+                                    if (!forceLoad && parentUri.ToString() != urlBox.Text)
+                                        return; // The user selected something else while we where busy
 
-                                // The user typed a directory Url without ending '/'
-                                fileNameBox.Text = e.Uri.ToString();
-                                UpdateDirectories();
-                                return;
-                            }
-                            else
-                            {
-                                Uri parentUri = new Uri(e.Uri, "./");
+                                    // The user typed a directory Url without ending '/'
+                                    fileNameBox.Text = combined.ToString();
+                                    UpdateDirectories();
+                                    return;
+                                }
+                            case SvnNodeKind.File:
+                                {
+                                    Uri parentUri = new Uri(combined, "./");
 
-                                if (parentUri.ToString() != urlBox.Text)
-                                    return; // The user selected something else while we where busy
+                                    if (parentUri.ToString() != urlBox.Text)
+                                        return; // The user selected something else while we where busy
 
-                                SelectedUri = e.Uri;
-                                SelectedRepositoryRoot = e.RepositoryRoot;
-                                DialogResult = DialogResult.OK;
-                            }
-                        });
+                                    SelectedUri = combined;
+
+                                    Uri reposRoot;
+                                    if (!session.GetRepositoryRoot(ca, out reposRoot))
+                                        return;
+
+                                    SelectedRepositoryRoot = reposRoot;
+                                    DialogResult = DialogResult.OK;
+                                    return;
+                                }
+                        }
                     });
             }
         }
@@ -434,7 +443,8 @@ namespace Ankh.UI.RepositoryOpen
                     {
                         path = path.Substring(0, dirEnd + 1);
 
-                        Uri uriRoot = new Uri(nameUri.GetComponents(UriComponents.StrongAuthority | UriComponents.SchemeAndServer, UriFormat.SafeUnescaped));
+                        string v = nameUri.GetComponents(UriComponents.StrongAuthority | UriComponents.SchemeAndServer, UriFormat.SafeUnescaped);
+                        Uri uriRoot = new Uri(v);
 
                         if (uriRoot.IsFile)
                             path = path.TrimStart('/'); // Fixup for UNC paths
@@ -641,7 +651,7 @@ namespace Ankh.UI.RepositoryOpen
                                 }
                                 else
                                 {
-                                    string message = 
+                                    string message =
                                         string.Format("<{0}>",
                                         la.LastException != null ? la.LastException.Message : "Nothing");
                                     dirView.Items.Add(message);
@@ -651,9 +661,20 @@ namespace Ankh.UI.RepositoryOpen
                     }
                 }
             }
+            catch (SvnException svnEx)
+            {
+                BeginInvoke((AnkhAction)delegate()
+                {
+                    dirView.Items.Clear();
+
+                    string message =
+                        string.Format("<{0}>", svnEx.Message);
+                    dirView.Items.Add(message);
+                });
+            }
             finally
             {
-                Invoke((AnkhAction)delegate()
+                BeginInvoke((AnkhAction)delegate()
                 {
                     lock (_running)
                     {
