@@ -453,11 +453,13 @@ namespace Ankh.Services.PendingChanges
             {
                 SvnItem item = state.Cache[path];
 
-                if (item.IsAdded || item.IsReplaced)
+                if (item.IsNewAddition)
                 {
                     SvnItem parent = item.Parent;
+                    string wc = item.WorkingCopy.FullPath;
 
-                    while (parent != null && (parent.IsAdded || parent.IsReplaced))
+                    while (parent != null && !string.Equals(parent.FullPath, wc, StringComparison.OrdinalIgnoreCase)
+                           && parent.IsNewAddition)
                     {
                         if (!state.CommitPaths.Contains(parent.FullPath))
                             state.CommitPaths.Add(parent.FullPath);
