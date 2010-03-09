@@ -881,6 +881,12 @@ namespace Ankh.Scc
                 get { return _data.EnlistMode; }
             }
 
+            public bool IsSccManageable
+            {
+                get { return _data.IsSccManageable; }
+
+            }
+
             #endregion
         }
     }

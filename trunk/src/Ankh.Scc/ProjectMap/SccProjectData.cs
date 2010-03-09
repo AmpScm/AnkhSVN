@@ -348,6 +348,25 @@ namespace Ankh.Scc.ProjectMap
             return SccEnlistMode.SvnStateOnly;
         }
 
+        public bool IsSccBindable
+        {
+            get
+            {
+                IVsSccProjectProviderBinding providerBinding = VsProject as IVsSccProjectProviderBinding;
+
+                VSSCCPROVIDERBINDING[] ppb = new VSSCCPROVIDERBINDING[1];
+                if (Microsoft.VisualStudio.ErrorHandler.Succeeded(providerBinding.GetProviderBinding(ppb)))
+                {
+                    VSSCCPROVIDERBINDING pb = ppb[0];
+
+                    if (pb == VSSCCPROVIDERBINDING.VSSCC_PB_CUSTOM_DISABLED || pb == VSSCCPROVIDERBINDING.VSSCC_PB_STANDARD_DISABLED)
+                        return false;
+                }
+
+                return true;
+            }
+        }
+
         string _uniqueName;
         public string UniqueProjectName
         {
@@ -562,7 +581,7 @@ namespace Ankh.Scc.ProjectMap
 
             if (!_inLoad && GetService<Ankh.UI.IAnkhConfigurationService>().Instance.AutoAddEnabled)
             {
-                GetService<IFileStatusMonitor>().ScheduleAddFile(path);                
+                GetService<IFileStatusMonitor>().ScheduleAddFile(path);
             }
 
             SccProjectFileReference reference;
