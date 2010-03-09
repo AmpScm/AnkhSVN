@@ -18,13 +18,15 @@ using System;
 using Ankh.UI;
 using Ankh.UI.RepositoryExplorer;
 using System.Windows.Forms;
+using Ankh.Scc;
+using SharpSvn;
 
 namespace Ankh.Commands.RepositoryExplorer
 {
     /// <summary>
     /// Command to add a new URL to the Repository Explorer.
     /// </summary>
-    [Command(AnkhCommand.RepositoryBrowse, ArgumentDefinition="u", AlwaysAvailable=true)]
+    [Command(AnkhCommand.RepositoryBrowse, ArgumentDefinition = "u|d", AlwaysAvailable = true)]
     class RepositoryBrowseCommand : CommandBase
     {
         public override void OnExecute(CommandEventArgs e)
@@ -34,8 +36,24 @@ namespace Ankh.Commands.RepositoryExplorer
 
             if (e.Argument is string)
             {
-                // Allow opening from
-                info = new Uri((string)e.Argument);
+                string arg = (string)e.Argument;
+
+                info = null;
+                if (SvnItem.IsValidPath(arg, true))
+                {
+                    SvnItem item = e.GetService<IFileStatusCache>()[arg];
+
+                    if (item.IsVersioned)
+                    {
+                        info = item.Status.Uri;
+
+                        if (item.IsFile)
+                            info = new Uri(info, "./");
+                    }
+                }
+
+                if (info == null)
+                    info = new Uri((string)e.Argument);
             }
             else if (e.Argument is Uri)
                 info = (Uri)e.Argument;
