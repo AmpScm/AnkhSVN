@@ -374,8 +374,9 @@ namespace Ankh.Commands
             {
                 ISvnProjectInfo projInfo = mapper.GetProjectInfo(project);
 
-                if (projInfo == null || projInfo.ProjectDirectory == null)
-                    continue; /* Some projects don't have a directory */
+                if (projInfo == null || projInfo.ProjectDirectory == null
+                    || !projInfo.IsSccBindable)
+                    continue; // Some projects can't be managed
 
                 SvnItem projectDir = cache[projInfo.ProjectDirectory];
 
