@@ -133,6 +133,17 @@ namespace Ankh.Services
             SvnUI.Bind(client, bindArgs);
         }
 
+		private void HookUI(AnkhSvnPoolRemoteSession client)
+		{
+			// Let SharpSvnUI handle login and SSL dialogs
+			SvnUIBindArgs bindArgs = new SvnUIBindArgs();
+			bindArgs.ParentWindow = new OwnerWrapper(DialogOwner);
+			bindArgs.UIService = GetService<IUIService>();
+			bindArgs.Synchronizer = _syncher;
+
+			SvnUI.Bind(client, bindArgs);
+		}
+
         internal void NotifyChanges(IDictionary<string, SvnClientAction> actions)
         {
             StatusMonitor.HandleSvnResult(actions);
@@ -258,6 +269,7 @@ namespace Ankh.Services
             }
 
             AnkhSvnPoolRemoteSession session = new AnkhSvnPoolRemoteSession(this, true, _returnCookie);
+            HookUI(session);
             session.Open(sessionUri);
             return session;
         }
