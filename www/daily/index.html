@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7895</title>
+          AnkhSVN-Daily Update - 2.1.7908</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,45 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3150/AnkhSvn-Daily-2.1.7895.435.msi">AnkhSVN 2.1.7895</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3152/AnkhSvn-Daily-2.1.7908.436.msi">AnkhSVN 2.1.7908</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7895">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7908">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-03-09</td></tr>
+<tr><td> </td><td class="r"><a id="7906" href="http://ankhsvn.net/rev/?r=7906">
+            [r7906]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> AddToSccCommands.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Disable+Hide the Add Solution/Project to Subversion commands in the
+Solution explorer on subnodes when the solution/project file is marked
+as ignore. But don't hide it in File-&gt;Subversion or on the Solution/Project
+itself.<br>
+Also add more checking for projects that don't want to be Scc managed
+for specific reasons.</td></tr>
+<tr><td> </td><td class="r"><a id="7904" href="http://ankhsvn.net/rev/?r=7904">
+            [r7904]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhClientPool.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Hook the SharpSvn UI to SvnRemoteSession instances.</td></tr>
+<tr><td> </td><td class="r"><a id="7903" href="http://ankhsvn.net/rev/?r=7903">
+            [r7903]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/RepositoryOpen:</strong> RepositoryOpenDialog.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Reimplement result checking using the cached SvnRemoteSession and
+fix the error handling to show errors on connecting to the repository
+again.</td></tr>
+<tr><td> </td><td class="r"><a id="7900" href="http://ankhsvn.net/rev/?r=7900">
+            [r7900]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh.Scc/SccUI/ChangeSourceControl.cs, Ankh.Services/Scc/IProjectInfo.cs, Ankh.Scc/AnkhSccProvider.FileMap.cs, Ankh.Scc/SccUI/ChangeSourceControlRow.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't show projects that decide not to be Scc managed in the
+Change SourceControl dialog.</td></tr>
+<tr><td> </td><td class="r"><a id="7897" href="http://ankhsvn.net/rev/?r=7897">
+            [r7897]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Ankh/Services/PendingChanges/PendingChangeHandler.cs, Ankh.Services/Scc/SvnItem.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update the check whether copied parents must be committed with a file
+itself to properly identify multi level copies with history.</td></tr>
 <tr class="d"><td colspan="4">2010-03-08</td></tr>
 <tr><td> </td><td class="r"><a id="7895" href="http://ankhsvn.net/rev/?r=7895">
             [r7895]
