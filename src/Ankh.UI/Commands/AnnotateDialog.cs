@@ -36,7 +36,7 @@ namespace Ankh.UI.Commands
             SetTargets(origins);
         }
 
-        private void SetTargets(List<SvnOrigin> origins)
+        public void SetTargets(List<SvnOrigin> origins)
         {
             foreach (SvnOrigin i in origins)
                 targetBox.Items.Add(i);

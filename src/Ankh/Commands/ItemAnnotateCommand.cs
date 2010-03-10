@@ -75,63 +75,51 @@ namespace Ankh.Commands
 
         public override void OnExecute(CommandEventArgs e)
         {
+            List<SvnOrigin> targets = new List<SvnOrigin>();
+            SvnRevision startRev = SvnRevision.Zero;
+            SvnRevision endRev = null;
             switch (e.Command)
             {
                 case AnkhCommand.ItemAnnotate:
-                    BlameItem(e);
+                    endRev = SvnRevision.Base;
+                    foreach (SvnItem i in e.Selection.GetSelectedSvnItems(false))
+                    {
+                        if (i.IsVersionable)
+                            targets.Add(new SvnOrigin(i));
+                    }
                     break;
                 case AnkhCommand.LogAnnotateRevision:
-                    BlameRevision(e);
+                    foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
+                    {
+                        targets.Add(logItem.Origin);
+                        endRev = logItem.Revision;
+                    }
                     break;
                 case AnkhCommand.SvnNodeAnnotate:
-                    SvnNodeBlame(e);
+                    foreach (ISvnRepositoryItem item in e.Selection.GetSelection<ISvnRepositoryItem>())
+                    {
+                        targets.Add(item.Origin);
+                        endRev = item.Revision;
+                    }
                     break;
                 case AnkhCommand.DocumentAnnotate:
-                    BlameDocument(e);
+                    targets.Add(new SvnOrigin(e.GetService<IFileStatusCache>()[e.Selection.ActiveDocumentFilename]));
+                    endRev = SvnRevision.Base;
                     break;
             }
-        }
 
-        static void SvnNodeBlame(CommandEventArgs e)
-        {
-            ISvnRepositoryItem blameSection = EnumTools.GetFirst(e.Selection.GetSelection<ISvnRepositoryItem>());
+            if (targets.Count == 0)
+                return;
 
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = blameSection.Revision;
-
-            // TODO: Confirm revisions?
-
-            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd, false, SvnIgnoreSpacing.None, false);
-        }
-
-        static void BlameRevision(CommandEventArgs e)
-        {
-            ISvnLogChangedPathItem item = null;
-            foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
-            {
-                item = logItem;
-                break;
-            }
-
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = item.Revision;
-
-            DoBlame(e, item.Origin, revisionStart, revisionEnd, false, SvnIgnoreSpacing.None, false);
-        }
-
-        static void BlameItem(CommandEventArgs e)
-        {
+            bool ignoreEols = true;
+            SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
+            bool retrieveMergeInfo = false;
             SvnOrigin target;
-            SvnRevision startRev = SvnRevision.One;
-            SvnRevision endRev = SvnRevision.Base;
-			bool ignoreEols = true;
-			SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
-			bool retrieveMergeInfo = false;
 
             if ((!e.DontPrompt && !Shift) || e.PromptUser)
                 using (AnnotateDialog dlg = new AnnotateDialog())
                 {
-                    dlg.SetTargets(e.Selection.GetSelectedSvnItems(false));
+                    dlg.SetTargets(targets);
                     dlg.StartRevision = startRev;
                     dlg.EndRevision = endRev;
 
@@ -141,10 +129,10 @@ namespace Ankh.Commands
                     target = dlg.SelectedTarget;
                     startRev = dlg.StartRevision;
                     endRev = dlg.EndRevision;
-					ignoreEols = dlg.IgnoreEols;
-					ignoreSpacing = dlg.IgnoreSpacing;
-					retrieveMergeInfo = dlg.RetrieveMergeInfo;
-				}
+                    ignoreEols = dlg.IgnoreEols;
+                    ignoreSpacing = dlg.IgnoreSpacing;
+                    retrieveMergeInfo = dlg.RetrieveMergeInfo;
+                }
             else
             {
                 SvnItem one = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
@@ -258,45 +246,6 @@ namespace Ankh.Commands
                     }
                 }
             }
-        }
-
-        static void BlameDocument(CommandEventArgs e)
-        {
-			SvnOrigin target;
-			SvnRevision startRev = SvnRevision.One;
-			SvnRevision endRev = SvnRevision.Base;
-			bool ignoreEols = true;
-			SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
-			bool retrieveMergeInfo = false;
-
-			if ((!e.DontPrompt && !Shift) || e.PromptUser)
-				using (AnnotateDialog dlg = new AnnotateDialog())
-				{
-					dlg.SetTargets(new SvnItem[] {e.Selection.ActiveDocumentItem });
-					dlg.StartRevision = startRev;
-					dlg.EndRevision = endRev;
-
-					if (dlg.ShowDialog(e.Context) != DialogResult.OK)
-						return;
-
-					target = dlg.SelectedTarget;
-					startRev = dlg.StartRevision;
-					endRev = dlg.EndRevision;
-					ignoreEols = dlg.IgnoreEols;
-					ignoreSpacing = dlg.IgnoreSpacing;
-					retrieveMergeInfo = dlg.RetrieveMergeInfo;
-				}
-			else
-			{
-				SvnItem one = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
-
-				if (one == null)
-					return;
-
-				target = new SvnOrigin(one);
-			}
-
-			DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
         }
     }
 }
