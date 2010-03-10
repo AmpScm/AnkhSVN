@@ -87,6 +87,11 @@ namespace Ankh.Selection
             get;
         }
 
+		bool IsSolutionExplorerSelection
+		{
+			get;
+		}
+
         /// <summary>
         /// Gets the current solution filename (full path)
         /// </summary>

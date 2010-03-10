@@ -172,7 +172,7 @@
                   toolTip="Associate your solution with an Issue Repository"
                   iconFile="menu/IssueRepository.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionUpdateLatest" name="UpdateLatest" priority="0x100"
-                  text="U&amp;pdate to Latest Version"
+                  text="U&amp;pdate Solution to Latest Version"
                   toolTip="Update your solution to the HEAD version"
                   iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_SolutionCommit" priority="0x1500" name="SolutionCommit" defaultInvisible="true"
@@ -237,7 +237,7 @@
       <!-- VS Predefined group for SCC commands on projects -->
       <ButtonRef id="Cmd_FileSccAddSolutionToSubversion" priority="0x1200" />
       <ButtonRef id="Cmd_FileSccAddProjectToSubversion" priority="0x1300" />
-      <Button id="Cmd_ProjectUpdateLatest" priority="0x1400" name="ProjectUpdateLatest" text="U&amp;pdate to Latest Version"
+      <Button id="Cmd_ProjectUpdateLatest" priority="0x1400" name="ProjectUpdateLatest" text="U&amp;pdate Project to Latest Version"
               iconFile="PendingChanges/Update.png" defaultInvisible="true"/>
       <Button id="Cmd_ProjectCommit" priority="0x1500" name="ProjectCommit"
               text="Comm&amp;it Project Changes" iconFile="PendingChanges/Commit.png" defaultInvisible="true"/>
@@ -427,12 +427,16 @@
                 toolTip="Refresh this view." iconFile="PendingChanges/Refresh.png"/>
         </Group>
         <Group id="Grp_SccExplore" priority="0xF000">
-          <Button id="Cmd_ItemSelectInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x200"
-                      text="Select in &amp;Working Copy Explorer" defaultInvisible="true">
+          <Button id="Cmd_ItemSelectInSolutionExplorer" name="OpenInSolutionExplorer" priority="0x100"
+                      text="Select in So&amp;lution Explorer" defaultInvisible="true">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
-          <Button id="Cmd_ItemOpenFolderInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x300"
-                      text="Open Folder in &amp;Repository Explorer" defaultInvisible="true">
+          <Button id="Cmd_ItemSelectInRepositoryExplorer" name="OpenInRepositoryExplorer" priority="0x200"
+                      text="Select in &amp;Repository Explorer" defaultInvisible="true">
+            <Visibility context="Ankh_SccProviderGuid"/>
+          </Button>
+          <Button id="Cmd_ItemSelectInWorkingCopyExplorer" name="OpenInWorkingCopyExplorer" priority="0x300"
+                      text="Select in &amp;Working Copy Explorer" defaultInvisible="true">
             <Visibility context="Ankh_SccProviderGuid"/>
           </Button>
         </Group>
@@ -814,7 +818,7 @@
               <Button id="Cmd_ItemOpenSolutionExplorer" name="FindInSolutionExplorer" priority="0x200"
                   text="Select in Solution E&amp;xplorer" iconFile="PendingChanges/SolutionExplorer.png"/>
               <ButtonRef id="Cmd_ItemSelectInWorkingCopyExplorer" priority="0x300" />
-              <ButtonRef id="Cmd_ItemOpenFolderInRepositoryExplorer" priority="0x400" />
+              <ButtonRef id="Cmd_ItemSelectInRepositoryExplorer" priority="0x400" />
             </Group>
           </Menu>
           <Button id="Cmd_ItemRevertBase" name="Revert" priority="0x400" defaultDisabled="true"

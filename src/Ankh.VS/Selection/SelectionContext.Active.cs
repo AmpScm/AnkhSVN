@@ -359,6 +359,14 @@ namespace Ankh.VS.Selection
             return null;
         }
 
+        public bool IsSolutionExplorerSelection
+        {
+            get
+            {
+                return (ActiveFrame == _solutionExplorer.SolutionExplorerFrame);
+            }
+        }
+
         IVsTrackSelectionEx ISelectionContextEx.GetModalTracker(Control control)
         {
             if (_topPopup != null && (control == null || _topPopup.Contains(control)))
