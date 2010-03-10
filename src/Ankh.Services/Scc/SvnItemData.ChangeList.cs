@@ -31,7 +31,7 @@ namespace Ankh.Scc
 
             public SvnChangeList(string list)
             {
-                if (string.IsNullOrEmpty(list))
+                if (list == null)
                     throw new ArgumentNullException("list");
 
                 _list = list;
@@ -74,7 +74,7 @@ namespace Ankh.Scc
 
             public static implicit operator SvnChangeList(string list)
             {
-                if (string.IsNullOrEmpty(list))
+                if (list == null)
                     return null;
                 return new SvnChangeList(list);
             }
