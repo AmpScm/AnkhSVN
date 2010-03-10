@@ -25,6 +25,7 @@ using Ankh.UI.Annotate;
 using Ankh.VS;
 using SharpSvn;
 using System.Collections.Generic;
+using Ankh.UI.Commands;
 
 namespace Ankh.Commands
 {
@@ -65,7 +66,7 @@ namespace Ankh.Commands
                         return;
                     }
 
-                    if(!EnumTools.IsEmpty(e.Selection.GetSelection<ISvnLogChangedPathItem>()))
+                    if (!EnumTools.IsEmpty(e.Selection.GetSelection<ISvnLogChangedPathItem>()))
                         return;
                     break;
             }
@@ -100,18 +101,14 @@ namespace Ankh.Commands
 
             // TODO: Confirm revisions?
 
-            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd);
+            DoBlame(e, blameSection.Origin, revisionStart, revisionEnd, false, SvnIgnoreSpacing.None, false);
         }
 
         static void BlameRevision(CommandEventArgs e)
         {
-            HybridCollection<string> changedPaths = new HybridCollection<string>(StringComparer.OrdinalIgnoreCase);
-
             ISvnLogChangedPathItem item = null;
             foreach (ISvnLogChangedPathItem logItem in e.Selection.GetSelection<ISvnLogChangedPathItem>())
             {
-                if (!changedPaths.Contains(logItem.Path))
-                    changedPaths.Add(logItem.Path);
                 item = logItem;
                 break;
             }
@@ -119,59 +116,49 @@ namespace Ankh.Commands
             SvnRevision revisionStart = SvnRevision.Zero;
             SvnRevision revisionEnd = item.Revision;
 
-            DoBlame(e, item.Origin, revisionStart, revisionEnd);
+            DoBlame(e, item.Origin, revisionStart, revisionEnd, false, SvnIgnoreSpacing.None, false);
         }
 
         static void BlameItem(CommandEventArgs e)
         {
-            IUIShell uiShell = e.GetService<IUIShell>();
+            SvnOrigin target;
+            SvnRevision startRev = SvnRevision.One;
+            SvnRevision endRev = SvnRevision.Base;
+			bool ignoreEols = true;
+			SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
+			bool retrieveMergeInfo = false;
 
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = SvnRevision.Base;
+            if ((!e.DontPrompt && !Shift) || e.PromptUser)
+                using (AnnotateDialog dlg = new AnnotateDialog())
+                {
+                    dlg.SetTargets(e.Selection.GetSelectedSvnItems(false));
+                    dlg.StartRevision = startRev;
+                    dlg.EndRevision = endRev;
 
-            SvnItem firstItem = null;
-            PathSelectorResult result;
-            PathSelectorInfo info = new PathSelectorInfo("Annotate",
-                e.Selection.GetSelectedSvnItems(false));
+                    if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+                        return;
 
-            info.CheckedFilter += delegate(SvnItem item)
-            {
-                if (firstItem == null && item.IsFile)
-                    firstItem = item;
-
-                return (item == firstItem);
-            };
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
-
-            // is shift depressed?
-            if (!Shift)
-            {
-
-                info.RevisionStart = revisionStart;
-                info.RevisionEnd = revisionEnd;
-                info.EnableRecursive = false;
-                info.Depth = SvnDepth.Empty;
-                info.SingleSelection = true;
-
-                // show the selector dialog
-                result = uiShell.ShowPathSelector(info);
-            }
+                    target = dlg.SelectedTarget;
+                    startRev = dlg.StartRevision;
+                    endRev = dlg.EndRevision;
+					ignoreEols = dlg.IgnoreEols;
+					ignoreSpacing = dlg.IgnoreSpacing;
+					retrieveMergeInfo = dlg.RetrieveMergeInfo;
+				}
             else
             {
-                result = info.DefaultResult;
+                SvnItem one = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
+
+                if (one == null)
+                    return;
+
+                target = new SvnOrigin(one);
             }
 
-            if (!result.Succeeded)
-                return;
-
-            SvnItem blameItem = null;
-            foreach (SvnItem i in result.Selection)
-                blameItem = i;
-
-            DoBlame(e, new SvnOrigin(blameItem), result.RevisionStart, result.RevisionEnd);
+            DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
         }
 
-        static void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd)
+        static void DoBlame(CommandEventArgs e, SvnOrigin item, SvnRevision revisionStart, SvnRevision revisionEnd, bool ignoreEols, SvnIgnoreSpacing ignoreSpacing, bool retrieveMergeInfo)
         {
             SvnWriteArgs wa = new SvnWriteArgs();
             wa.Revision = revisionEnd;
@@ -179,6 +166,9 @@ namespace Ankh.Commands
             SvnBlameArgs ba = new SvnBlameArgs();
             ba.Start = revisionStart;
             ba.End = revisionEnd;
+            ba.IgnoreLineEndings = ignoreEols;
+            ba.IgnoreSpacing = ignoreSpacing;
+            ba.RetrieveMergedRevisions = retrieveMergeInfo;
 
             SvnTarget target = item.Target;
 
@@ -207,13 +197,13 @@ namespace Ankh.Commands
 
                 ba.SvnError +=
                     delegate(object errorSender, SvnErrorEventArgs errorEventArgs)
+                    {
+                        if (errorEventArgs.Exception is SvnClientBinaryFileException)
                         {
-                            if (errorEventArgs.Exception is SvnClientBinaryFileException)
-                            {
-                                retry = true;
-                                errorEventArgs.Cancel = true;
-                            }
-                        };
+                            retry = true;
+                            errorEventArgs.Cancel = true;
+                        }
+                    };
                 ee.Client.GetBlame(target, ba, out blameResult);
             });
 
@@ -229,10 +219,10 @@ namespace Ankh.Commands
                         r = e.GetService<IProgressRunner>()
                             .RunModal(CommandStrings.Annotating,
                                       delegate(object sender, ProgressWorkerArgs ee)
-                                          {
-                                              ba.IgnoreMimeType = true;
-                                              ee.Client.GetBlame(target, ba, out blameResult);
-                                          });
+                                      {
+                                          ba.IgnoreMimeType = true;
+                                          ee.Client.GetBlame(target, ba, out blameResult);
+                                      });
                     }
                 }
             }
@@ -240,8 +230,8 @@ namespace Ankh.Commands
             if (!r.Succeeded)
                 return;
 
-            AnnotateEditorControl annEditor = new AnnotateEditorControl();           
-            IAnkhEditorResolver er = e.GetService<IAnkhEditorResolver>();            
+            AnnotateEditorControl annEditor = new AnnotateEditorControl();
+            IAnkhEditorResolver er = e.GetService<IAnkhEditorResolver>();
 
             annEditor.Create(e.Context, tempFile);
             annEditor.LoadFile(tempFile);
@@ -260,7 +250,7 @@ namespace Ankh.Commands
                 string line = blameResult[0].Line.Trim();
 
                 if (line.StartsWith("<?xml")
-                    || (line.StartsWith("<") && line.Contains("xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\"")))
+                    || (line.StartsWith("<") && line.Contains("xmlns=\"http://schemas.microsoft.com/developer/msbuild/")))
                 {
                     if (er.TryGetLanguageService(".xml", out language))
                     {
@@ -272,51 +262,41 @@ namespace Ankh.Commands
 
         static void BlameDocument(CommandEventArgs e)
         {
-            IUIShell uiShell = e.GetService<IUIShell>();
+			SvnOrigin target;
+			SvnRevision startRev = SvnRevision.One;
+			SvnRevision endRev = SvnRevision.Base;
+			bool ignoreEols = true;
+			SvnIgnoreSpacing ignoreSpacing = SvnIgnoreSpacing.IgnoreSpace;
+			bool retrieveMergeInfo = false;
 
-            SvnRevision revisionStart = SvnRevision.Zero;
-            SvnRevision revisionEnd = SvnRevision.Base;
+			if ((!e.DontPrompt && !Shift) || e.PromptUser)
+				using (AnnotateDialog dlg = new AnnotateDialog())
+				{
+					dlg.SetTargets(new SvnItem[] {e.Selection.ActiveDocumentItem });
+					dlg.StartRevision = startRev;
+					dlg.EndRevision = endRev;
 
-            SvnItem firstItem = null;
-            PathSelectorResult result;
-            PathSelectorInfo info = new PathSelectorInfo("Annotate",
-                new SvnItem[] { e.Selection.ActiveDocumentItem });
+					if (dlg.ShowDialog(e.Context) != DialogResult.OK)
+						return;
 
-            info.CheckedFilter += delegate(SvnItem item)
-            {
-                if (firstItem == null && item.IsFile)
-                    firstItem = item;
+					target = dlg.SelectedTarget;
+					startRev = dlg.StartRevision;
+					endRev = dlg.EndRevision;
+					ignoreEols = dlg.IgnoreEols;
+					ignoreSpacing = dlg.IgnoreSpacing;
+					retrieveMergeInfo = dlg.RetrieveMergeInfo;
+				}
+			else
+			{
+				SvnItem one = EnumTools.GetFirst(e.Selection.GetSelectedSvnItems(false));
 
-                return (item == firstItem);
-            };
-            info.VisibleFilter += delegate(SvnItem item) { return item.IsVersioned && item.IsFile; };
+				if (one == null)
+					return;
 
-            // is shift depressed?
-            if (!Shift)
-            {
+				target = new SvnOrigin(one);
+			}
 
-                info.RevisionStart = revisionStart;
-                info.RevisionEnd = revisionEnd;
-                info.EnableRecursive = false;
-                info.Depth = SvnDepth.Empty;
-                info.SingleSelection = true;
-
-                // show the selector dialog
-                result = uiShell.ShowPathSelector(info);
-            }
-            else
-            {
-                result = info.DefaultResult;
-            }
-
-            if (!result.Succeeded)
-                return;
-
-            SvnItem blameItem = null;
-            foreach (SvnItem i in result.Selection)
-                blameItem = i;
-
-            DoBlame(e, new SvnOrigin(blameItem), result.RevisionStart, result.RevisionEnd);
+			DoBlame(e, target, startRev, endRev, ignoreEols, ignoreSpacing, retrieveMergeInfo);
         }
     }
 }
