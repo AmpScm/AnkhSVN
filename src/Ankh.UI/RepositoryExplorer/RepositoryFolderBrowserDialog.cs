@@ -41,6 +41,12 @@ namespace Ankh.UI.RepositoryExplorer
                 reposBrowser.Context = Context;
         }
 
+        public bool ShowFiles
+        {
+            get { return reposBrowser.ShowFiles; }
+            set { reposBrowser.ShowFiles = value; }
+        }
+
         public Uri SelectedUri
         {
             get

@@ -123,14 +123,19 @@ namespace Ankh.UI.RepositoryExplorer
             get { return (RepositoryTreeView)base.TreeView; }
         }
 
-        internal void AddDummy()
+        internal void Preload(SvnNodeKind kind)
         {
-            if (Nodes.Count == 0 && _dummy == null)
-            {
-                _dummy = new RepositoryTreeNode(RawUri, true);
-                _dummy.Name = _dummy.Text = "<dummy>";
-                Nodes.Add(_dummy);
-            }
+			if (kind == SvnNodeKind.Directory)
+			{
+				if (Nodes.Count == 0 && _dummy == null)
+				{
+					_dummy = new RepositoryTreeNode(RawUri, true);
+					_dummy.Name = _dummy.Text = "<dummy>";
+					Nodes.Add(_dummy);
+				}
+			}
+			else
+				_loaded = true;
         }
 
         internal bool ExpandAfterLoad
