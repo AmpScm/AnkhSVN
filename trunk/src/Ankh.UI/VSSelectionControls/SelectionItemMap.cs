@@ -54,7 +54,7 @@ namespace Ankh.UI.VSSelectionControls
     }
 
     public class SelectionItemMap : IVsHierarchy, IVsMultiItemSelect, ISelectionContainer
-    {        
+    {
         protected abstract class MapData
         {
             internal MapData()
@@ -108,12 +108,12 @@ namespace Ankh.UI.VSSelectionControls
                 _owner = owner;
                 _owner.SelectionChanged += new EventHandler(OwnerSelectionChanged);
                 _owner.HandleDestroyed += new EventHandler(OwnerHandleDestroyed);
-            }            
+            }
 
             public uint GetId(T item)
             {
-				if (item == null)
-					throw new ArgumentNullException("item");
+                if (item == null)
+                    throw new ArgumentNullException("item");
 
                 uint id;
                 if (_items.TryGetValue(item, out id))
@@ -265,7 +265,7 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_Root:
                         pvar = VSConstants.VSITEMID_ROOT;
                         break;
-                    case __VSHPROPID.VSHPROPID_TypeGuid:                    
+                    case __VSHPROPID.VSHPROPID_TypeGuid:
                         pvar = typeof(SelectionItemMap).GUID;
                         break;
                     case __VSHPROPID.VSHPROPID_CmdUIGuid:
@@ -274,24 +274,25 @@ namespace Ankh.UI.VSSelectionControls
                     case __VSHPROPID.VSHPROPID_Caption:
                     case __VSHPROPID.VSHPROPID_Name:
                     case __VSHPROPID.VSHPROPID_TypeName:
-						if (lv != null)
-							pvar = _owner.GetText(lv);
-						else
-							pvar = ".";
+                        if (lv != null)
+                            pvar = _owner.GetText(lv);
+                        else
+                            pvar = ".";
                         break;
                     case __VSHPROPID.VSHPROPID_IconImgList:
                         pvar = (int)_owner.GetImageList();
                         break;
                     case __VSHPROPID.VSHPROPID_IconIndex:
-						if(lv != null)
-							pvar = _owner.GetImageListIndex(lv);
-						else
-							pvar = -1;
+                        if (lv != null)
+                            pvar = _owner.GetImageListIndex(lv);
+                        else
+                            pvar = -1;
                         break;
                     case __VSHPROPID.VSHPROPID_Expandable:
                     case __VSHPROPID.VSHPROPID_Expanded:
                     case __VSHPROPID.VSHPROPID_ExpandByDefault:
                     case __VSHPROPID.VSHPROPID_HasEnumerationSideEffects:
+                    case (__VSHPROPID)__VSHPROPID2.VSHPROPID_Container:
                         pvar = false;
                         break;
                     case __VSHPROPID.VSHPROPID_StateIconIndex:
@@ -334,7 +335,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             _data = mapData;
             _data.HandleDestroyed += new EventHandler(OnDataHandleDestroyed);
-        }        
+        }
 
         public static SelectionItemMap Create<T>(ISelectionMapOwner<T> owner)
             where T : class
@@ -349,7 +350,7 @@ namespace Ankh.UI.VSSelectionControls
             where T : class
         {
             return new MapData<T>(owner);
-        }        
+        }
 
         int IVsHierarchy.AdviseHierarchyEvents(IVsHierarchyEvents pEventSink, out uint pdwCookie)
         {
@@ -370,7 +371,7 @@ namespace Ankh.UI.VSSelectionControls
         {
             string name = _data.GetCanonicalName(itemid);
 
-            if(name == null)
+            if (name == null)
                 pbstrName = "{" + itemid + "}";
             else
                 pbstrName = name;
@@ -521,31 +522,31 @@ namespace Ankh.UI.VSSelectionControls
                 return VSConstants.E_POINTER;
 
             IList src;
-            if (dwFlags == (uint)Constants.GETOBJS_ALL )
+            if (dwFlags == (uint)Constants.GETOBJS_ALL)
                 src = AllIsSelected ? _data.Selection : _data.AllItems;
             else if (dwFlags == (uint)Constants.GETOBJS_SELECTED)
                 src = _data.Selection;
             else
                 return VSConstants.E_FAIL;
 
-            if(src == null || cObjects > src.Count)
+            if (src == null || cObjects > src.Count)
                 return VSConstants.E_FAIL;
 
-            if(_sel == null && src == _data.Selection)
+            if (_sel == null && src == _data.Selection)
             {
-                if(_ht == null)
+                if (_ht == null)
                     _ht = new Hashtable();
 
                 // Create cache of wrapper objects
                 object[] from = new object[src.Count];
-                _sel = new object[src.Count];                
+                _sel = new object[src.Count];
 
                 src.CopyTo(from, 0);
 
                 for (int i = 0; i < from.Length; i++)
                 {
                     object s = from[i];
-                    
+
                     _sel[i] = _ht[s] ?? _data.GetSelectionObject(s);
                 }
                 _ht.Clear();
@@ -554,7 +555,7 @@ namespace Ankh.UI.VSSelectionControls
                     _ht[from[i]] = _sel[i];
             }
 
-            if(_sel != null && src == _data.Selection)
+            if (_sel != null && src == _data.Selection)
             {
                 Array.Copy(_sel, apUnkObjects, cObjects);
 
@@ -573,14 +574,14 @@ namespace Ankh.UI.VSSelectionControls
         {
             object[] items = _data.CreateArray((int)cSelect);
 
-            if(cSelect > 0 && apUnkSelect == null)
+            if (cSelect > 0 && apUnkSelect == null)
                 return VSConstants.E_POINTER;
 
-            for(int i = 0; i < cSelect; i++)
+            for (int i = 0; i < cSelect; i++)
                 items[i] = _data.GetRealObject(apUnkSelect[i]);
 
             _data.SetSelection(items);
-                
+
             return VSConstants.S_OK; // E_NOTIMPL kills VS from the property explorer
         }
 
@@ -609,15 +610,15 @@ namespace Ankh.UI.VSSelectionControls
                 IntPtr h = _selHandle;
                 _selHandle = IntPtr.Zero;
                 Marshal.Release(h);
-            }            
+            }
         }
 
         IAnkhServiceProvider _context;
         public IAnkhServiceProvider Context
         {
             get { return _context; }
-            set 
-            { 
+            set
+            {
                 _context = value;
                 _tracker = null;
                 GC.KeepAlive(Tracker);
@@ -701,22 +702,22 @@ namespace Ankh.UI.VSSelectionControls
             uint itemid;
             IVsMultiItemSelect ms;
             IntPtr ppSc;
-            if(!ErrorHandler.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
+            if (!ErrorHandler.Succeeded(Tracker.GetCurrentSelection(out ppHier, out itemid, out ms, out ppSc)))
                 return;
-            
-            if(ppHier != IntPtr.Zero)
+
+            if (ppHier != IntPtr.Zero)
                 Marshal.Release(ppHier);
 
-            if(ppSc != IntPtr.Zero)
+            if (ppSc != IntPtr.Zero)
             {
                 object me = Marshal.GetObjectForIUnknown(ppSc);
                 Marshal.Release(ppSc);
 
-                if(me == this)
-                    return; 
+                if (me == this)
+                    return;
             }
 
-            NotifySelectionUpdated();            
+            NotifySelectionUpdated();
         }
 
         [CLSCompliant(false)]
