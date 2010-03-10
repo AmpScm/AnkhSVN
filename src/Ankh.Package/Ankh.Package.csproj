@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -152,6 +152,8 @@
     <Compile Include="OptionPages\EnvironmentSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="OptionPages\IssueTrackerPage.cs" />
+    <Compile Include="OptionPages\SolutionSettingsPage.cs" />
     <Compile Include="OptionPages\UserToolsSettingsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -212,6 +214,7 @@
     <Content Include="Gui\PendingChanges\AddToSourceControl.ico" />
     <Content Include="Gui\PendingChanges\Annotate.png" />
     <Content Include="Gui\PendingChanges\ApplyPatch.png" />
+    <Content Include="Gui\PendingChanges\Blank.png" />
     <Content Include="Gui\PendingChanges\Branch.png" />
     <Content Include="Gui\PendingChanges\BrowseRefresh.png" />
     <Content Include="Gui\PendingChanges\BrowseUp.png" />
@@ -220,7 +223,6 @@
     <Content Include="Gui\PendingChanges\CleanUp.png" />
     <Content Include="Gui\PendingChanges\Commit.png" />
     <Content Include="Gui\PendingChanges\Compare.png" />
-    <Content Include="Gui\PendingChanges\ConflictResolved.png" />
     <Content Include="Gui\PendingChanges\CopyTo.png" />
     <Content Include="Gui\PendingChanges\CreatePatch.png" />
     <Content Include="Gui\PendingChanges\Delete.png" />
