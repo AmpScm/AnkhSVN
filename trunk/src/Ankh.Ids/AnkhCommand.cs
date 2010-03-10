@@ -125,10 +125,9 @@ namespace Ankh
         ViewInWindows,
         SolutionBranch,
 
-        ItemOpenFolderInRepositoryExplorer,
+        ItemSelectInRepositoryExplorer,
         ItemSelectInWorkingCopyExplorer,
-
-        PendingChangesSpacer, // Whitespace command to move all buttons a bit
+        ItemSelectInSolutionExplorer,
 
         CommitPendingChanges,
         CommitPendingChangesKeepingLocks,
@@ -173,7 +172,7 @@ namespace Ankh
         ItemOpenInRepositoryExplorer, // Unused
 
         ItemRevertBase,
-        ItemRevertSpecific, // Unused
+        PendingChangesSpacer, // Whitespace command to move all buttons a bit
 
         ItemIgnoreFile,
         ItemIgnoreFileType,
