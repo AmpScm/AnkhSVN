@@ -39,7 +39,7 @@ namespace Ankh.UI.PathSelector
         public VersionSelector()
         {
             // This call is required by the Windows.Forms Form Designer.
-            InitializeComponent();       
+            InitializeComponent();
         }
 
         /// <summary>
@@ -64,16 +64,16 @@ namespace Ankh.UI.PathSelector
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IAnkhServiceProvider Context
         {
-            get { return _context; }
-            set 
-            { 
+            get { return _context ?? ((Context = this.ParentForm as IAnkhServiceProvider)); }
+            set
+            {
                 bool set = (_context == null);
                 _context = value;
 
                 if (value != null && set && _newValue != null)
                 {
                     EnsureList();
-                    Revision = _newValue;                    
+                    Revision = _newValue;
                 }
             }
         }
@@ -141,13 +141,26 @@ namespace Ankh.UI.PathSelector
         bool _ensured;
         private void EnsureList()
         {
-            if (_ensured || RevisionResolver == null || SvnOrigin == null)
+            if (RevisionResolver == null || SvnOrigin == null)
                 return;
+
+            foreach (AnkhRevisionType ri in new ArrayList(typeCombo.Items))
+            {
+                if (!ri.IsValidOn(SvnOrigin))
+                {
+                    if (ri == _currentRevType)
+                    {
+                        _newValue = ri.CurrentValue;
+                        _currentRevType = null;
+                    }
+                    typeCombo.Items.Remove(ri);
+                }
+            }
 
             if (_revTypes != null)
                 foreach (AnkhRevisionType rt in _revTypes)
                 {
-                    if (rt.IsValidOn(SvnOrigin))
+                    if (rt.IsValidOn(SvnOrigin) && !typeCombo.Items.Contains(rt))
                         typeCombo.Items.Add(rt);
                 }
             else
@@ -162,10 +175,24 @@ namespace Ankh.UI.PathSelector
                 typeCombo.Items.Add(rt);
             }
 
-            if(_currentRevType != null)
-                typeCombo.SelectedItem = _currentRevType;
+            if (_currentRevType == null && _newValue != null && _newValue != SvnRevision.None)
+            {
+                _currentRevType = RevisionResolver.Resolve(SvnOrigin, _newValue);
+
+                if (_currentRevType != null && !_currentRevType.IsValidOn(SvnOrigin))
+                {
+                    _newValue = SvnOrigin.Target.Revision;
+                    if (_newValue == null || _newValue == SvnRevision.None)
+                        _newValue = (SvnOrigin.Target is SvnUriTarget) ? SvnRevision.Head : SvnRevision.Base;
+
+                    _currentRevType = RevisionResolver.Resolve(SvnOrigin, _newValue);
+                }
+            }
 
             _ensured = true;
+
+            if (_currentRevType != typeCombo.SelectedItem)
+                typeCombo.SelectedItem = _currentRevType;
         }
 
         void SetRevision(AnkhRevisionType rev)
@@ -196,7 +223,7 @@ namespace Ankh.UI.PathSelector
                 if (rev.CurrentControl == null)
                     rev.InstantiateUIIn(versionTypePanel, EventArgs.Empty);
 
-                rev.CurrentControl.Visible = rev.CurrentControl.Enabled = true;                    
+                rev.CurrentControl.Visible = rev.CurrentControl.Enabled = true;
             }
 
             typeCombo.SelectedItem = _currentRevType;
