@@ -100,23 +100,24 @@ namespace Ankh.Commands
                 foreach (SvnProject p in projects)
                 {
                     foundOne = true;
-                    if (scc.IsProjectManaged(p))
-                        continue; // Something to enable
 
                     ISvnProjectInfo pi = pfm.GetProjectInfo(p);
 
                     if (pi == null || !pi.IsSccBindable)
                         continue; // Not an SCC project
 
-                    if (pi.ProjectDirectory != null && !cache[pi.ProjectDirectory].IsVersionable)
-                    {
-                        string file = pi.ProjectFile;
+                    // A project is managed if the file says its managed
+                    // and the project dir is managed
+                    if (pi.ProjectDirectory != null && cache[pi.ProjectDirectory].IsVersioned
+                        && scc.IsProjectManaged(p))
+                        continue; // Nothing to do here
 
-                        if (n > 1 && file != null && cache[file].IsIgnored)
-                            e.HideOnContextMenu = true;
+                    string projectFile = pi.ProjectFile;
 
-                        return;
-                    }
+                    if (n > 1 && projectFile != null && cache[projectFile].IsIgnored)
+                        e.HideOnContextMenu = true;
+
+                    return;
                 }
                 n++;
                 if (foundOne)
