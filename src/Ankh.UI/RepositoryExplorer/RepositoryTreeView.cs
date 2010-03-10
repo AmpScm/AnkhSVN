@@ -238,11 +238,6 @@ namespace Ankh.UI.RepositoryExplorer
             return null;
         }
 
-        int FolderIndex
-        {
-            get { return IconMapper.DirectoryIcon; }
-        }
-
         readonly Dictionary<Uri, RepositoryTreeNode> _nodeMap = new Dictionary<Uri, RepositoryTreeNode>();
 
         public void BrowseRoot(RepositoryTreeNode parent, Uri uri)
@@ -596,6 +591,13 @@ namespace Ankh.UI.RepositoryExplorer
             return rtn;
         }
 
+        bool _showFiles;
+        public bool ShowFiles
+        {
+            get { return _showFiles; }
+            set { _showFiles = value; }
+        }
+
         private void AddItem(ISvnRepositoryListItem item, Uri repositoryRoot)
         {
             if (item == null)
@@ -605,12 +607,12 @@ namespace Ankh.UI.RepositoryExplorer
 
             Uri folderUri;
 
-            if (item.Entry.NodeKind == SvnNodeKind.File)
+            if (item.Entry.NodeKind == SvnNodeKind.File && !ShowFiles)
                 folderUri = new Uri(uri, "./");
             else
                 folderUri = uri;
 
-            RepositoryTreeNode s = EnsureFolderUri(folderUri, repositoryRoot);
+            RepositoryTreeNode s = EnsureNodeUri(folderUri, repositoryRoot, ShowFiles ? item.Entry.NodeKind : SvnNodeKind.Directory);
 
             if (s != null)
             {
@@ -638,44 +640,49 @@ namespace Ankh.UI.RepositoryExplorer
             }
         }
 
-        private RepositoryTreeNode EnsureFolderUri(Uri uri, Uri repositoryUri)
+        private RepositoryTreeNode EnsureNodeUri(Uri uri, Uri repositoryUri, SvnNodeKind kind)
         {
             Uri nUri = SvnTools.GetNormalizedUri(uri);
             RepositoryTreeNode tn;
 
             if (!_nodeMap.TryGetValue(nUri, out tn))
             {
-                Uri parentUri = new Uri(uri, "../");
+                Uri parentUri = new Uri(uri, kind == SvnNodeKind.Directory ? "../" : "./");
 
                 if (parentUri == uri)
                     return null;
 
-                RepositoryTreeNode parent = EnsureFolderUri(parentUri, repositoryUri);
+                RepositoryTreeNode parent = EnsureNodeUri(parentUri, repositoryUri, SvnNodeKind.Directory);
 
                 if (parent != null)
                 {
                     tn = new RepositoryTreeNode(new SvnOrigin(uri, repositoryUri));
                     string name = uri.ToString();
-                    int nS = name.LastIndexOf('/', name.Length - 2);
 
-                    if (nS >= 0)
-                        tn.Text = name.Substring(nS + 1, name.Length - nS - 2);
-                    else
-                        tn.Text = name;
-
-                    tn.Text = Uri.UnescapeDataString(tn.Text); // Unescape special characters like '#' and ' '
+                    tn.Text = tn.Origin.Target.FileName;
 
                     if (IconMapper != null)
-                        tn.IconIndex = IconMapper.DirectoryIcon;
+                    {
+                        if (kind == SvnNodeKind.Directory)
+                            tn.IconIndex = IconMapper.DirectoryIcon;
+                        else
+                            tn.IconIndex = IconMapper.GetIconForExtension(Path.GetExtension(name));
+                    }
 
                     _nodeMap.Add(nUri, tn);
 
-                    tn.AddDummy();
+                    tn.Preload(kind);
 
                     SortedAddNode(parent.Nodes, tn);
 
                     if (!parent.IsExpanded && IsLoading(nUri))
+                    {
                         parent.LoadExpand();
+
+                        tn.EnsureVisible();
+                    }
+                    else if (IsLoading(nUri))
+                        tn.EnsureVisible();
                 }
             }
 
