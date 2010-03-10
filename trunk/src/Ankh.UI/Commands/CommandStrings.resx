@@ -123,4 +123,13 @@
   <data name="EnterValidUrl" xml:space="preserve">
     <value>Enter a valid url (like 'http://myserver/svn/repos/path')</value>
   </data>
+  <data name="WhitespaceCompare" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="WhitespaceIgnoreAllWhitespace" xml:space="preserve">
+    <value>Ignore all Whitespace</value>
+  </data>
+  <data name="WhitespaceIgnoreChanges" xml:space="preserve">
+    <value>Ignore Changes</value>
+  </data>
 </root>
