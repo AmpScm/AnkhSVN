@@ -146,7 +146,6 @@ namespace Ankh.UI.IssueTracker
                     && _connector is DummyConnector;
 
                 UpdatePageFor(_connector);
-
             }
             finally
             {
@@ -190,9 +189,9 @@ namespace Ankh.UI.IssueTracker
 
             configPagePanel.Controls.Add(newControl);
 
-            BeginInvoke((DoSomething)delegate()
+            if (_configPage != null && needsCurrentSettings)
             {
-                if (needsCurrentSettings)
+                BeginInvoke((DoSomething)delegate()
                 {
                     IssueRepositorySettings currentSettings = CurrentSolutionSettings;
                     if (currentSettings != null
@@ -200,8 +199,8 @@ namespace Ankh.UI.IssueTracker
                     {
                         _configPage.Settings = currentSettings;
                     }
-                }
-            });
+                });
+            }
         }
 
         private IssueRepositoryConfigurationPage GetConfigurationPageFor(IssueRepositoryConnector connector, ref bool needsCurrentSettings)
@@ -221,8 +220,24 @@ namespace Ankh.UI.IssueTracker
             }
             else
             {
-                // triggers connector package initialization
-                configPage = connector.ConfigurationPage;
+                Exception exception = null;
+                try
+                {
+                    // triggers connector package initialization
+                    configPage = connector.ConfigurationPage;
+                }
+                catch (Exception exc)
+                {
+                    exception = exc;
+                }
+                if (configPage == null)
+                {
+                    // use a dummy configuration page in case where connector does not provide a configuration page or
+                    // if an exception is thrown while initializing the connector.
+                    configPage = exception == null ?
+                        new DummyIssueRepositoryConfigurationPage(string.Format("'{0}' does not provide a configuration page.", connector.Name))
+                        : new DummyIssueRepositoryConfigurationPage(exception);
+                }
                 _connectorPageMap.Add(connector.Name, configPage);
                 needsCurrentSettings = true;
             }
@@ -260,7 +275,7 @@ namespace Ankh.UI.IssueTracker
                     if (handle != null
                         && handle != IntPtr.Zero)
                     {
-                        result = UserControl.FromHandle(window.Handle) as UserControl;
+                        result = Control.FromHandle(window.Handle);
                     }
                 }
             }
@@ -268,7 +283,7 @@ namespace Ankh.UI.IssueTracker
             if (result == null)
             {
                 result = new Label();
-                result.Text = "Do not associate current solution with an issue repository.";
+                result.Text = "Don't associate current solution with an issue repository.";
             }
             return result;
         }
@@ -278,6 +293,8 @@ namespace Ankh.UI.IssueTracker
         /// </summary>
         private class DummyConnector : IssueRepositoryConnector
         {
+            IssueRepositoryConfigurationPage _configPage;
+
             public override string Name
             {
                 get { return "None"; }
@@ -288,9 +305,72 @@ namespace Ankh.UI.IssueTracker
                 return null;
             }
 
+            /// <summary>
+            /// Returns an instamce of DummyIssueRepositoryConfigurationPage
+            /// </summary>
             public override IssueRepositoryConfigurationPage ConfigurationPage
             {
+                get
+                {
+                    if (_configPage == null)
+                    {
+                        System.Text.StringBuilder sb = new System.Text.StringBuilder("Don't associate this solution with an issue repository.");
+                        _configPage = new DummyIssueRepositoryConfigurationPage(sb.ToString());
+                    }
+                    return _configPage;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Dummy configuration page to be used in case of connector package initialization exceptions
+        /// </summary>
+        private class DummyIssueRepositoryConfigurationPage : IssueRepositoryConfigurationPage
+        {
+            string _message = null;
+            Exception _exception = null;
+            Control _control = null;
+
+            public DummyIssueRepositoryConfigurationPage(string message)
+                : base()
+            {
+                _message = message;
+            }
+
+            public DummyIssueRepositoryConfigurationPage(Exception exception)
+                : this(exception == null ? string.Empty : exception.Message)
+            {
+                _exception = exception;
+            }
+
+            public override IssueRepositorySettings Settings
+            {
                 get { return null; }
+                set
+                {
+                    ConfigPageEventArgs args = new ConfigPageEventArgs();
+                    args.IsComplete = false;
+                    base.ConfigurationPageChanged(args);
+                }
+            }
+
+            public override System.Windows.Forms.IWin32Window Window
+            {
+                get
+                {
+                    if (_control == null)
+                    {
+                        System.Text.StringBuilder sb = new System.Text.StringBuilder(_message);
+                        if (_exception != null)
+                        {
+                            sb.AppendLine();
+                            sb.AppendLine(_exception.StackTrace);
+                        }
+                        _control = new Label();
+                        _control.Text = sb.ToString();
+                    }
+                    return _control;
+                }
             }
         }
     }
