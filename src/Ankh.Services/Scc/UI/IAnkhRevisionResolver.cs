@@ -163,7 +163,7 @@ namespace Ankh.Scc.UI
         /// <returns>
         /// 	<c>true</c> if [is valid on] [the specified SVN origin]; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool IsValidOn(SvnOrigin SvnOrigin)
+        public virtual bool IsValidOn(SvnOrigin origin)
         {
             return true;
         }
