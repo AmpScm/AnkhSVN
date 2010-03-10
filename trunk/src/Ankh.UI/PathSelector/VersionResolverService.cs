@@ -244,6 +244,20 @@ namespace Ankh.UI.PathSelector
                         return _rev.RevisionType.ToString();
                     }
                 }
+
+                public override bool IsValidOn(SvnOrigin origin)
+                {
+                    switch (_rev.RevisionType)
+                    {
+                        case SvnRevisionType.Base:
+                        case SvnRevisionType.Committed:
+                        case SvnRevisionType.Previous:
+                        case SvnRevisionType.Working:
+                            return origin.Target is SvnPathTarget;
+                        default:
+                            return base.IsValidOn(origin);
+                    }
+                }
             }
         }
         sealed class DateRevisionType : AnkhRevisionType
@@ -307,7 +321,7 @@ namespace Ankh.UI.PathSelector
 
             void OnSelChanged(object sender, EventArgs e)
             {
-                if(_sel != null)
+                if (_sel != null)
                     _date = _sel.Value;
             }
 

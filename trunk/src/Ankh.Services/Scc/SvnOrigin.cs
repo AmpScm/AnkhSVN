@@ -19,13 +19,14 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace Ankh.Scc
 {
     /// <summary>
     /// Container of a <see cref="SvnTarget"/>, its repository Uri and its repository root.
     /// </summary>
-    public class SvnOrigin : IEquatable<SvnOrigin>
+    public class SvnOrigin : IEquatable<SvnOrigin>, IFormattable
     {
         readonly SvnTarget _target;
         readonly Uri _uri;
@@ -271,5 +272,32 @@ namespace Ankh.Scc
                 return SvnTools.GetNormalizedUri(RepositoryRoot) == SvnTools.GetNormalizedUri(Uri);
             }
         }
+
+        #region IFormattable Members
+
+        public override string ToString()
+        {
+            return ToString("", CultureInfo.CurrentCulture);
+        }
+
+        public string ToString(string format, IFormatProvider formatProvider)
+        {
+            if (string.IsNullOrEmpty(format))
+                return Target.ToString();
+
+            switch (format)
+            {
+                case "t":
+                    return Target.ToString();
+                case "f":
+                    return Target.FileName;
+                case "s":
+                    return Target.FileName + " (" + Target.ToString() + ")";
+                default:
+                    return Target.ToString();
+            }
+        }
+
+        #endregion
     }
 }
