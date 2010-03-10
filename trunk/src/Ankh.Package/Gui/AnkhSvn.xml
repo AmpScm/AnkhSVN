@@ -678,7 +678,7 @@
             type="Context" priority="0" notInTBList="true">
         <Group id="Grp_LogChangedPathsContextMenu" priority="0x100">
           <Button id="Cmd_LogAnnotateRevision" name="LogAnnotateRevision" priority="0x300"
-                  text="Annotate revision" iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
+                  text="&amp;Annotate Revision..." iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_LogShowChanges" priority="0x400" />
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>
@@ -697,7 +697,7 @@
           <Button id="Cmd_RepositoryShowChanges" priority="0x300" name="RepositoryShowChanges"
                   text="Show &amp;Changes"
                   iconFile="PendingChanges/Compare.png" dynamicVisibility="true" />
-          <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate"
+          <Button id="Cmd_SvnNodeAnnotate" priority="0x400" name="SvnNodeAnnotate" text="&amp;Annotate..."
                   iconFile="PendingChanges/Annotate.png" dynamicVisibility="true"/>
           <ButtonRef id="Cmd_CopyToWorkingCopy" priority="0x800" />
         </Group>

@@ -177,16 +177,18 @@ namespace Ankh.UI.PathSelector
 
             if (_currentRevType == null && _newValue != null && _newValue != SvnRevision.None)
             {
-                _currentRevType = RevisionResolver.Resolve(SvnOrigin, _newValue);
+                AnkhRevisionType rt = RevisionResolver.Resolve(SvnOrigin, _newValue);
 
-                if (_currentRevType != null && !_currentRevType.IsValidOn(SvnOrigin))
+                if (rt != null && !rt.IsValidOn(SvnOrigin))
                 {
                     _newValue = SvnOrigin.Target.Revision;
                     if (_newValue == null || _newValue == SvnRevision.None)
                         _newValue = (SvnOrigin.Target is SvnUriTarget) ? SvnRevision.Head : SvnRevision.Base;
 
-                    _currentRevType = RevisionResolver.Resolve(SvnOrigin, _newValue);
+                    rt = RevisionResolver.Resolve(SvnOrigin, _newValue);
                 }
+
+                SetRevision(rt);
             }
 
             _ensured = true;
@@ -197,7 +199,9 @@ namespace Ankh.UI.PathSelector
 
         void SetRevision(AnkhRevisionType rev)
         {
-            if (rev == _currentRevType)
+            if (rev == null && _currentRevType == null)
+                return;
+            else if (rev != null && _currentRevType != null && rev.Equals(_currentRevType))
                 return;
 
             if (_revTypes == null)
@@ -209,6 +213,8 @@ namespace Ankh.UI.PathSelector
             if (rev != null && !_revTypes.Contains(rev))
                 _revTypes.Add(rev);
 
+            _currentRevType = rev;
+
             EnsureList();
 
             foreach (Control c in versionTypePanel.Controls)
@@ -216,7 +222,7 @@ namespace Ankh.UI.PathSelector
                 c.Enabled = c.Visible = false;
             }
 
-            _currentRevType = rev;
+
 
             if (rev.HasUI)
             {
