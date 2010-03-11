@@ -71,7 +71,7 @@ namespace Ankh.Scc
             // If the path is the working copy root, the name doesn't matter!
 
             string dir = SvnTools.GetNormalizedDirectoryName(path);
-            
+
             using (SvnWorkingCopyClient wcc = GetService<ISvnClientPool>().GetWcClient())
             {
                 SvnWorkingCopyEntryEventArgs entry = null;
@@ -213,37 +213,58 @@ namespace Ankh.Scc
         {
             if (files == null)
                 throw new ArgumentNullException("files");
-            else if(string.IsNullOrEmpty(toDir))
+            else if (string.IsNullOrEmpty(toDir))
                 throw new ArgumentNullException("toDir");
 
             List<string> from = new List<string>(files.Values);
+            List<string> tryMove = new List<string>();
 
-            foreach(string f in from)
-                if(!File.Exists(f))
-                    throw new InvalidOperationException();
+            foreach (string f in from)
+            {
+                if (!File.Exists(f))
+                    tryMove.Add(f);
+            }
 
             using (MarkIgnoreFiles(files.Keys))
+            using (MarkIgnoreFiles(tryMove))
+            using (TempRevertForCopy(tryMove))
             {
                 List<string> setReadOnly = null;
                 using (MoveAwayFiles(files.Keys, true))
                 {
                     EnsureAdded(toDir);
 
-                    SvnCopyArgs ca = new SvnCopyArgs();
-                    ca.AlwaysCopyAsChild = false;
-                    ca.CreateParents = false; // We just did that ourselves. Use Svn for this?
-                    ca.ThrowOnError = false;
-                    ca.AlwaysCopyAsChild = true;
-
-                    List<SvnPathTarget> pt = new List<SvnPathTarget>();
-                    foreach(string f in files.Values)
-                        pt.Add(f);
-
-                    bool ok = _client.Copy(pt, toDir, ca);
-
-                    if (ok)
+                    List<SvnPathTarget> toCopy = new List<SvnPathTarget>();
+                    List<string> toMove = new List<string>();
+                    foreach (string f in files.Values)
                     {
-                        foreach (string f in files.Keys)
+                        if (tryMove.Contains(f))
+                            toMove.Add(f);
+                        else
+                            toCopy.Add(f);
+                    }
+
+                    if (toCopy.Count > 0)
+                    {
+                        SvnCopyArgs ca = new SvnCopyArgs();
+                        ca.ThrowOnError = false;
+                        ca.AlwaysCopyAsChild = true;
+
+                        _client.Copy(toCopy, toDir, ca);
+                    }
+
+                    if (toMove.Count > 0)
+                    {
+                        SvnMoveArgs ma = new SvnMoveArgs();
+                        ma.ThrowOnError = false;
+                        ma.AlwaysMoveAsChild = true;
+
+                        _client.Move(toMove, toDir, ma);
+                    }
+
+                    foreach (string f in files.Keys)
+                    {
+                        if (File.Exists(f))
                         {
                             if ((int)(File.GetAttributes(f) & FileAttributes.ReadOnly) != 0)
                             {
@@ -252,12 +273,12 @@ namespace Ankh.Scc
                             }
 
                             MaybeRevertReplaced(f);
-                        }                        
+                        }
                     }
                 }
 
-                if(setReadOnly != null)
-                    foreach(string f in setReadOnly)
+                if (setReadOnly != null)
+                    foreach (string f in setReadOnly)
                         File.SetAttributes(f, File.GetAttributes(f) | FileAttributes.ReadOnly);
             }
 
@@ -380,7 +401,7 @@ namespace Ankh.Scc
                     }
 
                     MaybeRevertReplaced(toPath);
-                }                
+                }
 
                 if (setReadOnly)
                     File.SetAttributes(toPath, File.GetAttributes(toPath) | FileAttributes.ReadOnly);
@@ -516,7 +537,7 @@ namespace Ankh.Scc
             // Now copy everything unversioned from our local backup back
             // into the new workingcopy, to be 100% sure VS finds what it expects
 
-            RecursiveCopyNotVersioned(from, to, true); 
+            RecursiveCopyNotVersioned(from, to, true);
         }
 
         public bool SafeDeleteFile(string path)
@@ -645,6 +666,43 @@ namespace Ankh.Scc
                             d.Dispose();
                         }
                     });
+            else
+                return null;
+        }
+
+        public IDisposable TempRevertForCopy(IEnumerable<string> paths)
+        {
+            if (paths == null)
+                throw new ArgumentNullException("paths");
+
+            List<string> deletePaths = new List<string>();
+            SvnRevertArgs ra = new SvnRevertArgs();
+            ra.ThrowOnError = false;
+
+            foreach (string p in paths)
+            {
+                if (_client.Revert(p, ra))
+                    deletePaths.Add(p);
+            }
+
+            if (deletePaths.Count > 0)
+            {
+                return new DelegateRunner(
+                    delegate
+                    {
+                        SvnDeleteArgs da = new SvnDeleteArgs();
+                        da.ThrowOnError = false;
+                        foreach (string p in deletePaths)
+                        {
+                            SvnItem item = StatusCache[p];
+
+                            item.MarkDirty();
+
+                            if (item.Exists && !item.IsDeleteScheduled)
+                                _client.Delete(p, da);
+                        }
+                    });
+            }
             else
                 return null;
         }
@@ -820,9 +878,9 @@ namespace Ankh.Scc
                 throw new ArgumentNullException("path");
 
             SvnItem item = StatusCache[path];
-            string file = Path.GetFileName(path);
+            string file = item.Name;
 
-            if (!item.Exists || (item.IsVersioned && item.Name == file ))
+            if (!item.Exists || item.IsVersioned)
                 return true; // Item already exists.. Fast
 
             SvnItem parent = item.Parent;
@@ -977,7 +1035,7 @@ namespace Ankh.Scc
 
             dir.Attributes = FileAttributes.Normal; // .Net fixes up FileAttributes.Directory
             dir.Delete();
-        }        
+        }
 
         static class NativeMethods
         {
@@ -986,6 +1044,6 @@ namespace Ankh.Scc
 
 
 
-        }        
+        }
     }
 }
