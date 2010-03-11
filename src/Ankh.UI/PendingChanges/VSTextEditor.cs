@@ -941,9 +941,9 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="parentHandle">Parent window handle</param>
         /// <param name="place">The place.</param>
-        /// <param name="allowModel">if set to <c>true</c> [allow model].</param>
+        /// <param name="allowModal">if set to <c>true</c> [allow modaal].</param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
-        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModel, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
+        private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModal, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
             codeWindow = CreateLocalInstance<IVsCodeWindow>(typeof(VsCodeWindowClass), _serviceProvider);
 
@@ -963,7 +963,7 @@ namespace Ankh.UI.PendingChanges
                 //(uint)TextViewInitFlags2.VIF_SUPPRESS_STATUS_BAR_UPDATE |
                 (uint)TextViewInitFlags2.VIF_SUPPRESSTRACKCHANGES;
 
-            if (allowModel)
+            if (allowModal)
                 initViewFlags |= (uint)TextViewInitFlags2.VIF_ACTIVEINMODALSTATE;
 
 
@@ -1039,7 +1039,7 @@ namespace Ankh.UI.PendingChanges
         /// <param name="forceLanguageService"><c>null</c> or the language service to force.</param>
         public void Init(bool allowModal, Guid? forceLanguageService)
         {
-            //Create window            
+            //Create window
             CreateCodeWindow(_container.Handle, _container.ClientRectangle, allowModal, forceLanguageService, out _codeWindow);
             commandTarget = _codeWindow as IOleCommandTarget;
 

@@ -275,7 +275,7 @@ namespace Ankh.Services
                 // 
                 int num = (int)ex.WindowsErrorCode;
 
-                if ((num & 0x80000000) != 0x80000000)
+                if ((num & 0x80000000) == 0)
                 {
                     num = unchecked((int)(((uint)num & 0xFFFF) | 0x80070000));
                 }
