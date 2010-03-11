@@ -266,6 +266,8 @@ namespace Ankh.Services
         {
             if (Enum.IsDefined(typeof(SvnErrorCode), ex.SvnErrorCode))
                 return ex.SvnErrorCode.ToString();
+            else if (Enum.IsDefined(typeof(SvnAprErrorCode), ex.AprErrorCode))
+                return ex.AprErrorCode.ToString();
             else if (ex.SvnErrorCategory == SvnErrorCategory.OperatingSystem)
             {
                 if (Enum.IsDefined(typeof(SvnWindowsErrorCode), ex.WindowsErrorCode))
@@ -281,10 +283,8 @@ namespace Ankh.Services
                 Exception sysEx = Marshal.GetExceptionForHR(num);
 
                 if (sysEx != null)
-                    return "OS:" + sysEx.GetType().Name;
+                    return string.Format("OS:{0}/{1}",sysEx.GetType().Name, ex.WindowsErrorCode);
             }
-            else if (Enum.IsDefined(typeof(SvnAprErrorCode), ex.AprErrorCode))
-                return ex.AprErrorCode.ToString();
             else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
                 return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
 
