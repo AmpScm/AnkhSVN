@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AnnotateDialog));
 			this.label1 = new System.Windows.Forms.Label();
 			this.targetBox = new System.Windows.Forms.ComboBox();
 			this.browseButton = new System.Windows.Forms.Button();
@@ -47,149 +48,96 @@
 			// 
 			// label1
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 9);
+			resources.ApplyResources(this.label1, "label1");
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(41, 13);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "&Target:";
 			// 
 			// targetBox
 			// 
-			this.targetBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			resources.ApplyResources(this.targetBox, "targetBox");
 			this.targetBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.targetBox.FormatString = "f";
 			this.targetBox.FormattingEnabled = true;
-			this.targetBox.Location = new System.Drawing.Point(15, 25);
 			this.targetBox.Name = "targetBox";
-			this.targetBox.Size = new System.Drawing.Size(394, 21);
-			this.targetBox.TabIndex = 1;
 			this.targetBox.SelectedValueChanged += new System.EventHandler(this.targetBox_SelectedValueChanged);
 			// 
 			// browseButton
 			// 
-			this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.browseButton.Location = new System.Drawing.Point(415, 23);
+			resources.ApplyResources(this.browseButton, "browseButton");
 			this.browseButton.Name = "browseButton";
-			this.browseButton.Size = new System.Drawing.Size(27, 23);
-			this.browseButton.TabIndex = 2;
-			this.browseButton.Text = "...";
 			this.browseButton.UseVisualStyleBackColor = true;
 			this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			resources.ApplyResources(this.groupBox1, "groupBox1");
 			this.groupBox1.Controls.Add(this.startRevision);
-			this.groupBox1.Location = new System.Drawing.Point(15, 57);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(433, 55);
-			this.groupBox1.TabIndex = 5;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "&From Revision:";
 			// 
 			// startRevision
 			// 
-			this.startRevision.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.startRevision.Location = new System.Drawing.Point(6, 19);
+			resources.ApplyResources(this.startRevision, "startRevision");
 			this.startRevision.Name = "startRevision";
-			this.startRevision.Size = new System.Drawing.Size(421, 29);
 			this.startRevision.SvnOrigin = null;
-			this.startRevision.TabIndex = 2;
 			// 
 			// groupBox2
 			// 
-			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			resources.ApplyResources(this.groupBox2, "groupBox2");
 			this.groupBox2.Controls.Add(this.toRevision);
-			this.groupBox2.Location = new System.Drawing.Point(15, 118);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(433, 55);
-			this.groupBox2.TabIndex = 6;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "&To Revision:";
 			// 
 			// toRevision
 			// 
-			this.toRevision.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.toRevision.Location = new System.Drawing.Point(6, 19);
+			resources.ApplyResources(this.toRevision, "toRevision");
 			this.toRevision.Name = "toRevision";
-			this.toRevision.Size = new System.Drawing.Size(421, 29);
 			this.toRevision.SvnOrigin = null;
-			this.toRevision.TabIndex = 2;
 			// 
 			// label2
 			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(18, 188);
+			resources.ApplyResources(this.label2, "label2");
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(67, 13);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "&Whitespace:";
 			// 
 			// whitespaceBox
 			// 
 			this.whitespaceBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.whitespaceBox.Location = new System.Drawing.Point(91, 185);
+			resources.ApplyResources(this.whitespaceBox, "whitespaceBox");
 			this.whitespaceBox.Name = "whitespaceBox";
-			this.whitespaceBox.Size = new System.Drawing.Size(187, 21);
-			this.whitespaceBox.TabIndex = 8;
 			// 
 			// ignoreEols
 			// 
-			this.ignoreEols.AutoSize = true;
+			resources.ApplyResources(this.ignoreEols, "ignoreEols");
 			this.ignoreEols.Checked = true;
 			this.ignoreEols.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.ignoreEols.Location = new System.Drawing.Point(21, 216);
 			this.ignoreEols.Name = "ignoreEols";
-			this.ignoreEols.Size = new System.Drawing.Size(120, 17);
-			this.ignoreEols.TabIndex = 9;
-			this.ignoreEols.Text = "&Ignore Line Endings";
 			this.ignoreEols.UseVisualStyleBackColor = true;
 			// 
 			// includeMergeInfo
 			// 
-			this.includeMergeInfo.AutoSize = true;
-			this.includeMergeInfo.Location = new System.Drawing.Point(21, 239);
+			resources.ApplyResources(this.includeMergeInfo, "includeMergeInfo");
 			this.includeMergeInfo.Name = "includeMergeInfo";
-			this.includeMergeInfo.Size = new System.Drawing.Size(151, 17);
-			this.includeMergeInfo.TabIndex = 10;
-			this.includeMergeInfo.Text = "Retrieve &Mergeinfo (Slow!)";
 			this.includeMergeInfo.UseVisualStyleBackColor = true;
 			// 
 			// okButton
 			// 
-			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			resources.ApplyResources(this.okButton, "okButton");
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.okButton.Location = new System.Drawing.Point(286, 243);
 			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
-			this.okButton.TabIndex = 11;
-			this.okButton.Text = "OK";
 			this.okButton.UseVisualStyleBackColor = true;
 			// 
 			// cancelButton
 			// 
-			this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			resources.ApplyResources(this.cancelButton, "cancelButton");
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.cancelButton.Location = new System.Drawing.Point(367, 243);
 			this.cancelButton.Name = "cancelButton";
-			this.cancelButton.Size = new System.Drawing.Size(75, 23);
-			this.cancelButton.TabIndex = 12;
-			this.cancelButton.Text = "Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
 			// 
 			// AnnotateDialog
 			// 
 			this.AcceptButton = this.okButton;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.cancelButton;
-			this.ClientSize = new System.Drawing.Size(460, 278);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.includeMergeInfo);
@@ -202,7 +150,6 @@
 			this.Controls.Add(this.targetBox);
 			this.Controls.Add(this.label1);
 			this.Name = "AnnotateDialog";
-			this.Text = "Annotate";
 			this.Load += new System.EventHandler(this.AnnotateDialog_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
