@@ -78,7 +78,12 @@ namespace Ankh.Scc.ProjectMap
             {
                 string itemDir = item.Directory;
 
-                if (string.Equals(itemDir, ProjectDirectory, StringComparison.OrdinalIgnoreCase))
+                if (itemDir == null)
+                {
+                    parentId = VSConstants.VSITEMID_NIL;
+                    return false;
+                }
+                else if (string.Equals(itemDir, ProjectDirectory, StringComparison.OrdinalIgnoreCase))
                     parentId = VSConstants.VSITEMID_ROOT;
                 else
                 {
@@ -103,6 +108,9 @@ namespace Ankh.Scc.ProjectMap
 
             private uint GetId(string itemPath, uint searchBelow)
             {
+                if (string.IsNullOrEmpty(itemPath))
+                    throw new ArgumentNullException("itemPath");
+
                 uint id;
                 if (_map.TryGetValue(itemPath, out id))
                     return id;
