@@ -68,8 +68,8 @@ namespace Ankh.UI.PendingChanges
         public virtual Guid? ForceLanguageService
         {
             get { return _forceLanguageService; }
-            set 
-            { 
+            set
+            {
                 _forceLanguageService = value;
 
                 if (_nativeWindow != null && value.HasValue)
@@ -115,10 +115,10 @@ namespace Ankh.UI.PendingChanges
         public bool EnableSplitter
         {
             get { return _enableSplitter; }
-            set 
-            { 
-                _enableSplitter = value; 
-                if(_nativeWindow != null)
+            set
+            {
+                _enableSplitter = value;
+                if (_nativeWindow != null)
                 {
                     _nativeWindow.EnableSplitter = value;
                 }
@@ -130,10 +130,10 @@ namespace Ankh.UI.PendingChanges
         public bool EnableNavigationBar
         {
             get { return _enableDropDownBar; }
-            set 
-            { 
-                _enableDropDownBar = value; 
-                if(_nativeWindow != null)
+            set
+            {
+                _enableDropDownBar = value;
+                if (_nativeWindow != null)
                 {
                     _nativeWindow.EnableNavigationBar = value;
                 }
@@ -163,6 +163,53 @@ namespace Ankh.UI.PendingChanges
 
                 return _nativeWindow.LineHeight;
             }
+        }
+
+        IVsTextEditorPropertyContainer GetPropContainer()
+        {
+            if (_nativeWindow == null)
+                throw new InvalidOperationException("No Editor created");
+
+            IVsTextEditorPropertyCategoryContainer catContainer = _nativeWindow.TextView as IVsTextEditorPropertyCategoryContainer;
+
+            if (catContainer == null)
+                throw new InvalidOperationException("No property category Container");
+
+            Guid g = new Guid("D1756E7C-B7FD-49A8-B48E-87B14A55655A"); // GUID_EditPropCategory_View_MasterSettings
+            IVsTextEditorPropertyContainer tpc;
+            if (!ErrorHandler.Succeeded(catContainer.GetPropertyCategory(ref g, out tpc)))
+                throw new InvalidOperationException("Category not found");
+
+            return tpc;
+        }
+
+        [CLSCompliant(false)]
+        public void SetProperty(VSEDITPROPID prop, object value)
+        {
+            // TODO: Maybe cache values for initialization
+            // or just store these as separate properties?
+            IVsTextEditorPropertyContainer tpc = GetPropContainer();
+
+
+            ErrorHandler.ThrowOnFailure(tpc.SetProperty(prop, value));
+        }
+
+        [CLSCompliant(false)]
+        public void RemoveProperty(VSEDITPROPID prop, object value)
+        {
+            IVsTextEditorPropertyContainer tpc = GetPropContainer();
+
+            ErrorHandler.ThrowOnFailure(tpc.RemoveProperty(prop, value));
+        }
+
+        [CLSCompliant(false)]
+        public object GetProperty(VSEDITPROPID prop)
+        {
+            IVsTextEditorPropertyContainer tpc = GetPropContainer();
+
+            object value;
+            ErrorHandler.ThrowOnFailure(tpc.GetProperty(prop, out value));
+            return value;
         }
 
         public event EventHandler<TextViewScrollEventArgs> Scroll;
@@ -264,7 +311,7 @@ namespace Ankh.UI.PendingChanges
 
             cf.AddCommandTarget(CommandTarget);
             cf.AddWindowPane(WindowPane);
-            cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;            
+            cf.ContainerMode |= VSContainerMode.TranslateKeys | VSContainerMode.UseTextEditorScope;
         }
 
         bool _inToolWindow;
@@ -539,7 +586,7 @@ namespace Ankh.UI.PendingChanges
             if (!DesignMode)
                 UpdateSize();
         }
-        
+
         string _text;
 
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -921,7 +968,7 @@ namespace Ankh.UI.PendingChanges
 
 
             _codewindowbehaviorflags cwFlags = _codewindowbehaviorflags.CWB_DEFAULT;
-            
+
             if (!EnableSplitter)
                 cwFlags |= _codewindowbehaviorflags.CWB_DISABLESPLITTER;
 
@@ -1109,7 +1156,7 @@ namespace Ankh.UI.PendingChanges
 
                 return false;
             }
-        }        
+        }
 
         internal void ReplaceContents(string pathToReplaceWith)
         {
@@ -1129,25 +1176,25 @@ namespace Ankh.UI.PendingChanges
                 buffer = Marshal.AllocCoTaskMem((size + 1) * sizeof(char));
 
                 if (_ro)
-                {                    
+                {
                     InternalSetReadOnly(false);
                     setReadOnly = true;
                 }
-                
+
                 ErrorHandler.ThrowOnFailure(tempStream.GetStream(0, size, buffer));
 
                 IVsTextStream destStream = (IVsTextStream)_textBuffer;
                 int oldDestSize;
                 ErrorHandler.ThrowOnFailure(destStream.GetSize(out oldDestSize));
 
-                destStream.ReplaceStream(0, oldDestSize, buffer, size);                
+                destStream.ReplaceStream(0, oldDestSize, buffer, size);
             }
             finally
             {
                 if (buffer != IntPtr.Zero)
                     Marshal.FreeCoTaskMem(buffer);
 
-                if(tempBuffer != null && Marshal.IsComObject(tempBuffer))
+                if (tempBuffer != null && Marshal.IsComObject(tempBuffer))
                     Marshal.ReleaseComObject(tempBuffer);
 
                 if (setReadOnly)
@@ -1249,7 +1296,7 @@ namespace Ankh.UI.PendingChanges
 
         internal void SetLanguageService(Guid languageService)
         {
-            if(_textBuffer == null)
+            if (_textBuffer == null)
                 throw new InvalidOperationException();
 
             if (VSVersion.VS2010Beta2)
@@ -1277,7 +1324,7 @@ namespace Ankh.UI.PendingChanges
             [return: MarshalAs(UnmanagedType.Bool)]
             internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-            [DllImport("user32.dll", ExactSpelling=true, CharSet=CharSet.Auto)]
+            [DllImport("user32.dll", ExactSpelling = true, CharSet = CharSet.Auto)]
             [return: MarshalAs(UnmanagedType.Bool)]
             internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
@@ -1294,22 +1341,22 @@ namespace Ankh.UI.PendingChanges
         {
             get
             {
-                if(_searchedTop)
+                if (_searchedTop)
                     return _topLayer;
 
-                if(_textView == null)
+                if (_textView == null)
                     return null;
                 _searchedTop = true;
-                
+
                 IVsLayeredTextView layeredView = _textView as IVsLayeredTextView;
 
-                if(layeredView != null)
+                if (layeredView != null)
                 {
                     IVsTextLayer topLayer;
-                    if(ErrorHandler.Succeeded(layeredView.GetTopmostLayer(out topLayer)))
+                    if (ErrorHandler.Succeeded(layeredView.GetTopmostLayer(out topLayer)))
                         return _topLayer = topLayer;
                 }
-                
+
                 return null;
             }
         }
@@ -1318,11 +1365,11 @@ namespace Ankh.UI.PendingChanges
         {
             IVsTextLayer topLayer = TopLayer;
 
-            if(topLayer == null)
+            if (topLayer == null)
                 return p;
-            
+
             int bY, bX;
-            if(ErrorHandler.Succeeded(topLayer.LocalLineIndexToBase(p.Y, p.X, out bY, out bX)))
+            if (ErrorHandler.Succeeded(topLayer.LocalLineIndexToBase(p.Y, p.X, out bY, out bX)))
                 return new Point(bX, bY);
             else
                 return new Point(-1, -1); // Not represented in buffer
