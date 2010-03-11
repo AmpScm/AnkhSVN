@@ -199,7 +199,7 @@ namespace Ankh.UI.PendingChanges
         {
             IVsTextEditorPropertyContainer tpc = GetPropContainer();
 
-            ErrorHandler.ThrowOnFailure(tpc.RemoveProperty(prop, value));
+            ErrorHandler.ThrowOnFailure(tpc.RemoveProperty(prop));
         }
 
         [CLSCompliant(false)]
