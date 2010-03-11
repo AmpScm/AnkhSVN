@@ -159,6 +159,7 @@ namespace Ankh.UI.PropertyEditors
         {
             r.SetValues(
                 ii.Reference,
+                null,
                 ii.Revision.ToString(),
                 ii.Target);
         }
@@ -222,12 +223,14 @@ namespace Ankh.UI.PropertyEditors
         private void externalGrid_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
         {
             DataGridViewRow r = externalGrid.Rows[e.RowIndex];
-
             string url = r.Cells[0].Value as string;
-            string target = r.Cells[2].Value as string;
-            string rev = r.Cells[1].Value as string;
+            string target = r.Cells[3].Value as string;
+            string rev = r.Cells[2].Value as string;
 
-            if (r.IsNewRow && string.IsNullOrEmpty(url) && string.IsNullOrEmpty(target) && string.IsNullOrEmpty(rev))
+            if (r.IsNewRow && 
+                string.IsNullOrEmpty(url) && 
+                string.IsNullOrEmpty(target) && 
+                string.IsNullOrEmpty(rev))
                 return;
 
             long v = 0;
@@ -290,8 +293,8 @@ namespace Ankh.UI.PropertyEditors
                 throw new ArgumentNullException("r");
 
             string url = r.Cells[0].Value as string;
-            string target = r.Cells[2].Value as string;
-            string rev = r.Cells[1].Value as string;
+            string target = r.Cells[3].Value as string;
+            string rev = r.Cells[2].Value as string;
             SvnRevision rr = string.IsNullOrEmpty(rev) ? SvnRevision.None : long.Parse(rev);
 
             if (url.Contains("://"))
@@ -318,6 +321,38 @@ namespace Ankh.UI.PropertyEditors
             item = ei;
             return true;
         }
+
+        private void externalGrid_CellContentClick(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
+        {
+            // if the column is the Url selection column
+            if (e.ColumnIndex == this.buttonColumn.Index)
+            {
+                using (RepositoryExplorer.RepositoryFolderBrowserDialog rfbd = new RepositoryExplorer.RepositoryFolderBrowserDialog())
+                {
+                    // do not show files in repo browser
+                    rfbd.ShowFiles = false;
+
+                    DataGridViewRow row = externalGrid.Rows[e.RowIndex];
+                    string selectedUriString = row.Cells[0].Value as string;
+
+                    // set the current URL value as the initial selection
+                    Uri selectedUri;
+                    if (!string.IsNullOrEmpty(selectedUriString)
+                        && Uri.TryCreate(selectedUriString, UriKind.Absolute, out selectedUri)
+                        )
+                    {
+                        rfbd.SelectedUri = selectedUri;
+                    }
+                    if (DialogResult.OK == rfbd.ShowDialog(Context))
+                    {
+                        Uri uri = rfbd.SelectedUri;
+                        // set the Url cell value to the selected Url
+                        row.Cells[0].Value = uri == null ? string.Empty : uri.AbsoluteUri;
+                    }
+                }
+            }
+        }
+
     }
 }
 
