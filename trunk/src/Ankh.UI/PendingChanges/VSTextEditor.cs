@@ -956,7 +956,7 @@ namespace Ankh.UI.PendingChanges
         /// </summary>
         /// <param name="parentHandle">Parent window handle</param>
         /// <param name="place">The place.</param>
-        /// <param name="allowModal">if set to <c>true</c> [allow modaal].</param>
+        /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
         private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModal, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
