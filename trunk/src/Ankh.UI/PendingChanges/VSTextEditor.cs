@@ -77,6 +77,20 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
+        private bool _disableWordWrap;
+        public bool DisableWordWrap
+        {
+            get { return _disableWordWrap; }
+            set
+            {
+                _disableWordWrap = value;
+                if(_nativeWindow != null)
+                {
+                    _nativeWindow.DisableWordWrap = value;
+                }
+            }
+        }
+
         bool _showHorizontalScrollBar;
 
         [Localizable(false), DefaultValue(false)]
@@ -351,6 +365,7 @@ namespace Ankh.UI.PendingChanges
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
                 _nativeWindow.Init(allowModal, ForceLanguageService);
                 _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
+                _nativeWindow.DisableWordWrap = DisableWordWrap;
                 _nativeWindow.Size = ClientSize;
                 _nativeWindow.SetReadOnly(_readOnly);
 
@@ -1058,6 +1073,33 @@ namespace Ankh.UI.PendingChanges
             HookEvents(true);
         }
 
+        private IVsTextEditorPropertyContainer _editorPropertyContainer;
+        IVsTextEditorPropertyContainer EditorPropertyContainer
+        {
+            get
+            {
+                if (_editorPropertyContainer != null)
+                    return _editorPropertyContainer;
+
+                IVsTextEditorPropertyCategoryContainer spPropCatContainer =
+                    (IVsTextEditorPropertyCategoryContainer)_textView;
+
+                if (spPropCatContainer != null)
+                {
+                    IVsTextEditorPropertyContainer spPropContainer;
+                    Guid GUID_EditPropCategory_View_MasterSettings =
+                        new Guid("{D1756E7C-B7FD-49a8-B48E-87B14A55655A}");
+                    ErrorHandler.ThrowOnFailure(spPropCatContainer.GetPropertyCategory(
+                        ref GUID_EditPropCategory_View_MasterSettings,
+                        out spPropContainer));
+
+                    _editorPropertyContainer = spPropContainer;
+                }
+
+                return _editorPropertyContainer;
+            }
+        }
+
         bool _ro;
         internal void SetReadOnly(bool value)
         {
@@ -1358,6 +1400,28 @@ namespace Ankh.UI.PendingChanges
                 }
 
                 return null;
+            }
+        }
+
+
+        public bool DisableWordWrap
+        {
+            get
+            {
+                if (EditorPropertyContainer == null)
+                    return false;
+
+                object o;
+                ErrorHandler.ThrowOnFailure(
+                    EditorPropertyContainer.GetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, out o));
+                return (bool) o;
+            }
+            set
+            {
+                if(EditorPropertyContainer != null)
+                {
+                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, !value);
+                }
             }
         }
 
