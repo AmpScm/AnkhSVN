@@ -78,5 +78,27 @@ namespace Ankh.UI.PropertyEditors
             if (Changed != null)
                 Changed(this, e);
         }
+
+        /// <summary>
+        /// Gets the Ankh context
+        /// </summary>
+        /// TODO should we make this a settable property?
+        protected virtual IAnkhServiceProvider Context
+        {
+            get
+            {
+                IAnkhServiceProvider context = null;
+                Control parent = this;
+                while (parent != null)
+                {
+                    if (parent is VSDialogForm)
+                    {
+                        context = ((VSDialogForm)parent).Context;
+                    }
+                    parent = context == null ? parent.Parent : null;
+                }
+                return context;
+            }
+        }
     }
 }

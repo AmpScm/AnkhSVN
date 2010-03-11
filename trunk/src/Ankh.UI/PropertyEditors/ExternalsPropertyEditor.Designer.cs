@@ -34,6 +34,7 @@ namespace Ankh.UI.PropertyEditors
             this.urlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,8 +47,10 @@ namespace Ankh.UI.PropertyEditors
             this.externalGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.externalGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.urlColumn,
+            this.buttonColumn,
             this.revisionColumn,
-            this.nameColumn});
+            this.nameColumn
+            });
             this.externalGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.externalGrid.Location = new System.Drawing.Point(0, 0);
             this.externalGrid.MultiSelect = false;
@@ -56,6 +59,7 @@ namespace Ankh.UI.PropertyEditors
             this.externalGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.externalGrid.Size = new System.Drawing.Size(348, 196);
             this.externalGrid.TabIndex = 0;
+            this.externalGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(externalGrid_CellContentClick);
             this.externalGrid.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.externalGrid_RowValidating);
             this.externalGrid.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.externalGrid_RowValidated);
             // 
@@ -79,6 +83,18 @@ namespace Ankh.UI.PropertyEditors
             this.nameColumn.Name = "nameColumn";
             this.nameColumn.Width = 60;
             // 
+            // buttonColumn
+            // 
+            this.buttonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+            this.buttonColumn.FillWeight = 30F;
+            this.buttonColumn.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.buttonColumn.HeaderText = System.String.Empty;
+            this.buttonColumn.Name = "buttonColumn";
+            this.buttonColumn.Text = "...";
+            this.buttonColumn.UseColumnTextForButtonValue = true;
+            this.buttonColumn.Width = 60;
+
+            // 
             // ExternalsPropertyEditor
             // 
             this.Controls.Add(this.externalGrid);
@@ -87,6 +103,7 @@ namespace Ankh.UI.PropertyEditors
             this.ResumeLayout(false);
 
         }
+
         #endregion
 
         private System.ComponentModel.IContainer components;
@@ -94,5 +111,6 @@ namespace Ankh.UI.PropertyEditors
         private System.Windows.Forms.DataGridViewTextBoxColumn urlColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn revisionColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
+        private System.Windows.Forms.DataGridViewButtonColumn buttonColumn;
     }
 }
