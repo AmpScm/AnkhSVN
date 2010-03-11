@@ -283,9 +283,10 @@ namespace Ankh.Services
                 Exception sysEx = Marshal.GetExceptionForHR(num);
 
                 if (sysEx != null)
-                    return string.Format("OS:{0}/{1}",sysEx.GetType().Name, ex.WindowsErrorCode);
+                    return string.Format("OS:{0}/{1}", sysEx.GetType().Name, ex.WindowsErrorCode);
             }
-            else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
+            else if (ex.SvnErrorCategory > SvnErrorCategory.None
+                     && Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
                 return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
 
             return ((int)ex.SvnErrorCode).ToString();
