@@ -63,14 +63,14 @@
 			this.targetBox.FormattingEnabled = true;
 			this.targetBox.Location = new System.Drawing.Point(15, 25);
 			this.targetBox.Name = "targetBox";
-			this.targetBox.Size = new System.Drawing.Size(400, 21);
+			this.targetBox.Size = new System.Drawing.Size(394, 21);
 			this.targetBox.TabIndex = 1;
 			this.targetBox.SelectedValueChanged += new System.EventHandler(this.targetBox_SelectedValueChanged);
 			// 
 			// browseButton
 			// 
 			this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.browseButton.Location = new System.Drawing.Point(421, 23);
+			this.browseButton.Location = new System.Drawing.Point(415, 23);
 			this.browseButton.Name = "browseButton";
 			this.browseButton.Size = new System.Drawing.Size(27, 23);
 			this.browseButton.TabIndex = 2;
@@ -96,7 +96,7 @@
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.startRevision.Location = new System.Drawing.Point(6, 19);
 			this.startRevision.Name = "startRevision";
-			this.startRevision.Size = new System.Drawing.Size(379, 29);
+			this.startRevision.Size = new System.Drawing.Size(421, 29);
 			this.startRevision.SvnOrigin = null;
 			this.startRevision.TabIndex = 2;
 			// 
@@ -118,7 +118,7 @@
 						| System.Windows.Forms.AnchorStyles.Right)));
 			this.toRevision.Location = new System.Drawing.Point(6, 19);
 			this.toRevision.Name = "toRevision";
-			this.toRevision.Size = new System.Drawing.Size(379, 29);
+			this.toRevision.Size = new System.Drawing.Size(421, 29);
 			this.toRevision.SvnOrigin = null;
 			this.toRevision.TabIndex = 2;
 			// 
