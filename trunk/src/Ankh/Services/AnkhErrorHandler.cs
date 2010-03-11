@@ -283,6 +283,8 @@ namespace Ankh.Services
                 if (sysEx != null)
                     return "OS:" + sysEx.GetType().Name;
             }
+            else if (Enum.IsDefined(typeof(SvnAprErrorCode), ex.AprErrorCode))
+                return ex.AprErrorCode.ToString();
             else if (Enum.IsDefined(typeof(SvnErrorCategory), ex.SvnErrorCategory))
                 return string.Format("{0}:{1}", ex.SvnErrorCategory, ex.SvnErrorCode);
 
