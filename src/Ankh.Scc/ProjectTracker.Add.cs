@@ -373,7 +373,16 @@ namespace Ankh.Scc
                                     break;
                                 }
                             }
-                            // TODO: Check for missing files at origin (Cut&Paste)
+                            else if (!orgInfo.Exists)
+                            {
+                                // Handle Cut&Paste
+                                SvnItem item = StatusCache[orgInfo.FullName];
+
+                                if (item.IsVersioned && item.IsDeleteScheduled)
+                                {
+                                    _fileOrigins[newName] = origin = item.FullPath;
+                                }
+                            }
                         }
                     }
                 }
