@@ -352,12 +352,7 @@ namespace Ankh.Scc
                                 readOnlyItems.Add(item);
                             }
                         }
-                        else
-                        {
-                            // What?
-                            // Deny? or Make the file writable?
-                            // Fallthrough = OK to edit
-                        }
+                        // else // allow editting
                     }
                 }
                 if (mustLockItems != null)
