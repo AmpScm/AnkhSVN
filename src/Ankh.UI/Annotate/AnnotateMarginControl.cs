@@ -392,13 +392,27 @@ namespace Ankh.UI.Annotate
                     e.Graphics.DrawRectangle(border, rect);
 
                     AnnotateSource src = region.Source;
+                    string revisionString = src.Revision.ToString();
+                    string dateString = src.Time.ToShortDateString();
 
-                    const int revisionWidth = 30; // TODO: Fix for higher/lower revisions than the 10000-99999 range
+                    float rectTop = rect.Top + 2; // top padding of 2px
+                    float revisionWidth = e.Graphics.MeasureString(revisionString, f).Width;
+                    float dateWidth = e.Graphics.MeasureString(dateString, f).Width;
 
+                    // Calculate the author field based on the fields to the left and right of it
+                    // because we use ellipsis trimming when it's too small
+                    float authorWidth = Width - revisionWidth - dateWidth - 8; // left+right padding of both revision and date means 2+2+2+2 = 8
+                    
                     Brush color = IsSelected(region) ? selectedTextColor : textColor;
-                    e.Graphics.DrawString(src.Revision.ToString(), f, color, new RectangleF(3, rect.Top + 2, revisionWidth, LineHeight), sfr);
-                    e.Graphics.DrawString(src.Author, f, color, new RectangleF(revisionWidth + 5, rect.Top + 2, Width - revisionWidth -32, LineHeight), sfl);
-                    e.Graphics.DrawString(src.Time.ToShortDateString(), f, color, new RectangleF(Width - 60, rect.Top + 2, 58, LineHeight), sfr);
+                    e.Graphics.DrawString(revisionString, f, color, new RectangleF(3, rectTop, revisionWidth, LineHeight), sfr);
+
+                    // TODO: decide if this is the best way
+                    // If the authorWidth is negative, don't attempt to show the author. This case should only
+                    // occur with very long ShortDateStrings, or very long revision strings.
+                    if(authorWidth > 0) 
+                        e.Graphics.DrawString(src.Author, f, color, new RectangleF(revisionWidth + 5, rectTop, authorWidth, LineHeight), sfl);
+
+                    e.Graphics.DrawString(dateString, f, color, new RectangleF(Width - dateWidth - 2, rectTop, dateWidth, LineHeight), sfr);
                 }
 
                 Rectangle clip = e.ClipRectangle;
