@@ -74,7 +74,6 @@ namespace Ankh.VS.Extenders
         }
 
         bool _disposed;
-        [DebuggerNonUserCode]
         void Dispose(bool disposing)
         {
             if (_disposed)
@@ -96,7 +95,7 @@ namespace Ankh.VS.Extenders
         }
 
         [Browsable(false)]
-        private SvnItem SvnItem
+        internal SvnItem SvnItem
         {
             get
             {
@@ -107,7 +106,14 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Url"), DisplayName("Url")]
         public Uri Url
         {
-            get { return SvnItem.Status.Uri; }
+            get
+            {
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+                return item.Status.Uri;
+            }
         }
 
         [Category("Subversion"), DisplayName("Change List"), Description("Change List")]
@@ -116,8 +122,11 @@ namespace Ankh.VS.Extenders
             get
             {
                 SvnItem item = SvnItem;
-                if (item != null && item.IsVersioned && item.IsFile)
-                    return SvnItem.Status.ChangeList ?? "";
+
+                if (item == null)
+                    return null;
+                if (item.IsVersioned && item.IsFile)
+                    return item.Status.ChangeList ?? "";
                 else
                     return null;
             }
@@ -125,11 +134,16 @@ namespace Ankh.VS.Extenders
             {
                 string cl = value;
 
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return;
+
                 cl = string.IsNullOrEmpty(cl) ? null : cl.Trim();
 
-                if (SvnItem.IsVersioned && SvnItem.Status != null && SvnItem.IsFile)
+                if (item.IsVersioned && item.Status != null && item.IsFile)
                 {
-                    if (value != SvnItem.Status.ChangeList)
+                    if (value != item.Status.ChangeList)
                     {
                         using (SvnClient client = GetService<ISvnClientPool>().GetNoUIClient())
                         {
@@ -137,13 +151,13 @@ namespace Ankh.VS.Extenders
                             {
                                 SvnAddToChangeListArgs ca = new SvnAddToChangeListArgs();
                                 ca.ThrowOnError = false;
-                                client.AddToChangeList(SvnItem.FullPath, cl);
+                                client.AddToChangeList(item.FullPath, cl);
                             }
                             else
                             {
                                 SvnRemoveFromChangeListArgs ca = new SvnRemoveFromChangeListArgs();
                                 ca.ThrowOnError = false;
-                                client.RemoveFromChangeList(SvnItem.FullPath, ca);
+                                client.RemoveFromChangeList(item.FullPath, ca);
                             }
                         }
                     }
@@ -159,7 +173,15 @@ namespace Ankh.VS.Extenders
         [Category("Subversion"), Description("Last committed author"), DisplayName("Last Author")]
         public string LastCommittedAuthor
         {
-            get { return SvnItem.Status.LastChangeAuthor; }
+            get
+            {
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+
+                return item.Status.LastChangeAuthor;
+            }
         }
 
         [Category("Subversion"), Description("Current Revision")]
@@ -167,10 +189,13 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                SvnItem i = SvnItem;
+                SvnItem item = SvnItem;
 
-                if (i.IsVersioned && i.Status.Revision > 0)
-                    return SvnItem.Status.Revision;
+                if (item == null)
+                    return null;
+
+                if (item.IsVersioned && item.Status.Revision > 0)
+                    return item.Status.Revision;
                 else
                     return null;
             }
@@ -181,7 +206,12 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                DateTime dt = SvnItem.Status.LastChangeTime;
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return DateTime.MinValue;
+
+                DateTime dt = item.Status.LastChangeTime;
                 if (dt != DateTime.MinValue)
                     return dt.ToLocalTime();
                 else
@@ -194,9 +224,13 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                SvnItem i = SvnItem;
-                if (i.IsVersioned && i.Status.LastChangeRevision > 0)
-                    return SvnItem.Status.LastChangeRevision;
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+
+                if (item.IsVersioned && item.Status.LastChangeRevision > 0)
+                    return item.Status.LastChangeRevision;
                 else
                     return null;
             }
@@ -208,8 +242,13 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                AnkhStatus status = SvnItem.Status;
-                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, status.HasTreeConflict, SvnItem);
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+
+                AnkhStatus status = item.Status;
+                PendingChangeKind kind = PendingChange.CombineStatus(status.LocalContentStatus, status.LocalPropertyStatus, status.HasTreeConflict, item);
 
                 if (kind == PendingChangeKind.None)
                     return "";
@@ -222,9 +261,17 @@ namespace Ankh.VS.Extenders
         }
 
         [Category("Subversion"), Description("Locked")]
-        public bool Locked
+        public bool? Locked
         {
-            get { return SvnItem.Status.IsLockedLocal; }
+            get
+            {
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+
+                return item.Status.IsLockedLocal;
+            }
         }
 
         [Category("Properties"), DisplayName("Line ending style"), Description("svn:eol-style")]
@@ -232,7 +279,9 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                if (SvnItem == null)
+                SvnItem item = SvnItem;
+
+                if (item == null)
                     return LineEndingStyle.None;
 
                 using (SvnClient c = GetNoUIClient())
@@ -241,7 +290,7 @@ namespace Ankh.VS.Extenders
                         return LineEndingStyle.None;
 
                     string value;
-                    if (SvnItem.Exists && c.TryGetProperty(new SvnPathTarget(SvnItem.FullPath), SvnPropertyNames.SvnEolStyle, out value))
+                    if (item.Exists && c.TryGetProperty(item.FullPath, SvnPropertyNames.SvnEolStyle, out value))
                     {
                         try
                         {
@@ -255,6 +304,11 @@ namespace Ankh.VS.Extenders
             set
             {
                 string strValue = null;
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return;
+
                 switch (value)
                 {
                     case LineEndingStyle.Native:
@@ -272,9 +326,9 @@ namespace Ankh.VS.Extenders
                         return;
 
                     if (string.IsNullOrEmpty(strValue))
-                        c.DeleteProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle);
+                        c.DeleteProperty(item.FullPath, SvnPropertyNames.SvnEolStyle);
                     else
-                        c.SetProperty(SvnItem.FullPath, SvnPropertyNames.SvnEolStyle, strValue);
+                        c.SetProperty(item.FullPath, SvnPropertyNames.SvnEolStyle, strValue);
 
                     ScheduleUpdate();
                 }
@@ -292,7 +346,12 @@ namespace Ankh.VS.Extenders
         {
             get
             {
-                if (SvnItem == null || SvnItem.IsDirectory || !SvnItem.IsVersioned)
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return null;
+
+                if (item.IsDirectory || !item.IsVersioned)
                     return null;
 
                 using (SvnClient c = GetNoUIClient())
@@ -303,7 +362,7 @@ namespace Ankh.VS.Extenders
                     string value;
                     try
                     {
-                        if (c.TryGetProperty(new SvnPathTarget(SvnItem.FullPath), SvnPropertyNames.SvnMimeType, out value))
+                        if (c.TryGetProperty(item.FullPath, SvnPropertyNames.SvnMimeType, out value))
                             return value;
                     }
                     catch { }
@@ -312,15 +371,20 @@ namespace Ankh.VS.Extenders
             }
             set
             {
+                SvnItem item = SvnItem;
+
+                if (item == null)
+                    return;
+
                 using (SvnClient c = GetNoUIClient())
                 {
                     if (c == null)
                         return;
 
                     if (string.IsNullOrEmpty(value))
-                        c.DeleteProperty(SvnItem.FullPath, SvnPropertyNames.SvnMimeType);
+                        c.DeleteProperty(item.FullPath, SvnPropertyNames.SvnMimeType);
                     else
-                        c.SetProperty(SvnItem.FullPath, SvnPropertyNames.SvnMimeType, value);
+                        c.SetProperty(item.FullPath, SvnPropertyNames.SvnMimeType, value);
 
                     ScheduleUpdate();
                 }
@@ -339,14 +403,16 @@ namespace Ankh.VS.Extenders
 
         void ScheduleUpdate()
         {
-            if (SvnItem == null)
+            SvnItem item = SvnItem;
+
+            if (item == null)
                 return;
 
             IFileStatusMonitor monitor = GetService<IFileStatusMonitor>();
             if (monitor == null)
                 return;
 
-            monitor.ScheduleSvnStatus(SvnItem.FullPath);
+            monitor.ScheduleSvnStatus(item.FullPath);
         }
         #endregion
     }
