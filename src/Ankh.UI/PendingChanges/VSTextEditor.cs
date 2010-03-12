@@ -180,52 +180,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        IVsTextEditorPropertyContainer GetPropContainer()
-        {
-            if (_nativeWindow == null)
-                throw new InvalidOperationException("No Editor created");
-
-            IVsTextEditorPropertyCategoryContainer catContainer = _nativeWindow.TextView as IVsTextEditorPropertyCategoryContainer;
-
-            if (catContainer == null)
-                throw new InvalidOperationException("No property category Container");
-
-            Guid g = new Guid("D1756E7C-B7FD-49A8-B48E-87B14A55655A"); // GUID_EditPropCategory_View_MasterSettings
-            IVsTextEditorPropertyContainer tpc;
-            if (!ErrorHandler.Succeeded(catContainer.GetPropertyCategory(ref g, out tpc)))
-                throw new InvalidOperationException("Category not found");
-
-            return tpc;
-        }
-
-        [CLSCompliant(false)]
-        public void SetProperty(VSEDITPROPID prop, object value)
-        {
-            // TODO: Maybe cache values for initialization
-            // or just store these as separate properties?
-            IVsTextEditorPropertyContainer tpc = GetPropContainer();
-
-
-            ErrorHandler.ThrowOnFailure(tpc.SetProperty(prop, value));
-        }
-
-        [CLSCompliant(false)]
-        public void RemoveProperty(VSEDITPROPID prop, object value)
-        {
-            IVsTextEditorPropertyContainer tpc = GetPropContainer();
-
-            ErrorHandler.ThrowOnFailure(tpc.RemoveProperty(prop));
-        }
-
-        [CLSCompliant(false)]
-        public object GetProperty(VSEDITPROPID prop)
-        {
-            IVsTextEditorPropertyContainer tpc = GetPropContainer();
-
-            object value;
-            ErrorHandler.ThrowOnFailure(tpc.GetProperty(prop, out value));
-            return value;
-        }
+        
 
         public event EventHandler<TextViewScrollEventArgs> Scroll;
 
@@ -1404,26 +1359,7 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-
-        public bool EnableWordWrap
-        {
-            get
-            {
-                if (EditorPropertyContainer == null)
-                    return false;
-
-                object o;
-                ErrorHandler.ThrowOnFailure(
-                    EditorPropertyContainer.GetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, out o));
-                return (bool) o;
-            }
-            set
-            {
-               
-            }
-        }
-
-        public void SetWordWrapMode(WordWrapMode mode)
+        internal void SetWordWrapMode(WordWrapMode mode)
         {
             if (EditorPropertyContainer == null)
                 return;
