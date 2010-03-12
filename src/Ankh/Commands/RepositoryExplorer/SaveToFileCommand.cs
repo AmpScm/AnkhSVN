@@ -41,8 +41,6 @@ namespace Ankh.Commands.RepositoryExplorer
             if (ri == null)
                 return;
 
-            IUIService ui = e.GetService<IUIService>();
-
             string toFile;
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
@@ -56,7 +54,7 @@ namespace Ankh.Commands.RepositoryExplorer
 
                 sfd.FileName = name;
 
-                if (sfd.ShowDialog(ui.GetDialogOwnerWindow()) != DialogResult.OK)
+                if (sfd.ShowDialog(e.Context.DialogOwner) != DialogResult.OK)
                     return;
 
                 toFile = sfd.FileName;

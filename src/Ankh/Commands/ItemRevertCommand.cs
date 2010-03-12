@@ -81,7 +81,7 @@ namespace Ankh.Commands
                     toRevert.Add(i);
             }
 
-            if (e.PromptUser || !Shift)
+            if (e.PromptUser || (!e.DontPrompt && !Shift))
             {
                 using (PendingChangeSelector pcs = new PendingChangeSelector())
                 {

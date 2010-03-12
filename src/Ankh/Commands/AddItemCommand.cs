@@ -16,13 +16,17 @@
 
 using Ankh.UI;
 using SharpSvn;
+using Ankh.UI.PathSelector;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using Ankh.Scc;
 
 namespace Ankh.Commands
 {
     /// <summary>
     /// Command to add selected items to the working copy.
     /// </summary>
-    [Command(AnkhCommand.AddItem)]
+    [Command(AnkhCommand.AddItem, ArgumentDefinition = "d")]
     class AddItemCommand : CommandBase
     {
         public override void OnUpdate(CommandUpdateEventArgs e)
@@ -41,55 +45,61 @@ namespace Ankh.Commands
         public override void OnExecute(CommandEventArgs e)
         {
             string argumentFile = e.Argument as string;
-            PathSelectorResult result = null;
+            List<SvnItem> selection = new List<SvnItem>();
 
             if (string.IsNullOrEmpty(argumentFile))
             {
-                IUIShell uiShell = e.GetService<IUIShell>();
-
-                PathSelectorInfo info = new PathSelectorInfo("Select items to add",
-                    e.Selection.GetSelectedSvnItems(true));
-
-                info.CheckedFilter += delegate(SvnItem item) { return !item.IsVersioned && !item.IsIgnored && item.IsVersionable; };
-                info.VisibleFilter += delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; };
-
-                // are we shifted?
-                if (!Shift && !e.DontPrompt && !e.IsInAutomation)
+                if (e.PromptUser || (!e.DontPrompt && !Shift))
                 {
-                    info.EnableRecursive = false;
+                    selection.AddRange(e.Selection.GetSelectedSvnItems(true));
 
-                    result = uiShell.ShowPathSelector(info);
+                    using (PendingChangeSelector pcs = new PendingChangeSelector())
+                    {
+                        pcs.Text = CommandStrings.AddDialogTitle;
+
+                        pcs.LoadItems(selection,
+                                      delegate(SvnItem item) { return !item.IsIgnored || !item.InSolution; },
+                                    delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; });
+
+                        if (pcs.ShowDialog(e.Context) != DialogResult.OK)
+                            return;
+
+                        selection.Clear();
+                        selection.AddRange(pcs.GetSelectedItems());
+                    }
                 }
                 else
-                    result = info.DefaultResult;
-
-                if (!result.Succeeded)
-                    return;
+                {
+                    foreach (SvnItem item in e.Selection.GetSelectedSvnItems(true))
+                    {
+                        if (!item.IsVersioned && item.IsVersionable && !item.IsIgnored && item.InSolution)
+                            selection.Add(item);
+                    }
+                }
             }
             else
             {
-                // Fix casing from user passed path
-                argumentFile = SvnTools.GetTruePath(argumentFile, true);
+                selection.Add(e.GetService<IFileStatusCache>()[argumentFile]);
             }
 
-            e.GetService<IProgressRunner>().RunModal("Adding",
-                delegate(object sender, ProgressWorkerArgs ee)
-                {
-                    SvnAddArgs args = new SvnAddArgs();
-                    args.ThrowOnError = false;
-                    args.Depth = SvnDepth.Empty;
-                    args.AddParents = true;
+            ICollection<string> paths = SvnItem.GetPaths(selection);
+            IAnkhOpenDocumentTracker documentTracker = e.GetService<IAnkhOpenDocumentTracker>();
+            documentTracker.SaveDocuments(paths); // Make sure all files are saved before updating/merging!
 
-                    if (!string.IsNullOrEmpty(argumentFile))
-                        ee.Client.Add(argumentFile, args);
-                    else
+            using (DocumentLock lck = documentTracker.LockDocuments(paths, DocumentLockType.NoReload))
+            using (lck.MonitorChangesForReload())
+                e.GetService<IProgressRunner>().RunModal(CommandStrings.AddTaskDialogTitle,
+                    delegate(object sender, ProgressWorkerArgs ee)
                     {
-                        foreach (SvnItem item in result.Selection)
+                        SvnAddArgs args = new SvnAddArgs();
+                        args.Depth = SvnDepth.Empty;
+                        args.AddParents = true;
+
+                        foreach (SvnItem item in selection)
                         {
                             ee.Client.Add(item.FullPath, args);
                         }
-                    }
-                });
+                    });
         }
     }
 }
