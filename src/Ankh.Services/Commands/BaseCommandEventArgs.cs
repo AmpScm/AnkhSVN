@@ -15,10 +15,11 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Ankh.Selection;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using Ankh.Selection;
 
 namespace Ankh.Commands
 {
@@ -68,6 +69,10 @@ namespace Ankh.Commands
             get { return _state ?? (_state = GetService<IAnkhCommandStates>()); }
         }
 
+        [GuidAttribute("3C536122-57B1-46DE-AB34-ACC524140093")]
+        sealed class SVsExtensibility
+        {
+        }
         /// <summary>
         /// Gets a value indicating whether this instance is in automation.
         /// </summary>
@@ -78,12 +83,17 @@ namespace Ankh.Commands
         {
             get
             {
-                IAnkhRuntimeInfo runtimeInfo = Context.GetService<IAnkhRuntimeInfo>();
+                IVsExtensibility3 extensibility = GetService<IVsExtensibility3>(typeof(SVsExtensibility));
 
-                if (runtimeInfo != null)
-                    return runtimeInfo.IsInAutomation;
-                else
-                    return false;
+                if (extensibility != null)
+                {
+                    int inAutomation;
+
+                    if (extensibility.IsInAutomationFunction(out inAutomation) == 0)
+                        return inAutomation != 0;
+                }
+
+                return false;
             }
         }
 
