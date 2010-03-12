@@ -87,7 +87,7 @@ namespace Ankh.UI.Annotate
             // 
             // editor
             // 
-            this.editor.WordWrapMode = WordWrapMode.Off;
+            this.editor.WordWrapMode = InheritBool.False;
             this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editor.Location = new System.Drawing.Point(0, 0);
             this.editor.Name = "editor";

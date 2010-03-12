@@ -77,9 +77,9 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        private WordWrapMode _wordWrapMode;
-        [Localizable(false), DefaultValue(WordWrapMode.Inherit)]
-        public WordWrapMode WordWrapMode
+        private InheritBool _wordWrapMode;
+        [Localizable(false), DefaultValue(InheritBool.Inherit)]
+        public InheritBool WordWrapMode
         {
             get { return _wordWrapMode; }
             set
@@ -1359,19 +1359,19 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        internal void SetWordWrapMode(WordWrapMode mode)
+        internal void SetWordWrapMode(InheritBool mode)
         {
             if (EditorPropertyContainer == null)
                 return;
 
             switch (mode)
             {
-                case WordWrapMode.Inherit:
+                case InheritBool.Inherit:
                     break;
-                case WordWrapMode.On:
+                case InheritBool.True:
                     EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
                     break;
-                case WordWrapMode.Off:
+                case InheritBool.False:
                     EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
                     break;
             }
@@ -1451,11 +1451,11 @@ namespace Ankh.UI.PendingChanges
         }
     }
 
-    public enum WordWrapMode
+    public enum InheritBool
     {
         Inherit,
-        On,
-        Off
+        True,
+        False
     }
 }
 
