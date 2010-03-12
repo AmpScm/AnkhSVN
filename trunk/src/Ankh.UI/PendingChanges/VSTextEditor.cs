@@ -29,7 +29,6 @@ using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System.Security.Permissions;
 using Ankh.Scc.UI;
-using System.Diagnostics;
 
 namespace Ankh.UI.PendingChanges
 {
@@ -301,7 +300,7 @@ namespace Ankh.UI.PendingChanges
         }
 
         /// <summary>
-        /// Creation and initialization of <see cref="CodeEditorNativeWindow"/> class.
+        /// Creation and initialization of <see cref="CodeEditorWindow"/> class.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
@@ -311,7 +310,6 @@ namespace Ankh.UI.PendingChanges
                 throw new ArgumentNullException("context");
 
             _context = context;
-            IOleServiceProvider serviceProvider = context.GetService<IOleServiceProvider>();
             try
             {
                 _nativeWindow = new CodeEditorWindow(_context, this);
@@ -913,6 +911,7 @@ namespace Ankh.UI.PendingChanges
         /// <param name="parentHandle">Parent window handle</param>
         /// <param name="place">The place.</param>
         /// <param name="allowModal">if set to <c>true</c> [allow modal].</param>
+        /// <param name="forceLanguageService"></param>
         /// <param name="codeWindow">Represents a multiple-document interface (MDI) child that contains one or more code views.</param>
         private void CreateCodeWindow(IntPtr parentHandle, Rectangle place, bool allowModal, Guid? forceLanguageService, out IVsCodeWindow codeWindow)
         {
@@ -1114,9 +1113,7 @@ namespace Ankh.UI.PendingChanges
             if (HasFocus)
                 return commandTarget.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             else
-            {
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-            }
+                return (int) OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
 
@@ -1133,9 +1130,7 @@ namespace Ankh.UI.PendingChanges
             if (HasFocus)
                 return commandTarget.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             else
-            {
-                return (int)OLEConstants.OLECMDERR_E_NOTSUPPORTED;
-            }
+                return (int) OLEConstants.OLECMDERR_E_NOTSUPPORTED;
         }
 
         public bool HasFocus
