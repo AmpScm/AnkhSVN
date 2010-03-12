@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Ankh.Commands
 {
@@ -142,6 +143,27 @@ namespace Ankh.Commands
 
             if (HideOnContextMenu)
                 cmdf |= OLECMDF.OLECMDF_DEFHIDEONCTXTMENU;
+        }
+
+        /// <summary>
+        /// If the command is executed directly via the command window or indirectly via
+        /// EnvDTE.ExecuteCommand(), returns a boolean indicating whether an nonempty
+        /// argument was supplied.
+        /// </summary>
+        public bool CommandArgumentAvailable
+        {
+            get
+            {
+                IVsCommandArgInfo info = GetService<IVsCommandArgInfo>(typeof(SVsCommandWindow));
+                if (info == null)
+                    return false;
+
+                int available;
+                if (info.QueryCommandArgAvailable(out available) == 0)
+                    return (available != 0);
+
+                return false;
+            }
         }
     }
 }
