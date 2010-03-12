@@ -62,7 +62,7 @@ namespace Ankh.VSPackage
             
             RegistryKey baseKey = Registry.LocalMachine;
 
-            // TODO: Find some way to use the VS2008 RANU api
+            // Simple hack via 2005 api to support 2008+ RANU cases.
             if (root.EndsWith("\\UserSettings"))
             {
                 root = root.Substring(0, root.Length - 13) + "\\Configuration";
