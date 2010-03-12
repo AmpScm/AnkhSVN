@@ -457,7 +457,7 @@ namespace Ankh.UI.VSSelectionControls
             return VSConstants.E_NOTIMPL;
         }
 
-        [DebuggerHidden]
+        [DebuggerHidden, DebuggerNonUserCode]
         int IVsMultiItemSelect.GetSelectionInfo(out uint pcItems, out int pfSingleHierarchy)
         {
             pcItems = (uint)_data.Selection.Count;
