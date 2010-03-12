@@ -77,16 +77,17 @@ namespace Ankh.UI.PendingChanges
             }
         }
 
-        private bool _disableWordWrap;
-        public bool DisableWordWrap
+        private WordWrapMode _wordWrapMode;
+        [Localizable(false), DefaultValue(WordWrapMode.Inherit)]
+        public WordWrapMode WordWrapMode
         {
-            get { return _disableWordWrap; }
+            get { return _wordWrapMode; }
             set
             {
-                _disableWordWrap = value;
+                _wordWrapMode = value;
                 if(_nativeWindow != null)
                 {
-                    _nativeWindow.DisableWordWrap = value;
+                    _nativeWindow.SetWordWrapMode(value);
                 }
             }
         }
@@ -365,7 +366,7 @@ namespace Ankh.UI.PendingChanges
                 _nativeWindow.EnableNavigationBar = EnableNavigationBar;
                 _nativeWindow.Init(allowModal, ForceLanguageService);
                 _nativeWindow.ShowHorizontalScrollBar = ShowHorizontalScrollBar;
-                _nativeWindow.DisableWordWrap = DisableWordWrap;
+                _nativeWindow.SetWordWrapMode(WordWrapMode);
                 _nativeWindow.Size = ClientSize;
                 _nativeWindow.SetReadOnly(_readOnly);
 
@@ -1404,7 +1405,7 @@ namespace Ankh.UI.PendingChanges
         }
 
 
-        public bool DisableWordWrap
+        public bool EnableWordWrap
         {
             get
             {
@@ -1418,10 +1419,25 @@ namespace Ankh.UI.PendingChanges
             }
             set
             {
-                if(EditorPropertyContainer != null)
-                {
-                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, !value);
-                }
+               
+            }
+        }
+
+        public void SetWordWrapMode(WordWrapMode mode)
+        {
+            if (EditorPropertyContainer == null)
+                return;
+
+            switch (mode)
+            {
+                case WordWrapMode.Inherit:
+                    break;
+                case WordWrapMode.On:
+                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, true);
+                    break;
+                case WordWrapMode.Off:
+                    EditorPropertyContainer.SetProperty(VSEDITPROPID.VSEDITPROPID_ViewLangOpt_WordWrap, false);
+                    break;
             }
         }
 
@@ -1497,6 +1513,13 @@ namespace Ankh.UI.PendingChanges
         {
             get { return _iFirstVisibleUnit; }
         }
+    }
+
+    public enum WordWrapMode
+    {
+        Inherit,
+        On,
+        Off
     }
 }
 

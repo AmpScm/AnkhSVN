@@ -14,6 +14,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using Ankh.UI.PendingChanges;
+
 namespace Ankh.UI.Annotate
 {
     partial class AnnotateEditorControl
@@ -85,7 +87,7 @@ namespace Ankh.UI.Annotate
             // 
             // editor
             // 
-            this.editor.DisableWordWrap = true;
+            this.editor.WordWrapMode = WordWrapMode.Off;
             this.editor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editor.Location = new System.Drawing.Point(0, 0);
             this.editor.Name = "editor";
