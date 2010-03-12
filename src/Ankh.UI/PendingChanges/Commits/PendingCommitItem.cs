@@ -35,7 +35,7 @@ namespace Ankh.UI.PendingChanges.Commits
             if (change == null)
                 throw new ArgumentNullException("change");
 
-            _change = change;        
+            _change = change;
 
             //initially check only if this change does not belong to an "ignore" change list
             Checked = !change.IgnoreOnCommit;
@@ -80,8 +80,15 @@ namespace Ankh.UI.PendingChanges.Commits
                     clr = System.Drawing.Color.Red;
                 else if (item.IsDeleteScheduled)
                     clr = System.Drawing.Color.DarkRed;
-                else if (item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added || !item.IsVersioned)
+                else if (item.Status.IsCopied || item.Status.CombinedStatus == SharpSvn.SvnStatus.Added)
                     clr = System.Drawing.Color.FromArgb(100, 0, 100);
+                else if (!item.IsVersioned)
+                {
+                    if (item.InSolution && !item.IsIgnored)
+                        clr = System.Drawing.Color.FromArgb(100, 0, 100); // Same as added+copied
+                    else
+                        clr = System.Drawing.Color.Black;
+                }
                 else if (item.IsModified)
                     clr = System.Drawing.Color.DarkBlue;
 
@@ -89,13 +96,13 @@ namespace Ankh.UI.PendingChanges.Commits
             }
         }
 
-		private string GetRevision(PendingChange PendingChange)
-		{
-			if (PendingChange.Revision.HasValue)
-				return PendingChange.Revision.ToString();
-			else
-				return "";
-		}
+        private string GetRevision(PendingChange PendingChange)
+        {
+            if (PendingChange.Revision.HasValue)
+                return PendingChange.Revision.ToString();
+            else
+                return "";
+        }
 
         private string SafeDate(DateTime dateTime)
         {
