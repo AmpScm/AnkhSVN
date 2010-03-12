@@ -40,43 +40,55 @@ namespace Ankh.UI.PathSelector
             if (changeWalker == null)
                 throw new ArgumentNullException("changeWalker");
 
+            _changeEnumerator = changeWalker;
+
+            if (IsHandleCreated)
+                Reload();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
             if (pendingList.Context == null && Context != null)
             {
                 pendingList.Context = Context;
                 pendingList.SelectionPublishServiceProvider = Context;
             }
 
-            _changeEnumerator = changeWalker;
             Reload();
         }
 
+        IEnumerable<SvnItem> _allItems;
+        Predicate<SvnItem> _filter;
+        Predicate<SvnItem> _checkedFilter;
+
         private void Reload()
         {
-            Dictionary<PendingChange, PendingCommitItem> chk = null;
+            PendingChange.RefreshContext rc = new PendingChange.RefreshContext(Context);
+            Dictionary<string, bool> checkedCache = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
 
-            if (pendingList.Items.Count > 0)
+            foreach (PendingCommitItem pci in pendingList.Items)
             {
-                chk = new Dictionary<PendingChange, PendingCommitItem>();
-
-                foreach (PendingCommitItem it in pendingList.Items)
-                {
-                    chk.Add(it.PendingChange, it);
-                    it.Group = null;
-                }
+                checkedCache[pci.FullPath] = pci.Checked;
             }
 
             pendingList.ClearItems();
-
-            foreach (PendingChange pc in _changeEnumerator)
+            foreach (SvnItem i in _allItems)
             {
-                PendingCommitItem pi;
-                if (chk != null && chk.TryGetValue(pc, out pi))
-                {
-                    pendingList.Items.Add(pi);
-                    pi.RefreshText(Context);
-                }
-                else
-                    pendingList.Items.Add(new PendingCommitItem(pendingList, pc));
+                if (_filter != null && !_filter(i))
+                    continue;
+
+                PendingChange pc = new PendingChange(rc, i);
+                PendingCommitItem pci = new PendingCommitItem(pendingList, pc);
+
+                bool chk;
+                if (checkedCache.TryGetValue(i.FullPath, out chk))
+                    pci.Checked = chk;
+                else if (_checkedFilter != null && !_checkedFilter(i))
+                    pci.Checked = false;
+
+                pendingList.Items.Add(pci);
             }
         }
 
@@ -107,69 +119,24 @@ namespace Ankh.UI.PathSelector
                     yield return it.PendingChange;
             }
         }
-        
-        class ItemLister : AnkhService, IEnumerable<PendingChange>
+
+        public IEnumerable<SvnItem> GetSelectedItems()
         {
-            readonly IEnumerable<SvnItem> _items;
-
-            IPendingChangesManager _pcm;
-            readonly PendingChange.RefreshContext _rc;
-            public ItemLister(IAnkhServiceProvider context, IEnumerable<SvnItem> items)
-                : base(context)
+            foreach (PendingChange pc in GetSelection())
             {
-                if (items == null)
-                    throw new ArgumentNullException("items");
-                _items = items;
-                _rc = new PendingChange.RefreshContext(context);
+                yield return pc.SvnItem;
             }
-
-            #region IEnumerable<PendingChange> Members
-
-            IPendingChangesManager Manager
-            {
-                get { return _pcm ?? (_pcm = GetService<IPendingChangesManager>()); }
-            }
-
-            readonly Dictionary<string, PendingChange> _pcs = new Dictionary<string, PendingChange>(StringComparer.OrdinalIgnoreCase);
-
-            public IEnumerator<PendingChange> GetEnumerator()
-            {
-                foreach (SvnItem item in _items)
-                {
-                    if (PendingChange.IsPending(item))
-                    {
-                        PendingChange pc = Manager[item.FullPath];
-
-                        if (pc == null && !_pcs.TryGetValue(item.FullPath, out pc))
-                        {
-                            PendingChange.CreateIfPending(_rc, item, out pc);
-                        }
-
-                        if (pc == null)
-                            yield break; // Not a pending change
-
-                        _pcs[item.FullPath] = pc;
-
-                        yield return pc;
-                    }
-                }
-            }
-
-            #endregion
-
-            #region IEnumerable Members
-
-            System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            #endregion
         }
 
-        public void LoadItems(IEnumerable<SvnItem> iEnumerable)
+        public void LoadItems(IEnumerable<SvnItem> allItems, Predicate<SvnItem> checkedFilter, Predicate<SvnItem> visibleFilter)
         {
-            LoadChanges(new ItemLister(Context, iEnumerable));
+            _allItems = allItems;
+            _checkedFilter = checkedFilter;
+        }
+
+        public void LoadItems(IEnumerable<SvnItem> allItems)
+        {
+            LoadItems(allItems, PendingChange.IsPending, null);
         }
 
         private void pendingList_ItemChecked(object sender, ItemCheckedEventArgs e)

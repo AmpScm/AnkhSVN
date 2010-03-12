@@ -187,6 +187,15 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Items to Revert.
+        /// </summary>
+        internal static string RevertDialogTitle {
+            get {
+                return ResourceManager.GetString("RevertDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The conflict in &apos;{0}&apos; is already resolved..
         /// </summary>
         internal static string TheConflictInXIsAlreadyResolved {

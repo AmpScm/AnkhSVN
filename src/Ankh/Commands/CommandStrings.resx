@@ -192,4 +192,7 @@
   <data name="UpdatingFolder" xml:space="preserve">
     <value>Updating Folder</value>
   </data>
+  <data name="RevertDialogTitle" xml:space="preserve">
+    <value>Select Items to Revert</value>
+  </data>
 </root>
