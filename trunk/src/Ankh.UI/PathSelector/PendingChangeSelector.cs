@@ -132,6 +132,7 @@ namespace Ankh.UI.PathSelector
         {
             _allItems = allItems;
             _checkedFilter = checkedFilter;
+			_filter = visibleFilter;
         }
 
         public void LoadItems(IEnumerable<SvnItem> allItems)
