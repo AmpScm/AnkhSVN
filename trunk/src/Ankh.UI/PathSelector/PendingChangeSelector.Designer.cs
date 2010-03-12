@@ -57,6 +57,7 @@ namespace Ankh.UI.PathSelector
             this.pendingList.HideSelection = false;
             this.pendingList.Location = new System.Drawing.Point(12, 12);
             this.pendingList.Name = "pendingList";
+            this.pendingList.ShowSelectAllCheckBox = true;
             this.pendingList.Size = new System.Drawing.Size(600, 185);
             this.pendingList.TabIndex = 0;
             this.pendingList.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.pendingList_ItemChecked);

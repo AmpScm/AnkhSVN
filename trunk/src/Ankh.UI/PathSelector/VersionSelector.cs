@@ -138,7 +138,6 @@ namespace Ankh.UI.PathSelector
             EnsureList();
         }
 
-        bool _ensured;
         private void EnsureList()
         {
             if (RevisionResolver == null || SvnOrigin == null)
@@ -190,8 +189,6 @@ namespace Ankh.UI.PathSelector
 
                 SetRevision(rt);
             }
-
-            _ensured = true;
 
             if (_currentRevType != typeCombo.SelectedItem)
                 typeCombo.SelectedItem = _currentRevType;
