@@ -16,21 +16,23 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Ankh.VS;
-using Ankh.Selection;
-using Ankh.Scc;
-using SharpSvn;
-using System.IO;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
-using Microsoft.Win32;
-using Ankh.UI;
-using System.Security;
-using FileVersionInfo = System.Diagnostics.FileVersionInfo;
-using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Text.RegularExpressions;
+using Microsoft.Win32;
+using FileVersionInfo = System.Diagnostics.FileVersionInfo;
+
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
+
+using SharpSvn;
+
+using Ankh.Scc;
+using Ankh.Selection;
+using Ankh.UI;
+using Ankh.VS;
 
 namespace Ankh.Settings
 {
@@ -142,9 +144,9 @@ namespace Ankh.Settings
             if (cache.SolutionFilename != solutionFile)
                 return true;
 
-            if(solutionFile == null)
+            if (solutionFile == null)
                 return false;
-            
+
             SvnItem item = StatusCache[solutionFile];
 
             if (item == null || item.ChangeCookie != cache.SolutionCookie)
@@ -319,7 +321,7 @@ namespace Ankh.Settings
                     break;
                 case SvnPropertyNames.BugTrackMessage:
                     if (cache.BugTrackMessage == null)
-                        cache.BugTrackMessage = pv.StringValue.Replace("\r","");
+                        cache.BugTrackMessage = pv.StringValue.Replace("\r", "");
                     break;
                 case SvnPropertyNames.BugTrackNumber:
                     if (!cache.BugTrackNumber.HasValue && TryParseBool(pv, out boolValue))
@@ -797,6 +799,7 @@ namespace Ankh.Settings
             }
         }
 
+        string _solutionFilter;
         /// <summary>
         /// Gets the solution filter.
         /// </summary>
@@ -804,13 +807,57 @@ namespace Ankh.Settings
         public string SolutionFilter
         {
             // TODO: Find a way to fetch the real list
-            get { return "*.sln;*.dsw"; }
+            get
+            {
+                if (_solutionFilter != null)
+                    return _solutionFilter;
+
+                _solutionFilter = "*.sln;*.dsw"; // Hardcoded default :(
+                ILocalRegistry3 lr = GetService<ILocalRegistry3>(typeof(SLocalRegistry));
+
+                if (lr == null)
+                    return _solutionFilter;
+
+                string root;
+                if (!ErrorHandler.Succeeded(lr.GetLocalRegistryRoot(out root)))
+                    return _solutionFilter;
+
+                RegistryKey baseKey = Registry.LocalMachine;
+
+                // Simple hack via 2005 api to support 2008+ RANU cases.
+                if (root.EndsWith("\\UserSettings"))
+                {
+                    root = root.Substring(0, root.Length - 13) + "\\Configuration";
+                    baseKey = Registry.CurrentUser;
+                }
+
+                using (RegistryKey rk = baseKey.OpenSubKey(root))
+                {
+                    if (rk != null)
+                    {
+                        string ext = rk.GetValue("SolutionFileExt") as string;
+
+                        if (!string.IsNullOrEmpty(ext))
+                        {
+                            if (!ext.StartsWith("."))
+                                return _solutionFilter = "*." + ext; // Normal case for standalone shell
+                            else
+                                return _solutionFilter = "*" + ext;
+                        }
+                    }
+                }
+
+                return _solutionFilter;
+            }
         }
 
         #region IAnkhSolutionSettings Members
 
         public void OpenProjectFile(string projectFile)
         {
+            if (string.IsNullOrEmpty(projectFile))
+                throw new ArgumentNullException("projectFile");
+
             string ext = Path.GetExtension(projectFile);
             bool isSolution = false;
             foreach (string x in SolutionFilter.Split(';'))
