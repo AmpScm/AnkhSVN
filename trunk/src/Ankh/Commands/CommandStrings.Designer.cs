@@ -61,6 +61,24 @@ namespace Ankh.Commands {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select Items to Add.
+        /// </summary>
+        internal static string AddDialogTitle {
+            get {
+                return ResourceManager.GetString("AddDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding files.
+        /// </summary>
+        internal static string AddTaskDialogTitle {
+            get {
+                return ResourceManager.GetString("AddTaskDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are trying to annotate a binary fily. Are you sure you want to continue?.
         /// </summary>
         internal static string AnnotateBinaryFileContinueAnywayText {

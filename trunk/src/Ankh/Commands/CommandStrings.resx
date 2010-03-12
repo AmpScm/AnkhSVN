@@ -192,6 +192,12 @@
   <data name="UpdatingFolder" xml:space="preserve">
     <value>Updating Folder</value>
   </data>
+  <data name="AddDialogTitle" xml:space="preserve">
+    <value>Select Items to Add</value>
+  </data>
+  <data name="AddTaskDialogTitle" xml:space="preserve">
+    <value>Adding files</value>
+  </data>
   <data name="RevertDialogTitle" xml:space="preserve">
     <value>Select Items to Revert</value>
   </data>
