@@ -128,11 +128,11 @@ namespace Ankh.UI.PathSelector
             }
         }
 
-        public void LoadItems(IEnumerable<SvnItem> allItems, Predicate<SvnItem> checkedFilter, Predicate<SvnItem> visibleFilter)
+        public void LoadItems(IEnumerable<SvnItem> allItems, Predicate<SvnItem> visibleFilter, Predicate<SvnItem> checkedFilter)
         {
             _allItems = allItems;
             _checkedFilter = checkedFilter;
-			_filter = visibleFilter;
+            _filter = visibleFilter;
         }
 
         public void LoadItems(IEnumerable<SvnItem> allItems)

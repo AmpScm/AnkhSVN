@@ -58,8 +58,8 @@ namespace Ankh.Commands
                         pcs.Text = CommandStrings.AddDialogTitle;
 
                         pcs.LoadItems(selection,
-                                      delegate(SvnItem item) { return !item.IsIgnored || !item.InSolution; },
-                                    delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; });
+                                      delegate(SvnItem item) { return !item.IsVersioned && item.IsVersionable; },
+                                      delegate(SvnItem item) { return !item.IsIgnored || !item.InSolution; });
 
                         if (pcs.ShowDialog(e.Context) != DialogResult.OK)
                             return;
