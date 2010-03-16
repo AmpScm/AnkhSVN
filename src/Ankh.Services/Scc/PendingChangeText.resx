@@ -132,6 +132,9 @@
   <data name="StateEdited" xml:space="preserve">
     <value>Edited</value>
   </data>
+  <data name="StateIgnored" xml:space="preserve">
+    <value>Ignored</value>
+  </data>
   <data name="StateIncomplete" xml:space="preserve">
     <value>Incomplete</value>
   </data>

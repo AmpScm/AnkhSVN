@@ -76,6 +76,8 @@ namespace Ankh.Scc
                     return PendingChangeText.StateConflicted;
                 case PendingChangeKind.TreeConflict:
                     return PendingChangeText.StateTreeConflicted;
+                case PendingChangeKind.Ignored:
+                    return PendingChangeText.StateIgnored;
                 default:
                     return State.ToString();
             }            

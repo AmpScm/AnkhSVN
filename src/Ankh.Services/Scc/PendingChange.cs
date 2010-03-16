@@ -394,10 +394,14 @@ namespace Ankh.Scc
             switch (contentStatus)
             {
                 case SvnStatus.NotVersioned:
-                    if (item != null && item.InSolution)
-                        return PendingChangeKind.New;
-                    else
-                        return PendingChangeKind.None;
+                    if (item != null)
+                    {
+                        if (item.IsIgnored)
+                            return PendingChangeKind.Ignored;
+                        else if (item.InSolution)
+                            return PendingChangeKind.New;
+                    }
+                    return PendingChangeKind.None;
                 case SvnStatus.Modified:
                     return PendingChangeKind.Modified;
                 case SvnStatus.Replaced:

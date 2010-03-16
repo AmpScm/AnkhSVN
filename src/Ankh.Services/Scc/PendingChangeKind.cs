@@ -92,6 +92,10 @@ namespace Ankh.Scc
         /// </summary>
         Incomplete,
 
+        /// <summary>
+        /// 
+        /// </summary>
+        Ignored,
 
         /// <summary>
         /// The node has an invalid casing (FileName -> FILEname)
