@@ -202,6 +202,7 @@ namespace Ankh.UI.PendingChanges
             this.pendingCommits.Location = new System.Drawing.Point(0, 0);
             this.pendingCommits.Name = "pendingCommits";
             this.pendingCommits.ShowItemToolTips = true;
+            this.pendingCommits.ShowSelectAllCheckBox = true;
             this.pendingCommits.Size = new System.Drawing.Size(768, 215);
             this.pendingCommits.TabIndex = 0;
             this.pendingCommits.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.pendingCommits_MouseDoubleClick);
