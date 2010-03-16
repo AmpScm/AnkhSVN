@@ -435,7 +435,7 @@ namespace Ankh.Commands
             IAnkhConfigurationService config = context.GetService<IAnkhConfigurationService>();
             using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
             {
-                int interval = 24 * 7; // 1 week
+                int interval = 24 * 6; // 6 days
                 object value = rk.GetValue("Interval");
 
                 if (value is int)
