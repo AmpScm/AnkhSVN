@@ -122,7 +122,7 @@ namespace Ankh.Commands
                 return;
             }
 
-            int interval = 24 * 7; // 1 week
+            int interval = 24 * 6; // 6 days
             IAnkhConfigurationService config = e.GetService<IAnkhConfigurationService>();
             using (RegistryKey rk = config.OpenUserInstanceKey("UpdateCheck"))
             {
