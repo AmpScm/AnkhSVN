@@ -65,7 +65,7 @@ namespace Ankh.Scc.ProjectMap
 
             IAnkhOpenDocumentTracker dt = _context.GetService<IAnkhOpenDocumentTracker>();
 
-            dt.SetDirty(ProjectFile, true);
+            dt.SetDirty(ProjectFile, false);
         }
 
         void SetPreCreatedItem(uint itemid)
