@@ -364,7 +364,7 @@ namespace Ankh.Scc.ProjectMap
                         return false;
                 }
 
-                return true;
+                return !string.IsNullOrEmpty(ProjectDirectory);
             }
         }
 
