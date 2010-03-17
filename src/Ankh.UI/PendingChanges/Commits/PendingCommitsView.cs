@@ -266,5 +266,13 @@ namespace Ankh.UI.PendingChanges.Commits
             if (_shell != null)
                 _shell.UpdateCommandUI(0); // Make sure the toolbar is updated on check actions
         }
+
+        protected override bool IsPartOfSelectAll(ListViewItem i)
+        {
+            PendingCommitItem pci = i as PendingCommitItem;
+
+            return pci != null &&
+                !PendingChange.IsIgnoreOnCommitChangeList(pci.PendingChange.ChangeList);
+        }
     }
 }
