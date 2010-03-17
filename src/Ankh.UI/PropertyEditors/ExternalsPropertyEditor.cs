@@ -161,6 +161,7 @@ namespace Ankh.UI.PropertyEditors
                 ii.Reference,
                 null,
                 ii.Revision.ToString(),
+                null,
                 ii.Target);
         }
 
@@ -224,12 +225,12 @@ namespace Ankh.UI.PropertyEditors
         {
             DataGridViewRow r = externalGrid.Rows[e.RowIndex];
             string url = r.Cells[0].Value as string;
-            string target = r.Cells[3].Value as string;
+            string target = r.Cells[4].Value as string;
             string rev = r.Cells[2].Value as string;
 
-            if (r.IsNewRow && 
-                string.IsNullOrEmpty(url) && 
-                string.IsNullOrEmpty(target) && 
+            if (r.IsNewRow &&
+                string.IsNullOrEmpty(url) &&
+                string.IsNullOrEmpty(target) &&
                 string.IsNullOrEmpty(rev))
                 return;
 
@@ -293,7 +294,7 @@ namespace Ankh.UI.PropertyEditors
                 throw new ArgumentNullException("r");
 
             string url = r.Cells[0].Value as string;
-            string target = r.Cells[3].Value as string;
+            string target = r.Cells[4].Value as string;
             string rev = r.Cells[2].Value as string;
             SvnRevision rr = string.IsNullOrEmpty(rev) ? SvnRevision.None : long.Parse(rev);
 
@@ -324,15 +325,34 @@ namespace Ankh.UI.PropertyEditors
 
         private void externalGrid_CellContentClick(object sender, System.Windows.Forms.DataGridViewCellEventArgs e)
         {
+            DataGridViewRow row = externalGrid.Rows[e.RowIndex];
+
             // if the column is the Url selection column
             if (e.ColumnIndex == this.buttonColumn.Index)
+            {
+                SelectRepositoryFolder(row);
+            }
+            // if the column is the revision selection column
+            else if (e.ColumnIndex == this.revButtonColumn.Index)
+            {
+                SelectRevision(row);
+            }
+        }
+
+        /// <summary>
+        /// Shows the repository folder browser and sets URL cell value to the selected url
+        /// </summary>
+        /// <param name="row"></param>
+        private void SelectRepositoryFolder(DataGridViewRow row)
+        {
+            IAnkhServiceProvider context = Context;
+            if (context != null)
             {
                 using (RepositoryExplorer.RepositoryFolderBrowserDialog rfbd = new RepositoryExplorer.RepositoryFolderBrowserDialog())
                 {
                     // do not show files in repo browser
                     rfbd.ShowFiles = false;
 
-                    DataGridViewRow row = externalGrid.Rows[e.RowIndex];
                     string selectedUriString = row.Cells[0].Value as string;
 
                     // set the current URL value as the initial selection
@@ -343,7 +363,7 @@ namespace Ankh.UI.PropertyEditors
                     {
                         rfbd.SelectedUri = selectedUri;
                     }
-                    if (DialogResult.OK == rfbd.ShowDialog(Context))
+                    if (DialogResult.OK == rfbd.ShowDialog(context))
                     {
                         Uri uri = rfbd.SelectedUri;
                         // set the Url cell value to the selected Url
@@ -353,6 +373,71 @@ namespace Ankh.UI.PropertyEditors
             }
         }
 
+        private string _lastUsedUriString = null;
+        private Uri _lastRepositoryRoot = null;
+
+        /// <summary>
+        /// Shows the log viewer and sets the revision cell value to the selected revision
+        /// </summary>
+        /// <param name="row"></param>
+        private void SelectRevision(DataGridViewRow row)
+        {
+            IAnkhServiceProvider context = Context;
+            if (context != null)
+            {
+                string selectedUriString = row.Cells[0].Value as string;
+
+                Uri selectedUri;
+                if (!string.IsNullOrEmpty(selectedUriString)
+                    && Uri.TryCreate(selectedUriString, UriKind.Absolute, out selectedUri)
+                    )
+                {
+                    Uri repoRoot = string.Equals(_lastUsedUriString, selectedUriString) ? _lastRepositoryRoot : null;
+                    if (repoRoot == null)
+                    {
+                        if (context.GetService<IProgressRunner>().RunModal(
+                            "Retrieving Repository Root",
+                            delegate(object sender, ProgressWorkerArgs a)
+                            {
+                                repoRoot = a.Client.GetRepositoryRoot(selectedUri);
+
+                            }).Succeeded)
+                        {
+                            //cache the last used repo uri string and the fetched repository root uri
+                            _lastRepositoryRoot = repoRoot;
+                            _lastUsedUriString = selectedUriString;
+                        }
+                    }
+                    if (repoRoot != null)
+                    {
+                        try
+                        {
+                            // set the current revision value as the initial selection
+                            string rev = row.Cells[2].Value as string;
+                            SvnRevision rr = string.IsNullOrEmpty(rev) ? SvnRevision.None : long.Parse(rev);
+                            SvnUriTarget svnTarget = new SvnUriTarget(selectedUri, rr);
+                            Ankh.Scc.SvnOrigin origin = new Ankh.Scc.SvnOrigin(svnTarget, repoRoot);
+                            using (Ankh.UI.SvnLog.LogViewerDialog dlg = new Ankh.UI.SvnLog.LogViewerDialog(origin))
+                            {
+                                if (dlg.ShowDialog(Context) == DialogResult.OK)
+                                {
+                                    Ankh.Scc.ISvnLogItem li = EnumTools.GetSingle(dlg.SelectedItems);
+                                    rev = li == null ? null : li.Revision.ToString();
+                                    //set the revision cell value to the selection revision
+                                    row.Cells[2].Value = rev ?? string.Empty;
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            // clear cache in case of error
+                            _lastUsedUriString = null;
+                            _lastRepositoryRoot = null;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
