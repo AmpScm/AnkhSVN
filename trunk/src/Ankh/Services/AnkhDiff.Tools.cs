@@ -117,7 +117,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge",
                 RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-e -x -ub -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
+                "-e -x -u -wl $(ReadOnly?'-wr':'') -dl '$(BaseName)' -dr '$(MineName)' '$(base)' '$(mine)'", true));
 
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
                 Path.Combine((RegistrySearch("SOFTWARE\\Perforce\\Environment", "P4INSTROOT")
@@ -180,7 +180,7 @@ namespace Ankh.Services
             tools.Add(new DiffTool(this, "WinMerge", "WinMerge (2-Way)",
                 RegistrySearch("SOFTWARE\\Thingamahoochie\\WinMerge", "Executable")
                     ?? "$(ProgramFiles)\\WinMerge\\WinMergeU.exe",
-                "-e -dl '$(TheirsName)' -dr '$(MineName)' " +
+                "-e -u -wl -dl '$(TheirsName)' -dr '$(MineName)' " +
                     "'$(Theirs)' '$(Mine)' '$(Merged)'", true));
 
             tools.Add(new DiffTool(this, "P4Merge", "Perforce Visual Merge",
