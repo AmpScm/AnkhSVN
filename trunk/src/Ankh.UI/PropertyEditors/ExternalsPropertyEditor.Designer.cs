@@ -35,6 +35,7 @@ namespace Ankh.UI.PropertyEditors
             this.revisionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.nameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.revButtonColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.externalGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -49,6 +50,7 @@ namespace Ankh.UI.PropertyEditors
             this.urlColumn,
             this.buttonColumn,
             this.revisionColumn,
+            this.revButtonColumn,
             this.nameColumn
             });
             this.externalGrid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -93,6 +95,17 @@ namespace Ankh.UI.PropertyEditors
             this.buttonColumn.Text = "...";
             this.buttonColumn.UseColumnTextForButtonValue = true;
             this.buttonColumn.Width = 60;
+            // 
+            // revButtonColumn
+            // 
+            this.revButtonColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+            this.revButtonColumn.FillWeight = 30F;
+            this.revButtonColumn.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.revButtonColumn.HeaderText = System.String.Empty;
+            this.revButtonColumn.Name = "revButtonColumn";
+            this.revButtonColumn.Text = "...";
+            this.revButtonColumn.UseColumnTextForButtonValue = true;
+            this.revButtonColumn.Width = 60;
 
             // 
             // ExternalsPropertyEditor
@@ -112,5 +125,6 @@ namespace Ankh.UI.PropertyEditors
         private System.Windows.Forms.DataGridViewTextBoxColumn revisionColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameColumn;
         private System.Windows.Forms.DataGridViewButtonColumn buttonColumn;
+        private System.Windows.Forms.DataGridViewButtonColumn revButtonColumn;
     }
 }
