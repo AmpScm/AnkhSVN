@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7977</title>
+          AnkhSVN-Daily Update - 2.1.7983</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,38 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3190/AnkhSvn-Daily-2.1.7977.450.msi">AnkhSVN 2.1.7977</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3196/AnkhSvn-Daily-2.1.7983.451.msi">AnkhSVN 2.1.7983</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7977">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7983">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-03-17</td></tr>
+<tr><td> </td><td class="r"><a id="7983" href="http://ankhsvn.net/rev/?r=7983">
+            [r7983]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccProjectData.Hierarchy.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Stop forcing a project file to edited when its inner hierarchy changes;
+rely on the checking of the dirty status instead.</td></tr>
+<tr><td> </td><td class="r"><a id="7982" href="http://ankhsvn.net/rev/?r=7982">
+            [r7982]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.UI/PendingChanges/Commits:</strong> PendingCommitsView.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">When using the select all checkbox, don't switch the ignore-on-commit
+pending changes.</td></tr>
+<tr><td> </td><td class="r"><a id="7981" href="http://ankhsvn.net/rev/?r=7981">
+            [r7981]
+          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh.UI/PropertyEditors:</strong> ExternalsPropertyEditor.Designer.cs, ExternalsPropertyEditor.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">use LogViewerDialog to select revision in externals prop editor.<br>
+<a href="http://ankhsvn.net/issues/?id=613">Issue #613</a>: Use repository browser for selecting externals</td></tr>
+<tr><td> </td><td class="r"><a id="7979" href="http://ankhsvn.net/rev/?r=7979">
+            [r7979]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh/Services:</strong> AnkhDiff.Tools.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update winmerge diff and merge templates to make files which shouldn't be
+edited read only. Also make sure winmerge doesn't add our files to its
+recently used files list.</td></tr>
 <tr class="d"><td colspan="4">2010-03-16</td></tr>
 <tr><td> </td><td class="r"><a id="7973" href="http://ankhsvn.net/rev/?r=7973">
             [r7973]
