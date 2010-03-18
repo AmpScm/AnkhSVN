@@ -42,7 +42,7 @@ namespace Ankh.Commands
             {
                 SvnItem sel = e.Selection.ActiveDocumentItem;
 
-                if (sel == null || sel.IsDirectory || !sel.IsLocalDiffAvailable)
+                if (sel == null || sel.IsDirectory ||!sel.IsLocalDiffAvailable)
                     e.Enabled = false;
 
                 return;
@@ -59,10 +59,17 @@ namespace Ankh.Commands
                 }
                 if (item.IsVersioned && (item.Status.CombinedStatus != SvnStatus.Added || item.Status.IsCopied))
                 {
-                    if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
+                    if (e.Command == AnkhCommand.ItemCompareBase 
+                        || e.Command == AnkhCommand.ItemShowChanges
+                        )
                     {
                         if (!item.IsLocalDiffAvailable)
+                        {
+                            // skip if local diff is not available
+                            // single-select -> don't show 'Show Changes" option
+                            // multi-select -> show the option, exclude these items during execution
                             continue;
+                        }
                     }
 
                     if (noConflictDiff && item.IsConflicted)
@@ -95,9 +102,12 @@ namespace Ankh.Commands
                     if (!item.IsVersioned || (item.Status.CombinedStatus == SvnStatus.Added && !item.Status.IsCopied))
                         continue;
 
-                    if (e.Command == AnkhCommand.ItemCompareBase || e.Command == AnkhCommand.ItemShowChanges)
+                    if ( e.Command == AnkhCommand.ItemCompareBase
+                         || e.Command == AnkhCommand.ItemShowChanges)
                     {
-                        if (!(item.IsModified || item.IsDocumentDirty))
+                        if (!(item.IsModified || item.IsDocumentDirty)
+                            || !item.IsLocalDiffAvailable // exclude if local diff is not available
+                            )
                             continue;
                     }
 
@@ -166,6 +176,15 @@ namespace Ankh.Commands
             IAnkhDiffHandler diff = e.GetService<IAnkhDiffHandler>();
             foreach (SvnItem item in selectedFiles)
             {
+                if (!item.IsLocalDiffAvailable
+                    && (revRange.StartRevision.RequiresWorkingCopy
+                        || revRange.EndRevision.RequiresWorkingCopy)
+                    )
+                {
+                    // skip the items that don't have local diff available, and either rev type is workingcopy.
+                    // maybe show some feedback ???
+                    continue;
+                }
                 AnkhDiffArgs da = new AnkhDiffArgs();
 
                 if ((item.Status.IsCopied || item.IsReplaced) &&
