@@ -612,27 +612,28 @@ namespace Ankh.UI.PendingChanges
 
         public bool PreFilterMessage(ref Message msg)
         {
-            if (!_containsWpfEditor)
-                return false;
-
             const int WM_KEYDOWN = 0x100;
             const int WM_KEYUP = 0x101;
-            const int WM_CHAR = 0x0102;
+            //const int WM_CHAR = 0x0102;
 
-            if (msg.Msg == WM_CHAR)
-                switch ((uint)msg.WParam & 0xFFFF)
+            if (msg.Msg == WM_KEYDOWN || msg.Msg == WM_KEYUP)
+                switch ((Keys)msg.WParam)
                 {
-                    case '\b':
-                    case '\r':
+                    case Keys.Up:
+                    case Keys.Right:
+                    case Keys.Down:
+                    case Keys.Left:
+                    case Keys.Back:
+                    case Keys.Home:
+                    case Keys.End:
+                    case Keys.PageUp:
+                    case Keys.PageDown:
+                    case Keys.Insert:
+                    case Keys.Delete:
+                    case Keys.Return:
                         return true;
                     default:
                         return false;
-                }
-            else if (msg.Msg == WM_KEYDOWN || msg.Msg == WM_KEYUP)
-                switch ((uint)msg.WParam)
-                {
-                    case 0x26:
-                        return true; // VK_UP
                 }
 
             return false;
