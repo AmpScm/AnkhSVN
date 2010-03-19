@@ -29,7 +29,7 @@ using Ankh.Selection;
 namespace Ankh.Scc.ProjectMap
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [DebuggerDisplay("Name={Name}, Dirty={IsDirty}")]
     sealed class SccDocumentData : IVsFileChangeEvents, IDisposable
@@ -108,12 +108,21 @@ namespace Ankh.Scc.ProjectMap
             }
         }
 
+        bool _fetchedRaw;
+
         /// <summary>
         /// Document instance which usually implements <see cref="IVsPersistDocData"/> and <see cref"IVsDocDataFileChangeControl"/>
         /// </summary>
         public object RawDocument
         {
-            get { return _rawDocument ?? (_rawDocument = FetchDocument()); }
+            get
+            {
+                if (_fetchedRaw)
+                    return _rawDocument;
+
+                _fetchedRaw = true;
+                return _rawDocument ?? (_rawDocument = FetchDocument());
+            }
             internal set { _rawDocument = value; }
         }
 
@@ -444,71 +453,75 @@ namespace Ankh.Scc.ProjectMap
             IPersistFileFormat pff;
             IVsPersistHierarchyItem phi;
             IVsWindowFrame wf;
+            object rawDoc = RawDocument;
 
-            // Implemented by most editors             
-            if (null != (pdd = RawDocument as IVsPersistDocData))
+            if (rawDoc != null)
             {
-                try
+                // Implemented by most editors
+                if (null != (pdd = rawDoc as IVsPersistDocData))
                 {
-                    if (ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
+                    try
                     {
-                        if (dirty != 0)
-                            return true;
+                        if (ErrorHandler.Succeeded(pdd.IsDocDataDirty(out dirty)))
+                        {
+                            if (dirty != 0)
+                                return true;
 
-                        done = true;
+                            done = true;
+                        }
+                    }
+                    catch
+                    {
+                        /* Some stupid implementations throw an exception from IsDocDataDirty */
                     }
                 }
-                catch 
+
+                // Implemented by the common project types (Microsoft Project Base)
+                if (!done && null != (pff = rawDoc as IPersistFileFormat))
                 {
-                    /* Some stupid implementations throw an exception from IsDocDataDirty */
+                    try
+                    {
+                        if (ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
+                        {
+                            if (dirty != 0)
+                                return true;
+
+                            done = true;
+                        }
+                    }
+                    catch
+                    {
+                        /* Some stupid implementations may throw an exception from IsDirty */
+                    }
+                }
+
+                // Project based documents will probably handle this
+                if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem))
+                {
+                    IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
+                    try
+                    {
+                        if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
+                        {
+                            if (dirty != 0)
+                                return true;
+
+                            done = true;
+                        }
+                    }
+                    catch
+                    {
+                        // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData..
+                        // which we tried before getting here*/
+                    }
+                    finally
+                    {
+                        Marshal.Release(docHandle);
+                    }
                 }
             }
 
-            // Implemented by the common project types (Microsoft Project Base)
-            if (!done && null != (pff = RawDocument as IPersistFileFormat))
-            {
-                try
-                {
-                    if (ErrorHandler.Succeeded(pff.IsDirty(out dirty)))
-                    {
-                        if (dirty != 0)
-                            return true;
-
-                        done = true;
-                    }
-                }
-                catch
-                {
-                    /* Some stupid implementations may throw an exception from IsDirty */
-                }
-            }
-
-            // Project based documents will probably handle this            
-            if (!done && null != (phi = Hierarchy as IVsPersistHierarchyItem))
-            {
-                IntPtr docHandle = Marshal.GetIUnknownForObject(RawDocument);
-                try
-                {
-                    if (ErrorHandler.Succeeded(phi.IsItemDirty(ItemId, docHandle, out dirty)))
-                    {
-                        if (dirty != 0)
-                            return true;
-
-                        done = true;
-                    }
-                }
-                catch
-                {
-                    // MPF throws a cast exception when docHandle doesn't implement IVsPersistDocData.. 
-                    // which we tried before getting here*/ 
-                }
-                finally
-                {
-                    Marshal.Release(docHandle);
-                }
-            }
-
-            // Literally look if the frame window has a modified *            
+            // Literally look if the frame window has a modified *
             if (!done && TryGetOpenDocumentFrame(out wf))
             {
                 object ok;
@@ -617,17 +630,17 @@ namespace Ankh.Scc.ProjectMap
         }
 
         /// <summary>
-        /// Tells the data document (object implementing IVsPersistDocData) to release 
+        /// Tells the data document (object implementing IVsPersistDocData) to release
         /// any hold it has on its storage (i.e. release any file system locks on its file).
         /// </summary>
         /// <returns></returns>
         /// <remarks>
-        /// After a call to HandsOff the document is either closed 
+        /// After a call to HandsOff the document is either closed
         /// (by reloading a changed project or solution file), or reloaded by calling ReloadDocData or ReloadItem.
-        /// 
+        ///
         /// If the data document hasn't been modified, HandsOnDocDataStorage will be called.
-        /// 
-        /// Most calls to the data document are expected to fail when the object is in hands off mode. 
+        ///
+        /// Most calls to the data document are expected to fail when the object is in hands off mode.
         /// The only methods expected to work are IsDocDataReloadable and IsDocDataDirty.
         /// </remarks>
         public bool HandsOff()
