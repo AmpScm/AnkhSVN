@@ -93,7 +93,7 @@ namespace Ankh.Commands
                 if (RepositoryUrlUtils.TryGuessLayout(e.Context, root.Status.Uri, out info))
                     dlg.NewDirectoryName = new Uri(info.BranchesRoot, ".");
 
-                while(true)
+                while (true)
                 {
                     if (DialogResult.OK != dlg.ShowDialog(e.Context))
                         return;
@@ -107,9 +107,9 @@ namespace Ankh.Commands
                         delegate(object sender, ProgressWorkerArgs ee)
                         {
                             SvnInfoArgs ia = new SvnInfoArgs();
-                            ia.ThrowOnError =false;
+                            ia.ThrowOnError = false;
 
-                            if(ee.Client.Info(dlg.NewDirectoryName, ia, null))
+                            if (ee.Client.Info(dlg.NewDirectoryName, ia, null))
                             {
                                 DialogResult dr = DialogResult.Cancel;
 
@@ -117,30 +117,29 @@ namespace Ankh.Commands
                                     delegate
                                     {
                                         AnkhMessageBox mb = new AnkhMessageBox(ee.Context);
-
-                                        dr = mb.Show(string.Format("The Branch/Tag at Url {0} already exists, would you like to overwrite it with the specified branch?", dlg.NewDirectoryName),
-                                            "Path Exists", MessageBoxButtons.YesNoCancel);
+                                        dr = mb.Show(string.Format("The Branch/Tag at Url '{0}' already exists.", dlg.NewDirectoryName),
+                                            "Path Exists", MessageBoxButtons.RetryCancel);
                                     }, null);
 
-                                if (dr == DialogResult.No)
+                                if (dr == DialogResult.Retry)
                                 {
+                                    // show dialog again to let user modify the branch URL
                                     retry = true;
-                                    return;
                                 }
-                                if (dr != DialogResult.Yes)
-                                    return;
                             }
+                            else
+                            {
+                                SvnCopyArgs ca = new SvnCopyArgs();
+                                ca.CreateParents = true;
+                                ca.LogMessage = msg;
 
-                            SvnCopyArgs ca = new SvnCopyArgs();
-                            ca.CreateParents = true;
-                            ca.LogMessage = msg;
-
-                            ok = dlg.CopyFromUri ? 
-                                ee.Client.RemoteCopy(new SvnUriTarget(dlg.SrcUri, dlg.SelectedRevision), dlg.NewDirectoryName, ca) :
-                                ee.Client.RemoteCopy(new SvnPathTarget(dlg.SrcFolder), dlg.NewDirectoryName, ca);
+                                ok = dlg.CopyFromUri ?
+                                    ee.Client.RemoteCopy(new SvnUriTarget(dlg.SrcUri, dlg.SelectedRevision), dlg.NewDirectoryName, ca) :
+                                    ee.Client.RemoteCopy(new SvnPathTarget(dlg.SrcFolder), dlg.NewDirectoryName, ca);
+                            }
                         });
 
-                    if(rr.Succeeded && ok && dlg.SwitchToBranch)
+                    if (rr.Succeeded && ok && dlg.SwitchToBranch)
                     {
                         e.GetService<IAnkhCommandService>().PostExecCommand(AnkhCommand.SolutionSwitchDialog, dlg.NewDirectoryName);
                     }
@@ -148,7 +147,6 @@ namespace Ankh.Commands
                     if (!retry)
                         break;
                 }
-                
             }
         }
     }
