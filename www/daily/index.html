@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          AnkhSVN-Daily Update - 2.1.7986</title>
+          AnkhSVN-Daily Update - 2.1.7989</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>AnkhSVN-Daily Update</h1>
 
@@ -14,20 +14,31 @@
 
 
 <h2>
-          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3198/AnkhSvn-Daily-2.1.7986.452.msi">AnkhSVN 2.1.7986</a>.
+          The latest daily build is <a href="http://ankhsvn.open.collab.net/files/documents/175/3200/AnkhSvn-Daily-2.1.7989.453.msi">AnkhSVN 2.1.7989</a>.
         </h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7986">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id=7989">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-03-19</td></tr>
+<tr><td> </td><td class="r"><a id="7989" href="http://ankhsvn.net/rev/?r=7989">
+            [r7989]
+          </a></td><td class="a">baybora</td><td class="f"><strong class="f-pf">src/Ankh/Commands:</strong> BranchSolutionCommand.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">warn user if the branch path already exists.
+"Retry" brings back the dialog to allow users modify the path, otherwise op gets cancelled.<br>
+
+<a href="http://ankhsvn.net/issues/?id=607">Issue #607</a>: Branch to existing location causes exception</td></tr>
+<tr><td> </td><td class="r"><a id="7988" href="http://ankhsvn.net/rev/?r=7988">
+            [r7988]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/Ankh.Scc/ProjectMap:</strong> SccDocumentData.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Don't retrieve RawDocument multiple times and avoid using a null reference
+if for some strange reason RawDocument is null.</td></tr>
 <tr class="d"><td colspan="4">2010-03-18</td></tr>
 <tr><td> </td><td class="r"><a id="7986" href="http://ankhsvn.net/rev/?r=7986">
             [r7986]
@@ -290,10 +301,6 @@ configured to use the global settings.</td></tr>
 passed to specify the 'default command group'. I never heard of an issue
 with this, but it is documented to be possible. (Found by checking for
 differences between different Visual Studio SDK versions)</td></tr>
-<tr class="d"><td colspan="4">2010-02-18</td></tr>
-<tr><td> </td><td class="r"><a id="7815" href="http://ankhsvn.net/rev/?r=7815">
-            [r7815]
-          </a></td><td class="a">sander</td><td class="f"><strong class="f-pf">src/Ankh/Services/PendingChanges:</strong> PendingChangeHandler.cs, PccStrings.resx, PccStrings.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove caption text, because it doesn't show up in the caption of the messagebox, just above the actual message.</td></tr>
 
 </table>
 <!--/Recent changes-->
