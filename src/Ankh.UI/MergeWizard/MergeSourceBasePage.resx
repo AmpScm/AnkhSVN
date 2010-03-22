@@ -219,6 +219,9 @@
   <data name="wcBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
   </data>
+  <data name="wcUri.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
   <data name="wcUri.Location" type="System.Drawing.Point, System.Drawing">
     <value>44, 38</value>
   </data>
@@ -296,6 +299,9 @@
   </data>
   <data name="&gt;&gt;wcHistoryBtn.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <data name="wcPath.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
   </data>
   <data name="wcPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>44, 16</value>
@@ -385,6 +391,6 @@
     <value>MergeSourceBasePage</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>Ankh.UI.MergeWizard.BasePage, Ankh.UI, Version=2.1.3733.22168, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
+    <value>Ankh.UI.MergeWizard.BaseWizardPage, Ankh.UI, Version=2.1.3733.31780, Culture=neutral, PublicKeyToken=d0beed809dd9333a</value>
   </data>
 </root>
