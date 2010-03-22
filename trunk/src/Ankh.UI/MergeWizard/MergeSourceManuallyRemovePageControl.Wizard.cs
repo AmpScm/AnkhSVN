@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Resources;
-using WizardFramework;
+using Ankh.UI.WizardFramework;
 using SharpSvn;
 
 namespace Ankh.UI.MergeWizard

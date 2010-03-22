@@ -19,7 +19,7 @@ using System.Text;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// Simple class to create a message with message type.

@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using WizardFramework;
+using Ankh.UI.WizardFramework;
 using System.Resources;
 using System.Reflection;
 using System.ComponentModel;

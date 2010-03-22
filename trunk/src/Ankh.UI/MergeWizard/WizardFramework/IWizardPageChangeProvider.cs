@@ -19,7 +19,7 @@ using System.Text;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// Minimal implementation of a page change provider.  Useful for

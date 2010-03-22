@@ -20,7 +20,7 @@ using System.Windows.Forms;
  * limitations under the License.
  * 
  **/
-namespace WizardFramework
+namespace Ankh.UI.WizardFramework
 {
     /// <summary>
     /// Interface for containers that can host a wizard.

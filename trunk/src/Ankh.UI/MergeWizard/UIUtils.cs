@@ -22,7 +22,7 @@ using System.Drawing;
 using SharpSvn;
 using Ankh.UI.RepositoryExplorer;
 using Ankh.UI.RepositoryOpen;
-using WizardFramework;
+using Ankh.UI.WizardFramework;
 using System.IO;
 
 namespace Ankh.UI.MergeWizard
@@ -68,7 +68,8 @@ namespace Ankh.UI.MergeWizard
                         width = newWidth;
                     }
                 }
-                comboBox.DropDownWidth = width;
+                if (comboBox.DropDownWidth < width)
+                    comboBox.DropDownWidth = width;
             }
         }
         public static Uri DisplayBrowseDialogAndGetResult(WizardPage page, SvnItem target, string baseUri)

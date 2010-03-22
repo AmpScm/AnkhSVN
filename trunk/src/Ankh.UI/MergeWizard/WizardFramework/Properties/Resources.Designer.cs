@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WizardFramework.Properties {
+namespace Ankh.UI.WizardFramework.Properties {
     using System;
     
     

@@ -15,11 +15,8 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using WizardFramework;
 using System.Drawing;
-using System.Windows.Forms;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {    

@@ -17,24 +17,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using System.Resources;
 
-using SharpSvn;
-using WizardFramework;
-using Ankh.UI.RepositoryExplorer;
-using Ankh.UI.RepositoryOpen;
-using System.IO;
 using Ankh.Scc;
+using Ankh.UI.SvnLog;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    
+
     public partial class MergeSourceBasePage : BasePage
-        
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(MergeStrings.InvalidFromUrl,
             WizardMessage.MessageType.Error);
@@ -47,7 +39,7 @@ namespace Ankh.UI.MergeWizard
         [Obsolete("Designer Only")]
         protected MergeSourceBasePage()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         /// <summary>
@@ -101,7 +93,9 @@ namespace Ankh.UI.MergeWizard
             MergeSources retrieveMergeSources = new MergeSources(RetrieveMergeSources);
 
             IAsyncResult mergeRetrieveResult = retrieveMergeSources.BeginInvoke(new AsyncCallback(MergesRetrieved), retrieveMergeSources);
-            
+
+            wcPath.Text = MergeTarget.FullPath;
+            wcUri.Text = MergeTarget.Status.Uri.ToString();
         }
 
         /// <summary>
@@ -124,8 +118,8 @@ namespace Ankh.UI.MergeWizard
                 containsAtLeastOne = true;
                 suggestedSources.Add(u.ToString());
             }
-            
-            if(containsAtLeastOne)
+
+            if (containsAtLeastOne)
             {
                 UIUtils.ResizeDropDownForLongestEntry(mergeFromComboBox);
             }
@@ -175,6 +169,16 @@ namespace Ankh.UI.MergeWizard
 
             if (uri != null)
                 mergeFromComboBox.Text = uri.ToString();
+        }
+
+        private void wcHistoryBtn_Click(object sender, EventArgs e)
+        {
+            using (LogViewerDialog dialog = new LogViewerDialog(new SvnOrigin(MergeTarget)))
+            {
+                dialog.LogControl.StrictNodeHistory = true;
+
+                dialog.ShowDialog(Context);
+            }
         }
     }
 }
