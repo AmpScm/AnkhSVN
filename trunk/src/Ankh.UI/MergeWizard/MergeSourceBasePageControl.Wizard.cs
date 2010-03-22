@@ -30,7 +30,7 @@ namespace Ankh.UI.MergeWizard
     /// to be used by all merge source pages except for the "Two Different Trees"
     /// merge source page.
     /// </summary>
-    public abstract partial class MergeSourceBasePage
+    public partial class MergeSourceBasePage
     {
         /// <summary>
         /// Constructor with name.
@@ -103,7 +103,7 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Returns the merge type for the subclass' page.
         /// </summary>
-        internal abstract MergeWizard.MergeType MergeType { get; }
+        internal virtual MergeWizard.MergeType MergeType { get { throw new NotImplementedException(); } }
 
         internal virtual ICollection<Uri> GetMergeSources(SvnItem target)
         {
