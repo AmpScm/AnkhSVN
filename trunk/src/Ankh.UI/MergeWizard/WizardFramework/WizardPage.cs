@@ -28,30 +28,44 @@ namespace Ankh.UI.WizardFramework
     /// <summary>
     /// An abstract implementation of a wizard page.
     /// </summary>
-    public abstract class WizardPage : UserControl, IWizardPage
+    public class WizardPage : UserControl
     {
-        private string title_prop = null;
-        private WizardMessage message_prop = null;
-        private string description_prop = null;
-        private bool isPageComplete_prop = false;
-        private IWizardPage previousPage_prop = null;
-        private Image image_prop = null;
-        private IWizard wizard_prop = null;
+        Image _image;
+        string _message;
+        string _description;
+        WizardMessage.MessageType _messageType;
+
+        private bool _pageComplete = false;
+        private WizardPage _prevPage = null;
         private string name_prop = null;
         bool _disposed;
 
-        [Obsolete("Designer Only")]
         protected WizardPage()
         {
         }
-        /// <summary>
-        /// Constructor for a named wizard page.
-        /// </summary>
-        /// <param name="name"></param>
-        protected WizardPage(string name)
-        {
-            name_prop = name;
-        }
+
+		[Browsable(false)]
+		public new string Name
+		{
+			get
+			{
+				string name = base.Name;
+
+				if (!string.IsNullOrEmpty(name))
+					return name;
+				else
+					return GetType().FullName;
+			}
+			set
+			{
+				base.Name = value;
+			}
+		}
+
+		protected bool ShouldSerializeName()
+		{
+			return Name != GetType().FullName;
+		}
 
         /// <summary>
         /// Create a named page with a non-default page image.
@@ -59,15 +73,16 @@ namespace Ankh.UI.WizardFramework
         /// <param name="name">The page name.</param>
         /// <param name="image">The page image.</param>
         protected WizardPage(string name, Image image)
+            : this()
         {
-            name_prop = name;
-            image_prop = image;
+            Name = name;
+            Image = image;
         }
 
         IAnkhServiceProvider _context;
         public virtual IAnkhServiceProvider Context
         {
-            get { return _context; }
+            get { return _context ?? FindContext(); }
             set
             {
                 if (_context != value)
@@ -77,6 +92,11 @@ namespace Ankh.UI.WizardFramework
                 }
             }
         }
+
+		private IAnkhServiceProvider FindContext()
+		{
+			throw new NotImplementedException();
+		}
 
         protected virtual void OnContextChanged(EventArgs e)
         {
@@ -95,185 +115,142 @@ namespace Ankh.UI.WizardFramework
         /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
         public virtual bool IsPageComplete
         {
-            get { return isPageComplete_prop; }
+            get { return _pageComplete; }
             set
             {
-                isPageComplete_prop = value;
-                if (this.IsCurrentPage)
-                {
-                    this.Container.UpdateButtons();
-                }
+                _pageComplete = value;
+                if (Wizard != null && Wizard.Form != null)
+                    Wizard.Form.UpdateButtons();
             }
         }  
 
-        /// <summary>
-        /// Handle disposing the UI stuff maintained in this wizard page.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if(_disposed)
-                    return;
-
-                if(disposing)
-                {
-                    if (image_prop != null)
-                    {
-                        image_prop.Dispose();
-                        image_prop = null;
-                    }
-                }
-            }
-            finally
-            {
-                _disposed = true;
-
-                base.Dispose(disposing);
-            }
-        }
-
         /// <see cref="WizardFramework.IWizardPage.NextPage" />
-        public virtual IWizardPage NextPage
+        public virtual WizardPage NextPage
         {
             get
             {
-                if (wizard_prop == null) return null;
+                if (Wizard == null) return null;
 
-                return wizard_prop.GetNextPage(this);
+                return Wizard.GetNextPage(this);
             }
         }
 
         /// <see cref="WizardFramework.IWizardPage.PreviousPage" />
-        public virtual IWizardPage PreviousPage
+        public virtual WizardPage PreviousPage
         {
             get
             {
-                if (previousPage_prop != null) return previousPage_prop;
+                if (_prevPage != null)
+                    return _prevPage;
 
-                if (wizard_prop == null) return null;
-
-                return wizard_prop.GetPreviousPage(this);
+                if (Wizard != null)
+					return Wizard.GetPreviousPage(this);
+					
+				return null;
             }
-            set
-            {
-                previousPage_prop = value;
-            }
-        }
-
-        /// <see cref="WizardFramework.IWizardPage.Name" />
-        public virtual string PageName
-        {
-            get { return name_prop; }
-        }
-
-        /// <see cref="WizardFramework.IWizardPage.Wizard" />
-        public virtual IWizard Wizard
-        {
-            get
-            {
-                return wizard_prop;
-            }
-            set
-            {
-                wizard_prop = value;
-            }
+            set { _prevPage = value; }
         }
 
         /// <see cref="WizardFramework.IWizardPage.Description" />
+		[DefaultValue("")]
         public virtual string Description
         {
-            get
-            {
-                return description_prop;
-            }
+            get { return _description ?? ""; }
             set
             {
-                description_prop = value;
+                _description = value;
 
-                if (IsCurrentPage) Container.UpdateTitleBar();
+                if (Wizard != null && Wizard.Form != null)
+                    Wizard.Form.UpdateTitleBar();
             }
         }
 
         /// <see cref="WizardFramework.IWizardPage.Message" />
+		[Browsable(false)]
         public virtual WizardMessage Message
         {
-            get
+            get { return new WizardMessage(MessageText, MessageType); }
+            set 
             {
-                return message_prop;
-            }
-            set
-            {
-                message_prop = value;
-
-                if (Form != null)
-                    ((WizardDialog)Form).UpdateMessage();
+				if (value == null)
+				{
+					MessageText = "";
+					MessageType = WizardMessage.MessageType.None;
+				}
+				else
+				{
+					MessageText = value.Message;
+					MessageType = value.Type;
+				}
             }
         }
 
-        /// <see cref="WizardFramework.IWizardPage.Control" />
-        public virtual UserControl Control
-        {
-            get { return this; }
-        }
+		[DefaultValue("")]
+		public string MessageText
+		{
+			get { return _message ?? ""; }
+			set { _message = value; }
+		}
+
+		[DefaultValue(WizardMessage.MessageType.None)]
+		public WizardMessage.MessageType MessageType
+		{
+			get { return _messageType; }
+			set { _messageType = value; }
+		}
 
         /// <see cref="WizardFramework.IWizardPage.Image" />
         /// <para>If the page hasn't explicitly created an image
         /// for this page, return the wizard's default page image.</para>
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual Image Image
         {
             get
             {
-                if (image_prop == null && wizard_prop != null)
-                    return wizard_prop.DefaultPageImage;
-                else 
-                    return image_prop;
+				if (_image != null)
+					return _image;
+				else if (Wizard != null)
+					return Wizard.DefaultPageImage;
+
+				return null;
             }
 
-            set { image_prop = value; }
+            set { _image = value; }
         }
+
+		bool ShouldSerializeImage()
+		{
+			return _image != null;
+		}
 
         /// <see cref="WizardFramework.IWizardPage.Title" />
+		[Obsolete("Please use .Text")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual string Title
         {
-            get
-            {
-                return title_prop;
-            }
-            set
-            {
-                title_prop = value;
-            }
+            get { return Text; }
+            set { Text = value; }
         }
 
-        /// <summary>
-        /// Returns the container for the wizard that this
-        /// page belongs to.
-        /// </summary>
-        protected new virtual IWizardContainer Container
-        {
-            get
-            {
-                if (wizard_prop == null) return null;
+		[Bindable(true)]
+		[EditorBrowsable(EditorBrowsableState.Always)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+		public override string Text
+		{
+			get { return base.Text; }
+			set { base.Text = value; }
+		}
 
-                return wizard_prop.Container;
-            }
-        }
-
-        /// <summary>
-        /// Returns the Form that contains the wizard
-        /// that this page belongs to.
-        /// </summary>
-        public virtual Form Form
-        {
-            get
-            {
-                if (Container == null) return null;
-
-                return Container.Form;
-            }
-        }
+		public new Wizard Container
+		{
+			get
+			{
+				if (_collection != null)
+					return _collection.Wizard;
+				else
+					return null;
+			}
+		}
 
         /// <summary>
         /// Returns whether or not this page is the current page
@@ -283,10 +260,52 @@ namespace Ankh.UI.WizardFramework
         {
             get
             {
-                return (Container != null && this == Container.CurrentPage);
+				if (Wizard != null && Wizard.Form != null)
+					return Wizard.Form.CurrentPage == this;
+				else
+					return false;
             }
         }
         
         #endregion
-    }
+
+        bool _removing;
+        WizardPageCollection _collection;
+
+		protected internal virtual void OnBeforeAdd(WizardPageCollection collection)
+		{
+			if (!_removing && _collection != null)
+				throw new InvalidOperationException("Can be part of only one wizard at once");
+		}
+
+		protected internal virtual void OnAfterAdd(WizardPageCollection collection)
+		{
+			_collection = collection;
+		}
+
+		protected internal virtual void OnBeforeRemove(WizardPageCollection collection)
+		{
+			_removing = true;
+		}
+
+		protected internal virtual void OnAfterRemove(WizardPageCollection wizardPageCollection)
+		{
+			_removing = false;
+			_collection = null;
+		}
+
+		/// <summary>
+		/// Gets the Wizard containing this page
+		/// </summary>
+		public Wizard Wizard
+		{
+			get
+			{
+				if (_collection != null)
+					return _collection.Wizard;
+
+				return null;
+			}
+		}
+	}
 }

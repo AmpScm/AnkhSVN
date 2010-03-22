@@ -29,7 +29,7 @@ namespace Ankh.UI.WizardFramework
     /// <summary>
     /// A dialog to display a wizard to the end user.
     /// </summary>
-    public partial class WizardDialog : VSContainerForm, IWizardContainer, IWizardPageChangeProvider
+    public partial class WizardDialog : VSContainerForm
     {
         readonly string _nextText;
         readonly string _finishText;
@@ -50,10 +50,10 @@ namespace Ankh.UI.WizardFramework
         /// associated wizard.
         /// </summary>
         /// <param name="wizard">The default wizard.</param>
-        public WizardDialog(IWizard wizard) : this()
+        public WizardDialog(Wizard wizard) : this()
         {
             this.wizard_prop = wizard;
-            this.wizard_prop.Container = this;
+            this.wizard_prop.Form = this;
         }
 
         #region WizardDialog Members
@@ -91,7 +91,7 @@ namespace Ankh.UI.WizardFramework
         /// Update the receiver for the new page.
         /// </summary>
         /// <param name="page">New <c>IWizardPage</c></param>
-        private void UpdateForPage(IWizardPage page)
+        private void UpdateForPage(WizardPage page)
         {
             // ensure this page belongs to the current wizard
             if (this.Wizard != page.Wizard)
@@ -106,12 +106,11 @@ namespace Ankh.UI.WizardFramework
             }
 
             // Only add pages if they are not already added
-            UserControl pageControl = page.Control;
-            if (!PageContainer.Controls.Contains(pageControl))
+            if (!PageContainer.Controls.Contains(page))
             {
-                pageControl.Size = PageContainer.Size;
-                pageControl.Dock = DockStyle.Fill;
-                PageContainer.Controls.Add(pageControl);
+                page.Size = PageContainer.Size;
+                page.Dock = DockStyle.Fill;
+                PageContainer.Controls.Add(page);
             }
 
             currPage_prop = page;
@@ -139,14 +138,14 @@ namespace Ankh.UI.WizardFramework
         /// <summary>
         /// The current wizard for this dialog.
         /// </summary>
-        protected IWizard Wizard
+        protected Wizard Wizard
         {
             get { return wizard_prop; }
             set
             {
                 wizard_prop = value;
 
-                wizard_prop.Container = this;
+                wizard_prop.Form = this;
 
                 if (!createdWizards.Contains(wizard_prop))
                 {
@@ -166,36 +165,21 @@ namespace Ankh.UI.WizardFramework
             }
         }
 
-        /// <summary>
-        /// Disposes all wizards and nullifies their controls.
-        /// </summary>
-        private void HardClose()
-        {
-            foreach (IWizard wizard in createdWizards)
-            {
-                wizard.Dispose();
-
-                wizard.Container = null;
-            }
-
-            base.Dispose();
-        }
-
-        private List<IWizard> createdWizards = new List<IWizard>();
-        private IWizard wizard_prop = null;
+		private List<Wizard> createdWizards = new List<Wizard>();
+        private Wizard wizard_prop = null;
         #endregion
 
         #region IWizardContainer Members
         /// <see cref="WizardFramework.IWizardContainer.CurrentPage" />
-        public IWizardPage CurrentPage
+        public WizardPage CurrentPage
         {
             get { return currPage_prop; }
         }
 
         /// <see cref="WizardFramework.IWizardContainer.ShowPage" />
-        public void ShowPage(IWizardPage page)
+        public void ShowPage(WizardPage page)
         {
-            if (page == null || page.Control == null)
+            if (page == null)
             {
                 return;
             }
@@ -271,8 +255,8 @@ namespace Ankh.UI.WizardFramework
         {
             if (currPage_prop == null) return;
 
-            if (currPage_prop.Title != null && currPage_prop.Title != headerTitle.Text)
-                headerTitle.Text = currPage_prop.Title;
+            if (currPage_prop.Text != null && currPage_prop.Text != headerTitle.Text)
+				headerTitle.Text = currPage_prop.Text;
 
             if (currPage_prop.Image != null && headerImage.Image != currPage_prop.Image)
                 headerImage.Image = currPage_prop.Image;
@@ -284,9 +268,10 @@ namespace Ankh.UI.WizardFramework
         /// <see cref="WizardFramework.IWizardContainer.UpdateFormTitle" />
         public void UpdateFormTitle()
         {
-            if (wizard_prop.WindowTitle == null) return;
+            if (wizard_prop.Text == null) return;
 
-            if (wizard_prop.WindowTitle != this.Text) this.Text = wizard_prop.WindowTitle;
+            if (wizard_prop.Text != this.Text) 
+				Text = wizard_prop.Text;
         }
 
         /// <see cref="WizardFramework.IWizardContainer.UpdateMessage" />
@@ -346,7 +331,7 @@ namespace Ankh.UI.WizardFramework
             get { return this.wizardPagePanel; }
         }
 
-        private IWizardPage currPage_prop = null;
+        private WizardPage currPage_prop = null;
         #endregion
 
         #region IWizardPageChangeProvider Members
@@ -371,12 +356,12 @@ namespace Ankh.UI.WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizardPageChangeProvider.SelectedPage" />
-        public IWizardPage SelectedPage
+        public WizardPage SelectedPage
         {
             get { return selectedPage_prop; }
         }
 
-        private IWizardPage selectedPage_prop = null;
+        private WizardPage selectedPage_prop = null;
         public event EventHandler<WizardPageChangedEventArgs> PageChanged;
         public event EventHandler<WizardPageChangingEventArgs> PageChanging;
         #endregion
@@ -387,7 +372,7 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         private void backButton_Click(object sender, EventArgs e)
         {
-            IWizardPage page = currPage_prop.PreviousPage;
+            WizardPage page = currPage_prop.PreviousPage;
 
             if (page == null) return; // Should never happen if the back button is enabled
 
@@ -407,7 +392,7 @@ namespace Ankh.UI.WizardFramework
             }
             else
             {
-                IWizardPage page = currPage_prop.NextPage;
+                WizardPage page = currPage_prop.NextPage;
 
                 if (page == null)
                     return; // Should never happen if the next button is enabled
@@ -427,14 +412,14 @@ namespace Ankh.UI.WizardFramework
         /// is called to allow for it do do work and/or save state.</para>
         private void finishButton_Click(object sender, EventArgs e)
         {
-            if (wizard_prop.PerformFinish())
+			CancelEventArgs ce = new CancelEventArgs();
+			Wizard.OnFinish(ce);
+            if (!ce.Cancel)
             {
                 for (int i = 0; i < nestedWizards.Count - 1; i++)
                 {
-                    nestedWizards[i].PerformFinish();
+                    nestedWizards[i].OnFinish(ce);
                 }
-
-                HardClose();
             }
         }
 
@@ -443,10 +428,10 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            HardClose();
+			DialogResult = DialogResult.Cancel;
         }
 
-        private List<IWizard> nestedWizards = new List<IWizard>();
+        private List<Wizard> nestedWizards = new List<Wizard>();
         private bool isMovingToPreviousPage = false;
         #endregion
 

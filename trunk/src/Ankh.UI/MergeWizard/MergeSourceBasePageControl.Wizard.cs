@@ -32,30 +32,6 @@ namespace Ankh.UI.MergeWizard
     /// </summary>
     public partial class MergeSourceBasePage
     {
-        /// <summary>
-        /// Constructor with name.
-        /// </summary>
-        protected MergeSourceBasePage(MergeWizard wizard, string name)
-            : base(wizard, name)
-        {
-            InitializeComponent();
-
-            bindingSource = new BindingSource(suggestedSources, "");
-            mergeFromComboBox.DataSource = bindingSource;
-        }
-
-        /// <summary>
-        /// Constructor with name and image.
-        /// </summary>
-        protected MergeSourceBasePage(MergeWizard wizard, string name, Image image)
-            : base(wizard, name, image)
-        {
-            InitializeComponent();
-
-            bindingSource = new BindingSource(suggestedSources, "");
-            mergeFromComboBox.DataSource = bindingSource;
-        }
-
         /// <see cref="WizardFramework.IWizardPage.IsPageComplete" />
         public override bool IsPageComplete
         {

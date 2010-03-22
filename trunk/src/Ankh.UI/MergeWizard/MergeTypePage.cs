@@ -19,13 +19,42 @@ using System.Windows.Forms;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeTypePage : BasePage
+    public partial class MergeTypePage : BaseWizardPage
     {
-        [Obsolete()]
-        public MergeTypePage()
-        {
-            InitializeComponent();
-        }
+		public const string PAGE_NAME = "Merge Type Page";
+
+		public MergeTypePage()
+		{
+			Name = PAGE_NAME;
+			IsPageComplete = true;
+
+			Text = MergeStrings.MergeTypePageHeaderTitle;
+			this.Description = MergeStrings.MergeTypePageHeaderMessage;
+			InitializeComponent();
+		}
+
+		/// <summary>
+		/// Returns whether or not to show the best practices page.
+		/// </summary>
+		public bool ShowBestPracticesPage
+		{
+			get { return IsPerformBestPracticesChecked; }
+		}
+
+		public MergeWizard.MergeType SelectedMergeType
+		{
+			get
+			{
+				return mergeType_prop;
+			}
+
+			set
+			{
+				mergeType_prop = value;
+			}
+		}
+
+		private MergeWizard.MergeType mergeType_prop = MergeWizard.MergeType.RangeOfRevisions;
 
         #region UI Events
         private void rangeofRevisionsRadioButton_CheckedChanged(object sender, EventArgs e)

@@ -21,15 +21,38 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSourceManuallyRecordPage : MergeSourceBasePage
     {
-        [Obsolete()]
-        public MergeSourceManuallyRecordPage()
-        {
-            InitializeComponent();
-        }
+		public const string PAGE_NAME = "Merge Source Manually Record";
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public MergeSourceManuallyRecordPage()
+		{
+			Name = PAGE_NAME;
+
+			IsPageComplete = false;
+			Text = MergeStrings.MergeSourceHeaderTitle;
+			Description = MergeStrings.MergeSourceManuallyRecordPageHeaderMessage;
+			InitializeComponent();
+		}
+
+		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+		internal override MergeWizard.MergeType MergeType
+		{
+			get { return MergeWizard.MergeType.ManuallyRecord; }
+		}
+
+		protected override void OnPageChanging(WizardPageChangingEventArgs e)
+		{
+			base.OnPageChanging(e);
+
+			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+		}
     }
 }
