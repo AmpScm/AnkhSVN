@@ -16,7 +16,7 @@
 
 namespace Ankh.UI.MergeWizard
 {
-    partial class BasePage
+    partial class BaseWizardPage
     {
         /// <summary> 
         /// Required designer variable.

@@ -28,29 +28,29 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         /// <param name="provider">The page change provider.</param>
         /// <param name="currPage">The current page displayed in the wizard.</param>
-        internal WizardPageChangedEventArgs(IWizardPageChangeProvider provider, IWizardPage currPage)
+        internal WizardPageChangedEventArgs(WizardDialog dialog, WizardPage currPage)
         {
-            currPage_prop = currPage;
-            provider_prop = provider;
+            _page = currPage;
+            _dialog = dialog;
         }
 
-        readonly IWizardPage currPage_prop;
-        readonly IWizardPageChangeProvider provider_prop;
+        readonly WizardPage _page;
+        readonly WizardDialog _dialog;
 
         /// <summary>
         /// Returns the page currently being displayed.
         /// </summary>
-        public IWizardPage CurrentPage
+        public WizardPage CurrentPage
         {
-            get { return currPage_prop; }
+            get { return _page; }
         }
 
         /// <summary>
         /// Gets the page change provider.
         /// </summary>
-        public IWizardPageChangeProvider Provider
+        public WizardDialog Dialog
         {
-            get { return provider_prop; }
+            get { return _dialog; }
         }
     }
 }

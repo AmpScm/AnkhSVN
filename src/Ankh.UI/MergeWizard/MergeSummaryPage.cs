@@ -20,11 +20,17 @@ using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeSummaryPage : BasePage
+    public partial class MergeSummaryPage : BaseWizardPage
     {
-        [Obsolete()]
-        public MergeSummaryPage()
-        {
+		public const string PAGE_NAME = "Merge Summary Page";
+
+		public MergeSummaryPage()
+		{
+			Name = PAGE_NAME;
+			IsPageComplete = true;
+
+			Text = MergeStrings.MergeSummaryPageHeaderTitle;
+			this.Description = MergeStrings.MergeSummaryPageHeaderMessage;
             InitializeComponent();
         }
 

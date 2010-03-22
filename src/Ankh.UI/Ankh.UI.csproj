@@ -94,11 +94,13 @@
     </Compile>
     <Compile Include="Annotate\AnnotateSection.cs" />
     <Compile Include="Annotate\AnnotateEditorControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Annotate\AnnotateEditorControl.Designer.cs">
       <DependentUpon>AnnotateEditorControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\AnnotateDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\AnnotateDialog.Designer.cs">
       <DependentUpon>AnnotateDialog.cs</DependentUpon>
@@ -109,17 +111,20 @@
       <DependentUpon>CommandStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CreateChangeListDialog.Designer.cs">
       <DependentUpon>CreateChangeListDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\UIEditCommand.cs" />
     <Compile Include="Commands\UpdateDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\UpdateDialog.Designer.cs">
       <DependentUpon>UpdateDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\StatusPanelTestForm.Designer.cs">
       <DependentUpon>StatusPanelTestForm.cs</DependentUpon>
@@ -151,6 +156,7 @@
       <DependentUpon>MergeToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="IssueTracker\IssueSelector.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueSelector.Designer.cs">
       <DependentUpon>IssueSelector.cs</DependentUpon>
@@ -159,6 +165,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="IssueTracker\IssueTrackerConfigDialog.Designer.cs">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
@@ -167,25 +174,23 @@
     <Compile Include="MergeWizard\InteractiveConflictService.cs" />
     <Compile Include="MergeWizard\MergeConflictHandler.cs" />
     <Compile Include="MergeWizard\Dialogs\MergeConflictHandlerDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\Dialogs\MergeConflictHandlerDialog.Designer.cs">
       <DependentUpon>MergeConflictHandlerDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeResultsDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\WizardFramework\IWizard.cs" />
-    <Compile Include="MergeWizard\WizardFramework\IWizardContainer.cs" />
-    <Compile Include="MergeWizard\WizardFramework\IWizardNode.cs" />
-    <Compile Include="MergeWizard\WizardFramework\IWizardPage.cs" />
-    <Compile Include="MergeWizard\WizardFramework\IWizardPageChangeProvider.cs" />
     <Compile Include="MergeWizard\WizardFramework\Properties\Resources.Designer.cs" />
     <Compile Include="MergeWizard\WizardFramework\Wizard.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardDialog.Designer.cs">
       <DependentUpon>WizardDialog.cs</DependentUpon>
@@ -196,9 +201,6 @@
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangedEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
-    <Compile Include="MergeWizard\WizardFramework\WizardSelectionPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="OptionsPages\AnkhOptionsPageControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -214,11 +216,13 @@
       <DependentUpon>OptionsResources.resx</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OptionsPages\SvnAuthenticationCacheEditor.Designer.cs">
       <DependentUpon>SvnAuthenticationCacheEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\SvnProxyEditor.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="OptionsPages\SvnProxyEditor.Designer.cs">
       <DependentUpon>SvnProxyEditor.cs</DependentUpon>
@@ -285,57 +289,68 @@
       <DependentUpon>PropertyEditStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="RecentMessageDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RecentMessageDialog.Designer.cs">
       <DependentUpon>RecentMessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\ConfirmDeleteDialog.Designer.cs">
       <DependentUpon>ConfirmDeleteDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\Dialogs\RenameDialog.Designer.cs">
       <DependentUpon>RenameDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddProjectToSubversion.Designer.cs">
       <DependentUpon>AddProjectToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CopyToDialog.Designer.cs">
       <DependentUpon>CopyToDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateBranchDialog.Designer.cs">
       <DependentUpon>CreateBranchDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\CreateDirectoryDialog.Designer.cs">
       <DependentUpon>CreateDirectoryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="PathSelector\PendingChangeSelector.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PendingChangeSelector.Designer.cs">
       <DependentUpon>PendingChangeSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\MultiWorkingCopyCommit.Designer.cs">
       <DependentUpon>MultiWorkingCopyCommit.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\ProjectCommitDialog.Designer.cs">
       <DependentUpon>ProjectCommitDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\RepositoryUrlUtils.cs" />
     <Compile Include="SccManagement\UpdateAvailableDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\UpdateAvailableDialog.Designer.cs">
       <DependentUpon>UpdateAvailableDialog.cs</DependentUpon>
@@ -355,39 +370,29 @@
     <Compile Include="SvnLog\LogRequest.cs" />
     <Compile Include="SvnLog\LogRevisionItem.cs" />
     <Compile Include="SvnLog\LogViewerDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogViewerDialog.Designer.cs">
       <DependentUpon>LogViewerDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\BasePageControl.Wizard.cs">
-      <DependentUpon>BasePageControl.cs</DependentUpon>
+    <Compile Include="MergeWizard\BaseWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MergeWizard\BasePageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\BasePageControl.Designer.cs">
-      <DependentUpon>BasePageControl.cs</DependentUpon>
+    <Compile Include="MergeWizard\BaseWizardPage.Designer.cs">
+      <DependentUpon>BaseWizardPage.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\Commands\Merge.cs" />
-    <Compile Include="MergeWizard\MergeBestPracticesPage.Wizard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="MergeWizard\MergeBestPracticesPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeBestPracticesPage.Designer.cs">
       <DependentUpon>MergeBestPracticesPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeOptionsPageControl.Wizard.cs">
-      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
+    <Compile Include="MergeWizard\MergeOptionsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MergeWizard\MergeOptionsPageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\MergeOptionsPageControl.Designer.cs">
-      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
+    <Compile Include="MergeWizard\MergeOptionsPage.Designer.cs">
+      <DependentUpon>MergeOptionsPage.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeRevisionsSelectionPageControl.Wizard.cs">
       <DependentUpon>MergeRevisionsSelectionPage.cs</DependentUpon>
@@ -409,19 +414,11 @@
     <Compile Include="MergeWizard\MergeSourceBasePage.Designer.cs">
       <DependentUpon>MergeSourceBasePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceManuallyRecordPageControl.Wizard.cs">
-      <DependentUpon>MergeSourceManuallyRecordPage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRecordPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRecordPage.Designer.cs">
       <DependentUpon>MergeSourceManuallyRecordPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MergeWizard\MergeSourceManuallyRemovePageControl.Wizard.cs">
-      <DependentUpon>MergeSourceManuallyRemovePage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceManuallyRemovePage.cs">
       <SubType>UserControl</SubType>
@@ -429,19 +426,11 @@
     <Compile Include="MergeWizard\MergeSourceManuallyRemovePage.Designer.cs">
       <DependentUpon>MergeSourceManuallyRemovePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPageControl.Wizard.cs">
-      <DependentUpon>MergeSourceRangeOfRevisionsPage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceRangeOfRevisionsPage.Designer.cs">
       <DependentUpon>MergeSourceRangeOfRevisionsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MergeWizard\MergeSourceReintegratePageControl.Wizard.cs">
-      <DependentUpon>MergeSourceReintegratePage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSourceReintegratePage.cs">
       <SubType>UserControl</SubType>
@@ -449,29 +438,17 @@
     <Compile Include="MergeWizard\MergeSourceReintegratePage.Designer.cs">
       <DependentUpon>MergeSourceReintegratePage.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.Wizard.cs">
-      <DependentUpon>MergeSourceTwoDifferentTreesPageControl.cs</DependentUpon>
+    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.Designer.cs">
-      <DependentUpon>MergeSourceTwoDifferentTreesPageControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MergeWizard\MergeSummaryPageControl.Wizard.cs">
-      <DependentUpon>MergeSummaryPage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
+    <Compile Include="MergeWizard\MergeSourceTwoDifferentTreesPage.Designer.cs">
+      <DependentUpon>MergeSourceTwoDifferentTreesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeSummaryPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeSummaryPage.Designer.cs">
       <DependentUpon>MergeSummaryPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MergeWizard\MergeTypePageControl.Wizard.cs">
-      <DependentUpon>MergeTypePage.cs</DependentUpon>
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeTypePage.cs">
       <SubType>UserControl</SubType>
@@ -484,6 +461,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MergeWizard\MergeWizardDialog.Designer.cs">
       <DependentUpon>MergeWizardDialog.cs</DependentUpon>
@@ -499,11 +477,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="PropertyEditors\PropertyDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyDialog.Designer.cs">
       <DependentUpon>PropertyDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\AddRepositoryRootDialog.Designer.cs">
       <DependentUpon>AddRepositoryRootDialog.cs</DependentUpon>
@@ -513,6 +493,7 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryExplorerItem.cs" />
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryFolderBrowserDialog.Designer.cs">
       <DependentUpon>RepositoryFolderBrowserDialog.cs</DependentUpon>
@@ -528,11 +509,13 @@
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeNode.cs" />
     <Compile Include="SccManagement\AddToSubversion.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\AddToSubversion.Designer.cs">
       <DependentUpon>AddToSubversion.cs</DependentUpon>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SccManagement\SccEditEnlistment.Designer.cs">
       <DependentUpon>SccEditEnlistment.cs</DependentUpon>
@@ -545,6 +528,7 @@
     <Compile Include="SvnLog\Commands\ShowChanges.cs" />
     <Compile Include="SvnLog\Commands\ShowLogMessage.cs" />
     <Compile Include="SvnLog\EditLogMessageDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\EditLogMessageDialog.Designer.cs">
       <DependentUpon>EditLogMessageDialog.cs</DependentUpon>
@@ -559,6 +543,7 @@
       <DependentUpon>LogToolWindowControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\SwitchDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\SwitchDialog.Designer.cs">
       <DependentUpon>SwitchDialog.cs</DependentUpon>
@@ -590,6 +575,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="WorkingCopyExplorer\AddWorkingCopyExplorerRootDialog.Designer.cs">
       <DependentUpon>AddWorkingCopyExplorerRootDialog.cs</DependentUpon>
@@ -602,16 +588,19 @@
     </Compile>
     <Compile Include="AnkhUIModule.cs" />
     <Compile Include="Commands\CheckoutDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\CheckoutDialog.Designer.cs">
       <DependentUpon>CheckoutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="ErrorDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="ErrorDialog.Designer.cs">
       <DependentUpon>ErrorDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\ExportDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Commands\ExportDialog.Designer.cs">
       <DependentUpon>ExportDialog.cs</DependentUpon>
@@ -685,6 +674,7 @@
       <DependentUpon>RecentChangesPage.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\CheckoutProject.Designer.cs">
       <DependentUpon>CheckoutProject.cs</DependentUpon>
@@ -748,6 +738,7 @@
       <DependentUpon>RepositoryExplorerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryOpen\RepositoryOpenDialog.Designer.cs">
       <DependentUpon>RepositoryOpenDialog.cs</DependentUpon>
@@ -765,6 +756,7 @@
       <DependentUpon>LogControl.cs</DependentUpon>
     </Compile>
     <Compile Include="LockDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SvnLog\LogChangedPaths.cs">
       <SubType>UserControl</SubType>
@@ -779,18 +771,22 @@
       <DependentUpon>LogMessageView.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionsPages\ToolArgumentDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PathSelectionTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PathSelector\PathSelector.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PathSelector\PathTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ProgressDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="PropertyEditors\PropertyEditorDialog.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="RepositoryExplorer\RepositoryTreeView.cs">
       <SubType>Component</SubType>
@@ -1010,8 +1006,8 @@
       <DependentUpon>MergeBestPracticesPage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\MergeOptionsPageControl.resx">
-      <DependentUpon>MergeOptionsPageControl.cs</DependentUpon>
+    <EmbeddedResource Include="MergeWizard\MergeOptionsPage.resx">
+      <DependentUpon>MergeOptionsPage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeRevisionsSelectionPage.resx">
@@ -1038,8 +1034,8 @@
       <DependentUpon>MergeSourceReintegratePage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\MergeSourceTwoDifferentTreesPageControl.resx">
-      <DependentUpon>MergeSourceTwoDifferentTreesPageControl.cs</DependentUpon>
+    <EmbeddedResource Include="MergeWizard\MergeSourceTwoDifferentTreesPage.resx">
+      <DependentUpon>MergeSourceTwoDifferentTreesPage.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeSummaryPage.resx">

@@ -17,6 +17,8 @@
 using System;
 using System.Collections.Generic;
 
+using SharpSvn;
+
 using Ankh.Scc;
 using Ankh.Scc.UI;
 using Ankh.UI.SvnLog;
@@ -24,17 +26,89 @@ using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
-    public partial class MergeRevisionsSelectionPage : BasePage, ILogControl
+    public partial class MergeRevisionsSelectionPage : BaseWizardPage, ILogControl
     {
-        [Obsolete()]
-        public MergeRevisionsSelectionPage()
-        {
-            InitializeComponent();
+		public const string PAGE_NAME = "Merge Revisions Selection Page";
 
-            logToolControl1.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(logToolControl1_SelectionChanged);
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public MergeRevisionsSelectionPage()
+		{
+			Name = PAGE_NAME;
+			IsPageComplete = false;
 
-            logToolControl1.StrictNodeHistory = true;
-        }
+			Text = MergeStrings.MergeRevisionsSelectionPageTitle;
+			this.Message = new WizardMessage(MergeStrings.MergeRevisionsSelectionPageMessage);
+
+			SelectionChanged += new EventHandler<EventArgs>(MergeRevisionsSelectionPage_SelectionChanged);
+			InitializeComponent();
+
+			logToolControl1.SelectionChanged += new EventHandler<CurrentItemEventArgs<ISvnLogItem>>(logToolControl1_SelectionChanged);
+
+			logToolControl1.StrictNodeHistory = true;
+		}
+
+		/// <summary>
+		/// Returns an array of revisions, in numerical order, to be merged.
+		/// </summary>
+		public IEnumerable<SvnRevisionRange> MergeRevisions
+		{
+			get
+			{
+				ISvnLogItem start = null;
+				ISvnLogItem end = null;
+				int previousIndex = -1;
+				List<ISvnLogItem> logitems = new List<ISvnLogItem>(SelectedRevisions);
+				logitems.Sort(delegate(ISvnLogItem a, ISvnLogItem b) { return a.Index.CompareTo(b.Index); });
+
+				foreach (ISvnLogItem item in logitems)
+				{
+					if (start == null)
+					{
+						start = item;
+						end = item;
+					}
+					else if (previousIndex + 1 == item.Index)
+					{
+						// range is still contiguous, move end ptr
+						end = item;
+					}
+					else
+					{
+						// The start of a new range because it's no longer contiguous
+						// return the previous range and start a new one
+						yield return new SvnRevisionRange(start.Revision - 1, end.Revision);
+
+						start = item;
+						end = item;
+					}
+
+					previousIndex = item.Index;
+				}
+
+				// The loop doesn't handle the last range
+				if (start != null && end != null)
+				{
+					yield return new SvnRevisionRange(start.Revision - 1, end.Revision);
+				}
+			}
+		}
+
+		void MergeRevisionsSelectionPage_SelectionChanged(object sender, EventArgs e)
+		{
+			IsPageComplete = SelectedRevisions.Count > 0;
+
+			if (IsPageComplete)
+				((MergeWizard)Wizard).MergeRevisions = MergeRevisions;
+			else
+				((MergeWizard)Wizard).MergeRevisions = null;
+		}
+
+		protected override void OnPageChanged(WizardPageChangedEventArgs e)
+		{
+			base.OnPageChanged(e);
+		}
 
         public IList<Ankh.Scc.ISvnLogItem> SelectedRevisions
         {

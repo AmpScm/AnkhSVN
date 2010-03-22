@@ -26,7 +26,7 @@ using Ankh.UI.WizardFramework;
 namespace Ankh.UI.MergeWizard
 {
 
-    public partial class MergeSourceBasePage : BasePage
+    public partial class MergeSourceBasePage : BaseWizardPage
     {
         private readonly WizardMessage INVALID_FROM_URL = new WizardMessage(MergeStrings.InvalidFromUrl,
             WizardMessage.MessageType.Error);
@@ -36,10 +36,12 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        [Obsolete("Designer Only")]
         protected MergeSourceBasePage()
         {
             InitializeComponent();
+
+			bindingSource = new BindingSource(suggestedSources, "");
+			mergeFromComboBox.DataSource = bindingSource;
         }
 
         /// <summary>
@@ -129,7 +131,7 @@ namespace Ankh.UI.MergeWizard
                 mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             }
 
-            ((WizardDialog)Form).EnablePageAndButtons(true);
+            ((WizardDialog)ParentForm).EnablePageAndButtons(true);
         }
 
         /// <summary>

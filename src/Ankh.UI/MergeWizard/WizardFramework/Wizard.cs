@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.ComponentModel;
 using Ankh;
+using System.Collections.ObjectModel;
 
 /* 
  * Wizard.cs
@@ -25,26 +26,97 @@ using Ankh;
  **/
 namespace Ankh.UI.WizardFramework
 {
+	public class WizardPageCollection : KeyedCollection<string, WizardPage>
+	{
+		Wizard _wizard;
+		public WizardPageCollection(Wizard wizard)
+		{
+			if (wizard == null)
+				throw new ArgumentNullException("wizard");
+
+			_wizard = wizard;
+		}
+
+		protected override string GetKeyForItem(WizardPage item)
+		{
+			return item.Name;
+		}
+
+		protected override void InsertItem(int index, WizardPage item)
+		{
+			item.OnBeforeAdd(this);
+			base.InsertItem(index, item);
+			item.OnAfterAdd(this);
+		}
+
+		protected override void SetItem(int index, WizardPage item)
+		{
+			WizardPage oldItem = this[index];
+			oldItem.OnBeforeRemove(this);
+			item.OnBeforeAdd(this);
+			base.SetItem(index, item);
+			oldItem.OnAfterRemove(this);
+			item.OnAfterAdd(this);
+		}
+
+		protected override void RemoveItem(int index)
+		{
+			WizardPage oldItem = this[index];
+			oldItem.OnBeforeRemove(this);
+			base.RemoveItem(index);
+			oldItem.OnBeforeRemove(this);
+		}
+
+		public Wizard Wizard
+		{
+			get { return _wizard; }
+		}
+	}
+
+
     /// <summary>
     /// An abstract implementation of a wizard.
     /// </summary>
     /// <para>The most common scenario is that
     /// you will subclass this to implement your own wizard.</para>
-    public abstract class Wizard : Component, IWizard
+    public class Wizard : Component
     {
-        bool _disposed;
+        readonly WizardPageCollection _pages;
+		WizardDialog _container;
         IAnkhServiceProvider _context;
+        Image _defaultImage;
+		string _text;
+
+        protected Wizard() 
+        { 
+        }
 
         protected Wizard(IAnkhServiceProvider context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
+            _pages = new WizardPageCollection(this);
             _context = context;
         }
 
+		/// <summary>
+		/// 
+		/// </summary>
+        public WizardPageCollection Pages
+        {
+            get { return _pages; }
+        }
+
+		public WizardDialog Form
+		{
+			get { return _container; }
+			set { _container = value; }
+		}
+
         #region IWizard Members
 
+		bool _disposed;
         /// <summary>
         /// Handle disposing the UI stuff maintained in this wizard.
         /// </summary>
@@ -80,14 +152,16 @@ namespace Ankh.UI.WizardFramework
         /// this can implement this method themselves when necessary.
         /// </summary>
         /// <see cref="WizardFramework.IWizard.AddPages" />
-        public virtual void AddPages() { }
+        public virtual void AddPages()
+		{ 
+		}
 
         /// <see cref="WizardFramework.IWizard.CanFinish" />
         public virtual bool NextIsFinish
         {
             get
             {
-                foreach (IWizardPage page in pages_prop)
+                foreach (WizardPage page in Pages)
                 {
                     if (!page.IsPageComplete)
                         return false;
@@ -98,23 +172,21 @@ namespace Ankh.UI.WizardFramework
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
-        public virtual IWizardPage GetNextPage(IWizardPage page)
+        public virtual WizardPage GetNextPage(WizardPage page)
         {
-            int index = pages_prop.IndexOf(page);
+            int index = Pages.IndexOf(page);
 
-            if (index == pages_prop.Count - 1 || index == -1) return null;
+            if (index+1 >= Pages.Count || index < 0) 
+                return null;
 
-            return pages_prop[index + 1];
+            return Pages[index + 1];
         }
 
         /// <see cref="WizardFramework.IWizard.GetPage" />
-        public virtual IWizardPage GetPage(string pageName)
+        public virtual WizardPage GetPage(string pageName)
         {
-            foreach (IWizardPage page in pages_prop)
-            {
-                if (page.PageName == pageName)
-                    return page;
-            }
+            if (Pages.Contains(pageName))
+                return Pages[pageName];
 
             return null;
         }
@@ -122,116 +194,68 @@ namespace Ankh.UI.WizardFramework
         /// <see cref="WizardFramework.IWizard.PageCount" />
         public virtual int PageCount
         {
-            get { return pages_prop.Count; }
-        }
-
-        /// <see cref="WizardFramework.IWizard.Pages" />
-        public virtual List<IWizardPage> Pages
-        {
-            get { return pages_prop; }
+            get { return Pages.Count; }
         }
 
         /// <see cref="WizardFramework.IWizard.GetPreviousPage" />
-        public virtual IWizardPage GetPreviousPage(IWizardPage page)
+        public virtual WizardPage GetPreviousPage(WizardPage page)
         {
-            int index = pages_prop.IndexOf(page);
+            int index = Pages.IndexOf(page);
 
-            if (index == 0 || index == -1) return null;
+            if (index <= 0)
+                return null;
 
-            return pages_prop[index - 1];
+            return Pages[index - 1];
         }
 
         /// <see cref="WizardFramework.IWizard.StartingPage" />
-        public virtual IWizardPage StartingPage
+        public virtual WizardPage StartingPage
         {
             get
             {
-                if (pages_prop.Count == 0) return null;
+                if (Pages.Count == 0) return null;
 
-                return pages_prop[0];
+                return Pages[0];
             }
         }
 
         /// <see cref="WizardFramework.IWizard.PerformCancel" />
         /// <para>Wizard does nothing here.  Subclasses should override
         /// if they need to perform any custom cancel steps.</para>
-        public virtual bool PerformCancel()
+        public virtual void OnCancel(CancelEventArgs e)
         {
-            return true;
         }
 
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
-        public abstract bool PerformFinish();
-
-        /// <see cref="WizardFramework.IWizard.Container" />
-        public new virtual IWizardContainer Container
+        public virtual void OnFinish(CancelEventArgs e)
         {
-            get
-            {
-                return container_prop;
-            }
-            set
-            {
-                container_prop = value;
-            }
-        }
-
-        /// <see cref="WizardFramework.IWizard.WindowTitle" />
-        public virtual string WindowTitle
-        {
-            get { return windowTitle_prop; }
-            set
-            {
-                windowTitle_prop = value;
-
-                if (container_prop != null) container_prop.Form.Text = windowTitle_prop;
-            }
         }
 
         /// <see cref="WizardFramework.IWizard.DefaultPageImage" />
         /// <para>Returns null for now.</para>
+		[DefaultValue(null)]
         public virtual Image DefaultPageImage
         {
-            get
-            {
-                return null; // TODO: Change to a default image later.
-            }
+            get { return _defaultImage; }
+            set { _defaultImage = value; }
         }
 
-        private IWizardContainer container_prop = null;
-        private List<IWizardPage> pages_prop = new List<IWizardPage>();
-        private string windowTitle_prop = null;
         #endregion
 
-        #region Wizard Members
-        protected Wizard() { }
+		[Localizable(true)]
+		public string Text
+		{
+			get { return _text; }
+			set { _text = value; }
+		}
 
-        /// <summary>
-        /// Adds a new page to this wizard.  The page is inserted at
-        /// the end of the page list.
-        /// </summary>
-        /// <param name="page">The page.</param>
-        public virtual void AddPage(IWizardPage page)
-        {
-            if (page == null) return;
-
-            if (GetPage(page.PageName) == null) this.pages_prop.Add(page);
-
-            page.Wizard = this;
-            page.Context = Context;
-        }
-
-        /// <see cref="WizardFramework.IWizard.Form" />
-        public virtual Form Form
-        {
-            get
-            {
-                if (container_prop != null)
-                    return container_prop.Form;
-                else
-                    return null;
-            }
-        }
-        #endregion
+		[Obsolete("Use .Text")]
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		public string WindowTitle
+		{
+			get { return Text; }
+			set { Text = value; }
+		}
     }
 }

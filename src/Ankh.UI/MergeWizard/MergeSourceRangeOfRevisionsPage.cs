@@ -16,17 +16,61 @@
 
 using System;
 using System.Windows.Forms;
+using Ankh.UI.WizardFramework;
 
 namespace Ankh.UI.MergeWizard
 {
 
     partial class MergeSourceRangeOfRevisionsPage : MergeSourceBasePage
     {
-        [Obsolete()]
-        public MergeSourceRangeOfRevisionsPage()
-        {
-            InitializeComponent();
-        }
+		public const string PAGE_NAME = "Merge Source Range of Revisions";
+
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public MergeSourceRangeOfRevisionsPage()
+		{
+			Name = PAGE_NAME;
+			Text = MergeStrings.MergeSourceHeaderTitle;
+			Description = MergeStrings.MergeSourceRangeOfRevisionsPageHeaderMessage;
+			Load += new EventHandler(Control_Load);
+			InitializeComponent();
+		}
+
+		void Control_Load(object sender, EventArgs e)
+		{
+			NextPageRequired = true;
+		}
+
+		/// <summary>
+		/// Gets/Sets whether or not the next page is required.
+		/// </summary>
+		public bool NextPageRequired
+		{
+			get { return _needsNextPage; }
+			set
+			{
+				_needsNextPage = value;
+
+				if (Wizard != null && Wizard.Form != null)
+					Wizard.Form.UpdateButtons();
+			}
+		}
+
+		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+		internal override MergeWizard.MergeType MergeType
+		{
+			get { return MergeWizard.MergeType.RangeOfRevisions; }
+		}
+
+		protected override void OnPageChanging(WizardPageChangingEventArgs e)
+		{
+			base.OnPageChanging(e);
+
+			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesEligible;
+		}
+
+		private bool _needsNextPage = false;
 
         #region UI Events
         /// <summary>

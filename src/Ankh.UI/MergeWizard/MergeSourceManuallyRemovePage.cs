@@ -15,15 +15,57 @@
 //  limitations under the License.
 
 using System;
+using Ankh.UI.WizardFramework;
+using System.Collections.Generic;
+using SharpSvn;
 
 namespace Ankh.UI.MergeWizard
 {
     public partial class MergeSourceManuallyRemovePage : MergeSourceBasePage
     {
-        [Obsolete()]
-        public MergeSourceManuallyRemovePage()
-        {
-            InitializeComponent();
-        }
+		public const string PAGE_NAME = "Merge Source Manually Remove";
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public MergeSourceManuallyRemovePage()
+		{
+			Name = PAGE_NAME;
+
+			IsPageComplete = false;
+			Text = MergeStrings.MergeSourceHeaderTitle;
+			Description = MergeStrings.MergeSourceManuallyRemovePageHeaderMessage;
+
+			EnableSelectButton(false);
+			InitializeComponent();
+		}
+
+		/// <see cref="Ankh.UI.MergeWizard.MergeSourceBasePage" />
+		internal override MergeWizard.MergeType MergeType
+		{
+			get { return MergeWizard.MergeType.ManuallyRemove; }
+		}
+
+		protected override void OnPageChanging(WizardPageChangingEventArgs e)
+		{
+			base.OnPageChanging(e);
+
+			((MergeWizard)Wizard).LogMode = Ankh.UI.SvnLog.LogMode.MergesMerged;
+		}
+
+		internal override ICollection<Uri> GetMergeSources(SvnItem target)
+		{
+			SvnMergeItemCollection items = ((MergeWizard)Wizard).MergeUtils.GetAppliedMerges(target);
+
+			List<Uri> rslt = new List<Uri>(items == null ? 0 : items.Count);
+
+			if (items != null)
+			{
+				foreach (SvnMergeItem i in items)
+					rslt.Add(i.Uri);
+			}
+
+			return rslt;
+		}
     }
 }

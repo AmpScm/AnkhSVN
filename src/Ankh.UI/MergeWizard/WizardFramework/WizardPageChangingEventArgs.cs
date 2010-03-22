@@ -29,19 +29,19 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         /// <param name="currentPage">The current page displayed in the wizard.</param>
         /// <param name="targetPage">The target page attempting to be switched to.</param>
-        internal WizardPageChangingEventArgs(IWizardPage currentPage, IWizardPage targetPage)
+        internal WizardPageChangingEventArgs(WizardPage currentPage, WizardPage targetPage)
         {
             currPage_prop = currentPage;
             tarPage_prop = targetPage;
         }
 
-        readonly IWizardPage currPage_prop;
-        readonly IWizardPage tarPage_prop;
+        readonly WizardPage currPage_prop;
+        readonly WizardPage tarPage_prop;
 
         /// <summary>
         /// Returns the page currently being displayed.
         /// </summary>
-        public IWizardPage CurrentPage
+        public WizardPage CurrentPage
         {
             get { return currPage_prop; }
         }
@@ -49,7 +49,7 @@ namespace Ankh.UI.WizardFramework
         /// <summary>
         /// Retuns the page attempting to be changed to.
         /// </summary>
-        public IWizardPage TargetPage
+        public WizardPage TargetPage
         {
             get { return tarPage_prop; }
         }

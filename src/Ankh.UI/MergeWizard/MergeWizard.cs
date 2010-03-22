@@ -65,40 +65,39 @@ namespace Ankh.UI.MergeWizard
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MergeWizard(IAnkhServiceProvider context, IWizardContainer container)
+        public MergeWizard(IAnkhServiceProvider context, WizardDialog dialog)
             : base(context)
         {
-            Container = container;
-            this.WindowTitle = MergeStrings.MergeWizardTitle;
+            Text = MergeStrings.MergeWizardTitle;
 
-            mergeTypePage = new MergeTypePage(this);
-            bestPracticesPage = new MergeBestPracticesPage(this);
-            mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage(this);
-            mergeSourceReintegratePage = new MergeSourceReintegratePage(this);
-            mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage(this);
-            mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage(this);
-            mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage(this);
-            mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage(this);
-            mergeOptionsPage = new MergeOptionsPage(this);
-            mergeSummaryPage = new MergeSummaryPage(this);
+            mergeTypePage = new MergeTypePage();
+            bestPracticesPage = new MergeBestPracticesPage();
+            mergeSourceRangeOfRevisionsPage = new MergeSourceRangeOfRevisionsPage();
+            mergeSourceReintegratePage = new MergeSourceReintegratePage();
+            mergeSourceTwoDifferentTreesPage = new MergeSourceTwoDifferentTreesPage();
+            mergeSourceManuallyRecordPage = new MergeSourceManuallyRecordPage();
+            mergeSourceManuallyRemovePage = new MergeSourceManuallyRemovePage();
+            mergeRevisionsSelectionPage = new MergeRevisionsSelectionPage();
+            mergeOptionsPage = new MergeOptionsPage();
+            mergeSummaryPage = new MergeSummaryPage();
         }
 
         public override void AddPages()
         {
-            AddPage(mergeTypePage);
-            AddPage(bestPracticesPage);
-            AddPage(mergeSourceRangeOfRevisionsPage);
-            AddPage(mergeSourceReintegratePage);
-            AddPage(mergeSourceTwoDifferentTreesPage);
-            AddPage(mergeSourceManuallyRecordPage);
-            AddPage(mergeSourceManuallyRemovePage);
-            AddPage(mergeRevisionsSelectionPage);
-            AddPage(mergeOptionsPage);
-            AddPage(mergeSummaryPage);
+            Pages.Add(mergeTypePage);
+            Pages.Add(bestPracticesPage);
+            Pages.Add(mergeSourceRangeOfRevisionsPage);
+            Pages.Add(mergeSourceReintegratePage);
+            Pages.Add(mergeSourceTwoDifferentTreesPage);
+            Pages.Add(mergeSourceManuallyRecordPage);
+            Pages.Add(mergeSourceManuallyRemovePage);
+            Pages.Add(mergeRevisionsSelectionPage);
+            Pages.Add(mergeOptionsPage);
+            Pages.Add(mergeSummaryPage);
         }
 
         /// <see cref="WizardFramework.IWizard.GetNextPage" />
-        public override IWizardPage GetNextPage(IWizardPage page)
+        public override WizardPage GetNextPage(WizardPage page)
         {
             // Handle the main page
             if (page is MergeTypePage)
@@ -163,18 +162,16 @@ namespace Ankh.UI.MergeWizard
         {
             get
             {
-                if (!(Container.CurrentPage is MergeSummaryPage))
+                if (!(Form.CurrentPage is MergeSummaryPage))
                     return false;
                 
-                return Container.CurrentPage.IsPageComplete;
+                return Form.CurrentPage.IsPageComplete;
             }
         }
 
         /// <see cref="WizardFramework.IWizard.PerformFinish" />
-        public override bool PerformFinish()
+        public override void OnFinish(CancelEventArgs e)
         {
-            bool status = false;
-
             try
             {
                 ((WizardDialog)Form).EnablePageAndButtons(false);
@@ -193,29 +190,25 @@ namespace Ankh.UI.MergeWizard
                         dialog.ShowDialog(Context);
                     }
 
-                    status = false;
+					e.Cancel = true;
                 }
                 else
                 {
                     PerformMerge();
 
                     this.Form.DialogResult = DialogResult.OK;
-
-                    status = true;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(e.InnerException.Message, WizardMessage.MessageType.Error);
+                ((WizardDialog)Form).CurrentPage.Message = new WizardMessage(ex.InnerException.Message, WizardMessage.MessageType.Error);
 
-                status = false;
+				e.Cancel = false;
             }
             finally
             {
                 ((WizardDialog)Form).EnablePageAndButtons(true);
             }
-
-            return status;
         }
 
         public void PerformMerge()
