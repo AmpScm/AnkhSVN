@@ -41,7 +41,7 @@ namespace Ankh.UI.MergeWizard
         }
 
         #region UI Events
-        private void MergeOptionsPageControl_Load(object sender, EventArgs e)
+        private void MergeOptionsPage_Load(object sender, EventArgs e)
         {
             if (!DesignMode)
             {

@@ -373,7 +373,7 @@
     <value>NoControl</value>
   </data>
   <data name="toRevisionSelectButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>440, 59</value>
+    <value>460, 59</value>
   </data>
   <data name="toRevisionSelectButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -502,7 +502,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="toURLTextBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>428, 20</value>
+    <value>448, 20</value>
   </data>
   <data name="toURLTextBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -532,7 +532,7 @@
     <value>NoControl</value>
   </data>
   <data name="toURLSelectButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>440, 34</value>
+    <value>460, 34</value>
   </data>
   <data name="toURLSelectButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
