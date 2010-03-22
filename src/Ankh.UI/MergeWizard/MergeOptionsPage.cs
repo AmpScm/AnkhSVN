@@ -106,7 +106,7 @@ namespace Ankh.UI.MergeWizard
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         #region UI Events
@@ -209,9 +209,9 @@ namespace Ankh.UI.MergeWizard
         }
         #endregion
 
-        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
+        private void WizardDialog_PageChangeEvent(object sender, EventArgs e)
         {
-            if (e.CurrentPage == this)
+            if (Wizard.CurrentPage == this)
             {
                 PopulateUI();
             }

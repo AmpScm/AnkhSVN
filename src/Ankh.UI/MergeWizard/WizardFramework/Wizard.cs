@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.ComponentModel;
-using Ankh;
-using System.Collections.ObjectModel;
+using Ankh.UI;
 
 /* 
- * Wizard.cs
+ * WizardDialog.cs
  * 
  * Copyright (c) 2008 CollabNet, Inc. ("CollabNet"), http://www.collab.net,
  * Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -26,126 +26,382 @@ using System.Collections.ObjectModel;
  **/
 namespace Ankh.UI.WizardFramework
 {
-	public class WizardPageCollection : KeyedCollection<string, WizardPage>
-	{
-		Wizard _wizard;
-		public WizardPageCollection(Wizard wizard)
-		{
-			if (wizard == null)
-				throw new ArgumentNullException("wizard");
-
-			_wizard = wizard;
-		}
-
-		protected override string GetKeyForItem(WizardPage item)
-		{
-			return item.Name;
-		}
-
-		protected override void InsertItem(int index, WizardPage item)
-		{
-			item.OnBeforeAdd(this);
-			base.InsertItem(index, item);
-			item.OnAfterAdd(this);
-		}
-
-		protected override void SetItem(int index, WizardPage item)
-		{
-			WizardPage oldItem = this[index];
-			oldItem.OnBeforeRemove(this);
-			item.OnBeforeAdd(this);
-			base.SetItem(index, item);
-			oldItem.OnAfterRemove(this);
-			item.OnAfterAdd(this);
-		}
-
-		protected override void RemoveItem(int index)
-		{
-			WizardPage oldItem = this[index];
-			oldItem.OnBeforeRemove(this);
-			base.RemoveItem(index);
-			oldItem.OnBeforeRemove(this);
-		}
-
-		public Wizard Wizard
-		{
-			get { return _wizard; }
-		}
-	}
-
-
     /// <summary>
-    /// An abstract implementation of a wizard.
+    /// A dialog to display a wizard to the end user.
     /// </summary>
-    /// <para>The most common scenario is that
-    /// you will subclass this to implement your own wizard.</para>
-    public class Wizard : Component
+    public partial class Wizard : VSContainerForm
     {
-        readonly WizardPageCollection _pages;
-		WizardDialog _container;
-        IAnkhServiceProvider _context;
-        Image _defaultImage;
-		string _text;
-
-        protected Wizard() 
-        { 
-        }
-
-        protected Wizard(IAnkhServiceProvider context)
+        readonly string _nextText;
+        readonly string _finishText;
+        bool _isMovingToPreviousPage;
+        /// <summary>
+        /// Default parameterless constructor required by VS.NET Designer.
+        /// Do not use this constructor when trying to instantiate a
+        /// WizardDialog.
+        /// </summary>
+        protected Wizard()
         {
-            if (context == null)
-                throw new ArgumentNullException("context");
+            InitializeComponent();
 
             _pages = new WizardPageCollection(this);
-            _context = context;
+            _nextText = nextButton.Text;
+            _finishText = finishButton.Text;
         }
 
-		/// <summary>
-		/// 
-		/// </summary>
+        #region WizardDialog Members
+        /// <summary>
+        /// Shows the starting page of the wizard.
+        /// </summary>
+        private void ShowStartingPage()
+        {
+            ShowPage(StartingPage);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            if (!DesignMode)
+                InitializeDialog();
+        }
+
+        /// <summary>
+        /// Performance any pre-display initialization for the dialog,
+        /// the wizard and the framework.
+        /// </summary>
+        private void InitializeDialog()
+        {
+            AddPages();
+            ShowStartingPage();
+        }
+
+        /// <summary>
+        /// Update the receiver for the new page.
+        /// </summary>
+        /// <param name="page">New <c>IWizardPage</c></param>
+        private void UpdateForPage(WizardPage page)
+        {
+            // ensure this page belongs to the current wizard
+            if (!Pages.Contains(page))
+                Pages.Add(page);
+
+            // Make the page invisible so the new page can be displayed
+            if (CurrentPage != null && CurrentPage != page)
+            {
+                CurrentPage.Visible = false;
+            }
+
+            // Only add pages if they are not already added
+            if (!PageContainer.Controls.Contains(page))
+            {
+                page.Size = PageContainer.Size;
+                page.Dock = DockStyle.Fill;
+                PageContainer.Controls.Add(page);
+            }
+
+            _curPage = page;
+
+            page.Visible = true;
+            UpdateUI();
+        }
+
+        /// <summary>
+        /// Method will update the UI components (form title, wizard title, wizard message,
+        /// wizard image and buttons.)
+        /// </summary>
+        private void UpdateUI()
+        {
+            // Update the Page title
+            UpdateTitleBar();
+            // Update the Page message
+            UpdateMessage();
+            // Update the buttons
+            UpdateButtons();
+        }
+
+        #endregion
+
+        #region IWizardContainer Members
+        /// <see cref="WizardFramework.IWizardContainer.CurrentPage" />
+        public WizardPage CurrentPage
+        {
+            get { return _curPage; }
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.ShowPage" />
+        public void ShowPage(WizardPage page)
+        {
+            if (page == null)
+                throw new ArgumentNullException("page");
+
+            if (!_isMovingToPreviousPage)
+                page.PreviousPage = this.CurrentPage; // Help going back
+
+            _isMovingToPreviousPage = false;
+            WizardPageChangingEventArgs pageChangingEventArgs = new WizardPageChangingEventArgs(page);
+
+            OnPageChanging(pageChangingEventArgs);
+
+            // Evaluate if changing is an option
+            if (pageChangingEventArgs.Cancel)
+                return;
+
+            UpdateForPage(page);
+
+            OnPageChanged(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Allows the wizard and its pages to toggle the
+        /// enablement of the page and buttons.
+        /// </summary>
+        public void EnablePageAndButtons(bool enabled)
+        {
+            EnablePage(enabled);
+            EnableButtons(enabled);
+        }
+
+        /// <summary>
+        /// Allows the wizard and its pages to toggle the
+        /// enablement of the page.
+        /// </summary>
+        public void EnablePage(bool enabled)
+        {
+            PageContainer.Enabled = enabled;
+        }
+
+        /// <summary>
+        /// Allows the wizard and its pages to toggle the
+        /// enablement of the buttons.
+        /// </summary>
+        public void EnableButtons(bool enabled)
+        {
+            NavigationContainer.Enabled = enabled;
+        }
+
+        public Panel NavigationContainer
+        {
+            get
+            {
+                return controlPanel;
+            }
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.UpdateButtons" />
+        public void UpdateButtons()
+        {
+            bool isFinish = NextIsFinish;
+            nextButton.Text = isFinish ? _finishText : _nextText;
+            backButton.Enabled = _curPage.PreviousPage != null;
+            nextButton.Enabled = isFinish ? _curPage.IsPageComplete : _curPage.CanFlipToNextPage;
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.UpdateTitleBar" />
+        public void UpdateTitleBar()
+        {
+            if (_curPage == null)
+                return;
+
+            if (_curPage.Text != null)
+            {
+                string newText = _curPage.Text ?? "";
+                if (newText != headerTitle.Text)
+                    headerTitle.Text = newText;
+            }
+
+            if (_curPage.Description != null)
+            {
+                string newText = _curPage.Description ?? "";
+                if (newText != headerDescription.Text)
+                    headerDescription.Text = newText;
+            }
+
+            if (_curPage.Image != null && headerImage.Image != _curPage.Image)
+                headerImage.Image = _curPage.Image ?? DefaultPageImage;
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.UpdateMessage" />
+        public void UpdateMessage()
+        {
+            if (_curPage == null) return;
+
+            WizardMessage message = _curPage.Message;
+
+            if (message != null && message.Message != null)
+            {
+                Image newImg;
+                // Display the message panel
+                // Bora: statusIcon images are set be read from the MergeWizard resources.
+                // otherwise, runtime throws an exception and quits the Wizard.
+                switch (message.Type)
+                {
+                    case WizardMessage.MessageType.Error:
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.ErrorIcon;
+                        break;
+                    case WizardMessage.MessageType.Information:
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.InfoIcon;
+                        break;
+                    case WizardMessage.MessageType.Warning:
+                        newImg = Ankh.UI.MergeWizard.MergeStrings.WarningIcon;
+                        break;
+                    case WizardMessage.MessageType.None:
+                    default:
+                        newImg = null;
+                        break;
+                }
+
+                if (statusIcon.Image != newImg)
+                    statusIcon.Image = newImg;
+
+                if (message.Message != null && statusMessage.Text != message.Message)
+                    statusMessage.Text = message.Message;
+
+                statusPanel.Visible = true;
+            }
+            else
+            {
+                // Hide the message panel
+                statusPanel.Visible = false;
+            }
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.Form" />
+        [Obsolete()]
+        public Form Form
+        {
+            get { return this; }
+        }
+
+        /// <see cref="WizardFramework.IWizardContainer.PageContainer" />
+        public Panel PageContainer
+        {
+            get { return this.wizardPagePanel; }
+        }
+
+        private WizardPage _curPage = null;
+        #endregion
+
+        #region IWizardPageChangeProvider Members
+        /// <summary>
+        /// Fires an event signifying a page change.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnPageChanged(EventArgs e)
+        {
+            if (PageChanged != null)
+                PageChanged(this, e);
+        }
+
+        /// <summary>
+        /// Fires an event signifying a page is changing event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnPageChanging(WizardPageChangingEventArgs e)
+        {
+            if (PageChanging != null)
+                PageChanging(this, e);
+        }
+
+        /// <see cref="WizardFramework.IWizardPageChangeProvider.SelectedPage" />
+        public WizardPage SelectedPage
+        {
+            get { return selectedPage_prop; }
+        }
+
+        private WizardPage selectedPage_prop = null;
+        public event EventHandler PageChanged;
+        public event EventHandler<WizardPageChangingEventArgs> PageChanging;
+        #endregion
+
+        #region WizardDialog UI Event Handling
+        /// <summary>
+        /// Handles the clicking of the back button.
+        /// </summary>
+        private void backButton_Click(object sender, EventArgs e)
+        {
+            WizardPage page = _curPage.PreviousPage;
+
+            if (page == null) return; // Should never happen if the back button is enabled
+
+            _isMovingToPreviousPage = true;
+
+            ShowPage(page); // Show the page
+        }
+
+        /// <summary>
+        /// Handles the clicking of the Next button.
+        /// </summary>
+        private void nextButton_Click(object sender, EventArgs e)
+        {
+            if (NextIsFinish)
+            {
+                finishButton_Click(sender, e);
+            }
+            else
+            {
+                WizardPage page = _curPage.NextPage;
+
+                if (page == null)
+                    return; // Should never happen if the next button is enabled
+
+                ShowPage(page); // Show the page
+            }
+        }
+
+        /// <summary>
+        /// Handles the clicking of the Finish button.
+        /// </summary>
+        /// <para>The wizard framework allows for nested wizards using
+        /// the set Wizard accessor.  Since the current wizard is always
+        /// the last wizard in the stack, it's <code>PerformFinish</code>
+        /// is called manually to allow for cancelation, work and/or state
+        /// management.  Then each nested wizard's <code>PerformFinish</code>
+        /// is called to allow for it do do work and/or save state.</para>
+        private void finishButton_Click(object sender, EventArgs e)
+        {
+            CancelEventArgs ce = new CancelEventArgs();
+            OnFinish(ce);
+            if (!ce.Cancel)
+            {
+                for (int i = 0; i < nestedWizards.Count - 1; i++)
+                {
+                    nestedWizards[i].OnFinish(ce);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the clicking of the Cancel button.
+        /// </summary>
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+        }
+
+        private List<Wizard> nestedWizards = new List<Wizard>();
+
+        #endregion
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            base.OnFontChanged(e);
+            headerTitle.Font = new Font(Font, FontStyle.Bold);
+        }
+
+        readonly WizardPageCollection _pages;
+        Image _defaultImage;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public WizardPageCollection Pages
         {
             get { return _pages; }
         }
 
-		public WizardDialog Form
-		{
-			get { return _container; }
-			set { _container = value; }
-		}
-
         #region IWizard Members
 
-		bool _disposed;
-        /// <summary>
-        /// Handle disposing the UI stuff maintained in this wizard.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            try
-            {
-                if (_disposed)
-                    return;
 
-                if (disposing)
-                {
-                }
-            }
-            finally
-            {
-                _disposed = true;
-                base.Dispose(disposing);
-            }
-        }
-
-        /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <value>The context.</value>
-        public IAnkhServiceProvider Context
-        {
-            get { return _context; }
-        }
 
         /// <summary>
         /// This method does nothing for this wizard.  Wizards subclassing
@@ -153,8 +409,8 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         /// <see cref="WizardFramework.IWizard.AddPages" />
         public virtual void AddPages()
-		{ 
-		}
+        {
+        }
 
         /// <see cref="WizardFramework.IWizard.CanFinish" />
         public virtual bool NextIsFinish
@@ -176,7 +432,7 @@ namespace Ankh.UI.WizardFramework
         {
             int index = Pages.IndexOf(page);
 
-            if (index+1 >= Pages.Count || index < 0) 
+            if (index + 1 >= Pages.Count || index < 0)
                 return null;
 
             return Pages[index + 1];
@@ -233,7 +489,7 @@ namespace Ankh.UI.WizardFramework
 
         /// <see cref="WizardFramework.IWizard.DefaultPageImage" />
         /// <para>Returns null for now.</para>
-		[DefaultValue(null)]
+        [DefaultValue(null)]
         public virtual Image DefaultPageImage
         {
             get { return _defaultImage; }
@@ -241,21 +497,5 @@ namespace Ankh.UI.WizardFramework
         }
 
         #endregion
-
-		[Localizable(true)]
-		public string Text
-		{
-			get { return _text; }
-			set { _text = value; }
-		}
-
-		[Obsolete("Use .Text")]
-		[Browsable(false)]
-		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-		public string WindowTitle
-		{
-			get { return Text; }
-			set { Text = value; }
-		}
     }
 }

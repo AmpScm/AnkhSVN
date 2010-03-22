@@ -185,21 +185,25 @@
     <Compile Include="MergeWizard\MergeResultsDialog.Designer.cs">
       <DependentUpon>MergeResultsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeWizard\WizardFramework\Properties\Resources.Designer.cs" />
-    <Compile Include="MergeWizard\WizardFramework\Wizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\WizardFramework\WizardDialog.cs">
+    <Compile Include="MergeWizard\MergeWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MergeWizard\WizardFramework\WizardDialog.Designer.cs">
-      <DependentUpon>WizardDialog.cs</DependentUpon>
+    <Compile Include="MergeWizard\MergeWizard.Designer.cs">
+      <DependentUpon>MergeWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MergeWizard\WizardFramework\Properties\Resources.Designer.cs" />
+    <Compile Include="MergeWizard\WizardFramework\WizardPageCollection.cs">
+    </Compile>
+    <Compile Include="MergeWizard\WizardFramework\Wizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeWizard\WizardFramework\Wizard.Designer.cs">
+      <DependentUpon>Wizard.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\WizardFramework\WizardMessage.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MergeWizard\WizardFramework\WizardPageChangedEventArgs.cs" />
     <Compile Include="MergeWizard\WizardFramework\WizardPageChangingEventArgs.cs" />
     <Compile Include="OptionsPages\AnkhOptionsPageControl.cs">
       <SubType>UserControl</SubType>
@@ -457,15 +461,6 @@
       <DependentUpon>MergeTypePage.cs</DependentUpon>
     </Compile>
     <Compile Include="MergeWizard\MergeUtils.cs" />
-    <Compile Include="MergeWizard\MergeWizard.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\MergeWizardDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MergeWizard\MergeWizardDialog.Designer.cs">
-      <DependentUpon>MergeWizardDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="MergeWizard\MergeStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -906,8 +901,8 @@
     <EmbeddedResource Include="MergeWizard\WizardFramework\Properties\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\WizardFramework\WizardDialog.resx">
-      <DependentUpon>WizardDialog.cs</DependentUpon>
+    <EmbeddedResource Include="MergeWizard\WizardFramework\Wizard.resx">
+      <DependentUpon>Wizard.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionsPages\EnvironmentSettingsControl.resx">
@@ -1044,10 +1039,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeTypePage.resx">
       <DependentUpon>MergeTypePage.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MergeWizard\MergeWizardDialog.resx">
-      <DependentUpon>MergeWizardDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeWizard\MergeStrings.resx">
@@ -1231,6 +1222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IssueTracker\IssueTrackerConfigDialog.resx">
       <DependentUpon>IssueTrackerConfigDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeWizard\MergeWizard.resx">
+      <DependentUpon>MergeWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PendingChanges\PendingActivationPage.resx">
       <DependentUpon>PendingActivationPage.cs</DependentUpon>

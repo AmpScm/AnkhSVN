@@ -17,7 +17,7 @@
  **/
 namespace Ankh.UI.WizardFramework
 {
-    partial class WizardDialog
+    partial class Wizard
     {
         /// <summary>
         /// Required designer variable.
@@ -45,7 +45,7 @@ namespace Ankh.UI.WizardFramework
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WizardDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Wizard));
             this.controlPanel = new System.Windows.Forms.Panel();
             this.horizontalDividerLabel = new System.Windows.Forms.Label();
             this.backButton = new System.Windows.Forms.Button();

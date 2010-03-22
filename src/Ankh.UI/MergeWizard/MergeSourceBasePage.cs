@@ -131,7 +131,7 @@ namespace Ankh.UI.MergeWizard
                 mergeFromComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             }
 
-            ((WizardDialog)ParentForm).EnablePageAndButtons(true);
+            ((Wizard)ParentForm).EnablePageAndButtons(true);
         }
 
         /// <summary>

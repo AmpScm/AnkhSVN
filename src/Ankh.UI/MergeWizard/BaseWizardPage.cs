@@ -30,19 +30,19 @@ namespace Ankh.UI.MergeWizard
 		{
 			base.OnAfterAdd(collection);
 
-			Wizard.Form.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
-			Wizard.Form.PageChanging += new EventHandler<WizardPageChangingEventArgs>(WizardDialog_PageChangingEvent);
+			Wizard.PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
+			Wizard.PageChanging += new EventHandler<WizardPageChangingEventArgs>(WizardDialog_PageChangingEvent);
 		}
 
 
 		void WizardDialog_PageChangingEvent(object sender, WizardPageChangingEventArgs e)
 		{
-			if (e.CurrentPage == this)
+			if (Wizard.CurrentPage == this)
 				OnPageChanging(e);
 		}
-		void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
+		void WizardDialog_PageChangeEvent(object sender, EventArgs e)
 		{
-			if (e.CurrentPage.PreviousPage == this)
+			if (Wizard.CurrentPage.PreviousPage == this)
 				OnPageChanged(e);
 		}
 
@@ -50,7 +50,7 @@ namespace Ankh.UI.MergeWizard
 		{
 		}
 
-		protected virtual void OnPageChanged(WizardPageChangedEventArgs e)
+		protected virtual void OnPageChanged(EventArgs e)
 		{
 		}
 

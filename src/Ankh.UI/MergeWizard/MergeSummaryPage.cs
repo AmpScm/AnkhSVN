@@ -34,9 +34,9 @@ namespace Ankh.UI.MergeWizard
             InitializeComponent();
         }
 
-        private void WizardDialog_PageChangeEvent(object sender, WizardPageChangedEventArgs e)
+        private void WizardDialog_PageChangeEvent(object sender, EventArgs e)
         {
-            if (e.CurrentPage == this)
+            if (Wizard.CurrentPage == this)
             {
                 Message = null;
 
@@ -138,7 +138,7 @@ namespace Ankh.UI.MergeWizard
         {
             PopulateUI();
 
-            ((MergeWizard)Wizard).WizardDialog.PageChanged += new EventHandler<WizardPageChangedEventArgs>(WizardDialog_PageChangeEvent);
+            ((MergeWizard)Wizard).PageChanged += new EventHandler(WizardDialog_PageChangeEvent);
         }
 
         private void performDryRunCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -37,8 +37,6 @@ namespace Ankh.UI.WizardFramework
 
         private bool _pageComplete = false;
         private WizardPage _prevPage = null;
-        private string name_prop = null;
-        bool _disposed;
 
         protected WizardPage()
         {
@@ -95,7 +93,15 @@ namespace Ankh.UI.WizardFramework
 
 		private IAnkhServiceProvider FindContext()
 		{
-			throw new NotImplementedException();
+			IAnkhServiceProvider context = null;
+
+			if (Wizard != null)
+				context = Wizard.Context;
+
+			if (context != null)
+				Context = context;
+
+			return context;
 		}
 
         protected virtual void OnContextChanged(EventArgs e)
@@ -119,8 +125,8 @@ namespace Ankh.UI.WizardFramework
             set
             {
                 _pageComplete = value;
-                if (Wizard != null && Wizard.Form != null)
-                    Wizard.Form.UpdateButtons();
+                if (Wizard != null)
+                    Wizard.UpdateButtons();
             }
         }  
 
@@ -160,8 +166,8 @@ namespace Ankh.UI.WizardFramework
             {
                 _description = value;
 
-                if (Wizard != null && Wizard.Form != null)
-                    Wizard.Form.UpdateTitleBar();
+                if (Wizard != null)
+                    Wizard.UpdateTitleBar();
             }
         }
 
@@ -260,8 +266,8 @@ namespace Ankh.UI.WizardFramework
         {
             get
             {
-				if (Wizard != null && Wizard.Form != null)
-					return Wizard.Form.CurrentPage == this;
+				if (Wizard != null)
+					return Wizard.CurrentPage == this;
 				else
 					return false;
             }
