@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<VsGui version="1.0"  xmlns="http://schemas.studioturtle.net/2007/01/gui/"
+<VsGui version="1.0"  xmlns="http://schemas.ankhsvn.net/2010/03/gui/"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-     xsi:schemaLocation="http://schemas.studioturtle.net/2007/01/gui/ Gui.xsd">
+     xsi:schemaLocation="http://schemas.ankhsvn.net/2010/03/gui/ Gui.xsd">
   <Imports>
     <Import include="stdidcmd.h" />
     <Import include="vsshlids.h" />
